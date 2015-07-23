@@ -80,6 +80,11 @@ sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id) throw (RuntimeE
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw ( InvocationTargetException )
 {
+    if( !Py_IsInitialized() )
+    {
+        throw RuntimeException();
+    }
+
     if( PyErr_Occurred() )
     {
         PyRef excType, excValue, excTraceback;
@@ -195,6 +200,11 @@ Any Adapter::invoke( const OUString &aFunctionName,
     {
     PyThreadAttach guard( mInterpreter );
     {
+        if( !Py_IsInitialized() )
+        {
+            throw InvocationTargetException();
+        }
+
         // convert parameters to python args
         // TODO: Out parameter
         Runtime runtime;
@@ -225,6 +235,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         // get callable
         PyRef method(PyObject_GetAttrString( mWrappedObject.get(), TO_ASCII(aFunctionName)),
                      SAL_NO_ACQUIRE);
+
         raiseInvocationTargetExceptionWhenNeeded( runtime);
         if( !method.is() )
         {
@@ -355,6 +366,11 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     PyThreadAttach guard( mInterpreter );
     try
     {
+        if( !Py_IsInitialized() )
+        {
+            throw InvocationTargetException();
+        }
+
         Runtime runtime;
         PyRef obj = runtime.any2PyObject( value );
 
@@ -375,6 +391,12 @@ Any Adapter::getValue( const OUString & aPropertyName )
     Any ret;
     PyThreadAttach guard( mInterpreter );
     {
+        if( !Py_IsInitialized() )
+        {
+            // Should probably be InvocationTargetException, but the interface doesn't allow it
+            throw RuntimeException();
+        }
+
         Runtime runtime;
         PyRef pyRef(
             PyObject_GetAttrString( mWrappedObject.get(), TO_ASCII(aPropertyName) ),
@@ -401,6 +423,12 @@ sal_Bool Adapter::hasMethod( const OUString & aMethodName )
 sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
     throw ( RuntimeException, std::exception )
 {
+    if( !Py_IsInitialized() )
+    {
+        // Should probably be InvocationTargetException, but the interface doesn't allow it
+        throw RuntimeException();
+    }
+
     bool bRet = false;
     PyThreadAttach guard( mInterpreter );
     {

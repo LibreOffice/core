@@ -150,13 +150,14 @@ public:
         throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xNameContainer->insertByName( Name, Element ); }
 
-    virtual void SAL_CALL replaceByName( const OUString& Name, const Any& Element )
-        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
-        { _xNameContainer->replaceByName( Name, Element ); }
-
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xNameContainer->removeByName( Name ); }
+
+    // XNameReplace
+    virtual void SAL_CALL replaceByName( const OUString& Name, const Any& Element )
+        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
+        { _xNameReplace->replaceByName( Name, Element ); }
 
     // XNameAccess
     virtual Any SAL_CALL getByName( const OUString& Name )
@@ -174,13 +175,14 @@ public:
         throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xIndexContainer->insertByIndex( Index, Element ); }
 
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element )
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
-        { _xIndexContainer->replaceByIndex( Index, Element ); }
-
     virtual void SAL_CALL removeByIndex( sal_Int32 Index )
         throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xIndexContainer->removeByIndex( Index ); }
+
+    // XIndexReplace
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element )
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
+        { _xIndexReplace->replaceByIndex( Index, Element ); }
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw( RuntimeException, std::exception ) SAL_OVERRIDE
@@ -220,8 +222,10 @@ private:
 
     // supplied Interfaces
     Reference<XNameContainer>           _xNameContainer;
+    Reference<XNameReplace>             _xNameReplace;
     Reference<XNameAccess>              _xNameAccess;
     Reference<XIndexContainer>          _xIndexContainer;
+    Reference<XIndexReplace>            _xIndexReplace;
     Reference<XIndexAccess>             _xIndexAccess;
     Reference<XEnumerationAccess>       _xEnumerationAccess;
     Reference<XElementAccess>           _xElementAccess;
@@ -285,6 +289,11 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
         if( _xNameContainer.is() )
             return makeAny( Reference< XNameContainer >( (static_cast< XNameContainer* >(this)) ) );
     }
+    else if ( aType == cppu::UnoType<XNameReplace>::get())
+    {
+        if( _xNameReplace.is() )
+            return makeAny( Reference< XNameReplace >( (static_cast< XNameReplace* >(this)) ) );
+    }
     else if ( aType == cppu::UnoType<XNameAccess>::get())
     {
         if( _xNameAccess.is() )
@@ -294,6 +303,11 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
     {
         if (_xIndexContainer.is())
             return makeAny( Reference< XIndexContainer >( (static_cast< XIndexContainer* >(this)) ) );
+    }
+    else if ( aType == cppu::UnoType<XIndexReplace>::get())
+    {
+        if (_xIndexReplace.is())
+            return makeAny( Reference< XIndexReplace >( (static_cast< XIndexReplace* >(this)) ) );
     }
     else if ( aType == cppu::UnoType<XIndexAccess>::get())
     {
@@ -371,8 +385,10 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
         _xElementAccess     = Reference<XElementAccess>::query( _xDirect );
         _xEnumerationAccess = Reference<XEnumerationAccess>::query( _xDirect );
         _xIndexAccess       = Reference<XIndexAccess>::query( _xDirect );
+        _xIndexReplace      = Reference<XIndexReplace>::query( _xDirect );
         _xIndexContainer    = Reference<XIndexContainer>::query( _xDirect );
         _xNameAccess        = Reference<XNameAccess>::query( _xDirect );
+        _xNameReplace       = Reference<XNameReplace>::query( _xDirect );
         _xNameContainer     = Reference<XNameContainer>::query( _xDirect );
         _xENDirect          = Reference<XExactName>::query( _xDirect );
         _xDirect2           = Reference<XInvocation2>::query( _xDirect );
@@ -405,6 +421,10 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
 
                     if( _xIndexAccess.is() )
                     {
+                        _xIndexReplace = Reference<XIndexReplace>::query(
+                             _xIntrospectionAccess->queryAdapter(
+                                        cppu::UnoType<XIndexReplace>::get()) );
+
                         _xIndexContainer = Reference<XIndexContainer>::query(
                              _xIntrospectionAccess->queryAdapter(
                                         cppu::UnoType<XIndexContainer>::get()) );
@@ -416,6 +436,10 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
 
                     if( _xNameAccess.is() )
                     {
+                        _xNameReplace = Reference<XNameReplace>::query(
+                                   _xIntrospectionAccess->queryAdapter(
+                                       cppu::UnoType<XNameReplace>::get()) );
+
                         _xNameContainer = Reference<XNameContainer>::query(
                                    _xIntrospectionAccess->queryAdapter(
                                        cppu::UnoType<XNameContainer>::get()) );
@@ -559,6 +583,8 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
             // NameContainer
             else if( _xNameContainer.is() )
             {
+                // Note: This misfeature deliberately not adapted to apply to objects which
+                // have XNameReplace but not XNameContainer
                 Any aConv;
                 Reference < XIdlClass > r =
                     TypeToIdlClass( _xNameContainer->getElementType(), xCoreReflection );
@@ -1002,6 +1028,10 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes() throw( RuntimeException, s
         {
             pTypes[ n++ ] = cppu::UnoType<XNameContainer>::get();
         }
+        if( _xNameReplace.is() )
+        {
+            pTypes[ n++ ] = cppu::UnoType<XNameReplace>::get();
+        }
         if( _xNameAccess.is() )
         {
             pTypes[ n++ ] = cppu::UnoType<XNameAccess>::get();
@@ -1009,6 +1039,10 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes() throw( RuntimeException, s
         if (_xIndexContainer.is())
         {
             pTypes[ n++ ] = cppu::UnoType<XIndexContainer>::get();
+        }
+        if (_xIndexReplace.is())
+        {
+            pTypes[ n++ ] = cppu::UnoType<XIndexReplace>::get();
         }
         if (_xIndexAccess.is())
         {
