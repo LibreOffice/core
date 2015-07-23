@@ -34,6 +34,24 @@
       "revId": "b63c1844776e75cd1002f029c6d166c7cf9fbcb8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0dbbfe73",
+        "filename": "include/tools/errcode.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-23T08:04:50Z",
+      "side": 1,
+      "message": "Ah, no, my mistake, sorry, I thought it was a mismatched if/else",
+      "parentUuid": "1a54edaf_4dc1f6e3",
+      "revId": "b63c1844776e75cd1002f029c6d166c7cf9fbcb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
