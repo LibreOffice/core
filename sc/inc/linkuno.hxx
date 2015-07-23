@@ -37,10 +37,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "externalrefmgr.hxx"
 
@@ -53,7 +50,7 @@ typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XRefreshListener > XRefreshListenerRef;
 typedef boost::ptr_vector<XRefreshListenerRef> XRefreshListenerArr_Impl;
 
-class ScSheetLinkObj : public cppu::WeakImplHelper4<
+class ScSheetLinkObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XNamed,
                             com::sun::star::util::XRefreshable,
                             com::sun::star::beans::XPropertySet,
@@ -153,7 +150,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScSheetLinksObj : public cppu::WeakImplHelper4<
+class ScSheetLinksObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
@@ -207,7 +204,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScAreaLinkObj : public cppu::WeakImplHelper4<
+class ScAreaLinkObj : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XAreaLink,
                             com::sun::star::util::XRefreshable,
                             com::sun::star::beans::XPropertySet,
@@ -313,7 +310,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScAreaLinksObj : public cppu::WeakImplHelper3<
+class ScAreaLinksObj : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XAreaLinks,
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::lang::XServiceInfo >,
@@ -367,7 +364,7 @@ public:
 
 //! order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
 
-class ScDDELinkObj : public cppu::WeakImplHelper5<
+class ScDDELinkObj : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XDDELink,
                             com::sun::star::container::XNamed,
                             com::sun::star::util::XRefreshable,
@@ -430,7 +427,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScDDELinksObj : public cppu::WeakImplHelper4<
+class ScDDELinksObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::sheet::XDDELinks,
@@ -491,7 +488,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScExternalSheetCacheObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalSheetCache >
+class ScExternalSheetCacheObj : public cppu::WeakImplHelper< ::com::sun::star::sheet::XExternalSheetCache >
 {
 public:
     explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
@@ -524,7 +521,7 @@ private:
     size_t mnIndex;
 };
 
-class ScExternalDocLinkObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLink >
+class ScExternalDocLinkObj : public cppu::WeakImplHelper< ::com::sun::star::sheet::XExternalDocLink >
 {
 public:
     ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
@@ -572,7 +569,7 @@ private:
 };
 
 /** This is the UNO API equivalent of ScExternalRefManager. */
-class ScExternalDocLinksObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLinks >
+class ScExternalDocLinksObj : public cppu::WeakImplHelper< ::com::sun::star::sheet::XExternalDocLinks >
 {
 public:
     ScExternalDocLinksObj(ScDocShell* pDocShell);
