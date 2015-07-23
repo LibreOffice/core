@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDROPCONTEXT_HXX
 #define INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDROPCONTEXT_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
 
 #include "target.hxx"
@@ -30,7 +30,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-class TargetDropContext: public WeakImplHelper1<XDropTargetDropContext>
+class TargetDropContext: public WeakImplHelper<XDropTargetDropContext>
 {
     // calls to the functions of XDropTargetDropContext are delegated
     // to non-interface functions of m_pDropTarget

@@ -42,7 +42,7 @@ extern Reference< XTransferable > g_XTransferable;
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
 DropTarget::DropTarget( const Reference<XComponentContext>& rxContext):
-    WeakComponentImplHelper3<XInitialization,XDropTarget, XServiceInfo>(m_mutex),
+    WeakComponentImplHelper<XInitialization,XDropTarget, XServiceInfo>(m_mutex),
     m_hWnd( NULL),
     m_threadIdWindow(0),
     m_threadIdTarget(0),

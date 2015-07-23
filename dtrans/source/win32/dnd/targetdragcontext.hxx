@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDRAGCONTEXT_HXX
 #define INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDRAGCONTEXT_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
@@ -31,7 +31,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-class TargetDragContext: public WeakImplHelper1<XDropTargetDragContext>
+class TargetDragContext: public WeakImplHelper<XDropTargetDragContext>
 {
     // some calls to the functions of XDropTargetDragContext are delegated
     // to non-interface functions of m_pDropTarget

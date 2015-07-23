@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DTRANS_SOURCE_CNTTYPE_MCNTTYPE_HXX
 #define INCLUDED_DTRANS_SOURCE_CNTTYPE_MCNTTYPE_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -29,7 +29,7 @@
 #include <map>
 
 class CMimeContentType : public
-    cppu::WeakImplHelper1< com::sun::star::datatransfer::XMimeContentType >
+    cppu::WeakImplHelper< com::sun::star::datatransfer::XMimeContentType >
 {
 public:
     CMimeContentType( const OUString& aCntType );

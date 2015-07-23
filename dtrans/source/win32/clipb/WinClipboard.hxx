@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
@@ -60,7 +60,7 @@ protected:
 
 class CWinClipboard :
     public CWinClipboardDummy,
-    public cppu::WeakComponentImplHelper3<
+    public cppu::WeakComponentImplHelper<
         ::com::sun::star::datatransfer::clipboard::XSystemClipboard,
         ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
         ::com::sun::star::lang::XServiceInfo >

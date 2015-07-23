@@ -24,7 +24,7 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // it is destroyed. Therefore no second instance may exist which was
 // created in the same thread and still needs OLE.
 class DropTarget: public MutexDummy,
-                  public WeakComponentImplHelper3< XInitialization, XDropTarget, XServiceInfo>
+                  public WeakComponentImplHelper< XInitialization, XDropTarget, XServiceInfo>
 
 {
 private:

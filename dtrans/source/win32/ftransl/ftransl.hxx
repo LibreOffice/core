@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
@@ -59,7 +59,7 @@ struct FormatEntry
 // CDataFormatTranslator
 
 class CDataFormatTranslator : public
-    cppu::WeakImplHelper2< com::sun::star::datatransfer::XDataFormatTranslator, \
+    cppu::WeakImplHelper< com::sun::star::datatransfer::XDataFormatTranslator, \
     com::sun::star::lang::XServiceInfo >
 {
 

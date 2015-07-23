@@ -32,7 +32,7 @@ using namespace osl;
 using ::dtrans::GenericClipboard;
 
 GenericClipboard::GenericClipboard() :
-    WeakComponentImplHelper4< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
+    WeakComponentImplHelper< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
     m_bInitialized(sal_False)
 {
 }

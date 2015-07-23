@@ -26,7 +26,7 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
 SourceContext::SourceContext( DragSource* pSource,
                              const Reference<XDragSourceListener>& listener):
-        WeakComponentImplHelper1<XDragSourceContext>(m_mutex),
+        WeakComponentImplHelper<XDragSourceContext>(m_mutex),
         m_pDragSource( pSource),
         m_dragSource( static_cast<XDragSource*>( m_pDragSource) )
 {

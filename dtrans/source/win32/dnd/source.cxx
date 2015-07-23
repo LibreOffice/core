@@ -56,7 +56,7 @@ extern Reference< XTransferable > g_XTransferable;
 unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 
 DragSource::DragSource( const Reference<XComponentContext>& rxContext):
-    WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
+    WeakComponentImplHelper< XDragSource, XInitialization, XServiceInfo >(m_mutex),
     m_xContext( rxContext ),
 //  m_pcurrentContext_impl(0),
     m_hAppWindow(0),
