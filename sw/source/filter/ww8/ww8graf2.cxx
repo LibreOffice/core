@@ -99,7 +99,7 @@ sal_uInt16 wwZOrderer::GetEscherObjectIdx(sal_uLong nSpId)
     // First, find out what position this shape is in the Escher order.
     for (sal_uInt16 nShapePos=0; nShapePos < nShapeCount; nShapePos++)
     {
-        const SvxMSDffShapeOrder& rOrder = (*mpShapeOrders)[nShapePos];
+        const SvxMSDffShapeOrder& rOrder = *(*mpShapeOrders)[nShapePos];
         if (rOrder.nShapeId == nSpId)
         {
             nFound = nShapePos;

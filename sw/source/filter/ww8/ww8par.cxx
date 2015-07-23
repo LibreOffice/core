@@ -5167,7 +5167,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         for (sal_uInt16 nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
         {
             SvxMSDffShapeOrder *pOrder =
-                &(*m_pMSDffManager->GetShapeOrders())[nShapeNum];
+                (*m_pMSDffManager->GetShapeOrders())[nShapeNum].get();
             // Insert Pointer into new Sort array
             if (pOrder->nTxBxComp && pOrder->pFly)
                 aTxBxSort.insert(pOrder);

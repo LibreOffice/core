@@ -5470,10 +5470,10 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
                                       SwFlyFrameFormat*  pFly,
                                       short         nHdFtSection) const
 {
-    sal_uInt16 nShpCnt = pShapeOrders->size();
+    sal_uInt16 nShpCnt = m_pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder = (*pShapeOrders)[ nShapeNum ];
+        SvxMSDffShapeOrder& rOrder = *(*m_pShapeOrders)[ nShapeNum ];
 
         if( rOrder.nShapeId == nId )
         {
@@ -5491,10 +5491,10 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
                                             SwFlyFrameFormat* pFly,
                                             SdrObject*   pObject) const
 {
-    sal_uInt16 nShpCnt = pShapeOrders->size();
+    sal_uInt16 nShpCnt = m_pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder = (*pShapeOrders)[ nShapeNum ];
+        SvxMSDffShapeOrder& rOrder = *(*m_pShapeOrders)[ nShapeNum ];
 
         if( rOrder.pObj == pOldObject )
         {
@@ -5508,10 +5508,10 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
 
 void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 {
-    sal_uInt16 nShpCnt = pShapeOrders->size();
+    sal_uInt16 nShpCnt = m_pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder = (*pShapeOrders)[ nShapeNum ];
+        SvxMSDffShapeOrder& rOrder = *(*m_pShapeOrders)[ nShapeNum ];
 
         if( rOrder.pObj == pObject )
         {
@@ -5523,11 +5523,7 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 }
 
 
-
-
-
 //  exported class: Public Methods
-
 
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  const OUString& rBaseURL,
@@ -5542,7 +5538,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pFormModel( NULL ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
-     pShapeOrders( new SvxMSDffShapeOrders ),
+     m_pShapeOrders( new SvxMSDffShapeOrders ),
      nOffsDgg( nOffsDgg_ ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
      nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
@@ -5591,7 +5587,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      pFormModel( NULL ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
-     pShapeOrders( new SvxMSDffShapeOrders ),
+     m_pShapeOrders( new SvxMSDffShapeOrders ),
      nOffsDgg( 0 ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
      nGroupShapeFlags(0),
@@ -5616,7 +5612,7 @@ SvxMSDffManager::~SvxMSDffManager()
 {
     delete pSecPropSet;
     delete m_pBLIPInfos;
-    delete pShapeOrders;
+    delete m_pShapeOrders;
     delete pFormModel;
 }
 
@@ -6146,7 +6142,8 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         }
         m_xShapeInfosByTxBxComp->insert(std::shared_ptr<SvxMSDffShapeInfo>(
                     new SvxMSDffShapeInfo(aInfo)));
-        pShapeOrders->push_back( new SvxMSDffShapeOrder( aInfo.nShapeId ) );
+        m_pShapeOrders->push_back(std::unique_ptr<SvxMSDffShapeOrder>(
+                    new SvxMSDffShapeOrder( aInfo.nShapeId )));
     }
 
     // and position the Stream correctly again

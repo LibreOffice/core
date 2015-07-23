@@ -27,8 +27,6 @@
 #include <set>
 #include <vector>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -110,7 +108,7 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
 /// the following will be sorted by the order of their appearance:
-typedef boost::ptr_vector<SvxMSDffShapeOrder> SvxMSDffShapeOrders;
+typedef std::vector<std::unique_ptr<SvxMSDffShapeOrder>> SvxMSDffShapeOrders;
 
 struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoById
 {
@@ -402,7 +400,7 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     SvxMSDffBLIPInfos*      m_pBLIPInfos;
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
-    SvxMSDffShapeOrders*    pShapeOrders;
+    SvxMSDffShapeOrders*    m_pShapeOrders;
     sal_uInt32              nOffsDgg;
     sal_uInt16              nBLIPCount;
     sal_uInt32              nGroupShapeFlags;
@@ -675,7 +673,7 @@ public:
         { return m_xShapeInfosById.get(); }
 
     inline SvxMSDffShapeOrders* GetShapeOrders() const
-        { return pShapeOrders; }
+        { return m_pShapeOrders; }
 
     void StoreShapeOrder(sal_uLong      nId,
                          sal_uLong      nTxBx,
