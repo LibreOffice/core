@@ -5701,13 +5701,13 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
         {
             PPTCharPropSet *const pCharPropSet =
                 rPropReader.aCharPropList[rnCurCharPos];
-            PPTPortionObj* pPPTPortion = new PPTPortionObj( *pCharPropSet,
-                    rStyleSheet, nInstance, pParaSet->mnDepth );
-            m_PortionList.push_back(pPPTPortion);
+            std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
+                    *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth));
             if (!mbTab)
             {
                 mbTab = pPPTPortion->HasTabulator();
             }
+            m_PortionList.push_back(std::move(pPPTPortion));
         }
     }
 }
@@ -5718,10 +5718,11 @@ PPTParagraphObj::~PPTParagraphObj()
 
 void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 {
-    m_PortionList.push_back(new PPTPortionObj(rPPTPortion));
+    m_PortionList.push_back(
+            std::unique_ptr<PPTPortionObj>(new PPTPortionObj(rPPTPortion)));
     if ( !mbTab )
     {
-        mbTab = m_PortionList.back().HasTabulator();
+        mbTab = m_PortionList.back()->HasTabulator();
     }
 }
 
@@ -5732,7 +5733,7 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
         sal_uInt16 nFontHeight = 0;
         if (!m_PortionList.empty())
         {
-            PPTPortionObj const& rPortion = m_PortionList.front();
+            PPTPortionObj const& rPortion = *m_PortionList.front();
             if (rPortion.pCharSet->mnAttrSet & (1 << PPT_CharAttr_FontHeight))
             {
                 nFontHeight = rPortion.pCharSet->mnFontHeight;
@@ -5775,7 +5776,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
                 rRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
                 if ((nDestinationInstance != 0xffffffff) && !m_PortionList.empty())
                 {
-                    PPTPortionObj const& rPortion = m_PortionList.front();
+                    PPTPortionObj const& rPortion = *m_PortionList.front();
                     if (rPortion.pCharSet->mnAttrSet & (1 << PPT_CharAttr_FontColor))
                     {
                         rRetValue = rPortion.pCharSet->mnColor;
@@ -5803,7 +5804,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
                 rRetValue = 0;
                 if ((nDestinationInstance != 0xffffffff) && !m_PortionList.empty())
                 {
-                    PPTPortionObj const& rPortion = m_PortionList.front();
+                    PPTPortionObj const& rPortion = *m_PortionList.front();
                     if (rPortion.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Font ) )
                     {
                         rRetValue = rPortion.pCharSet->mnFont;
@@ -5869,7 +5870,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
                 {
                     if (!m_PortionList.empty())
                     {
-                        PPTPortionObj const& rPortion = m_PortionList.front();
+                        PPTPortionObj const& rPortion = *m_PortionList.front();
                         bIsHardAttribute = rPortion.GetAttrib(
                             PPT_CharAttr_Font, rRetValue, nDestinationInstance);
                     }
@@ -5905,7 +5906,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
                 {
                     if (!m_PortionList.empty())
                     {
-                        PPTPortionObj const& rPortion = m_PortionList.front();
+                        PPTPortionObj const& rPortion = *m_PortionList.front();
                         if (rPortion.mbIsHyperlink )
                         {
                             if( rPortion.mbHardHylinkOrigColor )
@@ -6137,7 +6138,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         if (!m_PortionList.empty())
         {
             sal_uInt32 nFontHeight = 0;
-            m_PortionList.back().GetAttrib(
+            m_PortionList.back()->GetAttrib(
                     PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance);
             if ( ((sal_Int16)nUpperDist) > 0 )
                 nUpperDist = - (sal_Int16)( ( nFontHeight * nUpperDist * 100 ) / 1000 );
@@ -6219,7 +6220,7 @@ sal_uInt32 PPTParagraphObj::GetTextSize()
     sal_uInt32 nCount, nRetValue = 0;
     for (size_t i = 0; i < m_PortionList.size(); i++)
     {
-        PPTPortionObj const& rPortionObj = m_PortionList[i];
+        PPTPortionObj const& rPortionObj = *m_PortionList[i];
         nCount = rPortionObj.Count();
         if ((!nCount) && rPortionObj.mpFieldItem)
             nCount++;
@@ -6233,7 +6234,7 @@ PPTPortionObj* PPTParagraphObj::First()
     mnCurrentObject = 0;
     if (m_PortionList.empty())
         return NULL;
-    return &m_PortionList.front();
+    return m_PortionList.front().get();
 }
 
 PPTPortionObj* PPTParagraphObj::Next()
@@ -6242,7 +6243,7 @@ PPTPortionObj* PPTParagraphObj::Next()
     if (i >= m_PortionList.size())
         return NULL;
     mnCurrentObject++;
-    return &m_PortionList[i];
+    return m_PortionList[i].get();
 }
 
 PPTFieldEntry::~PPTFieldEntry()

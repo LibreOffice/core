@@ -1161,7 +1161,7 @@ public:
     bool                    mbTab;          // if true, this paragraph has tabulators in text
 
     sal_uInt32              mnCurrentObject;
-    ::boost::ptr_vector<PPTPortionObj> m_PortionList;
+    ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
 
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;
     bool                    GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, sal_uInt32 nInstanceInSheet );
