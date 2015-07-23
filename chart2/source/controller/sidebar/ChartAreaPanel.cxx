@@ -63,7 +63,8 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
         ChartController* pController):
     svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame),
     mxModel(pController->getModel()),
-    mxListener(new ChartSidebarModifyListener(this))
+    mxListener(new ChartSidebarModifyListener(this)),
+    mxSelectionListener(new ChartSidebarSelectionListener(this))
 {
 }
 
@@ -77,6 +78,10 @@ void ChartAreaPanel::dispose()
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
 
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
+
     AreaPropertyPanelBase::dispose();
 }
 
@@ -84,6 +89,10 @@ void ChartAreaPanel::Initialize()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->addModifyListener(mxListener);
+
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
 void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
@@ -170,6 +179,16 @@ void ChartAreaPanel::modelInvalid()
 {
 }
 
+void ChartAreaPanel::selectionChanged(bool bCorrectType)
+{
+    if (bCorrectType)
+        updateData();
+}
+
+void ChartAreaPanel::SelectionInvalid()
+{
+}
+
 void ChartAreaPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
@@ -180,6 +199,10 @@ void ChartAreaPanel::updateModel(
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
+
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
 
