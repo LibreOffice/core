@@ -381,6 +381,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
     mbAlternatingRowColors(false),
+    mbUpdateAlternatingRows(false),
     eSelMode(NO_SELECTION),
     nMinWidthInChars(0)
 {
@@ -411,6 +412,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
     mbAlternatingRowColors(false),
+    mbUpdateAlternatingRows(false),
     eSelMode(NO_SELECTION),
     nMinWidthInChars(0)
 {
@@ -471,16 +473,7 @@ sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pPare
 {
     sal_uLong nInsPos = pModel->Insert( pEntry, pParent, nPos );
     pEntry->SetBackColor( GetBackground().GetColor() );
-    if(mbAlternatingRowColors)
-    {
-        if(nPos == TREELIST_APPEND)
-        {
-            if(Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetBackground().GetColor())
-                pEntry->SetBackColor( GetSettings().GetStyleSettings().GetAlternatingRowColor() );
-        }
-        else
-            SetAlternatingRowColors( true );
-    }
+    SetAlternatingRowColors( mbAlternatingRowColors );
     return nInsPos;
 }
 
@@ -488,16 +481,7 @@ sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos )
 {
     sal_uLong nInsPos = pModel->Insert( pEntry, nRootPos );
     pEntry->SetBackColor( GetBackground().GetColor() );
-    if(mbAlternatingRowColors)
-    {
-        if(nRootPos == TREELIST_APPEND)
-        {
-            if(Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetBackground().GetColor())
-                pEntry->SetBackColor( GetSettings().GetStyleSettings().GetAlternatingRowColor() );
-        }
-        else
-            SetAlternatingRowColors( true );
-    }
+    SetAlternatingRowColors( mbAlternatingRowColors );
     return nInsPos;
 }
 
@@ -2383,6 +2367,7 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
             pImp->EntryExpanded( pParent );
             pHdlEntry = pParent;
             ExpandedHdl();
+            SetAlternatingRowColors( mbAlternatingRowColors );
         }
         nFlags = pParent->GetFlags();
         nFlags &= ~SvTLEntryFlags::NO_NODEBMP;
@@ -2420,6 +2405,7 @@ bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
         pImp->EntryCollapsed( pParent );
         pHdlEntry = pParent;
         ExpandedHdl();
+        SetAlternatingRowColors( mbAlternatingRowColors );
     }
 
     // #i92103#
@@ -2601,6 +2587,8 @@ void SvTreeListBox::MouseMove( const MouseEvent& rMEvt )
 void SvTreeListBox::SetUpdateMode( bool bUpdate )
 {
     pImp->SetUpdateMode( bUpdate );
+    mbUpdateAlternatingRows = bUpdate;
+    SetAlternatingRowColors( mbAlternatingRowColors );
 }
 
 void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
@@ -3404,20 +3392,35 @@ Size SvTreeListBox::GetOptimalSize() const
 
 void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
 {
-    mbAlternatingRowColors = bEnable;
-    if( mbAlternatingRowColors )
+    if( !mbUpdateAlternatingRows )
+    {
+        mbAlternatingRowColors = bEnable;
+        return;
+    }
+
+    if( bEnable )
     {
         SvTreeListEntry* pEntry = pModel->First();
         for(size_t i = 0; pEntry; ++i)
         {
             pEntry->SetBackColor( i % 2 == 0 ? GetBackground().GetColor() : GetSettings().GetStyleSettings().GetAlternatingRowColor());
-            pEntry = pModel->Next(pEntry);
+            SvTreeListEntry *pNextEntry = nullptr;
+            if( IsExpanded( pEntry ) )
+                pNextEntry = pModel->FirstChild( pEntry );
+            else
+                pNextEntry = pModel->NextSibling( pEntry );
+
+            if( !pNextEntry )
+                pEntry = pModel->Next( pEntry );
+            else
+                pEntry = pNextEntry;
         }
     }
-    else
+    else if( mbAlternatingRowColors )
         for(SvTreeListEntry* pEntry = pModel->First(); pEntry; pEntry = pModel->Next(pEntry))
             pEntry->SetBackColor( GetBackground().GetColor() );
 
+    mbAlternatingRowColors = bEnable;
     pImp->UpdateAll();
 }
 
