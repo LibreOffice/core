@@ -450,7 +450,8 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
     return rIn;
 }
 
-class PptFontCollection: public boost::ptr_vector<PptFontEntityAtom> {
+class PptFontCollection : public std::vector<std::unique_ptr<PptFontEntityAtom>>
+{
 };
 
 SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
@@ -514,7 +515,7 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
-    pFonts                  ( NULL ),
+    m_pFonts                ( nullptr ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
     eCharSetSystem          ( osl_getThreadTextEncoding() ),
@@ -533,7 +534,7 @@ SdrEscherImport::~SdrEscherImport()
     for ( size_t i = 0, n = aOleObjectList.size(); i < n; ++i )
         delete aOleObjectList[ i ];
     aOleObjectList.clear();
-    delete pFonts;
+    delete m_pFonts;
 }
 
 const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
@@ -576,8 +577,8 @@ bool SdrEscherImport::SeekToShape( SvStream& /*rSt*/, void* /*pClientData*/, sal
 PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
 {
     PptFontEntityAtom* pRetValue = NULL;
-    if ( pFonts && ( nNum < pFonts->size() ) )
-        pRetValue = &(*pFonts)[ (sal_uInt16)nNum ];
+    if (m_pFonts && (nNum < m_pFonts->size()))
+        pRetValue = (*m_pFonts)[ (sal_uInt16)nNum ].get();
     return pRetValue;
 }
 
@@ -1441,7 +1442,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
         if ( bOk )
         {
-            if ( !pFonts )
+            if (!m_pFonts)
                 ReadFontCollection();
 
             // reading TxPF, TxSI
@@ -2133,9 +2134,9 @@ bool SdrPowerPointImport::ReadFontCollection()
             while ( SeekToRec( rStCtrl, PPT_PST_FontEntityAtom, aListHd.GetRecEndFilePos() ) )
             {
                 bRet = true;
-                if ( !pFonts )
-                    pFonts = new PptFontCollection;
-                PptFontEntityAtom* pFont = new PptFontEntityAtom;
+                if (!m_pFonts)
+                    m_pFonts = new PptFontCollection;
+                std::unique_ptr<PptFontEntityAtom> pFont(new PptFontEntityAtom);
                 ReadPptFontEntityAtom( rStCtrl, *pFont );
 
                 vcl::Font aFont;
@@ -2159,7 +2160,7 @@ bool SdrPowerPointImport::ReadFontCollection()
                 {
                     pFont->eCharSet = RTL_TEXTENCODING_SYMBOL;
                 };
-                pFonts->insert( pFonts->begin() + nCount2++, pFont );
+                m_pFonts->insert(m_pFonts->begin() + nCount2++, std::move(pFont));
             }
         }
         rStCtrl.Seek( nFPosMerk ); // restore FilePos

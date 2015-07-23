@@ -430,7 +430,7 @@ protected:
 
     PPTOleEntryList     aOleObjectList;             // contains PPTOleEntrys
 
-    PptFontCollection*  pFonts;
+    PptFontCollection*  m_pFonts;
 
     sal_uInt32          nStreamLen;
     sal_uInt16          nTextStylesIndex;
