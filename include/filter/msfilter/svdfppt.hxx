@@ -36,9 +36,9 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <vcl/font.hxx>
 #include <vector>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class SdrModel;
 class SdPage;
@@ -354,23 +354,27 @@ public:
 class MSFILTER_DLLPUBLIC PptSlidePersistList: private boost::noncopyable
 {
 private:
-    boost::ptr_vector<PptSlidePersistEntry> mvEntries;
+    typedef std::vector<std::unique_ptr<PptSlidePersistEntry>> Entries_t;
+    Entries_t mvEntries;
 
 public:
     PptSlidePersistList();
     ~PptSlidePersistList();
 
     size_t size() const { return mvEntries.size(); }
-    bool is_null( size_t nIdx ) const { return mvEntries.is_null( nIdx ); }
-    const PptSlidePersistEntry& operator[]( size_t nIdx ) const { return mvEntries[ nIdx ]; }
-    PptSlidePersistEntry& operator[]( size_t nIdx ) { return mvEntries[ nIdx ]; }
-    boost::ptr_vector<PptSlidePersistEntry>::iterator begin() { return mvEntries.begin(); }
-    void insert( boost::ptr_vector<PptSlidePersistEntry>::iterator it,
-                 PptSlidePersistEntry* pEntry )
+    bool is_null( size_t nIdx ) const { return mvEntries[ nIdx ] == nullptr; }
+    const PptSlidePersistEntry& operator[](size_t nIdx) const { return *mvEntries[ nIdx ]; }
+    PptSlidePersistEntry& operator[](size_t nIdx) { return *mvEntries[ nIdx ]; }
+    Entries_t::iterator begin() { return mvEntries.begin(); }
+    void insert( Entries_t::iterator it,
+                 std::unique_ptr<PptSlidePersistEntry> pEntry )
     {
-        mvEntries.insert(it, pEntry);
+        mvEntries.insert(it, std::move(pEntry));
     }
-    void push_back( PptSlidePersistEntry* pEntry ) { mvEntries.push_back(pEntry); }
+    void push_back(std::unique_ptr<PptSlidePersistEntry> pEntry)
+    {
+        mvEntries.push_back(std::move(pEntry));
+    }
 
     sal_uInt16          FindPage( sal_uInt32 nId ) const;
 };
@@ -545,9 +549,9 @@ protected:
     const PPTStyleSheet*    pPPTStyleSheet; // this is the current stylesheet;
     const PPTStyleSheet*    pDefaultSheet;  // this is a sheet we are using if no masterpage can be found, but that should
                                             // never happen just preventing a crash
-    PptSlidePersistList*    pMasterPages;
-    PptSlidePersistList*    pSlidePages;
-    PptSlidePersistList*    pNotePages;
+    PptSlidePersistList*    m_pMasterPages;
+    PptSlidePersistList*    m_pSlidePages;
+    PptSlidePersistList*    m_pNotePages;
     sal_uInt16              nAktPageNum;
     sal_uLong               nDocStreamPos;
     sal_uInt16              nPageColorsNum;

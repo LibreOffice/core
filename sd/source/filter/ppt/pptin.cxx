@@ -541,7 +541,7 @@ bool ImplSdPPTImport::Import()
     // create master pages:
 
     SfxProgress* pStbMgr = new SfxProgress( pDocShell, SD_RESSTR( STR_POWERPOINT_IMPORT ),
-            pMasterPages->size() + pSlidePages->size() + pNotePages->size() );
+        m_pMasterPages->size() + m_pSlidePages->size() + m_pNotePages->size() );
 
     sal_uInt32 nImportedPages = 0;
     {
@@ -726,7 +726,7 @@ bool ImplSdPPTImport::Import()
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
                 {
-                    sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                    sal_uInt16 nNextMaster = m_pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
                     if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                         break;
                     else
@@ -952,7 +952,7 @@ bool ImplSdPPTImport::Import()
                 if ( nNotesPageId )
                 {
                     nImportedPages++;
-                    sal_uInt16 nNotesPageIndex = pNotePages->FindPage( nNotesPageId );
+                    sal_uInt16 nNotesPageIndex = m_pNotePages->FindPage( nNotesPageId );
                     if ( nNotesPageIndex == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                         nNotesPageIndex = 0;
                     SetPageNum( nNotesPageIndex, PPT_NOTEPAGE );
