@@ -17,11 +17,53 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/textchain.hxx>
 #include <svx/textchaincursor.hxx>
+#include <svx/svdedxv.hxx>
+#include <svx/svdoutl.hxx>
 
-TextChainCursorHandler::TextChainCursorHandler()
+TextChainCursorManager::TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj) :
+    mpEditView(pEditView),
+    mpTextObj(pTextObj)
 {
 
+}
+
+bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt ) const
+{
+    bool bHandled = false;
+
+    // XXX: Find a clean way to do this (even cleaner than the code commented below)
+    // if( pTextEditOutlinerView->IsKeyEventPushingOutOfPage(rKevt, pWin)
+    //       pWin = HandleKeyPushingOutOfBox(rKevt);
+    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    ESelection aCurSel = mpEditView->GetTextEditOutlinerView()->GetSelection();
+
+    if (mpTextObj && mpTextObj->IsChainable() && mpTextObj->GetNextLinkInChain() &&
+        eFunc ==  KeyFuncType::DONTKNOW)
+    {
+        SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
+        sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
+        OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
+        sal_Int32 nLastParaLen = aLastParaText.getLength();
+
+        if (nCode == KEY_RIGHT &&
+            aCurSel.nEndPara == nLastPara &&
+            aCurSel.nEndPos == nLastParaLen
+            )
+        {
+            fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
+
+            // Move to next box
+            mpEditView->SdrEndTextEdit();
+            SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
+            mpEditView->SdrBeginTextEdit(pNextLink);
+            bHandled = true;
+        }
+
+    }
+    return bHandled;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,10 +20,21 @@
 #ifndef INCLUDED_SVX_TEXTCHAINCURSOR_HXX
 #define INCLUDED_SVX_TEXTCHAINCURSOR_HXX
 
+class SdrObjEditView;
+class SdrTextObj;
+class KeyEvent;
 
-class TextChainCursorHandler
+
+class TextChainCursorManager
 {
-    TextChainCursorHandler();
+public:
+    TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj);
+
+    bool HandleKeyEvent( const KeyEvent& rKEvt ) const;
+
+private:
+    SdrObjEditView *mpEditView;
+    const SdrTextObj *mpTextObj;
 };
 
 

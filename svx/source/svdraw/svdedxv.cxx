@@ -52,6 +52,7 @@
 #include "svdglob.hxx"
 #include "svx/globl3d.hxx"
 #include <svx/textchain.hxx>
+#include <svx/textchaincursor.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svtools/colorcfg.hxx>
@@ -1284,49 +1285,20 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 
 bool SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
-    // XXX: Find a clean way to do this (even cleaner than the code commented below)
-    // if( pTextEditOutlinerView->IsKeyEventPushingOutOfPage(rKevt, pWin)
-    //       pWin = HandleKeyPushingOutOfBox(rKevt);
-    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
-    ESelection aCurSel = pTextEditOutlinerView->GetSelection();
-
-
     SdrTextObj* pTextObj = NULL;
     if (mxTextEditObj.is())
         pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
+    else
+        return false;
 
-    bool bHandled = false;
-
-    // XXX: Add check for last position in the para
-    if (pTextObj && pTextObj->IsChainable() && pTextObj->GetNextLinkInChain() &&
-        eFunc ==  KeyFuncType::DONTKNOW)
-    {
-        SdrOutliner *pOutl = GetTextEditOutliner();
-        sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
-        OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
-        sal_Int32 nLastParaLen = aLastParaText.getLength();
-
-        if (nCode == KEY_RIGHT &&
-            aCurSel.nEndPara == nLastPara &&
-            aCurSel.nEndPos == nLastParaLen
-            )
-        {
-            fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
-
-            // Move to next box
-            SdrEndTextEdit();
-            SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
-            SdrBeginTextEdit(pNextLink);
-            bHandled = true;
-        }
-
+    TextChainCursorManager aCursorManager(this, pTextObj);
+    if( aCursorManager.HandleKeyEvent(rKEvt) ) {
+        // Possibly do other stuff here if necessary...
         // XXX: Careful with the checks below (in KeyInput) for pWin and co. You should do them here I guess.
-
+        return true;
+    } else {
+        return false;
     }
-
-    return bHandled;
-
 }
 
 bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
@@ -1357,8 +1329,6 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
             ImpMakeTextCursorAreaVisible();
-
-
 
             return true;
         }
