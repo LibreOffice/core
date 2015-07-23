@@ -39,7 +39,7 @@ PaletteManager::PaletteManager() :
     mLastColor(COL_AUTO)
 {
     LoadPalettes();
-    mnNumOfPalettes += maPalettes.size();
+    mnNumOfPalettes += m_Palettes.size();
 }
 
 PaletteManager::~PaletteManager()
@@ -48,7 +48,7 @@ PaletteManager::~PaletteManager()
 
 void PaletteManager::LoadPalettes()
 {
-    maPalettes.clear();
+    m_Palettes.clear();
     OUString aPalPaths = SvtPathOptions().GetPalettePath();
 
     std::stack<OUString> aDirs;
@@ -82,16 +82,16 @@ void PaletteManager::LoadPalettes()
                     OUString aFName = aFileStat.getFileName();
                     if (aNames.find(aFName) == aNames.end())
                     {
-                        Palette* pPalette = 0;
+                        std::unique_ptr<Palette> pPalette;
                         if( aFName.endsWithIgnoreAsciiCase(".gpl") )
-                            pPalette = new PaletteGPL( aFileStat.getFileURL(), aFName );
+                            pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFName));
                         else if( aFName.endsWithIgnoreAsciiCase(".soc") )
-                            pPalette = new PaletteSOC( aFileStat.getFileURL(), aFName );
+                            pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFName));
                         else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
-                            pPalette = new PaletteASE( aFileStat.getFileURL(), aFName );
+                            pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFName));
 
                         if( pPalette && pPalette->IsValid() )
-                            maPalettes.push_back( pPalette );
+                            m_Palettes.push_back( std::move(pPalette) );
                         aNames.insert(aFName);
                     }
                 }
@@ -136,7 +136,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else
     {
-        maPalettes[mnCurrentPalette-1].LoadColorSet( rColorSet );
+        m_Palettes[mnCurrentPalette-1]->LoadColorSet( rColorSet );
         mnColorCount = rColorSet.GetItemCount();
     }
 }
@@ -159,9 +159,7 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 
     aPaletteNames.push_back( SVX_RESSTR( RID_SVXSTR_DEFAULT_PAL ) );
 
-    for( boost::ptr_vector<Palette>::iterator it = maPalettes.begin();
-         it != maPalettes.end();
-         ++it)
+    for (auto const& it : m_Palettes)
     {
         aPaletteNames.push_back( (*it).GetName() );
     }

@@ -23,7 +23,6 @@
 #include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/tbxcolorupdate.hxx>
-#include <deque>
 
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -33,7 +32,9 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <deque>
+#include <vector>
+#include <memory>
 
 class PaletteManager
 {
@@ -47,7 +48,8 @@ class PaletteManager
 
     Color                   mLastColor;
     std::deque<Color>       maRecentColors;
-    boost::ptr_vector<Palette> maPalettes;
+    std::vector<std::unique_ptr<Palette>> m_Palettes;
+
 public:
     PaletteManager();
     ~PaletteManager();
