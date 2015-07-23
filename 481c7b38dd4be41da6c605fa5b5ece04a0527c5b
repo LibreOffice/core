@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_4dcc9635",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1000292
+      },
+      "writtenOn": "2015-07-23T03:29:38Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be necessary as this is set in gridwin4.cxx:718 but without this the Points won\u0027t get converted.",
+      "revId": "481c7b38dd4be41da6c605fa5b5ece04a0527c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
