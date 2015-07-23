@@ -291,7 +291,8 @@ ChartSeriesPanel::ChartSeriesPanel(
   : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui", rxFrame),
     mxFrame(rxFrame),
     mxModel(pController->getModel()),
-    mxListener(new ChartSidebarModifyListener(this))
+    mxListener(new ChartSidebarModifyListener(this)),
+    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_DATA_SERIES))
 {
     get(mpCBLabel, "checkbutton_label");
     get(mpCBTrendline, "checkbutton_trendline");
@@ -317,6 +318,9 @@ void ChartSeriesPanel::dispose()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
 
     mpCBLabel.clear();
     mpCBTrendline.clear();
@@ -337,6 +341,9 @@ void ChartSeriesPanel::Initialize()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->addModifyListener(mxListener);
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
     updateData();
 
@@ -422,6 +429,20 @@ void ChartSeriesPanel::updateModel(
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
+
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+}
+
+void ChartSeriesPanel::selectionChanged(bool bCorrectType)
+{
+    if (bCorrectType)
+        updateData();
+}
+
+void ChartSeriesPanel::SelectionInvalid()
+{
 }
 
 IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)

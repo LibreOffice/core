@@ -190,7 +190,8 @@ ChartAxisPanel::ChartAxisPanel(
   : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame),
     mxFrame(rxFrame),
     mxModel(pController->getModel()),
-    mxListener(new ChartSidebarModifyListener(this))
+    mxModifyListener(new ChartSidebarModifyListener(this)),
+    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS))
 {
     get(mpCBShowLabel, "checkbutton_show_label");
     get(mpCBReverse, "checkbutton_reverse");
@@ -208,7 +209,11 @@ ChartAxisPanel::~ChartAxisPanel()
 void ChartAxisPanel::dispose()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    xBroadcaster->removeModifyListener(mxModifyListener);
+
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
 
     mpCBShowLabel.clear();
     mpCBReverse.clear();
@@ -221,7 +226,11 @@ void ChartAxisPanel::dispose()
 void ChartAxisPanel::Initialize()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->addModifyListener(mxListener);
+    xBroadcaster->addModifyListener(mxModifyListener);
+
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
     updateData();
 
@@ -285,12 +294,26 @@ void ChartAxisPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    xBroadcaster->removeModifyListener(mxModifyListener);
 
     mxModel = xModel;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcasterNew->addModifyListener(mxListener);
+    xBroadcasterNew->addModifyListener(mxModifyListener);
+
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+}
+
+void ChartAxisPanel::selectionChanged(bool bCorrectType)
+{
+    if (bCorrectType)
+        updateData();
+}
+
+void ChartAxisPanel::SelectionInvalid()
+{
 }
 
 IMPL_LINK(ChartAxisPanel, CheckBoxHdl, CheckBox*, pCheckbox)

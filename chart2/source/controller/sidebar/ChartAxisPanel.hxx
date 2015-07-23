@@ -17,8 +17,10 @@
 #include <svx/sidebar/PanelLayout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
+#include "ChartSidebarSelectionListener.hxx"
 
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 
 class FixedText;
 class ListBox;
@@ -34,7 +36,8 @@ class ChartAxisPanel : public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface,
     public sfx2::sidebar::SidebarModelUpdate,
-    public ChartSidebarModifyListenerParent
+    public ChartSidebarModifyListenerParent,
+    public ChartSidebarSelectionListenerParent
 {
 public:
     static VclPtr<vcl::Window> Create(
@@ -65,6 +68,9 @@ public:
     virtual void updateData() SAL_OVERRIDE;
     virtual void modelInvalid() SAL_OVERRIDE;
 
+    virtual void selectionChanged(bool bCorrectType) SAL_OVERRIDE;
+    virtual void SelectionInvalid() SAL_OVERRIDE;
+
     virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
 
 private:
@@ -77,7 +83,8 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
     css::uno::Reference<css::frame::XModel> mxModel;
-    css::uno::Reference<css::util::XModifyListener> mxListener;
+    css::uno::Reference<css::util::XModifyListener> mxModifyListener;
+    css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     void Initialize();
 
