@@ -212,6 +212,17 @@ bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* /*
     return true;
 }
 
+bool X11SalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& /*rControlCacheKey*/, int /*nX*/, int /*nY*/)
+{
+    return false;
+}
+
+bool X11SalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
+                                              ControlCacheKey& /*rControlCacheKey*/)
+{
+    return RenderPixmapToScreen(pPixmap, pMask, nX, nY);
+}
+
 XID X11SalGraphicsImpl::GetXRenderPicture()
 {
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();

@@ -111,17 +111,27 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     return true;
 }
 
-bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
+struct TextureCombo
 {
-    const int aAttribs[] = {
+    std::unique_ptr<OpenGLTexture> mpTexture;
+    std::unique_ptr<OpenGLTexture> mpMask;
+};
+
+typedef std::unordered_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
+
+ControlCacheType gTextureCache;
+
+bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo)
+{
+    const int aAttribs[] =
+    {
         GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
         GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
         None
     };
+
     Display* pDisplay = mrParent.GetXDisplay();
     bool bInverted;
-
-    SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
 
     const long nWidth = pPixmap->GetWidth();
     const long nHeight = pPixmap->GetHeight();
@@ -145,27 +155,28 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixm
 
     //TODO: lfrb: glXGetProc to get the functions
 
-    OpenGLTexture aTexture( pPixmap->GetWidth(), pPixmap->GetHeight(), false );
+    rCombo.mpTexture.reset(new OpenGLTexture(pPixmap->GetWidth(), pPixmap->GetHeight(), false));
+
     glActiveTexture( GL_TEXTURE0 );
-    aTexture.Bind();
+    rCombo.mpTexture->Bind();
     glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, NULL );
-    aTexture.Unbind();
+    rCombo.mpTexture->Unbind();
 
     if( pMask != NULL && pGlxMask )
     {
-        OpenGLTexture aMaskTexture( pMask->GetWidth(), pMask->GetHeight(), false );
-        aMaskTexture.Bind();
+        rCombo.mpMask.reset(new OpenGLTexture(pPixmap->GetWidth(), pPixmap->GetHeight(), false));
+        rCombo.mpMask->Bind();
         glXBindTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT, NULL );
-        aMaskTexture.Unbind();
+        rCombo.mpMask->Unbind();
 
-        DrawTextureDiff( aTexture, aMaskTexture, aPosAry, bInverted );
+        DrawTextureDiff(*rCombo.mpTexture, *rCombo.mpMask, aPosAry, bInverted);
 
         glXReleaseTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT );
         glXDestroyPixmap( pDisplay, pGlxMask );
     }
     else
     {
-        DrawTexture( aTexture, aPosAry, bInverted );
+        DrawTexture(*rCombo.mpTexture, aPosAry, bInverted);
     }
 
     CHECK_GL_ERROR();
@@ -176,7 +187,56 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixm
     PostDraw();
 
     CHECK_GL_ERROR();
+
     return true;
+}
+
+bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
+{
+    SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
+
+    TextureCombo aCombo;
+    return RenderPixmap(pPixmap, pMask, nX, nY, aCombo);
+}
+
+bool X11OpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
+{
+    static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
+
+    if (!gbCacheEnabled)
+        return false;
+
+    ControlCacheType::const_iterator iterator = gTextureCache.find(rControlCacheKey);
+
+    if (iterator == gTextureCache.end())
+        return false;
+
+    const std::unique_ptr<TextureCombo>& pCombo = iterator->second;
+
+    PreDraw();
+
+    OpenGLTexture& rTexture = *pCombo->mpTexture;
+
+    SalTwoRect aPosAry(0,  0,  rTexture.GetWidth(), rTexture.GetHeight(),
+                       nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
+
+    if (pCombo->mpMask)
+        DrawTextureDiff(rTexture, *pCombo->mpMask, aPosAry, true);
+    else
+        DrawTexture(rTexture, aPosAry, true);
+
+    PostDraw();
+
+    return true;
+}
+
+bool X11OpenGLSalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
+                                                           ControlCacheKey& aControlCacheKey)
+{
+    std::unique_ptr<TextureCombo> pCombo(new TextureCombo);
+    bool bResult = RenderPixmap(pPixmap, pMask, nX, nY, *pCombo);
+    gTextureCache[aControlCacheKey] = std::move(pCombo);
+    return bResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
