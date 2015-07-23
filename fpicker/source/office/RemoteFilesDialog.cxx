@@ -171,6 +171,7 @@ class FileViewContainer : public vcl::Window
 RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "fps/ui/remotefilesdialog.ui" )
     , m_context( comphelper::getProcessComponentContext() )
+    , m_pCurrentAsyncAction( NULL )
     , m_pFileNotifier( NULL )
     , m_pSplitter( NULL )
     , m_pFileView( NULL )
@@ -187,6 +188,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_bMultiselection = ( nBits & SFXWB_MULTISELECTION ) != 0;
     m_bIsUpdated = false;
     m_bIsConnected = false;
+    m_bServiceChanged = false;
     m_nCurrentFilter = LISTBOX_ENTRY_NOTFOUND;
 
     m_pFilter_lb->Enable( false );
@@ -201,6 +203,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pOk_btn->Enable( false );
 
     m_pOk_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
+    m_pCancel_btn->SetClickHdl( LINK( this, RemoteFilesDialog, CancelHdl ) );
 
     m_pPath = VclPtr<Breadcrumb>::Create( get< vcl::Window >( "breadcrumb_container" ) );
     m_pPath->set_hexpand( true );
@@ -462,7 +465,13 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
     if( m_pFileView )
     {
-        if( !sURL.isEmpty() && ContentIsFolder( sURL ) )
+        m_pTreeView->EndSelection();
+        DisableControls();
+
+        EnableChildPointerOverwrite( true );
+        SetPointer( PointerStyle::Wait );
+
+        if( !sURL.isEmpty() )
         {
             OUString sFilter = FILEDIALOG_FILTER_ALL;
 
@@ -473,33 +482,27 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
             m_pFileView->EndInplaceEditing( false );
 
-            EnableChildPointerOverwrite( true );
-            SetPointer( PointerStyle::Wait );
+            DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFileDialog::executeAsync: previous async action not yet finished!" );
 
-            eResult = m_pFileView->Initialize( sURL, sFilter, NULL, GetBlackList() );
+            m_pCurrentAsyncAction = new AsyncPickerAction( this, m_pFileView, AsyncPickerAction::Action::eOpenURL );
 
-            if( eResult == eSuccess )
-            {
-                m_pPath->SetURL( sURL );
-
-                m_pTreeView->SetSelectHdl( Link<>() );
-                m_pTreeView->SetTreePath( sURL );
-                m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
-
-                m_bIsConnected = true;
-                EnableControls();
-            }
-
-            SetPointer( PointerStyle::Arrow );
-            EnableChildPointerOverwrite( false );
+            // -1 timeout - sync
+            m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetBlackList() );
         }
         else
         {
+            SetPointer( PointerStyle::Arrow );
+            EnableChildPointerOverwrite( false );
+
             // content doesn't exist
-            m_pTreeView->EndSelection();
             ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
+
+            EnableControls();
             return eFailure;
         }
+
+        SetPointer( PointerStyle::Arrow );
+        EnableChildPointerOverwrite( false );
     }
 
     return eResult;
@@ -547,6 +550,22 @@ void RemoteFilesDialog::EnableControls()
         m_pContainer->Enable( false );
         m_pOk_btn->Enable( false );
     }
+
+    m_pPath->EnableFields( true );
+    m_pAddService_btn->Enable( true );
+}
+
+void RemoteFilesDialog::DisableControls()
+{
+    m_pServices_lb->Enable( false );
+    m_pFilter_lb->Enable( false );
+    m_pAddService_btn->Enable( false );
+    m_pName_ed->Enable( false );
+    m_pContainer->Enable( false );
+    m_pOk_btn->Enable( false );
+    m_pPath->EnableFields( false );
+
+    m_pCancel_btn->Enable( true );
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
@@ -591,23 +610,9 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
     if( nPos >= 0 )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
-        OUString sName = m_aServices[nPos]->GetName();
 
-        if( OpenURL( sURL ) == eSuccess )
-        {
-            m_pPath->SetRootName( sName );
-            m_pTreeView->Clear();
-
-            SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( sName, NULL, true );
-            OUString* sData = new OUString( sURL );
-            pRoot->SetUserData( static_cast< void* >( sData ) );
-
-            m_pTreeView->Expand( pRoot );
-
-            m_pName_ed->GrabFocus();
-
-            m_sLastServiceUrl = sURL;
-        }
+        m_bServiceChanged = true;
+        OpenURL( sURL );
     }
 
     return 1;
@@ -690,15 +695,23 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
 {
     if( m_pFileView->GetSelectionCount() )
     {
-        OUString sURL = m_pFileView->GetCurrentURL();
+        SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
 
-        if( ContentIsDocument( sURL ) )
+        if( pEntry )
         {
-            EndDialog( RET_OK );
-        }
-        else
-        {
-            OpenURL( sURL );
+            SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
+
+            if( pData )
+            {
+                if( !pData->mbIsFolder )
+                {
+                    EndDialog( RET_OK );
+                }
+                else
+                {
+                    OpenURL( pData->maURL );
+                }
+            }
         }
     }
 
@@ -789,7 +802,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
 
         OUString sCurrentURL = m_pFileView->GetViewURL();
 
-        if( !sCurrentURL.isEmpty() )
+        if( !sCurrentURL.isEmpty() && m_bIsConnected )
             OpenURL( sCurrentURL );
     }
 
@@ -896,6 +909,20 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     return 1;
 }
 
+IMPL_LINK_NOARG ( RemoteFilesDialog, CancelHdl )
+{
+    if( m_pCurrentAsyncAction.is() )
+    {
+        m_pCurrentAsyncAction->cancel();
+        onAsyncOperationFinished();
+    }
+    else
+    {
+        EndDialog( RET_CANCEL );
+    }
+    return 1;
+}
+
 // SvtFileDialog_Base
 
 SvtFileView* RemoteFilesDialog::GetView()
@@ -938,6 +965,24 @@ void RemoteFilesDialog::SetPath( const OUString& rNewURL )
         OUString sFileName = aUrl.GetLastName( INetURLObject::DECODE_WITH_CHARSET );
 
         m_pName_ed->SetText( sFileName );
+    }
+}
+
+OUString RemoteFilesDialog::getCurrentFileText() const
+{
+    OUString sReturn;
+    if( m_pName_ed )
+        sReturn = m_pName_ed->GetText();
+    return sReturn;
+}
+
+void RemoteFilesDialog::setCurrentFileText( const OUString& rText, bool bSelectAll )
+{
+    if( m_pName_ed )
+    {
+        m_pName_ed->SetText( rText );
+        if( bSelectAll )
+            m_pName_ed->SetSelection( Selection( 0, rText.getLength() ) );
     }
 }
 
@@ -987,9 +1032,58 @@ void RemoteFilesDialog::SetCurFilter( const OUString& rFilter )
     }
 }
 
+void RemoteFilesDialog::FilterSelect()
+{
+}
+
 void RemoteFilesDialog::SetFileCallback( ::svt::IFilePickerListener *pNotifier )
 {
     m_pFileNotifier = pNotifier;
+}
+
+void RemoteFilesDialog::onAsyncOperationStarted()
+{
+    DisableControls();
+}
+
+void RemoteFilesDialog::onAsyncOperationFinished()
+{
+    m_pCurrentAsyncAction = NULL;
+    EnableControls();
+}
+
+void RemoteFilesDialog::UpdateControls( const OUString& rURL )
+{
+    int nPos = GetSelectedServicePos();
+
+    if( nPos >= 0 && m_bServiceChanged && rURL == m_aServices[nPos]->GetUrl() )
+    {
+        OUString sURL = m_aServices[nPos]->GetUrl();
+        OUString sName = m_aServices[nPos]->GetName();
+
+        m_pPath->SetRootName( sName );
+        m_pTreeView->Clear();
+
+        SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( sName, NULL, true );
+        OUString* sData = new OUString( rURL );
+        pRoot->SetUserData( static_cast< void* >( sData ) );
+
+        m_pTreeView->Expand( pRoot );
+
+        m_pName_ed->GrabFocus();
+
+        m_sLastServiceUrl = sURL;
+
+        m_bServiceChanged = false;
+    }
+
+    m_pPath->SetURL( rURL );
+    m_pTreeView->SetSelectHdl( Link<>() );
+    m_pTreeView->SetTreePath( rURL );
+    m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
+
+    m_bIsConnected = true;
+    EnableControls();
 }
 
 void RemoteFilesDialog::EnableAutocompletion( bool )

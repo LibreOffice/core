@@ -84,13 +84,20 @@ public:
     virtual bool ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE;
     virtual bool ContentIsDocument( const OUString& rURL );
 
+    virtual OUString getCurrentFileText() const SAL_OVERRIDE;
+    virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) SAL_OVERRIDE;
+
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) SAL_OVERRIDE;
     virtual void AddFilterGroup( const OUString& _rFilter,
                                 const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) SAL_OVERRIDE;
     virtual OUString GetCurFilter() const SAL_OVERRIDE;
     virtual void SetCurFilter( const OUString& rFilter ) SAL_OVERRIDE;
+    virtual void FilterSelect() SAL_OVERRIDE;
 
     virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier ) SAL_OVERRIDE;
+    virtual void onAsyncOperationStarted() SAL_OVERRIDE;
+    virtual void onAsyncOperationFinished() SAL_OVERRIDE;
+    virtual void UpdateControls( const OUString& rURL ) SAL_OVERRIDE;
 
     virtual void EnableAutocompletion( bool ) SAL_OVERRIDE;
 
@@ -114,11 +121,14 @@ private:
     bool m_bMultiselection;
     bool m_bIsUpdated;
     bool m_bIsConnected;
+    bool m_bServiceChanged;
 
     OUString m_sPath;
     OUString m_sStdDir;
     OUString m_sLastServiceUrl;
     unsigned int m_nCurrentFilter;
+
+    ::rtl::Reference< ::svt::AsyncPickerAction > m_pCurrentAsyncAction;
 
     ::com::sun::star::uno::Sequence< OUString > m_aBlackList;
     ::svt::IFilePickerListener* m_pFileNotifier;
@@ -148,6 +158,7 @@ private:
     void AddFileExtension();
 
     void EnableControls();
+    void DisableControls();
 
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );
@@ -168,6 +179,7 @@ private:
     DECL_LINK( SelectBreadcrumbHdl, Breadcrumb * );
 
     DECL_LINK( OkHdl, void * );
+    DECL_LINK( CancelHdl, void * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX

@@ -35,6 +35,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
 
         OUString m_sRootName;
         OUString m_sClickedURL;
+        OUString m_aCurrentURL;
 
         SvtBreadcrumbMode m_eMode;
 
@@ -50,6 +51,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         virtual ~Breadcrumb();
 
         void dispose() SAL_OVERRIDE;
+        void EnableFields( bool bEnable );
 
         void SetClickHdl( const Link<>& rLink );
         OUString GetHdlURL();

@@ -28,7 +28,7 @@
 #include <vcl/vclptr.hxx>
 
 class SvtFileView;
-class SvtFileDialog;
+class SvtFileDialog_Base;
 
 typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
 
@@ -54,13 +54,13 @@ namespace svt
     private:
         Action                      m_eAction;
         VclPtr<SvtFileView>         m_pView;
-        VclPtr<SvtFileDialog>       m_pDialog;
+        VclPtr<SvtFileDialog_Base>  m_pDialog;
         OUString                    m_sURL;
         OUString                    m_sFileName;
         bool                        m_bRunning;
 
     public:
-        AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction );
+        AsyncPickerAction( SvtFileDialog_Base* _pDialog, SvtFileView* _pView, const Action _eAction );
 
         /** executes the action
 

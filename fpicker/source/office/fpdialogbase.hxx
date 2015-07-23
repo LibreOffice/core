@@ -82,13 +82,20 @@ public:
     virtual std::vector<OUString> GetPathList() const = 0;
     virtual bool ContentIsFolder( const OUString& rURL ) = 0;
 
+    virtual OUString getCurrentFileText() const = 0;
+    virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) = 0;
+
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) = 0;
     virtual void AddFilterGroup( const OUString& _rFilter,
                                 const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) = 0;
     virtual OUString GetCurFilter() const = 0;
     virtual void SetCurFilter( const OUString& rFilter ) = 0;
+    virtual void FilterSelect() = 0;
 
     virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier ) = 0;
+    virtual void onAsyncOperationStarted() = 0;
+    virtual void onAsyncOperationFinished() = 0;
+    virtual void UpdateControls( const OUString& rURL ) = 0;
 
     virtual void EnableAutocompletion( bool _bEnable = true ) = 0;
 

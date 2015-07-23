@@ -178,7 +178,7 @@ public:
     virtual void                StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
 
             void                FileSelect();
-            void                FilterSelect();
+            void                FilterSelect() SAL_OVERRIDE;
 
     void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) SAL_OVERRIDE;
     const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const SAL_OVERRIDE;
@@ -207,7 +207,7 @@ public:
     SvtFileView*                GetView() SAL_OVERRIDE;
 
     void                        InitSize();
-    void                        UpdateControls( const OUString& rURL );
+    void                        UpdateControls( const OUString& rURL ) SAL_OVERRIDE;
     void                        EnableAutocompletion( bool _bEnable = true ) SAL_OVERRIDE;
 
     void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) SAL_OVERRIDE { _pFileNotifier = pNotifier; }
@@ -219,11 +219,11 @@ public:
     bool                        getShowState() SAL_OVERRIDE;
     bool                        isAutoExtensionEnabled();
 
-    OUString                    getCurrentFileText( ) const;
-    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false );
+    OUString                    getCurrentFileText( ) const SAL_OVERRIDE;
+    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false ) SAL_OVERRIDE;
 
-    void                        onAsyncOperationStarted();
-    void                        onAsyncOperationFinished();
+    void                        onAsyncOperationStarted() SAL_OVERRIDE;
+    void                        onAsyncOperationFinished() SAL_OVERRIDE;
 
     void                        RemovablePlaceSelected(bool enable = true);
 

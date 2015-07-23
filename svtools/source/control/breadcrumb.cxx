@@ -32,6 +32,17 @@ void Breadcrumb::dispose()
     VclHBox::dispose();
 }
 
+void Breadcrumb::EnableFields( bool bEnable )
+{
+    VclHBox::Enable( bEnable, true );
+    if( bEnable )
+    {
+        INetURLObject aURL( m_aCurrentURL );
+        int nSegments = aURL.getSegmentCount();
+        m_aLinks[nSegments]->Enable( false );
+    }
+}
+
 void Breadcrumb::SetClickHdl( const Link<>& rLink )
 {
     m_aClickHdl = rLink;
@@ -59,6 +70,7 @@ void Breadcrumb::SetRootName( const OUString& rURL )
 
 void Breadcrumb::SetURL( const OUString& rURL )
 {
+    m_aCurrentURL = rURL;
     INetURLObject aURL( rURL );
     aURL.setFinalSlash();
 
