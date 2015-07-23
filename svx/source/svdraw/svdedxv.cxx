@@ -553,10 +553,10 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     switch ( pTextChain->GetCursorEvent(pTextObj) ) {
 
             case CursorChainingEvent::UNCHANGED:
-                // Set same selection as before the chaining
+                // Set same selection as before the chaining (which is saved as PostChainingSel)
                 // We need an explicit set because the Outliner is messed up
                 //    after text transfer and otherwise it brings us at arbitrary positions.
-                pOLV->SetSelection(pTextChain->GetPreChainingSel(pTextObj));
+                pOLV->SetSelection(aNewSel);
                 break;
             case CursorChainingEvent::TO_NEXT_LINK:
                 SdrEndTextEdit();

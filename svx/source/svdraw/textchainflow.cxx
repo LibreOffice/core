@@ -317,18 +317,16 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
 
 void EditingTextChainFlow::impBroadcastCursorInfo() const
 {
-    bool bCursorOut = false;
+    ESelection aPreChainingSel = GetTextChain()->GetPreChainingSel(GetLinkTarget()) ;
+
+    // Test whether the cursor is out of the box.
+    bool bCursorOut = mbPossiblyCursorOut && maOverflowPosSel.IsLess(aPreChainingSel);
 
     // NOTE: I handled already the stuff for the comments below. They will be kept temporarily till stuff settles down.
     // Possibility: 1) why don't we stop passing the actual event to the TextChain and instead we pass
     //              the overflow pos and mbPossiblyCursorOut
     //              2) We pass the current selection before anything happens and we make impBroadcastCursorInfo compute it.
 
-    if (mbPossiblyCursorOut) {
-        ESelection aPreChainingSel = GetTextChain()->GetPreChainingSel(GetLinkTarget()) ;
-        // Test whether the cursor is out of the box.
-        bCursorOut = maOverflowPosSel.IsLess(aPreChainingSel);
-    }
 
     if (bCursorOut) {
             //maCursorEvent = CursorChainingEvent::TO_NEXT_LINK;
@@ -336,6 +334,7 @@ void EditingTextChainFlow::impBroadcastCursorInfo() const
             GetTextChain()->SetCursorEvent(GetLinkTarget(), CursorChainingEvent::TO_NEXT_LINK);
     } else {
         //maCursorEvent = CursorChainingEvent::UNCHANGED;
+        GetTextChain()->SetPostChainingSel(GetLinkTarget(), aPreChainingSel);
         GetTextChain()->SetCursorEvent(GetLinkTarget(), CursorChainingEvent::UNCHANGED);
     }
 
