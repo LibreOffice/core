@@ -114,8 +114,6 @@ public:
 private:
     bool    m_bFixed;
     bool    m_bAutoOrder;
-    OUString   m_strLanguage;
-    OUString   m_strCountry;
     XFStyleContainer    m_aParts;
 };
 

@@ -97,7 +97,6 @@ public:
 private:
     enumXFEntry     m_eType;
     OUString   m_strValue;
-    OUString   m_strDisplay;
     OUString   m_strKey1;
     OUString   m_strKey2;
     OUString   m_strName;
