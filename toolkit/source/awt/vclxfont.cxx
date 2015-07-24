@@ -29,6 +29,7 @@
 #include <sal/alloca.h>
 
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 
 //  class VCLXFont
@@ -200,6 +201,7 @@ sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    SolarMutexGuard aSolarGuard;
 
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
