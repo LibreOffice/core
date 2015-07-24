@@ -1683,6 +1683,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             }
             break;
         case RTF_FOOTNOTE:
+            checkFirstRun();
             if (!m_pSuperstream)
             {
                 Id nId = NS_ooxml::LN_footnote;
