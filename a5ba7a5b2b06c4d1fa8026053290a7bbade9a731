@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a8ce5881",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "This doesn\u0027t make any sense. I guess it should be \"If there is leading 0 set on a printer device, we have a problem\"",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_c8cb9471",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "This doesn\u0027t make any sense, again.",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_48a6c4c2",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "There\u0027s no verb in the sentence. \"... always use ...\", perhaps?",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_28882822",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2759,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "I think the meaning of the second sentence is \"The flag can be already set by DrawBackground.\" But I am not sure. Anyway, IMHO you should leave this as it was, because the translation is about as helpful as the original... It will have to be translated (or dropped) by someone who actually knows the code.",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_488d6430",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4127,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "Again, this should better stay untranslated.",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e8aa1085",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4854,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "centre -\u003e center",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_08b0ccf3",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5057,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "needen -\u003e needed\n\nAlso, the sentence sounds weird. Change \"when on the left ...\" -\u003e \"on the left side of the window\"?",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_889cbc6a",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5155,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-24T06:57:41Z",
+      "side": 1,
+      "message": "\"center justify\" -\u003e \"justification to center\"",
+      "revId": "a5ba7a5b2b06c4d1fa8026053290a7bbade9a731",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
