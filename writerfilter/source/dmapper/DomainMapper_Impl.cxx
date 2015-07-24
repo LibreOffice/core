@@ -1574,8 +1574,14 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     {
         // Redlines outside the footnote should not affect footnote content
         m_aRedlines.push(std::vector< RedlineParamsPtr >());
-
+        bool bMissingPara = false;
         PropertyMapPtr pTopContext = GetTopContext();
+        if (!pTopContext)
+        {
+            bMissingPara = true;
+            PushProperties(CONTEXT_PARAGRAPH);
+            pTopContext = GetTopContext();
+        }
         uno::Reference< text::XText > xFootnoteText;
         if (GetTextFactory().is())
             xFootnoteText.set( GetTextFactory()->createInstance(
@@ -1616,6 +1622,8 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // between the footnote number and text using a tab, so just ignore
         // that for now.
         m_bIgnoreNextTab = true;
+        if (bMissingPara)
+            PopProperties(CONTEXT_PARAGRAPH);
     }
     catch( const uno::Exception& e )
     {
