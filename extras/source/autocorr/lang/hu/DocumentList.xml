@@ -674,12 +674,12 @@
   <block-list:block block-list:abbreviated-name=".*_).*" block-list:name="₎"/>
   <block-list:block block-list:abbreviated-name=":schwa:" block-list:name="ə"/>
   <block-list:block block-list:abbreviated-name=":o:" block-list:name="⭕"/>
-  <block-list:block block-list:abbreviated-name=":gyógyfű:" block-list:name="🌿"/>
   <block-list:block block-list:abbreviated-name=":bőrszín2:" block-list:name="🏻"/>
   <block-list:block block-list:abbreviated-name=":bőrszín3:" block-list:name="🏼"/>
   <block-list:block block-list:abbreviated-name=":bőrszín4:" block-list:name="🏽"/>
   <block-list:block block-list:abbreviated-name=":bőrszín5:" block-list:name="🏾"/>
   <block-list:block block-list:abbreviated-name=":bőrszín6:" block-list:name="🏿"/>
+  <block-list:block block-list:abbreviated-name=":virág:" block-list:name="🌼"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -824,11 +824,11 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":...:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":*:" block-list:name="·"/>
-  <block-list:block block-list:abbreviated-name=":\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":bocsánatkérés:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":bőgő macska:" block-list:name="🙀"/>
   <block-list:block block-list:abbreviated-name=":boldog macska:" block-list:name="😹"/>
@@ -874,7 +874,6 @@
   <block-list:block block-list:abbreviated-name=":csavarkulcs:" block-list:name="🔧"/>
   <block-list:block block-list:abbreviated-name=":csepp:" block-list:name="💧"/>
   <block-list:block block-list:abbreviated-name=":cseresznye:" block-list:name="🍒"/>
-  <block-list:block block-list:abbreviated-name=":cseresznyevirág:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":csibe2:" block-list:name="🐤"/>
   <block-list:block block-list:abbreviated-name=":csibe3:" block-list:name="🐥"/>
   <block-list:block block-list:abbreviated-name=":csibe:" block-list:name="🐣"/>
@@ -1135,7 +1134,6 @@
   <block-list:block block-list:abbreviated-name=":hegyi vasút:" block-list:name="🚞"/>
   <block-list:block block-list:abbreviated-name=":helikopter:" block-list:name="🚁"/>
   <block-list:block block-list:abbreviated-name=":helyeslés:" block-list:name="🙆"/>
-  <block-list:block block-list:abbreviated-name=":hercegnő:" block-list:name="👸"/>
   <block-list:block block-list:abbreviated-name=":hév:" block-list:name="🚈"/>
   <block-list:block block-list:abbreviated-name=":hibiszkusz:" block-list:name="🌺"/>
   <block-list:block block-list:abbreviated-name=":híd:" block-list:name="🌉"/>
@@ -1266,6 +1264,7 @@
   <block-list:block block-list:abbreviated-name=":kimerült:" block-list:name="😩"/>
   <block-list:block block-list:abbreviated-name=":kimonó:" block-list:name="👘"/>
   <block-list:block block-list:abbreviated-name=":király:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":királylány:" block-list:name="👸"/>
   <block-list:block block-list:abbreviated-name=":kis csillag2:" block-list:name="⭑"/>
   <block-list:block block-list:abbreviated-name=":kis csillag:" block-list:name="⭒"/>
   <block-list:block block-list:abbreviated-name=":kisebb négyzet2:" block-list:name="◾"/>
@@ -1455,7 +1454,7 @@
   <block-list:block block-list:abbreviated-name=":nevetés:" block-list:name="😆"/>
   <block-list:block block-list:abbreviated-name=":nő:" block-list:name="👩"/>
   <block-list:block block-list:abbreviated-name=":nők:" block-list:name="🚺"/>
-  <block-list:block block-list:abbreviated-name=":növény:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":növény:" block-list:name="🌿"/>
   <block-list:block block-list:abbreviated-name=":növő hold:" block-list:name="🌔"/>
   <block-list:block block-list:abbreviated-name=":növő holdsarló:" block-list:name="🌒"/>
   <block-list:block block-list:abbreviated-name=":nű:" block-list:name="ν"/>
@@ -1807,7 +1806,8 @@
   <block-list:block block-list:abbreviated-name=":villamos:" block-list:name="🚊"/>
   <block-list:block block-list:abbreviated-name=":villogó:" block-list:name="🚨"/>
   <block-list:block block-list:abbreviated-name=":violinkulcs:" block-list:name="𝄞"/>
-  <block-list:block block-list:abbreviated-name=":virág:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":virág2:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":virág:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":vitorlás:" block-list:name="⛵"/>
   <block-list:block block-list:abbreviated-name=":Vízöntő:" block-list:name="♒"/>
   <block-list:block block-list:abbreviated-name=":vonalzó2:" block-list:name="📐"/>

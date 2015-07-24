@@ -176,6 +176,7 @@
   <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":bat:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":bázický bod:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
   <block-list:block block-list:abbreviated-name=":Beta:" block-list:name="Β"/>
   <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
@@ -207,12 +208,16 @@
   <block-list:block block-list:abbreviated-name=":Epsilon:" block-list:name="Ε"/>
   <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":fi:" block-list:name="φ"/>
   <block-list:block block-list:abbreviated-name=":Fi:" block-list:name="Φ"/>
   <block-list:block block-list:abbreviated-name=":gama:" block-list:name="γ"/>
   <block-list:block block-list:abbreviated-name=":Gama:" block-list:name="Γ"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":guľka:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":hrivna:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":informácia:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":J:" block-list:name="↓"/>
   <block-list:block block-list:abbreviated-name=":jen:" block-list:name="¥"/>
   <block-list:block block-list:abbreviated-name=":jota:" block-list:name="ι"/>
   <block-list:block block-list:abbreviated-name=":Jota:" block-list:name="Ι"/>
@@ -224,36 +229,54 @@
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
   <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
   <block-list:block block-list:abbreviated-name=":libra:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":líra:" block-list:name="₤"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":mi:" block-list:name="μ"/>
   <block-list:block block-list:abbreviated-name=":Mi:" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=":minúta:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":ni:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":nie:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":Ny:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":odrážka2:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":omicron:" block-list:name="ο"/>
   <block-list:block block-list:abbreviated-name=":Omikron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":palec:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":paragraf:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Pi:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":promile:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
   <block-list:block block-list:abbreviated-name=":Psi:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":registrované:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":ro:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Ro:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":rupia:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":S:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":šekel:" block-list:name="₪"/>
   <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
   <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":SJ:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":stupeň:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":SV:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":SZ:" block-list:name="↖"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
   <block-list:block block-list:abbreviated-name=":theta:" block-list:name="θ"/>
   <block-list:block block-list:abbreviated-name=":Theta:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":turecká líra:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":V:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":VZ:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
   <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
   <block-list:block block-list:abbreviated-name=":Xi:" block-list:name="Ξ"/>
   <block-list:block block-list:abbreviated-name=":ypsilon:" block-list:name="υ"/>
   <block-list:block block-list:abbreviated-name=":Ypsilon:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":Z:" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
 </block-list:block-list>
