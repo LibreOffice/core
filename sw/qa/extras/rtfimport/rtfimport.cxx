@@ -2173,6 +2173,15 @@ DECLARE_RTFIMPORT_TEST(testFdo85889pca, "fdo85889-pca.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf90046, "tdf90046.rtf")
+{
+    // this was crashing on importing the footnote
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Ma"), xTextRange->getString());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
