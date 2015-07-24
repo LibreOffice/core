@@ -112,45 +112,6 @@ GETTYPES_IMPL_START( Class )                                                \
     CPPU_TYPE_REF( I5 )                                                     \
 GETTYPES_IMPL_END
 
-// 6 interfaces supported
-#define XTYPEPROVIDER_IMPL_6( Class, I1,I2,I3,I4,I5,I6 )                    \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 )                                                     \
-GETTYPES_IMPL_END
-
-// 7 interfaces supported
-#define XTYPEPROVIDER_IMPL_7( Class, I1,I2,I3,I4,I5,I6,I7 )                 \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 ),                                                    \
-    CPPU_TYPE_REF( I7 )                                                     \
-GETTYPES_IMPL_END
-
-// 8 interfaces supported
-#define XTYPEPROVIDER_IMPL_8( Class, I1,I2,I3,I4,I5,I6,I7,I8 )              \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 ),                                                    \
-    CPPU_TYPE_REF( I7 ),                                                    \
-    CPPU_TYPE_REF( I8 )                                                     \
-GETTYPES_IMPL_END
-
 // 9 interfaces supported
 #define XTYPEPROVIDER_IMPL_9( Class, I1,I2,I3,I4,I5,I6,I7,I8,I9 )           \
 XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
@@ -298,14 +259,6 @@ Class::getSupportedServiceNames_Static()                                    \
 }
 
 // Service with service factory.
-
-// Own implementation of getSupportedServiceNames_Static().
-#define XSERVICEINFO_IMPL_0( Class, ImplName )                              \
-XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
-XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
-                                                                            \
-com::sun::star::uno::Sequence< OUString >                              \
-Class::getSupportedServiceNames_Static()
 
 // Own implementation of getSupportedServiceNames_Static().
 #define XSERVICEINFO_IMPL_0_CTX( Class, ImplName )                              \

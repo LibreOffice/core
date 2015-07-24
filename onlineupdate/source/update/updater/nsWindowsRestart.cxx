@@ -55,12 +55,6 @@
 
 // Everything else is not a surrogate: 0x000 -- 0xD7FF, 0xE000 -- 0xFFFF
 
-// N = (H - 0xD800) * 0x400 + 0x10000 + (L - 0xDC00)
-// I wonder whether we could somehow assert that H is a high surrogate
-// and L is a low surrogate
-#define SURROGATE_TO_UCS4(h, l) (((uint32_t(h) & 0x03FF) << 10) + \
-                                 (uint32_t(l) & 0x03FF) + PLANE1_BASE)
-
 // Extract surrogates from a UCS4 char
 // Reference: the Unicode standard 4.0, section 3.9
 // Since (c - 0x10000) >> 10 == (c >> 10) - 0x0080 and

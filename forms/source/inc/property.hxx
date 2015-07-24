@@ -155,14 +155,6 @@ public:
 // === some property types require special handling
 // === such as interfaces
 
-#define DECL_IFACE_PROP0(varname, type) \
-    DECL_IFACE_PROP_IMPL(varname, type) 0)
-
-
-#define DECL_IFACE_PROP1(varname, type, attrib1)    \
-    DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1)
-
-
 #define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)   \
         DECL_IFACE_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
@@ -175,10 +167,6 @@ public:
     DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 | PropertyAttribute::attrib4)
 
 // === or Boolean properties
-
-#define DECL_BOOL_PROP0(varname)    \
-    DECL_BOOL_PROP_IMPL(varname) 0)
-
 
 #define DECL_BOOL_PROP1(varname, attrib1)   \
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1)
@@ -198,10 +186,6 @@ public:
 
 
 
-#define REGISTER_PROP_1( prop, member, attrib1 ) \
-    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1, \
-        &member, cppu::UnoType<decltype(member)>::get() );
-
 #define REGISTER_PROP_2( prop, member, attrib1, attrib2 ) \
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
         &member, cppu::UnoType<decltype(member)>::get() );
@@ -210,10 +194,6 @@ public:
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2 | PropertyAttribute::attrib3, \
         &member, cppu::UnoType<decltype(member)>::get() );
 
-
-#define REGISTER_VOID_PROP_1( prop, memberAny, type, attrib1 ) \
-    registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1, \
-        &memberAny, cppu::UnoType<type>::get() );
 
 #define REGISTER_VOID_PROP_2( prop, memberAny, type, attrib1, attrib2 ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \

@@ -258,9 +258,6 @@ enum
     kDebugInterruptDepthMask                = 0x00FF0000
 };
 
-#define DebugExtractTaskLevelInterruptLevel( LEVEL )    \
-    ( ( ( LEVEL ) &kDebugInterruptLevelMask ) >> kDebugInterruptLevelShift )
-
 #define DebugExtractTaskLevelInterruptDepth( LEVEL )    \
     ( ( ( LEVEL ) &kDebugInterruptDepthMask ) >> kDebugInterruptDepthShift )
 

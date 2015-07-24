@@ -160,12 +160,6 @@ public:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
 
-#define IMPLEMENT_SERVICE_INFO1_STATIC(classname, implasciiname, serviceasciiname)  \
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \
-    IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname) \
-
 #define IMPLEMENT_SERVICE_INFO2(classname, implasciiname, serviceasciiname1, serviceasciiname2) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
@@ -182,14 +176,6 @@ public:
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED3(classname, serviceasciiname1, serviceasciiname2, serviceasciiname3)    \
 
-#define IMPLEMENT_SERVICE_INFO1_ABSTRACT(classname, serviceasciiname)   \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
-
-#define IMPLEMENT_SERVICE_INFO2_ABSTRACT(classname, serviceasciiname1, serviceasciiname2)   \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)   \
-
 // XTypeProvider helpers
 
 #define DECLARE_IMPLEMENTATION_ID( )    \
@@ -198,10 +184,6 @@ public:
 
 #define DECLARE_GETTYPES( ) \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-
-#define DECLARE_TYPEPROVIDER( ) \
-    DECLARE_GETTYPES( ) \
-    DECLARE_IMPLEMENTATION_ID( )
 
 #define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
 ::com::sun::star::uno::Sequence< sal_Int8 > classname::getUnoTunnelImplementationId() \
@@ -241,14 +223,6 @@ public:
             baseclass3::getTypes( ) \
         );  \
     }
-
-#define IMPLEMENT_TYPEPROVIDER2( classname, baseclass1, baseclass2 )    \
-    IMPLEMENT_IMPLEMENTATION_ID( classname) \
-    IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )
-
-#define IMPLEMENT_TYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 )    \
-    IMPLEMENT_IMPLEMENTATION_ID( classname) \
-    IMPLEMENT_GETTYPES3(classname, baseclass1, baseclass2, baseclass3 )
 
 // helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
@@ -293,17 +267,11 @@ public:
 #define DECL_PROP0_BOOL(varname)    \
     DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) 0)
 
-#define DECL_PROP0_IFACE(varname, iface)    \
-    DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) 0)
-
 #define DECL_PROP1(varname, type, attrib1)  \
     DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1)
 
 #define DECL_PROP1_BOOL(varname, attrib1)   \
     DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1)
-
-#define DECL_PROP1_IFACE(varname, iface, attrib1)   \
-    DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1)
 
 #define DECL_PROP2_IFACE(varname, iface, attrib1, attrib2)  \
     DECL_PROP_IMPL(varname, cppu::UnoType<iface>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
@@ -311,14 +279,8 @@ public:
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
     DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
-#define DECL_PROP2_BOOL(varname, attrib1, attrib2)  \
-    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
-
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
     DECL_PROP_IMPL(varname, cppu::UnoType<type>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
-
-#define DECL_PROP3_BOOL(varname, attrib1, attrib2, attrib3) \
-    DECL_PROP_IMPL(varname, cppu::UnoType<bool>::get()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
 
 #define END_PROPERTY_SEQUENCE()                             \
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \

@@ -417,9 +417,9 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aSNS( 1 );
     if ( isFolder() )
-        aSNS.getArray()[ 0 ] = PACKAGE_FOLDER_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.PackageFolderContent";
     else
-        aSNS.getArray()[ 0 ] = PACKAGE_STREAM_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.PackageStreamContent";
 
     return aSNS;
 }

@@ -429,14 +429,6 @@
         AutoCheck = TRUE ; \
     };
 
-#define TBI_SOLID_CREATE \
-    ToolBoxItem\
-    {\
-        Identifier = SID_SOLID_CREATE ; \
-        HelpID = SID_SOLID_CREATE ; \
-        AutoCheck = TRUE ; \
-    };
-
 #define TBI_LEAVE_ALL_GROUPS \
     ToolBoxItem\
     {\

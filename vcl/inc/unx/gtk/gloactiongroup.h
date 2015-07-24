@@ -18,14 +18,8 @@ G_BEGIN_DECLS
 #define G_TYPE_LO_ACTION_GROUP                          (g_lo_action_group_get_type ())
 #define G_LO_ACTION_GROUP(inst)                         (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
                                                          G_TYPE_LO_ACTION_GROUP, GLOActionGroup))
-#define G_LO_ACTION_GROUP_CLASS(klass)                  (G_TYPE_CHECK_CLASS_CAST ((klass),                       \
-                                                         G_TYPE_LO_ACTION_GROUP, GLOActionGroupClass))
 #define G_IS_LO_ACTION_GROUP(inst)                      (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
                                                          G_TYPE_LO_ACTION_GROUP))
-#define G_IS_LO_ACTION_GROUP_CLASS(klass)               (G_TYPE_CHECK_CLASS_TYPE ((klass),                       \
-                                                         G_TYPE_LO_ACTION_GROUP))
-#define G_LO_ACTION_GROUP_GET_CLASS(inst)               (G_TYPE_INSTANCE_GET_CLASS ((inst),                      \
-                                                         G_TYPE_LO_ACTION_GROUP, GLOActionGroupClass))
 
 typedef struct _GLOActionGroupPrivate                   GLOActionGroupPrivate;
 typedef struct _GLOActionGroupClass                     GLOActionGroupClass;

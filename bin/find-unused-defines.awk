@@ -6,6 +6,8 @@
 END { 
     tmp = substr(y, 0, index(y, ":")-1)
     if (x==1) print "sed -i '/[[:space:]]" p1 "[[:space:]]/d' " tmp
+    # mark these as potential places to inline a constant
+    if (x==2) print "#inline " p1 " " tmp
 }
 
 

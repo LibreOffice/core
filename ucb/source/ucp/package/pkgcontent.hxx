@@ -59,14 +59,6 @@ namespace package_ucp
 
 
 
-// UNO service name for the content.
-#define PACKAGE_FOLDER_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.PackageFolderContent"
-#define PACKAGE_STREAM_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.PackageStreamContent"
-
-
-
 struct ContentProperties
 {
     OUString  aTitle;                // Title
