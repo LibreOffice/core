@@ -216,7 +216,6 @@ private:
     OUString                    aHelpText;
     OUString                    aLabel;
     OUString                    aCommand;
-    OUString                    aHelpURL;
 
     bool                        bPopUp;
     bool                        bStrEdited;
