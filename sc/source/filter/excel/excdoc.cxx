@@ -881,10 +881,15 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     if (rCaches.HasCaches())
         rCaches.SaveXml(rStrm);
 
-    XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
     const ScCalcConfig& rCalcConfig = GetDoc().GetCalcConfig();
-    xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
-    xExtLst->SaveXml(rStrm);
+
+    // don't write if it hasn't been read or explicitly changed
+    if ( rCalcConfig.mbHasStringRefSyntax )
+    {
+        XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
+        xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
+        xExtLst->SaveXml(rStrm);
+    }
 
     rWorkbook->endElement( XML_workbook );
     rWorkbook.reset();
