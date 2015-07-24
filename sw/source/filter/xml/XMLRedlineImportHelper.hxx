@@ -40,7 +40,6 @@ typedef ::std::map< OUString, RedlineInfo* > RedlineMapType;
 
 class XMLRedlineImportHelper
 {
-    const OUString sEmpty;
     const OUString sInsertion;
     const OUString sDeletion;
     const OUString sFormatChange;

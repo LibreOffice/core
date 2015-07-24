@@ -240,7 +240,6 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,
     const Reference<XPropertySet> & rImportInfo ) :
-        sEmpty(),
         sInsertion( GetXMLToken( XML_INSERTION )),
         sDeletion( GetXMLToken( XML_DELETION )),
         sFormatChange( GetXMLToken( XML_FORMAT_CHANGE )),

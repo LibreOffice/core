@@ -26,7 +26,6 @@ class SwNavigationPI;
 
 class SwHelpToolBox: public ToolBox, public DropTargetHelper
 {
-    Link<> aDoubleClickLink;
     Link<> aRightClickLink;     // link gets mouse event as parameter !!!
 
     using ToolBox::DoubleClick;

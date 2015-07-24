@@ -525,7 +525,6 @@ public:
 // Extended User settings.
 class SwExtUserFieldType : public SwFieldType
 {
-    OUString aData;
 public:
     SwExtUserFieldType();
 

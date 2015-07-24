@@ -54,7 +54,6 @@ public:
     explicit SlideTransitionPane(
         Window * pParent,
         ViewShellBase & rBase,
-        const Size& rMinSize,
         SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPane();
@@ -101,7 +100,6 @@ private:
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
-    Size              maMinSize;
 
     VclPtr<ListBox>      mpLB_SLIDE_TRANSITIONS;
     VclPtr<FixedText>    mpFT_SPEED;

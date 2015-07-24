@@ -288,7 +288,6 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
     const ScColorScaleFormat* mpFormat;
@@ -382,7 +381,6 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
     const ScDataBarFormat* mpFormat;
@@ -470,7 +468,6 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
     const ScIconSetFormat* mpFormat;

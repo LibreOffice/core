@@ -412,14 +412,12 @@ namespace sd
 SlideTransitionPane::SlideTransitionPane(
     Window * pParent,
     ViewShellBase & rBase,
-    const Size& rMinSize,
     SdDrawDocument* pDoc,
     const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
         PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
 
         mrBase( rBase ),
         mpDrawDoc( pDoc ),
-        maMinSize( rMinSize ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
@@ -1089,8 +1087,7 @@ vcl::Window * createSlideTransitionPanel( vcl::Window* pParent, ViewShellBase& r
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )
     {
-        Size aMinSize( pParent->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
-        pWindow = VclPtr<SlideTransitionPane>::Create( pParent, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
+        pWindow = VclPtr<SlideTransitionPane>::Create( pParent, rBase, pDocSh->GetDoc(), rxFrame );
     }
 
     return pWindow;

@@ -148,7 +148,6 @@ private:
     OUString            aStrRowLabel;
     OUString            aStrColLabel;
     OUString            aStrUndefined;
-    OUString            aStrAreaLabel;
 
     const sal_uInt16    nWhichSort;
     ScSortParam         aSortData;

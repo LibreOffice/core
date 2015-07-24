@@ -192,7 +192,6 @@ friend class SwConnectionDisposedListener_Impl;
 
     OUString            sEMailAddrField;      ///< Mailing: Column name of email address.
     OUString            sSubject;           ///< Mailing: Subject
-    OUString            sAttached;          ///< Mailing: Attached Files.
     bool            bCancel;            ///< Mail merge canceled.
     bool            bInitDBFields : 1;
     bool            bInMerge    : 1;    ///< merge process active

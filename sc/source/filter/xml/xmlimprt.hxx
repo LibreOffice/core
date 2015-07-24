@@ -841,8 +841,6 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     OUString                       sNumberFormat;
     OUString                       sLocale;
     OUString                       sCellStyle;
-    OUString                       sStandardFormat;
-    OUString                       sType;
 
     rtl::Reference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;

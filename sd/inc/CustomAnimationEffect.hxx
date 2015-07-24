@@ -195,8 +195,6 @@ private:
 
     EffectSequenceHelper* mpEffectSequence;
 
-    OUString        maName;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio > mxAudio;
     ::com::sun::star::uno::Any maTarget;

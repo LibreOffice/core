@@ -99,7 +99,6 @@
 #include <utility>
 
 #define SC_LOCALE           "Locale"
-#define SC_STANDARDFORMAT   "StandardFormat"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
 #define SC_REPEAT_ROW "repeat-row"
 #define SC_FILTER "filter"
@@ -1992,8 +1991,6 @@ ScXMLImport::ScXMLImport(
     sNumberFormat(SC_UNONAME_NUMFMT),
     sLocale(SC_LOCALE),
     sCellStyle(SC_UNONAME_CELLSTYL),
-    sStandardFormat(SC_STANDARDFORMAT),
-    sType(SC_UNONAME_TYPE),
     pDocElemTokenMap( 0 ),
     pStylesElemTokenMap( 0 ),
     pStylesAttrTokenMap( 0 ),

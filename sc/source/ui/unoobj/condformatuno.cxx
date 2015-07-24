@@ -869,7 +869,6 @@ void SAL_CALL ScConditionEntryObj::removeVetoableChangeListener( const OUString&
 
 ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScColorScaleFormat* pFormat):
-    mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
     maPropSet(getColorScalePropSet()),
     mpFormat(pFormat)
@@ -1142,7 +1141,6 @@ void ScColorScaleEntryObj::setFormula(const OUString& rFormula)
 
 ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScDataBarFormat* pFormat):
-    mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
     maPropSet(getDataBarPropSet()),
     mpFormat(pFormat)
@@ -1543,7 +1541,6 @@ void ScDataBarEntryObj::setFormula(const OUString& rFormula)
 
 ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScIconSetFormat* pFormat):
-    mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
     maPropSet(getIconSetPropSet()),
     mpFormat(pFormat)
