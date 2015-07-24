@@ -415,7 +415,7 @@ void GtkSalFrame::doKeyCallback( guint state,
     if (keyval == GDK_0)
     {
         fprintf( stderr, "force widget_queue_draw\n");
-        gtk_widget_queue_draw (m_pWindow);
+        gtk_widget_queue_draw (m_pFixedContainer);
         return;
     }
     else if (keyval == GDK_1)
@@ -1034,12 +1034,25 @@ void GtkSalFrame::updateScreenNumber()
 
 void GtkSalFrame::InitCommon()
 {
+    // add the fixed container child,
+    // fixed is needed since we have to position plugin windows
+    m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), NULL ));
+    gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pFixedContainer) );
+
+    gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
+    /*non-X11 displays won't show anything at all without double-buffering
+      enabled*/
+    if (GDK_IS_X11_DISPLAY(getGdkDisplay()))
+        gtk_widget_set_double_buffered(GTK_WIDGET(m_pFixedContainer), false);
+    gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pFixedContainer), false);
+
+
     // connect signals
     g_signal_connect( G_OBJECT(m_pWindow), "style-set", G_CALLBACK(signalStyleSet), this );
     g_signal_connect( G_OBJECT(m_pWindow), "button-press-event", G_CALLBACK(signalButton), this );
     g_signal_connect( G_OBJECT(m_pWindow), "button-release-event", G_CALLBACK(signalButton), this );
 #if GTK_CHECK_VERSION(3,0,0)
-    g_signal_connect( G_OBJECT(m_pWindow), "draw", G_CALLBACK(signalDraw), this );
+    g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
 //    g_signal_connect( G_OBJECT(m_pWindow), "state-flags-changed", G_CALLBACK(signalFlagsChanged), this );
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(m_pWindow);
@@ -1055,7 +1068,7 @@ void GtkSalFrame::InitCommon()
 #endif
 
 #else
-    g_signal_connect( G_OBJECT(m_pWindow), "expose-event", G_CALLBACK(signalExpose), this );
+    g_signal_connect( G_OBJECT(m_pFixedContainer), "expose-event", G_CALLBACK(signalExpose), this );
 #endif
     g_signal_connect( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
@@ -1097,23 +1110,11 @@ void GtkSalFrame::InitCommon()
     m_nAppActionGroupExportId = 0;
     m_nHudAwarenessId   = 0;
 
-    gtk_widget_set_app_paintable( m_pWindow, TRUE );
-    /*non-X11 displays won't show anything at all without double-buffering
-      enabled*/
-    if (GDK_IS_X11_DISPLAY(getGdkDisplay()))
-        gtk_widget_set_double_buffered( m_pWindow, FALSE );
-    gtk_widget_set_redraw_on_allocate( m_pWindow, FALSE );
-
     gtk_widget_add_events( m_pWindow,
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                            GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
                            GDK_VISIBILITY_NOTIFY_MASK | GDK_SCROLL_MASK
                            );
-
-    // add the fixed container child,
-    // fixed is needed since we have to position plugin windows
-    m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), NULL ));
-    gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pFixedContainer) );
 
     // show the widgets
     gtk_widget_show( GTK_WIDGET(m_pFixedContainer) );
@@ -3646,7 +3647,7 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
         cairo_destroy(cr);
     }
 
-    gtk_widget_queue_draw_area(m_pWindow,
+    gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
                                rDamageRect.getMinX(),
                                rDamageRect.getMinY(),
                                rDamageRect.getWidth(),
@@ -3709,7 +3710,7 @@ void GtkSalFrame::TriggerPaintEvent()
     SAL_INFO("vcl.gtk3", "force painting" << 0 << "," << 0 << " " << maGeometry.nWidth << "x" << maGeometry.nHeight);
     SalPaintEvent aPaintEvt(0, 0, maGeometry.nWidth, maGeometry.nHeight, true);
     CallCallback(SALEVENT_PAINT, &aPaintEvt);
-    gtk_widget_queue_draw(m_pWindow);
+    gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
 #endif
 }
 
