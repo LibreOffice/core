@@ -42,7 +42,21 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
         css::uno::Reference<css::frame::XModel> xModel)
 {
     OUString aCID = getCID(xModel);
-    return ObjectIdentifier::getObjectPropertySet(aCID, xModel);
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        ObjectIdentifier::getObjectPropertySet(aCID, xModel);
+
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    if (eType == OBJECTTYPE_DIAGRAM)
+    {
+        css::uno::Reference<css::chart2::XDiagram> xDiagram(
+                xPropSet, css::uno::UNO_QUERY);
+        if (!xDiagram.is())
+            return xPropSet;
+
+        xPropSet.set(xDiagram->getWall());
+    }
+
+    return xPropSet;
 }
 
 ChartController* getController(css::uno::Reference<css::frame::XModel> xModel)
