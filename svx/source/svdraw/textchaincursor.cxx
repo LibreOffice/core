@@ -28,14 +28,15 @@
 
 TextChainCursorManager::TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj) :
     mpEditView(pEditView),
-    mpTextObj(pTextObj)
+    mpTextObj(pTextObj),
+    mbHandlingDel(false)
 {
     assert(mpEditView);
     assert(mpTextObj);
 
 }
 
-bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt ) const
+bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt )
 {
     ESelection aNewSel;
     CursorChainingEvent aCursorEvent;
@@ -56,7 +57,7 @@ bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt ) const
 void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
                                             CursorChainingEvent *pOutCursorEvt,
                                             ESelection *pOutSel,
-                                            bool *bOutHandled) const
+                                            bool *bOutHandled)
 {
     SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
     OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
@@ -92,6 +93,16 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
         return;
     }
 
+    // Possibility: Are we "pushing" at the end of the object?
+    if (nCode == KEY_DELETE && bAtEndOfTextContent && pNextLink)
+    {
+        *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
+        // Selection unchanged: we are at the beginning of the box
+        *bOutHandled = false; // We still need to delete the characters
+        mbHandlingDel = true;
+        return;
+    }
+
     ESelection aStartSel = ESelection(0, 0);
     bool bAtStartOfTextContent = aCurSel.IsEqual(aStartSel);
 
@@ -118,15 +129,39 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
 
 }
 
+void TextChainCursorManager::HandleCursorEventAfterChaining(
+                            const CursorChainingEvent aCurEvt,
+                            const ESelection  aNewSel)
+
+{
+     // Special case for DELETE handling: we need to get back at the end of the prev box
+    if (mbHandlingDel) {
+        // reset flag
+        mbHandlingDel = false;
+
+        // Move to end of prev box
+        SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
+        ESelection aEndSel(100000, 100000);
+        impChangeEditingTextObj(pPrevLink, aEndSel);
+        return;
+    }
+
+    // Standard handling
+    HandleCursorEvent(aCurEvt, aNewSel);
+}
+
+
 void TextChainCursorManager::HandleCursorEvent(
                             const CursorChainingEvent aCurEvt,
                             const ESelection  aNewSel)
-                            const
+
 {
 
     OutlinerView* pOLV = mpEditView->GetTextEditOutlinerView();
     SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
     SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
+
+
 
     switch ( aCurEvt ) {
             case CursorChainingEvent::UNCHANGED:
@@ -148,7 +183,7 @@ void TextChainCursorManager::HandleCursorEvent(
 
 }
 
-void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const
+void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel)
 {
     assert(pTargetTextObj);
 
@@ -156,7 +191,10 @@ void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj,
     mpEditView->SdrBeginTextEdit(pTargetTextObj);
     // OutlinerView has changed, so we update the pointer
     OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
-    pOLV->SetSelection(aNewSel); // XXX
+    pOLV->SetSelection(aNewSel);
+
+    // Update reference text obj
+    mpTextObj = pTargetTextObj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

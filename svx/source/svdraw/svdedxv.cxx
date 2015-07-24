@@ -533,9 +533,10 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
     return 0;
 }
 
-void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
+
+void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager)
 {
-    if (!mxTextEditObj.is())
+    if (!mxTextEditObj.is() || !pCursorManager)
         return;
 
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
@@ -546,8 +547,8 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     TextChain *pTextChain = pTextObj->GetTextChain();
     ESelection aNewSel = pTextChain->GetPostChainingSel(pTextObj);
 
-    TextChainCursorManager aCursorManager(this, pTextObj);
-    aCursorManager.HandleCursorEvent(
+
+    pCursorManager->HandleCursorEventAfterChaining(
         pTextChain->GetCursorEvent(pTextObj),
         aNewSel);
 
@@ -1260,25 +1261,30 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
     return bOk;
 }
 
-bool SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
+TextChainCursorManager *SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(
+                                            const KeyEvent& rKEvt,
+                                            vcl::Window* pWin,
+                                            bool *bOutHandled)
 {
+    *bOutHandled = false;
+
     SdrTextObj* pTextObj = NULL;
     if (mxTextEditObj.is())
         pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
     else
-        return false;
+        return NULL;
 
     if (!pTextObj->IsChainable())
-        return false;
+        return NULL;
 
-    TextChainCursorManager aCursorManager(this, pTextObj);
-    if( aCursorManager.HandleKeyEvent(rKEvt) ) {
+    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
+    if( pCursorManager->HandleKeyEvent(rKEvt) ) {
         // Possibly do other stuff here if necessary...
         // XXX: Careful with the checks below (in KeyInput) for pWin and co. You should do them here I guess.
-        return true;
-    } else {
-        return false;
+        *bOutHandled = true;
     }
+
+    return pCursorManager;
 }
 
 bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
@@ -1286,7 +1292,10 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     if(pTextEditOutlinerView)
     {
         // We possibly move to another box before any handling
-        if (ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin))
+        bool bHandled = false;
+        TextChainCursorManager *pCursorManager =
+            ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin, &bHandled);
+        if (bHandled)
             return true;
 
         // FIXME(matteocam): Old code from here
@@ -1301,7 +1310,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             // FIXME(matteocam)
             // Start chaining processing
             ImpChainingEventHdl(NULL);
-            ImpMoveCursorAfterChainingEvent();
+            ImpMoveCursorAfterChainingEvent(pCursorManager);
             // End chaining processing
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);

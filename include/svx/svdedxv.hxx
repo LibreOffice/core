@@ -34,6 +34,7 @@ class EditFieldInfo;
 class ImpSdrEditPara;
 struct PasteOrDropInfos;
 class SdrUndoManager;
+class TextChainCursorManager;
 
 enum class CursorChainingEvent;
 class ESelection;
@@ -110,8 +111,8 @@ protected:
 
     OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
 
-    void ImpMoveCursorAfterChainingEvent();
-    bool ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
+    void ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager);
+    TextChainCursorManager *ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin, bool *bOutHandled);
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized

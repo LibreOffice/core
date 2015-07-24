@@ -31,19 +31,28 @@ class TextChainCursorManager
 public:
     TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj);
 
-    bool HandleKeyEvent( const KeyEvent& rKEvt ) const;
+    bool HandleKeyEvent( const KeyEvent& rKEvt );
+
+    // Used by HandledKeyEvent and basic building block for handling cursor event
     void HandleCursorEvent(const CursorChainingEvent aCurEvt,
-                           const ESelection  aNewSel) const;
+                           const ESelection  aNewSel);
+
+    // To be used after chaining event to deal with some nuisances
+    void  HandleCursorEventAfterChaining(const CursorChainingEvent aCurEvt,
+                                         const ESelection  aNewSel);
 
 private:
     SdrObjEditView *mpEditView;
     const SdrTextObj *mpTextObj;
 
-    void impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const;
+    // flag for handling of CANC which is kind of an exceptional case
+    bool mbHandlingDel;
+
+    void impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel);
     void impDetectEvent(const KeyEvent& rKEvt,
                         CursorChainingEvent *pOutCursorEvt,
                         ESelection *pOutSel,
-                        bool *bOutHandled) const;
+                        bool *bOutHandled);
 };
 
 
