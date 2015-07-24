@@ -68,7 +68,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
 
     // We need to have this KeyFuncType
-    if (eFunc !=  KeyFuncType::DONTKNOW)
+    if (eFunc !=  KeyFuncType::DONTKNOW && eFunc != KeyFuncType::DELETE)
     {
         *pOutCursorEvt = CursorChainingEvent::NULL_EVENT;
         return;
@@ -94,7 +94,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     }
 
     // Possibility: Are we "pushing" at the end of the object?
-    if (nCode == KEY_DELETE && bAtEndOfTextContent && pNextLink)
+    if (eFunc == KeyFuncType::DELETE && bAtEndOfTextContent && pNextLink)
     {
         *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
         // Selection unchanged: we are at the beginning of the box
