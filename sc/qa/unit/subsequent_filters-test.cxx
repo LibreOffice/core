@@ -204,6 +204,7 @@ public:
     void testEmbeddedImageXLS();
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
+    void testRefStringConfigXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -299,6 +300,7 @@ public:
     CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
+    CPPUNIT_TEST(testRefStringConfigXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3104,6 +3106,22 @@ void ScFiltersTest::testRefStringXLSX()
 
     const ScCalcConfig& rCalcConfig = rDoc.GetCalcConfig();
     CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, rCalcConfig.meStringRefAddressSyntax);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testRefStringConfigXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("empty.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    xDocSh = saveAndReload( &(*xDocSh), XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScCalcConfig aConfig = rDoc.GetCalcConfig();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_OOO,
+                            aConfig.meStringRefAddressSyntax);
 
     xDocSh->DoClose();
 }
