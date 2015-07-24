@@ -1,0 +1,53 @@
+diff -ru clucene.org/src/core/CLucene/util/VoidMap.h clucene/src/core/CLucene/util/VoidMap.h
+--- src/core/CLucene/util/VoidMap.h	2015-07-24 20:11:28.892997236 +0200
++++ src/core/CLucene/util/VoidMap.h	2015-07-24 20:21:17.290990623 +0200
+@@ -154,16 +154,16 @@
+ 
+  //a CLSet with CLHashMap traits
+ template<typename _kt, typename _vt,
+-	typename _Compare,
++	typename Compare,
+ 	typename _EqualDummy,
+ 	typename _KeyDeletor=CL_NS(util)::Deletor::Dummy,
+ 	typename _ValueDeletor=CL_NS(util)::Deletor::Dummy>
+ class CLUCENE_INLINE_EXPORT CLHashMap:public __CLMap<_kt,_vt,
+-	CL_NS_STD(map)<_kt,_vt, _Compare>,
++	CL_NS_STD(map)<_kt,_vt, Compare>,
+ 	_KeyDeletor,_ValueDeletor>
+ {
+-	typedef typename CL_NS_STD(map)<_kt,_vt,_Compare> _base;
+-	typedef __CLMap<_kt, _vt, CL_NS_STD(map)<_kt,_vt, _Compare>,
++	typedef typename CL_NS_STD(map)<_kt,_vt,Compare> _base;
++	typedef __CLMap<_kt, _vt, CL_NS_STD(map)<_kt,_vt, Compare>,
+ 		_KeyDeletor,_ValueDeletor> _this;
+ public:
+ 	CLHashMap ( const bool deleteKey=false, const bool deleteValue=false )
+@@ -260,15 +260,15 @@
+ //A collection that contains no duplicates
+ //does not guarantee that the order will remain constant over time
+ template<typename _kt, typename _vt,
+-	typename _Compare,
++	typename Compare,
+ 	typename _KeyDeletor=CL_NS(util)::Deletor::Dummy,
+ 	typename _ValueDeletor=CL_NS(util)::Deletor::Dummy>
+ class CLUCENE_INLINE_EXPORT CLSet:public __CLMap<_kt,_vt,
+-	CL_NS_STD(map)<_kt,_vt, _Compare>,
++	CL_NS_STD(map)<_kt,_vt, Compare>,
+ 	_KeyDeletor,_ValueDeletor>
+ {
+-	typedef typename CL_NS_STD(map)<_kt,_vt,_Compare> _base;
+-	typedef __CLMap<_kt, _vt, CL_NS_STD(map)<_kt,_vt, _Compare>,
++	typedef typename CL_NS_STD(map)<_kt,_vt,Compare> _base;
++	typedef __CLMap<_kt, _vt, CL_NS_STD(map)<_kt,_vt, Compare>,
+ 		_KeyDeletor,_ValueDeletor> _this;
+ public:
+ 	CLSet ( const bool deleteKey=false, const bool deleteValue=false )
+@@ -294,7 +294,7 @@
+ 
+ //A collection that can contains duplicates
+ template<typename _kt, typename _vt,
+-	typename _Compare,
++	typename Compare,
+ 	typename _KeyDeletor=CL_NS(util)::Deletor::Dummy,
+ 	typename _ValueDeletor=CL_NS(util)::Deletor::Dummy>
+ class CLUCENE_INLINE_EXPORT CLMultiMap:public __CLMap<_kt,_vt,

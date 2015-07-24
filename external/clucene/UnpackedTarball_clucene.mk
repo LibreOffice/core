@@ -26,6 +26,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 #  http://sourceforge.net/mailarchive/message.php?msg_id=32314782
 # clucene-asan.patch was proposed upstream, see
 #  http://sourceforge.net/mailarchive/message.php?msg_id=32367781
+# see msvc14.0 error report on:
+# https://connect.microsoft.com/VisualStudio/feedback/details/1424082/vs2015-rc-c-compiler-mixes-up-template-parameter-with-identical-named-inherited-typedef
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-debug.patch \
 	external/clucene/patches/clucene-multimap-put.patch \
@@ -37,6 +39,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-ub.patch \
 	external/clucene/patches/clucene-mutex.patch \
 	external/clucene/patches/clucene-asan.patch \
+	external/clucene/patches/clucene-mixes-uptemplate-parameter-msvc-14.patch \
 ))
 
 ifneq ($(OS),WNT)
