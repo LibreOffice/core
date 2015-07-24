@@ -60,6 +60,13 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
+        Property( "Transparency",
+                  FillProperties::PROP_FILL_TRANSPARENCE,
+                  cppu::UnoType<sal_Int16>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
         Property( "FillTransparence",
                   FillProperties::PROP_FILL_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
