@@ -173,6 +173,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 
     SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
+    GtkFixed*                       m_pFixedContainer;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
@@ -180,7 +181,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     Pixmap                          m_hBackgroundPixmap;
     sal_uLong                       m_nStyle;
     SalExtStyle                     m_nExtStyle;
-    GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
     std::list< GtkSalFrame* >       m_aChildren;
     GdkWindowState                  m_nState;
