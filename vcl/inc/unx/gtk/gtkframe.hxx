@@ -173,6 +173,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 
     SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
+    GtkEventBox*                    m_pEventBox;
     GtkFixed*                       m_pFixedContainer;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;

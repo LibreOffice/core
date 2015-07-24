@@ -101,14 +101,27 @@ wrapper_factory_get_accessible_type()
 static AtkObject*
 wrapper_factory_create_accessible( GObject *obj )
 {
-    GtkWidget* parent_widget = gtk_widget_get_parent( GTK_WIDGET( obj ) );
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget* pEventBox = gtk_widget_get_parent(GTK_WIDGET(obj));
 
     // gail_container_real_remove_gtk tries to re-instanciate an accessible
     // for a widget that is about to vanish ..
-    if( ! parent_widget )
+    if (!pEventBox)
         return atk_noop_object_wrapper_new();
 
-    GtkSalFrame* pFrame = GtkSalFrame::getFromWindow( GTK_WINDOW( parent_widget ) );
+    GtkWidget* pTopLevel = gtk_widget_get_parent(pEventBox);
+    if (!pTopLevel)
+        return atk_noop_object_wrapper_new();
+#else
+    GtkWidget* pTopLevel = gtk_widget_get_parent(GTK_WIDGET(obj));
+
+    // gail_container_real_remove_gtk tries to re-instanciate an accessible
+    // for a widget that is about to vanish ..
+    if (!pTopLevel)
+        return atk_noop_object_wrapper_new();
+#endif
+
+    GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(GTK_WINDOW(pTopLevel));
     g_return_val_if_fail( pFrame != NULL, NULL );
 
     vcl::Window* pFrameWindow = pFrame->GetWindow();
@@ -130,7 +143,7 @@ wrapper_factory_create_accessible( GObject *obj )
                 if( accessible )
                     g_object_ref( G_OBJECT(accessible) );
                 else
-                    accessible = atk_object_wrapper_new( xAccessible, gtk_widget_get_accessible(parent_widget) );
+                    accessible = atk_object_wrapper_new( xAccessible, gtk_widget_get_accessible(pTopLevel) );
 
                 return accessible;
             }

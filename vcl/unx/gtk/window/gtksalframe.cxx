@@ -1034,10 +1034,23 @@ void GtkSalFrame::updateScreenNumber()
 
 void GtkSalFrame::InitCommon()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    m_pEventBox = GTK_EVENT_BOX(gtk_event_box_new());
+    gtk_widget_add_events( GTK_WIDGET(m_pEventBox),
+                           GDK_ALL_EVENTS_MASK );
+    gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pEventBox) );
+
+    // add the fixed container child,
+    // fixed is needed since we have to position plugin windows
+    m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), NULL ));
+    gtk_container_add( GTK_CONTAINER(m_pEventBox), GTK_WIDGET(m_pFixedContainer) );
+#else
+    m_pEventBox = 0;
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), NULL ));
     gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pFixedContainer) );
+#endif
 
     gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
     /*non-X11 displays won't show anything at all without double-buffering
@@ -1117,7 +1130,11 @@ void GtkSalFrame::InitCommon()
                            );
 
     // show the widgets
-    gtk_widget_show( GTK_WIDGET(m_pFixedContainer) );
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_show_all( GTK_WIDGET(m_pEventBox) );
+#else
+    gtk_widget_show_all( GTK_WIDGET(m_pFixedContainer) );
+#endif
 
     // realize the window, we need an XWindow id
     gtk_widget_realize( m_pWindow );
@@ -3187,6 +3204,8 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     }
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
+    if( m_pEventBox )
+        gtk_widget_destroy( GTK_WIDGET(m_pEventBox) );
     if( m_pWindow )
         gtk_widget_destroy( m_pWindow );
     if( m_pForeignParent )
@@ -4135,6 +4154,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     if( pObj == pThis->m_pWindow )
     {
         pThis->m_pFixedContainer = NULL;
+        pThis->m_pEventBox = NULL;
         pThis->m_pWindow = NULL;
         pThis->InvalidateGraphics();
     }
