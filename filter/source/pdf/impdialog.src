@@ -23,7 +23,7 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 268 )
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 352, 190 )
 //string for TabDialog standard buttons
 String STR_PDF_EXPORT
 {
@@ -55,21 +55,21 @@ TabPage  RID_PDF_TAB_GENER
 
     FixedLine FL_PAGES
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Range";
     };
     RadioButton RB_ALL
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_GENER:RB_ALL";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~All";
     };
     RadioButton RB_RANGE
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_GENER:RB_RANGE";
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 101 , 10 ) ;
         Text[ en-US ] = "~Pages";
     };
@@ -77,39 +77,39 @@ TabPage  RID_PDF_TAB_GENER
     {
         HelpID = "filter:Edit:RID_PDF_TAB_GENER:ED_PAGES";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 116, 26 ) ;
+        Pos = MAP_APPFONT ( 116, 28 ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
     };
     RadioButton RB_SELECTION
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_GENER:RB_SELECTION";
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Selection";
     };
     FixedLine FL_IMAGES
     {
-        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 55 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Images";
     };
     RadioButton RB_LOSSLESSCOMPRESSION
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_GENER:RB_LOSSLESSCOMPRESSION";
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Lossless compression";
     };
     RadioButton RB_JPEGCOMPRESSION
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_GENER:RB_JPEGCOMPRESSION";
-        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 158, 10 ) ;
         Text[ en-US ] = "~JPEG compression";
     };
     FixedText FT_QUALITY
     {
-        Pos = MAP_APPFONT ( 30 , 89 ) ;
+        Pos = MAP_APPFONT ( 30 , 92 ) ;
         Size = MAP_APPFONT ( 83, 10 ) ;
         Text[ en-US ] = "~Quality";
     };
@@ -117,7 +117,7 @@ TabPage  RID_PDF_TAB_GENER
     {
         HelpID = "filter:MetricField:RID_PDF_TAB_GENER:NF_QUALITY";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 116, 88 ) ;
+        Pos = MAP_APPFONT ( 116, 91 ) ;
         Size = MAP_APPFONT ( 48, 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -128,7 +128,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_REDUCEIMAGERESOLUTION
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_REDUCEIMAGERESOLUTION";
-        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 101 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Reduce image resolution";
@@ -136,7 +136,7 @@ TabPage  RID_PDF_TAB_GENER
     ComboBox CO_REDUCEIMAGERESOLUTION
     {
         HelpID = "filter:ComboBox:RID_PDF_TAB_GENER:CO_REDUCEIMAGERESOLUTION";
-        Pos = MAP_APPFONT ( 116 , 102 ) ;
+        Pos = MAP_APPFONT ( 116 , 105 ) ;
         Size = MAP_APPFONT ( 48 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -151,14 +151,14 @@ TabPage  RID_PDF_TAB_GENER
     };
     FixedLine FL_GENERAL
     {
-        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Pos = MAP_APPFONT ( 182 , 5 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "General";
     };
     CheckBox CB_PDFA_1B_SELECT
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_PDFA_1B_SELECT";
-        Pos = MAP_APPFONT ( 12, 128 ) ;
+        Pos = MAP_APPFONT ( 188, 16 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "P~DF/A-1a";
@@ -166,7 +166,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_TAGGEDPDF
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_TAGGEDPDF";
-        Pos = MAP_APPFONT ( 12 , 141 ) ;
+        Pos = MAP_APPFONT ( 188 , 29 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Tagged PDF";
@@ -174,14 +174,14 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTFORMFIELDS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTFORMFIELDS";
-        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Pos = MAP_APPFONT ( 188 , 42 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Create PDF form";
     };
     FixedText FT_FORMSFORMAT
     {
-        Pos = MAP_APPFONT ( 30 , 168 ) ;
+        Pos = MAP_APPFONT ( 205 , 55 ) ;
         Size = MAP_APPFONT ( 93, 8 ) ;
         Text[ en-US ] = "Submit ~format";
     };
@@ -189,7 +189,7 @@ TabPage  RID_PDF_TAB_GENER
     {
         HelpID = "filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 126, 166 ) ;
+        Pos = MAP_APPFONT ( 302, 55 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -205,7 +205,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_ALLOWDUPLICATEFIELDNAMES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_ALLOWDUPLICATEFIELDNAMES";
-        Pos = MAP_APPFONT( 30, 178 );
+        Pos = MAP_APPFONT( 205, 68 );
         Size = MAP_APPFONT( 128, 10 );
         TabStop = TRUE;
         Text [ en-US ] = "Allow duplicate field ~names";
@@ -213,7 +213,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTBOOKMARKS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS";
-        Pos = MAP_APPFONT ( 12 , 190 ) ;
+        Pos = MAP_APPFONT ( 188 , 81 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~bookmarks";
@@ -221,7 +221,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTNOTES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTES";
-        Pos = MAP_APPFONT ( 12 , 203 ) ;
+        Pos = MAP_APPFONT ( 188 , 94 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Export comments";
@@ -229,7 +229,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTNOTESPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTESPAGES";
-        Pos = MAP_APPFONT ( 12 , 216 ) ;
+        Pos = MAP_APPFONT ( 188 , 107 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~notes pages";
@@ -237,7 +237,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTEMPTYPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES";
-        Pos = MAP_APPFONT ( 12 , 229 ) ;
+        Pos = MAP_APPFONT ( 188 , 120 ) ;
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -246,7 +246,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EMBEDSTANDARDFONTS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EMBEDSTANDARDFONTS";
-        Pos = MAP_APPFONT ( 12 , 248 ) ;
+        Pos = MAP_APPFONT ( 188 , 139 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "E~mbed standard fonts";
@@ -254,7 +254,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_ADDSTREAM
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_ADDSTREAM";
-        Pos = MAP_APPFONT ( 12 , 261 ) ;
+        Pos = MAP_APPFONT ( 188 , 152 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Embed this document ~inside the PDF";
@@ -279,42 +279,42 @@ TabPage  RID_PDF_TAB_OPNFTR
 ////////////////////////////////////////
     FixedLine FL_INITVIEW
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Panes" ;
     };
     RadioButton  RB_OPNMODE_PAGEONLY
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_PAGEONLY";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Page only" ;
     };
     RadioButton  RB_OPNMODE_OUTLINE
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_OUTLINE";
-        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Bookmarks and page" ;
     };
     RadioButton  RB_OPNMODE_THUMBS
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_THUMBS";
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Thumbnails and page" ;
     };
 
     FixedText FT_MAGNF_INITIAL_PAGE
     {
-        Pos = MAP_APPFONT( 12, 52 );
+        Pos = MAP_APPFONT( 12, 55 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Open on page";
     };
     NumericField NUM_MAGNF_INITIAL_PAGE
     {
         HelpID = "filter:NumericField:RID_PDF_TAB_OPNFTR:NUM_MAGNF_INITIAL_PAGE";
-        Pos = MAP_APPFONT( 124, 52 );
+        Pos = MAP_APPFONT( 124, 55 );
         Size = MAP_APPFONT( 40, 12 );
         Value = 1;
         Spin = TRUE;
@@ -325,7 +325,7 @@ TabPage  RID_PDF_TAB_OPNFTR
 ///////////////////////////////////////////////////
     FixedLine FL_MAGNIFICATION
     {
-        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Pos = MAP_APPFONT ( 6 , 70 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Magnification" ;
     };
@@ -333,7 +333,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_MAGNF_DEFAULT";
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /XYZ )
-        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Default" ;
     };
@@ -341,7 +341,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_MAGNF_WIND";
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /Fit )
-        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Fit in window" ;
     };
@@ -349,7 +349,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_MAGNF_WIDTH";
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /FitH top )
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Pos = MAP_APPFONT ( 12 , 108 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "Fit ~width" ;
     };
@@ -357,7 +357,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_MAGNF_VISIBLE";
         // see PDF ref v 1.5 tab 8.2, pg. 542 ( /FitBH top )
-        Pos = MAP_APPFONT ( 12 , 116 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "Fit ~visible" ;
     };
@@ -365,14 +365,14 @@ TabPage  RID_PDF_TAB_OPNFTR
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_MAGNF_ZOOM";
         // see PDF ref v 1.6 tab 8.2, pg. 551 ( /XYZ left top zoom )
-        Pos = MAP_APPFONT ( 12 , 128 ) ;
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text[ en-US ] = "~Zoom factor" ;
     };
     MetricField NUM_MAGNF_ZOOM
     {
         HelpID = "filter:MetricField:RID_PDF_TAB_OPNFTR:NUM_MAGNF_ZOOM";
-        Pos = MAP_APPFONT( 124, 128 ) ;
+        Pos = MAP_APPFONT( 124, 135 ) ;
         Size = MAP_APPFONT( 40, 12 ) ;
         Unit = FUNIT_PERCENT;
         Value = 100;
@@ -384,42 +384,42 @@ TabPage  RID_PDF_TAB_OPNFTR
 ////////////////////////////////////////
     FixedLine FL_PAGE_LAYOUT
     {
-        Pos = MAP_APPFONT ( 6 , 146 ) ;
+        Pos = MAP_APPFONT ( 182 , 5 ) ;
         Size = MAP_APPFONT (164  , 8 ) ;
         Text[ en-US ] = "Page layout" ;
     };
     RadioButton  RB_PGLY_DEFAULT
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_DEFAULT";
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Pos = MAP_APPFONT ( 188 , 16 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "D~efault" ;
     };
     RadioButton  RB_PGLY_SINGPG
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_SINGPG";
-        Pos = MAP_APPFONT ( 12 , 170 ) ;
+        Pos = MAP_APPFONT ( 188 , 29 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Single page" ;
     };
     RadioButton  RB_PGLY_CONT
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONT";
-        Pos = MAP_APPFONT ( 12 , 182 ) ;
+        Pos = MAP_APPFONT ( 188 , 42 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Continuous" ;
     };
     RadioButton  RB_PGLY_CONTFAC
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONTFAC";
-        Pos = MAP_APPFONT ( 12 , 194 ) ;
+        Pos = MAP_APPFONT ( 188 , 55 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "C~ontinuous facing" ;
     };
     CheckBox  CB_PGLY_FIRSTLEFT
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_OPNFTR:CB_PGLY_FIRSTLEFT";
-        Pos = MAP_APPFONT ( 22 , 206 ) ;
+        Pos = MAP_APPFONT ( 198 , 68 ) ;
         Size = MAP_APPFONT ( 148 , 10 ) ;
         Text[ en-US ] = "First page is ~left" ;
     };
@@ -437,7 +437,7 @@ TabPage  RID_PDF_TAB_VPREFER
 //////////////////////////////////////
     FixedLine FL_WINOPT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Window options" ;
     };
@@ -445,7 +445,7 @@ TabPage  RID_PDF_TAB_VPREFER
     CheckBox CB_WNDOPT_RESINIT
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_RESINIT";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Resize window to initial page";
@@ -453,7 +453,7 @@ TabPage  RID_PDF_TAB_VPREFER
     CheckBox CB_WNDOPT_CNTRWIN
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_CNTRWIN";
-        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Center window on screen";
@@ -461,14 +461,14 @@ TabPage  RID_PDF_TAB_VPREFER
     CheckBox CB_WNDOPT_OPNFULL
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_OPNFULL";
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Pos = MAP_APPFONT ( 12 , 42) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "~Open in full screen mode" ;
     };
     CheckBox CB_DISPDOCTITLE
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_DISPDOCTITLE";
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Display document title";
@@ -477,14 +477,14 @@ TabPage  RID_PDF_TAB_VPREFER
 ////////////////////////////////
     FixedLine FL_USRIFOPT
     {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
+        Pos = MAP_APPFONT ( 6 , 68 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "User interface options" ;
     };
     CheckBox CB_UOP_HIDEVMENUBAR
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVMENUBAR";
-        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 81 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Hide ~menubar";
@@ -492,7 +492,7 @@ TabPage  RID_PDF_TAB_VPREFER
     CheckBox CB_UOP_HIDEVTOOLBAR
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVTOOLBAR";
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Hide ~toolbar";
@@ -500,7 +500,7 @@ TabPage  RID_PDF_TAB_VPREFER
     CheckBox CB_UOP_HIDEVWINCTRL
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVWINCTRL";
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Hide ~window controls";
@@ -509,14 +509,14 @@ TabPage  RID_PDF_TAB_VPREFER
 ////////////////////////////////
     FixedLine FL_TRANSITIONS
     {
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Pos = MAP_APPFONT ( 182 , 6 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Transitions" ;
     };
     CheckBox CB_TRANSITIONEFFECTS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_VPREFER:CB_TRANSITIONEFFECTS";
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Pos = MAP_APPFONT ( 188 , 18 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Use transition effects";
@@ -524,28 +524,28 @@ TabPage  RID_PDF_TAB_VPREFER
 ////////////////////////////////
     FixedLine FL_BOOKMARKS
     {
-        Pos = MAP_APPFONT ( 6 , 140 ) ;
+        Pos = MAP_APPFONT ( 182 , 32 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "Bookmarks" ;
     };
     RadioButton RB_ALLBOOKMARKLEVELS
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_VPREFER:RB_ALLBOOKMARKLEVELS";
-        Pos = MAP_APPFONT ( 12 , 152 ) ;
+        Pos = MAP_APPFONT ( 188 , 44 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text[ en-US ] = "All bookmark levels";
     };
     RadioButton RB_VISIBLEBOOKMARKLEVELS
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_VPREFER:RB_VISIBLEBOOKMARKLEVELS";
-        Pos = MAP_APPFONT ( 12 , 166 ) ;
+        Pos = MAP_APPFONT ( 188 , 58 ) ;
         Size = MAP_APPFONT ( 117 , 10 ) ;
         Text[ en-US ] = "Visible bookmark levels";
     };
     NumericField NUM_BOOKMARKLEVELS
     {
         HelpID = "filter:NumericField:RID_PDF_TAB_VPREFER:NUM_BOOKMARKLEVELS";
-        Pos = MAP_APPFONT ( 132 , 165 ) ;
+        Pos = MAP_APPFONT ( 308 , 57 ) ;
         Size = MAP_APPFONT ( 32 , 12 ) ;
         Border = TRUE;
         Spin = TRUE;
@@ -648,28 +648,28 @@ TabPage  RID_PDF_TAB_SECURITY
 //////////////////////////////
     FixedLine FL_PRINT_PERMISSIONS
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Pos = MAP_APPFONT ( 182 , 6 ) ;
         Size = MAP_APPFONT (156  , 8 ) ;
         Text[ en-US ] = "Printing" ;
     };
     RadioButton RB_PRINT_NONE
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_PRINT_NONE";
-        Pos = MAP_APPFONT ( 18 , 101 ) ;
+        Pos = MAP_APPFONT ( 188 , 17 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Not permitted";
     };
     RadioButton RB_PRINT_LOWRES
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_PRINT_LOWRES";
-        Pos = MAP_APPFONT ( 18 , 112 ) ;
+        Pos = MAP_APPFONT ( 188 , 30 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Low resolution (150 dpi)";
     };
     RadioButton RB_PRINT_HIGHRES
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_PRINT_HIGHRES";
-        Pos = MAP_APPFONT ( 18 , 123 ) ;
+        Pos = MAP_APPFONT ( 188 , 43 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~High resolution";
     };
@@ -677,35 +677,35 @@ TabPage  RID_PDF_TAB_SECURITY
 /////////////////////////////
     FixedLine FL_CHANGES_ALLOWED
     {
-        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Pos = MAP_APPFONT ( 182 , 58 ) ;
         Size = MAP_APPFONT (156  , 8 ) ;
         Text[ en-US ] = "Changes" ;
     };
     RadioButton RB_CHANGES_NONE
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_CHANGES_NONE";
-        Pos = MAP_APPFONT ( 18 , 145 ) ;
+        Pos = MAP_APPFONT ( 188 , 69 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "No~t permitted";
     };
     RadioButton RB_CHANGES_INSDEL
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_CHANGES_INSDEL";
-        Pos = MAP_APPFONT ( 18 , 157 ) ;
+        Pos = MAP_APPFONT ( 188 , 82 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Inserting, deleting, and rotating pages";
     };
     RadioButton RB_CHANGES_FILLFORM
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_CHANGES_FILLFORM";
-        Pos = MAP_APPFONT ( 18 , 168 ) ;
+        Pos = MAP_APPFONT ( 188 , 95 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Filling in form fields";
     };
     RadioButton RB_CHANGES_COMMENT
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_CHANGES_COMMENT";
-        Pos = MAP_APPFONT ( 18 , 179 ) ;
+        Pos = MAP_APPFONT ( 188 , 108 ) ;
         Size = MAP_APPFONT ( 152 , 16 ) ;
         WordBreak = TRUE ;
         Text[ en-US ] = "~Commenting, filling in form fields";
@@ -713,7 +713,7 @@ TabPage  RID_PDF_TAB_SECURITY
     RadioButton RB_CHANGES_ANY_NOCOPY
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_SECURITY:RB_CHANGES_ANY_NOCOPY";
-        Pos = MAP_APPFONT ( 18 , 198 ) ;
+        Pos = MAP_APPFONT ( 188 , 127 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text[ en-US ] = "~Any except extracting pages";
     };
@@ -721,7 +721,7 @@ TabPage  RID_PDF_TAB_SECURITY
     CheckBox CB_ENDAB_COPY
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_SECURITY:CB_ENDAB_COPY";
-        Pos = MAP_APPFONT ( 12 , 211 ) ;
+        Pos = MAP_APPFONT ( 182 , 142 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Ena~ble copying of content" ;
@@ -730,7 +730,7 @@ TabPage  RID_PDF_TAB_SECURITY
     CheckBox CB_ENAB_ACCESS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_SECURITY:CB_ENAB_ACCESS";
-        Pos = MAP_APPFONT ( 12 , 224 ) ;
+        Pos = MAP_APPFONT ( 182 , 158 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Enable text access for acce~ssibility tools" ;
@@ -749,7 +749,7 @@ TabPage  RID_PDF_TAB_LINKS
     CheckBox CB_EXP_BMRK_TO_DEST
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_LINKS:CB_EXP_BMRK_TO_DEST";
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 164 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -759,7 +759,7 @@ TabPage  RID_PDF_TAB_LINKS
     CheckBox CB_CNV_OOO_DOCTOPDF
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_LINKS:CB_CNV_OOO_DOCTOPDF";
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 164 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -769,7 +769,7 @@ TabPage  RID_PDF_TAB_LINKS
     CheckBox CB_ENAB_RELLINKFSYS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_LINKS:CB_ENAB_RELLINKFSYS";
-        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 164 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -778,7 +778,7 @@ TabPage  RID_PDF_TAB_LINKS
 
     FixedLine FL_DEFAULT_LINK_ACTION
     {
-        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 164  , 8 ) ;
         Text[ en-US ] = "Cross-document links" ;
     };
@@ -786,7 +786,7 @@ TabPage  RID_PDF_TAB_LINKS
     RadioButton CB_VIEW_PDF_DEFAULT
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_LINKS:CB_VIEW_PDF_DEFAULT";
-        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Default mode" ;
@@ -795,7 +795,7 @@ TabPage  RID_PDF_TAB_LINKS
     RadioButton CB_VIEW_PDF_APPLICATION
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_LINKS:CB_VIEW_PDF_APPLICATION";
-        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 158  , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Open with PDF reader application" ;
@@ -804,7 +804,7 @@ TabPage  RID_PDF_TAB_LINKS
     RadioButton CB_VIEW_PDF_BROWSER
     {
         HelpID = "filter:RadioButton:RID_PDF_TAB_LINKS:CB_VIEW_PDF_BROWSER";
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 158  , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Open with Internet browser" ;
