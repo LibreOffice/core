@@ -37,10 +37,6 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 namespace chelp
 {
 
-// UNO service name for the content.
-#define MYUCP_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.CHelpContent"
-
     class Databases;
 
     struct ContentProperties

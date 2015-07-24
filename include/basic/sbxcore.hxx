@@ -39,14 +39,6 @@ class SvStream;
     virtual sal_uInt16 GetVersion() const SAL_OVERRIDE { return nVer;   }    \
     virtual sal_uInt16 GetSbxId() const SAL_OVERRIDE   { return nSbxId; }
 
-// This version of the macro defines Load/StorePrivateData()-methods
-#define SBX_DECL_PERSIST( nCre, nSbxId, nVer )              \
-    virtual bool LoadPrivateData( SvStream&, sal_uInt16 );      \
-    virtual bool StorePrivateData( SvStream& ) const;       \
-    virtual sal_uInt32 GetCreator() const { return nCre;   }    \
-    virtual sal_uInt16 GetVersion() const { return nVer;   }    \
-    virtual sal_uInt16 GetSbxId() const   { return nSbxId; }
-
 class SbxBase;
 class SbxFactory;
 class SbxObject;
@@ -62,7 +54,13 @@ protected:
     SbxBase( const SbxBase& );
     SbxBase& operator=( const SbxBase& );
     virtual ~SbxBase();
-    SBX_DECL_PERSIST(0,0,0);
+
+    virtual bool LoadPrivateData( SvStream&, sal_uInt16 );
+    virtual bool StorePrivateData( SvStream& ) const;
+    virtual sal_uInt32 GetCreator() const { return 0;   }
+    virtual sal_uInt16 GetVersion() const { return 0;   }
+    virtual sal_uInt16 GetSbxId() const   { return 0; }
+
 public:
     TYPEINFO();
     inline void         SetFlags( SbxFlagBits n );

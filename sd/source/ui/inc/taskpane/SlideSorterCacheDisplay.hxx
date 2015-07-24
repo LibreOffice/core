@@ -168,8 +168,6 @@ void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
     SscdSetStatus(RequestData,::sd::toolpanel::SlideSorterCacheDisplay::Status)
 #define SSCD_SET_VISIBILITY(Model,Index,Visible) \
     SscdSetVisibility(Model,Index,Visible)
-#define SSCD_SET_UPTODATE(Page,UpToDate) \
-    SscdSetUpToDate(Page,UpToDate)
 
 }
 
@@ -178,7 +176,6 @@ void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
 #define SSCD_SET_REQUEST_CLASS(Page,RequestClass)
 #define SSCD_SET_STATUS(RequestData,Status)
 #define SSCD_SET_VISIBILITY(Model,Index,Visible)
-#define SSCD_SET_UPTODATE(Page,UpToDate)
 
 #endif
 

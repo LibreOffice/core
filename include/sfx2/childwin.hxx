@@ -349,14 +349,6 @@ public:
             static_cast<SfxDockingWindow*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
-#define SFX_IMPL_TOOLBOX(Class, MyID)   \
-        SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo Class::GetInfo() const \
-        {                                       \
-            SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            static_cast<SfxToolbox*>(GetWindow())->FillInfo( aInfo );  \
-            return aInfo; }
-
 bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize );
 
 bool GetSplitSizeFromString( const OUString& rStr, Size& rSize );

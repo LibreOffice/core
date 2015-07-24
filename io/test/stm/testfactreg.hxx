@@ -106,14 +106,6 @@ Sequence<sal_Int8> createIntSeq( sal_Int32 i );
         }\
         ((void)0)
 
-#define ERROR_EXCEPTION_ASSERT(expr, Message, Exception) \
-    if( !(expr)) { \
-        BUILD_ERROR(expr,Message);\
-        m_seqExceptions.getArray()[ m_seqExceptions.getLength()-1] = Any( Exception );\
-        return; \
-    } \
-    ((void)0)
-
 #endif // INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

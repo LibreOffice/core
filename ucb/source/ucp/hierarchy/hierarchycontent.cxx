@@ -300,11 +300,11 @@ HierarchyContent::getSupportedServiceNames()
     uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_eKind == LINK )
-        aSNS.getArray()[ 0 ] = HIERARCHY_LINK_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.HierarchyLinkContent";
     else if ( m_eKind == FOLDER )
-        aSNS.getArray()[ 0 ] = HIERARCHY_FOLDER_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.HierarchyFolderContent";
     else
-        aSNS.getArray()[ 0 ] = HIERARCHY_ROOT_FOLDER_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.HierarchyRootFolderContent";
 
     return aSNS;
 }

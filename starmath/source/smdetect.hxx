@@ -57,11 +57,19 @@ public:
     explicit SmFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SmFilterDetect();
 
-    SFX_DECL_XSERVICEINFO_NOFACTORY
+    /* XServiceInfo */
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
+    /* Helper for XServiceInfo */
+    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
+
+    /* Helper for registry */
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
 
     // XExtendedFilterDetect
-
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 

@@ -45,15 +45,6 @@ namespace hierarchy_ucp
 
 
 
-#define HIERARCHY_ROOT_FOLDER_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.HierarchyRootFolderContent"
-#define HIERARCHY_FOLDER_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.HierarchyFolderContent"
-#define HIERARCHY_LINK_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.HierarchyLinkContent"
-
-
-
 class HierarchyContentProperties
 {
 public:

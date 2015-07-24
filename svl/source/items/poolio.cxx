@@ -501,8 +501,17 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     if ( !pLoadMaster )
     {
         // Load format version
-        CHECK_FILEFORMAT2( rStream,
-                SFX_ITEMPOOL_TAG_STARTPOOL_5, SFX_ITEMPOOL_TAG_STARTPOOL_4 );
+        sal_uInt16 nFileTag;
+        rStream.ReadUInt16( nFileTag );
+        if ( SFX_ITEMPOOL_TAG_STARTPOOL_5 != nFileTag && SFX_ITEMPOOL_TAG_STARTPOOL_4 != nFileTag )
+        {
+            OSL_FAIL( "SFX_ITEMPOOL_TAG_STARTPOOL_5" ); /*! s.u. */
+            /*! Set error code and evaluate! */
+            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR);
+            pImp->bStreaming = false;
+            return rStream;
+        }
+
         rStream.ReadUChar( pImp->nMajorVer ).ReadUChar( pImp->nMinorVer );
 
         // Take over format version to MasterPool
@@ -518,7 +527,17 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         }
 
         // Trick for version 1.2: skip data
-        CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_TRICK4OLD );
+        sal_uInt16 nFileTag2;
+        rStream.ReadUInt16( nFileTag2 );
+        if ( SFX_ITEMPOOL_TAG_TRICK4OLD != nFileTag2 )
+        {
+            OSL_FAIL( "SFX_ITEMPOOL_TAG_TRICK4OLD" ); /*! s.u. */
+            /*! Set error code and evaluate! */
+            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR);
+            pImp->bStreaming = false;
+            return rStream;
+        }
+
         rStream.SeekRel( 4 ); // Hack: Skip data due to SfxStyleSheetPool bug
     }
 

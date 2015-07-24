@@ -52,18 +52,15 @@ public:
             TYPEINFO();
 };
 
-#define SV_DECL_PERSIST( Class, CLASS_ID )                          \
-    TYPEINFO_OVERRIDE();                                                     \
-    static  sal_Int32  StaticClassId() { return CLASS_ID; }            \
+#define SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                 \
+    TYPEINFO_OVERRIDE();                                            \
+    static  sal_Int32  StaticClassId() { return CLASS_ID; }         \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
                                           Class *& rpObj);          \
-    virtual sal_Int32  GetClassId() const SAL_OVERRIDE;                             \
-    virtual void    Load( SvPersistStream & ) SAL_OVERRIDE;                      \
+    virtual sal_Int32  GetClassId() const SAL_OVERRIDE;              \
+    virtual void    Load( SvPersistStream & ) SAL_OVERRIDE;          \
     virtual void    Save( SvPersistStream & ) SAL_OVERRIDE;
-
-#define SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                 \
-    SV_DECL_PERSIST( Class, CLASS_ID )
 
 #define PRV_SV_IMPL_PERSIST( Class )                                \
     void *          Class::CreateInstance( SvPersistBase ** ppBase )\

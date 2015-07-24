@@ -40,18 +40,6 @@ namespace tdoc_ucp
 {
 
 
-
-#define TDOC_ROOT_CONTENT_SERVICE_NAME \
-                "com.sun.star.ucb.TransientDocumentsRootContent"
-#define TDOC_DOCUMENT_CONTENT_SERVICE_NAME \
-                "com.sun.star.ucb.TransientDocumentsDocumentContent"
-#define TDOC_FOLDER_CONTENT_SERVICE_NAME \
-                "com.sun.star.ucb.TransientDocumentsFolderContent"
-#define TDOC_STREAM_CONTENT_SERVICE_NAME \
-                "com.sun.star.ucb.TransientDocumentsStreamContent"
-
-
-
 enum ContentType { STREAM, FOLDER, DOCUMENT, ROOT };
 
 class ContentProperties

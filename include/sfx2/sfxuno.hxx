@@ -65,32 +65,6 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 
 typedef sal_Int32 FrameSearchFlags;
 
-//  macros for declaration and definition of uno-services
-
-//  declaration of      XInterface::queryInterface()
-//                      XInterface::acquire()
-//                      XInterface::release()
-//                      XTypeProvider::getTypes()
-//                      XTypeProvider::getImplementationId()
-//                      XServiceInfo::getImplementationName()
-//                      XServiceInfo::supportsService()
-//                      XServiceInfo::getSupportedServiceNames()
-//                      static xxx::impl_getStaticSupportedServiceNames()
-//                      static xxx::impl_getStaticImplementationName()
-//                      static xxx::impl_createInstance()
-#define SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                         \
-    /* XServiceInfo */                                                                                                          \
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;                                 \
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;         \
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;        \
-                                                                                                                                \
-    /* Helper for XServiceInfo */                                                                                               \
-    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();                                           \
-    static OUString impl_getStaticImplementationName();                                                                    \
-                                                                                                                                \
-    /* Helper for registry */                                                                                                   \
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
-
 #endif // INCLUDED_SFX2_SFXUNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

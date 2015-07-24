@@ -127,13 +127,13 @@ public:
 
 IdlDll & GetIdlApp();
 
-#define SV_GLOBAL_HASH_ACCESS( Name )                           \
-    if( !GetIdlApp().pGlobalNames )                                 \
-        GetIdlApp().pGlobalNames = new SvGlobalHashNames();         \
-    return GetIdlApp().pGlobalNames->MM_##Name;
-
-#define HASH_INLINE( Name )                                             \
-inline SvStringHashEntry * SvHash_##Name() { SV_GLOBAL_HASH_ACCESS( Name ) }
+#define HASH_INLINE( Name )                                  \
+inline SvStringHashEntry * SvHash_##Name()                   \
+{                                                            \
+    if( !GetIdlApp().pGlobalNames )                          \
+        GetIdlApp().pGlobalNames = new SvGlobalHashNames();  \
+    return GetIdlApp().pGlobalNames->MM_##Name;              \
+}
 
 HASH_INLINE(Name)
 HASH_INLINE(module)

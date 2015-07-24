@@ -140,7 +140,8 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = MYUCP_CONTENT_SERVICE_NAME ;
+    aSNS.getArray()[ 0 ] = "com.sun.star.ucb.CHelpContent";
+
     return aSNS;
 }
 

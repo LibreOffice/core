@@ -53,10 +53,6 @@ using namespace com::sun::star;
 using namespace ucbhelper;
 
 
-#define CONFIG_CONTENTPROVIDERS_KEY \
-                "/org.openoffice.ucb.Configuration/ContentProviders"
-
-
 namespace {
 
 bool fillPlaceholders(OUString const & rInput,
@@ -888,7 +884,9 @@ bool UniversalContentBroker::getContentProviderData(
                 configuration::theDefaultProvider::get( m_xContext );
 
         OUStringBuffer aFullPath;
-        aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/['" );
+        aFullPath.appendAscii(
+                "/org.openoffice.ucb.Configuration/ContentProviders"
+                "/['" );
         makeAndAppendXMLName( aFullPath, rKey1 );
         aFullPath.appendAscii( "']/SecondaryKeys/['" );
         makeAndAppendXMLName( aFullPath, rKey2 );

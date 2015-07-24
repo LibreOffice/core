@@ -89,7 +89,9 @@ OUString RegressionCurveCalculator::getFormattedString(
     if( xNumFormatter.is())
         aResult = xNumFormatter->convertNumberToString( nNumberFormatKey, fNumber );
     else
-        aResult = NUMBER_TO_STR( fNumber );
+        aResult = OStringToOUString(
+                      ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, 4, '.', true ),
+                      RTL_TEXTENCODING_ASCII_US );
 
     return aResult;
 }
