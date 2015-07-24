@@ -43,31 +43,74 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     return ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 }
 
-XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
-        const OUString& rName)
+ViewElementListProvider getViewElementListProvider( css::uno::Reference<css::frame::XModel> xModel)
 {
     css::uno::Reference<css::frame::XController>xController = xModel->getCurrentController();
     if (!xController.is())
-        return XGradient();
+        throw std::exception();
 
     ChartController* pController = dynamic_cast<ChartController*>(xController.get());
     if (!pController)
-        return XGradient();
+        throw std::exception();
 
     ViewElementListProvider aProvider = pController->getViewElementListProvider();
-    XGradientListRef aRef = aProvider.GetGradientList();
-    size_t n = aRef->Count();
-    for (size_t i = 0; i < n; ++i)
-    {
-        XGradientEntry* pGradient = aRef->GetGradient(i);
-        if (!pGradient)
-            continue;
+    return aProvider;
+}
 
-        if (pGradient->GetName() == rName)
-            return XGradient(pGradient->GetGradient());
+XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rName)
+{
+    try
+    {
+        ViewElementListProvider aProvider = getViewElementListProvider(xModel);
+        XGradientListRef aRef = aProvider.GetGradientList();
+        size_t n = aRef->Count();
+        for (size_t i = 0; i < n; ++i)
+        {
+            XGradientEntry* pGradient = aRef->GetGradient(i);
+            if (!pGradient)
+                continue;
+
+            if (pGradient->GetName() == rName)
+                return XGradient(pGradient->GetGradient());
+        }
+    }
+    catch (...)
+    {
+        // ignore exception
     }
 
     return XGradient();
+}
+
+XHatch getXHatchFromName(css::uno::Reference<css::frame::XModel> xModel,
+        OUString& rName)
+{
+    try
+    {
+        ViewElementListProvider aProvider = getViewElementListProvider(xModel);
+        XHatchListRef aRef = aProvider.GetHatchList();
+        size_t n = aRef->Count();
+        for (size_t i = 0; i < n; ++i)
+        {
+            XHatchEntry* pHatch = aRef->GetHatch(i);
+            if (!pHatch)
+                continue;
+
+            if (pHatch->GetName().equalsIgnoreAsciiCase(rName))
+            {
+                // we need to update the hatch name
+                rName = pHatch->GetName();
+                return XHatch(pHatch->GetHatch());
+            }
+        }
+    }
+    catch (...)
+    {
+        // ignore exception
+    }
+
+    return XHatch();
 }
 
 class PreventUpdate
@@ -249,6 +292,12 @@ void ChartAreaPanel::updateData()
     XGradient xGradient = getXGradientForName(mxModel, aGradientName);
     XFillGradientItem aGradientItem(aGradientName, xGradient);
     updateFillGradient(false, true, &aGradientItem);
+
+    OUString aHatchName;
+    xPropSet->getPropertyValue("HatchName") >>= aHatchName;
+    XHatch xHatch = getXHatchFromName(mxModel, aHatchName);
+    XFillHatchItem aHatchItem(aHatchName, xHatch);
+    updateFillHatch(false, true, &aHatchItem);
 }
 
 void ChartAreaPanel::modelInvalid()
