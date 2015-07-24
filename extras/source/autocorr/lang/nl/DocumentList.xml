@@ -224,6 +224,7 @@
   <block-list:block block-list:abbreviated-name=":beer:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":beginner:" block-list:name="🔰"/>
   <block-list:block block-list:abbreviated-name=":bel:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":bento:" block-list:name="🍱"/>
   <block-list:block block-list:abbreviated-name=":benzinepomp:" block-list:name="⛽"/>
   <block-list:block block-list:abbreviated-name=":berg:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":bergspoorweg:" block-list:name="🚞"/>
@@ -245,6 +246,7 @@
   <block-list:block block-list:abbreviated-name=":bierkroezen:" block-list:name="🍻"/>
   <block-list:block block-list:abbreviated-name=":bikini:" block-list:name="👙"/>
   <block-list:block block-list:abbreviated-name=":biljart:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":biogevaar:" block-list:name="☣"/>
   <block-list:block block-list:abbreviated-name=":bioscoop:" block-list:name="🎦"/>
   <block-list:block block-list:abbreviated-name=":blad:" block-list:name="🍁"/>
   <block-list:block block-list:abbreviated-name=":bladwijzer2:" block-list:name="🔖"/>
@@ -304,6 +306,7 @@
   <block-list:block block-list:abbreviated-name=":bunny oren:" block-list:name="👯"/>
   <block-list:block block-list:abbreviated-name=":bushalte:" block-list:name="🚏"/>
   <block-list:block block-list:abbreviated-name=":cactus:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":caduceus:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":camera:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
   <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
@@ -330,6 +333,7 @@
   <block-list:block block-list:abbreviated-name=":dameslaars:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":damessandaal:" block-list:name="👡"/>
   <block-list:block block-list:abbreviated-name=":damesschoen:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
   <block-list:block block-list:abbreviated-name=":danser:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":Davidster:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
@@ -345,6 +349,7 @@
   <block-list:block block-list:abbreviated-name=":dik dollarteken:" block-list:name="💲"/>
   <block-list:block block-list:abbreviated-name=":diskette:" block-list:name="💾"/>
   <block-list:block block-list:abbreviated-name=":distilleerkolf:" block-list:name="⚗"/>
+  <block-list:block block-list:abbreviated-name=":dit werd aangetoond:" block-list:name="∎"/>
   <block-list:block block-list:abbreviated-name=":dobbelspel:" block-list:name="🎲"/>
   <block-list:block block-list:abbreviated-name=":dobbelsteen1:" block-list:name="⚀"/>
   <block-list:block block-list:abbreviated-name=":dobbelsteen2:" block-list:name="⚁"/>
@@ -373,6 +378,8 @@
   <block-list:block block-list:abbreviated-name=":druiven:" block-list:name="🍇"/>
   <block-list:block block-list:abbreviated-name=":druppels:" block-list:name="💧"/>
   <block-list:block block-list:abbreviated-name=":dubbel kruisje:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":dubbel scherp:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":dubbel vlak:" block-list:name="𝄫"/>
   <block-list:block block-list:abbreviated-name=":duim:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":duim omhoog:" block-list:name="👍"/>
   <block-list:block block-list:abbreviated-name=":duim omlaag:" block-list:name="👎"/>
@@ -525,6 +532,7 @@
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
   <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
   <block-list:block block-list:abbreviated-name=":ijsje:" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":ijzeren berg:" block-list:name="⛏"/>
   <block-list:block block-list:abbreviated-name=":in:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":Informatie:" block-list:name="ℹ"/>
   <block-list:block block-list:abbreviated-name=":injectiespuit:" block-list:name="💉"/>
@@ -617,6 +625,7 @@
   <block-list:block block-list:abbreviated-name=":koning:" block-list:name="🂮"/>
   <block-list:block block-list:abbreviated-name=":koningin:" block-list:name="🂭"/>
   <block-list:block block-list:abbreviated-name=":koppeling:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":koppelteken:" block-list:name="💨"/>
   <block-list:block block-list:abbreviated-name=":koptelefoon:" block-list:name="🎧"/>
   <block-list:block block-list:abbreviated-name=":koud zweet:" block-list:name="😰"/>
   <block-list:block block-list:abbreviated-name=":krant:" block-list:name="📰"/>
@@ -768,6 +777,7 @@
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
   <block-list:block block-list:abbreviated-name=":O:" block-list:name="→"/>
   <block-list:block block-list:abbreviated-name=":oceaan:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":oden:" block-list:name="🍢"/>
   <block-list:block block-list:abbreviated-name=":of:" block-list:name="∨"/>
   <block-list:block block-list:abbreviated-name=":ogen:" block-list:name="👀"/>
   <block-list:block block-list:abbreviated-name=":ok2:" block-list:name="🙆"/>
@@ -1161,6 +1171,7 @@
   <block-list:block block-list:abbreviated-name=":wintersport:" block-list:name="🎿"/>
   <block-list:block block-list:abbreviated-name=":wisselkantoor:" block-list:name="💱"/>
   <block-list:block block-list:abbreviated-name=":wisselkoers:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":wit kruis:" block-list:name="♧"/>
   <block-list:block block-list:abbreviated-name=":wit paard:" block-list:name="♘"/>
   <block-list:block block-list:abbreviated-name=":witte bloem:" block-list:name="💮"/>
   <block-list:block block-list:abbreviated-name=":witte cirkel:" block-list:name="⚪"/>
@@ -1229,6 +1240,7 @@
   <block-list:block block-list:abbreviated-name=":zwarte pion:" block-list:name="♟"/>
   <block-list:block block-list:abbreviated-name=":zwarte toren:" block-list:name="♜"/>
   <block-list:block block-list:abbreviated-name=":zwarte vlag:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":zwart kruis:" block-list:name="♣"/>
   <block-list:block block-list:abbreviated-name=":zwart paard:" block-list:name="♞"/>
   <block-list:block block-list:abbreviated-name=":ZW:" block-list:name="↙"/>
   <block-list:block block-list:abbreviated-name=":zweet:" block-list:name="😓"/>

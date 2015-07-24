@@ -850,7 +850,9 @@
   <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
   <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":EW2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":EW:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":for all:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
   <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
@@ -869,15 +871,19 @@
   <block-list:block block-list:abbreviated-name=":Mu:" block-list:name="Μ"/>
   <block-list:block block-list:abbreviated-name=":N2:" block-list:name="⇑"/>
   <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
   <block-list:block block-list:abbreviated-name=":NS:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":nu:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Nu:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":NW2:" block-list:name="⇖"/>
   <block-list:block block-list:abbreviated-name=":NW:" block-list:name="↖"/>
   <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":omicron:" block-list:name="ο"/>
   <block-list:block block-list:abbreviated-name=":Omicron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":partial:" block-list:name="∂"/>
   <block-list:block block-list:abbreviated-name=":per mille:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":phi:" block-list:name="φ"/>
@@ -890,12 +896,15 @@
   <block-list:block block-list:abbreviated-name=":rho:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Rho:" block-list:name="Ρ"/>
   <block-list:block block-list:abbreviated-name=":rupee:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
   <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":SE2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":SE:" block-list:name="↘"/>
   <block-list:block block-list:abbreviated-name=":shekel:" block-list:name="₪"/>
   <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
   <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":SW2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":SW:" block-list:name="↙"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
@@ -913,13 +922,22 @@
   <block-list:block block-list:abbreviated-name=":Xi:" block-list:name="Ξ"/>
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":不包含:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":不存在:" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=":不属于:" block-list:name="∌"/>
   <block-list:block block-list:abbreviated-name=":分:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":包含:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":包含(小):" block-list:name="∊"/>
   <block-list:block block-list:abbreviated-name=":圆点:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":存在:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":属于:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":属于(小):" block-list:name="∍"/>
   <block-list:block block-list:abbreviated-name=":度:" block-list:name="°"/>
   <block-list:block block-list:abbreviated-name=":日元:" block-list:name="¥"/>
   <block-list:block block-list:abbreviated-name=":注册商标:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":版权:" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=":磅:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":空集:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":章:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":非:" block-list:name="¬"/>
 </block-list:block-list>
