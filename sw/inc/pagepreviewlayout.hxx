@@ -215,7 +215,7 @@ private:
 
         @author OD
     */
-    void _PaintSelectMarkAtPage( const PreviewPage* _aSelectedPreviewPage ) const;
+    void _PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext, const PreviewPage* _aSelectedPreviewPage) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>

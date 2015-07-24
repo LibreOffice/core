@@ -1122,7 +1122,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
 
             if ( (*aPageIter)->pPage->GetPhyPageNum() == mnSelectedPageNum )
             {
-                _PaintSelectMarkAtPage( (*aPageIter) );
+                _PaintSelectMarkAtPage(rRenderContext, *aPageIter);
             }
 
         }
@@ -1203,10 +1203,10 @@ void SwPagePreviewLayout::Repaint( const Rectangle& rInvalidCoreRect ) const
 
     OD 17.12.2002 #103492#
 */
-void SwPagePreviewLayout::_PaintSelectMarkAtPage(
+void SwPagePreviewLayout::_PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext,
                                     const PreviewPage* _aSelectedPreviewPage ) const
 {
-    OutputDevice* pOutputDev = mrParentViewShell.GetOut();
+    OutputDevice* pOutputDev = &rRenderContext;
     MapMode aMapMode( pOutputDev->GetMapMode() );
     // save mapping mode of output device
     MapMode aSavedMapMode = aMapMode;
@@ -1270,12 +1270,12 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 
     // re-paint for current selected page in order to unmark it.
     const PreviewPage* pOldSelectedPreviewPage = _GetPreviewPageByPageNum( nOldSelectedPageNum );
+    OutputDevice* pOutputDev = mrParentViewShell.GetOut();
     if ( pOldSelectedPreviewPage && pOldSelectedPreviewPage->bVisible )
     {
         // OD 20.02.2003 #107369# - invalidate only areas of selection mark.
         SwRect aPageRect( pOldSelectedPreviewPage->aPreviewWinPos,
                               pOldSelectedPreviewPage->aPageSize );
-        OutputDevice* pOutputDev = mrParentViewShell.GetOut();
         ::SwAlignRect( aPageRect, &mrParentViewShell, pOutputDev );
         Rectangle aPxPageRect = pOutputDev->LogicToPixel( aPageRect.SVRect() );
         // invalidate top mark line
@@ -1299,7 +1299,7 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
     // re-paint for new selected page in order to mark it.
     const PreviewPage* pNewSelectedPreviewPage = _GetPreviewPageByPageNum( _nSelectedPage );
     if ( pNewSelectedPreviewPage && pNewSelectedPreviewPage->bVisible )
-        _PaintSelectMarkAtPage( pNewSelectedPreviewPage );
+        _PaintSelectMarkAtPage( *pOutputDev, pNewSelectedPreviewPage );
 }
 
 // helper methods
