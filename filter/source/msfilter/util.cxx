@@ -1361,17 +1361,17 @@ namespace
 static void CalculateScheme(const BitmapColor& rBitmapColor, std::vector<int> &vScheme, sal_uInt16 nVariance)
 {
     vScheme.resize(3,1);
-    if( rBitmapColor.GetRed() > rBitmapColor.GetGreen() + nVariance )
+    if( rBitmapColor.GetRed() < rBitmapColor.GetGreen() + nVariance )
         ++vScheme[0];
-    if( rBitmapColor.GetRed() > rBitmapColor.GetBlue() + nVariance )
+    if( rBitmapColor.GetRed() < rBitmapColor.GetBlue() + nVariance )
         ++vScheme[0];
-    if( rBitmapColor.GetGreen() > rBitmapColor.GetRed() + nVariance )
+    if( rBitmapColor.GetGreen() < rBitmapColor.GetRed() + nVariance )
         ++vScheme[1];
-    if( rBitmapColor.GetGreen() > rBitmapColor.GetBlue() + nVariance )
+    if( rBitmapColor.GetGreen() < rBitmapColor.GetBlue() + nVariance )
         ++vScheme[1];
-    if( rBitmapColor.GetBlue() > rBitmapColor.GetRed() + nVariance )
+    if( rBitmapColor.GetBlue() < rBitmapColor.GetRed() + nVariance )
         ++vScheme[2];
-    if( rBitmapColor.GetBlue() > rBitmapColor.GetGreen() + nVariance )
+    if( rBitmapColor.GetBlue() < rBitmapColor.GetGreen() + nVariance )
         ++vScheme[2];
 }
 
