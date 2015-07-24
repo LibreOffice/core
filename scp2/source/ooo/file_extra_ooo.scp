@@ -192,6 +192,13 @@ File gid_File_Extra_Tplpresnt
     Name = "extras_tplpresnt.filelist";
 End
 
+File gid_File_Extra_Tpl_styles
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tpl_styles.filelist";
+End
+
 File gid_File_Extra_Tplpersonal
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
