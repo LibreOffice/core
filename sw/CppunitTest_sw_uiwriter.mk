@@ -15,11 +15,14 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_uiwriter, \
     sw/qa/extras/uiwriter/uiwriter \
 ))
 
+# note: this links msword only for the reason to have a order dependency,
+# because "make sw.check" will not see the dependency through services.rdb
 $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     comphelper \
     cppu \
     cppuhelper \
     editeng \
+	msword \
     sal \
     sfx \
     svl \
