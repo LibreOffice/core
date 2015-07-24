@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <map>
+#include <memory>
 
 namespace writerfilter {
 namespace dmapper
@@ -34,7 +35,7 @@ struct ThemeTable_Impl;
 
 class ThemeTable : public LoggedProperties, public LoggedTable
 {
-    ThemeTable_Impl *m_pImpl;
+    std::unique_ptr<ThemeTable_Impl> m_pImpl;
 
 public:
     ThemeTable();

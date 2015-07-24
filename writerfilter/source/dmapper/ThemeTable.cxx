@@ -52,7 +52,6 @@ ThemeTable::ThemeTable()
 
 ThemeTable::~ThemeTable()
 {
-    delete m_pImpl;
 }
 
 void ThemeTable::lcl_attribute(Id Name, Value & val)
