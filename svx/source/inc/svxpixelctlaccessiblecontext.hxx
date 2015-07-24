@@ -71,7 +71,6 @@ class SvxPixelCtlAccessibleChild :
     SvxPixelCtl& mrParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
-    Point maPoint;
     Rectangle*  mpBoundingBox;
     /// index of child in parent
     long                                mnIndexInParent;
@@ -81,7 +80,6 @@ public:
     SvxPixelCtlAccessibleChild(
                 SvxPixelCtl& rWindow,
                 bool bPixelColorOrBG,
-                const Point& aPoint,
                 const Rectangle& rBounds,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xParent,
                 long nIndexInParent );

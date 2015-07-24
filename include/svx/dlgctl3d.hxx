@@ -66,8 +66,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DLightControl : public Svx3DPreviewControl
 {
     // Callback for interactive changes
-    Link<>                      maUserInteractiveChangeCallback;
-    Link<>                      maUserSelectionChangeCallback;
     Link<>                      maChangeCallback;
     Link<>                      maSelectionChangeCallback;
 

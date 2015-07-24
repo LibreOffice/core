@@ -84,11 +84,6 @@ private:
     ::sfx2::sidebar::ControllerItem                     maGammaControl;
     ::sfx2::sidebar::ControllerItem                     maModeControl;
 
-    OUString                                            msNormal;
-    OUString                                            msBW;
-    OUString                                            msGray;
-    OUString                                            msWater;
-
     css::uno::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;
 

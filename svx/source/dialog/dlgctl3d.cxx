@@ -252,8 +252,6 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 
 Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
 :   Svx3DPreviewControl(pParent, nStyle),
-    maUserInteractiveChangeCallback(),
-    maUserSelectionChangeCallback(),
     maChangeCallback(),
     maSelectionChangeCallback(),
     maSelectedLight(NO_LIGHT_SELECTED),

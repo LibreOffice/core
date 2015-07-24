@@ -68,9 +68,6 @@ private:
 
     sal_uInt16 eUsage;
 
-    OUString aLeftText;
-    OUString aRightText;
-
 protected:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 

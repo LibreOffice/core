@@ -68,7 +68,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FontWorkGalleryDialog : public ModalDialog
     sal_uInt16          mnThemeId;
 
     SdrView*            mpSdrView;
-    FmFormModel*        mpModel;
 
     DECL_LINK( DoubleClickFavoriteHdl, void * );
     DECL_LINK( ClickOKHdl, void * );

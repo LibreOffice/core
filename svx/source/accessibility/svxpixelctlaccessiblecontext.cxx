@@ -482,19 +482,11 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,bool bSelect ,bool bCheck)
 
 uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Point mPoint)
 {
-    long nX = mPoint.X();
-    long nY = mPoint.Y();
-    if( AllSettings::GetLayoutRTL())
-    {
-        nX = (sal_uInt16) mrPixelCtl.GetWidth() - 1 - nX;
-    }
-
     bool bPixelColorOrBG = mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)) != 0;
     Size size(mrPixelCtl.GetWidth() / mrPixelCtl.GetLineCount(),mrPixelCtl.GetHeight() / mrPixelCtl.GetLineCount());
     uno::Reference<XAccessible> xChild;
     xChild = new SvxPixelCtlAccessibleChild(mrPixelCtl,
                 bPixelColorOrBG,
-                Point(nX,nY),
                 Rectangle(mPoint,size),
                 this,
                 nIndex);
@@ -557,7 +549,6 @@ void SvxPixelCtlAccessibleChild::FireAccessibleEvent (
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     SvxPixelCtl& rWindow,
     bool bPixelColorOrBG,
-    const Point &aPoint,
     const Rectangle& rBoundingBox,
     const uno::Reference<XAccessible>&  rxParent,
     long nIndexInParent ) :
@@ -565,7 +556,6 @@ SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     mrParentWindow( rWindow ),
     mxParent(rxParent),
     m_bPixelColorOrBG(bPixelColorOrBG),
-    maPoint(aPoint),
     mpBoundingBox( new Rectangle( rBoundingBox ) ),
     mnIndexInParent( nIndexInParent ),
     mnClientId( 0 )

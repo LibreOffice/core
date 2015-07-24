@@ -73,10 +73,7 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     bTable(false),
     bHorz(false),
     bVert(false),
-    eUsage(SVX_PAGE_ALL),
-
-    aLeftText(),
-    aRightText()
+    eUsage(SVX_PAGE_ALL)
 {
     // Count in Twips by default
     SetMapMode(MapMode(MAP_TWIP));
