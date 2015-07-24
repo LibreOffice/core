@@ -45,14 +45,6 @@ class Gradient;
 #define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
 #define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
 
-#ifndef METAFILE_END
-#define METAFILE_END                    GDI_METAFILE_END
-#endif
-
-#ifndef METAFILE_LABEL_NOTFOUND
-#define METAFILE_LABEL_NOTFOUND         GDI_METAFILE_LABEL_NOTFOUND
-#endif
-
 enum MtfConversion
 {
     MTF_CONVERSION_NONE = 0,
