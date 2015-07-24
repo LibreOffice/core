@@ -321,6 +321,7 @@ void RemoteFilesDialog::Resize()
         Size aSize = m_pContainer->GetSizePixel();
         m_pFileView->SetSizePixel( aSize );
     }
+    Invalidate(InvalidateFlags::Update);
 }
 
 short RemoteFilesDialog::Execute()
@@ -559,6 +560,8 @@ void RemoteFilesDialog::EnableControls()
 
     m_pPath->EnableFields( true );
     m_pAddService_btn->Enable( true );
+
+    Invalidate(InvalidateFlags::Update);
 }
 
 void RemoteFilesDialog::DisableControls()
