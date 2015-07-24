@@ -265,16 +265,19 @@ ContextHandlerRef ExtGlobalWorkbookContext::onCreateContext( sal_Int32 nElement,
         switch( nToken )
         {
              case XML_CalcA1:
-                aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_OOO;
+                aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_OOO );
                 break;
              case XML_ExcelA1:
-                aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_A1;
+                aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_A1 );
                 break;
              case XML_ExcelR1C1:
-                aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
+                aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_R1C1 );
+                break;
+             case XML_CalcA1ExcelA1:
+                aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_A1_XL_A1 );
                 break;
              default:
-                aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_UNSPECIFIED;
+                aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_UNSPECIFIED );
                break;
         }
         pDoc->SetCalcConfig(aCalcConfig);
