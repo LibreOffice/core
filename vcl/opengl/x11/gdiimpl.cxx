@@ -238,8 +238,15 @@ bool X11OpenGLSalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X
 {
     std::unique_ptr<TextureCombo> pCombo(new TextureCombo);
     bool bResult = RenderPixmap(pPixmap, pMask, nX, nY, *pCombo);
+    if (!bResult)
+        return false;
+
+    if (aControlCacheKey.mnType == CTRL_CHECKBOX)
+        return true;
+
     ControlCachePair pair(aControlCacheKey, std::move(pCombo));
     gTextureCache.insert(std::move(pair));
+
     return bResult;
 }
 
