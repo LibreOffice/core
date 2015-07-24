@@ -1258,10 +1258,6 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
         }
     }
 
-    /* Chaining handling */
-    ImpChainingEventHdl(NULL);
-    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
-    ImpMoveCursorAfterChainingEvent(pCursorManager);
 }
 
 bool View::ShouldToggleOn(

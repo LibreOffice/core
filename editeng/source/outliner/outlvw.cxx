@@ -705,6 +705,10 @@ void OutlinerView::PasteSpecial()
         pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
         pEditView->ShowCursor( true, true );
+
+        // XXX: Not sure if this should be called right before ShowCursor
+        if (aEndPasteLink.IsSet())
+            aEndPasteLink.Call(NULL);
     }
 
 }

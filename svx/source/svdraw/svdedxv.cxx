@@ -795,8 +795,15 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
-            if (pTextObj->IsChainable())
-                pTextEditOutliner->SetChainingEventHdl(LINK(this,SdrObjEditView,ImpChainingEventHdl) );
+            if (pTextObj->IsChainable()) {
+                pTextEditOutlinerView->SetEndPasteLinkHdl(LINK(this,SdrObjEditView,ImpChainingEventHdl) );
+                /* We should call:
+                 *
+                    ImpChainingEventHdl(NULL);
+                    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
+                    ImpMoveCursorAfterChainingEvent(pCursorManager);
+                */
+            }
 
 #ifdef DBG_UTIL
             if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
