@@ -58,6 +58,9 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
     OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
 
+    SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
+    SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
+
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
 
     // We need to have this KeyFuncType
@@ -74,17 +77,27 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
     sal_Int32 nLastParaLen = aLastParaText.getLength();
 
-    bool bAtEndOfTextContent =
-        (aCurSel.nEndPara == nLastPara) &&
-        (aCurSel.nEndPos == nLastParaLen);
+    ESelection aEndSel = ESelection(nLastPara, nLastParaLen);
+    bool bAtEndOfTextContent = aCurSel.IsEqual(aEndSel);
 
-    if (nCode == KEY_RIGHT && bAtEndOfTextContent)
+    // Are we "pushing" at the end of the object?
+    if (nCode == KEY_RIGHT && bAtEndOfTextContent && pNextLink)
     {
         *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
         // Selection unchanged: we are at the beginning of the box
+        return;
     }
 
-    // if (nCode == KEY_LEFT && bAtStartOfTextContent) ...
+    ESelection aStartSel = ESelection(0, 0);
+    bool bAtStartOfTextContent = aCurSel.IsEqual(aStartSel);
+
+    // Are we "pushing" at the start of the object?
+    if (nCode == KEY_LEFT && bAtStartOfTextContent && pPrevLink)
+    {
+        *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
+        *pOutSel = ESelection(100000, 100000); // Set at end of selection
+        return;
+    }
 
     // If arrived here there is no event detected
     *pOutCursorEvt = CursorChainingEvent::NULL_EVENT;

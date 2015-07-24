@@ -89,17 +89,17 @@ SdrTextObj *TextChain::impGetNextLink(const SdrTextObj *pTextObj) const
 
 SdrTextObj *TextChain::impGetPrevLink(const SdrTextObj *pTextObj) const
 {
-    SdrTextObj *pNextTextObj = NULL;
+    SdrTextObj *pPrevTextObj = NULL;
     SdrPage *pPage = pTextObj->pPage;
 
     if ( pPage && pPage->GetObjCount() > 1) {
 
-        sal_uInt32 nextIndex = (pTextObj->GetOrdNum()-1);
+        sal_Int32 prevIndex = (pTextObj->GetOrdNum()-1);
 
-        if (nextIndex > 0)
-            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
+        if (prevIndex >= 0)
+            pPrevTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( prevIndex ) );
 
-        return pNextTextObj;
+        return pPrevTextObj;
     } else {
         fprintf(stderr, "Make New Object please\n");
         return NULL;
