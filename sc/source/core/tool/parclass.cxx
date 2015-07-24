@@ -105,6 +105,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocDiv,             {{ Array, Array                                         }, 0 }},
     { ocEqual,           {{ Array, Array                                         }, 0 }},
     { ocForecast,        {{ Value, ForceArray, ForceArray                        }, 0 }},
+    { ocFormula,         {{ Reference                                            }, 0 }},
     { ocFrequency,       {{ Reference, Reference                                 }, 0 }},
     { ocFTest,           {{ ForceArray, ForceArray                               }, 0 }},
     { ocGeoMean,         {{ Reference                                            }, 1 }},

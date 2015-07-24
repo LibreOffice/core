@@ -2563,6 +2563,55 @@ void ScInterpreter::ScFormula()
     switch ( GetStackType() )
     {
         case svDoubleRef :
+            if (bMatrixFormula)
+            {
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                if (nGlobalError)
+                    break;
+
+                if (nTab1 != nTab2)
+                {
+                    SetError( errIllegalArgument);
+                    break;
+                }
+
+                ScMatrixRef pResMat = GetNewMat( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1, true);
+                if (!pResMat)
+                    break;
+
+                /* TODO: use a column iterator instead? */
+                SCSIZE i=0, j=0;
+                ScAddress aAdr(0,0,nTab1);
+                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                {
+                    aAdr.SetCol(nCol);
+                    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                    {
+                        aAdr.SetRow(nRow);
+                        ScRefCellValue aCell;
+                        aCell.assign(*pDok, aAdr);
+                        switch (aCell.meType)
+                        {
+                            case CELLTYPE_FORMULA :
+                                aCell.mpFormula->GetFormula(aFormula);
+                                pResMat->PutString( mrStrPool.intern( aFormula), i,j);
+                                break;
+                            default:
+                                pResMat->PutError( NOTAVAILABLE, i,j);
+                        }
+                        ++j;
+                    }
+                    ++i;
+                    j = 0;
+                }
+
+                PushMatrix( pResMat);
+                return;
+            }
+            // fallthru
         case svSingleRef :
         {
             ScAddress aAdr;
