@@ -1160,6 +1160,9 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
     const PPTStyleSheet&    mrStyleSheet;
     sal_uInt32              mnInstance;
 
+    PPTParagraphObj(PPTParagraphObj const&) = delete;
+    void operator=(PPTParagraphObj const&) = delete;
+
 public:
 
     bool                    mbTab;          // if true, this paragraph has tabulators in text
