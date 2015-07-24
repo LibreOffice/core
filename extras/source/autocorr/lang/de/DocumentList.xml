@@ -510,6 +510,7 @@
   <block-list:block block-list:abbreviated-name=":Farbpalette:" block-list:name="🎨"/>
   <block-list:block block-list:abbreviated-name=":Farsi:" block-list:name="☫"/>
   <block-list:block block-list:abbreviated-name=":Faust:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":Faust vorne:" block-list:name="👊"/>
   <block-list:block block-list:abbreviated-name=":Faxgerät:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
   <block-list:block block-list:abbreviated-name=":Fernseher:" block-list:name="📺"/>
@@ -572,7 +573,7 @@
   <block-list:block block-list:abbreviated-name=":Gespann:" block-list:name="🚛"/>
   <block-list:block block-list:abbreviated-name=":Gespenst:" block-list:name="👻"/>
   <block-list:block block-list:abbreviated-name=":Getränk:" block-list:name="🍹"/>
-  <block-list:block block-list:abbreviated-name=":Gewitter:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":Gewitter:" block-list:name="⛈"/>
   <block-list:block block-list:abbreviated-name=":Giftstoffe:" block-list:name="☠"/>
   <block-list:block block-list:abbreviated-name=":Gitarre:" block-list:name="🎸"/>
   <block-list:block block-list:abbreviated-name=":Glaskugel:" block-list:name="🔮"/>
@@ -622,6 +623,7 @@
   <block-list:block block-list:abbreviated-name=":Hemd:" block-list:name="👕"/>
   <block-list:block block-list:abbreviated-name=":Henkelkreuz:" block-list:name="☥"/>
   <block-list:block block-list:abbreviated-name=":Hermesstab:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":Heroldsstab:" block-list:name="⚚"/>
   <block-list:block block-list:abbreviated-name=":Herren:" block-list:name="🚹"/>
   <block-list:block block-list:abbreviated-name=":Herrenschuh:" block-list:name="👞"/>
   <block-list:block block-list:abbreviated-name=":Herzdekoration:" block-list:name="💟"/>
@@ -1115,6 +1117,7 @@
   <block-list:block block-list:abbreviated-name=":Smiley:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":Smiley Engel:" block-list:name="😇"/>
   <block-list:block block-list:abbreviated-name=":Smiley enttäuscht:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":Smiley enttäuscht erleichtert:" block-list:name="😥"/>
   <block-list:block block-list:abbreviated-name=":Smiley erleichtert:" block-list:name="😌"/>
   <block-list:block block-list:abbreviated-name=":Smiley errötet:" block-list:name="😳"/>
   <block-list:block block-list:abbreviated-name=":Smiley erschrocken:" block-list:name="😮"/>
@@ -1289,6 +1292,7 @@
   <block-list:block block-list:abbreviated-name=":Uhr:" block-list:name="⌚"/>
   <block-list:block block-list:abbreviated-name=":und:" block-list:name="∧"/>
   <block-list:block block-list:abbreviated-name=":unendlich:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":Unwetter:" block-list:name="☈"/>
   <block-list:block block-list:abbreviated-name=":Urne:" block-list:name="⚱"/>
   <block-list:block block-list:abbreviated-name=":Vanillesoße:" block-list:name="🍮"/>
   <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
@@ -1309,6 +1313,7 @@
   <block-list:block block-list:abbreviated-name=":Waage:" block-list:name="⚖"/>
   <block-list:block block-list:abbreviated-name=":Wachmann:" block-list:name="💂"/>
   <block-list:block block-list:abbreviated-name=":Waggon:" block-list:name="🚃"/>
+  <block-list:block block-list:abbreviated-name=":Wal auftauchend:" block-list:name="🐳"/>
   <block-list:block block-list:abbreviated-name=":Wal:" block-list:name="🐋"/>
   <block-list:block block-list:abbreviated-name=":Wappenlilie:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":Wasserbüffel:" block-list:name="🐃"/>
@@ -1326,6 +1331,7 @@
   <block-list:block block-list:abbreviated-name=":Weinglas:" block-list:name="🍷"/>
   <block-list:block block-list:abbreviated-name=":Weintraube:" block-list:name="🍇"/>
   <block-list:block block-list:abbreviated-name=":Wichtel:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":Wickelraum:" block-list:name="🚼"/>
   <block-list:block block-list:abbreviated-name=":Widder:" block-list:name="🐏"/>
   <block-list:block block-list:abbreviated-name=":Wildschwein:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":Windspiel:" block-list:name="🎐"/>

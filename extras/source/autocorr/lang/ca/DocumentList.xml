@@ -352,6 +352,7 @@
   <block-list:block block-list:abbreviated-name="solicitud" block-list:name="sol·licitud"/>
   <block-list:block block-list:abbreviated-name="donat que" block-list:name="atès que"/>
   <block-list:block block-list:abbreviated-name="tals com" block-list:name="com ara"/>
+  <block-list:block block-list:abbreviated-name=":clau:" block-list:name="🔑"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":10:30:" block-list:name="🕥"/>
@@ -417,16 +418,24 @@
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":alfil blanc:" block-list:name="♗"/>
   <block-list:block block-list:abbreviated-name=":alfil negre:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":alta tensió:" block-list:name="⚡"/>
   <block-list:block block-list:abbreviated-name=":altaveu:" block-list:name="🔈"/>
   <block-list:block block-list:abbreviated-name=":ambulància:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":amor:" block-list:name="💘"/>
   <block-list:block block-list:abbreviated-name=":amunt2:" block-list:name="👆"/>
   <block-list:block block-list:abbreviated-name=":amunt:" block-list:name="☝"/>
   <block-list:block block-list:abbreviated-name=":àncora:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":anell:" block-list:name="💍"/>
   <block-list:block block-list:abbreviated-name=":àngel:" block-list:name="👼"/>
   <block-list:block block-list:abbreviated-name=":angle2:" block-list:name="∡"/>
   <block-list:block block-list:abbreviated-name=":angle:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":aniversari:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":ankh:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":aplaudiment:" block-list:name="👏"/>
   <block-list:block block-list:abbreviated-name=":Aquari:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":arbre:" block-list:name="🌳"/>
   <block-list:block block-list:abbreviated-name=":arbre de Nadal:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":arc de sant Martí:" block-list:name="🌈"/>
   <block-list:block block-list:abbreviated-name=":Àries:" block-list:name="♈"/>
   <block-list:block block-list:abbreviated-name=":arrel cúbica:" block-list:name="∛"/>
   <block-list:block block-list:abbreviated-name=":arrelq:" block-list:name="√"/>
@@ -434,17 +443,24 @@
   <block-list:block block-list:abbreviated-name=":arròs:" block-list:name="🍚"/>
   <block-list:block block-list:abbreviated-name=":as:" block-list:name="🂡"/>
   <block-list:block block-list:abbreviated-name=":assolellat:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":assortidor de combustible:" block-list:name="⛽"/>
   <block-list:block block-list:abbreviated-name=":àtom:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":auriculars:" block-list:name="🎧"/>
   <block-list:block block-list:abbreviated-name=":avall2:" block-list:name="👇"/>
   <block-list:block block-list:abbreviated-name=":avall:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":avió:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":avís:" block-list:name="⚠"/>
   <block-list:block block-list:abbreviated-name=":avorriment:" block-list:name="😟"/>
   <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":bala2:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":bala3:" block-list:name="◦"/>
   <block-list:block block-list:abbreviated-name=":bala:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":balança:" block-list:name="⚖"/>
   <block-list:block block-list:abbreviated-name=":Balança:" block-list:name="♎"/>
   <block-list:block block-list:abbreviated-name=":balena2:" block-list:name="🐋"/>
   <block-list:block block-list:abbreviated-name=":balena:" block-list:name="🐳"/>
+  <block-list:block block-list:abbreviated-name=":ballarí:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":bambú:" block-list:name="🎍"/>
   <block-list:block block-list:abbreviated-name=":banc:" block-list:name="🏦"/>
   <block-list:block block-list:abbreviated-name=":bandera2:" block-list:name="⚑"/>
   <block-list:block block-list:abbreviated-name=":bandera3:" block-list:name="🏁"/>
@@ -452,18 +468,28 @@
   <block-list:block block-list:abbreviated-name=":banderes2:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":banderes:" block-list:name="🎌"/>
   <block-list:block block-list:abbreviated-name=":bany:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":barberia:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":barret2:" block-list:name="👲"/>
+  <block-list:block block-list:abbreviated-name=":barret:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":barret de copa:" block-list:name="🎩"/>
   <block-list:block block-list:abbreviated-name=":basquetbol:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":bastó d'Esculapi:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":batec:" block-list:name="💓"/>
   <block-list:block block-list:abbreviated-name=":bateria:" block-list:name="🔋"/>
   <block-list:block block-list:abbreviated-name=":^b:" block-list:name="ᵇ"/>
   <block-list:block block-list:abbreviated-name=":^B:" block-list:name="ᴮ"/>
   <block-list:block block-list:abbreviated-name=":bebè2:" block-list:name="🚼"/>
   <block-list:block block-list:abbreviated-name=":bebè:" block-list:name="👶"/>
+  <block-list:block block-list:abbreviated-name=":beguda tropical:" block-list:name="🍹"/>
   <block-list:block block-list:abbreviated-name=":Bessons:" block-list:name="♊"/>
   <block-list:block block-list:abbreviated-name=":^beta:" block-list:name="ᵝ"/>
   <block-list:block block-list:abbreviated-name=":_beta:" block-list:name="ᵦ"/>
   <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
   <block-list:block block-list:abbreviated-name=":Beta:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":biberó:" block-list:name="🍼"/>
   <block-list:block block-list:abbreviated-name=":bicicleta:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":biquini:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":bitlles:" block-list:name="🎳"/>
   <block-list:block block-list:abbreviated-name=":^=:" block-list:name="⁼"/>
   <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
@@ -490,32 +516,54 @@
   <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":bloqueig:" block-list:name="🔒"/>
   <block-list:block block-list:abbreviated-name=":boca:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":boira:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":bola:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":bola d'arròs:" block-list:name="🍙"/>
   <block-list:block block-list:abbreviated-name=":bola de cristall:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":bolet:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":bomba:" block-list:name="💣"/>
   <block-list:block block-list:abbreviated-name=":botó2:" block-list:name="🔲"/>
   <block-list:block block-list:abbreviated-name=":botó:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":bou:" block-list:name="🐂"/>
   <block-list:block block-list:abbreviated-name=":brillantor2:" block-list:name="🔆"/>
   <block-list:block block-list:abbreviated-name=":brillantor:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":bucle2:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":bucle:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":búfal d'aigua:" block-list:name="🐃"/>
   <block-list:block block-list:abbreviated-name=":bus2:" block-list:name="🚍"/>
   <block-list:block block-list:abbreviated-name=":bus:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":bust:" block-list:name="👤"/>
   <block-list:block block-list:abbreviated-name=":bústia2:" block-list:name="📫"/>
   <block-list:block block-list:abbreviated-name=":bústia3:" block-list:name="📬"/>
   <block-list:block block-list:abbreviated-name=":bústia4:" block-list:name="📭"/>
   <block-list:block block-list:abbreviated-name=":bústia:" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":busts:" block-list:name="👥"/>
   <block-list:block block-list:abbreviated-name=":cabra:" block-list:name="🐐"/>
+  <block-list:block block-list:abbreviated-name=":cactus:" block-list:name="🌵"/>
   <block-list:block block-list:abbreviated-name=":cadenes:" block-list:name="⛓"/>
   <block-list:block block-list:abbreviated-name=":cadira de rodes:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":caduceu:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":cafè:" block-list:name="☕"/>
   <block-list:block block-list:abbreviated-name=":caixer:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":camell:" block-list:name="🐫"/>
   <block-list:block block-list:abbreviated-name=":càmera:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":camió2:" block-list:name="🚚"/>
   <block-list:block block-list:abbreviated-name=":camió:" block-list:name="⛟"/>
   <block-list:block block-list:abbreviated-name=":campana:" block-list:name="🔔"/>
   <block-list:block block-list:abbreviated-name=":Capricorn:" block-list:name="♑"/>
   <block-list:block block-list:abbreviated-name=":caragol:" block-list:name="🐌"/>
+  <block-list:block block-list:abbreviated-name=":carn:" block-list:name="🍖"/>
   <block-list:block block-list:abbreviated-name=":carpeta2:" block-list:name="📂"/>
   <block-list:block block-list:abbreviated-name=":carpeta:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":carta d'amor:" block-list:name="💌"/>
   <block-list:block block-list:abbreviated-name=":casa2:" block-list:name="🏡"/>
   <block-list:block block-list:abbreviated-name=":casa:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":casament:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":casc:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":casella de selecció2:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":casella de selecció3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":casella de selecció:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":castanya:" block-list:name="🌰"/>
   <block-list:block block-list:abbreviated-name=":castell2:" block-list:name="🏯"/>
   <block-list:block block-list:abbreviated-name=":castell:" block-list:name="🏰"/>
   <block-list:block block-list:abbreviated-name=":cavall2:" block-list:name="🐴"/>
@@ -535,26 +583,38 @@
   <block-list:block block-list:abbreviated-name=":cervesa2:" block-list:name="🍻"/>
   <block-list:block block-list:abbreviated-name=":cervesa:" block-list:name="🍺"/>
   <block-list:block block-list:abbreviated-name=":ciclista:" block-list:name="🚴"/>
-  <block-list:block block-list:abbreviated-name=":clau:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":cicló:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":cinema:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":cireres:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":claqueta:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":clau:" block-list:name="𝄞"/>
   <block-list:block block-list:abbreviated-name=":coala:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":coche2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":coche3:" block-list:name="🚙"/>
   <block-list:block block-list:abbreviated-name=":coche:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":cocodril:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":còctel:" block-list:name="🍸"/>
   <block-list:block block-list:abbreviated-name=":cometa:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":comodí:" block-list:name="🃏"/>
   <block-list:block block-list:abbreviated-name=":conill2:" block-list:name="🐰"/>
   <block-list:block block-list:abbreviated-name=":conill:" block-list:name="🐇"/>
   <block-list:block block-list:abbreviated-name=":conjunt buit:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":construcció:" block-list:name="🚧"/>
   <block-list:block block-list:abbreviated-name=":conté:" block-list:name="∋"/>
   <block-list:block block-list:abbreviated-name=":conté petit:" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":copa de vi:" block-list:name="🍷"/>
   <block-list:block block-list:abbreviated-name=":copyright:" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=":cor:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":corona:" block-list:name="👑"/>
+  <block-list:block block-list:abbreviated-name=":corredor:" block-list:name="🏃"/>
   <block-list:block block-list:abbreviated-name=":correu-e:" block-list:name="📧"/>
   <block-list:block block-list:abbreviated-name=":cors2:" block-list:name="♡"/>
   <block-list:block block-list:abbreviated-name=":cors:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":cor trencat:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":Cranc:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":crani:" block-list:name="💀"/>
   <block-list:block block-list:abbreviated-name=":creixent i estrella:" block-list:name="☪"/>
+  <block-list:block block-list:abbreviated-name=":crema:" block-list:name="🍮"/>
   <block-list:block block-list:abbreviated-name=":creu de Jerusalem:" block-list:name="☩"/>
   <block-list:block block-list:abbreviated-name=":creu de Lorena:" block-list:name="☨"/>
   <block-list:block block-list:abbreviated-name=":creu de Malta:" block-list:name="✠"/>
@@ -562,8 +622,10 @@
   <block-list:block block-list:abbreviated-name=":creu grega:" block-list:name="✚"/>
   <block-list:block block-list:abbreviated-name=":creu llatina:" block-list:name="✝"/>
   <block-list:block block-list:abbreviated-name=":creu ortodoxa:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":crismó:" block-list:name="☧"/>
   <block-list:block block-list:abbreviated-name=":cronòmetre:" block-list:name="⏱"/>
   <block-list:block block-list:abbreviated-name=":curri:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":cursa de cavalls:" block-list:name="🏇"/>
   <block-list:block block-list:abbreviated-name=":d'acord:" block-list:name="👌"/>
   <block-list:block block-list:abbreviated-name=":daga2:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":daga:" block-list:name="†"/>
@@ -573,16 +635,19 @@
   <block-list:block block-list:abbreviated-name=":dau4:" block-list:name="⚃"/>
   <block-list:block block-list:abbreviated-name=":dau5:" block-list:name="⚄"/>
   <block-list:block block-list:abbreviated-name=":dau6:" block-list:name="⚅"/>
+  <block-list:block block-list:abbreviated-name=":dau:" block-list:name="🎲"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
   <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
   <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
   <block-list:block block-list:abbreviated-name=":desbloqueig:" block-list:name="🔓"/>
   <block-list:block block-list:abbreviated-name=":despertador:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":diable:" block-list:name="👿"/>
   <block-list:block block-list:abbreviated-name=":diamants2:" block-list:name="♢"/>
   <block-list:block block-list:abbreviated-name=":diamants:" block-list:name="♦"/>
   <block-list:block block-list:abbreviated-name=":diari:" block-list:name="📰"/>
   <block-list:block block-list:abbreviated-name=":diners:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":direcció prohibida:" block-list:name="⛔"/>
   <block-list:block block-list:abbreviated-name=":disquet:" block-list:name="💾"/>
   <block-list:block block-list:abbreviated-name=":divideix:" block-list:name="∣"/>
   <block-list:block block-list:abbreviated-name=":divorci:" block-list:name="⚮"/>
@@ -592,11 +657,14 @@
   <block-list:block block-list:abbreviated-name=":dona:" block-list:name="👩"/>
   <block-list:block block-list:abbreviated-name=":dona gran:" block-list:name="👵"/>
   <block-list:block block-list:abbreviated-name=":dones:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":dònut:" block-list:name="🍩"/>
+  <block-list:block block-list:abbreviated-name=":dos cors:" block-list:name="💕"/>
   <block-list:block block-list:abbreviated-name=":drac2:" block-list:name="🐲"/>
   <block-list:block block-list:abbreviated-name=":drac:" block-list:name="🐉"/>
   <block-list:block block-list:abbreviated-name=":dreta2:" block-list:name="👉"/>
   <block-list:block block-list:abbreviated-name=":dreta3:" block-list:name="☛"/>
   <block-list:block block-list:abbreviated-name=":dreta:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":dromedari:" block-list:name="🐪"/>
   <block-list:block block-list:abbreviated-name=":dutxa:" block-list:name="🚿"/>
   <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
   <block-list:block block-list:abbreviated-name=":E2:" block-list:name="⇒"/>
@@ -606,38 +674,52 @@
   <block-list:block block-list:abbreviated-name=":E:" block-list:name="→"/>
   <block-list:block block-list:abbreviated-name=":elefant:" block-list:name="🐘"/>
   <block-list:block block-list:abbreviated-name=":el·lipse:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":empremtes:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":engranatge:" block-list:name="⚙"/>
   <block-list:block block-list:abbreviated-name=":enllaç:" block-list:name="🔗"/>
   <block-list:block block-list:abbreviated-name=":EO2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":EO:" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name=":^èpsilon:" block-list:name="ᵋ"/>
   <block-list:block block-list:abbreviated-name=":èpsilon:" block-list:name="ε"/>
   <block-list:block block-list:abbreviated-name=":Èpsilon:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":esbergínia:" block-list:name="🍆"/>
   <block-list:block block-list:abbreviated-name=":escola:" block-list:name="🏫"/>
   <block-list:block block-list:abbreviated-name=":Escorpí:" block-list:name="♏"/>
   <block-list:block block-list:abbreviated-name=":escriptura:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":escut:" block-list:name="⛨"/>
   <block-list:block block-list:abbreviated-name=":església:" block-list:name="⛪"/>
   <block-list:block block-list:abbreviated-name=":espagueti :" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":espases:" block-list:name="⚔"/>
   <block-list:block block-list:abbreviated-name=":esquerra2:" block-list:name="👈"/>
   <block-list:block block-list:abbreviated-name=":esquerra3:" block-list:name="☚"/>
   <block-list:block block-list:abbreviated-name=":esquerra:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":esquí:" block-list:name="🎿"/>
   <block-list:block block-list:abbreviated-name=":estació:" block-list:name="🚉"/>
   <block-list:block block-list:abbreviated-name=":estrella2:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":estrella3:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":estrella4:" block-list:name="🌠"/>
   <block-list:block block-list:abbreviated-name=":estrella:" block-list:name="★"/>
   <block-list:block block-list:abbreviated-name=":estrella de David:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":estrella mitjana:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":estrella petita2:" block-list:name="⭑"/>
+  <block-list:block block-list:abbreviated-name=":estrella petita:" block-list:name="⭒"/>
   <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
   <block-list:block block-list:abbreviated-name=":euro2:" block-list:name="💶"/>
   <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":existeix:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":extraterrestre2:" block-list:name="👾"/>
+  <block-list:block block-list:abbreviated-name=":extraterrestre:" block-list:name="👽"/>
   <block-list:block block-list:abbreviated-name=":fàbrica:" block-list:name="🏭"/>
   <block-list:block block-list:abbreviated-name=":falç i martell:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":família:" block-list:name="👪"/>
   <block-list:block block-list:abbreviated-name=":fantasma:" block-list:name="👻"/>
   <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":femení:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":ferri:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":festa:" block-list:name="🎉"/>
   <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
-  <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
   <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
   <block-list:block block-list:abbreviated-name=":^fi:" block-list:name="ᵠ"/>
   <block-list:block block-list:abbreviated-name=":_fi:" block-list:name="ᵩ"/>
@@ -650,9 +732,16 @@
   <block-list:block block-list:abbreviated-name=":flor:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":flor de lis:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":foc:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":focs artificials:" block-list:name="🎆"/>
+  <block-list:block block-list:abbreviated-name=":follet:" block-list:name="👺"/>
   <block-list:block block-list:abbreviated-name=":font:" block-list:name="⛲"/>
   <block-list:block block-list:abbreviated-name=":formiga:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":fulla2:" block-list:name="🍂"/>
+  <block-list:block block-list:abbreviated-name=":fulla3:" block-list:name="🍃"/>
+  <block-list:block block-list:abbreviated-name=":fulla:" block-list:name="🍁"/>
   <block-list:block block-list:abbreviated-name=":futbol:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":galeta:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":gall:" block-list:name="🐓"/>
   <block-list:block block-list:abbreviated-name=":gallina:" block-list:name="🐔"/>
   <block-list:block block-list:abbreviated-name=":^gamma:" block-list:name="ᵞ"/>
   <block-list:block block-list:abbreviated-name=":_gamma:" block-list:name="ᵧ"/>
@@ -663,9 +752,14 @@
   <block-list:block block-list:abbreviated-name=":gat:" block-list:name="🐈"/>
   <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
   <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":gelat:" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":gemma:" block-list:name="💎"/>
+  <block-list:block block-list:abbreviated-name=":gira-sol :" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":globus:" block-list:name="🎈"/>
   <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
   <block-list:block block-list:abbreviated-name=":gos2:" block-list:name="🐶"/>
   <block-list:block block-list:abbreviated-name=":gos:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":graduació:" block-list:name="🎓"/>
   <block-list:block block-list:abbreviated-name=":granota:" block-list:name="🐸"/>
   <block-list:block block-list:abbreviated-name=":grau:" block-list:name="°"/>
   <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
@@ -676,6 +770,7 @@
   <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
   <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
   <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
+  <block-list:block block-list:abbreviated-name=":herba:" block-list:name="🌿"/>
   <block-list:block block-list:abbreviated-name=":hexàgon2:" block-list:name="⬢"/>
   <block-list:block block-list:abbreviated-name=":hexàgon:" block-list:name="⬡"/>
   <block-list:block block-list:abbreviated-name=":home:" block-list:name="👨"/>
@@ -684,6 +779,7 @@
   <block-list:block block-list:abbreviated-name=":hospital:" block-list:name="🏥"/>
   <block-list:block block-list:abbreviated-name=":hotel2:" block-list:name="🏩"/>
   <block-list:block block-list:abbreviated-name=":hotel:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":hrívnia:" block-list:name="₴"/>
   <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
   <block-list:block block-list:abbreviated-name=":i:" block-list:name="∧"/>
@@ -693,6 +789,7 @@
   <block-list:block block-list:abbreviated-name=":infinit:" block-list:name="∞"/>
   <block-list:block block-list:abbreviated-name=":informació2:" block-list:name="💁"/>
   <block-list:block block-list:abbreviated-name=":informació:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":insecte:" block-list:name="🐛"/>
   <block-list:block block-list:abbreviated-name=":integral2:" block-list:name="∬"/>
   <block-list:block block-list:abbreviated-name=":integral3:" block-list:name="∭"/>
   <block-list:block block-list:abbreviated-name=":integral4:" block-list:name="∮"/>
@@ -726,6 +823,10 @@
   <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
   <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
   <block-list:block block-list:abbreviated-name=":lira turca:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":llampec:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":llapis2:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":llapis3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":llapis:" block-list:name="✎"/>
   <block-list:block block-list:abbreviated-name=":llengua2:" block-list:name="😛"/>
   <block-list:block block-list:abbreviated-name=":llengua3:" block-list:name="😜"/>
   <block-list:block block-list:abbreviated-name=":llengua4:" block-list:name="😝"/>
@@ -735,24 +836,45 @@
   <block-list:block block-list:abbreviated-name=":llibre2:" block-list:name="📖"/>
   <block-list:block block-list:abbreviated-name=":llibre:" block-list:name="📕"/>
   <block-list:block block-list:abbreviated-name=":llibres:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":lliga_ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":lliga_fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":llimona:" block-list:name="🍋"/>
   <block-list:block block-list:abbreviated-name=":lliura2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":lliura:" block-list:name="£"/>
   <block-list:block block-list:abbreviated-name=":llop:" block-list:name="🐺"/>
+  <block-list:block block-list:abbreviated-name=":lluna2:" block-list:name="🌜"/>
   <block-list:block block-list:abbreviated-name=":Lluna2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":lluna:" block-list:name="🌛"/>
   <block-list:block block-list:abbreviated-name=":Lluna:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":lluna nova2:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":lluna nova:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":lluna plena2:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":lluna plena:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":lot:" block-list:name="🏮"/>
   <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":mà:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":maduixa:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":mahjong:" block-list:name="🀄"/>
   <block-list:block block-list:abbreviated-name=":malcarat:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":mandarina:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":mans obertes:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":maquina escurabutxaques:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":marca de verificació2:" block-list:name="✔"/>
+  <block-list:block block-list:abbreviated-name=":marca de verificació3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":marca de verificació:" block-list:name="✓"/>
   <block-list:block block-list:abbreviated-name=":marcador2:" block-list:name="🔖"/>
   <block-list:block block-list:abbreviated-name=":marca registrada:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":marieta:" block-list:name="🐞"/>
   <block-list:block block-list:abbreviated-name=":martell:" block-list:name="🔨"/>
   <block-list:block block-list:abbreviated-name=":masculí:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":massatge:" block-list:name="💆"/>
   <block-list:block block-list:abbreviated-name=":matrimoni:" block-list:name="⚭"/>
   <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
   <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
   <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
   <block-list:block block-list:abbreviated-name=":mel:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":meló:" block-list:name="🍈"/>
   <block-list:block block-list:abbreviated-name=":menor d'edat:" block-list:name="🔞"/>
   <block-list:block block-list:abbreviated-name=":Mercuri:" block-list:name="☿"/>
   <block-list:block block-list:abbreviated-name=":metro:" block-list:name="🚇"/>
@@ -764,6 +886,7 @@
   <block-list:block block-list:abbreviated-name=":microscopi:" block-list:name="🔬"/>
   <block-list:block block-list:abbreviated-name=":minibús:" block-list:name="🚐"/>
   <block-list:block block-list:abbreviated-name=":mòbil:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":multiplicació2:" block-list:name="✖"/>
   <block-list:block block-list:abbreviated-name=":muntanya:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":música2:" block-list:name="🎵"/>
   <block-list:block block-list:abbreviated-name=":música:" block-list:name="🎶"/>
@@ -775,13 +898,16 @@
   <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
   <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":nedador:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":negació:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":Neptú:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":ni:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Ni:" block-list:name="Ν"/>
   <block-list:block block-list:abbreviated-name=":ninot de neu2:" block-list:name="⛄"/>
   <block-list:block block-list:abbreviated-name=":ninot de neu:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":nit:" block-list:name="🌃"/>
   <block-list:block block-list:abbreviated-name=":NO2:" block-list:name="⇖"/>
-  <block-list:block block-list:abbreviated-name=":no:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":no:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":NO:" block-list:name="↖"/>
   <block-list:block block-list:abbreviated-name=":no conté:" block-list:name="∌"/>
   <block-list:block block-list:abbreviated-name=":no divideix:" block-list:name="∤"/>
@@ -799,6 +925,7 @@
   <block-list:block block-list:abbreviated-name=":notes:" block-list:name="♫"/>
   <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
   <block-list:block block-list:abbreviated-name=":NS:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":núvia:" block-list:name="👰"/>
   <block-list:block block-list:abbreviated-name=":núvol2:" block-list:name="⛅"/>
   <block-list:block block-list:abbreviated-name=":núvol3:" block-list:name="⛈"/>
   <block-list:block block-list:abbreviated-name=":núvol:" block-list:name="☁"/>
@@ -808,8 +935,12 @@
   <block-list:block block-list:abbreviated-name=":o:" block-list:name="∨"/>
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
   <block-list:block block-list:abbreviated-name=":O:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":ocàs:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":oceà:" block-list:name="🌊"/>
   <block-list:block block-list:abbreviated-name=":ocell:" block-list:name="🐦"/>
   <block-list:block block-list:abbreviated-name=":oficina:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":oficina de correus2:" block-list:name="🏣"/>
+  <block-list:block block-list:abbreviated-name=":oficina de correus:" block-list:name="🏤"/>
   <block-list:block block-list:abbreviated-name=":ogre:" block-list:name="👹"/>
   <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
@@ -817,10 +948,18 @@
   <block-list:block block-list:abbreviated-name=":Òmicron:" block-list:name="Ο"/>
   <block-list:block block-list:abbreviated-name=":ordinador:" block-list:name="💻"/>
   <block-list:block block-list:abbreviated-name=":orella:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":orelles de conill:" block-list:name="👯"/>
+  <block-list:block block-list:abbreviated-name=":ós:" block-list:name="🐻"/>
   <block-list:block block-list:abbreviated-name=":ou:" block-list:name="🍳"/>
   <block-list:block block-list:abbreviated-name=":ovella:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":pa:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":palmera:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":panda:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":panís:" block-list:name="🌽"/>
   <block-list:block block-list:abbreviated-name=":paquet:" block-list:name="📦"/>
   <block-list:block block-list:abbreviated-name=":parada de bus:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":paraigua2:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":paraigua3:" block-list:name="⛱"/>
   <block-list:block block-list:abbreviated-name=":paraigua:" block-list:name="☂"/>
   <block-list:block block-list:abbreviated-name=":paral·lel:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":paral·lelogram2:" block-list:name="▰"/>
@@ -828,7 +967,12 @@
   <block-list:block block-list:abbreviated-name=":parcial:" block-list:name="∂"/>
   <block-list:block block-list:abbreviated-name=":parella2:" block-list:name="👬"/>
   <block-list:block block-list:abbreviated-name=":parella3:" block-list:name="👭"/>
+  <block-list:block block-list:abbreviated-name=":parella4:" block-list:name="💑"/>
   <block-list:block block-list:abbreviated-name=":parella:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":partitura:" block-list:name="🎼"/>
+  <block-list:block block-list:abbreviated-name=":pastís:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":patates fregides:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":patí:" block-list:name="⛸"/>
   <block-list:block block-list:abbreviated-name=":pau:" block-list:name="☮"/>
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
@@ -842,23 +986,39 @@
   <block-list:block block-list:abbreviated-name=":pentagrama:" block-list:name="⛤"/>
   <block-list:block block-list:abbreviated-name=":peó blanc:" block-list:name="♙"/>
   <block-list:block block-list:abbreviated-name=":peó negre:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":pera:" block-list:name="🍐"/>
   <block-list:block block-list:abbreviated-name=":per a qualsevol:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":per mil:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":pertany:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":pertany petit:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":petó:" block-list:name="💏"/>
   <block-list:block block-list:abbreviated-name=":peus:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":piano:" block-list:name="🎹"/>
   <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Pi:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":pic:" block-list:name="⛏"/>
+  <block-list:block block-list:abbreviated-name=":pic i martell:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":piña:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":píndola:" block-list:name="💊"/>
   <block-list:block block-list:abbreviated-name=":pingüí:" block-list:name="🐧"/>
   <block-list:block block-list:abbreviated-name=":piques2:" block-list:name="♤"/>
   <block-list:block block-list:abbreviated-name=":piques:" block-list:name="♠"/>
   <block-list:block block-list:abbreviated-name=":pistola:" block-list:name="🔫"/>
   <block-list:block block-list:abbreviated-name=":pizza:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":plàtan:" block-list:name="🍌"/>
+  <block-list:block block-list:abbreviated-name=":ploma2:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":ploma:" block-list:name="✑"/>
   <block-list:block block-list:abbreviated-name=":pluja2:" block-list:name="⛆"/>
   <block-list:block block-list:abbreviated-name=":pluja:" block-list:name="☔"/>
   <block-list:block block-list:abbreviated-name=":Plutó:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":policia:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":pollastre2:" block-list:name="🐤"/>
+  <block-list:block block-list:abbreviated-name=":pollastre3:" block-list:name="🐥"/>
+  <block-list:block block-list:abbreviated-name=":pollastre:" block-list:name="🐣"/>
   <block-list:block block-list:abbreviated-name=":polzada:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":poma:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":poma verda:" block-list:name="🍏"/>
   <block-list:block block-list:abbreviated-name=":pont:" block-list:name="🌉"/>
   <block-list:block block-list:abbreviated-name=":pop:" block-list:name="🐙"/>
   <block-list:block block-list:abbreviated-name=":porc2:" block-list:name="🐷"/>
@@ -866,6 +1026,7 @@
   <block-list:block block-list:abbreviated-name=":porta:" block-list:name="🚪"/>
   <block-list:block block-list:abbreviated-name=":porta-retalls:" block-list:name="📋"/>
   <block-list:block block-list:abbreviated-name=":precaució:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":préssec:" block-list:name="🍑"/>
   <block-list:block block-list:abbreviated-name=":prima:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":princesa:" block-list:name="👸"/>
   <block-list:block block-list:abbreviated-name=":producte:" block-list:name="∏"/>
@@ -873,17 +1034,24 @@
   <block-list:block block-list:abbreviated-name=":Psi:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":punt base:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":punt volat:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":puny2:" block-list:name="👊"/>
   <block-list:block block-list:abbreviated-name=":puny:" block-list:name="✊"/>
   <block-list:block block-list:abbreviated-name=":quadrat2:" block-list:name="■"/>
   <block-list:block block-list:abbreviated-name=":quadrat:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":quadrat gran2:" block-list:name="⬛"/>
+  <block-list:block block-list:abbreviated-name=":quadrat gran:" block-list:name="⬜"/>
   <block-list:block block-list:abbreviated-name=":quadrat més petit2:" block-list:name="◾"/>
   <block-list:block block-list:abbreviated-name=":quadrat més petit:" block-list:name="◽"/>
   <block-list:block block-list:abbreviated-name=":quadrat mitjà2:" block-list:name="◼"/>
   <block-list:block block-list:abbreviated-name=":quadrat mitjà:" block-list:name="◻"/>
   <block-list:block block-list:abbreviated-name=":quadrat petit2:" block-list:name="▪"/>
   <block-list:block block-list:abbreviated-name=":quadrat petit:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":quart creixent:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":quart menguant:" block-list:name="🌗"/>
   <block-list:block block-list:abbreviated-name=":radioactiu:" block-list:name="☢"/>
   <block-list:block block-list:abbreviated-name=":ràdio:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":raïm:" block-list:name="🍇"/>
+  <block-list:block block-list:abbreviated-name=":rata:" block-list:name="🐀"/>
   <block-list:block block-list:abbreviated-name=":ratolí2:" block-list:name="🐭"/>
   <block-list:block block-list:abbreviated-name=":ratolí:" block-list:name="🐁"/>
   <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
@@ -893,6 +1061,7 @@
   <block-list:block block-list:abbreviated-name=":reciclatge:" block-list:name="♲"/>
   <block-list:block block-list:abbreviated-name=":rectangle2:" block-list:name="▬"/>
   <block-list:block block-list:abbreviated-name=":rectangle:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":regal:" block-list:name="🎁"/>
   <block-list:block block-list:abbreviated-name=":registrat:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":rei blan:" block-list:name="♔"/>
   <block-list:block block-list:abbreviated-name=":rei:" block-list:name="🂮"/>
@@ -910,11 +1079,20 @@
   <block-list:block block-list:abbreviated-name=":ro:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Ro:" block-list:name="Ρ"/>
   <block-list:block block-list:abbreviated-name=":rombe:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":rosa:" block-list:name="🌹"/>
   <block-list:block block-list:abbreviated-name=":rúpia:" block-list:name="₹"/>
   <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":sabata2:" block-list:name="👟"/>
+  <block-list:block block-list:abbreviated-name=":sabata3:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":sabata:" block-list:name="👞"/>
   <block-list:block block-list:abbreviated-name=":Sagitari:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":sake:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":samarreta2:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":samarreta:" block-list:name="👕"/>
   <block-list:block block-list:abbreviated-name=":satèl·lit:" block-list:name="📡"/>
   <block-list:block block-list:abbreviated-name=":Saturn:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":sautor:" block-list:name="☓"/>
+  <block-list:block block-list:abbreviated-name=":saxofon:" block-list:name="🎷"/>
   <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
   <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
   <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
@@ -923,12 +1101,15 @@
   <block-list:block block-list:abbreviated-name=":secció:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":semàfor2:" block-list:name="🚦"/>
   <block-list:block block-list:abbreviated-name=":semàfor:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":senglar:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":serp:" block-list:name="🐍"/>
+  <block-list:block block-list:abbreviated-name=":serpentari:" block-list:name="⛎"/>
   <block-list:block block-list:abbreviated-name=":sí:" block-list:name="👍"/>
   <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
   <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
   <block-list:block block-list:abbreviated-name=":silenci:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":síndria:" block-list:name="🍉"/>
   <block-list:block block-list:abbreviated-name=":SO2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":so:" block-list:name="🔉"/>
   <block-list:block block-list:abbreviated-name=":SO:" block-list:name="↙"/>
@@ -936,78 +1117,110 @@
   <block-list:block block-list:abbreviated-name=":sobre3:" block-list:name="📩"/>
   <block-list:block block-list:abbreviated-name=":sobre:" block-list:name="✉"/>
   <block-list:block block-list:abbreviated-name=":Sol2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":sol:" block-list:name="🌞"/>
   <block-list:block block-list:abbreviated-name=":Sol:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":somriure2:" block-list:name="☻"/>
   <block-list:block block-list:abbreviated-name=":somriure:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":subconjunt:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":sumatori:" block-list:name="∑"/>
   <block-list:block block-list:abbreviated-name=":superconjunt:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":surfista:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":sushi:" block-list:name="🍣"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
   <block-list:block block-list:abbreviated-name=":Taure:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":taüt:" block-list:name="⚰"/>
   <block-list:block block-list:abbreviated-name=":taxi2:" block-list:name="🚖"/>
   <block-list:block block-list:abbreviated-name=":taxi:" block-list:name="🚕"/>
   <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
   <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
   <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
+  <block-list:block block-list:abbreviated-name=":teatre:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":te:" block-list:name="🍵"/>
   <block-list:block block-list:abbreviated-name=":teclat:" block-list:name="⌨"/>
   <block-list:block block-list:abbreviated-name=":telèfon2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":telèfon3:" block-list:name="✆"/>
   <block-list:block block-list:abbreviated-name=":telèfon:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":telescopi:" block-list:name="🔭"/>
   <block-list:block block-list:abbreviated-name=":tempesta:" block-list:name="☈"/>
   <block-list:block block-list:abbreviated-name=":temporitzador:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":tennis:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":Terra2:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":Terra3:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":Terra4:" block-list:name="🌐"/>
   <block-list:block block-list:abbreviated-name=":Terra:" block-list:name="♁"/>
   <block-list:block block-list:abbreviated-name=":^theta:" block-list:name="ᶿ"/>
   <block-list:block block-list:abbreviated-name=":theta:" block-list:name="θ"/>
   <block-list:block block-list:abbreviated-name=":Theta:" block-list:name="Θ"/>
   <block-list:block block-list:abbreviated-name=":tigre2:" block-list:name="🐯"/>
   <block-list:block block-list:abbreviated-name=":tigre:" block-list:name="🐅"/>
+  <block-list:block block-list:abbreviated-name=":tisores2:" block-list:name="✄"/>
+  <block-list:block block-list:abbreviated-name=":tisores3:" block-list:name="✁"/>
+  <block-list:block block-list:abbreviated-name=":tisores4:" block-list:name="✃"/>
+  <block-list:block block-list:abbreviated-name=":tisores:" block-list:name="✂"/>
+  <block-list:block block-list:abbreviated-name=":tomàquet:" block-list:name="🍅"/>
   <block-list:block block-list:abbreviated-name=":torre blanca:" block-list:name="♖"/>
   <block-list:block block-list:abbreviated-name=":torre:" block-list:name="🗼"/>
   <block-list:block block-list:abbreviated-name=":torre negra:" block-list:name="♜"/>
   <block-list:block block-list:abbreviated-name=":tortuga:" block-list:name="🐢"/>
   <block-list:block block-list:abbreviated-name=":tractor:" block-list:name="🚜"/>
   <block-list:block block-list:abbreviated-name=":trapezi:" block-list:name="⏢"/>
+  <block-list:block block-list:abbreviated-name=":treballador:" block-list:name="👷"/>
   <block-list:block block-list:abbreviated-name=":tren2:" block-list:name="🚄"/>
   <block-list:block block-list:abbreviated-name=":tren3:" block-list:name="🚅"/>
   <block-list:block block-list:abbreviated-name=":tren:" block-list:name="🚆"/>
+  <block-list:block block-list:abbreviated-name=":trèvol:" block-list:name="🍀"/>
   <block-list:block block-list:abbreviated-name=":trèvols2:" block-list:name="♧"/>
   <block-list:block block-list:abbreviated-name=":trèvols:" block-list:name="♣"/>
   <block-list:block block-list:abbreviated-name=":triangle2:" block-list:name="▲"/>
   <block-list:block block-list:abbreviated-name=":triangle:" block-list:name="△"/>
   <block-list:block block-list:abbreviated-name=":triangle rectangle:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":trident:" block-list:name="🔱"/>
+  <block-list:block block-list:abbreviated-name=":trofeu:" block-list:name="🏆"/>
+  <block-list:block block-list:abbreviated-name=":trompeta:" block-list:name="🎺"/>
   <block-list:block block-list:abbreviated-name=":trucada:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":tulipa:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":turbant:" block-list:name="👳"/>
   <block-list:block block-list:abbreviated-name=":tv:" block-list:name="📺"/>
   <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
   <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
   <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
+  <block-list:block block-list:abbreviated-name=":ulleres:" block-list:name="👓"/>
   <block-list:block block-list:abbreviated-name=":ulls:" block-list:name="👀"/>
   <block-list:block block-list:abbreviated-name=":Urà:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":urna:" block-list:name="⚱"/>
   <block-list:block block-list:abbreviated-name=":vaca2:" block-list:name="🐮"/>
   <block-list:block block-list:abbreviated-name=":vaca:" block-list:name="🐄"/>
   <block-list:block block-list:abbreviated-name=":vaixell:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":vaquers:" block-list:name="👖"/>
   <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
   <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
   <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
   <block-list:block block-list:abbreviated-name=":Verge:" block-list:name="♍"/>
   <block-list:block block-list:abbreviated-name=":verí:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":vestit:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":Via Làctia:" block-list:name="🌌"/>
   <block-list:block block-list:abbreviated-name=":victòria:" block-list:name="✌"/>
   <block-list:block block-list:abbreviated-name=":vídeo:" block-list:name="📼"/>
   <block-list:block block-list:abbreviated-name=":videocàmera:" block-list:name="📹"/>
   <block-list:block block-list:abbreviated-name=":videojoc:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":violí:" block-list:name="🎻"/>
   <block-list:block block-list:abbreviated-name=":volcà:" block-list:name="🌋"/>
   <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
   <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
+  <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
   <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
   <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
   <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
   <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
   <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":xéquel:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":xeringa:" block-list:name="💉"/>
   <block-list:block block-list:abbreviated-name=":xocolata:" block-list:name="🍫"/>
   <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
   <block-list:block block-list:abbreviated-name=":ying-yang:" block-list:name="☯"/>
   <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
 </block-list:block-list>
