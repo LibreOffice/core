@@ -41,6 +41,8 @@
 #include <svx/svdoutl.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
+#include <svx/textchaincursor.hxx>
+
 #include <svx/svdetc.hxx>
 #include <editeng/editstat.hxx>
 
@@ -1204,6 +1206,7 @@ void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
     get the correct style sheet. */
 void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
 {
+    /* Style Sheet handling */
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
     SdrOutliner* pOutliner = GetTextEditOutliner();
     if( pOutliner && pTextObj && pTextObj->GetPage() )
@@ -1254,6 +1257,11 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             }
         }
     }
+
+    /* Chaining handling */
+    ImpChainingEventHdl(NULL);
+    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
+    ImpMoveCursorAfterChainingEvent(pCursorManager);
 }
 
 bool View::ShouldToggleOn(

@@ -20,13 +20,15 @@
 #ifndef INCLUDED_SVX_TEXTCHAINCURSOR_HXX
 #define INCLUDED_SVX_TEXTCHAINCURSOR_HXX
 
+#include <svx/svxdllapi.h>
+
 class SdrObjEditView;
 class SdrTextObj;
 class KeyEvent;
 class SdrOutliner;
 
 
-class TextChainCursorManager
+class SVX_DLLPUBLIC TextChainCursorManager
 {
 public:
     TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj);
