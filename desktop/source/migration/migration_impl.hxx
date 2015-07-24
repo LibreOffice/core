@@ -194,7 +194,6 @@ private:
     install_info         m_aInfo;                // info about the version being migrated
     strings_vr           m_vrFileList;           // final list of files to be copied
      MigrationHashMap     m_aOldVersionItemsHashMap;
-     OUString      m_sModuleIdentifier;
 
     // functions to control the migration process
     static bool   readAvailableMigrations(migrations_available&);

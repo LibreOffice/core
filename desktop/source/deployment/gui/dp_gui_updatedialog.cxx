@@ -492,7 +492,6 @@ UpdateDialog::UpdateDialog(
     std::vector< dp_gui::UpdateData > * updateData):
     ModalDialog(parent, "UpdateDialog", "desktop/ui/updatedialog.ui"),
     m_context(context),
-    m_error(DPGUI_RESSTR(RID_DLG_UPDATE_ERROR)),
     m_none(DPGUI_RESSTR(RID_DLG_UPDATE_NONE)),
     m_noInstallable(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALLABLE)),
     m_failure(DPGUI_RESSTR(RID_DLG_UPDATE_FAILURE)),

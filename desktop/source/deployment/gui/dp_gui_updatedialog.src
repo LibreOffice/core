@@ -27,10 +27,6 @@ Image RID_DLG_UPDATE_NORMALALERT {
     };
 };
 
-String RID_DLG_UPDATE_ERROR {
-    Text[en-US] = "Error";
-};
-
 String RID_DLG_UPDATE_NONE {
     Text[en-US] = "No new updates are available.";
 };

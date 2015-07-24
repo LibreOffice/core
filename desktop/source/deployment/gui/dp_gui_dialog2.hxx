@@ -183,7 +183,6 @@ class UpdateRequiredDialog : public ModalDialog,
     VclPtr<CancelButton>        m_pCancelBtn;
     VclPtr<FixedText>           m_pProgressText;
     VclPtr<ProgressBar>         m_pProgressBar;
-    const OUString       m_sAddPackages;
     const OUString       m_sCloseText;
     OUString             m_sProgressText;
     ::osl::Mutex         m_aMutex;

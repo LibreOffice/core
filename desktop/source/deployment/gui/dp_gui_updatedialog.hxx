@@ -182,7 +182,6 @@ private:
     VclPtr<HelpButton> m_pHelp;
     VclPtr<PushButton> m_pOk;
     VclPtr<PushButton> m_pClose;
-    OUString m_error;
     OUString m_none;
     OUString m_noInstallable;
     OUString m_failure;
@@ -203,8 +202,6 @@ private:
     rtl::Reference< UpdateDialog::Thread > m_thread;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
 
-    Point   m_aFirstLinePos;
-    Size    m_aFirstLineSize;
     sal_uInt16  m_nLastID;
     bool    m_bModified;
 };
