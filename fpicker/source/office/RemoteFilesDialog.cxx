@@ -658,6 +658,9 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                     m_bIsUpdated = true;
                     break;
                 }
+                case RET_NO:
+                    sIdent = "delete_service";
+                    break;
                 case RET_CANCEL :
                 default :
                     // Do Nothing
@@ -665,7 +668,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
             };
         }
     }
-    else if( sIdent == "delete_service"  && m_pServices_lb->GetEntryCount() > 0 )
+    if( sIdent == "delete_service"  && m_pServices_lb->GetEntryCount() > 0 )
     {
         unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
         int nPos = GetSelectedServicePos();
