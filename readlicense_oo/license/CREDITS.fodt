@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
- <office:meta><dc:title>Credits » LibreOffice</dc:title><meta:keyword>Credits</meta:keyword><meta:keyword>contributors</meta:keyword><meta:keyword>coders</meta:keyword><meta:keyword>developers</meta:keyword><dc:description>Credits for the LibreOffice development/coding.</dc:description><meta:generator>LibreOffice/4.4.4.3$Linux_X86_64 LibreOffice_project/2c39ebcf046445232b798108aa8a7e7d89552ea8</meta:generator><dc:date>2012-02-20T22:17:18.060000000</dc:date><meta:editing-duration>PT14M12S</meta:editing-duration><meta:editing-cycles>3</meta:editing-cycles><meta:document-statistic meta:table-count="5" meta:image-count="1" meta:object-count="0" meta:page-count="2" meta:paragraph-count="3230" meta:word-count="11412" meta:character-count="82434" meta:non-whitespace-character-count="72143"/><meta:user-defined meta:name="google-site-verification">JUebjoxEpqXoQcpltWRTwzBZEEHtch3wApdhgiQPFiA</meta:user-defined></office:meta>
+ <office:meta><dc:title>Credits » LibreOffice</dc:title><meta:keyword>Credits</meta:keyword><meta:keyword>contributors</meta:keyword><meta:keyword>coders</meta:keyword><meta:keyword>developers</meta:keyword><dc:description>Credits for the LibreOffice development/coding.</dc:description><meta:generator>LibreOffice/4.4.4.3$Linux_X86_64 LibreOffice_project/2c39ebcf046445232b798108aa8a7e7d89552ea8</meta:generator><dc:date>2012-02-20T22:17:18.060000000</dc:date><meta:editing-duration>PT14M12S</meta:editing-duration><meta:editing-cycles>3</meta:editing-cycles><meta:document-statistic meta:table-count="5" meta:image-count="1" meta:object-count="0" meta:page-count="2" meta:paragraph-count="3230" meta:word-count="11412" meta:character-count="82435" meta:non-whitespace-character-count="72144"/><meta:user-defined meta:name="google-site-verification">JUebjoxEpqXoQcpltWRTwzBZEEHtch3wApdhgiQPFiA</meta:user-defined></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="ViewAreaTop" config:type="long">501</config:config-item>
@@ -83,7 +83,7 @@
    <config:config-item config:name="ConsiderTextWrapOnObjPos" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
    <config:config-item config:name="RedlineProtectionKey" config:type="base64Binary"/>
-   <config:config-item config:name="Rsid" config:type="int">3292622</config:config-item>
+   <config:config-item config:name="Rsid" config:type="int">3298233</config:config-item>
    <config:config-item config:name="PrintProspectRTL" config:type="boolean">false</config:config-item>
    <config:config-item config:name="PrinterSetup" config:type="base64Binary"/>
    <config:config-item config:name="AlignTabStopPosition" config:type="boolean">true</config:config-item>
@@ -388,16 +388,16 @@
    <style:table-cell-properties fo:padding="0.049cm" fo:border="none"/>
   </style:style>
   <style:style style:name="Tabelle5" style:family="table">
-   <style:table-properties style:width="30.699cm" table:align="left"/>
+   <style:table-properties style:width="31.334cm" table:align="left"/>
   </style:style>
   <style:style style:name="Tabelle5.A" style:family="table-column">
    <style:table-column-properties style:column-width="6.696cm"/>
   </style:style>
   <style:style style:name="Tabelle5.B" style:family="table-column">
-   <style:table-column-properties style:column-width="11.564cm"/>
+   <style:table-column-properties style:column-width="6.458cm"/>
   </style:style>
   <style:style style:name="Tabelle5.C" style:family="table-column">
-   <style:table-column-properties style:column-width="5.823cm"/>
+   <style:table-column-properties style:column-width="11.564cm"/>
   </style:style>
   <style:style style:name="Tabelle5.D" style:family="table-column">
    <style:table-column-properties style:column-width="6.616cm"/>
@@ -1013,7 +1013,7 @@
        </office:binary-data>
       </draw:image>
      </draw:frame>Credits</text:p>
-    <text:p text:style-name="Text_20_body">1065 individuals contributed to OpenOffice.org (and whose contributions were imported into LibreOffice) or LibreOffice until 2015-07-06 23:56:44.</text:p>
+    <text:p text:style-name="Text_20_body">1065 individuals contributed to OpenOffice.org (and whose contributions were imported into LibreOffice) or LibreOffice until 2015-07-24 19:45:49.</text:p>
     <text:p text:style-name="Text_20_body"><text:span text:style-name="T1">*</text:span> marks developers whose first contributions happened after 2010-09-28.</text:p>
     <text:h text:style-name="Heading_20_2" text:outline-level="2">Developers committing code since 2010-09-28</text:h>
     <table:table table:name="Tabelle1" table:style-name="Tabelle1">
@@ -1040,10 +1040,10 @@
        <text:p text:style-name="Table_20_Contents">Vladimir Glazunov<text:line-break/>Commits: 25434<text:line-break/>Joined: 2000-12-04</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Caolán McNamara<text:line-break/>Commits: 17729<text:line-break/>Joined: 2000-10-10</text:p>
+       <text:p text:style-name="Table_20_Contents">Caolán McNamara<text:line-break/>Commits: 17739<text:line-break/>Joined: 2000-10-10</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Stephan Bergmann<text:line-break/>Commits: 9637<text:line-break/>Joined: 2000-10-04</text:p>
+       <text:p text:style-name="Table_20_Contents">Stephan Bergmann<text:line-break/>Commits: 9641<text:line-break/>Joined: 2000-10-04</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">Ivo Hinkelmann<text:line-break/>Commits: 9480<text:line-break/>Joined: 2002-09-09</text:p>
@@ -1051,7 +1051,7 @@
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Tor Lillqvist<text:line-break/>Commits: 6953<text:line-break/>Joined: 2010-03-23</text:p>
+       <text:p text:style-name="Table_20_Contents">Tor Lillqvist<text:line-break/>Commits: 6954<text:line-break/>Joined: 2010-03-23</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">Kohei Yoshida<text:line-break/>Commits: 5360<text:line-break/>Joined: 2009-06-19</text:p>
@@ -1060,18 +1060,18 @@
        <text:p text:style-name="Table_20_Contents">Frank Schoenheit [fs]<text:line-break/>Commits: 5008<text:line-break/>Joined: 2000-09-19</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Michael Stahl<text:line-break/>Commits: 4719<text:line-break/>Joined: 2008-06-16</text:p>
+       <text:p text:style-name="Table_20_Contents">Michael Stahl<text:line-break/>Commits: 4732<text:line-break/>Joined: 2008-06-16</text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Miklos Vajna<text:line-break/>Commits: 4636<text:line-break/>Joined: 2010-07-29</text:p>
+       <text:p text:style-name="Table_20_Contents">Miklos Vajna<text:line-break/>Commits: 4641<text:line-break/>Joined: 2010-07-29</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Noel Grandin<text:line-break/>Commits: 4051<text:line-break/>Joined: <text:span text:style-name="T2">2011-12-12</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Noel Grandin<text:line-break/>Commits: 4067<text:line-break/>Joined: <text:span text:style-name="T2">2011-12-12</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Markus Mohrhard<text:line-break/>Commits: 3692<text:line-break/>Joined: <text:span text:style-name="T2">2011-03-17</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Markus Mohrhard<text:line-break/>Commits: 3696<text:line-break/>Joined: <text:span text:style-name="T2">2011-03-17</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">David Tardon<text:line-break/>Commits: 3071<text:line-break/>Joined: 2009-11-12</text:p>
@@ -1085,7 +1085,7 @@
        <text:p text:style-name="Table_20_Contents">Ocke Janssen [oj]<text:line-break/>Commits: 2850<text:line-break/>Joined: 2000-09-20</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Eike Rathke<text:line-break/>Commits: 2764<text:line-break/>Joined: 2000-10-11</text:p>
+       <text:p text:style-name="Table_20_Contents">Eike Rathke<text:line-break/>Commits: 2769<text:line-break/>Joined: 2000-10-11</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">Mathias Bauer<text:line-break/>Commits: 2580<text:line-break/>Joined: 2000-09-20</text:p>
@@ -1099,7 +1099,7 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Thomas Arnhold<text:line-break/>Commits: 2176<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-16</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Jan Holesovsky<text:line-break/>Commits: 2163<text:line-break/>Joined: 2009-06-23</text:p>
+       <text:p text:style-name="Table_20_Contents">Jan Holesovsky<text:line-break/>Commits: 2164<text:line-break/>Joined: 2009-06-23</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Norbert Thiebaud<text:line-break/>Commits: 2106<text:line-break/>Joined: <text:span text:style-name="T2">2010-09-29</text:span></text:p>
@@ -1138,7 +1138,7 @@
        <text:p text:style-name="Table_20_Contents">Fridrich Štrba<text:line-break/>Commits: 1324<text:line-break/>Joined: 2007-02-22</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Tomaž Vajngerl<text:line-break/>Commits: 1318<text:line-break/>Joined: <text:span text:style-name="T2">2012-06-02</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Tomaž Vajngerl<text:line-break/>Commits: 1323<text:line-break/>Joined: <text:span text:style-name="T2">2012-06-02</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">Thomas Lange [tl]<text:line-break/>Commits: 1310<text:line-break/>Joined: 2000-09-22</text:p>
@@ -1169,10 +1169,10 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Matteo Casalin<text:line-break/>Commits: 950<text:line-break/>Joined: <text:span text:style-name="T2">2011-11-13</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Lionel Elie Mamane<text:line-break/>Commits: 940<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-15</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Lionel Elie Mamane<text:line-break/>Commits: 942<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-15</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Takeshi Abe<text:line-break/>Commits: 917<text:line-break/>Joined: <text:span text:style-name="T2">2010-11-08</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Takeshi Abe<text:line-break/>Commits: 918<text:line-break/>Joined: <text:span text:style-name="T2">2010-11-08</text:span></text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -1292,10 +1292,10 @@
        <text:p text:style-name="Table_20_Contents">Radek Doulik<text:line-break/>Commits: 305<text:line-break/>Joined: 2010-05-03</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Chr. Rossmanith<text:line-break/>Commits: 295<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-03</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents">Christian Lohmaier<text:line-break/>Commits: 295<text:line-break/>Joined: 2008-06-01</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents">Christian Lohmaier<text:line-break/>Commits: 292<text:line-break/>Joined: 2008-06-01</text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Chr. Rossmanith<text:line-break/>Commits: 295<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-03</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>August Sodora<text:line-break/>Commits: 285<text:line-break/>Joined: <text:span text:style-name="T2">2011-10-18</text:span></text:p>
@@ -1312,7 +1312,7 @@
        <text:p text:style-name="Table_20_Contents">Lars Langhans<text:line-break/>Commits: 260<text:line-break/>Joined: 2000-09-22</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Katarina Behrens<text:line-break/>Commits: 254<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-13</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Katarina Behrens<text:line-break/>Commits: 258<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-13</text:span></text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -1334,13 +1334,13 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Khaled Hosny<text:line-break/>Commits: 227<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-28</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>László Németh<text:line-break/>Commits: 207<text:line-break/>Joined: <text:span text:style-name="T2">2010-09-29</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>László Németh<text:line-break/>Commits: 208<text:line-break/>Joined: <text:span text:style-name="T2">2010-09-29</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">Ingo Schmidt<text:line-break/>Commits: 202<text:line-break/>Joined: 2004-02-05</text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Maxim Monastirsky<text:line-break/>Commits: 195<text:line-break/>Joined: <text:span text:style-name="T2">2013-10-27</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Maxim Monastirsky<text:line-break/>Commits: 196<text:line-break/>Joined: <text:span text:style-name="T2">2013-10-27</text:span></text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -1362,24 +1362,24 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Philipp Riemer<text:line-break/>Commits: 171<text:line-break/>Joined: <text:span text:style-name="T2">2012-05-25</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Szymon Kłos<text:line-break/>Commits: 166<text:line-break/>Joined: <text:span text:style-name="T2">2014-03-22</text:span></text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Nigel Hawkins<text:line-break/>Commits: 160<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-28</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Artur Dorda<text:line-break/>Commits: 151<text:line-break/>Joined: <text:span text:style-name="T2">2012-04-15</text:span></text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Gert Faller<text:line-break/>Commits: 151<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-25</text:span></text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Adolfo Jayme Barrientos<text:line-break/>Commits: 151<text:line-break/>Joined: <text:span text:style-name="T2">2013-06-21</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents">Gregor Hartmann<text:line-break/>Commits: 141<text:line-break/>Joined: 2000-10-12</text:p>
-      </table:table-cell>
-      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Szymon Kłos<text:line-break/>Commits: 137<text:line-break/>Joined: <text:span text:style-name="T2">2014-03-22</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Artur Dryomov<text:line-break/>Commits: 137<text:line-break/>Joined: <text:span text:style-name="T2">2013-03-14</text:span></text:p>
@@ -1443,13 +1443,13 @@
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Krisztian Pinter<text:line-break/>Commits: 90<text:line-break/>Joined: <text:span text:style-name="T2">2013-02-18</text:span></text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Daniel Bankston<text:line-break/>Commits: 88<text:line-break/>Joined: <text:span text:style-name="T2">2012-04-03</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Tim Retout<text:line-break/>Commits: 88<text:line-break/>Joined: <text:span text:style-name="T2">2012-02-14</text:span></text:p>
-      </table:table-cell>
-      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Krisztian Pinter<text:line-break/>Commits: 87<text:line-break/>Joined: <text:span text:style-name="T2">2013-02-18</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Adam Co<text:line-break/>Commits: 86<text:line-break/>Joined: <text:span text:style-name="T2">2013-04-28</text:span></text:p>
@@ -1488,7 +1488,7 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Andreas Kainz<text:line-break/>Commits: 81<text:line-break/>Joined: <text:span text:style-name="T2">2015-03-18</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Laurent Balland-Poirier<text:line-break/>Commits: 79<text:line-break/>Joined: <text:span text:style-name="T2">2011-08-31</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Laurent Balland-Poirier<text:line-break/>Commits: 80<text:line-break/>Joined: <text:span text:style-name="T2">2011-08-31</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Douglas Mencken<text:line-break/>Commits: 76<text:line-break/>Joined: <text:span text:style-name="T2">2013-12-11</text:span></text:p>
@@ -1589,15 +1589,15 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Rob Snelders<text:line-break/>Commits: 53<text:line-break/>Joined: <text:span text:style-name="T2">2011-02-08</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Matthias Freund<text:line-break/>Commits: 52<text:line-break/>Joined: <text:span text:style-name="T2">2013-02-08</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Mihály Palenik<text:line-break/>Commits: 52<text:line-break/>Joined: <text:span text:style-name="T2">2013-07-11</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Efe Gürkan YALAMAN<text:line-break/>Commits: 52<text:line-break/>Joined: <text:span text:style-name="T2">2012-08-01</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Matthias Freund<text:line-break/>Commits: 52<text:line-break/>Joined: <text:span text:style-name="T2">2013-02-08</text:span></text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Mihály Palenik<text:line-break/>Commits: 51<text:line-break/>Joined: <text:span text:style-name="T2">2013-07-11</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Efe Gürkan YALAMAN<text:line-break/>Commits: 52<text:line-break/>Joined: <text:span text:style-name="T2">2012-08-01</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Will Thompson<text:line-break/>Commits: 51<text:line-break/>Joined: <text:span text:style-name="T2">2012-03-21</text:span></text:p>
@@ -1611,6 +1611,9 @@
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Matthew J. Francis<text:line-break/>Commits: 51<text:line-break/>Joined: <text:span text:style-name="T2">2014-08-25</text:span></text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Cao Cuong Ngo<text:line-break/>Commits: 51<text:line-break/>Joined: <text:span text:style-name="T2">2013-03-04</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
@@ -1618,9 +1621,6 @@
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Ptyl Dragon<text:line-break/>Commits: 50<text:line-break/>Joined: <text:span text:style-name="T2">2013-05-09</text:span></text:p>
-      </table:table-cell>
-      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Matthew J. Francis<text:line-break/>Commits: 50<text:line-break/>Joined: <text:span text:style-name="T2">2014-08-25</text:span></text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -1908,16 +1908,19 @@
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Jack Leigh<text:line-break/>Commits: 23<text:line-break/>Joined: <text:span text:style-name="T2">2012-10-03</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Varun Dhall<text:line-break/>Commits: 23<text:line-break/>Joined: <text:span text:style-name="T2">2015-03-07</text:span></text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Luke Deller<text:line-break/>Commits: 23<text:line-break/>Joined: <text:span text:style-name="T2">2012-11-26</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Lucas Baudin<text:line-break/>Commits: 23<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-25</text:span></text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Sören Möller<text:line-break/>Commits: 23<text:line-break/>Joined: <text:span text:style-name="T2">2011-01-03</text:span></text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Robert Roth<text:line-break/>Commits: 23<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-31</text:span></text:p>
       </table:table-cell>
@@ -1927,16 +1930,13 @@
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>zhenyu yuan<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2013-11-06</text:span></text:p>
       </table:table-cell>
-      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Jian Fang Zhang<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2012-06-18</text:span></text:p>
-      </table:table-cell>
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Jacek Wolszczak<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-07</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Jian Fang Zhang<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2012-06-18</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Varun Dhall<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2015-03-07</text:span></text:p>
+       <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Jacek Wolszczak<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2010-10-07</text:span></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:span text:style-name="T1">*</text:span>Ruslan Kabatsayev<text:line-break/>Commits: 22<text:line-break/>Joined: <text:span text:style-name="T2">2012-05-11</text:span></text:p>
@@ -4888,7 +4888,7 @@
      </table:table-row>
     </table:table>
     <text:p text:style-name="Text_20_body">We do not distinguish between commits that were imported from the OOo code base and those who went directly into the LibreOffice code base as:</text:p>
-    <text:list xml:id="list881243072954021300" text:style-name="L3">
+    <text:list xml:id="list3855254007070677391" text:style-name="L3">
      <text:list-item>
       <text:p text:style-name="P18">a) it is technically not possible to distinguish between commits that go directly into the LibreOffice code base and commits that were merged in from the OpenOffice.org code base, and </text:p>
      </text:list-item>
@@ -4920,7 +4920,7 @@
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Pierre-yves%20samyn" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Pierre-yves samyn</text:a> (3409) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Pierre-yves%20samyn" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Pierre-yves samyn</text:a> (3414) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Kü" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Kü</text:a> (2834) </text:p>
@@ -4990,7 +4990,7 @@
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Filmsi" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Filmsi</text:a> (711) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Filmsi" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Filmsi</text:a> (714) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Naruoga" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Naruoga</text:a> (697) </text:p>
@@ -5091,10 +5091,10 @@
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Kohei" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Yoshida, Kohei</text:a> (386) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Foral" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Foral</text:a> (384) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:ErAck" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Rathke, Eike</text:a> (384) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:ErAck" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Rathke, Eike</text:a> (383) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Foral" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Foral</text:a> (384) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Kendy" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Holešovský, Jan</text:a> (382) </text:p>
@@ -5111,7 +5111,7 @@
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Emanuel%20Marcatinco" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Emanuel Marcatinco</text:a> (374) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Vmiklos" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Vajna, Miklos</text:a> (371) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Vmiklos" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Vajna, Miklos</text:a> (372) </text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -5335,12 +5335,12 @@
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:P.guimberteau" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">P.guimberteau</text:a> (137) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Norah" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Norah</text:a> (135) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Hibagonsan" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Hibagonsan</text:a> (136) </text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Hibagonsan" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Hibagonsan</text:a> (134) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Norah" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Norah</text:a> (135) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Philippw" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Weissenbacher, Philipp</text:a> (134) </text:p>
@@ -5363,12 +5363,12 @@
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Sb" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Bergmann, Stephan</text:a> (129) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Nik" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Nik</text:a> (127) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Lmamane" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Mamane, Lionel Elie</text:a> (128) </text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Lmamane" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Mamane, Lionel Elie</text:a> (126) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Nik" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Nik</text:a> (127) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Krackedpress" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Krackedpress</text:a> (123) </text:p>
@@ -5461,7 +5461,7 @@
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:AlanC" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">AlanC</text:a> (98) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Nemeth" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Nemeth</text:a> (93) </text:p>
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Nemeth" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Nemeth</text:a> (94) </text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -5791,13 +5791,13 @@
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Deneb" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Deneb</text:a> (41) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Htietze" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Htietze</text:a> (41) </text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Joey" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Joey</text:a> (41) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:PhilJung" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Jung, Philippe</text:a> (41) </text:p>
-      </table:table-cell>
-      <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Htietze" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Htietze</text:a> (40) </text:p>
       </table:table-cell>
      </table:table-row>
      <table:table-row>
@@ -6628,6 +6628,9 @@
      </table:table-row>
      <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
+       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Steve-%20-" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Steve- -</text:a> (11) </text:p>
+      </table:table-cell>
+      <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Sunk8" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Sunk8</text:a> (11) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
@@ -6636,11 +6639,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Webmink" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Webmink</text:a> (11) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Zero0w" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Zero0w</text:a> (11) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Admasonscottisha" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Admasonscottisha</text:a> (10) </text:p>
       </table:table-cell>
@@ -6650,11 +6653,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Algotruneman" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Algotruneman</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:AliIsingor" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">AliIsingor</text:a> (10) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Beppec56" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Castagno, Giuseppe</text:a> (10) </text:p>
       </table:table-cell>
@@ -6664,11 +6667,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Diginin" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Diginin</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Eagles051387" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Eagles051387</text:a> (10) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Eduardogula" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Eduardogula</text:a> (10) </text:p>
       </table:table-cell>
@@ -6678,11 +6681,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Elrath" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Elrath</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:J.baer" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">J.baer</text:a> (10) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Kirill%20NN" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Kirill NN</text:a> (10) </text:p>
       </table:table-cell>
@@ -6692,11 +6695,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:MNeto" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">MNeto</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Madscientist159" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Pearson, Timothy</text:a> (10) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Mfldelton" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Chung, Elton</text:a> (10) </text:p>
       </table:table-cell>
@@ -6706,11 +6709,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Otto" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Otto</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Revol" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Revol</text:a> (10) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ronja" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ronja</text:a> (10) </text:p>
       </table:table-cell>
@@ -6720,11 +6723,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Tatat" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Tatat</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Teseu" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Teseu</text:a> (10) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Tomg" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Tomg</text:a> (10) </text:p>
       </table:table-cell>
@@ -6734,11 +6737,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Wlenon" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Wlenon</text:a> (10) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Abdulmajeed" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Al-Abdulrazzaq, Abdulmajeed</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Afaccioli74" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Afaccioli74</text:a> (9) </text:p>
       </table:table-cell>
@@ -6748,11 +6751,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Bubli" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Bubli</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Calisgarge" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Calisgarge</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Camargo" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Camargo</text:a> (9) </text:p>
       </table:table-cell>
@@ -6762,11 +6765,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Crazyskeggy" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Crazyskeggy</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Dupreyb" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Dupreyb</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Fatdf" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Fatdf</text:a> (9) </text:p>
       </table:table-cell>
@@ -6776,11 +6779,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Gibi" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Gibi</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:GisbertFriege" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">GisbertFriege</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Goranrakic" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Goranrakic</text:a> (9) </text:p>
       </table:table-cell>
@@ -6790,11 +6793,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Jopsen" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Jopsen</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Jowyta" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Jowyta</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Lapetec" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Lapetec</text:a> (9) </text:p>
       </table:table-cell>
@@ -6804,11 +6807,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Mapper" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Mapper</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Marco" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Marco</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Marcuskgosi" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Marcuskgosi</text:a> (9) </text:p>
       </table:table-cell>
@@ -6818,11 +6821,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Msaffron" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Msaffron</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ohnemax" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ohnemax</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Oprea.luci" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Oprea.luci</text:a> (9) </text:p>
       </table:table-cell>
@@ -6832,11 +6835,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Pixpray" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Pixpray</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ploum" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Dricot, Lionel</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Rogawa" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Rogawa</text:a> (9) </text:p>
       </table:table-cell>
@@ -6846,11 +6849,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Slacka" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Slacka</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Spacebat" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ellis, Damien</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Therabi" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Therabi</text:a> (9) </text:p>
       </table:table-cell>
@@ -6860,11 +6863,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Twstdude0to1" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Twstdude0to1</text:a> (9) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Urdulizer" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Urdulizer</text:a> (9) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Zhangxiaofei" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Zhangxiaofei</text:a> (9) </text:p>
       </table:table-cell>
@@ -6874,11 +6877,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Acbaird" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Baird, Alan C.</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Alexxed" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Alexxed</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:AndreasL" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">AndreasL</text:a> (8) </text:p>
       </table:table-cell>
@@ -6888,11 +6891,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Cocofan" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Cocofan</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Crolidge" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Crolidge</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Dashohoxha" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Dashohoxha</text:a> (8) </text:p>
       </table:table-cell>
@@ -6902,11 +6905,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ed%20Eyles" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ed Eyles</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Elacheche" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Elacheche</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Horst" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Horst</text:a> (8) </text:p>
       </table:table-cell>
@@ -6916,11 +6919,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:JR" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">JR</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Jslozier" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Jslozier</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Juliohm" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Hoffimann Mendes, Júlio</text:a> (8) </text:p>
       </table:table-cell>
@@ -6930,11 +6933,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Kednar" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Kednar</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Krabina" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Krabina</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:KristianRietveld" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Rietveld, Kristian</text:a> (8) </text:p>
       </table:table-cell>
@@ -6944,11 +6947,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Leo.h.hildebrandt" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Leo.h.hildebrandt</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Manj%20k" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Manj k</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Mrmox2" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Mrmox2</text:a> (8) </text:p>
       </table:table-cell>
@@ -6958,11 +6961,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:NightMonkey" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">NightMonkey</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Paulo.tavares" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Paulo.tavares</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Pefoley2" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Foley, Peter</text:a> (8) </text:p>
       </table:table-cell>
@@ -6972,11 +6975,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ricardolau" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ricardolau</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Seomarketing221" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Seomarketing221</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Tibbylickle" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Tibbylickle</text:a> (8) </text:p>
       </table:table-cell>
@@ -6986,11 +6989,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Vbkaisetsu" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Vbkaisetsu</text:a> (8) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:VlhOwn" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">VlhOwn</text:a> (8) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Yakusha" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Yakusha</text:a> (8) </text:p>
       </table:table-cell>
@@ -7000,11 +7003,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:10110111" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Kabatsayev, Ruslan</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Andrea.soragna" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Andrea.soragna</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Bastik" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Bastik</text:a> (7) </text:p>
       </table:table-cell>
@@ -7014,11 +7017,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Borim7" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Borim7</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Capiscuas" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Capiscuas</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ciaran" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ciaran</text:a> (7) </text:p>
       </table:table-cell>
@@ -7028,11 +7031,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Drose" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Drose</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Esbardu" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Esbardu</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:GuKK-Devel" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">GuKK-Devel</text:a> (7) </text:p>
       </table:table-cell>
@@ -7042,11 +7045,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Ingotian" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Ingotian</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Jstnlth" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Jstnlth</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Lenochod" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Lenochod</text:a> (7) </text:p>
       </table:table-cell>
@@ -7056,11 +7059,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Mbayer" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Mbayer</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:MephistoBooks" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">MephistoBooks</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Mjayfrancis" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Francis, Matthew</text:a> (7) </text:p>
       </table:table-cell>
@@ -7070,11 +7073,11 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Olivier%20DDB" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Olivier DDB</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Opensas" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Opensas</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Polte" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Polte</text:a> (7) </text:p>
       </table:table-cell>
@@ -7084,19 +7087,16 @@
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Rodo" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Rodo</text:a> (7) </text:p>
       </table:table-cell>
+     </table:table-row>
+     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Shady" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Shady</text:a> (7) </text:p>
       </table:table-cell>
-     </table:table-row>
-     <table:table-row>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Simosx" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Simosx</text:a> (7) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Smarquespt" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Smarquespt</text:a> (7) </text:p>
-      </table:table-cell>
-      <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
-       <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Steve-%20-" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Steve- -</text:a> (7) </text:p>
       </table:table-cell>
       <table:table-cell table:style-name="Tabelle5.A1" office:value-type="string">
        <text:p text:style-name="Table_20_Contents"><text:a xlink:type="simple" xlink:href="http://wiki.documentfoundation.org/User:Toxicbits" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">Toxicbits</text:a> (7) </text:p>
