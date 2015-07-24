@@ -117,12 +117,14 @@
   <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
   <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":~:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
   <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
   <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
   <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
   <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
   <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":-+:" block-list:name="∓"/>
   <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
   <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
@@ -136,9 +138,13 @@
   <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
   <block-list:block block-list:abbreviated-name=":Chi:" block-list:name="Χ"/>
   <block-list:block block-list:abbreviated-name=":copyright:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":delar:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":delar ej:" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=":delmängd:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
   <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
   <block-list:block block-list:abbreviated-name=":dubbelkors:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":eller:" block-list:name="∨"/>
   <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="ε"/>
   <block-list:block block-list:abbreviated-name=":Epsilon:" block-list:name="Ε"/>
   <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
@@ -148,25 +154,45 @@
   <block-list:block block-list:abbreviated-name=":existerar inte:" block-list:name="∄"/>
   <block-list:block block-list:abbreviated-name=":fi:" block-list:name="φ"/>
   <block-list:block block-list:abbreviated-name=":Fi:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":fjärderot:" block-list:name="∜"/>
   <block-list:block block-list:abbreviated-name=":för alla:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
   <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
   <block-list:block block-list:abbreviated-name=":grader:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":grundmängd:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":halvhög punkt:" block-list:name="·"/>
   <block-list:block block-list:abbreviated-name=":hryvnia:" block-list:name="₴"/>
   <block-list:block block-list:abbreviated-name=":icke:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":information:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":innehåller:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":innehåller inte:" block-list:name="∌"/>
+  <block-list:block block-list:abbreviated-name=":inte delmängd:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":integral2:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":integral3:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":integral4:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":integral5:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":integral:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":inte grundmängd:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":inte lika med:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":inte parallell:" block-list:name="∦"/>
   <block-list:block block-list:abbreviated-name=":jota:" block-list:name="ι"/>
   <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
   <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":klocka:" block-list:name="⌚"/>
   <block-list:block block-list:abbreviated-name=":kors:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":kubikrot:" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=":kvadratrot:" block-list:name="√"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
   <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":lilla innehåller:" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":lilla tillhör:" block-list:name="∊"/>
   <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
   <block-list:block block-list:abbreviated-name=":listpunkt2:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":listpunkt:" block-list:name="•"/>
   <block-list:block block-list:abbreviated-name=":lota:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":my:" block-list:name="μ"/>
   <block-list:block block-list:abbreviated-name=":My:" block-list:name="Μ"/>
@@ -181,7 +207,9 @@
   <block-list:block block-list:abbreviated-name=":ny:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Ny:" block-list:name="Ν"/>
   <block-list:block block-list:abbreviated-name=":Ö2:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":oändlighet:" block-list:name="∞"/>
   <block-list:block block-list:abbreviated-name=":Ö:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":och:" block-list:name="∧"/>
   <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":omikron:" block-list:name="ο"/>
@@ -189,15 +217,18 @@
   <block-list:block block-list:abbreviated-name=":ÖV2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":ÖV:" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name=":paragraf:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":parallell:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":partiell:" block-list:name="∂"/>
   <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Pi:" block-list:name="Π"/>
   <block-list:block block-list:abbreviated-name=":prim:" block-list:name="′"/>
+  <block-list:block block-list:abbreviated-name=":produkt:" block-list:name="∏"/>
   <block-list:block block-list:abbreviated-name=":promille:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
   <block-list:block block-list:abbreviated-name=":Psi:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":pund:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":rätvinklig triangel:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":rho:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Rho:" block-list:name="Ρ"/>
   <block-list:block block-list:abbreviated-name=":rupie:" block-list:name="₹"/>
@@ -207,23 +238,31 @@
   <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
   <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":snitt:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":SÖ2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":SÖ:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":summa:" block-list:name="∑"/>
   <block-list:block block-list:abbreviated-name=":SV2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":SV:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":tangentbord:" block-list:name="⌨"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
   <block-list:block block-list:abbreviated-name=":theta:" block-list:name="θ"/>
   <block-list:block block-list:abbreviated-name=":Theta:" block-list:name="Θ"/>
   <block-list:block block-list:abbreviated-name=":tillhör:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":tillhör inte:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":timglas:" block-list:name="⌛"/>
   <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name=":tom mängd:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":tum:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":Turkisk lira:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":union:" block-list:name="∪"/>
   <block-list:block block-list:abbreviated-name=":V2:" block-list:name="⇐"/>
   <block-list:block block-list:abbreviated-name=":varumärke:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":V:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":vilket skulle bevisas:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":vinkel2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":vinkel:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
   <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
   <block-list:block block-list:abbreviated-name=":xi:" block-list:name="ξ"/>

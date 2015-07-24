@@ -186,7 +186,7 @@
   <block-list:block block-list:abbreviated-name=":E:" block-list:name="→"/>
   <block-list:block block-list:abbreviated-name=":eeta:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Eeta:" block-list:name="Η"/>
-  <block-list:block block-list:abbreviated-name=":ei:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":ei:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":ei huvittunut:" block-list:name="😒"/>
   <block-list:block block-list:abbreviated-name=":ei hyvä:" block-list:name="🙅"/>
   <block-list:block block-list:abbreviated-name=":ei jaa:" block-list:name="∤"/>
@@ -295,6 +295,7 @@
   <block-list:block block-list:abbreviated-name=":hymy:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":hymyilevä kissa:" block-list:name="😸"/>
   <block-list:block block-list:abbreviated-name=":hymyilevä pikkupiru:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":hymysilmät:" block-list:name="😄"/>
   <block-list:block block-list:abbreviated-name=":hyssyttelevä:" block-list:name="😯"/>
   <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
@@ -657,6 +658,7 @@
   <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
   <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":negaatio:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":Neitsyt:" block-list:name="♍"/>
   <block-list:block block-list:abbreviated-name=":neliö2:" block-list:name="■"/>
   <block-list:block block-list:abbreviated-name=":neliö:" block-list:name="□"/>
@@ -742,11 +744,13 @@
   <block-list:block block-list:abbreviated-name=":pariskunta4:" block-list:name="💑"/>
   <block-list:block block-list:abbreviated-name=":pariskunta:" block-list:name="👫"/>
   <block-list:block block-list:abbreviated-name=":parkuva:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":partituuri:" block-list:name="🎼"/>
   <block-list:block block-list:abbreviated-name=":parturi:" block-list:name="💈"/>
   <block-list:block block-list:abbreviated-name=":passi:" block-list:name="🛂"/>
   <block-list:block block-list:abbreviated-name=":pässi:" block-list:name="🐏"/>
   <block-list:block block-list:abbreviated-name=":pata2:" block-list:name="♤"/>
   <block-list:block block-list:abbreviated-name=":pata:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":pataruoka:" block-list:name="🍲"/>
   <block-list:block block-list:abbreviated-name=":patsas:" block-list:name="🗿"/>
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
@@ -807,6 +811,7 @@
   <block-list:block block-list:abbreviated-name=":Psii:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":puhekupla:" block-list:name="💬"/>
   <block-list:block block-list:abbreviated-name=":puhelin2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":puhelin3:" block-list:name="✆"/>
   <block-list:block block-list:abbreviated-name=":puhelin:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":puhu ei ilkeä:" block-list:name="🙊"/>
   <block-list:block block-list:abbreviated-name=":puku:" block-list:name="👗"/>
@@ -865,6 +870,8 @@
   <block-list:block block-list:abbreviated-name=":rintakuva:" block-list:name="👤"/>
   <block-list:block block-list:abbreviated-name=":rintakuvat:" block-list:name="👥"/>
   <block-list:block block-list:abbreviated-name=":risti2:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":risti3:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":risti4:" block-list:name="♧"/>
   <block-list:block block-list:abbreviated-name=":risti:" block-list:name="†"/>
   <block-list:block block-list:abbreviated-name=":roskat:" block-list:name="🚮"/>
   <block-list:block block-list:abbreviated-name=":roskaus kielletty:" block-list:name="🚯"/>
