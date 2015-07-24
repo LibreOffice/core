@@ -287,10 +287,10 @@ WinBits const WB_EXT_DOCMODIFIED =      0x00000002;
 
 enum class WindowAlign { Left, Top, Right, Bottom };
 
-enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_BOTTOM,
-                  IMAGEALIGN_LEFT_TOP, IMAGEALIGN_LEFT_BOTTOM, IMAGEALIGN_TOP_LEFT,
-                  IMAGEALIGN_TOP_RIGHT, IMAGEALIGN_RIGHT_TOP, IMAGEALIGN_RIGHT_BOTTOM,
-                  IMAGEALIGN_BOTTOM_LEFT, IMAGEALIGN_BOTTOM_RIGHT, IMAGEALIGN_CENTER };
+enum class ImageAlign { Left, Top, Right, Bottom,
+                  LeftTop, LeftBottom, TopLeft,
+                  TopRight, RightTop, RightBottom,
+                  BottomLeft, BottomRight, Center };
 
 enum class SymbolAlign { LEFT, RIGHT };
 

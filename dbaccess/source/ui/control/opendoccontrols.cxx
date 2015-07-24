@@ -177,7 +177,7 @@ namespace dbaui
         SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );
         EnableImageDisplay( true );
         EnableTextDisplay( true );
-        SetImageAlign( IMAGEALIGN_LEFT );
+        SetImageAlign( ImageAlign::Left );
         SetStyle( GetStyle() | WB_CENTER );
     }
 

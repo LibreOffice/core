@@ -34,19 +34,19 @@ namespace toolkit
         sal_Int16 nReturn = AboveCenter;
         switch ( _eVCLAlign )
         {
-        case IMAGEALIGN_LEFT:           nReturn = LeftCenter; break;
-        case IMAGEALIGN_TOP:            nReturn = AboveCenter;  break;
-        case IMAGEALIGN_RIGHT:          nReturn = RightCenter; break;
-        case IMAGEALIGN_BOTTOM:         nReturn = BelowCenter; break;
-        case IMAGEALIGN_LEFT_TOP:       nReturn = LeftTop; break;
-        case IMAGEALIGN_LEFT_BOTTOM:    nReturn = LeftBottom; break;
-        case IMAGEALIGN_TOP_LEFT:       nReturn = AboveLeft; break;
-        case IMAGEALIGN_TOP_RIGHT:      nReturn = AboveRight; break;
-        case IMAGEALIGN_RIGHT_TOP:      nReturn = RightTop; break;
-        case IMAGEALIGN_RIGHT_BOTTOM:   nReturn = RightBottom; break;
-        case IMAGEALIGN_BOTTOM_LEFT:    nReturn = BelowLeft; break;
-        case IMAGEALIGN_BOTTOM_RIGHT:   nReturn = BelowRight; break;
-        case IMAGEALIGN_CENTER:         nReturn = Centered; break;
+        case ImageAlign::Left:           nReturn = LeftCenter; break;
+        case ImageAlign::Top:            nReturn = AboveCenter;  break;
+        case ImageAlign::Right:          nReturn = RightCenter; break;
+        case ImageAlign::Bottom:         nReturn = BelowCenter; break;
+        case ImageAlign::LeftTop:       nReturn = LeftTop; break;
+        case ImageAlign::LeftBottom:    nReturn = LeftBottom; break;
+        case ImageAlign::TopLeft:       nReturn = AboveLeft; break;
+        case ImageAlign::TopRight:      nReturn = AboveRight; break;
+        case ImageAlign::RightTop:      nReturn = RightTop; break;
+        case ImageAlign::RightBottom:   nReturn = RightBottom; break;
+        case ImageAlign::BottomLeft:    nReturn = BelowLeft; break;
+        case ImageAlign::BottomRight:   nReturn = BelowRight; break;
+        case ImageAlign::Center:         nReturn = Centered; break;
         default:
             OSL_FAIL( "translateImagePosition: unknown IMAGEALIGN value!" );
         }
@@ -55,22 +55,22 @@ namespace toolkit
 
     ImageAlign translateImagePosition( sal_Int16 _eUNOAlign )
     {
-        ImageAlign nReturn = IMAGEALIGN_TOP;
+        ImageAlign nReturn = ImageAlign::Top;
         switch ( _eUNOAlign )
         {
-        case LeftCenter:  nReturn = IMAGEALIGN_LEFT; break;
-        case AboveCenter: nReturn = IMAGEALIGN_TOP;  break;
-        case RightCenter: nReturn = IMAGEALIGN_RIGHT; break;
-        case BelowCenter: nReturn = IMAGEALIGN_BOTTOM; break;
-        case LeftTop:     nReturn = IMAGEALIGN_LEFT_TOP; break;
-        case LeftBottom:  nReturn = IMAGEALIGN_LEFT_BOTTOM; break;
-        case AboveLeft:   nReturn = IMAGEALIGN_TOP_LEFT; break;
-        case AboveRight:  nReturn = IMAGEALIGN_TOP_RIGHT; break;
-        case RightTop:    nReturn = IMAGEALIGN_RIGHT_TOP; break;
-        case RightBottom: nReturn = IMAGEALIGN_RIGHT_BOTTOM; break;
-        case BelowLeft:   nReturn = IMAGEALIGN_BOTTOM_LEFT; break;
-        case BelowRight:  nReturn = IMAGEALIGN_BOTTOM_RIGHT; break;
-        case Centered:    nReturn = IMAGEALIGN_CENTER; break;
+        case LeftCenter:  nReturn = ImageAlign::Left; break;
+        case AboveCenter: nReturn = ImageAlign::Top;  break;
+        case RightCenter: nReturn = ImageAlign::Right; break;
+        case BelowCenter: nReturn = ImageAlign::Bottom; break;
+        case LeftTop:     nReturn = ImageAlign::LeftTop; break;
+        case LeftBottom:  nReturn = ImageAlign::LeftBottom; break;
+        case AboveLeft:   nReturn = ImageAlign::TopLeft; break;
+        case AboveRight:  nReturn = ImageAlign::TopRight; break;
+        case RightTop:    nReturn = ImageAlign::RightTop; break;
+        case RightBottom: nReturn = ImageAlign::RightBottom; break;
+        case BelowLeft:   nReturn = ImageAlign::BottomLeft; break;
+        case BelowRight:  nReturn = ImageAlign::BottomRight; break;
+        case Centered:    nReturn = ImageAlign::Center; break;
         default:
             OSL_FAIL( "translateImagePosition: unknown css.awt.ImagePosition value!" );
         }
@@ -82,23 +82,23 @@ namespace toolkit
         sal_Int16 nReturn = TOP;
         switch ( _eAlign )
         {
-        case IMAGEALIGN_LEFT_TOP:
-        case IMAGEALIGN_LEFT:
-        case IMAGEALIGN_LEFT_BOTTOM:    nReturn = LEFT; break;
+        case ImageAlign::LeftTop:
+        case ImageAlign::Left:
+        case ImageAlign::LeftBottom:    nReturn = LEFT; break;
 
-        case IMAGEALIGN_TOP_LEFT:
-        case IMAGEALIGN_TOP:
-        case IMAGEALIGN_TOP_RIGHT:      nReturn = TOP; break;
+        case ImageAlign::TopLeft:
+        case ImageAlign::Top:
+        case ImageAlign::TopRight:      nReturn = TOP; break;
 
-        case IMAGEALIGN_RIGHT_TOP:
-        case IMAGEALIGN_RIGHT:
-        case IMAGEALIGN_RIGHT_BOTTOM:   nReturn = RIGHT; break;
+        case ImageAlign::RightTop:
+        case ImageAlign::Right:
+        case ImageAlign::RightBottom:   nReturn = RIGHT; break;
 
-        case IMAGEALIGN_BOTTOM_LEFT:
-        case IMAGEALIGN_BOTTOM:
-        case IMAGEALIGN_BOTTOM_RIGHT:   nReturn = BOTTOM; break;
+        case ImageAlign::BottomLeft:
+        case ImageAlign::Bottom:
+        case ImageAlign::BottomRight:   nReturn = BOTTOM; break;
 
-        case IMAGEALIGN_CENTER:         nReturn = TOP; break;
+        case ImageAlign::Center:         nReturn = TOP; break;
         default:
             OSL_FAIL( "getCompatibleImageAlign: unknown IMAGEALIGN value!" );
         }

@@ -1375,7 +1375,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         }
-        xButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        xButton->SetImageAlign(ImageAlign::Left); //default to left
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
     }
@@ -1387,7 +1387,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
         VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
-        xButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        xButton->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xButton;
     }
     else if (name == "GtkCheckButton")
@@ -1405,7 +1405,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
         if (bIsTriState)
             xCheckBox->SetState(TRISTATE_INDET);
-        xCheckBox->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        xCheckBox->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xCheckBox;
     }
     else if (name == "GtkSpinButton")

@@ -82,7 +82,7 @@ public:
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
-mbSmallSymbol(false), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SymbolAlign::LEFT)
+mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT)
 {
 }
 
@@ -333,21 +333,21 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
         if (bDrawText)
         {
-            if ((eImageAlign == IMAGEALIGN_LEFT_TOP)     ||
-                (eImageAlign == IMAGEALIGN_LEFT )        ||
-                (eImageAlign == IMAGEALIGN_LEFT_BOTTOM)  ||
-                (eImageAlign == IMAGEALIGN_RIGHT_TOP)    ||
-                (eImageAlign == IMAGEALIGN_RIGHT)        ||
-                (eImageAlign == IMAGEALIGN_RIGHT_BOTTOM))
+            if ((eImageAlign == ImageAlign::LeftTop)     ||
+                (eImageAlign == ImageAlign::Left )        ||
+                (eImageAlign == ImageAlign::LeftBottom)  ||
+                (eImageAlign == ImageAlign::RightTop)    ||
+                (eImageAlign == ImageAlign::Right)        ||
+                (eImageAlign == ImageAlign::RightBottom))
             {
                 aRect.Right() -= (aImageSize.Width() + nImageSep);
             }
-            else if ((eImageAlign == IMAGEALIGN_TOP_LEFT)    ||
-                     (eImageAlign == IMAGEALIGN_TOP)         ||
-                     (eImageAlign == IMAGEALIGN_TOP_RIGHT)   ||
-                     (eImageAlign == IMAGEALIGN_BOTTOM_LEFT) ||
-                     (eImageAlign == IMAGEALIGN_BOTTOM)      ||
-                     (eImageAlign == IMAGEALIGN_BOTTOM_RIGHT))
+            else if ((eImageAlign == ImageAlign::TopLeft)    ||
+                     (eImageAlign == ImageAlign::Top)         ||
+                     (eImageAlign == ImageAlign::TopRight)   ||
+                     (eImageAlign == ImageAlign::BottomLeft) ||
+                     (eImageAlign == ImageAlign::Bottom)      ||
+                     (eImageAlign == ImageAlign::BottomRight))
             {
                 aRect.Bottom() -= (aImageSize.Height() + nImageSep);
             }
@@ -373,56 +373,56 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
         // Now calculate the output area for the image and the text according to the image align flags
 
-        if ((eImageAlign == IMAGEALIGN_LEFT) ||
-            (eImageAlign == IMAGEALIGN_RIGHT))
+        if ((eImageAlign == ImageAlign::Left) ||
+            (eImageAlign == ImageAlign::Right))
         {
             aImagePos.Y() = rPos.Y() + (aMax.Height() - aImageSize.Height()) / 2;
             aTextPos.Y()  = rPos.Y() + (aMax.Height() - aTSSize.Height()) / 2;
         }
-        else if ((eImageAlign == IMAGEALIGN_LEFT_BOTTOM) ||
-                 (eImageAlign == IMAGEALIGN_RIGHT_BOTTOM))
+        else if ((eImageAlign == ImageAlign::LeftBottom) ||
+                 (eImageAlign == ImageAlign::RightBottom))
         {
             aImagePos.Y() = rPos.Y() + aMax.Height() - aImageSize.Height();
             aTextPos.Y()  = rPos.Y() + aMax.Height() - aTSSize.Height();
         }
-        else if ((eImageAlign == IMAGEALIGN_TOP) ||
-                 (eImageAlign == IMAGEALIGN_BOTTOM))
+        else if ((eImageAlign == ImageAlign::Top) ||
+                 (eImageAlign == ImageAlign::Bottom))
         {
             aImagePos.X() = rPos.X() + (aMax.Width() - aImageSize.Width()) / 2;
             aTextPos.X()  = rPos.X() + (aMax.Width() - aTSSize.Width()) / 2;
         }
-        else if ((eImageAlign == IMAGEALIGN_TOP_RIGHT) ||
-                 (eImageAlign == IMAGEALIGN_BOTTOM_RIGHT))
+        else if ((eImageAlign == ImageAlign::TopRight) ||
+                 (eImageAlign == ImageAlign::BottomRight))
         {
             aImagePos.X() = rPos.X() + aMax.Width() - aImageSize.Width();
             aTextPos.X()  = rPos.X() + aMax.Width() - aTSSize.Width();
         }
 
-        if ((eImageAlign == IMAGEALIGN_LEFT_TOP) ||
-            (eImageAlign == IMAGEALIGN_LEFT)     ||
-            (eImageAlign == IMAGEALIGN_LEFT_BOTTOM))
+        if ((eImageAlign == ImageAlign::LeftTop) ||
+            (eImageAlign == ImageAlign::Left)     ||
+            (eImageAlign == ImageAlign::LeftBottom))
         {
             aTextPos.X() = rPos.X() + aImageSize.Width() + nImageSep;
         }
-        else if ((eImageAlign == IMAGEALIGN_RIGHT_TOP) ||
-                 (eImageAlign == IMAGEALIGN_RIGHT)     ||
-                 (eImageAlign == IMAGEALIGN_RIGHT_BOTTOM))
+        else if ((eImageAlign == ImageAlign::RightTop) ||
+                 (eImageAlign == ImageAlign::Right)     ||
+                 (eImageAlign == ImageAlign::RightBottom))
         {
             aImagePos.X() = rPos.X() + aTSSize.Width() + nImageSep;
         }
-        else if ((eImageAlign == IMAGEALIGN_TOP_LEFT) ||
-                 (eImageAlign == IMAGEALIGN_TOP)      ||
-                 (eImageAlign == IMAGEALIGN_TOP_RIGHT))
+        else if ((eImageAlign == ImageAlign::TopLeft) ||
+                 (eImageAlign == ImageAlign::Top)      ||
+                 (eImageAlign == ImageAlign::TopRight))
         {
             aTextPos.Y() = rPos.Y() + aImageSize.Height() + nImageSep;
         }
-        else if ((eImageAlign == IMAGEALIGN_BOTTOM_LEFT) ||
-                 (eImageAlign == IMAGEALIGN_BOTTOM)      ||
-                 (eImageAlign == IMAGEALIGN_BOTTOM_RIGHT))
+        else if ((eImageAlign == ImageAlign::BottomLeft) ||
+                 (eImageAlign == ImageAlign::Bottom)      ||
+                 (eImageAlign == ImageAlign::BottomRight))
         {
             aImagePos.Y() = rPos.Y() + aTSSize.Height() + nImageSep;
         }
-        else if (eImageAlign == IMAGEALIGN_CENTER)
+        else if (eImageAlign == ImageAlign::Center)
         {
             aImagePos.X() = rPos.X() + (aMax.Width()  - aImageSize.Width()) / 2;
             aImagePos.Y() = rPos.Y() + (aMax.Height() - aImageSize.Height()) / 2;
@@ -593,15 +593,15 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "image-position")
     {
-        ImageAlign eAlign = IMAGEALIGN_LEFT;
+        ImageAlign eAlign = ImageAlign::Left;
         if (rValue == "left")
-            eAlign = IMAGEALIGN_LEFT;
+            eAlign = ImageAlign::Left;
         else if (rValue == "right")
-            eAlign = IMAGEALIGN_RIGHT;
+            eAlign = ImageAlign::Right;
         else if (rValue == "top")
-            eAlign = IMAGEALIGN_TOP;
+            eAlign = ImageAlign::Top;
         else if (rValue == "bottom")
-            eAlign = IMAGEALIGN_BOTTOM;
+            eAlign = ImageAlign::Bottom;
         SetImageAlign(eAlign);
     }
     else

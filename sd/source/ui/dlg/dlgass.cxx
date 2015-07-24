@@ -418,7 +418,7 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishL
         );
         mpPage1OpenPB->EnableImageDisplay(true);
         mpPage1OpenPB->EnableTextDisplay(true);
-        mpPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
+        mpPage1OpenPB->SetImageAlign(ImageAlign::Left);
         mpPage1OpenPB->SetStyle(mpPage1OpenPB->GetStyle() | WB_CENTER);
     }
 
