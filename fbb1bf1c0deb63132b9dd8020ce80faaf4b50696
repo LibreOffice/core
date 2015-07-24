@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_28ba68e2",
+        "filename": "package/source/zipapi/ZipOutputEntry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2015-07-24T03:54:40Z",
+      "side": 1,
+      "message": "Maybe this should be moved to a deflating thread and not done in main thread?\nEither as some openBufferFile() or into write() with \"if stream is null\"",
+      "revId": "fbb1bf1c0deb63132b9dd8020ce80faaf4b50696",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
