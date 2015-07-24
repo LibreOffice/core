@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SFX2_FRAME_HXX
 #define INCLUDED_SFX2_FRAME_HXX
 
-#ifndef TF_NEWDESKTOP
-#define TF_NEWDESKTOP 1
-#endif
-
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
