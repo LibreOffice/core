@@ -358,7 +358,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
 
     if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
     {
-        OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
+        OUString aURLPath = sURL.copy( strlen(URL_PREFIX_PRIV_SOFFICE) );
         OUString aType = aURLPath.getToken( 0, '/' );
         if ( aType == "factory" )
         {
@@ -536,7 +536,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 
         if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
         {
-            OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
+            OUString aURLPath = sURL.copy( strlen(URL_PREFIX_PRIV_SOFFICE) );
             OUString aType = aURLPath.getToken( 0, '/' );
             if ( aType == "factory" )
             {

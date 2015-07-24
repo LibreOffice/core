@@ -43,24 +43,6 @@ namespace com { namespace sun { namespace star { namespace util {
 #define INET_HID_SCHEME "hid:"
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
-enum
-{
-    URL_PREFIX_PRIV_SOFFICE_LEN
-        = RTL_CONSTASCII_LENGTH(URL_PREFIX_PRIV_SOFFICE)
-};
-
-#define URL_PREFIX_PRIV_OBSOLETE URL_PREFIX_PRIV_SOFFICE
-enum
-{
-    URL_PREFIX_PRIV_OBSOLETE_LEN
-        = RTL_CONSTASCII_LENGTH(URL_PREFIX_PRIV_OBSOLETE)
-};
-
-#define URL_PREFIX_PRIV_EXTERN "staroffice:"
-enum
-{
-    URL_PREFIX_PRIV_EXTERN_LEN = RTL_CONSTASCII_LENGTH(URL_PREFIX_PRIV_EXTERN)
-};
 
 // Schemes:
 enum class INetProtocol
