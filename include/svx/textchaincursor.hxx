@@ -42,7 +42,8 @@ private:
     void impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const;
     void impDetectEvent(const KeyEvent& rKEvt,
                         CursorChainingEvent *pOutCursorEvt,
-                        ESelection *pOutSel) const;
+                        ESelection *pOutSel,
+                        bool *bOutHandled) const;
 };
 
 

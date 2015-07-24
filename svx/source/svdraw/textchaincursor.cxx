@@ -41,19 +41,22 @@ bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt ) const
     CursorChainingEvent aCursorEvent;
 
     // check what the cursor/event situation looks like
-    impDetectEvent(rKEvt, &aCursorEvent, &aNewSel);
+    bool bCompletelyHandled = false;
+    impDetectEvent(rKEvt, &aCursorEvent, &aNewSel, &bCompletelyHandled);
 
     if (aCursorEvent == CursorChainingEvent::NULL_EVENT)
         return false;
     else {
         HandleCursorEvent(aCursorEvent, aNewSel);
-        return true;
+        // return value depends on the situation we are in
+        return bCompletelyHandled;
     }
 }
 
 void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
                                             CursorChainingEvent *pOutCursorEvt,
-                                            ESelection *pOutSel) const
+                                            ESelection *pOutSel,
+                                            bool *bOutHandled) const
 {
     SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
     OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
@@ -80,22 +83,33 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     ESelection aEndSel = ESelection(nLastPara, nLastParaLen);
     bool bAtEndOfTextContent = aCurSel.IsEqual(aEndSel);
 
-    // Are we "pushing" at the end of the object?
+    // Possibility: Are we "pushing" at the end of the object?
     if (nCode == KEY_RIGHT && bAtEndOfTextContent && pNextLink)
     {
         *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
         // Selection unchanged: we are at the beginning of the box
+        *bOutHandled = true; // Nothing more to do than move cursor
         return;
     }
 
     ESelection aStartSel = ESelection(0, 0);
     bool bAtStartOfTextContent = aCurSel.IsEqual(aStartSel);
 
-    // Are we "pushing" at the start of the object?
+    // Possibility: Are we "pushing" at the start of the object?
     if (nCode == KEY_LEFT && bAtStartOfTextContent && pPrevLink)
     {
         *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
         *pOutSel = ESelection(100000, 100000); // Set at end of selection
+        *bOutHandled = true; // Nothing more to do than move cursor
+        return;
+    }
+
+    // Possibility: Are we "pushing" at the start of the object and deleting left?
+    if (nCode == KEY_BACKSPACE && bAtStartOfTextContent && pPrevLink)
+    {
+        *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
+        *pOutSel = ESelection(100000, 100000); // Set at end of selection
+        *bOutHandled = false; // We need to delete characters after moving cursor
         return;
     }
 
