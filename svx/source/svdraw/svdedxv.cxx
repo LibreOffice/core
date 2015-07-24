@@ -533,6 +533,16 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
     return 0;
 }
 
+IMPL_LINK_NOARG(SdrObjEditView,ImpAfterPasteChainingEventHdl)
+{
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( GetTextEditObject());
+    if (!pTextObj)
+        return 0;
+    ImpChainingEventHdl(NULL);
+    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
+    ImpMoveCursorAfterChainingEvent(pCursorManager);
+    return 0;
+}
 
 void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager)
 {
@@ -796,7 +806,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
             if (pTextObj->IsChainable()) {
-                pTextEditOutlinerView->SetEndPasteLinkHdl(LINK(this,SdrObjEditView,ImpChainingEventHdl) );
+                pTextEditOutlinerView->SetEndPasteLinkHdl(LINK(this,SdrObjEditView,ImpAfterPasteChainingEventHdl) );
                 /* We should call:
                  *
                     ImpChainingEventHdl(NULL);

@@ -128,6 +128,7 @@ protected:
     // handler for AutoGrowing text with active Outliner
     DECL_LINK(ImpOutlinerStatusEventHdl,EditStatus*);
     DECL_LINK(ImpChainingEventHdl,void*);
+    DECL_LINK(ImpAfterPasteChainingEventHdl,void*);
     DECL_LINK(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*);
 
     // link for EndTextEditHdl
