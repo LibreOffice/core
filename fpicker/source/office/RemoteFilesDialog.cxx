@@ -176,6 +176,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     , m_pSplitter( NULL )
     , m_pFileView( NULL )
     , m_pContainer( NULL )
+    , m_pAddMenu( NULL )
 {
     get( m_pCancel_btn, "cancel" );
     get( m_pAddService_btn, "add_service_btn" );
@@ -252,6 +253,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pName_ed->SetModifyHdl( LINK( this, RemoteFilesDialog, FileNameModifyHdl ) );
 
     m_pAddService_btn->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    m_pAddMenu = m_pAddService_btn->GetPopupMenu();
     m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
     m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
 
@@ -413,7 +415,10 @@ void RemoteFilesDialog::FillServicesListbox()
     if( m_pServices_lb->GetEntryCount() > 0 )
     {
         m_pServices_lb->SelectEntryPos( nPos );
+        m_pAddService_btn->SetPopupMenu( m_pAddMenu );
     }
+    else
+        m_pAddService_btn->SetPopupMenu( NULL );
 
     EnableControls();
 }
@@ -588,6 +593,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
 
             m_pServices_lb->InsertEntry( sPrefix + newService->GetName() );
             m_pServices_lb->SelectEntryPos( m_pServices_lb->GetEntryCount() - 1 );
+            m_pAddService_btn->SetPopupMenu( m_pAddMenu );
             SelectServiceHdl( NULL );
 
             m_bIsUpdated = true;
@@ -682,6 +688,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                 else
                 {
                     m_pServices_lb->SetNoSelection();
+                    m_pAddService_btn->SetPopupMenu( NULL );
                 }
 
                 m_bIsUpdated = true;
