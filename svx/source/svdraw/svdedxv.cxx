@@ -540,7 +540,7 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
 
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
 
-    if (!pTextObj->IsChainable() || !pTextObj->GetNextLinkInChain())
+    if (!pTextObj->IsChainable())
         return;
 
     TextChain *pTextChain = pTextObj->GetTextChain();
