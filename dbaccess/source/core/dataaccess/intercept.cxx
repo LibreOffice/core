@@ -412,7 +412,27 @@ void SAL_CALL OInterceptor::documentEventOccured( const ::com::sun::star::docume
             aEvt.IsEnabled = xModel.is() && xModel->isModified();
             aEvt.Requery = sal_False;
 
-            NOTIFY_LISTERNERS((*pListener),XStatusListener,statusChanged)
+            Sequence< Reference< XInterface > > aListenerSeq = pListener->getElements();
+
+            const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();
+            const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength();
+
+            _rGuard.clear();
+            while( pxInt > pxIntBegin )
+            {
+                try
+                {
+                    while( pxInt > pxIntBegin )
+                    {
+                        --pxInt;
+                        static_cast< XStatusListener* >( pxInt->get() )->statusChanged(aEvt);
+                    }
+                }
+                catch( RuntimeException& )
+                {
+                }
+            }
+            _rGuard.reset();
         }
     }
 }

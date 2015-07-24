@@ -58,7 +58,15 @@ protected:
     sal_Int16   getLastReadVersion() const { return m_nLastReadVersion; }
 
 public:
-    DECLARE_DEFAULT_BOUND_XTOR( OEditBaseModel );
+    OEditBaseModel(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
+        const OUString& _rUnoControlModelTypeName,
+        const OUString& _rDefault,
+        const bool _bSupportExternalBinding,
+        const bool _bSupportsValidation
+    );
+    DECLARE_DEFAULT_CLONE_CTOR( OEditBaseModel )
+    virtual ~OEditBaseModel();
 
     // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

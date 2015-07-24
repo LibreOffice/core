@@ -49,24 +49,6 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
 
-#define FORWARD_TO_PEER_1_RET( returnType, unoInterface, method, param1 )   \
-    returnType aReturn; \
-    Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
-    if ( xTypedPeer.is() )  \
-    {   \
-        aReturn = xTypedPeer->method( param1 );  \
-    }   \
-    return aReturn;
-
-#define FORWARD_TO_PEER_3_RET( returnType, unoInterface, method, param1, param2, param3 )   \
-    returnType aReturn; \
-    Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
-    if ( xTypedPeer.is() )  \
-    {   \
-        aReturn = xTypedPeer->method( param1, param2, param3 );  \
-    }   \
-    return aReturn;
-
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
     {
@@ -261,12 +243,24 @@ namespace frm
 
     Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException, std::exception)
     {
-        FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
+        Reference< XDispatch > aReturn;
+        Reference< XDispatchProvider > xTypedPeer( getPeer(), UNO_QUERY );
+        if ( xTypedPeer.is() )
+        {
+            aReturn = xTypedPeer->queryDispatch( _rURL, _rTargetFrameName, _nSearchFlags );
+        }
+        return aReturn;
     }
 
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException, std::exception)
     {
-        FORWARD_TO_PEER_1_RET( Sequence< Reference< XDispatch > >, XDispatchProvider, queryDispatches, _rRequests );
+        Sequence< Reference< XDispatch > > aReturn;
+        Reference< XDispatchProvider > xTypedPeer( getPeer(), UNO_QUERY );
+        if ( xTypedPeer.is() )
+        {
+            aReturn = xTypedPeer->queryDispatches( _rRequests );
+        }
+        return aReturn;
     }
 
     bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const

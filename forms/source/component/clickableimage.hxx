@@ -91,7 +91,13 @@ namespace frm
         inline void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
     public:
-        DECLARE_DEFAULT_XTOR( OClickableImageBaseModel );
+        OClickableImageBaseModel(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
+            const OUString& _rUnoControlModelTypeName,
+            const OUString& _rDefault
+        );
+        DECLARE_DEFAULT_CLONE_CTOR( OClickableImageBaseModel )
+        virtual ~OClickableImageBaseModel();
 
         // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel)

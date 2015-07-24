@@ -36,12 +36,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
-    ::rtl::OUString a##str_name( str_value )
-
 // condition names
 
-OSLTEST_DECLARE_USTRING( TestCon,  "testcondition" );
+::rtl::OUString aTestCon( "testcondition" );
 
 const char pTestString[17] = "Sun Microsystems";
 

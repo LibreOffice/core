@@ -289,29 +289,6 @@ public:
     END_PROPERTY_SEQUENCE() \
     return new ::cppu::OPropertyArrayHelper(aDescriptor);
 
-#define NOTIFY_LISTERNERS(_rListeners,T,method)                                   \
-    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
-                                                                                  \
-    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
-    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
-                                                                                  \
-    _rGuard.clear();                                                              \
-    while( pxInt > pxIntBegin )                                                   \
-    {                                                                             \
-        try                                                                       \
-        {                                                                         \
-            while( pxInt > pxIntBegin )                                           \
-            {                                                                     \
-                --pxInt;                                                          \
-                static_cast< T* >( pxInt->get() )->method(aEvt);                  \
-            }                                                                     \
-        }                                                                         \
-        catch( RuntimeException& )                                                \
-        {                                                                         \
-        }                                                                         \
-    }                                                                             \
-    _rGuard.reset();
-
 #endif // INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

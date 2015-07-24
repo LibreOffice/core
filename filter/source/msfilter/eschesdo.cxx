@@ -156,18 +156,6 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     rSolverContainer.AddShape( rObj.GetShapeRef(), nShapeID );  \
 }
 
-#define SHAPE_TEXT( bFill )                                         \
-{                                                                   \
-    mpEscherEx->OpenContainer( ESCHER_SpContainer );                \
-    ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                     \
-    if ( bFill )                                                    \
-        aPropOpt.CreateFillProperties( rObj.mXPropSet, true );  \
-    if( rObj.ImplGetText() )                                        \
-        aPropOpt.CreateTextProperties( rObj.mXPropSet,              \
-            mpEscherEx->QueryTextID( rObj.GetShapeRef(),            \
-                rObj.GetShapeId() ) );                              \
-}
-
 sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 EscherSolverContainer& rSolverContainer,
                                 ImplEESdrPageType ePageType, const bool bOOxmlExport )
@@ -575,7 +563,13 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType() == "drawing.Text" )
         {
-            SHAPE_TEXT( true );
+            mpEscherEx->OpenContainer( ESCHER_SpContainer );
+            ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );
+            aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
+            if( rObj.ImplGetText() )
+                aPropOpt.CreateTextProperties( rObj.mXPropSet,
+                    mpEscherEx->QueryTextID( rObj.GetShapeRef(),
+                        rObj.GetShapeId() ) );
         }
         else if ( rObj.GetType() == "drawing.Page" )
         {

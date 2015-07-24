@@ -314,13 +314,13 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_aProps.getType() == STREAM )
-        aSNS.getArray()[ 0 ] = TDOC_STREAM_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsStreamContent";
     else if ( m_aProps.getType() == FOLDER )
-        aSNS.getArray()[ 0 ] = TDOC_FOLDER_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsFolderContent";
     else if ( m_aProps.getType() == DOCUMENT )
-        aSNS.getArray()[ 0 ] = TDOC_DOCUMENT_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsDocumentContent";
     else
-        aSNS.getArray()[ 0 ] = TDOC_ROOT_CONTENT_SERVICE_NAME;
+        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.TransientDocumentsRootContent";
 
     return aSNS;
 }

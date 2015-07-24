@@ -50,31 +50,6 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
     return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
 }
 
-#define IMPL_XUNOTUNNEL2( ClassName, BaseClass ) \
-sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
-{ \
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
-    { \
-        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
-    } \
-    return BaseClass::getSomething( rIdentifier ); \
-} \
-namespace \
-{ \
-    class the##ClassName##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##ClassName##UnoTunnelId> {}; \
-} \
-const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
-{ \
-    return the##ClassName##UnoTunnelId::get().getSeq(); \
-} \
-ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) \
-{ \
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \
-    return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
-}
-
-
-
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
 ::com::sun::star::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) \
 { \
@@ -163,32 +138,6 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e ) (void)e;
 #endif
-
-#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( ClassName, InterfaceName, MethodName, ParamType1, ParamType2 ) \
-{ \
-    ParamType1 aMulti( evt ); \
-    ParamType2 aMulti2( evt2 ); \
-    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
-    while( aIt.hasMoreElements() ) \
-    { \
-        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
-            static_cast< InterfaceName* >( aIt.next() ) ); \
-        try \
-        { \
-            xListener->MethodName( aMulti, aMulti2 ); \
-        } \
-        catch(const ::com::sun::star::lang::DisposedException& e) \
-        { \
-            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
-            if ( e.Context == xListener || !e.Context.is() ) \
-                aIt.remove(); \
-        } \
-        catch(const ::com::sun::star::uno::RuntimeException& e) \
-        { \
-            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
-        } \
-    } \
-}
 
 #define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
 { \

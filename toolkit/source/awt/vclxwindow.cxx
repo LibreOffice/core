@@ -904,7 +904,30 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 
 
 // ::com::sun::star::lang::XUnoTunnel
-IMPL_XUNOTUNNEL2( VCLXWindow, VCLXDevice )
+sal_Int64 VCLXWindow::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+{
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( VCLXWindow::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    {
+        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
+    }
+    return VCLXDevice::getSomething( rIdentifier );
+}
+namespace
+{
+    class theVCLXWindowUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theVCLXWindowUnoTunnelId> {};
+}
+const ::com::sun::star::uno::Sequence< sal_Int8 >& VCLXWindow::GetUnoTunnelId() throw()
+{
+    return theVCLXWindowUnoTunnelId::get().getSeq();
+}
+VCLXWindow* VCLXWindow::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
+    return xUT.is() ? reinterpret_cast<VCLXWindow*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( VCLXWindow::GetUnoTunnelId() ))) : NULL;
+}
+
+
+
 
 // ::com::sun::star::lang::Component
 void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)

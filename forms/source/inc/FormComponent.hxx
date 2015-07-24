@@ -519,29 +519,7 @@ public:
         const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory \
     ); \
 
-// all xtors for an inner class of the object hierarchy
-#define DECLARE_DEFAULT_XTOR( classname )   \
-    classname( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, \
-        const OUString& _rUnoControlModelTypeName, \
-        const OUString& _rDefault \
-    ); \
-    DECLARE_DEFAULT_CLONE_CTOR( classname )  \
-    virtual ~classname() \
-
-// all xtors for an inner class of the object hierarchy which is *bound*
-#define DECLARE_DEFAULT_BOUND_XTOR( classname ) \
-    classname( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, \
-        const OUString& _rUnoControlModelTypeName, \
-        const OUString& _rDefault, \
-        const bool _bSupportExternalBinding, \
-        const bool _bSupportsValidation \
-    ); \
-    DECLARE_DEFAULT_CLONE_CTOR( classname )  \
-    virtual ~classname() \
-
-// all xtors for a leas class of the object hierarchy
+// all xtors for a leaf class of the object hierarchy
 #define DECLARE_DEFAULT_LEAF_XTOR( classname )  \
     classname( \
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory \

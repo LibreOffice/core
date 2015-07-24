@@ -52,10 +52,6 @@ using namespace hierarchy_ucp;
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
 
-#define CONFIG_READ_SERVICE_NAME      \
-                        "com.sun.star.configuration.ConfigurationAccess"
-#define CONFIG_READWRITE_SERVICE_NAME \
-                        "com.sun.star.configuration.ConfigurationUpdateAccess"
 #define CONFIG_DATA_ROOT_KEY          \
                         "/org.openoffice.ucb.Hierarchy/Root"
 
@@ -500,7 +496,7 @@ HierarchyDataSource::createInstanceWithArguments(
         {
             // Create configuration read-only access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                OUString( CONFIG_READ_SERVICE_NAME  ),
+                                OUString( "com.sun.star.configuration.ConfigurationAccess"  ),
                                 aNewArgs );
         }
         else
@@ -519,7 +515,7 @@ HierarchyDataSource::createInstanceWithArguments(
 
             // Create configuration read-write access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                OUString( CONFIG_READWRITE_SERVICE_NAME  ),
+                                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess"  ),
                                 aNewArgs );
         }
     }

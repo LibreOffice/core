@@ -52,11 +52,6 @@
 #include <stdio.h>
 #endif
 
-#define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
-    OSL_ENSURE(aCon, aError); \
-    if (!(aCon)) \
-        return aRet;
-
 using namespace ::com::sun::star::lang;
 
 //-begin
@@ -7474,7 +7469,9 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
 // one or two bytes at the beginning at the sprm id
 sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 {
-    ASSERT_RET_ON_FAIL(pSp, "Why GetSprmId with pSp of 0", 0);
+    OSL_ENSURE(pSp, "Why GetSprmId with pSp of 0");
+    if (!pSp)
+        return 0;
 
     sal_uInt16 nId = 0;
 

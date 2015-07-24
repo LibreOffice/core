@@ -31,11 +31,6 @@ namespace package_ucp {
 
 
 
-// UNO service name for the provider. This name will be used by the UCB to
-// create instances of the provider.
-#define PACKAGE_CONTENT_PROVIDER_SERVICE_NAME \
-                "com.sun.star.ucb.PackageContentProvider"
-
 // UCB Content Type.
 #define PACKAGE_FOLDER_CONTENT_TYPE \
                 "application/" PACKAGE_URL_SCHEME "-folder"

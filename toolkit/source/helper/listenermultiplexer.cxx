@@ -155,14 +155,43 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ItemListenerMultiplexer, ::com::sun::st
 //  class TabListenerMultiplexer
 
 IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener )
+
 void TabListenerMultiplexer::inserted( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, inserted, ::sal_Int32 )
+
 void TabListenerMultiplexer::removed( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, removed, ::sal_Int32 )
+
 void TabListenerMultiplexer::changed( sal_Int32 evt, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& evt2 ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, changed, ::sal_Int32, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > )
+{
+    sal_Int32 aMulti( evt );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aMulti2( evt2 );
+    ::cppu::OInterfaceIteratorHelper aIt( *this );
+    while( aIt.hasMoreElements() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener > xListener(
+            static_cast< ::com::sun::star::awt::XTabListener* >( aIt.next() ) );
+        try
+        {
+            xListener->changed( aMulti, aMulti2 );
+        }
+        catch(const ::com::sun::star::lang::DisposedException& e)
+        {
+            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" );
+            if ( e.Context == xListener || !e.Context.is() )
+                aIt.remove();
+        }
+        catch(const ::com::sun::star::uno::RuntimeException& e)
+        {
+            DISPLAY_EXCEPTION( TabListenerMultiplexer, changed, e )
+        }
+    }
+}
+
+
 void TabListenerMultiplexer::activated( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, activated, ::sal_Int32 )
+
 void TabListenerMultiplexer::deactivated( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, deactivated, ::sal_Int32 )
 

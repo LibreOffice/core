@@ -378,12 +378,6 @@ namespace ftp {
                      &control)
 
 
-#define SET_DATA_CONTAINER                                        \
-        curl_easy_setopt(curl,CURLOPT_NOBODY,false);              \
-    MemoryContainer data;                                         \
-    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);    \
-    curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data)
-
 #define SET_URL(url)                                              \
     OString urlParAscii(url.getStr(),                        \
                              url.getLength(),                     \
@@ -439,7 +433,11 @@ std::vector<FTPDirentry> FTPURL::list(
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    SET_DATA_CONTAINER;
+    curl_easy_setopt(curl,CURLOPT_NOBODY,false);
+    MemoryContainer data;
+    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);
+    curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data);
+
     OUString url(ident(true,true));
     SET_URL(url);
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);

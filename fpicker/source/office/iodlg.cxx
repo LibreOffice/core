@@ -107,9 +107,6 @@ using namespace ExtendedFilePickerElementIds;
 using namespace CommonFilePickerElementIds;
 using namespace InternalFilePickerElementIds;
 
-#define GET_DECODED_NAME(aObj) \
-    aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET )
-
 // Time to wait while traveling in the filterbox until
 // the browsebox gets filtered ( in ms).
 #define TRAVELFILTER_TIMEOUT    750
@@ -2012,7 +2009,8 @@ short SvtFileDialog::PrepareExecute()
     bool bFileToSelect = nFileNameLen != 0;
     if ( bFileToSelect && aFileName[ nFileNameLen - 1 ] != '/' )
     {
-        _pImp->_pEdFileName->SetText( GET_DECODED_NAME( aFolderURL ) );
+         OUString aDecodedName = aFolderURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        _pImp->_pEdFileName->SetText( aDecodedName );
         aFolderURL.removeSegment();
     }
 

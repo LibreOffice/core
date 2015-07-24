@@ -121,9 +121,6 @@ namespace T602ImportFilter {
 #define _End(_nam) \
     mxHandler->endElement(_nam);
 
-#define _Chars(_ch) \
-    mxHandler->characters(OUString::createFromAscii(_ch) );
-
 inistruct ini;
 
 T602ImportFilter::T602ImportFilter(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r )
@@ -738,8 +735,13 @@ void T602ImportFilter::Read602()
                 ch = Readchar602();
                 cmd602[1] = ch;
                 cmd602[2] = '\0';
-                if(isupper(ch)) node = SETCMD;   //nedodelano
-                else { inschr('@'); _Chars(cmd602); node = READCH; }
+                if(isupper(ch))
+                    node = SETCMD;   //nedodelano
+                else {
+                    inschr('@');
+                    mxHandler->characters(OUString::createFromAscii(cmd602));
+                    node = READCH;
+                }
             } else {
                 inschr('@');
                 if(ch<32) node = SETCH;

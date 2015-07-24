@@ -75,14 +75,6 @@ Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw();
         }\
         ((void)0)
 
-#define ERROR_EXCEPTION_ASSERT(expr, Message, Exception) \
-    if( !(expr)) { \
-        BUILD_ERROR(expr,Message);\
-        m_seqExceptions.getArray()[ m_seqExceptions.getLength()-1] = Any( Exception );\
-        return; \
-    } \
-    ((void)0)
-
 #endif // INCLUDED_SAX_TEST_SAX_FACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
