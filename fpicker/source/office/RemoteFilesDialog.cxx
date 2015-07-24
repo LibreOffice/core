@@ -470,6 +470,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
         EnableChildPointerOverwrite( true );
         SetPointer( PointerStyle::Wait );
+        Invalidate(InvalidateFlags::Update);
 
         if( !sURL.isEmpty() )
         {
