@@ -12,6 +12,8 @@
 #include "ChartController.hxx"
 #include "ViewElementListProvider.hxx"
 
+#include "chartview/DrawModelWrapper.hxx"
+
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 
@@ -43,7 +45,7 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     return ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 }
 
-ViewElementListProvider getViewElementListProvider( css::uno::Reference<css::frame::XModel> xModel)
+ChartController* getController(css::uno::Reference<css::frame::XModel> xModel)
 {
     css::uno::Reference<css::frame::XController>xController = xModel->getCurrentController();
     if (!xController.is())
@@ -53,8 +55,20 @@ ViewElementListProvider getViewElementListProvider( css::uno::Reference<css::fra
     if (!pController)
         throw std::exception();
 
+    return pController;
+}
+
+ViewElementListProvider getViewElementListProvider( css::uno::Reference<css::frame::XModel> xModel)
+{
+    ChartController* pController = getController(xModel);
     ViewElementListProvider aProvider = pController->getViewElementListProvider();
     return aProvider;
+}
+
+DrawModelWrapper* getDrawModelWrapper(css::uno::Reference<css::frame::XModel> xModel)
+{
+    ChartController* pController = getController(xModel);
+    return pController->GetDrawModelWrapper();
 }
 
 XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
@@ -111,6 +125,34 @@ XHatch getXHatchFromName(css::uno::Reference<css::frame::XModel> xModel,
     }
 
     return XHatch();
+}
+
+GraphicObject getXBitmapFromName(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rName)
+{
+    try
+    {
+        ViewElementListProvider aProvider = getViewElementListProvider(xModel);
+        XBitmapListRef aRef = aProvider.GetBitmapList();
+        size_t n = aRef->Count();
+        for (size_t i = 0; i < n; ++i)
+        {
+            XBitmapEntry* pBitmap = aRef->GetBitmap(i);
+            if (!pBitmap)
+                continue;
+
+            if (pBitmap->GetName().equalsIgnoreAsciiCase(rName))
+            {
+                return GraphicObject(pBitmap->GetGraphicObject());
+            }
+        }
+    }
+    catch (...)
+    {
+        // ignore exception
+    }
+
+    return GraphicObject();
 }
 
 class PreventUpdate
@@ -298,6 +340,25 @@ void ChartAreaPanel::updateData()
     XHatch xHatch = getXHatchFromName(mxModel, aHatchName);
     XFillHatchItem aHatchItem(aHatchName, xHatch);
     updateFillHatch(false, true, &aHatchItem);
+
+    OUString aBitmapName;
+    xPropSet->getPropertyValue("FillBitmapName") >>= aBitmapName;
+    GraphicObject xBitmap = getXBitmapFromName(mxModel, aBitmapName);
+    XFillBitmapItem aBitmapItem(aBitmapName, xBitmap);
+    XFillBitmapItem* pBitmapItem = NULL;
+    try
+    {
+        DrawModelWrapper* pModelWrapper = getDrawModelWrapper(mxModel);
+        if (pModelWrapper)
+        {
+            pBitmapItem = aBitmapItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
+        }
+    }
+    catch (...)
+    {
+    }
+    updateFillBitmap(false, true, pBitmapItem ? pBitmapItem : &aBitmapItem);
+    delete pBitmapItem;
 }
 
 void ChartAreaPanel::modelInvalid()

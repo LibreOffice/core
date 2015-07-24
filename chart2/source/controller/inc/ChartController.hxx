@@ -435,6 +435,7 @@ public:
     bool isShapeContext() const;
 
     ViewElementListProvider getViewElementListProvider();
+    DrawModelWrapper* GetDrawModelWrapper();
 
     DECL_LINK( NotifyUndoActionHdl, SdrUndoAction* );
 
@@ -442,7 +443,6 @@ public:
     //private
 
 private:
-    DrawModelWrapper* GetDrawModelWrapper();
     DrawViewWrapper* GetDrawViewWrapper();
 
 private:
