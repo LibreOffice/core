@@ -71,35 +71,42 @@ void XMLTextExportPropertySetMapper::handleElementItem(
 
     case CTF_BACKGROUND_URL:
         {
-            assert(pProperties && nIdx >= 3);
             const Any *pPos = 0, *pFilter = 0, *pTrans = 0;
             sal_uInt32 nPropIndex = rProperty.mnIndex;
 
             // these are all optional, so have to check them in order
             // note: this index order dependency is a steaming pile of manure
-            sal_uInt32 nIndex(nIdx - 1);
-            const XMLPropertyState& rFilter = (*pProperties)[nIndex];
-            if (CTF_BACKGROUND_FILTER == getPropertySetMapper()
-                    ->GetEntryContextId(rFilter.mnIndex))
+            if (nIdx)
             {
-                pFilter = &rFilter.maValue;
-                --nIndex;
+                const XMLPropertyState& rFilter = (*pProperties)[nIdx - 1];
+                if (CTF_BACKGROUND_FILTER == getPropertySetMapper()
+                        ->GetEntryContextId(rFilter.mnIndex))
+                {
+                    pFilter = &rFilter.maValue;
+                    --nIdx;
+                }
             }
 
-            const XMLPropertyState& rPos = (*pProperties)[nIndex];
-            if (CTF_BACKGROUND_POS == getPropertySetMapper()
-                    ->GetEntryContextId(rPos.mnIndex))
+            if (nIdx)
             {
-                pPos = &rPos.maValue;
-                --nIndex;
+                const XMLPropertyState& rPos = (*pProperties)[nIdx - 1];
+                if (CTF_BACKGROUND_POS == getPropertySetMapper()
+                        ->GetEntryContextId(rPos.mnIndex))
+                {
+                    pPos = &rPos.maValue;
+                    --nIdx;
+                }
             }
 
-            const XMLPropertyState& rTrans = (*pProperties)[nIndex];
-            // #99657# transparency may be there, but doesn't have to be.
-            // If it's there, it must be in the right position.
-            if( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
-                  ->GetEntryContextId( rTrans.mnIndex ) )
-                pTrans = &rTrans.maValue;
+            if (nIdx)
+            {
+                const XMLPropertyState& rTrans = (*pProperties)[nIdx - 1];
+                // #99657# transparency may be there, but doesn't have to be.
+                // If it's there, it must be in the right position.
+                if( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
+                      ->GetEntryContextId( rTrans.mnIndex ) )
+                    pTrans = &rTrans.maValue;
+            }
 
             pThis->maBackgroundImageExport.exportXML(
                     rProperty.maValue, pPos, pFilter, pTrans,
