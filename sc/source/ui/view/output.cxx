@@ -327,8 +327,21 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     // It is a big mess to distinguish when we are using pixels and when logic
     // units for drawing.  Ultimately we want to work only in the logic units,
     // but until that happens, we need to special-case:
-    // * metafile
-    // * drawing to the screen - everything is internally counted in pixels there
+    //
+    //   * metafile
+    //   * drawing to the screen - everything is internally counted in pixels there
+    //
+    // 'Internally' in the above means the pCellInfo[...].nWidth and
+    // pRowInfo[...]->nHeight:
+    //
+    //   * when bWorksInPixels is true: these are in pixels
+    //   * when bWorksInPixels is false: these are in the logic units
+    //
+    // This is where all the confusion comes from, ultimately we want them
+    // always in the logic units (100th of milimiters), but we need to get
+    // there gradually (get rid of setting MAP_PIXEL first), otherwise we'd
+    // break all the drawing by one change.
+    // So until that happens, we need to special case.
     bool bWorksInPixels = bMetaFile;
 
     if ( eType == OUTTYPE_WINDOW )
@@ -956,20 +969,21 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 {
     FindRotated();              //! from the outside?
 
-    bool bWorksInPixels = bMetaFile;
+    Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
+    long nOneXLogic = aOnePixel.Width();
+    long nOneYLogic = aOnePixel.Height();
 
-    if ( eType == OUTTYPE_WINDOW )
-    {
+    // See more about bWorksInPixels in ScOutputData::DrawGrid
+    bool bWorksInPixels = false;
+    if (eType == OUTTYPE_WINDOW)
         bWorksInPixels = true;
-    }
 
     long nOneX = 1;
     long nOneY = 1;
     if (!bWorksInPixels)
     {
-        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
-        nOneX = aOnePixel.Width();
-        nOneY = aOnePixel.Height();
+        nOneX = nOneXLogic;
+        nOneY = nOneYLogic;
     }
 
     Rectangle aRect;
@@ -1014,6 +1028,8 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     nPosX += nMirrorW - nOneX;
 
                 aRect = Rectangle(nPosX, nPosY - nOneY, nPosX, nPosY - nOneY + nRowHeight);
+                if (bWorksInPixels)
+                    aRect = rRenderContext.PixelToLogic(aRect); // internal data in pixels, but we'll be drawing in logic units
 
                 const SvxBrushItem* pOldBackground = NULL;
                 const SvxBrushItem* pBackground;
@@ -1067,18 +1083,11 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar.get();
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
 
-                    Rectangle aRectC = aRect;
-                    long nPosXC = nPosX;
+                    long nPosXLogic = nPosX;
+                    if (bWorksInPixels)
+                        nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                    if(bWorksInPixels)
-                    {
-                        aRectC = rRenderContext.PixelToLogic(aRect);
-                        nPosXC = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
-                    }
-                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRectC, nPosXC, nLayoutSign, nOneX, nOneY, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo);
-
-                    if(bWorksInPixels)
-                        aRect = rRenderContext.LogicToPixel(aRectC);
+                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo);
 
                     // extend for all merged cells
                     nMergedCells = 1;
@@ -1095,19 +1104,11 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     }
                 }
 
-                Rectangle aRectC = aRect;
-                long nPosXC = nPosX;
+                long nPosXLogic = nPosX;
+                if (bWorksInPixels)
+                    nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                if(bWorksInPixels)
-                {
-                    aRectC = rRenderContext.PixelToLogic(aRect);
-                    nPosXC = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
-                }
-
-                drawCells(rRenderContext, NULL, NULL, pOldColor, pOldBackground, aRectC, nPosXC, nLayoutSign, nOneX, nOneY, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo);
-
-                if(bWorksInPixels)
-                    aRect = rRenderContext.LogicToPixel(aRectC);
+                drawCells(rRenderContext, NULL, NULL, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo);
 
                 nArrY += nSkip;
             }
