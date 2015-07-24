@@ -66,6 +66,10 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     , mpField( static_cast<SwPostItField*>(aField->GetField()))
     , mpButtonPopup(0)
 {
+    if (SupportsDoubleBuffering())
+        // When double-buffering, allow parents to paint on our area. That's
+        // necessary when parents paint the complete buffer.
+        SetParentClipMode(ParentClipMode::NoClip);
 }
 
 SwAnnotationWin::~SwAnnotationWin()
