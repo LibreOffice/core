@@ -25,6 +25,8 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
+#include <o3tl/lru_map.hxx>
+
 X11OpenGLSalGraphicsImpl::X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent ):
     OpenGLSalGraphicsImpl(rParent,rParent.GetGeometryProvider()),
     mrParent(rParent)
@@ -117,9 +119,10 @@ struct TextureCombo
     std::unique_ptr<OpenGLTexture> mpMask;
 };
 
-typedef std::unordered_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
+typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
+typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
 
-ControlCacheType gTextureCache;
+ControlCacheType gTextureCache(200);
 
 bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo)
 {
@@ -235,7 +238,8 @@ bool X11OpenGLSalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X
 {
     std::unique_ptr<TextureCombo> pCombo(new TextureCombo);
     bool bResult = RenderPixmap(pPixmap, pMask, nX, nY, *pCombo);
-    gTextureCache[aControlCacheKey] = std::move(pCombo);
+    ControlCachePair pair(aControlCacheKey, std::move(pCombo));
+    gTextureCache.insert(std::move(pair));
     return bResult;
 }
 
