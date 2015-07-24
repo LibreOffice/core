@@ -908,7 +908,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     vcl::KeyCode aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode);
-                    pOLV->PostKeyEvent(aKEvt);
+                    //pOLV->PostKeyEvent(aKEvt);
+                    mpDrawView->KeyInput(aKEvt, NULL);
                 }
             }
             else
