@@ -1299,7 +1299,12 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
     // re-paint for new selected page in order to mark it.
     const PreviewPage* pNewSelectedPreviewPage = _GetPreviewPageByPageNum( _nSelectedPage );
     if ( pNewSelectedPreviewPage && pNewSelectedPreviewPage->bVisible )
-        _PaintSelectMarkAtPage( *pOutputDev, pNewSelectedPreviewPage );
+    {
+        const PreviewPage* pSelectedPreviewPage = _GetPreviewPageByPageNum(mnSelectedPageNum);
+        SwRect aPageRect(pSelectedPreviewPage->aPreviewWinPos, pSelectedPreviewPage->aPageSize);
+        ::SwAlignRect(aPageRect, &mrParentViewShell, pOutputDev);
+        mrParentViewShell.GetWin()->Invalidate(aPageRect.SVRect());
+    }
 }
 
 // helper methods
