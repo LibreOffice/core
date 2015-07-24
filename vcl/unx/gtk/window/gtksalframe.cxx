@@ -894,8 +894,13 @@ GtkSalFrame::~GtkSalFrame()
 
     delete m_pIMHandler;
 
+    GtkWidget *pEventWidget = getMouseEventWidget();
+    for (auto handler_id : m_aMouseSignalIds)
+        g_signal_handler_disconnect(G_OBJECT(pEventWidget), handler_id);
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
+    if( m_pEventBox )
+        gtk_widget_destroy( GTK_WIDGET(m_pEventBox) );
     {
         SolarMutexGuard aGuard;
 #if defined ENABLE_GMENU_INTEGRATION
@@ -1032,6 +1037,15 @@ void GtkSalFrame::updateScreenNumber()
     maGeometry.nDisplayScreenNumber = nScreen;
 }
 
+GtkWidget *GtkSalFrame::getMouseEventWidget() const
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return GTK_WIDGET(m_pEventBox);
+#else
+    return m_pWindow;
+#endif
+}
+
 void GtkSalFrame::InitCommon()
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -1052,6 +1066,8 @@ void GtkSalFrame::InitCommon()
     gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pFixedContainer) );
 #endif
 
+    GtkWidget *pEventWidget = getMouseEventWidget();
+
     gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
     /*non-X11 displays won't show anything at all without double-buffering
       enabled*/
@@ -1062,8 +1078,9 @@ void GtkSalFrame::InitCommon()
 
     // connect signals
     g_signal_connect( G_OBJECT(m_pWindow), "style-set", G_CALLBACK(signalStyleSet), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "button-press-event", G_CALLBACK(signalButton), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "button-release-event", G_CALLBACK(signalButton), this );
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "motion-notify-event", G_CALLBACK(signalMotion), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
 #if GTK_CHECK_VERSION(3,0,0)
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
 //    g_signal_connect( G_OBJECT(m_pWindow), "state-flags-changed", G_CALLBACK(signalFlagsChanged), this );
@@ -1088,7 +1105,6 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap-event", G_CALLBACK(signalUnmap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "motion-notify-event", G_CALLBACK(signalMotion), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-press-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "delete-event", G_CALLBACK(signalDelete), this );
@@ -2789,7 +2805,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
     if (bGrab)
-        gdk_device_grab(pPointer, widget_get_window(m_pWindow), GDK_OWNERSHIP_NONE, bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, GDK_CURRENT_TIME);
+        gdk_device_grab(pPointer, widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE, bOwnerEvents, (GdkEventMask) nMask, m_pCurrentCursor, GDK_CURRENT_TIME);
     else
         gdk_device_ungrab(pPointer, GDK_CURRENT_TIME);
 #else
@@ -3202,6 +3218,10 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     {
         gdk_region_destroy( m_pRegion );
     }
+
+    GtkWidget *pEventWidget = getMouseEventWidget();
+    for (auto handler_id : m_aMouseSignalIds)
+        g_signal_handler_disconnect(G_OBJECT(pEventWidget), handler_id);
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
     if( m_pEventBox )

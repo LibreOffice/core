@@ -335,6 +335,7 @@ public:
     guint                           m_nActionGroupExportId;
     guint                           m_nAppActionGroupExportId;
     guint                           m_nHudAwarenessId;
+    std::vector<gulong>             m_aMouseSignalIds;
 
     // dispatches an event, returns true if dispatched
     // and false else; if true was returned the event should
@@ -347,6 +348,7 @@ public:
     static GdkDisplay*     getGdkDisplay();
     GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
+    GtkWidget*  getMouseEventWidget() const;
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }
     GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
