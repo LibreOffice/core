@@ -275,23 +275,6 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
                                 return aNames; \
                             } \
 
-
-
-#define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
-    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE   \
-                            { \
-                                ::com::sun::star::uno::Sequence< OUString > aNames( 1 ); \
-                                aNames[ 0 ] = OUString::createFromAscii( ServiceName ); \
-                                return aNames; \
-                            } \
-    DECLIMPL_SUPPORTS_SERVICE( )
-
-
-
-
-
-
 #endif // INCLUDED_TOOLKIT_HELPER_MACROS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

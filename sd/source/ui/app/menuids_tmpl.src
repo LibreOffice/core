@@ -76,14 +76,6 @@
         Text [ en-US ] = "Page ~Layout" ; \
     };
 
-#define MN_MODIFY_SLIDE \
-    MenuItem\
-    {\
-        Identifier = SID_MODIFYPAGE ; \
-        HelpId = CMD_SID_MODIFYPAGE ; \
-        Text [ en-US ] = "Slide ~Layout" ; \
-    };
-
 #define MN_FORMAT_PAGE \
     MenuItem\
     {\

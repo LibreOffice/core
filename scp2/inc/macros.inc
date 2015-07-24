@@ -103,10 +103,6 @@
         TXT_FILE_BODY; \
         Styles = (PACKED)
 
-#define ARCHIVE_TXT_FILE_BODY \
-        TXT_FILE_BODY; \
-        Styles = (ARCHIVE)
-
 #ifdef WITH_HELPPACK_INTEGRATION
 #define FILELIST_TXT_FILE_BODY_HELPPACK \
         TXT_FILE_BODY; \
@@ -196,15 +192,6 @@ End
         Styles  = (PACKED); \
     End
 
-#define STD_FONTWIN_FILE(id,name,fontname) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir      = gid_Dir_Fonts_Truetype; \
-        Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
-        Name     = STRING(name) ; \
-        NetDir   = gid_Dir_Winfonts; \
-    End
-
 #ifdef UNX
 #define STD_FONT_FILELIST(id,name) \
     File id \
@@ -240,14 +227,6 @@ End
         Dir = gid_Dir_Classes; \
         Styles = (PACKED); \
     End
-
-#define STD_PY_FILE(id,name) \
-    File id \
-        PACKED_TXT_FILE_BODY; \
-        Dir = GID_DIR_PY; \
-        Name = name; \
-    End
-
 
 #define CONDITIONAL_MODULE_ENTRY(name,modid) \
     Module gid_Module_Root_Reg_##name \
@@ -375,16 +354,6 @@ End
         Name = STRING(CONCAT2(.,key)); \
         Value = STRING(CONCAT2(LibreOffice.,name)); \
         Styles = (); \
-    End
-
-#define REGISTRY_ENTRY_KINDMAP(name, modid, key) \
-    RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Explorer_KindMap_,name) \
-        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
-        ModuleID = modid; \
-        ComponentCondition = STRING(VersionNT >= 600); \
-        Subkey = STRING(SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap); \
-        Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(document); \
     End
 
 #define CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \

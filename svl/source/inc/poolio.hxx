@@ -181,20 +181,6 @@ struct SfxItemPool_Impl
         } \
     }
 
-#define CHECK_FILEFORMAT_RELEASE( rStream, nTag, pPointer ) \
-   {   sal_uInt16 nFileTag; \
-       rStream.ReadUInt16( nFileTag ); \
-       if ( nTag != nFileTag ) \
-        { \
-           OSL_FAIL( #nTag ); /*! s.u. */ \
-           /*! Set error code and evaluate! */ \
-           (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-           pImp->bStreaming = false; \
-           delete pPointer; \
-            return rStream; \
-        } \
-    }
-
 #define CHECK_FILEFORMAT2( rStream, nTag1, nTag2 ) \
     {   sal_uInt16 nFileTag; \
         rStream.ReadUInt16( nFileTag ); \

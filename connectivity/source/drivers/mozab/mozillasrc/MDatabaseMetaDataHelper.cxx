@@ -188,13 +188,6 @@ static nsresult insertPABDescription()
 #define NS_RDF_CONTRACTID                           "@mozilla.org/rdf"
 #define NS_RDF_DATASOURCE_CONTRACTID                NS_RDF_CONTRACTID "/datasource;1"
 #define NS_RDF_DATASOURCE_CONTRACTID_PREFIX NS_RDF_DATASOURCE_CONTRACTID "?name="
-#define NS_ABDIRECTORYDATASOURCE_CONTRACTID \
-  NS_RDF_DATASOURCE_CONTRACTID_PREFIX "addressdirectory"
-#define NS_ABDIRECTORYDATASOURCE_CID            \
-{ /* 0A79186D-F754-11d2-A2DA-001083003D0C */        \
-    0xa79186d, 0xf754, 0x11d2,              \
-    {0xa2, 0xda, 0x0, 0x10, 0x83, 0x0, 0x3d, 0xc}   \
-}
 
 
 // Case where we get a parent uri, and need to list its children.

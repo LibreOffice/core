@@ -34,12 +34,6 @@
 
 
 
-#define PROVIDER_FACTORY_SERVICE_NAME \
-                            "com.sun.star.ucb.ContentProviderProxyFactory"
-#define PROVIDER_PROXY_SERVICE_NAME \
-                            "com.sun.star.ucb.ContentProviderProxy"
-
-
 
 // class UcbContentProviderProxyFactory.
 

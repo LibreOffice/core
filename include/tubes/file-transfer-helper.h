@@ -38,16 +38,8 @@ G_BEGIN_DECLS
 #define EMPATHY_FT_HANDLER(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
    EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandler))
-#define EMPATHY_FT_HANDLER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), \
-   EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerClass))
 #define EMPATHY_IS_FT_HANDLER(obj) \
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EMPATHY_TYPE_FT_HANDLER))
-#define EMPATHY_IS_FT_HANDLER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), EMPATHY_TYPE_FT_HANDLER))
-#define EMPATHY_FT_HANDLER_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-   EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerClass))
 
 typedef struct _EmpathyFTHandlerPriv EmpathyFTHandlerPriv;
 

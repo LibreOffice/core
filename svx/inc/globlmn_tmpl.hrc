@@ -243,11 +243,6 @@
     Command = ".uno:Paste" ; \
     Text [ en-US ] = "~Paste" ; \
 
-#define ITEM_EDIT_IMAP \
-    Identifier = SID_IMAP ; \
-    Command = ".uno:ImageMapDialog" ; \
-    Text [ en-US ] = "ImageMap" ; \
-
 #define ITEM_EXTERNAL_EDIT \
     Identifier = SID_EXTERNAL_EDIT ; \
     Command = ".uno:ExternalEdit" ; \
@@ -408,31 +403,10 @@
                              Toolbar-IDs
 ------------------------------------------------------------------------*/
 
-#define ITEM_TOOLBAR_TEMPLATE_APPLY \
-    Identifier = SID_STYLE_APPLY ; \
-    Command = ".uno:StyleApply" ; \
-
 #define ITEM_TOOLBAR_ATTR_CHAR_COLOR \
     Identifier = SID_ATTR_CHAR_COLOR ; \
     Command = ".uno:Color" ; \
     DropDown = TRUE ;
-
-#define ITEM_TOOLBAR_BACKGROUND_COLOR \
-    Identifier = SID_BACKGROUND_COLOR ; \
-    Command = ".uno:BackgroundColor" ; \
-    DropDown = TRUE ;
-
-#define ITEM_TOOLBAR_ATTR_BORDER \
-    Identifier = SID_ATTR_BORDER ; \
-    Command = ".uno:BorderStyle" ; \
-
-#define ITEM_TOOLBAR_FRAME_LINESTYLE \
-    Identifier = SID_FRAME_LINESTYLE ; \
-    Command = ".uno:LineStyle" ; \
-
-#define ITEM_TOOLBAR_FRAME_LINECOLOR \
-    Identifier = SID_FRAME_LINECOLOR ; \
-    Command = ".uno:FrameLineColor" ; \
 
 #define ITEM_TOOLBAR_ATTR_LINEEND_STYLE \
     Identifier = SID_ATTR_LINEEND_STYLE ; \

@@ -91,17 +91,6 @@ typedef unsigned short LanguageType;
 
 #define LANGUAGE_MASK_PRIMARY 0x03ff
 
-#ifdef __cplusplus
-/* Please use the methods provided in mslangid.hxx for type-safety! */
-#else
-#define MSLANGID_MAKELANGID( nSubLangId, nPriLangId )  \
-   (((nSubLangId) << 10) | (nPriLangId))
-#define MSLANGID_GETPRIMARYLANGUAGE( nLangID )         \
-    ((nLangID) & LANGUAGE_MASK_PRIMARY)
-#define MSLANGID_GETSUBLANGUAGE( nLangID )             \
-    (((nLangID) & ~LANGUAGE_MASK_PRIMARY) >> 10)
-#endif
-
 
 #define LANGUAGE_DONTKNOW                   0x03FF  /* yes, the mask */
 #define LANGUAGE_NONE                       0x00FF

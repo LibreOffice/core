@@ -125,26 +125,6 @@
         return;   \
     }
 
-/** asserts a given condition (in debug mode), and continues the most-inner
-    loop if the condition is not met
-*/
-#define ENSURE_OR_CONTINUE( c, m ) \
-    if ( !(c) ) \
-    {   \
-        OSL_ENSURE( false, m ); \
-        continue;   \
-    }
-
-/** asserts a given condition (in debug mode), and continues the most-inner
-    loop if the condition is not met
-*/
-#define ENSURE_OR_BREAK( c, m ) \
-    if ( !(c) ) \
-    {   \
-        OSL_ENSURE( false, m ); \
-        break;  \
-    }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

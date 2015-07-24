@@ -54,7 +54,7 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
                      OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
-                     PROVIDER_FACTORY_SERVICE_NAME );
+                     "com.sun.star.ucb.ContentProviderProxyFactory" );
 
 
 
@@ -185,8 +185,7 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
 
 XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
                             OUString( "com.sun.star.comp.ucb.UcbContentProviderProxy" ),
-                            PROVIDER_PROXY_SERVICE_NAME );
-
+                            "com.sun.star.ucb.ContentProviderProxy" );
 
 
 // XContentProvider methods.

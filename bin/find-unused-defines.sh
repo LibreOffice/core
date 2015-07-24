@@ -10,17 +10,16 @@
 # Algorithm Detail:
 # (1) find #defines, excluding the externals folder
 # (2) extract just the constant name from the search results
-# (3) trim blank lines
-# (4) sort the results, mostly so I have an idea how far along the process is
-# (5) for each result:
-#   (6) grep for the constant
-#   (7) use awk to to check if only one match for a given constant was found
-#   (8) if so, generate a sed command to remove the #define
+# (3) sort and uniq the results, mostly so I have an idea how far along the process is
+# (4) for each result:
+#   (5) grep for the constant
+#   (6) use awk to to check if only one match for a given constant was found
+#   (7) if so, generate a sed command to remove the #define
 #
-git grep -P '^#define\s+\w+\s+\w' -- "[!e][!x][!t]*" \
-  | cut -s -d ' ' -f 2 \
-  | sed '/^$/d' \
+git grep -hP '^#define\s+\w+.*\\' -- "[!e][!x][!t]*" \
+  | sed -r 's/#define[ ]+([a-zA-Z0-9_]+).*/\1/' \
   | sort \
+  | uniq \
   | xargs -Ixxx sh -c \
     "git grep -w 'xxx' | awk -f bin/find-unused-defines.awk -v p1=xxx && echo \"xxx\" 1>&2"
 

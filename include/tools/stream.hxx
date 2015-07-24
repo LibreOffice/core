@@ -61,12 +61,6 @@ namespace o3tl
     template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x0f1f> {};
 }
 
-#define STREAM_READWRITEBITS            (StreamMode::READ | StreamMode::WRITE | \
-                                         StreamMode::NOCREATE | StreamMode::TRUNC)
-
-#define STREAM_SHAREBITS                (StreamMode::SHARE_DENYNONE | StreamMode::SHARE_DENYREAD |\
-                                         StreamMode::SHARE_DENYWRITE | StreamMode::SHARE_DENYALL)
-
 #define STREAM_READWRITE                (StreamMode::READ | StreamMode::WRITE)
 #define STREAM_SHARE_DENYREADWRITE      (StreamMode::SHARE_DENYREAD | StreamMode::SHARE_DENYWRITE)
 
