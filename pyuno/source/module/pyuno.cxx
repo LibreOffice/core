@@ -411,12 +411,12 @@ Py_hash_t PyUNO_hash( PyObject *self )
     {
         Reference< XMaterialHolder > xMe( me->members->xInvocation, UNO_QUERY );
         return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
-            xMe->getMaterial().getValue() ) );
+            *static_cast<void * const *>(xMe->getMaterial().getValue()) ) );
     }
     else
     {
         return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
-            me->members->wrappedObject.getValue() ) );
+            *static_cast<void * const *>(me->members->wrappedObject.getValue()) ) );
     }
 
 }
