@@ -126,7 +126,6 @@ void ShadowPropertyPanel::Initialize()
     Link<> bLink = LINK(this, ShadowPropertyPanel, ClickShadowHdl );
     mpShowShadow->SetClickHdl( bLink );
     Link<> aLink = LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl );
-    mpShadowTransMetric->SetMax(100);
     mpShadowTransMetric->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
     mpLBShadowColor->SetSelectHdl( aLink );
     mpShadowAngle->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
