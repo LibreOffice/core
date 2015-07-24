@@ -57,9 +57,6 @@ enum SizeSelector
     SIZE_REL
 };
 
-#define BORDER_SET          2
-#define BORDER_YES          1
-#define BORDER_NO           0
 #define SPACING_NOT_SET     -1L
 #define SIZE_NOT_SET        -1L
 
@@ -75,7 +72,8 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     long                    nWidth;
     ScrollingMode           eScroll;
     SizeSelector            eSizeSelector;
-    sal_uInt16              nHasBorder;
+    bool                    bHasBorder;
+    bool                    bHasBorderSet;
     sal_uInt16              nItemId;
     bool                    bResizeHorizontal;
     bool                    bResizeVertical;
@@ -119,23 +117,19 @@ public:
     void                    SetScrollingMode( ScrollingMode eMode )
                             { eScroll = eMode; }
 
-                            // FrameBorder
     void                    SetWallpaper( const Wallpaper& rWallpaper );
-    bool                    HasFrameBorder() const;
 
+                            // FrameBorder
+    bool                    HasFrameBorder() const
+                            { return bHasBorder; }
     bool                    IsFrameBorderOn() const
-                            { return ( nHasBorder & BORDER_YES ) != 0; }
-
+                            { return bHasBorder; }
     void                    SetFrameBorder( bool bBorder )
-                            {
-                                nHasBorder = bBorder ?
-                                            BORDER_YES | BORDER_SET :
-                                            BORDER_NO | BORDER_SET;
-                            }
+                            { bHasBorder = bBorder; bHasBorderSet = true; }
     bool                    IsFrameBorderSet() const
-                            { return (nHasBorder & BORDER_SET) != 0; }
+                            { return bHasBorderSet; }
     void                    ResetBorder()
-                            { nHasBorder = 0; }
+                            { bHasBorder = false; bHasBorderSet = false; }
 
                             // Copy for example for Views
     SfxFrameDescriptor*     Clone( bool bWithIds = true ) const;

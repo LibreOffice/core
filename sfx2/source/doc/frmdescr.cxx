@@ -45,7 +45,8 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     nWidth( 0L ),
     eScroll( ScrollingAuto ),
     eSizeSelector( SIZE_ABS ),
-    nHasBorder( BORDER_YES ),
+    bHasBorder( true ),
+    bHasBorderSet( false ),
     nItemId( 0 ),
     bResizeHorizontal( true ),
     bResizeVertical( true ),
@@ -109,7 +110,8 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( bool bWithIds ) const
     pFrame->eScroll = eScroll;
     pFrame->bResizeHorizontal = bResizeHorizontal;
     pFrame->bResizeVertical = bResizeVertical;
-    pFrame->nHasBorder = nHasBorder;
+    pFrame->bHasBorder = bHasBorder;
+    pFrame->bHasBorderSet = bHasBorderSet;
     pFrame->bHasUI = bHasUI;
     pFrame->SetReadOnly( IsReadOnly() );
     pFrame->SetEditable( IsEditable() );
@@ -128,11 +130,6 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( bool bWithIds ) const
         pFrame->nItemId = 0;
 
     return pFrame;
-}
-
-bool SfxFrameDescriptor::HasFrameBorder() const
-{
-    return (nHasBorder & BORDER_YES) != 0;
 }
 
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
