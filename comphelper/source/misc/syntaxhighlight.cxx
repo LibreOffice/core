@@ -78,6 +78,7 @@ static const char* strListBasicKeyWords[] = {
     "defvar",
     "dim",
     "do",
+    "doevents",
     "double",
     "each",
     "else",
