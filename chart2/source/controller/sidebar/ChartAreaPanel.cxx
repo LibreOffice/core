@@ -212,6 +212,8 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true)
 {
+    std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
+    mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
     Initialize();
 }
 
@@ -227,7 +229,7 @@ void ChartAreaPanel::dispose()
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
+        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
 
     AreaPropertyPanelBase::dispose();
 }
@@ -239,7 +241,7 @@ void ChartAreaPanel::Initialize()
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
     updateData();
 }
@@ -404,7 +406,7 @@ void ChartAreaPanel::updateModel(
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 }
 
 

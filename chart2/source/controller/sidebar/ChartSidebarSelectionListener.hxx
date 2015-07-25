@@ -15,6 +15,8 @@
 
 #include "ObjectIdentifier.hxx"
 
+#include <vector>
+
 namespace chart {
 namespace sidebar {
 
@@ -44,11 +46,12 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
         throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
 
+    void setAcceptedTypes(const std::vector<ObjectType>& aTypes);
+
 private:
     ChartSidebarSelectionListenerParent* mpParent;
 
-    bool mbAll;
-    ObjectType meType;
+    std::vector<ObjectType> maTypes;
 };
 
 } }

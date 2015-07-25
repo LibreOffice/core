@@ -23,19 +23,16 @@ ChartSidebarSelectionListenerParent::~ChartSidebarSelectionListenerParent()
 
 ChartSidebarSelectionListener::ChartSidebarSelectionListener(
         ChartSidebarSelectionListenerParent* pParent):
-    mpParent(pParent),
-    mbAll(true),
-    meType()
+    mpParent(pParent)
 {
 }
 
 ChartSidebarSelectionListener::ChartSidebarSelectionListener(
         ChartSidebarSelectionListenerParent* pParent,
         ObjectType eType):
-    mpParent(pParent),
-    mbAll(false),
-    meType(eType)
+    mpParent(pParent)
 {
+    maTypes.push_back(eType);
 }
 
 ChartSidebarSelectionListener::~ChartSidebarSelectionListener()
@@ -45,13 +42,10 @@ ChartSidebarSelectionListener::~ChartSidebarSelectionListener()
 void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObject& rEvent)
         throw (::css::uno::RuntimeException, ::std::exception)
 {
-    (void)rEvent;
     bool bCorrectObjectSelected = false;
-    if (mbAll)
-        bCorrectObjectSelected = true;
 
     css::uno::Reference<css::frame::XController> xController(rEvent.Source, css::uno::UNO_QUERY);
-    if (!mbAll && xController.is())
+    if (xController.is())
     {
         css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
         if (xSelectionSupplier.is())
@@ -62,7 +56,8 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
                 OUString aCID;
                 aAny >>= aCID;
                 ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-                bCorrectObjectSelected = eType == meType;
+                bCorrectObjectSelected = std::any_of(maTypes.begin(), maTypes.end(),
+                        [=](const ObjectType& eTypeInVector) { return eType == eTypeInVector; });
             }
         }
     }
@@ -74,6 +69,11 @@ void ChartSidebarSelectionListener::disposing(const css::lang::EventObject& /*rE
         throw (::css::uno::RuntimeException, ::std::exception)
 {
     mpParent->SelectionInvalid();
+}
+
+void ChartSidebarSelectionListener::setAcceptedTypes(const std::vector<ObjectType>& aTypes)
+{
+    maTypes = aTypes;
 }
 
 } }
