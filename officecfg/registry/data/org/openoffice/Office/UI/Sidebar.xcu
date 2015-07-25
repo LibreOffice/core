@@ -1266,7 +1266,8 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Chart, any, visible ;
+            Chart, Chart, visible ;
+            Chart, Series, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

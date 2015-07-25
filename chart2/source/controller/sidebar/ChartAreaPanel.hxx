@@ -86,7 +86,7 @@ private:
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
-    css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
+    rtl::Reference<ChartSidebarSelectionListener> mxSelectionListener;
 
     void Initialize();
 
