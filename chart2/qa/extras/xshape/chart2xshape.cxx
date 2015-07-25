@@ -20,27 +20,31 @@
 #include <com/sun/star/qa/XDumper.hpp>
 
 #include <test/xmldiff.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <fstream>
 
-class Chart2XShapeTest : public ChartTest
+class Chart2XShapeTest : public ChartTest, public XmlTestTools
 {
 public:
 
     void testFdo75075();
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
+    void testTdf76649TrendLineBug();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testFdo75075);
     CPPUNIT_TEST(testPropertyMappingBarChart);
     CPPUNIT_TEST(testPieChartLabels1);
+    CPPUNIT_TEST(testTdf76649TrendLineBug);
     CPPUNIT_TEST_SUITE_END();
 
 private:
 
     void compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference = false);
-
+    OUString getXShapeDumpString();
+    xmlDocPtr getXShapeDumpXmlDoc();
 };
 
 namespace {
@@ -58,11 +62,24 @@ bool checkDumpAgainstFile( const OUString& rDump, const OUString& aFilePath)
 
 }
 
-void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference)
+OUString Chart2XShapeTest::getXShapeDumpString()
 {
     uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
     uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
-    OUString aDump = xDumper->dump();
+    return xDumper->dump();
+}
+
+xmlDocPtr Chart2XShapeTest::getXShapeDumpXmlDoc()
+{
+    OUString rDump = getXShapeDumpString();
+    OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
+    return xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr()));
+}
+
+void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference)
+{
+    OUString aDump = getXShapeDumpString();
+
     OUString aReference = getPathFromSrc("/chart2/qa/extras/xshape/data/reference/") + rReferenceFile;
     if(bCreateReference)
     {
@@ -94,6 +111,20 @@ void Chart2XShapeTest::testPieChartLabels1()
     // inside placement for the best fit case
     load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
     compareAgainstReference("tdf90839-1.xml");
+}
+
+void Chart2XShapeTest::testTdf76649TrendLineBug()
+{
+    // This bug prevents that the trendline (regression curve) is drawn
+    // if the first cell is empty. See tdf#76649 for details.
+
+    load("chart2/qa/extras/xshape/data/ods/", "tdf76649_TrendLineBug.ods");
+
+    xmlDocPtr pXmlDoc = getXShapeDumpXmlDoc();
+
+    // Check if the regression curve exists (which means a XShape with a certain
+    // name should exist in the dump)
+    assertXPath(pXmlDoc, "//XShape[@name='CID/D=0:CS=0:CT=0:Series=0:Curve=0']", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2XShapeTest);
