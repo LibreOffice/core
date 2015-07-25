@@ -3397,7 +3397,7 @@ void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
             if( IsExpanded( pEntry ) )
                 pNextEntry = pModel->FirstChild( pEntry );
             else
-                pNextEntry = pModel->NextSibling( pEntry );
+                pNextEntry = SvTreeList::NextSibling( pEntry );
 
             if( !pNextEntry )
                 pEntry = pModel->Next( pEntry );
