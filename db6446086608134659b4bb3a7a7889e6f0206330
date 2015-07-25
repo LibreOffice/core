@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a313db5b",
+        "filename": "external/coinmp/ExternalProject_coinmp.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-25T06:28:02Z",
+      "side": 1,
+      "message": "This was wrong, so the upgrade wasn\u0027t necessary? and it worked because of added line 25 below?",
+      "range": {
+        "startLine": 19,
+        "startChar": 49,
+        "endLine": 19,
+        "endChar": 66
+      },
+      "revId": "db6446086608134659b4bb3a7a7889e6f0206330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
