@@ -240,6 +240,8 @@ void ChartAreaPanel::Initialize()
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
+
+    updateData();
 }
 
 void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
