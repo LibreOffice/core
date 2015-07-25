@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_631de365",
+        "filename": "external/cppunit/ExternalProject_cppunit.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-25T06:28:26Z",
+      "side": 1,
+      "message": "This line is not needed?",
+      "range": {
+        "startLine": 19,
+        "startChar": 49,
+        "endLine": 19,
+        "endChar": 66
+      },
+      "revId": "8e5debfed26cfaed025a10e8c74ba325bc2fd741",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
