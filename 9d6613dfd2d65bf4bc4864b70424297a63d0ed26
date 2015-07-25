@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_23260bbb",
+        "filename": "external/libgltf/ExternalProject_libgltf.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-25T06:28:47Z",
+      "side": 1,
+      "message": "copy/paste.",
+      "range": {
+        "startLine": 43,
+        "startChar": 49,
+        "endLine": 43,
+        "endChar": 66
+      },
+      "revId": "9d6613dfd2d65bf4bc4864b70424297a63d0ed26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
