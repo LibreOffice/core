@@ -475,12 +475,15 @@ setTilesInvalid (LOKDocView* pDocView, const GdkRectangle& rRectangle)
     aStart.y = aRectanglePixels.x / nTileSizePixels;
     aEnd.x = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
     aEnd.y = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     for (int i = aStart.x; i < aEnd.x; i++)
+    {
         for (int j = aStart.y; j < aEnd.y; j++)
+        {
+            GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
             priv->m_aTileBuffer.setInvalid(i, j, priv->m_fZoom, task);
-
-    g_object_unref(task);
+            g_object_unref(task);
+        }
+    }
 }
 
 static gboolean
