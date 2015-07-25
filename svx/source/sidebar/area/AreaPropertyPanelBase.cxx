@@ -799,36 +799,37 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     const bool /*bIsEnabled*/)
 {
     const bool bDisabled(SfxItemState::DISABLED == eState);
+    const bool bDefaultOrSet(SfxItemState::DEFAULT <= eState);
     const bool bDefault(SfxItemState::DEFAULT == eState);
 
     switch(nSID)
     {
         case SID_ATTR_FILL_TRANSPARENCE:
-            updateFillTransparence(bDisabled, bDefault,
+            updateFillTransparence(bDisabled, bDefaultOrSet,
                     static_cast<const SfxUInt16Item*>(pState));
         break;
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
-            updateFillFloatTransparence(bDisabled, bDefault,
+            updateFillFloatTransparence(bDisabled, bDefaultOrSet,
                     static_cast<const XFillFloatTransparenceItem*>(pState));
         break;
         case SID_ATTR_FILL_STYLE:
-            updateFillStyle(bDisabled, bDefault,
+            updateFillStyle(bDisabled, bDefaultOrSet,
                     static_cast<const XFillStyleItem*>(pState));
         break;
         case SID_ATTR_FILL_COLOR:
-            updateFillColor(bDefault,
+            updateFillColor(bDefaultOrSet,
                     static_cast<const XFillColorItem*>(pState));
         break;
         case SID_ATTR_FILL_GRADIENT:
-            updateFillGradient(bDisabled, bDefault,
+            updateFillGradient(bDisabled, bDefaultOrSet,
                     static_cast<const XFillGradientItem*>(pState));
         break;
         case SID_ATTR_FILL_HATCH:
-            updateFillHatch(bDisabled, bDefault,
+            updateFillHatch(bDisabled, bDefaultOrSet,
                     static_cast<const XFillHatchItem*>(pState));
         break;
         case SID_ATTR_FILL_BITMAP:
-            updateFillBitmap(bDisabled, bDefault,
+            updateFillBitmap(bDisabled, bDefaultOrSet,
                     static_cast<const XFillBitmapItem*>(pState));
         break;
         case SID_GRADIENT_LIST:
