@@ -472,6 +472,7 @@ public:
 private:
     virtual void doWork() SAL_OVERRIDE
     {
+        mpEntry->createBufferFile();
         try
         {
             deflateZipEntry(mpEntry, mxInStream);
@@ -481,6 +482,7 @@ private:
         {
             mpEntry->setParallelDeflateException(::cppu::getCaughtException());
         }
+        mpEntry->closeBufferFile();
     }
 };
 
@@ -823,7 +825,6 @@ bool ZipPackageStream::saveChild(
                 {
                     // Start a new thread deflating this zip entry
                     ZipOutputEntry *pZipEntry = new ZipOutputEntry(
-                            css::uno::Reference<css::io::XOutputStream>(),
                             m_xContext, *pTempEntry, this, bToBeEncrypted);
                     rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
                 }
