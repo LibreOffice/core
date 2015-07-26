@@ -70,26 +70,35 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task)
     {
         m_mTiles[index].valid = false;
 
-        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE, x, y, fZoom);
+        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
+        pLOEvent->m_nPaintTileX = x;
+        pLOEvent->m_nPaintTileY = y;
+        pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, g_free);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
     }
 }
 
-Tile& TileBuffer::getTile(int x, int y, float aZoom, GTask* task)
+Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task)
 {
     int index = x * m_nWidth + y;
 
     if (m_mTiles.find(index) != m_mTiles.end() && !m_mTiles[index].valid)
     {
-        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE, x, y, aZoom);
+        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
+        pLOEvent->m_nPaintTileX = x;
+        pLOEvent->m_nPaintTileY = y;
+        pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, g_free);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         return m_mTiles[index];
     }
     else if(m_mTiles.find(index) == m_mTiles.end())
     {
-        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE, x, y, aZoom);
+        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
+        pLOEvent->m_nPaintTileX = x;
+        pLOEvent->m_nPaintTileY = y;
+        pLOEvent->m_fPaintTileZoom = fZoom;
         g_task_set_task_data(task, pLOEvent, g_free);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         return m_DummyTile;
