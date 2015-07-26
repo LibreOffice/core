@@ -1,11 +1,10 @@
-diff -ru python3.orig/Include/modsupport.h python3/Include/modsupport.h
---- python3.orig/Include/modsupport.h	2015-07-05 18:50:06.000000000 +0200
-+++ python3/Include/modsupport.h	2015-07-26 18:21:30.717680314 +0200
+--- Python-3.3.0/Include/modsupport.h	2012-09-29 10:00:26.000000000 +0200
++++ Python-3.3.0/Include/modsupport.h	2013-03-08 10:46:28.671938738 +0100
 @@ -26,7 +26,11 @@
  /* Due to a glitch in 3.2, the _SizeT versions weren't exported from the DLL. */
  #if !defined(PY_SSIZE_T_CLEAN) || !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
  PyAPI_FUNC(int) PyArg_Parse(PyObject *, const char *, ...);
--PyAPI_FUNC(int) PyArg_ParseTuple(PyObject *, const char *, ...);
+-PyAPI_FUNC(int) PyArg_ParseTuple(PyObject *, const char *, ...) Py_FORMAT_PARSETUPLE(PyArg_ParseTuple, 2, 3);
 +PyAPI_FUNC(int) PyArg_ParseTuple(PyObject *, const char *, ...)
 +#ifdef PY_SSIZE_T_CLEAN
 +    Py_FORMAT_PARSETUPLE(PyArg_ParseTuple, 2, 3)

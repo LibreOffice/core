@@ -1,0 +1,289 @@
+Fix Python build for x64 Windows
+
+diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
+--- python3/PCbuild/pcbuild.sln	2012-09-29 10:00:48.000000000 +0200
++++ python3.new/PCbuild/pcbuild.sln	2012-11-12 22:13:49.445159668 +0100
+@@ -104,20 +84,20 @@
+ 		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9}.Release|x64.Build.0 = Release|x64
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|Win32.Build.0 = Debug|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|x64.ActiveCfg = Debug|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|x64.Build.0 = Debug|Win32
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|x64.ActiveCfg = Debug|x64
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Debug|x64.Build.0 = Debug|x64
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGInstrument|Win32.ActiveCfg = Release|Win32
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGInstrument|Win32.Build.0 = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGInstrument|x64.ActiveCfg = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGInstrument|x64.Build.0 = Release|Win32
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGInstrument|x64.ActiveCfg = Release|x64
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGInstrument|x64.Build.0 = Release|x64
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|Win32.ActiveCfg = Release|Win32
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|Win32.Build.0 = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|x64.ActiveCfg = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|x64.Build.0 = Release|Win32
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|x64.ActiveCfg = Release|x64
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.PGUpdate|x64.Build.0 = Release|x64
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|Win32.ActiveCfg = Release|Win32
+ 		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|Win32.Build.0 = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.ActiveCfg = Release|Win32
+-		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.Build.0 = Release|Win32
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.ActiveCfg = Release|x64
++		{F0E0541E-F17D-430B-97C4-93ADF0DD284E}.Release|x64.Build.0 = Release|x64
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}.Debug|Win32.Build.0 = Debug|Win32
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}.Debug|x64.ActiveCfg = Debug|x64
+@@ -168,20 +148,20 @@
+ 		{E9E0A1F6-0009-4E8C-B8F8-1B8F5D49A058}.Release|x64.Build.0 = Release|x64
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Debug|Win32.ActiveCfg = Release|Win32
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Debug|Win32.Build.0 = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Debug|x64.ActiveCfg = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Debug|x64.Build.0 = Release|Win32
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Debug|x64.ActiveCfg = Release|x64
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Debug|x64.Build.0 = Release|x64
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGInstrument|Win32.ActiveCfg = Release|Win32
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGInstrument|Win32.Build.0 = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGInstrument|x64.ActiveCfg = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGInstrument|x64.Build.0 = Release|Win32
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGInstrument|x64.ActiveCfg = Release|x64
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGInstrument|x64.Build.0 = Release|x64
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|Win32.ActiveCfg = Release|Win32
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|Win32.Build.0 = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|x64.ActiveCfg = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|x64.Build.0 = Release|Win32
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|x64.ActiveCfg = Release|x64
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.PGUpdate|x64.Build.0 = Release|x64
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|Win32.ActiveCfg = Release|Win32
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|Win32.Build.0 = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.ActiveCfg = Release|Win32
+-		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.Build.0 = Release|Win32
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.ActiveCfg = Release|x64
++		{C73F0EC1-358B-4177-940F-0846AC8B04CD}.Release|x64.Build.0 = Release|x64
+ 		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|Win32.Build.0 = Debug|Win32
+ 		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|x64.ActiveCfg = Debug|x64
+@@ -577,38 +557,38 @@
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Debug|x64.Build.0 = Debug|x64
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGInstrument|Win32.ActiveCfg = PGInstrument|Win32
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGInstrument|Win32.Build.0 = PGInstrument|Win32
+-		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGInstrument|x64.ActiveCfg = PGInstrument|Win32
+-		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGInstrument|x64.Build.0 = PGInstrument|Win32
++		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGInstrument|x64.ActiveCfg = PGInstrument|x64
++		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGInstrument|x64.Build.0 = PGInstrument|x64
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGUpdate|Win32.ActiveCfg = PGUpdate|Win32
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGUpdate|Win32.Build.0 = PGUpdate|Win32
+-		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGUpdate|x64.ActiveCfg = PGUpdate|Win32
+-		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGUpdate|x64.Build.0 = PGUpdate|Win32
++		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
++		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.PGUpdate|x64.Build.0 = PGUpdate|x64
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Release|Win32.ActiveCfg = Release|Win32
+ 		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Release|Win32.Build.0 = Release|Win32
+-		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Release|x64.ActiveCfg = Release|Win32
+-		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Release|x64.Build.0 = Release|Win32
++		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Release|x64.ActiveCfg = Release|x64
++		{7B2727B5-5A3F-40EE-A866-43A13CD31446}.Release|x64.Build.0 = Release|x64
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Debug|Win32.Build.0 = Debug|Win32
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Debug|x64.ActiveCfg = Debug|x64
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Debug|x64.Build.0 = Debug|x64
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGInstrument|Win32.ActiveCfg = PGInstrument|Win32
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGInstrument|Win32.Build.0 = PGInstrument|Win32
+-		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGInstrument|x64.ActiveCfg = PGInstrument|Win32
+-		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGInstrument|x64.Build.0 = PGInstrument|Win32
++		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGInstrument|x64.ActiveCfg = PGInstrument|x64
++		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGInstrument|x64.Build.0 = PGInstrument|x64
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGUpdate|Win32.ActiveCfg = PGUpdate|Win32
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGUpdate|Win32.Build.0 = PGUpdate|Win32
+-		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGUpdate|x64.ActiveCfg = PGUpdate|Win32
+-		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGUpdate|x64.Build.0 = PGUpdate|Win32
++		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGUpdate|x64.ActiveCfg = PGUpdate|x64
++		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.PGUpdate|x64.Build.0 = PGUpdate|x64
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Release|Win32.ActiveCfg = Release|Win32
+ 		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Release|Win32.Build.0 = Release|Win32
+-		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Release|x64.ActiveCfg = Release|Win32
+-		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Release|x64.Build.0 = Release|Win32
++		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Release|x64.ActiveCfg = Release|x64
++		{1D4B18D3-7C12-4ECB-9179-8531FF876CE6}.Release|x64.Build.0 = Release|x64
+ 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Debug|Win32.ActiveCfg = Debug|Win32
+ 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Debug|x64.ActiveCfg = Debug|x64
+ 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGInstrument|Win32.ActiveCfg = Release|Win32
+-		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGInstrument|x64.ActiveCfg = Release|Win32
++		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGInstrument|x64.ActiveCfg = Release|x64
+ 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGUpdate|Win32.ActiveCfg = Release|Win32
+-		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGUpdate|x64.ActiveCfg = Release|Win32
++		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.PGUpdate|x64.ActiveCfg = Release|x64
+ 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Release|Win32.ActiveCfg = Release|Win32
+ 		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Release|x64.ActiveCfg = Release|x64
+ 	EndGlobalSection
+--- python3/PCbuild/make_buildinfo.vcxproj
++++ python3/PCbuild/make_buildinfo.vcxproj
+@@ -5,6 +5,10 @@
+       <Configuration>Release</Configuration>
+       <Platform>Win32</Platform>
+     </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
+   </ItemGroup>
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{C73F0EC1-358B-4177-940F-0846AC8B04CD}</ProjectGuid>
+@@ -16,6 +20,10 @@
+     <ConfigurationType>Application</ConfigurationType>
+     <CharacterSet>NotSet</CharacterSet>
+   </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <CharacterSet>NotSet</CharacterSet>
++  </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings">
+   </ImportGroup>
+@@ -24,17 +32,38 @@
+     <Import Project="pyproject.props" />
+     <Import Project="release.props" />
+   </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="pyproject.props" />
++    <Import Project="x64.props" />
++    <Import Project="release.props" />
++  </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
++    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
++    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+       <Optimization>Disabled</Optimization>
+       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)make_buildinfo.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <Optimization>Disabled</Optimization>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+--- python3/PCbuild/make_versioninfo.vcxproj
++++ python3/PCbuild/make_versioninfo.vcxproj
+@@ -114,24 +114,25 @@
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <CustomBuildStep>
+       <Message>Build PC/pythonnt_rc(_d).h</Message>
+       <Command>cd $(SolutionDir)
+-make_versioninfo.exe &gt; ..\PC\pythonnt_rc.h
++amd64\make_versioninfo.exe &gt; ..\PC\pythonnt_rc.h
+ </Command>
+       <Outputs>$(SolutionDir)..\PC\pythonnt_rc.h;%(Outputs)</Outputs>
+     </CustomBuildStep>
+     <ClCompile>
+       <Optimization>MaxSpeed</Optimization>
+       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+       <IntrinsicFunctions>true</IntrinsicFunctions>
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <OutputFile>$(SolutionDir)make_versioninfo.exe</OutputFile>
++      <OutputFile>$(SolutionDir)amd64\make_versioninfo.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
+     </Link>
+     <PostBuildEvent>
+       <Command>cd $(SolutionDir)
+-make_versioninfo.exe &gt; ..\PC\python_nt.h
++amd64\make_versioninfo.exe &gt; ..\PC\python_nt.h
+ </Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+@@ -172,9 +172,9 @@
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <CustomBuildStep>
+       <Message>Build PC/pythonnt_rc(_d).h</Message>
+       <Command>cd $(SolutionDir)
+-make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h
++amd64\make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h
+ </Command>
+       <Outputs>$(SolutionDir)..\PC\pythonnt_rc_d.h;%(Outputs)</Outputs>
+     </CustomBuildStep>
+     <Midl>
+@@ -186,14 +186,15 @@
+       <IntrinsicFunctions>false</IntrinsicFunctions>
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <OutputFile>$(SolutionDir)make_versioninfo_d.exe</OutputFile>
++      <OutputFile>$(SolutionDir)amd64\make_versioninfo_d.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+     <PostBuildEvent>
+       <Command>cd $(SolutionDir)
+-make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h
++amd64\make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h
+ </Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+--- python3/PCbuild/pythoncore.vcxproj
++++ python3/PCbuild/pythoncore.vcxproj
+@@ -195,35 +195,35 @@
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <Midl>
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
+       <AdditionalIncludeDirectories>..\Python;..\Modules\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+     </ClCompile>
+     <ResourceCompile>
+       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <Culture>0x0409</Culture>
+       <AdditionalIncludeDirectories>..\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ResourceCompile>
+     <PreLinkEvent>
+       <Message>Generate build information...</Message>
+-      <Command>"$(SolutionDir)make_buildinfo.exe" Release "$(IntDir)"</Command>
++      <Command>"$(SolutionDir)amd64\make_buildinfo.exe" Release "$(IntDir)"</Command>
+     </PreLinkEvent>
+     <Link>
+       <AdditionalDependencies>$(IntDir)getbuildinfo.o;%(AdditionalDependencies)</AdditionalDependencies>
+       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+       <BaseAddress>0x1e000000</BaseAddress>
+     </Link>
+     <PreBuildEvent>
+       <Command>$(KillPythonExe)
+ IF %ERRORLEVEL% NEQ 0 (
+     echo kill_python: warning: could not kill running Pythons, exit code %ERRORLEVEL%
+     exit /b 0
+ )</Command>
+     </PreBuildEvent>
+     <PreBuildEvent>
+       <Message>Killing any running $(PythonExe) instances...</Message>
+     </PreBuildEvent>
+   </ItemDefinitionGroup>
+@@ -289,9 +289,9 @@
+       <AdditionalIncludeDirectories>..\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ResourceCompile>
+     <PreLinkEvent>
+       <Message>Generate build information...</Message>
+-      <Command>"$(SolutionDir)make_buildinfo.exe" Debug "$(IntDir)"</Command>
++      <Command>"$(SolutionDir)amd64\make_buildinfo.exe" Debug "$(IntDir)"</Command>
+     </PreLinkEvent>
+     <Link>
+       <AdditionalDependencies>$(IntDir)getbuildinfo.o;%(AdditionalDependencies)</AdditionalDependencies>
+       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
