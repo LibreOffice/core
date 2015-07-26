@@ -139,7 +139,8 @@ enum
     LOK_SET_PART,
     LOK_POST_KEY,
     LOK_PAINT_TILE,
-    LOK_POST_MOUSE_EVENT
+    LOK_POST_MOUSE_EVENT,
+    LOK_SET_GRAPHIC_SELECTION
 };
 
 /**
@@ -194,6 +195,13 @@ struct LOEvent
     int m_nPostMouseEventX;
     int m_nPostMouseEventY;
     int m_nPostMouseEventCount;
+    ///@}
+
+    /// @name setGraphicSelection parameters
+    ///@{
+    int m_nSetGraphicSelectionType;
+    int m_nSetGraphicSelectionX;
+    int m_nSetGraphicSelectionY;
     ///@}
 
     /// Constructor to instantiate an object of type `type`.
