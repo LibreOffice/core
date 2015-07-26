@@ -152,24 +152,25 @@ Const cstThisSub = &quot;CommandBarControl.Execute&quot;
 	Utils._SetCalledSub(cstThisSub)
 
 Dim sExecute As String
-	Execute = False
+
+	Execute = True
 	sExecute = _GetPropertyValue(_Element, &quot;CommandURL&quot;, &quot;&quot;)
 
 	Select Case True
-		Case sExecute = &quot;&quot;
+		Case sExecute = &quot;&quot;		:	Execute = False
 		Case _IsLeft(sExecute, &quot;.uno:&quot;)
 			Execute = DoCmd.RunCommand(sExecute)
 		Case _IsLeft(sExecute, &quot;vnd.sun.star.script:&quot;)
 			Execute = Utils._RunScript(sExecute, Array(Nothing))
 		Case Else
 	End Select
-
+	
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
-	Reset = False
+	Execute = False
 	GoTo Exit_Function
 End Function	&apos;	Execute	V1.3.0
 
