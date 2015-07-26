@@ -1,30 +1,18 @@
 FreeBSD porting fixes, patch by maho@openoffice.org
 
---- Python-3.3.0/configure	2012-11-28 09:00:41.094955090 +0000
-+++ Python-3.3.0/configure	2012-11-28 09:01:13.033329526 +0000
-@@ -5545,11 +5545,6 @@
- 	  LDLIBRARY='libpython$(LDVERSION).so'
- 	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
- 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
--	  case $ac_sys_system in
--	      FreeBSD*)
--		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
--		;;
--	  esac
- 	  INSTSONAME="$LDLIBRARY".$SOVERSION
- 	  if test "$with_pydebug" != yes
-           then
---- Python-3.3.0/Lib/test/test_threading.py	2012-11-28 09:00:41.292957412 +0000
-+++ Python-3.3.0/Lib/test/test_threading.py	2012-11-28 09:01:13.017329339 +0000
-@@ -451,7 +451,7 @@
-     # #12316 and #11870), and fork() from a worker thread is known to trigger
-     # problems with some operating systems (issue #3863): skip problematic tests
-     # on platforms known to behave badly.
--    platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'netbsd5',
-+    platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'netbsd5',
-                          'os2emx', 'hp-ux11')
+--- python3.orig/Lib/test/test_threading.py	2015-07-05 18:50:07.000000000 +0200
++++ python3/Lib/test/test_threading.py	2015-07-26 17:03:55.935367820 +0200
+@@ -24,8 +24,8 @@
+ # #12316 and #11870), and fork() from a worker thread is known to trigger
+ # problems with some operating systems (issue #3863): skip problematic tests
+ # on platforms known to behave badly.
+-platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'netbsd5',
+-                     'hp-ux11')
++platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'netbsd5',
++                     'os2emx', 'hp-ux11')
  
-     def _run_and_join(self, script):
+ 
+ # A trivial mutable counter.
 --- Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:00:41.097955124 +0000
 +++ Python-3.3.0/Python/thread_pthread.h	2012-11-28 09:01:13.018329351 +0000
 @@ -42,6 +42,10 @@
