@@ -1,0 +1,12 @@
+diff -ur python3.org/Mac/PythonLauncher/Makefile.in python3/Mac/PythonLauncher/Makefile.in
+--- python3.org/Mac/PythonLauncher/Makefile.in	2015-06-06 08:47:38.000000000 +0300
++++ python3/Mac/PythonLauncher/Makefile.in	2015-06-06 08:48:18.000000000 +0300
+@@ -53,7 +53,7 @@
+ 		--resource=$(srcdir)/factorySettings.plist \
+ 		--plist Info.plist \
+ 		build
+-	find "Python Launcher.app" -name '.svn' -print0 | xargs -0 rm -r
++	find "Python Launcher.app" -name '.svn' -print0 | xargs -0 rm -rf
+ 		
+ 
+ FileSettings.o: $(srcdir)/FileSettings.m

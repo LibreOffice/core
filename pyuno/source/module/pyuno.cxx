@@ -1610,6 +1610,10 @@ static PyNumberMethods PyUNONumberMethods[] =
     nullptr,                                         /* nb_inplace_true_divide */
 
     nullptr,                                         /* nb_index */
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 5
+    nullptr,                                         /* nb_matrix_multiply */
+    nullptr,                                         /* nb_inplace_matrix_multiply */
+#endif
 };
 
 static PySequenceMethods PyUNOSequenceMethods[] =
