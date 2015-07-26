@@ -1,6 +1,7 @@
---- Modules/_ctypes/libffi/src/x86/ffi64.c
-+++ Modules/_ctypes/libffi/src/x86/ffi64.c
-@@ -545,11 +545,15 @@
+diff -ru python3.orig/Modules/_ctypes/libffi/src/x86/ffi64.c python3/Modules/_ctypes/libffi/src/x86/ffi64.c
+--- Modules/_ctypes/libffi/src/x86/ffi64.c	2015-07-05 18:50:07.000000000 +0200
++++ Modules/_ctypes/libffi/src/x86/ffi64.c	2015-07-26 20:18:56.457153323 +0200
+@@ -548,11 +548,15 @@
    tramp = (volatile unsigned short *) &closure->tramp[0];
  
    tramp[0] = 0xbb49;		/* mov <code>, %r11	*/
@@ -20,19 +21,9 @@
  
    /* Set the carry bit iff the function uses any sse registers.
       This is clc or stc, together with the first byte of the jmp.  */
---- Objects/bytearrayobject.c
-+++ Objects/bytearrayobject.c
-@@ -294,7 +294,7 @@
-         PyBuffer_Release(&vo);
-         return NULL;
-     }
--    memcpy(self->ob_bytes + mysize, vo.buf, vo.len);
-+    if (vo.len != 0) memcpy(self->ob_bytes + mysize, vo.buf, vo.len);
-     PyBuffer_Release(&vo);
-     Py_INCREF(self);
-     return (PyObject *)self;
---- Objects/listobject.c
-+++ Objects/listobject.c
+diff -ru python3.orig/Objects/listobject.c python3/Objects/listobject.c
+--- Objects/listobject.c	2015-07-05 18:50:08.000000000 +0200
++++ Objects/listobject.c	2015-07-26 20:22:30.539167695 +0200
 @@ -641,7 +641,7 @@
              goto Error;
          }
@@ -41,24 +32,4 @@
 +    if (s != 0) memcpy(recycle, &item[ilow], s);
  
      if (d < 0) { /* Delete -d items */
-         memmove(&item[ihigh+d], &item[ihigh],
-@@ -2036,7 +2036,7 @@
-     if (keys != NULL) {
-         for (i = 0; i < saved_ob_size; i++)
-             Py_DECREF(keys[i]);
--        if (keys != &ms.temparray[saved_ob_size+1])
-+        if (keys != ((char *) ms.temparray) + (saved_ob_size+1) * sizeof (PyObject *))
-             PyMem_FREE(keys);
-     }
- 
---- Objects/longobject.c
-+++ Objects/longobject.c
-@@ -36,7 +36,7 @@
- static PyObject *
- get_small_int(sdigit ival)
- {
--    PyObject *v = (PyObject*)(small_ints + ival + NSMALLNEGINTS);
-+    PyObject *v = (PyObject*)(small_ints + (ival + NSMALLNEGINTS));
-     Py_INCREF(v);
- #ifdef COUNT_ALLOCS
-     if (ival >= 0)
+         Py_ssize_t tail;
