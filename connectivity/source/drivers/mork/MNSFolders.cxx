@@ -47,7 +47,7 @@ namespace
         ::osl::Security   aSecurity;
         OUString   aConfigPath;
 
-    #if defined(XP_WIN) || defined(MACOSX)
+    #if defined(WNT) || defined(MACOSX)
         aSecurity.getConfigDir( aConfigPath );
     #else
         //This is to find the dir under which .mozilla/.thunderbird is created.
@@ -69,7 +69,7 @@ namespace
     // DO NOT CHANGE THE ORDER; ADD ONLY TO THE END
     static const char* DefaultProductDir[NB_PRODUCTS][NB_CANDIDATES] =
     {
-    #if defined(XP_WIN)
+    #if defined(WNT)
         { "Mozilla/SeaMonkey/", NULL, NULL, NULL },
         { "Mozilla/Firefox/", NULL, NULL, NULL },
         { "Thunderbird/", "Mozilla/Thunderbird/", NULL, NULL }
