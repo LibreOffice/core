@@ -39,8 +39,8 @@
 /// Private struct used by this GObject type
 struct _LOKDocViewPrivate
 {
-    gchar* m_aLOPath;
-    gchar* m_aDocPath;
+    const gchar* m_aLOPath;
+    const gchar* m_aDocPath;
     gdouble m_nLoadProgress;
     gboolean m_bIsLoading;
     gboolean m_bCanZoomIn;
@@ -302,7 +302,10 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     if (pEvent->type == GDK_KEY_RELEASE)
     {
         GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
-        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
+        pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYUP;
+        pLOEvent->m_nCharCode = nCharCode;
+        pLOEvent->m_nKeyCode  = nKeyCode;
         g_task_set_task_data(task, pLOEvent, g_free);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
@@ -310,7 +313,10 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     else
     {
         GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
-        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
+        pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYINPUT;
+        pLOEvent->m_nCharCode = nCharCode;
+        pLOEvent->m_nKeyCode  = nKeyCode;
         g_task_set_task_data(task, pLOEvent, g_free);
         g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         g_object_unref(task);
@@ -1163,7 +1169,7 @@ paintTileInThread (gpointer data)
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     TileBuffer& buffer = priv->m_aTileBuffer;
-    int index = pLOEvent->m_nX * buffer.m_nWidth + pLOEvent->m_nY;
+    int index = pLOEvent->m_nPaintTileX * buffer.m_nWidth + pLOEvent->m_nPaintTileY;
     if (buffer.m_mTiles.find(index) != buffer.m_mTiles.end() &&
         buffer.m_mTiles[index].valid)
         return;
@@ -1177,21 +1183,21 @@ paintTileInThread (gpointer data)
 
     unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
     GdkRectangle aTileRectangle;
-    aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom) * pLOEvent->m_nY;
-    aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom) * pLOEvent->m_nX;
+    aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileY;
+    aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
 
     g_test_timer_start();
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
                                          pBuffer,
                                          nTileSizePixels, nTileSizePixels,
                                          aTileRectangle.x, aTileRectangle.y,
-                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom),
-                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom));
+                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
+                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
 
     double elapsedTime = g_test_timer_elapsed();
     g_info ("Rendered (%d, %d) in %f seconds",
-            pLOEvent->m_nX,
-            pLOEvent->m_nY,
+            pLOEvent->m_nPaintTileX,
+            pLOEvent->m_nPaintTileY,
             elapsedTime);
 
     //create a mapping for it
@@ -1674,9 +1680,12 @@ lok_doc_view_open_document (LOKDocView* pDocView,
                             gpointer userdata)
 {
     GTask* task = g_task_new(pDocView, cancellable, callback, userdata);
-    LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC, pPath);
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-    priv->m_aDocPath = g_strdup(pPath);
+
+    LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC);
+    pLOEvent->m_pPath = pPath;
+
+    priv->m_aDocPath = pPath;
     g_task_set_task_data(task, pLOEvent, g_free);
 
     g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
@@ -1836,9 +1845,11 @@ lok_doc_view_post_command (LOKDocView* pDocView,
 {
 
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
-    LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND, pCommand, pArguments);
-    g_task_set_task_data(task, pLOEvent, g_free);
+    LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
+    pLOEvent->m_pCommand = pCommand;
+    pLOEvent->m_pArguments  = pArguments;
 
+    g_task_set_task_data(task, pLOEvent, g_free);
     g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
 }

@@ -152,46 +152,44 @@ struct LOEvent
 {
     /// To identify the type of LOK call
     int m_nType;
+
+    /// @name post_command parameters
+    ///@{
     const gchar* m_pCommand;
     const gchar* m_pArguments;
-    gchar* m_pPath;
+    ///@}
+
+    /// @name open_document parameter
+    ///@{
+    const gchar* m_pPath;
+    ///@}
+
+    /// set_edit parameter
     gboolean m_bEdit;
+
+    /// set_partmode parameter
     int m_nPartMode;
+
+    /// set_part parameter
     int m_nPart;
+
+    /// @name postKeyEvent parameters
+    ///@{
     int m_nKeyEvent;
     int m_nCharCode;
     int m_nKeyCode;
+    ///@}
 
-    int m_nX;
-    int m_nY;
-    float m_fZoom;
+    /// @name paintTile parameters
+    ///@{
+    int m_nPaintTileX;
+    int m_nPaintTileY;
+    float m_fPaintTileZoom;
+    ///@}
 
-    /// Constructor to easily instantiate an object for LOK call of `type' type.
+    /// Constructor to instantiate an object of type `type`.
     LOEvent(int type)
         : m_nType(type) {}
-
-    LOEvent(int type, const gchar* pCommand, const gchar* pArguments)
-        : m_nType(type),
-          m_pCommand(pCommand),
-          m_pArguments(pArguments) {}
-
-    LOEvent(int type, const gchar* pPath)
-        : m_nType(type)
-    {
-        m_pPath = g_strdup(pPath);
-    }
-
-    LOEvent(int type, int nKeyEvent, int nCharCode, int nKeyCode)
-        : m_nType(type),
-          m_nKeyEvent(nKeyEvent),
-          m_nCharCode(nCharCode),
-          m_nKeyCode(nKeyCode) {}
-
-    LOEvent(int type, int x, int y, float zoom)
-        : m_nType(type),
-          m_nX(x),
-          m_nY(y),
-          m_fZoom(zoom) {}
 };
 
 #endif // INCLUDED_TILEBUFFER_HXX
