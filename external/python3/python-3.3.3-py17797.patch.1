@@ -1,27 +1,29 @@
 http://bugs.python.org/issue17797
 http://connect.microsoft.com/VisualStudio/feedback/details/785119/
 
-Visual Studio 2012 changed return value for fileno function that breaks
+Visual Studio 2013 changed return value for fileno function that breaks
 when python tries to check/setup stdin/out/err
 GetStdHandle on Windows XP behaves contrary to the documentation...
+MSVC 14.0 fixed this bug.
 
-diff --git a/Python/pythonrun.c b/Python/pythonrun.c
-index 91d56b7..d28ffc7 100644
---- a/Python/pythonrun.c
-+++ b/Python/pythonrun.c
-@@ -1015,13 +1015,28 @@ error:
+diff -ru python3.orig/Python/pylifecycle.c python3/Python/pylifecycle.c
+--- python3.orig/Python/pylifecycle.c	2015-07-05 18:50:08.000000000 +0200
++++ python3/Python/pylifecycle.c	2015-07-26 20:01:23.563082638 +0200
+@@ -1065,15 +1065,30 @@
  static int
  is_valid_fd(int fd)
  {
 -    int dummy_fd;
      if (fd < 0 || !_PyVerify_fd(fd))
          return 0;
+-    _Py_BEGIN_SUPPRESS_IPH
 -    dummy_fd = dup(fd);
--    if (dummy_fd < 0)
--        return 0;
--    close(dummy_fd);
+-    if (dummy_fd >= 0)
+-        close(dummy_fd);
+-    _Py_END_SUPPRESS_IPH
+-    return dummy_fd >= 0;
 +
-+#if defined(MS_WINDOWS) && defined(HAVE_FSTAT)
++#if defined(MS_WINDOWS) && defined(HAVE_FSTAT) && defined(_MSC_VER) && (_MSC_VER >= 1700 && _MSC_VER < 1900)
 +    /* dup (DuplicateHandle) doesn't say fd is a valid *file* handle.
 +     * It could be a current thread pseudo-handle.
 +     */
@@ -29,17 +31,19 @@ index 91d56b7..d28ffc7 100644
 +        struct stat buf;
 +        if (fstat(fd, &buf) < 0 && (errno == EBADF || errno == ENOENT))
 +            return 0;
++        else
++	    return 1;
 +    }
 +#else
 +    {
-+        int dummy_fd;
-+        dummy_fd = dup(fd);
-+        if (dummy_fd < 0)
-+            return 0;
-+        close(dummy_fd);
++        int dummy_fd = dup(fd);
++        _Py_BEGIN_SUPPRESS_IPH
++        if (dummy_fd >= 0)
++            close(dummy_fd);
++        _Py_END_SUPPRESS_IPH
++        return dummy_fd >= 0;
 +    }
 +#endif
-+
-     return 1;
  }
  
+ /* Initialize sys.stdin, stdout, stderr and builtins.open */

@@ -1,9 +1,8 @@
 build with GCC on AIX
 
-diff -ru python3.orig/configure python3/configure
---- python3.orig/configure	2015-07-26 17:10:18.218393484 +0200
-+++ python3/configure	2015-07-26 17:29:44.460471779 +0200
-@@ -3534,8 +3534,6 @@
+--- Python-3.3.3/configure	2012-11-28 09:05:45.990529603 +0000
++++ Python-3.3.3/configure	2012-11-28 09:06:23.037963934 +0000
+@@ -3426,8 +3426,6 @@
  else
  
  	case $ac_sys_system in
@@ -12,7 +11,7 @@ diff -ru python3.orig/configure python3/configure
  	*)	without_gcc=no;;
  	esac
  fi
-@@ -5787,10 +5785,18 @@
+@@ -5541,10 +5539,18 @@
  	      PY3LIBRARY=libpython3.so
  	  fi
            ;;
@@ -20,7 +19,7 @@ diff -ru python3.orig/configure python3/configure
 +    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*|AIX*)
  	  LDLIBRARY='libpython$(LDVERSION).so'
 -	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
--	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+-	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
 +	  case $ac_sys_system in
 +	    AIX*)
 +	      BLDLIBRARY='-Wl,-brtl -L. -lpython$(LDVERSION)'
@@ -34,7 +33,7 @@ diff -ru python3.orig/configure python3/configure
  	  INSTSONAME="$LDLIBRARY".$SOVERSION
  	  if test "$with_pydebug" != yes
            then
-@@ -8789,8 +8795,13 @@
+@@ -8301,8 +8307,13 @@
  then
  	case $ac_sys_system/$ac_sys_release in
  	AIX*)
@@ -50,10 +49,9 @@ diff -ru python3.orig/configure python3/configure
  		;;
  	IRIX/5*) LDSHARED="ld -shared";;
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
-diff -ru python3.orig/configure.ac python3/configure.ac
---- python3.orig/configure.ac	2015-07-05 18:50:08.000000000 +0200
-+++ python3/configure.ac	2015-07-26 17:32:10.445481579 +0200
-@@ -587,8 +587,6 @@
+--- Python-3.3.3/configure.ac	2012-11-28 09:05:45.990529603 +0000
++++ Python-3.3.3/configure.ac	2012-11-28 09:06:23.038963946 +0000
+@@ -545,8 +545,6 @@
  		without_gcc=$withval;;
  	esac], [
  	case $ac_sys_system in
@@ -62,15 +60,15 @@ diff -ru python3.orig/configure.ac python3/configure.ac
  	*)	without_gcc=no;;
  	esac])
  AC_MSG_RESULT($without_gcc)
-@@ -1090,10 +1088,18 @@
+@@ -910,10 +908,18 @@
  	      PY3LIBRARY=libpython3.so
  	  fi
            ;;
 -    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*)
-+    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*|AIX*)Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*)
++    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*|AIX*)
  	  LDLIBRARY='libpython$(LDVERSION).so'
 -	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
--	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+-	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
 +	  case $ac_sys_system in
 +	    AIX*)
 +	      BLDLIBRARY='-Wl,-brtl -L. -lpython$(LDVERSION)'
@@ -81,10 +79,10 @@ diff -ru python3.orig/configure.ac python3/configure.ac
 +	      RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
 +	      ;;
 +	  esac
- 	  INSTSONAME="$LDLIBRARY".$SOVERSION
- 	  if test "$with_pydebug" != yes
-           then
-@@ -2164,8 +2170,13 @@
+ 	  case $ac_sys_system in
+ 	      FreeBSD*)
+ 		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
+@@ -1866,8 +1872,13 @@
  then
  	case $ac_sys_system/$ac_sys_release in
  	AIX*)
@@ -100,10 +98,9 @@ diff -ru python3.orig/configure.ac python3/configure.ac
  		;;
  	IRIX/5*) LDSHARED="ld -shared";;
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
-diff -ru python3.orig/Makefile.pre.in python3/Makefile.pre.in
---- python3.orig/Makefile.pre.in	2015-07-05 18:50:07.000000000 +0200
-+++ python3/Makefile.pre.in	2015-07-26 17:34:00.386488960 +0200
-@@ -598,14 +598,20 @@
+--- Python-3.3.3/Makefile.pre.in	2012-11-28 09:05:45.861528086 +0000
++++ Python-3.3.3/Makefile.pre.in	2012-11-28 09:06:23.046964040 +0000
+@@ -493,14 +493,20 @@
  
  libpython$(LDVERSION).so: $(LIBRARY_OBJS)
  	if test $(INSTSONAME) != $(LDLIBRARY); then \
@@ -126,7 +123,7 @@ diff -ru python3.orig/Makefile.pre.in python3/Makefile.pre.in
  
  libpython$(LDVERSION).dylib: $(LIBRARY_OBJS)
  	 $(CC) -dynamiclib -Wl,-single_module $(PY_LDFLAGS) -undefined dynamic_lookup -Wl,-install_name,$(prefix)/lib/libpython$(LDVERSION).dylib -Wl,-compatibility_version,$(VERSION) -Wl,-current_version,$(VERSION) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
-@@ -1299,6 +1305,8 @@
+@@ -1106,6 +1112,8 @@
  	export PATH; PATH="`pwd`:$$PATH"; \
  	export PYTHONPATH; PYTHONPATH="`pwd`/Lib"; \
  	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
@@ -135,10 +132,9 @@ diff -ru python3.orig/Makefile.pre.in python3/Makefile.pre.in
  	export EXE; EXE="$(BUILDEXE)"; \
  	if [ -n "$(MULTIARCH)" ]; then export MULTIARCH; MULTIARCH=$(MULTIARCH); fi; \
  	export PYTHON_FOR_BUILD; \
-diff -ru python3.orig/Modules/Setup.dist python3/Modules/Setup.dist
---- python3.orig/Modules/Setup.dist	2015-07-05 18:50:07.000000000 +0200
-+++ python3/Modules/Setup.dist	2015-07-26 17:34:27.951490811 +0200
-@@ -181,7 +181,7 @@
+--- Python-3.3.3/Modules/Setup.dist	2012-11-28 09:05:45.935528957 +0000
++++ Python-3.3.3/Modules/Setup.dist	2012-11-28 09:06:23.052964111 +0000
+@@ -177,7 +177,7 @@
  #_bisect _bisectmodule.c	# Bisection algorithms
  #_heapq _heapqmodule.c	# Heap queue algorithm
  

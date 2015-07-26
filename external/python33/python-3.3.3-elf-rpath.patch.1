@@ -1,0 +1,13 @@
+set RPATH (only to be used on ELF platforms)
+
+--- python3/Makefile.pre.in	2013-04-19 15:08:43.637715422 +0200
++++ python3/Makefile.pre.in	2013-04-19 15:07:32.685711138 +0200
+@@ -464,7 +464,7 @@
+ 
+ # Build the interpreter
+ $(BUILDPYTHON):	Modules/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
+-	$(LINKCC) $(PY_LDFLAGS) $(LINKFORSHARED) -o $@ Modules/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
++	$(LINKCC) $(PY_LDFLAGS) $(LINKFORSHARED) -o $@ Modules/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST) -Wl,-rpath,\$$ORIGIN
+ 
+ platform: $(BUILDPYTHON) pybuilddir.txt
+ 	$(RUNSHARED) $(PYTHON_FOR_BUILD) -c 'import sys ; from sysconfig import get_platform ; print(get_platform()+"-"+sys.version[0:3])' >platform
