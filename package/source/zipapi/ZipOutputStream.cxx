@@ -121,10 +121,12 @@ void ZipOutputStream::finish()
             rawWrite(aSequence);
         }
         while (nRead == n_ConstBufferSize);
+        xInput.clear();
 
         rawCloseEntry(m_aEntries[i]->isEncrypt());
 
         m_aEntries[i]->getZipPackageStream()->successfullyWritten(m_aEntries[i]->getZipEntry());
+        m_aEntries[i]->deleteBufferFile();
         delete m_aEntries[i];
     }
 

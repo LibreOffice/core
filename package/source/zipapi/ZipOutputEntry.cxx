@@ -21,6 +21,8 @@
 
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <comphelper/storagehelper.hxx>
 
 #include <osl/time.h>
@@ -49,25 +51,40 @@ ZipOutputEntry::ZipOutputEntry(
         bool bEncrypt)
 : m_aDeflateBuffer(n_ConstBufferSize)
 , m_aDeflater(DEFAULT_COMPRESSION, true)
+, m_xContext(rxContext)
+, m_xOutStream(rxOutput)
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
 , m_bEncryptCurrentEntry(bEncrypt)
 , m_pCurrentStream(pStream)
 {
-    if (rxOutput.is())
+    assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
+    assert(m_xOutStream.is());
+    if (m_bEncryptCurrentEntry)
     {
-        m_xOutStream = rxOutput;
+        m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
+        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
     }
-    else
-    {
-        m_xTempFile = io::TempFile::create(rxContext);
-        m_xOutStream = m_xTempFile->getOutputStream();
-    }
+}
+
+ZipOutputEntry::ZipOutputEntry(
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry,
+        ZipPackageStream* pStream,
+        bool bEncrypt)
+: m_aDeflateBuffer(n_ConstBufferSize)
+, m_aDeflater(DEFAULT_COMPRESSION, true)
+, m_xContext(rxContext)
+, m_pCurrentEntry(&rEntry)
+, m_nDigested(0)
+, m_bEncryptCurrentEntry(bEncrypt)
+, m_pCurrentStream(pStream)
+{
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)
     {
-        m_xCipherContext = ZipFile::StaticGetCipher( rxContext, pStream->GetEncryptionData(), true );
-        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( rxContext, pStream->GetEncryptionData() );
+        m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
+        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
     }
 }
 
@@ -75,12 +92,39 @@ ZipOutputEntry::~ZipOutputEntry()
 {
 }
 
-uno::Reference< io::XInputStream > ZipOutputEntry::getData()
+void ZipOutputEntry::createBufferFile()
+{
+    assert(!m_xOutStream.is() && m_aTempURL.isEmpty() &&
+           "should only be called in the threaded mode where there is no existing stream yet");
+    uno::Reference < beans::XPropertySet > xTempFileProps(
+            io::TempFile::create(m_xContext),
+            uno::UNO_QUERY_THROW );
+    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(sal_False));
+    uno::Any aUrl = xTempFileProps->getPropertyValue( "Uri" );
+    aUrl >>= m_aTempURL;
+    assert(!m_aTempURL.isEmpty());
+
+    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
+    m_xOutStream = xTempAccess->openFileWrite(m_aTempURL);
+}
+
+void ZipOutputEntry::closeBufferFile()
 {
     m_xOutStream->closeOutput();
-    uno::Reference< io::XSeekable > xTempSeek(m_xOutStream, UNO_QUERY_THROW);
-    xTempSeek->seek(0);
-    return m_xTempFile->getInputStream();
+    m_xOutStream.clear();
+}
+
+void ZipOutputEntry::deleteBufferFile()
+{
+    assert(!m_xOutStream.is() && !m_aTempURL.isEmpty());
+    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(m_xContext));
+    xAccess->kill(m_aTempURL);
+}
+
+uno::Reference< io::XInputStream > ZipOutputEntry::getData() const
+{
+    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
+    return xTempAccess->openFileRead(m_aTempURL);
 }
 
 void ZipOutputEntry::closeEntry()
