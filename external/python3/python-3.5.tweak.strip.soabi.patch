@@ -1,0 +1,12 @@
+diff -ru python3.orig/configure python3/configure
+--- misc/python3.orig/configure	2015-07-26 21:14:31.127377193 +0200
++++ misc/python3/configure	2015-07-26 21:21:34.975405648 +0200
+@@ -14388,7 +14388,7 @@
+ $as_echo "$ABIFLAGS" >&6; }
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking SOABI" >&5
+ $as_echo_n "checking SOABI... " >&6; }
+-SOABI='cpython-'`echo $VERSION | tr -d .`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++SOABI='cpython-'`echo $VERSION$ABIFLAGS`
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOABI" >&5
+ $as_echo "$SOABI" >&6; }
+ 

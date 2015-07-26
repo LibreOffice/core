@@ -15,26 +15,37 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 	PCbuild/pcbuild.sln \
 ))
 
+# Fixed upstream?
+#	external/python3/python-3.3.0-msvc2012.patch.1 \
+#	external/python3/python-3.3.0-msvc-x64.patch.1 \
+
+# <SubSystem>NotSet</SubSystem> not used any more. Not needed?
+#	external/python3/python-3.3.3-msvc2012-winxp.patch.1 \
+
+# no more this line: find "Python Launcher.app" -name '.svn' -print0 | xargs -0 rm -r
+#	external/python3/python-3.3.5-darwin-gnu-xargs.patch.1 \
+
+# PCbuild/release.props && make_buildinfo.c missing?
+#	external/python3/python-msvc-disable-sse2.patch.1 \
+
+# Doesn't apply: fixed upstream?
+#	external/python3/python-3.3.0-gcc-4.8.patch.1 \
+
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/i100492-freebsd.patch.1 \
-	external/python3/python-3.3.0-i42553.patch.2 \
 	external/python3/python-3.3.3-aix.patch.1 \
 	external/python3/python-3.3.0-darwin.patch.1 \
-	external/python3/python-3.3.0-msvc2012.patch.1 \
 	external/python3/python-3.3.0-msvc-disable.patch.1 \
-	external/python3/python-3.3.0-msvc-x64.patch.1 \
 	external/python3/python-3.3.0-ssl.patch.1 \
-	external/python3/python-3.3.0-gcc-4.8.patch.1 \
+	external/python3/python-3.3.3-py17797.patch.1 \
+	external/python3/python-3.3.0-i42553.patch.2 \
 	external/python3/python-3.3.0-pythreadstate.patch.1 \
 	external/python3/python-3.3.0-clang.patch.1 \
-	external/python3/python-3.3.3-py17797.patch.1 \
-	external/python3/python-3.3.3-msvc2012-winxp.patch.1 \
 	external/python3/python-3.3.5-pyexpat-symbols.patch.1 \
 	external/python3/python-3.3.5-vs2013.patch.1 \
-	external/python3/python-3.3.5-darwin-gnu-xargs.patch.1 \
-	external/python3/python-msvc-disable-sse2.patch.1 \
 	external/python3/python-lsan.patch.0 \
 	external/python3/ubsan.patch.0 \
+	external/python3/python-3.5.tweak.strip.soabi.patch \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
