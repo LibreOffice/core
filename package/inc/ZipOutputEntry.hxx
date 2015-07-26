@@ -37,7 +37,8 @@ class ZipOutputEntry
 {
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
-    css::uno::Reference< css::io::XTempFile > m_xTempFile;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    OUString m_aTempURL;
     css::uno::Reference< css::io::XOutputStream > m_xOutStream;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
@@ -58,13 +59,21 @@ public:
 
     ~ZipOutputEntry();
 
-    css::uno::Reference< css::io::XInputStream > getData();
+    /* This block of methods is for threaded zipping, where we compress to a temp stream, whose
+       data is retrieved via getData */
+    ZipOutputEntry(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt = false);
+    void createBufferFile();
+    void setParallelDeflateException(const ::css::uno::Any &rAny) { m_aParallelDeflateException = rAny; }
+    css::uno::Reference< css::io::XInputStream > getData() const;
+    ::css::uno::Any getParallelDeflateException() const { return m_aParallelDeflateException; }
+    void closeBufferFile();
+    void deleteBufferFile();
+
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
     bool isEncrypt() { return m_bEncryptCurrentEntry; }
-
-    void setParallelDeflateException(const ::css::uno::Any &rAny) { m_aParallelDeflateException = rAny; }
-    ::css::uno::Any getParallelDeflateException() const { return m_aParallelDeflateException; }
 
     void closeEntry();
     void write(const css::uno::Sequence< sal_Int8 >& rBuffer);
