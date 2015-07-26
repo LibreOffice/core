@@ -958,7 +958,16 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         if ((pEvent->time - priv->m_nLastButtonPressTime) < 250)
             nCount++;
         priv->m_nLastButtonPressTime = pEvent->time;
-        priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x, priv->m_fZoom), pixelToTwip(pEvent->y, priv->m_fZoom), nCount);
+        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
+        pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEBUTTONDOWN;
+        pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
+        pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
+        pLOEvent->m_nPostMouseEventCount = nCount;
+        g_task_set_task_data(task, pLOEvent, g_free);
+
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_object_unref(task);
         break;
     }
     case GDK_BUTTON_RELEASE:
@@ -967,7 +976,16 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         if ((pEvent->time - priv->m_nLastButtonReleaseTime) < 250)
             nCount++;
         priv->m_nLastButtonReleaseTime = pEvent->time;
-        priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x, priv->m_fZoom), pixelToTwip(pEvent->y, priv->m_fZoom), nCount);
+        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
+        pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEBUTTONUP;
+        pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
+        pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
+        pLOEvent->m_nPostMouseEventCount = nCount;
+        g_task_set_task_data(task, pLOEvent, g_free);
+
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_object_unref(task);
         break;
     }
     default:
@@ -1050,9 +1068,34 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     }
 
     // Otherwise a mouse move, as on the desktop.
-    priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument, LOK_MOUSEEVENT_MOUSEMOVE, pixelToTwip(pEvent->x, priv->m_fZoom), pixelToTwip(pEvent->y, priv->m_fZoom), 1);
+
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    LOEvent* pLOEvent = new LOEvent(LOK_POST_MOUSE_EVENT);
+    pLOEvent->m_nPostMouseEventType = LOK_MOUSEEVENT_MOUSEMOVE;
+    pLOEvent->m_nPostMouseEventX = pixelToTwip(pEvent->x, priv->m_fZoom);
+    pLOEvent->m_nPostMouseEventY = pixelToTwip(pEvent->y, priv->m_fZoom);
+    pLOEvent->m_nPostMouseEventCount = 1;
+    g_task_set_task_data(task, pLOEvent, g_free);
+
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+    g_object_unref(task);
 
     return FALSE;
+}
+
+static void
+postMouseEventInThread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+
+    priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument,
+                                              pLOEvent->m_nPostMouseEventType,
+                                              pLOEvent->m_nPostMouseEventX,
+                                              pLOEvent->m_nPostMouseEventY,
+                                              pLOEvent->m_nPostMouseEventCount);
 }
 
 static void
@@ -1235,6 +1278,9 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         break;
     case LOK_PAINT_TILE:
         paintTileInThread(task);
+        break;
+    case LOK_POST_MOUSE_EVENT:
+        postMouseEventInThread(task);
         break;
     }
 
