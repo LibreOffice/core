@@ -1,0 +1,16 @@
+diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
+--- foo/python3.orig/PCbuild/pcbuild.sln	2015-08-22 19:12:48.508338400 +0200
++++ foo/python3/PCbuild/pcbuild.sln	2015-08-22 19:15:50.130169800 +0200
+@@ -58,12 +58,6 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_testmultiphase", "_testmultiphase.vcxproj", "{16BFE6F0-22EF-40B5-B831-7E937119EF10}"
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tcl", "tcl.vcxproj", "{B5FD6F1D-129E-4BFF-9340-03606FAC7283}"
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tix", "tix.vcxproj", "{C5A3E7FB-9695-4B2E-960B-1D9F43F1E555}"
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tk", "tk.vcxproj", "{7E85ECCF-A72C-4DA4-9E52-884508E80BA1}"
+-EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Win32 = Debug|Win32
