@@ -170,6 +170,7 @@ Dim oObject As Object
 				Set oObject = New Collect
 				oObject._CollType = COLLCOMMANDBARCONTROLS
 				oObject._ParentType = OBJCOMMANDBAR
+				oObject._ParentName = _Name
 				oObject._Count = iItemsCount
 			Case Else		&apos;	pvIndex is numeric
 				Goto Trace_IndexError
