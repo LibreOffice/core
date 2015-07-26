@@ -21,8 +21,6 @@
 
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <comphelper/storagehelper.hxx>
 
 #include <osl/time.h>
@@ -51,56 +49,38 @@ ZipOutputEntry::ZipOutputEntry(
         bool bEncrypt)
 : m_aDeflateBuffer(n_ConstBufferSize)
 , m_aDeflater(DEFAULT_COMPRESSION, true)
-, m_xContext(rxContext)
-, m_xOutStream(rxOutput)
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
 , m_bEncryptCurrentEntry(bEncrypt)
 , m_pCurrentStream(pStream)
 {
+    if (rxOutput.is())
+    {
+        m_xOutStream = rxOutput;
+    }
+    else
+    {
+        m_xTempFile = io::TempFile::create(rxContext);
+        m_xOutStream = m_xTempFile->getOutputStream();
+    }
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)
     {
-        m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
-        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
+        m_xCipherContext = ZipFile::StaticGetCipher( rxContext, pStream->GetEncryptionData(), true );
+        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( rxContext, pStream->GetEncryptionData() );
     }
 }
 
 ZipOutputEntry::~ZipOutputEntry()
 {
-    if (!m_aTempURL.isEmpty())
-    {
-        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(m_xContext));
-        xAccess->kill(m_aTempURL);
-    }
 }
 
-void ZipOutputEntry::createBufferFile()
-{
-    assert(!m_xOutStream.is() && m_aTempURL.isEmpty() &&
-           "should only be called in the threaded mode where there is no existing stream yet");
-    uno::Reference < beans::XPropertySet > xTempFileProps(
-            io::TempFile::create(m_xContext),
-            uno::UNO_QUERY_THROW );
-    xTempFileProps->setPropertyValue("RemoveFile", uno::makeAny(sal_False));
-    uno::Any aUrl = xTempFileProps->getPropertyValue( "Uri" );
-    aUrl >>= m_aTempURL;
-    assert(!m_aTempURL.isEmpty());
-
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-    m_xOutStream = xTempAccess->openFileWrite(m_aTempURL);
-}
-
-void ZipOutputEntry::closeBufferFile()
+uno::Reference< io::XInputStream > ZipOutputEntry::getData()
 {
     m_xOutStream->closeOutput();
-    m_xOutStream.clear();
-}
-
-uno::Reference< io::XInputStream > ZipOutputEntry::getData() const
-{
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-    return xTempAccess->openFileRead(m_aTempURL);
+    uno::Reference< io::XSeekable > xTempSeek(m_xOutStream, UNO_QUERY_THROW);
+    xTempSeek->seek(0);
+    return m_xTempFile->getInputStream();
 }
 
 void ZipOutputEntry::closeEntry()
