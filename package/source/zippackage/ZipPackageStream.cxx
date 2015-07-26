@@ -474,8 +474,10 @@ private:
     {
         try
         {
+            mpEntry->createBufferFile();
             deflateZipEntry(mpEntry, mxInStream);
             mxInStream.clear();
+            mpEntry->closeBufferFile();
         }
         catch (const uno::Exception&)
         {
@@ -823,7 +825,6 @@ bool ZipPackageStream::saveChild(
                 {
                     // Start a new thread deflating this zip entry
                     ZipOutputEntry *pZipEntry = new ZipOutputEntry(
-                            css::uno::Reference<css::io::XOutputStream>(),
                             m_xContext, *pTempEntry, this, bToBeEncrypted);
                     rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
                 }
