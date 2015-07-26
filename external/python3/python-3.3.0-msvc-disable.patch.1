@@ -1,20 +1,18 @@
 Disable some stuff LO does not need, especially stuff with external dependencies
 
-diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
---- python3/PCbuild/pcbuild.sln	2012-09-29 10:00:48.000000000 +0200
-+++ python3.new/PCbuild/pcbuild.sln	2012-11-12 22:13:49.445159668 +0100
-@@ -12,10 +12,6 @@
+diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
+--- python3.orig/PCbuild/pcbuild.sln	2015-07-26 17:43:52.262528695 +0200
++++ python3/PCbuild/pcbuild.sln	2015-07-26 18:00:18.438594901 +0200
+@@ -12,8 +12,6 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore", "pythoncore.vcxproj", "{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}"
  EndProject
 -Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythonw", "pythonw.vcxproj", "{F4229CC3-873C-49AE-9729-DD308ED4CD4A}"
 -EndProject
--Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "w9xpopen", "w9xpopen.vcxproj", "{E9E0A1F6-0009-4E8C-B8F8-1B8F5D49A058}"
--EndProject
- Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "make_buildinfo", "make_buildinfo.vcxproj", "{C73F0EC1-358B-4177-940F-0846AC8B04CD}"
- EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winsound", "winsound.vcxproj", "{28B5D777-DDF2-4B6B-B34F-31D938813856}"
-@@ -32,30 +28,16 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_decimal", "_decimal.vcxproj", "{0E9791DB-593A-465F-98BC-681011311617}"
+@@ -28,32 +26,18 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_socket", "_socket.vcxproj", "{86937F53-C189-40EF-8CE8-8759D8E7D480}"
  EndProject
@@ -23,6 +21,8 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ssl", "_ssl.vcxproj", "{C6E20F84-3247-4AD6-B051-B073268F73BA}"
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_testcapi", "_testcapi.vcxproj", "{6901D91C-6E48-4BB7-9FEC-700C8131DF1D}"
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_testimportmultiple", "_testimportmultiple.vcxproj", "{36D0C52C-DF4E-45D0-8BC7-E294C3ABC781}"
  EndProject
 -Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_tkinter", "_tkinter.vcxproj", "{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}"
 -EndProject
@@ -36,7 +36,7 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyexpat", "pyexpat.vcxproj", "{D06B6426-4762-44CC-8BAD-D79052507F2F}"
  EndProject
--Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bdist_wininst", "bdist_wininst.vcxproj", "{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}"
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bdist_wininst", "..\PC\bdist_wininst\bdist_wininst.vcxproj", "{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}"
 -EndProject
 -Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_hashlib", "_hashlib.vcxproj", "{447F05A8-F581-4CAC-A466-5AC7936E207E}"
 -EndProject
@@ -44,4 +44,4 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
 -EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_multiprocessing", "_multiprocessing.vcxproj", "{9E48B300-37D1-11DD-8C41-005056C00008}"
  EndProject
- Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ssl", "ssl.vcxproj", "{E5B04CC0-EB4C-42AB-B4DC-18EF95F864B0}"
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "python3dll", "python3dll.vcxproj", "{885D4898-D08D-4091-9C40-C700CFE3FC5A}"

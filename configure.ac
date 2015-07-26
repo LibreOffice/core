@@ -8161,7 +8161,7 @@ int main(int argc, char **argv) {
 internal)
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
-    PYTHON_VERSION_MINOR=3
+    PYTHON_VERSION_MINOR=5
     PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.3
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
