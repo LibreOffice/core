@@ -1050,7 +1050,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 }
 
 static void
-lok_doc_view_open_document_in_thread (gpointer data)
+openDocumentInThread (gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
@@ -1099,7 +1099,7 @@ lok_doc_view_open_document_in_thread (gpointer data)
 }
 
 static void
-lok_doc_view_set_part_in_thread(gpointer data)
+setPartInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
@@ -1111,7 +1111,7 @@ lok_doc_view_set_part_in_thread(gpointer data)
 }
 
 static void
-lok_doc_view_set_partmode_in_thread(gpointer data)
+setPartmodeInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
@@ -1123,7 +1123,7 @@ lok_doc_view_set_partmode_in_thread(gpointer data)
 }
 
 static void
-lok_doc_view_set_edit_in_thread(gpointer data)
+setEditInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
@@ -1145,7 +1145,7 @@ lok_doc_view_set_edit_in_thread(gpointer data)
 }
 
 static void
-lok_doc_view_post_command_in_thread (gpointer data)
+postCommandInThread (gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
@@ -1210,19 +1210,19 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
     switch (pLOEvent->m_nType)
     {
     case LOK_LOAD_DOC:
-        lok_doc_view_open_document_in_thread (task);
+        openDocumentInThread(task);
         break;
     case LOK_POST_COMMAND:
-        lok_doc_view_post_command_in_thread (task);
+        postCommandInThread(task);
         break;
     case LOK_SET_EDIT:
-        lok_doc_view_set_edit_in_thread(task);
+        setEditInThread(task);
         break;
     case LOK_SET_PART:
-        lok_doc_view_set_part_in_thread(task);
+        setPartInThread(task);
         break;
     case LOK_SET_PARTMODE:
-        lok_doc_view_set_partmode_in_thread(task);
+        setPartmodeInThread(task);
         break;
     case LOK_POST_KEY:
         postKeyEventInThread(task);
