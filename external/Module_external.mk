@@ -85,7 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,PAGEMAKER,libpagemaker) \
 	$(call gb_Helper_optional,POPPLER,poppler) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
-	$(call gb_Helper_optional,PYTHON,python3) \
+	$(call gb_Helper_optional,PYTHON,$(if $(filter $(PYTHON_VERSION_MINOR),3),python33,python3)) \
 	$(call gb_Helper_optional,REDLAND,redland) \
 	$(call gb_Helper_optional,REVENGE,librevenge) \
 	$(call gb_Helper_optional,RHINO,rhino) \

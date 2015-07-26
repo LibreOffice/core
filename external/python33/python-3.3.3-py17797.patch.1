@@ -1,0 +1,45 @@
+http://bugs.python.org/issue17797
+http://connect.microsoft.com/VisualStudio/feedback/details/785119/
+
+Visual Studio 2012 changed return value for fileno function that breaks
+when python tries to check/setup stdin/out/err
+GetStdHandle on Windows XP behaves contrary to the documentation...
+
+diff --git a/Python/pythonrun.c b/Python/pythonrun.c
+index 91d56b7..d28ffc7 100644
+--- a/Python/pythonrun.c
++++ b/Python/pythonrun.c
+@@ -1015,13 +1015,28 @@ error:
+ static int
+ is_valid_fd(int fd)
+ {
+-    int dummy_fd;
+     if (fd < 0 || !_PyVerify_fd(fd))
+         return 0;
+-    dummy_fd = dup(fd);
+-    if (dummy_fd < 0)
+-        return 0;
+-    close(dummy_fd);
++
++#if defined(MS_WINDOWS) && defined(HAVE_FSTAT)
++    /* dup (DuplicateHandle) doesn't say fd is a valid *file* handle.
++     * It could be a current thread pseudo-handle.
++     */
++    {
++        struct stat buf;
++        if (fstat(fd, &buf) < 0 && (errno == EBADF || errno == ENOENT))
++            return 0;
++    }
++#else
++    {
++        int dummy_fd;
++        dummy_fd = dup(fd);
++        if (dummy_fd < 0)
++            return 0;
++        close(dummy_fd);
++    }
++#endif
++
+     return 1;
+ }
+ 
