@@ -889,7 +889,17 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
             {
                 g_info("LOKDocView_Impl::signalButton: end of drag graphic handle #%d", i);
                 priv->m_bInDragGraphicHandles[i] = false;
-                priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x, priv->m_fZoom), pixelToTwip(pEvent->y, priv->m_fZoom));
+
+                GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+                LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+                pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+                pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
+                pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
+                g_task_set_task_data(task, pLOEvent, g_free);
+
+                g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+                g_object_unref(task);
+
                 return FALSE;
             }
         }
@@ -898,7 +908,17 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
         {
             g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
             priv->m_bInDragGraphicSelection = false;
-            priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x, priv->m_fZoom), pixelToTwip(pEvent->y, priv->m_fZoom));
+
+            GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+            LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+            pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_END;
+            pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
+            pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
+            g_task_set_task_data(task, pLOEvent, g_free);
+
+            g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+            g_object_unref(task);
+
             return FALSE;
         }
     }
@@ -937,10 +957,17 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
                 {
                     g_info("LOKDocView_Impl::signalButton: start of drag graphic handle #%d", i);
                     priv->m_bInDragGraphicHandles[i] = true;
-                    priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument,
-                                                             LOK_SETGRAPHICSELECTION_START,
-                                                             pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom),
-                                                             pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom));
+
+                    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+                    LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+                    pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
+                    pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
+                    pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
+                    g_task_set_task_data(task, pLOEvent, g_free);
+
+                    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+                    g_object_unref(task);
+
                     return FALSE;
                 }
             }
@@ -1063,7 +1090,17 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     {
         g_info("lcl_signalMotion: start of drag graphic selection");
         priv->m_bInDragGraphicSelection = true;
-        priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument, LOK_SETGRAPHICSELECTION_START, pixelToTwip(pEvent->x, priv->m_fZoom), pixelToTwip(pEvent->y, priv->m_fZoom));
+
+        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        LOEvent* pLOEvent = new LOEvent(LOK_SET_GRAPHIC_SELECTION);
+        pLOEvent->m_nSetGraphicSelectionType = LOK_SETGRAPHICSELECTION_START;
+        pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
+        pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
+        g_task_set_task_data(task, pLOEvent, g_free);
+
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_object_unref(task);
+
         return FALSE;
     }
 
@@ -1081,6 +1118,20 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     g_object_unref(task);
 
     return FALSE;
+}
+
+static void
+setGraphicSelectionInThread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+
+    priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument,
+                                                   pLOEvent->m_nSetGraphicSelectionType,
+                                                   pLOEvent->m_nSetGraphicSelectionX,
+                                                   pLOEvent->m_nSetGraphicSelectionY);
 }
 
 static void
@@ -1281,6 +1332,9 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         break;
     case LOK_POST_MOUSE_EVENT:
         postMouseEventInThread(task);
+        break;
+    case LOK_SET_GRAPHIC_SELECTION:
+        setGraphicSelectionInThread(task);
         break;
     }
 
