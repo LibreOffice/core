@@ -138,7 +138,8 @@ enum
     LOK_SET_PARTMODE,
     LOK_SET_PART,
     LOK_POST_KEY,
-    LOK_PAINT_TILE
+    LOK_PAINT_TILE,
+    LOK_POST_MOUSE_EVENT
 };
 
 /**
@@ -185,6 +186,14 @@ struct LOEvent
     int m_nPaintTileX;
     int m_nPaintTileY;
     float m_fPaintTileZoom;
+    ///@}
+
+    /// @name postMouseEvent parameters
+    ///@{
+    int m_nPostMouseEventType;
+    int m_nPostMouseEventX;
+    int m_nPostMouseEventY;
+    int m_nPostMouseEventCount;
     ///@}
 
     /// Constructor to instantiate an object of type `type`.
