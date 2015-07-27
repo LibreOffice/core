@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_83e25f9e",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-27T15:54:31Z",
+      "side": 1,
+      "message": "the test method is missing an \"o\" - it\u0027s \"OOoXML\" not to be confused with \"OOXML\" the Microsoft format",
+      "revId": "3b850aa5f4b15ce8f417d0ee83ad99bc7e603a7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
