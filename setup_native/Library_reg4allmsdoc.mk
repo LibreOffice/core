@@ -31,12 +31,14 @@ $(eval $(call gb_Library_add_exception_objects,reg4allmsdoc,\
 $(eval $(call gb_Library_use_system_win32_libs,reg4allmsdoc,\
 	libcmt \
 	libcpmt \
+	libucrt \
 	msi \
 	kernel32 \
 	user32 \
 	advapi32 \
 	shell32 \
 	shlwapi \
+	vcruntime \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -29,8 +29,10 @@ $(eval $(call gb_Library_add_exception_objects,regactivex,\
 $(eval $(call gb_Library_use_system_win32_libs,regactivex,\
 	libcmt \
 	libcpmt \
+	libucrt \
 	kernel32 \
 	msi \
+	vcruntime \
 ))
 
 # vim: set noet sw=4 ts=4:
