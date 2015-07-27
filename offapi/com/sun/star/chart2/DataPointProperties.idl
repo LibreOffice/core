@@ -20,6 +20,7 @@
 #define com_sun_star_chart2_DataPointProperties_idl
 
 #include <com/sun/star/beans/PropertySet.idl>
+#include <com/sun/star/drawing/FillProperties.idl>
 #include <com/sun/star/awt/Gradient.idl>
 #include <com/sun/star/style/XStyle.idl>
 #include <com/sun/star/drawing/Hatch.idl>
@@ -45,6 +46,15 @@ service DataPointProperties
     /** to give access to the properties required by this service.
     */
     service ::com::sun::star::beans::PropertySet;
+
+    /** to give access to the fill properties
+
+        Note that there is access for some of them
+        through some alias.
+
+        @since LibreOffice 5.1
+    */
+    service ::com::sun::star::drawing::FillProperties;
 
 
     /** points to a style that also supports this service (but not

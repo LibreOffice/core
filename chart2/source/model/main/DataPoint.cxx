@@ -284,7 +284,8 @@ void DataPoint::fireModifyEvent()
 
 Sequence< OUString > DataPoint::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 3 );
+    Sequence< OUString > aServices( 4 );
+    aServices[ 0 ] = "com.sun.star.drawing.FillProperties";
     aServices[ 0 ] = "com.sun.star.chart2.DataPoint";
     aServices[ 1 ] = "com.sun.star.chart2.DataPointProperties";
     aServices[ 2 ] = "com.sun.star.beans.PropertySet";
