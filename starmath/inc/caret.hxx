@@ -218,7 +218,7 @@ private:
  * n3 -> n4 [label="0"];
  * n4 [label="SmTextNode: A (5)"];
  * n3 -> n5 [label="1"];
- * n5 [label="SmMathSymbolNode:  (6)"];
+ * n5 [label="SmMathSymbolNode: + (6)"];
  * n3 -> n6 [label="2"];
  * n6 [label="SmBinVerNode (7)"];
  * n6 -> n7 [label="0"];
@@ -228,7 +228,7 @@ private:
  * n8 -> n9 [label="0"];
  * n9 [label="SmTextNode: B (10)"];
  * n8 -> n10 [label="1"];
- * n10 [label="SmMathSymbolNode: ⋅ (11)"];
+ * n10 [label="SmMathSymbolNode: &#183; (11)"];
  * n8 -> n11 [label="2"];
  * n11 [label="SmTextNode: C (12)"];
  * n6 -> n12 [label="1"];
@@ -296,7 +296,7 @@ private:
  * n8 -> n9 [label="0"];
  * n9 [label="SmTextNode: B (10)"];
  * n8 -> n10 [label="1"];
- * n10 [label="SmMathSymbolNode: ⋅ (11)"];
+ * n10 [label="SmMathSymbolNode: &#183; (11)"];
  * n8 -> n11 [label="2"];
  * n11 [label="SmTextNode: C (12)"];
  * }
