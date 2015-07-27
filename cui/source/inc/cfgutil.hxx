@@ -74,22 +74,25 @@ struct SfxStylesInfo_Impl
         static OUString generateCommand(const OUString& sFamily, const OUString& sStyle);
 };
 
-#define SFX_CFGGROUP_FUNCTION           1
-#define SFX_CFGFUNCTION_SLOT            2
-#define SFX_CFGGROUP_SCRIPTCONTAINER    3
-#define SFX_CFGFUNCTION_SCRIPT          4
-#define SFX_CFGGROUP_STYLES             5
+enum class SfxCfgKind
+{
+    GROUP_FUNCTION           = 1,
+    FUNCTION_SLOT            = 2,
+    GROUP_SCRIPTCONTAINER    = 3,
+    FUNCTION_SCRIPT          = 4,
+    GROUP_STYLES             = 5,
+};
 
 struct SfxGroupInfo_Impl
 {
-    sal_uInt16  nKind;
+    SfxCfgKind  nKind;
     sal_uInt16  nUniqueID;
     void*       pObject;
-    bool    bWasOpened;
+    bool        bWasOpened;
     OUString    sCommand;
     OUString    sLabel;
 
-                SfxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, void* pObj = 0 ) :
+                SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = 0 ) :
                     nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
 };
 

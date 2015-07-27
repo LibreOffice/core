@@ -294,13 +294,13 @@ void SfxConfigFunctionListBox::ClearAll()
     {
         SfxGroupInfo_Impl *pData = &aArr[i];
 
-        if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
+        if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
         {
             OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
             delete pScriptURI;
         }
 
-        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        if ( pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -320,7 +320,7 @@ OUString SfxConfigFunctionListBox::GetSelectedScriptURI()
     if ( pEntry )
     {
         SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
-        if ( pData && ( pData->nKind == SFX_CFGFUNCTION_SCRIPT ) )
+        if ( pData && ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT ) )
             return *static_cast<OUString*>(pData->pObject);
     }
     return OUString();
@@ -428,7 +428,7 @@ void SfxConfigGroupListBox::ClearAll()
     for ( sal_uInt16 i=0; i<nCount; ++i )
     {
         SfxGroupInfo_Impl *pData = &aArr[i];
-        if (pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER)
+        if (pData->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER)
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -473,7 +473,7 @@ void SfxConfigGroupListBox::InitModule()
                 { continue; }
 
             SvTreeListEntry*        pEntry = InsertEntry(sGroupName, NULL);
-            SfxGroupInfo_Impl* pInfo   = new SfxGroupInfo_Impl(SFX_CFGGROUP_FUNCTION, rGroupID);
+            SfxGroupInfo_Impl* pInfo   = new SfxGroupInfo_Impl(SfxCfgKind::GROUP_FUNCTION, rGroupID);
             pEntry->SetUserData(pInfo);
         }
     }
@@ -584,7 +584,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
             rootNode->acquire();
 
             SfxGroupInfo_Impl *pInfo =
-                new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
+                new SfxGroupInfo_Impl( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get()));
 
             OUString aTitle(pImp->m_sDlgMacros);
@@ -655,7 +655,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                             theChild->acquire();
 
                             SfxGroupInfo_Impl* pInfo =
-                                new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                new SfxGroupInfo_Impl(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                                     0, static_cast<void *>( theChild.get()));
 
                             Image aImage = GetImage( theChild, xCtx, bIsRootNode );
@@ -696,7 +696,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         OUString sStyle( pImp->m_aStrGroupStyles );
         SvTreeListEntry *pEntry = InsertEntry( sStyle, 0 );
-        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
+        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
         pEntry->EnableChildrenOnDemand( true );
@@ -837,9 +837,9 @@ void SfxConfigGroupListBox::GroupSelected()
     SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
     pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
-    if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
-             pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER &&
-             pInfo->nKind != SFX_CFGGROUP_STYLES )
+    if ( pInfo->nKind != SfxCfgKind::GROUP_FUNCTION &&
+             pInfo->nKind != SfxCfgKind::GROUP_SCRIPTCONTAINER &&
+             pInfo->nKind != SfxCfgKind::GROUP_STYLES )
     {
         pFunctionListBox->SetUpdateMode(true);
         return;
@@ -847,7 +847,7 @@ void SfxConfigGroupListBox::GroupSelected()
 
     switch ( pInfo->nKind )
     {
-        case SFX_CFGGROUP_FUNCTION :
+        case SfxCfgKind::GROUP_FUNCTION :
         {
             sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
@@ -860,7 +860,7 @@ void SfxConfigGroupListBox::GroupSelected()
                 const css::frame::DispatchInformation& rInfo      = lCommands[i];
                 OUString                        sUIName    = MapCommand2UIName(rInfo.Command);
                 SvTreeListEntry*                           pFuncEntry = pFunctionListBox->InsertEntry(sUIName, NULL);
-                SfxGroupInfo_Impl*                     pGrpInfo   = new SfxGroupInfo_Impl(SFX_CFGFUNCTION_SLOT, 0);
+                SfxGroupInfo_Impl*                     pGrpInfo   = new SfxGroupInfo_Impl(SfxCfgKind::FUNCTION_SLOT, 0);
                 pGrpInfo->sCommand = rInfo.Command;
                 pGrpInfo->sLabel   = sUIName;
                 pFuncEntry->SetUserData(pGrpInfo);
@@ -869,7 +869,7 @@ void SfxConfigGroupListBox::GroupSelected()
             break;
         }
 
-        case SFX_CFGGROUP_SCRIPTCONTAINER:
+        case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
             if ( !GetChildCount( pEntry ) )
             {
@@ -899,7 +899,7 @@ void SfxConfigGroupListBox::GroupSelected()
                                 value >>= uri;
 
                                 OUString* pScriptURI = new OUString( uri );
-                                SfxGroupInfo_Impl* pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGFUNCTION_SCRIPT, 0, pScriptURI );
+                                SfxGroupInfo_Impl* pGrpInfo = new SfxGroupInfo_Impl( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI );
 
                                 Image aImage = GetImage( children[n], Reference< XComponentContext >(), false );
                                 SvTreeListEntry* pNewEntry =
@@ -924,7 +924,7 @@ void SfxConfigGroupListBox::GroupSelected()
             break;
         }
 
-        case SFX_CFGGROUP_STYLES :
+        case SfxCfgKind::GROUP_STYLES :
         {
             SfxStyleInfo_Impl* pFamily = static_cast<SfxStyleInfo_Impl*>(pInfo->pObject);
             if (pFamily)
@@ -937,7 +937,7 @@ void SfxConfigGroupListBox::GroupSelected()
                 {
                     SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(*pIt);
                     SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry( pStyle->sLabel, NULL );
-                    SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pStyle );
+                    SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, pStyle );
                     pFunctionListBox->aArr.push_back( pGrpInfo );
                     pGrpInfo->sCommand = pStyle->sCommand;
                     pGrpInfo->sLabel = pStyle->sLabel;
@@ -997,7 +997,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
     pInfo->bWasOpened = true;
     switch ( pInfo->nKind )
     {
-        case SFX_CFGGROUP_SCRIPTCONTAINER:
+        case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
             if ( !GetChildCount( pEntry ) )
             {
@@ -1052,7 +1052,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                                 theChild->acquire();
 
                                 SfxGroupInfo_Impl* pGrpInfo =
-                                    new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                    new SfxGroupInfo_Impl(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
                                 Image aImage = GetImage( theChild, Reference< XComponentContext >(), false );
@@ -1089,7 +1089,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
             break;
         }
 
-        case SFX_CFGGROUP_STYLES:
+        case SfxCfgKind::GROUP_STYLES:
         {
             if ( !GetChildCount( pEntry ) )
             {
@@ -1101,7 +1101,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                 {
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(*pIt);
                     SvTreeListEntry* pStyleEntry = InsertEntry( pFamily->sLabel, pEntry );
-                    SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pFamily );
+                    SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, pFamily );
                     aArr.push_back( pGrpInfo );
                     pStyleEntry->SetUserData( pGrpInfo );
                     pStyleEntry->EnableChildrenOnDemand( false );
