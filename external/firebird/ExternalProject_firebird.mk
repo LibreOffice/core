@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			--without-editline \
 			--disable-superserver \
 			--with-system-icu --without-fbsample --without-fbsample-db \
-			$(if $(ENABLE_DEBUG),--enable-debug) \
+			$(if $(filter-out MSC,$(COM)),$(if $(ENABLE_DEBUG),--enable-debug)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
