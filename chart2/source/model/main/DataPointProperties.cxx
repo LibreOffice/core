@@ -59,7 +59,22 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
+        Property( "FillColor",
+                  PROP_DATAPOINT_COLOR,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
         Property( "Transparency",
+                  PROP_DATAPOINT_TRANSPARENCY,
+                  cppu::UnoType<sal_Int16>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "FillTransparence",
                   PROP_DATAPOINT_TRANSPARENCY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
@@ -82,7 +97,23 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
+        Property( "FillTransparenceGradientName",
+                  PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
         Property( "GradientName",
+                  PROP_DATAPOINT_GRADIENT_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( "FillGradientName",
                   PROP_DATAPOINT_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
@@ -97,7 +128,22 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
+        beans::Property( "FillGradientStepCount",
+                  PROP_DATAPOINT_GRADIENT_STEPCOUNT,
+                  cppu::UnoType<sal_Int16>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
         Property( "HatchName",
+                  PROP_DATAPOINT_HATCH_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( "FillHatchName",
                   PROP_DATAPOINT_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
@@ -111,6 +157,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID  ));
+
     rOutProperties.push_back(
         Property( "FillBackground",
                   PROP_DATAPOINT_FILL_BACKGROUND,

@@ -255,7 +255,7 @@ void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("Transparency", css::uno::makeAny(rItem.GetValue()));
+    xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(rItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillFloatTransparence(
@@ -268,7 +268,7 @@ void ChartAreaPanel::setFillFloatTransparence(
 
     if (!rItem.IsEnabled())
     {
-        xPropSet->setPropertyValue("TransparencyGradientName", css::uno::makeAny(OUString()));
+        xPropSet->setPropertyValue("FillTransparenceGradientName", css::uno::makeAny(OUString()));
         return;
     }
 
@@ -276,7 +276,7 @@ void ChartAreaPanel::setFillFloatTransparence(
     css::uno::Any aGradientVal;
     rItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
     OUString aNewName = PropertyHelper::addTransparencyGradientUniqueNameToTable(aGradientVal, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aName);
-    xPropSet->setPropertyValue("TransparencyGradientName", css::uno::makeAny(aNewName));
+    xPropSet->setPropertyValue("FillTransparenceGradientName", css::uno::makeAny(aNewName));
 }
 
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
@@ -298,7 +298,7 @@ void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
 
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue("Color", css::uno::makeAny(rColorItem.GetValue()));
+    xPropSet->setPropertyValue("FillColor", css::uno::makeAny(rColorItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
@@ -311,7 +311,7 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
 
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue("GradientName", css::uno::makeAny(rGradientItem.GetValue()));
+    xPropSet->setPropertyValue("FillGradientName", css::uno::makeAny(rGradientItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
@@ -324,7 +324,7 @@ void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
 
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
-    xPropSet->setPropertyValue("HatchName", css::uno::makeAny(rHatchItem.GetValue()));
+    xPropSet->setPropertyValue("FillHatchName", css::uno::makeAny(rHatchItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
@@ -355,18 +355,18 @@ void ChartAreaPanel::updateData()
     updateFillStyle(false, true, &aFillStyleItem);
 
     sal_uInt16 nFillTransparence = 0;
-    xPropSet->getPropertyValue("Transparency") >>= nFillTransparence;
+    xPropSet->getPropertyValue("FillTransparence") >>= nFillTransparence;
     SfxUInt16Item aTransparenceItem(0, nFillTransparence);
     updateFillTransparence(false, true, &aTransparenceItem);
 
     OUString aGradientName;
-    xPropSet->getPropertyValue("GradientName") >>= aGradientName;
+    xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
     XGradient xGradient = getXGradientForName(mxModel, aGradientName);
     XFillGradientItem aGradientItem(aGradientName, xGradient);
     updateFillGradient(false, true, &aGradientItem);
 
     OUString aHatchName;
-    xPropSet->getPropertyValue("HatchName") >>= aHatchName;
+    xPropSet->getPropertyValue("FillHatchName") >>= aHatchName;
     XHatch xHatch = getXHatchFromName(mxModel, aHatchName);
     XFillHatchItem aHatchItem(aHatchName, xHatch);
     updateFillHatch(false, true, &aHatchItem);
@@ -392,7 +392,7 @@ void ChartAreaPanel::updateData()
     delete pBitmapItem;
 
     OUString aFillFloatTransparenceName;
-    xPropSet->getPropertyValue("TransparencyGradientName") >>= aFillFloatTransparenceName;
+    xPropSet->getPropertyValue("FillTransparenceGradientName") >>= aFillFloatTransparenceName;
     XFillFloatTransparenceItem aFillFloatTransparenceItem;
     if (!aFillFloatTransparenceName.isEmpty())
         aFillFloatTransparenceItem.SetEnabled(true);
