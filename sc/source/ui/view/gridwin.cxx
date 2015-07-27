@@ -1727,7 +1727,7 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
 
     // obtain the bounding box of the text in first non-empty cell
     // to the left
-    Rectangle aRect(aOutputData.LayoutStrings(false, false, ScAddress(nNonEmptyX, nPosY, nTab)));
+    Rectangle aRect(aOutputData.LayoutStrings(*this, false, false, ScAddress(nNonEmptyX, nPosY, nTab)));
 
     SetMapMode(aCurrentMapMode);
 

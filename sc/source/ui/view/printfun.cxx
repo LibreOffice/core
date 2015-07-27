@@ -552,7 +552,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     aOutputData.DrawShadow();
     aOutputData.DrawFrame(*pDev);
-    aOutputData.DrawStrings();
+    aOutputData.DrawStrings(*pDev);
 
     if (!bMetaFile && pViewData)
         pDev->SetMapMode(pViewData->GetLogicMode(pViewData->GetActivePart()));
@@ -1614,7 +1614,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     {
         aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
         aOutputData.DrawFrame(*pDev);
-        aOutputData.DrawStrings();
+        aOutputData.DrawStrings(*pDev);
         aOutputData.DrawEdit(false);
     }
 
