@@ -78,6 +78,12 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfexport,\
     writerfilter/util/writerfilter \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
     xmloff/util/xo \
+    chart2/source/chartcore \
+    chart2/source/controller/chartcontroller \
+    sc/util/sc \
+    sd/util/sd \
+    svx/util/svxcore \
+    xmloff/source/transform/xof \
 ))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sw_odfexport,\

@@ -22,6 +22,10 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/fileformat.h>
 
 class Test : public SwModelTestBase
 {
@@ -195,6 +199,38 @@ DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
         // (emulated - hopefully not with rounding errors)
         assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity-name='Transparency_20_1']/style:background-image[@style:repeat='stretch' and @draw:opacity='43%']", 1);
     }
+}
+
+DECLARE_ODFEXPORT_TEST(testOOoxmlEmbedded, "oooxml_embedded.sxw")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
+    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
+    uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier1(xAccess->getByName("Object1"), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xObj1(xEOSupplier1->getEmbeddedObject());
+    uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier2(xAccess->getByName("Object2"), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xObj2(xEOSupplier2->getEmbeddedObject());
+    uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier3(xAccess->getByName("Object3"), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xObj3(xEOSupplier3->getEmbeddedObject());
+    uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier4(xAccess->getByName("Object4"), uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xObj4(xEOSupplier4->getEmbeddedObject());
+    //checking first object
+    uno::Reference<document::XStorageBasedDocument> xSBDoc1(xObj1, uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xStorage1(xSBDoc1->getDocumentStorage());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(SOFFICE_FILEFORMAT_8), comphelper::OStorageHelper::GetXStorageFormat(xStorage1));
+    //checking second object
+    uno::Reference<document::XStorageBasedDocument> xSBDoc2(xObj2, uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xStorage2(xSBDoc2->getDocumentStorage());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(SOFFICE_FILEFORMAT_8), comphelper::OStorageHelper::GetXStorageFormat(xStorage2));
+    //checking third object
+    uno::Reference<document::XStorageBasedDocument> xSBDoc3(xObj3, uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xStorage3(xSBDoc3->getDocumentStorage());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(SOFFICE_FILEFORMAT_8), comphelper::OStorageHelper::GetXStorageFormat(xStorage3));
+    //checking fourth object
+    uno::Reference<document::XStorageBasedDocument> xSBDoc4(xObj4, uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xStorage4(xSBDoc4->getDocumentStorage());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(SOFFICE_FILEFORMAT_8), comphelper::OStorageHelper::GetXStorageFormat(xStorage4));
 }
 
 DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
