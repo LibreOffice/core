@@ -77,3 +77,5 @@ mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/mai
 # xlsExtLst for features introduced by excel 2010
 xlsExtLst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main
 
+# LibreOffice's own extensions
+loext                  http://schemas.libreoffice.org/

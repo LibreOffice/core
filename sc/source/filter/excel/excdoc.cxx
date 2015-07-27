@@ -822,6 +822,17 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     if( pExpChangeTrack )
         pExpChangeTrack->WriteXml( rStrm );
 
+    const ScCalcConfig& rCalcConfig = GetDoc().GetCalcConfig();
+
+    // don't write if it hasn't been read or explicitly changed
+    if ( rCalcConfig.mbHasStringRefSyntax )
+    {
+        XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
+        xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
+        xExtLst->SaveXml(rStrm);
+    }
+
+
     rWorkbook->endElement( XML_workbook );
     rWorkbook.reset();
 
