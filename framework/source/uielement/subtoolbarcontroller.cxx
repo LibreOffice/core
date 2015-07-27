@@ -260,7 +260,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
 sal_Bool SubToolBarController::opensSubToolbar()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    return sal_True;
+    return !m_aLastCommand.isEmpty();
 }
 
 OUString SubToolBarController::getSubToolbarName()
