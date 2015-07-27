@@ -329,6 +329,7 @@ public:
 
     SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=NULL) const;
     TextChain *GetTextChain() const;
+    void SetNextLinkInTextChain(SdrTextObj *pPrev, SdrTextObj *pNext);
 
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;

@@ -46,6 +46,7 @@ TextChain::~TextChain()
     // XXX: Should free all LinkProperties
 }
 
+/*
 bool TextChain::IsLinkInChain(SdrTextObj *) const
 {
     return true;    // XXX: Should make an actual check
@@ -105,6 +106,7 @@ SdrTextObj *TextChain::impGetPrevLink(const SdrTextObj *pTextObj) const
         return NULL;
     }
 }
+*/
 
 
 ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)

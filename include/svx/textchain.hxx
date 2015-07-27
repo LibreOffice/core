@@ -137,11 +137,11 @@ class TextChain {
     TextChain();
     ~TextChain();
 
-    void AppendLink(SdrTextObj *);
-    bool IsLinkInChain(SdrTextObj *) const;
+    //void AppendLink(SdrTextObj *);
+    //bool IsLinkInChain(SdrTextObj *) const;
 
-    SdrTextObj *GetNextLink(const SdrTextObj *) const;
-    SdrTextObj *GetPrevLink(const SdrTextObj *) const;
+    //SdrTextObj *GetNextLink(const SdrTextObj *) const;
+    //SdrTextObj *GetPrevLink(const SdrTextObj *) const;
 
     ChainLinkId GetId(const SdrTextObj *) const;
     ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
@@ -160,8 +160,8 @@ class TextChain {
     LinkPropertiesMap maLinkPropertiesMap;
 
     private:
-    SdrTextObj *impGetNextLink(const SdrTextObj *) const;
-    SdrTextObj *impGetPrevLink(const SdrTextObj *) const;
+    //SdrTextObj *impGetNextLink(const SdrTextObj *) const;
+    //SdrTextObj *impGetPrevLink(const SdrTextObj *) const;
 
 
 };

@@ -2082,18 +2082,50 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 
 SdrTextObj* SdrTextObj::GetNextLinkInChain() const
 {
+    /*
     if (GetTextChain())
         return GetTextChain()->GetNextLink(this);
 
     return NULL;
+    */
+
+    return mpNextInChain;
+}
+
+void SdrTextObj::SetNextLinkInChain(SdrTextObj *pNextObj)
+{
+    // Basically a doubly linked list implementation
+
+    SdrTextObj *pOldNextObj = mpNextInChain;
+
+    // Replace next link
+    mpNextInChain = pNextObj;
+    // Deal with old next link's prev link
+    if (pOldNextObj) {
+        pOldNextObj->mpPrevInChain = NULL;
+    }
+
+    // Deal with new next link's prev link
+    if (mpNextInChain) {
+        if (mpNextInChain->mpPrevInChain)
+            mpNextInChain->mpPrevInChain->mpNextInChain = NULL;
+        mpNextInChain->mpPrevInChain = this;
+    }
+
+    // TODO: Introduce check for circular chains
+
 }
 
 SdrTextObj* SdrTextObj::GetPrevLinkInChain() const
 {
+    /*
     if (GetTextChain())
         return GetTextChain()->GetPrevLink(this);
 
     return NULL;
+    */
+
+    return mpPrevInChain;
 }
 
 void SdrTextObj::SetPreventChainable()

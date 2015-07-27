@@ -230,6 +230,7 @@ protected:
     //FIXME(matteocam)
     // the successor in a chain
     SdrTextObj *mpNextInChain = NULL;
+    SdrTextObj *mpPrevInChain = NULL;
 
     // indicating the for its text to be chained to another text box
     bool mbToBeChained : 1;
@@ -367,6 +368,7 @@ public:
     // Chaining // XXX: how are we using IsToBeChained at the moment?
     bool IsToBeChained() const;
     SdrTextObj *GetNextLinkInChain() const;
+    void SetNextLinkInChain(SdrTextObj *);
     SdrTextObj *GetPrevLinkInChain() const;
     bool IsChainable() const;
     void SetPreventChainable();
