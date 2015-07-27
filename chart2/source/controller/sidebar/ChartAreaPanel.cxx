@@ -11,11 +11,13 @@
 
 #include "ChartController.hxx"
 #include "ViewElementListProvider.hxx"
+#include "PropertyHelper.hxx"
 
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
+#include <svx/unomid.hxx>
 
 namespace chart { namespace sidebar {
 
@@ -264,7 +266,17 @@ void ChartAreaPanel::setFillFloatTransparence(
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("TransparencyGradientName", css::uno::makeAny(rItem.GetValue()));
+    if (!rItem.IsEnabled())
+    {
+        xPropSet->setPropertyValue("TransparencyGradientName", css::uno::makeAny(OUString()));
+        return;
+    }
+
+    OUString aName = rItem.GetName();
+    css::uno::Any aGradientVal;
+    rItem.QueryValue(aGradientVal, MID_FILLGRADIENT);
+    OUString aNewName = PropertyHelper::addTransparencyGradientUniqueNameToTable(aGradientVal, css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY_THROW), aName);
+    xPropSet->setPropertyValue("TransparencyGradientName", css::uno::makeAny(aNewName));
 }
 
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
@@ -364,9 +376,10 @@ void ChartAreaPanel::updateData()
     GraphicObject xBitmap = getXBitmapFromName(mxModel, aBitmapName);
     XFillBitmapItem aBitmapItem(aBitmapName, xBitmap);
     XFillBitmapItem* pBitmapItem = NULL;
+    DrawModelWrapper* pModelWrapper = NULL;
     try
     {
-        DrawModelWrapper* pModelWrapper = getDrawModelWrapper(mxModel);
+        pModelWrapper = getDrawModelWrapper(mxModel);
         if (pModelWrapper)
         {
             pBitmapItem = aBitmapItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
@@ -377,6 +390,19 @@ void ChartAreaPanel::updateData()
     }
     updateFillBitmap(false, true, pBitmapItem ? pBitmapItem : &aBitmapItem);
     delete pBitmapItem;
+
+    OUString aFillFloatTransparenceName;
+    xPropSet->getPropertyValue("TransparencyGradientName") >>= aFillFloatTransparenceName;
+    XFillFloatTransparenceItem aFillFloatTransparenceItem;
+    if (!aFillFloatTransparenceName.isEmpty())
+        aFillFloatTransparenceItem.SetEnabled(true);
+
+    aFillFloatTransparenceItem.SetName(aFillFloatTransparenceName);
+    XFillFloatTransparenceItem* pCorrectFloatTransparenceItem = aFillFloatTransparenceItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
+    XFillFloatTransparenceItem* pFillFloatTransparenceItem = pCorrectFloatTransparenceItem ? pCorrectFloatTransparenceItem : &aFillFloatTransparenceItem;
+    pFillFloatTransparenceItem->SetGradientValue(getXGradientForName(mxModel, pFillFloatTransparenceItem->GetName()));
+    updateFillFloatTransparence(false, true, pFillFloatTransparenceItem);
+    delete pCorrectFloatTransparenceItem;
 }
 
 void ChartAreaPanel::modelInvalid()
