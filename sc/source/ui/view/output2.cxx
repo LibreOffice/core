@@ -1424,18 +1424,18 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
     return eHorJustContext;
 }
 
-void ScOutputData::DrawStrings( bool bPixelToLogic )
+void ScOutputData::DrawStrings(vcl::RenderContext& rRenderContext, bool bPixelToLogic )
 {
-    LayoutStrings(bPixelToLogic, true);
+    LayoutStrings(rRenderContext, bPixelToLogic, true);
 }
 
-Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
+Rectangle ScOutputData::LayoutStrings(vcl::RenderContext& rRenderContext, bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
 {
-    OSL_ENSURE( mpDev == mpRefDevice ||
-                mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
+    OSL_ENSURE( &rRenderContext == mpRefDevice ||
+                rRenderContext.GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
                 "LayoutStrings: unterschiedliche MapUnits ?!?!" );
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, rRenderContext.GetExtOutDevData() );
 
     sc::IdleSwitch aIdleSwitch(*mpDoc, false);
     ScDrawStringsVars aVars( this, bPixelToLogic );
@@ -1961,11 +1961,11 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                             if (bMetaFile)
                             {
-                                mpDev->Push();
-                                mpDev->IntersectClipRegion( aAreaParam.maClipRect );
+                                rRenderContext.Push();
+                                rRenderContext.IntersectClipRegion( aAreaParam.maClipRect );
                             }
                             else
-                                mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
+                                rRenderContext.SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
                         }
 
                         Point aURLStart( nJustPosX, nJustPosY );    // copy before modifying for orientation
@@ -2051,12 +2051,12 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                             if (!bPaint && rAddress.Col() == nX)
                             {
                                 Rectangle aRect;
-                                mpDev->GetTextBoundRect(aRect, aShort);
+                                rRenderContext.GetTextBoundRect(aRect, aShort);
                                 aRect += aDrawTextPos;
                                 return aRect;
                             }
 
-                            if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
+                            if (bMetaFile || pFmtDevice != &rRenderContext || aZoomX != aZoomY)
                             {
                                 size_t nLen = aShort.getLength();
                                 if (aDX.size() < nLen)
@@ -2073,21 +2073,21 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                                 }
 
                                 if (bPaint)
-                                    mpDev->DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
+                                    rRenderContext.DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
                             }
                             else
                             {
                                 if (bPaint)
-                                    mpDev->DrawText(aDrawTextPos, aShort);
+                                    rRenderContext.DrawText(aDrawTextPos, aShort);
                             }
                         }
 
                         if ( bHClip || bVClip )
                         {
                             if (bMetaFile)
-                                mpDev->Pop();
+                                rRenderContext.Pop();
                             else
-                                mpDev->SetClipRegion();
+                                rRenderContext.SetClipRegion();
                         }
 
                         // PDF: whole-cell hyperlink from formula?
@@ -2095,7 +2095,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         if (bPaint && bHasURL)
                         {
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
-                            lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
+                            lcl_DoHyperlinkResult(&rRenderContext, aURLRect, aCell);
                         }
                     }
                 }

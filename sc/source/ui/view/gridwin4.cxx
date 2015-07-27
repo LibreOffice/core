@@ -747,14 +747,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     pContentDev->SetMapMode(MAP_PIXEL);
 
     if ( !bLogicText )
-        aOutputData.DrawStrings(false);     // in pixel MapMode
+        aOutputData.DrawStrings(*pContentDev, false);     // in pixel MapMode
 
     // edit cells and printer-metrics text must be before the buttons
     // (DataPilot buttons contain labels in UI font)
 
     pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
     if ( bLogicText )
-        aOutputData.DrawStrings(true);      // in logic MapMode if bLogicText is set
+        aOutputData.DrawStrings(*pContentDev, true);      // in logic MapMode if bLogicText is set
     aOutputData.DrawEdit(true);
 
     // the buttons are painted in absolute coordinates

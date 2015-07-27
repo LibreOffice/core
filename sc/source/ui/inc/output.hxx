@@ -298,10 +298,10 @@ public:
     void    SetSnapPixel( bool bSet = true );
 
     void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage);
-    void    DrawStrings( bool bPixelToLogic = false );
+    void    DrawStrings(vcl::RenderContext& rRenderContext, bool bPixelToLogic = false );
 
     /// Draw all strings, or provide Rectangle where the text (defined by rAddress) would be drawn.
-    Rectangle LayoutStrings(bool bPixelToLogic = false, bool bPaint = true, const ScAddress &rAddress = ScAddress());
+    Rectangle LayoutStrings(vcl::RenderContext& rRenderContext, bool bPixelToLogic = false, bool bPaint = true, const ScAddress &rAddress = ScAddress());
 
     void    DrawDocumentBackground();
     void    DrawBackground(vcl::RenderContext& rRenderContext);
