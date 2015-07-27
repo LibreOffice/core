@@ -110,7 +110,6 @@ public:
 
 #define FILE_SELECTION_CHANGED  1
 #define DIRECTORY_CHANGED       2
-#define HELP_REQUESTED          3
 #define CTRL_STATE_CHANGED      4
 #define DIALOG_SIZE_CHANGED     5
 

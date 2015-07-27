@@ -323,9 +323,6 @@ void SvtFilePicker::notify( sal_Int16 _nEventId, sal_Int16 _nControlId )
         case DIRECTORY_CHANGED:
             m_xListener->directoryChanged( aEvent );
             break;
-        case HELP_REQUESTED:
-            m_xListener->helpRequested( aEvent );
-            break;
         case CTRL_STATE_CHANGED:
             m_xListener->controlStateChanged( aEvent );
             break;
