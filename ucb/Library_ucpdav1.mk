@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,ucpdav1))
 
-$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1))
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1))
 
 $(eval $(call gb_Library_use_sdk_api,ucpdav1))
 
@@ -23,41 +23,6 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	ucbhelper \
 	$(gb_UWINAPI) \
 ))
-
-ifeq ($(WITH_WEBDAV),neon)
-
-$(eval $(call gb_Library_use_externals,ucpdav1,\
-	boost_headers \
-	libxml2 \
-	neon \
-	openssl \
-))
-
-$(eval $(call gb_Library_add_exception_objects,ucpdav1,\
-	ucb/source/ucp/webdav-neon/ContentProperties \
-	ucb/source/ucp/webdav-neon/DateTimeHelper \
-	ucb/source/ucp/webdav-neon/DAVProperties \
-	ucb/source/ucp/webdav-neon/DAVResourceAccess \
-	ucb/source/ucp/webdav-neon/DAVSessionFactory \
-	ucb/source/ucp/webdav-neon/LinkSequence \
-	ucb/source/ucp/webdav-neon/LockEntrySequence \
-	ucb/source/ucp/webdav-neon/LockSequence \
-	ucb/source/ucp/webdav-neon/NeonHeadRequest \
-	ucb/source/ucp/webdav-neon/NeonInputStream \
-	ucb/source/ucp/webdav-neon/NeonLockStore \
-	ucb/source/ucp/webdav-neon/NeonPropFindRequest \
-	ucb/source/ucp/webdav-neon/NeonSession \
-	ucb/source/ucp/webdav-neon/NeonUri \
-	ucb/source/ucp/webdav-neon/UCBDeadPropertyValue \
-	ucb/source/ucp/webdav-neon/webdavcontentcaps \
-	ucb/source/ucp/webdav-neon/webdavcontent \
-	ucb/source/ucp/webdav-neon/webdavdatasupplier \
-	ucb/source/ucp/webdav-neon/webdavprovider \
-	ucb/source/ucp/webdav-neon/webdavresultset \
-	ucb/source/ucp/webdav-neon/webdavservices \
-))
-
-else # WITH_WEBDAV == serf
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
@@ -102,8 +67,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav/webdavresultset \
 	ucb/source/ucp/webdav/webdavservices \
  ))
-
-endif # WITH_WEBDAV
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,ucpdav1,\

@@ -1116,44 +1116,6 @@ endif
 
 endef
 
-else ifeq ($(WITH_WEBDAV),neon)
-
-ifneq ($(SYSTEM_NEON),)
-
-define gb_LinkTarget__use_neon
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DNEON_VERSION=0x$(NEON_VERSION) \
-	-DSYSTEM_NEON \
-)
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(NEON_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(NEON_LIBS))
-
-endef
-
-else # !SYSTEM_NEON
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
-	neon \
-))
-
-define gb_LinkTarget__use_neon
-$(call gb_LinkTarget_use_unpacked,$(1),neon)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,neon/src) \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	neon \
-)
-
-endef
-
-endif # SYSTEM_NEON
-
 endif # WITH_WEBDAV
 
 ifneq ($(SYSTEM_REDLAND),)
@@ -1605,20 +1567,9 @@ $(call gb_LinkTarget_add_libs,$(1),$(GNUTLS_LIBS))
 
 endef
 
-define gb_LinkTarget__use_libgcrypt
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(LIBGCRYPT_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(LIBGCRYPT_LIBS))
-
-endef
-
 else # !DISABLE_OPENSSL
 
 gb_LinkTarget__use_gnutls:=
-gb_LinkTarget__use_libgcrypt:=
 
 endif # DISABLE_OPENSSL
 

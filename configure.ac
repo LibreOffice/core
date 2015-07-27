@@ -1245,11 +1245,6 @@ AC_ARG_ENABLE(vlc,
         [Enable building with the (experimental) VLC avmedia backend.]),
 ,enable_vlc=no)
 
-AC_ARG_ENABLE(neon,
-    AS_HELP_STRING([--disable-neon],
-        [Disable neon and the compilation of webdav binding.]),
-,)
-
 AC_ARG_ENABLE([eot],
     [AS_HELP_STRING([--enable-eot],
         [Enable support for Embedded OpenType fonts.])],
@@ -1567,7 +1562,7 @@ AC_ARG_WITH(tls,
     AS_HELP_STRING([--with-tls],
         [Decides which TLS/SSL and cryptographic implementations to use for
          LibreOffice's code. Notice that this doesn't apply for depending
-         libraries like "neon", for example. Default is to use OpenSSL
+         libraries. Default is to use OpenSSL
          although NSS is also possible. Notice that selecting NSS restricts
          the usage of OpenSSL in LO's code but selecting OpenSSL doesn't
          restrict by now the usage of NSS in LO's code. Possible values:
@@ -1940,14 +1935,6 @@ AC_ARG_WITH(jpeg-turbo,
     AS_HELP_STRING([--with-jpeg-turbo],
         [Use internal libjpeg-turbo library.]),,
     [with_jpeg_turbo=auto])
-
-AC_ARG_WITH(webdav,
-    AS_HELP_STRING([--with-webdav],
-        [Specify which library to use for webdav implementation.
-         Possible values: "neon", "serf", "no". The default value is "neon".
-         Example: --with-webdav="serf"]),
-    WITH_WEBDAV=$withval,
-    WITH_WEBDAV="neon")
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -8628,7 +8615,6 @@ if test "$with_system_curl" = "yes"; then
     libo_MINGW_TRY_DLL([nss3])
     libo_MINGW_TRY_DLL([ssl3])
     libo_MINGW_TRY_DLL([libgpg-error])
-    libo_MINGW_TRY_DLL([libgcrypt])
     libo_MINGW_TRY_DLL([libssh2])
     ENABLE_CURL=TRUE
 elif test $_os = iOS; then
@@ -9268,11 +9254,10 @@ AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
-if test "$enable_neon" = "no" -o "$enable_mpl_subset" = "yes"; then
-    WITH_WEBDAV="serf"
-fi
 if test $_os = iOS -o $_os = Android; then
     WITH_WEBDAV="no"
+else
+    WITH_WEBDAV="serf"
 fi
 AC_MSG_CHECKING([for webdav library])
 case "$WITH_WEBDAV" in
@@ -9296,20 +9281,6 @@ serf)
         test -n "${MSVC_USE_DEBUG_RUNTIME}" && SERF_LIB_DIR="Debug"
         SERF_LIBS="${WORKDIR}/UnpackedTarball/serf/${SERF_LIB_DIR}/serf-1.lib"
     fi
-    ;;
-neon)
-    AC_MSG_RESULT([neon])
-    # Check for system neon
-    libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
-    if test "$with_system_neon" = "yes"; then
-        NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-        libo_MINGW_CHECK_DLL([libneon])
-        libo_MINGW_TRY_DLL([libtasn1])
-        libo_MINGW_TRY_DLL([libgnutls])
-    else
-        NEON_VERSION=0295
-    fi
-    AC_SUBST(NEON_VERSION)
     ;;
 *)
     AC_MSG_RESULT([none, disabled])
@@ -9400,23 +9371,6 @@ else
 fi
 
 AC_SUBST([DISABLE_OPENSSL])
-
-dnl ===================================================================
-dnl Check for building gnutls
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use gnutls])
-if test "$WITH_WEBDAV" = "neon" -a "$with_system_neon" = no -a "$enable_openssl" = "no"; then
-    AC_MSG_RESULT([yes])
-    AM_PATH_LIBGCRYPT()
-    PKG_CHECK_MODULES(GNUTLS, [gnutls],,
-        AC_MSG_ERROR([[Disabling OpenSSL was requested, but GNUTLS is not
-                      available in the system to use as replacement.]]))
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_SUBST([LIBGCRYPT_CFLAGS])
-AC_SUBST([LIBGCRYPT_LIBS])
 
 dnl ===================================================================
 dnl Check for system redland
@@ -12974,9 +12928,6 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     if test "$enable_lotuswordpro" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
-    fi
-    if test "$WITH_WEBDAV" = "neon"; then
-        AC_MSG_ERROR([need --with-webdav=serf or --without-webdav - webdav support.])
     fi
     if test "x$enable_ext_mariadb_connector" = "xyes"; then
         AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])
