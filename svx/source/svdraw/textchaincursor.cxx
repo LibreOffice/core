@@ -77,6 +77,8 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     ESelection aCurSel = pOLV->GetSelection();
 
+    ESelection aEndSelPrevBox(100000, 100000);
+
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
     OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
     sal_Int32 nLastParaLen = aLastParaText.getLength();
@@ -110,7 +112,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     if (nCode == KEY_LEFT && bAtStartOfTextContent && pPrevLink)
     {
         *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
-        *pOutSel = ESelection(100000, 100000); // Set at end of selection
+        *pOutSel = aEndSelPrevBox; // Set at end of selection
         *bOutHandled = true; // Nothing more to do than move cursor
         return;
     }
@@ -119,7 +121,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     if (nCode == KEY_BACKSPACE && bAtStartOfTextContent && pPrevLink)
     {
         *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
-        *pOutSel = ESelection(100000, 100000); // Set at end of selection
+        *pOutSel = aEndSelPrevBox; // Set at end of selection
         *bOutHandled = false; // We need to delete characters after moving cursor
         return;
     }
