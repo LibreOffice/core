@@ -31,6 +31,8 @@ $(eval $(call gb_Library_add_exception_objects,reg4allmsdoc,\
 $(eval $(call gb_Library_use_system_win32_libs,reg4allmsdoc,\
 	libcmt \
 	libcpmt \
+	$(if $(filter-out 120,$(VCVER)),libucrt) \
+	$(if $(filter-out 120,$(VCVER)),libvcruntime) \
 	msi \
 	kernel32 \
 	user32 \
