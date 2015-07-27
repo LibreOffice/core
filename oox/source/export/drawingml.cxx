@@ -1746,10 +1746,14 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             mpFS->singleElementNS( XML_a, XML_buSzPct,
                                    XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
         if( bHasFontDesc )
+        {
+            if ( SVX_NUM_CHAR_SPECIAL == nNumberingType )
+                aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS( XML_a, XML_buFont,
                                    XML_typeface, aFontDesc.Name.toUtf8().getStr(),
                                    XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
                                    FSEND );
+        }
 
         OUString pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
 
@@ -1762,7 +1766,6 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         }
         else
         {
-            aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS(XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND);
         }
     }
