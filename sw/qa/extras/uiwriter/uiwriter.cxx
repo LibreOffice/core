@@ -10,6 +10,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -49,6 +50,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
+#include <comphelper/propertysequence.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -93,6 +95,7 @@ public:
     void testUndoCharAttribute();
     void testTdf86639();
     void testTdf90883TableBoxGetCoordinates();
+    void testDde();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -130,6 +133,7 @@ public:
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
+    CPPUNIT_TEST(testDde);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -978,6 +982,44 @@ void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
     pos = aBoxes[1]->GetCoordinates();
     CPPUNIT_ASSERT_EQUAL( 1, (int)pos.X() );
     CPPUNIT_ASSERT_EQUAL( 2, (int)pos.Y() );
+}
+
+void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+void SwUiWriterTest::testDde()
+{
+    // Type asdf and copy it.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("asdf");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", aPropertyValues);
+
+    // Go before the selection and paste as a DDE link.
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::LINK))}
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    // Make sure that the document starts with a field now, and its expanded string value contains asdf.
+    const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
+    CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
