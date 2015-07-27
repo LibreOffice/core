@@ -95,9 +95,8 @@ namespace
             ppMark != rMarkAccess.getAllMarksEnd();
             ++ppMark)
         {
-            if ( IDocumentMarkAccess::GetType( *(ppMark->get()) ) == IDocumentMarkAccess::MarkType::DDE_BOOKMARK)
+            if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get()))
             {
-                ::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get());
                 if (!pBkmk)
                     return NULL;
                 if (
