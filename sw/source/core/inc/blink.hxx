@@ -26,7 +26,9 @@ class SwTextFrm;
 
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
-#include <boost/ptr_container/ptr_set.hpp>
+
+#include <set>
+#include <memory>
 
 class SwBlinkPortion
 {
@@ -61,11 +63,20 @@ public:
     { return reinterpret_cast<sal_IntPtr>(pPor) == reinterpret_cast<sal_IntPtr>(rBlinkPortion.pPor); }
 };
 
-class SwBlinkList : public boost::ptr_set<SwBlinkPortion> {};
+struct SwBlinkPortion_Less
+{
+    bool operator()(std::unique_ptr<SwBlinkPortion> const& lhs,
+                    std::unique_ptr<SwBlinkPortion> const& rhs)
+    {
+        return (*lhs) < (*rhs);
+    }
+};
+
+typedef std::set<std::unique_ptr<SwBlinkPortion>, SwBlinkPortion_Less> SwBlinkSet;
 
 class SwBlink
 {
-    SwBlinkList     aList;
+    SwBlinkSet      m_List;
     AutoTimer       aTimer;
     bool            bVisible;
 

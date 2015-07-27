@@ -62,12 +62,12 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
         aTimer.SetTimeout( BLINK_ON_TIME );
     else
         aTimer.SetTimeout( BLINK_OFF_TIME );
-    if( !aList.empty() )
+    if (!m_List.empty())
     {
 
-        for( SwBlinkList::iterator it = aList.begin(); it != aList.end(); )
+        for (SwBlinkSet::iterator it = m_List.begin(); it != m_List.end(); )
         {
-            const SwBlinkPortion* pTmp = &*it;
+            const SwBlinkPortion* pTmp = it->get();
             if( pTmp->GetRootFrm() &&
                 pTmp->GetRootFrm()->GetCurrShell() )
             {
@@ -108,7 +108,7 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
             else // Portions without a shell can be removed from the list
-                it = aList.erase(it);
+                it = m_List.erase(it);
         }
     }
     else // If the list is empty, the timer can be stopped
@@ -118,19 +118,18 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
 void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
                       const SwTextFrm *pTextFrm, sal_uInt16 nDir )
 {
-    SwBlinkPortion *pBlinkPor = new SwBlinkPortion( pPor, nDir );
+    std::unique_ptr<SwBlinkPortion> pBlinkPor(new SwBlinkPortion(pPor, nDir));
 
-    SwBlinkList::iterator it = aList.find( *pBlinkPor );
-    if( it != aList.end()  )
+    SwBlinkSet::iterator it = m_List.find( pBlinkPor );
+    if (it != m_List.end())
     {
-        (*it).SetPos( rPoint );
-        delete pBlinkPor;
+        (*it)->SetPos( rPoint );
     }
     else
     {
         pBlinkPor->SetPos( rPoint );
         pBlinkPor->SetRootFrm( pTextFrm->getRootFrm() );
-        aList.insert( pBlinkPor );
+        m_List.insert(std::move(pBlinkPor));
         pTextFrm->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )
             const_cast<SwLineLayout*>(static_cast<const SwLineLayout*>(pPor))->SetBlinking();
@@ -144,13 +143,13 @@ void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
 {
     // setting direction to 0 because direction does not matter
     // for this operation
-    SwBlinkPortion aBlink( pOld, 0 );
-    SwBlinkList::iterator it = aList.find( aBlink );
-    if( it != aList.end()  )
+    std::unique_ptr<SwBlinkPortion> pBlinkPortion(new SwBlinkPortion(pOld, 0));
+    SwBlinkSet::iterator it = m_List.find( pBlinkPortion );
+    if (it != m_List.end())
     {
-        SwBlinkPortion* aTmp = new SwBlinkPortion( &*it, pNew );
-        aList.erase( it );
-        aList.insert( aTmp );
+        std::unique_ptr<SwBlinkPortion> pTmp(new SwBlinkPortion(it->get(), pNew));
+        m_List.erase( it );
+        m_List.insert(std::move(pTmp));
     }
 }
 
@@ -158,16 +157,16 @@ void SwBlink::Delete( const SwLinePortion* pPor )
 {
     // setting direction to 0 because direction does not matter
     // for this operation
-    SwBlinkPortion aBlink( pPor, 0 );
-    aList.erase( aBlink );
+    std::unique_ptr<SwBlinkPortion> pBlinkPortion(new SwBlinkPortion(pPor, 0));
+    m_List.erase( pBlinkPortion );
 }
 
 void SwBlink::FrmDelete( const SwRootFrm* pRoot )
 {
-    for( SwBlinkList::iterator it = aList.begin(); it != aList.end(); )
+    for (SwBlinkSet::iterator it = m_List.begin(); it != m_List.end(); )
     {
-        if( pRoot == (*it).GetRootFrm() )
-            aList.erase( it++ );
+        if (pRoot == (*it)->GetRootFrm())
+            m_List.erase( it++ );
         else
             ++it;
     }
