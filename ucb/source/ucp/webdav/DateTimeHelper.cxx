@@ -127,29 +127,29 @@ sal_Int32 DateTimeHelper::convertDayToInt (const OUString& day)
 
 sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& month)
 {
-    if (month.equalsAscii("Jan"))
+    if (month == "Jan")
         return 1;
-    else if (month.equalsAscii("Feb"))
+    else if (month == "Feb")
         return 2;
-    else if (month.equalsAscii("Mar"))
+    else if (month == "Mar")
         return 3;
-    else if (month.equalsAscii("Apr"))
+    else if (month == "Apr")
         return 4;
-    else if (month.equalsAscii("May"))
+    else if (month == "May")
         return 5;
-    else if (month.equalsAscii("Jun"))
+    else if (month == "Jun")
         return 6;
-    else if (month.equalsAscii("Jul"))
+    else if (month == "Jul")
         return 7;
-    else if (month.equalsAscii("Aug"))
+    else if (month == "Aug")
         return 8;
-    else if (month.equalsAscii("Sep"))
+    else if (month == "Sep")
         return 9;
-    else if (month.equalsAscii("Oct"))
+    else if (month == "Oct")
         return 10;
-    else if (month.equalsAscii("Nov"))
+    else if (month == "Nov")
         return 11;
-    else if (month.equalsAscii("Dec"))
+    else if (month == "Dec")
         return 12;
     else
         return 0;

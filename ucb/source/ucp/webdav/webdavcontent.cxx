@@ -1134,7 +1134,7 @@ Content::queryCreatableContentsInfo()
     uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
     // document.
-    aSeq.getArray()[ 0 ].Type = OUString( WEBDAV_CONTENT_TYPE );
+    aSeq.getArray()[ 0 ].Type = WEBDAV_CONTENT_TYPE;
     aSeq.getArray()[ 0 ].Attributes
         = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
           | ucb::ContentInfoAttribute::KIND_DOCUMENT;
@@ -1148,7 +1148,7 @@ Content::queryCreatableContentsInfo()
     aSeq.getArray()[ 0 ].Properties = aDocProps;
 
     // folder.
-    aSeq.getArray()[ 1 ].Type = OUString( WEBDAV_COLLECTION_TYPE );
+    aSeq.getArray()[ 1 ].Type = WEBDAV_COLLECTION_TYPE;
     aSeq.getArray()[ 1 ].Attributes
         = ucb::ContentInfoAttribute::KIND_FOLDER;
 

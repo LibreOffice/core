@@ -230,7 +230,7 @@ namespace
     void WebDAVContext::splitName(const OUString& rSource)
     {
         const sal_Int32 nLen(rSource.getLength());
-        maNamespace = "";
+        maNamespace.clear();
         maName = rSource;
 
         if(nLen)
@@ -457,7 +457,8 @@ namespace
                             case WebDAVName_response:
                             {
                                 // response start, reset Href and status and maResponseProperties
-                                maHref = maStatus = "";
+                                maHref.clear();
+                                maStatus.clear();
 
                                 if(isCollectingProperties())
                                 {
@@ -807,7 +808,7 @@ namespace
                 if(aNew.getLength())
                 {
                     // add one char when appending (see html1.1 spec)
-                    aNew += OUString(' ');
+                    aNew += " ";
                 }
 
                 aNew += aTrimmedChars;

@@ -202,7 +202,7 @@ OUString SerfUri::GetPathBaseNameUnescaped () const
 void SerfUri::AppendPath (const OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += OUString("/");
+        mPath += "/";
 
     mPath += rPath;
     calculateURI ();
