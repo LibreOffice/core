@@ -58,7 +58,6 @@ EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 
 #define EDITUNDO_REMOVECHARS        100
 #define EDITUNDO_CONNECTPARAS       101
-#define EDITUNDO_REMOVEFEATURE      102
 #define EDITUNDO_MOVEPARAGRAPHS     103
 #define EDITUNDO_INSERTFEATURE      104
 #define EDITUNDO_SPLITPARA          105
@@ -68,7 +67,6 @@ EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 #define EDITUNDO_CUT                109
 #define EDITUNDO_PASTE              110
 #define EDITUNDO_INSERT             111
-#define EDITUNDO_SRCHANDREPL        112
 #define EDITUNDO_MOVEPARAS          113
 #define EDITUNDO_PARAATTRIBS        114
 #define EDITUNDO_ATTRIBS            115
@@ -76,7 +74,6 @@ EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 #define EDITUNDO_READ               117
 #define EDITUNDO_STYLESHEET         118
 #define EDITUNDO_REPLACEALL         119
-#define EDITUNDO_STRETCH            120
 #define EDITUNDO_RESETATTRIBS       121
 #define EDITUNDO_INDENTBLOCK        122
 #define EDITUNDO_UNINDENTBLOCK      123

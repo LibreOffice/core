@@ -2488,7 +2488,6 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
     {
         case EDITUNDO_REMOVECHARS:
         case EDITUNDO_CONNECTPARAS:
-        case EDITUNDO_REMOVEFEATURE:
         case EDITUNDO_DELCONTENT:
         case EDITUNDO_DELETE:
         case EDITUNDO_CUT:
@@ -2507,13 +2506,11 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_READ:
             aComment = EE_RESSTR(RID_EDITUNDO_INSERT);
         break;
-        case EDITUNDO_SRCHANDREPL:
         case EDITUNDO_REPLACEALL:
             aComment = EE_RESSTR(RID_EDITUNDO_REPLACE);
         break;
         case EDITUNDO_ATTRIBS:
         case EDITUNDO_PARAATTRIBS:
-        case EDITUNDO_STRETCH:
             aComment = EE_RESSTR(RID_EDITUNDO_SETATTRIBS);
         break;
         case EDITUNDO_RESETATTRIBS:
