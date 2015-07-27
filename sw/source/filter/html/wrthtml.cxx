@@ -448,11 +448,11 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     aHTMLControls.DeleteAndDestroyAll();
 
-    if( !aChrFormatInfos.empty() )
-        aChrFormatInfos.clear();
+    if (!m_CharFormatInfos.empty())
+        m_CharFormatInfos.clear();
 
-    if( !aTextCollInfos.empty() )
-        aTextCollInfos.clear();
+    if (!m_TextCollInfos.empty())
+        m_TextCollInfos.clear();
 
     if(!aImgMapNames.empty())
         aImgMapNames.clear();

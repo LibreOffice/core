@@ -20,8 +20,9 @@
 #define INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
+#include <memory>
 #include <vector>
+#include <set>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -263,7 +264,16 @@ struct SwHTMLFormatInfo
 
 };
 
-typedef boost::ptr_set<SwHTMLFormatInfo> SwHTMLFormatInfos;
+struct SwHTMLFormatInfo_Less
+{
+    bool operator()(std::unique_ptr<SwHTMLFormatInfo> const& lhs,
+                    std::unique_ptr<SwHTMLFormatInfo> const& rhs)
+    {
+        return (*lhs) < (*rhs);
+    }
+};
+
+typedef std::set<std::unique_ptr<SwHTMLFormatInfo>, SwHTMLFormatInfo_Less> SwHTMLFormatInfos;
 
 class IDocumentStylePoolAccess;
 
@@ -296,8 +306,8 @@ public:
     std::vector<OUString> aOutlineMarks;
     std::vector<sal_uInt32> aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden Forms
-    SwHTMLFormatInfos aChrFormatInfos;
-    SwHTMLFormatInfos aTextCollInfos;
+    SwHTMLFormatInfos m_CharFormatInfos;
+    SwHTMLFormatInfos m_TextCollInfos;
     INetFormats aINetFormats;             // die "offenen" INet-Attribute
     SwHTMLTextFootnotes *pFootEndNotes;
 

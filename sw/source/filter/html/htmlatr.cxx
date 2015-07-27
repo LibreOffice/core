@@ -523,12 +523,12 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // Jetzt holen wir das Token und ggf. die Klasse
-    SwHTMLFormatInfo aFormatInfo( &rFormat );
+    std::unique_ptr<SwHTMLFormatInfo> pTmpInfo(new SwHTMLFormatInfo(&rFormat));
     SwHTMLFormatInfo *pFormatInfo;
-    SwHTMLFormatInfos::iterator it = rHWrt.aTextCollInfos.find( aFormatInfo );
-    if( it != rHWrt.aTextCollInfos.end() )
+    SwHTMLFormatInfos::iterator it = rHWrt.m_TextCollInfos.find( pTmpInfo );
+    if (it != rHWrt.m_TextCollInfos.end())
     {
-        pFormatInfo = &*it;
+        pFormatInfo = it->get();
     }
     else
     {
@@ -536,7 +536,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                                       rHWrt.bCfgOutStyles, rHWrt.eLang,
                                       rHWrt.nCSS1Script,
                                       false );
-        rHWrt.aTextCollInfos.insert( pFormatInfo );
+        rHWrt.m_TextCollInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
         if( rHWrt.aScriptParaStyles.count( rFormat.GetName() ) )
             pFormatInfo->bScriptDependent = true;
     }
@@ -1590,17 +1590,17 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
                                                 SwHTMLFormatInfos& rFormatInfos )
 {
     SwHTMLFormatInfo *pFormatInfo;
-    const SwHTMLFormatInfo aFormatInfo( &rFormat );
-    SwHTMLFormatInfos::iterator it = rFormatInfos.find( aFormatInfo );
-    if( it != rFormatInfos.end() )
+    std::unique_ptr<SwHTMLFormatInfo> pTmpInfo(new SwHTMLFormatInfo(&rFormat));
+    SwHTMLFormatInfos::iterator it = rFormatInfos.find( pTmpInfo );
+    if (it != rFormatInfos.end())
     {
-        pFormatInfo = &*it;
+        pFormatInfo = it->get();
     }
     else
     {
         pFormatInfo = new SwHTMLFormatInfo( &rFormat, pDoc, pTemplate,
                                       bOutStyles );
-        rFormatInfos.insert( pFormatInfo );
+        rFormatInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
         if ( rScriptTextStyles.count( rFormat.GetName() ) )
             pFormatInfo->bScriptDependent = true;
     }
@@ -2309,7 +2309,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     if( aFormatInfo.pItemSet )
     {
         aEndPosLst.Insert( *aFormatInfo.pItemSet, 0, nEnd + nOffset,
-                           rHTMLWrt.aChrFormatInfos, false, true );
+                           rHTMLWrt.m_CharFormatInfos, false, true );
     }
 
     if( !aOutlineText.isEmpty() || rHTMLWrt.pFormatFootnote )
@@ -2368,14 +2368,14 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 if( rHTMLWrt.bWriteAll )
                     aEndPosLst.Insert( pHt->GetAttr(), nHtStt + nOffset,
                                        nHtEnd + nOffset,
-                                       rHTMLWrt.aChrFormatInfos );
+                                       rHTMLWrt.m_CharFormatInfos );
                 else
                 {
                     sal_Int32 nTmpStt = nHtStt < nStrPos ? nStrPos : nHtStt;
                     sal_Int32 nTmpEnd = nHtEnd < nEnd ? nHtEnd : nEnd;
                     aEndPosLst.Insert( pHt->GetAttr(), nTmpStt + nOffset,
                                        nTmpEnd + nOffset,
-                                       rHTMLWrt.aChrFormatInfos );
+                                       rHTMLWrt.m_CharFormatInfos );
                 }
                 continue;
                 // aber nicht ausgeben, das erfolgt spaeter !!
@@ -2423,7 +2423,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                             // Bereich aufspannen werden ignoriert
                             aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
                                                *pHt->End() + nOffset,
-                                               rHTMLWrt.aChrFormatInfos );
+                                               rHTMLWrt.m_CharFormatInfos );
                         }
                     }
                     else
@@ -2460,7 +2460,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 if( RES_DRAWFRMFMT == pFrameFormat->Which() )
                     aEndPosLst.Insert( *static_cast<const SwDrawFrameFormat *>(pFrameFormat),
                                         nStrPos + nOffset,
-                                        rHTMLWrt.aChrFormatInfos );
+                                        rHTMLWrt.m_CharFormatInfos );
             }
 
             aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
@@ -2954,22 +2954,22 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     {
         const SwCharFormat* pFormat = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                  RES_POOLCHR_INET_NORMAL );
-        SwHTMLFormatInfo aFormatInfo( pFormat );
-        SwHTMLFormatInfos::const_iterator it = rHTMLWrt.aChrFormatInfos.find( aFormatInfo );
-        if( it != rHTMLWrt.aChrFormatInfos.end() )
+        std::unique_ptr<SwHTMLFormatInfo> pFormatInfo(new SwHTMLFormatInfo(pFormat));
+        auto const it = rHTMLWrt.m_CharFormatInfos.find( pFormatInfo );
+        if (it != rHTMLWrt.m_CharFormatInfos.end())
         {
-            bScriptDependent = it->bScriptDependent;
+            bScriptDependent = (*it)->bScriptDependent;
         }
     }
     if( !bScriptDependent )
     {
         const SwCharFormat* pFormat = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                  RES_POOLCHR_INET_VISIT );
-        SwHTMLFormatInfo aFormatInfo( pFormat );
-        SwHTMLFormatInfos::const_iterator it = rHTMLWrt.aChrFormatInfos.find( aFormatInfo );
-        if( it != rHTMLWrt.aChrFormatInfos.end() )
+        std::unique_ptr<SwHTMLFormatInfo> pFormatInfo(new SwHTMLFormatInfo(pFormat));
+        auto const it = rHTMLWrt.m_CharFormatInfos.find( pFormatInfo );
+        if (it != rHTMLWrt.m_CharFormatInfos.end())
         {
-            bScriptDependent = it->bScriptDependent;
+            bScriptDependent = (*it)->bScriptDependent;
         }
     }
 
@@ -3113,12 +3113,12 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
     }
 
-    SwHTMLFormatInfo aFormatInfo( pFormat );
-    SwHTMLFormatInfos::const_iterator it = rHTMLWrt.aChrFormatInfos.find( aFormatInfo );
-    if( it == rHTMLWrt.aChrFormatInfos.end())
+    std::unique_ptr<SwHTMLFormatInfo> pTmpInfo(new SwHTMLFormatInfo(pFormat));
+    SwHTMLFormatInfos::const_iterator it = rHTMLWrt.m_CharFormatInfos.find(pTmpInfo);
+    if (it == rHTMLWrt.m_CharFormatInfos.end())
         return rWrt;
 
-    const SwHTMLFormatInfo *pFormatInfo = &*it;
+    const SwHTMLFormatInfo *pFormatInfo = it->get();
     OSL_ENSURE( pFormatInfo, "Wieso gint es keine Infos ueber die Zeichenvorlage?" );
 
     if( rHTMLWrt.bTagOn )
