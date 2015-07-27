@@ -140,6 +140,8 @@ namespace comphelper
 
     public:
         OInteractionRequest(const ::com::sun::star::uno::Any& _rRequestDescription);
+        OInteractionRequest(const ::com::sun::star::uno::Any& rRequestDescription,
+            css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const& rContinuations);
 
         /// add a new continuation
         void addContinuation(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >& _rxContinuation);

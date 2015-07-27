@@ -44,6 +44,12 @@ namespace comphelper
     {
     }
 
+    OInteractionRequest::OInteractionRequest(const Any& rRequestDescription,
+            Sequence<Reference<XInteractionContinuation>> const& rContinuations)
+        : m_aRequest(rRequestDescription)
+        , m_aContinuations(rContinuations)
+    {
+    }
 
     void OInteractionRequest::addContinuation(const Reference< XInteractionContinuation >& _rxContinuation)
     {

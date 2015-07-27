@@ -19,6 +19,9 @@
 
 
 #include "dp_interact.h"
+
+#include <comphelper/interaction.hxx>
+
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -88,42 +91,6 @@ void InteractionContinuationImpl::select() throw (RuntimeException, std::excepti
     *m_pselect = true;
 }
 
-
-class InteractionRequest :
-    public ::cppu::WeakImplHelper<task::XInteractionRequest>
-{
-    Any m_request;
-    Sequence< Reference<task::XInteractionContinuation> > m_conts;
-
-public:
-    inline InteractionRequest(
-        Any const & request,
-        Sequence< Reference<task::XInteractionContinuation> > const & conts )
-        : m_request( request ),
-          m_conts( conts )
-        {}
-
-    // XInteractionRequest
-    virtual Any SAL_CALL getRequest()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< Reference<task::XInteractionContinuation> >
-    SAL_CALL getContinuations() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-};
-
-// XInteractionRequest
-
-Any InteractionRequest::getRequest() throw (RuntimeException, std::exception)
-{
-    return m_request;
-}
-
-
-Sequence< Reference< task::XInteractionContinuation > >
-InteractionRequest::getContinuations() throw (RuntimeException, std::exception)
-{
-    return m_conts;
-}
-
 } // anon namespace
 
 
@@ -147,7 +114,7 @@ bool interactContinuation( Any const & request,
             conts[ 1 ] = new InteractionContinuationImpl(
                 cppu::UnoType<task::XInteractionAbort>::get(), &abort );
             xInteractionHandler->handle(
-                new InteractionRequest( request, conts ) );
+                new ::comphelper::OInteractionRequest( request, conts ) );
             if (cont || abort) {
                 if (pcont != 0)
                     *pcont = cont;
