@@ -1986,6 +1986,22 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 bool SdrTextObj::IsChainable() const
 {
+    // XXX: Hack to have links together
+    static bool bHasDoneTheLinking = false;
+
+    SdrTextObj *pTxtObj0 =  dynamic_cast< SdrTextObj * >( pPage->GetObj( 0 ) );
+
+    if (!bHasDoneTheLinking && pPage && pPage->GetObjCount() > 1 && this == pTxtObj0)
+    {
+        SdrTextObj *pTxtObj1 =  dynamic_cast< SdrTextObj * >( pPage->GetObj( 1 ) );
+        const_cast<SdrTextObj *>(this)->SetNextLinkInChain(pTxtObj1);
+
+        bHasDoneTheLinking = true;
+    }
+
+
+
+    // XXX
     if (!GetName().startsWith("Chainable")) {
         //fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
         return false;
