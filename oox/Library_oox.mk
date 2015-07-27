@@ -236,6 +236,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ole/oleobjecthelper \
     oox/source/ole/olestorage \
     oox/source/ole/vbacontrol \
+    oox/source/ole/vbaexport \
     oox/source/ole/vbahelper \
     oox/source/ole/vbainputstream \
     oox/source/ole/vbamodule \
