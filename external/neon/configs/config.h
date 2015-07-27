@@ -240,7 +240,11 @@
 #endif
 
 #ifdef WIN32
+#if _MSC_VER >= 1900 // VS 2015
+#define HAVE_SNPRINTF 1
+#else
 #define snprintf _snprintf
+#endif
 #endif
 
 /* Define to 1 if the system has the type `socklen_t'. */
@@ -333,6 +337,9 @@
 /* Define if the timezone global is available */
 #ifndef MACOSX
 #define HAVE_TIMEZONE 1
+#if defined(_MSC_VER) && _MSC_VER >= 1900 // VS 2015
+#define timezone _timezone
+#endif
 #endif
 
 /* Use trio printf replacement library */
