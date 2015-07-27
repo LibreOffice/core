@@ -3919,6 +3919,9 @@ ENABLE_DEBUGINFO_FOR=
 if test -n "$ENABLE_DEBUG"; then
     AC_MSG_CHECKING([whether to use selective debuginfo])
     if test -n "$enable_selective_debuginfo" -a "$enable_selective_debuginfo" != "no"; then
+        if test "$enable_selective_debuginfo" = "yes"; then
+            AC_MSG_ERROR([--enable-selective-debuginfo requires a parameter])
+        fi
         ENABLE_DEBUGINFO_FOR="$enable_selective_debuginfo"
         AC_MSG_RESULT([for "$enable_selective_debuginfo"])
     else
