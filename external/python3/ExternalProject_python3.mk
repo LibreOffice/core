@@ -39,6 +39,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				/p:VisualStudioVersion=11.0) \
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 \
 				/p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
+			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 \
+				/p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
 	,PCBuild)
 
 else
