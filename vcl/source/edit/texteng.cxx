@@ -1747,8 +1747,8 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     TextNode* pNode = pTEParaPortion->GetNode();
     DBG_ASSERT( !pNode->GetText().isEmpty(), "CreateTextPortions: should not be used for empty paragraphs!" );
 
-    std::set<sal_uInt16> aPositions;
-    std::set<sal_uInt16>::iterator aPositionsIt;
+    std::set<sal_Int32> aPositions;
+    std::set<sal_Int32>::iterator aPositionsIt;
     aPositions.insert(0);
 
     sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
@@ -1824,7 +1824,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
 
     if ( aPositionsIt != aPositions.end() )
     {
-        std::set<sal_uInt16>::iterator nextIt = aPositionsIt;
+        std::set<sal_Int32>::iterator nextIt = aPositionsIt;
         for ( ++nextIt; nextIt != aPositions.end(); ++aPositionsIt, ++nextIt )
         {
             TETextPortion* pNew = new TETextPortion( *nextIt - *aPositionsIt );
@@ -2565,8 +2565,8 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
             }
             else
             {
-                sal_uInt16 nTmpStart = nStartPos;
-                sal_uInt16 nTmpEnd = nEndPos;
+                sal_Int32 nTmpStart = nStartPos;
+                sal_Int32 nTmpEnd = nEndPos;
                 do
                 {
                     const TextCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( TEXTATTR_HYPERLINK, nTmpStart, nEndPos );
@@ -2577,7 +2577,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
 
                     if ( pAttr )
                     {
-                        nTmpEnd = std::min( pAttr->GetEnd(), (sal_uInt16) nEndPos );
+                        nTmpEnd = std::min( pAttr->GetEnd(), nEndPos );
 
                         // e.g. <A HREF="http://www.mopo.de/">Morgenpost</A>
                         aText.append( "<A HREF=\"" );

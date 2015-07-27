@@ -1473,8 +1473,8 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 if(pErrorAttrLeft)
                 {
                     boost::scoped_ptr<TextAttrib> pNewError(pErrorAttrLeft->GetAttr().Clone());
-                    sal_uInt16 nStart = pErrorAttrLeft->GetStart();
-                    sal_uInt16 nEnd = pErrorAttrLeft->GetEnd();
+                    const sal_Int32 nStart = pErrorAttrLeft->GetStart();
+                    sal_Int32 nEnd = pErrorAttrLeft->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttrLeft );
                     SetAttrib( *pNewError, 0, nStart, ++nEnd );
                     //only active errors move the mark
@@ -1508,8 +1508,8 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     if(pBackAttrLeft)
                     {
                         boost::scoped_ptr<TextAttrib> pNewBack(pBackAttrLeft->GetAttr().Clone());
-                        sal_uInt16 _nStart = pBackAttrLeft->GetStart();
-                        sal_uInt16 _nEnd = pBackAttrLeft->GetEnd();
+                        const sal_Int32 _nStart = pBackAttrLeft->GetStart();
+                        const sal_Int32 _nEnd = pBackAttrLeft->GetEnd();
                         pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
                         SetAttrib( *pNewBack, 0, _nStart, _nEnd - nAddedChars);
                     }

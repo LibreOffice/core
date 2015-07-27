@@ -139,14 +139,14 @@ class TextCharAttrib
 {
 private:
     TextAttrib*     mpAttr;
-    sal_uInt16          mnStart;
-    sal_uInt16          mnEnd;
+    sal_Int32       mnStart;
+    sal_Int32       mnEnd;
 
 protected:
 
 public:
 
-                    TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+                    TextCharAttrib( const TextAttrib& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
                     TextCharAttrib( const TextCharAttrib& rTextCharAttrib );
                     ~TextCharAttrib();
 
@@ -154,64 +154,64 @@ public:
 
     sal_uInt16          Which() const               { return mpAttr->Which(); }
 
-    sal_uInt16          GetStart() const            { return mnStart; }
-    sal_uInt16&         GetStart()                  { return mnStart; }
+    sal_Int32           GetStart() const            { return mnStart; }
+    sal_Int32&          GetStart()                  { return mnStart; }
 
-    sal_uInt16          GetEnd() const              { return mnEnd; }
-    sal_uInt16&         GetEnd()                    { return mnEnd; }
+    sal_Int32           GetEnd() const              { return mnEnd; }
+    sal_Int32&          GetEnd()                    { return mnEnd; }
 
-    inline sal_uInt16   GetLen() const;
+    inline sal_Int32    GetLen() const;
 
-    inline void     MoveForward( sal_uInt16 nDiff );
-    inline void     MoveBackward( sal_uInt16 nDiff );
+    inline void     MoveForward( sal_Int32 nDiff );
+    inline void     MoveBackward( sal_Int32 nDiff );
 
-    inline void     Expand( sal_uInt16 nDiff );
-    inline void     Collaps( sal_uInt16 nDiff );
+    inline void     Expand( sal_Int32 nDiff );
+    inline void     Collaps( sal_Int32 nDiff );
 
-    inline bool     IsIn( sal_uInt16 nIndex );
-    inline bool     IsInside( sal_uInt16 nIndex );
+    inline bool     IsIn( sal_Int32 nIndex );
+    inline bool     IsInside( sal_Int32 nIndex );
     inline bool     IsEmpty() const;
 
 };
 
-inline sal_uInt16 TextCharAttrib::GetLen() const
+inline sal_Int32 TextCharAttrib::GetLen() const
 {
     DBG_ASSERT( mnEnd >= mnStart, "TextCharAttrib: nEnd < nStart!" );
     return mnEnd-mnStart;
 }
 
-inline void TextCharAttrib::MoveForward( sal_uInt16 nDiff )
+inline void TextCharAttrib::MoveForward( sal_Int32 nDiff )
 {
-    DBG_ASSERT( ((long)mnEnd + nDiff) <= 0xFFFF, "TextCharAttrib: MoveForward?!" );
+    DBG_ASSERT( nDiff <= SAL_MAX_INT32-mnEnd, "TextCharAttrib: MoveForward?!" );
     mnStart = mnStart + nDiff;
     mnEnd = mnEnd + nDiff;
 }
 
-inline void TextCharAttrib::MoveBackward( sal_uInt16 nDiff )
+inline void TextCharAttrib::MoveBackward( sal_Int32 nDiff )
 {
-    DBG_ASSERT( ((long)mnStart - nDiff) >= 0, "TextCharAttrib: MoveBackward?!" );
+    DBG_ASSERT( mnStart >= nDiff, "TextCharAttrib: MoveBackward?!" );
     mnStart = mnStart - nDiff;
     mnEnd = mnEnd - nDiff;
 }
 
-inline void TextCharAttrib::Expand( sal_uInt16 nDiff )
+inline void TextCharAttrib::Expand( sal_Int32 nDiff )
 {
-    DBG_ASSERT( ( ((long)mnEnd + nDiff) <= (long)0xFFFF ), "TextCharAttrib: Expand?!" );
+    DBG_ASSERT( nDiff <= SAL_MAX_INT32-mnEnd, "TextCharAttrib: Expand?!" );
     mnEnd = mnEnd + nDiff;
 }
 
-inline void TextCharAttrib::Collaps( sal_uInt16 nDiff )
+inline void TextCharAttrib::Collaps( sal_Int32 nDiff )
 {
-    DBG_ASSERT( (long)mnEnd - nDiff >= (long)mnStart, "TextCharAttrib: Collaps?!" );
+    DBG_ASSERT( mnEnd-mnStart >= nDiff, "TextCharAttrib: Collaps?!" );
     mnEnd = mnEnd - nDiff;
 }
 
-inline bool TextCharAttrib::IsIn( sal_uInt16 nIndex )
+inline bool TextCharAttrib::IsIn( sal_Int32 nIndex )
 {
     return ( ( mnStart <= nIndex ) && ( mnEnd >= nIndex ) );
 }
 
-inline bool TextCharAttrib::IsInside( sal_uInt16 nIndex )
+inline bool TextCharAttrib::IsInside( sal_Int32 nIndex )
 {
     return ( ( mnStart < nIndex ) && ( mnEnd > nIndex ) );
 }

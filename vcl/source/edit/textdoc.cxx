@@ -28,7 +28,7 @@ static bool CompareStart( const TextCharAttrib& pFirst, const TextCharAttrib& pS
     return pFirst.GetStart() < pSecond.GetStart();
 }
 
-TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd )
+TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_Int32 nStart, sal_Int32 nEnd )
 {
     mpAttr = rAttr.Clone();
     mnStart = nStart,
@@ -67,7 +67,7 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
     if ( pAttrib->IsEmpty() )
         mbHasEmptyAttribs = true;
 
-    const sal_uInt16 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
+    const sal_Int32 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
     bool bInserted = false;
     for (TextCharAttribs::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {

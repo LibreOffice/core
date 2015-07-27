@@ -1506,7 +1506,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
     {
         //current item has been found
         sal_uLong nPara = rSelection.GetStart().GetPara();
-        sal_uInt16 nIndex = pBeginAttrib->GetStart();
+        sal_Int32 nIndex = pBeginAttrib->GetStart();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         const OUString sCurrentItem = pTextEngine->GetText(aEntrySel);
         pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
