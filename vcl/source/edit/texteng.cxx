@@ -490,8 +490,8 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
         OUString aStr( pNode->GetText().copy( rPaM.GetIndex(), nChars ) );
 
         // check if attributes are being deleted or changed
-        sal_uInt16 nStart = rPaM.GetIndex();
-        sal_uInt16 nEnd = nStart + nChars;
+        const sal_Int32 nStart = rPaM.GetIndex();
+        const sal_Int32 nEnd = nStart + nChars;
         for ( sal_uInt16 nAttr = pNode->GetCharAttribs().Count(); nAttr; )
         {
             TextCharAttrib& rAttr = pNode->GetCharAttribs().GetAttrib( --nAttr );
@@ -2542,7 +2542,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
     {
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
 
-        sal_uInt16 nStartPos = 0;
+        sal_Int32  nStartPos = 0;
         sal_Int32  nEndPos = pNode->GetText().getLength();
         if ( nPara == aSel.GetStart().GetPara() )
             nStartPos = aSel.GetStart().GetIndex();

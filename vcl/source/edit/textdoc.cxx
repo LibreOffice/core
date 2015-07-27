@@ -474,7 +474,7 @@ sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSe
         {
             TextNode* pNode = maTextNodes[ nNode ];
 
-            sal_uInt16 nS = 0;
+            sal_Int32 nS = 0;
             sal_Int32 nE = pNode->GetText().getLength();
             if ( pSel && ( nNode == pSel->GetStart().GetPara() ) )
                 nS = pSel->GetStart().GetIndex();

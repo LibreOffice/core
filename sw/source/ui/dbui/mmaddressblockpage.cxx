@@ -1443,7 +1443,7 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     sal_uLong nPara = rSelection.GetStart().GetPara();
-    sal_uInt16 nIndex = rSelection.GetEnd().GetIndex();
+    sal_Int32 nIndex = rSelection.GetEnd().GetIndex();
     ExtTextEngine *pTextEngine = GetTextEngine();
     const TextCharAttrib *pAttrib;
     if(0 != (pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED )))
@@ -1452,7 +1452,7 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 
     // select the new entry
     pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
-    const sal_uInt16 nEnd = pAttrib ? pAttrib->GetEnd() : nIndex;
+    const sal_Int32 nEnd = pAttrib ? pAttrib->GetEnd() : nIndex;
     TextSelection aEntrySel(TextPaM(nPara, nIndex), TextPaM(nPara, nEnd));
     pTextView->SetSelection(aEntrySel);
     Invalidate();

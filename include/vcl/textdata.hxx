@@ -31,17 +31,17 @@ class TextPaM
 {
 private:
     sal_uLong           mnPara;
-    sal_uInt16          mnIndex;
+    sal_Int32           mnIndex;
 
 public:
-                    TextPaM()                               { mnPara = 0, mnIndex = 0; }
-                    TextPaM( sal_uLong nPara, sal_uInt16 nIndex )   { mnPara = nPara, mnIndex = nIndex; }
+                    TextPaM() : mnPara(0), mnIndex(0) {}
+                    TextPaM( sal_uLong nPara, sal_Int32 nIndex ) : mnPara(nPara), mnIndex(nIndex) {}
 
     sal_uLong           GetPara() const     { return mnPara; }
     sal_uLong&          GetPara()           { return mnPara; }
 
-    sal_uInt16          GetIndex() const    { return mnIndex; }
-    sal_uInt16&         GetIndex()          { return mnIndex; }
+    sal_Int32           GetIndex() const    { return mnIndex; }
+    sal_Int32&          GetIndex()          { return mnIndex; }
 
     inline bool     operator == ( const TextPaM& rPaM ) const;
     inline bool     operator != ( const TextPaM& rPaM ) const;

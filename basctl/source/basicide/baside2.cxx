@@ -703,8 +703,7 @@ void ModulWindow::BasicAddWatch()
         if ( !aWord.isEmpty() )
         {
             TextSelection aSel( aWordStart );
-            sal_uInt16& rIndex = aSel.GetEnd().GetIndex();
-            rIndex = rIndex + aWord.getLength();
+            aSel.GetEnd().GetIndex() += aWord.getLength();
             GetEditView()->SetSelection( aSel );
             bAdd = true;
         }
