@@ -37,6 +37,7 @@
 
 #include <unordered_map>
 
+class FreetypeManager;
 class FtFontInfo;
 class GlyphCachePeer;
 class GlyphData;
@@ -99,7 +100,7 @@ private:
     mutable int             mnGlyphCount;
     ServerFont*             mpCurrentGCFont;
 
-    class FreetypeManager*  mpFtManager;
+    FreetypeManager*        mpFtManager;
 };
 
 class GlyphMetric

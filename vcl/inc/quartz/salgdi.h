@@ -48,6 +48,7 @@
 class AquaSalFrame;
 class ImplDevFontAttributes;
 class CoreTextStyle;
+class XorEmulation;
 
 typedef sal_uInt32 sal_GlyphId;
 typedef std::vector<unsigned char> ByteVector;
@@ -146,7 +147,7 @@ protected:
     CGLayerRef                              mxLayer;    // Quartz graphics layer
     CGContextRef                            mrContext;  // Quartz drawing context
     int                                     mnContextStackDepth;
-    class XorEmulation*                     mpXorEmulation;
+    XorEmulation*                           mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
     int                                     mnWidth;
     int                                     mnHeight;
