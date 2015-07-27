@@ -7,6 +7,7 @@
  */
 
 #include <com/sun/star/i18n/TextConversionOption.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -59,6 +60,7 @@ public:
     void testFdo85554();
     void testBookmarkUndo();
     void testCp1000115();
+    void testDde();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -84,6 +86,7 @@ public:
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testCp1000115);
+    CPPUNIT_TEST(testDde);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -637,6 +640,43 @@ void SwUiWriterTest::testCp1000115()
     // second page.
     CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);
+}
+
+void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+void SwUiWriterTest::testDde()
+{
+    // Type asdf and copy it.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("asdf");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", aPropertyValues);
+
+    // Go before the selection and paste as a DDE link.
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    aPropertyValues = uno::Sequence<beans::PropertyValue>(1);
+    aPropertyValues[0].Name = "SelectedFormat";
+    aPropertyValues[0].Value = uno::makeAny(static_cast<sal_uInt32>(SOT_FORMATSTR_ID_LINK));
+    lcl_dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    // Make sure that the document starts with a field now, and its expanded string value contains asdf.
+    const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
+    CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
