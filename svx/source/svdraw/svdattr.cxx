@@ -502,7 +502,6 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
         case SDRATTR_TEXT_WORDWRAP          : nResId = SIP_SA_WORDWRAP;break;
         case SDRATTR_TEXT_CHAINNEXTNAME     : nResId = SIP_SA_CHAINNEXTNAME;break;
         case SDRATTR_TEXT_AUTOGROWSIZE      : nResId = SIP_SA_AUTOGROWSIZE;break;
-
         case SDRATTR_EDGEKIND           : nResId = SIP_SA_EDGEKIND;break;
         case SDRATTR_EDGENODE1HORZDIST  : nResId = SIP_SA_EDGENODE1HORZDIST;break;
         case SDRATTR_EDGENODE1VERTDIST  : nResId = SIP_SA_EDGENODE1VERTDIST;break;
