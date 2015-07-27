@@ -13,6 +13,8 @@
 #include "interpre.hxx"
 #include "compiler.hxx"
 
+#define DISPLAY_LEN 15
+
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
         const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
     : mnFormatType(0)
@@ -22,6 +24,7 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mpDoc(pDoc)
     , maGram(eGram)
     , bIsMatrix(false)
+    , mbLimitString(false)
 {
     // compile already here
     ScCompiler aComp(mpDoc, maAddr);
@@ -53,6 +56,21 @@ void ScSimpleFormulaCalculator::Calculate()
         aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get(), false);
 
         bIsMatrix = true;
+
+        if (mbLimitString)
+        {
+            size_t n = aStr.getLength();
+            for (size_t i = DISPLAY_LEN; i < n; ++i)
+            {
+                if (aStr[i] == ',' || aStr[i] == ';')
+                {
+                    aStr.truncate(i);
+                    aStr.append("...");
+                    break;
+                }
+            }
+        }
+
         maMatrixFormulaResult = aStr.makeStringAndClear();
     }
     mnFormatType = aInt.GetRetFormatType();
@@ -119,6 +137,11 @@ bool ScSimpleFormulaCalculator::HasColRowName()
 ScTokenArray* ScSimpleFormulaCalculator::GetCode()
 {
     return mpCode.get();
+}
+
+void ScSimpleFormulaCalculator::SetLimitString(bool bLimitString)
+{
+    mbLimitString = bLimitString;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

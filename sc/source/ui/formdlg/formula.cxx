@@ -308,6 +308,7 @@ bool ScFormulaDlg::Close()
 bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     boost::scoped_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );
+    pFCell->SetLimitString(true);
 
     // HACK! to avoid neither #REF! from ColRowNames
     // if a name is added as actually range in the overall formula,
@@ -324,6 +325,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
             aBraced.append(rStrExp);
             aBraced.append(')');
             pFCell.reset( new ScSimpleFormulaCalculator( pDoc, aCursorPos, aBraced.makeStringAndClear() ) );
+            pFCell->SetLimitString(true);
         }
         else
             bColRowName = false;

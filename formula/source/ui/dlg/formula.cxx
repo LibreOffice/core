@@ -723,7 +723,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
                         const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
                         if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
                         {
-//                             EditNextFunc(false);
+                            EditNextFunc(false);
                         }
                     }
 

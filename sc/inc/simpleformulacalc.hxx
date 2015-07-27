@@ -33,6 +33,7 @@ private:
     formula::FormulaGrammar::Grammar maGram;
     bool bIsMatrix;
     OUString maMatrixFormulaResult;
+    bool mbLimitString;
 
 public:
     ScSimpleFormulaCalculator(ScDocument* pDoc, const ScAddress& rAddr,
@@ -50,6 +51,8 @@ public:
     bool HasColRowName();
 
     ScTokenArray* GetCode();
+
+    void SetLimitString(bool bLimitString);
 };
 
 #endif
