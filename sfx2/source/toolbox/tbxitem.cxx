@@ -1142,7 +1142,7 @@ VclPtr<SfxPopupWindow> SfxRecentFilesToolBoxControl::CreatePopupWindow()
     sal_uInt16 nItemId = GetId();
     ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
 
-    Sequence< Any > aArgs( 2 );
+    Sequence< Any > aArgs( 3 );
     PropertyValue aPropValue;
 
     aPropValue.Name = "CommandURL";
@@ -1195,7 +1195,7 @@ VclPtr<SfxPopupWindow> SfxSaveAsToolBoxControl::CreatePopupWindow()
     sal_uInt16 nItemId = GetId();
     ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
 
-    Sequence< Any > aArgs( 3 );
+    Sequence< Any > aArgs( 2 );
     PropertyValue aPropValue;
 
     aPropValue.Name = "CommandURL";
