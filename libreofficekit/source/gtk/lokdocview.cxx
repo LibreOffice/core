@@ -1947,7 +1947,7 @@ lok_doc_view_post_command (LOKDocView* pDocView,
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
     pLOEvent->m_pCommand = pCommand;
-    pLOEvent->m_pArguments  = pArguments;
+    pLOEvent->m_pArguments  = g_strdup(pArguments);
 
     g_task_set_task_data(task, pLOEvent, g_free);
     g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
