@@ -72,6 +72,7 @@
 
 class ImpChainLinkProperties;
 class SdrTextObj;
+class SdrModel;
 
 namespace rtl {
     class OUString;
@@ -134,7 +135,7 @@ class ImpChainLinkProperties
 class TextChain {
 
     public:
-    TextChain();
+
     ~TextChain();
 
     //void AppendLink(SdrTextObj *);
@@ -157,9 +158,11 @@ class TextChain {
 
 
     protected:
+    TextChain();
     LinkPropertiesMap maLinkPropertiesMap;
 
     private:
+    friend class SdrModel;
     //SdrTextObj *impGetNextLink(const SdrTextObj *) const;
     //SdrTextObj *impGetPrevLink(const SdrTextObj *) const;
 
