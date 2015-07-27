@@ -1400,8 +1400,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                 aSel = pEditEngine->DeleteSelection(aSel);
             }
 
-            PasteOrDropInfos aPasteOrDropInfos;
-            aPasteOrDropInfos.nAction = EE_ACTION_PASTE;
+            PasteOrDropInfos aPasteOrDropInfos(PasteOrDropInfosAction::PASTE);
             aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
             pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
 
@@ -1839,8 +1838,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
                 DrawSelection();
                 EditPaM aPaM( pDragAndDropInfo->aDropDest );
 
-                PasteOrDropInfos aPasteOrDropInfos;
-                aPasteOrDropInfos.nAction = EE_ACTION_DROP;
+                PasteOrDropInfos aPasteOrDropInfos(PasteOrDropInfosAction::DROP);
                 aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
 
