@@ -91,7 +91,7 @@ private:
 
     SfxBindings* mpBindings;
 
-    void Initialize();
+    static void Initialize();
 };
 
 
