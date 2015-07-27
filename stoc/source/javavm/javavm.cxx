@@ -484,6 +484,9 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
     tmData = localtime(&clock);
 #ifdef MACOSX
     char * p = tmData->tm_zone;
+#elif defined(_MSC_VER) && _MSC_VER >= 1900
+    char * p = _tzname[0];
+    (void)tmData;
 #else
     char * p = tzname[0];
     (void)tmData;
