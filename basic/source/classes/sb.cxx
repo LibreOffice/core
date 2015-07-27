@@ -281,128 +281,128 @@ struct SFX_VB_ErrorItem
 
 const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 {
-    { 1, SbERR_BASIC_EXCEPTION },  // #87844 Map exception to error code 1
-    { 2, SbERR_SYNTAX },
-    { 3, SbERR_NO_GOSUB },
-    { 4, SbERR_REDO_FROM_START },
-    { 5, SbERR_BAD_ARGUMENT },
-    { 6, SbERR_MATH_OVERFLOW },
-    { 7, SbERR_NO_MEMORY },
-    { 8, SbERR_ALREADY_DIM },
-    { 9, SbERR_OUT_OF_RANGE },
-    { 10, SbERR_DUPLICATE_DEF },
-    { 11, SbERR_ZERODIV },
-    { 12, SbERR_VAR_UNDEFINED },
-    { 13, SbERR_CONVERSION },
-    { 14, SbERR_BAD_PARAMETER },
-    { 18, SbERR_USER_ABORT },
-    { 20, SbERR_BAD_RESUME },
-    { 28, SbERR_STACK_OVERFLOW },
-    { 35, SbERR_PROC_UNDEFINED },
-    { 48, SbERR_BAD_DLL_LOAD },
-    { 49, SbERR_BAD_DLL_CALL },
-    { 51, SbERR_INTERNAL_ERROR },
-    { 52, SbERR_BAD_CHANNEL },
-    { 53, SbERR_FILE_NOT_FOUND },
-    { 54, SbERR_BAD_FILE_MODE },
-    { 55, SbERR_FILE_ALREADY_OPEN },
-    { 57, SbERR_IO_ERROR },
-    { 58, SbERR_FILE_EXISTS },
-    { 59, SbERR_BAD_RECORD_LENGTH },
-    { 61, SbERR_DISK_FULL },
-    { 62, SbERR_READ_PAST_EOF },
-    { 63, SbERR_BAD_RECORD_NUMBER },
-    { 67, SbERR_TOO_MANY_FILES },
-    { 68, SbERR_NO_DEVICE },
-    { 70, SbERR_ACCESS_DENIED },
-    { 71, SbERR_NOT_READY },
-    { 73, SbERR_NOT_IMPLEMENTED },
-    { 74, SbERR_DIFFERENT_DRIVE },
-    { 75, SbERR_ACCESS_ERROR },
-    { 76, SbERR_PATH_NOT_FOUND },
-    { 91, SbERR_NO_OBJECT },
-    { 93, SbERR_BAD_PATTERN },
-    { 94, SBERR_IS_NULL },
-    { 250, SbERR_DDE_ERROR },
-    { 280, SbERR_DDE_WAITINGACK },
-    { 281, SbERR_DDE_OUTOFCHANNELS },
-    { 282, SbERR_DDE_NO_RESPONSE },
-    { 283, SbERR_DDE_MULT_RESPONSES },
-    { 284, SbERR_DDE_CHANNEL_LOCKED },
-    { 285, SbERR_DDE_NOTPROCESSED },
-    { 286, SbERR_DDE_TIMEOUT },
-    { 287, SbERR_DDE_USER_INTERRUPT },
-    { 288, SbERR_DDE_BUSY },
-    { 289, SbERR_DDE_NO_DATA },
-    { 290, SbERR_DDE_WRONG_DATA_FORMAT },
-    { 291, SbERR_DDE_PARTNER_QUIT },
-    { 292, SbERR_DDE_CONV_CLOSED },
-    { 293, SbERR_DDE_NO_CHANNEL },
-    { 294, SbERR_DDE_INVALID_LINK },
-    { 295, SbERR_DDE_QUEUE_OVERFLOW },
-    { 296, SbERR_DDE_LINK_ALREADY_EST },
-    { 297, SbERR_DDE_LINK_INV_TOPIC },
-    { 298, SbERR_DDE_DLL_NOT_FOUND },
-    { 323, SbERR_CANNOT_LOAD },
-    { 341, SbERR_BAD_INDEX },
-    { 366, SbERR_NO_ACTIVE_OBJECT },
-    { 380, SbERR_BAD_PROP_VALUE },
-    { 382, SbERR_PROP_READONLY },
-    { 394, SbERR_PROP_WRITEONLY },
-    { 420, SbERR_INVALID_OBJECT },
-    { 423, SbERR_NO_METHOD },
-    { 424, SbERR_NEEDS_OBJECT },
-    { 425, SbERR_INVALID_USAGE_OBJECT },
-    { 430, SbERR_NO_OLE },
-    { 438, SbERR_BAD_METHOD },
-    { 440, SbERR_OLE_ERROR },
-    { 445, SbERR_BAD_ACTION },
-    { 446, SbERR_NO_NAMED_ARGS },
-    { 447, SbERR_BAD_LOCALE },
-    { 448, SbERR_NAMED_NOT_FOUND },
-    { 449, SbERR_NOT_OPTIONAL },
-    { 450, SbERR_WRONG_ARGS },
-    { 451, SbERR_NOT_A_COLL },
-    { 452, SbERR_BAD_ORDINAL },
-    { 453, SbERR_DLLPROC_NOT_FOUND },
-    { 460, SbERR_BAD_CLIPBD_FORMAT },
-    { 951, SbERR_UNEXPECTED },
-    { 952, SbERR_EXPECTED },
-    { 953, SbERR_SYMBOL_EXPECTED },
-    { 954, SbERR_VAR_EXPECTED },
-    { 955, SbERR_LABEL_EXPECTED },
-    { 956, SbERR_LVALUE_EXPECTED },
-    { 957, SbERR_VAR_DEFINED },
-    { 958, SbERR_PROC_DEFINED },
-    { 959, SbERR_LABEL_DEFINED },
-    { 960, SbERR_UNDEF_VAR },
-    { 961, SbERR_UNDEF_ARRAY },
-    { 962, SbERR_UNDEF_PROC },
-    { 963, SbERR_UNDEF_LABEL },
-    { 964, SbERR_UNDEF_TYPE },
-    { 965, SbERR_BAD_EXIT },
-    { 966, SbERR_BAD_BLOCK },
-    { 967, SbERR_BAD_BRACKETS },
-    { 968, SbERR_BAD_DECLARATION },
-    { 969, SbERR_BAD_PARAMETERS },
-    { 970, SbERR_BAD_CHAR_IN_NUMBER },
-    { 971, SbERR_MUST_HAVE_DIMS },
-    { 972, SbERR_NO_IF },
-    { 973, SbERR_NOT_IN_SUBR },
-    { 974, SbERR_NOT_IN_MAIN },
-    { 975, SbERR_WRONG_DIMS },
-    { 976, SbERR_BAD_OPTION },
-    { 977, SbERR_CONSTANT_REDECLARED },
-    { 978, SbERR_PROG_TOO_LARGE },
-    { 979, SbERR_NO_STRINGS_ARRAYS },
-    { 1000, SbERR_PROPERTY_NOT_FOUND },
-    { 1001, SbERR_METHOD_NOT_FOUND },
-    { 1002, SbERR_ARG_MISSING },
-    { 1003, SbERR_BAD_NUMBER_OF_ARGS },
-    { 1004, SbERR_METHOD_FAILED },
-    { 1005, SbERR_SETPROP_FAILED },
-    { 1006, SbERR_GETPROP_FAILED },
-    { 1007, SbERR_BASIC_COMPAT },
+    { 1, ERRCODE_BASIC_EXCEPTION },  // #87844 Map exception to error code 1
+    { 2, ERRCODE_BASIC_SYNTAX },
+    { 3, ERRCODE_BASIC_NO_GOSUB },
+    { 4, ERRCODE_BASIC_REDO_FROM_START },
+    { 5, ERRCODE_BASIC_BAD_ARGUMENT },
+    { 6, ERRCODE_BASIC_MATH_OVERFLOW },
+    { 7, ERRCODE_BASIC_NO_MEMORY },
+    { 8, ERRCODE_BASIC_ALREADY_DIM },
+    { 9, ERRCODE_BASIC_OUT_OF_RANGE },
+    { 10, ERRCODE_BASIC_DUPLICATE_DEF },
+    { 11, ERRCODE_BASIC_ZERODIV },
+    { 12, ERRCODE_BASIC_VAR_UNDEFINED },
+    { 13, ERRCODE_BASIC_CONVERSION },
+    { 14, ERRCODE_BASIC_BAD_PARAMETER },
+    { 18, ERRCODE_BASIC_USER_ABORT },
+    { 20, ERRCODE_BASIC_BAD_RESUME },
+    { 28, ERRCODE_BASIC_STACK_OVERFLOW },
+    { 35, ERRCODE_BASIC_PROC_UNDEFINED },
+    { 48, ERRCODE_BASIC_BAD_DLL_LOAD },
+    { 49, ERRCODE_BASIC_BAD_DLL_CALL },
+    { 51, ERRCODE_BASIC_INTERNAL_ERROR },
+    { 52, ERRCODE_BASIC_BAD_CHANNEL },
+    { 53, ERRCODE_BASIC_FILE_NOT_FOUND },
+    { 54, ERRCODE_BASIC_BAD_FILE_MODE },
+    { 55, ERRCODE_BASIC_FILE_ALREADY_OPEN },
+    { 57, ERRCODE_BASIC_IO_ERROR },
+    { 58, ERRCODE_BASIC_FILE_EXISTS },
+    { 59, ERRCODE_BASIC_BAD_RECORD_LENGTH },
+    { 61, ERRCODE_BASIC_DISK_FULL },
+    { 62, ERRCODE_BASIC_READ_PAST_EOF },
+    { 63, ERRCODE_BASIC_BAD_RECORD_NUMBER },
+    { 67, ERRCODE_BASIC_TOO_MANY_FILES },
+    { 68, ERRCODE_BASIC_NO_DEVICE },
+    { 70, ERRCODE_BASIC_ACCESS_DENIED },
+    { 71, ERRCODE_BASIC_NOT_READY },
+    { 73, ERRCODE_BASIC_NOT_IMPLEMENTED },
+    { 74, ERRCODE_BASIC_DIFFERENT_DRIVE },
+    { 75, ERRCODE_BASIC_ACCESS_ERROR },
+    { 76, ERRCODE_BASIC_PATH_NOT_FOUND },
+    { 91, ERRCODE_BASIC_NO_OBJECT },
+    { 93, ERRCODE_BASIC_BAD_PATTERN },
+    { 94, ERRCODE_BASIC_IS_NULL },
+    { 250, ERRCODE_BASIC_DDE_ERROR },
+    { 280, ERRCODE_BASIC_DDE_WAITINGACK },
+    { 281, ERRCODE_BASIC_DDE_OUTOFCHANNELS },
+    { 282, ERRCODE_BASIC_DDE_NO_RESPONSE },
+    { 283, ERRCODE_BASIC_DDE_MULT_RESPONSES },
+    { 284, ERRCODE_BASIC_DDE_CHANNEL_LOCKED },
+    { 285, ERRCODE_BASIC_DDE_NOTPROCESSED },
+    { 286, ERRCODE_BASIC_DDE_TIMEOUT },
+    { 287, ERRCODE_BASIC_DDE_USER_INTERRUPT },
+    { 288, ERRCODE_BASIC_DDE_BUSY },
+    { 289, ERRCODE_BASIC_DDE_NO_DATA },
+    { 290, ERRCODE_BASIC_DDE_WRONG_DATA_FORMAT },
+    { 291, ERRCODE_BASIC_DDE_PARTNER_QUIT },
+    { 292, ERRCODE_BASIC_DDE_CONV_CLOSED },
+    { 293, ERRCODE_BASIC_DDE_NO_CHANNEL },
+    { 294, ERRCODE_BASIC_DDE_INVALID_LINK },
+    { 295, ERRCODE_BASIC_DDE_QUEUE_OVERFLOW },
+    { 296, ERRCODE_BASIC_DDE_LINK_ALREADY_EST },
+    { 297, ERRCODE_BASIC_DDE_LINK_INV_TOPIC },
+    { 298, ERRCODE_BASIC_DDE_DLL_NOT_FOUND },
+    { 323, ERRCODE_BASIC_CANNOT_LOAD },
+    { 341, ERRCODE_BASIC_BAD_INDEX },
+    { 366, ERRCODE_BASIC_NO_ACTIVE_OBJECT },
+    { 380, ERRCODE_BASIC_BAD_PROP_VALUE },
+    { 382, ERRCODE_BASIC_PROP_READONLY },
+    { 394, ERRCODE_BASIC_PROP_WRITEONLY },
+    { 420, ERRCODE_BASIC_INVALID_OBJECT },
+    { 423, ERRCODE_BASIC_NO_METHOD },
+    { 424, ERRCODE_BASIC_NEEDS_OBJECT },
+    { 425, ERRCODE_BASIC_INVALID_USAGE_OBJECT },
+    { 430, ERRCODE_BASIC_NO_OLE },
+    { 438, ERRCODE_BASIC_BAD_METHOD },
+    { 440, ERRCODE_BASIC_OLE_ERROR },
+    { 445, ERRCODE_BASIC_BAD_ACTION },
+    { 446, ERRCODE_BASIC_NO_NAMED_ARGS },
+    { 447, ERRCODE_BASIC_BAD_LOCALE },
+    { 448, ERRCODE_BASIC_NAMED_NOT_FOUND },
+    { 449, ERRCODE_BASIC_NOT_OPTIONAL },
+    { 450, ERRCODE_BASIC_WRONG_ARGS },
+    { 451, ERRCODE_BASIC_NOT_A_COLL },
+    { 452, ERRCODE_BASIC_BAD_ORDINAL },
+    { 453, ERRCODE_BASIC_DLLPROC_NOT_FOUND },
+    { 460, ERRCODE_BASIC_BAD_CLIPBD_FORMAT },
+    { 951, ERRCODE_BASIC_UNEXPECTED },
+    { 952, ERRCODE_BASIC_EXPECTED },
+    { 953, ERRCODE_BASIC_SYMBOL_EXPECTED },
+    { 954, ERRCODE_BASIC_VAR_EXPECTED },
+    { 955, ERRCODE_BASIC_LABEL_EXPECTED },
+    { 956, ERRCODE_BASIC_LVALUE_EXPECTED },
+    { 957, ERRCODE_BASIC_VAR_DEFINED },
+    { 958, ERRCODE_BASIC_PROC_DEFINED },
+    { 959, ERRCODE_BASIC_LABEL_DEFINED },
+    { 960, ERRCODE_BASIC_UNDEF_VAR },
+    { 961, ERRCODE_BASIC_UNDEF_ARRAY },
+    { 962, ERRCODE_BASIC_UNDEF_PROC },
+    { 963, ERRCODE_BASIC_UNDEF_LABEL },
+    { 964, ERRCODE_BASIC_UNDEF_TYPE },
+    { 965, ERRCODE_BASIC_BAD_EXIT },
+    { 966, ERRCODE_BASIC_BAD_BLOCK },
+    { 967, ERRCODE_BASIC_BAD_BRACKETS },
+    { 968, ERRCODE_BASIC_BAD_DECLARATION },
+    { 969, ERRCODE_BASIC_BAD_PARAMETERS },
+    { 970, ERRCODE_BASIC_BAD_CHAR_IN_NUMBER },
+    { 971, ERRCODE_BASIC_MUST_HAVE_DIMS },
+    { 972, ERRCODE_BASIC_NO_IF },
+    { 973, ERRCODE_BASIC_NOT_IN_SUBR },
+    { 974, ERRCODE_BASIC_NOT_IN_MAIN },
+    { 975, ERRCODE_BASIC_WRONG_DIMS },
+    { 976, ERRCODE_BASIC_BAD_OPTION },
+    { 977, ERRCODE_BASIC_CONSTANT_REDECLARED },
+    { 978, ERRCODE_BASIC_PROG_TOO_LARGE },
+    { 979, ERRCODE_BASIC_NO_STRINGS_ARRAYS },
+    { 1000, ERRCODE_BASIC_PROPERTY_NOT_FOUND },
+    { 1001, ERRCODE_BASIC_METHOD_NOT_FOUND },
+    { 1002, ERRCODE_BASIC_ARG_MISSING },
+    { 1003, ERRCODE_BASIC_BAD_NUMBER_OF_ARGS },
+    { 1004, ERRCODE_BASIC_METHOD_FAILED },
+    { 1005, ERRCODE_BASIC_SETPROP_FAILED },
+    { 1006, ERRCODE_BASIC_GETPROP_FAILED },
+    { 1007, ERRCODE_BASIC_COMPAT },
     { 0xFFFF, 0xFFFFFFFFL }     // End mark
 };
 
@@ -1538,17 +1538,17 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
     {
         switch( nError )
         {
-        case SbERR_BASIC_ARRAY_FIX:
+        case ERRCODE_BASIC_ARRAY_FIX:
             return 10;
-        case SbERR_BASIC_STRING_OVERFLOW:
+        case ERRCODE_BASIC_STRING_OVERFLOW:
             return 14;
-        case SbERR_BASIC_EXPR_TOO_COMPLEX:
+        case ERRCODE_BASIC_EXPR_TOO_COMPLEX:
             return 16;
-        case SbERR_BASIC_OPER_NOT_PERFORM:
+        case ERRCODE_BASIC_OPER_NOT_PERFORM:
             return 17;
-        case SbERR_BASIC_TOO_MANY_DLL:
+        case ERRCODE_BASIC_TOO_MANY_DLL:
             return 47;
-        case SbERR_BASIC_LOOP_NOT_INIT:
+        case ERRCODE_BASIC_LOOP_NOT_INIT:
             return 92;
         default:
             nRet = 0;
@@ -1588,17 +1588,17 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
         case 73:
             return 0L;
         case 10:
-            return SbERR_BASIC_ARRAY_FIX;
+            return ERRCODE_BASIC_ARRAY_FIX;
         case 14:
-            return SbERR_BASIC_STRING_OVERFLOW;
+            return ERRCODE_BASIC_STRING_OVERFLOW;
         case 16:
-            return SbERR_BASIC_EXPR_TOO_COMPLEX;
+            return ERRCODE_BASIC_EXPR_TOO_COMPLEX;
         case 17:
-            return SbERR_BASIC_OPER_NOT_PERFORM;
+            return ERRCODE_BASIC_OPER_NOT_PERFORM;
         case 47:
-            return SbERR_BASIC_TOO_MANY_DLL;
+            return ERRCODE_BASIC_TOO_MANY_DLL;
         case 92:
-            return SbERR_BASIC_LOOP_NOT_INIT;
+            return ERRCODE_BASIC_LOOP_NOT_INIT;
         default:
             nRet = 0L;
         }
@@ -1753,7 +1753,7 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
         // seems that this is not used ( if rMsg already has content )
         // In the case of VBA MakeErrorText also formats the error to be a little more
         // like vba ( adds an error number etc )
-        if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
+        if ( SbiRuntime::isVBAEnabled() && ( code == ERRCODE_BASIC_COMPAT ) )
         {
             OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
                             "\'\n" + OUString(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
@@ -2232,14 +2232,14 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             {
                 if( !( pBefore->IsErr() || ( pBefore->GetType() == SbxEMPTY ) ) )
                 {
-                    SetError( SbERR_BAD_ARGUMENT );
+                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     return;
                 }
                 SbxVariable* pAfter = pPar_->Get(4);
                 sal_Int32 nAfterIndex = implGetIndex( pAfter );
                 if( nAfterIndex == -1 )
                 {
-                    SetError( SbERR_BAD_ARGUMENT );
+                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     return;
                 }
                 nNextIndex = nAfterIndex + 1;
@@ -2249,7 +2249,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
                 sal_Int32 nBeforeIndex = implGetIndex( pBefore );
                 if( nBeforeIndex == -1 )
                 {
-                    SetError( SbERR_BAD_ARGUMENT );
+                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     return;
                 }
                 nNextIndex = nBeforeIndex;
@@ -2264,13 +2264,13 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             {
                 if( pKey->GetType() != SbxSTRING )
                 {
-                    SetError( SbERR_BAD_ARGUMENT );
+                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     return;
                 }
                 OUString aKey = pKey->GetOUString();
                 if( implGetIndexForName( aKey ) != -1 )
                 {
-                    SetError( SbERR_BAD_ARGUMENT );
+                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     return;
                 }
                 pNewItem->SetName( aKey );
@@ -2281,7 +2281,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
     }
     else
     {
-        SetError( SbERR_BAD_ARGUMENT );
+        SetError( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 }
@@ -2302,7 +2302,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     }
     if( !pRes )
     {
-        SetError( SbERR_BAD_ARGUMENT );
+        SetError( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
@@ -2341,7 +2341,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     }
     else
     {
-        SetError( SbERR_BAD_ARGUMENT );
+        SetError( ERRCODE_BASIC_BAD_ARGUMENT );
     }
 }
 

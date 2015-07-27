@@ -63,7 +63,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
-        StarBASIC::Error( SbERR_PROP_READONLY );
+        StarBASIC::Error( ERRCODE_BASIC_PROP_READONLY );
         return;
     }
 
@@ -83,7 +83,7 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
-        StarBASIC::Error( SbERR_PROP_READONLY );
+        StarBASIC::Error( ERRCODE_BASIC_PROP_READONLY );
         return;
     }
 
@@ -98,7 +98,7 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
-        StarBASIC::Error( SbERR_PROP_READONLY );
+        StarBASIC::Error( ERRCODE_BASIC_PROP_READONLY );
         return;
     }
 
@@ -306,7 +306,7 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
-        StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
@@ -318,14 +318,14 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool )
 
     if( !pPar_ || (pPar_->Count() != 2) )
     {
-        StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
     sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -335,14 +335,14 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
-        StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
     sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -353,7 +353,7 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
-        StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
@@ -366,14 +366,14 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool )
 
     if( !pPar_ || (pPar_->Count() != 3) )
     {
-        StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 
     sal_uInt16 nFormat = pPar_->Get(2)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -385,7 +385,7 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 
     if( !pPar_ || (pPar_->Count() != 2) )
     {
-        StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
         return;
     }
 

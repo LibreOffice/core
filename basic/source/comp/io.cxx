@@ -37,7 +37,7 @@ bool SbiParser::Channel( bool bAlways )
         bRes = true;
     }
     else if( bAlways )
-        Error( SbERR_EXPECTED, "#" );
+        Error( ERRCODE_BASIC_EXPECTED, "#" );
     return bRes;
 }
 
@@ -132,9 +132,9 @@ void SbiParser::LineInput()
     Channel( true );
     boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
     if( !pExpr->IsVariable() )
-        Error( SbERR_VAR_EXPECTED );
+        Error( ERRCODE_BASIC_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
-        Error( SbERR_CONVERSION );
+        Error( ERRCODE_BASIC_CONVERSION );
     pExpr->Gen();
     aGen.Gen( _LINPUT );
     pExpr.reset();
@@ -151,7 +151,7 @@ void SbiParser::Input()
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
-            Error( SbERR_VAR_EXPECTED );
+            Error( ERRCODE_BASIC_VAR_EXPECTED );
         pExpr->Gen();
         aGen.Gen( _INPUT );
         if( Peek() == COMMA )
@@ -188,7 +188,7 @@ void SbiParser::Open()
         case BINARY:
             nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SBSTRM_BINARY; break;
         default:
-            Error( SbERR_SYNTAX );
+            Error( ERRCODE_BASIC_SYNTAX );
     }
     if( Peek() == ACCESS )
     {
@@ -209,7 +209,7 @@ void SbiParser::Open()
         else if( eTok == WRITE )
             nMode |= StreamMode::WRITE;
         else
-            Error( SbERR_SYNTAX );
+            Error( ERRCODE_BASIC_SYNTAX );
     }
     switch( Peek() )
     {
@@ -234,7 +234,7 @@ void SbiParser::Open()
             else if( eTok == WRITE )
                 nMode |= StreamMode::SHARE_DENYWRITE;
             else
-                Error( SbERR_SYNTAX );
+                Error( ERRCODE_BASIC_SYNTAX );
             break;
         default: break;
     }
@@ -242,7 +242,7 @@ void SbiParser::Open()
     // channel number
     boost::scoped_ptr<SbiExpression> pChan(new SbiExpression( this ));
     if( !pChan )
-        Error( SbERR_SYNTAX );
+        Error( ERRCODE_BASIC_SYNTAX );
     boost::scoped_ptr<SbiExpression> pLen;
     if( Peek() == SYMBOL )
     {

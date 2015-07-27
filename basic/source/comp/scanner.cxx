@@ -85,17 +85,17 @@ void SbiScanner::GenError( SbError code )
             sal_Int32 nc = nColLock ? nSavedCol1 : nCol1;
             switch( code )
             {
-                case SbERR_EXPECTED:
-                case SbERR_UNEXPECTED:
-                case SbERR_SYMBOL_EXPECTED:
-                case SbERR_LABEL_EXPECTED:
+                case ERRCODE_BASIC_EXPECTED:
+                case ERRCODE_BASIC_UNEXPECTED:
+                case ERRCODE_BASIC_SYMBOL_EXPECTED:
+                case ERRCODE_BASIC_LABEL_EXPECTED:
                     nc = nCol1;
                     if( nc > nCol2 ) nCol2 = nc;
                     break;
             }
             bRes = pBasic->CError( code, aError, nLine, nc, nCol2 );
         }
-        bAbort = bAbort || !bRes  || ( code == SbERR_NO_MEMORY || code == SbERR_PROG_TOO_LARGE );
+        bAbort = bAbort || !bRes  || ( code == ERRCODE_BASIC_NO_MEMORY || code == ERRCODE_BASIC_PROG_TOO_LARGE );
     }
     nErrors++;
 }
@@ -359,7 +359,7 @@ bool SbiScanner::NextSym()
         {
             --pLine, --nCol;
             aError = OUString( aLine[nCol]);
-            nError = SbERR_BAD_CHAR_IN_NUMBER;
+            nError = ERRCODE_BASIC_BAD_CHAR_IN_NUMBER;
         }
 
         rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
@@ -378,13 +378,13 @@ bool SbiScanner::NextSym()
             // Copy error position from original string, not the buffer
             // replacement where "12dE" => "12EE".
             aError = aLine.copy( nCol, nChars);
-            nError = SbERR_BAD_CHAR_IN_NUMBER;
+            nError = ERRCODE_BASIC_BAD_CHAR_IN_NUMBER;
         }
         else if (eStatus != rtl_math_ConversionStatus_Ok)
         {
             // Keep the scan error and character at position, if any.
             if (!nError)
-                nError = SbERR_MATH_OVERFLOW;
+                nError = ERRCODE_BASIC_MATH_OVERFLOW;
         }
 
         if (nError)
@@ -399,7 +399,7 @@ bool SbiScanner::NextSym()
         }
 
         if( bBufOverflow )
-            GenError( SbERR_MATH_OVERFLOW );
+            GenError( ERRCODE_BASIC_MATH_OVERFLOW );
 
         // type recognition?
         if( nCol < aLine.getLength() )
@@ -457,7 +457,7 @@ bool SbiScanner::NextSym()
             else
             {
                 aError = OUString(ch);
-                GenError( SbERR_BAD_CHAR_IN_NUMBER );
+                GenError( ERRCODE_BASIC_BAD_CHAR_IN_NUMBER );
             }
         }
         if(nCol < aLine.getLength() && aLine[nCol] == '&') ++pLine, ++nCol;
@@ -465,7 +465,7 @@ bool SbiScanner::NextSym()
         nVal = (double) ls;
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bOverflow )
-            GenError( SbERR_MATH_OVERFLOW );
+            GenError( ERRCODE_BASIC_MATH_OVERFLOW );
     }
 
     // Strings:
@@ -502,13 +502,13 @@ bool SbiScanner::NextSym()
                         eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
                     break;
                 }
-            } else aError = OUString(cSep), GenError( SbERR_EXPECTED );
+            } else aError = OUString(cSep), GenError( ERRCODE_BASIC_EXPECTED );
         }
     }
     // invalid characters:
     else if( *pLine >= 0x7F )
     {
-        GenError( SbERR_SYNTAX ); pLine++; nCol++;
+        GenError( ERRCODE_BASIC_SYNTAX ); pLine++; nCol++;
     }
     // other groups:
     else

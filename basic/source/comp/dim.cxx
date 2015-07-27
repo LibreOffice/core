@@ -67,7 +67,7 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
     if( !ppDim && pDim )
     {
         if(pDim->GetDims() )
-            Error( SbERR_EXPECTED, "()" );
+            Error( ERRCODE_BASIC_EXPECTED, "()" );
         delete pDim;
     }
     else if( ppDim )
@@ -97,7 +97,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
         {
             case ANY:
                 if( rDef.IsNew() )
-                    Error( SbERR_SYNTAX );
+                    Error( ERRCODE_BASIC_SYNTAX );
                 eType = SbxVARIANT; break;
             case TINTEGER:
             case TLONG:
@@ -112,7 +112,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
             case TVARIANT:
             case TBYTE:
                 if( rDef.IsNew() )
-                    Error( SbERR_SYNTAX );
+                    Error( ERRCODE_BASIC_SYNTAX );
                 eType = (eTok==TBYTE) ? SbxBYTE : SbxDataType( eTok - TINTEGER + SbxINTEGER );
                 if( eType == SbxSTRING )
                 {
@@ -123,7 +123,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                         SbiConstExpression aSize( this );
                         nSize = aSize.GetShortValue();
                         if( nSize < 0 || (bVBASupportOn && nSize <= 0) )
-                            Error( SbERR_OUT_OF_RANGE );
+                            Error( ERRCODE_BASIC_OUT_OF_RANGE );
                         else
                             rDef.SetFixedStringLength( nSize );
                     }
@@ -131,7 +131,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                 break;
             case SYMBOL: // can only be a TYPE or a object class!
                 if( eScanType != SbxVARIANT )
-                    Error( SbERR_SYNTAX );
+                    Error( ERRCODE_BASIC_SYNTAX );
                 else
                 {
                     OUString aCompleteName = aSym;
@@ -153,7 +153,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                             else
                             {
                                 Next();
-                                Error( SbERR_UNEXPECTED, SYMBOL );
+                                Error( ERRCODE_BASIC_UNEXPECTED, SYMBOL );
                                 break;
                             }
                         }
@@ -177,16 +177,16 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                 eType = SbxOBJECT;
                 break;
             default:
-                Error( SbERR_UNEXPECTED, eTok );
+                Error( ERRCODE_BASIC_UNEXPECTED, eTok );
                 Next();
         }
         // The variable could have been declared with a suffix
         if( rDef.GetType() != SbxVARIANT )
         {
             if( rDef.GetType() != eType )
-                Error( SbERR_VAR_DEFINED, rDef.GetName() );
+                Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
             else if( eType == SbxSTRING && rDef.GetLen() != nSize )
-                Error( SbERR_VAR_DEFINED, rDef.GetName() );
+                Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
         }
         rDef.SetType( eType );
         rDef.SetLen( nSize );
@@ -209,7 +209,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     SbiToken eFirstTok = eCurTok;
 
     if( pProc && ( eCurTok == GLOBAL || eCurTok == PUBLIC || eCurTok == PRIVATE ) )
-        Error( SbERR_NOT_IN_SUBR, eCurTok );
+        Error( ERRCODE_BASIC_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
     {
         bSwitchPool = true;     // at the right moment switch to the global pool
@@ -291,7 +291,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         if( eOp == _REDIM )
             eOp = _REDIMP;
         else
-            Error( SbERR_UNEXPECTED, eCurTok );
+            Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
     }
     SbiSymDef* pDef;
     SbiDimList* pDim;
@@ -346,10 +346,10 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                         bError_ = true;
                 }
                 if( bError_ )
-                    Error( SbERR_VAR_DEFINED, pDef->GetName() );
+                    Error( ERRCODE_BASIC_VAR_DEFINED, pDef->GetName() );
             }
             else
-                Error( SbERR_VAR_DEFINED, pDef->GetName() );
+                Error( ERRCODE_BASIC_VAR_DEFINED, pDef->GetName() );
             delete pDef; pDef = pOld;
         }
         else
@@ -409,16 +409,16 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                     if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
                     {
                         if(!IsUnoInterface(aTypeName))
-                            Error( SbERR_UNDEF_TYPE, aTypeName );
+                            Error( ERRCODE_BASIC_UNDEF_TYPE, aTypeName );
                     }
                     else
-                        Error( SbERR_UNDEF_TYPE, aTypeName );
+                        Error( ERRCODE_BASIC_UNDEF_TYPE, aTypeName );
                 }
             }
 
             if( bConst )
             {
-                Error( SbERR_SYNTAX );
+                Error( ERRCODE_BASIC_SYNTAX );
             }
 
             if( pDim )
@@ -461,7 +461,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 // Definition of the constants
                 if( pDim )
                 {
-                    Error( SbERR_SYNTAX );
+                    Error( ERRCODE_BASIC_SYNTAX );
                     delete pDim;
                 }
                 SbiExpression aVar( this, *pDef );
@@ -582,7 +582,7 @@ void SbiParser::DefType( bool bPrivate )
 
     if (rTypeArray->Find(aSym,SbxCLASS_OBJECT))
     {
-        Error( SbERR_VAR_DEFINED, aSym );
+        Error( ERRCODE_BASIC_VAR_DEFINED, aSym );
         return;
     }
 
@@ -617,7 +617,7 @@ void SbiParser::DefType( bool bPrivate )
             OUString aElemName = pElem->GetName();
             if( pTypeMembers->Find( aElemName, SbxCLASS_DONTCARE) )
             {
-                Error (SbERR_VAR_DEFINED);
+                Error (ERRCODE_BASIC_VAR_DEFINED);
             }
             else
             {
@@ -638,7 +638,7 @@ void SbiParser::DefType( bool bPrivate )
                             if ( !pDim->Get( i )->IsBased() ) // each dim is low/up
                             {
                                 if (  ++i >= pDim->GetSize() ) // trouble
-                                    StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+                                    StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
                                 pNode =  pDim->Get(i)->GetExprNode();
                                 lb = ub;
                                 ub = pNode->GetNumber();
@@ -703,7 +703,7 @@ void SbiParser::DefEnum( bool bPrivate )
     OUString aEnumName = aSym;
     if( rEnumArray->Find(aEnumName,SbxCLASS_OBJECT) )
     {
-        Error( SbERR_VAR_DEFINED, aSym );
+        Error( ERRCODE_BASIC_VAR_DEFINED, aSym );
         return;
     }
 
@@ -747,7 +747,7 @@ void SbiParser::DefEnum( bool bPrivate )
                 else if( pDim )
                 {
                     delete pDim;
-                    Error( SbERR_SYNTAX );
+                    Error( ERRCODE_BASIC_SYNTAX );
                     bDone = true;   // Error occurred
                     break;
                 }
@@ -777,7 +777,7 @@ void SbiParser::DefEnum( bool bPrivate )
                 SbiSymDef* pOld = pPoolToUse->Find( pElem->GetName() );
                 if( pOld )
                 {
-                    Error( SbERR_VAR_DEFINED, pElem->GetName() );
+                    Error( ERRCODE_BASIC_VAR_DEFINED, pElem->GetName() );
                     bDone = true;   // Error occurred
                     break;
                 }
@@ -848,7 +848,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         }
         else
         {
-            Error( SbERR_SYNTAX );
+            Error( ERRCODE_BASIC_SYNTAX );
         }
     }
     if( Peek() == ALIAS )
@@ -860,7 +860,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         }
         else
         {
-            Error( SbERR_SYNTAX );
+            Error( ERRCODE_BASIC_SYNTAX );
         }
     }
     if( !bDecl )
@@ -868,15 +868,15 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         // CDECL, LIB and ALIAS are invalid
         if( !pDef->GetLib().isEmpty() )
         {
-            Error( SbERR_UNEXPECTED, LIB );
+            Error( ERRCODE_BASIC_UNEXPECTED, LIB );
         }
         if( !pDef->GetAlias().isEmpty() )
         {
-            Error( SbERR_UNEXPECTED, ALIAS );
+            Error( ERRCODE_BASIC_UNEXPECTED, ALIAS );
         }
         if( pDef->IsCdecl() )
         {
-            Error( SbERR_UNEXPECTED, _CDECL_ );
+            Error( ERRCODE_BASIC_UNEXPECTED, _CDECL_ );
         }
         pDef->SetCdecl( false );
         pDef->GetLib().clear();
@@ -887,11 +887,11 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         // ALIAS and CDECL only together with LIB
         if( !pDef->GetAlias().isEmpty() )
         {
-            Error( SbERR_UNEXPECTED, ALIAS );
+            Error( ERRCODE_BASIC_UNEXPECTED, ALIAS );
         }
         if( pDef->IsCdecl() )
         {
-            Error( SbERR_UNEXPECTED, _CDECL_ );
+            Error( ERRCODE_BASIC_UNEXPECTED, _CDECL_ );
         }
         pDef->SetCdecl( false );
         pDef->GetAlias().clear();
@@ -931,7 +931,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                 {
                     if( bByVal || bOptional )
                     {
-                        Error( SbERR_UNEXPECTED, PARAMARRAY );
+                        Error( ERRCODE_BASIC_UNEXPECTED, PARAMARRAY );
                     }
                     Next();
                     bParamArray = true;
@@ -983,7 +983,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     }
                     if( bError2 )
                     {
-                        Error( SbERR_EXPECTED, RPAREN );
+                        Error( ERRCODE_BASIC_EXPECTED, RPAREN );
                         break;
                     }
                 }
@@ -997,7 +997,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     TypeDecl( *pDef );
     if( eType != SbxVARIANT && pDef->GetType() != eType )
     {
-        Error( SbERR_BAD_DECLARATION, aName );
+        Error( ERRCODE_BASIC_BAD_DECLARATION, aName );
     }
     if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
     {
@@ -1018,7 +1018,7 @@ void SbiParser::DefDeclare( bool bPrivate )
     Next();
     if( eCurTok != SUB && eCurTok != FUNCTION )
     {
-      Error( SbERR_UNEXPECTED, eCurTok );
+      Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
     }
     else
     {
@@ -1029,7 +1029,7 @@ void SbiParser::DefDeclare( bool bPrivate )
         {
             if( pDef->GetLib().isEmpty() )
             {
-                Error( SbERR_EXPECTED, LIB );
+                Error( ERRCODE_BASIC_EXPECTED, LIB );
             }
             // Is it already there?
             SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
@@ -1039,7 +1039,7 @@ void SbiParser::DefDeclare( bool bPrivate )
                 if( !p )
                 {
                     // Declared as a variable
-                    Error( SbERR_BAD_DECLARATION, pDef->GetName() );
+                    Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
                     delete pDef;
                     pDef = NULL;
                 }
@@ -1140,7 +1140,7 @@ void SbiParser::Attribute()
 
     if( eCurTok != EQ )
     {
-        Error( SbERR_SYNTAX );
+        Error( ERRCODE_BASIC_SYNTAX );
     }
     else
     {
@@ -1190,7 +1190,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
         else
         {
-            Error( SbERR_EXPECTED, "Get or Let or Set" );
+            Error( ERRCODE_BASIC_EXPECTED, "Get or Let or Set" );
         }
     }
 
@@ -1212,7 +1212,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         if( !pProc )
         {
             // Declared as a variable
-            Error( SbERR_BAD_DECLARATION, pDef->GetName() );
+            Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
             pProc = NULL;
             bError_ = true;
@@ -1224,7 +1224,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
             PropertyMode ePropMode = pDef->getPropertyMode();
             if( ePropMode == PropertyMode::NONE || ePropMode == pProc->getPropertyMode() )
             {
-                Error( SbERR_PROC_DEFINED, pDef->GetName() );
+                Error( ERRCODE_BASIC_PROC_DEFINED, pDef->GetName() );
                 delete pDef;
                 pProc = NULL;
                 bError_ = true;
@@ -1259,7 +1259,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
         else
         {
-            Error( SbERR_NOT_IMPLEMENTED ); // STATIC SUB ...
+            Error( ERRCODE_BASIC_NOT_IMPLEMENTED ); // STATIC SUB ...
         }
     }
     else
@@ -1314,7 +1314,7 @@ void SbiParser::DefStatic( bool bPrivate )
     default:
         if( !pProc )
         {
-            Error( SbERR_NOT_IN_SUBR );
+            Error( ERRCODE_BASIC_NOT_IN_SUBR );
         }
         // Reset the Pool, so that STATIC-Declarations go into the
         // global Pool

@@ -415,7 +415,7 @@ public:
 inline void checkArithmeticOverflow( double d )
 {
     if( !::rtl::math::isFinite( d ) )
-        StarBASIC::Error( SbERR_MATH_OVERFLOW );
+        StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
 }
 
 inline void checkArithmeticOverflow( SbxVariable* pVar )

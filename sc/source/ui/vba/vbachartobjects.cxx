@@ -123,7 +123,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
     return sChartNames;
 }

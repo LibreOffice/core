@@ -87,7 +87,7 @@ bool SbiBuffer::Check( sal_Int32 n )
         }
         if( !p )
         {
-            pParser->Error( SbERR_PROG_TOO_LARGE );
+            pParser->Error( ERRCODE_BASIC_PROG_TOO_LARGE );
             nInc = 0;
             delete[] pBuf; pBuf = NULL;
             return false;
@@ -140,7 +140,7 @@ void SbiBuffer::Chain( sal_uInt32 off )
 
             if( i >= nOff )
             {
-                pParser->Error( SbERR_INTERNAL_ERROR, "BACKCHAIN" );
+                pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "BACKCHAIN" );
                 break;
             }
             *ip++ = (char) ( val1 & 0xFF );

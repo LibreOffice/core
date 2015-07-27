@@ -248,7 +248,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if(  nExtend == word::WdMovementType::wdExtend )
             {
-                DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
+                DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
                 return;
             }
             NextCell( nCount, eDirection );
@@ -358,7 +358,7 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
     xCursorProps->getPropertyValue("Cell") >>= xCell;
     if( !xTextTable.is() || !xCell.is() )
     {
-        DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
         return;
     }
     uno::Reference< beans::XPropertySet > xCellProps( xCell, uno::UNO_QUERY_THROW );
@@ -390,7 +390,7 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
         }
         default:
         {
-            DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
+            DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
             return;
         }
     }
@@ -558,7 +558,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
 {
     sal_Int32 nWhat = 0;
     if( !( _what >>= nWhat ) )
-         DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
+         DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
     switch( nWhat )
     {
         case word::WdGoToItem::wdGoToBookmark:

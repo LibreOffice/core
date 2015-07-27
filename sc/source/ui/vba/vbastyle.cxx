@@ -44,11 +44,11 @@ lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XMod
 void ScVbaStyle::initialise() throw ( uno::RuntimeException, script::BasicErrorException )
 {
     if (!mxModel.is() )
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
     if ( !xServiceInfo->supportsService("com.sun.star.style.CellStyle") )
     {
-            DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
     mxStyle.set( mxPropertySet, uno::UNO_QUERY_THROW );
 
@@ -65,7 +65,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent, c
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -77,7 +77,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -122,7 +122,7 @@ ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeExcep
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
     return sName;
 }
@@ -136,20 +136,20 @@ ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException, 
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
 void SAL_CALL
 ScVbaStyle::setMergeCells( const uno::Any& /*MergeCells*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
 }
 
 uno::Any SAL_CALL
 ScVbaStyle::getMergeCells(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
     return uno::Any();
 }
 

@@ -49,7 +49,7 @@ void SbiParser::If()
             eTok = Peek();
             if( IsEof() )
             {
-                Error( SbERR_BAD_BLOCK, IF ); bAbort = true; return;
+                Error( ERRCODE_BASIC_BAD_BLOCK, IF ); bAbort = true; return;
             }
         }
         while( eTok == ELSEIF )
@@ -57,7 +57,7 @@ void SbiParser::If()
             // jump to ENDIF in case of a successful IF/ELSEIF
             if( iJmp >= JMP_TABLE_SIZE )
             {
-                Error( SbERR_PROG_TOO_LARGE );  bAbort = true;  return;
+                Error( ERRCODE_BASIC_PROG_TOO_LARGE );  bAbort = true;  return;
             }
             pnJmpToEndLbl[iJmp++] = aGen.Gen( _JUMP, 0 );
 
@@ -77,7 +77,7 @@ void SbiParser::If()
                 eTok = Peek();
                 if( IsEof() )
                 {
-                    Error( SbERR_BAD_BLOCK, ELSEIF );  bAbort = true; return;
+                    Error( ERRCODE_BASIC_BAD_BLOCK, ELSEIF );  bAbort = true; return;
                 }
             }
         }
@@ -137,7 +137,7 @@ void SbiParser::If()
 
 void SbiParser::NoIf()
 {
-    Error( SbERR_NO_IF );
+    Error( ERRCODE_BASIC_NO_IF );
     StmntBlock( ENDIF );
 }
 
@@ -163,7 +163,7 @@ void SbiParser::DoLoop()
             if (eTok == EOLN || eTok == REM)
                 aGen.Gen (_JUMP, nStartLbl);
             else
-                Error( SbERR_EXPECTED, WHILE );
+                Error( ERRCODE_BASIC_EXPECTED, WHILE );
     }
     else
     {
@@ -250,7 +250,7 @@ void SbiParser::For()
     {
         SbiExpression aVar( this, SbOPERAND );
         if( aVar.GetRealVar() != aLvalue.GetRealVar() )
-            Error( SbERR_EXPECTED, aLvalue.GetRealVar()->GetName() );
+            Error( ERRCODE_BASIC_EXPECTED, aLvalue.GetRealVar()->GetName() );
     }
     aGen.BackChain( nEndTarget );
     CloseBlock();
@@ -268,7 +268,7 @@ void SbiParser::With()
     if( pDef->GetType() == SbxVARIANT || pDef->GetType() == SbxEMPTY )
         pDef->SetType( SbxOBJECT );
     else if( pDef->GetType() != SbxOBJECT )
-        Error( SbERR_NEEDS_OBJECT );
+        Error( ERRCODE_BASIC_NEEDS_OBJECT );
 
 
     pNode->SetType( SbxOBJECT );
@@ -283,9 +283,9 @@ void SbiParser::With()
 void SbiParser::BadBlock()
 {
     if( eEndTok )
-        Error( SbERR_BAD_BLOCK, eEndTok );
+        Error( ERRCODE_BASIC_BAD_BLOCK, eEndTok );
     else
-        Error( SbERR_BAD_BLOCK, "Loop/Next/Wend" );
+        Error( ERRCODE_BASIC_BAD_BLOCK, "Loop/Next/Wend" );
 }
 
 // On expr Goto/Gosub n,n,n...
@@ -298,7 +298,7 @@ void SbiParser::OnGoto()
     SbiToken eTok = Next();
     if( eTok != GOTO && eTok != GOSUB )
     {
-        Error( SbERR_EXPECTED, "GoTo/GoSub" );
+        Error( ERRCODE_BASIC_EXPECTED, "GoTo/GoSub" );
         eTok = GOTO;
     }
 
@@ -312,7 +312,7 @@ void SbiParser::OnGoto()
             aGen.Gen( _JUMP, nOff );
             nLbl++;
         }
-        else Error( SbERR_LABEL_EXPECTED );
+        else Error( ERRCODE_BASIC_LABEL_EXPECTED );
     }
     while( !bAbort && TestComma() );
     if( eTok == GOSUB )
@@ -331,7 +331,7 @@ void SbiParser::Goto()
         sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
         aGen.Gen( eOp, nOff );
     }
-    else Error( SbERR_LABEL_EXPECTED );
+    else Error( ERRCODE_BASIC_LABEL_EXPECTED );
 }
 
 // RETURN [label]
@@ -381,7 +381,7 @@ void SbiParser::Select()
             else while( !bDone )
             {
                 if( bElse )
-                    Error( SbERR_SYNTAX );
+                    Error( ERRCODE_BASIC_SYNTAX );
                 SbiToken eTok2 = Peek();
                 if( eTok2 == IS || ( eTok2 >= EQ && eTok2 <= GE ) )
                 {   // CASE [IS] operator expr
@@ -389,7 +389,7 @@ void SbiParser::Select()
                         Next();
                     eTok2 = Peek();
                     if( eTok2 < EQ || eTok2 > GE )
-                        Error( SbERR_SYNTAX );
+                        Error( ERRCODE_BASIC_SYNTAX );
                     else Next();
                     SbiExpression aCompare( this );
                     aCompare.Gen();
@@ -443,7 +443,7 @@ void SbiParser::Select()
     }
 done:
     if( eTok != ENDSELECT )
-        Error( SbERR_EXPECTED, ENDSELECT );
+        Error( ERRCODE_BASIC_EXPECTED, ENDSELECT );
     if( nNextTarget )
         aGen.BackChain( nNextTarget );
     aGen.BackChain( nDoneTarget );
@@ -504,7 +504,7 @@ void SbiParser::On()
             }
             if( bError_ )
             {
-                Error( SbERR_LABEL_EXPECTED );
+                Error( ERRCODE_BASIC_LABEL_EXPECTED );
             }
         }
         else if( eCurTok == RESUME )
@@ -512,7 +512,7 @@ void SbiParser::On()
             TestToken( NEXT );
             aGen.Gen( _NOERROR );
         }
-        else Error( SbERR_EXPECTED, "GoTo/Resume" );
+        else Error( ERRCODE_BASIC_EXPECTED, "GoTo/Resume" );
     }
 }
 
@@ -547,7 +547,7 @@ void SbiParser::Resume()
                 break;
             } // fall through
         default:
-            Error( SbERR_LABEL_EXPECTED );
+            Error( ERRCODE_BASIC_LABEL_EXPECTED );
     }
 }
 

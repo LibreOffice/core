@@ -485,7 +485,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
         SbiRuntime::translateErrorToVba( n, aErrorMsg );
 
         bool bVBATranslationAlreadyDone = true;
-        pRun->Error( SbERR_BASIC_COMPAT, bVBATranslationAlreadyDone );
+        pRun->Error( ERRCODE_BASIC_COMPAT, bVBATranslationAlreadyDone );
     }
 }
 
@@ -706,7 +706,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 {
                     if( p && (p->eType & SbxARRAY) )
                     {
-                        Error( SbERR_CONVERSION );
+                        Error( ERRCODE_BASIC_CONVERSION );
                     }
                     else
                     {
@@ -786,7 +786,7 @@ bool SbiRuntime::Step()
         }
         else
         {
-            StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+            StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         }
 
         SbError nSbError = SbxBase::GetError();
@@ -904,7 +904,7 @@ void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
                 pGlobErr->setNumberAndDescription( nVBAErrorNumber, aMsg );
             }
             pInst->aErrorMsg = aMsg;
-            nError = SbERR_BASIC_COMPAT;
+            nError = ERRCODE_BASIC_COMPAT;
         }
     }
 }
@@ -985,7 +985,7 @@ SbxVariableRef SbiRuntime::PopVar()
 #ifdef DBG_UTIL
     if( !nExprLvl )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return new SbxVariable;
     }
 #endif
@@ -1022,7 +1022,7 @@ SbxVariable* SbiRuntime::GetTOS( short n )
 #ifdef DBG_UTIL
     if( n < 0 )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return new SbxVariable;
     }
 #endif
@@ -1064,7 +1064,7 @@ void SbiRuntime::PushGosub( const sal_uInt8* pc )
 {
     if( ++nGosubLvl > MAXRECURSION )
     {
-        StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
+        StarBASIC::FatalError( ERRCODE_BASIC_STACK_OVERFLOW );
     }
     SbiGosubStack* p = new SbiGosubStack;
     p->pCode  = pc;
@@ -1077,7 +1077,7 @@ void SbiRuntime::PopGosub()
 {
     if( !pGosubStk )
     {
-        Error( SbERR_NO_GOSUB );
+        Error( ERRCODE_BASIC_NO_GOSUB );
     }
     else
     {
@@ -1162,7 +1162,7 @@ void SbiRuntime::PushForEach()
     SbxBase* pObj = xObjVar.Is() ? xObjVar->GetObject() : NULL;
     if( pObj == NULL )
     {
-        Error( SbERR_NO_OBJECT );
+        Error( ERRCODE_BASIC_NO_OBJECT );
         return;
     }
 
@@ -1233,7 +1233,7 @@ void SbiRuntime::PushForEach()
 
     if( bError_ )
     {
-        Error( SbERR_CONVERSION );
+        Error( ERRCODE_BASIC_CONVERSION );
         return;
     }
 
@@ -1293,7 +1293,7 @@ void SbiRuntime::DllCall
     // No DllCall for "virtual" portal users
     if( needSecurityRestrictions() )
     {
-        StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
+        StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
         return;
     }
 
@@ -1606,7 +1606,7 @@ void SbiRuntime::StepIS()
     bool bRes = ( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
     if ( bVBAEnabled  && !bRes )
     {
-        Error( SbERR_INVALID_USAGE_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
     }
     bRes = ( bRes && refVar1->GetObject() == refVar2->GetObject() );
     SbxVariable* pRes = new SbxVariable;
@@ -1811,7 +1811,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     SbxDataType eVarType = refVar->GetType();
     if( !bHandleDefaultProp && eVarType != SbxOBJECT && !(eVarType & SbxARRAY) && refVar->IsFixed() )
     {
-        Error( SbERR_INVALID_USAGE_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
         return;
     }
 
@@ -1819,7 +1819,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     SbxDataType eValType = refVal->GetType();
     if( !bHandleDefaultProp && eValType != SbxOBJECT && !(eValType & SbxARRAY) && refVal->IsFixed() )
     {
-        Error( SbERR_INVALID_USAGE_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
         return;
     }
 
@@ -1849,7 +1849,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     // as an object!
     if( !refVal )
     {
-        Error( SbERR_INVALID_USAGE_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
     }
     else
     {
@@ -2051,7 +2051,7 @@ void SbiRuntime::StepLSET()
     if( refVar->GetType() != SbxSTRING ||
         refVal->GetType() != SbxSTRING )
     {
-        Error( SbERR_INVALID_USAGE_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
     }
     else
     {
@@ -2087,7 +2087,7 @@ void SbiRuntime::StepRSET()
     SbxVariableRef refVar = PopVar();
     if( refVar->GetType() != SbxSTRING || refVal->GetType() != SbxSTRING )
     {
-        Error( SbERR_INVALID_USAGE_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
     }
     else
     {
@@ -2159,7 +2159,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
     // have in mind that Arg[0] does not count!
     if( pDims && !( pDims->Count() & 1 ) )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     }
     else
     {
@@ -2176,7 +2176,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
                 sal_Int32 ub = pDims->Get( i++ )->GetLong();
                 if( ub < lb )
                 {
-                    Error( SbERR_OUT_OF_RANGE ), ub = lb;
+                    Error( ERRCODE_BASIC_OUT_OF_RANGE ), ub = lb;
                 }
                 pArray->AddDim32( lb, ub );
                 if ( lb != ub )
@@ -2258,7 +2258,7 @@ void SbiRuntime::StepREDIMP()
 
             if( nDimsOld != nDimsNew )
             {
-                StarBASIC::Error( SbERR_OUT_OF_RANGE );
+                StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
             }
             else if (nDims > 0)
             {
@@ -2401,7 +2401,7 @@ void SbiRuntime::StepARRAYACCESS()
 {
     if( !refArgv )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     }
     SbxVariableRef refVar = PopVar();
     refVar->SetParameters( refArgv );
@@ -2438,7 +2438,7 @@ void SbiRuntime::StepARGV()
 {
     if( !refArgv )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     }
     else
     {
@@ -2536,7 +2536,7 @@ void SbiRuntime::StepINPUT()
                 SbxBase::ResetError();
                 if( !err )
                 {
-                    err = SbERR_CONVERSION;
+                    err = ERRCODE_BASIC_CONVERSION;
                 }
             }
         }
@@ -2547,7 +2547,7 @@ void SbiRuntime::StepINPUT()
             SbxBase::ResetError();
         }
     }
-    if( err == SbERR_USER_ABORT )
+    if( err == ERRCODE_BASIC_USER_ABORT )
     {
         Error( err );
     }
@@ -2604,7 +2604,7 @@ void SbiRuntime::StepNEXT()
 {
     if( !pForStk )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return;
     }
     if( pForStk->eForType == FOR_TO )
@@ -2631,7 +2631,7 @@ void SbiRuntime::StepENDCASE()
 {
     if( !refCaseStk || !refCaseStk->Count() )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     }
     else
     {
@@ -2779,7 +2779,7 @@ void SbiRuntime::StepRESTART()
 void SbiRuntime::StepEMPTY()
 {
     // #57915 The semantics of StepEMPTY() is the representation of a missing argument.
-    // This is represented by the value 448 (SbERR_NAMED_NOT_FOUND) of the type error
+    // This is represented by the value 448 (ERRCODE_BASIC_NAMED_NOT_FOUND) of the type error
     // in VB. StepEmpty should now rather be named StepMISSING() but the name is kept
     // to simplify matters.
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
@@ -2847,7 +2847,7 @@ void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
 void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
 {
     if( !refArgv )
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     else
     {
         OUString aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
@@ -2871,7 +2871,7 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
 void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
 {
     if( !refArgv )
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     else
     {
         bool bByVal = (nOp1 & 0x8000) != 0;         // Ist BYVAL requested?
@@ -2898,7 +2898,7 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
             if( bByVal )
                 pVar->ResetFlag( SbxFlagBits::Reference );   // no reference -> OK
             else
-                Error( SbERR_BAD_PARAMETERS );      // reference needed
+                Error( ERRCODE_BASIC_BAD_PARAMETERS );      // reference needed
         }
 
         if( pVar->GetType() != t )
@@ -2941,7 +2941,7 @@ void SbiRuntime::StepJUMP( sal_uInt32 nOp1 )
     // #QUESTION shouln't this be
     // if( (sal_uInt8*)( nOp1+pImagGetCode() ) >= pImg->GetCodeSize() )
     if( nOp1 >= pImg->GetCodeSize() )
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
 #endif
     pCode = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
 }
@@ -2995,7 +2995,7 @@ void SbiRuntime::StepGOSUB( sal_uInt32 nOp1 )
 {
     PushGosub( pCode );
     if( nOp1 >= pImg->GetCodeSize() )
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     pCode = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
 }
 
@@ -3014,7 +3014,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
 {
     if( !pForStk )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return;
     }
 
@@ -3115,7 +3115,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
 void SbiRuntime::StepCASETO( sal_uInt32 nOp1 )
 {
     if( !refCaseStk || !refCaseStk->Count() )
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     else
     {
         SbxVariableRef xTo   = PopVar();
@@ -3147,7 +3147,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     // #32714 Resume without error? -> error
     if( !bInError )
     {
-        Error( SbERR_BAD_RESUME );
+        Error( ERRCODE_BASIC_BAD_RESUME );
         return;
     }
     if( nOp1 )
@@ -3261,7 +3261,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
                 if ( !bOk )
                 {
                     if( bRaiseErrors )
-                        Error( SbERR_INVALID_USAGE_OBJECT );
+                        Error( ERRCODE_BASIC_INVALID_USAGE_OBJECT );
                 }
             }
             else
@@ -3279,7 +3279,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
         if ( !bVBAEnabled )
         {
             if( bRaiseErrors )
-                Error( SbERR_NEEDS_OBJECT );
+                Error( ERRCODE_BASIC_NEEDS_OBJECT );
             bOk = false;
         }
     }
@@ -3366,7 +3366,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
     SbxVariable* pElem = NULL;
     if( !pObj )
     {
-        Error( SbERR_NO_OBJECT );
+        Error( ERRCODE_BASIC_NO_OBJECT );
         pElem = new SbxVariable;
     }
     else
@@ -3496,9 +3496,9 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                     bFatalError = true;
 
 
-                    if( !( nOp1 & 0x8000 ) && nNotFound == SbERR_PROC_UNDEFINED )
+                    if( !( nOp1 & 0x8000 ) && nNotFound == ERRCODE_BASIC_PROC_UNDEFINED )
                     {
-                        nNotFound = SbERR_VAR_UNDEFINED;
+                        nNotFound = ERRCODE_BASIC_VAR_UNDEFINED;
                     }
                 }
                 if( bFatalError )
@@ -3668,7 +3668,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
     {
         if( !refArgv )
         {
-            StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+            StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         }
         bool bHasNamed = false;
         sal_uInt16 i;
@@ -3755,7 +3755,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 }
                 if( bError_ )
                 {
-                    Error( SbERR_NO_NAMED_ARGS );
+                    Error( ERRCODE_BASIC_NO_NAMED_ARGS );
                 }
             }
             else
@@ -3782,7 +3782,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                         }
                         if( !pParam )
                         {
-                            Error( SbERR_NAMED_NOT_FOUND ); break;
+                            Error( ERRCODE_BASIC_NAMED_NOT_FOUND ); break;
                         }
                     }
                     pArg->Put( pVar, nCurPar++ );
@@ -3825,7 +3825,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             {
                 if( !pPar )
                 {
-                    Error( SbERR_OUT_OF_RANGE );
+                    Error( ERRCODE_BASIC_OUT_OF_RANGE );
                     pElem = new SbxVariable;
                 }
                 else
@@ -3867,7 +3867,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 sal_uInt32 nParamCount = (sal_uInt32)pPar->Count() - 1;
                                 if( nParamCount != 1 )
                                 {
-                                    StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                                    StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
                                     return pElem;
                                 }
 
@@ -3886,7 +3886,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 catch (const IndexOutOfBoundsException&)
                                 {
                                     // usually expect converting problem
-                                    StarBASIC::Error( SbERR_OUT_OF_RANGE );
+                                    StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
                                 }
 
                                 // #57847 always create a new variable, else error
@@ -3975,7 +3975,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                 SbxArray* pParam = pElem->GetParameters();
                 if( pParam != NULL && !pElem->IsSet( SbxFlagBits::VarToDim ) )
                 {
-                    Error( SbERR_NO_OBJECT );
+                    Error( ERRCODE_BASIC_NO_OBJECT );
                 }
             }
         }
@@ -3988,7 +3988,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
 void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, false ) );
+    PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, false ) );
 }
 
 void SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2,
@@ -4004,7 +4004,7 @@ void SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp
 
 void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true );
+    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true );
 }
 
 // Search inside a class module (CM) to enable global search in time
@@ -4016,7 +4016,7 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         pMod->SetFlag( SbxFlagBits::GlobalSearch );
     }
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true );
+    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true );
 
     if( pClassModuleObject )
     {
@@ -4026,7 +4026,7 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
 void SbiRuntime::StepFIND_STATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true, true );
+    StepFIND_Impl( pMod, nOp1, nOp2, ERRCODE_BASIC_PROC_UNDEFINED, true, true );
 }
 
 // loading an object-element (+StringID+type)
@@ -4051,7 +4051,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         SaveRef( static_cast<SbxVariable*>(pObj) );
     }
-    PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, false ) );
+    PushVar( FindElement( pObj, nOp1, nOp2, ERRCODE_BASIC_NO_METHOD, false ) );
 }
 
 // loading a parameter (+offset+type)
@@ -4088,7 +4088,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             }
             else
             {
-                p->PutErr( 448 );       // like in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+                p->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
             }
             refParams->Put( p, iLoop );
             iLoop--;
@@ -4123,7 +4123,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         }
         if( !bOpt )
         {
-            Error( SbERR_NOT_OPTIONAL );
+            Error( ERRCODE_BASIC_NOT_OPTIONAL );
         }
     }
     else if( t != SbxVARIANT && (SbxDataType)(p->GetType() & 0x0FFF ) != t )
@@ -4147,7 +4147,7 @@ void SbiRuntime::StepCASEIS( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     if( !refCaseStk || !refCaseStk->Count() )
     {
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
     }
     else
     {
@@ -4229,7 +4229,7 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // would be wrong later otherwise!
     if( bFatalExpr)
     {
-        StarBASIC::FatalError( SbERR_NO_METHOD, sUnknownMethodName );
+        StarBASIC::FatalError( ERRCODE_BASIC_NO_METHOD, sUnknownMethodName );
         return;
     }
     pStmnt = pCode - 9;
@@ -4320,7 +4320,7 @@ void SbiRuntime::StepCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxObject *pObj = SbxBase::CreateObject( aClass );
     if( !pObj )
     {
-        Error( SbERR_INVALID_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_OBJECT );
     }
     else
     {
@@ -4376,7 +4376,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxBaseRef xObj = refVar->GetObject();
     if( !xObj )
     {
-        StarBASIC::Error( SbERR_INVALID_OBJECT );
+        StarBASIC::Error( ERRCODE_BASIC_INVALID_OBJECT );
         return;
     }
 
@@ -4413,7 +4413,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             SbxObject *pClassObj = SbxBase::CreateObject( aClass );
             if( !pClassObj )
             {
-                Error( SbERR_INVALID_OBJECT );
+                Error( ERRCODE_BASIC_INVALID_OBJECT );
                 break;
             }
             else
@@ -4463,7 +4463,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
         if( bRangeError )
         {
-            StarBASIC::Error( SbERR_OUT_OF_RANGE );
+            StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
         }
         else
         {

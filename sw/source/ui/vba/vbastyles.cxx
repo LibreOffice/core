@@ -328,7 +328,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                             break;
                         }
                         default:
-                            DebugHelper::basicexception( SbERR_INTERNAL_ERROR, OUString() );
+                            DebugHelper::basicexception( ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
                     }
                     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW);
                     uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );

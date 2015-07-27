@@ -160,25 +160,25 @@ void SbiStream::MapError()
             nError = 0;
             break;
         case SVSTREAM_FILE_NOT_FOUND:
-            nError = SbERR_FILE_NOT_FOUND;
+            nError = ERRCODE_BASIC_FILE_NOT_FOUND;
             break;
         case SVSTREAM_PATH_NOT_FOUND:
-            nError = SbERR_PATH_NOT_FOUND;
+            nError = ERRCODE_BASIC_PATH_NOT_FOUND;
             break;
         case SVSTREAM_TOO_MANY_OPEN_FILES:
-            nError = SbERR_TOO_MANY_FILES;
+            nError = ERRCODE_BASIC_TOO_MANY_FILES;
             break;
         case SVSTREAM_ACCESS_DENIED:
-            nError = SbERR_ACCESS_DENIED;
+            nError = ERRCODE_BASIC_ACCESS_DENIED;
             break;
         case SVSTREAM_INVALID_PARAMETER:
-            nError = SbERR_BAD_ARGUMENT;
+            nError = ERRCODE_BASIC_BAD_ARGUMENT;
             break;
         case SVSTREAM_OUTOFMEMORY:
-            nError = SbERR_NO_MEMORY;
+            nError = ERRCODE_BASIC_NO_MEMORY;
             break;
         default:
-            nError = SbERR_IO_ERROR;
+            nError = ERRCODE_BASIC_IO_ERROR;
             break;
         }
     }
@@ -663,7 +663,7 @@ SbError SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
         }
         if( !n )
         {
-            return nError = SbERR_BAD_RECORD_LENGTH;
+            return nError = ERRCODE_BASIC_BAD_RECORD_LENGTH;
         }
         OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
         //Pad it out with ' ' to the requested length on short read
@@ -674,7 +674,7 @@ SbError SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
     MapError();
     if( !nError && pStrm->IsEof() )
     {
-        nError = SbERR_READ_PAST_EOF;
+        nError = ERRCODE_BASIC_READ_PAST_EOF;
     }
     return nError;
 }
@@ -756,7 +756,7 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
         }
         if( !n )
         {
-            return nError = SbERR_BAD_RECORD_LENGTH;
+            return nError = ERRCODE_BASIC_BAD_RECORD_LENGTH;
         }
         pStrm->Write(rBuf.getStr(), n);
         MapError();
@@ -799,11 +799,11 @@ void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, short 
     nError = 0;
     if( nCh >= CHANNELS || !nCh )
     {
-        nError = SbERR_BAD_CHANNEL;
+        nError = ERRCODE_BASIC_BAD_CHANNEL;
     }
     else if( pChan[ nCh ] )
     {
-        nError = SbERR_FILE_ALREADY_OPEN;
+        nError = ERRCODE_BASIC_FILE_ALREADY_OPEN;
     }
     else
     {
@@ -822,11 +822,11 @@ void SbiIoSystem::Close()
 {
     if( !nChan )
     {
-        nError = SbERR_BAD_CHANNEL;
+        nError = ERRCODE_BASIC_BAD_CHANNEL;
     }
     else if( !pChan[ nChan ] )
     {
-        nError = SbERR_BAD_CHANNEL;
+        nError = ERRCODE_BASIC_BAD_CHANNEL;
     }
     else
     {
@@ -876,7 +876,7 @@ void SbiIoSystem::Read(OString& rBuf, short n)
     }
     else if( !pChan[ nChan ] )
     {
-        nError = SbERR_BAD_CHANNEL;
+        nError = ERRCODE_BASIC_BAD_CHANNEL;
     }
     else
     {
@@ -899,7 +899,7 @@ char SbiIoSystem::Read()
     }
     else if( !pChan[ nChan ] )
     {
-        nError = SbERR_BAD_CHANNEL;
+        nError = ERRCODE_BASIC_BAD_CHANNEL;
     }
     else
     {
@@ -916,7 +916,7 @@ void SbiIoSystem::Write(const OUString& rBuf, short n)
     }
     else if( !pChan[ nChan ] )
     {
-        nError = SbERR_BAD_CHANNEL;
+        nError = ERRCODE_BASIC_BAD_CHANNEL;
     }
     else
     {
@@ -970,7 +970,7 @@ void SbiIoSystem::ReadCon(OString& rIn)
     }
     else
     {
-        nError = SbERR_USER_ABORT;
+        nError = ERRCODE_BASIC_USER_ABORT;
     }
     aPrompt.clear();
 }
@@ -1009,7 +1009,7 @@ void SbiIoSystem::WriteCon(const OUString& rText)
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                         OUString(), s )->Execute() )
             {
-                nError = SbERR_USER_ABORT;
+                nError = ERRCODE_BASIC_USER_ABORT;
             }
         }
     }

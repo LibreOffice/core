@@ -585,7 +585,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
             // should equal number of dimensions in the array )
             // And that should at least be 1 !
             // #QUESTION is there a better error?
-            StarBASIC::Error( SbERR_INVALID_OBJECT );
+            StarBASIC::Error( ERRCODE_BASIC_INVALID_OBJECT );
             return;
         }
 
@@ -1152,7 +1152,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
         }
         catch (const IndexOutOfBoundsException&)
         {
-            StarBASIC::Error( SbERR_OUT_OF_RANGE );
+            StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
         }
     }
     return aRetVal;
@@ -1368,7 +1368,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                         }
                         catch (const IndexOutOfBoundsException&)
                         {
-                            StarBASIC::Error( SbERR_OUT_OF_RANGE );
+                            StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
                         }
                     }
                 }
@@ -2080,7 +2080,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             StructRefInfo aMember = maStructInfo->getStructMember( pProp->GetName() );
                             if ( aMember.isEmpty() )
                             {
-                                 StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+                                 StarBASIC::Error( ERRCODE_BASIC_PROPERTY_NOT_FOUND );
                             }
                             else
                             {
@@ -2149,7 +2149,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     if( pProp->aUnoProp.Attributes & PropertyAttribute::READONLY )
                     {
-                        StarBASIC::Error( SbERR_PROP_READONLY );
+                        StarBASIC::Error( ERRCODE_BASIC_PROP_READONLY );
                         return;
                     }
                     if (  maStructInfo.get()  )
@@ -2157,7 +2157,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         StructRefInfo aMember = maStructInfo->getStructMember( pProp->GetName() );
                         if ( aMember.isEmpty() )
                         {
-                            StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+                            StarBASIC::Error( ERRCODE_BASIC_PROPERTY_NOT_FOUND );
                         }
                         else
                         {
@@ -2237,7 +2237,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 if( rxClass->getTypeClass() != TypeClass_ANY )
                                 {
                                     bError = true;
-                                    StarBASIC::Error( SbERR_NOT_OPTIONAL );
+                                    StarBASIC::Error( ERRCODE_BASIC_NOT_OPTIONAL );
                                 }
                             }
                             if( !bError )
@@ -2969,7 +2969,7 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     // We need 1 parameter minimum
     if ( rPar.Count() < 2 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -2995,7 +2995,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     // We need 1 Parameter minimum
     if ( rPar.Count() < 2 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -3046,7 +3046,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     // We need 2 parameter minimum
     if ( rPar.Count() < 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -3119,7 +3119,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     sal_uInt16 nParCount = rPar.Count();
     if( nParCount < 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -3180,7 +3180,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     // We need 1 parameter minimum
     if ( rPar.Count() < 2 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -3215,7 +3215,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     if ( rPar.Count() < 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -3673,7 +3673,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if( !bRestParameterMode || nDiff > 1 )
                 {
                     bParameterError = true;
-                    StarBASIC::Error( SbERR_NOT_OPTIONAL );
+                    StarBASIC::Error( ERRCODE_BASIC_NOT_OPTIONAL );
                 }
             }
 
@@ -3856,7 +3856,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         if( nParamCount > nAllowedParamCount )
         {
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
             return;
         }
 
@@ -4157,7 +4157,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     // We need 2 parameters
     if ( rPar.Count() != 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -4237,7 +4237,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     // 2 parameters needed
     if ( rPar.Count() != 3 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -4390,7 +4390,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     if( pMeth == NULL )
     {
         // TODO: Check vba behavior concernig missing function
-        //StarBASIC::Error( SbERR_NO_METHOD, aFunctionName );
+        //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
         throw UnknownPropertyException();
     }
 
@@ -4430,7 +4430,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     if( pMeth == NULL )
     {
         // TODO: Check vba behavior concernig missing function
-        //StarBASIC::Error( SbERR_NO_METHOD, aFunctionName );
+        //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
         throw UnknownPropertyException();
     }
 
@@ -4487,7 +4487,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     if( pMeth == NULL )
     {
         // TODO: Check vba behavior concernig missing function
-        //StarBASIC::Error( SbERR_NO_METHOD, aFunctionName );
+        //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
         return aRet;
     }
 
@@ -5055,7 +5055,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     unoToSbxValue( pVar, aRetAny );
                 }
                 else
-                    StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+                    StarBASIC::Error( ERRCODE_BASIC_PROPERTY_NOT_FOUND );
             }
             else if( pHint->GetId() == SBX_HINT_DATACHANGED )
             {
@@ -5066,7 +5066,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     it->second->setValue( aAnyValue );
                 }
                 else
-                    StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+                    StarBASIC::Error( ERRCODE_BASIC_PROPERTY_NOT_FOUND );
             }
         }
         else

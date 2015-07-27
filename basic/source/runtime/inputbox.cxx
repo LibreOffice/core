@@ -160,7 +160,7 @@ RTLFUNC(InputBox)
 
     sal_uInt32 nArgCount = rPar.Count();
     if ( nArgCount < 2 )
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     else
     {
         OUString aTitle;
@@ -175,7 +175,7 @@ RTLFUNC(InputBox)
         {
             if ( nArgCount != 6 )
             {
-                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
                 return;
             }
             nX = rPar.Get(4)->GetLong();

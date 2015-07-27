@@ -288,7 +288,7 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                         nVal = ( eRes >= 0 ) ? SbxTRUE : SbxFALSE;
                         break;
                     default:
-                        pParser->Error( SbERR_CONVERSION );
+                        pParser->Error( ERRCODE_BASIC_CONVERSION );
                         bError = true;
                         break;
                     }
@@ -314,7 +314,7 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                     lrMod = static_cast<long>(nr);
                     if( err )
                     {
-                        pParser->Error( SbERR_MATH_OVERFLOW );
+                        pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
                         bError = true;
                     }
                 }
@@ -336,7 +336,7 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                     case DIV:
                         if( !nr )
                         {
-                            pParser->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
+                            pParser->Error( ERRCODE_BASIC_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
                         } else nVal = nl / nr;
                         break;
@@ -367,14 +367,14 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                     case IDIV:
                         if( !lr )
                         {
-                            pParser->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
+                            pParser->Error( ERRCODE_BASIC_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
                         } else nVal = ll / lr;
                         eType = SbxLONG; break;
                     case MOD:
                         if( !lr )
                         {
-                            pParser->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
+                            pParser->Error( ERRCODE_BASIC_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
                         } else nVal = llMod - lrMod * (llMod/lrMod);
                         eType = SbxLONG; break;
@@ -392,7 +392,7 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                 }
 
                 if( !::rtl::math::isFinite( nVal ) )
-                    pParser->Error( SbERR_MATH_OVERFLOW );
+                    pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
 
                 // Recover the data type to kill rounding error
                 if( bCheckType && bBothInt
@@ -424,7 +424,7 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                 else if( nVal < SbxMINLNG ) err = true, nVal = SbxMINLNG;
                 if( err )
                 {
-                    pParser->Error( SbERR_MATH_OVERFLOW );
+                    pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
                     bError = true;
                 }
                 nVal = (double) ~((long) nVal);

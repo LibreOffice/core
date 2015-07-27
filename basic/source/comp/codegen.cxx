@@ -85,7 +85,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 
 #ifdef DBG_UTIL
     if( eOpcode < SbOP0_START || eOpcode > SbOP0_END )
-        pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE1" );
+        pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE1" );
 #endif
     GenStmnt();
     aCode += (sal_uInt8) eOpcode;
@@ -99,7 +99,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
 
 #ifdef DBG_UTIL
     if( eOpcode < SbOP1_START || eOpcode > SbOP1_END )
-        pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE2" );
+        pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE2" );
 #endif
     GenStmnt();
     aCode += (sal_uInt8) eOpcode;
@@ -115,7 +115,7 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
 
 #ifdef DBG_UTIL
     if( eOpcode < SbOP2_START || eOpcode > SbOP2_END )
-        pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE3" );
+        pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "OPCODE3" );
 #endif
     GenStmnt();
     aCode += (sal_uInt8) eOpcode;

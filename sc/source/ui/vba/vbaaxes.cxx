@@ -73,11 +73,11 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
     if (((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue)))
     {
         if ((nAxisGroup != xlPrimary) && (nAxisGroup != xlSecondary))
-            DebugHelper::runtimeexception(SbERR_METHOD_FAILED, OUString());
+            DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
         xAxisPropertySet.set( pChart->getAxisPropertySet(nType, nAxisGroup), uno::UNO_QUERY_THROW );
     }
     else
-        DebugHelper::runtimeexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     uno::Reference< XHelperInterface > xParent( xChart, uno::UNO_QUERY_THROW );
     return new ScVbaAxis( xParent, xContext, xAxisPropertySet, nType, nAxisGroup);
 }

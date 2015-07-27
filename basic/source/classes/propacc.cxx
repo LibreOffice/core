@@ -272,7 +272,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
     // TODO: In this case < 2 is not correct ;-)
     if ( rPar.Count() < 2 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 

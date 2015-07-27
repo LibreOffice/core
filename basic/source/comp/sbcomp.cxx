@@ -871,7 +871,7 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 
     if ( rPar.Count() < 2 )
     {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
@@ -897,7 +897,7 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
     {
         if ( rPar.Count() < 3 )
         {
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
             return;
         }
 

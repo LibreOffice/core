@@ -485,7 +485,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     break;
                 }
 #if HAVE_FEATURE_SCRIPTING
-            StarBASIC::FatalError (SbERR_WRONG_ARGS);
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
             rReq.Ignore ();
             break;
@@ -513,7 +513,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     break;
                 }
 #if HAVE_FEATURE_SCRIPTING
-            StarBASIC::FatalError (SbERR_WRONG_ARGS);
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
             rReq.Ignore ();
             break;
@@ -562,13 +562,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
                     }
 #if HAVE_FEATURE_SCRIPTING
-                    else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+                    else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
 #endif
                     rReq.Ignore ();
                     break;
                 }
 #if HAVE_FEATURE_SCRIPTING
-            StarBASIC::FatalError (SbERR_WRONG_ARGS);
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
             rReq.Ignore ();
             break;
@@ -1443,7 +1443,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else if (pArgs->Count () != 4)
                  {
 #if HAVE_FEATURE_SCRIPTING
-                     StarBASIC::FatalError (SbERR_WRONG_ARGS);
+                     StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
                      Cancel();
                      rReq.Ignore ();
@@ -1625,7 +1625,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
 #if HAVE_FEATURE_SCRIPTING
-                StarBASIC::FatalError (SbERR_WRONG_ARGS);
+                StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
                 Cancel ();
                 rReq.Ignore ();

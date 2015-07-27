@@ -41,7 +41,7 @@ ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent, con
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -136,12 +136,12 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
                 }
                 else
                 {
-                    DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString() );
+                    DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString() );
                 }
             }
             else
             {
-                DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
+                DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
             }
         }
 
@@ -159,7 +159,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return aRet;
 }
@@ -174,7 +174,7 @@ ScVbaStyles::Delete(const OUString& _sStyleName) throw ( script::BasicErrorExcep
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 

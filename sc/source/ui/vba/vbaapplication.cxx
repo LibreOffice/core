@@ -877,7 +877,7 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType ) throw (un
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::runtimeexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return sRetPath;
 }
@@ -1102,7 +1102,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Intersect(
         throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if( !rArg1.is() || !rArg2.is() )
-        DebugHelper::basicexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
 
     // initialize the result list with 1st parameter, join its ranges together
     ListOfScRange aList;
@@ -1156,7 +1156,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Union(
         throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if( !rArg1.is() || !rArg2.is() )
-        DebugHelper::basicexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
 
     ListOfScRange aList;
     lclAddToListOfScRange( aList, uno::Any( rArg1 ) );

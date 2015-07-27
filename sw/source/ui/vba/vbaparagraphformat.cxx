@@ -86,7 +86,7 @@ void SAL_CALL SwVbaParagraphFormat::setKeepTogether( const uno::Any& _keeptogeth
     }
     else
     {
-        DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 }
 
@@ -106,7 +106,7 @@ void SAL_CALL SwVbaParagraphFormat::setKeepWithNext( const uno::Any& _keepwithne
     }
     else
     {
-        DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 }
 
@@ -126,7 +126,7 @@ void SAL_CALL SwVbaParagraphFormat::setHyphenation( const uno::Any& _hyphenation
     }
     else
     {
-        DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 }
 
@@ -174,7 +174,7 @@ void SAL_CALL SwVbaParagraphFormat::setNoLineNumber( const uno::Any& _nolinenumb
     }
     else
     {
-        DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 }
 
@@ -233,7 +233,7 @@ void SAL_CALL SwVbaParagraphFormat::setPageBreakBefore( const uno::Any& _breakbe
     }
     else
     {
-        DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 }
 
@@ -324,7 +324,7 @@ void SAL_CALL SwVbaParagraphFormat::setWidowControl( const uno::Any& _widowcontr
     }
     else
     {
-        DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 }
 
@@ -402,7 +402,7 @@ style::LineSpacing SwVbaParagraphFormat::getOOoLineSpacingFromRule( sal_Int32 _l
         }
         default:
         {
-            DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
             break;
         }
     }
@@ -467,7 +467,7 @@ sal_Int32 SwVbaParagraphFormat::getMSWordLineSpacingRule( style::LineSpacing& rL
         }
         default:
         {
-            DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
         }
     }
     return wdLineSpacing;
@@ -507,7 +507,7 @@ sal_Int32 SwVbaParagraphFormat::getOOoAlignment( sal_Int32 _alignment )
         }
         default:
         {
-            DebugHelper::runtimeexception( SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
         }
     }
     return nParaAjust;
@@ -540,7 +540,7 @@ sal_Int32 SwVbaParagraphFormat::getMSWordAlignment( sal_Int32 _alignment )
         }
         default:
         {
-            DebugHelper::basicexception( SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_BAD_PARAMETER, OUString() );
         }
     }
     return wdAlignment;

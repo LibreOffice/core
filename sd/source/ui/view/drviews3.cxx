@@ -154,7 +154,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     if (! CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
                     {
 #if HAVE_FEATURE_SCRIPTING
-                        StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+                        StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
 #endif
                         rReq.Ignore ();
                         break;
@@ -164,7 +164,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         if (! CHECK_RANGE (0, nWhatPage, GetDoc()->GetSdPageCount((PageKind)nWhatKind)))
                         {
 #if HAVE_FEATURE_SCRIPTING
-                            StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+                            StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
 #endif
                             rReq.Ignore ();
                             break;
@@ -177,7 +177,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 else
                 {
 #if HAVE_FEATURE_SCRIPTING
-                    StarBASIC::FatalError (SbERR_WRONG_ARGS);
+                    StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
                     rReq.Ignore ();
                     break;

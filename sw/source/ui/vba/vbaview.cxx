@@ -148,7 +148,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
             }
             else
             {
-                DebugHelper::runtimeexception( SbERR_NO_ACTIVE_OBJECT, OUString() );
+                DebugHelper::runtimeexception( ERRCODE_BASIC_NO_ACTIVE_OBJECT, OUString() );
             }
             break;
         }
@@ -163,7 +163,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
             }
             else
             {
-                DebugHelper::runtimeexception( SbERR_NO_ACTIVE_OBJECT, OUString() );
+                DebugHelper::runtimeexception( ERRCODE_BASIC_NO_ACTIVE_OBJECT, OUString() );
             }
             break;
         }
@@ -235,7 +235,7 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::
             break;
         }
         default:
-            DebugHelper::runtimeexception( SbERR_NOT_IMPLEMENTED, OUString() );
+            DebugHelper::runtimeexception( ERRCODE_BASIC_NOT_IMPLEMENTED, OUString() );
 
     }
 }
@@ -316,7 +316,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
                 while( hasNextPage && ( xStyle == word::getCurrentPageStyle( mxModel ) ) );
 
                 if( !hasNextPage )
-                    DebugHelper::basicexception( SbERR_BAD_ACTION, OUString() );
+                    DebugHelper::basicexception( ERRCODE_BASIC_BAD_ACTION, OUString() );
             }
             break;
         }
@@ -356,7 +356,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         if( nType == word::WdSeekView::wdSeekEvenPagesFooter
             || nType == word::WdSeekView::wdSeekEvenPagesHeader )
         {
-            DebugHelper::basicexception( SbERR_BAD_ACTION, OUString() );
+            DebugHelper::basicexception( ERRCODE_BASIC_BAD_ACTION, OUString() );
         }
         xText.set( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
     }
@@ -364,7 +364,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     mxModel->unlockControllers();
     if( !xText.is() )
     {
-        DebugHelper::basicexception( SbERR_INTERNAL_ERROR, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
     }
     uno::Reference< text::XTextRange > xTextRange = word::getFirstObjectPosition( xText );
     return xTextRange;

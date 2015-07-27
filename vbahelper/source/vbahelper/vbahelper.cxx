@@ -1071,7 +1071,7 @@ void DebugHelper::basicexception( int err,  const OUString& additionalArgument )
 
 void DebugHelper::basicexception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
 {
-    basicexception( OUString(), ex, SbERR_INTERNAL_ERROR, OUString() );
+    basicexception( OUString(), ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
 }
 
 void DebugHelper::runtimeexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException )

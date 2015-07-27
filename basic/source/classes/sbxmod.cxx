@@ -833,7 +833,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if( pMeth->bInvalid && !Compile() )
                 {
                     // auto compile has not worked!
-                    StarBASIC::Error( SbERR_BAD_PROP_VALUE );
+                    StarBASIC::Error( ERRCODE_BASIC_BAD_PROP_VALUE );
                 }
                 else
                 {
@@ -1245,7 +1245,7 @@ void SbModule::Run( SbMethod* pMeth )
     else
     {
         GetSbData()->pInst->nCallLvl--;          // Call-Level down again
-        StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
+        StarBASIC::FatalError( ERRCODE_BASIC_STACK_OVERFLOW );
     }
 
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
@@ -1517,7 +1517,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             p += 8, nPC += 8;
         else if( !( eOp >= SbOP0_START && eOp <= SbOP0_END ) )
         {
-            StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+            StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
             break;
         }
     }
@@ -2097,7 +2097,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 
     // #104083: Compile BEFORE get
     if( bInvalid && !pMod_->Compile() )
-        StarBASIC::Error( SbERR_BAD_PROP_VALUE );
+        StarBASIC::Error( ERRCODE_BASIC_BAD_PROP_VALUE );
 
     Get( aVals );
     if ( pRet )

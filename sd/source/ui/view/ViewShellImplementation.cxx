@@ -144,7 +144,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             else
             {
 #if HAVE_FEATURE_SCRIPTING
-                StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+                StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
 #endif
                 rRequest.Ignore ();
                 break;
@@ -158,7 +158,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         else
         {
 #if HAVE_FEATURE_SCRIPTING
-            StarBASIC::FatalError (SbERR_WRONG_ARGS);
+            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
             rRequest.Ignore ();
             break;

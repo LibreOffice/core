@@ -407,7 +407,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if( rReq.IsAPI() )
                                 {
 #if HAVE_FEATURE_SCRIPTING
-                                    StarBASIC::Error( SbERR_SETPROP_FAILED ); // XXX error handling???
+                                    StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED ); // XXX error handling???
 #endif
                                 }
                                 else
@@ -739,7 +739,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     if( rReq.IsAPI() )
                                     {
 #if HAVE_FEATURE_SCRIPTING
-                                        StarBASIC::Error( SbERR_SETPROP_FAILED );
+                                        StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED );
 #endif
                                     }
                                 }

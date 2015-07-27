@@ -149,7 +149,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
         aTablePageBreakData = aTablePageBreakDataList[i];
         sal_Int32 nPos = aTablePageBreakData.Position;
         if( nPos > nUsedEnd + 1 )
-            DebugHelper::runtimeexception(SbERR_METHOD_FAILED, OUString());
+            DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
         index++;
         if( index == nAPIItemIndex )
             return aTablePageBreakData;
@@ -164,7 +164,7 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before ) throw ( css::script
     Before >>= xRange;
     if( !xRange.is() )
     {
-        DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
     }
 
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );

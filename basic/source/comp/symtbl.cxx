@@ -147,7 +147,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         {
 #ifdef DBG_UTIL
 
-            pParser->Error( SbERR_INTERNAL_ERROR, "Dbl Pool" );
+            pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "Dbl Pool" );
 #endif
             return;
         }
@@ -221,7 +221,7 @@ sal_uInt32 SbiSymPool::Define( const OUString& rName )
     {
         if( p->IsDefined() )
         {
-            pParser->Error( SbERR_LABEL_DEFINED, rName );
+            pParser->Error( ERRCODE_BASIC_LABEL_DEFINED, rName );
         }
     }
     else
@@ -251,7 +251,7 @@ void SbiSymPool::CheckRefs()
         SbiSymDef &r = aData[ i ];
         if( !r.IsDefined() )
         {
-            pParser->Error( SbERR_UNDEF_LABEL, r.GetName() );
+            pParser->Error( ERRCODE_BASIC_UNDEF_LABEL, r.GetName() );
         }
     }
 }
@@ -451,7 +451,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
     {
         // mark the whole line
         pOld->pIn->GetParser()->SetCol1( 0 );
-        pOld->pIn->GetParser()->Error( SbERR_BAD_DECLARATION, aName );
+        pOld->pIn->GetParser()->Error( ERRCODE_BASIC_BAD_DECLARATION, aName );
     }
     if( !pIn && pOld->pIn )
     {

@@ -29,24 +29,24 @@
 
 static const SbError nDdeErrMap[] =
 {
-    /* DMLERR_ADVACKTIMEOUT       */  0x4000, SbERR_DDE_TIMEOUT,
-    /* DMLERR_BUSY                */  0x4001, SbERR_DDE_BUSY,
-    /* DMLERR_DATAACKTIMEOUT      */  0x4002, SbERR_DDE_TIMEOUT,
-    /* DMLERR_DLL_NOT_INITIALIZED */  0x4003, SbERR_DDE_ERROR,
-    /* DMLERR_DLL_USAGE           */  0x4004, SbERR_DDE_ERROR,
-    /* DMLERR_EXECACKTIMEOUT      */  0x4005, SbERR_DDE_TIMEOUT,
-    /* DMLERR_INVALIDPARAMETER    */  0x4006, SbERR_DDE_ERROR,
-    /* DMLERR_LOW_MEMORY          */  0x4007, SbERR_DDE_ERROR,
-    /* DMLERR_MEMORY_ERROR        */  0x4008, SbERR_DDE_ERROR,
-    /* DMLERR_NOTPROCESSED        */  0x4009, SbERR_DDE_NOTPROCESSED,
-    /* DMLERR_NO_CONV_ESTABLISHED */  0x400a, SbERR_DDE_NO_CHANNEL,
-    /* DMLERR_POKEACKTIMEOUT      */  0x400b, SbERR_DDE_TIMEOUT,
-    /* DMLERR_POSTMSG_FAILED      */  0x400c, SbERR_DDE_QUEUE_OVERFLOW,
-    /* DMLERR_REENTRANCY          */  0x400d, SbERR_DDE_ERROR,
-    /* DMLERR_SERVER_DIED         */  0x400e, SbERR_DDE_PARTNER_QUIT,
-    /* DMLERR_SYS_ERROR           */  0x400f, SbERR_DDE_ERROR,
-    /* DMLERR_UNADVACKTIMEOUT     */  0x4010, SbERR_DDE_TIMEOUT,
-    /* DMLERR_UNFOUND_QUEUE_ID    */  0x4011, SbERR_DDE_NO_CHANNEL
+    /* DMLERR_ADVACKTIMEOUT       */  0x4000, ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_BUSY                */  0x4001, ERRCODE_BASIC_DDE_BUSY,
+    /* DMLERR_DATAACKTIMEOUT      */  0x4002, ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_DLL_NOT_INITIALIZED */  0x4003, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_DLL_USAGE           */  0x4004, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_EXECACKTIMEOUT      */  0x4005, ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_INVALIDPARAMETER    */  0x4006, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_LOW_MEMORY          */  0x4007, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_MEMORY_ERROR        */  0x4008, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_NOTPROCESSED        */  0x4009, ERRCODE_BASIC_DDE_NOTPROCESSED,
+    /* DMLERR_NO_CONV_ESTABLISHED */  0x400a, ERRCODE_BASIC_DDE_NO_CHANNEL,
+    /* DMLERR_POKEACKTIMEOUT      */  0x400b, ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_POSTMSG_FAILED      */  0x400c, ERRCODE_BASIC_DDE_QUEUE_OVERFLOW,
+    /* DMLERR_REENTRANCY          */  0x400d, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_SERVER_DIED         */  0x400e, ERRCODE_BASIC_DDE_PARTNER_QUIT,
+    /* DMLERR_SYS_ERROR           */  0x400f, ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_UNADVACKTIMEOUT     */  0x4010, ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_UNFOUND_QUEUE_ID    */  0x4011, ERRCODE_BASIC_DDE_NO_CHANNEL
 };
 
 SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
@@ -62,7 +62,7 @@ SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
     }
     if( nErr < DDE_FIRSTERR || nErr > DDE_LASTERR )
     {
-        return SbERR_DDE_ERROR;
+        return ERRCODE_BASIC_DDE_ERROR;
     }
     return nDdeErrMap[ 2 * (nErr - DDE_FIRSTERR) + 1 ];
 }
@@ -123,13 +123,13 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
     DdeConnection* pConv = aConvList[nChannel-1];
 
     if( pConv == DDE_FREECHANNEL )
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
     delete pConv;
     aConvList[nChannel-1] = DDE_FREECHANNEL;
@@ -158,14 +158,14 @@ SbError SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString
 {
     if (!nChannel || nChannel > aConvList.size())
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
 
     DdeConnection* pConv = aConvList[nChannel-1];
 
     if( pConv == DDE_FREECHANNEL )
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
 
     DdeRequest aRequest( *pConv, rItem, 30000 );
@@ -179,14 +179,14 @@ SbError SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
 
     DdeConnection* pConv = aConvList[nChannel-1];
 
     if( pConv == DDE_FREECHANNEL )
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
     DdeExecute aRequest( *pConv, rCommand, 30000 );
     aRequest.Execute();
@@ -197,13 +197,13 @@ SbError SbiDdeControl::Poke( size_t nChannel, const OUString& rItem, const OUStr
 {
     if (!nChannel || nChannel > aConvList.size())
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
     DdeConnection* pConv = aConvList[nChannel-1];
 
     if( pConv == DDE_FREECHANNEL )
     {
-        return SbERR_DDE_NO_CHANNEL;
+        return ERRCODE_BASIC_DDE_NO_CHANNEL;
     }
     DdePoke aRequest( *pConv, rItem, DdeData(rData), 30000 );
     aRequest.Execute();

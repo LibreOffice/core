@@ -173,7 +173,7 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
 {
 #ifdef DBG_UTIL
     if ((eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G && eOp != _FIND_CM && eOp != _FIND_STATIC)
-        rGen.GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
+        rGen.GetParser()->Error( ERRCODE_BASIC_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
     // The ID is either the position or the String-ID
@@ -228,7 +228,7 @@ void SbiExprList::Gen()
                 if( pProc )
                 {
                     // For the present: trigger an error
-                    pParser->Error( SbERR_NO_NAMED_ARGS );
+                    pParser->Error( ERRCODE_BASIC_NO_NAMED_ARGS );
 
                     // Later, if Named Args at DECLARE is possible
                     //for( sal_uInt16 i = 1 ; i < nParAnz ; i++ )

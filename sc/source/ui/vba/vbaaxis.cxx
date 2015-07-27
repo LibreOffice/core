@@ -47,7 +47,7 @@ ScVbaAxis::isValueAxis() throw( script::BasicErrorException )
 {
     if ( getType() == xlCategory )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return true;
 }
@@ -103,13 +103,13 @@ ScVbaAxis::getAxisTitle(  ) throw (script::BasicErrorException, uno::RuntimeExce
 void SAL_CALL
 ScVbaAxis::setDisplayUnit( ::sal_Int32 /*DisplayUnit*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaAxis::getDisplayUnit(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
     return -1;
 }
 
@@ -143,7 +143,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses ) throw (script::BasicErrorExceptio
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 ::sal_Int32 SAL_CALL
@@ -175,7 +175,7 @@ ScVbaAxis::getCrosses(  ) throw (script::BasicErrorException, uno::RuntimeExcept
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
     return nCrosses;
 }
@@ -205,7 +205,7 @@ ScVbaAxis::getCrossesAt(  ) throw (script::BasicErrorException, uno::RuntimeExce
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return fCrosses;
 }
@@ -285,7 +285,7 @@ ScVbaAxis::setMinorUnit( double _fMinorUnit ) throw (script::BasicErrorException
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -300,7 +300,7 @@ ScVbaAxis::getMinorUnit(  ) throw (script::BasicErrorException, uno::RuntimeExce
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return fMinor;
 }
@@ -315,7 +315,7 @@ ScVbaAxis::setMinorUnitIsAuto( sal_Bool _bMinorUnitIsAuto ) throw (script::Basic
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
 }
 
@@ -332,7 +332,7 @@ ScVbaAxis::getMinorUnitIsAuto(  ) throw (script::BasicErrorException, uno::Runti
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return bIsAuto;
 }
@@ -340,13 +340,13 @@ ScVbaAxis::getMinorUnitIsAuto(  ) throw (script::BasicErrorException, uno::Runti
 void SAL_CALL
 ScVbaAxis::setReversePlotOrder( sal_Bool /*ReversePlotOrder*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
 }
 
 sal_Bool SAL_CALL
 ScVbaAxis::getReversePlotOrder(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
+    DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
     return false;
 }
 
@@ -362,7 +362,7 @@ ScVbaAxis::setMajorUnit( double _fMajorUnit ) throw (script::BasicErrorException
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -377,7 +377,7 @@ ScVbaAxis::getMajorUnit(  ) throw (script::BasicErrorException, uno::RuntimeExce
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
     return fMax;
 }
@@ -394,7 +394,7 @@ ScVbaAxis::setMajorUnitIsAuto( sal_Bool _bMajorUnitIsAuto ) throw (script::Basic
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -411,7 +411,7 @@ ScVbaAxis::getMajorUnitIsAuto(  ) throw (script::BasicErrorException, uno::Runti
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return bIsAuto;
 }
@@ -428,7 +428,7 @@ ScVbaAxis::setMaximumScale( double _fMaximumScale ) throw (script::BasicErrorExc
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -445,7 +445,7 @@ ScVbaAxis::getMaximumScale(  ) throw (script::BasicErrorException, uno::RuntimeE
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return fMax;
 
@@ -462,7 +462,7 @@ ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto ) throw (script:
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -477,7 +477,7 @@ ScVbaAxis::getMaximumScaleIsAuto(  ) throw (script::BasicErrorException, uno::Ru
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception( SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception( ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
     return bIsAuto;
 }
@@ -492,7 +492,7 @@ ScVbaAxis::setMinimumScale( double _fMinimumScale ) throw (script::BasicErrorExc
     }
     catch ( uno::Exception& )
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     }
 }
 
@@ -524,7 +524,7 @@ ScVbaAxis::setMinimumScaleIsAuto( sal_Bool _bMinimumScaleIsAuto ) throw (script:
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -541,7 +541,7 @@ ScVbaAxis::getMinimumScaleIsAuto(  ) throw (script::BasicErrorException, uno::Ru
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return bIsAuto;
 }
@@ -575,7 +575,7 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType ) throw (script::BasicErrorExce
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
 }
 
@@ -597,7 +597,7 @@ ScVbaAxis::getScaleType(  ) throw (script::BasicErrorException, uno::RuntimeExce
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
     }
     return nScaleType;
 }

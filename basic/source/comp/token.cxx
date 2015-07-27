@@ -240,7 +240,7 @@ SbiTokenizer::~SbiTokenizer()
 void SbiTokenizer::Push( SbiToken t )
 {
     if( ePush != NIL )
-        Error( SbERR_INTERNAL_ERROR, "PUSH" );
+        Error( ERRCODE_BASIC_INTERNAL_ERROR, "PUSH" );
     else ePush = t;
 }
 

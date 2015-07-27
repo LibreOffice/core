@@ -56,7 +56,7 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
         (type != excel::XlPageBreak::xlPageBreakManual) &&
         (type != excel::XlPageBreak::xlPageBreakAutomatic) )
     {
-        DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
     }
 
     if( type == excel::XlPageBreak::xlPageBreakNone )

@@ -240,9 +240,9 @@ void SbiParser::Exit()
         }
     }
     if( pStack )
-        Error( SbERR_EXPECTED, pStack->eExitTok );
+        Error( ERRCODE_BASIC_EXPECTED, pStack->eExitTok );
     else
-        Error( SbERR_BAD_EXIT );
+        Error( ERRCODE_BASIC_BAD_EXIT );
 }
 
 bool SbiParser::TestSymbol( bool bKwdOk )
@@ -252,7 +252,7 @@ bool SbiParser::TestSymbol( bool bKwdOk )
     {
         Next(); return true;
     }
-    Error( SbERR_SYMBOL_EXPECTED );
+    Error( ERRCODE_BASIC_SYMBOL_EXPECTED );
     return false;
 }
 
@@ -266,7 +266,7 @@ bool SbiParser::TestToken( SbiToken t )
     }
     else
     {
-        Error( SbERR_EXPECTED, t );
+        Error( ERRCODE_BASIC_EXPECTED, t );
         return false;
     }
 }
@@ -283,7 +283,7 @@ bool SbiParser::TestComma()
     }
     else if( eTok != COMMA )
     {
-        Error( SbERR_EXPECTED, COMMA );
+        Error( ERRCODE_BASIC_EXPECTED, COMMA );
         return false;
     }
     Next();
@@ -296,7 +296,7 @@ void SbiParser::TestEoln()
 {
     if( !IsEoln( Next() ) )
     {
-        Error( SbERR_EXPECTED, EOLN );
+        Error( ERRCODE_BASIC_EXPECTED, EOLN );
         while( !IsEoln( Next() ) ) {}
     }
 }
@@ -311,7 +311,7 @@ void SbiParser::StmntBlock( SbiToken eEnd )
     eEndTok = xe;
     if( IsEof() )
     {
-        Error( SbERR_BAD_BLOCK, eEnd );
+        Error( ERRCODE_BASIC_BAD_BLOCK, eEnd );
         bAbort = true;
     }
 }
@@ -353,7 +353,7 @@ bool SbiParser::Parse()
     {
         // is a label
         if( !pProc )
-            Error( SbERR_NOT_IN_MAIN, aSym );
+            Error( ERRCODE_BASIC_NOT_IN_MAIN, aSym );
         else
             pProc->GetLabels().Define( aSym );
         Next(); Peek();
@@ -400,7 +400,7 @@ bool SbiParser::Parse()
     if( eCurTok == SYMBOL || eCurTok == DOT )
     {
         if( !pProc )
-            Error( SbERR_EXPECTED, SUB );
+            Error( ERRCODE_BASIC_EXPECTED, SUB );
         else
         {
             // for correct line and column...
@@ -423,9 +423,9 @@ bool SbiParser::Parse()
         if( p->eTok != NIL )
         {
             if( !pProc && !p->bMain )
-                Error( SbERR_NOT_IN_MAIN, eCurTok );
+                Error( ERRCODE_BASIC_NOT_IN_MAIN, eCurTok );
             else if( pProc && !p->bSubr )
-                Error( SbERR_NOT_IN_SUBR, eCurTok );
+                Error( ERRCODE_BASIC_NOT_IN_SUBR, eCurTok );
             else
             {
                 // AB #41606/#40689: Due to the new static-handling there
@@ -447,7 +447,7 @@ bool SbiParser::Parse()
             }
         }
         else
-            Error( SbERR_UNEXPECTED, eCurTok );
+            Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
     }
 
     // test for the statement's end -
@@ -459,7 +459,7 @@ bool SbiParser::Parse()
         if( !IsEos() && eCurTok != ELSE )
         {
             // if the parsing has been aborted, jump over to the ":"
-            Error( SbERR_UNEXPECTED, eCurTok );
+            Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
             while( !IsEos() ) Next();
         }
     }
@@ -495,7 +495,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
 
     bool bEQ = ( Peek() == EQ );
     if( !bEQ && bVBASupportOn && aVar.IsBracket() )
-        Error( SbERR_EXPECTED, "=" );
+        Error( ERRCODE_BASIC_EXPECTED, "=" );
 
     RecursiveMode eRecMode = ( bEQ ? PREVENT_CALL : FORCE_CALL );
     bool bSpecialMidHandling = false;
@@ -534,7 +534,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         {
             // so it must be an assignment!
             if( !aVar.IsLvalue() )
-                Error( SbERR_LVALUE_EXPECTED );
+                Error( ERRCODE_BASIC_LVALUE_EXPECTED );
             TestToken( EQ );
             SbiExpression aExpr( this );
             aExpr.Gen();
@@ -542,7 +542,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
             if( pDef )
             {
                 if( pDef->GetConstDef() )
-                    Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+                    Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
                 if( pDef->GetType() == SbxOBJECT )
                 {
                     eOp = _SET;
@@ -570,7 +570,7 @@ void SbiParser::Assign()
     SbiSymDef* pDef = aLvalue.GetRealVar();
     {
         if( pDef->GetConstDef() )
-            Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+            Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
         nLen = aLvalue.GetRealVar()->GetLen();
     }
     if( nLen )
@@ -585,11 +585,11 @@ void SbiParser::Set()
     SbiExpression aLvalue( this, SbLVALUE );
     SbxDataType eType = aLvalue.GetType();
     if( eType != SbxOBJECT && eType != SbxEMPTY && eType != SbxVARIANT )
-        Error( SbERR_INVALID_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_OBJECT );
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
     if( pDef->GetConstDef() )
-        Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+        Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
 
     SbiToken eTok = Peek();
     if( eTok == NEW )
@@ -636,13 +636,13 @@ void SbiParser::LSet()
     SbiExpression aLvalue( this, SbLVALUE );
     if( aLvalue.GetType() != SbxSTRING )
     {
-        Error( SbERR_INVALID_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_OBJECT );
     }
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
     if( pDef && pDef->GetConstDef() )
     {
-        Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+        Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
     }
     SbiExpression aExpr( this );
     aLvalue.Gen();
@@ -656,12 +656,12 @@ void SbiParser::RSet()
     SbiExpression aLvalue( this, SbLVALUE );
     if( aLvalue.GetType() != SbxSTRING )
     {
-        Error( SbERR_INVALID_OBJECT );
+        Error( ERRCODE_BASIC_INVALID_OBJECT );
     }
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
     if( pDef && pDef->GetConstDef() )
-        Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+        Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
     SbiExpression aExpr( this );
     aLvalue.Gen();
     aExpr.Gen();
@@ -683,11 +683,11 @@ void SbiParser::DefXXX()
         if( Peek() == MINUS )
         {
             Next();
-            if( Next() != SYMBOL ) Error( SbERR_SYMBOL_EXPECTED );
+            if( Next() != SYMBOL ) Error( ERRCODE_BASIC_SYMBOL_EXPECTED );
             else
             {
                 ch2 = aSym.toAsciiUpperCase()[0];
-                if( ch2 < ch1 ) Error( SbERR_SYNTAX ), ch2 = 0;
+                if( ch2 < ch1 ) Error( ERRCODE_BASIC_SYNTAX ), ch2 = 0;
             }
         }
         if (!ch2) ch2 = ch1;
@@ -711,14 +711,14 @@ void SbiParser::Implements()
 {
     if( !bClassModule )
     {
-        Error( SbERR_UNEXPECTED, IMPLEMENTS );
+        Error( ERRCODE_BASIC_UNEXPECTED, IMPLEMENTS );
         return;
     }
 
     Peek();
     if( eCurTok != SYMBOL )
     {
-        Error( SbERR_SYMBOL_EXPECTED );
+        Error( ERRCODE_BASIC_SYMBOL_EXPECTED );
         return;
     }
 
@@ -740,7 +740,7 @@ void SbiParser::Implements()
             else
             {
                 Next();
-                Error( SbERR_SYMBOL_EXPECTED );
+                Error( ERRCODE_BASIC_SYMBOL_EXPECTED );
                 break;
             }
         }
@@ -772,14 +772,14 @@ void SbiParser::Option()
                     break;
                 }
             }
-            Error( SbERR_EXPECTED, "0/1" );
+            Error( ERRCODE_BASIC_EXPECTED, "0/1" );
             break;
         case PRIVATE:
         {
             OUString aString = SbiTokenizer::Symbol(Next());
             if( !aString.equalsIgnoreAsciiCase("Module") )
             {
-                Error( SbERR_EXPECTED, "Module" );
+                Error( ERRCODE_BASIC_EXPECTED, "Module" );
             }
             break;
         }
@@ -796,7 +796,7 @@ void SbiParser::Option()
             }
             else
             {
-                Error( SbERR_EXPECTED, "Text/Binary" );
+                Error( ERRCODE_BASIC_EXPECTED, "Text/Binary" );
             }
             break;
         }
@@ -827,10 +827,10 @@ void SbiParser::Option()
                     break;
                 }
             }
-            Error( SbERR_EXPECTED, "0/1" );
+            Error( ERRCODE_BASIC_EXPECTED, "0/1" );
             break;
         default:
-            Error( SbERR_BAD_OPTION, eCurTok );
+            Error( ERRCODE_BASIC_BAD_OPTION, eCurTok );
     }
 }
 
