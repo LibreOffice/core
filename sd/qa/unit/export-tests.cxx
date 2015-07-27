@@ -56,6 +56,7 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -100,6 +101,7 @@ public:
     void testRightToLeftParaghraph();
     void testTableCellBorder();
     void testBulletColor();
+    void testBulletCharAndFont();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
 
@@ -134,6 +136,7 @@ public:
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
+    CPPUNIT_TEST(testBulletCharAndFont);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
 
@@ -935,6 +938,38 @@ void SdExportTest::testBulletColor()
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor().GetColor());
+}
+
+void SdExportTest::testBulletCharAndFont()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/bulletCharAndFont.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc( xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+    uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+    OUString    sBulletChar(sal_Unicode(0xf06c));
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "BulletChar")
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "BulletChar incorrect.", sBulletChar ,rProp.Value.get<OUString>());
+        if (rProp.Name == "BulletFont")
+        {
+            awt::FontDescriptor aFontDescriptor;
+            rProp.Value >>= aFontDescriptor;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "BulletFont incorrect.", OUString("Wingdings"),aFontDescriptor.Name);
+        }
+    }
+    xDocShRef->DoClose();
 }
 
 #if !defined WNT
