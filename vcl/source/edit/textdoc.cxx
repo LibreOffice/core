@@ -163,7 +163,7 @@ TextNode::TextNode( const OUString& rText ) :
 {
 }
 
-void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
+void TextNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
 {
     if ( !nNew )
         return;
@@ -227,13 +227,13 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
         maCharAttribs.ResortAttribs();
 }
 
-void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
+void TextNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
 {
     if ( !nDeleted )
         return;
 
     bool bResort = false;
-    sal_uInt16 nEndChanges = nIndex+nDeleted;
+    const sal_Int32 nEndChanges = nIndex+nDeleted;
 
     for ( sal_uInt16 nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
     {
@@ -289,25 +289,25 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
         maCharAttribs.ResortAttribs();
 }
 
-void TextNode::InsertText( sal_uInt16 nPos, const OUString& rText )
+void TextNode::InsertText( sal_Int32 nPos, const OUString& rText )
 {
     maText = maText.replaceAt( nPos, 0, rText );
     ExpandAttribs( nPos, rText.getLength() );
 }
 
-void TextNode::InsertText( sal_uInt16 nPos, sal_Unicode c )
+void TextNode::InsertText( sal_Int32 nPos, sal_Unicode c )
 {
     maText = maText.replaceAt( nPos, 0, OUString(c) );
     ExpandAttribs( nPos, 1 );
 }
 
-void TextNode::RemoveText( sal_uInt16 nPos, sal_uInt16 nChars )
+void TextNode::RemoveText( sal_Int32 nPos, sal_Int32 nChars )
 {
     maText = maText.replaceAt( nPos, nChars, "" );
     CollapsAttribs( nPos, nChars );
 }
 
-TextNode* TextNode::Split( sal_uInt16 nPos, bool bKeepEndingAttribs )
+TextNode* TextNode::Split( sal_Int32 nPos, bool bKeepEndingAttribs )
 {
     OUString aNewText;
     if ( nPos < maText.getLength() )

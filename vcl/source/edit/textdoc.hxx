@@ -69,8 +69,8 @@ private:
 
                         TextNode( const TextNode& ) {;}
 protected:
-    void                ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNewChars );
-    void                CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars );
+    void                ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars );
+    void                CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars );
 
 public:
                         TextNode( const OUString& rText );
@@ -81,11 +81,11 @@ public:
     const TextCharAttribList&   GetCharAttribs() const  { return maCharAttribs; }
     TextCharAttribList&         GetCharAttribs()        { return maCharAttribs; }
 
-    void                InsertText( sal_uInt16 nPos, const OUString& rText );
-    void                InsertText( sal_uInt16 nPos, sal_Unicode c );
-    void                RemoveText( sal_uInt16 nPos, sal_uInt16 nChars );
+    void                InsertText( sal_Int32 nPos, const OUString& rText );
+    void                InsertText( sal_Int32 nPos, sal_Unicode c );
+    void                RemoveText( sal_Int32 nPos, sal_Int32 nChars );
 
-    TextNode*           Split( sal_uInt16 nPos, bool bKeepEndigAttribs );
+    TextNode*           Split( sal_Int32 nPos, bool bKeepEndigAttribs );
     void                Append( const TextNode& rNode );
 };
 
