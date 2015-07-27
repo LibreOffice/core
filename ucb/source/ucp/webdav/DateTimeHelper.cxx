@@ -242,7 +242,7 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
         }
     }
 
-    return (found) ? true : false;
+    return found;
 }
 
 bool DateTimeHelper::convert (const OUString& s, DateTime& dateTime)

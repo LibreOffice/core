@@ -328,7 +328,7 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
                                              theUserName,
                                              thePassWord,
                                              bCanUseSystemCreds,
-                                             bGiveProvidedCredentialsASecondTry ? sal_False : sal_True );
+                                             bGiveProvidedCredentialsASecondTry );
 
     if ( theRetVal == 0 )
     {
@@ -923,9 +923,7 @@ void SerfSession::COPY( const OUString & inSourceURL,
     SerfUri theSourceUri( inSourceURL );
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
     apr_status_t status = APR_SUCCESS;
-    aReqProc->processCopy( inDestinationURL,
-                           (inOverWrite ? true : false),
-                           status );
+    aReqProc->processCopy( inDestinationURL, inOverWrite, status );
 
     HandleError( aReqProc );
 }
@@ -946,9 +944,7 @@ void SerfSession::MOVE( const OUString & inSourceURL,
     SerfUri theSourceUri( inSourceURL );
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
     apr_status_t status = APR_SUCCESS;
-    aReqProc->processMove( inDestinationURL,
-                           (inOverWrite ? true : false),
-                           status );
+    aReqProc->processMove( inDestinationURL, inOverWrite, status );
 
     HandleError( aReqProc );
 }
