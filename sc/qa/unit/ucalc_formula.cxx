@@ -5366,4 +5366,130 @@ void Test::testFuncFORMULA()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncTableRef()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+
+    {
+        ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+        CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+
+        // Insert "table" database range definition for A1:B4, with default
+        // HasHeader=true and HasTotals=false.
+        ScDBData* pData = new ScDBData( "table", 0,0,0, 1,3);
+        bool bInserted = pDBs->getNamedDBs().insert(pData);
+        CPPUNIT_ASSERT_MESSAGE( "Failed to insert \"table\" database range.", bInserted);
+    }
+
+    {
+        // Populate "table" database range with headers and data in A1:B4
+        const char* aData[][2] = {
+            { "Header1", "Header2" },
+            { "1", "2" },
+            { "4", "8" },
+            { "16", "32" }
+        };
+        ScAddress aPos(0,0,0);
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT(aRange.aStart == aPos);
+    }
+
+    // Named expressions that use Table structured references.
+    /* TODO: should the item/header separator really be equal to the parameter
+     * separator, thus be locale dependent and ';' semicolon here, or should it
+     * be a fixed ',' comma instead? */
+    struct {
+        const char* pName;
+        const char* pExpr;
+        const char* pCounta; // expected result when used in row 2 (first data row) as argument to COUNTA()
+        const char* pSum3;   // expected result when used in row 3 (second data row) as argument to SUM().
+        const char* pSum4;   // expected result when used in row 4 (third data row) as argument to SUM().
+        const char* pSumX;   // expected result when used in row 5 (non-intersecting) as argument to SUM().
+    } aNames[] = {
+        { "all",                            "table[[#All]]",                            "8", "63", "63", "63" },
+        { "data_implicit",                  "table[]",                                  "6", "63", "63", "63" },
+        { "data",                           "table[[#Data]]",                           "6", "63", "63", "63" },
+        { "headers",                        "table[[#Headers]]",                        "2",  "0",  "0",  "0" },
+        { "header1",                        "table[[Header1]]",                         "3", "21", "21", "21" },
+        { "header2",                        "table[[Header2]]",                         "3", "42", "42", "42" },
+        { "data_header1",                   "table[[#Data];[Header1]]",                 "3", "21", "21", "21" },
+        { "data_header2",                   "table[[#Data];[Header2]]",                 "3", "42", "42", "42" },
+        { "this_row",                       "table[[#This Row]]",                       "2", "12", "48", "#VALUE!" },
+        { "this_row_header1",               "table[[#This Row];[Header1]]",             "1",  "4", "16", "#VALUE!" },
+        { "this_row_header2",               "table[[#This Row];[Header2]]",             "1",  "8", "32", "#VALUE!" },
+        { "this_row_range_header_1_to_2",   "table[[#This Row];[Header1]:[Header2]]",   "2", "12", "48", "#VALUE!" }
+    };
+
+    {
+        // Insert named expressions.
+        ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+        CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+
+        for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+        {
+            // Choose base position that does not intersect with the database
+            // range definition to test later use of [#This Row] results in
+            // proper rows.
+            ScRangeData* pName = new ScRangeData(
+                    m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
+                    ScAddress(2,4,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+            bool bInserted = pGlobalNames->insert(pName);
+            CPPUNIT_ASSERT_MESSAGE(
+                    OString("Failed to insert named expression "+ OString(aNames[i].pName) +".").getStr(), bInserted);
+        }
+    }
+
+    // Use the named expressions in COUNTA() formulas, on row 2 that intersects.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    {
+        OUString aFormula( "=COUNTA(" + OUString::createFromAscii( aNames[i].pName) + ")");
+        ScAddress aPos(3+i,1,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pCounta),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Use the named expressions in SUM() formulas, on row 3 that intersects.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
+        ScAddress aPos(3+i,2,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum3),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Use the named expressions in SUM() formulas, on row 4 that intersects.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
+        ScAddress aPos(3+i,3,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum4),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Use the named expressions in SUM() formulas, on row 5 that does not intersect.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
+        ScAddress aPos(3+i,4,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSumX),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
