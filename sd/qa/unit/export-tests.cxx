@@ -56,6 +56,7 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -120,6 +121,7 @@ public:
     void testTableCellBorder();
     void testBulletColor();
     void testTdf62176();
+    void testBulletCharAndFont();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
     void testTransparentBackground();
@@ -159,6 +161,7 @@ public:
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
     CPPUNIT_TEST(testTdf62176);
+    CPPUNIT_TEST(testBulletCharAndFont);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTransparentBackground);
@@ -1021,6 +1024,37 @@ void SdExportTest::testTdf62176()
     uno::Reference<container::XEnumeration> paraEnum2(paraEnumAccess2->createEnumeration());
     uno::Reference<text::XTextRange> xParagraph2(paraEnum2->nextElement(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
+}
+void SdExportTest::testBulletCharAndFont()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/bulletCharAndFont.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc( xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+    uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+    OUString    sBulletChar(sal_Unicode(0xf06c));
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "BulletChar")
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "BulletChar incorrect.", sBulletChar ,rProp.Value.get<OUString>());
+        if (rProp.Name == "BulletFont")
+        {
+            awt::FontDescriptor aFontDescriptor;
+            rProp.Value >>= aFontDescriptor;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "BulletFont incorrect.", OUString("Wingdings"),aFontDescriptor.Name);
+        }
+    }
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testTdf91378()
