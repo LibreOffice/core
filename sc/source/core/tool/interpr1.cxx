@@ -7835,17 +7835,27 @@ void ScInterpreter::ScIndirect()
             // Use the current address syntax if unspecified.
             eConv = pDok->GetAddressConvention();
 
+        // either CONV_A1_XL_A1 was explicitly configured, or nothing at all
+        // was configured
+        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1 ||
+                          !maCalcConfig.mbHasStringRefSyntax);
+
         if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
         {
             // Overwrite the config and try Excel R1C1.
             eConv = FormulaGrammar::CONV_XL_R1C1;
+            bTryXlA1 = false;
         }
-        const ScAddress::Details aDetails( eConv, aPos );
+
+        const ScAddress::Details aDetails( bTryXlA1 ? FormulaGrammar::CONV_OOO : eConv, aPos );
+        const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
         ScAddress::ExternalInfo aExtInfo;
-        if (ConvertDoubleRef(pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo))
+        if ( ConvertDoubleRef(pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
+             ( bTryXlA1 && ConvertDoubleRef(pDok, sRefStr, nTab, aRefAd,
+                                            aRefAd2, aDetailsXlA1, &aExtInfo) ) )
         {
             if (aExtInfo.mbExternal)
             {
@@ -7858,7 +7868,9 @@ void ScInterpreter::ScIndirect()
                 PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
                         aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
         }
-        else if (ConvertSingleRef(pDok, sRefStr, nTab, aRefAd, aDetails, &aExtInfo))
+        else if ( ConvertSingleRef(pDok, sRefStr, nTab, aRefAd, aDetails, &aExtInfo) ||
+                  ( bTryXlA1 && ConvertSingleRef (pDok, sRefStr, nTab, aRefAd,
+                                                  aDetailsXlA1, &aExtInfo) ) )
         {
             if (aExtInfo.mbExternal)
             {

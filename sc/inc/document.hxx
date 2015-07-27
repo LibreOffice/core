@@ -1974,9 +1974,8 @@ public:
      */
     bool HasBroadcaster( SCTAB nTab, SCCOL nCol ) const;
 
-
-    void SetCalcConfig( const ScCalcConfig& rConfig );
-    const ScCalcConfig& GetCalcConfig() const;
+    SC_DLLPUBLIC void SetCalcConfig( const ScCalcConfig& rConfig );
+    SC_DLLPUBLIC const ScCalcConfig& GetCalcConfig() const;
 
 private: // CLOOK-Impl-methods
 

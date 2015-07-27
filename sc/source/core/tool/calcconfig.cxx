@@ -11,7 +11,8 @@
 
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
-    mbEmptyStringAsZero(false) {}
+    mbEmptyStringAsZero(false),
+    mbHasStringRefSyntax(false) {}
 
 void ScCalcConfig::reset()
 {
@@ -20,17 +21,23 @@ void ScCalcConfig::reset()
 
 void ScCalcConfig::MergeDocumentSpecific( const ScCalcConfig& r )
 {
-    // String conversion options are per document.
-    meStringConversion       = r.meStringConversion;
     mbEmptyStringAsZero      = r.mbEmptyStringAsZero;
     // INDIRECT ref syntax is per document.
     meStringRefAddressSyntax = r.meStringRefAddressSyntax;
+    mbHasStringRefSyntax = r.mbHasStringRefSyntax;
+}
+
+void ScCalcConfig::SetStringRefSyntax( formula::FormulaGrammar::AddressConvention eConv )
+{
+    meStringRefAddressSyntax = eConv;
+    mbHasStringRefSyntax = true;
 }
 
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
-        mbEmptyStringAsZero == r.mbEmptyStringAsZero;
+        mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
+        mbHasStringRefSyntax == r.mbHasStringRefSyntax;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

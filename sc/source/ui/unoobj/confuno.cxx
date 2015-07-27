@@ -28,8 +28,10 @@
 #include "viewopti.hxx"
 #include "docpool.hxx"
 #include "sc.hrc"
+#include "document.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <formula/grammar.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -77,6 +79,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_EMBED_FONTS), 0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SYNTAXSTRINGREF), 0, &getCppuType((sal_Int16*)0),     0, 0},
         {0,0,0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -289,6 +292,29 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     pDoc->SetIsUsingEmbededFonts(bVal);
                 }
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_SYNTAXSTRINGREF ) == 0 )
+            {
+                ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();
+                sal_Int16 nUno = 0;
+
+                if( aValue >>= nUno )
+                {
+                    switch (nUno)
+                    {
+                        case 0: // CONV_OOO
+                        case 2: // CONV_XL_A1
+                        case 3: // CONV_XL_R1C1
+                        case 7: // CONV_A1_XL_A1
+                            aCalcConfig.SetStringRefSyntax( static_cast<formula::FormulaGrammar::AddressConvention>( nUno ) );
+                            break;
+                        default:
+                            aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_UNSPECIFIED );
+                            break;
+
+                    }
+                    pDoc->SetCalcConfig( aCalcConfig );
+                }
+            }
 
             else
             {
@@ -429,6 +455,34 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
             else if ( aPropertyName.compareToAscii( SC_UNO_EMBED_FONTS ) == 0 )
             {
                 aRet <<= pDoc->IsUsingEmbededFonts();
+            }
+            else if ( aPropertyName.compareToAscii( SC_UNO_SYNTAXSTRINGREF ) == 0 )
+            {
+                ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();
+
+                // if it hasn't been read or explicitly changed, don't write it
+                if ( aCalcConfig.mbHasStringRefSyntax )
+                {
+                    formula::FormulaGrammar::AddressConvention aConv = aCalcConfig.meStringRefAddressSyntax;
+
+                    switch (aConv)
+                    {
+                        case formula::FormulaGrammar::CONV_OOO:
+                        case formula::FormulaGrammar::CONV_XL_A1:
+                        case formula::FormulaGrammar::CONV_XL_R1C1:
+                        case formula::FormulaGrammar::CONV_A1_XL_A1:
+                             aRet <<= static_cast<sal_Int16>( aConv );
+                             break;
+
+                        case formula::FormulaGrammar::CONV_UNSPECIFIED:
+                        case formula::FormulaGrammar::CONV_ODF:
+                        case formula::FormulaGrammar::CONV_XL_OOX:
+                        case formula::FormulaGrammar::CONV_LOTUS_A1:
+                        case formula::FormulaGrammar::CONV_LAST:
+                            aRet <<= sal_Int16(9999);
+                            break;
+                    }
+                }
             }
 
             else

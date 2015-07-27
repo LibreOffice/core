@@ -54,6 +54,8 @@ formula::FormulaGrammar::AddressConvention toAddressConvention(sal_uInt16 nPos)
             return formula::FormulaGrammar::CONV_XL_A1;
         case 3:
             return formula::FormulaGrammar::CONV_XL_R1C1;
+        case 4:
+            return formula::FormulaGrammar::CONV_A1_XL_A1;
         case 0:
         default:
             ;
@@ -80,6 +82,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString()),
     maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString()),
     maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString()),
+    maCalcA1ExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_A1_XL_A1).toString()),
     maCaptionStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_CAPTION).toString()),
     maDescStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_DESC).toString()),
     maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
@@ -161,6 +164,7 @@ void ScCalcOptionsDialog::SelectionChanged()
             maLbOptionEdit.InsertEntry(maCalcA1);
             maLbOptionEdit.InsertEntry(maExcelA1);
             maLbOptionEdit.InsertEntry(maExcelR1C1);
+            maLbOptionEdit.InsertEntry(maCalcA1ExcelR1C1);
             switch (maConfig.meStringRefAddressSyntax)
             {
                 case formula::FormulaGrammar::CONV_OOO:
@@ -171,6 +175,9 @@ void ScCalcOptionsDialog::SelectionChanged()
                 break;
                 case formula::FormulaGrammar::CONV_XL_R1C1:
                     maLbOptionEdit.SelectEntryPos(3);
+                break;
+                case formula::FormulaGrammar::CONV_A1_XL_A1:
+                    maLbOptionEdit.SelectEntryPos(4);
                 break;
                 case formula::FormulaGrammar::CONV_UNSPECIFIED:
                 default:
@@ -213,7 +220,7 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
         {
             // Formula syntax for INDIRECT function.
             sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
-            maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
+            maConfig.SetStringRefSyntax(toAddressConvention(nPos));
 
             maLbSettings.SetUpdateMode(false);
 
@@ -272,6 +279,8 @@ OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConventio
             return maExcelA1;
         case formula::FormulaGrammar::CONV_XL_R1C1:
             return maExcelR1C1;
+        case formula::FormulaGrammar::CONV_A1_XL_A1:
+            return maCalcA1ExcelR1C1;
         case formula::FormulaGrammar::CONV_UNSPECIFIED:
         default:
             ;

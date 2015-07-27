@@ -708,4 +708,14 @@ void ScDocument::RebuildFormulaGroups()
             maTabs[nTab]->RebuildFormulaGroups();
 }
 
+void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
+{
+    maCalcConfig = rConfig;
+}
+
+const ScCalcConfig& ScDocument::GetCalcConfig() const
+{
+    return maCalcConfig;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

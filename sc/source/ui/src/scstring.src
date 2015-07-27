@@ -839,6 +839,11 @@ String SCSTR_FORMULA_SYNTAX_XL_R1C1
     Text [ en-US ] = "Excel R1C1";
 };
 
+String SCSTR_FORMULA_SYNTAX_A1_XL_A1
+{
+    Text [ en-US ] = "Calc A1 | Excel A1";
+};
+
 String SCSTR_COL_LABEL
 {
     Text [ en-US ] = "Range contains column la~bels" ;
