@@ -41,26 +41,6 @@ namespace dbtools
     };
 }
 
-namespace connectivity
-{
-    namespace CONNECTIVITY_PROPERTY_NAME_SPACE
-    {
-        typedef const sal_Char* (*PVFN)();
-
-        struct OOO_DLLPUBLIC_DBTOOLS UStringDescription
-        {
-            const sal_Char* pZeroTerminatedName;
-            sal_Int32 nLength;
-
-            UStringDescription(PVFN _fCharFkt);
-            operator OUString() const { return OUString(pZeroTerminatedName,nLength,RTL_TEXTENCODING_ASCII_US); }
-            ~UStringDescription();
-        private:
-            UStringDescription();
-        };
-    }
-}
-
 #define PROPERTY_ID_QUERYTIMEOUT                    1
 #define PROPERTY_ID_MAXFIELDSIZE                    2
 #define PROPERTY_ID_MAXROWS                         3
