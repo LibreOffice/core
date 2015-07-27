@@ -70,7 +70,7 @@ void PropertyNode::setValue(int layer, css::uno::Any const & value) {
     externalDescriptor_.clear();
 }
 
-com::sun::star::uno::Any *PropertyNode::getValuePtr(int layer)
+css::uno::Any *PropertyNode::getValuePtr(int layer)
 {
     setLayer(layer);
     externalDescriptor_.clear();

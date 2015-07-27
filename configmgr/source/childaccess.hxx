@@ -51,11 +51,11 @@ class Node;
 class RootAccess;
 
 class ChildAccess:
-    public Access, public com::sun::star::container::XChild,
-    public com::sun::star::lang::XUnoTunnel
+    public Access, public css::container::XChild,
+    public css::lang::XUnoTunnel
 {
 public:
-    static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
+    static css::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
         Components & components, rtl::Reference< RootAccess > const & root,
@@ -82,20 +82,19 @@ public:
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
     virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL getParent()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setParent(
-        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-            const &)
+        css::uno::Reference< css::uno::XInterface > const &)
         throw (
-            com::sun::star::lang::NoSupportException,
-            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::lang::NoSupportException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int64 SAL_CALL getSomething(
-        com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Sequence< sal_Int8 > const & aIdentifier)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void bind(
         rtl::Reference< RootAccess > const & root,
@@ -109,7 +108,7 @@ public:
     void setNode(rtl::Reference< Node > const & node);
 
     void setProperty(
-        com::sun::star::uno::Any const & value,
+        css::uno::Any const & value,
         Modifications * localModifications);
 
     css::uno::Any asValue();
@@ -123,20 +122,20 @@ private:
     virtual ~ChildAccess();
 
     virtual void addTypes(
-        std::vector< com::sun::star::uno::Type > * types) const SAL_OVERRIDE;
+        std::vector< css::uno::Type > * types) const SAL_OVERRIDE;
 
     virtual void addSupportedServiceNames(
         std::vector< OUString > * services) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-        com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & aType)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null if free node
     OUString name_;
     rtl::Reference< Node > node_;
-    std::unique_ptr< com::sun::star::uno::Any > changedValue_;
+    std::unique_ptr< css::uno::Any > changedValue_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
     std::shared_ptr<osl::Mutex> lock_;

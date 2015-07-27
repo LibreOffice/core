@@ -37,19 +37,19 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr { namespace configuration_provider {
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createDefault(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+css::uno::Reference< css::uno::XInterface > createDefault(
+    css::uno::Reference< css::uno::XComponentContext >
         const & context);
 
 OUString SAL_CALL getImplementationName();
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString > SAL_CALL
 getSupportedServiceNames();
 
-com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+css::uno::Reference< css::lang::XSingleComponentFactory >
 SAL_CALL createFactory(
     cppu::ComponentFactoryFunc, OUString const &,
-    com::sun::star::uno::Sequence< OUString > const &, rtl_ModuleCount *);
+    css::uno::Sequence< OUString > const &, rtl_ModuleCount *);
 
 } }
 

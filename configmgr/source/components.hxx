@@ -53,8 +53,7 @@ class RootAccess;
 class Components {
 public:
     static Components & getSingleton(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context);
+        css::uno::Reference< css::uno::XComponentContext > const & context);
 
     static bool allLocales(OUString const & locale);
 
@@ -101,7 +100,7 @@ public:
         std::set< OUString > const & excludedPaths,
         Modifications * modifications);
 
-    com::sun::star::beans::Optional< com::sun::star::uno::Any >
+    css::beans::Optional< css::uno::Any >
     getExternalValue(OUString const & descriptor);
 
 private:
@@ -113,8 +112,7 @@ private:
         Additions *);
 public:
     explicit Components(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context);
+        css::uno::Reference< css::uno::XComponentContext > const & context);
 
     ~Components();
 private:
@@ -151,13 +149,13 @@ private:
 
     typedef
         config_map<
-            com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > >
+            css::uno::Reference<
+                css::beans::XPropertySet > >
         ExternalServices;
 
     class WriteThread;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         context_;
     Data data_;
     WeakRootSet roots_;
