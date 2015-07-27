@@ -55,9 +55,6 @@ public:
     SvBOOL &    operator = ( bool n ) { nVal = n; bSet = true; return *this; }
 
     operator    bool() const { return nVal; }
-#ifdef STC
-    operator    int() const { return nVal; }
-#endif
     bool        Is() const { return nVal; }
     bool        IsSet() const { return bSet; }
 
