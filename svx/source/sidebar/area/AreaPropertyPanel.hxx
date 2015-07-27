@@ -69,13 +69,13 @@ public:
 
     virtual ~AreaPropertyPanel();
 
-    virtual void setFillTransparence(const XFillTransparenceItem& rItem);
-    virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem);
-    virtual void setFillStyle(const XFillStyleItem& rItem);
-    virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& aColorItem);
-    virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& aGradientItem);
-    virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& aHatchItem);
-    virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem);
+    virtual void setFillTransparence(const XFillTransparenceItem& rItem) SAL_OVERRIDE;
+    virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) SAL_OVERRIDE;
+    virtual void setFillStyle(const XFillStyleItem& rItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& aColorItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& aGradientItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& aHatchItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) SAL_OVERRIDE;
 
 private:
     ::sfx2::sidebar::ControllerItem maStyleControl;
