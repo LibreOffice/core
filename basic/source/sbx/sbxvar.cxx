@@ -115,7 +115,7 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 SbxVariable::~SbxVariable()
 {
 #if HAVE_FEATURE_SCRIPTING
-    if( IsSet( SBX_DIM_AS_NEW ))
+    if( IsSet( SbxFlagBits::DimAsNew ))
     {
         removeDimAsNewRecoverItem( this );
     }
@@ -146,7 +146,7 @@ SbxArray* SbxVariable::GetParameters() const
 
 void SbxVariable::Broadcast( sal_uInt32 nHintId )
 {
-    if( pCst && !IsSet( SBX_NO_BROADCAST ) )
+    if( pCst && !IsSet( SbxFlagBits::NoBroadcast ) )
     {
         // Because the method could be called from outside, check the
         // rights here again
@@ -173,7 +173,7 @@ void SbxVariable::Broadcast( sal_uInt32 nHintId )
         SfxBroadcaster* pSave = pCst;
         pCst = NULL;
         SbxFlagBits nSaveFlags = GetFlags();
-        SetFlag( SBX_READWRITE );
+        SetFlag( SbxFlagBits::ReadWrite );
         if( mpPar.Is() )
         {
             // Register this as element 0, but don't change over the parent!
@@ -257,7 +257,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         {
             aTmp += ",";
         }
-        if( (i->nFlags & SBX_OPTIONAL) != SBX_NONE )
+        if( i->nFlags & SbxFlagBits::Optional )
         {
             aTmp += OUString( SbxRes( STRING_OPTIONAL ) );
         }
@@ -393,7 +393,7 @@ SbxClassType SbxVariable::GetClass() const
 
 void SbxVariable::SetModified( bool b )
 {
-    if( IsSet( SBX_NO_MODIFY ) )
+    if( IsSet( SbxFlagBits::NoModify ) )
     {
         return;
     }
@@ -596,15 +596,15 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
         // as return-value are saved in the method as a value were saved
         SbxVariable* pThis = const_cast<SbxVariable*>(this);
         SbxFlagBits nSaveFlags = GetFlags();
-        pThis->SetFlag( SBX_WRITE );
+        pThis->SetFlag( SbxFlagBits::Write );
         pThis->SbxValue::Clear();
         pThis->SetFlags( nSaveFlags );
 
         // So that the method will not be executed in any case!
         // CAST, to avoid const!
-        pThis->SetFlag( SBX_NO_BROADCAST );
+        pThis->SetFlag( SbxFlagBits::NoBroadcast );
         bValStore = SbxValue::StoreData( rStrm );
-        pThis->ResetFlag( SBX_NO_BROADCAST );
+        pThis->ResetFlag( SbxFlagBits::NoBroadcast );
     }
     else
     {

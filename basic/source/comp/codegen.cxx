@@ -276,12 +276,12 @@ void SbiCodeGen::Save()
 
                     if( !pProc->IsPublic() )
                     {
-                        pMeth->SetFlag( SBX_PRIVATE );
+                        pMeth->SetFlag( SbxFlagBits::Private );
                     }
                     // Declare? -> Hidden
                     if( !pProc->GetLib().isEmpty())
                     {
-                        pMeth->SetFlag( SBX_HIDDEN );
+                        pMeth->SetFlag( SbxFlagBits::Hidden );
                     }
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
@@ -315,10 +315,10 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxARRAY );
                         }
                         // #33677 hand-over an Optional-Info
-                        SbxFlagBits nFlags = SBX_READ;
+                        SbxFlagBits nFlags = SbxFlagBits::Read;
                         if( pPar->IsOptional() )
                         {
-                            nFlags |= SBX_OPTIONAL;
+                            nFlags |= SbxFlagBits::Optional;
                         }
                         pInfo->AddParam( pPar->GetName(), t, nFlags );
 

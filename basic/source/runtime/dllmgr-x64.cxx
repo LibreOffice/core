@@ -252,7 +252,7 @@ SbError marshal(
     std::vector< char > & blob, std::size_t offset, MarshalData & data)
 {
     OSL_ASSERT(variable != 0);
-    if ((variable->GetFlags() & SBX_REFERENCE) == 0) {
+    if (!(variable->GetFlags() & SbxFlagBits::Reference)) {
         if ((variable->GetType() & SbxARRAY) == 0) {
             switch (variable->GetType()) {
             case SbxINTEGER:
@@ -596,7 +596,7 @@ SbError call(
         break;
     }
     for (int i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
-        arguments->Get(i)->ResetFlag(SBX_REFERENCE);
+        arguments->Get(i)->ResetFlag(SbxFlagBits::Reference);
             //TODO: skipped for errors?!?
     }
     for (std::vector< UnmarshalData >::iterator i(data.unmarshal.begin());

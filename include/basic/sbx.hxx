@@ -82,7 +82,7 @@ public:
     SbxInfo();
     SbxInfo( const OUString&, sal_uInt32 );
 
-    void                AddParam( const OUString&, SbxDataType, SbxFlagBits=SBX_READ );
+    void                AddParam( const OUString&, SbxDataType, SbxFlagBits=SbxFlagBits::Read );
     const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!
     const OUString&     GetComment() const              { return aComment; }
     const OUString&     GetHelpFile() const             { return aHelpFile; }

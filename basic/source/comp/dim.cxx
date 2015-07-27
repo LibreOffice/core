@@ -654,7 +654,7 @@ void SbiParser::DefType( bool bPrivate )
                     SbxFlagBits nSavFlags = pTypeElem->GetFlags();
                     // need to reset the FIXED flag
                     // when calling PutObject ( because the type will not match Object )
-                    pTypeElem->ResetFlag( SBX_FIXED );
+                    pTypeElem->ResetFlag( SbxFlagBits::Fixed );
                     pTypeElem->PutObject( pArray );
                     pTypeElem->SetFlags( nSavFlags );
                 }
@@ -710,7 +710,7 @@ void SbiParser::DefEnum( bool bPrivate )
     SbxObject *pEnum = new SbxObject( aEnumName );
     if( bPrivate )
     {
-        pEnum->SetFlag( SBX_PRIVATE );
+        pEnum->SetFlag( SbxFlagBits::Private );
     }
     SbiSymDef* pElem;
     SbiDimList* pDim;
@@ -809,8 +809,8 @@ void SbiParser::DefEnum( bool bPrivate )
             SbxArray *pEnumMembers = pEnum->GetProperties();
             SbxProperty *pEnumElem = new SbxProperty( pElem->GetName(), SbxLONG );
             pEnumElem->PutLong( nCurrentEnumValue );
-            pEnumElem->ResetFlag( SBX_WRITE );
-            pEnumElem->SetFlag( SBX_CONST );
+            pEnumElem->ResetFlag( SbxFlagBits::Write );
+            pEnumElem->SetFlag( SbxFlagBits::Const );
             pEnumMembers->Insert( pEnumElem, pEnumMembers->Count() );
         }
     }

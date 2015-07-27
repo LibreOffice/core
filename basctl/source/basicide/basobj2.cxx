@@ -216,7 +216,7 @@ namespace
         // take ownership of the data
         boost::scoped_ptr< MacroExecutionData > pData( i_pData );
 
-        SAL_WARN_IF( (pData->xMethod->GetParent()->GetFlags() & SBX_EXTSEARCH) == SBX_NONE, "basctl.basicide","No EXTSEARCH!" );
+        SAL_WARN_IF( (pData->xMethod->GetParent()->GetFlags() & SbxFlagBits::ExtSearch) == SbxFlagBits::NONE, "basctl.basicide","No EXTSEARCH!" );
 
         // in case this is a document-local macro, try to protect the document's Undo Manager from
         // flawed scripts

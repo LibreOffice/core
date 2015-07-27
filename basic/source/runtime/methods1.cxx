@@ -834,7 +834,7 @@ RTLFUNC(Array)
     {
         SbxVariable* pVar = rPar.Get(i+1);
         SbxVariable* pNew = new SbxVariable( *pVar );
-        pNew->SetFlag( SBX_WRITE );
+        pNew->SetFlag( SbxFlagBits::Write );
         short index = static_cast< short >(i);
         if ( bIncIndex )
         {
@@ -847,7 +847,7 @@ RTLFUNC(Array)
     // return array
     SbxVariableRef refVar = rPar.Get(0);
     SbxFlagBits nFlags = refVar->GetFlags();
-    refVar->ResetFlag( SBX_FIXED );
+    refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
     refVar->SetParameters( NULL );
@@ -887,7 +887,7 @@ RTLFUNC(DimArray)
     }
     SbxVariableRef refVar = rPar.Get(0);
     SbxFlagBits nFlags = refVar->GetFlags();
-    refVar->ResetFlag( SBX_FIXED );
+    refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
     refVar->SetParameters( NULL );
@@ -1838,7 +1838,7 @@ RTLFUNC(Split)
     // return array
     SbxVariableRef refVar = rPar.Get(0);
     SbxFlagBits nFlags = refVar->GetFlags();
-    refVar->ResetFlag( SBX_FIXED );
+    refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
     refVar->SetParameters( NULL );

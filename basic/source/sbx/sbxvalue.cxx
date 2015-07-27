@@ -45,7 +45,7 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
     if( n == SbxVARIANT )
         n = SbxEMPTY;
     else
-        SetFlag( SBX_FIXED );
+        SetFlag( SbxFlagBits::Fixed );
     if( p )
     {
         switch( t & 0x0FFF )
@@ -172,7 +172,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 SbxValue::~SbxValue()
 {
     Broadcast( SBX_HINT_DYING );
-    SetFlag( SBX_WRITE );
+    SetFlag( SbxFlagBits::Write );
     SbxValue::Clear();
 }
 
@@ -610,7 +610,7 @@ bool SbxValue::PutStringExt( const OUString& r )
         SbxValue aVal;
         aVal.Put( aRes );
         if( aVal.IsNumeric() )
-            SetFlag( SBX_FIXED );
+            SetFlag( SbxFlagBits::Fixed );
     }
 
     Put( aRes );
@@ -707,7 +707,7 @@ PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
 
 bool SbxValue::IsFixed() const
 {
-    return ((GetFlags() & SBX_FIXED) != SBX_NONE) || ((aData.eType & SbxBYREF) != 0);
+    return (GetFlags() & SbxFlagBits::Fixed) || ((aData.eType & SbxBYREF) != 0);
 }
 
 // A variable is numeric, if it is EMPTY or really numeric
@@ -775,7 +775,7 @@ bool SbxValue::SetType( SbxDataType t )
     if( ( t & 0x0FFF ) == SbxVARIANT )
     {
         // Try to set the data type to Variant
-        ResetFlag( SBX_FIXED );
+        ResetFlag( SbxFlagBits::Fixed );
         if( IsFixed() )
         {
             SetError( SbxERR_CONVERSION );
@@ -833,7 +833,7 @@ bool SbxValue::Convert( SbxDataType eTo )
     if( eTo == SbxVARIANT )
     {
         // Trial to set the data type to Variant
-        ResetFlag( SBX_FIXED );
+        ResetFlag( SbxFlagBits::Fixed );
         if( IsFixed() )
         {
             SetError( SbxERR_CONVERSION );
@@ -1545,7 +1545,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 break;
             default:
                 memset (&aData,0,sizeof(aData));
-                ResetFlag(SBX_FIXED);
+                ResetFlag(SbxFlagBits::Fixed);
                 aData.eType = SbxNULL;
                 DBG_ASSERT( false, "Loaded a non-supported data type" );
 

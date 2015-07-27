@@ -246,7 +246,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         sal_uInt16 n = 1;
         for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
         {
-            if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != SBX_NONE )
+            if ( pParamInfo->nFlags & SbxFlagBits::Optional )
                 ++nSbxOptional;
             else
                 nSbxOptional = 0;
@@ -271,7 +271,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
 
             // Enable passing by ref
             if ( xSbxVar->GetType() != SbxVARIANT )
-                xSbxVar->SetFlag( SBX_FIXED );
+                xSbxVar->SetFlag( SbxFlagBits::Fixed );
         }
     }
     if ( xSbxParams.Is() )
@@ -389,7 +389,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
     {
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module
-        m_pMod->ResetFlag( SBX_GBLSEARCH );
+        m_pMod->ResetFlag( SbxFlagBits::GlobalSearch );
         pMethod = dynamic_cast<SbMethod*>(m_pMod->SbModule::Find(aName,  SbxCLASS_METHOD));
         m_pMod->SetFlags( nSaveFlgs );
     }
@@ -404,7 +404,7 @@ SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (Runt
     {
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module.
-        m_pMod->ResetFlag( SBX_GBLSEARCH );
+        m_pMod->ResetFlag( SbxFlagBits::GlobalSearch );
         pProperty = dynamic_cast<SbProperty*>(m_pMod->SbModule::Find(aName,  SbxCLASS_PROPERTY));
         m_pMod->SetFlag( nSaveFlgs );
     }
@@ -486,7 +486,7 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
            pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
 {
     SetName( rName );
-    SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
+    SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
     SetModuleType( script::ModuleType::NORMAL );
 
     // #i92642: Set name property to intitial name
@@ -568,20 +568,20 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
     {
         pMeth = new SbMethod( rName, t, this );
         pMeth->SetParent( this );
-        pMeth->SetFlags( SBX_READ );
+        pMeth->SetFlags( SbxFlagBits::Read );
         pMethods->Put( pMeth, pMethods->Count() );
         StartListening( pMeth->GetBroadcaster(), true );
     }
     // The method is per default valid, because it could be
     // created from the compiler (code generator) as well.
     pMeth->bInvalid = false;
-    pMeth->ResetFlag( SBX_FIXED );
-    pMeth->SetFlag( SBX_WRITE );
+    pMeth->ResetFlag( SbxFlagBits::Fixed );
+    pMeth->SetFlag( SbxFlagBits::Write );
     pMeth->SetType( t );
-    pMeth->ResetFlag( SBX_WRITE );
+    pMeth->ResetFlag( SbxFlagBits::Write );
     if( t != SbxVARIANT )
     {
-        pMeth->SetFlag( SBX_FIXED );
+        pMeth->SetFlag( SbxFlagBits::Fixed );
     }
     return pMeth;
 }
@@ -599,7 +599,7 @@ SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
     if( !pProp )
     {
         pProp = new SbProperty( rName, t, this );
-        pProp->SetFlag( SBX_READWRITE );
+        pProp->SetFlag( SbxFlagBits::ReadWrite );
         pProp->SetParent( this );
         pProps->Put( pProp, pProps->Count() );
         StartListening( pProp->GetBroadcaster(), true );
@@ -618,7 +618,7 @@ SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxD
     if( !pProp )
     {
         pProp = new SbProcedureProperty( rName, t );
-        pProp->SetFlag( SBX_READWRITE );
+        pProp->SetFlag( SbxFlagBits::ReadWrite );
         pProp->SetParent( this );
         pProps->Put( pProp, pProps->Count() );
         StartListening( pProp->GetBroadcaster(), true );
@@ -638,7 +638,7 @@ SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod( const OUString& rName, SbMe
     {
         pMapperMethod = new SbIfaceMapperMethod( rName, pImplMeth );
         pMapperMethod->SetParent( this );
-        pMapperMethod->SetFlags( SBX_READ );
+        pMapperMethod->SetFlags( SbxFlagBits::Read );
         pMethods->Put( pMapperMethod, pMethods->Count() );
     }
     pMapperMethod->bInvalid = false;
@@ -708,16 +708,16 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
                 SbxObject* pEnumObject = PTR_CAST( SbxObject, pEnumVar );
                 if( pEnumObject )
                 {
-                    bool bPrivate = pEnumObject->IsSet( SBX_PRIVATE );
+                    bool bPrivate = pEnumObject->IsSet( SbxFlagBits::Private );
                     OUString aEnumName = pEnumObject->GetName();
 
                     pRes = new SbxVariable( SbxOBJECT );
                     pRes->SetName( aEnumName );
                     pRes->SetParent( this );
-                    pRes->SetFlag( SBX_READ );
+                    pRes->SetFlag( SbxFlagBits::Read );
                     if( bPrivate )
                     {
-                        pRes->SetFlag( SBX_PRIVATE );
+                        pRes->SetFlag( SbxFlagBits::Private );
                     }
                     pRes->PutObject( pEnumObject );
                 }
@@ -1108,13 +1108,13 @@ void SbModule::Run( SbMethod* pMeth )
             StarBASIC* pMSOMacroRuntimeLib = PTR_CAST(StarBASIC,pMSOMacroRuntimeLibVar);
             if( pMSOMacroRuntimeLib )
             {
-                SbxFlagBits nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
-                pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
+                SbxFlagBits nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SbxFlagBits::GlobalSearch;
+                pMSOMacroRuntimeLib->ResetFlag( SbxFlagBits::GlobalSearch );
                 SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( "Application", SbxCLASS_METHOD );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
                 if( pAppSymbol )
                 {
-                    pMSOMacroRuntimeLib->SetFlag( SBX_EXTSEARCH );      // Could have been disabled before
+                    pMSOMacroRuntimeLib->SetFlag( SbxFlagBits::ExtSearch );      // Could have been disabled before
                     GetSbData()->pMSOMacroRuntimLib = pMSOMacroRuntimeLib;
                 }
             }
@@ -1633,7 +1633,7 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return false;
     // As a precaution...
-    SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
+    SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
     sal_uInt8 bImage;
     rStrm.ReadUChar( bImage );
     if( bImage )
@@ -2003,7 +2003,7 @@ SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
     refStatics = new SbxArray;
     mCaller          = 0;
     // HACK due to 'Referenz could not be saved'
-    SetFlag( SBX_NO_MODIFY );
+    SetFlag( SbxFlagBits::NoModify );
 }
 
 SbMethod::SbMethod( const SbMethod& r )
@@ -2017,7 +2017,7 @@ SbMethod::SbMethod( const SbMethod& r )
     nLine2       = r.nLine2;
         refStatics = r.refStatics;
     mCaller          = r.mCaller;
-    SetFlag( SBX_NO_MODIFY );
+    SetFlag( SbxFlagBits::NoModify );
 }
 
 SbMethod::~SbMethod()
@@ -2044,7 +2044,7 @@ bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     if( nVer == 2 )
         rStrm.ReadUInt16( nLine1 ).ReadUInt16( nLine2 ).ReadInt16( nTempStart ).ReadCharAsBool( bInvalid );
     // HACK ue to 'Referenz could not be saved'
-    SetFlag( SBX_NO_MODIFY );
+    SetFlag( SbxFlagBits::NoModify );
     nStart = nTempStart;
     return true;
 }
@@ -2118,7 +2118,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 // #100883 Own Broadcast for SbMethod
 void SbMethod::Broadcast( sal_uInt32 nHintId )
 {
-    if( pCst && !IsSet( SBX_NO_BROADCAST ) )
+    if( pCst && !IsSet( SbxFlagBits::NoBroadcast ) )
     {
         // Because the method could be called from outside, test here once again
         // the authorisation
@@ -2155,7 +2155,7 @@ void SbMethod::Broadcast( sal_uInt32 nHintId )
         pSave->Broadcast( SbxHint( nHintId, pThisCopy ) );
 
         SbxFlagBits nSaveFlags = GetFlags();
-        SetFlag( SBX_READWRITE );
+        SetFlag( SbxFlagBits::ReadWrite );
         pCst = NULL;
         Put( pThisCopy->GetValues_Impl() );
         pCst = pSave;
@@ -2490,7 +2490,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
 
                 // Enable passing by ref
                 if ( xSbxVar->GetType() != SbxVARIANT )
-                    xSbxVar->SetFlag( SBX_FIXED );
+                    xSbxVar->SetFlag( SbxFlagBits::Fixed );
             }
             pMeth->SetParameters( xArray );
 

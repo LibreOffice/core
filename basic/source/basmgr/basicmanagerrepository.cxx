@@ -447,7 +447,7 @@ namespace basic
         {
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
-            pBasic->SetFlag( SBX_EXTSEARCH );
+            pBasic->SetFlag( SbxFlagBits::ExtSearch );
             _out_rpBasicManager = new BasicManager( pBasic, NULL, true );
         }
 

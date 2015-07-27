@@ -263,7 +263,7 @@ SbError marshal(
     OSL_ASSERT(variable != 0);
 
     SbxDataType eVarType = variable->GetType();
-    bool bByVal = (variable->GetFlags() & SBX_REFERENCE) == 0;
+    bool bByVal = !(variable->GetFlags() & SbxFlagBits::Reference);
     if( !bByVal && !SbiRuntime::isVBAEnabled() && eVarType == SbxSTRING )
         bByVal = true;
 
@@ -550,7 +550,7 @@ SbError call(
         break;
     }
     for (sal_uInt16 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
-        arguments->Get(i)->ResetFlag(SBX_REFERENCE);
+        arguments->Get(i)->ResetFlag(SbxFlagBits::Reference);
             //TODO: skipped for errors?!?
     }
     for (std::vector< UnmarshalData >::iterator i(data.unmarshal.begin());

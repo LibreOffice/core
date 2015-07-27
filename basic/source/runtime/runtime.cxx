@@ -662,7 +662,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                     pArray->Put( v, &nDimIndex );
                 }
                 SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
-                pArrayVar->SetFlag( SBX_READWRITE );
+                pArrayVar->SetFlag( SbxFlagBits::ReadWrite );
                 pArrayVar->PutObject( pArray );
                 refParams->Put( pArrayVar, i );
 
@@ -696,7 +696,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                     t = SbxOBJECT;
                 }
                 SbxVariable* v2 = new SbxVariable( t );
-                v2->SetFlag( SBX_READWRITE );
+                v2->SetFlag( SbxFlagBits::ReadWrite );
                 *v2 = *v;
                 refParams->Put( v2, i );
             }
@@ -732,7 +732,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
             pArray->unoAddDim( 0, -1 );
             SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
-            pArrayVar->SetFlag( SBX_READWRITE );
+            pArrayVar->SetFlag( SbxFlagBits::ReadWrite );
             pArrayVar->PutObject( pArray );
             refParams->Put( pArrayVar, nParamCount );
         }
@@ -1048,13 +1048,13 @@ void SbiRuntime::TOSMakeTemp()
         // so set it to NULL now
         pDflt->SetParent( NULL );
         p = new SbxVariable( *pDflt );
-        p->SetFlag( SBX_READWRITE );
+        p->SetFlag( SbxFlagBits::ReadWrite );
         refExprStk->Put( p, nExprLvl - 1 );
     }
     else if( p->GetRefCount() != 1 )
     {
         SbxVariable* pNew = new SbxVariable( *p );
-        pNew->SetFlag( SBX_READWRITE );
+        pNew->SetFlag( SbxFlagBits::ReadWrite );
         refExprStk->Put( pNew, nExprLvl - 1 );
     }
 }
@@ -1328,7 +1328,7 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     TOSMakeTemp();
     SbxVariable* p2 = GetTOS();
 
-    p2->ResetFlag( SBX_FIXED );
+    p2->ResetFlag( SbxFlagBits::Fixed );
     p2->Compute( eOp, *p1 );
 
     checkArithmeticOverflow( p2 );
@@ -1702,12 +1702,12 @@ void SbiRuntime::StepPUT()
     SbxVariableRef refVar = PopVar();
     // store on its own method (inside a function)?
     bool bFlagsChanged = false;
-    SbxFlagBits n = SBX_NONE;
+    SbxFlagBits n = SbxFlagBits::NONE;
     if( refVar.get() == pMeth )
     {
         bFlagsChanged = true;
         n = refVar->GetFlags();
-        refVar->SetFlag( SBX_WRITE );
+        refVar->SetFlag( SbxFlagBits::Write );
     }
 
     // if left side arg is an object or variant and right handside isn't
@@ -1854,12 +1854,12 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     else
     {
         bool bFlagsChanged = false;
-        SbxFlagBits n = SBX_NONE;
+        SbxFlagBits n = SbxFlagBits::NONE;
         if( refVar.get() == pMeth )
         {
             bFlagsChanged = true;
             n = refVar->GetFlags();
-            refVar->SetFlag( SBX_WRITE );
+            refVar->SetFlag( SbxFlagBits::Write );
         }
         SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty, refVar.get());
         if( pProcProperty )
@@ -1920,14 +1920,14 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
 
         // Handle Dim As New
-        bool bDimAsNew = bVBAEnabled && refVar->IsSet( SBX_DIM_AS_NEW );
+        bool bDimAsNew = bVBAEnabled && refVar->IsSet( SbxFlagBits::DimAsNew );
         SbxBaseRef xPrevVarObj;
         if( bDimAsNew )
         {
             xPrevVarObj = refVar->GetObject();
         }
         // Handle withevents
-        bool bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
+        bool bWithEvents = refVar->IsSet( SbxFlagBits::WithEvents );
         if ( bWithEvents )
         {
             Reference< XInterface > xComListener;
@@ -2058,7 +2058,7 @@ void SbiRuntime::StepLSET()
         SbxFlagBits n = refVar->GetFlags();
         if( refVar.get() == pMeth )
         {
-            refVar->SetFlag( SBX_WRITE );
+            refVar->SetFlag( SbxFlagBits::Write );
         }
         OUString aRefVarString = refVar->GetOUString();
         OUString aRefValString = refVal->GetOUString();
@@ -2094,7 +2094,7 @@ void SbiRuntime::StepRSET()
         SbxFlagBits n = refVar->GetFlags();
         if( refVar.get() == pMeth )
         {
-            refVar->SetFlag( SBX_WRITE );
+            refVar->SetFlag( SbxFlagBits::Write );
         }
         OUString aRefVarString = refVar->GetOUString();
         OUString aRefValString = refVal->GetOUString();
@@ -2123,10 +2123,10 @@ void SbiRuntime::StepPUTC()
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-    refVar->SetFlag( SBX_WRITE );
+    refVar->SetFlag( SbxFlagBits::Write );
     *refVar = *refVal;
-    refVar->ResetFlag( SBX_WRITE );
-    refVar->SetFlag( SBX_CONST );
+    refVar->ResetFlag( SbxFlagBits::Write );
+    refVar->SetFlag( SbxFlagBits::Const );
 }
 
 // DIM
@@ -2168,7 +2168,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
         // allow arrays without dimension information, too (VB-compatible)
         if( pDims )
         {
-            refVar->ResetFlag( SBX_VAR_TO_DIM );
+            refVar->ResetFlag( SbxFlagBits::VarToDim );
 
             for( sal_uInt16 i = 1; i < pDims->Count(); )
             {
@@ -2192,7 +2192,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
             pArray->unoAddDim( 0, -1 );
         }
         SbxFlagBits nSavFlags = refVar->GetFlags();
-        refVar->ResetFlag( SBX_FIXED );
+        refVar->ResetFlag( SbxFlagBits::Fixed );
         refVar->PutObject( pArray );
         refVar->SetFlags( nSavFlags );
         refVar->SetParameters( NULL );
@@ -2325,7 +2325,7 @@ void SbiRuntime::StepREDIMP_ERASE()
 static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
 {
     SbxFlagBits nSavFlags = refVar->GetFlags();
-    refVar->ResetFlag( SBX_FIXED );
+    refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->SetType( SbxDataType(eType & 0x0FFF) );
     refVar->SetFlags( nSavFlags );
     refVar->Clear();
@@ -2416,7 +2416,7 @@ void SbiRuntime::StepBYVAL()
     SbxDataType t = pVar->GetType();
 
     SbxVariable* pCopyVar = new SbxVariable( t );
-    pCopyVar->SetFlag( SBX_READWRITE );
+    pCopyVar->SetFlag( SbxFlagBits::ReadWrite );
     *pCopyVar = *pVar;
 
     PushVar( pCopyVar );
@@ -2886,17 +2886,17 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
             {
                 // Call by Value is requested -> create a copy
                 pVar = new SbxVariable( *pVar );
-                pVar->SetFlag( SBX_READWRITE );
+                pVar->SetFlag( SbxFlagBits::ReadWrite );
                 refExprStk->Put( pVar, refArgv->Count() - 1 );
             }
             else
-                pVar->SetFlag( SBX_REFERENCE );     // Ref-Flag for DllMgr
+                pVar->SetFlag( SbxFlagBits::Reference );     // Ref-Flag for DllMgr
         }
         else
         {
             // parameter is NO reference
             if( bByVal )
-                pVar->ResetFlag( SBX_REFERENCE );   // no reference -> OK
+                pVar->ResetFlag( SbxFlagBits::Reference );   // no reference -> OK
             else
                 Error( SbERR_BAD_PARAMETERS );      // reference needed
         }
@@ -3359,7 +3359,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         StarBASIC* pMSOMacroRuntimeLib = GetSbData()->pMSOMacroRuntimLib;
         if( pMSOMacroRuntimeLib != NULL )
         {
-            pMSOMacroRuntimeLib->ResetFlag( SBX_EXTSEARCH );
+            pMSOMacroRuntimeLib->ResetFlag( SbxFlagBits::ExtSearch );
         }
     }
 
@@ -3413,14 +3413,14 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             // #110004, #112015: Make private really private
             if( bLocal && pElem )   // Local as flag for global search
             {
-                if( pElem->IsSet( SBX_PRIVATE ) )
+                if( pElem->IsSet( SbxFlagBits::Private ) )
                 {
                     SbiInstance* pInst_ = GetSbData()->pInst;
                     if( pInst_ && pInst_->IsCompatibility() && pObj != pElem->GetParent() )
                     {
                         pElem = NULL;   // Found but in wrong module!
                     }
-                    // Interfaces: Use SBX_EXTFOUND
+                    // Interfaces: Use SbxFlagBits::ExtFound
                 }
             }
             rBasic.bNoRtl = bSave;
@@ -3467,8 +3467,8 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 if( pElem )
                 {
                     // #63774 May not be saved too!!!
-                    pElem->SetFlag( SBX_DONTSTORE );
-                    pElem->SetFlag( SBX_NO_MODIFY);
+                    pElem->SetFlag( SbxFlagBits::DontStore );
+                    pElem->SetFlag( SbxFlagBits::NoModify);
 
                     // #72382 save locally, all variables that have been declared
                     // implicit would become global automatically otherwise!
@@ -3525,7 +3525,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                         pElem = new SbxVariable( t );
                         if( t != SbxVARIANT )
                         {
-                            pElem->SetFlag( SBX_FIXED );
+                            pElem->SetFlag( SbxFlagBits::Fixed );
                         }
                         pElem->SetName( aName );
                         refLocals->Put( pElem, refLocals->Count() );
@@ -3544,7 +3544,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             // shall the type be converted?
             SbxDataType t2 = pElem->GetType();
             bool bSet = false;
-            if( (pElem->GetFlags() & SBX_FIXED) == SBX_NONE )
+            if( (pElem->GetFlags() & SbxFlagBits::Fixed) == SbxFlagBits::NONE )
             {
                 if( t != SbxVARIANT && t != t2 &&
                     t >= SbxINTEGER && t <= SbxSTRING )
@@ -3558,7 +3558,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             // remove potential rests of the last call of the SbxMethod
             // free Write before, so that there's no error
             SbxFlagBits nSavFlags = pElem->GetFlags();
-            pElem->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
+            pElem->SetFlag( SbxFlagBits::ReadWrite | SbxFlagBits::NoBroadcast );
             pElem->SbxValue::Clear();
             pElem->SetFlags( nSavFlags );
 
@@ -3570,7 +3570,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             //OLD: SbxVariable* pNew = new SbxVariable( *pElem );
 
             pElem->SetParameters(0);
-            pNew->SetFlag( SBX_READWRITE );
+            pNew->SetFlag( SbxFlagBits::ReadWrite );
 
             if( bSet )
             {
@@ -3973,7 +3973,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             else if( bVBAEnabled )  // !pObj
             {
                 SbxArray* pParam = pElem->GetParameters();
-                if( pParam != NULL && !pElem->IsSet( SBX_VAR_TO_DIM ) )
+                if( pParam != NULL && !pElem->IsSet( SbxFlagBits::VarToDim ) )
                 {
                     Error( SbERR_NO_OBJECT );
                 }
@@ -4014,13 +4014,13 @@ void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pMod);
     if( pClassModuleObject )
     {
-        pMod->SetFlag( SBX_GBLSEARCH );
+        pMod->SetFlag( SbxFlagBits::GlobalSearch );
     }
     StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, true );
 
     if( pClassModuleObject )
     {
-        pMod->ResetFlag( SBX_GBLSEARCH );
+        pMod->ResetFlag( SbxFlagBits::GlobalSearch );
     }
 }
 
@@ -4106,7 +4106,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             if ( pInfo )
             {
                 const SbxParamInfo* pParam = pInfo->GetParam( i );
-                if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != SBX_NONE ) )
+                if( pParam && ( pParam->nFlags & SbxFlagBits::Optional ) )
                 {
                     // Default value?
                     sal_uInt16 nDefaultId = (sal_uInt16)(pParam->nUserData & 0x0ffff);
@@ -4498,12 +4498,12 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
     if( bWithEvents )
     {
-        pVar->SetFlag( SBX_WITH_EVENTS );
+        pVar->SetFlag( SbxFlagBits::WithEvents );
     }
     bool bDimAsNew = ((nOp2 & SBX_TYPE_DIM_AS_NEW_FLAG) != 0);
     if( bDimAsNew )
     {
-        pVar->SetFlag( SBX_DIM_AS_NEW );
+        pVar->SetFlag( SbxFlagBits::DimAsNew );
     }
     bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
     if( bFixedString )
@@ -4517,7 +4517,7 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     bool bVarToDim = ((nOp2 & SBX_TYPE_VAR_TO_DIM_FLAG) != 0);
     if( bVarToDim )
     {
-        pVar->SetFlag( SBX_VAR_TO_DIM );
+        pVar->SetFlag( SbxFlagBits::VarToDim );
     }
 }
 
@@ -4546,8 +4546,8 @@ void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedFo
 {
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);;
-    bool bFlag = pMod->IsSet( SBX_NO_MODIFY );
-    pMod->SetFlag( SBX_NO_MODIFY );
+    bool bFlag = pMod->IsSet( SbxFlagBits::NoModify );
+    pMod->SetFlag( SbxFlagBits::NoModify );
     SbxVariableRef p = pMod->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
     {
@@ -4556,17 +4556,17 @@ void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedFo
     SbProperty* pProp = pMod->GetProperty( aName, t );
     if( !bUsedForClassModule )
     {
-        pProp->SetFlag( SBX_PRIVATE );
+        pProp->SetFlag( SbxFlagBits::Private );
     }
     if( !bFlag )
     {
-        pMod->ResetFlag( SBX_NO_MODIFY );
+        pMod->ResetFlag( SbxFlagBits::NoModify );
     }
     if( pProp )
     {
-        pProp->SetFlag( SBX_DONTSTORE );
+        pProp->SetFlag( SbxFlagBits::DontStore );
         // from 2.7.1996: HACK because of 'reference can't be saved'
-        pProp->SetFlag( SBX_NO_MODIFY);
+        pProp->SetFlag( SbxFlagBits::NoModify);
 
         implHandleSbxFlags( pProp, t, nOp2 );
     }
@@ -4609,8 +4609,8 @@ void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pMod->AddVarName( aName );
     }
 
-    bool bFlag = pStorage->IsSet( SBX_NO_MODIFY );
-    rBasic.SetFlag( SBX_NO_MODIFY );
+    bool bFlag = pStorage->IsSet( SbxFlagBits::NoModify );
+    rBasic.SetFlag( SbxFlagBits::NoModify );
     SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
     {
@@ -4619,13 +4619,13 @@ void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     p = pStorage->Make( aName, SbxCLASS_PROPERTY, t );
     if( !bFlag )
     {
-        pStorage->ResetFlag( SBX_NO_MODIFY );
+        pStorage->ResetFlag( SbxFlagBits::NoModify );
     }
     if( p )
     {
-        p->SetFlag( SBX_DONTSTORE );
+        p->SetFlag( SbxFlagBits::DontStore );
         // from 2.7.1996: HACK because of 'reference can't be saved'
-        p->SetFlag( SBX_NO_MODIFY);
+        p->SetFlag( SbxFlagBits::NoModify);
     }
 }
 
@@ -4676,7 +4676,7 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl( OUString& aName, SbxDataType& t )
             p = new SbxVariable( t );
             if( t != SbxVARIANT )
             {
-                p->SetFlag( SBX_FIXED );
+                p->SetFlag( SbxFlagBits::Fixed );
             }
             p->SetName( aName );
             pStatics->Put( p, pStatics->Count() );

@@ -106,8 +106,8 @@ SbxObject::~SbxObject()
     CheckParentsOnDelete( this, pMethods );
     CheckParentsOnDelete( this, pObjs );
 
-    // avoid handling in ~SbxVariable as SBX_DIM_AS_NEW == SBX_GBLSEARCH
-    ResetFlag( SBX_DIM_AS_NEW );
+    // avoid handling in ~SbxVariable as SbxFlagBits::DimAsNew == SbxFlagBits::GlobalSearch
+    ResetFlag( SbxFlagBits::DimAsNew );
 }
 
 SbxDataType SbxObject::GetType() const
@@ -127,10 +127,10 @@ void SbxObject::Clear()
     pObjs      = new SbxArray( SbxOBJECT );
     SbxVariable* p;
     p = Make( pNameProp, SbxCLASS_PROPERTY, SbxSTRING );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pParentProp, SbxCLASS_PROPERTY, SbxOBJECT );
-    p->ResetFlag( SBX_WRITE );
-    p->SetFlag( SBX_DONTSTORE );
+    p->ResetFlag( SbxFlagBits::Write );
+    p->SetFlag( SbxFlagBits::DontStore );
     pDfltProp  = NULL;
     SetModified( false );
 }
@@ -189,17 +189,17 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
         pRes = pObjs->FindUserData( nData );
     }
     // Search in the parents?
-    if( !pRes && IsSet( SBX_GBLSEARCH ) )
+    if( !pRes && IsSet( SbxFlagBits::GlobalSearch ) )
     {
         SbxObject* pCur = this;
         while( !pRes && pCur->pParent )
         {
             // I myself was already searched!
             SbxFlagBits nOwn = pCur->GetFlags();
-            pCur->ResetFlag( SBX_EXTSEARCH );
+            pCur->ResetFlag( SbxFlagBits::ExtSearch );
             // I search already global!
             SbxFlagBits nPar = pCur->pParent->GetFlags();
-            pCur->pParent->ResetFlag( SBX_GBLSEARCH );
+            pCur->pParent->ResetFlag( SbxFlagBits::GlobalSearch );
             pRes = pCur->pParent->FindUserData( nData );
             pCur->SetFlags( nOwn );
             pCur->pParent->SetFlags( nPar );
@@ -224,7 +224,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 #endif
 
     SbxVariable* pRes = NULL;
-    pObjs->SetFlag( SBX_EXTSEARCH );
+    pObjs->SetFlag( SbxFlagBits::ExtSearch );
     if( t == SbxCLASS_DONTCARE )
     {
         pRes = pMethods->Find( rName, SbxCLASS_METHOD );
@@ -258,17 +258,17 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     if( !pRes && ( t == SbxCLASS_METHOD || t == SbxCLASS_PROPERTY ) )
         pRes = pObjs->Find( rName, t );
     // Search in the parents?
-    if( !pRes && IsSet( SBX_GBLSEARCH ) )
+    if( !pRes && IsSet( SbxFlagBits::GlobalSearch ) )
     {
         SbxObject* pCur = this;
         while( !pRes && pCur->pParent )
         {
             // I myself was already searched!
             SbxFlagBits nOwn = pCur->GetFlags();
-            pCur->ResetFlag( SBX_EXTSEARCH );
+            pCur->ResetFlag( SbxFlagBits::ExtSearch );
             // I search already global!
             SbxFlagBits nPar = pCur->pParent->GetFlags();
-            pCur->pParent->ResetFlag( SBX_GBLSEARCH );
+            pCur->pParent->ResetFlag( SbxFlagBits::GlobalSearch );
             pRes = pCur->pParent->Find( rName, t );
             pCur->SetFlags( nOwn );
             pCur->pParent->SetFlags( nPar );
@@ -348,7 +348,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     {
         nArrayIdx = pArray->Count();
         // Is the variable per name available?
-        pArray->ResetFlag( SBX_EXTSEARCH );
+        pArray->ResetFlag( SbxFlagBits::ExtSearch );
         SbxVariable* pOld = pArray->Find( pVar->GetName(), pVar->GetClass() );
         if( pOld )
         {
@@ -681,7 +681,7 @@ static bool CollectAttrs( const SbxBase* p, OUString& rRes )
     {
         aAttrs = "Hidden";
     }
-    if( p->IsSet( SBX_EXTSEARCH ) )
+    if( p->IsSet( SbxFlagBits::ExtSearch ) )
     {
         if( !aAttrs.isEmpty() )
         {
@@ -697,7 +697,7 @@ static bool CollectAttrs( const SbxBase* p, OUString& rRes )
         }
         aAttrs += "Invisible";
     }
-    if( p->IsSet( SBX_DONTSTORE ) )
+    if( p->IsSet( SbxFlagBits::DontStore ) )
     {
         if( !aAttrs.isEmpty() )
         {

@@ -184,7 +184,7 @@ namespace basprov
                 sal_uInt16 n = 1;
                 for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
                 {
-                    if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != SBX_NONE )
+                    if ( pParamInfo->nFlags & SbxFlagBits::Optional )
                         ++nSbxOptional;
                     else
                         nSbxOptional = 0;
@@ -216,7 +216,7 @@ namespace basprov
 
                     // Enable passing by ref
                     if ( xSbxVar->GetType() != SbxVARIANT )
-                        xSbxVar->SetFlag( SBX_FIXED );
+                        xSbxVar->SetFlag( SbxFlagBits::Fixed );
                  }
             }
             if ( xSbxParams.Is() )

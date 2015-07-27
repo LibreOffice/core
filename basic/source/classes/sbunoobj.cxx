@@ -669,7 +669,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     {
                         SbxDimArrayRef xArray = pArray;
                         SbxFlagBits nFlags = pVar->GetFlags();
-                        pVar->ResetFlag( SBX_FIXED );
+                        pVar->ResetFlag( SbxFlagBits::Fixed );
                         pVar->PutObject( static_cast<SbxDimArray*>(xArray) );
                         pVar->SetFlags( nFlags );
                     }
@@ -799,7 +799,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 
             // return the Array
             SbxFlagBits nFlags = pVar->GetFlags();
-            pVar->ResetFlag( SBX_FIXED );
+            pVar->ResetFlag( SbxFlagBits::Fixed );
             pVar->PutObject( static_cast<SbxDimArray*>(xArray) );
             pVar->SetFlags( nFlags );
 
@@ -2584,7 +2584,7 @@ SbxInfo* SbUnoMethod::GetInfo()
                 OUString aParamName = rInfo.aName;
 
                 SbxDataType t = SbxVARIANT;
-                SbxFlagBits nFlags_ = SBX_READ;
+                SbxFlagBits nFlags_ = SbxFlagBits::Read;
                 pInfo->AddParam( aParamName, t, nFlags_ );
             }
         }
@@ -3953,7 +3953,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                     {
                         // #95792 Avoid a second call
                         SbxFlagBits nFlags = pVar->GetFlags();
-                        pVar->SetFlag( SBX_NO_BROADCAST );
+                        pVar->SetFlag( SbxFlagBits::NoBroadcast );
                         *pRet = sbxToUnoValueImpl( pVar );
                         pVar->SetFlags( nFlags );
                     }

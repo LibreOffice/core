@@ -74,18 +74,18 @@ void SbxCollection::Clear()
 void SbxCollection::Initialize()
 {
     SetType( SbxOBJECT );
-    SetFlag( SBX_FIXED );
-    ResetFlag( SBX_WRITE );
+    SetFlag( SbxFlagBits::Fixed );
+    ResetFlag( SbxFlagBits::Write );
     SbxVariable* p;
     p = Make( pCount , SbxCLASS_PROPERTY, SbxINTEGER );
-    p->ResetFlag( SBX_WRITE );
-    p->SetFlag( SBX_DONTSTORE );
+    p->ResetFlag( SbxFlagBits::Write );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pAdd, SbxCLASS_METHOD, SbxEMPTY );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pItem , SbxCLASS_METHOD, SbxOBJECT );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pRemove, SbxCLASS_METHOD, SbxEMPTY );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
 }
 
 SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )

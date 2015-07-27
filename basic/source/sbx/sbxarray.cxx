@@ -44,7 +44,7 @@ SbxArray::SbxArray( SbxDataType t ) : SbxBase()
     mpVarEntries = new VarEntriesType;
     eType = t;
     if( t != SbxVARIANT )
-        SetFlag( SBX_FIXED );
+        SetFlag( SbxFlagBits::Fixed );
 }
 
 SbxArray::SbxArray( const SbxArray& rArray ) :
@@ -52,7 +52,7 @@ SbxArray::SbxArray( const SbxArray& rArray ) :
 {
     mpVarEntries = new VarEntriesType;
     if( rArray.eType != SbxVARIANT )
-        SetFlag( SBX_FIXED );
+        SetFlag( SbxFlagBits::Fixed );
     *this = rArray;
 }
 
@@ -207,7 +207,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
         if( static_cast<SbxVariable*>(rRef) != pVar )
         {
             rRef = pVar;
-            SetFlag( SBX_MODIFIED );
+            SetFlag( SbxFlagBits::Modified );
         }
     }
 }
@@ -227,7 +227,7 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
         if( static_cast<SbxVariable*>(rRef) != pVar )
         {
             rRef = pVar;
-            SetFlag( SBX_MODIFIED );
+            SetFlag( SbxFlagBits::Modified );
         }
     }
 }
@@ -286,7 +286,7 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
     {
         mpVarEntries->insert( mpVarEntries->begin() + nIdx, p );
     }
-    SetFlag( SBX_MODIFIED );
+    SetFlag( SbxFlagBits::Modified );
 }
 
 void SbxArray::Insert( SbxVariable* pVar, sal_uInt16 nIdx )
@@ -306,7 +306,7 @@ void SbxArray::Remove32( sal_uInt32 nIdx )
         SbxVarEntry* pRef = (*mpVarEntries)[nIdx];
         mpVarEntries->erase( mpVarEntries->begin() + nIdx );
         delete pRef;
-        SetFlag( SBX_MODIFIED );
+        SetFlag( SbxFlagBits::Modified );
     }
 }
 
@@ -317,7 +317,7 @@ void SbxArray::Remove( sal_uInt16 nIdx )
         SbxVarEntry* pRef = (*mpVarEntries)[nIdx];
         mpVarEntries->erase( mpVarEntries->begin() + nIdx );
         delete pRef;
-        SetFlag( SBX_MODIFIED );
+        SetFlag( SbxFlagBits::Modified );
     }
 }
 
@@ -398,12 +398,12 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
         if (pEntry->mpVar->IsVisible() && pEntry->mpVar->GetUserData() == nData)
         {
             p = &pEntry->mpVar;
-            p->ResetFlag( SBX_EXTFOUND );
+            p->ResetFlag( SbxFlagBits::ExtFound );
             break;  // JSM 1995-10-06
         }
 
         // Did we have an array/object with extended search?
-        if (pEntry->mpVar->IsSet(SBX_EXTSEARCH))
+        if (pEntry->mpVar->IsSet(SbxFlagBits::ExtSearch))
         {
             switch (pEntry->mpVar->GetClass())
             {
@@ -411,7 +411,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
                 {
                     // Objects are not allowed to scan their parent.
                     SbxFlagBits nOld = pEntry->mpVar->GetFlags();
-                    pEntry->mpVar->ResetFlag(SBX_GBLSEARCH);
+                    pEntry->mpVar->ResetFlag(SbxFlagBits::GlobalSearch);
                     p = static_cast<SbxObject&>(*pEntry->mpVar).FindUserData(nData);
                     pEntry->mpVar->SetFlags(nOld);
                 }
@@ -426,7 +426,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
 
             if (p)
             {
-                p->SetFlag(SBX_EXTFOUND);
+                p->SetFlag(SbxFlagBits::ExtFound);
                 break;
             }
         }
@@ -443,7 +443,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
     sal_uInt32 nCount = mpVarEntries->size();
     if( !nCount )
         return NULL;
-    bool bExtSearch = IsSet( SBX_EXTSEARCH );
+    bool bExtSearch = IsSet( SbxFlagBits::ExtSearch );
     sal_uInt16 nHash = SbxVariable::MakeHashCode( rName );
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -458,12 +458,12 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
             && (pEntry->mpVar->GetName().equalsIgnoreAsciiCase(rName)))
         {
             p = &pEntry->mpVar;
-            p->ResetFlag(SBX_EXTFOUND);
+            p->ResetFlag(SbxFlagBits::ExtFound);
             break;
         }
 
         // Did we have an array/object with extended search?
-        if (bExtSearch && pEntry->mpVar->IsSet(SBX_EXTSEARCH))
+        if (bExtSearch && pEntry->mpVar->IsSet(SbxFlagBits::ExtSearch))
         {
             switch (pEntry->mpVar->GetClass())
             {
@@ -471,7 +471,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
                 {
                     // Objects are not allowed to scan their parent.
                     SbxFlagBits nOld = pEntry->mpVar->GetFlags();
-                    pEntry->mpVar->ResetFlag(SBX_GBLSEARCH);
+                    pEntry->mpVar->ResetFlag(SbxFlagBits::GlobalSearch);
                     p = static_cast<SbxObject&>(*pEntry->mpVar).Find(rName, t);
                     pEntry->mpVar->SetFlags(nOld);
                 }
@@ -486,7 +486,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
 
             if (p)
             {
-                p->SetFlag(SBX_EXTFOUND);
+                p->SetFlag(SbxFlagBits::ExtFound);
                 break;
             }
         }
@@ -500,7 +500,7 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     Clear();
     bool bRes = true;
     SbxFlagBits f = nFlags;
-    nFlags |= SBX_WRITE;
+    nFlags |= SbxFlagBits::Write;
     rStrm.ReadUInt16( nElem );
     nElem &= 0x7FFF;
     for( sal_uInt32 n = 0; n < nElem; n++ )
@@ -533,14 +533,14 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
     for( n = 0; n < mpVarEntries->size(); n++ )
     {
         SbxVarEntry* pEntry = (*mpVarEntries)[n];
-        if (pEntry->mpVar && (pEntry->mpVar->GetFlags() & SBX_DONTSTORE) == SBX_NONE)
+        if (pEntry->mpVar && !(pEntry->mpVar->GetFlags() & SbxFlagBits::DontStore))
             nElem++;
     }
     rStrm.WriteUInt16( nElem );
     for( n = 0; n < mpVarEntries->size(); n++ )
     {
         SbxVarEntry* pEntry = (*mpVarEntries)[n];
-        if (pEntry->mpVar && (pEntry->mpVar->GetFlags() & SBX_DONTSTORE) == SBX_NONE)
+        if (pEntry->mpVar && !(pEntry->mpVar->GetFlags() & SbxFlagBits::DontStore))
         {
             rStrm.WriteUInt16( n );
             if (!pEntry->mpVar->Store(rStrm))

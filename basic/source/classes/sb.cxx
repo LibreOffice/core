@@ -572,7 +572,7 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                     pDest->unoAddDim( 0, -1 ); // variant array
                 }
                 SbxFlagBits nSavFlags = pVar->GetFlags();
-                pNewProp->ResetFlag( SBX_FIXED );
+                pNewProp->ResetFlag( SbxFlagBits::Fixed );
                 // need to reset the FIXED flag
                 // when calling PutObject ( because the type will not match Object )
                 pNewProp->PutObject( pDest );
@@ -644,7 +644,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     SetClassName( pClassModule->GetName() );
 
     // Allow search only internally
-    ResetFlag( SBX_GBLSEARCH );
+    ResetFlag( SbxFlagBits::GlobalSearch );
 
     // Copy the methods from original class module
     SbxArray* pClassMethods = pClassModule->GetMethods();
@@ -662,9 +662,9 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             if( pMethod )
             {
                 SbxFlagBits nFlags_ = pMethod->GetFlags();
-                pMethod->SetFlag( SBX_NO_BROADCAST );
+                pMethod->SetFlag( SbxFlagBits::NoBroadcast );
                 SbMethod* pNewMethod = new SbMethod( *pMethod );
-                pNewMethod->ResetFlag( SBX_NO_BROADCAST );
+                pNewMethod->ResetFlag( SbxFlagBits::NoBroadcast );
                 pMethod->SetFlags( nFlags_ );
                 pNewMethod->pMod = this;
                 pNewMethod->SetParent( this );
@@ -714,11 +714,11 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         if( pProcedureProp )
         {
             SbxFlagBits nFlags_ = pProcedureProp->GetFlags();
-            pProcedureProp->SetFlag( SBX_NO_BROADCAST );
+            pProcedureProp->SetFlag( SbxFlagBits::NoBroadcast );
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
             pNewProp->SetFlags( nFlags_ ); // Copy flags
-            pNewProp->ResetFlag( SBX_NO_BROADCAST ); // except the Broadcast if it was set
+            pNewProp->ResetFlag( SbxFlagBits::NoBroadcast ); // except the Broadcast if it was set
             pProcedureProp->SetFlags( nFlags_ );
             pProps->PutDirect( pNewProp, i );
             StartListening( pNewProp->GetBroadcaster(), true );
@@ -729,7 +729,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             if( pProp )
             {
                 SbxFlagBits nFlags_ = pProp->GetFlags();
-                pProp->SetFlag( SBX_NO_BROADCAST );
+                pProp->SetFlag( SbxFlagBits::NoBroadcast );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
 
                 // Special handling for modules instances and collections, they need
@@ -763,7 +763,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                     }
                 }
 
-                pNewProp->ResetFlag( SBX_NO_BROADCAST );
+                pNewProp->ResetFlag( SbxFlagBits::NoBroadcast );
                 pNewProp->SetParent( this );
                 pProps->PutDirect( pNewProp, i );
                 pProp->SetFlags( nFlags_ );
@@ -805,7 +805,7 @@ SbxVariable* SbClassModuleObject::Find( const OUString& rName, SbxClassType t )
         if( pIfaceMapperMethod )
         {
             pRes = pIfaceMapperMethod->getImplMethod();
-            pRes->SetFlag( SBX_EXTFOUND );
+            pRes->SetFlag( SbxFlagBits::ExtFound );
         }
     }
     return pRes;
@@ -946,7 +946,7 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     }
     pRtl = new SbiStdObject(OUString(RTLNAME), this );
     // Search via StarBasic is always global
-    SetFlag( SBX_GBLSEARCH );
+    SetFlag( SbxFlagBits::GlobalSearch );
     pVBAGlobals = NULL;
     bQuit = false;
 
@@ -1117,7 +1117,7 @@ void StarBASIC::Insert( SbxVariable* pVar )
     {
         bool bWasModified = IsModified();
         SbxObject::Insert( pVar );
-        if( !bWasModified && pVar->IsSet( SBX_DONTSTORE ) )
+        if( !bWasModified && pVar->IsSet( SbxFlagBits::DontStore ) )
         {
             SetModified( false );
         }
@@ -1345,7 +1345,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
         }
         if( pRes )
         {
-            pRes->SetFlag( SBX_EXTFOUND );
+            pRes->SetFlag( SbxFlagBits::ExtFound );
         }
     }
     // Search module
@@ -1375,8 +1375,8 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
                 }
                 // otherwise check if the element is available
                 // unset GBLSEARCH-Flag (due to Rekursion)
-                SbxFlagBits nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
-                p->ResetFlag( SBX_GBLSEARCH );
+                SbxFlagBits nGblFlag = p->GetFlags() & SbxFlagBits::GlobalSearch;
+                p->ResetFlag( SbxFlagBits::GlobalSearch );
                 pRes = p->Find( rName, t );
                 p->SetFlag( nGblFlag );
                 if( pRes )
@@ -1949,8 +1949,8 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     }
     // End of the hacks!
     // Search via StarBASIC is at all times global
-    DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic loaded without GBLSEARCH" );
-    SetFlag( SBX_GBLSEARCH );
+    DBG_ASSERT( IsSet( SbxFlagBits::GlobalSearch ), "Basic loaded without GBLSEARCH" );
+    SetFlag( SbxFlagBits::GlobalSearch );
     return true;
 }
 
@@ -2086,30 +2086,30 @@ void BasicCollection::Initialize()
 {
     xItemArray = new SbxArray();
     SetType( SbxOBJECT );
-    SetFlag( SBX_FIXED );
-    ResetFlag( SBX_WRITE );
+    SetFlag( SbxFlagBits::Fixed );
+    ResetFlag( SbxFlagBits::Write );
     SbxVariable* p;
     p = Make( pCountStr, SbxCLASS_PROPERTY, SbxINTEGER );
-    p->ResetFlag( SBX_WRITE );
-    p->SetFlag( SBX_DONTSTORE );
+    p->ResetFlag( SbxFlagBits::Write );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pAddStr, SbxCLASS_METHOD, SbxEMPTY );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pItemStr, SbxCLASS_METHOD, SbxVARIANT );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pRemoveStr, SbxCLASS_METHOD, SbxEMPTY );
-    p->SetFlag( SBX_DONTSTORE );
+    p->SetFlag( SbxFlagBits::DontStore );
     if ( !xAddInfo.Is() )
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  OUString( "Item" ), SbxVARIANT, SBX_READ );
-        xAddInfo->AddParam(  OUString( "Key" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
-        xAddInfo->AddParam(  OUString( "Before" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
-        xAddInfo->AddParam(  OUString( "After" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  OUString( "Item" ), SbxVARIANT, SbxFlagBits::Read );
+        xAddInfo->AddParam(  OUString( "Key" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  OUString( "Before" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  OUString( "After" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
     }
     if ( !xItemInfo.Is() )
     {
         xItemInfo = new SbxInfo;
-        xItemInfo->AddParam(  OUString( "Index" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);
+        xItemInfo->AddParam(  OUString( "Index" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional);
     }
 }
 
@@ -2276,7 +2276,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
                 pNewItem->SetName( aKey );
             }
         }
-        pNewItem->SetFlag( SBX_READWRITE );
+        pNewItem->SetFlag( SbxFlagBits::ReadWrite );
         xItemArray->Insert32( pNewItem, nNextIndex );
     }
     else

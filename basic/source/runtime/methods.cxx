@@ -4408,7 +4408,7 @@ RTLFUNC(StrConv)
             SbxVariable* pNew = new SbxVariable( SbxBYTE );
             pNew->PutByte(*pChar);
             pChar++;
-            pNew->SetFlag( SBX_WRITE );
+            pNew->SetFlag( SbxFlagBits::Write );
             short index = i;
             if( bIncIndex )
             {
@@ -4420,7 +4420,7 @@ RTLFUNC(StrConv)
 
         SbxVariableRef refVar = rPar.Get(0);
         SbxFlagBits nFlags = refVar->GetFlags();
-        refVar->ResetFlag( SBX_FIXED );
+        refVar->ResetFlag( SbxFlagBits::Fixed );
         refVar->PutObject( pArray );
         refVar->SetFlags( nFlags );
         refVar->SetParameters( NULL );

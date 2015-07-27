@@ -49,7 +49,7 @@ SbxAppData::~SbxAppData()
 
 SbxBase::SbxBase()
 {
-    nFlags  = SBX_READWRITE;
+    nFlags  = SbxFlagBits::ReadWrite;
 }
 
 SbxBase::SbxBase( const SbxBase& r )
@@ -84,17 +84,17 @@ void SbxBase::Clear()
 
 bool SbxBase::IsFixed() const
 {
-    return IsSet( SBX_FIXED );
+    return IsSet( SbxFlagBits::Fixed );
 }
 
 void SbxBase::SetModified( bool b )
 {
-    if( IsSet( SBX_NO_MODIFY ) )
+    if( IsSet( SbxFlagBits::NoModify ) )
         return;
     if( b )
-        SetFlag( SBX_MODIFIED );
+        SetFlag( SbxFlagBits::Modified );
     else
-        ResetFlag( SBX_MODIFIED );
+        ResetFlag( SbxFlagBits::Modified );
 }
 
 SbxError SbxBase::GetError()
@@ -206,8 +206,8 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     SbxFlagBits nFlags = static_cast<SbxFlagBits>(nFlagsTmp);
 
     // Correcting a foolishness of mine:
-    if( (nFlags & SBX_RESERVED) != SBX_NONE )
-        nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
+    if( nFlags & SbxFlagBits::Reserved )
+        nFlags = ( nFlags & ~SbxFlagBits::Reserved ) | SbxFlagBits::GlobalSearch;
 
     sal_Size nOldPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
@@ -257,11 +257,11 @@ void SbxBase::Skip( SvStream& rStrm )
 
 bool SbxBase::Store( SvStream& rStrm )
 {
-    if( ( nFlags & SBX_DONTSTORE ) == SBX_NONE )
+    if( ( nFlags & SbxFlagBits::DontStore ) == SbxFlagBits::NONE )
     {
         rStrm.WriteUInt32( GetCreator() )
              .WriteUInt16( GetSbxId() )
-             .WriteUInt16( GetFlags() )
+             .WriteUInt16( static_cast<sal_uInt16>(GetFlags()) )
              .WriteUInt16( GetVersion() );
         sal_Size nOldPos = rStrm.Tell();
         rStrm.WriteUInt32( 0L );
@@ -377,7 +377,7 @@ bool SbxInfo::StoreData( SvStream& rStrm ) const
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, i->aName,
             RTL_TEXTENCODING_ASCII_US);
         rStrm.WriteUInt16( i->eType )
-             .WriteUInt16( i->nFlags )
+             .WriteUInt16( static_cast<sal_uInt16>(i->nFlags) )
              .WriteUInt32( i->nUserData );
     }
     return true;

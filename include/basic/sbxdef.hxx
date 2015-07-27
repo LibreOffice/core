@@ -24,6 +24,7 @@
 
 #ifndef __RSC
 #include <tools/errcode.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 enum SbxClassType {         // SBX-class-IDs (order is important!)
     SbxCLASS_DONTCARE = 1,  // don't care (search, not 0 due to StarBASIC)
@@ -200,54 +201,35 @@ typedef sal_uIntPtr SbxError;           // Preserve old type
 
 
 // Flag-Bits:
-enum SbxFlagBits {
-    SBX_NONE         = 0x0000,
-    SBX_READ         = 0x0001,  // Read permission
-    SBX_WRITE        = 0x0002,  // Write permission
-    SBX_READWRITE    = 0x0003,  // Read/Write permission
-    SBX_DONTSTORE    = 0x0004,  // Don't store object
-    SBX_MODIFIED     = 0x0008,  // Object was changed
-    SBX_FIXED        = 0x0010,  // Fixed data type (SbxVariable)
-    SBX_CONST        = 0x0020,  // Definition of const value
-    SBX_OPTIONAL     = 0x0040,  // Parameter is optional
-    SBX_HIDDEN       = 0x0080,  // Element is invisible
-    SBX_INVISIBLE    = 0x0100,  // Element is not found by Find()
-    SBX_EXTSEARCH    = 0x0200,  // Object is searched completely
-    SBX_EXTFOUND     = 0x0400,  // Variable was found through extended search
-    SBX_GBLSEARCH    = 0x0800,  // Global search via Parents
-    SBX_RESERVED     = 0x1000,  // reserved
-    SBX_PRIVATE      = 0x1000,  // #110004, #112015, cannot conflict with SBX_RESERVED
-    SBX_NO_BROADCAST = 0x2000,  // No broadcast on Get/Put
-    SBX_REFERENCE    = 0x4000,  // Parameter is Reference (DLL-call)
-    SBX_NO_MODIFY    = 0x8000,  // SetModified is suppressed
-    SBX_WITH_EVENTS  = 0x0080,  // Same value as unused SBX_HIDDEN
-    SBX_DIM_AS_NEW   = 0x0800,  // Same value as SBX_GBLSEARCH, cannot conflict as one
-                                // is used for objects, the other for variables only
-    SBX_VAR_TO_DIM   = 0x2000,  // Same value as SBX_NO_BROADCAST, cannot conflict as
-                                // used for variables without broadcaster only
+enum class SbxFlagBits {
+    NONE         = 0x0000,
+    Read         = 0x0001,  // Read permission
+    Write        = 0x0002,  // Write permission
+    ReadWrite    = 0x0003,  // Read/Write permission
+    DontStore    = 0x0004,  // Don't store object
+    Modified     = 0x0008,  // Object was changed
+    Fixed        = 0x0010,  // Fixed data type (SbxVariable)
+    Const        = 0x0020,  // Definition of const value
+    Optional     = 0x0040,  // Parameter is optional
+    Hidden       = 0x0080,  // Element is invisible
+    Invisible    = 0x0100,  // Element is not found by Find()
+    ExtSearch    = 0x0200,  // Object is searched completely
+    ExtFound     = 0x0400,  // Variable was found through extended search
+    GlobalSearch = 0x0800,  // Global search via Parents
+    Reserved     = 0x1000,  // reserved
+    Private      = 0x1000,  // #110004, #112015, cannot conflict with SbxFlagBits::Reserved
+    NoBroadcast  = 0x2000,  // No broadcast on Get/Put
+    Reference    = 0x4000,  // Parameter is Reference (DLL-call)
+    NoModify     = 0x8000,  // SetModified is suppressed
+    WithEvents   = 0x0080,  // Same value as unused SbxFlagBits::Hidden
+    DimAsNew     = 0x0800,  // Same value as SbxFlagBits::GlobalSearch, cannot conflict as one
+                                         // is used for objects, the other for variables only
+    VarToDim     = 0x2000,  // Same value as SbxFlagBits::NoBroadcast, cannot conflict as
+                                         // used for variables without broadcaster only
 };
-// make combining these type-safe
-inline SbxFlagBits operator| (SbxFlagBits lhs, SbxFlagBits rhs)
+namespace o3tl
 {
-    return static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
-}
-inline SbxFlagBits operator& (SbxFlagBits lhs, SbxFlagBits rhs)
-{
-    return static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
-}
-inline SbxFlagBits& operator|= (SbxFlagBits& lhs, SbxFlagBits rhs)
-{
-    lhs = static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
-    return lhs;
-}
-inline SbxFlagBits operator~ (SbxFlagBits rhs)
-{
-    return static_cast<SbxFlagBits>(0xffff & ~(static_cast<sal_uInt16>(rhs)));
-}
-inline SbxFlagBits& operator&= (SbxFlagBits& lhs, SbxFlagBits rhs)
-{
-    lhs = static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
-    return lhs;
+    template<> struct typed_flags<SbxFlagBits> : is_typed_flags<SbxFlagBits, 0xffff> {};
 }
 
 // Broadcaster-IDs:

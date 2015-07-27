@@ -116,25 +116,25 @@ inline void SbxBase::ResetFlag( SbxFlagBits n )
 { nFlags &= ~n; }
 
 inline bool SbxBase::IsSet( SbxFlagBits n ) const
-{ return ( nFlags & n ) != SBX_NONE; }
+{ return ( nFlags & n ) != SbxFlagBits::NONE; }
 
 inline bool SbxBase::IsReset( SbxFlagBits n ) const
-{ return ( nFlags & n ) == SBX_NONE; }
+{ return ( nFlags & n ) == SbxFlagBits::NONE; }
 
 inline bool SbxBase::CanRead() const
-{ return IsSet( SBX_READ ); }
+{ return IsSet( SbxFlagBits::Read ); }
 
 inline bool SbxBase::CanWrite() const
-{ return IsSet( SBX_WRITE ); }
+{ return IsSet( SbxFlagBits::Write ); }
 
 inline bool SbxBase::IsModified() const
-{ return IsSet( SBX_MODIFIED ); }
+{ return IsSet( SbxFlagBits::Modified ); }
 
 inline bool SbxBase::IsHidden() const
-{ return IsSet( SBX_HIDDEN ); }
+{ return IsSet( SbxFlagBits::Hidden ); }
 
 inline bool SbxBase::IsVisible() const
-{ return IsReset( SBX_INVISIBLE ); }
+{ return IsReset( SbxFlagBits::Invisible ); }
 
 #endif
 

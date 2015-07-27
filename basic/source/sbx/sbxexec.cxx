@@ -291,7 +291,7 @@ static SbxVariable* Element
         SbxFlagBits nOld = pObj->GetFlags();
         if( pObj == pGbl )
         {
-            pObj->SetFlag( SBX_GBLSEARCH );
+            pObj->SetFlag( SbxFlagBits::GlobalSearch );
         }
         refVar = pObj->Find( aSym, t );
         pObj->SetFlags( nOld );

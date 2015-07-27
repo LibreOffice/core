@@ -518,7 +518,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
             StarBASICRef xStdLib = rStdLibInfo.GetLib();
             xStdLib->SetName( OUString(szStdLibName) );
             rStdLibInfo.SetLibName( OUString(szStdLibName) );
-            xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
+            xStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
             xStdLib->SetModified( false );
         }
         else
@@ -532,7 +532,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
                 if ( pBasic )
                 {
                     pStdLib->Insert( pBasic );
-                    pBasic->SetFlag( SBX_EXTSEARCH );
+                    pBasic->SetFlag( SbxFlagBits::ExtSearch );
                 }
             }
             // Modified through insert
@@ -692,7 +692,7 @@ BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr )
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
     xStdLib->SetName(OUString(szStdLibName));
     pStdLibInfo->SetLibName(OUString(szStdLibName) );
-    pSLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
+    pSLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
 
     // Save is only necessary if basic has changed
     xStdLib->SetModified( false );
@@ -711,7 +711,7 @@ void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
     xStdLib->SetName( OUString(szStdLibName) );
     pStdLibInfo->SetLibName( OUString(szStdLibName) );
-    xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
+    xStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
     xStdLib->SetModified( false );
 }
 
@@ -723,7 +723,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     pStdLibInfo->SetLib( pStdLib );
     pStdLib->SetName( OUString(szStdLibName) );
     pStdLibInfo->SetLibName( OUString(szStdLibName) );
-    pStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
+    pStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
 }
 
 void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadLibs )
@@ -1012,7 +1012,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
                     StarBASICRef xStdLib = pLibInfo->GetLib();
                     xStdLib->SetName( pLibInfo->GetLibName() );
                     xStdLib->SetModified( false );
-                    xStdLib->SetFlag( SBX_DONTSTORE );
+                    xStdLib->SetFlag( SbxFlagBits::DontStore );
                 }
                 else
                 {
@@ -1091,7 +1091,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
                 {
                     pNew->GetParent()->Insert( pNew );
                 }
-                pNew->SetFlag( SBX_EXTSEARCH );
+                pNew->SetFlag( SbxFlagBits::ExtSearch );
             }
             rOldBasic = pNew;
 
@@ -1376,7 +1376,7 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
             if ( pLib )
             {
                 GetStdLib()->Insert( pLib );
-                pLib->SetFlag( SBX_EXTSEARCH );
+                pLib->SetFlag( SbxFlagBits::ExtSearch );
             }
         }
     }
@@ -1397,7 +1397,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName )
     BasicLibInfo* pLibInfo = CreateLibInfo();
     StarBASIC* pNew = new StarBASIC( GetStdLib(), mbDocMgr );
     GetStdLib()->Insert( pNew );
-    pNew->SetFlag( SBX_EXTSEARCH | SBX_DONTSTORE );
+    pNew->SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::DontStore );
     pLibInfo->SetLib( pNew );
     pLibInfo->SetLibName( rLibName );
     pLibInfo->GetLib()->SetName( rLibName );
@@ -1452,7 +1452,7 @@ StarBASIC* BasicManager::CreateLibForLibContainer( const OUString& rLibName,
     BasicLibInfo* pLibInfo = CreateLibInfo();
     StarBASIC* pNew = new StarBASIC( GetStdLib(), mbDocMgr );
     GetStdLib()->Insert( pNew );
-    pNew->SetFlag( SBX_EXTSEARCH | SBX_DONTSTORE );
+    pNew->SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::DontStore );
     pLibInfo->SetLib( pNew );
     pLibInfo->SetLibName( rLibName );
     pLibInfo->GetLib()->SetName( rLibName );
@@ -1514,7 +1514,7 @@ uno::Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const 
         aOldValue = sbxToUnoValue( pVariable );
 
     SbxObjectRef xUnoObj = GetSbUnoObject( sVarName, _rValue );
-    xUnoObj->SetFlag( SBX_DONTSTORE );
+    xUnoObj->SetFlag( SbxFlagBits::DontStore );
     pStandardLib->Insert( xUnoObj );
 
     return aOldValue;

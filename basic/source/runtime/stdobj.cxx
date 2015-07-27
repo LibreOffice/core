@@ -791,7 +791,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
             SbxFlagBits nAccess = static_cast<SbxFlagBits>(( p->nArgs & _RWMASK ) >> 8);
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
-                nAccess |= SBX_CONST;
+                nAccess |= SbxFlagBits::Const;
             OUString aName_ = OUString::createFromAscii( p->pName );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
@@ -870,7 +870,7 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
         SbxFlagBits nFlags_ = static_cast<SbxFlagBits>(( p->nArgs >> 8 ) & 0x03);
         if( p->nArgs & _OPT )
         {
-            nFlags_ |= SBX_OPTIONAL;
+            nFlags_ |= SbxFlagBits::Optional;
         }
         pInfo_->AddParam( aName_, p->eType, nFlags_ );
     }
