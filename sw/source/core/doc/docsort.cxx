@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/ptr_container/ptr_set.hpp>
-
 #include <hintids.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -50,6 +48,8 @@
 #include <node2lay.hxx>
 #include <unochart.hxx>
 
+#include <set>
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
@@ -63,8 +63,8 @@ LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 // List of all sorted elements
 
-typedef ::boost::ptr_multiset<SwSortTextElement> SwSortTextElements;
-typedef ::boost::ptr_multiset<SwSortBoxElement> SwSortBoxElements;
+typedef ::std::multiset<SwSortTextElement> SwSortTextElements;
+typedef ::std::multiset<SwSortBoxElement> SwSortBoxElements;
 
 /// Construct a SortElement for the Sort
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
@@ -379,8 +379,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     while( aStart <= pEnd->nNode )
     {
         // Iterate over a selected range
-        SwSortTextElement* pSE = new SwSortTextElement( aStart );
-        aSortSet.insert(pSE);
+        aSortSet.insert(SwSortTextElement(aStart));
         ++aStart;
     }
 
@@ -562,8 +561,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // When sorting, do not include the first row if the HeaderLine is repeated
     for( sal_uInt16 i = static_cast<sal_uInt16>(nStart); i < nCount; ++i)
     {
-        SwSortBoxElement* pEle = new SwSortBoxElement( i );
-        aSortList.insert(pEle);
+        aSortList.insert(SwSortBoxElement(i));
     }
 
     // Move after Sorting

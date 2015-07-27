@@ -48,7 +48,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
