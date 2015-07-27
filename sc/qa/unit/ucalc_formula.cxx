@@ -5325,4 +5325,45 @@ void Test::testFuncRangeOp()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncFORMULA()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+
+    // Data in B1:D3
+    const char* aData[][3] = {
+        { "=A1", "=FORMULA(B1)", "=FORMULA(B1:B3)" },
+        {     0, "=FORMULA(B2)", "=FORMULA(B1:B3)" },
+        { "=A3", "=FORMULA(B3)", "=FORMULA(B1:B3)" },
+    };
+
+    ScAddress aPos(1,0,0);
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT(aRange.aStart == aPos);
+
+    // Checks of C1:D3, where Cy==Dy, and D4:D6
+    const char* aChecks[] = {
+        "=A1",
+        "#N/A",
+        "=A3",
+    };
+    for (size_t i=0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aChecks[i]), m_pDoc->GetString(2,i,0));
+        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aChecks[i]), m_pDoc->GetString(3,i,0));
+    }
+
+    // Matrix in D4:D6, no intersection with B1:B3
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(3, 3, 3, 5, aMark, "=FORMULA(B1:B3)");
+    for (size_t i=0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aChecks[i]), m_pDoc->GetString(3,i+3,0));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
