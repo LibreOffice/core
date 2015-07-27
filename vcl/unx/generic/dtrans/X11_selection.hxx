@@ -47,6 +47,7 @@
 namespace x11 {
 
     class PixmapHolder; // in bmp.hxx
+    class SelectionManager;
 
     rtl_TextEncoding getTextPlainEncoding( const OUString& rMimeType );
 
@@ -76,7 +77,7 @@ namespace x11 {
         bool                        m_bActive;
         sal_Int8                    m_nDefaultActions;
         ::Window                    m_aTargetWindow;
-        class SelectionManager*     m_pSelectionManager;
+        SelectionManager*           m_pSelectionManager;
         css::uno::Reference< css::datatransfer::dnd::XDragSource >
                                     m_xSelectionManager;
         ::std::list< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
