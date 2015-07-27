@@ -158,7 +158,7 @@ struct LOEvent
     /// @name post_command parameters
     ///@{
     const gchar* m_pCommand;
-    const gchar* m_pArguments;
+    gchar* m_pArguments;
     ///@}
 
     /// @name open_document parameter
