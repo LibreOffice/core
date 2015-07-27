@@ -64,7 +64,7 @@ public:
     {}
 
     // XAnyCompareFactory
-    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
@@ -81,7 +81,7 @@ public:
     static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
 };
 
-sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int16 aResult = 0;
 
@@ -96,7 +96,7 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
     return aResult;
 }
 
-Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw(css::uno::RuntimeException, std::exception)
 {
     // for now only OUString properties compare is implemented
     // so no check for the property name is done

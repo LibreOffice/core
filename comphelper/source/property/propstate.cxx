@@ -42,12 +42,12 @@ namespace comphelper
 
 
 
-    ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType) throw( css::uno::RuntimeException, std::exception)
     {
-        ::com::sun::star::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
+        css::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
         // our own ifaces
         if ( !aReturn.hasValue() )
-            aReturn = ::cppu::queryInterface(_rType, static_cast< ::com::sun::star::beans::XPropertyState*>(this));
+            aReturn = ::cppu::queryInterface(_rType, static_cast< css::beans::XPropertyState*>(this));
 
         return aReturn;
     }
@@ -71,60 +71,60 @@ namespace comphelper
     OPropertyStateHelper::~OPropertyStateHelper() {}
 
 
-    void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  ::com::sun::star::uno::Any& aNewValue, const  ::com::sun::star::uno::Any& aOldValue)
+    void OPropertyStateHelper::firePropertyChange(sal_Int32 nHandle, const  css::uno::Any& aNewValue, const  css::uno::Any& aOldValue)
     {
         fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
     }
 
     // XPropertyState
 
-    ::com::sun::star::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException, std::exception)
+    css::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName) throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
         if (nHandle == -1)
-            throw  ::com::sun::star::beans::UnknownPropertyException();
+            throw  css::beans::UnknownPropertyException();
 
         return getPropertyStateByHandle(nHandle);
     }
 
 
-    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName) throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
         if (nHandle == -1)
-            throw  ::com::sun::star::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException();
 
         setPropertyToDefaultByHandle(nHandle);
     }
 
 
-    ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName) throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
 
         if (nHandle == -1)
-            throw  ::com::sun::star::beans::UnknownPropertyException();
+            throw css::beans::UnknownPropertyException();
 
         return getPropertyDefaultByHandle(nHandle);
     }
 
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  ::com::sun::star::uno::Sequence< OUString >& _rPropertyNames) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Sequence< css::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  css::uno::Sequence< OUString >& _rPropertyNames) throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
     {
         sal_Int32 nLen = _rPropertyNames.getLength();
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> aRet(nLen);
-        ::com::sun::star::beans::PropertyState* pValues = aRet.getArray();
+        css::uno::Sequence< css::beans::PropertyState> aRet(nLen);
+        css::beans::PropertyState* pValues = aRet.getArray();
         const OUString* pNames = _rPropertyNames.getConstArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps = rHelper.getProperties();
-        const  ::com::sun::star::beans::Property* pProps = aProps.getConstArray();
+        css::uno::Sequence< css::beans::Property> aProps = rHelper.getProperties();
+        const css::beans::Property* pProps = aProps.getConstArray();
         sal_Int32 nPropCount       = aProps.getLength();
 
         osl::MutexGuard aGuard(rBHelper.rMutex);
@@ -144,7 +144,7 @@ namespace comphelper
     }
 
 
-    ::com::sun::star::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle( sal_Int32 _nHandle )
+    css::beans::PropertyState OPropertyStateHelper::getPropertyStateByHandle( sal_Int32 _nHandle )
     {
         // simply compare the current and the default value
         Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
@@ -166,9 +166,9 @@ namespace comphelper
     }
 
 
-    ::com::sun::star::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 ) const
+    css::uno::Any OPropertyStateHelper::getPropertyDefaultByHandle( sal_Int32 ) const
     {
-        return  ::com::sun::star::uno::Any();
+        return css::uno::Any();
     }
 
 

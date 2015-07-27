@@ -77,7 +77,7 @@ void StillReadWriteInteraction::resetErrorStates()
 
 
 ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction::intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
-                                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
+                                                                  const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     // we are used!
     m_bUsed = true;

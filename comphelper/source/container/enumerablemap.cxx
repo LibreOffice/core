@@ -189,9 +189,9 @@ namespace comphelper
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEnumerableMap
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createKeyEnumeration( sal_Bool _Isolated ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createValueEnumeration( sal_Bool _Isolated ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createElementEnumeration( sal_Bool _Isolated ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createKeyEnumeration( sal_Bool _Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createValueEnumeration( sal_Bool _Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createElementEnumeration( sal_Bool _Isolated ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XMap
         virtual Type SAL_CALL getKeyType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -231,7 +231,7 @@ namespace comphelper
         ::osl::Mutex        m_aMutex;
         MapData             m_aData;
 
-        ::std::vector< ::com::sun::star::uno::WeakReference< XInterface > >
+        ::std::vector< css::uno::WeakReference< XInterface > >
                             m_aDependentComponents;
     };
 

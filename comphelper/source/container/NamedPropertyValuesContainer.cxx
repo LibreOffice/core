@@ -41,37 +41,37 @@ public:
     virtual ~NamedPropertyValuesContainer() throw();
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException, css::container::ElementExistException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
-            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL getImplementationName_static();
@@ -92,8 +92,8 @@ NamedPropertyValuesContainer::~NamedPropertyValuesContainer() throw()
 
 // XNameContainer
 void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const uno::Any& aElement )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IllegalArgumentException, css::container::ElementExistException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if( maProperties.find( aName ) != maProperties.end() )
         throw container::ElementExistException();
@@ -106,8 +106,8 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
 }
 
 void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
-    throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( Name );
     if( aIter == maProperties.end() )
@@ -117,9 +117,9 @@ void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const css::uno::Any& aElement )
+    throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -133,9 +133,9 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 }
 
 // XNameAccess
-::com::sun::star::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
-    throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
+    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -148,8 +148,8 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
     return aElement;
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
+    throw(css::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.begin();
     const NamedPropertyValues::iterator aEnd = maProperties.end();
@@ -166,27 +166,27 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
 }
 
 // XElementAccess
-::com::sun::star::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return !maProperties.empty();
 }
 
 //XServiceInfo
-OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
@@ -196,17 +196,17 @@ OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName_static(  )
     return OUString( "NamedPropertyValuesContainer" );
 }
 
-sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames_static(  )
+css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
     const OUString aServiceName( "com.sun.star.document.NamedPropertyValues" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );

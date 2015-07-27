@@ -27,21 +27,21 @@ namespace comphelper
 {
 
 /** returns an empty UString(). most times sufficient */
-OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception )
+OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
     return OUString();
 }
 
 /** the base implementation has no supported services */
-::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    ::com::sun::star::uno::Sequence< OUString> aSeq(0);
+    css::uno::Sequence< OUString> aSeq(0);
     return aSeq;
 }
 
 /** this method adds a variable number of char pointer to a given Sequence
  */
-void ServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* char * */ ... ) throw()
+void ServiceInfoHelper::addToSequence( css::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* char * */ ... ) throw()
 {
     sal_uInt32 nCount = rSeq.getLength();
 

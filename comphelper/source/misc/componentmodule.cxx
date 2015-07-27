@@ -109,7 +109,7 @@ namespace comphelper
     }
 
 
-    void OModule::registerImplementation( const OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
+    void OModule::registerImplementation( const OUString& _rImplementationName, const css::uno::Sequence< OUString >& _rServiceNames,
         ::cppu::ComponentFactoryFunc _pCreateFunction, FactoryInstantiation _pFactoryFunction )
     {
         ComponentDescription aComponent( _rImplementationName, _rServiceNames, OUString(), _pCreateFunction, _pFactoryFunction );

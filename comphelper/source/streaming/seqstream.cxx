@@ -52,7 +52,7 @@ inline sal_Int32 SequenceInputStream::avail()
     return m_aData.getLength() - m_nPos;
 }
 
-// com::sun::star::io::XInputStream
+// css::io::XInputStream
 
 sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
     throw(NotConnectedException, BufferSizeExceededException,

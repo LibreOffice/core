@@ -60,13 +60,13 @@ namespace comphelper
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const SAL_OVERRIDE
         {
             Date lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
@@ -88,13 +88,13 @@ namespace comphelper
     class TimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const SAL_OVERRIDE
         {
             Time lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             // FIXME Timezone?
 
             if ( lhs.Hours < rhs.Hours )
@@ -121,13 +121,13 @@ namespace comphelper
     class DateTimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
+        virtual bool isLess( css::uno::Any const & _lhs, css::uno::Any const & _rhs ) const SAL_OVERRIDE
         {
             DateTime lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )

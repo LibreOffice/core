@@ -655,14 +655,14 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     if (aCurrentPosition->aEventList.empty())
         return;
 
-    Sequence<com::sun::star::script::EventListener> aEvents(aCurrentPosition->aEventList.size());
+    Sequence<css::script::EventListener> aEvents(aCurrentPosition->aEventList.size());
     std::deque<ScriptEventDescriptor>::iterator itr = aCurrentPosition->aEventList.begin();
     std::deque<ScriptEventDescriptor>::iterator itrEnd = aCurrentPosition->aEventList.end();
-    ::com::sun::star::script::EventListener* p = aEvents.getArray();
+    css::script::EventListener* p = aEvents.getArray();
     size_t i = 0;
     for (; itr != itrEnd; ++itr)
     {
-        com::sun::star::script::EventListener aListener;
+        css::script::EventListener aListener;
         aListener.AllListener =
             new AttacherAllListener_Impl(this, itr->ScriptType, itr->ScriptCode);
         aListener.Helper = rCurObj.aHelper;

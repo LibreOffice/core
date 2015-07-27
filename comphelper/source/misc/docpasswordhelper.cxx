@@ -350,9 +350,9 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
 
 
-/*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
+/*static*/ css::uno::Sequence< css::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
         IDocPasswordVerifier& rVerifier,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rMediaEncData,
+        const css::uno::Sequence< css::beans::NamedValue >& rMediaEncData,
         const OUString& rMediaPassword,
         const Reference< XInteractionHandler >& rxInteractHandler,
         const OUString& rDocumentName,
@@ -360,7 +360,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         const ::std::vector< OUString >* pDefaultPasswords,
         bool* pbIsDefaultPassword )
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aEncData;
+    css::uno::Sequence< css::beans::NamedValue > aEncData;
     DocPasswordVerifierResult eResult = DocPasswordVerifierResult_WRONG_PASSWORD;
 
     // first, try provided default passwords

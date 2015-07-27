@@ -21,13 +21,13 @@
 
 namespace comphelper
 {
-    OEventListenerHelper::OEventListenerHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>&
+    OEventListenerHelper::OEventListenerHelper(const css::uno::Reference< css::lang::XEventListener>&
             _rxListener) : m_xListener(_rxListener)
     {
     }
-    void SAL_CALL OEventListenerHelper::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OEventListenerHelper::disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> xRef = m_xListener;
+        css::uno::Reference< css::lang::XEventListener> xRef = m_xListener;
         if(xRef.is())
             xRef->disposing(Source);
     }

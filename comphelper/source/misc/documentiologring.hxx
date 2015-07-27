@@ -32,22 +32,22 @@
 namespace comphelper
 {
 
-class OSimpleLogRing : public ::cppu::WeakImplHelper< ::com::sun::star::logging::XSimpleLogRing,
-                                                           ::com::sun::star::lang::XInitialization,
-                                                           ::com::sun::star::lang::XServiceInfo >
+class OSimpleLogRing : public ::cppu::WeakImplHelper< css::logging::XSimpleLogRing,
+                                                      css::lang::XInitialization,
+                                                      css::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Sequence< OUString > m_aMessages;
+    css::uno::Sequence< OUString > m_aMessages;
 
-    bool m_bInitialized;
-    bool m_bFull;
+    bool      m_bInitialized;
+    bool      m_bFull;
     sal_Int32 m_nPos;
 
 public:
     OSimpleLogRing();
     virtual ~OSimpleLogRing();
 
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< OUString > SAL_CALL
             getSupportedServiceNames_static();
 
     static OUString SAL_CALL getImplementationName_static();
@@ -56,20 +56,20 @@ public:
 
     static OUString SAL_CALL getServiceName_static();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        Create( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
 // XSimpleLogRing
-    virtual void SAL_CALL logString( const OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCollectedLog() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL logString( const OUString& aMessage ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getCollectedLog() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

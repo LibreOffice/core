@@ -281,7 +281,7 @@ bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rNa
     return ( aIt != pImpl->maObjectContainer.end() );
 }
 
-OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj )
+OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )
 {
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
     while ( aIt != pImpl->maObjectContainer.end() )
@@ -411,7 +411,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     return CreateEmbeddedObject( rClassId, uno::Sequence < beans::PropertyValue >(), rNewName );
 }
 
-void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, const OUString& rName )
+void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, const OUString& rName )
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Added object doesn't have a name!");
@@ -593,7 +593,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xRet;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aMedium, OUString& rNewName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -625,7 +625,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xObj;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aMedium, OUString& rNewName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -1165,7 +1165,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
     return xStream;
 }
 
-uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, OUString* pMediaType )
+uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, OUString* pMediaType )
 {
     // try to load it from the container storage
     return GetGraphicStream( GetEmbeddedObjectName( xObj ), pMediaType );
@@ -1206,7 +1206,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( co
     return GetObjectStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
-bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
+bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
     try
     {
@@ -1241,7 +1241,7 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Re
     return true;
 }
 
-bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
+bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
     try
     {
