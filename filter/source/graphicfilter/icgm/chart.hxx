@@ -28,13 +28,6 @@
 #define AUTOBULCHT      96      /* Autobuild BUL CHT        */
 #define AUTOTABCHT      97      /* Autobuild TAB CHT        */
 
-/* FNC 10/11/93: for the chart stream, ALLCHART was added.  */
-/* It is used specifically by PPT in its Template to let    */
-/* us know that the template applies to all charts, not to  */
-/* one specific chart type.                                 */
-#define ALLCHART       127      /* Applies to all chart types */
-#define ALLCHART_TPL   255      /* Applies to all chart types */
-
 typedef struct TextAttribute
 {
     sal_uInt16          nTextAttribCount;
