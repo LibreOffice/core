@@ -320,14 +320,14 @@ namespace frm
 
     IMPL_LINK( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar )
     {
-        m_pView->Scroll( -_pScrollbar->GetDelta(), 0, RGCHK_PAPERSZ1 );
+        m_pView->Scroll( -_pScrollbar->GetDelta(), 0, ScrollRangeCheck::PaperWidthTextSize );
         return 0L;
     }
 
 
     IMPL_LINK( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar )
     {
-        m_pView->Scroll( 0, -_pScrollbar->GetDelta(), RGCHK_PAPERSZ1 );
+        m_pView->Scroll( 0, -_pScrollbar->GetDelta(), ScrollRangeCheck::PaperWidthTextSize );
         return 0L;
     }
 

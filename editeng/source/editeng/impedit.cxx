@@ -973,7 +973,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
     }
 }
 
-Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
+Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
 {
     DBG_ASSERT( pEditEngine->pImpEditEngine->IsFormatted(), "Scroll: Not formatted!" );
     if ( !ndX && !ndY )
@@ -999,13 +999,13 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
         aNewVisArea.Top() += ndX;
         aNewVisArea.Bottom() += ndX;
     }
-    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Bottom() > (long)pEditEngine->pImpEditEngine->GetTextHeight() ) )
+    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > (long)pEditEngine->pImpEditEngine->GetTextHeight() ) )
     {
         // GetTextHeight still optimizing!
         long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negative
         aNewVisArea.Move( 0, nDiff );   // could end up in the negative area...
     }
-    if ( ( aNewVisArea.Top() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
+    if ( ( aNewVisArea.Top() < 0 ) && ( nRangeCheck != ScrollRangeCheck::NONE ) )
         aNewVisArea.Move( 0, -aNewVisArea.Top() );
 
     // Horizontal:
@@ -1019,12 +1019,12 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
         aNewVisArea.Left() -= ndY;
         aNewVisArea.Right() -= ndY;
     }
-    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( false ) ) )
+    if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( false ) ) )
     {
         long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( false ) - aNewVisArea.Right();     // negative
         aNewVisArea.Move( nDiff, 0 );   // could end up in the negative area...
     }
-    if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
+    if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != ScrollRangeCheck::NONE ) )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
 
     // The difference must be alignt on pixel (due to scroll!)
@@ -1953,7 +1953,7 @@ void ImpEditView::dragOver(const ::com::sun::star::datatransfer::dnd::DropTarget
                 if ( nScrollX || nScrollY )
                 {
                     HideDDCursor();
-                    Scroll( nScrollX, nScrollY, RGCHK_PAPERSZ1 );
+                    Scroll( nScrollX, nScrollY, ScrollRangeCheck::PaperWidthTextSize );
                 }
             }
 

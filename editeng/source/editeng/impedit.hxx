@@ -29,6 +29,7 @@
 #include <editeng/SpellPortions.hxx>
 #include <editeng/eedata.hxx>
 #include "editeng/editeng.hxx"
+#include <editeng/editview.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
@@ -347,7 +348,7 @@ public:
     void            RecalcOutputArea();
 
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16 nShowCursorFlags = 0 );
-    Pair            Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck = RGCHK_NEG );
+    Pair            Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
     void        SetInsertMode( bool bInsert );
     bool        IsInsertMode() const            { return !( nControl & EVControlBits::OVERWRITE ); }

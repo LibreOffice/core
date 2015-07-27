@@ -71,6 +71,14 @@ namespace linguistic2 {
 }
 }}}
 
+enum class ScrollRangeCheck
+{
+    NONE          = 0,   // No correction of VisArea when scrolling
+    NoNegative    = 1,   // No negative VisArea when scrolling
+    PaperWidthTextSize = 2,   // VisArea must be within paper width, Text Size
+};
+
+
 class EDITENG_DLLPUBLIC EditView
 {
     friend class EditEngine;
@@ -100,7 +108,7 @@ public:
 
     void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
     void            Invalidate();
-    Pair            Scroll( long nHorzScroll, long nVertScroll, sal_uInt8 nRangeCheck = RGCHK_NEG );
+    Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
     void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true );
     void            HideCursor();

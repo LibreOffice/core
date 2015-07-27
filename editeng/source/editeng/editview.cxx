@@ -407,7 +407,7 @@ void EditView::HideCursor()
         pImpEditView->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
 }
 
-Pair EditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
+Pair EditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
 {
     return pImpEditView->Scroll( ndX, ndY, nRangeCheck );
 }

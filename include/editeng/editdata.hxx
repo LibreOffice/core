@@ -89,10 +89,6 @@ class ImpEditEngine;
 class EditTextObject;
 class SfxStyleSheet;
 
-#define RGCHK_NONE          0   // No correction of ViusArea when scrolling
-#define RGCHK_NEG           1   // No negative ViusArea when scrolling
-#define RGCHK_PAPERSZ1      2   // VisArea must be within paper width, Text Size
-
 struct EPosition
 {
     sal_Int32   nPara;
