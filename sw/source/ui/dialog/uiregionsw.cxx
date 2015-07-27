@@ -142,7 +142,7 @@ private:
     SwFormatNoBalancedColumns  m_Balance;
     SvxFrameDirectionItem   m_FrmDirItem;
     SvxLRSpaceItem          m_LRSpaceItem;
-    size_t                  m_nArrPos;
+    const size_t            m_nArrPos;
     // shows, if maybe textcontent is in the region
     bool                    m_bContent  : 1;
     // for multiselection, mark at first, then work with TreeListBox!
@@ -816,9 +816,10 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
         pEntry = m_pTree->Next( pEntry );
     }
 
-    for (SectReprArr::reverse_iterator aI = aSectReprArr.rbegin(), aEnd = aSectReprArr.rend(); aI != aEnd; ++aI)
+    for (SectReprs_t::reverse_iterator it = m_SectReprs.rbegin(), aEnd = m_SectReprs.rend(); it != aEnd; ++it)
     {
-        SwSectionFormat* pFormat = aOrigArray[ aI->GetArrPos() ];
+        assert(it->first == it->second->GetArrPos());
+        SwSectionFormat* pFormat = aOrigArray[ it->second->GetArrPos() ];
         const size_t nNewPos = rDocFormats.GetPos( pFormat );
         if( SIZE_MAX != nNewPos )
             rSh.DelSectionFormat( nNewPos );
@@ -930,7 +931,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         bool bRestart = false;
         if(pSectRepr->IsSelected())
         {
-            aSectReprArr.insert( pSectRepr );
+            m_SectReprs.insert(std::make_pair(pSectRepr->GetArrPos(),
+                        std::unique_ptr<SectRepr>(pSectRepr)));
             while( (pChild = m_pTree->FirstChild(pEntry) )!= 0 )
             {
                 // because of the repositioning we have to start at the beginning again

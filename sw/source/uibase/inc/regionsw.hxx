@@ -44,7 +44,8 @@
 #include <svx/paraprev.hxx>
 #include <editeng/lrspitem.hxx>
 
-#include <boost/ptr_container/ptr_set.hpp>
+#include <memory>
+#include <map>
 
 class SwWrtShell;
 
@@ -56,7 +57,7 @@ namespace sfx2
 
 // dialog "edit regions"
 class SectRepr;
-typedef boost::ptr_set<SectRepr> SectReprArr;
+typedef std::map<size_t, std::unique_ptr<SectRepr>> SectReprs_t;
 
 class SwEditRegionDlg : public SfxModalDialog
 {
@@ -91,7 +92,7 @@ class SwEditRegionDlg : public SfxModalDialog
     ImageList       aImageIL;
 
     SwWrtShell&             rSh;
-    SectReprArr             aSectReprArr;
+    SectReprs_t             m_SectReprs;
     const SwSection*        pCurrSect;
     sfx2::DocumentInserter* m_pDocInserter;
     VclPtr<vcl::Window>     m_pOldDefDlgParent;
