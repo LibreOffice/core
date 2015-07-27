@@ -31,8 +31,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpdav1_component_getFactory(
     void * pRet = 0;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr(
-            reinterpret_cast< lang::XMultiServiceFactory * >(
-                pServiceManager ) );
+            static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
 

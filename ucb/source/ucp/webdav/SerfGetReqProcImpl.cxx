@@ -102,7 +102,7 @@ void SerfGetReqProcImpl::processChunkOfResponseData( const char* data,
     }
     else if ( xOutputStream.is() )
     {
-        const uno::Sequence< sal_Int8 > aDataSeq( (sal_Int8 *)data, len );
+        const uno::Sequence< sal_Int8 > aDataSeq( reinterpret_cast<const sal_Int8 *>(data), len );
         xOutputStream->writeBytes( aDataSeq );
     }
 }
