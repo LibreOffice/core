@@ -416,7 +416,7 @@ void SFTreeListBox::ExpandedHdl()
 
 // CuiInputDialog ------------------------------------------------------------
 
-CuiInputDialog::CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode )
+CuiInputDialog::CuiInputDialog(vcl::Window * pParent, InputDialogMode nMode )
     : ModalDialog(pParent, "NewLibDialog",
         "cui/ui/newlibdialog.ui")
 {
@@ -425,14 +425,14 @@ CuiInputDialog::CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode )
 
     FixedText *pNewLibFT = get<FixedText>("newlibft");
 
-    if ( nMode == INPUTMODE_NEWMACRO )
+    if ( nMode == InputDialogMode::NEWMACRO )
     {
         pNewLibFT->Hide();
         FixedText *pNewMacroFT = get<FixedText>("newmacroft");
         pNewMacroFT->Show();
         SetText(get<FixedText>("altmacrotitle")->GetText());
     }
-    else if ( nMode == INPUTMODE_RENAME )
+    else if ( nMode == InputDialogMode::RENAME )
     {
         pNewLibFT->Hide();
         FixedText *pRenameFT = get<FixedText>("renameft");
@@ -840,7 +840,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         OUString aNewName;
         OUString aNewStdName;
-        sal_uInt16 nMode = INPUTMODE_NEWLIB;
+        InputDialogMode nMode = InputDialogMode::NEWLIB;
         if( m_pScriptsBox->GetModel()->GetDepth( pEntry ) == 0 )
         {
             aNewStdName = "Library" ;
@@ -848,7 +848,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         else
         {
             aNewStdName = "Macro" ;
-            nMode = INPUTMODE_NEWMACRO;
+            nMode = InputDialogMode::NEWMACRO;
         }
         //do we need L10N for this? ie something like:
         //String aNewStdName( ResId( STR_STDMODULENAME ) );
@@ -1025,9 +1025,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
             extn = aNewName.copy(extnPos);
             aNewName = aNewName.copy(0,extnPos);
         }
-        sal_uInt16 nMode = INPUTMODE_RENAME;
-
-        ScopedVclPtrInstance< CuiInputDialog > xNewDlg( static_cast<vcl::Window*>(this), nMode );
+        ScopedVclPtrInstance< CuiInputDialog > xNewDlg( static_cast<vcl::Window*>(this), InputDialogMode::RENAME );
         xNewDlg->SetObjectName( aNewName );
 
         bool bValid;

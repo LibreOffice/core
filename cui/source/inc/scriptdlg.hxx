@@ -38,10 +38,6 @@
 #define OBJTYPE_SCRIPTCONTAINER 3L
 #define OBJTYPE_SFROOT          4L
 
-#define INPUTMODE_NEWLIB        1
-#define INPUTMODE_NEWMACRO      2
-#define INPUTMODE_RENAME        3
-
 typedef std::unordered_map < OUString, OUString,
                              OUStringHash, std::equal_to< OUString > > Selection_hash;
 
@@ -91,12 +87,18 @@ public:
     void deleteAllTree( );
 };
 
+enum class InputDialogMode {
+    NEWLIB        = 1,
+    NEWMACRO      = 2,
+    RENAME        = 3,
+};
+
 class CuiInputDialog : public ModalDialog
 {
 private:
     VclPtr<Edit> m_pEdit;
 public:
-    CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode);
+    CuiInputDialog(vcl::Window * pParent, InputDialogMode nMode);
     virtual ~CuiInputDialog();
     virtual void dispose() SAL_OVERRIDE;
 
