@@ -3696,7 +3696,7 @@ if test "$_os" = "WINNT"; then
         dnl localized
         AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
         echo "#include <stdlib.h>" > conftest.c
-        SHOWINCLUDES_PREFIX=`$CC -c -showIncludes conftest.c 2>/dev/null | \
+        SHOWINCLUDES_PREFIX=`$CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
             grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
         rm -f conftest.c conftest.obj
         if test -z "$SHOWINCLUDES_PREFIX"; then
