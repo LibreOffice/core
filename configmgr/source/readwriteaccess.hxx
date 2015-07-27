@@ -23,14 +23,14 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr { namespace read_write_access {
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface > SAL_CALL
 create(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         const &);
 
 OUString SAL_CALL getImplementationName();
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString > SAL_CALL
 getSupportedServiceNames();
 
 } }

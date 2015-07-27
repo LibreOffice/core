@@ -39,9 +39,9 @@ bool isListType(Type type);
 
 Type elementType(Type type);
 
-com::sun::star::uno::Type mapType(Type type);
+css::uno::Type mapType(Type type);
 
-Type getDynamicType(com::sun::star::uno::Any const & value);
+Type getDynamicType(css::uno::Any const & value);
 
 }
 

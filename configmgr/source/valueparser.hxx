@@ -71,7 +71,7 @@ private:
     ValueParser(const ValueParser&) SAL_DELETED_FUNCTION;
     ValueParser& operator=(const ValueParser&) SAL_DELETED_FUNCTION;
 
-    template< typename T > com::sun::star::uno::Any convertItems();
+    template< typename T > css::uno::Any convertItems();
 
     enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };
 
@@ -80,7 +80,7 @@ private:
     OUString localizedName_;
     State state_;
     xmlreader::Pad pad_;
-    std::vector< com::sun::star::uno::Any > items_;
+    std::vector< css::uno::Any > items_;
 };
 
 }

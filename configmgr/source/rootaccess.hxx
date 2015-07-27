@@ -54,8 +54,8 @@ class Components;
 class Node;
 
 class RootAccess:
-    public Access, public com::sun::star::util::XChangesNotifier,
-    public com::sun::star::util::XChangesBatch
+    public Access, public css::util::XChangesNotifier,
+    public css::util::XChangesBatch
 {
 public:
     RootAccess(
@@ -80,26 +80,26 @@ public:
     void setAlive(bool b);
 
     virtual void SAL_CALL addChangesListener(
-        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+        css::uno::Reference< css::util::XChangesListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeChangesListener(
-        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+        css::uno::Reference< css::util::XChangesListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL commitChanges()
         throw (
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException,
             std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::util::ChangesSet SAL_CALL getPendingChanges()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     virtual ~RootAccess();
@@ -118,7 +118,7 @@ private:
 
     virtual rtl::Reference< Access > getParentAccess() SAL_OVERRIDE;
 
-    virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
+    virtual void addTypes(std::vector< css::uno::Type > * types)
         const SAL_OVERRIDE;
 
     virtual void addSupportedServiceNames(
@@ -128,17 +128,17 @@ private:
 
     virtual void clearListeners() throw () SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-        com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & aType)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     typedef
         std::multiset<
-            com::sun::star::uno::Reference<
-                com::sun::star::util::XChangesListener > >
+            css::uno::Reference<
+                css::util::XChangesListener > >
         ChangesListeners;
 
     OUString pathRepresentation_;

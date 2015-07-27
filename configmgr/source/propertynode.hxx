@@ -37,7 +37,7 @@ class PropertyNode: public Node {
 public:
     PropertyNode(
         int layer, Type staticType, bool nillable,
-        com::sun::star::uno::Any const & value, bool extension);
+        css::uno::Any const & value, bool extension);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
@@ -45,10 +45,10 @@ public:
 
     bool isNillable() const { return nillable_;}
 
-    com::sun::star::uno::Any getValue(Components & components);
+    css::uno::Any getValue(Components & components);
 
-    void setValue(int layer, com::sun::star::uno::Any const & value);
-    com::sun::star::uno::Any *getValuePtr(int layer);
+    void setValue(int layer, css::uno::Any const & value);
+    css::uno::Any *getValuePtr(int layer);
 
     void setExternal(int layer, OUString const & descriptor);
 
@@ -67,7 +67,7 @@ private:
     bool nillable_;
     bool extension_;
     OUString externalDescriptor_;
-    com::sun::star::uno::Any value_;
+    css::uno::Any value_;
 };
 
 }
