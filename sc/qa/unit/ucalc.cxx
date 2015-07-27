@@ -6514,19 +6514,22 @@ void Test::testFormulaWizardSubformula()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    m_pDoc->SetString(ScAddress(0,0,0), "=B0:B2");
-    m_pDoc->SetString(ScAddress(0,1,0), "=1");          // B0
-    m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B1
-    m_pDoc->SetString(ScAddress(2,1,0), "=gibberish");  // B2
-    ScSimpleFormulaCalculator aFCell( m_pDoc, ScAddress(0,0,0), "" );
-    if ( aFCell.GetErrCode() == 0 )
-        CPPUNIT_ASSERT_EQUAL( OUString("{1, #DIV/0!, #NAME!}"), aFCell.GetString().getString() );
+    m_pDoc->SetString(ScAddress(1,0,0), "=1");          // B1
+    m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B2
+    m_pDoc->SetString(ScAddress(1,2,0), "=gibberish");  // B3
 
-    m_pDoc->SetString(ScAddress(0,1,0), "=NA()");       // B0
-    m_pDoc->SetString(ScAddress(1,1,0), "2");           // B1
-    m_pDoc->SetString(ScAddress(2,1,0), "=1+2");        // B2
-    if ( aFCell.GetErrCode() == 0 )
-        CPPUNIT_ASSERT_EQUAL(OUString("{#N/A, 2, 3}"), aFCell.GetString().getString());
+    ScSimpleFormulaCalculator pFCell1( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
+    sal_uInt16 nErrCode = pFCell1.GetErrCode();
+    CPPUNIT_ASSERT( nErrCode == 0 || pFCell1.IsMatrix() );
+    CPPUNIT_ASSERT_EQUAL( OUString("{1;#DIV/0!;#NAME?}"), pFCell1.GetString().getString() );
+
+    m_pDoc->SetString(ScAddress(1,0,0), "=NA()");       // B1
+    m_pDoc->SetString(ScAddress(1,1,0), "2");           // B2
+    m_pDoc->SetString(ScAddress(1,2,0), "=1+2");        // B3
+    ScSimpleFormulaCalculator pFCell2( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
+    nErrCode = pFCell2.GetErrCode();
+    CPPUNIT_ASSERT( nErrCode == 0 || pFCell2.IsMatrix() );
+    CPPUNIT_ASSERT_EQUAL( OUString("{#N/A;2;3}"), pFCell2.GetString().getString() );
 
     m_pDoc->DeleteTab(0);
 }
