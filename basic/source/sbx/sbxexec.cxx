@@ -55,7 +55,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
         // A symbol had to begin with a alphabetic character or an underline
         if( !rtl::isAsciiAlpha( *p ) && *p != '_' )
         {
-            SbxBase::SetError( SbxERR_SYNTAX );
+            SbxBase::SetError( ERRCODE_SBX_SYNTAX );
         }
         else
         {
@@ -105,7 +105,7 @@ static SbxVariable* QualifiedName
         }
     }
     else
-        SbxBase::SetError( SbxERR_SYNTAX );
+        SbxBase::SetError( ERRCODE_SBX_SYNTAX );
     *ppBuf = p;
     if( refVar.Is() )
         refVar->AddFirstRef();
@@ -249,7 +249,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
             // Assign only onto properties!
             if( refVar->GetClass() != SbxCLASS_PROPERTY )
             {
-                SbxBase::SetError( SbxERR_BAD_ACTION );
+                SbxBase::SetError( ERRCODE_SBX_BAD_ACTION );
                 refVar.Clear();
             }
             else
@@ -335,7 +335,7 @@ static SbxVariable* Element
             }
         }
         else
-            SbxBase::SetError( SbxERR_NO_METHOD );
+            SbxBase::SetError( ERRCODE_SBX_NO_METHOD );
     }
     *ppBuf = p;
     if( refVar.Is() )
@@ -358,7 +358,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
         }
         if( *p++ != '[' )
         {
-            SetError( SbxERR_SYNTAX ); break;
+            SetError( ERRCODE_SBX_SYNTAX ); break;
         }
         pVar = Assign( this, this, &p );
         if( !pVar )
@@ -368,7 +368,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
         p = SkipWhitespace( p );
         if( *p++ != ']' )
         {
-            SetError( SbxERR_SYNTAX ); break;
+            SetError( ERRCODE_SBX_SYNTAX ); break;
         }
     }
     return pVar;
@@ -387,7 +387,7 @@ SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
     p = SkipWhitespace( p );
     if( *p )
     {
-        SetError( SbxERR_SYNTAX );
+        SetError( ERRCODE_SBX_SYNTAX );
     }
     return pVar;
 }

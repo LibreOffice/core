@@ -33,7 +33,7 @@
 TYPEINIT0(SbxBase)
 
 SbxAppData::SbxAppData()
-    : eSbxError(SbxERR_OK)
+    : eSbxError(ERRCODE_SBX_OK)
     , pBasicFormater(0)
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
@@ -105,18 +105,18 @@ SbxError SbxBase::GetError()
 void SbxBase::SetError( SbxError e )
 {
     SbxAppData& r = GetSbxData_Impl();
-    if( e && r.eSbxError == SbxERR_OK )
+    if( e && r.eSbxError == ERRCODE_SBX_OK )
         r.eSbxError = e;
 }
 
 bool SbxBase::IsError()
 {
-    return GetSbxData_Impl().eSbxError != SbxERR_OK;
+    return GetSbxData_Impl().eSbxError != ERRCODE_SBX_OK;
 }
 
 void SbxBase::ResetError()
 {
-    GetSbxData_Impl().eSbxError = SbxERR_OK;
+    GetSbxData_Impl().eSbxError = ERRCODE_SBX_OK;
 }
 
 void SbxBase::AddFactory( SbxFactory* pFac )

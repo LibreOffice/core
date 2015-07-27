@@ -224,7 +224,7 @@ namespace basprov
 
             // call method
             SbxVariableRef xReturn = new SbxVariable;
-            ErrCode nErr = SbxERR_OK;
+            ErrCode nErr = ERRCODE_SBX_OK;
 
             // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
             Any aOldThisComponent;
@@ -243,7 +243,7 @@ namespace basprov
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                 m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
 
-            if ( nErr != SbxERR_OK )
+            if ( nErr != ERRCODE_SBX_OK )
             {
                 // TODO: throw InvocationTargetException ?
             }

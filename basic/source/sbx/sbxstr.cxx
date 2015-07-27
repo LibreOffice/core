@@ -38,7 +38,7 @@ OUString ImpGetString( const SbxValues* p )
     switch( +p->eType )
     {
         case SbxNULL:
-            SbxBase::SetError( SbxERR_CONVERSION );
+            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
         case SbxEMPTY:
             break;
         case SbxCHAR:
@@ -95,7 +95,7 @@ OUString ImpGetString( const SbxValues* p )
             }
             else
             {
-                SbxBase::SetError( SbxERR_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
             }
             break;
         }
@@ -132,7 +132,7 @@ OUString ImpGetString( const SbxValues* p )
         case SbxBYREF | SbxSALUINT64:
             ImpPutUInt64( &aTmp, *p->puInt64 ); break;
         default:
-            SbxBase::SetError( SbxERR_CONVERSION );
+            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
     }
     return aRes;
 }
@@ -218,7 +218,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
             if( pVal )
                 pVal->PutString( *n );
             else
-                SbxBase::SetError( SbxERR_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
             break;
         }
         case SbxBYREF | SbxCHAR:
@@ -250,7 +250,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = ImpGetUInt64( p ); break;
         default:
-            SbxBase::SetError( SbxERR_CONVERSION );
+            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
     }
     delete pTmp;
 }

@@ -256,17 +256,17 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     else if ( SbiRuntime::isVBAEnabled() )
     {
         OSL_TRACE("Reporting error converting");
-        return SbxERR_CONVERSION;
+        return ERRCODE_SBX_CONVERSION;
     }
 #endif
     if( pLen )
         *pLen = (sal_uInt16) ( p - pStart );
     if( !bRes )
-        return SbxERR_CONVERSION;
+        return ERRCODE_SBX_CONVERSION;
     if( bMinus )
         nVal = -nVal;
     rType = eScanType;
-    return SbxERR_OK;
+    return ERRCODE_SBX_OK;
 }
 
 // port for CDbl in the Basic
@@ -277,9 +277,9 @@ SbxError SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingl
     SbxError nRetError = ImpScan( rSrc, nVal, t, &nLen,
         /*bAllowIntntl*/false, /*bOnlyIntntl*/true );
     // read completely?
-    if( nRetError == SbxERR_OK && nLen != rSrc.getLength() )
+    if( nRetError == ERRCODE_SBX_OK && nLen != rSrc.getLength() )
     {
-        nRetError = SbxERR_CONVERSION;
+        nRetError = ERRCODE_SBX_CONVERSION;
     }
     if( bSingle )
     {
@@ -532,17 +532,17 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
 
 bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
 {
-    SbxError eRes = SbxERR_OK;
+    SbxError eRes = ERRCODE_SBX_OK;
     if( !CanWrite() )
     {
-        eRes = SbxERR_PROP_READONLY;
+        eRes = ERRCODE_SBX_PROP_READONLY;
     }
     else
     {
         double n;
         SbxDataType t;
         eRes = ImpScan( rSrc, n, t, pLen );
-        if( eRes == SbxERR_OK )
+        if( eRes == ERRCODE_SBX_OK )
         {
             if( !IsFixed() )
             {

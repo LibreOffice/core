@@ -1666,7 +1666,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
         // Alternatively it is possible that the same scenario
         // could overwrite and existing error. Lets prevent that
         SbxObjectRef xVarObj = static_cast<SbxObject*>(refVar->GetObject());
-        if ( eOldErr != SbxERR_OK )
+        if ( eOldErr != ERRCODE_SBX_OK )
             SbxBase::SetError( eOldErr );
         else
             SbxBase::ResetError();

@@ -135,7 +135,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
 #if HAVE_FEATURE_SCRIPTING
                 if (!bDone)
-                    SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
+                    SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );  // Basic-Fehler
 #endif
             }
             break;

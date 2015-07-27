@@ -321,7 +321,7 @@ OUString lcl_dumpMethodParameters( SbMethod* pMethod )
     }
 
     SbxBase::ResetError();
-    if( eOld != SbxERR_OK )
+    if( eOld != ERRCODE_SBX_OK )
     {
         SbxBase::SetError( eOld );
     }
@@ -902,12 +902,12 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         }
 
         SbxError eOld = SbxBase::GetError();
-        if( eOld != SbxERR_OK )
+        if( eOld != ERRCODE_SBX_OK )
             SbxBase::ResetError();
 
         OUString aValStr = rPar.Get(2)->GetString();
         SbxError eErr = SbxBase::GetError();
-        if( eErr != SbxERR_OK )
+        if( eErr != ERRCODE_SBX_OK )
         {
             aValStr = "<ERROR converting value to String>";
             SbxBase::ResetError();
@@ -919,7 +919,7 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         int nIndent = GnLastCallLvl * GnIndentPerCallLevel;
         lcl_lineOut( Buffer, lcl_getSpaces( nIndent ) );
 
-        if( eOld != SbxERR_OK )
+        if( eOld != ERRCODE_SBX_OK )
         {
             SbxBase::SetError( eOld );
         }

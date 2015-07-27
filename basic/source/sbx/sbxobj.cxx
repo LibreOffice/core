@@ -303,7 +303,7 @@ bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
         pMeth->SetParameters( NULL );
         return true;
     }
-    SetError( SbxERR_NO_METHOD );
+    SetError( ERRCODE_SBX_NO_METHOD );
     return false;
 }
 

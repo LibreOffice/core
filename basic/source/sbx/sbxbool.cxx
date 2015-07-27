@@ -28,7 +28,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
     switch( +p->eType )
     {
         case SbxNULL:
-            SbxBase::SetError( SbxERR_CONVERSION );
+            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
         case SbxEMPTY:
             nRes = SbxFALSE; break;
         case SbxCHAR:
@@ -79,7 +79,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                     double n;
                     SbxDataType t;
                     sal_uInt16 nLen = 0;
-                    if( ImpScan( *p->pOUString, n, t, &nLen ) == SbxERR_OK )
+                    if( ImpScan( *p->pOUString, n, t, &nLen ) == ERRCODE_SBX_OK )
                     {
                         if( nLen == p->pOUString->getLength() )
                         {
@@ -89,7 +89,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                         }
                     }
                     if( bError )
-                        SbxBase::SetError( SbxERR_CONVERSION );
+                        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
                 }
             }
             break;
@@ -100,7 +100,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                 nRes = pVal->GetBool() ? SbxTRUE : SbxFALSE;
             else
             {
-                SbxBase::SetError( SbxERR_NO_OBJECT ); nRes = SbxFALSE;
+                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT ); nRes = SbxFALSE;
             }
             break;
         }
@@ -130,7 +130,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
         case SbxBYREF | SbxSALUINT64:
             nRes = ( *p->puInt64 ) ? SbxTRUE : SbxFALSE; break;
         default:
-            SbxBase::SetError( SbxERR_CONVERSION ); nRes = SbxFALSE;
+            SbxBase::SetError( ERRCODE_SBX_CONVERSION ); nRes = SbxFALSE;
     }
     return nRes;
 }
@@ -185,7 +185,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             if( pVal )
                 pVal->PutBool( n != 0 );
             else
-                SbxBase::SetError( SbxERR_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
             break;
         }
         case SbxBYREF | SbxCHAR:
@@ -213,7 +213,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = (sal_uInt64) n; break;
         default:
-            SbxBase::SetError( SbxERR_CONVERSION );
+            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
     }
 }
 

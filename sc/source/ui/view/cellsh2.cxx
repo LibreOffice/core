@@ -671,7 +671,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
 #if HAVE_FEATURE_SCRIPTING
                 else if (rReq.IsAPI())
-                    SbxBase::SetError(SbxERR_BAD_PARAMETER);
+                    SbxBase::SetError(ERRCODE_SBX_BAD_PARAMETER);
 #endif
             }
             break;

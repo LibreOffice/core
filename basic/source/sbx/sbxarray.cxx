@@ -135,7 +135,7 @@ SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
     // Very Hot Fix
     if( nIdx > SBX_MAXINDEX32 )
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         nIdx = 0;
     }
     while( mpVarEntries->size() <= nIdx )
@@ -152,7 +152,7 @@ SbxVariableRef& SbxArray::GetRef( sal_uInt16 nIdx )
     // Very Hot Fix
     if( nIdx > SBX_MAXINDEX )
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         nIdx = 0;
     }
     while( mpVarEntries->size() <= nIdx )
@@ -166,7 +166,7 @@ SbxVariable* SbxArray::Get32( sal_uInt32 nIdx )
 {
     if( !CanRead() )
     {
-        SetError( SbxERR_PROP_WRITEONLY );
+        SetError( ERRCODE_SBX_PROP_WRITEONLY );
         return NULL;
     }
     SbxVariableRef& rRef = GetRef32( nIdx );
@@ -181,7 +181,7 @@ SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
 {
     if( !CanRead() )
     {
-        SetError( SbxERR_PROP_WRITEONLY );
+        SetError( ERRCODE_SBX_PROP_WRITEONLY );
         return NULL;
     }
     SbxVariableRef& rRef = GetRef( nIdx );
@@ -195,7 +195,7 @@ SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
 void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
 {
     if( !CanWrite() )
-        SetError( SbxERR_PROP_READONLY );
+        SetError( ERRCODE_SBX_PROP_READONLY );
     else
     {
         if( pVar )
@@ -215,7 +215,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
 void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
 {
     if( !CanWrite() )
-        SetError( SbxERR_PROP_READONLY );
+        SetError( ERRCODE_SBX_PROP_READONLY );
     else
     {
         if( pVar )
@@ -236,7 +236,7 @@ OUString SbxArray::GetAlias( sal_uInt16 nIdx )
 {
     if( !CanRead() )
     {
-        SetError( SbxERR_PROP_WRITEONLY );
+        SetError( ERRCODE_SBX_PROP_WRITEONLY );
         return OUString();
     }
     SbxVarEntry& rRef = reinterpret_cast<SbxVarEntry&>(GetRef( nIdx ));
@@ -251,7 +251,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
 {
     if( !CanWrite() )
     {
-        SetError( SbxERR_PROP_READONLY );
+        SetError( ERRCODE_SBX_PROP_READONLY );
     }
     else
     {
@@ -595,10 +595,10 @@ void SbxDimArray::Clear()
 
 void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, bool bAllowSize0 )
 {
-    SbxError eRes = SbxERR_OK;
+    SbxError eRes = ERRCODE_SBX_OK;
     if( ub < lb && !bAllowSize0 )
     {
-        eRes = SbxERR_BOUNDS;
+        eRes = ERRCODE_SBX_BOUNDS;
         ub = lb;
     }
     SbxDim d;
@@ -638,7 +638,7 @@ bool SbxDimArray::GetDim32( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
 {
     if( n < 1 || n > static_cast<sal_Int32>(m_vDimensions.size()) )
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         rub = rlb = 0;
         return false;
     }
@@ -658,7 +658,7 @@ bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
     {
         if( rlb32 < -SBX_MAXINDEX || rub32 > SBX_MAXINDEX )
         {
-            SetError( SbxERR_BOUNDS );
+            SetError( ERRCODE_SBX_BOUNDS );
             return false;
         }
     }
@@ -682,7 +682,7 @@ sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
     }
     if( m_vDimensions.empty() || nPos > SBX_MAXINDEX32 )
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         nPos = 0;
     }
     return nPos;
@@ -704,7 +704,7 @@ sal_uInt16 SbxDimArray::Offset( const short* pIdx )
     }
     if( m_vDimensions.empty() || nPos > SBX_MAXINDEX )
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         nPos = 0;
     }
     return (sal_uInt16) nPos;
@@ -738,7 +738,7 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
         ((m_vDimensions.size() != sal::static_int_cast<size_t>(pPar->Count() - 1))
             && SbiRuntime::isVBAEnabled()))
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         return 0;
     }
 #endif
@@ -757,7 +757,7 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
     }
     if( nPos > (sal_uInt32) SBX_MAXINDEX32 )
     {
-        SetError( SbxERR_BOUNDS );
+        SetError( ERRCODE_SBX_BOUNDS );
         nPos = 0;
     }
     return nPos;

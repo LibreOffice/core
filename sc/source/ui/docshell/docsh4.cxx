@@ -156,14 +156,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     else                // geschuetzte Zelle
                     {
 #if HAVE_FEATURE_SCRIPTING
-                        SbxBase::SetError( SbxERR_BAD_PARAMETER );      //! welchen Fehler ?
+                        SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );      //! welchen Fehler ?
 #endif
                         break;
                     }
                 }
             }
 #if HAVE_FEATURE_SCRIPTING
-            SbxBase::SetError( SbxERR_NO_OBJECT );
+            SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
 #endif
         }
         break;
@@ -1110,7 +1110,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 pSh->Execute( rReq );
 #if HAVE_FEATURE_SCRIPTING
             else
-                SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
+                SbxBase::SetError( ERRCODE_SBX_NO_ACTIVE_OBJECT );
 #endif
         }
     }

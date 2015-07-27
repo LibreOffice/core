@@ -1984,7 +1984,7 @@ void StackWindow::UpdateCalls()
         }
 
         SbxBase::ResetError();
-        if( eOld != SbxERR_OK )
+        if( eOld != ERRCODE_SBX_OK )
             SbxBase::SetError( eOld );
     }
     else
@@ -2624,7 +2624,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     Invalidate();
 
     SbxBase::ResetError();
-    if( eOld != SbxERR_OK )
+    if( eOld != ERRCODE_SBX_OK )
         SbxBase::SetError( eOld );
     setBasicWatchMode( false );
 }

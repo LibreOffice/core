@@ -179,27 +179,6 @@ typedef sal_uIntPtr SbxError;           // Preserve old type
 
 #ifndef __RSC
 
-// Map old codes to new ones
-#define SbxERR_OK                       ERRCODE_SBX_OK
-#define SbxERR_SYNTAX                   ERRCODE_SBX_SYNTAX
-#define SbxERR_NOTIMP                   ERRCODE_SBX_NOTIMP
-#define SbxERR_OVERFLOW                 ERRCODE_SBX_OVERFLOW
-#define SbxERR_BOUNDS                   ERRCODE_SBX_BOUNDS
-#define SbxERR_ZERODIV                  ERRCODE_SBX_ZERODIV
-#define SbxERR_CONVERSION               ERRCODE_SBX_CONVERSION
-#define SbxERR_BAD_PARAMETER            ERRCODE_SBX_BAD_PARAMETER
-#define SbxERR_PROC_UNDEFINED           ERRCODE_SBX_PROC_UNDEFINED
-#define SbxERR_NO_OBJECT                ERRCODE_SBX_NO_OBJECT
-#define SbxERR_BAD_INDEX                ERRCODE_SBX_BAD_INDEX
-#define SbxERR_NO_ACTIVE_OBJECT         ERRCODE_SBX_NO_ACTIVE_OBJECT
-#define SbxERR_BAD_PROP_VALUE           ERRCODE_SBX_BAD_PROP_VALUE
-#define SbxERR_PROP_READONLY            ERRCODE_SBX_PROP_READONLY
-#define SbxERR_PROP_WRITEONLY           ERRCODE_SBX_PROP_WRITEONLY
-#define SbxERR_NO_METHOD                ERRCODE_SBX_NO_METHOD
-#define SbxERR_BAD_ACTION               ERRCODE_SBX_BAD_ACTION
-#define SbxERR_WRONG_ARGS               ERRCODE_SBX_WRONG_ARGS
-
-
 // Flag-Bits:
 enum class SbxFlagBits {
     NONE         = 0x0000,

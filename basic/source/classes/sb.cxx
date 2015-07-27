@@ -996,7 +996,7 @@ StarBASIC::~StarBASIC()
         lclRemoveDocBasicItem( *this );
 
         SbxBase::ResetError();
-        if( eOld != SbxERR_OK )
+        if( eOld != ERRCODE_SBX_OK )
         {
             SbxBase::SetError( eOld );
         }
@@ -1406,7 +1406,7 @@ bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
     {
         SbxError eErr = SbxBase::GetError();
         SbxBase::ResetError();
-        if( eErr != SbxERR_OK )
+        if( eErr != ERRCODE_SBX_OK )
         {
             RTError( (SbError)eErr, 0, 0, 0 );
         }
@@ -2213,7 +2213,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
     sal_uInt16 nCount = pPar_->Count();
     if( nCount < 2 || nCount > 5 )
     {
-        SetError( SbxERR_WRONG_ARGS );
+        SetError( ERRCODE_SBX_WRONG_ARGS );
         return;
     }
 
@@ -2290,7 +2290,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
 {
     if( pPar_->Count() != 2 )
     {
-        SetError( SbxERR_WRONG_ARGS );
+        SetError( ERRCODE_SBX_WRONG_ARGS );
         return;
     }
     SbxVariable* pRes = NULL;
@@ -2314,7 +2314,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
 {
     if( pPar_ == NULL || pPar_->Count() != 2 )
     {
-        SetError( SbxERR_WRONG_ARGS );
+        SetError( ERRCODE_SBX_WRONG_ARGS );
         return;
     }
 

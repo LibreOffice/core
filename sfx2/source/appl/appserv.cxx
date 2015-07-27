@@ -1230,7 +1230,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 #if HAVE_FEATURE_SCRIPTING
             else
-                SbxBase::SetError( SbxERR_WRONG_ARGS );
+                SbxBase::SetError( ERRCODE_SBX_WRONG_ARGS );
 #endif
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bRet ) );
         }

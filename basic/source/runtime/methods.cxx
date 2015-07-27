@@ -1899,7 +1899,7 @@ RTLFUNC(CDateFromUnoDate)
     if(aAny >>= aUnoDate)
         SbxDateFromUNODate(rPar.Get(0), aUnoDate);
     else
-        SbxBase::SetError( SbxERR_CONVERSION );
+        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
 }
 
 css::util::Time SbxDateToUNOTime( const SbxValue* const pVal )
@@ -1952,7 +1952,7 @@ RTLFUNC(CDateFromUnoTime)
     if(aAny >>= aUnoTime)
         SbxDateFromUNOTime(rPar.Get(0), aUnoTime);
     else
-        SbxBase::SetError( SbxERR_CONVERSION );
+        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
 }
 
 css::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
@@ -2014,7 +2014,7 @@ RTLFUNC(CDateFromUnoDateTime)
     if(aAny >>= aUnoDT)
         SbxDateFromUNODateTime(rPar.Get(0), aUnoDT);
     else
-        SbxBase::SetError( SbxERR_CONVERSION );
+        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
 }
 
 // Function to convert date to ISO 8601 date format
