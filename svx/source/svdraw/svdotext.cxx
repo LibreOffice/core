@@ -1986,7 +1986,17 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 bool SdrTextObj::IsChainable() const
 {
-    // XXX: Hack to have links together
+    // XXX
+    if (!GetName().startsWith("Chainable")) {
+        //fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
+        return false;
+    }
+
+    // Check that no overflow is going on
+    if (!GetTextChain() || GetTextChain()->GetNilChainingEvent(this))
+        return false;
+
+     // XXX: Hack to have links together
     static bool bHasDoneTheLinking = false;
 
     SdrTextObj *pTxtObj0 =  dynamic_cast< SdrTextObj * >( pPage->GetObj( 0 ) );
@@ -1998,18 +2008,8 @@ bool SdrTextObj::IsChainable() const
 
         bHasDoneTheLinking = true;
     }
+    // end hack
 
-
-
-    // XXX
-    if (!GetName().startsWith("Chainable")) {
-        //fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
-        return false;
-    }
-
-    // Check that no overflow is going on
-    if (!GetTextChain() || GetTextChain()->GetNilChainingEvent(this))
-        return false;
 
     return true;
 
