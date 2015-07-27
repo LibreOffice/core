@@ -64,13 +64,13 @@ public:
 
     virtual ~ChartAreaPanel();
 
-    virtual void setFillTransparence(const XFillTransparenceItem& rItem);
-    virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem);
-    virtual void setFillStyle(const XFillStyleItem& rItem);
-    virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& rColorItem);
-    virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& rGradientItem);
-    virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& rHatchItem);
-    virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& rBitmapItem);
+    virtual void setFillTransparence(const XFillTransparenceItem& rItem) SAL_OVERRIDE;
+    virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) SAL_OVERRIDE;
+    virtual void setFillStyle(const XFillStyleItem& rItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& rColorItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& rGradientItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& rHatchItem) SAL_OVERRIDE;
+    virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& rBitmapItem) SAL_OVERRIDE;
 
     virtual void updateData() SAL_OVERRIDE;
     virtual void modelInvalid() SAL_OVERRIDE;
