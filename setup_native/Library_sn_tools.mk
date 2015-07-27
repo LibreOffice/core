@@ -33,9 +33,11 @@ $(eval $(call gb_Library_use_static_libraries,sn_tools,\
 $(eval $(call gb_Library_use_system_win32_libs,sn_tools,\
 	libcmt \
 	libcpmt \
+	$(if $(filter-out 120,$(VCVER)),libucrt) \
 	kernel32 \
 	msi \
 	advapi32 \
+	$(if $(filter-out 120,$(VCVER)),vcruntime) \
 ))
 
 # vim: set noet sw=4 ts=4:
