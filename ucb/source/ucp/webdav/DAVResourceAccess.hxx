@@ -219,7 +219,7 @@ public:
         throw ( DAVException );
 
     void
-    abort()
+    static abort()
         throw ( DAVException );
 
     // helper

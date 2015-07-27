@@ -61,7 +61,7 @@ SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
     , mbAcceptSerfResponseCalled( false )
     , mbHandleSerfResponseCalled( false )
 {
-    mPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
+    mPathStr = apr_pstrdup( SerfSession::getAprPool(),
                             OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
@@ -226,9 +226,9 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                         apr_status_t& outSerfStatus )
 {
-    mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
+    mContentType = apr_pstrdup( SerfSession::getAprPool(),
                                 OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
-    mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
+    mReferer = apr_pstrdup( SerfSession::getAprPool(),
                                 OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = new SerfPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
@@ -250,9 +250,9 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                         apr_status_t& outSerfStatus )
 {
-    mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
+    mContentType = apr_pstrdup( SerfSession::getAprPool(),
                                 OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
-    mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
+    mReferer = apr_pstrdup( SerfSession::getAprPool(),
                             OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = new SerfPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
@@ -291,7 +291,7 @@ bool SerfRequestProcessor::processCopy( const OUString & inDestinationPath,
                                         const bool inOverwrite,
                                         apr_status_t& outSerfStatus )
 {
-    mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
+    mDestPathStr = apr_pstrdup( SerfSession::getAprPool(),
                                 OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = new SerfCopyReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
@@ -307,7 +307,7 @@ bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
                                         const bool inOverwrite,
                                         apr_status_t& outSerfStatus )
 {
-    mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
+    mDestPathStr = apr_pstrdup( SerfSession::getAprPool(),
                                 OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
     mpProcImpl = new SerfMoveReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
@@ -365,7 +365,7 @@ apr_status_t SerfRequestProcessor::runProcessor()
     mbProcessingDone = false;
     apr_status_t status = APR_SUCCESS;
     serf_context_t* pSerfContext = mrSerfSession.getSerfContext();
-    apr_pool_t* pAprPool = mrSerfSession.getAprPool();
+    apr_pool_t* pAprPool = SerfSession::getAprPool();
     while ( true )
     {
         status = serf_context_run( pSerfContext,

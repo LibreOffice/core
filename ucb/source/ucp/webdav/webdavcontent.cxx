@@ -830,7 +830,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
             osl::MutexGuard aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
         }
-        xResAccess->abort();
+        DAVResourceAccess::abort();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );

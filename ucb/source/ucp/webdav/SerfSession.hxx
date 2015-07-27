@@ -102,7 +102,7 @@ public:
                                        apr_pool_t* inAprPool );
 
     // Serf-related data structures
-    apr_pool_t* getAprPool();
+    static apr_pool_t* getAprPool();
     serf_bucket_alloc_t* getSerfBktAlloc();
     serf_context_t* getSerfContext();
     serf_connection_t* getSerfConnection();
@@ -264,7 +264,7 @@ private:
 
     const ucbhelper::InternetProxyServer & getProxySettings() const;
 
-    bool removeExpiredLocktoken( const OUString & inURL,
+    static bool removeExpiredLocktoken( const OUString & inURL,
                                  const DAVRequestEnvironment & rEnv );
 
     // refresh lock, called by SerfLockStore::refreshLocks
