@@ -31,18 +31,18 @@
 namespace comphelper
 {
 
-class OOfficeRestartManager : public ::cppu::WeakImplHelper< ::com::sun::star::task::XRestartManager
-                                                            , ::com::sun::star::awt::XCallback
-                                                            , ::com::sun::star::lang::XServiceInfo >
+class OOfficeRestartManager : public ::cppu::WeakImplHelper< css::task::XRestartManager
+                                                           , css::awt::XCallback
+                                                           , css::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     bool m_bOfficeInitialized;
     bool m_bRestartRequested;
 
 public:
-    explicit OOfficeRestartManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    explicit OOfficeRestartManager( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     , m_bOfficeInitialized( false )
     , m_bRestartRequested( false )
@@ -51,7 +51,7 @@ public:
     virtual ~OOfficeRestartManager()
     {}
 
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< OUString > SAL_CALL
             getSupportedServiceNames_static();
 
     static OUString SAL_CALL getImplementationName_static();
@@ -60,20 +60,20 @@ public:
 
     static OUString SAL_CALL getServiceName_static();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        Create( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
 // XRestartManager
-    virtual void SAL_CALL requestRestart( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xInteractionHandler ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isRestartRequested( sal_Bool bInitialized ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL requestRestart( const css::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isRestartRequested( sal_Bool bInitialized ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XCallback
-    virtual void SAL_CALL notify( const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notify( const css::uno::Any& aData ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

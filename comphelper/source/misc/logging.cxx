@@ -212,7 +212,7 @@ namespace comphelper
         try
         {
             Reference< XResourceBundleLoader > xLoader(
-                com::sun::star::resource::OfficeResourceLoader::get(
+                css::resource::OfficeResourceLoader::get(
                     _rContext ) );
             _rLoggerData.xBundle = Reference< XResourceBundle >( xLoader->loadBundle_Default( _rLoggerData.sBundleBaseName ), UNO_QUERY_THROW );
         }

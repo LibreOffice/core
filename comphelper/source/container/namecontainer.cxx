@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-typedef std::map<OUString, ::com::sun::star::uno::Any> SvGenericNameContainerMapImpl;
+typedef std::map<OUString, css::uno::Any> SvGenericNameContainerMapImpl;
 
 namespace comphelper
 {
@@ -37,43 +37,43 @@ namespace comphelper
     };
 
     /** this is the base helper class for NameContainer thats also declared in this header. */
-    class NameContainer : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameContainer >, private NameContainerImpl
+    class NameContainer : public ::cppu::WeakImplHelper< css::container::XNameContainer >, private NameContainerImpl
     {
     public:
-        explicit NameContainer( ::com::sun::star::uno::Type aType );
+        explicit NameContainer( css::uno::Type aType );
         virtual ~NameContainer();
 
         // XNameContainer
-        virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-            throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
-            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+            throw(css::lang::IllegalArgumentException, css::container::ElementExistException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL removeByName( const OUString& Name )
-            throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-            throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+            throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+            throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XElementAccess
         virtual sal_Bool SAL_CALL hasElements(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Type SAL_CALL getElementType(  )
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         SvGenericNameContainerMapImpl maProperties;
-        const ::com::sun::star::uno::Type maType;
+        const css::uno::Type maType;
     };
 }
 
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-NameContainer::NameContainer( ::com::sun::star::uno::Type aType )
+NameContainer::NameContainer( css::uno::Type aType )
 : maType( aType )
 {
 }

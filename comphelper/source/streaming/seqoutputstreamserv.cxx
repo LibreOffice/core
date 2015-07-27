@@ -45,7 +45,7 @@ class SequenceOutputStreamService:
 public:
     explicit SequenceOutputStreamService();
 
-    // ::com::sun::star::lang::XServiceInfo:
+    // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -55,12 +55,12 @@ public:
     static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
-    // ::com::sun::star::io::XOutputStream:
+    // css::io::XOutputStream:
     virtual void SAL_CALL writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL flush() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL closeOutput() throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::io::XSequenceOutputStream:
+    // css::io::XSequenceOutputStream:
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) throw ( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -110,7 +110,7 @@ uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService::Create(
     return static_cast< ::cppu::OWeakObject * >( new SequenceOutputStreamService());
 }
 
-// ::com::sun::star::io::XOutputStream:
+// css::io::XOutputStream:
 void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -140,7 +140,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput() throw ( uno::RuntimeExc
     m_xOutputStream = uno::Reference< io::XOutputStream >();
 }
 
-// ::com::sun::star::io::XSequenceOutputStream:
+// css::io::XSequenceOutputStream:
 uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes() throw ( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

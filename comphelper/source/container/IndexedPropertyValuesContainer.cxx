@@ -40,35 +40,35 @@ public:
     virtual ~IndexedPropertyValuesContainer() throw();
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeByIndex( sal_Int32 nIndex )
-        throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
-        throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
+        throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL getImplementationName_static();
@@ -88,9 +88,9 @@ IndexedPropertyValuesContainer::~IndexedPropertyValuesContainer() throw()
 }
 
 // XIndexContainer
-void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
+    throw(css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nSize(maProperties.size());
     if ((nSize >= nIndex) && (nIndex >= 0))
@@ -131,8 +131,8 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
 }
 
 void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
-    throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nSize(maProperties.size());
     if ((nIndex < nSize) && (nIndex >= 0))
@@ -165,9 +165,9 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
+    throw(css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nSize(maProperties.size());
     if ((nIndex < nSize) && (nIndex >= 0))
@@ -183,14 +183,14 @@ void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, 
 
 // XIndexAccess
 sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return maProperties.size();
 }
 
-::com::sun::star::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
-    throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
+    throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nSize(maProperties.size());
     if (!((nIndex < nSize) && (nIndex >= 0)))
@@ -202,20 +202,20 @@ sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
 }
 
 // XElementAccess
-::com::sun::star::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return !maProperties.empty();
 }
 
 //XServiceInfo
-OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
@@ -225,18 +225,18 @@ OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static( 
     return OUString( "IndexedPropertyValuesContainer" );
 }
 
-sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
+css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
     const OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );

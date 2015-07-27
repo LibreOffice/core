@@ -50,7 +50,7 @@ class SequenceInputStreamService:
 public:
     explicit SequenceInputStreamService();
 
-    // ::com::sun::star::lang::XServiceInfo:
+    // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -60,20 +60,20 @@ public:
     static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
-    // ::com::sun::star::io::XInputStream:
+    // css::io::XInputStream:
     virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL available() throw ( uno::RuntimeException, io::NotConnectedException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL closeInput() throw ( uno::RuntimeException, io::NotConnectedException, io::IOException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::io::XSeekable:
+    // css::io::XSeekable:
     virtual void SAL_CALL seek( ::sal_Int64 location ) throw ( uno::RuntimeException, lang::IllegalArgumentException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual ::sal_Int64 SAL_CALL getPosition() throw ( uno::RuntimeException, io::IOException, std::exception ) SAL_OVERRIDE;
     virtual ::sal_Int64 SAL_CALL getLength() throw ( uno::RuntimeException, io::IOException, std::exception ) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XInitialization:
-    virtual void SAL_CALL initialize( const uno::Sequence< ::com::sun::star::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception ) SAL_OVERRIDE;
+    // css::lang::XInitialization:
+    virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception ) SAL_OVERRIDE;
 
 private:
     virtual ~SequenceInputStreamService() {}
@@ -123,7 +123,7 @@ uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService::Create(
     return static_cast< ::cppu::OWeakObject * >( new SequenceInputStreamService() );
 }
 
-// ::com::sun::star::io::XInputStream:
+// css::io::XInputStream:
 ::sal_Int32 SAL_CALL SequenceInputStreamService::readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) throw ( uno::RuntimeException, io::NotConnectedException, io::BufferSizeExceededException, io::IOException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -171,7 +171,7 @@ void SAL_CALL SequenceInputStreamService::closeInput() throw ( uno::RuntimeExcep
     m_xSeekable = uno::Reference< io::XSeekable >();
 }
 
-// ::com::sun::star::io::XSeekable:
+// css::io::XSeekable:
 void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location ) throw ( uno::RuntimeException, lang::IllegalArgumentException, io::IOException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -199,8 +199,8 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location ) throw ( u
     return m_xSeekable->getLength();
 }
 
-// ::com::sun::star::lang::XInitialization:
-void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< ::com::sun::star::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception )
+// css::lang::XInitialization:
+void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bInitialized )

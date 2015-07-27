@@ -450,7 +450,7 @@ Any SAL_CALL MasterPropertySet::getPropertyDefault( const OUString& rPropertyNam
 }
 
 void MasterPropertySet::_preGetPropertyState ()
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
@@ -462,7 +462,7 @@ void MasterPropertySet::_getPropertyState( const comphelper::PropertyInfo&, Prop
 }
 
 void MasterPropertySet::_postGetPropertyState ()
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }

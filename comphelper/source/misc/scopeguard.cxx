@@ -33,7 +33,7 @@ ScopeGuard::~ScopeGuard()
             try {
                 m_func();
             }
-            catch (com::sun::star::uno::Exception & exc) {
+            catch (css::uno::Exception & exc) {
                 (void) exc; // avoid warning about unused variable
                 OSL_FAIL(
                     OUStringToOString( "UNO exception occurred: " +

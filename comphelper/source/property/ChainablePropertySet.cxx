@@ -266,7 +266,7 @@ Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rProperty
 }
 
 void ChainablePropertySet::_preGetPropertyState ()
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
@@ -278,7 +278,7 @@ void ChainablePropertySet::_getPropertyState( const comphelper::PropertyInfo&, P
 }
 
 void ChainablePropertySet::_postGetPropertyState ()
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }

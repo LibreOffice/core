@@ -106,7 +106,7 @@ namespace comphelper
     }
 
 
-    bool NamedValueCollection::canExtractFrom( ::com::sun::star::uno::Any const & i_value )
+    bool NamedValueCollection::canExtractFrom( css::uno::Any const & i_value )
     {
         Type const & aValueType = i_value.getValueType();
         if  (   aValueType.equals( ::cppu::UnoType< PropertyValue >::get() )

@@ -32,8 +32,8 @@ namespace comphelper {
 
 
 typedef cppu::WeakImplHelper<
-            com::sun::star::util::XOfficeInstallationDirectories,
-            com::sun::star::lang::XServiceInfo > UnoImplBase;
+            css::util::XOfficeInstallationDirectories,
+            css::lang::XServiceInfo > UnoImplBase;
 
 struct mutex_holder
 {
@@ -44,52 +44,50 @@ class OfficeInstallationDirectories : public mutex_holder, public UnoImplBase
 {
 public:
     explicit OfficeInstallationDirectories(
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > & xCtx );
+        const css::uno::Reference< css::uno::XComponentContext > & xCtx );
     virtual ~OfficeInstallationDirectories();
 
     // XOfficeInstallationDirectories
     virtual OUString SAL_CALL
     getOfficeInstallationDirectoryURL()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
     getOfficeUserDataDirectoryURL()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
     makeRelocatableURL( const OUString& URL )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
     makeAbsoluteURL( const OUString& URL )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL
         getImplementationName_static();
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames_static();
     static OUString SAL_CALL
         getSingletonName_static();
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        Create( const css::uno::Reference< css::uno::XComponentContext >& );
 
 private:
     void initDirs();
 
     OUString                                   m_aOfficeBrandDirMacro;
     OUString                                   m_aUserDirMacro;
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext >    m_xCtx;
+    css::uno::Reference< css::uno::XComponentContext >    m_xCtx;
     OUString *                                 m_pOfficeBrandDir;
     OUString *                                 m_pUserDir;
 };

@@ -681,8 +681,8 @@ namespace comphelper
     bool OCommonAccessibleText::implInitTextChangedEvent(
         const OUString& rOldString,
         const OUString& rNewString,
-        ::com::sun::star::uno::Any& rDeleted,
-        ::com::sun::star::uno::Any& rInserted) // throw()
+        css::uno::Any& rDeleted,
+        css::uno::Any& rInserted) // throw()
     {
         sal_uInt32 nLenOld = rOldString.getLength();
         sal_uInt32 nLenNew = rNewString.getLength();

@@ -70,12 +70,12 @@ public:
     virtual void SAL_CALL closeOutput() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTruncate
-    virtual void SAL_CALL truncate() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL truncate() throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static versions (used for component registration)
     static OUString SAL_CALL getImplementationName_static();
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-    static Reference< XInterface > SAL_CALL Create( const Reference< ::com::sun::star::uno::XComponentContext >& );
+    static Reference< XInterface > SAL_CALL Create( const Reference< css::uno::XComponentContext >& );
 
 private:
     std::vector< sal_Int8 > maData;

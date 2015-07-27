@@ -29,7 +29,7 @@ namespace comphelper
 
 
 
-IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint)
+IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(xStartingPoint)
     ,m_xCurrentObject(NULL)
 {
@@ -39,7 +39,7 @@ IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com
 IndexAccessIterator::~IndexAccessIterator() {}
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> IndexAccessIterator::Next()
+css::uno::Reference< css::uno::XInterface> IndexAccessIterator::Next()
 {
     bool bCheckingStartingPoint = !m_xCurrentObject.is();
         // Is the current node the starting point?
@@ -48,7 +48,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
     if (!m_xCurrentObject.is())
         m_xCurrentObject = m_xStartingPoint;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xSearchLoop( m_xCurrentObject);
+    css::uno::Reference< css::uno::XInterface> xSearchLoop( m_xCurrentObject);
     bool bHasMoreToSearch = true;
     bool bFoundSomething = false;
     while (!bFoundSomething && bHasMoreToSearch)
@@ -62,11 +62,11 @@ IndexAccessIterator::~IndexAccessIterator() {}
         else
         {
             // First, check to see if there's a match below
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xContainerAccess(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference< css::container::XIndexAccess> xContainerAccess(xSearchLoop, css::uno::UNO_QUERY);
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
             {
-                ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(0));
-                xSearchLoop = *static_cast<css::uno::Reference< ::com::sun::star::uno::XInterface> const *>(aElement.getValue());
+                css::uno::Any aElement(xContainerAccess->getByIndex(0));
+                xSearchLoop = *static_cast<css::uno::Reference< css::uno::XInterface> const *>(aElement.getValue());
                 bCheckingStartingPoint = false;
 
                 m_arrChildIndizies.push_back((sal_Int32)0);
@@ -75,11 +75,11 @@ IndexAccessIterator::~IndexAccessIterator() {}
             {   // otherwise, look above and to the right, if possible
                 while (m_arrChildIndizies.size() > 0)
                 {   // If the list isn't empty and there's nothing above
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
+                    css::uno::Reference< css::container::XChild> xChild(xSearchLoop, css::uno::UNO_QUERY);
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no appropriate interface !");
 
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xParent( xChild->getParent());
-                    xContainerAccess = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xParent, ::com::sun::star::uno::UNO_QUERY);
+                    css::uno::Reference< css::uno::XInterface> xParent( xChild->getParent());
+                    xContainerAccess = css::uno::Reference< css::container::XIndexAccess>(xParent, css::uno::UNO_QUERY);
                     OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
                     // Remove the index that SearchLoop had within this parent from my stack
@@ -90,8 +90,8 @@ IndexAccessIterator::~IndexAccessIterator() {}
                     {   // Move to the right in this row
                         ++nOldSearchChildIndex;
                         // and check the next child
-                        ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
-                        xSearchLoop = *static_cast<css::uno::Reference< ::com::sun::star::uno::XInterface> const *>(aElement.getValue());
+                        css::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
+                        xSearchLoop = *static_cast<css::uno::Reference< css::uno::XInterface> const *>(aElement.getValue());
                         bCheckingStartingPoint = false;
                         // and update its position in the list.
                         m_arrChildIndizies.push_back((sal_Int32)nOldSearchChildIndex);

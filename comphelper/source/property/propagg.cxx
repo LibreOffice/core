@@ -201,7 +201,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
     bool bRet = i != m_aPropertyAccessors.end();
     if (bRet)
     {
-        const  ::com::sun::star::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
+        const css::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
         if (_pPropName)
             *_pPropName = rProperty.Name;
         if (_pAttributes)
@@ -235,7 +235,7 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
         if (_pPropName)
         {
             OSL_ENSURE((*i).second.nPos < m_aProperties.getLength(),"Invalid index for sequence!");
-            const  ::com::sun::star::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
+            const css::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
             *_pPropName = rProperty.Name;
         }
     }
@@ -244,7 +244,7 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
 
 
 
- ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> OPropertyArrayAggregationHelper::getProperties()
+css::uno::Sequence< css::beans::Property> OPropertyArrayAggregationHelper::getProperties()
 {
     return m_aProperties;
 }
@@ -252,7 +252,7 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
 
 
 sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
-        sal_Int32* _pHandles, const  ::com::sun::star::uno::Sequence< OUString >& _rPropNames )
+        sal_Int32* _pHandles, const css::uno::Sequence< OUString >& _rPropNames )
 {
     sal_Int32 nHitCount = 0;
     const OUString* pReqProps = _rPropNames.getConstArray();
@@ -275,8 +275,8 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     }
 #endif
 
-    const  ::com::sun::star::beans::Property* pCur = m_aProperties.getConstArray();
-    const  ::com::sun::star::beans::Property* pEnd = m_aProperties.getConstArray() + m_aProperties.getLength();
+    const css::beans::Property* pCur = m_aProperties.getConstArray();
+    const css::beans::Property* pEnd = m_aProperties.getConstArray() + m_aProperties.getLength();
 
     for( sal_Int32 i = 0; i < nReqLen; ++i )
     {
@@ -309,8 +309,8 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
         {
             // binary search is better
             sal_Int32   nCompVal = 1;
-            const  ::com::sun::star::beans::Property*  pOldEnd = pEnd--;
-            const  ::com::sun::star::beans::Property*  pMid = pCur;
+            const css::beans::Property*  pOldEnd = pEnd--;
+            const css::beans::Property*  pMid = pCur;
 
             while( nCompVal != 0 && pCur <= pEnd )
             {
@@ -443,15 +443,15 @@ OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
 }
 
 
- ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType) throw( css::uno::RuntimeException, std::exception)
 {
-     ::com::sun::star::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
+    css::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
 
     if ( !aReturn.hasValue() )
         aReturn = cppu::queryInterface(_rType
-        ,static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(this)
-        ,static_cast< ::com::sun::star::beans::XVetoableChangeListener*>(this)
-        ,static_cast< ::com::sun::star::lang::XEventListener*>(static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(this))
+        ,static_cast< css::beans::XPropertiesChangeListener*>(this)
+        ,static_cast< css::beans::XVetoableChangeListener*>(this)
+        ,static_cast< css::lang::XEventListener*>(static_cast< css::beans::XPropertiesChangeListener*>(this))
         );
 
     return aReturn;
@@ -474,7 +474,7 @@ void OPropertySetAggregationHelper::disposing()
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::disposing(const  ::com::sun::star::lang::EventObject& _rSource) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObject& _rSource) throw ( css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
     if (_rSource.Source == m_xAggregateSet)
@@ -482,7 +482,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const  ::com::sun::star::
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent>& _rEvents) throw( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents) throw( css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
 
@@ -491,7 +491,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
 
     if (1 == nLen)
     {
-        const  ::com::sun::star::beans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
+        const css::beans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
         OSL_ENSURE(!evt.PropertyName.isEmpty(), "OPropertySetAggregationHelper::propertiesChange : invalid event !");
             // we had a bug where this assertion would have us saved a whole day :) (72514)
         sal_Int32 nHandle = rPH.getHandleByName( evt.PropertyName );
@@ -507,10 +507,10 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
     else
     {
         std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[nLen]);
-        std::unique_ptr< ::com::sun::star::uno::Any[]> pNewValues(new ::com::sun::star::uno::Any[nLen]);
-        std::unique_ptr< ::com::sun::star::uno::Any[]> pOldValues(new ::com::sun::star::uno::Any[nLen]);
+        std::unique_ptr< css::uno::Any[]> pNewValues(new css::uno::Any[nLen]);
+        std::unique_ptr< css::uno::Any[]> pOldValues(new css::uno::Any[nLen]);
 
-        const  ::com::sun::star::beans::PropertyChangeEvent* pEvents = _rEvents.getConstArray();
+        const css::beans::PropertyChangeEvent* pEvents = _rEvents.getConstArray();
         sal_Int32 nDest = 0;
         for (sal_Int32 nSource=0; nSource<nLen; ++nSource, ++pEvents)
         {
@@ -530,7 +530,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const  ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::beans::PropertyVetoException,  ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyChangeEvent& _rEvent) throw( css::beans::PropertyVetoException,  css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::vetoableChange : have no aggregate !");
 
@@ -541,8 +541,8 @@ void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const  ::com::sun::s
 }
 
 
-void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno::Reference<  ::com::sun::star::uno::XInterface >& _rxDelegate)
-        throw(  ::com::sun::star::lang::IllegalArgumentException )
+void OPropertySetAggregationHelper::setAggregation(const css::uno::Reference<  css::uno::XInterface >& _rxDelegate)
+        throw( css::lang::IllegalArgumentException )
 {
     osl::MutexGuard aGuard(rBHelper.rMutex);
 
@@ -560,7 +560,7 @@ void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno:
 
     // must support XPropertySet and XMultiPropertySet
     if ( m_xAggregateSet.is() && !m_xAggregateMultiSet.is() )
-        throw  ::com::sun::star::lang::IllegalArgumentException();
+        throw  css::lang::IllegalArgumentException();
 }
 
 
@@ -571,7 +571,7 @@ void OPropertySetAggregationHelper::startListening()
     if (!m_bListening && m_xAggregateSet.is())
     {
         // register as a single listener
-         ::com::sun::star::uno::Sequence< OUString > aPropertyNames;
+        css::uno::Sequence< OUString > aPropertyNames;
         m_xAggregateMultiSet->addPropertiesChangeListener(aPropertyNames, this);
         m_xAggregateSet->addVetoableChangeListener(OUString(), this);
 
@@ -581,8 +581,8 @@ void OPropertySetAggregationHelper::startListening()
 
 
 void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const OUString& _rPropertyName,
-                                                                       const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener>& _rxListener)
-                                                                       throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException, std::exception)
+                                                                       const  css::uno::Reference< css::beans::XVetoableChangeListener>& _rxListener)
+                                                                       throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
 {
     OPropertySetHelper::addVetoableChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -591,8 +591,8 @@ void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const OUS
 
 
 void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUString& _rPropertyName,
-                                                                       const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& _rxListener)
-                                                                       throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException, std::exception)
+                                                                       const css::uno::Reference< css::beans::XPropertyChangeListener>& _rxListener)
+                                                                       throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
 {
     OPropertySetHelper::addPropertyChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -600,9 +600,9 @@ void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUS
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const  ::com::sun::star::uno::Sequence< OUString >& _rPropertyNames,
-                                                                         const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener>& _rxListener)
-                                                                         throw( ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const css::uno::Sequence< OUString >& _rPropertyNames,
+                                                                         const css::uno::Reference< css::beans::XPropertiesChangeListener>& _rxListener)
+                                                                         throw( css::uno::RuntimeException, std::exception)
 {
     OPropertySetHelper::addPropertiesChangeListener(_rPropertyNames, _rxListener);
     if (!m_bListening)
@@ -628,10 +628,10 @@ OUString OPropertySetAggregationHelper::getPropertyName( sal_Int32 _nHandle ) co
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  ::com::sun::star::uno::Any& _rValue)
-        throw(   ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::beans::PropertyVetoException,
-                 ::com::sun::star::lang::IllegalArgumentException,  ::com::sun::star::lang::WrappedTargetException,
-                 ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  css::uno::Any& _rValue)
+        throw( css::beans::UnknownPropertyException,  css::beans::PropertyVetoException,
+               css::lang::IllegalArgumentException,  css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
@@ -648,7 +648,7 @@ void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHa
 }
 
 
-void OPropertySetAggregationHelper::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const
+void OPropertySetAggregationHelper::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle) const
 {
     OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>( const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper() );
     OUString aPropName;
@@ -670,15 +670,15 @@ void OPropertySetAggregationHelper::getFastPropertyValue( ::com::sun::star::uno:
 }
 
 
- ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
-        throw(   ::com::sun::star::beans::UnknownPropertyException,
-                 ::com::sun::star::lang::WrappedTargetException,
-                 ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
+        throw(   css::beans::UnknownPropertyException,
+                 css::lang::WrappedTargetException,
+                 css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
     sal_Int32   nOriginalHandle = -1;
-     ::com::sun::star::uno::Any  aValue;
+    css::uno::Any  aValue;
 
     if (rPH.fillAggregatePropertyInfoByHandle(&aPropName, &nOriginalHandle, nHandle))
     {
@@ -759,7 +759,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         // mixed
         else
         {
-            const  ::com::sun::star::uno::Any* pValues = _rValues.getConstArray();
+            const  css::uno::Any* pValues = _rValues.getConstArray();
 
             try
             {
@@ -806,8 +806,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 sal_Int32 nHitCount = rPH2.fillHandles( pHandles.get(), DelPropertyNames );
                 if (nHitCount != 0)
                 {
-                    std::unique_ptr< ::com::sun::star::uno::Any[]> pConvertedValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
-                    std::unique_ptr< ::com::sun::star::uno::Any[]> pOldValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
+                    std::unique_ptr< css::uno::Any[]> pConvertedValues(new  css::uno::Any[ nHitCount ]);
+                    std::unique_ptr< css::uno::Any[]> pOldValues(new  css::uno::Any[ nHitCount ]);
                     nHitCount = 0;
                     sal_Int32 i;
 
@@ -820,8 +820,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                             {
                                 sal_Int16 nAttributes;
                                 rPH2.fillPropertyMembersByHandle( NULL, &nAttributes, pHandles[i] );
-                                if( nAttributes &  ::com::sun::star::beans::PropertyAttribute::READONLY )
-                                    throw  ::com::sun::star::beans::PropertyVetoException();
+                                if( nAttributes & css::beans::PropertyAttribute::READONLY )
+                                    throw css::beans::PropertyVetoException();
                                 // Will the property change?
                                 if( convertFastPropertyValue( pConvertedValues[ nHitCount ], pOldValues[nHitCount],
                                                             pHandles[i], pDelValues[i] ) )
@@ -860,7 +860,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                     m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
 
             }
-            catch(::com::sun::star::uno::Exception&)
+            catch(css::uno::Exception&)
             {
                 throw;
             }
@@ -870,15 +870,15 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
 
 // XPropertyState
 
- ::com::sun::star::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyState(const OUString& _rPropertyName)
-            throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException, std::exception)
+css::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyState(const OUString& _rPropertyName)
+            throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( _rPropertyName );
 
     if (nHandle == -1)
     {
-        throw  ::com::sun::star::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException();
     }
 
     OUString aPropName;
@@ -888,7 +888,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         if (m_xAggregateState.is())
             return m_xAggregateState->getPropertyState(_rPropertyName);
         else
-            return  ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+            return css::beans::PropertyState_DIRECT_VALUE;
     }
     else
         return getPropertyStateByHandle(nHandle);
@@ -896,13 +896,13 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
 
 
 void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString& _rPropertyName)
-        throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException, std::exception)
+        throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName(_rPropertyName);
     if (nHandle == -1)
     {
-        throw  ::com::sun::star::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException();
     }
 
     OUString aPropName;
@@ -928,14 +928,14 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
 }
 
 
- ::com::sun::star::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
-        throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
+        throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if ( nHandle == -1 )
-        throw  ::com::sun::star::beans::UnknownPropertyException();
+        throw css::beans::UnknownPropertyException();
 
     OUString aPropName;
     sal_Int32   nOriginalHandle = -1;
@@ -944,7 +944,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
         if (m_xAggregateState.is())
             return m_xAggregateState->getPropertyDefault(aPropertyName);
         else
-            return  ::com::sun::star::uno::Any();
+            return css::uno::Any();
     }
     else
         return getPropertyDefaultByHandle(nHandle);
