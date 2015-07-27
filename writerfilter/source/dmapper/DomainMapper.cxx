@@ -189,8 +189,6 @@ DomainMapper::~DomainMapper()
         (void)rEx;
     }
 
-    delete m_pImpl;
-
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().endDocument();
 #endif
@@ -1092,7 +1090,7 @@ sal_Int32 lcl_getCurrentNumberingProperty(
 }
 
 // In rtl-paragraphs the meaning of left/right are to be exchanged
-static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl* m_pImpl)
+static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl& rImpl)
 {
     bool bExchangeLeftRight = false;
     boost::optional<PropertyMap::Property> aPropPara = rContext->getProperty(PROP_WRITING_MODE);
@@ -1105,7 +1103,7 @@ static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl*
     else
     {
         // check if there RTL <bidi> in default style for the paragraph
-        StyleSheetEntryPtr pTable = m_pImpl->GetStyleSheetTable()->FindDefaultParaStyle();
+        StyleSheetEntryPtr pTable = rImpl.GetStyleSheetTable()->FindDefaultParaStyle();
         if ( pTable )
         {
             boost::optional<PropertyMap::Property> aPropStyle = pTable->pProperties->getProperty(PROP_WRITING_MODE);
@@ -1170,7 +1168,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     switch(nSprmId)
     {
     case NS_ooxml::LN_CT_PPrBase_jc:
-        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
+        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, *m_pImpl ));
         break;
     case NS_ooxml::LN_CT_PPrBase_keepLines:
         rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue == 0));

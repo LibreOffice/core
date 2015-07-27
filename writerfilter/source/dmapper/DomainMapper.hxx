@@ -26,7 +26,7 @@
 
 #include <map>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace com{ namespace sun {namespace star{
     namespace beans{
@@ -72,7 +72,7 @@ enum SprmType
 class DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream
 {
-    DomainMapper_Impl   *m_pImpl;
+    std::unique_ptr<DomainMapper_Impl> m_pImpl;
 
 public:
     DomainMapper(const css::uno::Reference<css::uno::XComponentContext>& xContext,
@@ -169,7 +169,7 @@ private:
     static css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbIsSplitPara;
-    boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
+    std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
 };
 
 } // namespace dmapper
