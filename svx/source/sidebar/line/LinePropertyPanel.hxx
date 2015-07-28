@@ -23,7 +23,6 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
@@ -97,8 +96,6 @@ private:
     //ui controls
     VclPtr<FixedText>   mpFTWidth;
     VclPtr<ToolBox>     mpTBWidth;
-    VclPtr<FixedText>   mpFTColor;
-    VclPtr<sfx2::sidebar::SidebarToolBox> mpLBColor;
     VclPtr<FixedText>   mpFTStyle;
     VclPtr<ListBox>     mpLBStyle;
     VclPtr<FixedText>   mpFTTransparency;
