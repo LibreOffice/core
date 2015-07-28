@@ -71,13 +71,11 @@ namespace cppcanvas
             using Action::render;
 
         private:
-            virtual bool renderPrimitive( ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::rendering::XCachedPrimitive >& rCachedPrimitive,
-                                 const ::basegfx::B2DHomMatrix&                       rTransformation ) const = 0;
+            virtual bool renderPrimitive( css::uno::Reference< css::rendering::XCachedPrimitive >& rCachedPrimitive,
+                                          const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
             CanvasSharedPtr                                             mpCanvas;
-            mutable ::com::sun::star::uno::Reference<
-                    ::com::sun::star::rendering::XCachedPrimitive >     mxCachedPrimitive;
+            mutable css::uno::Reference< css::rendering::XCachedPrimitive >     mxCachedPrimitive;
             mutable ::basegfx::B2DHomMatrix                             maLastTransformation;
             const bool                                                  mbOnlyRedrawWithSameTransform;
         };

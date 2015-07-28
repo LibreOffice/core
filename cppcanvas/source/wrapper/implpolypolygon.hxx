@@ -43,8 +43,8 @@ namespace cppcanvas
         {
         public:
             ImplPolyPolygon( const CanvasSharedPtr& rParentCanvas,
-                             const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::rendering::XPolyPolygon2D >& rPolyPoly );
+                             const css::uno::Reference<
+                                 css::rendering::XPolyPolygon2D >& rPolyPoly );
 
             virtual ~ImplPolyPolygon();
 
@@ -61,21 +61,21 @@ namespace cppcanvas
 
             virtual bool            draw() const SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const SAL_OVERRIDE;
+            virtual css::uno::Reference<
+                css::rendering::XPolyPolygon2D > getUNOPolyPolygon() const SAL_OVERRIDE;
 
         private:
             ImplPolyPolygon(const ImplPolyPolygon&) SAL_DELETED_FUNCTION;
             ImplPolyPolygon& operator= ( const ImplPolyPolygon& ) SAL_DELETED_FUNCTION;
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
+            const css::uno::Reference< css::rendering::XPolyPolygon2D >   mxPolyPoly;
 
-            ::com::sun::star::rendering::StrokeAttributes                                           maStrokeAttributes;
+            css::rendering::StrokeAttributes                                maStrokeAttributes;
 
-            ::com::sun::star::uno::Sequence< double >                                                       maFillColor;
-            ::com::sun::star::uno::Sequence< double >                                                       maStrokeColor;
-            bool                                                                                            mbFillColorSet;
-            bool                                                                                            mbStrokeColorSet;
+            css::uno::Sequence< double >                                    maFillColor;
+            css::uno::Sequence< double >                                    maStrokeColor;
+            bool                                                              mbFillColorSet;
+            bool                                                              mbStrokeColorSet;
         };
 
     }

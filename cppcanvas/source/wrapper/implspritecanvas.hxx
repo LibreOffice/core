@@ -39,8 +39,8 @@ namespace cppcanvas
         class ImplSpriteCanvas : public virtual SpriteCanvas, protected virtual ImplCanvas
         {
         public:
-            ImplSpriteCanvas( const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::rendering::XSpriteCanvas >& rCanvas );
+            ImplSpriteCanvas( const css::uno::Reference<
+                                  css::rendering::XSpriteCanvas >& rCanvas );
             ImplSpriteCanvas(const ImplSpriteCanvas&);
 
             virtual ~ImplSpriteCanvas();
@@ -54,8 +54,8 @@ namespace cppcanvas
 
             virtual CanvasSharedPtr         clone() const SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const SAL_OVERRIDE;
+            virtual css::uno::Reference<
+                css::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const SAL_OVERRIDE;
 
             /** This class passes the view transformation
                 to child sprites
@@ -82,8 +82,8 @@ namespace cppcanvas
         private:
             ImplSpriteCanvas& operator=( const ImplSpriteCanvas& ) SAL_DELETED_FUNCTION;
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSpriteCanvas >    mxSpriteCanvas;
-            TransformationArbiterSharedPtr                                                          mpTransformArbiter;
+            const css::uno::Reference< css::rendering::XSpriteCanvas >    mxSpriteCanvas;
+            TransformationArbiterSharedPtr                                    mpTransformArbiter;
         };
     }
 }

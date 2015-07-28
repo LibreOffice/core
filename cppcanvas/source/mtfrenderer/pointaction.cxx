@@ -68,7 +68,7 @@ namespace cppcanvas
             private:
                 ::basegfx::B2DPoint                         maPoint;
                 CanvasSharedPtr                             mpCanvas;
-                ::com::sun::star::rendering::RenderState    maState;
+                css::rendering::RenderState               maState;
             };
 
             PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,

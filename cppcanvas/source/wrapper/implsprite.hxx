@@ -37,10 +37,10 @@ namespace cppcanvas
         class ImplSprite : public virtual Sprite
         {
         public:
-            ImplSprite( const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
-                        const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::rendering::XSprite >&       rSprite,
+            ImplSprite( const css::uno::Reference<
+                                  css::rendering::XSpriteCanvas >&                    rParentCanvas,
+                        const css::uno::Reference<
+                                  css::rendering::XSprite >&                          rSprite,
                         const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             virtual ~ImplSprite();
 
@@ -57,17 +57,17 @@ namespace cppcanvas
 
             virtual void setPriority( double fPriority ) SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XSprite >  getUNOSprite() const SAL_OVERRIDE;
+            virtual css::uno::Reference<
+                css::rendering::XSprite >  getUNOSprite() const SAL_OVERRIDE;
 
         private:
             ImplSprite(const ImplSprite&) SAL_DELETED_FUNCTION;
             ImplSprite& operator=( const ImplSprite& ) SAL_DELETED_FUNCTION;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >          mxSprite;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite >  mxAnimatedSprite;
-            ImplSpriteCanvas::TransformationArbiterSharedPtr                                        mpTransformArbiter;
+            css::uno::Reference< css::rendering::XGraphicDevice >         mxGraphicDevice;
+            const css::uno::Reference< css::rendering::XSprite >          mxSprite;
+            const css::uno::Reference< css::rendering::XAnimatedSprite >  mxAnimatedSprite;
+            ImplSpriteCanvas::TransformationArbiterSharedPtr                  mpTransformArbiter;
         };
     }
 }

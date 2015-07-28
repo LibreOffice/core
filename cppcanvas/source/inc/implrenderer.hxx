@@ -239,10 +239,10 @@ static float GetSwapFloat( SvStream& rSt )
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            static ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
-                                                                       const vcl::Font&              rFont,
-                                                                       const ActionFactoryParameters&  rParms );
+            static css::uno::Reference<
+                css::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
+                                                            const vcl::Font&              rFont,
+                                                            const ActionFactoryParameters&  rParms );
             bool createActions( GDIMetaFile&                    rMtf,
                                 const ActionFactoryParameters&  rParms,
                                 bool                            bSubsettableActions );
@@ -287,7 +287,7 @@ static float GetSwapFloat( SvStream& rSt )
             /// @return how much we should shorten the original polygon.
             double EMFPPlusDrawLineCap(const ::basegfx::B2DPolygon& rPolygon, double fPolyLength,
                     const ::basegfx::B2DPolyPolygon& rLineCap, bool isFilled, bool bStart,
-                    const com::sun::star::rendering::StrokeAttributes& rAttributes,
+                    const css::rendering::StrokeAttributes& rAttributes,
                     const ActionFactoryParameters& rParms, OutDevState& rState);
 
             void EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex);

@@ -37,15 +37,15 @@ namespace cppcanvas
         class ImplColor : public Color
         {
         public:
-            explicit ImplColor( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XGraphicDevice >& rDevice );
+            explicit ImplColor( const css::uno::Reference<
+                               css::rendering::XGraphicDevice >& rDevice );
             virtual ~ImplColor();
 
-            virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const SAL_OVERRIDE;
-            virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const SAL_OVERRIDE;
+            virtual IntSRGBA                                    getIntSRGBA( css::uno::Sequence< double >& rDeviceColor ) const SAL_OVERRIDE;
+            virtual css::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const SAL_OVERRIDE;
 
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxDevice;
+            css::uno::Reference< css::rendering::XGraphicDevice > mxDevice;
         };
 
     }
