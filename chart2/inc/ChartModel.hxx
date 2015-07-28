@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -98,6 +99,7 @@ typedef cppu::WeakImplHelper<
         ,::com::sun::star::chart2::data::XDataSource
         ,::com::sun::star::document::XUndoManagerSupplier
         ,::com::sun::star::chart2::X3DChartWindowProvider
+        ,::com::sun::star::util::XUpdatable
         ,::com::sun::star::qa::XDumper
         >
     ChartModel_Base;
@@ -588,6 +590,7 @@ public:
     virtual void SAL_CALL setWindow( sal_uInt64 nWindowPtr )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    // XUpdatable
     virtual void SAL_CALL update()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
