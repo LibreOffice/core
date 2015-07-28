@@ -2521,8 +2521,10 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
         //  the ways of the Numberformatters are unfathomable, so try:
         OUString aOut;
-        Color* pCol;
-        const_cast<SvNumberformat*>(pOldEntry)->GetOutputString( nVal, aOut, &pCol );
+        //  It is not possible to get the exact string with "Standard" (General format)
+        //  11 characters is the default, and may convey in most of cases
+        //  better than infinite see tdf#92985
+        const_cast<SvNumberformat*>(pOldEntry)->GetOutputString( nVal, 11, aOut );
 
         nPrecision = 0;
         // 'E' for exponential is fixed in Numberformatter
