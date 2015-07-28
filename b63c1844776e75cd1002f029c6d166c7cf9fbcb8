@@ -88,6 +88,24 @@
       "revId": "b63c1844776e75cd1002f029c6d166c7cf9fbcb8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_87310aa5",
+        "filename": "include/tools/errcode.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2015-07-28T17:04:07Z",
+      "side": 1,
+      "message": "By memory (I can\u0027t access the code right now) this header file is also used for code generation from rsc files. While compiling without this #ifndef I got errors since sal_uInt32 is not defined there: the easiest/safest solution was to be transparent in that case.",
+      "parentUuid": "1a54edaf_e7f9dec9",
+      "revId": "b63c1844776e75cd1002f029c6d166c7cf9fbcb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
