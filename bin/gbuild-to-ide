@@ -953,7 +953,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def generate_build_configs(self, lib_folder):
         module_folder = os.path.join(self.base_folder, lib_folder)
         xml = ""
-        # In QtCreator UI, build configs are listed alphabetically, 
+        # In QtCreator UI, build configs are listed alphabetically,
         # so it can be different from the creation order.
         # So we prefix the names with the index.
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
@@ -1054,7 +1054,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
    </valuemap>
    """
-   
+
     build_configs_count_template = """
    <!-- nb build configurations -->
    <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">%(nb)s</value>
