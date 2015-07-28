@@ -1015,15 +1015,15 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             'nb' : '9',
             }
         return xml
-    
+
     # By default, QtCreator creates 2 BuildStepList : "Build" et "Clean"
     # but the "clean" can be empty.
     build_configs_template = """
     <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.%(index)s">
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">%(base_folder)s</value>
-    
+
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-    
+
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
@@ -1037,13 +1037,13 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">%(arg)s</value>
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
      </valuemap>
-     
+
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
     </valuemap>
-    
+
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
@@ -1063,7 +1063,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def generate_deploy_configs(self, lib_folder):
         xml = QtCreatorIntegrationGenerator.deploy_configs_template % {}
         return xml
-    
+
     deploy_configs_template = """
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
@@ -1079,9 +1079,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.DeployConfigurationCount">1</value>
     """
-    
+
     def generate_run_configs(self, lib_folder):
-        
+
         # If we use 'soffice', it's ok only for "Run", not for "Debug".
         # So we put "soffice.bin" that is ok for both.
         loexec = "%s/instdir/program/soffice.bin" % self.base_folder
@@ -1090,7 +1090,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 'workdir' : self.base_folder
             }
         return xml
-    
+
     run_configs_template = """
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.0">
     <valuelist type="QVariantList" key="Analyzer.Valgrind.AddedSuppressionFiles"/>
@@ -1129,7 +1129,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    
+
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable">%(loexec)s</value>
     <value type="bool" key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal">false</value>
@@ -1212,7 +1212,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
    <value type="bool" key="EditorConfiguration.inEntireDocument">false</value>
   </valuemap>
  </data>
- 
+
  <data>
   <variable>ProjectExplorer.Project.PluginSettings</variable>
   <valuemap type="QVariantMap"/>
@@ -1276,18 +1276,18 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             if os.path.isfile(path+ext):
                 return ext
         return ""
-                
+
     def get_header_extension(self, src_file):
         path = os.path.join(self.base_folder, src_file)
         for ext in (".hxx", ".hpp", ".h"):
             if os.path.isfile(path+ext):
                 return ext
         return ""
-        
+
     def build_data_libs(self):
-        
+
         self.data_libs = {}
-        
+
         all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
         for lib in all_libs:
             self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
@@ -1296,7 +1296,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
             def lopath(path):
                 return os.path.relpath(path, lib.location)
-                
+
             sources_list = []
             includepath_list = []
             # The explicit headers list is not mandatory :
@@ -1311,12 +1311,12 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 ext = self.get_source_extension(file_)
                 if ext:
                     sources_list.append(lopath(file_+ext))
-                
+
                 # few cxxobject files have a header beside
                 ext = self.get_header_extension(file_)
                 if ext:
                     headers_list.append(lopath(file_+ext))
-            
+
             # List all include paths
             for hdir in lib.include:
                 hf_lopath = lopath(hdir)
@@ -1329,7 +1329,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                         if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
                             hf_lopath = lopath(os.path.join(hdir, hf))
                             headers_list.append(hf_lopath)
-            
+
             # All datas are prepared, store them for the lib.
             if lib_folder in self.data_libs:
                 self.data_libs[lib_folder]['sources'] |= set(sources_list)
@@ -1345,7 +1345,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 }
 
     def emit(self):
-        
+
         # we remove existing '.pro' and '.pro.user' files
         self.remove_qt_files()
 
@@ -1362,11 +1362,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             includepath_list = sorted(self.data_libs[lib_folder]['includepath'])
             lib_loc = self.data_libs[lib_folder]['loc']
             lib_name = self.data_libs[lib_folder]['name']
-            
+
             sources = " \\\n".join(sources_list)
             headers = " \\\n".join(headers_list)
             includepath = " \\\n".join(includepath_list)
-            
+
             # create .pro file
             qt_pro_file = '%s/%s.pro' % (lib_loc, lib_name)
             try:
@@ -1375,28 +1375,28 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 with open(qt_pro_file, mode) as fpro:
                     fpro.write(content)
                 self._log("created %s\n" % qt_pro_file)
-                
+
             except Exception as e:
                 print("ERROR : creating pro file="+qt_pro_file, file=sys.stderr)
                 print(e, file=sys.stderr)
                 temp = traceback.format_exc() # .decode('utf8')
                 print(temp, file=sys.stderr)
                 print("\n\n", file=sys.stderr)
-            
+
             # create .pro.user file
             qt_pro_user_file = '%s/%s.pro.user' % (lib_loc, lib_name)
             try:
                 with open(qt_pro_user_file, mode) as fprouser:
                     fprouser.write(self.generate_pro_user_content(lib_folder))
                 self._log("created %s\n" % qt_pro_user_file)
-                
+
             except Exception as e:
                 print("ERROR : creating pro.user file="+qt_pro_user_file, file=sys.stderr)
                 print(e, file=sys.stderr)
                 temp = traceback.format_exc()
                 print(temp, file=sys.stderr)
                 print("\n\n", file=sys.stderr)
-            
+
         # create meta .pro file (lists all sub projects)
         qt_meta_pro_file = 'lo.pro'
         try:
@@ -1411,9 +1411,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             temp = traceback.format_exc()
             print(temp, file=sys.stderr)
             print("\n\n", file=sys.stderr)
-        
+
         self.log_close()
-        
+
     pro_template = """TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
@@ -1427,7 +1427,7 @@ HEADERS += %(headers)s
 
 """
     pro_meta_template = """TEMPLATE = subdirs
-    
+
 SUBDIRS = %(subdirs)s
 """
 
