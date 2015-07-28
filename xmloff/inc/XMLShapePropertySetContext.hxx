@@ -24,7 +24,7 @@
 
 class XMLShapePropertySetContext : public SvXMLPropertySetContext
 {
-    SvXMLImportContextRef mxBulletStyle;
+    FastSvXMLImportContextRef mxBulletStyle;
     sal_Int32 mnBulletIndex;
 
 public:

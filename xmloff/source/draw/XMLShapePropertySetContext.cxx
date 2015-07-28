@@ -130,11 +130,29 @@ SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
 
 Reference< xml::sax::XFastContextHandler >
     XMLShapePropertySetContext::createFastChildContext(
-    sal_Int32 /*Element*/, const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
-    std::vector< XMLPropertyState >& /*rProperties*/,
-    const XMLPropertyState& /*rProp*/ )
+    sal_Int32 Element, const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector< XMLPropertyState >& rProperties,
+    const XMLPropertyState& rProp )
 {
-    return Reference< XFastContextHandler >();
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    {
+    case CTF_NUMBERINGRULES:
+        mnBulletIndex = rProp.mnIndex;
+        mxBulletStyle = pContext = new SvxXMLListStyleContext( GetImport(), Element, xAttrList );
+        break;
+    case CTF_TABSTOP:
+        pContext = new SvxXMLTabStopImportContext( GetImport(), Element,
+                                                   rProp, rProperties );
+        break;
+    }
+
+    if( !pContext.is() )
+        pContext = SvXMLPropertySetContext::createFastChildContext( Element,
+                        xAttrList, rProperties, rProp );
+
+    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

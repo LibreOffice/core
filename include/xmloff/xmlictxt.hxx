@@ -130,6 +130,7 @@ public:
 
 //typedef tools::SvRef<SvXMLImportContext> SvXMLImportContextRef;
 typedef css::uno::Reference< SvXMLImportContext > SvXMLImportContextRef;
+typedef css::uno::Reference< css::xml::sax::XFastContextHandler > FastSvXMLImportContextRef;
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 
