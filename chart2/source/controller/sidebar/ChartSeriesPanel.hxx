@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/layout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
@@ -91,9 +92,11 @@ private:
     VclPtr<RadioButton> mpRBPrimaryAxis;
     VclPtr<RadioButton> mpRBSecondaryAxis;
 
+    VclPtr<VclHBox> mpBoxLabelPlacement;
     VclPtr<ListBox> mpLBLabelPlacement;
 
     VclPtr<FixedText> mpFTSeriesName;
+    VclPtr<FixedText> mpFTSeriesTemplate;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
