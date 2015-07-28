@@ -575,6 +575,11 @@ public:
         @author FME
     */
     sal_uInt16 GetNumberOfPreviewPages() { return sal::static_int_cast< sal_uInt16 >(maPreviewPages.size()); }
+
+    SwViewShell& GetParentViewShell()
+    {
+        return mrParentViewShell;
+    }
 };
 
 #endif // INCLUDED_SW_INC_PAGEPREVIEWLAYOUT_HXX
