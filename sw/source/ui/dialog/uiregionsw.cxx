@@ -152,9 +152,6 @@ private:
 public:
     SectRepr(size_t nPos, SwSection& rSect);
 
-    bool    operator< (const SectRepr& rSectRef) const
-            { return m_nArrPos <  rSectRef.GetArrPos(); }
-
     SwSectionData &     GetSectionData()        { return m_SectionData; }
     SwFormatCol&               GetCol()            { return m_Col; }
     SvxBrushItem&           GetBackground()     { return m_Brush; }
