@@ -30,6 +30,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include "LineWidthPopup.hxx"
+#include "LinePropertyPanelBase.hxx"
 
 
 class XLineStyleItem;
@@ -57,7 +58,7 @@ namespace sidebar
 class PopupContainer;
 class LineWidthControl;
 
-class LinePropertyPanel : public PanelLayout,
+class LinePropertyPanel : public LinePropertyPanelBase,
                           public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
@@ -69,9 +70,6 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) SAL_OVERRIDE;
-
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
@@ -80,36 +78,25 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
-    void SetWidth(long nWidth);
-    void SetWidthIcon(int n);
-    void SetWidthIcon();
-
-    void EndLineWidthPopupMode();
-
     // constructor/destuctor
     LinePropertyPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
-private:
-    //ui controls
-    VclPtr<FixedText>   mpFTWidth;
-    VclPtr<ToolBox>     mpTBWidth;
-    VclPtr<FixedText>   mpFTStyle;
-    VclPtr<ListBox>     mpLBStyle;
-    VclPtr<FixedText>   mpFTTransparency;
-    VclPtr<MetricField> mpMFTransparent;
-    VclPtr<FixedText>   mpFTArrow;
-    VclPtr<ListBox>     mpLBStart;
-    VclPtr<ListBox>     mpLBEnd;
-    VclPtr<FixedText>   mpFTEdgeStyle;
-    VclPtr<ListBox>     mpLBEdgeStyle;
-    VclPtr<FixedText>   mpFTCapStyle;
-    VclPtr<ListBox>     mpLBCapStyle;
-    VclPtr<VclGrid>     mpGridLineProps;
-    VclPtr<VclVBox>     mpBoxArrowProps;
+    virtual void setLineWidth(const XLineWidthItem& rItem) SAL_OVERRIDE;
 
+protected:
+
+    virtual void setLineStyle(const XLineStyleItem& rItem) SAL_OVERRIDE;
+    virtual void setLineDash(const XLineDashItem& rItem) SAL_OVERRIDE;
+    virtual void setLineEndStyle(const XLineEndItem* pItem) SAL_OVERRIDE;
+    virtual void setLineStartStyle(const XLineStartItem* pItem) SAL_OVERRIDE;
+    virtual void setLineTransparency(const XLineTransparenceItem& rItem) SAL_OVERRIDE;
+    virtual void setLineJoint(const XLineJointItem* pItem) SAL_OVERRIDE;
+    virtual void setLineCap(const XLineCapItem* pItem) SAL_OVERRIDE;
+
+private:
     //ControllerItem
     sfx2::sidebar::ControllerItem maStyleControl;
     sfx2::sidebar::ControllerItem maDashControl;
@@ -122,48 +109,10 @@ private:
     sfx2::sidebar::ControllerItem maEdgeStyle;
     sfx2::sidebar::ControllerItem maCapStyle;
 
-    std::unique_ptr<XLineStyleItem> mpStyleItem;
-    std::unique_ptr<XLineDashItem>  mpDashItem;
-
-    sal_uInt16      mnTrans;
-    SfxMapUnit      meMapUnit;
-    sal_Int32       mnWidthCoreValue;
-    XLineEndListRef mxLineEndList;
-    XDashListRef    mxLineStyleList;
-    std::unique_ptr<XLineStartItem> mpStartItem;
-    std::unique_ptr<XLineEndItem>   mpEndItem;
-
-    //popup windows
-    LineWidthPopup maLineWidthPopup;
-
-    // images from resource
-    Image maIMGNone;
-
-    // multi-images
-    std::unique_ptr<Image[]> mpIMGWidthIcon;
-
     css::uno::Reference<css::frame::XFrame> mxFrame;
     SfxBindings* mpBindings;
 
-    /// bitfield
-    bool                mbWidthValuable : 1;
-
     void Initialize();
-    void FillLineEndList();
-    void FillLineStyleList();
-    void SelectEndStyle(bool bStart);
-    void SelectLineStyle();
-    void ActivateControls();
-
-    DECL_LINK(ChangeLineStyleHdl, void*);
-    DECL_LINK_TYPED(ToolboxWidthSelectHdl, ToolBox*, void);
-    DECL_LINK(ChangeTransparentHdl , void *);
-    DECL_LINK(ChangeStartHdl, void *);
-    DECL_LINK(ChangeEndHdl, void *);
-    DECL_LINK(ChangeEdgeStyleHdl, void *);
-    DECL_LINK(ChangeCapStyleHdl, void *);
-
-    VclPtr<PopupControl> CreateLineWidthPopupControl (PopupContainer* pParent);
 };
 
 } } // end of namespace svx::sidebar
