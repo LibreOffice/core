@@ -220,23 +220,6 @@ public:
         HEADER_FIELD_ADDRESS
     };
 
-    /** Check for ISO 8859-1 character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a ISO 8859-1 character (0x00--0xFF).
-     */
-    static inline bool isISO88591(sal_uInt32 nChar);
-
-    /** Check for US-ASCII control character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII control character (US-ASCII
-        0x00--0x1F or 0x7F).
-     */
-    static inline bool isControl(sal_uInt32 nChar);
-
     /** Check for US-ASCII white space character.
 
         @param nChar  Some UCS-4 character.
@@ -254,15 +237,6 @@ public:
         0x21--0x7E).
      */
     static inline bool isVisible(sal_uInt32 nChar);
-
-    /** Check for US-ASCII Base 64 digit character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII Base 64 digit character (US-ASCII
-        'A'--'Z', 'a'--'z', '0'--'9', '+', or '/').
-     */
-    static inline bool isBase64Digit(sal_uInt32 nChar);
 
     /** Check whether some character is valid within an RFC 822 <atom>.
 
@@ -381,9 +355,6 @@ public:
                                 const sal_Unicode * pEnd1,
                                 const sal_Char * pString2);
 
-    static inline bool startsWithLineBreak(const sal_Char * pBegin,
-                                           const sal_Char * pEnd);
-
     static inline bool startsWithLineBreak(const sal_Unicode * pBegin,
                                            const sal_Unicode * pEnd);
 
@@ -392,9 +363,6 @@ public:
 
     static inline bool startsWithLineFolding(const sal_Unicode * pBegin,
                                              const sal_Unicode * pEnd);
-
-    static bool startsWithLinearWhiteSpace(const sal_Char * pBegin,
-                                           const sal_Char * pEnd);
 
     static const sal_Unicode * skipLinearWhiteSpace(const sal_Unicode *
                                                         pBegin,
@@ -551,18 +519,6 @@ public:
 };
 
 // static
-inline bool INetMIME::isISO88591(sal_uInt32 nChar)
-{
-    return nChar <= 0xFF;
-}
-
-// static
-inline bool INetMIME::isControl(sal_uInt32 nChar)
-{
-    return nChar <= 0x1F || nChar == 0x7F;
-}
-
-// static
 inline bool INetMIME::isWhiteSpace(sal_uInt32 nChar)
 {
     return nChar == '\t' || nChar == ' ';
@@ -572,13 +528,6 @@ inline bool INetMIME::isWhiteSpace(sal_uInt32 nChar)
 inline bool INetMIME::isVisible(sal_uInt32 nChar)
 {
     return nChar >= '!' && nChar <= '~';
-}
-
-// static
-inline bool INetMIME::isBase64Digit(sal_uInt32 nChar)
-{
-    return rtl::isAsciiUpperCase(nChar) || rtl::isAsciiLowerCase(nChar) || rtl::isAsciiDigit(nChar)
-           || nChar == '+' || nChar == '/';
 }
 
 // static
@@ -607,15 +556,7 @@ inline int INetMIME::getBase64Weight(sal_uInt32 nChar)
 }
 
 // static
-inline bool INetMIME::startsWithLineBreak(const sal_Char * pBegin,
-                                          const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::startsWithLineBreak(): Bad sequence");
 
-    return pEnd - pBegin >= 2 && pBegin[0] == 0x0D && pBegin[1] == 0x0A;
-        // CR, LF
-}
 
 // static
 inline bool INetMIME::startsWithLineBreak(const sal_Unicode * pBegin,
@@ -651,15 +592,7 @@ inline bool INetMIME::startsWithLineFolding(const sal_Unicode * pBegin,
 }
 
 // static
-inline bool INetMIME::startsWithLinearWhiteSpace(const sal_Char * pBegin,
-                                                 const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::startsWithLinearWhiteSpace(): Bad sequence");
 
-    return pBegin != pEnd
-           && (isWhiteSpace(*pBegin) || startsWithLineFolding(pBegin, pEnd));
-}
 
 // static
 inline bool INetMIME::needsQuotedStringEscape(sal_uInt32 nChar)

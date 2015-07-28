@@ -231,7 +231,6 @@ public:
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
-    sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
     void setMaxWidthChars(sal_Int32 nWidth);
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
@@ -249,13 +248,7 @@ public:
     using ListBox::SaveValue;
     using ListBox::GetSavedValue;
     using ListBox::IsValueChangedFromSaved;
-private:
-    // Bei MultiListBox nicht erlaubt...
-    void            SaveValue();
-    sal_Int32       GetSavedValue();
-    bool            IsValueChangedFromSaved() const;
 
-public:
     explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
 };

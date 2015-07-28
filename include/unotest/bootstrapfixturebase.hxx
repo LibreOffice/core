@@ -66,8 +66,10 @@ public:
   // return a URL to a given c-str path from the workdir directory
   OUString getURLFromWorkdir( const char *pPath );
 
+#ifdef _WIN32
   // return a Path to a given c-str path from the workdir directory
   OUString getPathFromWorkdir( const char *pPath );
+#endif
   virtual void setUp() SAL_OVERRIDE;
   virtual void tearDown() SAL_OVERRIDE;
 

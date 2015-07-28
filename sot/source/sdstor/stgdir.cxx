@@ -547,68 +547,6 @@ bool StgDirEntry::Commit()
     return bRes;
 }
 
-// Revert the entry
-
-bool StgDirEntry::Revert()
-{
-    aEntry = aSave;
-    switch( aEntry.GetType() )
-    {
-        case STG_STREAM:
-            if( pCurStrm )
-                delete pTmpStrm, pTmpStrm = pCurStrm, pCurStrm = NULL;
-            break;
-        case STG_STORAGE:
-        {
-            bool bSomeRenamed = false;
-            StgIterator aOIter( *this );
-            StgDirEntry* op = aOIter.First();
-            while( op )
-            {
-                op->aEntry = op->aSave;
-                op->bDirty = false;
-                bSomeRenamed = ( bSomeRenamed || op->bRenamed );
-                // Remove any new entries
-                if( op->bCreated )
-                {
-                    op->bCreated = false;
-                    op->Close();
-                    op->bInvalid = true;
-                }
-                // Reactivate any removed entries
-                else if( op->bRemoved )
-                    op->bRemoved = op->bInvalid = op->bTemp = false;
-                op = aOIter.Next();
-            }
-            // Resort all renamed entries
-            if( bSomeRenamed )
-            {
-                StgIterator aIter( *this );
-                StgDirEntry* p = aIter.First();
-                while( p )
-                {
-                    if( p->bRenamed )
-                    {
-                        StgAvlNode::Move
-                            ( reinterpret_cast<StgAvlNode**>(&p->pUp->pDown),
-                              reinterpret_cast<StgAvlNode**>(&p->pUp->pDown), p );
-                        p->bRenamed = false;
-                    }
-                    p = aIter.Next();
-                }
-            }
-            DelTemp( false );
-            break;
-        }
-        case STG_EMPTY:
-        case STG_LOCKBYTES:
-        case STG_PROPERTY:
-        case STG_ROOT:
-         break;
-    }
-    return true;
-}
-
 // Copy the stg stream to the temp stream
 
 bool StgDirEntry::Strm2Tmp()
@@ -1061,26 +999,6 @@ bool StgDirStrm::Rename( StgDirEntry& rStg, const OUString& rOld, const OUString
         if( !StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.pDown), p ) )
             return false;
         p->bRenamed = p->bDirty   = true;
-        return true;
-    }
-    else
-    {
-        rIo.SetError( SVSTREAM_FILE_NOT_FOUND );
-        return false;
-    }
-}
-
-// Move the given entry to a different storage.
-
-bool StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const OUString& rName )
-{
-    StgDirEntry* p = Find( rStg1, rName );
-    if( p )
-    {
-        if( !StgAvlNode::Move
-            ( reinterpret_cast<StgAvlNode**>(&rStg1.pDown), reinterpret_cast<StgAvlNode**>(&rStg2.pDown), p ) )
-            return false;
-        p->bDirty = true;
         return true;
     }
     else

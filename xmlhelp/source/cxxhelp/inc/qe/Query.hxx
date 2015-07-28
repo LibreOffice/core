@@ -61,16 +61,6 @@ namespace xmlsearch {
             OUString* terms_;
 
         };  // end class QueryHitData
-
-
-        class PrefixTranslator
-        {
-        public:
-            static PrefixTranslator* makePrefixTranslator( const OUString*,sal_Int32 )
-            {
-                return 0;
-            }
-        };
     }
 
 }

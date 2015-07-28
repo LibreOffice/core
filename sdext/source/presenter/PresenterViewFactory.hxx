@@ -98,11 +98,6 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterViewFactory();
 
-    static OUString getImplementationName_static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-    static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-
     virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 

@@ -131,7 +131,6 @@ public:
             long GetLeft()    const { return GetTopLeft().X(); }
             long GetBottom()  const { return GetTop() + GetHeight() - 1; }
             long GetRight()   const { return GetLeft() + GetWidth() - 1; }
-            long GetCenterX() const { return (GetLeft() + GetRight()) / 2L; }
             long GetCenterY() const { return (GetTop() + GetBottom()) / 2L; }
             long GetWidth()   const { return GetSize().Width(); }
             long GetHeight()  const { return GetSize().Height(); }

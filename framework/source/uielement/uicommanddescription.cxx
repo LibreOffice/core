@@ -656,10 +656,6 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
         }
     } // for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
 }
-Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const OUString& _sName)
-{
-    return new ConfigurationAccess_UICommand( _sName, m_xGenericUICommands, m_xContext );
-}
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)

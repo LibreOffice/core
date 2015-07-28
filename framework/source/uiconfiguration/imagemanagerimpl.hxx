@@ -61,14 +61,13 @@ namespace framework
 
             virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL );
             virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL );
-            virtual ::std::vector< OUString >& getImageNames();
-            virtual ::std::vector< OUString >& getImageCommandNames();
+            virtual ::std::vector< OUString >&      getImageCommandNames();
 
         protected:
             void                            impl_fillCommandToImageNameMap();
             ImageList*                      impl_getImageList( sal_Int16 nImageType );
-            std::vector< OUString >& impl_getImageNameVector() { return m_aImageNameVector;}
-            std::vector< OUString >& impl_getImageCommandNameVector() { return m_aImageCommandNameVector;}
+            std::vector< OUString >&        impl_getImageNameVector() { return m_aImageNameVector;}
+            std::vector< OUString >&        impl_getImageCommandNameVector() { return m_aImageCommandNameVector;}
 
         private:
             bool                                                                         m_bVectorInit;
@@ -89,7 +88,6 @@ namespace framework
 
             virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
             virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
-            virtual ::std::vector< OUString >& getImageNames() SAL_OVERRIDE;
             virtual ::std::vector< OUString >& getImageCommandNames() SAL_OVERRIDE;
     };
 

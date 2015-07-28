@@ -34,8 +34,6 @@ AstInterface::AstInterface(const OString& name,
     , AstScope(NT_interface)
     , m_mandatoryInterfaces(0)
     , m_bIsDefined(false)
-    , m_bForwarded(false)
-    , m_bForwardedInSameFile(false)
     , m_bSingleInheritance(pInherits != 0)
 {
     if (pInherits != 0) {

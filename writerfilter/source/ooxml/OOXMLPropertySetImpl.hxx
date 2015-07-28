@@ -47,7 +47,6 @@ public:
     virtual OUString getString() const SAL_OVERRIDE;
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() const SAL_OVERRIDE;

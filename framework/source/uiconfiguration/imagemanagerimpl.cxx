@@ -298,11 +298,6 @@ bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const OUString& rCommandU
         return false;
 }
 
-::std::vector< OUString >& CmdImageList::getImageNames()
-{
-    return impl_getImageNameVector();
-}
-
 ::std::vector< OUString >& CmdImageList::getImageCommandNames()
 {
     return impl_getImageCommandNameVector();
@@ -330,12 +325,6 @@ bool GlobalImageList::hasImage( sal_Int16 nImageType, const OUString& rCommandUR
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return CmdImageList::hasImage( nImageType, rCommandURL );
-}
-
-::std::vector< OUString >& GlobalImageList::getImageNames()
-{
-    osl::MutexGuard guard( getGlobalImageListMutex() );
-    return impl_getImageNameVector();
 }
 
 ::std::vector< OUString >& GlobalImageList::getImageCommandNames()
