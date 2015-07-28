@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_07dbda7d",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-07-28T12:52:30Z",
+      "side": 1,
+      "message": "Existing code in this file always puts \"{\" in a new line, please don\u0027t break that consistency.",
+      "revId": "f38688693a49288d970ae63b43a580ec6ef9eae8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a7e7663f",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-07-28T12:52:30Z",
+      "side": 1,
+      "message": "Does it make sense to spell this out instead of using comphelper::makePropertyValue() here, if you are doing a cleanup anyway? :-)",
+      "revId": "f38688693a49288d970ae63b43a580ec6ef9eae8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
