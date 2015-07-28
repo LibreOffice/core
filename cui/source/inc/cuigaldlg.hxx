@@ -262,14 +262,14 @@ class TPGalleryThemeProperties : public SfxTabPage
     INetURLObject           aURL;
     sal_uInt16              nCurFilterPos;
     sal_uInt16              nFirstExtFilterPos;
-    bool                bEntriesFound;
-    bool                bInputAllowed;
-    bool                bTakeAll;
-    bool                bSearchRecursive;
+    bool                    bEntriesFound;
+    bool                    bInputAllowed;
+    bool                    bTakeAll;
+    bool                    bSearchRecursive;
 
-    ::com::sun::star::uno::Reference< ::svt::DialogClosedListener >                  xDialogListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
+    css::uno::Reference< ::svt::DialogClosedListener >      xDialogListener;
+    css::uno::Reference< css::media::XPlayer >              xMediaPlayer;
+    css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     virtual void        Reset( const SfxItemSet* /*rSet*/ ) SAL_OVERRIDE {}
     virtual bool        FillItemSet( SfxItemSet* /*rSet*/ ) SAL_OVERRIDE { return true; }
@@ -290,7 +290,7 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( DClickFoundHdl, void* );
                         DECL_LINK_TYPED( PreviewTimerHdl, Timer*, void );
                         DECL_LINK(EndSearchProgressHdl, void *);
-                        DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
+                        DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent* );
 
 public:
                         TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );

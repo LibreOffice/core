@@ -40,17 +40,17 @@ class INetURLObject;
 class InsertObjectDialog_Impl : public ModalDialog
 {
 protected:
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > m_xObj;
-    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage > m_xStorage;
+    css::uno::Reference < css::embed::XEmbeddedObject > m_xObj;
+    const css::uno::Reference < css::embed::XStorage > m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
 
     InsertObjectDialog_Impl(vcl::Window * pParent, const OUString& rID,
         const OUString& rUIXMLDescription,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
+        const css::uno::Reference < css::embed::XStorage >& xStorage);
 public:
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
+    css::uno::Reference < css::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
+    virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
     virtual bool IsCreateNew() const;
 };
 
@@ -66,7 +66,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     VclPtr<CheckBox> m_pCbFilelink;
     const SvObjectServerList* m_pServers;
 
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aIconMetaFile;
+    css::uno::Sequence< sal_Int8 > m_aIconMetaFile;
     OUString m_aIconMediaType;
 
     DECL_LINK(DoubleClickHdl, void*);
@@ -84,14 +84,14 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
 
 public:
     SvInsertOleDlg( vcl::Window* pParent,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
+        const css::uno::Reference < css::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers = NULL );
     virtual ~SvInsertOleDlg();
     virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) SAL_OVERRIDE;
+    css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) SAL_OVERRIDE;
 };
 
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
@@ -109,7 +109,7 @@ private:
 
 public:
     SvInsertPlugInDialog(vcl::Window* pParent,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
+        const css::uno::Reference < css::embed::XStorage >& xStorage);
     virtual ~SvInsertPlugInDialog();
     virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
@@ -143,9 +143,9 @@ private:
 
 public:
     SfxInsertFloatingFrameDialog(vcl::Window *pParent,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+        const css::uno::Reference < css::embed::XStorage >& xStorage );
     SfxInsertFloatingFrameDialog( vcl::Window* pParent,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
+        const css::uno::Reference < css::embed::XEmbeddedObject >& xObj );
     virtual ~SfxInsertFloatingFrameDialog();
     virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;

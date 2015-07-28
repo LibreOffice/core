@@ -39,10 +39,10 @@ struct SpellErrorDescription
     OUString                                     sDialogTitle;
     OUString                                     sExplanation;
     OUString                                     sExplanationURL;
-    ::com::sun::star::lang::Locale                      aLocale;
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
+    css::lang::Locale                      aLocale;
+    css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
     OUString                                     sServiceName; ///< service name of GrammarChecker/SpellChecker
-    ::com::sun::star::uno::Sequence< OUString >  aSuggestions;
+    css::uno::Sequence< OUString >  aSuggestions;
     OUString                                     sRuleId;
 
     SpellErrorDescription() :
@@ -50,9 +50,9 @@ struct SpellErrorDescription
 
     SpellErrorDescription( bool bGrammar,
                       const OUString& rText,
-                      const ::com::sun::star::lang::Locale& rLocale,
-                      const ::com::sun::star::uno::Sequence< OUString >& rSuggestions,
-                      ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > rxGrammarChecker,
+                      const css::lang::Locale& rLocale,
+                      const css::uno::Sequence< OUString >& rSuggestions,
+                      css::uno::Reference< css::linguistic2::XProofreader > rxGrammarChecker,
                       const OUString& rServiceName,
                       const OUString* pDialogTitle = 0,
                       const OUString* pExplanation = 0,

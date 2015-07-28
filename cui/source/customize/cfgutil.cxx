@@ -70,7 +70,7 @@ using namespace ::com::sun::star::document;
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
 
-void SfxStylesInfo_Impl::setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel)
+void SfxStylesInfo_Impl::setModel(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     m_xDoc = xModel;
 }

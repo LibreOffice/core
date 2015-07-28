@@ -38,14 +38,14 @@ class FmShowColsDialog : public ModalDialog
     VclPtr<ListBox>        m_pList;
     VclPtr<OKButton>       m_pOK;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xColumns;
+    css::uno::Reference< css::container::XIndexAccess >   m_xColumns;
 
 public:
     FmShowColsDialog(vcl::Window* pParent);
     virtual ~FmShowColsDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    void SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols);
+    void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols);
 
 protected:
     DECL_LINK(OnClickedOk, void *);

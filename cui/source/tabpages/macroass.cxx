@@ -397,8 +397,8 @@ void _SfxMacroTabPage::InitAndSetHandler()
 void _SfxMacroTabPage::FillMacroList()
 {
     mpImpl->pGroupLB->Init(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext >(),
+        css::uno::Reference<
+            css::uno::XComponentContext >(),
         GetFrame(),
         OUString(), false);
 }

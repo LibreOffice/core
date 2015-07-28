@@ -137,7 +137,7 @@ protected:
     void Init(const OUString& strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors
 
-    void OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos);
+    void OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos);
     /** When searching in an own thread I naturally want to disable the UI for starting the search and for setting search
         parameters. If bEnable == sal_False, for all affected controls painting is turned off and shortly after turned on
         again using m_aDelayedPaint. If there is a demand with bEnable == sal_True inbetween, the timer is stopped and
@@ -175,7 +175,7 @@ private:
 
     DECL_LINK_TYPED( OnDelayedPaint, Timer*, void ); ///< see EnableSearchUI
 
-    void initCommon( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _rxCursor );
+    void initCommon( const css::uno::Reference< css::sdbc::XResultSet >& _rxCursor );
 };
 
 inline void FmSearchDialog::SetActiveField(const OUString& strField)

@@ -82,7 +82,7 @@ protected:
 
     SvTreeListEntry* FindEntry(const OUString& aStrName);
     void ClearTree();
-    int FillTree( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
+    int FillTree( css::uno::Reference< css::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
 
     virtual void Move () SAL_OVERRIDE;
 

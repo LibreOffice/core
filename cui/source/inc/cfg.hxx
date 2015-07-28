@@ -57,7 +57,7 @@ typedef std::vector< SvxConfigEntry* > SvxEntries;
 class SvxConfigDialog : public SfxTabDialog
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
     sal_uInt16 m_nMenusPageId;
     sal_uInt16 m_nKeyboardPageId;
     sal_uInt16 m_nToolbarsPageId;
@@ -67,7 +67,7 @@ public:
     SvxConfigDialog( vcl::Window*, const SfxItemSet* );
 
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
-    void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
+    void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
 };
 
 class SaveInData
@@ -79,36 +79,33 @@ private:
     bool        bDocConfig;
     bool        bReadOnly;
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::ui::XUIConfigurationManager > m_xCfgMgr;
+    css::uno::Reference
+        < css::ui::XUIConfigurationManager > m_xCfgMgr;
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::ui::XUIConfigurationManager > m_xParentCfgMgr;
+    css::uno::Reference
+        < css::ui::XUIConfigurationManager > m_xParentCfgMgr;
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::ui::XImageManager > m_xImgMgr;
+    css::uno::Reference
+        < css::ui::XImageManager > m_xImgMgr;
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::ui::XImageManager > m_xParentImgMgr;
+    css::uno::Reference
+        < css::ui::XImageManager > m_xParentImgMgr;
 
-    static ::com::sun::star::uno::Reference
-        < com::sun::star::ui::XImageManager >* xDefaultImgMgr;
+    static css::uno::Reference
+        < css::ui::XImageManager >* xDefaultImgMgr;
 
 public:
 
     SaveInData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >& xCfgMgr,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >& xParentCfgMgr,
+        const css::uno::Reference < css::ui::XUIConfigurationManager >& xCfgMgr,
+        const css::uno::Reference < css::ui::XUIConfigurationManager >& xParentCfgMgr,
         const OUString& aModuleId,
         bool docConfig );
 
     virtual ~SaveInData() {}
 
     bool PersistChanges(
-        const com::sun::star::uno::Reference
-            < com::sun::star::uno::XInterface >& xManager );
+        const css::uno::Reference< css::uno::XInterface >& xManager );
 
     void SetModified( bool bValue = true ) { bModified = bValue; }
     bool IsModified( ) { return bModified; }
@@ -116,27 +113,27 @@ public:
     bool IsReadOnly( ) { return bReadOnly; }
     bool IsDocConfig( ) { return bDocConfig; }
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::ui::XUIConfigurationManager >
+    css::uno::Reference
+        < css::ui::XUIConfigurationManager >
             GetConfigManager() { return m_xCfgMgr; };
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::ui::XUIConfigurationManager >
+    css::uno::Reference
+        < css::ui::XUIConfigurationManager >
             GetParentConfigManager() { return m_xParentCfgMgr; };
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::ui::XImageManager >
+    css::uno::Reference
+        < css::ui::XImageManager >
             GetImageManager() { return m_xImgMgr; };
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::ui::XImageManager >
+    css::uno::Reference
+        < css::ui::XImageManager >
             GetParentImageManager() { return m_xParentImgMgr; };
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::container::XNameAccess > m_xCommandToLabelMap;
+    css::uno::Reference
+        < css::container::XNameAccess > m_xCommandToLabelMap;
 
-    com::sun::star::uno::Sequence
-        < com::sun::star::beans::PropertyValue > m_aSeparatorSeq;
+    css::uno::Sequence
+        < css::beans::PropertyValue > m_aSeparatorSeq;
 
     Image GetImage( const OUString& rCommandURL );
 
@@ -155,8 +152,8 @@ private:
     OUString               m_aMenuResourceURL;
     OUString               m_aDescriptorContainer;
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::container::XIndexAccess > m_xMenuSettings;
+    css::uno::Reference
+        < css::container::XIndexAccess > m_xMenuSettings;
 
     SvxConfigEntry* pRootEntry;
 
@@ -168,31 +165,24 @@ private:
 
     void        Apply(
         SvxConfigEntry* pRootEntry,
-        com::sun::star::uno::Reference<
-            com::sun::star::container::XIndexContainer >& rNewMenuBar,
-        com::sun::star::uno::Reference<
-            com::sun::star::lang::XSingleComponentFactory >& rFactory,
+        css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
+        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
         SvTreeListEntry *pParent = NULL );
 
     void        ApplyMenu(
-        com::sun::star::uno::Reference<
-            com::sun::star::container::XIndexContainer >& rNewMenuBar,
-        com::sun::star::uno::Reference<
-            com::sun::star::lang::XSingleComponentFactory >& rFactory,
+        css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
+        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
         SvxConfigEntry *pMenuData = NULL );
 
     bool        LoadSubMenus(
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::container::XIndexAccess >& xMenuBarSettings,
+        const css::uno::Reference< css::container::XIndexAccess >& xMenuBarSettings,
         const OUString& rBaseTitle, SvxConfigEntry* pParentData );
 
 public:
 
     MenuSaveInData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
         bool docConfig );
 
@@ -227,8 +217,8 @@ private:
     bool                        bIsVisible;
     sal_Int32                   nStyle;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::graphic::XGraphic > xBackupGraphic;
+    css::uno::Reference<
+        css::graphic::XGraphic > xBackupGraphic;
 
     SvxEntries                  *mpEntries;
 
@@ -286,14 +276,10 @@ public:
     void    SetVisible( bool b ) { bIsVisible = b; }
     bool    IsVisible() const { return bIsVisible; }
 
-    void    SetBackupGraphic(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::graphic::XGraphic > graphic )
+    void    SetBackupGraphic( css::uno::Reference< css::graphic::XGraphic > graphic )
                 { xBackupGraphic = graphic; }
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::graphic::XGraphic >
-            GetBackupGraphic()
+    css::uno::Reference< css::graphic::XGraphic > GetBackupGraphic()
                 { return xBackupGraphic; }
 
     bool    IsIconModified() { return xBackupGraphic.is(); }
@@ -373,20 +359,17 @@ protected:
     VclPtr<SvxScriptSelectorDialog>            m_pSelectorDlg;
 
     /// the ResourceURL to select when opening the dialog
-    OUString                            m_aURLToSelect;
+    OUString                                   m_aURLToSelect;
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::frame::XFrame >  m_xFrame;
 
     SvxConfigPage( vcl::Window*, const SfxItemSet& );
 
     DECL_LINK( MoveHdl, Button * );
 
     virtual SaveInData* CreateSaveInData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
         bool docConfig ) = 0;
 
@@ -450,7 +433,7 @@ public:
         the ModuleManager is asked for the module ID of the component in the frame.
     */
     static OUString
-        GetFrameWithDefaultAndIdentify( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _inout_rxFrame );
+        GetFrameWithDefaultAndIdentify( css::uno::Reference< css::frame::XFrame >& _inout_rxFrame );
 };
 
 class SvxMenuConfigPage : public SvxConfigPage
@@ -477,10 +460,10 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     SaveInData* CreateSaveInData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
+        const css::uno::Reference <
+            css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference <
+            css::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
         bool docConfig ) SAL_OVERRIDE;
 };
@@ -576,10 +559,10 @@ public:
     void            MoveEntry( bool bMoveUp ) SAL_OVERRIDE;
 
     SaveInData*     CreateSaveInData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
+        const css::uno::Reference <
+            css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference <
+            css::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
         bool docConfig ) SAL_OVERRIDE;
 };
@@ -591,28 +574,23 @@ private:
     SvxConfigEntry*                                pRootEntry;
     OUString                                  m_aDescriptorContainer;
 
-    ::com::sun::star::uno::Reference
-        < com::sun::star::container::XNameAccess > m_xPersistentWindowState;
+    css::uno::Reference
+        < css::container::XNameAccess > m_xPersistentWindowState;
 
     bool        LoadToolbar(
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::container::XIndexAccess >& xToolBarSettings,
+        const css::uno::Reference< css::container::XIndexAccess >& xToolBarSettings,
         SvxConfigEntry* pParentData );
 
     void        ApplyToolbar(
-        com::sun::star::uno::Reference<
-            com::sun::star::container::XIndexContainer >& rNewToolbarBar,
-        com::sun::star::uno::Reference<
-            com::sun::star::lang::XSingleComponentFactory >& rFactory,
+        css::uno::Reference< css::container::XIndexContainer >& rNewToolbarBar,
+        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
         SvxConfigEntry *pToolbar = NULL );
 
 public:
 
     ToolbarSaveInData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
-            const ::com::sun::star::uno::Reference <
-            ::com::sun::star::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
         bool docConfig );
 
@@ -623,16 +601,14 @@ public:
     void            RemoveToolbar( SvxConfigEntry* pToolbar );
     void            ApplyToolbar( SvxConfigEntry* pToolbar );
 
-    OUString   GetSystemUIName( const OUString& rResourceURL );
+    OUString        GetSystemUIName( const OUString& rResourceURL );
 
     sal_Int32       GetSystemStyle( const OUString& rResourceURL );
 
-    void            SetSystemStyle(
-        const OUString& rResourceURL, sal_Int32 nStyle );
+    void            SetSystemStyle( const OUString& rResourceURL, sal_Int32 nStyle );
 
     void            SetSystemStyle(
-        ::com::sun::star::uno::Reference
-            < ::com::sun::star::frame::XFrame > xFrame,
+        css::uno::Reference< css::frame::XFrame > xFrame,
         const OUString& rResourceURL, sal_Int32 nStyle );
 
     SvxEntries*     GetEntries() SAL_OVERRIDE;
@@ -683,39 +659,36 @@ private:
 
     sal_Int32       m_nExpectedSize;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ui::XImageManager > m_xImageManager;
+    css::uno::Reference<
+        css::ui::XImageManager > m_xImageManager;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ui::XImageManager > m_xParentImageManager;
+    css::uno::Reference<
+        css::ui::XImageManager > m_xParentImageManager;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ui::XImageManager > m_xImportedImageManager;
+    css::uno::Reference<
+        css::ui::XImageManager > m_xImportedImageManager;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
+    css::uno::Reference<
+        css::graphic::XGraphicProvider > m_xGraphProvider;
 
     bool ReplaceGraphicItem( const OUString& aURL );
 
     bool ImportGraphic( const OUString& aURL );
 
-    void ImportGraphics(
-        const com::sun::star::uno::Sequence< OUString >& aURLs );
+    void ImportGraphics( const css::uno::Sequence< OUString >& aURLs );
 
 public:
 
     SvxIconSelectorDialog(
         vcl::Window *pWindow,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::ui::XImageManager >& rXImageManager,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::ui::XImageManager >& rXParentImageManager
+        const css::uno::Reference< css::ui::XImageManager >& rXImageManager,
+        const css::uno::Reference< css::ui::XImageManager >& rXParentImageManager
             );
 
     virtual ~SvxIconSelectorDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+    css::uno::Reference< css::graphic::XGraphic >
         GetSelectedIcon();
 
     DECL_LINK_TYPED( SelectHdl, ToolBox *, void );

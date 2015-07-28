@@ -29,10 +29,10 @@ namespace offapp
 {
 
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::sdbc;
+    using namespace css::uno;
+    using namespace css::lang;
+    using namespace css::container;
+    using namespace css::sdbc;
 
     class ODriverEnumerationImpl
     {

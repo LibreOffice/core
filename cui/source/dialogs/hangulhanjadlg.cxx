@@ -49,10 +49,10 @@ namespace svx
 {
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::linguistic2;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::container;
+    using namespace css::uno;
+    using namespace css::linguistic2;
+    using namespace css::lang;
+    using namespace css::container;
 
 
     namespace
@@ -633,7 +633,7 @@ namespace svx
         ModalDialog::dispose();
     }
 
-    void HangulHanjaConversionDialog::FillSuggestions( const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions )
+    void HangulHanjaConversionDialog::FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions )
     {
         m_pSuggestions->Clear();
         const OUString* pSuggestions = _rSuggestions.getConstArray();
@@ -1493,7 +1493,7 @@ namespace svx
                                                         0,
                                                         _rOrg.getLength(),
                                                         ConversionDirection_FROM_LEFT,
-                                                        ::com::sun::star::i18n::TextConversionOption::NONE );
+                                                        css::i18n::TextConversionOption::NONE );
                     bRet = _rEntries.getLength() > 0;
                 }
                 catch( const IllegalArgumentException& )

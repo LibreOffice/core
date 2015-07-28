@@ -312,7 +312,7 @@ editeng::HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversio
 
 void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
                     const OUString& _rNewString,
-                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
+                    const css::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument
                 )
 {
@@ -347,7 +347,7 @@ vcl::Window* AbstractHyphenWordDialog_Impl::GetWindow()
     return pDlg;
 }
 
-Reference < com::sun::star::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
+Reference < css::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
 {
    return pDlg->GetObject();
 }
@@ -357,7 +357,7 @@ bool AbstractInsertObjectDialog_Impl::IsCreateNew()
     return pDlg->IsCreateNew();
 }
 
-::Reference< ::com::sun::star::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( OUString* pGraphicMediaType )
+::Reference< css::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( OUString* pGraphicMediaType )
 {
    return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
@@ -379,7 +379,7 @@ SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableData
     return pDlg->GetFormat( aHelper, pFormats, pDesc );
 }
 
-void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< ::com::sun::star::container::XIndexContainer>& xCols)
+void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::container::XIndexContainer>& xCols)
 {
      pDlg->SetColumns(xCols);
 }
@@ -577,8 +577,7 @@ long AbstractFmInputRecordNoDialog_Impl::GetValue() const
     return pDlg->GetValue();
 }
 
-::Reference<
-        ::com::sun::star::linguistic2::XDictionary > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
+::Reference< css::linguistic2::XDictionary > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
 {
     return pDlg->GetNewDictionary();
 }
@@ -990,7 +989,7 @@ AbstractThesaurusDialog* AbstractDialogFactory_Impl::CreateThesaurusDialog( vcl:
 
 AbstractHyphenWordDialog* AbstractDialogFactory_Impl::CreateHyphenWordDialog( vcl::Window* pParent,
                                                 const OUString &rWord, LanguageType nLang,
-                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper )
 {
     VclPtrInstance<SvxHyphenWordDialog> pDlg( rWord, nLang, pParent, xHyphen, pWrapper );
@@ -1026,7 +1025,7 @@ VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgre
 
 VclAbstractDialog*
 AbstractDialogFactory_Impl::CreateScriptErrorDialog(
-    vcl::Window* pParent, const ::com::sun::star::uno::Any& rException)
+    vcl::Window* pParent, const css::uno::Any& rException)
 {
     return new SvxScriptErrorDialog(pParent, rException);
 }
@@ -1189,7 +1188,7 @@ AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordN
 }
 
 AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( vcl::Window* pParent,
-                                            ::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl )
+                                            ::Reference< css::linguistic2::XSpellChecker1 >  &xSpl )
 {
     VclPtrInstance<SvxNewDictionaryDialog> pDlg( pParent, xSpl );
     return new AbstractSvxNewDictionaryDialog_Impl( pDlg );
@@ -1197,7 +1196,7 @@ AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDiction
 
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
-                                            ::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
+                                            ::Reference< css::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId )
 {
     Dialog* pDlg=NULL;
@@ -1573,7 +1572,7 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
 }
 
 SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
-            const Reference < com::sun::star::embed::XStorage >& xStor,
+            const Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList )
 {
     InsertObjectDialog_Impl* pDlg=0;
@@ -1593,7 +1592,7 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Window* pParent,  const OUString& rCommand,
-            const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
+            const Reference < css::embed::XEmbeddedObject >& xObj )
 {
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {

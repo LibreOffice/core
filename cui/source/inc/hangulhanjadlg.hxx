@@ -154,7 +154,7 @@ namespace svx
         OUString  GetCurrentString( ) const;
         void    SetCurrentString(
                     const OUString& _rNewString,
-                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
+                    const css::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true
                 );
 
@@ -188,11 +188,11 @@ namespace svx
         DECL_LINK( ClickByCharacterHdl, CheckBox* );
 
         /// fill the suggestion list box with suggestions for the actual input
-        void FillSuggestions( const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions );
+        void FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions );
     };
 
 
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary > > HHDictList;
+    typedef ::std::vector< css::uno::Reference< css::linguistic2::XConversionDictionary > > HHDictList;
 
     class HangulHanjaOptionsDialog : public ModalDialog
     {
@@ -209,7 +209,7 @@ namespace svx
         SvLBoxButtonData*   m_pCheckButtonData;
 
         HHDictList          m_aDictList;
-        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
+        css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
         DECL_LINK( OkHdl, void* );
         DECL_LINK( OnNew, void* );
@@ -312,7 +312,7 @@ namespace svx
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
         void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
 
-        bool            DeleteEntryFromDictionary( const OUString& rEntry, const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >& xDict );
+        bool            DeleteEntryFromDictionary( const OUString& rEntry, const css::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
 
     public:
                         HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );

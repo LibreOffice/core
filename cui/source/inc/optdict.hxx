@@ -54,23 +54,23 @@ private:
     VclPtr<SvxLanguageBox>      pLanguageLB;
     VclPtr<CheckBox>            pExceptBtn;
     VclPtr<OKButton>            pOKBtn;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    xNewDic;
+    css::uno::Reference<
+        css::linguistic2::XSpellChecker1 >     xSpell;
+    css::uno::Reference<
+        css::linguistic2::XDictionary >    xNewDic;
 
     DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK(ModifyHdl_Impl, void *);
 
 public:
     SvxNewDictionaryDialog( vcl::Window* pParent,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl );
+            css::uno::Reference<
+                css::linguistic2::XSpellChecker1 >  &xSpl );
     virtual ~SvxNewDictionaryDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >
+    css::uno::Reference<
+        css::linguistic2::XDictionary >
                 GetNewDictionary() { return xNewDic; }
 };
 
@@ -117,11 +117,11 @@ private:
     OUString                sNew;
     DecorationView          aDecoView;
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
+    css::uno::Sequence<
+        css::uno::Reference<
+            css::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
+    css::uno::Reference<
+        css::linguistic2::XSpellChecker1 >     xSpell;
 
     short               nOld;
     long                nWidth;
@@ -137,10 +137,10 @@ private:
 
 
     void            ShowWords_Impl( sal_uInt16 nId );
-    void            SetLanguage_Impl( ::com::sun::star::util::Language nLanguage );
+    void            SetLanguage_Impl( css::util::Language nLanguage );
     bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
-    void            SetDicReadonly_Impl( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XDictionary >  &xDic );
+    void            SetDicReadonly_Impl( css::uno::Reference<
+                            css::linguistic2::XDictionary >  &xDic );
 
     void            RemoveDictEntry(SvTreeListEntry* pEntry);
     sal_uLong       GetLBInsertPos(const OUString &rDicWord);
@@ -148,8 +148,8 @@ private:
 public:
     SvxEditDictionaryDialog( vcl::Window* pParent,
             const OUString& rName,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );
+            css::uno::Reference<
+                css::linguistic2::XSpellChecker1> &xSpl );
     virtual ~SvxEditDictionaryDialog();
     virtual void dispose() SAL_OVERRIDE;
 };

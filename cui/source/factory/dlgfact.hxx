@@ -152,7 +152,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
                       GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const SAL_OVERRIDE;
     virtual void      SetCurrentString(
                         const OUString& _rNewString,
-                        const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
+                        const css::uno::Sequence< OUString >& _rSuggestions,
                         bool _bOriginatesFromDocument = true
                       ) SAL_OVERRIDE;
     virtual OUString  GetCurrentString( ) const SAL_OVERRIDE ;
@@ -178,7 +178,7 @@ class FmShowColsDialog;
 class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
 {
     DECL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl,FmShowColsDialog)
-     virtual void   SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols) SAL_OVERRIDE;
+     virtual void   SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols) SAL_OVERRIDE;
 };
 
 class SvxZoomDialog;
@@ -317,7 +317,7 @@ class SvxNewDictionaryDialog;
 class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl,SvxNewDictionaryDialog)
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  GetNewDictionary() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() SAL_OVERRIDE;
 };
 
 class SvxNameDialog;
@@ -420,8 +420,8 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {
     DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl)
-    virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) SAL_OVERRIDE;
+    virtual css::uno::Reference < css::embed::XEmbeddedObject > GetObject() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) SAL_OVERRIDE;
     virtual bool IsCreateNew() SAL_OVERRIDE;
 };
 
@@ -501,7 +501,7 @@ public:
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
+                                            const css::uno::Reference< css::frame::XFrame >& xViewFrame,
                                             bool bEditFmt=false,
                                             const OUString *pUserButtonText=0 ) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
@@ -518,21 +518,21 @@ public:
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
                                             SvxDistributeVertical eVer = SvxDistributeVerticalNone) SAL_OVERRIDE;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
-            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
+            const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 ) SAL_OVERRIDE;
     virtual VclAbstractDialog*          CreateEditObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
-            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj ) SAL_OVERRIDE;
+            const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) SAL_OVERRIDE;
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( vcl::Window* pParent ) SAL_OVERRIDE;
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p=0  ) SAL_OVERRIDE;
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( vcl::Window* _pParent,
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) SAL_OVERRIDE;
-   virtual AbstractThesaurusDialog*        CreateThesaurusDialog( vcl::Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+   virtual AbstractThesaurusDialog*        CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                                                 const OUString &rWord, sal_Int16 nLanguage ) SAL_OVERRIDE;
 
    virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( vcl::Window*,
                                                 const OUString &rWord, LanguageType nLang,
-                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper ) SAL_OVERRIDE;
 
    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( vcl::Window* pParent ) SAL_OVERRIDE;
@@ -586,10 +586,10 @@ public:
                                                             sal_Int32 nInitialFlags) SAL_OVERRIDE;
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( vcl::Window* pParent ) SAL_OVERRIDE;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl ) SAL_OVERRIDE;
+                                            css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpl ) SAL_OVERRIDE;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
+                                            css::uno::Reference< css::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId) SAL_OVERRIDE;
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) SAL_OVERRIDE;
@@ -644,7 +644,7 @@ public:
         CreateScriptSelectorDialog(
             vcl::Window* pParent,
             bool bShowSlots,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+            const css::uno::Reference< css::frame::XFrame >& _rxFrame
         ) SAL_OVERRIDE;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
@@ -652,9 +652,9 @@ public:
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
                 vcl::Window* _pParent,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+                const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
                 const bool _bUnoDialogMode,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& _rxEvents,
+                const css::uno::Reference< css::container::XNameReplace >& _rxEvents,
                 const sal_uInt16 _nInitiallySelectedEvent
             ) SAL_OVERRIDE;
 

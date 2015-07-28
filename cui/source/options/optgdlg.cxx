@@ -494,7 +494,7 @@ CanvasSettings::CanvasSettings() :
     try
     {
         Reference<XMultiServiceFactory> xConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get(
+            css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
 
         Any propValue(
@@ -1137,7 +1137,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     try
     {
         Reference< XMultiServiceFactory > theConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get(
+            css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs(1);
         Reference< XNameAccess > theNameAccess;
@@ -1188,11 +1188,11 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     }
 
     m_pWesternLanguageLB->SetLanguageList( SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
-    m_pWesternLanguageLB->InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::LATIN );
+    m_pWesternLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::LATIN );
     m_pAsianLanguageLB->SetLanguageList( SvxLanguageListFlags::CJK     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
-    m_pAsianLanguageLB->InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::ASIAN );
+    m_pAsianLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::ASIAN );
     m_pComplexLanguageLB->SetLanguageList( SvxLanguageListFlags::CTL     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
-    m_pComplexLanguageLB->InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::COMPLEX );
+    m_pComplexLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::COMPLEX );
 
     m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false, false, false);
     m_pLocaleSettingLB->InsertSystemLanguage( );
@@ -1340,7 +1340,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             aLangString = ConvertLanguageToIsoString(m_pUserInterfaceLB->GetSelectLanguage());
         */
         Reference< XMultiServiceFactory > theConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get(
+            css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs(1);
         theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(OUString(sUserLocalePath))));
@@ -1444,7 +1444,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::LATIN),
+            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, css::i18n::ScriptType::LATIN),
                 SID_ATTR_LANGUAGE));
         }
     }
@@ -1464,7 +1464,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::ASIAN),
+            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, css::i18n::ScriptType::ASIAN),
                 SID_ATTR_CHAR_CJK_LANGUAGE));
         }
     }
@@ -1484,7 +1484,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::COMPLEX),
+            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, css::i18n::ScriptType::COMPLEX),
                 SID_ATTR_CHAR_CTL_LANGUAGE));
         }
     }
@@ -1633,21 +1633,21 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_LANGUAGE, false, &pLang))
         {
             LanguageType eTempCurLang = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
-            if (MsLangId::resolveSystemLanguageByScriptType(eCurLang, ::com::sun::star::i18n::ScriptType::LATIN) != eTempCurLang)
+            if (MsLangId::resolveSystemLanguageByScriptType(eCurLang, css::i18n::ScriptType::LATIN) != eTempCurLang)
                 eCurLang = eTempCurLang;
         }
 
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, false, &pLang))
         {
             LanguageType eTempCurLang = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
-            if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCJK, ::com::sun::star::i18n::ScriptType::ASIAN) != eTempCurLang)
+            if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCJK, css::i18n::ScriptType::ASIAN) != eTempCurLang)
                 eCurLangCJK = eTempCurLang;
         }
 
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, false, &pLang))
         {
             LanguageType eTempCurLang = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
-            if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCTL, ::com::sun::star::i18n::ScriptType::COMPLEX) != eTempCurLang)
+            if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCTL, css::i18n::ScriptType::COMPLEX) != eTempCurLang)
                 eCurLangCTL = eTempCurLang;
         }
     }

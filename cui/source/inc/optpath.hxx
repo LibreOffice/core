@@ -48,8 +48,8 @@ private:
     VclPtr<svx::OptHeaderTabListBox> pPathBox;
     OptPath_Impl*               pImpl;
 
-    ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
+    css::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
+    css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     void        ChangeCurrentEntry( const OUString& _rFolder );
 
@@ -60,7 +60,7 @@ private:
     DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
     DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
 
-    DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
+    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent* );
 
     void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
                              OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );

@@ -31,9 +31,9 @@ class SvxEventConfigPage : public _SvxMacroTabPage
 {
     VclPtr<ListBox>   m_pSaveInListBox;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xAppEvents;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xDocumentEvents;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >         m_xDocumentModifiable;
+    css::uno::Reference< css::container::XNameReplace >   m_xAppEvents;
+    css::uno::Reference< css::container::XNameReplace >   m_xDocumentEvents;
+    css::uno::Reference< css::util::XModifiable >         m_xDocumentModifiable;
 
     bool            bAppConfig;
 
@@ -50,7 +50,7 @@ public:
                     virtual ~SvxEventConfigPage();
     virtual void    dispose() SAL_OVERRIDE;
 
-    void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+    void            LateInit( const css::uno::Reference< css::frame::XFrame >& _rxFrame );
 
 protected:
     virtual bool    FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

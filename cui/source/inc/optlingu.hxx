@@ -118,14 +118,14 @@ private:
     OUString            sHyphAuto;
     OUString            sHyphSpecial;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XLinguProperties >     xProp;
+    css::uno::Reference<
+        css::linguistic2::XLinguProperties >     xProp;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XDictionaryList >      xDicList;
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::linguistic2::XDictionary > >    aDics;
+    css::uno::Reference<
+        css::linguistic2::XDictionaryList >      xDicList;
+    css::uno::Sequence<
+        css::uno::Reference<
+            css::linguistic2::XDictionary > >    aDics;
 
     SvLBoxButtonData*   pCheckButtonData;
 
@@ -134,8 +134,8 @@ private:
     SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
-    void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
-    static sal_uLong GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
+    void    AddDicBoxEntry( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
+    static sal_uLong GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( ClickHdl_Impl, PushButton * );

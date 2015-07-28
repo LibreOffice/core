@@ -81,8 +81,8 @@ private:
     ::std::vector< JavaInfo* >
                             m_aAddedInfos;
 
-    ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
+    css::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
+    css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     DECL_LINK(EnableHdl_Impl, void *);
     DECL_LINK(              CheckHdl_Impl, SvSimpleTable * );
@@ -93,7 +93,7 @@ private:
     DECL_LINK_TYPED(ResetHdl_Impl, Idle *, void);
 
     DECL_LINK(              StartFolderPickerHdl, void * );
-    DECL_LINK(              DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
+    DECL_LINK(              DialogClosedHdl, css::ui::dialogs::DialogClosedEvent* );
 
     DECL_LINK(ExpertConfigHdl_Impl, void *);
 
@@ -146,8 +146,8 @@ public:
 
     virtual short           Execute() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Sequence< OUString > GetParameters() const;
-    void SetParameters( ::com::sun::star::uno::Sequence< OUString >& rParams );
+    css::uno::Sequence< OUString > GetParameters() const;
+    void SetParameters( css::uno::Sequence< OUString >& rParams );
 };
 
 // class SvxJavaClassPathDlg ---------------------------------------------

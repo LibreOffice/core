@@ -519,7 +519,7 @@ bool GetMenuItemData(
             return true;
         }
     }
-    catch ( ::com::sun::star::lang::IndexOutOfBoundsException& )
+    catch ( css::lang::IndexOutOfBoundsException& )
     {
     }
 
@@ -572,7 +572,7 @@ bool GetToolbarItemData(
             return true;
         }
     }
-    catch ( ::com::sun::star::lang::IndexOutOfBoundsException& )
+    catch ( css::lang::IndexOutOfBoundsException& )
     {
     }
 
@@ -809,7 +809,7 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
     }
 }
 
-void SvxConfigDialog::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     m_xFrame = xFrame;
 
@@ -972,7 +972,7 @@ bool SaveInData::PersistChanges(
             }
         }
     }
-    catch ( com::sun::star::io::IOException& )
+    catch ( css::io::IOException& )
     {
         result = false;
     }
@@ -1199,11 +1199,11 @@ bool MenuSaveInData::Apply()
         {
             OSL_TRACE("caught container::NoSuchElementException saving settings");
         }
-        catch ( com::sun::star::io::IOException& )
+        catch ( css::io::IOException& )
         {
             OSL_TRACE("caught IOException saving settings");
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( css::uno::Exception& )
         {
             OSL_TRACE("caught some other exception saving settings");
         }
@@ -3532,10 +3532,9 @@ void ToolbarSaveInData::SetSystemStyle(
         // check reference before we call getRealInterface. The layout manager
         // can only provide references for elements that have been created
         // before. It's possible that the current element is not available.
-        uno::Reference< com::sun::star::awt::XWindow > xWindow;
+        uno::Reference< css::awt::XWindow > xWindow;
         if ( xUIElement.is() )
-            xWindow = uno::Reference< com::sun::star::awt::XWindow >(
-                        xUIElement->getRealInterface(), uno::UNO_QUERY );
+            xWindow = uno::Reference< css::awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
 
         window = VCLUnoHelper::GetWindow( xWindow );
     }
@@ -4055,11 +4054,11 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     {
         OSL_TRACE("caught container::NoSuchElementException saving settings");
     }
-    catch ( com::sun::star::io::IOException& )
+    catch ( css::io::IOException& )
     {
         OSL_TRACE("caught IOException saving settings");
     }
-    catch ( com::sun::star::uno::Exception& )
+    catch ( css::uno::Exception& )
     {
         OSL_TRACE("caught some other exception saving settings");
     }
@@ -4091,15 +4090,15 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
     {
         OSL_TRACE("caught ElementExistsException saving settings");
     }
-    catch ( com::sun::star::lang::IllegalArgumentException& )
+    catch ( css::lang::IllegalArgumentException& )
     {
         OSL_TRACE("caught IOException saving settings");
     }
-    catch ( com::sun::star::lang::IllegalAccessException& )
+    catch ( css::lang::IllegalAccessException& )
     {
         OSL_TRACE("caught IOException saving settings");
     }
-    catch ( com::sun::star::uno::Exception& )
+    catch ( css::uno::Exception& )
     {
         OSL_TRACE("caught some other exception saving settings");
     }
@@ -4838,13 +4837,13 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     aDirectory += "soffice.cfg/import";
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-          ::com::sun::star::embed::FileSystemStorageFactory::create( xComponentContext ) );
+          css::embed::FileSystemStorageFactory::create( xComponentContext ) );
 
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= aDirectory;
-    aArgs[ 1 ] <<= com::sun::star::embed::ElementModes::READWRITE;
+    aArgs[ 1 ] <<= css::embed::ElementModes::READWRITE;
 
-    uno::Reference< com::sun::star::embed::XStorage > xStorage(
+    uno::Reference< css::embed::XStorage > xStorage(
         xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
 
     uno::Sequence< uno::Any > aProp( 2 );
@@ -4855,7 +4854,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     aProp[ 0 ] <<= aPropValue;
 
     aPropValue.Name = "OpenMode";
-    aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
+    aPropValue.Value <<= css::embed::ElementModes::READWRITE;
     aProp[ 1 ] <<= aPropValue;
 
     m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
@@ -5115,7 +5114,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     aMediaProps[0].Name = "URL";
     aMediaProps[0].Value <<= aURL;
 
-    com::sun::star::awt::Size aSize;
+    css::awt::Size aSize;
     bool bOK = false;
     try
     {
@@ -5169,7 +5168,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 bResult = true;
                 break;
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( css::uno::Exception& )
             {
                 break;
             }
@@ -5293,7 +5292,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     aMediaProps[0].Name = "URL";
 
     uno::Reference< graphic::XGraphic > xGraphic;
-    com::sun::star::awt::Size aSize;
+    css::awt::Size aSize;
     aMediaProps[0].Value <<= aURL;
     try
     {

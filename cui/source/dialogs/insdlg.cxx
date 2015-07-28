@@ -92,7 +92,7 @@ uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( 
 
 InsertObjectDialog_Impl::InsertObjectDialog_Impl(vcl::Window * pParent, const OUString& rID,
     const OUString& rUIXMLDescription,
-    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage)
+    const css::uno::Reference < css::embed::XStorage >& xStorage)
     : ModalDialog(pParent, rID, rUIXMLDescription)
     , m_xStorage( xStorage )
     , aCnt( m_xStorage )
@@ -494,7 +494,7 @@ short SvInsertPlugInDialog::Execute()
 }
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( vcl::Window *pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
+                            const css::uno::Reference < css::embed::XStorage >& xStorage )
     : InsertObjectDialog_Impl( pParent, "InsertFloatingFrameDialog", "cui/ui/insertfloatingframe.ui",
                               xStorage )
 {

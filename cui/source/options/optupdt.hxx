@@ -46,7 +46,7 @@ private:
     DECL_LINK(CheckNowHdl_Impl, void *) ;
     DECL_LINK(  AutoCheckHdl_Impl, CheckBox* ) ;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
+    css::uno::Reference< css::container::XNameReplace > m_xUpdateAccess;
 
     void                    UpdateLastCheckedText();
 
