@@ -190,6 +190,8 @@ LinePropertyPanel::LinePropertyPanel(
     get(mpLBEdgeStyle, "edgestyle");
     get(mpFTCapStyle, "caplabel");
     get(mpLBCapStyle, "linecapstyle");
+    get(mpGridLineProps, "lineproperties");
+    get(mpBoxArrowProps, "arrowproperties");
 
     Initialize();
 }
@@ -783,38 +785,10 @@ VclPtr<PopupControl> LinePropertyPanel::CreateLineWidthPopupControl (PopupContai
 void LinePropertyPanel::ActivateControls()
 {
     const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
-    if( 0 == nPos )
-    {
-        mpFTWidth->Disable();
-        mpTBWidth->Disable();
-        mpFTColor->Disable();
-        mpLBColor->Disable();
-        mpFTTransparency->Disable();
-        mpMFTransparent->Disable();
-        mpFTArrow->Disable();
-        mpLBStart->Disable();
-        mpLBEnd->Disable();
-        mpFTEdgeStyle->Disable();
-        mpLBEdgeStyle->Disable();
-        mpFTCapStyle->Disable();
-        mpLBCapStyle->Disable();
-    }
-    else
-    {
-        mpFTWidth->Enable();
-        mpTBWidth->Enable();
-        mpFTColor->Enable();
-        mpLBColor->Enable();
-        mpFTTransparency->Enable();
-        mpMFTransparent->Enable();
-        mpFTArrow->Enable();
-        mpLBStart->Enable();
-        mpLBEnd->Enable();
-        mpFTEdgeStyle->Enable();
-        mpLBEdgeStyle->Enable();
-        mpFTCapStyle->Enable();
-        mpLBCapStyle->Enable();
-    }
+    bool bLineStyle( nPos != 0 );
+
+    mpGridLineProps->Enable( bLineStyle );
+    mpBoxArrowProps->Enable( bLineStyle );
 }
 
 void LinePropertyPanel::EndLineWidthPopupMode()

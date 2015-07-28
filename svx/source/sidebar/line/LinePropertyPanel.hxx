@@ -25,6 +25,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <memory>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
@@ -108,6 +109,8 @@ private:
     VclPtr<ListBox>     mpLBEdgeStyle;
     VclPtr<FixedText>   mpFTCapStyle;
     VclPtr<ListBox>     mpLBCapStyle;
+    VclPtr<VclGrid>     mpGridLineProps;
+    VclPtr<VclVBox>     mpBoxArrowProps;
 
     //ControllerItem
     sfx2::sidebar::ControllerItem maStyleControl;

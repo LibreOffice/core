@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="step_increment">5</property>
@@ -64,7 +65,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="grid4">
+              <object class="GtkGrid" id="lineproperties">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -191,134 +192,145 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="arrowlabel">
+              <object class="GtkBox" id="arrowproperties">
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Arrow:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">beginarrowstyle</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="beginarrowstyle">
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the style of the beginning arrowhead.</property>
-                <property name="tooltip_text" translatable="yes">Select the style of the beginning arrowhead.</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="endarrowstyle">
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the style of the ending arrowhead.</property>
-                <property name="tooltip_text" translatable="yes">Select the style of the ending arrowhead.</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid5">
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
-                <property name="column_homogeneous">True</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="cornerlabel">
-                    <property name="visible">True</property>
+                  <object class="GtkLabel" id="arrowlabel">
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Corner style:</property>
+                    <property name="label" translatable="yes">_Arrow:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">edgestyle</property>
+                    <property name="mnemonic_widget">beginarrowstyle</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="edgestyle">
-                    <property name="visible">True</property>
+                  <object class="GtkComboBoxText" id="beginarrowstyle">
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the edge connections.</property>
-                    <property name="tooltip_text" translatable="yes">Select the style of the edge connections.</property>
-                    <items>
-                      <item translatable="yes">Rounded</item>
-                      <item translatable="yes">- none -</item>
-                      <item translatable="yes">Mitered</item>
-                      <item translatable="yes">Beveled</item>
-                    </items>
-                    <style>
-                      <class name="Rounded"/>
-                      <class name="- none -"/>
-                      <class name="Mitered"/>
-                      <class name="Beveled"/>
-                    </style>
+                    <property name="tooltip_markup" translatable="yes">Select the style of the beginning arrowhead.</property>
+                    <property name="tooltip_text" translatable="yes">Select the style of the beginning arrowhead.</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="caplabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Ca_p style:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">linecapstyle</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="linecapstyle">
-                    <property name="visible">True</property>
+                  <object class="GtkComboBoxText" id="endarrowstyle">
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the line caps.</property>
-                    <property name="tooltip_text" translatable="yes">Select the style of the line caps.</property>
-                    <items>
-                      <item translatable="yes">Flat</item>
-                      <item translatable="yes">Round</item>
-                      <item translatable="yes">Square</item>
-                    </items>
-                    <style>
-                      <class name="Flat"/>
-                      <class name="Round"/>
-                      <class name="Square"/>
-                    </style>
+                    <property name="tooltip_markup" translatable="yes">Select the style of the ending arrowhead.</property>
+                    <property name="tooltip_text" translatable="yes">Select the style of the ending arrowhead.</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid5">
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">6</property>
+                    <property name="column_homogeneous">True</property>
+                    <child>
+                      <object class="GtkLabel" id="cornerlabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">_Corner style:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">edgestyle</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="edgestyle">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Select the style of the edge connections.</property>
+                        <property name="tooltip_text" translatable="yes">Select the style of the edge connections.</property>
+                        <items>
+                          <item translatable="yes">Rounded</item>
+                          <item translatable="yes">- none -</item>
+                          <item translatable="yes">Mitered</item>
+                          <item translatable="yes">Beveled</item>
+                        </items>
+                        <style>
+                          <class name="Rounded"/>
+                          <class name="- none -"/>
+                          <class name="Mitered"/>
+                          <class name="Beveled"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="caplabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Ca_p style:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">linecapstyle</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="linecapstyle">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Select the style of the line caps.</property>
+                        <property name="tooltip_text" translatable="yes">Select the style of the line caps.</property>
+                        <items>
+                          <item translatable="yes">Flat</item>
+                          <item translatable="yes">Round</item>
+                          <item translatable="yes">Square</item>
+                        </items>
+                        <style>
+                          <class name="Flat"/>
+                          <class name="Round"/>
+                          <class name="Square"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">6</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
