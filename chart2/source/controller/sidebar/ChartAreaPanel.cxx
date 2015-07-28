@@ -90,6 +90,8 @@ DrawModelWrapper* getDrawModelWrapper(css::uno::Reference<css::frame::XModel> xM
 XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
         const OUString& rName)
 {
+
+
     try
     {
         ViewElementListProvider aProvider = getViewElementListProvider(xModel);
@@ -111,6 +113,28 @@ XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
     }
 
     return XGradient();
+}
+
+XFillFloatTransparenceItem getXTransparencyGradientForName(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rName)
+{
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
+    css::uno::Reference<css::container::XNameAccess> xNameAccess(
+            xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), css::uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        return XFillFloatTransparenceItem();
+
+    if (!xNameAccess->hasByName(rName))
+        return XFillFloatTransparenceItem();
+
+    css::uno::Any aAny = xNameAccess->getByName(rName);
+
+    XFillFloatTransparenceItem aItem;
+    aItem.SetName(rName);
+    aItem.PutValue(aAny, MID_FILLGRADIENT);
+    aItem.SetEnabled(true);
+
+    return aItem;
 }
 
 XHatch getXHatchFromName(css::uno::Reference<css::frame::XModel> xModel,
@@ -393,16 +417,8 @@ void ChartAreaPanel::updateData()
 
     OUString aFillFloatTransparenceName;
     xPropSet->getPropertyValue("FillTransparenceGradientName") >>= aFillFloatTransparenceName;
-    XFillFloatTransparenceItem aFillFloatTransparenceItem;
-    if (!aFillFloatTransparenceName.isEmpty())
-        aFillFloatTransparenceItem.SetEnabled(true);
-
-    aFillFloatTransparenceItem.SetName(aFillFloatTransparenceName);
-    XFillFloatTransparenceItem* pCorrectFloatTransparenceItem = aFillFloatTransparenceItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
-    XFillFloatTransparenceItem* pFillFloatTransparenceItem = pCorrectFloatTransparenceItem ? pCorrectFloatTransparenceItem : &aFillFloatTransparenceItem;
-    pFillFloatTransparenceItem->SetGradientValue(getXGradientForName(mxModel, pFillFloatTransparenceItem->GetName()));
-    updateFillFloatTransparence(false, true, pFillFloatTransparenceItem);
-    delete pCorrectFloatTransparenceItem;
+    XFillFloatTransparenceItem aFillFloatTransparenceItem = getXTransparencyGradientForName(mxModel, aFillFloatTransparenceName);
+    updateFillFloatTransparence(false, true, &aFillFloatTransparenceItem);
 }
 
 void ChartAreaPanel::modelInvalid()
