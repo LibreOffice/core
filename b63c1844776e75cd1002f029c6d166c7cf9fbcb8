@@ -70,6 +70,24 @@
       "revId": "b63c1844776e75cd1002f029c6d166c7cf9fbcb8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e7f9dec9",
+        "filename": "include/tools/errcode.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-28T16:33:49Z",
+      "side": 1,
+      "message": "Why is this only in the #ifndef __RSC case?",
+      "parentUuid": "1a54edaf_8d036e0f",
+      "revId": "b63c1844776e75cd1002f029c6d166c7cf9fbcb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
