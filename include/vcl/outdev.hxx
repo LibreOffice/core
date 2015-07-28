@@ -289,6 +289,10 @@ namespace o3tl
     template<> struct typed_flags<GetDefaultFontFlags> : is_typed_flags<GetDefaultFontFlags, 0x01> {};
 }
 
+// Flags for Invert()
+#define INVERT_HIGHLIGHT                ((sal_uInt16)0x0001)
+#define INVERT_50                       ((sal_uInt16)0x0002)
+
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
 enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OUTDEV_VIEWTYPE_SLIDESHOW };
@@ -766,6 +770,13 @@ public:
 
     ///@}
 
+    /** @name Invert functions
+     */
+    ///@{
+public:
+    void                                Invert( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
+    void                                Invert( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
+    ///@}
 
     /** @name Line functions
      */

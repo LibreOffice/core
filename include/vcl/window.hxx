@@ -217,10 +217,6 @@ namespace o3tl
 #define PARENTCLIPMODE_CLIP             ((sal_uInt16)0x0001)
 #define PARENTCLIPMODE_NOCLIP           ((sal_uInt16)0x0002)
 
-// Flags for Invert()
-#define INVERT_HIGHLIGHT                ((sal_uInt16)0x0001)
-#define INVERT_50                       ((sal_uInt16)0x0002)
-
 // Flags for ShowTracking()
 #define SHOWTRACK_SMALL                 ((sal_uInt16)0x0001)
 #define SHOWTRACK_BIG                   ((sal_uInt16)0x0002)
@@ -1142,9 +1138,6 @@ public:
 
     virtual void                        ShowFocus(const Rectangle& rRect);
     void                                HideFocus();
-
-    void                                Invert( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    void                                Invert( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
 
     // transparent background for selected or checked items in toolboxes etc.
     void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly );
