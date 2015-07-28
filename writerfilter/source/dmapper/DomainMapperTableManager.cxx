@@ -66,8 +66,6 @@ DomainMapperTableManager::DomainMapperTableManager() :
 
 DomainMapperTableManager::~DomainMapperTableManager()
 {
-    if ( m_pTablePropsHandler )
-        delete m_pTablePropsHandler, m_pTablePropsHandler = nullptr;
 }
 
 bool DomainMapperTableManager::attribute(Id nName, Value& rValue)

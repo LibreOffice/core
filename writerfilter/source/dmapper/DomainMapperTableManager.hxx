@@ -27,6 +27,7 @@
 #include "StyleSheetTable.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
 #include <vector>
+#include <memory>
 #include <comphelper/sequenceashashmap.hxx>
 
 namespace writerfilter {
@@ -72,7 +73,7 @@ class DomainMapperTableManager : public TableManager
     sal_uInt32 m_nLayoutType;
     sal_Int32 m_nMaxFixedWidth;
 
-    TablePropertiesHandler   *m_pTablePropsHandler;
+    std::unique_ptr<TablePropertiesHandler> m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
     virtual void clearData() SAL_OVERRIDE;
