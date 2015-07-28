@@ -42,12 +42,15 @@ private:
     Image m_aFolderImage;
     Image m_aFolderExpandedImage;
 
+    OUString m_sLastUpdatedDir;
+
 public:
     FolderTree( vcl::Window* pParent, WinBits nBits );
 
     virtual void RequestingChildren( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
     void FillTreeEntry( SvTreeListEntry* pEntry );
+    void FillTreeEntry( const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders );
     void SetTreePath( OUString const & sUrl );
     void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
 };

@@ -1387,6 +1387,21 @@ OUString SvtFileView::GetConfigString() const
     return sRet;
 }
 
+::std::vector< std::pair< OUString, OUString > > SvtFileView::GetSubFolders()
+{
+    ::std::vector< std::pair< OUString, OUString > > aContent;
+
+    for( ::std::vector< SortingData_Impl* >::size_type i = 0; i < mpImp->maContent.size(); i++ )
+    {
+        if( mpImp->maContent[i]->mbIsFolder )
+        {
+            std::pair< OUString, OUString > aEntry( mpImp->maContent[i]->GetTitle(), mpImp->maContent[i]->maTargetURL );
+            aContent.push_back( aEntry );
+        }
+    }
+
+    return aContent;
+}
 
 void SvtFileView::SetConfigString( const OUString& rCfgStr )
 {

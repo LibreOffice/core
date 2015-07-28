@@ -173,6 +173,8 @@ public:
 
     void                    EndInplaceEditing( bool _bCancel );
 
+    ::std::vector< std::pair< OUString, OUString > > GetSubFolders();
+
 protected:
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 };

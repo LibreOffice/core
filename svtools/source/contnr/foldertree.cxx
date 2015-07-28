@@ -34,21 +34,21 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 {
     if( pEntry )
     {
-        while (SvTreeListEntry* pChild = FirstChild(pEntry))
-        {
-            GetModel()->Remove(pChild);
-        }
-
-        ::std::vector< SortingData_Impl* > aContent;
-
-        ::rtl::Reference< ::svt::FileViewContentEnumerator >
-            xContentEnumerator(new FileViewContentEnumerator(
-            m_xEnv, aContent, m_aMutex, NULL));
-
         OUString* pURL = static_cast< OUString* >( pEntry->GetUserData() );
 
-        if( pURL )
+        if( pURL && m_sLastUpdatedDir != *pURL )
         {
+            while (SvTreeListEntry* pChild = FirstChild(pEntry))
+            {
+                GetModel()->Remove(pChild);
+            }
+
+            ::std::vector< SortingData_Impl* > aContent;
+
+            ::rtl::Reference< ::svt::FileViewContentEnumerator >
+                xContentEnumerator(new FileViewContentEnumerator(
+                m_xEnv, aContent, m_aMutex, NULL));
+
             FolderDescriptor aFolder( *pURL );
 
             EnumerationResult eResult =
@@ -68,6 +68,38 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
                 }
             }
         }
+    }
+    else
+    {
+        // this dir was updated recently
+        // next time read this remote folder
+        m_sLastUpdatedDir = "";
+    }
+}
+
+void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders )
+{
+    SetTreePath( rUrl );
+
+    SvTreeListEntry* pParent = GetCurEntry();
+
+    if( pParent && !IsExpanded( pParent ) )
+    {
+        while( GetChildCount( pParent ) > 0 )
+        {
+            SvTreeListEntry* pChild = FirstChild( pParent );
+            GetModel()->Remove( pChild );
+        }
+
+        for(::std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
+        {
+            SvTreeListEntry* pNewEntry = InsertEntry( it->first, pParent, true  );
+            OUString* sData = new OUString( it->second );
+            pNewEntry->SetUserData( static_cast< void* >( sData ) );
+        }
+
+        m_sLastUpdatedDir = rUrl;
+        Expand( pParent );
     }
 }
 

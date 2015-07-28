@@ -1078,8 +1078,6 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
         OUString* sData = new OUString( rURL );
         pRoot->SetUserData( static_cast< void* >( sData ) );
 
-        m_pTreeView->Expand( pRoot );
-
         m_pName_ed->GrabFocus();
 
         m_sLastServiceUrl = sURL;
@@ -1088,8 +1086,13 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     }
 
     m_pPath->SetURL( rURL );
+
     m_pTreeView->SetSelectHdl( Link<>() );
-    m_pTreeView->SetTreePath( rURL );
+
+    // read cached data for this url and fill the tree
+    const ::std::vector< std::pair< OUString, OUString > >& rFolders = m_pFileView->GetSubFolders();
+    m_pTreeView->FillTreeEntry( rURL, rFolders );
+
     m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
 
     m_bIsConnected = true;
