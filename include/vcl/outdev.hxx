@@ -288,6 +288,18 @@ namespace o3tl
     template<> struct typed_flags<GetDefaultFontFlags> : is_typed_flags<GetDefaultFontFlags, 0x01> {};
 }
 
+// Flags for Invert()
+enum class InvertFlags
+{
+    NONE                    = 0x0000,
+    Highlight               = 0x0001,
+    N50                     = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<InvertFlags> : is_typed_flags<InvertFlags, 0x0003> {};
+}
+
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
 enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OUTDEV_VIEWTYPE_SLIDESHOW };
@@ -753,6 +765,13 @@ public:
 
     ///@}
 
+    /** @name Invert functions
+     */
+    ///@{
+public:
+    void Invert( const Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
+    void Invert( const Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
+    ///@}
 
     /** @name Line functions
      */

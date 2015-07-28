@@ -129,6 +129,72 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
+void OutputDevice::Invert( const Rectangle& rRect, InvertFlags nFlags )
+{
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+
+    if ( aRect.IsEmpty() )
+        return;
+    aRect.Justify();
+
+    // we need a graphics
+    if ( !mpGraphics )
+    {
+        if ( !AcquireGraphics() )
+            return;
+    }
+
+    if ( mbInitClipRegion )
+        InitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
+
+    SalInvert nSalFlags = 0;
+    if ( nFlags & InvertFlags::Highlight )
+        nSalFlags |= SAL_INVERT_HIGHLIGHT;
+    if ( nFlags & InvertFlags::N50 )
+        nSalFlags |= SAL_INVERT_50;
+    mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
+}
+
+void OutputDevice::Invert( const Polygon& rPoly, InvertFlags nFlags )
+{
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    sal_uInt16 nPoints = rPoly.GetSize();
+
+    if ( nPoints < 2 )
+        return;
+
+    Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
+
+    // we need a graphics
+    if ( !mpGraphics )
+    {
+        if ( !AcquireGraphics() )
+            return;
+    }
+
+    if ( mbInitClipRegion )
+        InitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
+
+    SalInvert nSalFlags = 0;
+    if ( nFlags & InvertFlags::Highlight )
+        nSalFlags |= SAL_INVERT_HIGHLIGHT;
+    if ( nFlags & InvertFlags::N50 )
+        nSalFlags |= SAL_INVERT_50;
+    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
+    mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
+}
+
 void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
 {
     assert(!is_double_buffered_window());
