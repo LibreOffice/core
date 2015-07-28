@@ -42,11 +42,17 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_Unicode c,
             bool bCount );
+    XMLCharContext( SvXMLImport& rImport, sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            sal_Unicode c, bool bCount );
     XMLCharContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            sal_Int16 nControl );
+    XMLCharContext( SvXMLImport& rImport, sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             sal_Int16 nControl );
 
     virtual ~XMLCharContext();
@@ -55,6 +61,8 @@ public:
     // after a elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void InsertControlCharacter(sal_Int16   _nControl);
     virtual void InsertString(const OUString& _sString);
