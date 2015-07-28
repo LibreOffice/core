@@ -234,7 +234,9 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         aMM.SetScaleX(maScale);
         aMM.SetScaleY(maScale);
         rRenderContext.SetMapMode(aMM);
+        mpPgPreviewLayout->GetParentViewShell().setOutputToWindow(true);
         mpPgPreviewLayout->Paint(rRenderContext, rRect);
+        mpPgPreviewLayout->GetParentViewShell().setOutputToWindow(false);
     }
 }
 

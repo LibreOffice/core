@@ -569,6 +569,11 @@ public:
         @author FME
     */
     sal_uInt16 ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const;
+
+    SwViewShell& GetParentViewShell()
+    {
+        return mrParentViewShell;
+    }
 };
 
 #endif // INCLUDED_SW_INC_PAGEPREVIEWLAYOUT_HXX

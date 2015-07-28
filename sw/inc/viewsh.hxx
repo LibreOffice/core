@@ -350,6 +350,7 @@ public:
     inline vcl::RenderContext* GetOut()     const { return mpOut; }
 
     void SetWin(vcl::Window* win) { mpWin = win; }
+    void SetOut(vcl::RenderContext* pOut) { mpOut = pOut; }
     static inline bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.

@@ -986,12 +986,36 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
 
 // methods to paint page preview layout
 
+namespace
+{
+/// Similar to RenderContextGuard, but does not touch the draw view.
+class PreviewRenderContextGuard
+{
+    VclPtr<vcl::RenderContext> m_pOriginalValue;
+    SwViewShell& m_rShell;
+
+public:
+    PreviewRenderContextGuard(SwViewShell& rShell, vcl::RenderContext* pValue)
+        : m_pOriginalValue(rShell.GetOut()),
+        m_rShell(rShell)
+    {
+        m_rShell.SetOut(pValue);
+    }
+
+    ~PreviewRenderContextGuard()
+    {
+        m_rShell.SetOut(m_pOriginalValue);
+    }
+};
+}
+
 /** paint prepared preview
 
     OD 12.12.2002 #103492#
 */
 bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rOutRect) const
 {
+    PreviewRenderContextGuard aGuard(mrParentViewShell, &rRenderContext);
     // check environment and parameters
     {
         if (!mrParentViewShell.GetWin() && !mrParentViewShell.GetOut()->GetConnectMetaFile())
