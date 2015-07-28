@@ -68,14 +68,14 @@ namespace cppcanvas
             ImplPolyPolygon(const ImplPolyPolygon&) SAL_DELETED_FUNCTION;
             ImplPolyPolygon& operator= ( const ImplPolyPolygon& ) SAL_DELETED_FUNCTION;
 
-            const css::uno::Reference< css::rendering::XPolyPolygon2D >   mxPolyPoly;
+            const css::uno::Reference< css::rendering::XPolyPolygon2D > mxPolyPoly;
 
-            css::rendering::StrokeAttributes                                maStrokeAttributes;
+            css::rendering::StrokeAttributes                            maStrokeAttributes;
 
-            css::uno::Sequence< double >                                    maFillColor;
-            css::uno::Sequence< double >                                    maStrokeColor;
-            bool                                                              mbFillColorSet;
-            bool                                                              mbStrokeColorSet;
+            css::uno::Sequence< double >                                maFillColor;
+            css::uno::Sequence< double >                                maStrokeColor;
+            bool                                                        mbFillColorSet;
+            bool                                                        mbStrokeColorSet;
         };
 
     }

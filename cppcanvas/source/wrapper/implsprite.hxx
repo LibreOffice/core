@@ -41,7 +41,7 @@ namespace cppcanvas
                                   css::rendering::XSpriteCanvas >&                    rParentCanvas,
                         const css::uno::Reference<
                                   css::rendering::XSprite >&                          rSprite,
-                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
+                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
             virtual ~ImplSprite();
 
             virtual void setAlpha( const double& rAlpha ) SAL_OVERRIDE;
@@ -67,7 +67,7 @@ namespace cppcanvas
             css::uno::Reference< css::rendering::XGraphicDevice >         mxGraphicDevice;
             const css::uno::Reference< css::rendering::XSprite >          mxSprite;
             const css::uno::Reference< css::rendering::XAnimatedSprite >  mxAnimatedSprite;
-            ImplSpriteCanvas::TransformationArbiterSharedPtr                  mpTransformArbiter;
+            ImplSpriteCanvas::TransformationArbiterSharedPtr              mpTransformArbiter;
         };
     }
 }

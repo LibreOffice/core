@@ -53,31 +53,31 @@ namespace cppcanvas
         {
             /// Create polygon, fill/stroke according to state
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
-                                                         const OutDevState&     );
+                                                  const CanvasSharedPtr&,
+                                                  const OutDevState&     );
 
             /// Create texture-filled polygon
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
-                                                         const OutDevState&,
-                                                         const css::rendering::Texture& );
+                                                  const CanvasSharedPtr&,
+                                                  const OutDevState&,
+                                                  const css::rendering::Texture& );
 
             /// Create line polygon (always stroked, not filled)
             ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                             const CanvasSharedPtr&,
-                                                             const OutDevState& );
+                                                      const CanvasSharedPtr&,
+                                                      const OutDevState& );
 
             /// Create stroked polygon
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
-                                                         const OutDevState&,
-                                                         const css::rendering::StrokeAttributes& );
+                                                  const CanvasSharedPtr&,
+                                                  const OutDevState&,
+                                                  const css::rendering::StrokeAttributes& );
 
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
-                                                         const OutDevState&,
-                                                         int nTransparency );
+                                                  const CanvasSharedPtr&,
+                                                  const OutDevState&,
+                                                  int nTransparency );
         }
     }
 }

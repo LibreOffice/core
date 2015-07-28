@@ -82,8 +82,8 @@ namespace cppcanvas
         private:
             ImplSpriteCanvas& operator=( const ImplSpriteCanvas& ) SAL_DELETED_FUNCTION;
 
-            const css::uno::Reference< css::rendering::XSpriteCanvas >    mxSpriteCanvas;
-            TransformationArbiterSharedPtr                                    mpTransformArbiter;
+            const css::uno::Reference< css::rendering::XSpriteCanvas > mxSpriteCanvas;
+            TransformationArbiterSharedPtr                             mpTransformArbiter;
         };
     }
 }

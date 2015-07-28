@@ -69,9 +69,9 @@ namespace cppcanvas
             virtual void                             clear() const SAL_OVERRIDE;
 
             virtual css::uno::Reference<
-                css::rendering::XCanvas >          getUNOCanvas() const SAL_OVERRIDE;
+                css::rendering::XCanvas >            getUNOCanvas() const SAL_OVERRIDE;
 
-            virtual css::rendering::ViewState      getViewState() const SAL_OVERRIDE;
+            virtual css::rendering::ViewState        getViewState() const SAL_OVERRIDE;
 
             // take compiler-provided default copy constructor
             //ImplCanvas(const ImplCanvas&);
@@ -79,9 +79,9 @@ namespace cppcanvas
         private:
             ImplCanvas& operator=( const ImplCanvas& ) SAL_DELETED_FUNCTION;
 
-            mutable css::rendering::ViewState                       maViewState;
-            boost::optional<basegfx::B2DPolyPolygon>                  maClipPolyPolygon;
-            const css::uno::Reference< css::rendering::XCanvas >  mxCanvas;
+            mutable css::rendering::ViewState                    maViewState;
+            boost::optional<basegfx::B2DPolyPolygon>             maClipPolyPolygon;
+            const css::uno::Reference< css::rendering::XCanvas > mxCanvas;
         };
 
     }

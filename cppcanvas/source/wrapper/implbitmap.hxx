@@ -58,8 +58,8 @@ namespace cppcanvas
             ImplBitmap(const ImplBitmap&) SAL_DELETED_FUNCTION;
             ImplBitmap& operator=( const ImplBitmap& ) SAL_DELETED_FUNCTION;
 
-            const css::uno::Reference< css::rendering::XBitmap >  mxBitmap;
-            BitmapCanvasSharedPtr                                     mpBitmapCanvas;
+            const css::uno::Reference< css::rendering::XBitmap > mxBitmap;
+            BitmapCanvasSharedPtr                                mpBitmapCanvas;
          };
     }
 }

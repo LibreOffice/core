@@ -53,8 +53,8 @@ namespace cppcanvas
             sets up the transformation and the clip from the
             OutDevState.
          */
-        void initRenderState( css::rendering::RenderState& renderState,
-                              const ::cppcanvas::internal::OutDevState&         outdevState );
+        void initRenderState( css::rendering::RenderState&              renderState,
+                              const ::cppcanvas::internal::OutDevState& outdevState );
 
         /** Calc output offset relative to baseline
 
@@ -130,7 +130,7 @@ namespace cppcanvas
 
             @return true, if the clip has changed, false if not
          */
-        bool modifyClip( css::rendering::RenderState&                     o_rRenderState,
+        bool modifyClip( css::rendering::RenderState&                       o_rRenderState,
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
                          const CanvasSharedPtr&                             rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
@@ -170,7 +170,7 @@ namespace cppcanvas
 
         /** Transform given bounds to device coordinate system.
          */
-        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&            rBounds,
+        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&          rBounds,
                                                    const css::rendering::ViewState&    viewState,
                                                    const css::rendering::RenderState&  renderState );
 

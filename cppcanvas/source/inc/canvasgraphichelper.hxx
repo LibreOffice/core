@@ -59,15 +59,15 @@ namespace cppcanvas
             // for our clients
             // ===============
             CanvasSharedPtr                                                      getCanvas() const {  return mpCanvas; }
-            css::uno::Reference< css::rendering::XGraphicDevice >            getGraphicDevice() const {  return mxGraphicDevice; }
-            const css::rendering::RenderState&                                 getRenderState() const;
+            css::uno::Reference< css::rendering::XGraphicDevice >                getGraphicDevice() const {  return mxGraphicDevice; }
+            const css::rendering::RenderState&                                   getRenderState() const;
 
         private:
-            mutable css::rendering::RenderState                                 maRenderState;
+            mutable css::rendering::RenderState                                   maRenderState;
 
             boost::optional<basegfx::B2DPolyPolygon>                              maClipPolyPolygon;
             CanvasSharedPtr                                                       mpCanvas;
-            css::uno::Reference< css::rendering::XGraphicDevice >             mxGraphicDevice;
+            css::uno::Reference< css::rendering::XGraphicDevice >                 mxGraphicDevice;
         };
 
     }

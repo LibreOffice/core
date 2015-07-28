@@ -81,20 +81,20 @@ namespace cppcanvas
 
             ::basegfx::B2DPolyPolygon                                                clip;
             ::Rectangle                                                              clipRect;
-            css::uno::Reference< css::rendering::XPolyPolygon2D >                xClipPoly;
+            css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
 
-            css::uno::Sequence< double >                                           lineColor;
-            css::uno::Sequence< double >                                           fillColor;
-            css::uno::Sequence< double >                                           textColor;
-            css::uno::Sequence< double >                                           textFillColor;
-            css::uno::Sequence< double >                                           textLineColor;
+            css::uno::Sequence< double >                                             lineColor;
+            css::uno::Sequence< double >                                             fillColor;
+            css::uno::Sequence< double >                                             textColor;
+            css::uno::Sequence< double >                                             textFillColor;
+            css::uno::Sequence< double >                                             textLineColor;
 
             /** Current font.
 
                 @attention Beware, this member can be NULL, and
                 nevertheless text output is generated.
              */
-            css::uno::Reference< css::rendering::XCanvasFont >                   xFont;
+            css::uno::Reference< css::rendering::XCanvasFont >                       xFont;
             ::basegfx::B2DHomMatrix                                                  transform;
             ::basegfx::B2DHomMatrix                                                  mapModeTransform;
             double                                                                   fontRotation;

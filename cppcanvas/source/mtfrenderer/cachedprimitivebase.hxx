@@ -74,10 +74,10 @@ namespace cppcanvas
             virtual bool renderPrimitive( css::uno::Reference< css::rendering::XCachedPrimitive >& rCachedPrimitive,
                                           const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
-            CanvasSharedPtr                                             mpCanvas;
-            mutable css::uno::Reference< css::rendering::XCachedPrimitive >     mxCachedPrimitive;
-            mutable ::basegfx::B2DHomMatrix                             maLastTransformation;
-            const bool                                                  mbOnlyRedrawWithSameTransform;
+            CanvasSharedPtr                                                 mpCanvas;
+            mutable css::uno::Reference< css::rendering::XCachedPrimitive > mxCachedPrimitive;
+            mutable ::basegfx::B2DHomMatrix                                 maLastTransformation;
+            const bool                                                      mbOnlyRedrawWithSameTransform;
         };
     }
 }

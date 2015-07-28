@@ -241,8 +241,8 @@ static float GetSwapFloat( SvStream& rSt )
 
             static css::uno::Reference<
                 css::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
-                                                            const vcl::Font&              rFont,
-                                                            const ActionFactoryParameters&  rParms );
+                                                          const vcl::Font&                rFont,
+                                                          const ActionFactoryParameters&  rParms );
             bool createActions( GDIMetaFile&                    rMtf,
                                 const ActionFactoryParameters&  rParms,
                                 bool                            bSubsettableActions );

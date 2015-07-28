@@ -38,8 +38,8 @@ namespace cppcanvas
             intSRGBAToDoubleSequence( const css::uno::Reference< css::rendering::XGraphicDevice >&,
                                       Color::IntSRGBA );
 
-        Color::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Reference< css::rendering::XGraphicDevice >&    rDevice,
-                                                  const css::uno::Sequence< double >&              rColor  );
+        Color::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
+                                                  const css::uno::Sequence< double >&                          rColor  );
     }
 }
 

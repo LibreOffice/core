@@ -42,7 +42,7 @@ namespace cppcanvas
                                       css::rendering::XSpriteCanvas >&                    rParentCanvas,
                               const css::uno::Reference<
                                       css::rendering::XCustomSprite >&                    rSprite,
-                              const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
+                              const ImplSpriteCanvas::TransformationArbiterSharedPtr&     rTransformArbiter );
             virtual ~ImplCustomSprite();
 
             virtual CanvasSharedPtr getContentCanvas() const SAL_OVERRIDE;
@@ -51,8 +51,8 @@ namespace cppcanvas
             ImplCustomSprite(const ImplCustomSprite&) SAL_DELETED_FUNCTION;
             ImplCustomSprite& operator=( const ImplCustomSprite& ) SAL_DELETED_FUNCTION;
 
-            mutable CanvasSharedPtr                                           mpLastCanvas;
-            const css::uno::Reference< css::rendering::XCustomSprite >    mxCustomSprite;
+            mutable CanvasSharedPtr                                    mpLastCanvas;
+            const css::uno::Reference< css::rendering::XCustomSprite > mxCustomSprite;
         };
     }
 }
