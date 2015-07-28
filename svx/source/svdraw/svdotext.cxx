@@ -1986,6 +1986,11 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 bool SdrTextObj::IsChainable() const
 {
+    // Read it as item
+    const SfxItemSet& rSet = GetObjectItemSet();
+    OUString aNextName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
+    return aNextName == "";
+
     // XXX
     if (!GetName().startsWith("Chainable")) {
         //fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
