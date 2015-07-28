@@ -216,7 +216,7 @@
           <value>DesignDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/sfx2/res/symphony/sidebar-property-large.png</value>
+          <value>private:graphicrepository/cmd/lc_designerdialog.png</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
