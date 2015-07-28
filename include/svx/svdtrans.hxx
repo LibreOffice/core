@@ -29,20 +29,22 @@
 #include <vcl/field.hxx>
 #include <vcl/mapmod.hxx>
 
-
-
-// Winkelangaben der DrawingEngine sind 1/100 Degree
-// #i19054# nowhere used, removed // const int nAngleDiv=100;
-// Um Winkel der DrawingEngine mit den Trigonometrischen Funktionen
-// verarbeiten zu koennen, muessen sie zunaest ins Bogenmass umgerechnet
-// werden. Dies gestaltet sich recht einfach mit der folgenden Konstanten
-// nPi180. Sei nAngle ein Winkel in 1/100 Deg so schreibt man z.B.:
+// The DrawingEngine's angles are specified in 1/100th degrees
+// We need to convert these angles to radians, in order to be able
+// to process them with trigonometric functions.
+// This is done, using the constant nPi180.
+//
+// Example usage:
+// nAngle ... is an angle in 1/100 Deg
+//
+// Which is converted, by this:
 //   double nSin=sin(nAngle*nPi180);
-// Rueckwandlung entsprechend durch Teilen.
+//
+// To convert it back, we use divison.
 const double nPi=3.14159265358979323846;
-const double nPi180=0.000174532925199432957692222; // Bei zuweing Stellen ist tan(4500*nPi180)!=1.0
+const double nPi180=0.000174532925199432957692222; // If we have too few digits, we get tan(4500*nPi180)!=1.0
 
-// Der maximale Shearwinkel
+// That maximum shear angle
 #define SDRMAXSHEAR 8900
 
 class XPolygon;
@@ -74,15 +76,21 @@ inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear =
 SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
-// rPnt.X bzw rPnt.Y wird auf rCenter.X bzw. rCenter.Y gesetzt!
-// anschliessend muss rPnt nur noch um rCenter gedreht werden.
-// Der Rueckgabewinkel ist ausnahmsweise in Rad.
+/**
+ * rPnt.X/rPnt.Y is set to rCenter.X or rCenter.Y!
+ * We then only need to rotate rPnt by rCenter.
+ *
+ * @return the returned angle is in rad
+ */
 inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, bool bVertical);
-// Die folgenden Methoden behandeln einen Punkt eines XPolygons, wobei die
-// benachbarten Kontrollpunkte des eigentlichen Punktes ggf. in pC1/pC2
-// uebergeben werden. Ueber rSin/rCos wird gleichzeitig sin(nAngle) und cos(nAngle)
-// zurueckgegeben.
-// Der Rueckgabewinkel ist hier ebenfalls in Rad.
+
+/**
+ * The following methods accept a point of an XPolygon, whereas the neighbouring
+ * control points of the actual point are passed in pC1/pC2.
+ * Via rSin/rCos, sin(nAngle) and cos(nAngle) are returned.
+ *
+ * @return the returned angle is in rad
+ */
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                          const Point& rRad, double& rSin, double& rCos, bool bVert);
 double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
@@ -131,8 +139,8 @@ inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
         if (rPnt.Y()!=rRef.Y()) { // sonst nicht noetig
             rPnt.X()-=Round((rPnt.Y()-rRef.Y())*tn);
         }
-    } else { // ansonsten vertikal
-        if (rPnt.X()!=rRef.X()) { // sonst nicht noetig
+    } else { // or else vertical
+        if (rPnt.X()!=rRef.X()) { // else not needed
             rPnt.Y()-=Round((rPnt.X()-rRef.X())*tn);
         }
     }
@@ -156,62 +164,75 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
 /**************************************************************************************************/
 /**************************************************************************************************/
 
-// Y-Achse zeigt nach unten! Die Funktion negiert bei der
-// Winkelberechnung die Y-Achse, sodass GetAngle(Point(0,-1))=90.00deg.
-// GetAngle(Point(0,0)) liefert 0.
-// Der Rueckgabewert liegt im Bereich -180.00..179.99 Degree und
-// ist in 1/100 Degree angegeben.
+/**
+ * The Y axis points down!
+ * The function negates the Y axis, when calculating the angle, such
+ * that GetAngle(Point(0,-1))=90 deg.
+ * GetAngle(Point(0,0)) returns 0.
+ *
+ * @return the returned value is in the range of -180.00..179.99 deg
+ * and is in 1/100 deg units
+ */
 SVX_DLLPUBLIC long GetAngle(const Point& rPnt);
-long NormAngle180(long a); // Winkel normalisieren auf -180.00..179.99
-SVX_DLLPUBLIC long NormAngle360(long a); // Winkel normalisieren auf    0.00..359.99
-sal_uInt16 GetAngleSector(long nAngle); // Sektor im kartesischen Koordinatensystem bestimmen
-// Berechnet die Laenge von (0,0) via a^2 + b^2 = c^2
-// Zur Vermeidung von Ueberlaeufen werden ggf. einige Stellen ignoriert.
+
+long NormAngle180(long a); /// Normalize angle to -180.00..179.99
+
+SVX_DLLPUBLIC long NormAngle360(long a); /// Normalize angle to 0.00..359.99
+
+sal_uInt16 GetAngleSector(long nAngle); /// Determine sector within the cartesian coordinate system
+
+/**
+ * Calculates the length of (0,0) via a^2 + b^2 = c^2
+ * In order to avoid overflows, we ignore some decimal places.
+ */
 long GetLen(const Point& rPnt);
 
-/*
-  Transformation eines Rechtecks in ein Polygon unter            ------------
-  Anwendung der Winkelparameter aus GeoStat.                    /1        2/
-  Referenzpunkt ist stets der Punkt 0, also die linke          /          /
-  obere Ecke des Ausgangsrects.                               /          /
-  Bei der Berechnung des Polygons ist die Reihenfolge        /          /
-  (erst Shear, dann Rotation vorgegeben).                   /          / \
-                                                           /          /   |
-  A) Ausgangsrechteck aRect  B) Nach Anwendung von Shear  /0        3/  Rot|
-  +------------------+       --------------------        ------------  ------
-  |0                1|        \0                1\       C) Nach Anwendung
-  |                  |         \                  \      von Rotate
-  |                  |       |  \                  \
-  |3                2|       |   \3                2\
-  +------------------+       |    --------------------
-                             |Shr |
-  Bei Rueckkonvertierung des        Polygons in ein Rect ist die Reihenfolge
-  zwangslaeufig umgekehrt:
-  - Berechnung des Drehwinkels: Winkel der Strecke 0-1 aus Abb. C) zum Horizont
-  - Rueckdrehung des geshearten Rects (man erhaelt Abb B))
-  - Bestimmung der Breite des Rects=Laenge der Strecke 0-1 aus Abb. B)
-  - Bestimmung der Hoehe des Rects=vertikaler Abstand zwischen den Punkten
-    0 und 3 aus Abb. B)
-  - Bestimmung des Shear-Winkels aus der Strecke 0-3 zur Senkrechten.
-  Es ist darauf zu achten, dass das Polygon bei einer zwischenzeitlichen
-  Transformation evtl. gespiegelt wurde (Mirror oder Resize mit neg. Faktor).
-  In diesem Fall muss zunaecht eine Normalisierung durch Vertauschung der
-  Punkte (z.B. 0 mit 3 und 1 mit 2) durchgefuehrt werden, damit der
-  Richtungssinn im Polygon wieder stimmig ist.
-  Hinweis: Positiver Shear-Winkel bedeutet Shear mit auf dem Bildschirm
-  sichtbarer positiver Kursivierung. Mathematisch waere dass eine negative
-  Kursivierung, da die Y-Achse auf dem Bildschirm von oben nach unten verlaeuft.
-  Drehwinkel: Positiv bedeutet auf dem Bildschirm sichtbare Linksdrehung.
-*/
+/**
+ * The transformation of a rectangle into a polygon, by
+ * using angle parameters from GeoStat.                          ------------
+ * The point of reference is always the Point 0, meaning        /1        2/
+ * the upper left corner of the initial rectangle.             /          /
+ * When calculating the polygon, the order is first           /          /
+ * shear and then the rotation.                              /          /
+ *                                                          /          / \
+ *                                                         /          /   |
+ * A) Inital rectangle aRect  B) After applying Shear      /0        3/ Rot|
+ * +------------------+       --------------------        ------------------
+ * |0                1|        \0                1\       C) After applying Rotate
+ * |                  |         \                  \
+ * |                  |       |  \                  \
+ * |3                2|       |   \3                2\
+ * +------------------+       |    --------------------
+ *                            |Shr
+ *
+ * When converting the polygon back into a rect, the order is necessarily the
+ * other way around:
+ *  - Calculating the rotation angle: angle of the line 0-1 in figure C) to the horizontal
+ *  - Turning the sheared rect back (we get figure B)
+ *  - Determining the width of the rect = length of the line 0-1 in figure B)
+ *  - Determining the height of the rect = vertical distance between the points 0 and 3
+ *    of figure B)
+ *  - Determining the shear angle from the line 0-3 to the perpendicular line.
+ *
+ * We need to keep in mind that the polygon can be mirrored when it was
+ * transformed in the mean time (e.g. mirror or resize with negative factor).
+ * In that case, we first need to normalize, by swapping points (0 with 3 and 1
+ * with 2), so that it has the right orientation.
+ *
+ * Note: a positive shear angle means a shear with a positive visible curvature
+ * on the screen. Mathematically, that would be a negative curvature, as the
+ * Y axis runs from top to bottom on the screen.
+ * Rotation angle: positive means a visible left rotation.
+ */
 
-class GeoStat { // Geometrischer Status fuer ein Rect
+class GeoStat { // Geometric state for a rect
 public:
     long     nRotationAngle;
     long     nShearAngle;
     double   nTan;      // tan(nShearAngle)
     double   nSin;      // sin(nRotationAngle)
     double   nCos;      // cos(nRotationAngle)
-    bool     bMirrored; // Horizontal gespiegelt? (ni)
+    bool     bMirrored; // Horizontally mirrored? (ni)
 public:
     GeoStat(): nRotationAngle(0),nShearAngle(0),nTan(0.0),nSin(0.0),nCos(1.0),bMirrored(false) {}
     void RecalcSinCos();
@@ -224,13 +245,13 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
 SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
 SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
 
-// Multiplikation und anschliessende Division.
-// Rechnung und Zwischenergebnis sind BigInt.
+// Multiplication and subsequent division
+// Calculation and intermediate values are in BigInt
 SVX_DLLPUBLIC long BigMulDiv(long nVal, long nMul, long nDiv);
 
-// Fehlerbehaftetes Kuerzen einer Fraction.
-// nDigits gibt an, wieviele signifikante Stellen in
-// Zaehler/Nenner mindestens erhalten bleiben sollen.
+// Lossy cancellation of a fraction
+// nDigits specifies, how many significant digits the numerator
+// and denominator should at least be retained
 void Kuerzen(Fraction& rF, unsigned nDigits);
 
 
@@ -249,7 +270,7 @@ public:
     Fraction& Y()             { return aY; }
 };
 
-// Fuer die Umrechnung von Masseinheiten
+// To convert units of measurement
 SVX_DLLPUBLIC FrPair GetMapFactor(MapUnit eS, MapUnit eD);
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD);
 
