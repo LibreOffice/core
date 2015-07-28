@@ -87,6 +87,7 @@ void SAL_CALL DropTarget::disposing()
     {
         CoLockObjectExternal( m_pDropTarget, FALSE, TRUE);
         m_pDropTarget->Release();
+        m_pDropTarget = nullptr;
     }
 
     if( m_oleThreadId)
@@ -171,6 +172,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
                     // do clean up if drag and drop is not possible
                     CoLockObjectExternal( m_pDropTarget, FALSE, FALSE);
                     m_pDropTarget->Release();
+                    m_pDropTarget = nullptr;
                     m_hWnd= NULL;
                 }
             }
@@ -219,6 +221,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
                         // do clean up if drag and drop is not possible
                         CoLockObjectExternal( pTarget->m_pDropTarget, FALSE, FALSE);
                         pTarget->m_pDropTarget->Release();
+                        pTarget->m_pDropTarget = nullptr;
                         pTarget->m_hWnd= NULL;
                     }
                 }
