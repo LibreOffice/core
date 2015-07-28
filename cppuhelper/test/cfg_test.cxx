@@ -129,19 +129,19 @@ void ServiceImpl0::initialize( const Sequence< Any >& rArgs )
 // XServiceInfo
 
 OUString ServiceImpl0::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     return impl0_getImplementationName();
 }
 
 Sequence< OUString > ServiceImpl0::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     return impl0_getSupportedServiceNames();
 }
 
 sal_Bool ServiceImpl0::supportsService( const OUString & rServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -161,13 +161,13 @@ public:
 };
 
 OUString ServiceImpl1::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     return impl1_getImplementationName();
 }
 
 Sequence< OUString > ServiceImpl1::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     return impl1_getSupportedServiceNames();
 }

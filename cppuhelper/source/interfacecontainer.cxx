@@ -370,7 +370,7 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
     nSize = pMap->size();
     if( nSize )
     {
-        ::com::sun::star::uno::Sequence< Type > aInterfaceTypes( nSize );
+        css::uno::Sequence< Type > aInterfaceTypes( nSize );
         Type * pArray = aInterfaceTypes.getArray();
 
         t_type2ptr::iterator iter = pMap->begin();
@@ -387,11 +387,11 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
         }
         if( (t_type2ptr::size_type)i != nSize ) {
             // may be empty container, reduce the sequence to the right size
-            aInterfaceTypes = ::com::sun::star::uno::Sequence< Type >( pArray, i );
+            aInterfaceTypes = css::uno::Sequence< Type >( pArray, i );
         }
         return aInterfaceTypes;
     }
-    return ::com::sun::star::uno::Sequence< Type >();
+    return css::uno::Sequence< Type >();
 }
 
 static t_type2ptr::iterator findType(t_type2ptr *pMap, const Type & rKey )
@@ -552,7 +552,7 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
     nSize = pMap ? pMap->size() : 0;
     if( nSize )
     {
-        ::com::sun::star::uno::Sequence< sal_Int32 > aInterfaceTypes( nSize );
+        css::uno::Sequence< sal_Int32 > aInterfaceTypes( nSize );
         sal_Int32 * pArray = aInterfaceTypes.getArray();
 
         t_long2ptr::iterator iter = pMap->begin();
@@ -569,11 +569,11 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
         }
         if( (t_long2ptr::size_type)i != nSize ) {
             // may be empty container, reduce the sequence to the right size
-            aInterfaceTypes = ::com::sun::star::uno::Sequence< sal_Int32 >( pArray, i );
+            aInterfaceTypes = css::uno::Sequence< sal_Int32 >( pArray, i );
         }
         return aInterfaceTypes;
     }
-    return ::com::sun::star::uno::Sequence< sal_Int32 >();
+    return css::uno::Sequence< sal_Int32 >();
 }
 
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperInt32::getContainer( const sal_Int32 & rKey ) const

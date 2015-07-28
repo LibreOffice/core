@@ -83,13 +83,13 @@ public:
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XSingleComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
@@ -101,11 +101,11 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /**
@@ -115,7 +115,7 @@ protected:
      */
     virtual Reference<XInterface >  createInstanceEveryTime(
         Reference< XComponentContext > const & xContext )
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        throw(css::uno::Exception, css::uno::RuntimeException);
 
     Reference<XMultiServiceFactory > xSMgr;
     ComponentInstantiation           pCreateFunction;
@@ -130,7 +130,7 @@ OSingleFactoryHelper::~OSingleFactoryHelper()
 
 
 Any OSingleFactoryHelper::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::queryInterface(
         rType,
@@ -143,7 +143,7 @@ Any OSingleFactoryHelper::queryInterface( const Type & rType )
 // OSingleFactoryHelper
 Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
     Reference< XComponentContext > const & xContext )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw(css::uno::Exception, css::uno::RuntimeException)
 {
     if (m_fptr)
     {
@@ -168,7 +168,7 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
 
 // XSingleServiceFactory
 Reference<XInterface > OSingleFactoryHelper::createInstance()
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithContext( Reference< XComponentContext >() );
 }
@@ -176,7 +176,7 @@ Reference<XInterface > OSingleFactoryHelper::createInstance()
 // XSingleServiceFactory
 Reference<XInterface > OSingleFactoryHelper::createInstanceWithArguments(
     const Sequence<Any>& Arguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithArgumentsAndContext(
         Arguments, Reference< XComponentContext >() );
@@ -226,7 +226,7 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
 
 // XServiceInfo
 OUString OSingleFactoryHelper::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return aImplementationName;
 }
@@ -234,14 +234,14 @@ OUString OSingleFactoryHelper::getImplementationName()
 // XServiceInfo
 sal_Bool OSingleFactoryHelper::supportsService(
     const OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
 Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return aServiceNames;
 }
@@ -272,7 +272,7 @@ public:
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL acquire() throw() SAL_OVERRIDE
         { OComponentHelper::acquire(); }
     void SAL_CALL release() throw() SAL_OVERRIDE
@@ -280,9 +280,9 @@ public:
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Reference<XInterface > SAL_CALL createInstanceWithArguments( const Sequence<Any>& Arguments )
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XSingleComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
@@ -293,19 +293,19 @@ public:
         throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAggregation
     Any SAL_CALL queryAggregation( const Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUnloadingPreference
     virtual sal_Bool SAL_CALL releaseOnNotification()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     Reference<XInterface >  xTheInstance;
@@ -318,7 +318,7 @@ protected:
 
 
 Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if( rType == cppu::UnoType<XUnloadingPreference>::get() )
     {
@@ -331,7 +331,7 @@ Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
 
 // XAggregation
 Any OFactoryComponentHelper::queryAggregation( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Any aRet( OComponentHelper::queryAggregation( rType ) );
     return (aRet.hasValue() ? aRet : OSingleFactoryHelper::queryInterface( rType ));
@@ -339,7 +339,7 @@ Any OFactoryComponentHelper::queryAggregation( const Type & rType )
 
 // XTypeProvider
 Sequence< Type > OFactoryComponentHelper::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Type ar[ 4 ];
     ar[ 0 ] = cppu::UnoType<XSingleServiceFactory>::get();
@@ -353,14 +353,14 @@ Sequence< Type > OFactoryComponentHelper::getTypes()
 }
 
 Sequence< sal_Int8 > OFactoryComponentHelper::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // XSingleServiceFactory
 Reference<XInterface > OFactoryComponentHelper::createInstance()
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     if( bOneInstance )
     {
@@ -377,7 +377,7 @@ Reference<XInterface > OFactoryComponentHelper::createInstance()
 
 Reference<XInterface > OFactoryComponentHelper::createInstanceWithArguments(
     const Sequence<Any>& Arguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     if( bOneInstance )
     {
@@ -435,7 +435,7 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndC
 
 // OComponentHelper
 void OFactoryComponentHelper::dispose()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     OComponentHelper::dispose();
 
@@ -459,7 +459,7 @@ void OFactoryComponentHelper::dispose()
 // one-instance factory: sal_False
 // single factory: sal_True
 // component factory: sal_True
-sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(css::uno::RuntimeException, std::exception)
 {
     if( bOneInstance)
         return sal_False;
@@ -510,11 +510,11 @@ public:
     // OSingleFactoryHelper
     Reference<XInterface > createInstanceEveryTime(
         Reference< XComponentContext > const & xContext )
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XSingleComponentFactory
     Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
@@ -523,7 +523,7 @@ public:
 
     // XServiceInfo
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XUnloadingPreference
     sal_Bool SAL_CALL releaseOnNotification()
         throw( RuntimeException, std::exception) SAL_OVERRIDE;
@@ -531,7 +531,7 @@ public:
 
 private:
     Reference< XInterface > createModuleFactory()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        throw(css::uno::Exception, css::uno::RuntimeException);
 
     /** The registry key of the implementation section */
     Reference<XRegistryKey >    xImplementationKey;
@@ -650,7 +650,7 @@ void ORegistryFactoryHelper::getFastPropertyValue(
 
 Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
     Reference< XComponentContext > const & xContext )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw(css::uno::Exception, css::uno::RuntimeException)
 {
     if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
     {
@@ -679,7 +679,7 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
 
 Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArguments(
     const Sequence<Any>& Arguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
     {
@@ -748,7 +748,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
 
 // OSingleFactoryHelper
 Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    throw(css::uno::Exception, css::uno::RuntimeException)
 {
     OUString aActivatorUrl;
     OUString aActivatorName;
@@ -811,7 +811,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 
 // XServiceInfo
 Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( aMutex );
     if( aServiceNames.getLength() == 0 )
@@ -843,7 +843,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
     return aServiceNames;
 }
 
-sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(css::uno::RuntimeException, std::exception)
 {
     bool retVal= true;
     if( isOneInstance() && isInstance())
@@ -882,26 +882,26 @@ public:
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //XUnloadingPreference
     sal_Bool SAL_CALL releaseOnNotification()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
 // XSingleServiceFactory
 Reference<XInterface > OFactoryProxyHelper::createInstance()
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return xFactory->createInstance();
 }
@@ -911,14 +911,14 @@ Reference<XInterface > OFactoryProxyHelper::createInstanceWithArguments
 (
     const Sequence<Any>& Arguments
 )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return xFactory->createInstanceWithArguments( Arguments );
 }
 
 // XServiceInfo
 OUString OFactoryProxyHelper::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );
     if( xInfo.is() )
@@ -928,14 +928,14 @@ OUString OFactoryProxyHelper::getImplementationName()
 
 // XServiceInfo
 sal_Bool OFactoryProxyHelper::supportsService(const OUString& ServiceName)
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
 Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );
     if( xInfo.is() )
@@ -943,7 +943,7 @@ Sequence< OUString > OFactoryProxyHelper::getSupportedServiceNames()
     return Sequence< OUString >();
 }
 
-sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(css::uno::RuntimeException, std::exception)
 {
 
     Reference<XUnloadingPreference> pref( xFactory, UNO_QUERY);

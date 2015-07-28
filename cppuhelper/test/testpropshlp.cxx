@@ -353,7 +353,7 @@ public:
                     }
 
     // XInterface
-    Any             SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(RuntimeException)
+    Any             SAL_CALL queryInterface( const css::uno::Type & rType ) throw(RuntimeException)
                     {
                         Any aRet( OPropertySetHelper::queryInterface( rType ) );
                         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
