@@ -41,8 +41,7 @@ namespace cppcanvas
         public:
 
             ImplBitmap( const CanvasSharedPtr& rParentCanvas,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::rendering::XBitmap >& rBitmap );
+                        const css::uno::Reference< css::rendering::XBitmap >& rBitmap );
 
             virtual ~ImplBitmap();
 
@@ -53,15 +52,14 @@ namespace cppcanvas
             virtual BitmapCanvasSharedPtr                       getBitmapCanvas() const SAL_OVERRIDE;
 
             // Bitmap implementation
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const SAL_OVERRIDE;
+            virtual css::uno::Reference< css::rendering::XBitmap >  getUNOBitmap() const SAL_OVERRIDE;
 
         private:
             ImplBitmap(const ImplBitmap&) SAL_DELETED_FUNCTION;
             ImplBitmap& operator=( const ImplBitmap& ) SAL_DELETED_FUNCTION;
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >  mxBitmap;
-            BitmapCanvasSharedPtr                                                                   mpBitmapCanvas;
+            const css::uno::Reference< css::rendering::XBitmap >  mxBitmap;
+            BitmapCanvasSharedPtr                                     mpBitmapCanvas;
          };
     }
 }

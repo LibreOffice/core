@@ -38,10 +38,10 @@ namespace cppcanvas
         class ImplCustomSprite : public virtual CustomSprite, protected virtual ImplSprite
         {
         public:
-            ImplCustomSprite( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
-                              const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::rendering::XCustomSprite >&     rSprite,
+            ImplCustomSprite( const css::uno::Reference<
+                                      css::rendering::XSpriteCanvas >&                    rParentCanvas,
+                              const css::uno::Reference<
+                                      css::rendering::XCustomSprite >&                    rSprite,
                               const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
             virtual ~ImplCustomSprite();
 
@@ -51,8 +51,8 @@ namespace cppcanvas
             ImplCustomSprite(const ImplCustomSprite&) SAL_DELETED_FUNCTION;
             ImplCustomSprite& operator=( const ImplCustomSprite& ) SAL_DELETED_FUNCTION;
 
-            mutable CanvasSharedPtr                                                                         mpLastCanvas;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite >    mxCustomSprite;
+            mutable CanvasSharedPtr                                           mpLastCanvas;
+            const css::uno::Reference< css::rendering::XCustomSprite >    mxCustomSprite;
         };
     }
 }

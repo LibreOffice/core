@@ -60,7 +60,7 @@ namespace cppcanvas
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
-                                                         const ::com::sun::star::rendering::Texture& );
+                                                         const css::rendering::Texture& );
 
             /// Create line polygon (always stroked, not filled)
             ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,
@@ -71,7 +71,7 @@ namespace cppcanvas
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
-                                                         const ::com::sun::star::rendering::StrokeAttributes& );
+                                                         const css::rendering::StrokeAttributes& );
 
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
             ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,

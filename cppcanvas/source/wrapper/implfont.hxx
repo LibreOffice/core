@@ -44,22 +44,20 @@ namespace cppcanvas
         class ImplFont : public Font
         {
         public:
-            ImplFont( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::rendering::XCanvas >& rCanvas,
+            ImplFont( const css::uno::Reference< css::rendering::XCanvas >& rCanvas,
                       const OUString& rFontName,
                       const double& rCellSize );
 
             virtual ~ImplFont();
 
             virtual OUString getName() const SAL_OVERRIDE;
-            virtual double          getCellSize() const SAL_OVERRIDE;
+            virtual double   getCellSize() const SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont > getUNOFont() const SAL_OVERRIDE;
+            virtual css::uno::Reference< css::rendering::XCanvasFont > getUNOFont() const SAL_OVERRIDE;
 
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >        mxCanvas;
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >    mxFont;
+            css::uno::Reference< css::rendering::XCanvas >        mxCanvas;
+            css::uno::Reference< css::rendering::XCanvasFont >    mxFont;
         };
     }
 }

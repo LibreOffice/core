@@ -38,8 +38,7 @@ namespace cppcanvas
         class ImplBitmapCanvas : public virtual BitmapCanvas, protected virtual ImplCanvas
         {
         public:
-            explicit ImplBitmapCanvas( const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::rendering::XBitmapCanvas >& rCanvas );
+            explicit ImplBitmapCanvas( const css::uno::Reference< css::rendering::XBitmapCanvas >& rCanvas );
             virtual ~ImplBitmapCanvas();
 
             virtual ::basegfx::B2ISize      getSize() const SAL_OVERRIDE;
@@ -52,8 +51,8 @@ namespace cppcanvas
         private:
             ImplBitmapCanvas& operator=( const ImplBitmapCanvas& ) SAL_DELETED_FUNCTION;
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >    mxBitmapCanvas;
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >          mxBitmap;
+            const css::uno::Reference< css::rendering::XBitmapCanvas >    mxBitmapCanvas;
+            const css::uno::Reference< css::rendering::XBitmap >          mxBitmap;
         };
     }
 }
