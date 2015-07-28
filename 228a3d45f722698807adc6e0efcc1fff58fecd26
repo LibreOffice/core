@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_e768febc",
+        "filename": "sc/uiconfig/scalc/ui/sidebaralignment.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-28T10:05:27Z",
+      "side": 1,
+      "message": "Did you really intend to add this toolbox in this commit? If so, update the commit msg please, as it only mentions ref. edge and vertical stacking of the text",
+      "revId": "228a3d45f722698807adc6e0efcc1fff58fecd26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a76206d7",
+        "filename": "sc/uiconfig/scalc/ui/sidebaralignment.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-28T10:05:27Z",
+      "side": 1,
+      "message": "Please add some label here and/or tooltips to individual radiobuttons (if possible), it might be not so very clear, looking at the images only that this is supposed to be a reference edge for text rotation",
+      "revId": "228a3d45f722698807adc6e0efcc1fff58fecd26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
