@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a71a0616",
+        "filename": "sc/source/filter/oox/drawingfragment.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-28T17:14:43Z",
+      "side": 0,
+      "message": "This effectively reverts the change of commit 1abc0695d770eebd21256a86aeee14a5384d84c7\n\nApparently there was a reason to set rotation to 0 for twoCellAnchor, alas that Novell Bugzilla is private. Maybe Noel can enlighten us, if he\u0027s still reachable with that Suse address?",
+      "revId": "7e495e2b9e7b52ed169c936b63d960958db310cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
