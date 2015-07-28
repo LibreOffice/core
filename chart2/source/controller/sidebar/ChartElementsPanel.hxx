@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -95,6 +96,7 @@ private:
     VclPtr<CheckBox> mpCBGridHorizontalMinor;
 
     VclPtr<ListBox> mpLBLegendPosition;
+    VclPtr<VclHBox> mpBoxLegend;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;

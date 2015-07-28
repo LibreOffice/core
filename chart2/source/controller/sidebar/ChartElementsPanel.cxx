@@ -310,6 +310,7 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpCBGridHorizontalMinor,  "checkbutton_gridline_horizontal_minor");
 
     get(mpLBLegendPosition, "comboboxtext_legend");
+    get(mpBoxLegend, "box_legend");
 
     Initialize();
 }
@@ -341,6 +342,9 @@ void ChartElementsPanel::dispose()
     mpCBGridHorizontalMajor.clear();
     mpCBGridVerticalMinor.clear();
     mpCBGridHorizontalMinor.clear();
+
+    mpLBLegendPosition.clear();
+    mpBoxLegend.clear();
 
     PanelLayout::dispose();
 }
@@ -491,7 +495,10 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
     else if (pCheckBox == mpCB2ndYAxisTitle.get())
         setTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBLegend.get())
+    {
+        mpBoxLegend->Enable( bChecked );
         setLegendVisible(mxModel, bChecked);
+    }
     else if (pCheckBox == mpCBGridVerticalMajor.get())
         setGridVisible(mxModel, GridType::VERT_MAJOR, bChecked);
     else if (pCheckBox == mpCBGridHorizontalMajor.get())
