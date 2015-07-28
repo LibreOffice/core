@@ -137,7 +137,7 @@ SbiStream::SbiStream()
     , nExpandOnWriteTo(0)
     , nLine(0)
     , nLen(0)
-    , nMode(0)
+    , nMode(SbiStreamFlags::NONE)
     , nChan(0)
     , nError(0)
 {
@@ -569,7 +569,7 @@ void    UCBStream::SetSize( sal_uInt64 nSize )
 
 
 SbError SbiStream::Open
-( short nCh, const OString& rName, StreamMode nStrmMode, short nFlags, short nL )
+( short nCh, const OString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
@@ -794,7 +794,7 @@ SbError SbiIoSystem::GetError()
     return n;
 }
 
-void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, short nFlags, short nLen)
+void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, SbiStreamFlags nFlags, short nLen)
 {
     nError = 0;
     if( nCh >= CHANNELS || !nCh )

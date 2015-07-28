@@ -174,19 +174,19 @@ void SbiParser::Open()
     SbiToken eTok;
     TestToken( FOR );
     StreamMode nMode = StreamMode::NONE;
-    short nFlags = 0;
+    SbiStreamFlags nFlags = SbiStreamFlags::NONE;
     switch( Next() )
     {
         case INPUT:
-            nMode = StreamMode::READ;  nFlags |= SBSTRM_INPUT; break;
+            nMode = StreamMode::READ;  nFlags |= SbiStreamFlags::Input; break;
         case OUTPUT:
-            nMode = StreamMode::WRITE | StreamMode::TRUNC; nFlags |= SBSTRM_OUTPUT; break;
+            nMode = StreamMode::WRITE | StreamMode::TRUNC; nFlags |= SbiStreamFlags::Output; break;
         case APPEND:
-            nMode = StreamMode::WRITE; nFlags |= SBSTRM_APPEND; break;
+            nMode = StreamMode::WRITE; nFlags |= SbiStreamFlags::Append; break;
         case RANDOM:
-            nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SBSTRM_RANDOM; break;
+            nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SbiStreamFlags::Random; break;
         case BINARY:
-            nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SBSTRM_BINARY; break;
+            nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SbiStreamFlags::Binary; break;
         default:
             Error( ERRCODE_BASIC_SYNTAX );
     }
@@ -262,7 +262,7 @@ void SbiParser::Open()
     if( pChan )
         pChan->Gen();
     aFileName.Gen();
-    aGen.Gen( _OPEN, static_cast<sal_uInt32>(nMode), nFlags );
+    aGen.Gen( _OPEN, static_cast<sal_uInt32>(nMode), static_cast<sal_uInt32>(nFlags) );
     bInStatement = false;
 }
 

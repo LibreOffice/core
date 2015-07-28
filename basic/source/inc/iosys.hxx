@@ -22,6 +22,7 @@
 
 #include <tools/stream.hxx>
 #include <basic/sberrors.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SvStream;
 
@@ -30,11 +31,19 @@ class SvStream;
 
 #define CHANNELS 256
 
-#define SBSTRM_INPUT    0x0001
-#define SBSTRM_OUTPUT   0x0002
-#define SBSTRM_RANDOM   0x0004
-#define SBSTRM_APPEND   0x0008
-#define SBSTRM_BINARY   0x0010
+enum class SbiStreamFlags
+{
+    NONE     = 0x0000,
+    Input    = 0x0001,
+    Output   = 0x0002,
+    Random   = 0x0004,
+    Append   = 0x0008,
+    Binary   = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SbiStreamFlags> : is_typed_flags<SbiStreamFlags, 0x1f> {};
+}
 
 class SbiStream
 {
@@ -43,7 +52,7 @@ class SbiStream
     OString aLine;
     sal_uIntPtr  nLine;
     short  nLen;                    // buffer length
-    short  nMode;
+    SbiStreamFlags  nMode;
     short  nChan;
     SbError nError;
     void   MapError();
@@ -51,19 +60,19 @@ class SbiStream
 public:
     SbiStream();
    ~SbiStream();
-    SbError Open( short, const OString&, StreamMode, short, short );
+    SbError Open( short, const OString&, StreamMode, SbiStreamFlags, short );
     SbError Close();
     SbError Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     SbError Read( char& );
     SbError Write( const OString&, sal_uInt16 = 0 );
 
-    bool IsText() const     { return (nMode & SBSTRM_BINARY) == 0; }
-    bool IsRandom() const   { return (nMode & SBSTRM_RANDOM) != 0; }
-    bool IsBinary() const   { return (nMode & SBSTRM_BINARY) != 0; }
-    bool IsSeq() const      { return (nMode & SBSTRM_RANDOM) == 0; }
-    bool IsAppend() const   { return (nMode & SBSTRM_APPEND) != 0; }
+    bool IsText() const     { return !bool(nMode & SbiStreamFlags::Binary); }
+    bool IsRandom() const   { return bool(nMode & SbiStreamFlags::Random); }
+    bool IsBinary() const   { return bool(nMode & SbiStreamFlags::Binary); }
+    bool IsSeq() const      { return !bool(nMode & SbiStreamFlags::Random); }
+    bool IsAppend() const   { return bool(nMode & SbiStreamFlags::Append); }
     short GetBlockLen() const          { return nLen;           }
-    short GetMode() const              { return nMode;          }
+    SbiStreamFlags GetMode() const              { return nMode;          }
     sal_uIntPtr GetLine() const            { return nLine;          }
     void SetExpandOnWriteTo( sal_uIntPtr n ) { nExpandOnWriteTo = n;    }
     void ExpandFile();
@@ -89,7 +98,7 @@ public:
     void  SetChannel( short n  )       { nChan = n;   }
     short GetChannel() const           { return nChan;}
     void  ResetChannel()               { nChan = 0;   }
-    void  Open( short, const OString&, StreamMode, short, short );
+    void  Open( short, const OString&, StreamMode, SbiStreamFlags, short );
     void  Close();
     void  Read(OString&, short = 0);
     char  Read();

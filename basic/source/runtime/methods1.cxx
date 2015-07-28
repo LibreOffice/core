@@ -1248,7 +1248,7 @@ void PutGet( SbxArray& rPar, bool bPut )
     SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nFileNo );
 
-    if ( !pSbStrm || !(pSbStrm->GetMode() & (SBSTRM_BINARY | SBSTRM_RANDOM)) )
+    if ( !pSbStrm || !(pSbStrm->GetMode() & (SbiStreamFlags::Binary | SbiStreamFlags::Random)) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
         return;
@@ -3263,7 +3263,7 @@ RTLFUNC(Input)
 
     SbiIoSystem* pIosys = GetSbData()->pInst->GetIoSystem();
     SbiStream* pSbStrm = pIosys->GetStream( nFileNumber );
-    if ( !pSbStrm || !(pSbStrm->GetMode() & (SBSTRM_BINARY | SBSTRM_INPUT)) )
+    if ( !pSbStrm || !(pSbStrm->GetMode() & (SbiStreamFlags::Binary | SbiStreamFlags::Input)) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
         return;

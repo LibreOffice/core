@@ -4308,7 +4308,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     short nChan   = pChan->GetInteger();
     OString aName(OUStringToOString(pName->GetOUString(), osl_getThreadTextEncoding()));
     pIosys->Open( nChan, aName, static_cast<StreamMode>( nOp1 ),
-                  static_cast<short>( nOp2 ), nBlkLen );
+                  static_cast<SbiStreamFlags>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );
 }
 
