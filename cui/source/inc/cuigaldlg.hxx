@@ -189,7 +189,6 @@ private:
     GalleryTheme*   pThm;
 
     DECL_LINK( ClickOkHdl, void* );
-    DECL_LINK( ClickResNameHdl, void* );
 public:
     GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
     virtual ~GalleryIdDialog();
@@ -285,7 +284,6 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( ClickTakeHdl, void* );
                         DECL_LINK( ClickTakeAllHdl, void* );
                         DECL_LINK( SelectFoundHdl, void* );
-                        DECL_LINK( SelectThemeHdl, void* );
                         DECL_LINK( SelectFileTypeHdl, void* );
                         DECL_LINK( DClickFoundHdl, void* );
                         DECL_LINK_TYPED( PreviewTimerHdl, Timer*, void );

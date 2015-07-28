@@ -1049,7 +1049,6 @@ bool ComboBox::IsInDropDown() const
     return m_pImpl->m_pFloatWin && m_pImpl->m_pFloatWin->IsInPopupMode();
 }
 
-void ComboBox::SetMultiSelectionSeparator(sal_Unicode cSep) { m_pImpl->m_cMultiSep = cSep; }
 sal_Unicode ComboBox::GetMultiSelectionSeparator() const { return m_pImpl->m_cMultiSep; }
 
 void ComboBox::EnableMultiSelection( bool bMulti )
@@ -1568,8 +1567,6 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     }
     return aBounds;
 }
-
-sal_Int32 ComboBox::getMaxWidthChars() const { return m_pImpl->m_nMaxWidthChars; }
 
 void ComboBox::setMaxWidthChars(sal_Int32 nWidth)
 {

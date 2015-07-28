@@ -1843,22 +1843,6 @@ basegfx::B2DPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolygon& rPoly
     return aPoly;
 }
 
-basegfx::B2DPolyPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolyPolygon& rPolySource,
-                                                    const MapMode& rMapModeSource,
-                                                    const MapMode& rMapModeDest )
-{
-    if(rMapModeSource == rMapModeDest)
-    {
-        return rPolySource;
-    }
-
-    const basegfx::B2DHomMatrix aTransform(LogicToLogic(rMapModeSource, rMapModeDest));
-    basegfx::B2DPolyPolygon aPoly(rPolySource);
-
-    aPoly.transform(aTransform);
-    return aPoly;
-}
-
 basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest)
 {
     basegfx::B2DHomMatrix aTransform;

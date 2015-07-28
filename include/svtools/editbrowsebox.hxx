@@ -497,8 +497,6 @@ namespace svt
     protected:
         VclPtr<BrowserHeader>  pHeader;
 
-        void cancelGetCellFocus() { if (nStartEvent) Application::RemoveUserEvent(nStartEvent); nStartEvent = 0; }
-
         BrowserMouseEventPtr& getMouseEvent() { return aMouseEvent; }
 
     protected:

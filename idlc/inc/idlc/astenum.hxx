@@ -31,8 +31,6 @@ public:
 
     virtual ~AstEnum();
 
-    void setEnumValueCount(sal_Int32 count)
-        { m_enumValueCount = count; }
     sal_Int32 getEnumValueCount()
         { return m_enumValueCount++; }
 

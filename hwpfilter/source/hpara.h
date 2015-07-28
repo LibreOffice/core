@@ -136,7 +136,6 @@ class DLLEXPORT HWPPara
         HWPPara *Next(void) { return _next;}
 
         int HomePos(int line) const;
-        int EndPos(int line) const;
 
     private:
         HBox *readHBox(HWPFile &);
@@ -148,13 +147,6 @@ inline int HWPPara::HomePos(int line) const
 {
     if( nline < line + 1 ) return nch;
     return linfo[line].pos;
-}
-
-
-inline int HWPPara::EndPos(int line) const
-{
-    if( nline <= line + 1 ) return nch;
-    else return HomePos(line + 1);
 }
 
 

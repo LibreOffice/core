@@ -72,7 +72,6 @@ namespace dbaccess
         bool operator ==(const ORowSetMatrix::iterator& _rRH) const;
 
         void setBookmark(const ::com::sun::star::uno::Any&  _rBookmark);
-        ::com::sun::star::uno::Any getBookmark() const { return m_aIter->second.aBookmark; }
 
         ORowSetCacheMap::iterator getIter() const { return m_aIter; }
     };

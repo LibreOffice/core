@@ -42,8 +42,6 @@ public:
     bool isConstructor() const { return m_pReturnType == 0; }
 
     void setExceptions(DeclList const * pExceptions);
-    const DeclList& getExceptions()
-        { return m_exceptions; }
     sal_uInt16 nExceptions()
         { return (sal_uInt16)(m_exceptions.size()); }
 

@@ -55,24 +55,13 @@ protected:
 public:
                         TYPEINFO_OVERRIDE();
 
-    const OUString &    GetIdlFileName() const { return aIdlFileName; }
-    const OString& GetModulePrefix() const { return aModulePrefix.getString(); }
-
-    virtual bool    SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
-
-    const OString& GetHelpFileName() const { return aHelpFileName.getString(); }
-    const OString& GetTypeLibFileName() const { return aTypeLibFile.getString(); }
-
-    const SvMetaAttributeMemberList & GetAttrList() const { return aAttrList; }
-    const SvMetaTypeMemberList & GetTypeList() const { return aTypeList; }
-    const SvMetaClassMemberList & GetClassList() const { return aClassList; }
+    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
 
                         SvMetaModule( const OUString & rIdlFileName,
                                       bool bImported );
 
     bool                FillNextName( SvGlobalName * );
     bool                IsImported() const { return bImported; }
-    bool                IsModified() const { return bIsModified; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 

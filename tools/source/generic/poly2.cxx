@@ -549,26 +549,6 @@ bool PolyPolygon::operator==( const tools::PolyPolygon& rPolyPoly ) const
         return false;
 }
 
-bool PolyPolygon::IsEqual( const tools::PolyPolygon& rPolyPoly ) const
-{
-    bool bIsEqual = true;
-    if ( Count() != rPolyPoly.Count() )
-        bIsEqual = false;
-    else
-    {
-        sal_uInt16 i;
-        for ( i = 0; i < Count(); i++ )
-        {
-            if (!GetObject( i ).IsEqual( rPolyPoly.GetObject( i ) ) )
-            {
-                bIsEqual = false;
-                break;
-            }
-        }
-    }
-    return bIsEqual;
-}
-
 SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );

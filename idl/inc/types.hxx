@@ -54,34 +54,15 @@ public:
 
     void                SetNewAttribute( bool bNew )
                         { bNewAttr = bNew; }
-    bool                IsNewAttribute() const
-                        { return bNewAttr; }
     bool                GetReadonly() const;
-
     void                SetSlotId( const SvNumberIdentifier & rId )
                         { aSlotId = rId; }
     const SvNumberIdentifier & GetSlotId() const;
-
-    void                SetExport( bool bSet )
-                        { aExport = bSet; }
     bool                GetExport() const;
-
-    void                SetHidden( bool bSet )
-                        { aHidden = bSet; }
     bool                GetHidden() const;
-
-    void                SetAutomation( bool bSet )
-                        { aAutomation = bSet; }
     bool                GetAutomation() const;
-
-    void                SetIsCollection( bool bSet )
-                        { aIsCollection = bSet; }
     bool                GetIsCollection() const;
-    void                SetReadOnlyDoc( bool bSet )
-                        { aReadOnlyDoc = bSet; }
     bool                GetReadOnlyDoc() const;
-
-    void                SetType( SvMetaType * pT ) { aType = pT; }
     SvMetaType *        GetType() const;
 
     virtual bool        IsMethod() const;
@@ -147,10 +128,6 @@ public:
     sal_uLong               GetAttrCount() const
                         {
                             return pAttrList ? pAttrList->size() : 0L;
-                        }
-    void                AppendAttr( SvMetaAttribute * pAttr )
-                        {
-                            GetAttrList().push_back( pAttr );
                         }
 
     void                SetType( int nT );
@@ -227,7 +204,6 @@ public:
             TYPEINFO_OVERRIDE();
             SvMetaTypeEnum();
 
-    sal_uInt16          GetMaxValue() const;
     sal_uLong           Count() const { return aEnumValueList.size(); }
     const OString&      GetPrefix() const { return aPrefix; }
     SvMetaEnumValue *   GetObject( sal_uLong n ) const

@@ -1784,9 +1784,6 @@ public:
     static basegfx::B2DPolygon  LogicToLogic( const basegfx::B2DPolygon& rPoly,
                                               const MapMode&    rMapModeSource,
                                               const MapMode&    rMapModeDest );
-    static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
-                                                 const MapMode&    rMapModeSource,
-                                                 const MapMode&    rMapModeDest );
 
     // create a mapping transformation from rMapModeSource to rMapModeDest (the above methods
     // for B2DPoly/Polygons use this internally anyway to transform the B2DPolygon)

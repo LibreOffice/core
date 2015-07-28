@@ -320,7 +320,6 @@ public:
     void TakeStr(long nVal, OUString& rStr) const;
     static void TakeUnitStr(MapUnit eUnit, OUString& rStr);
     static void TakeUnitStr(FieldUnit eUnit, OUString& rStr);
-    static OUString GetUnitStr(MapUnit eUnit)   { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
     static OUString GetUnitStr(FieldUnit eUnit) { OUString aStr; TakeUnitStr(eUnit,aStr); return aStr; }
 };
 

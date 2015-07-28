@@ -612,30 +612,7 @@ bool ScColorScaleFormat::NeedsRepaint() const
     return false;
 }
 
-bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
-{
-    bool bNeedUpdate = false;
-    for(const_iterator itr = begin(); itr != end(); ++itr)
-    {
-        ScColorScaleEntryType eType = itr->GetType();
-        switch(eType)
-        {
-            case COLORSCALE_MIN:
-            case COLORSCALE_MAX:
-                bNeedUpdate = true;
-                break;
-            case COLORSCALE_FORMULA:
-                return true;
-            default:
-                break;
-        }
-    }
 
-    // TODO: check also if the changed value is the new min/max
-    // or has been the old min/max value
-    bNeedUpdate = bNeedUpdate && GetRange().Intersects(rRange);
-    return bNeedUpdate;
-}
 
 condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
 {

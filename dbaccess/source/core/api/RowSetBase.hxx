@@ -346,8 +346,6 @@ namespace dbaccess
             firePropertyChange(_nPos,_rNewValue);
         }
         using ::comphelper::OPropertyStateContainer::getFastPropertyValue;
-
-        ::osl::Mutex*   getMutex() const { return m_pMutex; }
     };
 
     /** eases the handling of the doCancelModification and notifyCancelInsert methods

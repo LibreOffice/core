@@ -77,7 +77,6 @@ public:
     bool IsDirty();
 
     bool Commit();
-    bool Revert();
 
     void  OpenStream( StgIo&, bool=false );     // set up an appropriate stream
     void  Close();
@@ -105,7 +104,6 @@ public:
     StgDirEntry* Find( StgDirEntry&, const OUString& );
     StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
     bool         Rename( StgDirEntry&, const OUString&, const OUString& );
-    bool         Move( StgDirEntry&, StgDirEntry&, const OUString& );
 };
 
 class StgIterator : public StgAvlIterator

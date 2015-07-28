@@ -88,7 +88,6 @@ OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
 OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
 {
     return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
-
 }
 #endif
 

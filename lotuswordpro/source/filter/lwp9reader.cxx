@@ -129,26 +129,6 @@ void Lwp9Reader::ReadIndex()
 }
 
 /**
- * @descr   Read all objects
- *      This function is  replaced by the read on demand model
- *      Reserverd for future use
-*/
-
-
-/**
- * @descr   Get file size
-*/
-sal_Int64 Lwp9Reader::GetFileSize()
-{
-    sal_Int64 pos = m_pDocStream->Tell();
-    m_pDocStream->Seek(0);
-
-    sal_Int64 size = m_pDocStream->Seek( STREAM_SEEK_TO_END);
-    m_pDocStream->Seek(pos);
-    return size;
-}
-
-/**
  * @descr       Parse all document content
 */
 void Lwp9Reader::ParseDocument()
