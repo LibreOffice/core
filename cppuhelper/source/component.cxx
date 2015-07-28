@@ -90,7 +90,7 @@ void OComponentHelper::release() throw()
                 {
                     dispose();
                 }
-                catch (::com::sun::star::uno::RuntimeException & exc)
+                catch (css::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
 #if OSL_DEBUG_LEVEL > 0
@@ -139,7 +139,7 @@ void OComponentHelper::disposing()
 
 // XComponent
 void OComponentHelper::dispose()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // An frequently programming error is to release the last
     // reference to this object in the disposing message.
@@ -212,7 +212,7 @@ void OComponentHelper::dispose()
 // XComponent
 void OComponentHelper::addEventListener(
     const Reference<XEventListener > & rxListener )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -230,7 +230,7 @@ void OComponentHelper::addEventListener(
 // XComponent
 void OComponentHelper::removeEventListener(
     const Reference<XEventListener > & rxListener )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
 }

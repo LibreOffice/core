@@ -169,7 +169,7 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
                 break;
             case typelib_TypeClass_TYPE:
                 {
-                    const ::rtl::OString sValue( ::rtl::OUStringToOString(static_cast<com::sun::star::uno::Type*>(pArg)->getTypeName(),osl_getThreadTextEncoding()));
+                    const ::rtl::OString sValue( ::rtl::OUStringToOString(static_cast<css::uno::Type*>(pArg)->getTypeName(),osl_getThreadTextEncoding()));
                    SAL_INFO("cppu.log", "" << sValue.getStr());
                 }
                 break;

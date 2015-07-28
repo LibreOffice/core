@@ -51,7 +51,7 @@ namespace detail {
  */
 ::rtl::OUString expandMacros(rtl::OUString const & text);
 
-com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+css::uno::Reference< css::lang::XSingleComponentFactory >
 create_bootstrap_macro_expander_factory();
 
 }

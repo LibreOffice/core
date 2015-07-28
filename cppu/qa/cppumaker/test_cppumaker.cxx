@@ -369,7 +369,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 std::ostream & operator <<(
     std::ostream & out,
-    SAL_UNUSED_PARAMETER com::sun::star::uno::Exception const &)
+    SAL_UNUSED_PARAMETER css::uno::Exception const &)
 {
     return out << "<UNO exception>";
 }
@@ -442,7 +442,7 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m11, static_cast< sal_Unicode >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m12.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(
-        +guard.p->m13.getTypeClass(), +com::sun::star::uno::TypeClass_VOID);
+        +guard.p->m13.getTypeClass(), +css::uno::TypeClass_VOID);
     CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), false);
     CPPUNIT_ASSERT_EQUAL(guard.p->m15.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(
@@ -470,7 +470,7 @@ void Test::testBigStruct() {
 #endif
 #endif
 
-    com::sun::star::uno::Type t(
+    css::uno::Type t(
         cppu::UnoType< test::codemaker::cppumaker::BigStruct >::get());
     typelib_TypeDescription * td = NULL;
     t.getDescription(&td);
@@ -488,11 +488,11 @@ void Test::testPolyStruct() {
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString(
                 "test.codemaker.cppumaker.Struct<char,short>"),
-        (com::sun::star::uno::makeAny(
+        (css::uno::makeAny(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueType().getTypeName()));
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+    css::uno::Sequence< css::uno::Sequence< css::uno::Any > >
         aEmptySequence;
 
     CPPUNIT_ASSERT_EQUAL(
@@ -502,12 +502,12 @@ void Test::testPolyStruct() {
 }
 
 void Test::testExceptions() {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+    css::uno::Sequence< css::uno::Sequence< css::uno::Any > >
         aEmptySequence;
 
     test::codemaker::cppumaker::TestException1 e11(
         rtl::OUString("abc"), 0, 1,
-        com::sun::star::uno::makeAny(123.0),
+        css::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException1 e12(e11);
@@ -517,7 +517,7 @@ void Test::testExceptions() {
     CPPUNIT_ASSERT_EQUAL(e11, e13);
     test::codemaker::cppumaker::TestException2 e21(
         rtl::OUString("abc"), 0, 1,
-        com::sun::star::uno::makeAny(123.0),
+        css::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException2 e22(e21);

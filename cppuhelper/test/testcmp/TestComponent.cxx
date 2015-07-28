@@ -71,7 +71,7 @@ public:
     explicit TestComponent(uno::Reference<uno::XComponentContext> const & xCtx);
     virtual ~TestComponent();
 
-    uno::Any SAL_CALL queryInterface(uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException);
+    uno::Any SAL_CALL queryInterface(uno::Type const & rType ) throw (css::uno::RuntimeException);
     void SAL_CALL release() throw ();
     void SAL_CALL acquire() throw ();
 
@@ -136,7 +136,7 @@ void SAL_CALL TestComponent::release() throw ()
     cppu::WeakImplHelper1<lang::XServiceInfo>::release();
 }
 
-uno::Any SAL_CALL TestComponent::queryInterface(uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+uno::Any SAL_CALL TestComponent::queryInterface(uno::Type const & rType ) throw (css::uno::RuntimeException)
 {
     return cppu::WeakImplHelper1<lang::XServiceInfo>::queryInterface(rType);
 }

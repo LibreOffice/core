@@ -54,7 +54,7 @@ void testPropertyTypeHelper()
     convertPropertyValue( f , a );
     OSL_ASSERT( 25. == f );
 
-    ::com::sun::star::beans::Property prop;
+    css::beans::Property prop;
 
     prop.Name = rtl::OUString("Huhu");
     prop.Handle = 5;
@@ -62,7 +62,7 @@ void testPropertyTypeHelper()
 
     a <<= prop;
 
-    ::com::sun::star::beans::Property prop2;
+    css::beans::Property prop2;
     convertPropertyValue( prop2 , a );
      OSL_ASSERT( prop.Handle == prop2.Handle && prop.Name == prop2.Name && prop.Attributes == prop2.Attributes );
 
