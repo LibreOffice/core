@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_832c9fac",
+        "filename": "external/boost/UnpackedTarball_boost.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-28T06:22:09Z",
+      "side": 1,
+      "message": "Nice this was merged upstream: [1] So probably just add\n\n  # merged upstream \n\ncomment here.\n\n* [1] https://github.com/boostorg/move/commit/49a42a2fffb72d0c5d867acdbdbc3d72912c5184",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 47
+      },
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
