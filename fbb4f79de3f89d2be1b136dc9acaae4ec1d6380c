@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_0770ba71",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2197,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-28T15:56:26Z",
+      "side": 1,
+      "message": "Can pTextNodeInfoInner be nullptr and should be checked? From WW8TableNodeInfo::getFirstInner() it looks like it could if mInners.empty().",
+      "range": {
+        "startLine": 2197,
+        "startChar": 13,
+        "endLine": 2197,
+        "endChar": 31
+      },
+      "revId": "fbb4f79de3f89d2be1b136dc9acaae4ec1d6380c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
