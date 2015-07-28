@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_0793da5c",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2959,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-28T21:11:47Z",
+      "side": 1,
+      "message": "i think this should be \"\u003c\" not \"\u003c\u003d\"",
+      "revId": "bd9d44b60fe1327fd4d66cf1a18e92a0d55a1208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a79f665e",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-28T21:11:47Z",
+      "side": 1,
+      "message": "need to check that nEnd \u003e nIndex here\n\n(or perhaps search forward, not backward)",
+      "revId": "bd9d44b60fe1327fd4d66cf1a18e92a0d55a1208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e7955e40",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 17912,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-28T21:11:47Z",
+      "side": 1,
+      "message": "i\u0027m not sure what does this do? is CT_R something specific to ruby or will this send a EG_RubyContent_r for every w:r element?",
+      "revId": "bd9d44b60fe1327fd4d66cf1a18e92a0d55a1208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
