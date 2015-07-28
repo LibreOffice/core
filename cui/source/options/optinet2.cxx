@@ -190,7 +190,7 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_pProxyModeLB->SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
 
-    Reference< com::sun::star::lang::XMultiServiceFactory >
+    Reference< css::lang::XMultiServiceFactory >
         xConfigurationProvider(
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext() ) );
@@ -293,7 +293,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
-    catch (const com::sun::star::lang::WrappedTargetException &) {
+    catch (const css::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
 
@@ -352,7 +352,7 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch (const com::sun::star::lang::WrappedTargetException &) {
+    catch (const css::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
@@ -386,7 +386,7 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch (const com::sun::star::lang::WrappedTargetException &) {
+    catch (const css::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
@@ -479,7 +479,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
         xChangesBatch->commitChanges();
     }
 
-    catch (const com::sun::star::lang::IllegalArgumentException &) {
+    catch (const css::lang::IllegalArgumentException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
@@ -491,7 +491,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
 
-    catch (const com::sun::star::lang::WrappedTargetException &) {
+    catch (const css::lang::WrappedTargetException &) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
 
@@ -1082,7 +1082,7 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
     if (m_pMailerURLPB == pButton && !pImpl->bROProgram)
     {
         FileDialogHelper aHelper(
-            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
         OUString sPath = m_pMailerURLED->GetText();
         if ( sPath.isEmpty() )

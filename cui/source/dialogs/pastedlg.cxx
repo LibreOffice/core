@@ -124,7 +124,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
                                  aEnd( ((DataFlavorExVector&)*pFormats).end() );
     while( aIter != aEnd )
     {
-        ::com::sun::star::datatransfer::DataFlavor aFlavor( *aIter );
+        css::datatransfer::DataFlavor aFlavor( *aIter );
         SotClipboardFormatId nFormat = (*aIter++).mnSotId;
 
         ::std::map< SotClipboardFormatId, OUString >::iterator itName =

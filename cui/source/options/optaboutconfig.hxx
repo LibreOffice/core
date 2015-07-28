@@ -54,7 +54,7 @@ private:
     VclPtr< SvSimpleTable > m_pPrefBox;
 
      //for search
-    ::com::sun::star::util::SearchOptions m_options;
+    css::util::SearchOptions m_options;
     SvTreeListEntries m_prefBoxEntries;
 
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
@@ -73,9 +73,9 @@ public:
    void     InsertEntry(const OUString &rPropertyPath, const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
                         SvTreeListEntry *pParentEntry = nullptr, bool bInsertToPrefBox = true);
    void     Reset();
-   void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess,
+   void     FillItems(const css::uno::Reference<css::container::XNameAccess>& xNameAccess,
                       SvTreeListEntry *pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);
-   static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
+   static css::uno::Reference< css::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
    bool FillItemSet();
 };
 

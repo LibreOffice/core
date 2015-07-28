@@ -325,28 +325,28 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             {
                 switch( aNode.getValueType().getTypeClass() )
                 {
-                case ::com::sun::star::uno::TypeClass_VOID:
+                case css::uno::TypeClass_VOID:
                     break;
 
-                case ::com::sun::star::uno::TypeClass_BOOLEAN:
+                case css::uno::TypeClass_BOOLEAN:
                     sValue = OUString::boolean( aNode.get<bool>() );
                     break;
 
-                case ::com::sun::star::uno::TypeClass_SHORT:
-                case ::com::sun::star::uno::TypeClass_LONG:
-                case ::com::sun::star::uno::TypeClass_HYPER:
+                case css::uno::TypeClass_SHORT:
+                case css::uno::TypeClass_LONG:
+                case css::uno::TypeClass_HYPER:
                     sValue = OUString::number( aNode.get<sal_Int64>() );
                     break;
 
-                case ::com::sun::star::uno::TypeClass_DOUBLE:
+                case css::uno::TypeClass_DOUBLE:
                     sValue = OUString::number( aNode.get<double>() );
                     break;
 
-                case ::com::sun::star::uno::TypeClass_STRING:
+                case css::uno::TypeClass_STRING:
                     sValue = aNode.get<OUString>();
                     break;
 
-                case ::com::sun::star::uno::TypeClass_SEQUENCE:
+                case css::uno::TypeClass_SEQUENCE:
                     if( sType == "[]boolean" )
                     {
                         uno::Sequence<sal_Bool> seq = aNode.get< uno::Sequence<sal_Bool> >();
@@ -487,7 +487,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString&
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-                com::sun::star::configuration::theDefaultProvider::get( xContext  ) );
+                css::configuration::theDefaultProvider::get( xContext  ) );
 
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";

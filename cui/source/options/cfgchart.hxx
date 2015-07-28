@@ -63,12 +63,12 @@ class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
     SvxChartColorTable          maDefColors;
-    bool                    mbIsInitialized;
+    bool                        mbIsInitialized;
 
-    ::com::sun::star::uno::Sequence< OUString >
-                            maPropertyNames;
+    css::uno::Sequence< OUString >
+                                maPropertyNames;
 
-    inline ::com::sun::star::uno::Sequence< OUString > GetPropertyNames() const
+    inline css::uno::Sequence< OUString > GetPropertyNames() const
         { return maPropertyNames; }
     bool RetrieveOptions();
 
@@ -81,7 +81,7 @@ public:
     const SvxChartColorTable&   GetDefaultColors();
     void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 };
 
 

@@ -62,7 +62,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     pPolyObj            ( NULL ),
     bObjSelected        ( false ),
 
-    aXLStyle            ( com::sun::star::drawing::LineStyle_SOLID ),
+    aXLStyle            ( css::drawing::LineStyle_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( rInAttrs.GetPool() ),
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg(com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         OUString aStrFilterType( "*.soe" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
@@ -638,7 +638,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 {
-    ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     OUString aStrFilterType( "*.soe" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 

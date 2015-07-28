@@ -43,11 +43,11 @@ struct SvxGroupInfo_Impl
 {
     sal_uInt16          nKind;
     sal_uInt16          nOrd;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
-                    xBrowseNode;
-    OUString sURL;
-    OUString sHelpText;
-    bool            bWasOpened;
+    css::uno::Reference< css::script::browse::XBrowseNode >
+                        xBrowseNode;
+    OUString            sURL;
+    OUString            sHelpText;
+    bool                bWasOpened;
 
     SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr )
         :nKind( n )
@@ -59,7 +59,7 @@ struct SvxGroupInfo_Impl
     {
     }
 
-    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxNode )
+    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const css::uno::Reference< css::script::browse::XBrowseNode >& _rxNode )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode( _rxNode )
@@ -120,11 +120,11 @@ class SvxConfigGroupListBox : public SvTreeListBox
     VclPtr<SvxConfigFunctionListBox>  pFunctionListBox;
     SaveInData*                     m_pImageProvider;
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::frame::XFrame > m_xFrame;
+    css::uno::Reference
+        < css::frame::XFrame > m_xFrame;
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::container::XNameAccess > m_xModuleCommands;
+    css::uno::Reference
+        < css::container::XNameAccess > m_xModuleCommands;
 
     Image m_hdImage;
     Image m_libImage;
@@ -133,19 +133,19 @@ class SvxConfigGroupListBox : public SvTreeListBox
     OUString m_sMyMacros;
     OUString m_sProdMacros;
     Image GetImage(
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
+        css::uno::Reference< css::script::browse::XBrowseNode > node,
+        css::uno::Reference< css::uno::XComponentContext > xCtx,
         bool bIsRootNode
     );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
+    static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
+        css::uno::Reference< css::uno::XComponentContext >& xCtx,
         OUString& docName
     );
 
 private:
     void    fillScriptList(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxRootNode,
+        const css::uno::Reference< css::script::browse::XBrowseNode >& _rxRootNode,
         SvTreeListEntry* _pParentEntry,
         bool _bCheapChildrenOnDemand
     );
@@ -159,8 +159,8 @@ public:
     virtual ~SvxConfigGroupListBox();
     virtual void dispose() SAL_OVERRIDE;
 
-    void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
-                    < ::com::sun::star::frame::XFrame >& xFrame);
+    void    Init(bool bShowSlots, const css::uno::Reference
+                    < css::frame::XFrame >& xFrame);
 
     void    ClearAll();
     void    GroupSelected();
@@ -195,8 +195,7 @@ public:
     SvxScriptSelectorDialog (
         vcl::Window* pParent = NULL,
         bool bShowSlots = false,
-        const ::com::sun::star::uno::Reference
-            < ::com::sun::star::frame::XFrame >& xFrame = 0
+        const css::uno::Reference< css::frame::XFrame >& xFrame = 0
     );
     virtual ~SvxScriptSelectorDialog();
     virtual void dispose() SAL_OVERRIDE;

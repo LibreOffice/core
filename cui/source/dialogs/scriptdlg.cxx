@@ -65,10 +65,10 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::document;
+using namespace css::uno;
+using namespace css::script;
+using namespace css::frame;
+using namespace css::document;
 
 void ShowErrorDialog( const Any& aException )
 {
@@ -302,7 +302,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
     return langNode;
 }
 
-void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< css::script::browse::XBrowseNode >& node,
                                        Reference< XModel >& model )
 {
     if (! node.is() )
@@ -737,22 +737,22 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         }
                         catch ( reflection::InvocationTargetException& ite )
                         {
-                            ::com::sun::star::uno::Any a = makeAny(ite);
+                            css::uno::Any a = makeAny(ite);
                             ShowErrorDialog(a);
                         }
                         catch ( provider::ScriptFrameworkErrorException& ite )
                         {
-                            ::com::sun::star::uno::Any a = makeAny(ite);
+                            css::uno::Any a = makeAny(ite);
                             ShowErrorDialog(a);
                         }
                         catch ( RuntimeException& re )
                         {
-                            ::com::sun::star::uno::Any a = makeAny(re);
+                            css::uno::Any a = makeAny(re);
                             ShowErrorDialog(a);
                         }
                         catch ( Exception& e )
                         {
-                            ::com::sun::star::uno::Any a = makeAny(e);
+                            css::uno::Any a = makeAny(e);
                             ShowErrorDialog(a);
                         }
                     }
@@ -1407,7 +1407,7 @@ OUString GetErrorMessage( const Exception& e )
     return message;
 }
 
-OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
+OUString GetErrorMessage( const css::uno::Any& aException )
 {
     if ( aException.getValueType() ==
          cppu::UnoType<reflection::InvocationTargetException>::get())
@@ -1457,7 +1457,7 @@ OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
 }
 
 SvxScriptErrorDialog::SvxScriptErrorDialog(
-    vcl::Window* , ::com::sun::star::uno::Any aException )
+    vcl::Window* , css::uno::Any aException )
     : m_sMessage()
 {
     SolarMutexGuard aGuard;

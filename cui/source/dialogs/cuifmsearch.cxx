@@ -38,11 +38,11 @@
 #include <sal/macros.h>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::i18n;
+using namespace css::uno;
+using namespace css::i18n;
 using namespace ::svxform;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::util;
+using namespace css::sdbc;
+using namespace css::util;
 
 #define MAX_HISTORY_ENTRIES     50
 
@@ -692,7 +692,7 @@ IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnDelayedPaint, Timer *, void)
     EnableControlPaint(true);
 }
 
-void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos)
+void FmSearchDialog::OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos)
 {
     FmFoundRecordInformation friInfo;
     friInfo.nContext = m_plbForm->GetSelectEntryPos();

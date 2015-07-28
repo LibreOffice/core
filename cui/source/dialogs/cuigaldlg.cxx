@@ -128,19 +128,19 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 
     try
     {
-        ::com::sun::star::uno::Reference< XCommandEnvironment > xEnv;
+        css::uno::Reference< XCommandEnvironment > xEnv;
         Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext() );
         Sequence< OUString > aProps( 2 );
 
         aProps.getArray()[ 0 ] = "IsFolder";
         aProps.getArray()[ 1 ] = "IsDocument";
-        ::com::sun::star::uno::Reference< XResultSet > xResultSet(
+        css::uno::Reference< XResultSet > xResultSet(
             aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
 
         if( xResultSet.is() )
         {
-            ::com::sun::star::uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
-            ::com::sun::star::uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
+            css::uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+            css::uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 
             while( xResultSet->next() && schedule() )
             {
@@ -191,10 +191,10 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     catch (const ContentCreationException&)
     {
     }
-    catch (const ::com::sun::star::uno::RuntimeException&)
+    catch (const css::uno::RuntimeException&)
     {
     }
-    catch (const ::com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
     }
 }
@@ -1056,7 +1056,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
         try
         {
             // setup folder picker
-            com::sun::star::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             xFolderPicker = FolderPicker::create(xContext);
 
             OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );
@@ -1064,7 +1064,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
 
             aPreviewTimer.Stop();
 
-            com::sun::star::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+            css::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
             if ( xAsyncDlg.is() )
                 xAsyncDlg->startExecuteModal( xDialogListener.get() );
             else
@@ -1274,7 +1274,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 
 
 
-IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent*, pEvt )
+IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt )
 {
     DBG_ASSERT( xFolderPicker.is(), "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
 

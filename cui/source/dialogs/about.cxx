@@ -134,9 +134,9 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         return 1;
     try
     {
-        Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
-        xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+        Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+            css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
+        xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch (const Exception&)
     {

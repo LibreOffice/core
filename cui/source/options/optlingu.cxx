@@ -71,10 +71,10 @@
 
 using namespace ::ucbhelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::beans;
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::linguistic2;
+using namespace css::beans;
 
 #define CBCOL_FIRST     0
 #define CBCOL_SECOND    1
@@ -155,10 +155,10 @@ bool KillFile_Impl( const OUString& rURL )
     bool bRet = true;
     try
     {
-        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        Content aCnt( rURL, uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString("delete"), makeAny( true ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( css::ucb::CommandAbortedException& )
     {
         SAL_WARN( "cui.options", "KillFile: CommandAbortedException" );
         bRet = false;

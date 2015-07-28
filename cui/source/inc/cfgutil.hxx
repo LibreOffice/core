@@ -56,14 +56,14 @@ struct SfxStyleInfo_Impl
 
 struct SfxStylesInfo_Impl
 {
-    private:
+private:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDoc;
+        css::uno::Reference< css::frame::XModel > m_xDoc;
 
-    public:
+public:
 
         SfxStylesInfo_Impl();
-        void setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
+        void setModel(const css::uno::Reference< css::frame::XModel >& xModel);
 
         static bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);
@@ -134,13 +134,13 @@ class SfxConfigGroupListBox : public SvTreeListBox
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
 
     Image GetImage(
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
+        css::uno::Reference< css::script::browse::XBrowseNode > node,
+        css::uno::Reference< css::uno::XComponentContext > xCtx,
         bool bIsRootNode
     );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
+    static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
+        css::uno::Reference< css::uno::XComponentContext >& xCtx,
         OUString& docName
     );
 

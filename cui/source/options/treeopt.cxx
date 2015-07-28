@@ -260,7 +260,7 @@ public:
     MailMergeCfg_Impl();
     virtual ~MailMergeCfg_Impl();
 
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     bool IsEmailSupported() const {return bIsEmailSupported;}
 
@@ -286,7 +286,7 @@ void MailMergeCfg_Impl::ImplCommit()
 {
 }
 
-void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& )
+void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
 {
 }
 
@@ -1497,7 +1497,7 @@ OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
         {
             sIdentifier = xModuleManager->identify( xCurrentFrame );
         }
-        catch ( ::com::sun::star::frame::UnknownModuleException& )
+        catch ( css::frame::UnknownModuleException& )
         {
             DBG_WARNING( "getActiveModule_Impl(): unknown module" );
         }
@@ -1542,7 +1542,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     if( ! xService.is() )
                         continue;
                 }
-                catch ( ::com::sun::star::uno::DeploymentException& )
+                catch ( css::uno::DeploymentException& )
                 {
                     continue;
                 }
@@ -1851,7 +1851,7 @@ OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& r
         {
             sModule = xModuleManager->identify( xCurrentFrame );
         }
-        catch ( ::com::sun::star::frame::UnknownModuleException& )
+        catch ( css::frame::UnknownModuleException& )
         {
             DBG_WARNING( "OfaTreeOptionsDialog::GetModuleIdentifier(): unknown module" );
         }
@@ -2149,7 +2149,7 @@ short OfaTreeOptionsDialog::Execute()
     if ( !bIsFromExtensionManager )
     {
         // collect all DictionaryList Events while the dialog is executed
-        Reference<com::sun::star::linguistic2::XSearchableDictionaryList> xDictionaryList(SvxGetDictionaryList());
+        Reference<css::linguistic2::XSearchableDictionaryList> xDictionaryList(SvxGetDictionaryList());
         pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
     }
     short nRet = SfxModalDialog::Execute();

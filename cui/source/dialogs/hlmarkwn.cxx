@@ -472,7 +472,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         nEntries++;
                     }
                 }
-                catch(const com::sun::star::uno::Exception&)
+                catch(const css::uno::Exception&)
                 {
                     // insert Displayname into treelist without bitmaps
                     pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
@@ -486,7 +486,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 if( xLTS.is() )
                     nEntries += FillTree( xLTS->getLinks(), pEntry );
             }
-            catch(const com::sun::star::uno::Exception&)
+            catch(const css::uno::Exception&)
             {
             }
         }

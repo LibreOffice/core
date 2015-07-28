@@ -1550,7 +1550,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xSpell )
+bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, css::uno::Reference<css::linguistic2::XSpellChecker1> xSpell )
 {
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
@@ -2034,9 +2034,9 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
         return 1;
     try
     {
-        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-        xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+        uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+            css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+        xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( uno::Exception& )
     {

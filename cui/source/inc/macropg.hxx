@@ -65,9 +65,9 @@ class _SvxMacroTabPage : public SfxTabPage
 
 protected:
     _SvxMacroTabPage_Impl*      mpImpl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xAppEvents;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xDocEvents;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > m_xModifiable;
+    css::uno::Reference< css::container::XNameReplace > m_xAppEvents;
+    css::uno::Reference< css::container::XNameReplace > m_xDocEvents;
+    css::uno::Reference< css::util::XModifiable > m_xModifiable;
     EventsHash m_appEventsHash;
     EventsHash m_docEventsHash;
     bool bReadOnly, bDocModified, bAppEvents, bInitialized;
@@ -76,8 +76,8 @@ protected:
     _SvxMacroTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();
-    static ::com::sun::star::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
-    static ::std::pair< OUString, OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
+    static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
+    static ::std::pair< OUString, OUString > GetPairFromAny( css::uno::Any aAny );
 
 public:
 
@@ -85,7 +85,7 @@ public:
     virtual void                dispose() SAL_OVERRIDE;
     void                        InitResources();
 
-    void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
+    void                        InitAndSetHandler( css::uno::Reference< css::container::XNameReplace > xAppEvents, css::uno::Reference< css::container::XNameReplace > xDocEvents, css::uno::Reference< css::util::XModifiable > xModifiable );
     virtual bool                FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
 
     virtual void                Reset( const SfxItemSet* ) SAL_OVERRIDE;
@@ -100,9 +100,9 @@ class SvxMacroTabPage : public _SvxMacroTabPage
 public:
     SvxMacroTabPage(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+        const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace,
+        css::uno::Reference< css::container::XNameReplace > xNameReplace,
         sal_uInt16 nSelectedIndex
     );
 };
@@ -126,9 +126,9 @@ class SvxMacroAssignDlg : public SvxMacroAssignSingleTabDialog
 public:
     SvxMacroAssignDlg(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+        const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& xNameReplace,
+        const css::uno::Reference< css::container::XNameReplace >& xNameReplace,
         sal_uInt16 nSelectedIndex
     );
 };

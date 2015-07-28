@@ -370,8 +370,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     // Don't list ambiguous locales where we won't be able to convert the
     // LanguageType back to an identical Language_Country name and therefore
     // couldn't load the i18n LocaleData. Show DebugMsg in non-PRODUCT version.
-    ::com::sun::star::uno::Sequence< sal_uInt16 > xLang =
-        LocaleDataWrapper::getInstalledLanguageTypes();
+    css::uno::Sequence< sal_uInt16 > xLang = LocaleDataWrapper::getInstalledLanguageTypes();
     sal_Int32 nCount = xLang.getLength();
     for ( sal_Int32 i=0; i<nCount; i++ )
     {

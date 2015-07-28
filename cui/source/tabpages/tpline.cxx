@@ -886,22 +886,22 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         {
             case 0: // Rounded, default
             {
-                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
+                pNew.reset(new XLineJointItem(css::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // - none -
             {
-                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
+                pNew.reset(new XLineJointItem(css::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // Miter
             {
-                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
+                pNew.reset(new XLineJointItem(css::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // Bevel
             {
-                pNew.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
+                pNew.reset(new XLineJointItem(css::drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -928,17 +928,17 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         {
             case 0: // Butt (=Flat), default
             {
-                pNew.reset(new XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                pNew.reset(new XLineCapItem(css::drawing::LineCap_BUTT));
                 break;
             }
             case 1: // Round
             {
-                pNew.reset(new XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                pNew.reset(new XLineCapItem(css::drawing::LineCap_ROUND));
                 break;
             }
             case 2: // Square
             {
-                pNew.reset(new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                pNew.reset(new XLineCapItem(css::drawing::LineCap_SQUARE));
                 break;
             }
         }
@@ -1048,22 +1048,22 @@ bool SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Rounded, default
             {
-                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
+                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // - none -
             {
-                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
+                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // Miter
             {
-                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
+                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // Bevel
             {
-                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
+                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -1077,17 +1077,17 @@ bool SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Butt (=Flat), default
             {
-                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                rXLSet.Put(XLineCapItem(css::drawing::LineCap_BUTT));
                 break;
             }
             case 1: // Round
             {
-                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                rXLSet.Put(XLineCapItem(css::drawing::LineCap_ROUND));
                 break;
             }
             case 2: // Square
             {
-                rXLSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                rXLSet.Put(XLineCapItem(css::drawing::LineCap_SQUARE));
                 break;
             }
         }
@@ -1462,16 +1462,16 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if(SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_LINEJOINT))
     {
-        const com::sun::star::drawing::LineJoint eLineJoint = static_cast<const XLineJointItem&>(rAttrs->Get(XATTR_LINEJOINT)).GetValue();
+        const css::drawing::LineJoint eLineJoint = static_cast<const XLineJointItem&>(rAttrs->Get(XATTR_LINEJOINT)).GetValue();
 
         switch(eLineJoint)
         {
-            case com::sun::star::drawing::LineJoint_MAKE_FIXED_SIZE: // fallback to round, unused value
-            case com::sun::star::drawing::LineJoint_MIDDLE : // fallback to round, unused value
-            case com::sun::star::drawing::LineJoint_ROUND : m_pLBEdgeStyle->SelectEntryPos(0); break;
-            case com::sun::star::drawing::LineJoint_NONE : m_pLBEdgeStyle->SelectEntryPos(1); break;
-            case com::sun::star::drawing::LineJoint_MITER : m_pLBEdgeStyle->SelectEntryPos(2); break;
-            case com::sun::star::drawing::LineJoint_BEVEL : m_pLBEdgeStyle->SelectEntryPos(3); break;
+            case css::drawing::LineJoint_MAKE_FIXED_SIZE: // fallback to round, unused value
+            case css::drawing::LineJoint_MIDDLE : // fallback to round, unused value
+            case css::drawing::LineJoint_ROUND : m_pLBEdgeStyle->SelectEntryPos(0); break;
+            case css::drawing::LineJoint_NONE : m_pLBEdgeStyle->SelectEntryPos(1); break;
+            case css::drawing::LineJoint_MITER : m_pLBEdgeStyle->SelectEntryPos(2); break;
+            case css::drawing::LineJoint_BEVEL : m_pLBEdgeStyle->SelectEntryPos(3); break;
         }
     }
     else
@@ -1487,13 +1487,13 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if(SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_LINECAP))
     {
-        const com::sun::star::drawing::LineCap eLineCap(static_cast<const XLineCapItem&>(rAttrs->Get(XATTR_LINECAP)).GetValue());
+        const css::drawing::LineCap eLineCap(static_cast<const XLineCapItem&>(rAttrs->Get(XATTR_LINECAP)).GetValue());
 
         switch(eLineCap)
         {
-            case com::sun::star::drawing::LineCap_ROUND: m_pLBCapStyle->SelectEntryPos(1); break;
-            case com::sun::star::drawing::LineCap_SQUARE : m_pLBCapStyle->SelectEntryPos(2); break;
-            default /*com::sun::star::drawing::LineCap_BUTT*/: m_pLBCapStyle->SelectEntryPos(0); break;
+            case css::drawing::LineCap_ROUND: m_pLBCapStyle->SelectEntryPos(1); break;
+            case css::drawing::LineCap_SQUARE : m_pLBCapStyle->SelectEntryPos(2); break;
+            default /*css::drawing::LineCap_BUTT*/: m_pLBCapStyle->SelectEntryPos(0); break;
         }
     }
     else

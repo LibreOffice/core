@@ -1429,7 +1429,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItem
     get(m_pDelDoublePB, "deldouble");
     get(m_pAutoCapsCB, "autodouble");
 
-    ::com::sun::star::lang::Locale aLcl( LanguageTag::convertToLocale(eLastDialogLanguage ));
+    css::lang::Locale aLcl( LanguageTag::convertToLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
@@ -2393,8 +2393,8 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     if (m_pAutoCompleteList && nSelCnt)
     {
         TransferDataContainer* pCntnr = new TransferDataContainer;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::datatransfer::XTransferable > xRef( pCntnr );
+        css::uno::Reference<
+            css::datatransfer::XTransferable > xRef( pCntnr );
 
         OStringBuffer sData;
         const sal_Char aLineEnd[] =

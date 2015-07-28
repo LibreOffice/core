@@ -73,10 +73,10 @@ private:
     VclPtr<Edit>                mpEdText;
     VclPtr<PushButton>          mpBtScript;
 
-    bool            mbIsCloseDisabled;
+    bool                        mbIsCloseDisabled;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                        mxDocumentFrame;
+    css::uno::Reference< css::frame::XFrame >
+                                mxDocumentFrame;
 
 protected:
     VclPtr<vcl::Window> mpDialog;
@@ -121,7 +121,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void    SetDocumentFrame(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame )
+        const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame )
     {
         mxDocumentFrame = rxDocumentFrame;
     }

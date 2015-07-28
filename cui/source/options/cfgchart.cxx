@@ -267,7 +267,7 @@ void SvxChartOptions::ImplCommit()
     PutProperties( aNames, aValues );
 }
 
-void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
+void SvxChartOptions::Notify( const css::uno::Sequence< OUString >& )
 {
 }
 

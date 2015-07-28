@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get( xContext ) );
+            css::configuration::theDefaultProvider::get( xContext ) );
 
         beans::NamedValue aProperty;
         aProperty.Name  = "nodepath";

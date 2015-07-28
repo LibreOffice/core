@@ -151,20 +151,20 @@ private:
     VclPtr<SvTreeListBox>  pTreeLB;
     VclPtr<VclBox>         pTabBox;
 
-    OUString        sTitle;
-    OUString        sNotLoadedError;
+    OUString               sTitle;
+    OUString               sNotLoadedError;
 
     // for the ColorTabPage
-    SfxItemSet*     pColorPageItemSet;
+    SfxItemSet*            pColorPageItemSet;
     VclPtr<SvxColorTabPage> mpColorPage;
 
-    bool        bForgetSelection;
-    bool            bIsFromExtensionManager;
+    bool                   bForgetSelection;
+    bool                   bIsFromExtensionManager;
 
     // check "for the current document only" and set focus to "Western" languages box
-    bool            bIsForSetDocumentLanguage;
+    bool                   bIsForSetDocumentLanguage;
 
-    com::sun::star::uno::Reference < com::sun::star::awt::XContainerWindowProvider >
+    css::uno::Reference < css::awt::XContainerWindowProvider >
                     m_xContainerWinProvider;
 
     static LastPageSaver*   pLastPageSaver;
@@ -172,12 +172,12 @@ private:
     SfxItemSet*     CreateItemSet( sal_uInt16 nId );
     static void     ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
-    void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
+    void            Initialize( const css::uno::Reference< css::frame::XFrame >& _xFrame );
     void            InitWidgets();
 
     void            LoadExtensionOptions( const OUString& rExtensionId );
-    static OUString GetModuleIdentifier( const com::sun::star::uno::Reference<
-                                            com::sun::star::frame::XFrame >& xFrame );
+    static OUString GetModuleIdentifier( const css::uno::Reference<
+                                            css::frame::XFrame >& xFrame );
     static Module*  LoadModule( const OUString& rModuleIdentifier );
     static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
@@ -195,7 +195,7 @@ protected:
 
 public:
     OfaTreeOptionsDialog( vcl::Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame,
+        const css::uno::Reference< css::frame::XFrame >& _xFrame,
         bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
     virtual ~OfaTreeOptionsDialog();
@@ -257,24 +257,24 @@ class ExtensionsTabPage : public TabPage
 {
 private:
     OUString       m_sPageURL;
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindow >
+    css::uno::Reference< css::awt::XWindow >
                         m_xPage;
     OUString       m_sEventHdl;
-    com::sun::star::uno::Reference< com::sun::star::awt::XContainerWindowEventHandler >
+    css::uno::Reference< css::awt::XContainerWindowEventHandler >
                         m_xEventHdl;
-    com::sun::star::uno::Reference< com::sun::star::awt::XContainerWindowProvider >
+    css::uno::Reference< css::awt::XContainerWindowProvider >
                         m_xWinProvider;
     bool                m_bIsWindowHidden;
 
     void                CreateDialogWithHandler();
-    bool            DispatchAction( const OUString& rAction );
+    bool                DispatchAction( const OUString& rAction );
 
 public:
     ExtensionsTabPage(
         vcl::Window* pParent, WinBits nStyle,
         const OUString& rPageURL, const OUString& rEvtHdl,
-        const com::sun::star::uno::Reference<
-            com::sun::star::awt::XContainerWindowProvider >& rProvider );
+        const css::uno::Reference<
+            css::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~ExtensionsTabPage();
     virtual void dispose() SAL_OVERRIDE;

@@ -55,11 +55,11 @@ private:
     OUString m_sMyMacros;
     OUString m_sProdMacros;
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
-        getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& root, OUString& language );
+    static css::uno::Reference< css::script::browse::XBrowseNode >
+        getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode >& root, OUString& language );
     static void delUserData( SvTreeListEntry* pEntry );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, OUString& docName );
+    static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext >& xCtx, OUString& docName );
 
 protected:
     virtual void            RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
@@ -68,8 +68,8 @@ protected:
 public:
     void                    Init( const OUString& language );
     void                    RequestSubEntries(  SvTreeListEntry* pRootEntry,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
-                                ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
+                                css::uno::Reference< css::script::browse::XBrowseNode >& node,
+                                css::uno::Reference< css::frame::XModel>& model  );
                             SFTreeListBox(vcl::Window* pParent);
                     virtual ~SFTreeListBox();
     virtual void    dispose() SAL_OVERRIDE;
@@ -115,18 +115,18 @@ class SFEntry
 private:
     sal_uInt8       nType;
     bool            loaded;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > model;
+        css::uno::Reference< css::script::browse::XBrowseNode > nodes;
+        css::uno::Reference< css::frame::XModel > model;
     SFEntry(){}
 public:
                     SFEntry( sal_uInt8 nT )             { nType = nT; loaded=false; }
                     SFEntry( sal_uInt8 nT,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
+                            const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
+                            const css::uno::Reference< css::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
     virtual         ~SFEntry() {}
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel() { return model ;};
+    css::uno::Reference< css::script::browse::XBrowseNode > GetNode() { return nodes ;}
+    css::uno::Reference< css::frame::XModel > GetModel() { return model ;};
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
 };
@@ -159,17 +159,17 @@ protected:
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
-    static bool         getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, OUString& propName );
-    void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
+    static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet >& xProps, OUString& propName );
+    void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode >& node );
 
 
     void        createEntry( SvTreeListEntry* pEntry );
     void        renameEntry( SvTreeListEntry* pEntry );
     void        deleteEntry( SvTreeListEntry* pEntry );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
+    static css::uno::Reference< css::script::browse::XBrowseNode >
                 getBrowseNode( SvTreeListEntry* pEntry );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvTreeListEntry* pEntry );
-    OUString    getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
+    static css::uno::Reference< css::frame::XModel > getModel( SvTreeListEntry* pEntry );
+    OUString    getListOfChildren( css::uno::Reference< css::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
 
@@ -194,8 +194,7 @@ private:
 
 public:
 
-    SvxScriptErrorDialog(
-        vcl::Window* parent, ::com::sun::star::uno::Any aException );
+    SvxScriptErrorDialog( vcl::Window* parent, css::uno::Any aException );
 
     virtual ~SvxScriptErrorDialog();
 

@@ -79,7 +79,7 @@ class SfxMacroTabPage : public _SfxMacroTabPage
 public:
     SfxMacroTabPage(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
+        const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet
     );
 
@@ -92,7 +92,7 @@ class SfxMacroAssignDlg : public SfxSingleTabDialog
 public:
     SfxMacroAssignDlg(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
+        const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet );
 };
 

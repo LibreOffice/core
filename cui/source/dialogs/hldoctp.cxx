@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 {
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0,
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0,
         GetParent() );
     OUString aOldURL( GetCurrentURL() );
     if( aOldURL.startsWithIgnoreAsciiCase( sFileScheme ) )

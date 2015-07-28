@@ -53,10 +53,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::ui::dialogs;
+using namespace css::uno;
 using namespace svx;
 
 // define ----------------------------------------------------------------

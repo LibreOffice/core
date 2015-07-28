@@ -56,7 +56,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
+        css::uno::Reference< css::beans::XPropertySet > xCol;
         for (sal_Int32 i=0; i < m_pList->GetSelectEntryCount(); ++i)
         {
             m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_pList->GetEntryData(m_pList->GetSelectEntryPos(i))))) >>= xCol;
@@ -79,7 +79,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
 }
 
 
-void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols)
+void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols)
 {
     DBG_ASSERT(xCols.is(), "FmShowColsDialog::SetColumns : invalid columns !");
     if (!xCols.is())
@@ -88,7 +88,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
     m_pList->Clear();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  xCurCol;
+    css::uno::Reference< css::beans::XPropertySet>  xCurCol;
     OUString sCurName;
     for (sal_Int32 i=0; i<xCols->getCount(); ++i)
     {
@@ -97,7 +97,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
         bool bIsHidden = false;
         try
         {
-            ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
+            css::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
             bIsHidden = ::comphelper::getBOOL(aHidden);
 
             OUString sName;
