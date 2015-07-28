@@ -76,7 +76,6 @@ private:
     LwpObjectFactory* m_pObjMgr;
     LwpFileHeader     m_LwpFileHdr;             //LWP7 object
 protected:
-    sal_Int64 GetFileSize();
     void ReadFileHeader();
     void ReadIndex();
     void ParseDocument();

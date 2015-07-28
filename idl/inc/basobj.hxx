@@ -59,10 +59,6 @@ public:
     void            Push( SvMetaObject * pObj )
                     { aList.push_back( pObj ); }
     SvMetaObject *  Pop() { return aList.pop_back(); }
-    SvMetaObject *  Top() const { return aList.back(); }
-    void            Clear() { aList.clear(); }
-    sal_uLong     Count() const { return aList.size(); }
-
     SvMetaObject *  Get( TypeId nType )
                     {
                         for( SvMetaObjectMemberList::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
@@ -92,8 +88,6 @@ public:
             SvMetaName();
 
     virtual bool                SetName( const OString& rName, SvIdlDataBase * = NULL  );
-    void                        SetDescription( const OString& rText )
-                                { aDescription.setString(rText); }
     const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
@@ -171,7 +165,6 @@ public:
     SvMetaModule *      GetModule() const;
 
     const SvGlobalName &GetUUId() const;
-    const SvVersion &   GetVersion() const { return aVersion; }
     void                SetModule( SvIdlDataBase & rBase );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 

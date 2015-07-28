@@ -36,13 +36,11 @@ typedef void * (*CreateInstanceType)( SotObject ** );
 //==================class SotFactory=======================================
 class SOT_DLLPUBLIC SotFactory : public SvGlobalName
 {
-    sal_uInt16              nSuperCount;    // Anzahl der Superklassen
+    sal_uInt16          nSuperCount;    // Anzahl der Superklassen
     const SotFactory ** pSuperClasses;  // Superklassen
-    CreateInstanceType  pCreateFunc;
 
     OUString            aClassName;
 
-    static  bool        ExistTest( const SvGlobalName & );
 protected:
     virtual             ~SotFactory();
 public:
@@ -54,7 +52,7 @@ public:
 #endif
 
             SotFactory( const SvGlobalName &,
-                        const OUString & rClassName, CreateInstanceType );
+                        const OUString & rClassName );
 
     void                PutSuperClass( const SotFactory * );
 

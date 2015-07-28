@@ -66,14 +66,6 @@ public:
     */
     void SAL_CALL addAttribute( OUString const & rAttrName, OUString const & rValue );
 
-    /** Gets the tag name (qname) of element.
-
-        @return
-                qname of element
-    */
-    inline OUString SAL_CALL getName()
-        { return _name; }
-
     /** Dumps out element (and all sub elements).
 
         @param xOut document handler to be written to

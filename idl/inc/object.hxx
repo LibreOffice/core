@@ -56,9 +56,6 @@ public:
 
     void            SetAutomation( bool rAutomation )
                     { aAutomation = rAutomation; }
-    bool            GetAutomation() const
-                    { return aAutomation; }
-
     void            SetClass( SvMetaClass * pClass )
                     { xClass = pClass; }
     SvMetaClass *   GetClass() const
@@ -106,16 +103,7 @@ public:
             TYPEINFO_OVERRIDE();
             SvMetaClass();
 
-    bool                GetAutomation() const
-                        { return aAutomation; }
-    SvMetaClass *       GetSuperClass() const
-                        { return aSuperClass; }
-
     void                FillClasses( SvMetaClassList & rList );
-
-    const SvClassElementMemberList&
-                        GetClassList() const
-                        { return aClassList; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) SAL_OVERRIDE;

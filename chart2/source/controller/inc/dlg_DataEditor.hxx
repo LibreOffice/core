@@ -79,8 +79,6 @@ private:
     DECL_LINK_TYPED( BrowserCursorMovedHdl, DataBrowser*, void);
     /// this is called if MiscOptions change, esp. High-Contrast mode
     DECL_LINK( MiscHdl, void* );
-    /// is called when the width of any column in the edit browsebox has changed
-    DECL_LINK( BrowserColumnResized, void* );
 
     void UpdateData();
     /// moved and resizes the series name control etc. to fit the dimensions of the edit browsebox

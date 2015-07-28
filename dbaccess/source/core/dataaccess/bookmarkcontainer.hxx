@@ -123,12 +123,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// helper
-    /** tell the container to free all resources. After that it's in a state like after the construction, i.e.
-        you may call <code>initialize</code> again (maybe with another configuration node).
-    */
-    void    dispose();
-
 protected:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.

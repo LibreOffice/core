@@ -69,7 +69,6 @@ public:
     void insert(LwpDLList*, LwpDLList*);
     void remove();
     LwpDLList* GetNext();
-    LwpDLList* GetPrevious();
     void SetNext(LwpDLList*);
     void SetPrevious(LwpDLList*);
 private:
@@ -85,11 +84,6 @@ inline LwpDLList* LwpDLList::GetNext()
 inline void LwpDLList::SetNext(LwpDLList* Next)
 {
     m_pNext = Next;
-}
-
-inline LwpDLList* LwpDLList::GetPrevious()
-{
-    return m_pPrevious;
 }
 
 inline void LwpDLList::SetPrevious(LwpDLList* Previous)

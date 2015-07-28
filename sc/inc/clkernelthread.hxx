@@ -34,8 +34,6 @@ public:
     CLBuildKernelThread();
     virtual ~CLBuildKernelThread();
 
-    void push(CLBuildKernelWorkItem item);
-
     osl::Condition maCompilationDoneCondition;
 
 protected:

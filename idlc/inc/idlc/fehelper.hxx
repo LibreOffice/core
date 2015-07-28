@@ -36,14 +36,8 @@ public:
 
     FeDeclarator(const OString& name, DeclaratorType declType, AstDeclaration* pComplPart);
     virtual ~FeDeclarator();
-
-    AstDeclaration* getComplexPart()
-        { return m_pComplexPart; }
     const OString& getName()
         { return m_name; }
-    DeclaratorType  getDeclType()
-        { return m_declType; }
-
     bool checkType(AstDeclaration const * pType);
     AstType const * compose(AstDeclaration const * pDecl);
 private:

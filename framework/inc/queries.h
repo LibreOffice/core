@@ -283,17 +283,6 @@ class QueryAnalyzer
             }
         }
 
-        // this method checks if given string match any supported query.
-        // (ignore additional parameters!)
-
-        static bool isQuery( const OUString& sQuery )
-        {
-            return(
-                    sQuery.startsWith("_query_") ||    // new style
-                    sQuery.startsWith("_filterquery_")       // old style!
-                  );
-        }
-
     private:
         EQuery      m_eQuery;
         sal_uInt32  m_nIFlags;

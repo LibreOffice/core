@@ -55,7 +55,6 @@ public:
     SvBOOL &    operator = ( bool n ) { nVal = n; bSet = true; return *this; }
 
     operator    bool() const { return nVal; }
-    bool        Is() const { return nVal; }
     bool        IsSet() const { return bSet; }
 
     friend SvStream& WriteSvBOOL(SvStream &, const SvBOOL &);
@@ -93,8 +92,6 @@ public:
 class SvNumberIdentifier : public SvIdentifier
 {
     sal_uInt32  nValue;
-    // must not be used
-    bool    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 public:
                 SvNumberIdentifier() : nValue( 0 ) {};
     bool        IsSet() const

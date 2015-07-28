@@ -49,7 +49,6 @@ public:
     // Look up the identifier 'name' specified only in the local scope
     AstDeclaration* lookupByNameLocal(const OString& name) const;
 
-    AstDeclaration* lookupInForwarded(const OString& scopedName);
     AstDeclaration* lookupInInherited(const OString& scopedName) const;
 
     // Look up a predefined type by its ExprType

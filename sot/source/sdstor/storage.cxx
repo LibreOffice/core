@@ -46,9 +46,8 @@ class SotStorageStreamFactory : public SotFactory
 {
 public:
         SotStorageStreamFactory( const SvGlobalName & rName,
-                                 const OUString & rClassName,
-                                 CreateInstanceType pCreateFuncP )
-            : SotFactory( rName, rClassName, pCreateFuncP )
+                                 const OUString & rClassName )
+            : SotFactory( rName, rClassName )
         {}
 };
 
@@ -58,9 +57,10 @@ SotFactory * SotStorageStream::ClassFactory()
     SotFactory **ppFactory = GetFactoryAdress();
     if( !*ppFactory )
     {
-        *ppFactory = new SotStorageStreamFactory( SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
-                            0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
-            OUString( "SotStorageStream" ), SotStorageStream::CreateInstance );
+        *ppFactory = new SotStorageStreamFactory(
+                            SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
+                                0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
+                            OUString( "SotStorageStream" ) );
         (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
     }
     return *ppFactory;
@@ -307,9 +307,8 @@ class SotStorageFactory : public SotFactory
 {
 public:
         SotStorageFactory( const SvGlobalName & rName,
-                           const OUString & rClassName,
-                           CreateInstanceType pCreateFuncP )
-            : SotFactory( rName, rClassName, pCreateFuncP )
+                           const OUString & rClassName )
+            : SotFactory( rName, rClassName )
         {}
 };
 
@@ -319,9 +318,10 @@ SotFactory * SotStorage::ClassFactory()
     SotFactory **ppFactory = GetFactoryAdress();
     if( !*ppFactory )
     {
-        *ppFactory = new SotStorageFactory( SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
+        *ppFactory = new SotStorageFactory(
+                               SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
                                         0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
-            OUString( "SotStorage" ), SotStorage::CreateInstance );
+                               OUString( "SotStorage" ) );
         (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
     }
     return *ppFactory;

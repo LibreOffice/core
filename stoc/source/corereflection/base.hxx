@@ -100,12 +100,8 @@ class IdlReflectionServiceImpl
     css::uno::Mapping                     _aUno2Cpp;
 
     inline css::uno::Reference< css::reflection::XIdlClass > constructClass( typelib_TypeDescription * pTypeDescr );
-public:
-    css::uno::Reference< css::container::XHierarchicalNameAccess > getTDMgr() const
-        { return _xTDMgr; }
-    css::uno::Reference< css::lang::XMultiServiceFactory > getSMgr() const
-        { return _xMgr; }
 
+public:
     const css::uno::Mapping & getCpp2Uno() throw(css::uno::RuntimeException);
     const css::uno::Mapping & getUno2Cpp() throw(css::uno::RuntimeException);
     uno_Interface * mapToUno( const css::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo ) throw(css::uno::RuntimeException);

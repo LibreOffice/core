@@ -67,8 +67,6 @@ public:
     virtual void Resize() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
 
-    OUString GetPath() const;
-
     // SvtFileDialog_Base
 
     virtual SvtFileView* GetView() SAL_OVERRIDE;
@@ -82,7 +80,6 @@ public:
     virtual const OUString& GetPath() SAL_OVERRIDE;
     virtual std::vector<OUString> GetPathList() const SAL_OVERRIDE;
     virtual bool ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE;
-    virtual bool ContentIsDocument( const OUString& rURL );
 
     virtual OUString getCurrentFileText() const SAL_OVERRIDE;
     virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) SAL_OVERRIDE;

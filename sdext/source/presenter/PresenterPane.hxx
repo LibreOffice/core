@@ -49,11 +49,6 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPane();
 
-    static OUString getImplementationName_static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-    static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-
     // XPane
 
     css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()

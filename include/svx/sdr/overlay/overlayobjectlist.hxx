@@ -43,9 +43,6 @@ namespace sdr
             // the vector of OverlayObjects
             OverlayObjectVector                     maVector;
 
-            // default value for HiTestPixel
-            static sal_uInt32 getDefaultValueForHitTestPixel() { return 4; }
-
         public:
             OverlayObjectList() {}
             ~OverlayObjectList();
