@@ -307,16 +307,6 @@ struct OStorePageNameBlock
     */
     static const size_t theSize = sizeof(G) + sizeof(K) + sizeof(sal_uInt32) + sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE]);
 
-    /** initialize.
-    */
-    void initialize()
-    {
-        m_aGuard  = G();
-        m_aKey    = K();
-        m_nAttrib = 0;
-        memset (m_pData, 0, sizeof(m_pData));
-    }
-
     /** Construction.
     */
     OStorePageNameBlock()
@@ -422,15 +412,6 @@ struct OStoreDirectoryDataBlock
     /** size.
      */
     static const size_t theSize = sizeof(G) + sizeof(LinkTable) + sizeof(sal_uInt32);
-
-    /** initialize.
-    */
-    void initialize()
-    {
-        m_aGuard = G();
-        m_aTable.initialize();
-        m_nDataLen = 0;
-    }
 
     /** Construction.
     */

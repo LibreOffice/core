@@ -97,9 +97,6 @@ public:
 // ::com::sun::star::uno::XInterface
     DECLARE_XINTERFACE( )
 
-// ::com::sun::star::lang::XServiceInfo
-    DECLARE_SERVICE_INFO_STATIC();
-
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -168,8 +165,6 @@ public:
             <TRUE/> if and only if the document component can be closed
     */
     bool prepareClose();
-
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getDefaultDocumentTypeClassId();
 
     static OUString GetDocumentServiceFromMediaType(
         const OUString& _rMediaType,
@@ -293,19 +288,6 @@ private:
                 const bool _bSuppressMacros,
                 const bool _bReadOnly
             );
-
-    /** loads the embedded object, if not already loaded. No new object can be created with this method.
-    */
-    void    loadEmbeddedObject( bool _bSuppressMacros = false )
-    {
-        loadEmbeddedObject(
-            NULL,
-            ::com::sun::star::uno::Sequence< sal_Int8 >(),
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >(),
-            _bSuppressMacros,
-            false
-        );
-    }
 
     /** loads the embedded object for preview. Macros will be suppressed, and the document will
         be read-only.

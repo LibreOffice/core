@@ -137,16 +137,6 @@ protected:
             }
     void    SetRecordAbsolute( bool bSet )
             { aRecordAbsolute = bSet; }
-    void    SetHasDialog( bool bSet )
-            { aHasDialog = bSet; }
-    void    SetMenuConfig( bool bSet )
-            { aMenuConfig = bSet; }
-    void    SetToolBoxConfig( bool bSet )
-            { aToolBoxConfig = bSet; }
-    void    SetStatusBarConfig( bool bSet )
-            { aStatusBarConfig = bSet; }
-    void    SetAccelConfig( bool bSet )
-            { aAccelConfig = bSet; }
     void    SetAllConfig( bool bSet )
             {
                 aMenuConfig     = bSet;
@@ -154,14 +144,6 @@ protected:
                 aStatusBarConfig = bSet;
                 aAccelConfig    = bSet;
             }
-    void    SetFastCall( bool bSet )
-            { aFastCall = bSet; }
-    void    SetContainer( bool bSet )
-            { aContainer = bSet; }
-    void    SetImageRotation( bool bSet )
-            { aImageRotation = bSet; }
-    void    SetImageReflection( bool bSet )
-            { aImageReflection = bSet; }
 
 public:
             TYPEINFO_OVERRIDE();
@@ -210,19 +192,14 @@ public:
     bool                GetContainer() const;
     bool                GetImageRotation() const;
     bool                GetImageReflection() const;
-    SvMetaSlot*         GetLinkedSlot() const
-                        { return pLinkedSlot; }
-    SvMetaSlot*         GetNextSlot() const
-                        { return pNextSlot; }
-    sal_uLong               GetListPos() const
+
+    sal_uLong           GetListPos() const
                         { return nListPos; }
     void                SetListPos(sal_uLong n)
                         { nListPos = n; }
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }
 
-    SvMetaEnumValue*    GetEnumValue() const
-                        { return pEnumValue; }
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm ) SAL_OVERRIDE;

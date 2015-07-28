@@ -408,12 +408,6 @@ FontCharMap::~FontCharMap()
     mpImplFontCharMap = 0;
 }
 
-FontCharMapPtr FontCharMap::GetDefaultMap( bool bSymbol )
-{
-    FontCharMapPtr pFontCharMap( new FontCharMap( ImplFontCharMap::getDefaultMap( bSymbol ) ) );
-    return pFontCharMap;
-}
-
 bool FontCharMap::IsDefaultMap() const
 {
     return mpImplFontCharMap->isDefaultMap();

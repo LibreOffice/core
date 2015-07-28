@@ -1074,16 +1074,6 @@ void ScTable::StartListeningFormulaCells(
             aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
 }
 
-void ScTable::EndListeningFormulaCells(
-    sc::EndListeningContext& rEndCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
-{
-    if (nCol2 > MAXCOL) nCol2 = MAXCOL;
-    if (nRow2 > MAXROW) nRow2 = MAXROW;
-    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
-        for (SCCOL i = nCol1; i <= nCol2; ++i)
-            aCol[i].EndListeningFormulaCells(rEndCxt, nRow1, nRow2);
-}
-
 void ScTable::CopyToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,

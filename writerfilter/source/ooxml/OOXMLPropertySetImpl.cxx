@@ -182,11 +182,6 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLValue::getProperties()
     return writerfilter::Reference<Properties>::Pointer_t();
 }
 
-writerfilter::Reference<Stream>::Pointer_t OOXMLValue::getStream()
-{
-    return writerfilter::Reference<Stream>::Pointer_t();
-}
-
 writerfilter::Reference<BinaryObj>::Pointer_t OOXMLValue::getBinary()
 {
     return writerfilter::Reference<BinaryObj>::Pointer_t();

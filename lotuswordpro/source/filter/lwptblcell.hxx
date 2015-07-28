@@ -230,15 +230,10 @@ public:
     LwpRowColumnQualifier();
     ~LwpRowColumnQualifier(){}
 
-    inline void SetAbsolute();
-    inline void ClearAbsolute();
     bool IsAbsolute();
 
-    inline void SetAfter();
-    inline void ClearAfter();
     bool IsAfter();
 
-    void SetBad(bool Bad);
     bool IsBad();
 
     void QuickRead(LwpObjectStream *pStrm);
@@ -252,30 +247,6 @@ private:
     };
     sal_uInt8 cFlags;
 };
-
-inline void
-LwpRowColumnQualifier::SetAbsolute()
-{
-    cFlags |= REF_ABSOLUTE;
-}
-
-inline void
-LwpRowColumnQualifier::ClearAbsolute()
-{
-    cFlags &= ~REF_ABSOLUTE;
-}
-
-inline void
-LwpRowColumnQualifier::SetAfter()
-{
-    cFlags |= REF_AFTER;
-}
-
-inline void
-LwpRowColumnQualifier::ClearAfter()
-{
-    cFlags &= ~REF_AFTER;
-}
 
 inline
 LwpRowColumnQualifier::LwpRowColumnQualifier()

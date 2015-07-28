@@ -89,9 +89,6 @@ public:
                   // -1: infinite lock, no refresh
                   sal_Int32 nLastChanceToSendRefreshRequest );
 
-    void updateLock( NeonLock * pLock,
-                     sal_Int32 nLastChanceToSendRefreshRequest );
-
     void removeLock( NeonLock * pLock );
 
     void refreshLocks();

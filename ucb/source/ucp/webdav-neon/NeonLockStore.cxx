@@ -178,22 +178,6 @@ void NeonLockStore::addLock( NeonLock * pLock,
     startTicker();
 }
 
-void NeonLockStore::updateLock( NeonLock * pLock,
-                                sal_Int32 nLastChanceToSendRefreshRequest )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    LockInfoMap::iterator it( m_aLockInfoMap.find( pLock ) );
-    OSL_ENSURE( it != m_aLockInfoMap.end(),
-                "NeonLockStore::updateLock: lock not found!" );
-
-    if ( it != m_aLockInfoMap.end() )
-    {
-        (*it).second.nLastChanceToSendRefreshRequest
-            = nLastChanceToSendRefreshRequest;
-    }
-}
-
 void NeonLockStore::removeLock( NeonLock * pLock )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );

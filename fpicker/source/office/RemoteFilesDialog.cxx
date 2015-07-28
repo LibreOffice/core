@@ -460,10 +460,6 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
         m_pFilter_lb->SelectEntryPos( 0 );
 }
 
-OUString RemoteFilesDialog::GetPath() const
-{
-    return m_sPath;
-}
 
 FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 {
@@ -1154,25 +1150,7 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
     return false;
 }
 
-bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
-{
-    try
-    {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
-        Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-        ::ucbhelper::Content aContent( rURL, xEnv, xContext );
 
-        return aContent.isDocument();
-    }
-    catch( const Exception& )
-    {
-        // a content doesn't exist
-    }
-
-    return false;
-}
 
 sal_Int32 RemoteFilesDialog::getTargetColorDepth()
 {

@@ -73,7 +73,6 @@ public:
 
     const OString&  GetName() const { return aName; }
     bool            HasId() const { return bHasId; }
-    sal_uInt32      GetId() const { return nHashId; }
 
     void            SetValue( sal_uLong n ) { nValue = n; }
     sal_uLong       GetValue() const { return nValue; }

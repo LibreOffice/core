@@ -148,8 +148,6 @@ private:
     bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
     bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
 
-    OString MergePairedList( OString const & sLine , OString const & sText );
-
     OString FullId();                    ///< creates cur. GID
 
     static OString GetPairedListID(const OString & rText);

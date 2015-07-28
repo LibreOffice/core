@@ -80,13 +80,6 @@ void StorageBase::ResetError() const
     const_cast<StorageBase*>(this)->m_nError = SVSTREAM_OK;
 }
 
-// Retrieve the underlying SvStream for info purposes
-
-const SvStream* OLEStorageBase::GetSvStream_Impl() const
-{
-    return pIo ? pIo->GetStrm() : NULL;
-}
-
 OLEStorageBase::OLEStorageBase( StgIo* p, StgDirEntry* pe, StreamMode& nMode )
     : nStreamMode( nMode ), pIo( p ), pEntry( pe )
 {
@@ -677,20 +670,6 @@ bool Storage::Remove( const OUString& rName )
         SetError( SVSTREAM_FILE_NOT_FOUND );
         return false;
     }
-}
-
-// Rename a storage element
-
-bool Storage::Rename( const OUString& rOld, const OUString& rNew )
-{
-    if( Validate( true ) )
-    {
-        bool b = pIo->pTOC->Rename( *pEntry, rOld, rNew );
-        pIo->MoveError( *this );
-        return b;
-    }
-    else
-        return false;
 }
 
 // Copy one element

@@ -252,7 +252,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             {
                 if( pXMLElement != NULL )
                 {
-                    XMLData *data = new XMLData( sNewdata , NULL , true ); // Add new one
+                    XMLData *data = new XMLData( sNewdata , NULL ); // Add new one
                     pXMLElement->RemoveAndDeleteAllChildren();
                     pXMLElement->AddChild( data );
                     aLangHM->erase( sCur );

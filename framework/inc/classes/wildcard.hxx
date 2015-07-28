@@ -56,20 +56,6 @@ class Wildcard
 
         virtual ~Wildcard();
 
-        //  interface
-
-        /*-****************************************************************************************************
-            @short      try to find an agreement between given text and searchpattern
-            @descr      You can use wildcards in pattern only!
-            @param      "sText" is the text, in which we search given pattern.
-            @param      "sPattern" is the searched pattern with includes wildcards.
-            @return     true , if pattern was found.
-            @return     false, if pattern don't match the text.
-        *//*-*****************************************************************************************************/
-
-        static bool match(  const   OUString&    sText       ,
-                            const   OUString&    sPattern    );
-
 };      //  class Wildcard
 
 }       //  namespace framework

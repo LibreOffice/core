@@ -75,12 +75,10 @@ SotData_Impl * SOTDATA()
 *************************************************************************/
 
 SotFactory::SotFactory( const SvGlobalName & rName,
-                        const OUString & rClassName,
-                        CreateInstanceType pCreateFuncP )
+                        const OUString & rClassName )
     : SvGlobalName  ( rName )
     , nSuperCount   ( 0 )
     , pSuperClasses ( NULL )
-    , pCreateFunc   ( pCreateFuncP )
     , aClassName    ( rClassName )
 {
 #ifdef DBG_UTIL

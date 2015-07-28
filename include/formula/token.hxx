@@ -191,9 +191,6 @@ public:
     /** This is dirty and only the compiler should use it! */
     struct PrivateAccess { friend class FormulaCompiler; private: PrivateAccess() { }  };
     inline  void                NewOpCode( OpCode e, const PrivateAccess&  ) { eOp = e; }
-
-    static  sal_Int32           GetStrLenBytes( sal_Int32 nLen )
-                                    { return nLen * sizeof(sal_Unicode); }
 };
 
 inline void intrusive_ptr_add_ref(const FormulaToken* p)

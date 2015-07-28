@@ -76,48 +76,6 @@ class ProtocolCheck
     };
 
     /**
-        it checks, if the given URL string match one of the well known protocols.
-        It returns the right enum value.
-        Protocols are defined above ...
-     */
-    static EProtocol specifyProtocol( const OUString& sURL )
-    {
-        // because "private:" is part of e.g. "private:object" too ...
-        // we must check it before all other ones!!!
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE)))
-            return E_PRIVATE;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_OBJECT)))
-            return E_PRIVATE_OBJECT;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_STREAM)))
-            return E_PRIVATE_STREAM;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_FACTORY)))
-            return E_PRIVATE_FACTORY;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SLOT)))
-            return E_SLOT;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_UNO)))
-            return E_UNO;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MACRO)))
-            return E_MACRO;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SERVICE)))
-            return E_SERVICE;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MAILTO)))
-            return E_MAILTO;
-        else
-        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_NEWS)))
-            return E_NEWS;
-        else
-            return E_UNKNOWN_PROTOCOL;
-    }
-
-    /**
         it checks if given URL match the required protocol only
         It should be used instead of specifyProtocol() if only this question
         is interesting to perform the code. We must not check for all possible protocols here...

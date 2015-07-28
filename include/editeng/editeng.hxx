@@ -436,8 +436,6 @@ public:
     void ClearSpellErrors();
     bool            HasText( const SvxSearchItem& rSearchItem );
 
-    //initialize sentence spelling
-    void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     //spell and return a sentence
     bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence

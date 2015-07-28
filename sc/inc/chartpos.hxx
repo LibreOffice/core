@@ -127,7 +127,6 @@ public:
     virtual ~ScChartPositioner();
 
     const ScRangeListRef&   GetRangeList() const { return aRangeListRef; }
-    void    SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
     void    SetRangeList( const ScRange& rNew );
 
     void    SetHeaders(bool bCol, bool bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
