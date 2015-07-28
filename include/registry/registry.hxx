@@ -218,8 +218,6 @@ protected:
         @param length specifies the length of the array specified by phKeys.
      */
     inline void setKeyHandles(Registry& registry, RegKeyHandle* phKeys, sal_uInt32 length);
-    /// close all subkeys
-    inline RegError closeKeyHandles();
 
     /// stores the number of open subkeys, the number of elements.
     sal_uInt32      m_length;
@@ -639,22 +637,6 @@ inline void RegistryKeyArray::setKeyHandles(Registry& registry,
     m_length = length;
     m_registry = registry;
 }
-
-inline RegError RegistryKeyArray::closeKeyHandles()
-{
-    if (m_registry.isValid() && m_phKeys)
-    {
-        RegError ret;
-        ret = m_registry.m_pApi->closeSubKeys(m_phKeys, m_length);
-        m_registry = Registry();
-        m_length = 0;
-        m_phKeys = NULL;
-        return ret;
-    } else
-        return RegError::INVALID_KEY;
-}
-
-
 
 inline RegistryKeyNames::RegistryKeyNames()
     : m_length(0)

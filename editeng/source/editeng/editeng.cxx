@@ -2170,11 +2170,6 @@ void EditEngine::ClearSpellErrors()
     pImpEditEngine->ClearSpellErrors();
 }
 
-void EditEngine::StartSpelling(EditView& rEditView, bool bMultipleDoc)
-{
-    pImpEditEngine->StartSpelling(rEditView, bMultipleDoc);
-}
-
 bool EditEngine::SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking );

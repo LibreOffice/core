@@ -180,16 +180,6 @@ namespace svt
             return implIs( _rURL, Folder );
         }
 
-        /** binds to the given URL, checks whether or not it refers to a document
-
-            @postcond
-                the content is not in the state UNKNOWN
-        */
-        inline  bool    isDocument(  const OUString& _rURL )
-        {
-            return implIs( _rURL, Document );
-        }
-
         /** checks if the content is existent (it is if and only if it is a document or a folder)
         */
         inline  bool    is( const OUString& _rURL )

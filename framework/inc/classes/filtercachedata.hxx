@@ -400,49 +400,6 @@ class DataContainer
 
         DataContainer();
 
-        static void             convertFileTypeToPropertySequence          ( const FileType&                                           aSource         ,
-                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             convertFilterToPropertySequence            ( const Filter&                                             aSource         ,
-                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             convertDetectorToPropertySequence          ( const Detector&                                           aSource         ,
-                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
-        static void             convertLoaderToPropertySequence            ( const Loader&                                             aSource         ,
-                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             convertContentHandlerToPropertySequence    ( const ContentHandler&                                     aSource         ,
-                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
-        static void             convertPropertySequenceToFilter            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
-                                                                                   Filter&                                             aDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             convertPropertySequenceToFileType          ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
-                                                                                   FileType&                                           aDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             convertPropertySequenceToDetector          ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
-                                                                                   Detector&                                           aDestination    );
-        static void             convertPropertySequenceToLoader            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
-                                                                                   Loader&                                             aDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             convertPropertySequenceToContentHandler    ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
-                                                                                   ContentHandler&                                     aDestination    ,
-                                                                             const OUString&                                    sCurrentLocale  );
-        static void             extractLocalizedStrings                    ( const OUString&                                    sCurrentLocale  ,
-                                                                             const css::uno::Any&                                      aCFGValue       ,
-                                                                                   OUStringHashMap&                                       lLocales        );
-        static void             packLocalizedStrings                       (       sal_Int16                                           nMode           ,
-                                                                             const OUString&                                    sCurrentLocale  ,
-                                                                                   css::uno::Any&                                      aCFGValue       ,
-                                                                             const OUStringHashMap&                                       lLocales        );
-        static OUString  getLocalelizedString                       ( const OUStringHashMap&                                       lLocales        ,
-                                                                             const OUString&                                    sLocale         );
-        static void             setLocalelizedString                       (       OUStringHashMap&                                       lLocales        ,
-                                                                             const OUString&                                    sLocale         ,
-                                                                             const OUString&                                    sValue          );
-        static void             correctExtensions                          (       OUStringList&                                       lExtensions     );
-
-    public:
-
         FileTypeHash            m_aTypeCache;               /// hold all information about registered file types
         FilterHash              m_aFilterCache;             /// hold all information about registered filters
         DetectorHash            m_aDetectorCache;           /// hold all information about registered detect services
@@ -484,26 +441,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
                                                             sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ,
                                                             ConfigItemMode   nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
         virtual                     ~FilterCFGAccess(                                                               );
-
-        static   OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formatted string of type properties
-        static   void               decodeTypeData  ( const OUString& sData                                  ,
-                                                            FileType&        aType                                  );
-        static   OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formatted string of filter properties
-        static   void               decodeFilterData( const OUString& sData                                  ,
-                                                            Filter&          aFilter                                );
-        static   OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formatted string of OUStringList
-        static   OUStringList       decodeStringList( const OUString& sValue                                 );
-
-    private:
-
-    //  debug checks
-
-    private:
-        static bool implcp_ctor ( const OUString& sPath    ,     // methods to check incoming parameter on our interface methods!
-                                            sal_Int32        nVersion ,
-                                            sal_Int16        nMode    );
-        static bool implcp_read ( const DataContainer&   rData    );
-        static bool implcp_write( const DataContainer&   rData    );
 
     //  member
 

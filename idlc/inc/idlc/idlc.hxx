@@ -54,8 +54,6 @@ public:
         { return m_pScopes; }
     AstModule* getRoot()
         { return m_pRoot; }
-    ErrorHandler* error()
-        { return m_pErrorHandler; }
     const OString& getFileName()
         { return m_fileName; }
     void setFileName(const OString& fileName)
@@ -85,14 +83,10 @@ public:
         { m_bIsInMainfile = bInMainfile; }
     sal_uInt32 getErrorCount()
         { return m_errorCount; }
-    void setErrorCount(sal_uInt32 errorCount)
-        { m_errorCount = errorCount; }
     void incErrorCount()
         { m_errorCount++; }
     sal_uInt32 getWarningCount()
         { return m_warningCount; }
-    void setWarningCount(sal_uInt32 warningCount)
-        { m_warningCount = warningCount; }
     void incWarningCount()
         { m_warningCount++; }
     sal_uInt32 getLineNumber()
@@ -114,8 +108,6 @@ public:
 
     void addInclude(const OString& inc)
         { m_includes.insert(inc); }
-    StringSet& getIncludes()
-        { return m_includes; }
 
     void setPublished(bool published) { m_published = published; }
     bool isPublished() const { return m_published; }

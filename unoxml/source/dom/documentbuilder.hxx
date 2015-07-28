@@ -63,11 +63,6 @@ namespace DOM
             css::uno::Reference< css::lang::XMultiServiceFactory > const&
                 xFactory);
 
-        // call for factory
-        static css::uno::Reference< XInterface > getInstance(
-            css::uno::Reference< css::lang::XMultiServiceFactory > const&
-                xFactory);
-
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];

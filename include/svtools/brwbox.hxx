@@ -403,8 +403,6 @@ protected:
 
     bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
 
-    bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
-
 private:
     void*           implGetDataFlavors() const;
         // with this we can make GetDataFlavors() inline, which is strongly needed as SVTOOLS does not export

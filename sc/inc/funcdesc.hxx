@@ -310,18 +310,6 @@ public:
     static OUString GetCategoryName(sal_uInt32 _nCategoryNumber );
 
     /**
-      Returns function by name.
-
-      Searches for a function with the function name rFName, while ignoring case.
-
-      @param rFName
-      name of the function
-
-      @return pointer to function with the name rFName, null if no such function was found.
-    */
-    const ScFuncDesc* Get( const OUString& rFName ) const;
-
-    /**
       Returns function by index.
 
       Searches for a function with the function index nFIndex.

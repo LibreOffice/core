@@ -42,8 +42,6 @@ namespace dbaccess
 
         mutable bool m_bResultSetChanged;
 
-        void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
-
         void executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName);
         void fillJoinedColumns_throw(const ::std::vector< ::connectivity::TNodePair>& i_aJoinColumns);
         void fillJoinedColumns_throw(const OUString& i_sLeftColumn,const OUString& i_sRightColumn);
@@ -74,7 +72,6 @@ namespace dbaccess
         virtual void fillMissingValues(ORowSetValueVector::Vector& io_aRow) const SAL_OVERRIDE;
 
         bool isReadOnly() const { return m_aJoinedKeyColumns.empty(); }
-        const ::std::map<sal_Int32,sal_Int32>& getJoinedColumns() const { return m_aJoinedColumns; }
         const ::std::map<sal_Int32,sal_Int32>& getJoinedKeyColumns() const { return m_aJoinedKeyColumns; }
     };
 }

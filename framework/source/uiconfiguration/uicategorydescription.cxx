@@ -408,8 +408,6 @@ public:
         return aSeq;
     }
 
-private:
-    virtual css::uno::Reference< css::container::XNameAccess > impl_createConfigAccess(const OUString& _sName) SAL_OVERRIDE;
 };
 
 UICategoryDescription::UICategoryDescription( const Reference< XComponentContext >& rxContext ) :
@@ -432,10 +430,6 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
 
 UICategoryDescription::~UICategoryDescription()
 {
-}
-Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const OUString& _sName)
-{
-    return new ConfigurationAccess_UICategory( _sName, m_xGenericUICommands, m_xContext );
 }
 
 struct Instance {

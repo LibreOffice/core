@@ -119,7 +119,6 @@ public:
     virtual bool                IsStorage( const OUString& rEleName ) const = 0;
     virtual bool                IsContained( const OUString& rEleName ) const = 0;
     virtual bool                Remove( const OUString & rEleName ) = 0;
-    virtual bool                Rename( const OUString & rEleName, const OUString & rNewName ) = 0;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) = 0;
     virtual bool                ValidateFAT() = 0;
     virtual bool                Equals( const BaseStorage& rStream ) const = 0;
@@ -135,8 +134,6 @@ protected:
                     ~OLEStorageBase();
     bool            Validate_Impl( bool=false ) const;
     static bool     ValidateMode_Impl( StreamMode, StgDirEntry* p = NULL );
-    const SvStream* GetSvStream_Impl() const;
-public:
 };
 
 class StorageStream : public BaseStorageStream, public OLEStorageBase
@@ -212,7 +209,6 @@ public:
     virtual bool                IsStorage( const OUString& rEleName ) const SAL_OVERRIDE;
     virtual bool                IsContained( const OUString& rEleName ) const SAL_OVERRIDE;
     virtual bool                Remove( const OUString & rEleName ) SAL_OVERRIDE;
-    virtual bool                Rename( const OUString & rEleName, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                ValidateFAT() SAL_OVERRIDE;
     virtual bool                Validate( bool=false ) const SAL_OVERRIDE;
@@ -318,7 +314,6 @@ public:
     virtual bool                IsStorage( const OUString& rEleName ) const SAL_OVERRIDE;
     virtual bool                IsContained( const OUString& rEleName ) const SAL_OVERRIDE;
     virtual bool                Remove( const OUString & rEleName ) SAL_OVERRIDE;
-    virtual bool                Rename( const OUString & rEleName, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                ValidateFAT() SAL_OVERRIDE;
     virtual bool                Validate( bool=false ) const SAL_OVERRIDE;

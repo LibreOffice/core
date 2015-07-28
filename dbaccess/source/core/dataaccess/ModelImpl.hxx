@@ -311,7 +311,6 @@ public:
             stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments );
 
 // other stuff
-    void    flushTables();
 
     // disposes all elements in m_aStorages, and clears it
     void    disposeStorages();
@@ -532,10 +531,6 @@ public:
     inline ::osl::Mutex& getMutex( GuardAccess ) const
     {
         return getMutex();
-    }
-    inline ::rtl::Reference< ODatabaseModelImpl > getImpl( GuardAccess ) const
-    {
-        return m_pImpl;
     }
 
     /// checks whether the component is already disposed, throws a DisposedException if so

@@ -107,38 +107,12 @@ public:
     virtual ~AstExpression();
 
     // Data Accessors
-    AstScope* getScope()
-        { return m_pScope; }
-    void setScope(AstScope* pScope)
-        { m_pScope = pScope; }
-    sal_Int32 getLine()
-        { return m_lineNo; }
-    void setLine(sal_Int32 l)
-        { m_lineNo = l; }
-    const OString& getFileName()
-        { return m_fileName; }
-    void setFileName(const OString& fileName)
-        { m_fileName = fileName; }
     ExprComb getCombOperator()
         { return m_combOperator; }
-    void setCombOperator(ExprComb new_ec)
-        { m_combOperator = new_ec; }
     AstExprValue* getExprValue()
         { return m_exprValue; }
     void setExprValue(AstExprValue *pEv)
         { m_exprValue = pEv; }
-    AstExpression* getExpr1()
-        { return m_subExpr1; }
-    void setExpr1(AstExpression *pExpr)
-        { m_subExpr1 = pExpr; }
-    AstExpression* getExpr2()
-        { return m_subExpr2; }
-    void setExpr2(AstExpression *pExpr)
-        { m_subExpr2 = pExpr; }
-    OString* getSymbolicName()
-        { return m_pSymbolicName; }
-    void setSymbolicName(OString* pSymbolicName)
-        { m_pSymbolicName = pSymbolicName; }
 
     // Evaluation and value coercion
     AstExprValue* coerce(ExprType type, bool bAssign=true);

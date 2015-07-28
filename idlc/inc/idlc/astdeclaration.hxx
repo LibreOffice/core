@@ -77,8 +77,6 @@ public:
         { return m_pScope; }
     const AstScope* getScope() const
         { return m_pScope; }
-    void setScope(AstScope* pSc)
-        { m_pScope = pSc; }
     NodeType getNodeType() const
         { return m_nodeType; }
     bool isInMainfile() const
@@ -101,10 +99,6 @@ public:
         { return m_documentation; }
     void setDocumentation(const OUString& rDocumentation)
         { m_documentation = rDocumentation; }
-    bool isAdded()
-        { return m_bIsAdded; }
-    void markAsAdded()
-        { m_bIsAdded = true; }
 
     virtual bool isType() const;
 

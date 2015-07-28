@@ -334,11 +334,6 @@ public:
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() = 0;
 
     /**
-       Returns stream of this value.
-     */
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream() = 0;
-
-    /**
        Returns binary object  of this value.
      */
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() = 0;

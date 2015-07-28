@@ -225,8 +225,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         SAL_DLLPRIVATE static void AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int32 nPara, const bool bIsSpecialValue );
 
-        SAL_DLLPRIVATE static void SetEnhancedCustomShapeEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
-                                        rParameter, const sal_Int16 nPara, const bool bIsSpecialValue );
         static void             SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nValue );
         static void             SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&

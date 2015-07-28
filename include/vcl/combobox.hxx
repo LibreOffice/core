@@ -121,7 +121,6 @@ public:
 
     void            EnableMultiSelection( bool bMulti );
     bool            IsMultiSelectionEnabled() const;
-    void            SetMultiSelectionSeparator( sal_Unicode cSep );
     sal_Unicode     GetMultiSelectionSeparator() const;
 
     void            SetSelectHdl(const Link<>& rLink);
@@ -177,7 +176,6 @@ public:
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
-    sal_Int32 getMaxWidthChars() const;
     void setMaxWidthChars(sal_Int32 nWidth);
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;

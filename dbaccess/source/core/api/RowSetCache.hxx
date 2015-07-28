@@ -100,10 +100,6 @@ namespace dbaccess
         bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
         bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 &_nNewEndPos);
         bool moveWindow();
-        // returns true when a keyset needs to be created.
-        bool impl_createBookmarkSet_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs);
-
-        void firePropertyChange(sal_Int32 _nColumnIndex,const ::connectivity::ORowSetValue& _rOldValue);
 
         void rotateCacheIterator(ORowSetMatrix::difference_type _nDist);
         void updateValue(sal_Int32 columnIndex
