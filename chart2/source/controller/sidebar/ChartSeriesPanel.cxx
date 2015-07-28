@@ -302,6 +302,7 @@ ChartSeriesPanel::ChartSeriesPanel(
     get(mpRBPrimaryAxis, "radiobutton_primary_axis");
     get(mpRBSecondaryAxis, "radiobutton_secondary_axis");
 
+    get(mpBoxLabelPlacement, "datalabel_box");
     get(mpLBLabelPlacement, "comboboxtext_label");
 
     get(mpFTSeriesName, "label_series_name");
@@ -330,6 +331,7 @@ void ChartSeriesPanel::dispose()
     mpRBPrimaryAxis.clear();
     mpRBSecondaryAxis.clear();
 
+    mpBoxLabelPlacement.clear();
     mpLBLabelPlacement.clear();
 
     mpFTSeriesName.clear();
@@ -374,7 +376,7 @@ void ChartSeriesPanel::updateData()
     mpRBPrimaryAxis->Check(bPrimaryAxis);
     mpRBSecondaryAxis->Check(!bPrimaryAxis);
 
-    mpLBLabelPlacement->Enable(bLabelVisible);
+    mpBoxLabelPlacement->Enable(bLabelVisible);
     mpLBLabelPlacement->SelectEntryPos(getDataLabelPlacement(mxModel, aCID));
 
     mpFTSeriesName->SetText(getSeriesLabel(mxModel, aCID));
