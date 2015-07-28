@@ -35,7 +35,7 @@ protected:
     void                ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions);
     bool                ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
 
-    // liefert True, wenn rPt geaendert wurde
+    // Returns true if rPt has changed
     bool                ImpLimitToWorkArea(Point& rPt) const;
 
 protected:
@@ -43,30 +43,31 @@ protected:
     SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut = 0L);
 
 public:
-    // Alle markierten Objekte auf dem angegebenen OutputDevice ausgeben.
+    // Output all marked objects on the specified OutputDevice
     ::std::vector< SdrObject* > GetMarkedObjects() const;
     virtual void        DrawMarkedObj(OutputDevice& rOut) const;
 
-    // Z.B. fuer's Clipboard, Drag&Drop, ...
-    // Alle markierten Objekte in ein Metafile stecken. Z.Zt. noch etwas
-    // buggee (Offset..., Fremdgrafikobjekte (SdrGrafObj), Virtuelle
-    // Objektkopien (SdrVirtObj) mit Ankerpos<>(0,0)).
+    // E.g. for Clipboard, Drag'n'Drop, ...
+    // Add all marked objects to a metafile.
+    // FIXME: This is known to be somewhat buggy still (Offset...,
+    // foreign graphics objects (SdrGrafObj), virutal object
+    // copies (SdrVirtObj) with anchor position <>(0,0)).
     GDIMetaFile GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked = false) const;
 
-    // Alle markierten Objekte auf eine Bitmap malen. Diese hat die Farbtiefe
-    // und Aufloesung des Bildschirms.
+    // Draw all marked objects onto a bitmap, with the display's color depth
+    // and resolution
     BitmapEx GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked = false) const;
 
-    // Alle markierten Objekte in ein neues Model kopieren. Dieses neue Model
-    // hat dann genau eine Page. Das Flag PageNotValid an diesem Model ist
-    // gesetzt. Daran ist zu erkennen, dass nur die Objekte der Page Gueltikeit
-    // haben, die Page sebst jedoch nicht (Seitengroesse, Raender). Das neue
-    // Model wird auf dem Heap erzeugt und wird an den Aufrufer dieser Methode
-    // uebergeben. Dieser hat es dann spaeter zu entsorgen.
-    // Beim einfuegen der markierten Objekte in die eine Page des neuen Model
-    // findet ein Merging der seitenlokalen Layer statt. Sollte kein Platz mehr
-    // fuer weitere seitenlokale Layer sein, wird den entsprechenden Objekten
-    // der Default-Layer zugewiesen (Layer 0, (dokumentglobaler Standardlayer).
+    // Copy all marked objects to a new model, consisting of exactly one page,
+    // with the flag PageNotValid set. This means, that only the page's objects
+    // are valid and not the page itself (page size, margins).
+    // The new model is created on the free store and passed to the caller of
+    // this method, which is responsible to dispose it later on.
+    //
+    // When inserting the marked objects into the one page of the new model,
+    // the page-local layer is merged. If there's no more room left for
+    // additional page-local layers, the corresponding objects are assigned
+    // the default layer (layer 0, document-global standard layer).
     virtual SdrModel*   GetMarkedObjModel() const;
 
     Graphic         GetAllMarkedGraphic() const;
@@ -86,23 +87,25 @@ public:
      */
     static Graphic  GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj );
 
-    // Bei allen Paste-Methoden werden die neuen Draw-Objekte markiert.
-    // Wird der Parameter bAddMark auf sal_True gesetzt, so werden die neuen
-    // DrawObjekte zu einer bereits bestehenden Selektion "hinzumarkiert".
-    // Dieser Fall ist fuer Drag&Drop mit mehreren Items gedacht.
-    // Die Methoden mit Point-Parameter fuegen neue Objekte zentriert an
-    // dieser Position ein, die anderen zentriert am 1.OutputDevice der View.
-    // Ist der Parameter pPg gesetzt, werden die Objekte and dieser Seite
-    // eingefuegt. Die Positionierung (rPos bzw. Zentrierung) bezieht sich
-    // dann nichtmehr auf die View sondern auf die Page.
-    // Hinweis: SdrObjList ist Basisklasse von SdrPage.
-    // Die Methoden liefern sal_True, wenn die Objekte erfolgreich erzeugt und
-    // eingefuegt wurden. Bei pLst=sal_False und kein TextEdit aktiv kann man
-    // sich dann auch darauf verlassen, dass diese an der View markiert sind.
-    // Andernfalls erfolgt die Markierung nur, wenn pLst z.Zt. auch an der
-    // View angezeigt wird.
-    // Gueltige Werte fuer nOptions sind SDRINSERT_DONTMARK und
-    // SDRINSERT_ADDMARK (siehe svdedtv.hxx).
+    // The new Draw objects are marked for all paste methods.
+    // If bAddMark is true, the new Draw objects are added to an existing
+    // selection, which is meant for Drag'n'Drop with multiple items.
+    //
+    // The methods with a point parameter insert objects centered at that
+    // position, all others are centered at the 1st OutputDevice of the View.
+    //
+    // If pPg is set, the objects are inserted at that page. The positioning
+    // (rPos or alignment) are not relative to the View, but to the Page.
+    //
+    // Note: SdrObjList is the base class of SdrPage.
+    // All methods return true, if the objects have been successfully created
+    // and inserted.
+    // If pLst = false and no TextEdit active, we can rely on the fact, that
+    // it is marked at the View. Or else the marking only happens if the pLst
+    // is also shown at the View at the moment.
+    //
+    // Valid values for nOptions are SDRINSERT_DONTMARK and SDRINSERT_ADDMARK
+    // (@see svdedtv.hxx).
     virtual bool Paste(
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions,
         const OUString& rSrcShellID, const OUString& rDestShellID );
