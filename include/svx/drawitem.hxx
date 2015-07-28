@@ -25,10 +25,6 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <svx/svxdllapi.h>
 
-
-//  SvxColorListItem
-
-
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxColorListItem: public SfxPoolItem
 {
     XColorListRef     pColorList;
@@ -53,7 +49,6 @@ public:
     XColorListRef           GetColorList() const { return pColorList; }
 };
 
-//  SvxGradientListItem
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxGradientListItem : public SfxPoolItem
 {
     XGradientListRef  pGradientList;
@@ -77,10 +72,6 @@ public:
 
     XGradientListRef        GetGradientList() const { return pGradientList; }
 };
-
-
-
-//  SvxHatchListItem
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxHatchListItem : public SfxPoolItem
 {
@@ -106,11 +97,6 @@ public:
     XHatchListRef           GetHatchList() const { return pHatchList; }
 };
 
-
-
-
-//  SvxBitmapListItem
-
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapListItem : public SfxPoolItem
 {
     XBitmapListRef    pBitmapList;
@@ -134,11 +120,6 @@ public:
 
     XBitmapListRef          GetBitmapList() const { return pBitmapList; }
 };
-
-
-
-
-//  SvxDashListItem
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDashListItem : public SfxPoolItem
 {
@@ -164,10 +145,6 @@ public:
     XDashListRef            GetDashList() const { return pDashList; }
 };
 
-
-
-//  SvxLineEndListItem
-
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxLineEndListItem : public SfxPoolItem
 {
     XLineEndListRef   pLineEndList;
@@ -191,9 +168,6 @@ public:
 
     XLineEndListRef         GetLineEndList() const { return pLineEndList; }
 };
-
-
-
 
 #endif
 

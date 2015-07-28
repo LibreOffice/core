@@ -53,10 +53,6 @@ extern sal_Unicode pszStandard[]; // "standard"
 // it can't be compared with enum COL_NAME
 SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
 
-
-// class XColorEntry
-
-
 class SVX_DLLPUBLIC XColorEntry : public XPropertyEntry
 {
 private:
@@ -71,10 +67,6 @@ public:
         return aColor;
     }
 };
-
-
-// class XLineEndEntry
-
 
 class SVX_DLLPUBLIC XLineEndEntry : public XPropertyEntry
 {
@@ -91,10 +83,6 @@ public:
     }
 };
 
-
-// class XDashEntry
-
-
 class SVX_DLLPUBLIC XDashEntry : public XPropertyEntry
 {
 private:
@@ -109,10 +97,6 @@ public:
         return aDash;
     }
 };
-
-
-// class XHatchEntry
-
 
 class SVX_DLLPUBLIC XHatchEntry : public XPropertyEntry
 {
@@ -129,10 +113,6 @@ public:
     }
 };
 
-
-// class XGradientEntry
-
-
 class SVX_DLLPUBLIC XGradientEntry : public XPropertyEntry
 {
 private:
@@ -148,10 +128,6 @@ public:
     }
 };
 
-
-// class XBitmapEntry
-
-
 class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
 {
 private:
@@ -166,10 +142,6 @@ public:
         return maGraphicObject;
     }
 };
-
-
-// class XPropertyList
-
 
 enum XPropertyListType {
     UNKNOWN_XPROPERTYLISTTYPE = -1,
@@ -280,10 +252,6 @@ public:
         rtl::Reference<XPropertyList> const & plist);
 };
 
-
-// class XColorList
-
-
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 protected:
@@ -306,10 +274,6 @@ public:
     static XColorListRef GetStdColorList(); // returns a singleton
 };
 
-
-// class XLineEndList
-
-
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
 protected:
@@ -326,10 +290,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
     virtual bool Create() SAL_OVERRIDE;
 };
-
-
-// class XDashList
-
 
 class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
@@ -366,10 +326,6 @@ public:
     OUString GetStringForUiNoLine() const;
 };
 
-
-// class XHatchList
-
-
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
 protected:
@@ -388,9 +344,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
     virtual bool Create() SAL_OVERRIDE;
 };
-
-
-// class XGradientList
 
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
@@ -411,10 +364,6 @@ public:
     virtual bool Create() SAL_OVERRIDE;
 };
 
-
-// class XBitmapList
-
-
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 protected:
@@ -432,7 +381,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance() SAL_OVERRIDE;
     virtual bool Create() SAL_OVERRIDE;
 };
-
 
 // FIXME: could add type checking too ...
 inline XDashListRef  XPropertyList::AsDashList(
