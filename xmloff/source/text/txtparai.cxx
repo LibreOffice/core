@@ -406,14 +406,25 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
             bool& rIgnLeadSpace );
+    XMLImpHyperlinkContext_Impl( SvXMLImport& rImport,
+            sal_Int32 Element,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList,
+            XMLHints_Impl& rHnts,
+            bool& rIgnLeadSpace );
 
     virtual ~XMLImpHyperlinkContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 Element,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList )
+            throw (RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void characters( const OUString& rChars )
+            throw (RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLImpHyperlinkContext_Impl, SvXMLImportContext );
@@ -486,6 +497,70 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     }
 }
 
+XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    XMLHints_Impl& rHnts,
+    bool& rIgnLeadSpace )
+:   SvXMLImportContext( rImport ),
+    mrHints( rHnts ),
+    mpHint( new XMLHyperlinkHint_Impl( GetImport().GetTextImport()->GetCursorAsRange()->getStart() ) ),
+    mrbIgnoreLeadingSpace( rIgnLeadSpace )
+{
+    OUString sShow;
+    const SvXMLTokenMap& rTokenMap = GetImport().GetTextImport()->GetTextHyperlinkAttrTokenMap();
+
+    if( xAttrList.is() )
+    {
+        Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+        xml::FastAttribute* attribs = attributes.getArray();
+        for( sal_Int16 i = 0; i < attributes.getLength(); i++ )
+        {
+            xml::FastAttribute attr = attribs[i];
+            switch (rTokenMap.Get(attr.Token))
+            {
+            case XML_TOK_TEXT_HYPERLINK_HREF:
+                mpHint->SetHRef( GetImport().GetAbsoluteReference( attr.Value ) );
+                break;
+            case XML_TOK_TEXT_HYPERLINK_NAME:
+                mpHint->SetName( attr.Value );
+                break;
+            case XML_TOK_TEXT_HYPERLINK_TARGET_FRAME:
+                mpHint->SetTargetFrameName( attr.Value );
+                break;
+            case XML_TOK_TEXT_HYPERLINK_SHOW:
+                sShow = attr.Value;
+                break;
+            case XML_TOK_TEXT_HYPERLINK_STYLE_NAME:
+                mpHint->SetStyleName( attr.Value );
+                break;
+            case XML_TOK_TEXT_HYPERLINK_VIS_STYLE_NAME:
+                mpHint->SetVisitedStyleName( attr.Value );
+                break;
+            }
+        }
+    }
+
+    if( !sShow.isEmpty() && mpHint->GetTargetFrameName().isEmpty() )
+    {
+        if( IsXMLToken( sShow, XML_NEW ) )
+            mpHint->SetTargetFrameName( OUString( "_blank" ) );
+        else if( IsXMLToken( sShow, XML_REPLACE ) )
+            mpHint->SetTargetFrameName( OUString( "_self" ) );
+    }
+
+    if( mpHint->GetHRef().isEmpty() )
+    {
+        // hyperlink without an URL is not imported.
+        delete mpHint;
+        mpHint = NULL;
+    }
+    else
+    {
+        mrHints.push_back( mpHint );
+    }
+}
+
 XMLImpHyperlinkContext_Impl::~XMLImpHyperlinkContext_Impl()
 {
     if( mpHint != NULL )
@@ -517,7 +592,38 @@ SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
     }
 }
 
+Reference< xml::sax::XFastContextHandler >
+    XMLImpHyperlinkContext_Impl::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) )
+    {
+        XMLEventsImportContext* pCtxt = new XMLEventsImportContext(
+            GetImport(), Element );
+        mpHint->SetEventsContext(pCtxt);
+        return pCtxt;
+    }
+    else
+    {
+        const SvXMLTokenMap& rTokenMap =
+            GetImport().GetTextImport()->GetTextPElemTokenMap();
+        sal_uInt16 nToken = rTokenMap.Get( Element );
+
+        return XMLImpSpanContext_Impl::createFastChildContext(
+            GetImport(), Element, xAttrList,
+            nToken, mrHints, mrbIgnoreLeadingSpace );
+    }
+}
+
 void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
+{
+    GetImport().GetTextImport()->InsertString( rChars, mrbIgnoreLeadingSpace );
+}
+
+void XMLImpHyperlinkContext_Impl::characters( const OUString& rChars )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
 {
     GetImport().GetTextImport()->InsertString( rChars, mrbIgnoreLeadingSpace );
 }
