@@ -2131,22 +2131,20 @@ void Edit::Command( const CommandEvent& rCEvt )
         maText.insert( mpIMEInfos->nPos, pData->GetText() );
         if ( mpIMEInfos->bWasCursorOverwrite )
         {
-            sal_Int32 nOldIMETextLen = mpIMEInfos->nLen;
-            sal_Int32 nNewIMETextLen = pData->GetText().getLength();
+            const sal_Int32 nOldIMETextLen = mpIMEInfos->nLen;
+            const sal_Int32 nNewIMETextLen = pData->GetText().getLength();
             if ( ( nOldIMETextLen > nNewIMETextLen ) &&
                  ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
             {
                 // restore old characters
-                sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
+                const sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                 maText.insert( mpIMEInfos->nPos + nNewIMETextLen, mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
             }
             else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
                       ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
             {
-                // overwrite
-                sal_uInt16 nOverwrite = nNewIMETextLen - nOldIMETextLen;
-                if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.getLength() )
-                    nOverwrite = mpIMEInfos->aOldTextAfterStartPos.getLength() - nOldIMETextLen;
+                const sal_Int32 nOverwrite = ( nNewIMETextLen > mpIMEInfos->aOldTextAfterStartPos.getLength()
+                    ? mpIMEInfos->aOldTextAfterStartPos.getLength() : nNewIMETextLen ) - nOldIMETextLen;
                 maText.remove( mpIMEInfos->nPos + nNewIMETextLen, nOverwrite );
             }
         }
