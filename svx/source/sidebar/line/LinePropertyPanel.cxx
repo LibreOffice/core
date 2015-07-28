@@ -218,6 +218,9 @@ void LinePropertyPanel::dispose()
     mpLBEdgeStyle.clear();
     mpFTCapStyle.clear();
     mpLBCapStyle.clear();
+    mpGridLineProps.clear();
+    mpBoxArrowProps.clear();
+
 
     maLineWidthPopup.dispose();
     maStyleControl.dispose();
