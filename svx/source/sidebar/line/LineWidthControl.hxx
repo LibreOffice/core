@@ -30,12 +30,12 @@ class SfxBindings;
 
 namespace svx { namespace sidebar {
 
-class LinePropertyPanel;
+class LinePropertyPanelBase;
 
 class LineWidthControl : public svx::sidebar::PopupControl
 {
 public:
-    LineWidthControl (vcl::Window* pParent, LinePropertyPanel& rPanel);
+    LineWidthControl (vcl::Window* pParent, LinePropertyPanelBase& rPanel);
     virtual ~LineWidthControl();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -53,8 +53,7 @@ public:
     }
 
 private:
-    LinePropertyPanel& mrLinePropertyPanel;
-    SfxBindings* mpBindings;
+    LinePropertyPanelBase& mrLinePropertyPanel;
     VclPtr<LineWidthValueSet> maVSWidth;
     VclPtr<FixedText> maFTCus;
     VclPtr<FixedText> maFTWidth;

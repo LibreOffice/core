@@ -192,6 +192,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/shadow/ShadowPropertyPanel \
     svx/source/sidebar/graphic/GraphicPropertyPanel \
     svx/source/sidebar/line/LinePropertyPanel \
+    svx/source/sidebar/line/LinePropertyPanelBase \
     svx/source/sidebar/line/LineWidthControl \
     svx/source/sidebar/line/LineWidthValueSet \
     svx/source/sidebar/line/LineWidthPopup \

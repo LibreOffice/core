@@ -18,7 +18,7 @@
  */
 #include "LineWidthControl.hxx"
 #include "LinePropertyPanel.hrc"
-#include "LinePropertyPanel.hxx"
+#include "LinePropertyPanelBase.hxx"
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
@@ -36,10 +36,9 @@ namespace svx { namespace sidebar {
 
 LineWidthControl::LineWidthControl (
     vcl::Window* pParent,
-    LinePropertyPanel& rPanel)
+    LinePropertyPanelBase& rPanel)
     : svx::sidebar::PopupControl(pParent,SVX_RES(RID_POPUPPANEL_LINEPAGE_WIDTH)),
       mrLinePropertyPanel(rPanel),
-      mpBindings(NULL),
       maVSWidth(VclPtr<LineWidthValueSet>::Create(this, SVX_RES(VS_WIDTH))),
       maFTCus( VclPtr<FixedText>::Create(this, SVX_RES(FT_CUSTOME))),
       maFTWidth( VclPtr<FixedText>::Create(this, SVX_RES(FT_LINE_WIDTH))),
@@ -57,7 +56,6 @@ LineWidthControl::LineWidthControl (
 {
     Initialize();
     FreeResource();
-    mpBindings = mrLinePropertyPanel.GetBindings();
 }
 
 LineWidthControl::~LineWidthControl()
@@ -268,7 +266,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(maVSWidth->GetItemData( iPos )), MAP_POINT, (MapUnit)meMapUnit);
             nVal = maMFWidth->Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
+            mrLinePropertyPanel.setLineWidth(aWidthItem);
             mrLinePropertyPanel.SetWidthIcon(iPos);
             mrLinePropertyPanel.SetWidth(nVal);
             mbCloseByEdit = false;
@@ -282,7 +280,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
                 long nVal = LogicToLogic(mnCustomWidth , MAP_POINT, (MapUnit)meMapUnit);
                 nVal = maMFWidth->Denormalize(nVal);
                 XLineWidthItem aWidthItem( nVal );
-                mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
+                mrLinePropertyPanel.setLineWidth(aWidthItem);
                 mrLinePropertyPanel.SetWidth(nVal);
                 mbCloseByEdit = false;
                 mnTmpCustomWidth = 0;
@@ -319,7 +317,7 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)meMapUnit );
         sal_Int32 nNewWidth = (short)maMFWidth->Denormalize( nVal );
         XLineWidthItem aWidthItem(nNewWidth);
-        mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
+        mrLinePropertyPanel.setLineWidth(aWidthItem);
 
         mbCloseByEdit = true;
         mnTmpCustomWidth = nTmp;
