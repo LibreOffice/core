@@ -25,9 +25,8 @@ class SotObjectFactory : public SotFactory
 {
 public:
         SotObjectFactory( const SvGlobalName & rName,
-                          const OUString & rClassName,
-                          CreateInstanceType pCreateFuncP )
-            : SotFactory( rName, rClassName, pCreateFuncP )
+                          const OUString & rClassName )
+            : SotFactory( rName, rClassName )
         {}
 };
 
@@ -37,9 +36,10 @@ SotFactory * SotObject::ClassFactory()
     SotFactory **ppFactory = GetFactoryAdress();
     if( !*ppFactory )
     {
-        *ppFactory = new SotObjectFactory( SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
-                            0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
-            OUString( "SotObject" ), SotObject::CreateInstance );
+        *ppFactory = new SotObjectFactory(
+                           SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
+                               0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
+                           OUString( "SotObject" ) );
     }
     return *ppFactory;
 }

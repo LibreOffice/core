@@ -297,11 +297,6 @@ void SpinfieldToolbarController::GetFocus()
     notifyFocusGet();
 }
 
-void SpinfieldToolbarController::LoseFocus()
-{
-    notifyFocusLost();
-}
-
 void SpinfieldToolbarController::StateChanged( StateChangedType /*nType*/ )
 {
 }

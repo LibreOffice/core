@@ -57,15 +57,6 @@ public:
     bool hasMandatoryInheritedInterfaces() const
     { return m_mandatoryInterfaces > 0; }
 
-    void setForwarded(bool bForwarded)
-        { m_bForwarded = bForwarded; }
-    bool isForwarded()
-        { return m_bForwarded; }
-    void setForwardedInSameFile(bool bForwarded)
-        { m_bForwardedInSameFile = bForwarded; }
-    bool isForwardedInSameFile()
-        { return m_bForwardedInSameFile; }
-
     void setDefined() { m_bIsDefined = true; }
     bool isDefined() const
         { return m_bIsDefined; }
@@ -125,8 +116,6 @@ private:
     InheritedInterfaces m_inheritedInterfaces;
     InheritedInterfaces::size_type m_mandatoryInterfaces;
     bool    m_bIsDefined;
-    bool    m_bForwarded;
-    bool    m_bForwardedInSameFile;
     bool m_bSingleInheritance;
     VisibleInterfaces m_visibleInterfaces;
     VisibleMembers m_visibleMembers;

@@ -54,9 +54,6 @@ protected:
     // get a 32bit value from Resource data
     static sal_Int32    GetLongRes( void * pLong )
     { return ResMgr::GetLong( pLong ); }
-    // get a 16bit value from Resource data
-    static sal_Int16    GetShortRes( void * pShort )
-    { return ResMgr::GetShort( pShort ); }
 
     // read a 32bit value from resource data and increment pointer
     sal_Int32 ReadLongRes()

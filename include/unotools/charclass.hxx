@@ -96,16 +96,6 @@ public:
     /// isalpha() on ascii values of entire string
     static bool isAsciiAlpha( const OUString& rStr );
 
-    /// isalnum() on ascii values of entire string
-    static bool isAsciiAlphaNumeric( const OUString& rStr );
-
-    /// whether type is pure alpha or not, e.g. return of getStringType
-    static inline bool isAlphaType( sal_Int32 nType )
-    {
-        return ((nType & nCharClassAlphaType) != 0) &&
-            ((nType & ~(nCharClassAlphaTypeMask)) == 0);
-    }
-
     /// whether type is pure numeric or not, e.g. return of getStringType
     static inline bool isNumericType( sal_Int32 nType )
     {

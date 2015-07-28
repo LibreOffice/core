@@ -202,11 +202,6 @@ writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
     return std::make_shared<RTFReferenceProperties>(*m_pAttributes, *m_pSprms);
 }
 
-writerfilter::Reference<Stream>::Pointer_t RTFValue::getStream()
-{
-    return writerfilter::Reference<Stream>::Pointer_t();
-}
-
 writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
 {
     return writerfilter::Reference<BinaryObj>::Pointer_t();

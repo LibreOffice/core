@@ -2946,29 +2946,6 @@ bool UCBStorage::Remove( const OUString& rEleName )
     return ( pElement != NULL );
 }
 
-bool UCBStorage::Rename( const OUString& rEleName, const OUString& rNewName )
-{
-    if( rEleName.isEmpty()|| rNewName.isEmpty() )
-        return false;
-
-    UCBStorageElement_Impl *pAlreadyExisting = FindElement_Impl( rNewName );
-    if ( pAlreadyExisting )
-    {
-        SetError( SVSTREAM_ACCESS_DENIED );
-        return false;                       // can't change to a name that is already used
-    }
-
-    UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
-    if ( pElement )
-    {
-        pElement->m_aName = rNewName;
-    }
-    else
-        SetError( SVSTREAM_FILE_NOT_FOUND );
-
-    return pElement != NULL;
-}
-
 bool UCBStorage::ValidateFAT()
 {
     // ???

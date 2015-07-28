@@ -97,7 +97,6 @@ namespace fs
             return (wchar_t const *) ustrSystemPath.getStr();
         }
 #endif
-        std::string native_directory_string() const { return native_file_string(); }
         std::string toUTF8() const
         {
             OString tmp(OUStringToOString(data, RTL_TEXTENCODING_UTF8));
@@ -235,14 +234,6 @@ public:
                 const std::string &in_lang,
                 bool in_bExtensionMode);
     bool compile() throw (HelpProcessingException, BasicCodeTagger::TaggerException);
-    void addEntryToJarFile(const std::string &prefix,
-        const std::string &entryName, const std::string &bytesToAdd);
-    void addEntryToJarFile(const std::string &prefix,
-                const std::string &entryName, const HashSet &bytesToAdd);
-    void addEntryToJarFile(const std::string &prefix,
-                const std::string &entryName, const Stringtable &bytesToAdd);
-    void addEntryToJarFile(const std::string &prefix,
-                const std::string &entryName, const Hashtable &bytesToAdd);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
     static void tagBasicCodeExamples(xmlDocPtr doc);

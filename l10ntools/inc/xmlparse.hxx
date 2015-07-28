@@ -240,23 +240,12 @@ public:
     /// Return a Unicode String representation of this object
     OString ToOString();
 
-    void SetProject         ( OString const & sPrj )        { m_sProject = sPrj; }
-    void SetFileName        ( OString const & sFileName )   { m_sFilename = sFileName; }
     void SetId              ( OString const & sTheId )      { m_sId = sTheId; }
-    void SetResourceType    ( OString const & sResType )    { m_sResourceType = sResType; }
     void SetLanguageId      ( OString const & sLangId )     { m_sLanguageId = sLangId; }
     void SetPos             ( int nPos )                    { m_nPos = nPos; }
     void SetOldRef          ( OString const & sOldRef )     { m_sOldRef = sOldRef; }
 
-    int GetPos()            { return m_nPos;         }
-    OString GetProject() const      { return m_sProject;      }
-    OString GetFileName() const     { return m_sFilename;     }
-    OString GetId() const           { return m_sId;           }
     OString GetOldref() const       { return m_sOldRef;      }
-    OString GetResourceType() const { return m_sResourceType; }
-    OString GetLanguageId() const   { return m_sLanguageId;   }
-
-
 };
 
 /** Holds character data
@@ -265,16 +254,14 @@ class XMLData : public XMLChildNode
 {
 private:
     OString m_sData;
-    bool    m_bIsNewCreated;
 
 public:
     /// create a data node
     XMLData(
         const OString &rData,    // the initial data
-        XMLParentNode *pParent,   // the parent node of this data, typically a element node
-        bool bNewCreated = false
+        XMLParentNode *pParent   // the parent node of this data, typically a element node
     )
-        : XMLChildNode( pParent ), m_sData( rData ), m_bIsNewCreated( bNewCreated ){}
+        : XMLChildNode( pParent ), m_sData( rData ) {}
 
     // Default copy constructor and copy operator work well.
 
@@ -282,8 +269,6 @@ public:
 
     /// returns the data
     OString GetData() const { return m_sData; }
-
-    bool isNew() const { return m_bIsNewCreated; }
 
     /// adds new character data to the existing one
     void AddData( const OString &rData ) { m_sData += rData; }

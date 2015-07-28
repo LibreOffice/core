@@ -203,8 +203,6 @@ public:
     void ForceMarkedObjToAnotherPage();
     void ForceMarkedToAnotherPage()   { ForceMarkedObjToAnotherPage(); }
 
-    bool IsReadOnly() const { ForcePossibilities(); return bReadOnly; }
-
     // delete all marked objects
     void DeleteMarkedObj();
 

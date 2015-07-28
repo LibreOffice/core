@@ -41,59 +41,9 @@ class WindowHelper
 {
     public:
 
-static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
-{
-    if (!xWindow.is())
-        return OUString();
 
-    OString sWindowState;
-    // SOLAR SAFE -> ----------------------------
-    {
-        SolarMutexGuard aSolarGuard;
 
-        vcl::Window*    pWindow     = VCLUnoHelper::GetWindow(xWindow);
-        // check for system window is necessary to guarantee correct pointer cast!
-        if (pWindow!=NULL && pWindow->IsSystemWindow())
-        {
-            sal_uLong nMask  = WINDOWSTATE_MASK_ALL;
-            nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
-            sWindowState = static_cast<SystemWindow*>(pWindow)->GetWindowState(nMask);
-        }
-    }
-    // <- SOLAR SAFE ----------------------------
 
-    return OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
-}
-
-static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                           const OUString&                          sWindowState)
-{
-    if (
-        (!xWindow.is()            ) ||
-        (!sWindowState.getLength())
-       )
-        return;
-
-    // SOLAR SAFE -> ----------------------------
-    SolarMutexGuard aSolarGuard;
-
-    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-    // check for system window is necessary to guarantee correct pointer cast!
-    if (
-        (pWindow                  ) &&
-        (pWindow->IsSystemWindow()) &&
-        (
-            // dont overwrite a might existing minimized mode!
-            (pWindow->GetType() != WINDOW_WORKWINDOW) ||
-            (!static_cast<WorkWindow*>(pWindow)->IsMinimized() )
-        )
-       )
-    {
-        static_cast<SystemWindow*>(pWindow)->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
-    }
-
-    // <- SOLAR SAFE ----------------------------
-}
 
 static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {

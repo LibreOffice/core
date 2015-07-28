@@ -57,7 +57,6 @@ protected:
     )=0;
 
     OString GetGID() { return sGID; }
-    OString GetLID() { return sLID; }
 
 public:
     XRMResParser();

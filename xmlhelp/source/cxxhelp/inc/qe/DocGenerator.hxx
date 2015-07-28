@@ -30,10 +30,7 @@ namespace xmlsearch {
         class RoleFiller
         {
         public:
-            static RoleFiller* STOP() { return &roleFiller_; }
-
             RoleFiller();
-
             ~RoleFiller();
 
         private:

@@ -67,13 +67,9 @@ namespace DOM
 
 
     public:
-
-        // call for factory
-        static css::uno::Reference< XInterface > getInstance(const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory);
-
         // static helpers for service info and component management
         static const char* aImplementationName;
-    static const char* aSupportedServiceNames[];
+        static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static css::uno::Sequence< OUString > _getSupportedServiceNames();
         static css::uno::Reference< XInterface > _getInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr);

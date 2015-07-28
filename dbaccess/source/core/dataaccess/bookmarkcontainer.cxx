@@ -52,18 +52,7 @@ OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
 {
 }
 
-void OBookmarkContainer::dispose()
-{
-    MutexGuard aGuard(m_rMutex);
 
-    // say goodbye to our listeners
-    EventObject aEvt(*this);
-    m_aContainerListeners.disposeAndClear(aEvt);
-
-    // remove our elements
-    m_aBookmarksIndexed.clear();
-    m_aBookmarks.clear();
-}
 
 void SAL_CALL OBookmarkContainer::acquire(  ) throw()
 {

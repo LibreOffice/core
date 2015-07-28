@@ -127,8 +127,6 @@ private:
     // like ReadString but doesn't call the string hook
     TOOLS_DLLPRIVATE OUString ReadStringWithoutHook();
 
-    static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
-
     ResMgr(const ResMgr&) SAL_DELETED_FUNCTION;
     ResMgr& operator=(const ResMgr&) SAL_DELETED_FUNCTION;
 

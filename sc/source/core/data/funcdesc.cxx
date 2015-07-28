@@ -683,22 +683,7 @@ ScFunctionMgr::~ScFunctionMgr()
         delete aCatLists[i];
 }
 
-const ScFuncDesc* ScFunctionMgr::Get( const OUString& rFName ) const
-{
-    const ScFuncDesc* pDesc = NULL;
-    if (rFName.getLength() <= pFuncList->GetMaxFuncNameLen())
-    {
-        ::boost::scoped_ptr<ScFuncDesc> dummy(new ScFuncDesc);
-        dummy->pFuncName = new OUString(rFName);
-        ::std::vector<const ScFuncDesc*>::iterator lower =
-            ::std::lower_bound(aCatLists[0]->begin(), aCatLists[0]->end(),
-                        static_cast<const ScFuncDesc*>(dummy.get()), ScFuncDesc::compareByName);
 
-        if(rFName.equalsIgnoreAsciiCase(*(*lower)->pFuncName))
-            pDesc = *lower;
-    }
-    return pDesc;
-}
 
 const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 {

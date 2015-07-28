@@ -85,11 +85,10 @@ public:
                 ~SvIdlDataBase();
 
     SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
-    SvStringHashTable *       GetIdTable() { return pIdTable; }
-    SvMetaTypeMemberList &    GetTypeList();
-    SvMetaClassMemberList &   GetClassList()  { return aClassList; }
-    SvMetaModuleMemberList &  GetModuleList() { return aModuleList; }
-    SvMetaModule *            GetModule( const OString& rName );
+    SvMetaTypeMemberList &      GetTypeList();
+    SvMetaClassMemberList &     GetClassList()  { return aClassList; }
+    SvMetaModuleMemberList &    GetModuleList() { return aModuleList; }
+    SvMetaModule *              GetModule( const OString& rName );
 
     // list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
@@ -115,15 +114,6 @@ public:
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const OString& rError, SvToken& rTok );
     void                    Push( SvMetaObject * pObj );
-    bool                    Pop( bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
-                            {
-                                GetStack().Pop();
-                                if( bOk )
-                                    aError.Clear();
-                                else
-                                    rInStm.Seek( nTokPos );
-                                return bOk;
-                            }
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     bool                    FindId( const OString& rIdName, sal_uLong * pVal );
     bool                    InsertId( const OString& rIdName, sal_uLong nVal );

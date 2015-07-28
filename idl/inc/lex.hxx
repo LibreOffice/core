@@ -57,7 +57,6 @@ public:
     SvToken & operator = ( const SvToken & rObj );
 
     OString     GetTokenAsString() const;
-    SVTOKEN_ENUM    GetType() const { return nType; }
 
     void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }
     sal_uLong   GetLine() const             { return nLine;         }
@@ -78,7 +77,6 @@ public:
                             || nType == SVTOKEN_HASHID;
                 }
     bool        IsChar() const      { return nType == SVTOKEN_CHAR; }
-    bool        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
     bool        IsEof() const       { return nType == SVTOKEN_EOF; }
 
     const OString& GetString() const
@@ -95,7 +93,6 @@ public:
                 { pHash = pHashP; nType = SVTOKEN_HASHID; }
     bool        HasHash() const
                 { return nType == SVTOKEN_HASHID; }
-    SvStringHashEntry * GetHash() const { return pHash; }
     bool        Is( SvStringHashEntry * pEntry ) const
                 { return IsIdentifierHash() && pHash == pEntry; }
 };
@@ -179,10 +176,6 @@ public:
     const OUString &  GetFileName() const { return aFileName; }
     SvStream &        GetStream() { return rInStream; }
 
-    void            SetTabSize( sal_uInt16 nTabSizeP )
-                    { nTabSize = nTabSizeP; }
-    sal_uInt16          GetTabSize() const { return nTabSize; }
-
     SvToken* GetToken_PrevAll()
     {
         boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken;
@@ -242,17 +235,6 @@ public:
     {
         pCurToken = aTokList.begin() + nPos;
         SetMax();
-    }
-
-    void SeekRel( sal_uInt32 nRelPos )
-    {
-        sal_uInt32 relIdx = Tell() + nRelPos;
-
-        if ( relIdx < aTokList.size())
-        {
-            pCurToken = aTokList.begin()+ (Tell() + nRelPos );
-            SetMax();
-        }
     }
 
     void SeekEnd()

@@ -84,12 +84,6 @@ public:
         delete p;
         aList.erase(aList.begin() + nPos);
     }
-    void               Move(sal_uInt16 nPos, sal_uInt16 nNewPos)
-    {
-        SdrHelpLine* p = aList[nPos];
-        aList.erase(aList.begin() + nPos);
-        aList.insert(aList.begin() + nNewPos, p);
-    }
     SdrHelpLine&       operator[](sal_uInt16 nPos)                             { return *GetObject(nPos); }
     const SdrHelpLine& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
     sal_uInt16             HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;

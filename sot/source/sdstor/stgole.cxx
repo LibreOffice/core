@@ -169,18 +169,6 @@ StgOleStream::StgOleStream( BaseStorage& rStg, bool bWr )
     nFlags = 0;
 }
 
-bool StgOleStream::Load()
-{
-    nFlags = 0;
-    if( GetError() != SVSTREAM_OK )
-        return false;
-
-    sal_Int32 version = 0;
-    Seek( 0L );
-    ReadInt32( version ).ReadUInt32( nFlags );
-    return GetError() == SVSTREAM_OK;
-}
-
 bool StgOleStream::Store()
 {
     if( GetError() != SVSTREAM_OK )

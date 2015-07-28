@@ -149,7 +149,6 @@ public:
     /** Sets a new color, does not modify other settings. */
     inline void         SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
     inline void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
-    inline void         SetColorGap( bool bUseIt, const Color& rColor ) { maColorGap = rColor; mbUseGapColor = bUseIt; }
     /** Sets whether to use dotted style for single hair lines. */
     inline void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
 

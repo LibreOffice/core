@@ -255,7 +255,6 @@ private:
     double GetMaxValue() const;
 
     void calcMinMax(double& nMin, double& nMax) const;
-    bool CheckEntriesForRel(const ScRange& rRange) const;
     double CalcValue(double nMin, double nMax, ColorScaleEntries::const_iterator& rItr) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);

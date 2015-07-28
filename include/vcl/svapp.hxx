@@ -834,28 +834,6 @@ public:
     */
     static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent );
 
-    /** Send zoom event
-
-     Experimental work in progress. Available only for iOS and Android, and unclear whether actually
-     is needed now with tiled rendering.
-
-     @param     nEvent          Event ID for zoom event
-     @param     pWin            Pointer to window to which the event is sent
-     @param     pZoomEvent      Zoom event to send
-    */
-    static ImplSVEvent *        PostZoomEvent( sal_uLong nEvent, vcl::Window *pWin, ZoomEvent* pZoomEvent );
-
-    /* Send scroll event
-
-     Experimental work in progress. Available only for iOS and Android, and unclear whether actually
-     is needed now with tiled rendering.
-
-     @param      nEvent          Event ID for scroll event
-     @param      pWin            Pointer to window to which the event is sent
-     @param      pScrollEvent    Scroll event to send
-    */
-    static ImplSVEvent *         PostScrollEvent( sal_uLong nEvent, vcl::Window *pWin, ScrollEvent* pScrollEvent );
-
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
      if the platform supports it.
 
@@ -1367,12 +1345,6 @@ public:
      @see GetFilterHdl
     */
     static void                 SetFilterHdl( const Link<>& rLink );
-
-    /*** Get a new graphics filter
-
-     @return Const reference to the Link object (the filter)
-    */
-    static const Link<>&        GetFilterHdl();
 
     ///@}
 

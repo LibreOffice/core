@@ -40,9 +40,6 @@ public:
               AstScope* pScope);
     virtual ~AstStruct();
 
-    AstStruct const* getBaseType()
-        { return m_pBaseType; }
-
     DeclList::size_type getTypeParameterCount() const
     { return m_typeParameters.size(); }
 

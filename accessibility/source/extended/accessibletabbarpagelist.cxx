@@ -60,24 +60,6 @@ namespace accessibility
     {
     }
 
-
-
-    void AccessibleTabBarPageList::UpdateEnabled( sal_Int32 i, bool bEnabled )
-    {
-        if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
-        {
-            Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-            if ( xChild.is() )
-            {
-                AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-                if ( pAccessibleTabBarPage )
-                    pAccessibleTabBarPage->SetEnabled( bEnabled );
-            }
-        }
-    }
-
-
-
     void AccessibleTabBarPageList::UpdateShowing( bool bShowing )
     {
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )

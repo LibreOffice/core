@@ -58,7 +58,6 @@ protected:
     // brightness - used in EnhancedCustomShapes2d.cxx for DARKEN[LESS] and LIGHTEN[LESS] segments implementation
     double mdBrightness;
 
-protected:
     // helper functions for GET, SET, INS etc. PNT
     void ImpSetClosed(bool bClose);
     void ImpForceKind();
@@ -67,11 +66,9 @@ protected:
     void impDeleteDAC() const;
 
 public:
-    static bool ImpFindPolyPnt(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum);
     virtual void SetRectsDirty(bool bNotMyself = false) SAL_OVERRIDE;
     double GetBrightness() { return mdBrightness; }
 
-public:
     TYPEINFO_OVERRIDE();
     SdrPathObj(SdrObjKind eNewKind);
     SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 1.0);

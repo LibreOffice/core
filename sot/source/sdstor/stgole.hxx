@@ -61,8 +61,6 @@ class StgOleStream : public StgInternalStream
     sal_uInt32 nFlags;
 public:
     StgOleStream( BaseStorage&, bool );
-    sal_uInt32& GetFlags() { return nFlags; }
-    bool Load();
     bool Store();
 };
 
