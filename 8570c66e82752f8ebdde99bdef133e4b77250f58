@@ -34,6 +34,24 @@
       "revId": "8570c66e82752f8ebdde99bdef133e4b77250f58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_679baeca",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-28T10:22:39Z",
+      "side": 1,
+      "message": "Can we avoid offending contributors and only give helpful comments? Thank you!\n\nAs Gerrit administrator, I would also like to point out, that overuse of CRVW-2 votes is strongly discouraged. CRVW-1 should be sufficient. As the matter of fact, every time CRVW-2 is removed on the same change and the follow-up patch sets, it\u0027s strong indication, that this vote was abused.",
+      "parentUuid": "3a57f1b5_565512c4",
+      "revId": "8570c66e82752f8ebdde99bdef133e4b77250f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
