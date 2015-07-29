@@ -29,6 +29,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include "LineWidthPopup.hxx"
+#include <svx/svxdllapi.h>
 
 
 class XLineStyleItem;
@@ -60,7 +61,7 @@ namespace sidebar
 class PopupContainer;
 class LineWidthControl;
 
-class LinePropertyPanelBase : public PanelLayout
+class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
 public:
     virtual ~LinePropertyPanelBase();
