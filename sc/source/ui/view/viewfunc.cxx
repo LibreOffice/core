@@ -2543,6 +2543,12 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
             nPrecision = aOut.getLength() - nPos - aDecSep.getLength();
         // else keep 0
     }
+    else
+    {
+        if ( (nOldType & css::util::NumberFormat::SCIENTIFIC) && !bThousand &&
+             (pOldEntry->GetFormatIntegerDigits()%3 == 0) && pOldEntry->GetFormatIntegerDigits() > 0 )
+            bThousand =  true;
+    }
 
     if (!bError)
     {
