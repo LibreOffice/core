@@ -1821,40 +1821,13 @@ struct TempFontItem
     TempFontItem* mpNextItem;
 };
 
-#ifdef FR_PRIVATE
-static int WINAPI __AddFontResourceExW( LPCWSTR lpszfileName, DWORD fl, PVOID pdv )
-{
-    typedef int (WINAPI *AddFontResourceExW_FUNC)(LPCWSTR, DWORD, PVOID );
-
-    static AddFontResourceExW_FUNC  pFunc = NULL;
-    static HMODULE                  hmGDI = NULL;
-
-    if ( !pFunc && !hmGDI )
-    {
-        hmGDI = GetModuleHandleA( "GDI32" );
-        if ( hmGDI )
-            pFunc = reinterpret_cast<AddFontResourceExW_FUNC>( GetProcAddress( hmGDI, "AddFontResourceExW" ) );
-    }
-
-    if ( pFunc )
-        return pFunc( lpszfileName, fl, pdv );
-    else
-    {
-        SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
-        return 0;
-    }
-}
-#endif
-
 bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
 {
     int nRet = 0;
     OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
-#ifdef FR_PRIVATE
-    nRet = __AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, NULL );
-#endif
+    nRet = AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, NULL );
 
     if ( !nRet )
     {
@@ -1911,13 +1884,6 @@ void ImplReleaseTempFonts( SalData& rSalData )
         rSalData.mpTempFontItem = p->mpNextItem;
         delete p;
     }
-
-#ifndef FR_PRIVATE
-    // notify every other application
-    // unless the temp fonts were installed as private fonts
-    if( nCount > 0 )
-        PostMessageW( HWND_BROADCAST, WM_FONTCHANGE, 0, NULL );
-#endif // FR_PRIVATE
 }
 
 static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
