@@ -197,6 +197,8 @@ ChartAxisPanel::ChartAxisPanel(
     get(mpCBReverse, "checkbutton_reverse");
 
     get(mpLBLabelPos, "comboboxtext_label_position");
+    //FIXME: add text orientation spinbox + its handler
+    get(mpGridLabel, "label_props");
 
     Initialize();
 }
@@ -219,6 +221,7 @@ void ChartAxisPanel::dispose()
     mpCBReverse.clear();
 
     mpLBLabelPos.clear();
+    mpGridLabel.clear();
 
     PanelLayout::dispose();
 }
@@ -322,7 +325,10 @@ IMPL_LINK(ChartAxisPanel, CheckBoxHdl, CheckBox*, pCheckbox)
     bool bChecked = pCheckbox->IsChecked();
 
     if (pCheckbox == mpCBShowLabel.get())
+    {
+        mpGridLabel->Enable(bChecked);
         setLabelShown(mxModel, aCID, bChecked);
+    }
     else if (pCheckbox == mpCBReverse.get())
         setReverse(mxModel, aCID, bChecked);
 
