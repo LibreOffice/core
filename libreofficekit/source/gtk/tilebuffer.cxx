@@ -13,8 +13,6 @@
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
 #endif
 
-extern GThreadPool* lokThreadPool;
-
 /* ------------------
    Utility functions
    ------------------
@@ -62,7 +60,8 @@ void TileBuffer::resetAllTiles()
     }
 }
 
-void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task)
+void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
+                            GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
     g_info("Setting tile invalid (%d, %d)", x, y);
@@ -79,7 +78,8 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task)
     }
 }
 
-Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task)
+Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
+                          GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
 

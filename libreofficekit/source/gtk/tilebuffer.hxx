@@ -103,11 +103,15 @@ class TileBuffer
 
        @param x the tile along the x-axis of the buffer
        @param y the tile along the y-axis of the buffer
-       @param aZoom This function needs the zoom factor to draw the tile using paintTile()
+       @param aZoom current zoom factor of the document
+       @param task GTask object containing the necessary data
+       @param pool GThreadPool managed by the widget instance used for all the
+       LOK calls made by widget. It is needed here because getTile invokes one
+       of the LOK call : paintTile.
 
        @return the tile at the mentioned position (x, y)
      */
-    Tile& getTile(int x, int y, float aZoom, GTask* task);
+    Tile& getTile(int x, int y, float aZoom, GTask* task, GThreadPool* pool);
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();
@@ -117,8 +121,13 @@ class TileBuffer
 
        @param x the position of tile along x-axis
        @param y the position of tile along y-axis
+       @param zoom zoom factor of the document
+       @param task GTask object containing the necessary data
+       @param pool GThreadPool managed by the widget instance used for all the
+       LOK calls made by widget. It is needed here because setInvalid() invokes one
+       of the LOK call : paintTile.
      */
-    void setInvalid(int x, int y, float zoom, GTask* task);
+    void setInvalid(int x, int y, float zoom, GTask* task, GThreadPool*);
 
     /// Contains the reference to the LOK Document that this tile buffer is for.
     LibreOfficeKitDocument *m_pLOKDocument;
