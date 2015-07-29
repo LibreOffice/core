@@ -70,7 +70,7 @@ class PtrStdPrinterBase(object):
             return self
 
         def __next__(self):
-            (index, value) = self.impl.next()
+            (index, value) = six.advance_iterator(self.impl)
             return (index, value.cast(self.type).dereference())
 
     def _import_std(self):
@@ -137,7 +137,7 @@ class PtrMapPrinter(PtrStdPrinterBase):
             return self
 
         def __next__(self):
-            (index, value) = self.impl.next()
+            (index, value) = six.advance_iterator(self.impl)
             if self.key:
                 value = value.cast(self.key_type)
             else:
@@ -190,7 +190,7 @@ class PtrUnorderedMapPrinter(PtrBoostPrinterBase):
 
         def __next__(self):
             if self.step:
-                self.value = self.impl.next()
+                self.value = six.advance_iterator(self.impl)
                 value = self.value[0]
             else:
                 value = self.value[1].cast(self.value_type).dereference()
@@ -216,7 +216,7 @@ class PtrUnorderedSetPrinter(PtrBoostPrinterBase):
             return self
 
         def __next__(self):
-            return ("", self.impl.next()[1].cast(self.value_type).dereference())
+            return ("", six.advance_iterator(self.impl)[1].cast(self.value_type).dereference())
 
 printer = None
 
