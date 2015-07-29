@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_27b056dd",
+        "filename": "external/boost/boost.concept_check.Wunused-local-typedefs.warnings.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-29T05:08:40Z",
+      "side": 1,
+      "message": "I probably don\u0027t understand your comment. Can you elaborate?",
+      "parentUuid": "1a54edaf_27ddb642",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_e7e79e10",
         "filename": "external/boost/boost_1_59_0.multi_array.wshadow.patch",
         "patchSetId": 11
@@ -53,6 +71,24 @@
       "writtenOn": "2015-07-28T19:25:05Z",
       "side": 1,
       "message": "why did you replace the old boost.multi_array.Wshadow.warnings.patch.2 with this one?\n\nba54eca1817e84a1f1d1beec312ca87b8b059649 indicates that upstream rejected the approach of actually fixing the warnings and requested a \"suppression\" approach.",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_67b64ede",
+        "filename": "external/boost/boost_1_59_0.multi_array.wshadow.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-29T05:08:40Z",
+      "side": 1,
+      "message": "Apparently i erroneously assumed, that the mention \"fixed upstream\" comment wa valid and discarded this patch. Later however I got similar warning, but failed to link them to your original patch. Given that i opened new issue and linked to this new path, I would prefer to let it as is.",
+      "parentUuid": "1a54edaf_e7e79e10",
       "revId": "ef430f1db96f603af73e0b391016762ab2212867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -76,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_07cc3a88",
+        "filename": "external/boost/boost_1_59_0.multi_array.wshadow.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-29T05:08:40Z",
+      "side": 1,
+      "message": "Indeed.",
+      "parentUuid": "1a54edaf_471472f4",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_67372eb1",
         "filename": "external/boost/boost_1_59_0.property_tree.wtype-limits.patch",
         "patchSetId": 11
@@ -93,6 +147,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_c7ee22ec",
+        "filename": "external/boost/boost_1_59_0.property_tree.wtype-limits.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-29T05:08:40Z",
+      "side": 1,
+      "message": "As the name of this patch indicates it fixes type-limits warning, always true or some such (depends on compiler).",
+      "parentUuid": "1a54edaf_67372eb1",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_07e51a08",
         "filename": "sw/Library_swui.mk",
         "patchSetId": 11
@@ -104,6 +176,24 @@
       "writtenOn": "2015-07-28T19:25:05Z",
       "side": 1,
       "message": "it\u0027s a bit surprising that this is only needed in 2 libraries but we use boost::none in a bunch of other places too.\n\ndoes that work by accident? will it break some time?\n\nmaybe better to patch the boost/optional.hpp to #define that?",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_87bb4ac4",
+        "filename": "sw/Library_swui.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-29T05:08:40Z",
+      "side": 1,
+      "message": "Another option would be to add this define to  com_MSC_defs.mk, around those lines:\n\n  gb_COMPILERDEFS :\u003d \\\n        -DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE \\\n        -D_CRT_NON_CONFORMING_SWPRINTFS \\\n        -D_CRT_NONSTDC_NO_DEPRECATE \\\n        [...]",
+      "parentUuid": "1a54edaf_07e51a08",
       "revId": "ef430f1db96f603af73e0b391016762ab2212867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
