@@ -12,6 +12,11 @@
 #include "PropertyHelper.hxx"
 #include "ChartController.hxx"
 
+#include <svx/xlnwtit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlntrit.hxx>
+
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 namespace chart { namespace sidebar {
@@ -174,12 +179,26 @@ void ChartLinePanel::updateModel(
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 }
 
-void ChartLinePanel::setLineStyle(const XLineStyleItem& /*rItem*/)
+void ChartLinePanel::setLineStyle(const XLineStyleItem& rItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getPropSet(mxModel);
+
+    if (!xPropSet.is())
+        return;
+
+    xPropSet->setPropertyValue("LineStyle", css::uno::makeAny(rItem.GetValue()));
 }
 
-void ChartLinePanel::setLineDash(const XLineDashItem& /*rItem*/)
+void ChartLinePanel::setLineDash(const XLineDashItem& rItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getPropSet(mxModel);
+
+    if (!xPropSet.is())
+        return;
+
+    xPropSet->setPropertyValue("LineDash", css::uno::makeAny(rItem.GetValue()));
 }
 
 void ChartLinePanel::setLineEndStyle(const XLineEndItem* /*pItem*/)
@@ -190,20 +209,42 @@ void ChartLinePanel::setLineStartStyle(const XLineStartItem* /*pItem*/)
 {
 }
 
-void ChartLinePanel::setLineJoint(const XLineJointItem* /*pItem*/)
+void ChartLinePanel::setLineJoint(const XLineJointItem* pItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getPropSet(mxModel);
+
+    if (!xPropSet.is())
+        return;
+
+    if (pItem)
+        xPropSet->setPropertyValue("LineJoint", css::uno::makeAny(pItem->GetValue()));
 }
 
 void ChartLinePanel::setLineCap(const XLineCapItem* /*pItem*/)
 {
 }
 
-void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& /*rItem*/)
+void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getPropSet(mxModel);
+
+    if (!xPropSet.is())
+        return;
+
+    xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(rItem.GetValue()));
 }
 
-void ChartLinePanel::setLineWidth(const XLineWidthItem& /*rItem*/)
+void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getPropSet(mxModel);
+
+    if (!xPropSet.is())
+        return;
+
+    xPropSet->setPropertyValue("LineWidth", css::uno::makeAny(rItem.GetValue()));
 }
 
 } }
