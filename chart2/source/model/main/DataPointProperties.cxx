@@ -174,24 +174,28 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( "BorderStyle",
                   PROP_DATAPOINT_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( "BorderWidth",
                   PROP_DATAPOINT_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( "BorderDashName",
                   PROP_DATAPOINT_BORDER_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
     rOutProperties.push_back(
         Property( "BorderTransparency",
                   PROP_DATAPOINT_BORDER_TRANSPARENCY,
@@ -206,22 +210,32 @@ void DataPointProperties::AddPropertiesToVector(
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( "LineWidth",
                   LinePropertiesHelper::PROP_LINE_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
          Property( "LineDash",
                    LinePropertiesHelper::PROP_LINE_DASH,
                    cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
                    | beans::PropertyAttribute::MAYBEVOID ));
+
     rOutProperties.push_back(
         Property( "LineDashName",
                   LinePropertiesHelper::PROP_LINE_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( "LineTransparence",
+                  PROP_DATAPOINT_BORDER_TRANSPARENCY,
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
