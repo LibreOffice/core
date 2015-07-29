@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_6712ceb6",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-29T08:46:15Z",
+      "side": 1,
+      "message": "I\u0027m a bit lost here, not familiar with the actual implementation. If there is no inner at all, doesn\u0027t that mean the cell is ended already? Then the condition should read instead\n\n if ( !pTextNodeInfoInner || pTextNodeInfoInner-\u003eisEndOfCell() )\n\nA writer filter guy should have a look at this.",
+      "revId": "4b73bb9c0d4bfd09aeb16db44ff58f42883c2f7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
