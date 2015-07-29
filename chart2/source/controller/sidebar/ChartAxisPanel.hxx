@@ -15,6 +15,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/layout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
@@ -79,6 +80,7 @@ private:
     VclPtr<CheckBox> mpCBReverse;
 
     VclPtr<ListBox> mpLBLabelPos;
+    VclPtr<VclGrid> mpGridLabel;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
 

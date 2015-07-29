@@ -5,13 +5,17 @@
   <object class="GtkGrid" id="ChartAxisPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="checkbutton_show_label">
-            <property name="label" translatable="yes">Show Labels</property>
+            <property name="label" translatable="yes">Show labels</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -38,48 +42,72 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label1">
+          <object class="GtkGrid" id="label_props">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Label Position</property>
+            <property name="margin_left">12</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">5</property>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Label position:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">comboboxtext_label_position</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="comboboxtext_label_position">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <items>
+                  <item translatable="yes">Near Axis</item>
+                  <item translatable="yes">Near Axis (other side)</item>
+                  <item translatable="yes">Outside start</item>
+                  <item translatable="yes">Outside end</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes">_Text orientation:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">spinbutton1:0degrees</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinbutton1:0degrees">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
           </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text orientation</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="comboboxtext_label_position">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <items>
-              <item translatable="yes">Near Axis</item>
-              <item translatable="yes">Near Axis (other side)</item>
-              <item translatable="yes">Outside start</item>
-              <item translatable="yes">Outside end</item>
-            </items>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>
