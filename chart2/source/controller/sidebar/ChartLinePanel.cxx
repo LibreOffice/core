@@ -154,6 +154,7 @@ void ChartLinePanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
+    setMapUnit(SFX_MAPUNIT_100TH_MM);
     updateData();
 }
 

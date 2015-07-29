@@ -100,6 +100,7 @@ void LinePropertyPanel::dispose()
 
 void LinePropertyPanel::Initialize()
 {
+    setMapUnit(maWidthControl.GetCoreMetric());
 }
 
 VclPtr<vcl::Window> LinePropertyPanel::Create (
