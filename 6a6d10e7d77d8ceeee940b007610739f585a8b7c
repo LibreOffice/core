@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c79062ef",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T11:11:14Z",
+      "side": 1,
+      "message": "\"part\"",
+      "revId": "6a6d10e7d77d8ceeee940b007610739f585a8b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a793e6f9",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T11:11:14Z",
+      "side": 1,
+      "message": "\"without\"",
+      "revId": "6a6d10e7d77d8ceeee940b007610739f585a8b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_67bc0e6d",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T11:11:14Z",
+      "side": 1,
+      "message": "\"without\"",
+      "revId": "6a6d10e7d77d8ceeee940b007610739f585a8b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_27b6168b",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T11:11:14Z",
+      "side": 1,
+      "message": "that\u0027s still german",
+      "revId": "6a6d10e7d77d8ceeee940b007610739f585a8b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_47bb1273",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T11:11:14Z",
+      "side": 1,
+      "message": "\"border\" is better than \"frame\" here",
+      "revId": "6a6d10e7d77d8ceeee940b007610739f585a8b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
