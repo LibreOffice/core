@@ -68,6 +68,7 @@
 #include "com/sun/star/text/TextMarkupType.hpp"
 #include <osl/file.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -136,6 +137,7 @@ public:
     void testTextTableCellNames();
     void testShapeAnchorUndo();
     void testDde();
+    void testTdf89954();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -197,6 +199,7 @@ public:
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST(testDde);
+    CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2039,6 +2042,25 @@ void SwUiWriterTest::testDde()
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
+}
+
+void SwUiWriterTest::testTdf89954()
+{
+    SwDoc* pDoc = createDoc("tdf89954.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->EndPara();
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 't', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'e', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 's', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 't', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '.', 0);
+
+    SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
+    // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).
+    // As a result, autocorrect did not turn the 't' input into 'T'.
+    OUString aExpected("Tes\xef\xbf\xb9t. Test.", 14, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aNodeIndex.GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
