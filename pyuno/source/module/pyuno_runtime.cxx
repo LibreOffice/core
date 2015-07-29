@@ -481,7 +481,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     case typelib_TypeClass_STRUCT:
     {
         PyRef excClass = getClass( a.getValueType().getTypeName(), *this );
-        PyRef value = PyUNO_new( a, getImpl()->cargo->xInvocation, false );
+        PyRef value = PyUNOStruct_new( a, getImpl()->cargo->xInvocation );
         PyRef argsTuple( PyTuple_New( 1 ) , SAL_NO_ACQUIRE, NOT_NULL );
         PyTuple_SetItem( argsTuple.get() , 0 , value.getAcquired() );
         PyRef ret( PyObject_CallObject( excClass.get() , argsTuple.get() ), SAL_NO_ACQUIRE );
@@ -556,7 +556,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         if (!tmp_interface.is ())
             return Py_None;
 
-        return PyUNO_new (a, getImpl()->cargo->xInvocation, true);
+        return PyUNO_new( a, getImpl()->cargo->xInvocation );
     }
     default:
     {
@@ -802,27 +802,21 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else if( PyObject_IsInstance( o, getPyUnoClass().get() ) )
         {
-            PyUNO* o_pi;
-            o_pi = reinterpret_cast<PyUNO*>(o);
-            if (o_pi->members->wrappedObject.getValueTypeClass () ==
-                com::sun::star::uno::TypeClass_STRUCT ||
-                o_pi->members->wrappedObject.getValueTypeClass () ==
-                com::sun::star::uno::TypeClass_EXCEPTION)
-            {
-                Reference<XMaterialHolder> my_mh (o_pi->members->xInvocation, UNO_QUERY);
+            PyUNO* o_pi = reinterpret_cast<PyUNO*>(o);
+            a = o_pi->members->wrappedObject;
+        }
+        else if( PyObject_IsInstance( o, getPyUnoStructClass().get() ) )
+        {
+            PyUNO* o_pi = reinterpret_cast<PyUNO*>(o);
+            Reference<XMaterialHolder> my_mh (o_pi->members->xInvocation, UNO_QUERY);
 
-                if (!my_mh.is ())
-                {
-                    throw RuntimeException(
-                        "struct wrapper does not support XMaterialHolder" );
-                }
-                else
-                    a = my_mh->getMaterial ();
+            if (!my_mh.is())
+            {
+                throw RuntimeException(
+                    "struct wrapper does not support XMaterialHolder" );
             }
             else
-            {
-                a = o_pi->members->wrappedObject;
-            }
+                a = my_mh->getMaterial();
         }
         else if( PyObject_IsInstance( o, getCharClass( runtime ).get() ) )
         {

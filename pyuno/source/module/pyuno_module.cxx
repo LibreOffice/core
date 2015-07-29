@@ -406,7 +406,7 @@ static PyObject *createUnoStructHelper(
                     if (idl_class.is ())
                     {
                         idl_class->createObject (IdlStruct);
-                        PyRef returnCandidate( PyUNO_new( IdlStruct, c->xInvocation, false ) );
+                        PyRef returnCandidate( PyUNOStruct_new( IdlStruct, c->xInvocation ) );
                         PyUNO *me = reinterpret_cast<PyUNO*>( returnCandidate.get() );
                         TypeDescription desc( typeName );
                         OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
@@ -862,6 +862,7 @@ extern "C"
 PyObject* PyInit_pyuno()
 {
     PyUNO_initType();
+    PyUNOStruct_initType();
     // noop when called already, otherwise needed to allow multiple threads
     PyEval_InitThreads();
     static struct PyModuleDef moduledef =
@@ -882,6 +883,7 @@ PyObject* PyInit_pyuno()
 void initpyuno()
 {
     PyUNO_initType();
+    PyUNOStruct_initType();
     PyEval_InitThreads();
     Py_InitModule ("pyuno", PyUNOModule_methods);
 }
