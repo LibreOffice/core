@@ -497,11 +497,9 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
         bool bChanged = ( nTab != aRange.aStart.Tab() );
         if (bChanged)
         {
-            // Save and restore column names, as SetArea() invalidates them.
-            ::std::vector<OUString> aNames( maTableColumnNames);
+            // Same column range, SetArea() does not invalidate column names.
             SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(),aRange.aEnd .Row() );
-            maTableColumnNames = aNames;
+                    aRange.aEnd.Col(),aRange.aEnd.Row() );
         }
 
         //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
