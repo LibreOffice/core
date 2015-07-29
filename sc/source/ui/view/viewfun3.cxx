@@ -1032,8 +1032,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         SCCOL nBlockAddX = nEndCol-nStartCol;
         SCROW nBlockAddY = nEndRow-nStartRow;
 
-        //  Nachfrage, wenn die Selektion groesser als 1 Zeile/Spalte, aber kleiner
-        //  als das Clipboard ist (dann wird ueber die Selektion hinaus eingefuegt)
+        // request, if the selection is greater than one row/column, but smaller
+        // as the Clipboard (then inserting is done beyond the selection)
 
         //  ClipSize is not size, but difference
         if ( ( nBlockAddX != 0 && nBlockAddX < nDestSizeX ) ||
