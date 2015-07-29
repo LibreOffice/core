@@ -1984,12 +1984,60 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     }
 }
 
+// XXX: Make it a method somewhere?
+SdrObject *ImpGetObjByName(SdrObjList *pObjList, OUString aObjName)
+{
+    // scan the whole list
+    size_t nObjCount = pObjList->GetObjCount();
+    for (unsigned i = 0; i < nObjCount; i++) {
+        SdrObject *pCurObj = pObjList->GetObj(i);
+
+        if (pCurObj->GetName() == aObjName) {
+            return pCurObj;
+        }
+    }
+    // not found
+    return NULL;
+}
+
+// XXX: Make it a (private) method of SdrTextObj
+void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString aNextLinkName)
+{
+    // XXX: Current implementation constraints text boxes to be on the same page
+
+    // No next link
+    if (aNextLinkName == "") {
+        pTextObj->SetNextLinkInChain(NULL);
+        return;
+    }
+
+    SdrPage *pPage = pTextObj->GetPage();
+    assert(pPage);
+    SdrTextObj *pNextTextObj = dynamic_cast< SdrTextObj * >
+                                (ImpGetObjByName(pPage, aNextLinkName));
+    if (!pNextTextObj) {
+        fprintf(stderr, "[CHAINING] Can't find object as next link.\n");
+        return;
+    }
+
+    pTextObj->SetNextLinkInChain(pNextTextObj);
+}
+
 bool SdrTextObj::IsChainable() const
 {
     // Read it as item
     const SfxItemSet& rSet = GetObjectItemSet();
-    OUString aNextName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
-    return aNextName != ""; // XXX: Should we also check for GetNilChainingEvent? (see old code below)
+    OUString aNextLinkName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
+
+    // Update links if any inconsistency is found
+    bool bNextLinkUnsetYet = (aNextLinkName != "") && !mpNextInChain;
+    bool bInconsistentNextLink = mpNextInChain && mpNextInChain->GetName() != aNextLinkName;
+    // if the link is not set despite there should be one OR if it has changed
+    if (bNextLinkUnsetYet || bInconsistentNextLink) {
+        ImpUpdateChainLinks(const_cast<SdrTextObj *>(this), aNextLinkName);
+    }
+
+    return aNextLinkName != ""; // XXX: Should we also check for GetNilChainingEvent? (see old code below)
 
 /*
     // Check that no overflow is going on
