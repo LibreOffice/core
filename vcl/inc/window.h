@@ -175,6 +175,7 @@ struct ImplFrameData
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
 
     bool                mbInternalDragGestureRecognizer;
+    VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
 };
 
 struct ImplAccessibleInfos
