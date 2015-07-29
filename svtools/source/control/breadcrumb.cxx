@@ -74,8 +74,12 @@ void Breadcrumb::SetURL( const OUString& rURL )
     INetURLObject aURL( rURL );
     aURL.setFinalSlash();
 
+    OUString sUser = aURL.GetUser( INetURLObject::NO_DECODE );
     OUString sPath = aURL.GetURLPath(INetURLObject::DECODE_WITH_CHARSET);
-    OUString sRootPath = INetURLObject::GetScheme( aURL.GetProtocol() ) + aURL.GetHost();
+    OUString sRootPath = INetURLObject::GetScheme( aURL.GetProtocol() )
+                        + sUser
+                        + ( sUser.isEmpty() ? OUString() : "@" )
+                        + aURL.GetHost();
 
     int nSegments = aURL.getSegmentCount();
     unsigned int nPos = 0;
