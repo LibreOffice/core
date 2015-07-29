@@ -1301,6 +1301,14 @@ define gb_LinkTarget_use_packages
 $(foreach package,$(2),$(call gb_LinkTarget_use_package,$(1),$(package)))
 endef
 
+# use a GeneratedPackage, possibly from another module
+# call gb_LinkTarget_use_generated_package,linktarget,package
+define gb_LinkTarget_use_generated_package
+$(call gb_LinkTarget_get_headers_target,$(1)) :| \
+	$(call gb_GeneratedPackage_get_target,$(strip $(2)))
+
+endef
+
 # Use sources from unpacked tarball of an external project
 # call gb_LinkTarget_use_unpacked,linktarget,unpackedtarget
 define gb_LinkTarget_use_unpacked
