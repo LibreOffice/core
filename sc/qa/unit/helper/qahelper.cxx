@@ -107,8 +107,7 @@ void loadFile(const OUString& aFileName, std::string& aContent)
 
     std::ifstream aFile(aOFileName.getStr());
 
-    OStringBuffer aErrorMsg("Could not open csv file: ");
-    aErrorMsg.append(aOFileName);
+    OStringBuffer aErrorMsg("Could not open csv file: " + aOFileName);
     CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
     std::ostringstream aOStream;
     aOStream << aFile.rdbuf();
@@ -137,8 +136,7 @@ void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStr
     catch (const orcus::csv::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
+        OStringBuffer aErrorMsg("csv parser error: " + e.what());
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
@@ -160,8 +158,7 @@ void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
     catch (const orcus::csv::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
+        OStringBuffer aErrorMsg("csv parser error: " + e.what());
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
@@ -603,18 +600,30 @@ OUString EnsureSeparator(const OUStringBuffer& rFilePath)
 void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer)).append(aFileExtension);
-    aBuffer.append(EnsureSeparator(aBuffer)).append(aFileBase).append(aFileExtension);
+    OUStringBuffer aBuffer(
+        getSrcRootURL()
+        + EnsureSeparator(aBuffer)
+        + m_aBaseString
+        + EnsureSeparator(aBuffer)
+        + aFileExtension
+        + EnsureSeparator(aBuffer)
+        + aFileBase
+        + aFileExtension
+    );
     rFilePath = aBuffer.makeStringAndClear();
 }
 
 void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
 {
-    OUStringBuffer aBuffer( getSrcRootPath());
-    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer)).append("contentCSV/").append(aFileBase).append("csv");
+    OUStringBuffer aBuffer(
+        getSrcRootPath()
+        + EnsureSeparator(aBuffer)
+        + m_aBaseString
+        + EnsureSeparator(aBuffer)
+        + "contentCSV/"
+        + aFileBase
+        + "csv"
+    );
     rCSVPath = aBuffer.makeStringAndClear();
 }
 

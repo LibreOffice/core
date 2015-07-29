@@ -47,34 +47,40 @@ OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SC
 
 OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    OStringBuffer aString("Error in Table: ");
-    aString.append(static_cast<sal_Int32>(nTab));
-    aString.append(" Column: ");
-    aString.append(static_cast<sal_Int32>(nCol));
-    aString.append(" Row: ");
-    aString.append(nRow);
+    OStringBuffer aString(
+        "Error in Table: "
+        + static_cast<sal_Int32>(nTab)
+        + " Column: "
+        + static_cast<sal_Int32>(nCol)
+        + " Row: "
+        + nRow
+    );
     return aString.makeStringAndClear();
 }
 
 OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)
 {
-    OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
-    aString.append("; Expected: '");
-    aString.append(OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8));
-    aString.append("' Found: '");
-    aString.append(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-    aString.append("'");
+    OStringBuffer aString(
+        createErrorMessage(nCol, nRow, nTab)
+        + "; Expected: '"
+        + OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8)
+        + "' Found: '"
+        + OUStringToOString(rString, RTL_TEXTENCODING_UTF8)
+        +"'"
+    );
     return aString.makeStringAndClear();
 }
 
 OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)
 {
-    OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
-    aString.append("; Expected: '");
-    aString.append(aExpected);
-    aString.append("' Found: '");
-    aString.append(aValue);
-    aString.append("'");
+    OStringBuffer aString(
+        createErrorMessage(nCol, nRow, nTab)
+        + "; Expected: '"
+        + aExpected
+        + "' Found: '"
+        + aValue
+        + "'"
+    );
     return aString.makeStringAndClear();
 
 }
