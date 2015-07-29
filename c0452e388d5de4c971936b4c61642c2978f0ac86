@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_279ff604",
+        "filename": "external/neon/configs/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T10:55:00Z",
+      "side": 1,
+      "message": "\u003d\u003e is a valid operator?",
+      "revId": "c0452e388d5de4c971936b4c61642c2978f0ac86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
