@@ -31,11 +31,6 @@
 #include <impbmp.hxx>
 #include <salgdi.hxx>
 
-// uncomment the following line to have ownerdrawn menus, ie, with bitmaps
-// however, this is incompatible with OLE inplace editing
-// so it is not activated by default
-//#define OWNERDRAW
-
 static DWORD myerr=0;
 
 bool SalData::IsKnownMenuHandle( HMENU hMenu )
@@ -98,11 +93,6 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 
         pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
         pSalMenuItem->mInfo.fType = MFT_STRING;
-#ifdef OWNERDRAW
-        if( pItemData->pMenu && !pItemData->pMenu->IsMenuBar() )
-            pSalMenuItem->mInfo.fType |= MFT_OWNERDRAW;
-        pSalMenuItem->mInfo.fState = MFS_ENABLED;
-#endif
         pSalMenuItem->mInfo.dwTypeData = (LPWSTR) pSalMenuItem->mText.getStr();
         pSalMenuItem->mInfo.cch = pSalMenuItem->mText.getLength();
 
@@ -310,10 +300,6 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
         pWItem->mText = pWItem->mText.replaceAll( "~", "&" );
         pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
         pWItem->mInfo.fType = MFT_STRING;
-#ifdef OWNERDRAW
-        if( pWItem->mpMenu && !((Menu*) pWItem->mpMenu)->IsMenuBar() )
-            pWItem->mInfo.fType |= MFT_OWNERDRAW;
-#endif
 
         // combine text and accelerator text
         OUString aStr( pWItem->mText );
@@ -339,10 +325,7 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
         pWItem->mAccelText = rKeyName;
         pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
         pWItem->mInfo.fType = MFT_STRING;
-#ifdef OWNERDRAW
-        if( pWItem->mpMenu && !((Menu*)pWItem->mpMenu)->IsMenuBar() )
-            pWItem->mInfo.fType |= MFT_OWNERDRAW;
-#endif
+
         // combine text and accelerator text
         OUString aStr( pWItem->mText );
         if( pWItem->mAccelText.getLength() )
