@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a749a6d2",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-07-29T08:26:20Z",
+      "side": 1,
+      "message": "One more remaining { that you changed (from the start of the last line to the end of the previous line).",
+      "revId": "683c508b0ace5e40afa427129dc91b1d7d734576",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
