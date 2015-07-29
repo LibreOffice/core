@@ -51,12 +51,20 @@
 
 // - Inlines -
 
-inline void ImplSetPixel4( const sal_uInt8* pScanline, long nX, const BYTE cIndex )
+inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 
-    ( nX & 1 ) ? ( rByte &= 0xf0, rByte |= ( cIndex & 0x0f ) ) :
-                 ( rByte &= 0x0f, rByte |= ( cIndex << 4 ) );
+    if ( nX & 1 )
+    {
+        rByte &= 0xf0;
+        rByte |= cIndex & 0x0f;
+    }
+    else
+    {
+        rByte &= 0x0f;
+        rByte |= cIndex << 4;
+    }
 }
 
 // Helper class to manage Gdiplus::Bitmap instances inside of
@@ -954,11 +962,11 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     sal_uInt8*      pRLE = (sal_uInt8*) pSrcBuf;
     sal_uInt8*      pDIB = (sal_uInt8*) pDstBuf;
     sal_uInt8*      pRow = (sal_uInt8*) pDstBuf;
-    sal_uLong           nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
+    sal_uLong       nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
     sal_uInt8*      pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
-    sal_uLong           nCountByte;
-    sal_uLong           nRunByte;
-    sal_uLong           i;
+    sal_uLong       nCountByte;
+    sal_uLong       nRunByte;
+    sal_uLong       i;
     BYTE            cTmp;
     bool            bEndDecoding = FALSE;
 
