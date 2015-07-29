@@ -2422,7 +2422,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
             bResize=true;
             double nCos=cos(nTmpAngle*nPi180);
             aNeuFact=nCos;
-            Kuerzen(aFact,10); // three decimals should be enough
+            aFact.ReduceInaccurate(10); // three decimals should be enough
         }
 
         if (nNewAngle>8900)

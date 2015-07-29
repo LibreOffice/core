@@ -584,39 +584,6 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
     return 0x7fffffff;
 }
 
-void Kuerzen(Fraction& rF, unsigned nDigits)
-{
-    sal_Int32 nMul=rF.GetNumerator();
-    sal_Int32 nDiv=rF.GetDenominator();
-    bool bNeg = false;
-    if (nMul<0) { nMul=-nMul; bNeg=!bNeg; }
-    if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
-    if (nMul==0 || nDiv==0) return;
-    sal_uInt32 a;
-    a=sal_uInt32(nMul); unsigned nMulZ=0; // count leading zeros
-    while (a<0x00800000) { nMulZ+=8; a<<=8; }
-    while (a<0x80000000) { nMulZ++; a<<=1; }
-    a=sal_uInt32(nDiv); unsigned nDivZ=0; // count leading zeros
-    while (a<0x00800000) { nDivZ+=8; a<<=8; }
-    while (a<0x80000000) { nDivZ++; a<<=1; }
-    // count the number of digits
-    int nMulDigits=32-nMulZ;
-    int nDivDigits=32-nDivZ;
-    // count how many decimal places can be removed
-    int nMulWeg=nMulDigits-nDigits; if (nMulWeg<0) nMulWeg=0;
-    int nDivWeg=nDivDigits-nDigits; if (nDivWeg<0) nDivWeg=0;
-    int nWeg=std::min(nMulWeg,nDivWeg);
-    nMul>>=nWeg;
-    nDiv>>=nWeg;
-    if (nMul==0 || nDiv==0) {
-        DBG_WARNING("Math error after canceling decimal places.");
-        return;
-    }
-    if (bNeg) nMul=-nMul;
-    rF=Fraction(nMul,nDiv);
-}
-
-
 // How many eU units fit into a mm, respectively an inch?
 // Or: How many mm, respectively inches, are there in an eU (and then give me the inverse)
 

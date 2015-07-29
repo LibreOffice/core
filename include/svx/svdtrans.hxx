@@ -249,12 +249,6 @@ SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 // Calculation and intermediate values are in BigInt
 SVX_DLLPUBLIC long BigMulDiv(long nVal, long nMul, long nDiv);
 
-// Lossy cancellation of a fraction
-// nDigits specifies, how many significant digits the numerator
-// and denominator should at least be retained
-void Kuerzen(Fraction& rF, unsigned nDigits);
-
-
 class FrPair {
     Fraction aX;
     Fraction aY;

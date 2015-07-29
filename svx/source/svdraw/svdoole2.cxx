@@ -2225,8 +2225,8 @@ bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHei
     aScaleHeight = Fraction(aSize.Height(), aObjAreaSize.Height() );
 
     // reduce to 10 binary digits
-    Kuerzen(aScaleHeight, 10);
-    Kuerzen(aScaleWidth,  10);
+    aScaleHeight.ReduceInaccurate(10);
+    aScaleWidth.ReduceInaccurate(10);
 
     return true;
 }
