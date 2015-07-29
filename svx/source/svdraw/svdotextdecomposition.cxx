@@ -1413,6 +1413,9 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
 
 void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutliner) const
 {
+    if (GetTextChain()->GetNilChainingEvent(this))
+        return;
+
     GetTextChain()->SetNilChainingEvent(this, true);
 
     TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
