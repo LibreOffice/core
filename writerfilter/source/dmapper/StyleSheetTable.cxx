@@ -390,7 +390,6 @@ StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
 
 StyleSheetTable::~StyleSheetTable()
 {
-    delete m_pImpl;
 }
 
 PropertyMapPtr StyleSheetTable::GetDefaultCharProps()

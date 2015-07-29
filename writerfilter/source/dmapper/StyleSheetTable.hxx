@@ -19,6 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_STYLESHEETTABLE_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_STYLESHEETTABLE_HXX
 
+#include <memory>
 #include "TblStylePrHandler.hxx"
 
 #include <DomainMapper.hxx>
@@ -77,7 +78,7 @@ public:
 };
 
 typedef std::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
-typedef ::std::deque<StyleSheetEntryPtr> StyleSheetEntryDeque;
+typedef std::deque<StyleSheetEntryPtr> StyleSheetEntryDeque;
 typedef std::shared_ptr<StyleSheetEntryDeque> StyleSheetEntryDequePtr;
 
 class DomainMapper;
@@ -85,7 +86,7 @@ class StyleSheetTable :
         public LoggedProperties,
         public LoggedTable
 {
-    StyleSheetTable_Impl   *m_pImpl;
+    std::unique_ptr<StyleSheetTable_Impl> m_pImpl;
 
 public:
     StyleSheetTable(DomainMapper& rDMapper, css::uno::Reference<css::text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
