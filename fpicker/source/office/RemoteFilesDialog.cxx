@@ -336,6 +336,10 @@ short RemoteFilesDialog::Execute()
         Show();
         SelectServiceHdl( NULL );
     }
+    if( !m_bIsConnected )
+    {
+        m_pServices_lb->SetNoSelection();
+    }
 
     short nRet = SvtFileDialog_Base::Execute();
 
