@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_externals,pyuno,\
 $(eval $(call gb_Library_add_exception_objects,pyuno,\
     pyuno/source/module/pyuno_runtime \
     pyuno/source/module/pyuno \
+    pyuno/source/module/pyuno_struct \
     pyuno/source/module/pyuno_callable \
     pyuno/source/module/pyuno_module \
     pyuno/source/module/pyuno_type \

@@ -376,26 +376,7 @@ bool lcl_hasInterfaceByName( Any const &object, OUString const & interfaceName )
 
 PyObject *PyUNO_repr( PyObject  * self )
 {
-    PyUNO *me = reinterpret_cast<PyUNO *>(self);
-    PyObject * ret = 0;
-
-    if( me->members->wrappedObject.getValueType().getTypeClass()
-        == com::sun::star::uno::TypeClass_EXCEPTION )
-    {
-        Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
-        if( rHolder.is() )
-        {
-            Any a = rHolder->getMaterial();
-            Exception e;
-            a >>= e;
-            ret = ustring2PyUnicode(e.Message ).getAcquired();
-        }
-    }
-    else
-    {
-        ret = PyUNO_str( self );
-    }
-    return ret;
+    return PyUNO_str( self );
 }
 
 Py_hash_t PyUNO_hash( PyObject *self )
@@ -405,20 +386,8 @@ Py_hash_t PyUNO_hash( PyObject *self )
 
     // Py_hash_t is not necessarily the same size as a pointer, but this is not
     // important for hashing - it just has to return the same value each time
-    if( me->members->wrappedObject.getValueType().getTypeClass()
-        == com::sun::star::uno::TypeClass_STRUCT ||
-        me->members->wrappedObject.getValueType().getTypeClass()
-        == com::sun::star::uno::TypeClass_EXCEPTION )
-    {
-        Reference< XMaterialHolder > xMe( me->members->xInvocation, UNO_QUERY );
-        return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
-            *static_cast<void * const *>(xMe->getMaterial().getValue()) ) );
-    }
-    else
-    {
-        return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
-            *static_cast<void * const *>(me->members->wrappedObject.getValue()) ) );
-    }
+    return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
+        *static_cast<void * const *>(me->members->wrappedObject.getValue()) ) );
 
 }
 
@@ -501,24 +470,7 @@ PyObject *PyUNO_str( PyObject * self )
 
     OStringBuffer buf;
 
-
-    if( me->members->wrappedObject.getValueType().getTypeClass()
-        == com::sun::star::uno::TypeClass_STRUCT ||
-        me->members->wrappedObject.getValueType().getTypeClass()
-        == com::sun::star::uno::TypeClass_EXCEPTION)
     {
-        Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
-        if( rHolder.is() )
-        {
-            PyThreadDetach antiguard;
-            Any a = rHolder->getMaterial();
-            OUString s = val2str( a.getValue(), a.getValueType().getTypeLibType() );
-            buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
-        }
-    }
-    else
-    {
-        // a common UNO object
         PyThreadDetach antiguard;
         buf.append( "pyuno object " );
 
@@ -527,7 +479,7 @@ PyObject *PyUNO_str( PyObject * self )
         buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
     }
 
-    return PyStr_FromString( buf.getStr());
+    return PyStr_FromString( buf.getStr() );
 }
 
 PyObject* PyUNO_dir (PyObject* self)
@@ -1447,17 +1399,14 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
         }
         if (strcmp (name, "__class__") == 0)
         {
-            if( me->members->wrappedObject.getValueTypeClass() ==
-                com::sun::star::uno::TypeClass_STRUCT ||
-                me->members->wrappedObject.getValueTypeClass() ==
-                com::sun::star::uno::TypeClass_EXCEPTION )
-            {
-                return getClass(
-                    me->members->wrappedObject.getValueType().getTypeName(), runtime ).getAcquired();
-            }
             Py_INCREF (Py_None);
             return Py_None;
         }
+
+        PyObject *pRet = PyObject_GenericGetAttr( self, PyUnicode_FromString( name ) );
+        if( pRet )
+            return pRet;
+        PyErr_Clear();
 
         OUString attrName( OUString::createFromAscii( name ) );
         //We need to find out if it's a method...
@@ -1557,7 +1506,6 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     return 1; //as above.
 }
 
-// ensure object identity and struct equality
 static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 {
     PyObject *result;
@@ -1586,26 +1534,11 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 
             if( tcMe == tcOther )
             {
-                if( tcMe == com::sun::star::uno::TypeClass_STRUCT ||
-                    tcMe == com::sun::star::uno::TypeClass_EXCEPTION )
+                if( me->members->wrappedObject == other->members->wrappedObject )
                 {
-                    Reference< XMaterialHolder > xMe( me->members->xInvocation,UNO_QUERY);
-                    Reference< XMaterialHolder > xOther( other->members->xInvocation,UNO_QUERY );
-                    if( xMe->getMaterial() == xOther->getMaterial() )
-                    {
-                        result = (op == Py_EQ ? Py_True : Py_False);
-                        Py_INCREF(result);
-                        return result;
-                    }
-                }
-                else if( tcMe == com::sun::star::uno::TypeClass_INTERFACE )
-                {
-                    if( me->members->wrappedObject == other->members->wrappedObject )
-                    {
-                        result = (op == Py_EQ ? Py_True : Py_False);
-                        Py_INCREF(result);
-                        return result;
-                    }
+                    result = (op == Py_EQ ? Py_True : Py_False);
+                    Py_INCREF(result);
+                    return result;
                 }
             }
         }
@@ -1768,8 +1701,7 @@ PyRef getPyUnoClass()
 
 PyRef PyUNO_new (
     const Any &targetInterface,
-    const Reference<XSingleServiceFactory> &ssf,
-    const bool bCheckExisting )
+    const Reference<XSingleServiceFactory> &ssf )
 {
     Reference<XInvocation2> xInvocation;
 
@@ -1780,16 +1712,13 @@ PyRef PyUNO_new (
         if( !xInvocation.is() )
             throw RuntimeException("XInvocation2 not implemented, cannot interact with object");
 
-        if (bCheckExisting)
+        Reference<XUnoTunnel> xUnoTunnel (
+            xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()), UNO_QUERY );
+        if( xUnoTunnel.is() )
         {
-            Reference<XUnoTunnel> xUnoTunnel (
-                xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()), UNO_QUERY );
-            if( xUnoTunnel.is() )
-            {
-                sal_Int64 that = xUnoTunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
-                if( that )
-                    return PyRef( reinterpret_cast<Adapter*>(that)->getWrappedObject() );
-            }
+            sal_Int64 that = xUnoTunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
+            if( that )
+                return PyRef( reinterpret_cast<Adapter*>(that)->getWrappedObject() );
         }
     }
     if( !Py_IsInitialized() )

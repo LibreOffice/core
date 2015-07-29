@@ -204,11 +204,15 @@ typedef std::unordered_map
 typedef std::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
 
 int PyUNO_initType();
+int PyUNOStruct_initType();
 
 PyRef PyUNO_new (
     const com::sun::star::uno::Any & targetInterface,
-    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf,
-    const bool bCheckExisting );
+    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf );
+
+PyRef PyUNOStruct_new (
+    const com::sun::star::uno::Any &targetInterface,
+    const  com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> &ssf );
 
 typedef struct
 {
@@ -283,6 +287,7 @@ PyRef getBoolClass( const Runtime &);
 PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
 PyRef getPyUnoClass();
+PyRef getPyUnoStructClass();
 PyRef getClass( const OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
