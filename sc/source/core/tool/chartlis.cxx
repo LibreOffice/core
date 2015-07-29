@@ -687,11 +687,12 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
         StartTimer();
 
     // New hidden range listener implementation
-    for (list<RangeListenerItem>::iterator itr = maHiddenListeners.begin(), itrEnd = maHiddenListeners.end();
-          itr != itrEnd; ++itr)
+    for (auto itr = maHiddenListeners.begin(); itr != maHiddenListeners.end(); ++itr)
     {
-        if (itr->maRange.Intersects(rRange))
-            itr->mpListener->notify();
+        if (itr->second.maRange.Intersects(rRange))
+        {
+            itr->second.mpListener->notify();
+        }
     }
 }
 
@@ -735,7 +736,8 @@ bool ScChartListenerCollection::operator!=( const ScChartListenerCollection& r )
 void ScChartListenerCollection::StartListeningHiddenRange( const ScRange& rRange, ScChartHiddenRangeListener* pListener )
 {
     RangeListenerItem aItem(rRange, pListener);
-    maHiddenListeners.push_back(aItem);
+    assert(maHiddenListeners.find(pListener) == maHiddenListeners.end() && "listener has not yet been registered");
+    maHiddenListeners.insert(std::make_pair<>(pListener, aItem));
 }
 
 namespace {
@@ -760,7 +762,8 @@ private:
 }
 void ScChartListenerCollection::EndListeningHiddenRange( ScChartHiddenRangeListener* pListener )
 {
-    maHiddenListeners.remove_if(MatchListener(pListener));
+    auto range = maHiddenListeners.equal_range(pListener);
+    maHiddenListeners.erase(range.first, range.second);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,6 +32,7 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <unordered_map>
 #include <unordered_set>
 
 class ScDocument;
@@ -145,7 +146,9 @@ private:
         SC_CLCUPDATE_RUNNING,
         SC_CLCUPDATE_MODIFIED
     } meModifiedDuringUpdate;
-    ::std::list<RangeListenerItem> maHiddenListeners;
+
+    std::unordered_map<ScChartHiddenRangeListener*, RangeListenerItem> maHiddenListeners;
+
     StringSetType maNonOleObjectNames;
 
     Idle            aIdle;
