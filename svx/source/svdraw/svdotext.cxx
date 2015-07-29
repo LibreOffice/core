@@ -1989,35 +1989,13 @@ bool SdrTextObj::IsChainable() const
     // Read it as item
     const SfxItemSet& rSet = GetObjectItemSet();
     OUString aNextName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
-    return aNextName != "";
+    return aNextName != ""; // XXX: Should we also check for GetNilChainingEvent? (see old code below)
 
-    // XXX
-    if (!GetName().startsWith("Chainable")) {
-        //fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
-        return false;
-    }
-
+/*
     // Check that no overflow is going on
     if (!GetTextChain() || GetTextChain()->GetNilChainingEvent(this))
         return false;
-
-     // XXX: Hack to have links together
-    static bool bHasDoneTheLinking = false;
-
-    SdrTextObj *pTxtObj0 =  dynamic_cast< SdrTextObj * >( pPage->GetObj( 0 ) );
-
-    if (!bHasDoneTheLinking && pPage && pPage->GetObjCount() > 1 && this == pTxtObj0)
-    {
-        SdrTextObj *pTxtObj1 =  dynamic_cast< SdrTextObj * >( pPage->GetObj( 1 ) );
-        const_cast<SdrTextObj *>(this)->SetNextLinkInChain(pTxtObj1);
-
-        bHasDoneTheLinking = true;
-    }
-    // end hack
-
-
-    return true;
-
+*/
 }
 
 void SdrTextObj::onChainingEvent()
