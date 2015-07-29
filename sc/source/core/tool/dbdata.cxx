@@ -169,7 +169,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
 
 bool ScDBData::operator== (const ScDBData& rData) const
 {
-    //  Daten, die nicht in den Params sind
+    // Data that is not in sort or query params.
 
     if ( nTable     != rData.nTable     ||
          bDoSize    != rData.bDoSize    ||
@@ -477,20 +477,20 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 {
         ScRange aRange;
         GetArea( aRange );
-        SCTAB nTab = aRange.aStart.Tab();               // hat nur eine Tabelle
+        SCTAB nTab = aRange.aStart.Tab();               // a database range is only on one sheet
 
         //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
 
-        if ( nTab == nOldPos )                          // verschobene Tabelle
+        if ( nTab == nOldPos )                          // moved sheet
             nTab = nNewPos;
-        else if ( nOldPos < nNewPos )                   // nach hinten verschoben
+        else if ( nOldPos < nNewPos )                   // moved to the back
         {
-            if ( nTab > nOldPos && nTab <= nNewPos )    // nachrueckender Bereich
+            if ( nTab > nOldPos && nTab <= nNewPos )    // move this sheet
                 --nTab;
         }
-        else                                            // nach vorne verschoben
+        else                                            // moved to the front
         {
-            if ( nTab >= nNewPos && nTab < nOldPos )    // nachrueckender Bereich
+            if ( nTab >= nNewPos && nTab < nOldPos )    // move this sheet
                 ++nTab;
         }
 
@@ -502,7 +502,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
                     aRange.aEnd.Col(),aRange.aEnd.Row() );
         }
 
-        //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
+        //  MoveTo() is not necessary if only the sheet changed.
 
         SetModified(bChanged);
 
@@ -1101,15 +1101,15 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
             if ( nCol < nStartCol || nCol > nEndCol || nRow < nStartRow || nRow > nEndRow )
             {
                 if (!pNearData)
-                    pNearData = &(*itr);    // ersten angrenzenden Bereich merken
+                    pNearData = &(*itr);    // remember first adjacent area
             }
             else
-                return &(*itr);             // nicht "unbenannt" und Cursor steht wirklich drin
+                return &(*itr);             // not "unbenannt"/"unnamed" and cursor within
         }
     }
     if (pNearData)
-        return pNearData;               // angrenzender, wenn nichts direkt getroffen
-    return pDoc->GetAnonymousDBData(nTab);                  // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+        return pNearData;                   // adjacent, if no direct hit
+    return pDoc->GetAnonymousDBData(nTab);  // "unbenannt"/"unnamed" only if nothing else
 }
 
 bool ScDBCollection::empty() const
