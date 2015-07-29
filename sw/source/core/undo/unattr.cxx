@@ -204,6 +204,7 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
     switch ( m_nFormatWhich )
     {
         case RES_TXTFMTCOLL:
+        case RES_CONDTXTFMTCOLL:
             bFound = pDoc->GetTextFormatColls()->Contains( m_pFormat );
             break;
 
@@ -301,7 +302,9 @@ void SwUndoFormatAttr::RepeatImpl(::sw::RepeatContext & rContext)
     }
     break;
 
-    case RES_TXTFMTCOLL: {
+    case RES_TXTFMTCOLL:
+    case RES_CONDTXTFMTCOLL:
+    {
         SwTextNode *const pNd =
             rContext.GetRepeatPaM().GetNode().GetTextNode();
         if( pNd ) {
