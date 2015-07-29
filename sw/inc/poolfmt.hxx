@@ -401,10 +401,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId );
 
 SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage);
 
-inline bool IsConditionalByPoolId(sal_uInt16 nId)
-    {
-        return RES_POOLCOLL_TEXT == nId;
-    }
+bool IsConditionalByPoolId(sal_uInt16 nId);
 
 #endif
 

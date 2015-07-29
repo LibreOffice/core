@@ -67,6 +67,14 @@
 using namespace ::editeng;
 using namespace ::com::sun::star;
 
+bool IsConditionalByPoolId(sal_uInt16 nId)
+{
+    // TODO: why is this style conditional?
+    // If it is changed to no longer be conditional, then a style "Text Body"
+    // will be imported without its conditions from ODF.
+    return RES_POOLCOLL_TEXT == nId;
+}
+
 namespace
 {
     static const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
