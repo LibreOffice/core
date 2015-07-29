@@ -1600,7 +1600,8 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mnRadius(0)
+    mnRadius(0),
+    maChainNextName("")
 {
 }
 
@@ -1617,6 +1618,12 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     mnRadius, rValue);
+            return;
+        }
+
+        if( IsXMLToken( rLocalName, XML_CHAIN_NEXT_NAME ) )
+        {
+            maChainNextName = rValue;
             return;
         }
     }
@@ -1748,6 +1755,23 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 catch(const uno::Exception&)
                 {
                     OSL_FAIL( "exception during setting of corner radius!");
+                }
+            }
+        }
+
+        if(maChainNextName != "")
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                try
+                {
+                    xPropSet->setPropertyValue("TextChainNextName",
+                                               uno::makeAny( maChainNextName ) );
+                }
+                catch(const uno::Exception&)
+                {
+                    OSL_FAIL( "exception during setting of name of next chain link!");
                 }
             }
         }

@@ -247,6 +247,7 @@ public:
 class SdXMLTextBoxShapeContext : public SdXMLShapeContext
 {
     sal_Int32                   mnRadius;
+    OUString                    maChainNextName;
 
 public:
     TYPEINFO_OVERRIDE();
