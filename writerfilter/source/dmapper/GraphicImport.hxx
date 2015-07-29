@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICIMPORT_HXX
 
 #include <queue>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "LoggedResources.hxx"
 
@@ -64,7 +64,7 @@ enum GraphicImportType
 class GraphicImport : public LoggedProperties, public LoggedTable
                     ,public BinaryObj, public LoggedStream
 {
-    boost::scoped_ptr<GraphicImport_Impl> m_pImpl;
+    std::unique_ptr<GraphicImport_Impl> m_pImpl;
 
     css::uno::Reference<css::uno::XComponentContext>     m_xComponentContext;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;

@@ -21,7 +21,7 @@
 
 #include <oox/helper/grabbagstack.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/optional.hpp>
 
 namespace writerfilter {
@@ -34,7 +34,7 @@ class TextEffectsHandler : public LoggedProperties
 private:
     boost::optional<PropertyIds>         maPropertyId;
     OUString                             maElementName;
-    boost::scoped_ptr<oox::GrabBagStack> mpGrabBagStack;
+    std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
 
     void convertElementIdToPropertyId(sal_Int32 aElementId);
 
