@@ -3443,6 +3443,7 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
     {
         case RES_TXTATR_REFMARK:
         case RES_TXTATR_TOXMARK:
+        case RES_TXTATR_ANNOTATION:
             cRet = CH_TXTATR_INWORD;
         break;
 
@@ -3451,7 +3452,6 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
         case RES_TXTATR_FTN:
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-        case RES_TXTATR_ANNOTATION:
         {
             cRet = CH_TXTATR_BREAKWORD;
         }
