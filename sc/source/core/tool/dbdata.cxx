@@ -276,7 +276,8 @@ void ScDBData::GetArea(ScRange& rRange) const
 
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    ::std::vector<OUString>().swap( maTableColumnNames);    // invalidate column names/offsets
+    if (nCol2 - nCol1 != nEndCol - nStartCol)
+        ::std::vector<OUString>().swap( maTableColumnNames);    // invalidate column names/offsets
 
     nTable  = nTab;
     nStartCol = nCol1;
