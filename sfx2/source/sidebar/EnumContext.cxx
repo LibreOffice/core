@@ -188,6 +188,7 @@ void EnumContext::ProvideContextContainers()
         AddContext(Form);
         AddContext(Frame);
         AddContext(Graphic);
+        AddContext(Grid);
         AddContext(HandoutPage);
         AddContext(MasterPage);
         AddContext(Media);
