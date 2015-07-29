@@ -60,6 +60,41 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_a720c6f8",
+        "filename": "external/boost/boost.concept_check.Wunused-local-typedefs.warnings.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T08:56:44Z",
+      "side": 1,
+      "message": "couple lines above in the file is this:\n\n#define BOOST_CONCEPT_UNUSED_TYPEDEF __attribute__((unused))\n\nwhich i hope should suppress the warning.\n\nso do you still get unused typedef warnings here?",
+      "parentUuid": "1a54edaf_27b056dd",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_07243a0b",
+        "filename": "external/boost/boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T08:56:44Z",
+      "side": 1,
+      "message": "it would be good to have a comment on this patch about what it conflicts with.",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_e7e79e10",
         "filename": "external/boost/boost_1_59_0.multi_array.wshadow.patch",
         "patchSetId": 11
@@ -165,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_270cd693",
+        "filename": "external/boost/boost_1_59_0.property_tree.wtype-limits.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T08:56:44Z",
+      "side": 1,
+      "message": "please add a comment which compiler and version in particular was complaining about this.\n\n(note: you can add comments to patches before the \"diff\" line like commit messages, the patch tool ignores that)",
+      "parentUuid": "1a54edaf_c7ee22ec",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_07e51a08",
         "filename": "sw/Library_swui.mk",
         "patchSetId": 11
@@ -194,6 +247,24 @@
       "side": 1,
       "message": "Another option would be to add this define to  com_MSC_defs.mk, around those lines:\n\n  gb_COMPILERDEFS :\u003d \\\n        -DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE \\\n        -D_CRT_NON_CONFORMING_SWPRINTFS \\\n        -D_CRT_NONSTDC_NO_DEPRECATE \\\n        [...]",
       "parentUuid": "1a54edaf_07e51a08",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4711d2ab",
+        "filename": "sw/Library_swui.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T08:56:44Z",
+      "side": 1,
+      "message": "yes that would also be better than the current patch.",
+      "parentUuid": "1a54edaf_87bb4ac4",
       "revId": "ef430f1db96f603af73e0b391016762ab2212867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
