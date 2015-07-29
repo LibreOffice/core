@@ -18,7 +18,7 @@
  */
 #include "LineWidthControl.hxx"
 #include "LinePropertyPanel.hrc"
-#include "LinePropertyPanelBase.hxx"
+#include <svx/sidebar/LinePropertyPanelBase.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>

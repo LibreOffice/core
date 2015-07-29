@@ -29,8 +29,7 @@
 #include <memory>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
-#include "LineWidthPopup.hxx"
-#include "LinePropertyPanelBase.hxx"
+#include <svx/sidebar/LinePropertyPanelBase.hxx>
 
 
 class XLineStyleItem;

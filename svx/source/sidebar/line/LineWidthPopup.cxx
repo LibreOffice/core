@@ -16,9 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "LineWidthPopup.hxx"
+#include <svx/sidebar/LineWidthPopup.hxx>
 #include "LineWidthControl.hxx"
-#include "LinePropertyPanel.hxx"
+
+#include <svx/sidebar/LinePropertyPanelBase.hxx>
 
 #include <unotools/viewoptions.hxx>
 
