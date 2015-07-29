@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_ca1aa76e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-29T14:12:54Z",
+      "side": 1,
+      "message": "\u003cSigh\u003e I’ve got to manually fix the changelogs due to every time people misuse bug references in commit messages. We no longer use fdo!!",
+      "revId": "0f2fb06b9e26077568c18e186894c445fb84285b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
