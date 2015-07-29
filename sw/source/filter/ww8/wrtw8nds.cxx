@@ -2123,7 +2123,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
     if ( pTextNodeInfo.get() != NULL )
     {
         pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
-        if ( pTextNodeInfoInner->isEndOfCell() ) {
+        if ( pTextNodeInfoInner && pTextNodeInfoInner->isEndOfCell() ) {
             bIsEndOfCell = true;
         }
     }
