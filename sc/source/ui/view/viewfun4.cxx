@@ -318,12 +318,12 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     bool bIsEditMode = GetViewData().HasEditView(eWhich);
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
-    if (bIsEditMode)                                            // Edit-Mode aktiv
+    if (bIsEditMode)                                            // edit mode active
     {
         GetViewData().GetEditView(eWhich, pEditView, nCol, nRow);
         pEditSel.reset(new ESelection(pEditView->GetSelection()));
         SC_MOD()->InputEnterHandler();
-        GetViewData().GetBindings().Update();          // sonst kommt der Sfx durcheinander...
+        GetViewData().GetBindings().Update();          // otherwise the Sfx becomes mixed-up...
     }
     else
     {
@@ -383,7 +383,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     eState = pEditView->StartThesaurus();
     OSL_ENSURE(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
-    if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
+    if (eState == EE_SPELL_ERRORFOUND)              // should happen later through Wrapper!
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
@@ -442,7 +442,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     bool bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
-    if (bIsEditMode)                                            // Edit-Mode aktiv
+    if (bIsEditMode)                                            // edit mode active
     {
         rViewData.GetEditView(eWhich, pEditView, nCol, nRow);
         SC_MOD()->InputEnterHandler();
@@ -489,7 +489,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
         }
     }
 
-    //  ab hier kein return mehr
+    // from here no return
 
     bool bOldEnabled = rDoc.IsIdleEnabled();
     rDoc.EnableIdle(false);   // stop online spelling
@@ -514,7 +514,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
 
     MakeEditView( pEngine.get(), nCol, nRow );
     pEngine->SetRefDevice( rViewData.GetActiveWin() );
-                                        // dummy Zelle simulieren:
+                                        // simulate dummy cell:
     pEditView = rViewData.GetEditView( rViewData.GetActivePart() );
     rViewData.SetSpellingView( pEditView );
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
@@ -565,8 +565,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     rDoc.EnableIdle(bOldEnabled);
 }
 
-// Pasten von SotClipboardFormatId::FILE-Items
-//  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
+// past from SotClipboardFormatId::FILE items
+// is not called directly from Drop, but asynchronously -> dialogs are allowed
 
 bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink )
 {
@@ -583,12 +583,12 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
                                 &aMediaURLItem, 0L ) );
     }
 
-    if (!bLink)     // bei bLink nur Grafik oder URL
+    if (!bLink)     // for bLink only graphics or URL
     {
-        // 1. Kann ich die Datei oeffnen?
+        // 1. can I open the file?
         const SfxFilter* pFlt = NULL;
 
-        // nur nach eigenen Filtern suchen, ohne Auswahlbox (wie in ScDocumentLoader)
+        // search only for its own filters, without selection box (as in ScDocumentLoader)
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
         SfxMedium aSfxMedium( aStrURL, (StreamMode::READ | StreamMode::SHARE_DENYNONE) );
         // #i73992# GuessFilter no longer calls UseInteractionHandler.
@@ -598,22 +598,22 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
         if ( pFlt && !nErr )
         {
-            // Code aus dem SFX geklaut!
+            // code stolen from the SFX!
             SfxDispatcher &rDispatcher = GetViewData().GetDispatcher();
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
             // #i69524# add target, as in SfxApplication when the Open dialog is used
             SfxStringItem aTargetItem( SID_TARGETNAME, OUString("_default") );
 
-            // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
-            // und das bekommt dem MAC nicht so gut ...
+            // Open Asynchronously, because it can also happen from D&D
+            // and that is not so good for the MAC...
             return ( 0 != rDispatcher.Execute( SID_OPENDOC,
                                     SfxCallMode::ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
 
-    // 2. Kann die Datei ueber die Grafik-Filter eingefuegt werden?
-    // (als Link, weil Gallery das so anbietet)
+    // 2. can the file be inserted using the graphics filter?
+    // (as a link, since the Gallery provides it in this way)
 
     sal_uInt16 nFilterFormat;
     Graphic aGraphic;
@@ -634,7 +634,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         }
     }
 
-    if (bLink)                      // bei bLink alles, was nicht Grafik ist, als URL
+    if (bLink)                      // for bLink everything, which is not graphics, as URL
     {
         Rectangle aRect( rPos, Size(0,0) );
         ScRange aRange = GetViewData().GetDocument()->
@@ -647,8 +647,8 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     }
     else
     {
-        // 3. Kann die Datei als OLE eingefuegt werden?
-        // auch nicht-Storages, z.B. Sounds (#38282#)
+        // 3. can the file be inserted as OLE?
+        // also non-storages, for instance sounds (#38282#)
         uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
 
         //TODO/LATER: what about "bLink"?
@@ -693,7 +693,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
             nPosX >= rViewData.GetEditStartCol() && nPosX <= rViewData.GetEditEndCol() &&
             nPosY >= rViewData.GetEditStartRow() && nPosY <= rViewData.GetEditEndRow() )
     {
-        //  in die gerade editierte Zelle einfuegen
+        // insert into the cell which just got edited
 
         OUString aTargetFrame;
         if (pTarget)
@@ -702,7 +702,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         return;
     }
 
-    //  in nicht editierte Zelle einfuegen
+    // insert into not edited cell
 
     ScDocument* pDoc = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();

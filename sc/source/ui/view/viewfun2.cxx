@@ -1628,7 +1628,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//  Suchen & Ersetzen
+// Search & Replace
 
 bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         bool bAddUndo, bool bIsApi )
@@ -1888,7 +1888,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     return bFound;
 }
 
-//  Zielwertsuche
+// Goal Seek
 
 void ScViewFunc::Solve( const ScSolveParam& rParam )
 {
@@ -2551,7 +2551,7 @@ void ScViewFunc::MoveTable(
 
     if (!pDestShell)
     {
-        OSL_FAIL("Dest-Doc nicht gefunden !!!");
+        OSL_FAIL("Destination document not found !!!");
         return;
     }
 
@@ -2704,7 +2704,7 @@ void ScViewFunc::MoveTable(
                 if (pSdrView)
                     pSdrView->ClearPageView();
 
-                pDestViewSh->TabChanged();      // Pages auf dem Drawing-Layer
+                pDestViewSh->TabChanged();      // pages on the drawing layer
             }
             pDestShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
                                     PAINT_GRID | PAINT_TOP | PAINT_LEFT |
