@@ -16,6 +16,7 @@
 #include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlntrit.hxx>
+#include <svx/unomid.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
@@ -59,6 +60,24 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     }
 
     return xPropSet;
+}
+
+css::uno::Any getLineDash(
+        css::uno::Reference<css::frame::XModel> xModel, const OUString& rDashName)
+{
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
+    css::uno::Reference<css::container::XNameAccess> xNameAccess(
+            xFact->createInstance("com.sun.star.drawing.DashTable"),
+            css::uno::UNO_QUERY );
+    if(xNameAccess.is())
+    {
+        if (!xNameAccess->hasByName(rDashName))
+            return css::uno::Any();
+
+        return xNameAccess->getByName(rDashName);
+    }
+
+    return css::uno::Any();
 }
 
 class PreventUpdate
@@ -147,6 +166,23 @@ void ChartLinePanel::updateData()
     if (!xPropSet.is())
         return;
 
+    sal_uInt16 nLineTransparence = 0;
+    xPropSet->getPropertyValue("LineTransparence") >>= nLineTransparence;
+    XLineTransparenceItem aLineTransparenceItem(nLineTransparence);
+    updateLineTransparence(false, true, &aLineTransparenceItem);
+
+    css::drawing::LineStyle eStyle = css::drawing::LineStyle_SOLID;
+    xPropSet->getPropertyValue("LineStyle") >>= eStyle;
+    XLineStyleItem aStyleItem(eStyle);
+    updateLineStyle(false, true, &aStyleItem);
+
+    css::uno::Any aLineDashName = xPropSet->getPropertyValue("LineDashName");
+    OUString aDashName;
+    aLineDashName >>= aDashName;
+    css::uno::Any aLineDash = getLineDash(mxModel, aDashName);
+    XLineDashItem aDashItem;
+    aDashItem.PutValue(aLineDash, MID_LINEDASH);
+    updateLineDash(false, true, &aDashItem);
 }
 
 void ChartLinePanel::modelInvalid()
@@ -198,7 +234,13 @@ void ChartLinePanel::setLineDash(const XLineDashItem& rItem)
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("LineDash", css::uno::makeAny(rItem.GetValue()));
+    css::uno::Any aAny;
+    rItem.QueryValue(aAny, MID_LINEDASH);
+    OUString aDashName = PropertyHelper::addLineDashUniqueNameToTable(aAny,
+            css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY),
+            "");
+    xPropSet->setPropertyValue("LineDash", aAny);
+    xPropSet->setPropertyValue("LineDashName", css::uno::makeAny(aDashName));
 }
 
 void ChartLinePanel::setLineEndStyle(const XLineEndItem* /*pItem*/)
