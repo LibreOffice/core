@@ -404,7 +404,7 @@ void getAxisLabelProperties(
     Reference<beans::XPropertySet> xProps(rAxisProp.m_xAxisModel, uno::UNO_QUERY);
 
     PropertyMapper::getTextLabelMultiPropertyLists(
-        xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight);
+        xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight, false);
 
     LabelPositionHelper::doDynamicFontResize(
         rPropValues, rPropNames, xProps, rAxisLabelProp.m_aFontReferenceSize);

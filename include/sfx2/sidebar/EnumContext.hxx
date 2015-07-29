@@ -78,6 +78,7 @@ public:
         Context_Form,
         Context_Frame,
         Context_Graphic,
+        Context_Grid,
         Context_HandoutPage,
         Context_MasterPage,
         Context_Media,

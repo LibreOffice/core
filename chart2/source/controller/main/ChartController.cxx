@@ -321,6 +321,8 @@ OUString ChartController::GetContextName()
             return OUString("ErrorBar");
         case OBJECTTYPE_AXIS:
             return OUString("Axis");
+        case OBJECTTYPE_GRID:
+            return OUString("Grid");
         default:
         break;
     }

@@ -123,7 +123,8 @@ public:
                 , tNameSequence& rPropNames, tAnySequence& rPropValues
                 , bool bName=true
                 , sal_Int32 nLimitedSpace=-1
-                , bool bLimitedHeight=false );
+                , bool bLimitedHeight=false
+                , bool bSupportsLabelBorder = true);
 
     /** adds line-, fill- and character properties and sets some suitable
         defaults for auto-grow properties

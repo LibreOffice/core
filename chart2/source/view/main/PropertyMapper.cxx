@@ -435,11 +435,12 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     , tNameSequence& rPropNames, tAnySequence& rPropValues
     , bool bName
     , sal_Int32 nLimitedSpace
-    , bool bLimitedHeight )
+    , bool bLimitedHeight
+    , bool bSupportsLabelBorder)
 {
     //fill character properties into the ValueMap
     tPropertyNameValueMap aValueMap;
-    tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForTextLabelProperties();
+    tMakePropertyNameMap aNameMap = bSupportsLabelBorder ? PropertyMapper::getPropertyNameMapForTextLabelProperties() : getPropertyNameMapForCharacterProperties();
 
     PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 

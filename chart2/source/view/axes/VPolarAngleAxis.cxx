@@ -66,7 +66,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     tAnySequence aPropValues;
 
     uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
-    PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false );
+    PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false, -1, false, false );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );
 
