@@ -108,6 +108,8 @@ protected:
     void SelectEndStyle(bool bStart);
     void SelectLineStyle();
 
+    void setMapUnit(SfxMapUnit eMapUnit);
+
 private:
     //ui controls
     VclPtr<FixedText>   mpFTWidth;

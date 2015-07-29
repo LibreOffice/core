@@ -216,8 +216,6 @@ void LinePropertyPanelBase::Initialize()
     mpIMGWidthIcon[6] = Image(SVX_RES(IMG_WIDTH7_ICON));
     mpIMGWidthIcon[7] = Image(SVX_RES(IMG_WIDTH8_ICON));
 
-    // meMapUnit = maWidthControl.GetCoreMetric();
-
     FillLineStyleList();
     SelectLineStyle();
     Link<> aLink = LINK( this, LinePropertyPanelBase, ChangeLineStyleHdl );
@@ -909,6 +907,11 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
             mpLBEnd->SelectEntryPos( 0 );
         }
     }
+}
+
+void LinePropertyPanelBase::setMapUnit(SfxMapUnit eMapUnit)
+{
+    meMapUnit = eMapUnit;
 }
 
 }} // end of namespace svx::sidebar
