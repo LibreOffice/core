@@ -177,21 +177,21 @@ void DataPointProperties::AddPropertiesToVector(
 
     rOutProperties.push_back(
         Property( "BorderStyle",
-                  PROP_DATAPOINT_BORDER_STYLE,
+                  LinePropertiesHelper::PROP_LINE_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "BorderWidth",
-                  PROP_DATAPOINT_BORDER_WIDTH,
+                  LinePropertiesHelper::PROP_LINE_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "BorderDashName",
-                  PROP_DATAPOINT_BORDER_DASH_NAME,
+                  LinePropertiesHelper::PROP_LINE_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
