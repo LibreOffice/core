@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_07d99af3",
+        "filename": "sc/source/ui/sidebar/AlignmentPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-29T10:15:21Z",
+      "side": 1,
+      "message": "break; went missing here",
+      "revId": "89705186d4b4c61c7de7ac68b7777482f212204a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
