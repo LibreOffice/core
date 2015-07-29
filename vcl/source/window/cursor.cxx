@@ -44,8 +44,9 @@ struct ImplCursorData
 static void ImplCursorInvert( ImplCursorData* pData )
 {
     vcl::Window* pWindow  = pData->mpWindow;
-    bool    bMapMode = pWindow->IsMapModeEnabled();
-    pWindow->EnableMapMode( false );
+    vcl::RenderContext* pRenderContext = pWindow->GetOutDev();
+    bool    bMapMode = pRenderContext->IsMapModeEnabled();
+    pRenderContext->EnableMapMode( false );
     InvertFlags nInvertStyle;
     if ( pData->mnStyle & CURSOR_SHADOW )
         nInvertStyle = InvertFlags::N50;
@@ -107,12 +108,12 @@ static void ImplCursorInvert( ImplCursorData* pData )
 
             if ( pData->mnOrientation )
                 aPoly.Rotate( pData->maPixRotOff, pData->mnOrientation );
-            pWindow->Invert( aPoly, nInvertStyle );
+            pRenderContext->Invert( aPoly, nInvertStyle );
         }
     }
     else
-        pWindow->Invert( aRect, nInvertStyle );
-    pWindow->EnableMapMode( bMapMode );
+        pRenderContext->Invert( aRect, nInvertStyle );
+    pRenderContext->EnableMapMode( bMapMode );
 }
 
 void vcl::Cursor::ImplDraw()
