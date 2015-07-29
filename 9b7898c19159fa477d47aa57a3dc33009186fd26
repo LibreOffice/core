@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a7aa0618",
+        "filename": "include/svx/svdtrans.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-29T11:36:20Z",
+      "side": 1,
+      "message": "the word \"positive\" is missing, i.e. \"visible positive curvature\"",
+      "revId": "9b7898c19159fa477d47aa57a3dc33009186fd26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
