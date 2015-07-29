@@ -53,6 +53,11 @@ namespace cmis
         m_sId = sId;
     }
 
+    void URL::setUsername( const OUString& sUser )
+    {
+        m_sUser = sUser;
+    }
+
     OUString URL::asString( )
     {
         OUString sUrl;
@@ -61,7 +66,9 @@ namespace cmis
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis://" +
+                ( m_sUser.isEmpty() ? OUString( ) : (m_sUser + "@") ) +
+                sEncodedBinding;
 
         if ( !m_sPath.isEmpty( ) )
         {

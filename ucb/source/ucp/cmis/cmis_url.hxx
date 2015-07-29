@@ -38,6 +38,7 @@ namespace cmis
             const OUString& getPassword() const { return m_sPass; }
             void setObjectPath( const OUString& sPath );
             void setObjectId( const OUString& sId );
+            void setUsername( const OUString& sUser );
 
             OUString asString( );
     };

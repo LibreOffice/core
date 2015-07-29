@@ -339,7 +339,7 @@ namespace cmis
         // Look for a cached session, key is binding url + repo id
         OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
         if ( NULL == m_pSession )
-            m_pSession = m_pProvider->getSession( sSessionId );
+            m_pSession = m_pProvider->getSession( sSessionId, m_aURL.getUsername( ) );
 
         if ( NULL == m_pSession )
         {
@@ -411,7 +411,7 @@ namespace cmis
                 }
                 else
                 {
-                    m_pProvider->registerSession(sSessionId, m_pSession);
+                    m_pProvider->registerSession(sSessionId, m_aURL.getUsername( ), m_pSession);
                 }
             }
             else
@@ -2019,14 +2019,20 @@ namespace cmis
                 {
                     // TODO Cache the objects
 
+                    INetURLObject aURL( m_sURL );
+                    OUString sUser = aURL.GetUser( INetURLObject::NO_DECODE );
+
                     URL aUrl( m_sURL );
                     OUString sPath( m_sObjectPath );
                     if ( !sPath.endsWith("/") )
                         sPath += "/";
                     sPath += STD_TO_OUSTR( ( *it )->getName( ) );
                     OUString sId = STD_TO_OUSTR( ( *it )->getId( ) );
+
                     aUrl.setObjectId( sId );
                     aUrl.setObjectPath( sPath );
+                    aUrl.setUsername( sUser );
+
                     uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
                     uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId, *it );
 
