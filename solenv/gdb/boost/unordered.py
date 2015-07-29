@@ -63,7 +63,7 @@ class UnorderedMapPrinter(PrinterBase):
 
         def __next__(self):
             if self.step:
-                self.value = self.impl.next()
+                self.value = six.advance_iterator(self.impl)
                 value = self.value[0]
             else:
                 value = self.value[1]
@@ -87,7 +87,7 @@ class UnorderedSetPrinter(PrinterBase):
             return self
 
         def __next__(self):
-            return ("", self.impl.next()[1])
+            return ("", six.advance_iterator(self.impl)[1])
 
 printer = None
 
