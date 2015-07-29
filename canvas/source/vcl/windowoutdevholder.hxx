@@ -37,8 +37,8 @@ namespace vclcanvas
         explicit WindowOutDevHolder( const css::uno::Reference< css::awt::XWindow>& xWin );
 
     private:
-        virtual OutputDevice&       getOutDev() SAL_OVERRIDE { return mrOutputWindow; }
-        virtual const OutputDevice& getOutDev() const SAL_OVERRIDE { return mrOutputWindow; }
+        virtual OutputDevice&       getOutDev() SAL_OVERRIDE { return *mrOutputWindow.get(); }
+        virtual const OutputDevice& getOutDev() const SAL_OVERRIDE { return *mrOutputWindow.get(); }
 
         // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
         // now listenes to the window component, I still consider
@@ -50,7 +50,7 @@ namespace vclcanvas
         // vcl/source/window/window.cxx is broken, that disposes the
         // canvas during window deletion, we're riding a dead horse
         // here
-        vcl::Window& mrOutputWindow;
+        VclPtr<vcl::Window> mrOutputWindow;
     };
 }
 

@@ -88,7 +88,7 @@ private:
 class RoadmapImpl : public RoadmapTypes
 {
 protected:
-    const ORoadmap&     m_rAntiImpl;
+    VclPtr<const ORoadmap> m_rAntiImpl;
     Link<>              m_aSelectHdl;
     BitmapEx            m_aPicture;
     HL_Vector           m_aRoadmapSteps;
@@ -101,7 +101,7 @@ public:
 
 public:
     explicit RoadmapImpl(const ORoadmap& rAntiImpl)
-        : m_rAntiImpl(rAntiImpl)
+        : m_rAntiImpl(&rAntiImpl)
         , m_iCurItemID(-1)
         , m_bInteractive(true)
         , m_bComplete(true)
@@ -189,9 +189,9 @@ public:
 
 void RoadmapImpl::initItemSize()
 {
-    Size aLabelSize( m_rAntiImpl.GetOutputSizePixel() );
-    aLabelSize.Height() = m_rAntiImpl.LogicToPixel( Size( 0, LABELBASEMAPHEIGHT ), MAP_APPFONT ).Height();
-    aLabelSize.Width() -= m_rAntiImpl.LogicToPixel( Size( 2 * ROADMAP_INDENT_X, 0 ), MAP_APPFONT ).Width();
+    Size aLabelSize( m_rAntiImpl->GetOutputSizePixel() );
+    aLabelSize.Height() = m_rAntiImpl->LogicToPixel( Size( 0, LABELBASEMAPHEIGHT ), MAP_APPFONT ).Height();
+    aLabelSize.Width() -= m_rAntiImpl->LogicToPixel( Size( 2 * ROADMAP_INDENT_X, 0 ), MAP_APPFONT ).Width();
     m_aItemSizePixel = aLabelSize;
 }
 

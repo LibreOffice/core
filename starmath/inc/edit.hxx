@@ -46,7 +46,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 {
     rtl::Reference<SmEditAccessible> mxAccessible;
 
-    SmCmdBoxWindow& rCmdBox;
+    VclPtr<SmCmdBoxWindow> rCmdBox;
     std::unique_ptr<EditView> pEditView;
     VclPtr<ScrollBar> pHScrollBar;
     VclPtr<ScrollBar> pVScrollBar;

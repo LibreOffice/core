@@ -41,7 +41,7 @@ namespace vclcanvas
     }
 
     WindowOutDevHolder::WindowOutDevHolder( const uno::Reference<awt::XWindow>& xWin ) :
-        mrOutputWindow( windowFromXWin(xWin) )
+        mrOutputWindow( &windowFromXWin(xWin) )
     {}
 }
 

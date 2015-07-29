@@ -68,7 +68,7 @@ namespace svt
     {
     public:
         explicit ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
-            :m_rDeck( i_rDeck )
+            :m_rDeck( &i_rDeck )
             ,m_aPanelAnchor( VclPtr<vcl::Window>::Create(&i_rDeck, WB_DIALOGCONTROL | WB_CHILDDLGCTRL) )
             ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
@@ -130,7 +130,7 @@ namespace svt
         PToolPanel          GetActiveOrDummyPanel_Impl();
 
     private:
-        ToolPanelDeck&      m_rDeck;
+        VclPtr<ToolPanelDeck> m_rDeck;
         VclPtr<vcl::Window> m_aPanelAnchor;
         ToolPanelCollection m_aPanels;
         PToolPanel          m_pDummyPanel;
@@ -202,7 +202,7 @@ namespace svt
 
     void ToolPanelDeck_Impl::ImplDoLayout()
     {
-        const Rectangle aDeckPlayground( Point(), m_rDeck.GetOutputSizePixel() );
+        const Rectangle aDeckPlayground( Point(), m_rDeck->GetOutputSizePixel() );
 
         // ask the layouter what is left for our panel, and position the panel container window appropriately
         Rectangle aPlaygroundArea( aDeckPlayground );

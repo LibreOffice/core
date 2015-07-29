@@ -1356,7 +1356,7 @@ namespace
     public:
         FocusableControlsFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
             :m_rView( i_rView )
-            ,m_rDevice( i_rDevice )
+            ,m_rDevice( &i_rDevice )
         {
         }
 
@@ -1367,13 +1367,13 @@ namespace
             if ( !pUnoObj )
                 return false;
 
-            Reference< XControl > xControl = pUnoObj->GetUnoControl( m_rView, m_rDevice );
+            Reference< XControl > xControl = pUnoObj->GetUnoControl( m_rView, *m_rDevice.get() );
             return FmXFormView::isFocusable( xControl );
         }
 
     private:
         const SdrView&      m_rView;
-        const OutputDevice& m_rDevice;
+        VclPtr<const OutputDevice> m_rDevice;
     };
 }
 

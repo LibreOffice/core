@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
 
 #include <sfx2/ctrlitem.hxx>
+#include <vcl/vclptr.hxx>
 
 class ScNavigatorDlg;
 
@@ -35,7 +36,7 @@ protected:
                                       const SfxPoolItem* pItem ) SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg& rNavigatorDlg;
+    VclPtr<ScNavigatorDlg> rNavigatorDlg;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX

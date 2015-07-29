@@ -117,7 +117,7 @@ public:
     void Visit( SmTextNode* pNode ) SAL_OVERRIDE;
     using SmDefaultingVisitor::Visit;
 private:
-    OutputDevice &rDev;
+    VclPtr<OutputDevice> rDev;
     SmCaretPos pos;
     /** Offset to draw from */
     Point Offset;
@@ -169,7 +169,7 @@ public:
      * @remarks This constructor will do the drawing, no need to anything more.
      */
     SmDrawingVisitor( OutputDevice &rDevice, Point position, SmNode* pTree )
-        : rDev( rDevice ) {
+        : rDev( &rDevice ) {
         this->Position = position;
         pTree->Accept( this );
     }
@@ -214,7 +214,7 @@ private:
     /** Draw an SmSpecialNode or a subclass of this  */
     void DrawSpecialNode( SmSpecialNode* pNode );
     /** OutputDevice to draw on */
-    OutputDevice& rDev;
+    VclPtr<OutputDevice> rDev;
     /** Position to draw on the rDev
      * @remarks This variable is used to pass parameters in DrawChildren( ), this means
                 that after a call to DrawChildren( ) the contents of this method is undefined
@@ -394,7 +394,7 @@ public:
     using SmDefaultingVisitor::Visit;
 private:
     /** Reference to drawing device */
-    OutputDevice& rDev;
+    VclPtr<OutputDevice> rDev;
     /** True if  aSelectionArea have been initialized */
     bool bHasSelectionArea;
     /** The current area that is selected */

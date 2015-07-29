@@ -401,7 +401,7 @@ namespace svt { namespace table
 
     struct GridTableRenderer::CellRenderContext
     {
-        OutputDevice&           rDevice;
+        VclPtr<OutputDevice>    rDevice;
         Rectangle const         aContentArea;
         StyleSettings const &   rStyle;
         ColPos const            nColumn;
@@ -410,7 +410,7 @@ namespace svt { namespace table
 
         CellRenderContext( OutputDevice& i_device, Rectangle const & i_contentArea,
             StyleSettings const & i_style, ColPos const i_column, bool const i_selected, bool const i_hasControlFocus )
-            :rDevice( i_device )
+            :rDevice( &i_device )
             ,aContentArea( i_contentArea )
             ,rStyle( i_style )
             ,nColumn( i_column )
@@ -493,7 +493,7 @@ namespace svt { namespace table
         else
             imageSize.Height() = i_context.aContentArea.GetHeight() - 1;
         DrawImageFlags const nStyle = m_pImpl->rModel.isEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
-        i_context.rDevice.DrawImage( imagePos, imageSize, i_image, nStyle );
+        i_context.rDevice->DrawImage( imagePos, imageSize, i_image, nStyle );
     }
 
 
@@ -529,19 +529,19 @@ namespace svt { namespace table
             ::Color const textColor = i_context.bHasControlFocus
                 ?   lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionTextColor(), i_context.rStyle, &StyleSettings::GetHighlightTextColor )
                 :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionTextColor(), i_context.rStyle, &StyleSettings::GetDeactiveTextColor );
-            i_context.rDevice.SetTextColor( textColor );
+            i_context.rDevice->SetTextColor( textColor );
         }
         else
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), i_context.rStyle, &StyleSettings::GetFieldTextColor );
-            i_context.rDevice.SetTextColor( textColor );
+            i_context.rDevice->SetTextColor( textColor );
         }
 
         Rectangle const textRect( lcl_getTextRenderingArea( i_context.aContentArea ) );
         DrawTextFlags nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | DrawTextFlags::Clip;
         if ( !m_pImpl->rModel.isEnabled() )
             nDrawTextFlags |= DrawTextFlags::Disable;
-        i_context.rDevice.DrawText( textRect, i_text, nDrawTextFlags );
+        i_context.rDevice->DrawText( textRect, i_text, nDrawTextFlags );
     }
 
 

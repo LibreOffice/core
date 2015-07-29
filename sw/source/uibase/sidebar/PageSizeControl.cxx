@@ -47,7 +47,7 @@ PageSizeControl::PageSizeControl(
     , maWidthHeightField( VclPtr<MetricField>::Create( this, SW_RES(FLD_WIDTH_HEIGHT) ) )
     , mePaper( ePaper )
     , maPaperList()
-    , mrPagePropPanel(rPanel)
+    , mrPagePropPanel(&rPanel)
 {
     maWidthHeightField->Hide();
     SetFieldUnit( *maWidthHeightField.get(), eFUnit );
@@ -165,19 +165,19 @@ IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
         if ( ePaper != mePaper )
         {
             mePaper = ePaper;
-            mrPagePropPanel.ExecuteSizeChange( mePaper );
+            mrPagePropPanel->ExecuteSizeChange( mePaper );
         }
     }
 
-    mrPagePropPanel.ClosePageSizePopup();
+    mrPagePropPanel->ClosePageSizePopup();
     return 0;
 }
 
 IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl)
 {
-    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
+    mrPagePropPanel->GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
 
-    mrPagePropPanel.ClosePageSizePopup();
+    mrPagePropPanel->ClosePageSizePopup();
     return 0;
 }
 

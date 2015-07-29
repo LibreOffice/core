@@ -58,6 +58,7 @@ class ScScenarioListBox : public ListBox
 public:
     explicit            ScScenarioListBox( ScScenarioWindow& rParent );
     virtual             ~ScScenarioListBox();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                UpdateEntries( const std::vector<OUString> &aNewEntryList );
 
@@ -86,8 +87,8 @@ private:
     void                DeleteScenario( bool bQueryBox );
 
 private:
-    ScScenarioWindow&   mrParent;
-    ScenarioList        maEntries;
+    VclPtr<ScScenarioWindow> mrParent;
+    ScenarioList             maEntries;
 };
 
 // class ScScenarioWindow ------------------------------------------------
@@ -121,6 +122,7 @@ class ColumnEdit : public SpinField
 public:
             ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId );
             virtual ~ColumnEdit();
+    virtual void dispose() SAL_OVERRIDE;
 
     SCCOL   GetCol() { return nCol; }
     void    SetCol( SCCOL nColNo );
@@ -134,9 +136,9 @@ protected:
     virtual void    Last() SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg& rDlg;
-    SCCOL           nCol;
-    sal_uInt16          nKeyGroup;
+    VclPtr<ScNavigatorDlg> rDlg;
+    SCCOL                  nCol;
+    sal_uInt16             nKeyGroup;
 
     void    EvalText        ();
     void    ExecuteCol      ();
@@ -152,6 +154,7 @@ class RowEdit : public NumericField
 public:
             RowEdit( ScNavigatorDlg* pParent, const ResId& rResId );
             virtual ~RowEdit();
+    virtual void dispose() SAL_OVERRIDE;
 
     SCROW   GetRow()                { return (SCROW)GetValue(); }
     void    SetRow( SCROW nRow ){ SetValue( nRow ); }
@@ -161,7 +164,7 @@ protected:
     virtual void    LoseFocus() SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg& rDlg;
+    VclPtr<ScNavigatorDlg> rDlg;
 
     void    ExecuteRow();
 };
@@ -173,12 +176,13 @@ class ScDocListBox : public ListBox
 public:
             ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId );
             virtual ~ScDocListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     virtual void    Select() SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg& rDlg;
+    VclPtr<ScNavigatorDlg> rDlg;
 };
 
 //  class CommandToolBox
@@ -188,6 +192,7 @@ class CommandToolBox : public ToolBox
 public:
             CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId );
             virtual ~CommandToolBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void Select( sal_uInt16 nId );
     void UpdateButtons();
@@ -202,7 +207,7 @@ protected:
     virtual void    Click() SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg& rDlg;
+    VclPtr<ScNavigatorDlg> rDlg;
 };
 
 //  class ScNavigatorDlg

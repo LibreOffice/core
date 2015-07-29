@@ -33,7 +33,7 @@ namespace vclcanvas
                                         const OutputDevice&     rRefDevice ) :
         maBitmap( rBitmap ),
         mpVDev( NULL ),
-        mrRefDevice( rRefDevice ),
+        mrRefDevice( &rRefDevice ),
         mbBitmapContentIsCurrent( false ),
         mbVDevContentIsCurrent( false )
     {
@@ -112,8 +112,8 @@ namespace vclcanvas
             // VDev not yet created, do it now. Create an alpha-VDev,
             // if bitmap has transparency.
             mpVDev = maBitmap->IsTransparent() ?
-                VclPtr<VirtualDevice>::Create( mrRefDevice, 0, 0 ) :
-                VclPtr<VirtualDevice>::Create( mrRefDevice );
+                VclPtr<VirtualDevice>::Create( *mrRefDevice.get(), 0, 0 ) :
+                VclPtr<VirtualDevice>::Create( *mrRefDevice.get() );
 
             OSL_ENSURE( mpVDev,
                         "BitmapBackBuffer::createVDev(): Unable to create VirtualDevice" );

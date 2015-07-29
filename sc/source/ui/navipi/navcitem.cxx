@@ -31,7 +31,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )
     :   SfxControllerItem   ( nIdP, rBindings ),
-        rNavigatorDlg       ( rDlg )
+        rNavigatorDlg       ( &rDlg )
 {
 }
 
@@ -56,8 +56,8 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
 
-                    rNavigatorDlg.UpdateColumn( &nCol );
-                    rNavigatorDlg.UpdateRow   ( &nRow );
+                    rNavigatorDlg->UpdateColumn( &nCol );
+                    rNavigatorDlg->UpdateRow   ( &nRow );
                 }
             }
             break;
@@ -74,9 +74,9 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
                 {
                     SCTAB nTab = pTabItem->GetValue() - 1;
 
-                    rNavigatorDlg.UpdateTable( &nTab );
-                    rNavigatorDlg.UpdateColumn();
-                    rNavigatorDlg.UpdateRow();
+                    rNavigatorDlg->UpdateTable( &nTab );
+                    rNavigatorDlg->UpdateColumn();
+                    rNavigatorDlg->UpdateRow();
                 }
             }
             break;
@@ -88,7 +88,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
             break;
 
         case SID_SELECT_SCENARIO:
-            rNavigatorDlg.aWndScenarios->NotifyState( pItem );
+            rNavigatorDlg->aWndScenarios->NotifyState( pItem );
             break;
 
         default:

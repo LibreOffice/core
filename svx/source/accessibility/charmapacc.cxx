@@ -229,7 +229,7 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 
 
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
-    mrParent( rParent )
+    mrParent( &rParent )
     ,mnId( _nPos )
     ,m_pItem(NULL)
     ,m_pParent(_pParent)
@@ -737,7 +737,7 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
 
     if( mpParent )
     {
-        if (mpParent->mrParent.IsEnabled())
+        if (mpParent->mrParent->IsEnabled())
         {
             pStateSet->AddState( css::accessibility::AccessibleStateType::ENABLED );
             // SELECTABLE
@@ -746,12 +746,12 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
         }
 
         // SELECTED
-        if( mpParent->mrParent.GetSelectIndexId() == mpParent->mnId )
+        if( mpParent->mrParent->GetSelectIndexId() == mpParent->mnId )
         {
             pStateSet->AddState( css::accessibility::AccessibleStateType::SELECTED );
                pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSED );
         }
-        if ( mpParent->mnId >= mpParent->mrParent.FirstInView() && mpParent->mnId <= mpParent->mrParent.LastInView() )
+        if ( mpParent->mnId >= mpParent->mrParent->FirstInView() && mpParent->mnId <= mpParent->mrParent->LastInView() )
         {
             pStateSet->AddState( AccessibleStateType::VISIBLE );
             pStateSet->AddState( AccessibleStateType::SHOWING );
@@ -777,7 +777,7 @@ sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex ) throw (I
 
     if( nIndex == 0 )
     {
-        mpParent->mrParent.OutputIndex( mpParent->mnId );
+        mpParent->mrParent->OutputIndex( mpParent->mnId );
         return 1;
     }
     throw IndexOutOfBoundsException();
@@ -817,7 +817,7 @@ awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  ) throw (RuntimeException)
     {
         Rectangle   aRect( mpParent->maRect );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        Rectangle   aParentRect( aOrigin, mpParent->mrParent->GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

@@ -89,7 +89,7 @@ private:
 
     private:
         // the layout window
-        Layout& rLayout;
+        VclPtr<Layout> rLayout;
         // horizontal or vertical strip?
         bool bVertical;
         // lower (top or left) or higher (bottom or right) strip?

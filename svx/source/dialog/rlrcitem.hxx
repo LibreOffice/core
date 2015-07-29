@@ -26,7 +26,7 @@ class SvxRuler;
 class SvxRulerItem : public SfxControllerItem
 {
 private:
-    SvxRuler& rRuler;
+    VclPtr<SvxRuler> rRuler;
 
 protected:
     virtual void StateChanged( sal_uInt16,

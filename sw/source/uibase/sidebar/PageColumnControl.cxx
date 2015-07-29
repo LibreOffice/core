@@ -40,7 +40,7 @@ PageColumnControl::PageColumnControl(
     , mpColumnValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_COLUMN) ) )
     , maMoreButton( VclPtr<PushButton>::Create( this, SW_RES(CB_COLUMN_MORE) ) )
     , mnColumnType( nColumnType )
-    , mrPagePropPanel(rPanel)
+    , mrPagePropPanel(&rPanel)
 {
     mpColumnValueSet->SetStyle( mpColumnValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT );
     mpColumnValueSet->SetColor(GetSettings().GetStyleSettings().GetMenuColor());
@@ -97,19 +97,19 @@ IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
         if ( nColumnType != mnColumnType )
         {
             mnColumnType = nColumnType;
-            mrPagePropPanel.ExecuteColumnChange( mnColumnType );
+            mrPagePropPanel->ExecuteColumnChange( mnColumnType );
         }
     }
 
-    mrPagePropPanel.ClosePageColumnPopup();
+    mrPagePropPanel->ClosePageColumnPopup();
     return 0;
 }
 
 IMPL_LINK_NOARG(PageColumnControl, MoreButtonClickHdl_Impl)
 {
-    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
+    mrPagePropPanel->GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
 
-    mrPagePropPanel.ClosePageColumnPopup();
+    mrPagePropPanel->ClosePageColumnPopup();
     return 0;
 }
 

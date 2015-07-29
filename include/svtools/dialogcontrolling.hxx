@@ -230,16 +230,16 @@ namespace svt
     */
     class SVT_DLLPUBLIC FilterForRadioOrCheckToggle : public IWindowEventFilter
     {
-        const vcl::Window&   m_rWindow;
+        VclPtr<const vcl::Window>   m_rWindow;
     public:
         FilterForRadioOrCheckToggle( const vcl::Window& _rWindow )
-            :m_rWindow( _rWindow )
+            :m_rWindow( &_rWindow )
         {
         }
 
         bool payAttentionTo( const VclWindowEvent& _rEvent ) const SAL_OVERRIDE
         {
-            if  (   ( _rEvent.GetWindow() == &m_rWindow )
+            if  (   ( _rEvent.GetWindow() == m_rWindow.get() )
                 &&  (   ( _rEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )
                     ||  ( _rEvent.GetId() == VCLEVENT_CHECKBOX_TOGGLE )
                     )

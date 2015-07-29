@@ -46,7 +46,7 @@ public:
 
 private:
 
-    OutputDevice&       mrDev;
+    VclPtr<OutputDevice>  mrDev;
     SvxFont&            mrFont;
     OUString            maText;
 };

@@ -24,6 +24,7 @@
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/virdev.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <cppcanvas/vclfactory.hxx>

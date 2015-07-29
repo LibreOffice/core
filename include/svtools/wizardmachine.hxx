@@ -364,18 +364,18 @@ namespace svt
     {
     public:
         WizardTravelSuspension( OWizardMachine& _rWizard )
-            :m_rWizard( _rWizard )
+            :m_rWizard( &_rWizard )
         {
-            m_rWizard.suspendTraveling( OWizardMachine::AccessGuard() );
+            m_rWizard->suspendTraveling( OWizardMachine::AccessGuard() );
         }
 
         ~WizardTravelSuspension()
         {
-            m_rWizard.resumeTraveling( OWizardMachine::AccessGuard() );
+            m_rWizard->resumeTraveling( OWizardMachine::AccessGuard() );
         }
 
     private:
-        OWizardMachine& m_rWizard;
+        VclPtr<OWizardMachine> m_rWizard;
     };
 
 

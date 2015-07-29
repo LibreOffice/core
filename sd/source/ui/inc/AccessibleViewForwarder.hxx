@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEVIEWFORWARDER_HXX
 
 #include <svx/IAccessibleViewForwarder.hxx>
+#include <vcl/vclptr.hxx>
 
 class SdrPaintView;
 class OutputDevice;
@@ -84,7 +85,7 @@ public:
 protected:
     SdrPaintView* mpView;
     sal_uInt16 mnWindowId;
-    OutputDevice& mrDevice;
+    VclPtr<OutputDevice> mrDevice;
 
 private:
     AccessibleViewForwarder (AccessibleViewForwarder&) SAL_DELETED_FUNCTION;

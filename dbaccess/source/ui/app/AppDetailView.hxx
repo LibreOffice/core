@@ -46,7 +46,7 @@ namespace dbaui
 
     class OCreationList : public SvTreeListBox
     {
-        OTasksWindow&   m_rTaskWindow;
+        VclPtr<OTasksWindow>    m_rTaskWindow;
 
         // members related to drawing the currently hovered/selected entry
         SvTreeListEntry*        m_pMouseDownEntry;
@@ -56,6 +56,8 @@ namespace dbaui
 
     public:
         explicit OCreationList( OTasksWindow& _rParent );
+        virtual ~OCreationList();
+        virtual void dispose() SAL_OVERRIDE;
         // Window overrides
         virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -148,7 +150,7 @@ namespace dbaui
         VclPtr<Splitter>                    m_aHorzSplitter;
         VclPtr<OTitleWindow>                m_aTasks;
         VclPtr<OTitleWindow>                m_aContainer;
-        OAppBorderWindow&                   m_rBorderWin;       // my parent
+        VclPtr<OAppBorderWindow>            m_rBorderWin;       // my parent
         VclPtr<OAppDetailPageHelper>        m_pControlHelper;
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
@@ -189,7 +191,7 @@ namespace dbaui
         */
         bool    interceptKeyInput( const KeyEvent& _rEvent );
 
-        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
+        inline OAppBorderWindow& getBorderWin() const { return *m_rBorderWin.get(); }
         inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
 
         bool isCutAllowed() SAL_OVERRIDE ;

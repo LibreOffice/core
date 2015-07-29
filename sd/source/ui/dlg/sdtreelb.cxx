@@ -89,7 +89,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     ::sd::DrawDocShell& rDocShell,
     NavigatorDragType eDragType)
     : SdTransferable(rDocShell.GetDoc(), NULL, true),
-      mrParent( rParent ),
+      mrParent( &rParent ),
       maBookmark( rBookmark ),
       mrDocShell( rDocShell ),
       meDragType( eDragType )
@@ -140,7 +140,7 @@ bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::Da
 
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mrParent.OnDragFinished( nDropAction );
+    mrParent->OnDragFinished( nDropAction );
     SdTransferable::DragFinished(nDropAction);
 }
 

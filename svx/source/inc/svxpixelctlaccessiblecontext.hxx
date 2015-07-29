@@ -68,7 +68,7 @@ class SvxPixelCtlAccessibleChild :
     public ::comphelper::OBaseMutex,
     public SvxPixelCtlAccessibleChild_BASE
 {
-    SvxPixelCtl& mrParentWindow;
+    VclPtr<SvxPixelCtl> mrParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
     Rectangle*  mpBoundingBox;
@@ -168,7 +168,7 @@ class SvxPixelCtlAccessible :
     public ::comphelper::OBaseMutex,
     public SvxPixelCtlAccessible_BASE
 {
-    SvxPixelCtl& mrPixelCtl;
+    VclPtr<SvxPixelCtl> mrPixelCtl;
 
 public:
     SvxPixelCtlAccessible(SvxPixelCtl& rWindow);

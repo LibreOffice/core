@@ -691,7 +691,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getA
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( mpParent )
-        xRet = mpParent->mrParent.GetAccessible();
+        xRet = mpParent->mrParent->GetAccessible();
 
     return xRet;
 }
@@ -708,7 +708,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
     {
         bool bDone = false;
 
-        sal_uInt16 nCount = mpParent->mrParent.ImplGetVisibleItemCount();
+        sal_uInt16 nCount = mpParent->mrParent->ImplGetVisibleItemCount();
         ThumbnailViewItem* pItem;
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
@@ -716,7 +716,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the mean time.
             try
             {
-                pItem = mpParent->mrParent.ImplGetVisibleItem (i);
+                pItem = mpParent->mrParent->ImplGetVisibleItem (i);
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
@@ -889,7 +889,7 @@ awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
     {
         Rectangle   aRect( mpParent->getDrawArea() );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        Rectangle   aParentRect( aOrigin, mpParent->mrParent->GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 
@@ -923,7 +923,7 @@ awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
     if( mpParent )
     {
         const Point aPos = mpParent->getDrawArea().TopLeft();
-        const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( aPos ) );
+        const Point aScreenPos( mpParent->mrParent->OutputToAbsoluteScreenPixel( aPos ) );
 
         aRet.X = aScreenPos.X();
         aRet.Y = aScreenPos.Y();

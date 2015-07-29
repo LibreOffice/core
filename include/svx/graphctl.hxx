@@ -116,12 +116,12 @@ public:
 
 class GraphCtrlUserCall : public SdrObjUserCall
 {
-    GraphCtrl& rWin;
+    VclPtr<GraphCtrl> rWin;
 
 public:
 
     GraphCtrlUserCall(GraphCtrl& rGraphWin)
-        : rWin(rGraphWin)
+        : rWin(&rGraphWin)
     {}
 
     virtual ~GraphCtrlUserCall()
@@ -137,20 +137,20 @@ SdrObjUserCall* GraphCtrl::GetSdrUserCall()
 
 class GraphCtrlView : public SdrView
 {
-    GraphCtrl& rGraphCtrl;
+    VclPtr<GraphCtrl> rGraphCtrl;
 
 protected:
 
     virtual void MarkListHasChanged() SAL_OVERRIDE
     {
         SdrView::MarkListHasChanged();
-        rGraphCtrl.MarkListHasChanged();
+        rGraphCtrl->MarkListHasChanged();
     }
 
 public:
     GraphCtrlView(SdrModel* pModel, GraphCtrl* pWindow)
         : SdrView(pModel, pWindow)
-        , rGraphCtrl(*pWindow)
+        , rGraphCtrl(pWindow)
     {}
 
     virtual ~GraphCtrlView()

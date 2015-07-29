@@ -53,7 +53,7 @@ public:
     }
 
 private:
-    LinePropertyPanel& mrLinePropertyPanel;
+    VclPtr<LinePropertyPanel> mrLinePropertyPanel;
     SfxBindings* mpBindings;
     VclPtr<LineWidthValueSet> maVSWidth;
     VclPtr<FixedText> maFTCus;

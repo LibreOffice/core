@@ -57,7 +57,7 @@ ObjectContactOfObjListPainter::ObjectContactOfObjListPainter(
     const SdrObjectVector& rObjects,
     const SdrPage* pProcessedPage)
 :   ObjectContactPainter(),
-    mrTargetOutputDevice(rTargetDevice),
+    mrTargetOutputDevice(&rTargetDevice),
     maStartObjects(rObjects),
     mpProcessedPage(pProcessedPage)
 {
@@ -132,25 +132,25 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
 // VirtualDevice?
 bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
 {
-    return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
+    return (OUTDEV_VIRDEV == mrTargetOutputDevice->GetOutDevType());
 }
 
 // recording MetaFile?
 bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
 {
-    GDIMetaFile* pMetaFile = mrTargetOutputDevice.GetConnectMetaFile();
+    GDIMetaFile* pMetaFile = mrTargetOutputDevice->GetConnectMetaFile();
     return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
 }
 
 // pdf export?
 bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
 {
-    return (0 != mrTargetOutputDevice.GetPDFWriter());
+    return (0 != mrTargetOutputDevice->GetPDFWriter());
 }
 
 OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const
 {
-    return &mrTargetOutputDevice;
+    return mrTargetOutputDevice.get();
 }
 
 sal_uInt32 ObjectContactOfPagePainter::GetPaintObjectCount() const

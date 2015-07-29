@@ -150,7 +150,7 @@ namespace drawinglayer
         }
 
         TextLayouterDevice::TextLayouterDevice()
-        :   mrDevice(acquireGlobalVirtualDevice())
+        :   mrDevice(&acquireGlobalVirtualDevice())
         {
         }
 
@@ -161,7 +161,7 @@ namespace drawinglayer
 
         void TextLayouterDevice::setFont(const vcl::Font& rFont)
         {
-            mrDevice.SetFont( rFont );
+            mrDevice->SetFont( rFont );
         }
 
         void TextLayouterDevice::setFontAttribute(
@@ -180,42 +180,42 @@ namespace drawinglayer
 
         double TextLayouterDevice::getOverlineOffset() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             double fRet = (rMetric.GetIntLeading() / 2.0) - rMetric.GetAscent();
             return fRet;
         }
 
         double TextLayouterDevice::getUnderlineOffset() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             double fRet = rMetric.GetDescent() / 2.0;
             return fRet;
         }
 
         double TextLayouterDevice::getStrikeoutOffset() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             double fRet = (rMetric.GetAscent() - rMetric.GetIntLeading()) / 3.0;
             return fRet;
         }
 
         double TextLayouterDevice::getOverlineHeight() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             double fRet = rMetric.GetIntLeading() / 2.5;
             return fRet;
         }
 
         double TextLayouterDevice::getUnderlineHeight() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             double fRet = rMetric.GetDescent() / 4.0;
             return fRet;
         }
 
         double TextLayouterDevice::getTextHeight() const
         {
-            return mrDevice.GetTextHeight();
+            return mrDevice->GetTextHeight();
         }
 
         double TextLayouterDevice::getTextWidth(
@@ -223,7 +223,7 @@ namespace drawinglayer
             sal_uInt32 nIndex,
             sal_uInt32 nLength) const
         {
-            return mrDevice.GetTextWidth(rText, nIndex, nLength);
+            return mrDevice->GetTextWidth(rText, nIndex, nLength);
         }
 
         bool TextLayouterDevice::getTextOutlines(
@@ -252,7 +252,7 @@ namespace drawinglayer
                     aIntegerDXArray[a] = basegfx::fround(rDXArray[a]);
                 }
 
-                return mrDevice.GetTextOutlines(
+                return mrDevice->GetTextOutlines(
                     rB2DPolyPolyVector,
                     rText,
                     nIndex,
@@ -264,7 +264,7 @@ namespace drawinglayer
             }
             else
             {
-                return mrDevice.GetTextOutlines(
+                return mrDevice->GetTextOutlines(
                     rB2DPolyPolyVector,
                     rText,
                     nIndex,
@@ -293,7 +293,7 @@ namespace drawinglayer
             {
                 Rectangle aRect;
 
-                mrDevice.GetTextBoundRect(
+                mrDevice->GetTextBoundRect(
                     aRect,
                     rText,
                     nIndex,
@@ -314,13 +314,13 @@ namespace drawinglayer
 
         double TextLayouterDevice::getFontAscent() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             return rMetric.GetAscent();
         }
 
         double TextLayouterDevice::getFontDescent() const
         {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            const ::FontMetric& rMetric = mrDevice->GetFontMetric();
             return rMetric.GetDescent();
         }
 
@@ -330,7 +330,7 @@ namespace drawinglayer
             DrawTextFlags nStyle,
             GDIMetaFile& rGDIMetaFile) const
         {
-            mrDevice.AddTextRectActions(
+            mrDevice->AddTextRectActions(
                 rRectangle, rText, nStyle, rGDIMetaFile);
         }
 
@@ -352,7 +352,7 @@ namespace drawinglayer
             {
                 aRetval.reserve(nTextLength);
                 ::std::vector<long> aArray(nTextLength);
-                mrDevice.GetTextArray(rText, &aArray[0], nIndex, nLength);
+                mrDevice->GetTextArray(rText, &aArray[0], nIndex, nLength);
                 aRetval.assign(aArray.begin(), aArray.end());
             }
 

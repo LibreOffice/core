@@ -23,7 +23,7 @@ class SFX2_DLLPUBLIC StylePreviewRenderer
 {
 protected:
     const SfxObjectShell& mrShell;
-    OutputDevice& mrOutputDev;
+    VclPtr<OutputDevice> mrOutputDev;
     SfxStyleSheetBase* mpStyle;
     long mnMaxHeight;
 
@@ -33,7 +33,7 @@ public:
                          SfxStyleSheetBase* pStyle,
                          long nMaxHeight = 32)
         : mrShell(rShell)
-        , mrOutputDev(rOutputDev)
+        , mrOutputDev(&rOutputDev)
         , mpStyle(pStyle)
         , mnMaxHeight(nMaxHeight)
     {}

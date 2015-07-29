@@ -128,7 +128,7 @@ typedef std::map<sal_uInt16, GridFieldValueListener*> ColumnFieldValueListeners;
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 {
     osl::Mutex                          m_aMutex;
-    DbGridControl&                      m_rParent;
+    VclPtr<DbGridControl>               m_rParent;
     ::comphelper::OPropertyChangeMultiplexer*   m_pRealListener;
     sal_uInt16                          m_nId;
     sal_Int16                           m_nSuspended;
@@ -148,7 +148,7 @@ public:
 
 GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& _rField, sal_uInt16 _nId)
     :OPropertyChangeListener(m_aMutex)
-    ,m_rParent(_rParent)
+    ,m_rParent(&_rParent)
     ,m_pRealListener(NULL)
     ,m_nId(_nId)
     ,m_nSuspended(0)
@@ -171,7 +171,7 @@ void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& _evt) t
 {
     DBG_ASSERT(m_nSuspended>=0, "GridFieldValueListener::_propertyChanged : resume > suspend !");
     if (m_nSuspended <= 0)
-        m_rParent.FieldValueChanged(m_nId, _evt);
+        m_rParent->FieldValueChanged(m_nId, _evt);
 }
 
 void GridFieldValueListener::dispose()
@@ -190,25 +190,25 @@ void GridFieldValueListener::dispose()
     }
 
     m_bDisposed = true;
-    m_rParent.FieldListenerDisposing(m_nId);
+    m_rParent->FieldListenerDisposing(m_nId);
 }
 
 class DisposeListenerGridBridge : public FmXDisposeListener
 {
     osl::Mutex              m_aMutex;
-    DbGridControl&          m_rParent;
+    VclPtr<DbGridControl>   m_rParent;
     FmXDisposeMultiplexer*  m_pRealListener;
 
 public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId = -1);
     virtual ~DisposeListenerGridBridge();
 
-    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) SAL_OVERRIDE { m_rParent.disposing(_nId, _rEvent); }
+    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) SAL_OVERRIDE { m_rParent->disposing(_nId, _rEvent); }
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
     :FmXDisposeListener(m_aMutex)
-    ,m_rParent(_rParent)
+    ,m_rParent(&_rParent)
     ,m_pRealListener(NULL)
 {
 

@@ -188,7 +188,7 @@ namespace
 
 // class OAppDetailPageHelper
 OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
-    ,m_rBorderWin(_rBorderWin)
+    ,m_rBorderWin(&_rBorderWin)
     ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
     ,m_aTBPreview(VclPtr<ToolBox>::Create(this,WB_TABSTOP) )
     ,m_aBorder(VclPtr<Window>::Create(this,WB_BORDER | WB_READONLY))

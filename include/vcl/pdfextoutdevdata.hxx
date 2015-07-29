@@ -73,7 +73,7 @@ struct GlobalSyncData;
 class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 {
 
-    const OutputDevice& mrOutDev;
+    VclPtr<const OutputDevice>  mrOutDev;
 
     bool                        mbTaggedPDF;
     bool                        mbExportNotes;

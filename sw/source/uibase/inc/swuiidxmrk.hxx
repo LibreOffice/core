@@ -47,7 +47,7 @@ class SwIndexMarkModalDlg;
 
 class SwIndexMarkPane
 {
-    Dialog& m_rDialog;
+    VclPtr<Dialog> m_rDialog;
 
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
@@ -139,7 +139,7 @@ public:
                     bool bNewDlg,
                     SwWrtShell& rWrtShell);
 
-    Dialog &GetDialog() { return m_rDialog; }
+    Dialog &GetDialog() { return *m_rDialog.get(); }
 
     ~SwIndexMarkPane();
 
@@ -174,7 +174,7 @@ class SwAuthMarkModalDlg;
 
 class SwAuthorMarkPane
 {
-    Dialog& m_rDialog;
+    VclPtr<Dialog> m_rDialog;
 
     static bool     bIsFromComponent;
 

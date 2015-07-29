@@ -188,7 +188,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
     mxPointer(),
     mpSlideShow( pSlideShow ),
-    mrOutputWindow( rOutputWindow ),
+    mrOutputWindow( &rOutputWindow ),
     mpViewListeners( new SlideShowViewListeners( m_aMutex ) ),
     mpPaintListeners( new SlideShowViewPaintListeners( m_aMutex ) ),
     mpMouseListeners( new SlideShowViewMouseListeners( m_aMutex ) ),
@@ -298,7 +298,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 
     // fill the bounds rectangle in black
 
-    const Size aWindowSize( mrOutputWindow.GetSizePixel() );
+    const Size aWindowSize( mrOutputWindow->GetSizePixel() );
 
     ::basegfx::B2DPolygon aPoly( ::basegfx::tools::createPolygonFromRect(
                                      ::basegfx::B2DRectangle(0.0,0.0,
@@ -324,14 +324,14 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     ::osl::MutexGuard aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
 
-    const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
+    const Size& rTmpSize( mrOutputWindow->GetSizePixel() );
 
     if (rTmpSize.Width()<=0 || rTmpSize.Height()<=0)
     {
         return geometry::AffineMatrix2D (1,0,0,0,1,0);
     }
 
-    const Size aWindowSize( mrOutputWindow.GetSizePixel() );
+    const Size aWindowSize( mrOutputWindow->GetSizePixel() );
     Size aOutputSize( aWindowSize );
 
     if( meAnimationMode != ANIMATIONMODE_SHOW )
@@ -369,7 +369,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     mTranslationOffset.Width = aOutputOffset.X();
 
     maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
-    mrOutputWindow.SetPresentationArea( maPresentationArea );
+    mrOutputWindow->SetPresentationArea( maPresentationArea );
 
     // scale presentation into available window rect (minus 10%); center in the window
     const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(

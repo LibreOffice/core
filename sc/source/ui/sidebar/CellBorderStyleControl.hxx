@@ -31,7 +31,7 @@ class CellAppearancePropertyPanel;
 class CellBorderStyleControl : public svx::sidebar::PopupControl
 {
 private:
-    CellAppearancePropertyPanel&    mrCellAppearancePropertyPanel;
+    VclPtr<CellAppearancePropertyPanel> mrCellAppearancePropertyPanel;
     VclPtr<ToolBox>                 maTBBorder1;
     VclPtr<ToolBox>                 maTBBorder2;
     VclPtr<ToolBox>                 maTBBorder3;

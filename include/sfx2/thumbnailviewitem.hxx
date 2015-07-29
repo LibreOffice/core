@@ -69,7 +69,7 @@ class SFX2_DLLPUBLIC ThumbnailViewItem
 {
 public:
 
-    ThumbnailView &mrParent;
+    VclPtr<ThumbnailView> mrParent;
     sal_uInt16 mnId;
     bool mbVisible;
     bool mbSelected;

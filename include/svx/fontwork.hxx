@@ -57,7 +57,7 @@ class SvxFontWorkDialog;
 
 class SvxFontWorkControllerItem : public SfxControllerItem
 {
-    SvxFontWorkDialog  &rFontWorkDlg;
+    VclPtr<SvxFontWorkDialog>  rFontWorkDlg;
 
 protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,

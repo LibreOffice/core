@@ -333,14 +333,14 @@ static float GetSwapFloat( SvStream& rSt )
                                      sal_Int32&                  io_rCurrActionIndex ) :
                 mrStates(rStates),
                 mrCanvas(rCanvas),
-                mrVDev(rVDev),
+                mrVDev(&rVDev),
                 mrParms(rParms),
                 mrCurrActionIndex(io_rCurrActionIndex)
             {}
 
             VectorOfOutDevStates&       mrStates;
             const CanvasSharedPtr&      mrCanvas;
-            ::VirtualDevice&            mrVDev;
+            VclPtr<::VirtualDevice>     mrVDev;
             const Renderer::Parameters& mrParms;
             sal_Int32&                  mrCurrActionIndex;
         };

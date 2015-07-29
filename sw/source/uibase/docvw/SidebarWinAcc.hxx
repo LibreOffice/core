@@ -44,7 +44,7 @@ class SidebarWinAccessible : public VCLXWindow
         void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
 
     private:
-        SwSidebarWin& mrSidebarWin;
+        VclPtr<SwSidebarWin> mrSidebarWin;
         SwViewShell& mrViewShell;
         const SwFrm* mpAnchorFrm;
         bool bAccContextCreated;

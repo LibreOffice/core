@@ -49,7 +49,7 @@ public:
 class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox
 {
 private:
-    SvSimpleTableContainer& m_rParentTableContainer;
+    VclPtr<SvSimpleTableContainer> m_rParentTableContainer;
 
     Link<>              aHeaderBarClickLink;
     Link<>              aHeaderBarDblClickLink;

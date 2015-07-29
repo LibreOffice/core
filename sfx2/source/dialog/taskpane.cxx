@@ -515,7 +515,7 @@ namespace sfx2
     {
     public:
         ModuleTaskPane_Impl( ModuleTaskPane& i_rAntiImpl, const Reference< XFrame >& i_rDocumentFrame )
-            :m_rAntiImpl( i_rAntiImpl )
+            :m_rAntiImpl( &i_rAntiImpl )
             ,m_sModuleIdentifier( lcl_identifyModule( i_rDocumentFrame ) )
             ,m_xFrame( i_rDocumentFrame )
             ,m_aPanelDeck( VclPtr< ::svt::ToolPanelDeck>::Create(i_rAntiImpl) )
@@ -551,7 +551,7 @@ namespace sfx2
         DECL_LINK( OnActivatePanel, void* );
 
     private:
-        ModuleTaskPane&              m_rAntiImpl;
+        VclPtr<ModuleTaskPane>       m_rAntiImpl;
         const OUString               m_sModuleIdentifier;
         const Reference< XFrame >    m_xFrame;
         VclPtr< ::svt::ToolPanelDeck> m_aPanelDeck;
@@ -560,7 +560,7 @@ namespace sfx2
 
     void ModuleTaskPane_Impl::OnResize()
     {
-        m_aPanelDeck->SetPosSizePixel( Point(), m_rAntiImpl.GetOutputSizePixel() );
+        m_aPanelDeck->SetPosSizePixel( Point(), m_rAntiImpl->GetOutputSizePixel() );
     }
 
 
@@ -621,7 +621,7 @@ namespace sfx2
             ::boost::optional< size_t > aPanelPos( GetPanelPos( sFirstVisiblePanelResource ) );
             OSL_ENSURE( !!aPanelPos, "ModuleTaskPane_Impl::impl_isToolPanelResource: just inserted it, and it's not there?!" );
             if ( !!aPanelPos )
-                m_rAntiImpl.PostUserEvent( LINK( this, ModuleTaskPane_Impl, OnActivatePanel ), reinterpret_cast< void* >( *aPanelPos ) );
+                m_rAntiImpl->PostUserEvent( LINK( this, ModuleTaskPane_Impl, OnActivatePanel ), reinterpret_cast< void* >( *aPanelPos ) );
         }
     }
 
@@ -868,40 +868,40 @@ namespace sfx2
     private:
         typedef ::std::vector< PanelDescriptor >    PanelDescriptors;
 
-        ModuleTaskPane&         m_rTaskPane;
-        TitledDockingWindow&    m_rDockingWindow;
-        sal_uInt16                  m_nViewMenuID;
-        PanelSelectorLayout     m_eCurrentLayout;
-        PanelDescriptors        m_aPanelRepository;
-        bool                    m_bTogglingPanelVisibility;
-        OUString         m_sDefaultTitle;
+        VclPtr<ModuleTaskPane>       m_rTaskPane;
+        VclPtr<TitledDockingWindow>  m_rDockingWindow;
+        sal_uInt16                   m_nViewMenuID;
+        PanelSelectorLayout          m_eCurrentLayout;
+        PanelDescriptors             m_aPanelRepository;
+        bool                         m_bTogglingPanelVisibility;
+        OUString                     m_sDefaultTitle;
     };
 
 
     TaskPaneController_Impl::TaskPaneController_Impl( ModuleTaskPane& i_rTaskPane, TitledDockingWindow& i_rDockingWindow )
-        :m_rTaskPane( i_rTaskPane )
-        ,m_rDockingWindow( i_rDockingWindow )
+        :m_rTaskPane( &i_rTaskPane )
+        ,m_rDockingWindow( &i_rDockingWindow )
         ,m_nViewMenuID( 0 )
         ,m_eCurrentLayout( LAYOUT_DRAWERS )
         ,m_aPanelRepository()
         ,m_bTogglingPanelVisibility( false )
         ,m_sDefaultTitle()
     {
-        m_rDockingWindow.ResetToolBox();
-        m_nViewMenuID = m_rDockingWindow.AddDropDownToolBoxItem(
+        m_rDockingWindow->ResetToolBox();
+        m_nViewMenuID = m_rDockingWindow->AddDropDownToolBoxItem(
             SfxResId( STR_SFX_TASK_PANE_VIEW ).toString(),
             HID_TASKPANE_VIEW_MENU,
             LINK( this, TaskPaneController_Impl, OnToolboxClicked )
         );
-        m_rDockingWindow.SetEndDockingHdl( LINK( this, TaskPaneController_Impl, DockingChanged ) );
+        m_rDockingWindow->SetEndDockingHdl( LINK( this, TaskPaneController_Impl, DockingChanged ) );
         impl_setLayout(LAYOUT_DRAWERS, true);
 
-        m_rTaskPane.GetPanelDeck().AddListener( *this );
+        m_rTaskPane->GetPanelDeck().AddListener( *this );
 
         // initialize the panel repository
-        for ( size_t i = 0; i < m_rTaskPane.GetPanelDeck().GetPanelCount(); ++i )
+        for ( size_t i = 0; i < m_rTaskPane->GetPanelDeck().GetPanelCount(); ++i )
         {
-            ::svt::PToolPanel pPanel( m_rTaskPane.GetPanelDeck().GetPanel( i ) );
+            ::svt::PToolPanel pPanel( m_rTaskPane->GetPanelDeck().GetPanel( i ) );
             m_aPanelRepository.push_back( PanelDescriptor( pPanel ) );
         }
 
@@ -911,7 +911,7 @@ namespace sfx2
 
     TaskPaneController_Impl::~TaskPaneController_Impl()
     {
-        m_rTaskPane.GetPanelDeck().RemoveListener( *this );
+        m_rTaskPane->GetPanelDeck().RemoveListener( *this );
         int i = 0;
 
         // remove the panels which are not under the control of the panel deck currently
@@ -936,17 +936,17 @@ namespace sfx2
 
     void TaskPaneController_Impl::ActivateToolPanel( const OUString& i_rPanelURL )
     {
-        ::boost::optional< size_t > aPanelPos( m_rTaskPane.GetPanelPos( i_rPanelURL ) );
+        ::boost::optional< size_t > aPanelPos( m_rTaskPane->GetPanelPos( i_rPanelURL ) );
         ENSURE_OR_RETURN_VOID( !!aPanelPos, "TaskPaneController_Impl::ActivateToolPanel: no such panel!" );
 
-        if ( aPanelPos == m_rTaskPane.GetPanelDeck().GetActivePanel() )
+        if ( aPanelPos == m_rTaskPane->GetPanelDeck().GetActivePanel() )
         {
-            ::svt::PToolPanel pPanel( m_rTaskPane.GetPanelDeck().GetPanel( *aPanelPos ) );
+            ::svt::PToolPanel pPanel( m_rTaskPane->GetPanelDeck().GetPanel( *aPanelPos ) );
             pPanel->GrabFocus();
         }
         else
         {
-            m_rTaskPane.GetPanelDeck().ActivatePanel( aPanelPos );
+            m_rTaskPane->GetPanelDeck().ActivatePanel( aPanelPos );
         }
     }
 
@@ -975,7 +975,7 @@ namespace sfx2
             // pass toolbox button rect so the menu can stay open on button up
             Rectangle aMenuRect( i_pToolBox->GetItemRect( m_nViewMenuID ) );
             aMenuRect.SetPos( i_pToolBox->GetPosPixel() );
-            pMenu->Execute( &m_rDockingWindow, aMenuRect, PopupMenuFlags::ExecuteDown );
+            pMenu->Execute( m_rDockingWindow.get(), aMenuRect, PopupMenuFlags::ExecuteDown );
         }
     }
 
@@ -988,11 +988,11 @@ namespace sfx2
         switch ( i_pMenu->GetCurItemId() )
         {
             case MID_UNLOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( true );
+                m_rDockingWindow->SetFloatingMode( true );
                 break;
 
             case MID_LOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( false );
+                m_rDockingWindow->SetFloatingMode( false );
                 break;
 
             case MID_LAYOUT_DRAWERS:
@@ -1000,7 +1000,7 @@ namespace sfx2
                 break;
 
             case MID_LAYOUT_TABS:
-                impl_setLayout( lcl_getTabLayoutFromAlignment( m_rDockingWindow.GetAlignment() ) );
+                impl_setLayout( lcl_getTabLayoutFromAlignment( m_rDockingWindow->GetAlignment() ) );
                 break;
 
             default:
@@ -1097,21 +1097,21 @@ namespace sfx2
         m_bTogglingPanelVisibility = true;
         if ( m_aPanelRepository[ i_nLogicalPanelIndex ].bHidden )
         {
-            OSL_VERIFY( m_rTaskPane.GetPanelDeck().InsertPanel( m_aPanelRepository[ i_nLogicalPanelIndex ].pPanel, nActualPanelIndex ) == nActualPanelIndex );
+            OSL_VERIFY( m_rTaskPane->GetPanelDeck().InsertPanel( m_aPanelRepository[ i_nLogicalPanelIndex ].pPanel, nActualPanelIndex ) == nActualPanelIndex );
             // if there has not been an active panel before, activate the newly inserted one
-            ::boost::optional< size_t > aActivePanel( m_rTaskPane.GetPanelDeck().GetActivePanel() );
+            ::boost::optional< size_t > aActivePanel( m_rTaskPane->GetPanelDeck().GetActivePanel() );
             if ( !aActivePanel )
                 aActivatePanel = nActualPanelIndex;
         }
         else
         {
-            OSL_VERIFY( m_rTaskPane.GetPanelDeck().RemovePanel( nActualPanelIndex ).get() == m_aPanelRepository[ i_nLogicalPanelIndex ].pPanel.get() );
+            OSL_VERIFY( m_rTaskPane->GetPanelDeck().RemovePanel( nActualPanelIndex ).get() == m_aPanelRepository[ i_nLogicalPanelIndex ].pPanel.get() );
         }
         m_bTogglingPanelVisibility = false;
         m_aPanelRepository[ i_nLogicalPanelIndex ].bHidden = !m_aPanelRepository[ i_nLogicalPanelIndex ].bHidden;
 
         if ( !!aActivatePanel )
-            m_rTaskPane.GetPanelDeck().ActivatePanel( *aActivatePanel );
+            m_rTaskPane->GetPanelDeck().ActivatePanel( *aActivatePanel );
     }
 
 
@@ -1123,19 +1123,19 @@ namespace sfx2
         switch ( i_eLayout )
         {
         case LAYOUT_DRAWERS:
-            m_rTaskPane.SetDrawersLayout();
+            m_rTaskPane->SetDrawersLayout();
             break;
         case LAYOUT_TABS_TOP:
-            m_rTaskPane.SetTabsLayout( ::svt::TABS_TOP, ::svt::TABITEM_IMAGE_ONLY );
+            m_rTaskPane->SetTabsLayout( ::svt::TABS_TOP, ::svt::TABITEM_IMAGE_ONLY );
             break;
         case LAYOUT_TABS_BOTTOM:
-            m_rTaskPane.SetTabsLayout( ::svt::TABS_BOTTOM, ::svt::TABITEM_IMAGE_ONLY );
+            m_rTaskPane->SetTabsLayout( ::svt::TABS_BOTTOM, ::svt::TABITEM_IMAGE_ONLY );
             break;
         case LAYOUT_TABS_LEFT:
-            m_rTaskPane.SetTabsLayout( ::svt::TABS_LEFT, ::svt::TABITEM_IMAGE_ONLY );
+            m_rTaskPane->SetTabsLayout( ::svt::TABS_LEFT, ::svt::TABITEM_IMAGE_ONLY );
             break;
         case LAYOUT_TABS_RIGHT:
-            m_rTaskPane.SetTabsLayout( ::svt::TABS_RIGHT, ::svt::TABITEM_IMAGE_ONLY );
+            m_rTaskPane->SetTabsLayout( ::svt::TABS_RIGHT, ::svt::TABITEM_IMAGE_ONLY );
             break;
         }
         m_eCurrentLayout = i_eLayout;
@@ -1146,9 +1146,9 @@ namespace sfx2
 
     void TaskPaneController_Impl::impl_updateDockingWindowTitle()
     {
-        ::boost::optional< size_t > aActivePanel( m_rTaskPane.GetPanelDeck().GetActivePanel() );
+        ::boost::optional< size_t > aActivePanel( m_rTaskPane->GetPanelDeck().GetActivePanel() );
         if ( !aActivePanel || ( impl_getLayout() == LAYOUT_DRAWERS ) )
-            m_rDockingWindow.SetTitle( m_sDefaultTitle );
+            m_rDockingWindow->SetTitle( m_sDefaultTitle );
         else
         {
             size_t nNewActive( *aActivePanel );
@@ -1159,7 +1159,7 @@ namespace sfx2
 
                 if ( !nNewActive )
                 {
-                    m_rDockingWindow.SetTitle( m_aPanelRepository[i].pPanel->GetDisplayName() );
+                    m_rDockingWindow->SetTitle( m_aPanelRepository[i].pPanel->GetDisplayName() );
                     break;
                 }
                 --nNewActive;
@@ -1201,7 +1201,7 @@ namespace sfx2
 #endif
 
         // Add entry for docking or un-docking the tool panel.
-        if ( m_rDockingWindow.IsFloatingMode() )
+        if ( m_rDockingWindow->IsFloatingMode() )
             pMenu->InsertItem(
                 MID_LOCK_TASK_PANEL,
                 SfxResId( STR_SFX_DOCK ).toString()

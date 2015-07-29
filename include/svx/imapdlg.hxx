@@ -60,7 +60,7 @@ class SvxIMapDlg;
 
 class SvxIMapDlgItem : public SfxControllerItem
 {
-    SvxIMapDlg& rIMap;
+    VclPtr<SvxIMapDlg> rIMap;
 
 
 protected:

@@ -48,7 +48,7 @@ ToolbarMenuAcc::ToolbarMenuAcc( ToolbarMenu_Impl& rParent )
 , mpParent( &rParent )
 , mbIsFocused(false)
 {
-    mpParent->mrMenu.AddEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
+    mpParent->mrMenu->AddEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
 }
 
 
@@ -56,7 +56,7 @@ ToolbarMenuAcc::ToolbarMenuAcc( ToolbarMenu_Impl& rParent )
 ToolbarMenuAcc::~ToolbarMenuAcc()
 {
     if( mpParent )
-        mpParent->mrMenu.RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
+        mpParent->mrMenu->RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
 }
 
 
@@ -88,7 +88,7 @@ void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         case VCLEVENT_OBJECT_DYING:
         {
-            mpParent->mrMenu.RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
+            mpParent->mrMenu->RemoveEventListener( LINK( this, ToolbarMenuAcc, WindowEventListener ) );
             mpParent = 0;
         }
         break;
@@ -182,7 +182,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleParent() throw (R
 
     Reference< XAccessible > xRet;
 
-    vcl::Window* pParent = mpParent->mrMenu.GetParent();
+    vcl::Window* pParent = mpParent->mrMenu->GetParent();
     if( pParent )
         xRet = pParent->GetAccessible();
 
@@ -196,12 +196,12 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleIndexInParent() throw (RuntimeEx
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
-    vcl::Window* pParent = mpParent->mrMenu.GetParent();
+    vcl::Window* pParent = mpParent->mrMenu->GetParent();
     if( pParent )
     {
         for( sal_uInt16 i = 0, nCount = pParent->GetChildCount(); i < nCount ; i++ )
         {
-            if( pParent->GetChild( i ) == &mpParent->mrMenu )
+            if( pParent->GetChild( i ) == mpParent->mrMenu.get() )
                 return i;
         }
     }
@@ -234,12 +234,12 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleName() throw (RuntimeException, s
     OUString aRet;
 
     if( mpParent )
-        aRet = mpParent->mrMenu.GetAccessibleName();
+        aRet = mpParent->mrMenu->GetAccessibleName();
 
     if( aRet.isEmpty() )
     {
-        vcl::Window* pLabel = mpParent->mrMenu.GetAccessibleRelationLabeledBy();
-        if( pLabel && pLabel != &mpParent->mrMenu )
+        vcl::Window* pLabel = mpParent->mrMenu->GetAccessibleRelationLabeledBy();
+        if( pLabel && pLabel != mpParent->mrMenu.get() )
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
     }
 
@@ -385,8 +385,8 @@ awt::Rectangle SAL_CALL ToolbarMenuAcc::getBounds() throw (RuntimeException, std
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const Point         aOutPos( mpParent->mrMenu.GetPosPixel() );
-    const Size          aOutSize( mpParent->mrMenu.GetOutputSizePixel() );
+    const Point         aOutPos( mpParent->mrMenu->GetPosPixel() );
+    const Size          aOutSize( mpParent->mrMenu->GetOutputSizePixel() );
     awt::Rectangle      aRet;
 
     aRet.X = aOutPos.X();
@@ -403,7 +403,7 @@ awt::Point SAL_CALL ToolbarMenuAcc::getLocation() throw (RuntimeException, std::
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const Point aOutPos( mpParent->mrMenu.GetPosPixel() );
+    const Point aOutPos( mpParent->mrMenu->GetPosPixel() );
     return awt::Point( aOutPos.X(), aOutPos.Y() );
 }
 
@@ -413,7 +413,7 @@ awt::Point SAL_CALL ToolbarMenuAcc::getLocationOnScreen()  throw (RuntimeExcepti
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const Point aScreenPos( mpParent->mrMenu.OutputToAbsoluteScreenPixel( Point() ) );
+    const Point aScreenPos( mpParent->mrMenu->OutputToAbsoluteScreenPixel( Point() ) );
     return awt::Point( aScreenPos.X(), aScreenPos.Y() );
 }
 
@@ -423,7 +423,7 @@ awt::Size SAL_CALL ToolbarMenuAcc::getSize() throw (RuntimeException, std::excep
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const Size aOutSize( mpParent->mrMenu.GetOutputSizePixel() );
+    const Size aOutSize( mpParent->mrMenu->GetOutputSizePixel() );
     return awt::Size( aOutSize.Width(), aOutSize.Height() );
 }
 
@@ -431,7 +431,7 @@ void SAL_CALL ToolbarMenuAcc::grabFocus() throw (RuntimeException, std::exceptio
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    mpParent->mrMenu.GrabFocus();
+    mpParent->mrMenu->GrabFocus();
 }
 
 sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException, std::exception)
@@ -651,7 +651,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuEntryAcc::getAccessibleParent() thr
     Reference< XAccessible > xRet;
 
     if( mpParent )
-        xRet = mpParent->mrMenu.GetAccessible();
+        xRet = mpParent->mrMenu->GetAccessible();
 
     return xRet;
 }
@@ -667,7 +667,7 @@ sal_Int32 SAL_CALL ToolbarMenuEntryAcc::getAccessibleIndexInParent() throw (Runt
 
     if( mpParent )
     {
-        Reference< XAccessibleContext > xParent( mpParent->mrMenu.GetAccessible(), UNO_QUERY );
+        Reference< XAccessibleContext > xParent( mpParent->mrMenu->GetAccessible(), UNO_QUERY );
 
         if( xParent.is() )
         {
@@ -749,7 +749,7 @@ Reference< XAccessibleStateSet > SAL_CALL ToolbarMenuEntryAcc::getAccessibleStat
             pStateSet->AddState( AccessibleStateType::SELECTABLE );
 
             // SELECTED
-            if( mpParent->mrMenu.getHighlightedEntryId() == mpParent->mnEntryId )
+            if( mpParent->mrMenu->getHighlightedEntryId() == mpParent->mnEntryId )
                 pStateSet->AddState( AccessibleStateType::SELECTED );
         }
     }
@@ -839,7 +839,7 @@ awt::Rectangle SAL_CALL ToolbarMenuEntryAcc::getBounds() throw (RuntimeException
     {
         Rectangle   aRect( mpParent->maRect );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrMenu.GetOutputSizePixel() );
+        Rectangle   aParentRect( aOrigin, mpParent->mrMenu->GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 
@@ -869,7 +869,7 @@ awt::Point SAL_CALL ToolbarMenuEntryAcc::getLocationOnScreen() throw (RuntimeExc
 
     if( mpParent )
     {
-        const Point aScreenPos( mpParent->mrMenu.OutputToAbsoluteScreenPixel( mpParent->maRect.TopLeft() ) );
+        const Point aScreenPos( mpParent->mrMenu->OutputToAbsoluteScreenPixel( mpParent->maRect.TopLeft() ) );
 
         aRet.X = aScreenPos.X();
         aRet.Y = aScreenPos.Y();

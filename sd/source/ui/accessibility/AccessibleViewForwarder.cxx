@@ -34,7 +34,7 @@ namespace accessibility {
 AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice)
     : mpView (pView),
       mnWindowId (0),
-      mrDevice (rDevice)
+      mrDevice (&rDevice)
 {
     // Search the output device to determine its id.
     for(sal_uInt32 a(0L); a < mpView->PaintWindowCount(); a++)

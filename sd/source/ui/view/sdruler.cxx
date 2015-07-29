@@ -37,7 +37,7 @@ namespace sd {
  */
 class RulerCtrlItem : public SfxControllerItem
 {
-    Ruler &rRuler;
+    VclPtr<Ruler> rRuler;
 
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
@@ -49,7 +49,7 @@ class RulerCtrlItem : public SfxControllerItem
 
 RulerCtrlItem::RulerCtrlItem(sal_uInt16 _nId, Ruler& rRlr, SfxBindings& rBind)
 : SfxControllerItem(_nId, rBind)
-, rRuler(rRlr)
+, rRuler(&rRlr)
 {
 }
 
@@ -62,7 +62,7 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
             const SfxPointItem* pItem = dynamic_cast< const SfxPointItem* >(pState);
             DBG_ASSERT(pState == nullptr || pItem != nullptr, "SfxPointItem expected");
             if ( pItem )
-                rRuler.SetNullOffset(pItem->GetValue());
+                rRuler->SetNullOffset(pItem->GetValue());
         }
         break;
     }

@@ -18,7 +18,7 @@ namespace avmedia { namespace ogl {
 OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, vcl::Window& rEventHandlerParent )
     : m_rHandle( rHandle )
     , m_rContext( rContext )
-    , m_rEventHandler( rEventHandlerParent )
+    , m_rEventHandler( &rEventHandlerParent )
     , m_bVisible ( false )
     , m_aLastMousePos(Point(0,0))
     , m_bIsOrbitMode( false )
@@ -77,9 +77,9 @@ uno::Sequence< OUString > SAL_CALL OGLWindow::getSupportedServiceNames() throw (
 
 void SAL_CALL OGLWindow::dispose() throw (uno::RuntimeException, std::exception)
 {
-    assert(m_rEventHandler.GetParent());
-    m_rEventHandler.GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
-    m_rEventHandler.RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
+    assert(m_rEventHandler->GetParent());
+    m_rEventHandler->GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
+    m_rEventHandler->RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
 }
 
 void SAL_CALL OGLWindow::addEventListener( const uno::Reference< lang::XEventListener >& )
@@ -116,17 +116,17 @@ awt::Rectangle SAL_CALL OGLWindow::getPosSize()
 void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
-    assert(m_rEventHandler.GetParent());
+    assert(m_rEventHandler->GetParent());
     if( bSet && !m_bVisible )
     {
-        m_rEventHandler.GetParent()->AddEventListener( LINK(this, OGLWindow, FocusGrabber));
-        m_rEventHandler.AddEventListener( LINK(this, OGLWindow, CameraHandler));
-        m_rEventHandler.GrabFocus();
+        m_rEventHandler->GetParent()->AddEventListener( LINK(this, OGLWindow, FocusGrabber));
+        m_rEventHandler->AddEventListener( LINK(this, OGLWindow, CameraHandler));
+        m_rEventHandler->GrabFocus();
     }
     else if( !bSet )
     {
-        m_rEventHandler.GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
-        m_rEventHandler.RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
+        m_rEventHandler->GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
+        m_rEventHandler->RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
     }
     m_bVisible = bSet;
 }
@@ -209,19 +209,19 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
         if(pMouseEvt)
         {
             const Point& rMousePos = pMouseEvt->GetPosPixel();
-            const Rectangle aWinRect(m_rEventHandler.GetPosPixel(),m_rEventHandler.GetSizePixel());
+            const Rectangle aWinRect(m_rEventHandler->GetPosPixel(),m_rEventHandler->GetSizePixel());
             // Grab focus to the OpenGL window when mouse pointer is over it
             if( aWinRect.IsInside(rMousePos) )
             {
-                if ( !m_rEventHandler.HasFocus() )
+                if ( !m_rEventHandler->HasFocus() )
                 {
-                    m_rEventHandler.GrabFocus();
+                    m_rEventHandler->GrabFocus();
                 }
             }
             // Move focus to the document when mouse is not over the OpenGL window
-            else if ( m_rEventHandler.HasFocus() )
+            else if ( m_rEventHandler->HasFocus() )
             {
-                m_rEventHandler.GrabFocusToDocument();
+                m_rEventHandler->GrabFocusToDocument();
             }
         }
     }
@@ -346,9 +346,9 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
     }
     else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
-        if ( !m_rEventHandler.HasFocus() )
+        if ( !m_rEventHandler->HasFocus() )
         {
-            m_rEventHandler.GrabFocus();
+            m_rEventHandler->GrabFocus();
         }
         MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
         if(pMouseEvt && pMouseEvt->IsLeft() && m_aLastMousePos != Point(0,0))

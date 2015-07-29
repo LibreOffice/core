@@ -66,7 +66,7 @@ private:
     Image               maRotLeft;
     Image               maRotRight;
 
-    AreaPropertyPanelBase& mrAreaPropertyPanel;
+    VclPtr<AreaPropertyPanelBase> mrAreaPropertyPanel;
     DECL_LINK( ModifiedTrgrHdl_Impl, void* );
     DECL_LINK_TYPED( Left_Click45_Impl, ToolBox*, void );
     DECL_LINK_TYPED( Right_Click45_Impl, ToolBox*, void );

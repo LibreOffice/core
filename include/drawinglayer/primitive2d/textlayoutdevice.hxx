@@ -27,6 +27,7 @@
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <vcl/vclptr.hxx>
 
 // predefines
 class VirtualDevice;
@@ -57,7 +58,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC TextLayouterDevice
         {
             /// internally used VirtualDevice
-            VirtualDevice&                  mrDevice;
+            VclPtr<VirtualDevice>               mrDevice;
 
         public:
             /// constructor/destructor

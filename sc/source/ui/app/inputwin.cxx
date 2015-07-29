@@ -174,7 +174,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
         aWndPos         ( VclPtr<ScPosWnd>::Create(this) ),
         pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
-        aTextWindow     ( *pRuntimeWindow ),
+        aTextWindow     ( pRuntimeWindow ),
         pInputHdl       ( NULL ),
         aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // Not always new as a Resource
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
@@ -207,12 +207,12 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     InsertItem      (SID_INPUT_SUM,      IMAGE(SID_INPUT_SUM), ToolBoxItemBits::NONE, 3);
     InsertItem      (SID_INPUT_EQUAL,    IMAGE(SID_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
     InsertSeparator (5);
-    InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 6);
+    InsertWindow    (7, aTextWindow.get(), ToolBoxItemBits::NONE, 6);
 
     aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
     aWndPos   ->SetHelpId       (HID_INSWIN_POS);
-    aTextWindow.SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-    aTextWindow.SetHelpId       (HID_INSWIN_INPUT);
+    aTextWindow->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    aTextWindow->SetHelpId       (HID_INSWIN_INPUT);
 
     // No SetHelpText: the helptexts come from the Help
     SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
@@ -227,7 +227,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
     aWndPos   ->Show();
-    aTextWindow.Show();
+    aTextWindow->Show();
 
     pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
     if (pInputHdl)
@@ -238,14 +238,14 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         // Switch over while the Function AutoPilot is active
         // -> show content of the Function AutoPilot again
         // Also show selection (remember at the InputHdl)
-        aTextWindow.SetTextString( pInputHdl->GetFormString() );
+        aTextWindow->SetTextString( pInputHdl->GetFormString() );
     }
     else if (pInputHdl && pInputHdl->IsInputMode())
     {
         // If the input row was hidden while editing (e.g. when editing a formula
         // and then switching to another document or the help), display the text
         // we just edited from the InputHandler
-        aTextWindow.SetTextString( pInputHdl->GetEditString() ); // Dispaly text
+        aTextWindow->SetTextString( pInputHdl->GetEditString() ); // Dispaly text
         if ( pInputHdl->IsTopMode() )
             pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }
@@ -396,7 +396,7 @@ void ScInputWindow::Select()
         case SID_INPUT_OK:
             pScMod->InputEnterHandler();
             SetSumAssignMode();
-            aTextWindow.Invalidate(); // Or else the Selection remains
+            aTextWindow->Invalidate(); // Or else the Selection remains
             break;
 
         case SID_INPUT_SUM:
@@ -503,10 +503,10 @@ void ScInputWindow::Select()
 
         case SID_INPUT_EQUAL:
         {
-            aTextWindow.StartEditEngine();
+            aTextWindow->StartEditEngine();
             if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
             {
-                aTextWindow.StartEditEngine();
+                aTextWindow->StartEditEngine();
 
                 sal_Int32 nStartPos = 1;
                 sal_Int32 nEndPos = 1;
@@ -514,7 +514,7 @@ void ScInputWindow::Select()
                 ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
                 if ( pViewSh )
                 {
-                    const OUString& rString = aTextWindow.GetTextString();
+                    const OUString& rString = aTextWindow->GetTextString();
                     const sal_Int32 nLen = rString.getLength();
 
                     ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
@@ -524,7 +524,7 @@ void ScInputWindow::Select()
                         case CELLTYPE_VALUE:
                         {
                             nEndPos = nLen + 1;
-                            aTextWindow.SetTextString("=" +  rString);
+                            aTextWindow->SetTextString("=" +  rString);
                             break;
                         }
                         case CELLTYPE_STRING:
@@ -536,12 +536,12 @@ void ScInputWindow::Select()
                             nEndPos = nLen;
                             break;
                         default:
-                            aTextWindow.SetTextString("=");
+                            aTextWindow->SetTextString("=");
                             break;
                     }
                 }
 
-                EditView* pView = aTextWindow.GetEditView();
+                EditView* pView = aTextWindow->GetEditView();
                 if (pView)
                 {
                     pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
@@ -574,7 +574,7 @@ void ScInputWindow::Resize()
     ToolBox::Resize();
     if ( mbIsMultiLine )
     {
-        aTextWindow.Resize();
+        aTextWindow->Resize();
         Size aSize = GetSizePixel();
         aSize.Height() = CalcWindowSizePixel().Height() + ADDITIONAL_BORDER;
         ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
@@ -595,13 +595,13 @@ void ScInputWindow::Resize()
     else
     {
         long nWidth = GetSizePixel().Width();
-        long nLeft  = aTextWindow.GetPosPixel().X();
-        Size aSize  = aTextWindow.GetSizePixel();
+        long nLeft  = aTextWindow->GetPosPixel().X();
+        Size aSize  = aTextWindow->GetSizePixel();
 
         aSize.Width() = std::max( ((long)(nWidth - nLeft - 5)), (long)0 );
 
-        aTextWindow.SetSizePixel( aSize );
-        aTextWindow.Invalidate();
+        aTextWindow->SetSizePixel( aSize );
+        aTextWindow->Invalidate();
     }
 }
 
@@ -610,15 +610,15 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
     //! new method at ScModule to query if function autopilot is open
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
-    aTextWindow.StartEditEngine();
+    aTextWindow->StartEditEngine();
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->IsEditMode() )
     {
         if ( bDoEdit )
-            aTextWindow.GrabFocus();
-        aTextWindow.SetTextString( rString );
-        EditView* pView = aTextWindow.GetEditView();
+            aTextWindow->GrabFocus();
+        aTextWindow->SetTextString( rString );
+        EditView* pView = aTextWindow->GetEditView();
         if (pView)
         {
             sal_Int32 nLen = rString.getLength();
@@ -646,9 +646,9 @@ void ScInputWindow::SetPosString( const OUString& rStr )
 void ScInputWindow::SetTextString( const OUString& rString )
 {
     if (rString.getLength() <= 32767)
-        aTextWindow.SetTextString(rString);
+        aTextWindow->SetTextString(rString);
     else
-        aTextWindow.SetTextString(rString.copy(0, 32767));
+        aTextWindow->SetTextString(rString.copy(0, 32767));
 }
 
 void ScInputWindow::SetOkCancelMode()
@@ -701,7 +701,7 @@ void ScInputWindow::SetSumAssignMode()
 void ScInputWindow::SetFormulaMode( bool bSet )
 {
     aWndPos->SetFormulaMode(bSet);
-    aTextWindow.SetFormulaMode(bSet);
+    aTextWindow->SetFormulaMode(bSet);
 }
 
 void ScInputWindow::SetText( const OUString& rString )
@@ -716,43 +716,43 @@ OUString ScInputWindow::GetText() const
 
 bool ScInputWindow::IsInputActive()
 {
-    return aTextWindow.IsInputActive();
+    return aTextWindow->IsInputActive();
 }
 
 EditView* ScInputWindow::GetEditView()
 {
-    return aTextWindow.GetEditView();
+    return aTextWindow->GetEditView();
 }
 
 void ScInputWindow::MakeDialogEditView()
 {
-    aTextWindow.MakeDialogEditView();
+    aTextWindow->MakeDialogEditView();
 }
 
 void ScInputWindow::StopEditEngine( bool bAll )
 {
-    aTextWindow.StopEditEngine( bAll );
+    aTextWindow->StopEditEngine( bAll );
 }
 
 void ScInputWindow::TextGrabFocus()
 {
-    aTextWindow.TextGrabFocus();
+    aTextWindow->TextGrabFocus();
 }
 
 void ScInputWindow::TextInvalidate()
 {
-    aTextWindow.Invalidate();
+    aTextWindow->Invalidate();
 }
 
 void ScInputWindow::SwitchToTextWin()
 {
     // used for shift-ctrl-F2
 
-    aTextWindow.StartEditEngine();
+    aTextWindow->StartEditEngine();
     if ( SC_MOD()->IsEditMode() )
     {
-        aTextWindow.TextGrabFocus();
-        EditView* pView = aTextWindow.GetEditView();
+        aTextWindow->TextGrabFocus();
+        EditView* pView = aTextWindow->GetEditView();
         if (pView)
         {
             sal_Int32 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
@@ -1161,7 +1161,7 @@ void ScInputBarGroup::TextGrabFocus()
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
     : ScTextWnd( pParen, pViewSh ),
-      mrGroupBar(* pParen ),
+      mrGroupBar( pParen ),
       mnLines( 1 ),
       mnLastExpandedLines( INPUTWIN_MULTILINES ),
       mbInvalidate( false )
@@ -1173,6 +1173,13 @@ ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh
 
 ScMultiTextWnd::~ScMultiTextWnd()
 {
+    disposeOnce();
+}
+
+void ScMultiTextWnd::dispose()
+{
+    mrGroupBar.clear();
+    ScTextWnd::dispose();
 }
 
 void ScMultiTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
@@ -1268,7 +1275,7 @@ void ScMultiTextWnd::SetScrollBarRange()
 {
     if ( pEditView )
     {
-        ScrollBar& rVBar = mrGroupBar.GetScrollBar();
+        ScrollBar& rVBar = mrGroupBar->GetScrollBar();
         rVBar.SetRange( Range( 0, GetEditEngTxtHeight() ) );
         long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
         rVBar.SetThumbPos( currentDocPos );
@@ -1280,7 +1287,7 @@ ScMultiTextWnd::DoScroll()
 {
     if ( pEditView )
     {
-        ScrollBar& rVBar = mrGroupBar.GetScrollBar();
+        ScrollBar& rVBar = mrGroupBar->GetScrollBar();
         long currentDocPos = pEditView->GetVisArea().TopLeft().Y();
         long nDiff = currentDocPos - rVBar.GetThumbPos();
         pEditView->Scroll( 0, nDiff );

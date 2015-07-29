@@ -80,7 +80,7 @@ void ToolbarMenuEntry::init( int nEntryId, MenuItemBits nBits )
 
 
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const OUString& rText, MenuItemBits nBits )
-: mrMenu( rMenu )
+: mrMenu( &rMenu )
 {
     init( nEntryId, nBits );
 
@@ -91,7 +91,7 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const OUSt
 
 
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const OUString& rText, MenuItemBits nBits )
-: mrMenu( rMenu )
+: mrMenu( &rMenu )
 {
     init( nEntryId, nBits );
 
@@ -105,7 +105,7 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Imag
 
 
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, Control* pControl, MenuItemBits nBits )
-: mrMenu( rMenu )
+: mrMenu( &rMenu )
 {
     init( nEntryId, nBits );
 
@@ -189,7 +189,7 @@ Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index )
 
 
 ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
-: mrMenu( rMenu )
+: mrMenu( &rMenu )
 , mxFrame( xFrame )
 , mnCheckPos(0)
 , mnImagePos(0)
@@ -319,7 +319,7 @@ void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (Ind
                 }
                 else if( pEntry->mnEntryId != TITLE_ID )
                 {
-                    mrMenu.implSelectEntry( nEntry );
+                    mrMenu->implSelectEntry( nEntry );
                 }
                 return;
             }
@@ -370,7 +370,7 @@ void ToolbarMenu_Impl::clearAccessibleSelection()
 {
     if( mnHighlightedEntry != -1 )
     {
-        mrMenu.Invalidate();
+        mrMenu->Invalidate();
         mnHighlightedEntry = -1;
     }
 }

@@ -53,7 +53,7 @@ private:
 
     sal_uInt16 mnColumnType;
 
-    PagePropertyPanel& mrPagePropPanel;
+    VclPtr<PagePropertyPanel> mrPagePropPanel;
 
     DECL_LINK(ImplColumnHdl, void*);
     DECL_LINK(MoreButtonClickHdl_Impl, void*);

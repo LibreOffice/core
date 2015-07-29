@@ -727,7 +727,7 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     msName( rName ),
     mxParent(rxParent),
     mpBoundingBox( new Rectangle( rBoundingBox ) ),
-    mrParentWindow( rParentWindow ),
+    mrParentWindow( &rParentWindow ),
     mnClientId( 0 ),
     mnIndexInParent( nIndexInParent ),
     mbIsChecked( false )
@@ -797,7 +797,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
     ThrowExceptionIfNotAlive();
-    return mrParentWindow.GetControlForeground().GetColor();
+    return mrParentWindow->GetControlForeground().GetColor();
 }
 sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -806,7 +806,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
     ::osl::MutexGuard   aGuard( maMutex );
 
     ThrowExceptionIfNotAlive();
-    return mrParentWindow.GetControlBackground().GetColor();
+    return mrParentWindow->GetControlBackground().GetColor();
 }
 
 // XAccessibleContext
@@ -1082,7 +1082,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBoxOnScreen() throw( Runt
     // no ThrowExceptionIfNotAlive() because its done in GetBoundingBox()
     Rectangle           aRect( GetBoundingBox() );
 
-    return Rectangle( mrParentWindow.OutputToScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
+    return Rectangle( mrParentWindow->OutputToScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
 }
 
 Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox() throw( RuntimeException )

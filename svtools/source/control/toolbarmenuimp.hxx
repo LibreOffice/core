@@ -63,7 +63,7 @@ const int BORDER_Y = 0;
 class ToolbarMenuEntry
 {
 public:
-    ToolbarMenu& mrMenu;
+    VclPtr<ToolbarMenu> mrMenu;
 
     int mnEntryId;
     MenuItemBits mnBits;
@@ -249,7 +249,7 @@ private:
 
 struct ToolbarMenu_Impl
 {
-    ToolbarMenu& mrMenu;
+    VclPtr<ToolbarMenu> mrMenu;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              mxFrame;
     rtl::Reference< svt::FrameStatusListener >                                       mxStatusListener;

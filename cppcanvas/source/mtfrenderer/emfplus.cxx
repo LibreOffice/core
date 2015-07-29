@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/virdev.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/tools/tools.hxx>
@@ -2177,7 +2178,7 @@ namespace cppcanvas
                                         0,
                                         stringLength,
                                         NULL,
-                                        rFactoryParms.mrVDev,
+                                        *rFactoryParms.mrVDev.get(),
                                         rFactoryParms.mrCanvas,
                                         rState,
                                         rFactoryParms.mrParms,
@@ -2434,7 +2435,7 @@ namespace cppcanvas
                                         0,
                                         glyphsCount,
                                         NULL,
-                                        rFactoryParms.mrVDev,
+                                        *rFactoryParms.mrVDev.get(),
                                         rFactoryParms.mrCanvas,
                                         rState,
                                         rFactoryParms.mrParms,

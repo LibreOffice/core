@@ -79,7 +79,7 @@ namespace accessibility
         DECL_LINK( NotifyHdl, EENotify* );
 
         SdrView&                        mrView;
-        const vcl::Window& mrWindow;
+        VclPtr<const vcl::Window>       mrWindow;
         SdrOutliner*                    mpOutliner;
         OutlinerView* mpOutlinerView;
 

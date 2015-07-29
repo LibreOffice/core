@@ -54,12 +54,12 @@ namespace {
     {
     public:
         explicit DeactivateUpdateMode( SfxSplitWindow& rSplitWindow )
-            : mrSplitWindow( rSplitWindow )
+            : mrSplitWindow( &rSplitWindow )
             , mbUpdateMode( rSplitWindow.IsUpdateMode() )
         {
             if ( mbUpdateMode )
             {
-                mrSplitWindow.SetUpdateMode( false );
+                mrSplitWindow->SetUpdateMode( false );
             }
         }
 
@@ -67,12 +67,12 @@ namespace {
         {
             if ( mbUpdateMode )
             {
-                mrSplitWindow.SetUpdateMode( true );
+                mrSplitWindow->SetUpdateMode( true );
             }
         }
 
     private:
-        SfxSplitWindow& mrSplitWindow;
+        VclPtr<SfxSplitWindow> mrSplitWindow;
         const bool mbUpdateMode;
     };
 }

@@ -169,6 +169,7 @@ class ScMultiTextWnd : public ScTextWnd
 public:
     ScMultiTextWnd( ScInputBarGroup* pParent, ScTabViewShell* pViewSh );
     virtual ~ScMultiTextWnd();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void StartEditEngine() SAL_OVERRIDE;
     virtual void StopEditEngine( bool bAll ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -189,7 +190,7 @@ protected:
     DECL_LINK( NotifyHdl, EENotify* );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
-    ScInputBarGroup& mrGroupBar;
+    VclPtr<ScInputBarGroup> mrGroupBar;
     long mnLines;
     long mnLastExpandedLines;
     long mnBorderHeight;
@@ -285,7 +286,7 @@ protected:
 private:
     VclPtr<ScPosWnd>  aWndPos;
     VclPtr<ScTextWndBase> pRuntimeWindow;
-    ScTextWndBase&  aTextWindow;
+    VclPtr<ScTextWndBase> aTextWindow;
     ScInputHandler* pInputHdl;
     OUString        aTextOk;
     OUString        aTextCancel;

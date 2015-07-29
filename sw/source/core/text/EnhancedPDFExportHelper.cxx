@@ -1453,7 +1453,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       bool bEditEngineOnly,
                                                       const SwPrintData& rPrintData )
     : mrSh( rSh ),
-      mrOut( rOut ),
+      mrOut( &rOut ),
       mpRangeEnum( 0 ),
       mbSkipEmptyPages( bSkipEmptyPages ),
       mbEditEngineOnly( bEditEngineOnly ),
@@ -1533,7 +1533,7 @@ Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrm* pCurrPage,
 void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
-        PTR_CAST( vcl::PDFExtOutDevData, mrOut.GetExtOutDevData() );
+        PTR_CAST( vcl::PDFExtOutDevData, mrOut->GetExtOutDevData() );
 
     if ( !pPDFExtOutDevData )
         return;
@@ -1545,10 +1545,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     // Prepare the output device:
 
-    mrOut.Push( PushFlags::MAPMODE );
-    MapMode aMapMode( mrOut.GetMapMode() );
+    mrOut->Push( PushFlags::MAPMODE );
+    MapMode aMapMode( mrOut->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
-    mrOut.SetMapMode( aMapMode );
+    mrOut->SetMapMode( aMapMode );
 
     // Create new cursor and lock the view:
 
@@ -2135,7 +2135,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     // Restore view, cursor, and outdev:
     mrSh.LockView( bOldLockView );
     mrSh.SwCrsrShell::Pop( false );
-    mrOut.Pop();
+    mrOut->Pop();
 }
 
 // Returns the page number in the output pdf on which the given rect is located.
@@ -2157,7 +2157,7 @@ std::vector< sal_Int32 > SwEnhancedPDFExportHelper::CalcOutputPageNums(
     std::vector< sal_Int32 > aPageNums;
 
     // Document page number.
-    sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
+    sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( *mrOut.get(), rRect );
     if ( nPageNumOfRect < 0 )
         return aPageNums;
 
@@ -2215,7 +2215,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
 {
     // We assume, that the primary link has just been exported. Therefore
     // the offset of the link rectangle calculates as follows:
-    const Point aOffset = rLinkRect.Pos() + mrOut.GetMapMode().GetOrigin();
+    const Point aOffset = rLinkRect.Pos() + mrOut->GetMapMode().GetOrigin();
 
     SwIterator<SwTextFrm,SwTextNode> aIter( rTNd );
     for ( SwTextFrm* pTmpFrm = aIter.First(); pTmpFrm; pTmpFrm = aIter.Next() )

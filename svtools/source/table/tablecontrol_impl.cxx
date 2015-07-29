@@ -223,7 +223,7 @@ namespace svt { namespace table
     };
 
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
-        :m_rAntiImpl            ( _rAntiImpl                    )
+        :m_rAntiImpl            ( &_rAntiImpl                   )
         ,m_pModel               ( new EmptyTableModel           )
         ,m_pInputHandler        (                               )
         ,m_nRowHeightPixel      ( 15                            )
@@ -284,7 +284,7 @@ namespace svt { namespace table
         impl_ni_relayout();
 
         // completely invalidate
-        m_rAntiImpl.Invalidate();
+        m_rAntiImpl->Invalidate();
 
         // reset cursor to (0,0)
         if ( m_nRowCount ) m_nCurRow = 0;
@@ -345,7 +345,7 @@ namespace svt { namespace table
 
         // call selection handlers, if necessary
         if ( selectionChanged )
-            m_rAntiImpl.Select();
+            m_rAntiImpl->Select();
     }
 
 
@@ -421,7 +421,7 @@ namespace svt { namespace table
 
         // call selection handlers, if necessary
         if ( selectionChanged )
-            m_rAntiImpl.Select();
+            m_rAntiImpl->Select();
     }
 
 
@@ -430,7 +430,7 @@ namespace svt { namespace table
         m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_relayout();
 
-        m_rAntiImpl.Invalidate();
+        m_rAntiImpl->Invalidate();
 
         OSL_UNUSED( i_colIndex );
    }
@@ -451,7 +451,7 @@ namespace svt { namespace table
 
         impl_ni_relayout();
 
-        m_rAntiImpl.Invalidate();
+        m_rAntiImpl->Invalidate();
 
         OSL_UNUSED( i_colIndex );
     }
@@ -462,7 +462,7 @@ namespace svt { namespace table
         m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_relayout();
 
-        m_rAntiImpl.Invalidate();
+        m_rAntiImpl->Invalidate();
     }
 
 
@@ -479,7 +479,7 @@ namespace svt { namespace table
     {
         impl_ni_updateCachedTableMetrics();
         impl_ni_relayout();
-        m_rAntiImpl.Invalidate();
+        m_rAntiImpl->Invalidate();
     }
 
 
@@ -489,7 +489,7 @@ namespace svt { namespace table
 
         const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
         if ( aColumn.isValid() )
-            m_rAntiImpl.Invalidate( aColumn.getRect() );
+            m_rAntiImpl->Invalidate( aColumn.getRect() );
     }
 
 
@@ -565,15 +565,15 @@ namespace svt { namespace table
 
     void TableControl_Impl::impl_ni_updateCachedTableMetrics()
     {
-        m_nRowHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getRowHeight() ), MAP_APPFONT ).Height();
+        m_nRowHeightPixel = m_rAntiImpl->LogicToPixel( Size( 0, m_pModel->getRowHeight() ), MAP_APPFONT ).Height();
 
         m_nColHeaderHeightPixel = 0;
         if ( m_pModel->hasColumnHeaders() )
-           m_nColHeaderHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getColumnHeaderHeight() ), MAP_APPFONT ).Height();
+           m_nColHeaderHeightPixel = m_rAntiImpl->LogicToPixel( Size( 0, m_pModel->getColumnHeaderHeight() ), MAP_APPFONT ).Height();
 
         m_nRowHeaderWidthPixel = 0;
         if ( m_pModel->hasRowHeaders() )
-            m_nRowHeaderWidthPixel = m_rAntiImpl.LogicToPixel( Size( m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT).Width();
+            m_nRowHeaderWidthPixel = m_rAntiImpl->LogicToPixel( Size( m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT).Width();
     }
 
 
@@ -708,7 +708,7 @@ namespace svt { namespace table
         bool const i_assumeVerticalScrollbar, ::std::vector< long >& o_newColWidthsPixel ) const
     {
         // the available horizontal space
-        long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
+        long gridWidthPixel = m_rAntiImpl->GetOutputSizePixel().Width();
         ENSURE_OR_RETURN( !!m_pModel, "TableControl_Impl::impl_ni_calculateColumnWidths: not allowed without a model!", gridWidthPixel );
         if ( m_pModel->hasRowHeaders() && ( gridWidthPixel != 0 ) )
         {
@@ -717,7 +717,7 @@ namespace svt { namespace table
 
         if ( i_assumeVerticalScrollbar && ( m_pModel->getVerticalScrollbarVisibility() != ScrollbarShowNever ) )
         {
-            long nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+            long nScrollbarMetrics = m_rAntiImpl->GetSettings().GetStyleSettings().GetScrollBarSize();
             gridWidthPixel -= nScrollbarMetrics;
         }
 
@@ -985,11 +985,11 @@ namespace svt { namespace table
         long gridWidthPixel = impl_ni_calculateColumnWidths( i_assumeInflexibleColumnsUpToIncluding, true, newWidthsPixel );
 
         // the width/height of a scrollbar, needed several times below
-        long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+        long const nScrollbarMetrics = m_rAntiImpl->GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // determine the playground for the data cells (excluding headers)
         // TODO: what if the control is smaller than needed for the headers/scrollbars?
-        Rectangle aDataCellPlayground( Point( 0, 0 ), m_rAntiImpl.GetOutputSizePixel() );
+        Rectangle aDataCellPlayground( Point( 0, 0 ), m_rAntiImpl->GetOutputSizePixel() );
         aDataCellPlayground.Left() = m_nRowHeaderWidthPixel;
         aDataCellPlayground.Top() = m_nColHeaderHeightPixel;
 
@@ -1094,11 +1094,11 @@ namespace svt { namespace table
     void TableControl_Impl::impl_ni_positionChildWindows( Rectangle const & i_dataCellPlayground,
         bool const i_verticalScrollbar, bool const i_horizontalScrollbar )
     {
-        long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+        long const nScrollbarMetrics = m_rAntiImpl->GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // create or destroy the vertical scrollbar, as needed
         lcl_updateScrollbar(
-            m_rAntiImpl,
+            *m_rAntiImpl.get(),
             m_pVScroll,
             i_verticalScrollbar,
             lcl_getRowsFittingInto( i_dataCellPlayground.GetHeight(), m_nRowHeightPixel ),
@@ -1123,7 +1123,7 @@ namespace svt { namespace table
 
         // create or destroy the horizontal scrollbar, as needed
         lcl_updateScrollbar(
-            m_rAntiImpl,
+            *m_rAntiImpl.get(),
             m_pHScroll,
             i_horizontalScrollbar,
             lcl_getColumnsVisibleWithin( i_dataCellPlayground, m_nLeftColumn, *this, false ),
@@ -1165,7 +1165,7 @@ namespace svt { namespace table
         }
         else if ( !bHaveScrollCorner && bNeedScrollCorner )
         {
-            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( &m_rAntiImpl );
+            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( m_rAntiImpl.get() );
             m_pScrollCorner->SetSizePixel( Size( nScrollbarMetrics, nScrollbarMetrics ) );
             m_pScrollCorner->SetPosPixel( Point( i_dataCellPlayground.Right() + 1, i_dataCellPlayground.Bottom() + 1 ) );
             m_pScrollCorner->Show();
@@ -1264,7 +1264,7 @@ namespace svt { namespace table
             if (_rUpdateRect.GetIntersection(aRowIterator.getRect() ).IsEmpty())
                 continue;
 
-            bool const isControlFocused = m_rAntiImpl.HasControlFocus();
+            bool const isControlFocused = m_rAntiImpl->HasControlFocus();
             bool const isSelectedRow = isRowSelected(aRowIterator.getRow());
 
             Rectangle const aRect = aRowIterator.getRect().GetIntersection(aAllDataCellsArea);
@@ -1672,7 +1672,7 @@ namespace svt { namespace table
 
         if ( bSuccess && selectionChanged )
         {
-            m_rAntiImpl.Select();
+            m_rAntiImpl->Select();
         }
 
         return bSuccess;
@@ -2099,7 +2099,7 @@ namespace svt { namespace table
         // - the user scroll to row number 1
         // => in this case, the need for the scrollbar vanishes immediately.
         if ( m_nTopRow == 0 )
-            m_rAntiImpl.PostUserEvent( LINK( this, TableControl_Impl, OnUpdateScrollbars ) );
+            m_rAntiImpl->PostUserEvent( LINK( this, TableControl_Impl, OnUpdateScrollbars ) );
 
         return (TableSize)( m_nTopRow - nOldTopRow );
     }
@@ -2171,7 +2171,7 @@ namespace svt { namespace table
         // the scrollbar when it is, in theory, unnecessary, but currently at a position > 0. In this case, it will
         // be auto-hidden when it's scrolled back to pos 0.
         if ( m_nLeftColumn == 0 )
-            m_rAntiImpl.PostUserEvent( LINK( this, TableControl_Impl, OnUpdateScrollbars ) );
+            m_rAntiImpl->PostUserEvent( LINK( this, TableControl_Impl, OnUpdateScrollbars ) );
 
         return (TableSize)( m_nLeftColumn - nOldLeftColumn );
     }
@@ -2418,7 +2418,7 @@ namespace svt { namespace table
             if ( xAccParent.is() )
             {
                 m_pAccessibleTable = m_aFactoryAccess.getFactory().createAccessibleTableControl(
-                    xAccParent, m_rAntiImpl
+                    xAccParent, *m_rAntiImpl.get()
                 );
             }
         }

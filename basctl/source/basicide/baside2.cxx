@@ -180,7 +180,7 @@ bool bSourceLinesEnabled = false;
 ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
                           const OUString& aLibName, const OUString& aName, OUString& aModule)
     : BaseWindow(pParent, rDocument, aLibName, aName)
-    , rLayout(*pParent)
+    , rLayout(pParent)
     , nValid(ValidWindow)
     , aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this))
     , m_aModule(aModule)
@@ -672,7 +672,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, 0 ), TextPaM( nErrorLine, 0 ) ) );
     aXEditorWindow->GetBrkWindow().SetMarkerPos( nErrorLine );
 
-    rLayout.UpdateDebug(false);
+    rLayout->UpdateDebug(false);
 
     aStatus.bIsInReschedule = true;
     aStatus.bIsRunning = true;
@@ -713,7 +713,7 @@ void ModulWindow::BasicAddWatch()
     {
         TextSelection aSel = GetEditView()->GetSelection();
         if ( aSel.GetStart().GetPara() == aSel.GetEnd().GetPara() ) // single line selection
-            rLayout.BasicAddWatch(GetEditView()->GetSelected());
+            rLayout->BasicAddWatch(GetEditView()->GetSelected());
     }
 }
 
@@ -975,7 +975,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         break;
         case SID_BASICIDE_REMOVEWATCH:
         {
-            rLayout.BasicRemoveWatch();
+            rLayout->BasicRemoveWatch();
         }
         break;
         case SID_CUT:
@@ -1445,7 +1445,7 @@ ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObje
     pChild(0),
     aWatchWindow(VclPtr<WatchWindow>::Create(this)),
     aStackWindow(VclPtr<StackWindow>::Create(this)),
-    rObjectCatalog(rObjectCatalog_)
+    rObjectCatalog(&rObjectCatalog_)
 { }
 
 ModulWindowLayout::~ModulWindowLayout()
@@ -1486,9 +1486,9 @@ void ModulWindowLayout::Activating (BaseWindow& rChild)
     pChild = &static_cast<ModulWindow&>(rChild);
     aWatchWindow->Show();
     aStackWindow->Show();
-    rObjectCatalog.Show();
-    rObjectCatalog.SetLayoutWindow(this);
-    rObjectCatalog.UpdateEntries();
+    rObjectCatalog->Show();
+    rObjectCatalog->SetLayoutWindow(this);
+    rObjectCatalog->UpdateEntries();
     Layout::Activating(rChild);
     aSyntaxColors.SetActiveEditor(&pChild->GetEditorWindow());
 }
@@ -1499,7 +1499,7 @@ void ModulWindowLayout::Deactivating ()
     Layout::Deactivating();
     aWatchWindow->Hide();
     aStackWindow->Hide();
-    rObjectCatalog.Hide();
+    rObjectCatalog->Hide();
     pChild = 0;
 }
 
@@ -1529,7 +1529,7 @@ void ModulWindowLayout::BasicRemoveWatch ()
 
 void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 {
-    AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));
+    AddToLeft(rObjectCatalog.get(), Size(nWidth * 0.20, nHeight * 0.75));
     AddToBottom(aWatchWindow.get(), Size(nWidth * 0.67, nHeight * 0.25));
     AddToBottom(aStackWindow.get(), Size(nWidth * 0.33, nHeight * 0.25));
 }

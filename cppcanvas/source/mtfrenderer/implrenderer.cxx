@@ -743,7 +743,7 @@ namespace cppcanvas
             }
 
             GDIMetaFile aTmpMtf;
-            rParms.mrVDev.AddGradientActions( rPoly.GetBoundRect(),
+            rParms.mrVDev->AddGradientActions( rPoly.GetBoundRect(),
                                               rGradient,
                                                aTmpMtf );
 
@@ -818,7 +818,7 @@ namespace cppcanvas
                 rFontSizeLog = ::Size(0, 16);
 
                 // convert to target MapUnit if not pixels
-                rFontSizeLog = OutputDevice::LogicToLogic(rFontSizeLog, MAP_PIXEL, rParms.mrVDev.GetMapMode());
+                rFontSizeLog = OutputDevice::LogicToLogic(rFontSizeLog, MAP_PIXEL, rParms.mrVDev->GetMapMode());
             }
 
             const sal_Int32 nFontWidthLog = rFontSizeLog.Width();
@@ -826,7 +826,7 @@ namespace cppcanvas
             {
                 vcl::Font aTestFont = rFont;
                 aTestFont.SetWidth( 0 );
-                sal_Int32 nNormalWidth = rParms.mrVDev.GetFontMetric( aTestFont ).GetWidth();
+                sal_Int32 nNormalWidth = rParms.mrVDev->GetFontMetric( aTestFont ).GetWidth();
                 if( nNormalWidth != nFontWidthLog )
                     if( nNormalWidth )
                         aFontMatrix.m00 = (double)nFontWidthLog / nNormalWidth;
@@ -890,7 +890,7 @@ namespace cppcanvas
             {
                 // calculate shadow offset (similar to outdev3.cxx)
                 // TODO(F3): better match with outdev3.cxx
-                sal_Int32 nShadowOffset = static_cast<sal_Int32>(1.5 + ((rParms.mrVDev.GetFont().GetHeight()-24.0)/24.0));
+                sal_Int32 nShadowOffset = static_cast<sal_Int32>(1.5 + ((rParms.mrVDev->GetFont().GetHeight()-24.0)/24.0));
                 if( nShadowOffset < 1 )
                     nShadowOffset = 1;
 
@@ -910,7 +910,7 @@ namespace cppcanvas
             if( rState.textReliefStyle )
             {
                 // calculate relief offset (similar to outdev3.cxx)
-                sal_Int32 nReliefOffset = rParms.mrVDev.PixelToLogic( Size( 1, 1 ) ).Height();
+                sal_Int32 nReliefOffset = rParms.mrVDev->PixelToLogic( Size( 1, 1 ) ).Height();
                 nReliefOffset += nReliefOffset/2;
                 if( nReliefOffset < 1 )
                     nReliefOffset = 1;
@@ -955,7 +955,7 @@ namespace cppcanvas
                     nIndex,
                     nLength,
                     pCharWidths,
-                    rParms.mrVDev,
+                    *rParms.mrVDev.get(),
                     rParms.mrCanvas,
                     rState,
                     rParms.mrParms,
@@ -965,7 +965,7 @@ namespace cppcanvas
 
             if ( rState.textStrikeoutStyle == STRIKEOUT_X || rState.textStrikeoutStyle == STRIKEOUT_SLASH )
             {
-                long nWidth = rParms.mrVDev.GetTextWidth( rString,nIndex,nLength );
+                long nWidth = rParms.mrVDev->GetTextWidth( rString,nIndex,nLength );
 
                 sal_Unicode pChars[4];
                 if ( rState.textStrikeoutStyle == STRIKEOUT_X )
@@ -974,7 +974,7 @@ namespace cppcanvas
                     pChars[0] = '/';
                 pChars[3]=pChars[2]=pChars[1]=pChars[0];
 
-                long nStrikeoutWidth = (rParms.mrVDev.GetTextWidth(
+                long nStrikeoutWidth = (rParms.mrVDev->GetTextWidth(
                     OUString(pChars, SAL_N_ELEMENTS(pChars))) + 2) / 4;
 
                 if( nStrikeoutWidth <= 0 )
@@ -1021,7 +1021,7 @@ namespace cppcanvas
                             nStartPos,
                             aStrikeoutText.getLength(),
                             pStrikeoutCharWidths,
-                            rParms.mrVDev,
+                            *rParms.mrVDev.get(),
                             rParms.mrCanvas,
                             rState,
                             rParms.mrParms,
@@ -1225,7 +1225,7 @@ namespace cppcanvas
             // alias common parameters
             VectorOfOutDevStates&  rStates(rFactoryParms.mrStates);
             const CanvasSharedPtr& rCanvas(rFactoryParms.mrCanvas);
-            ::VirtualDevice&       rVDev(rFactoryParms.mrVDev);
+            ::VirtualDevice&       rVDev(*rFactoryParms.mrVDev.get());
             const Parameters&      rParms(rFactoryParms.mrParms);
             sal_Int32&             io_rCurrActionIndex(rFactoryParms.mrCurrActionIndex);
 

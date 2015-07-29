@@ -331,7 +331,7 @@ void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& /*
 SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
                                             SfxBindings& rBindings ) :
             SfxControllerItem   ( nId_, rBindings ),
-            rBmpMask            ( rMask)
+            rBmpMask            ( &rMask)
 {
 }
 
@@ -343,7 +343,7 @@ void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*
         const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
         assert(pStateItem); //SfxBoolItem erwartet
         if (pStateItem)
-            rBmpMask.SetExecState( pStateItem->GetValue() );
+            rBmpMask->SetExecState( pStateItem->GetValue() );
     }
 }
 

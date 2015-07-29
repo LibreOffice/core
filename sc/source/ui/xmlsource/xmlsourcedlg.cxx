@@ -240,18 +240,18 @@ namespace {
 
 class UnhighlightEntry : std::unary_function<SvTreeListEntry*, void>
 {
-    SvTreeListBox& mrTree;
+    VclPtr<SvTreeListBox> mrTree;
 public:
-    UnhighlightEntry(SvTreeListBox& rTree) : mrTree(rTree) {}
+    UnhighlightEntry(SvTreeListBox& rTree) : mrTree(&rTree) {}
 
     void operator() (SvTreeListEntry* p)
     {
-        SvViewDataEntry* pView = mrTree.GetViewDataEntry(p);
+        SvViewDataEntry* pView = mrTree->GetViewDataEntry(p);
         if (!pView)
             return;
 
         pView->SetHighlighted(false);
-        mrTree.Invalidate();
+        mrTree->Invalidate();
     }
 };
 

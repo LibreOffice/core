@@ -85,15 +85,15 @@ private:
     {
     public:
         TabControlTransferable( TabControl& rParent ) :
-            mrParent( rParent ) {}
+            mrParent( &rParent ) {}
     private:
 
-        TabControl&     mrParent;
+        VclPtr<TabControl>     mrParent;
 
         virtual             ~TabControlTransferable();
 
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
-        virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
+        virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
         virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 
     };

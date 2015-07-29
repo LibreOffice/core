@@ -48,7 +48,7 @@ struct ComboBoxBounds
 
 struct ComboBox::Impl
 {
-    ComboBox &          m_rThis;
+    VclPtr<ComboBox>    m_rThis;
     VclPtr<Edit>        m_pSubEdit;
     VclPtr<ImplListBox> m_pImplLB;
     VclPtr<ImplBtn>     m_pBtn;
@@ -64,7 +64,7 @@ struct ComboBox::Impl
     boost::signals2::scoped_connection m_AutocompleteConnection;
 
     explicit Impl(ComboBox & rThis)
-        : m_rThis(rThis)
+        : m_rThis(&rThis)
         , m_nDDHeight(0)
         , m_cMultiSep(0)
         , m_isDDAutoSize(false)
@@ -135,6 +135,7 @@ ComboBox::~ComboBox()
 
 void ComboBox::dispose()
 {
+    m_pImpl->m_rThis.clear();
     m_pImpl->m_pSubEdit.disposeAndClear();
 
     VclPtr< ImplListBox > pImplLB = m_pImpl->m_pImplLB;
@@ -311,18 +312,18 @@ bool ComboBox::IsAutocompleteEnabled() const
 
 void ComboBox::Impl::ImplClickButtonHandler( ImplBtn* )
 {
-    m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+    m_rThis->CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     m_pSubEdit->GrabFocus();
     if (!m_pImplLB->GetEntryList()->GetMRUCount())
         ImplUpdateFloatSelection();
     else
         m_pImplLB->SelectEntry( 0 , true );
     m_pBtn->SetPressed( true );
-    m_rThis.SetSelection( Selection( 0, SELECTION_MAX ) );
+    m_rThis->SetSelection( Selection( 0, SELECTION_MAX ) );
     m_pFloatWin->StartFloat( true );
-    m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+    m_rThis->CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
 
-    m_rThis.ImplClearLayoutData();
+    m_rThis->ImplClearLayoutData();
     if (m_pImplLB)
         m_pImplLB->GetMainWindow()->ImplClearLayoutData();
 }
@@ -337,17 +338,17 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplPopupModeEndHdl)
             m_pImplLB->SelectEntry(m_pFloatWin->GetPopupModeStartSaveSelection(), true);
             bool bTravelSelect = m_pImplLB->IsTravelSelect();
             m_pImplLB->SetTravelSelect( true );
-            m_rThis.Select();
+            m_rThis->Select();
             m_pImplLB->SetTravelSelect( bTravelSelect );
         }
     }
 
-    m_rThis.ImplClearLayoutData();
+    m_rThis->ImplClearLayoutData();
     if (m_pImplLB)
         m_pImplLB->GetMainWindow()->ImplClearLayoutData();
 
     m_pBtn->SetPressed( false );
-    m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
+    m_rThis->CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     return 0;
 }
 
@@ -413,12 +414,12 @@ void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )
 
 IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl)
 {
-    bool bPopup = m_rThis.IsInDropDown();
+    bool bPopup = m_rThis->IsInDropDown();
     bool bCallSelect = false;
     if (m_pImplLB->IsSelectionChanged() || bPopup)
     {
         OUString aText;
-        if (m_rThis.IsMultiSelectionEnabled())
+        if (m_rThis->IsMultiSelectionEnabled())
         {
             aText = m_pSubEdit->GetText();
 
@@ -473,7 +474,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl)
         m_pSubEdit->SetText( aText );
 
         Selection aNewSelection( 0, aText.getLength() );
-        if (m_rThis.IsMultiSelectionEnabled())
+        if (m_rThis->IsMultiSelectionEnabled())
             aNewSelection.Min() = aText.getLength();
         m_pSubEdit->SetSelection( aNewSelection );
 
@@ -483,19 +484,19 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl)
     // #84652# Call GrabFocus and EndPopupMode before calling Select/Modify, but after changing the text
 
     if (bPopup && !m_pImplLB->IsTravelSelect() &&
-        (!m_rThis.IsMultiSelectionEnabled() || !m_pImplLB->GetSelectModifier()))
+        (!m_rThis->IsMultiSelectionEnabled() || !m_pImplLB->GetSelectModifier()))
     {
         m_pFloatWin->EndPopupMode();
-        m_rThis.GrabFocus();
+        m_rThis->GrabFocus();
     }
 
     if ( bCallSelect )
     {
         m_pSubEdit->SetModifyFlag();
         m_isSyntheticModify = true;
-        m_rThis.Modify();
+        m_rThis->Modify();
         m_isSyntheticModify = false;
-        m_rThis.Select();
+        m_rThis->Select();
     }
 
     return 0;
@@ -503,13 +504,13 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl)
 
 IMPL_LINK_NOARG( ComboBox::Impl, ImplListItemSelectHdl )
 {
-    m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
+    m_rThis->CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
     return 1;
 }
 
 IMPL_LINK_NOARG(ComboBox::Impl, ImplCancelHdl)
 {
-    if (m_rThis.IsInDropDown())
+    if (m_rThis->IsInDropDown())
         m_pFloatWin->EndPopupMode();
 
     return 1;
@@ -528,7 +529,7 @@ IMPL_LINK( ComboBox::Impl, ImplSelectionChangedHdl, void*, n )
 
 IMPL_LINK_NOARG(ComboBox::Impl, ImplDoubleClickHdl)
 {
-    m_rThis.DoubleClick();
+    m_rThis->DoubleClick();
     return 0;
 }
 
@@ -894,7 +895,7 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
 
     // move text in the ListBox into the visible region
     m_pImplLB->SetCallSelectionChangedHdl( false );
-    if (!m_rThis.IsMultiSelectionEnabled())
+    if (!m_rThis->IsMultiSelectionEnabled())
     {
         OUString        aSearchStr( m_pSubEdit->GetText() );
         sal_Int32       nSelect = LISTBOX_ENTRY_NOTFOUND;
@@ -1329,7 +1330,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
 void::ComboBox::Impl::ImplUserDrawHandler( UserDrawEvent* pEvent )
 {
-    m_rThis.UserDraw(*pEvent);
+    m_rThis->UserDraw(*pEvent);
 }
 
 void ComboBox::UserDraw( const UserDrawEvent& )
@@ -1523,7 +1524,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     long    nTop = 0;
     long    nBottom = rOutSz.Height();
 
-    vcl::Window *pBorder = m_rThis.GetWindow( GetWindowType::Border );
+    vcl::Window *pBorder = m_rThis->GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
     Point aPoint;
     Rectangle aContent, aBound;
@@ -1531,18 +1532,18 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     // use the full extent of the control
     Rectangle aArea( aPoint, rBorderOutSz );
 
-    if (m_rThis.GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+    if (m_rThis->GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
             aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
     {
         // convert back from border space to local coordinates
-        aPoint = pBorder->ScreenToOutputPixel(m_rThis.OutputToScreenPixel(aPoint));
+        aPoint = pBorder->ScreenToOutputPixel(m_rThis->OutputToScreenPixel(aPoint));
         aContent.Move(-aPoint.X(), -aPoint.Y());
 
         aBounds.aButtonPos = Point(aContent.Left(), nTop);
         aBounds.aButtonSize = Size(aContent.getWidth(), (nBottom-nTop));
 
         // adjust the size of the edit field
-        if (m_rThis.GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
+        if (m_rThis->GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
                     aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             // convert back from border space to local coordinates
@@ -1560,8 +1561,8 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     }
     else
     {
-        long nSBWidth = m_rThis.GetSettings().GetStyleSettings().GetScrollBarSize();
-        nSBWidth = m_rThis.CalcZoom( nSBWidth );
+        long nSBWidth = m_rThis->GetSettings().GetStyleSettings().GetScrollBarSize();
+        nSBWidth = m_rThis->CalcZoom( nSBWidth );
         aBounds.aSubEditSize = Size(rOutSz.Width() - nSBWidth, rOutSz.Height());
         aBounds.aButtonPos = Point(rOutSz.Width() - nSBWidth, nTop);
         aBounds.aButtonSize = Size(nSBWidth, (nBottom-nTop));

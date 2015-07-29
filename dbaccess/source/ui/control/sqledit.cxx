@@ -43,7 +43,7 @@ class OSqlEdit::ChangesListener:
     public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
-    explicit ChangesListener(OSqlEdit & editor): editor_(editor) {}
+    explicit ChangesListener(OSqlEdit & editor): editor_(&editor) {}
 
 private:
     virtual ~ChangesListener() {}
@@ -51,8 +51,8 @@ private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        osl::MutexGuard g(editor_.m_mutex);
-        editor_.m_notifier.clear();
+        osl::MutexGuard g(editor_->m_mutex);
+        editor_->m_notifier.clear();
     }
 
     virtual void SAL_CALL propertiesChange(
@@ -60,10 +60,10 @@ private:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         SolarMutexGuard g;
-        editor_.ImplSetFont();
+        editor_->ImplSetFont();
     }
 
-    OSqlEdit & editor_;
+    VclPtr<OSqlEdit> editor_;
 };
 
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :

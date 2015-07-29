@@ -660,15 +660,15 @@ SmGraphicController::SmGraphicController(SmGraphicWindow &rSmGraphic,
                         sal_uInt16          nId_,
                         SfxBindings     &rBindings) :
     SfxControllerItem(nId_, rBindings),
-    rGraphic(rSmGraphic)
+    rGraphic(&rSmGraphic)
 {
 }
 
 
 void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
-    rGraphic.SetTotalSize();
-    rGraphic.Invalidate();
+    rGraphic->SetTotalSize();
+    rGraphic->Invalidate();
     SfxControllerItem::StateChanged (nSID, eState, pState);
 }
 
@@ -680,7 +680,7 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
                      sal_uInt16       nId_,
                      SfxBindings  &rBindings) :
     SfxControllerItem(nId_, rBindings),
-    rEdit(rSmEdit)
+    rEdit(&rSmEdit)
 {
 }
 
@@ -696,8 +696,8 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 {
     const SfxStringItem *pItem = PTR_CAST(SfxStringItem, pState);
 
-    if ((pItem != NULL) && (rEdit.GetText() != OUString(pItem->GetValue())))
-        rEdit.SetText(pItem->GetValue());
+    if ((pItem != NULL) && (rEdit->GetText() != OUString(pItem->GetValue())))
+        rEdit->SetText(pItem->GetValue());
     SfxControllerItem::StateChanged (nSID, eState, pState);
 }
 

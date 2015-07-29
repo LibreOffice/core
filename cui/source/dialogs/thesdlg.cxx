@@ -142,14 +142,14 @@ AlternativesString::AlternativesString(
     SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr ) :
 
     SvLBoxString( pEntry, nFlags, rStr ),
-    m_rControlImpl( rControl )
+    m_rControlImpl( &rControl )
 {
 }
 
 void AlternativesString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
                                const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    AlternativesExtraData* pData = m_rControlImpl.GetExtraData(&rEntry);
+    AlternativesExtraData* pData = m_rControlImpl->GetExtraData(&rEntry);
     Point aPos(rPos);
     rRenderContext.Push(PushFlags::FONT);
     if (pData && pData->IsHeader())

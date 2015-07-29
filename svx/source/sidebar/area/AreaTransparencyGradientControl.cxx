@@ -69,7 +69,7 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
       maMtrTrgrBorder(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_BORDER))),
       maRotLeft( SVX_RES(IMG_ROT_LEFT)),
       maRotRight( SVX_RES(IMG_ROT_RIGHT)),
-      mrAreaPropertyPanel(rPanel)
+      mrAreaPropertyPanel(&rPanel)
 {
     Link<> aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
     maMtrTrgrCenterX->SetModifyHdl( aLink );
@@ -248,7 +248,7 @@ void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGr
             == AreaPropertyPanelBase::DEFAULT_ENDVALUE
         && rGradient.GetBorder() == AreaPropertyPanelBase::DEFAULT_BORDER)
     {
-        aGradient = mrAreaPropertyPanel.GetGradient(rGradient.GetGradientStyle());
+        aGradient = mrAreaPropertyPanel->GetGradient(rGradient.GetGradientStyle());
     }
     else
     {
@@ -275,20 +275,20 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     XGradient aTmpGradient(
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
-        (css::awt::GradientStyle)(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
+        (css::awt::GradientStyle)(mrAreaPropertyPanel->GetSelectedTransparencyTypeIndex()-2),
         (sal_uInt16)maMtrTrgrAngle->GetValue() * 10,
         (sal_uInt16)maMtrTrgrCenterX->GetValue(),
         (sal_uInt16)maMtrTrgrCenterY->GetValue(),
         (sal_uInt16)maMtrTrgrBorder->GetValue(),
         100, 100);
 
-    mrAreaPropertyPanel.SetGradient(aTmpGradient);
+    mrAreaPropertyPanel->SetGradient(aTmpGradient);
 
     SfxItemPool* pPool = NULL;
     bool bEnable = true;
     XFillFloatTransparenceItem aGradientItem(pPool,aTmpGradient, bEnable );
 
-    mrAreaPropertyPanel.setFillFloatTransparence(aGradientItem);
+    mrAreaPropertyPanel->setFillFloatTransparence(aGradientItem);
 }
 
 IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)

@@ -180,9 +180,9 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
     }
 
     DbCellControl* pCellControl = NULL;
-    if (m_rParent.IsFilterMode())
+    if (m_rParent->IsFilterMode())
     {
-        pCellControl = new DbFilterField(m_rParent.getContext(),*this);
+        pCellControl = new DbFilterField(m_rParent->getContext(),*this);
     }
     else
     {
@@ -195,7 +195,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case TYPE_DATEFIELD: pCellControl = new DbDateField(*this); break;
             case TYPE_LISTBOX: pCellControl = new DbListBox(*this); break;
             case TYPE_NUMERICFIELD: pCellControl = new DbNumericField(*this); break;
-            case TYPE_PATTERNFIELD: pCellControl = new DbPatternField( *this, m_rParent.getContext() ); break;
+            case TYPE_PATTERNFIELD: pCellControl = new DbPatternField( *this, m_rParent->getContext() ); break;
             case TYPE_TEXTFIELD: pCellControl = new DbTextField(*this); break;
             case TYPE_TIMEFIELD: pCellControl = new DbTimeField(*this); break;
             case TYPE_FORMATTEDFIELD: pCellControl = new DbFormattedField(*this); break;
@@ -206,14 +206,14 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
 
     }
     Reference< XRowSet >  xCur;
-    if (m_rParent.getDataSource())
-        xCur = Reference< XRowSet > (Reference< XInterface >(*m_rParent.getDataSource()), UNO_QUERY);
+    if (m_rParent->getDataSource())
+        xCur = Reference< XRowSet > (Reference< XInterface >(*m_rParent->getDataSource()), UNO_QUERY);
         // TODO : the cursor wrapper should use an XRowSet interface, too
 
-    pCellControl->Init( m_rParent.GetDataWindow(), xCur );
+    pCellControl->Init( m_rParent->GetDataWindow(), xCur );
 
     // now create the control wrapper
-    if (m_rParent.IsFilterMode())
+    if (m_rParent->IsFilterMode())
         m_pCell = new FmXFilterCell(this, pCellControl);
     else
     {
@@ -402,10 +402,10 @@ void DbGridColumn::setLock(bool _bLock)
     if (m_bHidden)
         return;     // no, it isn't (or at least it shouldn't be ...)
 
-    if (m_rParent.GetCurColumnId() == m_nId)
+    if (m_rParent->GetCurColumnId() == m_nId)
     {
-        m_rParent.DeactivateCell();
-        m_rParent.ActivateCell(m_rParent.GetCurRow(), m_rParent.GetCurColumnId());
+        m_rParent->DeactivateCell();
+        m_rParent->ActivateCell(m_rParent->GetCurRow(), m_rParent->GetCurColumnId());
     }
 }
 
@@ -444,7 +444,7 @@ OUString DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColu
 Reference< ::com::sun::star::sdb::XColumn >  DbGridColumn::GetCurrentFieldValue() const
 {
     Reference< ::com::sun::star::sdb::XColumn >  xField;
-    const DbGridRowRef xRow = m_rParent.GetCurrentRow();
+    const DbGridRowRef xRow = m_rParent->GetCurrentRow();
     if (xRow.Is() && xRow->HasField(m_nFieldPos))
     {
         xField = xRow->GetField(m_nFieldPos).getColumn();

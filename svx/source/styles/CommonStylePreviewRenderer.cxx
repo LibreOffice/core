@@ -141,14 +141,14 @@ bool CommonStylePreviewRenderer::recalculate()
     {
         const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
         Size aFontSize(0, pFontHeightItem->GetHeight());
-        maPixelSize = Size(mrOutputDev.LogicToPixel(aFontSize, mrShell.GetMapUnit()));
+        maPixelSize = Size(mrOutputDev->LogicToPixel(aFontSize, mrShell.GetMapUnit()));
         maFont.SetSize(maPixelSize);
 
-        vcl::Font aOldFont(mrOutputDev.GetFont());
+        vcl::Font aOldFont(mrOutputDev->GetFont());
 
-        mrOutputDev.SetFont(maFont);
+        mrOutputDev->SetFont(maFont);
         Rectangle aTextRect;
-        mrOutputDev.GetTextBoundRect(aTextRect, mpStyle->GetName());
+        mrOutputDev->GetTextBoundRect(aTextRect, mpStyle->GetName());
         if (aTextRect.Bottom() > mnMaxHeight)
         {
             double ratio = double(mnMaxHeight) / aTextRect.Bottom();
@@ -156,7 +156,7 @@ bool CommonStylePreviewRenderer::recalculate()
             maPixelSize.Height() *= ratio;
             maFont.SetSize(maPixelSize);
         }
-        mrOutputDev.SetFont(aOldFont);
+        mrOutputDev->SetFont(aOldFont);
     }
     else
     {
@@ -168,7 +168,7 @@ bool CommonStylePreviewRenderer::recalculate()
 
 Size CommonStylePreviewRenderer::getRenderSize()
 {
-    maPixelSize = maFont.GetTextSize(&mrOutputDev, maStyleName);
+    maPixelSize = maFont.GetTextSize(mrOutputDev, maStyleName);
     if (maPixelSize.Height() > mnMaxHeight)
         maPixelSize.Height() = mnMaxHeight;
     return maPixelSize;
@@ -177,29 +177,29 @@ Size CommonStylePreviewRenderer::getRenderSize()
 bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle)
 {
     // setup the device & draw
-    vcl::Font aOldFont(mrOutputDev.GetFont());
-    Color aOldColor(mrOutputDev.GetTextColor());
-    Color aOldFillColor(mrOutputDev.GetFillColor());
+    vcl::Font aOldFont(mrOutputDev->GetFont());
+    Color aOldColor(mrOutputDev->GetTextColor());
+    Color aOldFillColor(mrOutputDev->GetFillColor());
 
     if (maBackgroundColor != COL_AUTO)
     {
-        mrOutputDev.SetFillColor(maBackgroundColor);
-        mrOutputDev.DrawRect(aRectangle);
+        mrOutputDev->SetFillColor(maBackgroundColor);
+        mrOutputDev->DrawRect(aRectangle);
     }
 
-    mrOutputDev.SetFont(maFont);
+    mrOutputDev->SetFont(maFont);
     if (maFontColor != COL_AUTO)
-        mrOutputDev.SetTextColor(maFontColor);
+        mrOutputDev->SetTextColor(maFontColor);
 
     Point aFontDrawPosition = aRectangle.TopLeft();
     if (aRectangle.GetHeight() > maPixelSize.Height())
         aFontDrawPosition.Y() += ( aRectangle.GetHeight() - maPixelSize.Height() ) / 2;
 
-    mrOutputDev.DrawText(aFontDrawPosition, maStyleName);
+    mrOutputDev->DrawText(aFontDrawPosition, maStyleName);
 
-    mrOutputDev.SetFillColor(aOldFillColor);
-    mrOutputDev.SetTextColor(aOldColor);
-    mrOutputDev.SetFont(aOldFont);
+    mrOutputDev->SetFillColor(aOldFillColor);
+    mrOutputDev->SetTextColor(aOldColor);
+    mrOutputDev->SetFont(aOldFont);
 
     return true;
 }

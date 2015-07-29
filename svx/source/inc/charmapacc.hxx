@@ -97,7 +97,7 @@ namespace svx
     */
     struct SvxShowCharSetItem
     {
-        SvxShowCharSet&             mrParent;
+        VclPtr<SvxShowCharSet>      mrParent;
         sal_uInt16                  mnId;
         OUString                    maText;
         Rectangle                   maRect;

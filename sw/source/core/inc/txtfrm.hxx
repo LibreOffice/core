@@ -790,7 +790,7 @@ public:
 
 class SwLayoutModeModifier
 {
-    const OutputDevice& rOut;
+    VclPtr<const OutputDevice> rOut;
     ComplexTextLayoutMode nOldLayoutMode;
 public:
     SwLayoutModeModifier( const OutputDevice& rOutp );
@@ -801,7 +801,7 @@ public:
 
 class SwDigitModeModifier
 {
-    const OutputDevice& rOut;
+    VclPtr<const OutputDevice> rOut;
     LanguageType nOldLanguageType;
 public:
     SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang );

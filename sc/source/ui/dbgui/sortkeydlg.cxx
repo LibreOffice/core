@@ -80,19 +80,19 @@ void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
 
 ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     : m_aSortWin(pParent, rItems)
-    , m_rScrolledWindow(*pParent->get<VclScrolledWindow>("SortCriteriaPage"))
-    , m_rVertScroll(m_rScrolledWindow.getVertScrollBar())
+    , m_rScrolledWindow(pParent->get<VclScrolledWindow>("SortCriteriaPage"))
+    , m_rVertScroll(&m_rScrolledWindow->getVertScrollBar())
 {
-    m_rScrolledWindow.setUserManagedScrolling(true);
+    m_rScrolledWindow->setUserManagedScrolling(true);
 
-    m_rVertScroll.EnableDrag();
-    m_rVertScroll.Show(m_rScrolledWindow.GetStyle() & WB_VSCROLL);
+    m_rVertScroll->EnableDrag();
+    m_rVertScroll->Show(m_rScrolledWindow->GetStyle() & WB_VSCROLL);
 
-    m_rVertScroll.SetRangeMin( 0 );
-    m_rVertScroll.SetVisibleSize( 0xFFFF );
+    m_rVertScroll->SetRangeMin( 0 );
+    m_rVertScroll->SetVisibleSize( 0xFFFF );
 
     Link<> aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
-    m_rVertScroll.SetScrollHdl( aScrollLink );
+    m_rVertScroll->SetScrollHdl( aScrollLink );
 }
 
 void ScSortKeyCtrl::dispose()
@@ -102,24 +102,24 @@ void ScSortKeyCtrl::dispose()
 
 void ScSortKeyCtrl::checkAutoVScroll()
 {
-    WinBits nBits = m_rScrolledWindow.GetStyle();
+    WinBits nBits = m_rScrolledWindow->GetStyle();
     if (nBits & WB_VSCROLL)
         return;
     if (nBits & WB_AUTOVSCROLL)
     {
-        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
-        if (bShow != m_rVertScroll.IsVisible())
-            m_rVertScroll.Show(bShow);
+        bool bShow = m_rVertScroll->GetRangeMax() > m_rVertScroll->GetVisibleSize();
+        if (bShow != m_rVertScroll->IsVisible())
+            m_rVertScroll->Show(bShow);
     }
 }
 
 void ScSortKeyCtrl::setScrollRange()
 {
     sal_Int32 nScrollOffset = m_aSortWin.GetItemHeight();
-    sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
-    m_rVertScroll.SetPageSize( nVisibleItems - 1 );
-    m_rVertScroll.SetVisibleSize( nVisibleItems );
-    m_rVertScroll.Scroll();
+    sal_Int32 nVisibleItems = m_rScrolledWindow->getVisibleChildSize().Height() / nScrollOffset;
+    m_rVertScroll->SetPageSize( nVisibleItems - 1 );
+    m_rVertScroll->SetVisibleSize( nVisibleItems );
+    m_rVertScroll->Scroll();
     checkAutoVScroll();
 }
 
@@ -133,8 +133,8 @@ IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 
 void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
 {
-    m_rVertScroll.SetRangeMax( nItem );
-    m_rVertScroll.DoScroll( nItem );
+    m_rVertScroll->SetRangeMax( nItem );
+    m_rVertScroll->DoScroll( nItem );
     m_aSortWin.AddSortKey( nItem );
     checkAutoVScroll();
 }

@@ -40,13 +40,13 @@ OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorde
     :Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(VclPtr<OApplicationIconControl>::Create(this))
     ,m_eLastType(E_NONE)
-    ,m_rBorderWin( _rBorderWindow )
+    ,m_rBorderWin( &_rBorderWindow )
 {
 
     ImplInitSettings( true, true, true );
 
     m_aIconControl->SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
-    m_aIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
+    m_aIconControl->setControlActionListener( &m_rBorderWin->getView()->getAppController() );
     m_aIconControl->SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl->Show();
 }
@@ -146,7 +146,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
     if ( m_eLastType == _eType )
         return true;
 
-    if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
+    if ( m_rBorderWin->getView()->getAppController().onContainerSelect( _eType ) )
     {
         if ( _eType != E_NONE )
             m_eLastType = _eType;

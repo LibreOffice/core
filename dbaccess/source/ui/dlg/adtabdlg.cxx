@@ -59,7 +59,7 @@ class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
 {
-    OTableTreeListBox&          m_rTableList;
+    VclPtr<OTableTreeListBox>   m_rTableList;
     Reference< XConnection >    m_xConnection;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>
                                 m_pContainerListener;
@@ -68,7 +68,7 @@ class TableListFacade : public ::cppu::BaseMutex
 public:
     TableListFacade( OTableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection )
         : ::comphelper::OContainerListener(m_aMutex)
-        ,m_rTableList( _rTableList )
+        ,m_rTableList( &_rTableList )
         ,m_xConnection( _rxConnection )
         ,m_bAllowViews(true)
     {
@@ -93,20 +93,20 @@ TableListFacade::~TableListFacade()
 
 OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
-    SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
+    SvTreeListEntry* pEntry = m_rTableList->FirstSelected();
     if ( !pEntry )
         return OUString();
 
     OUString aCatalog, aSchema, aTableName;
-    SvTreeListEntry* pSchema = m_rTableList.GetParent(pEntry);
-    if(pSchema && pSchema != m_rTableList.getAllObjectsEntry())
+    SvTreeListEntry* pSchema = m_rTableList->GetParent(pEntry);
+    if(pSchema && pSchema != m_rTableList->getAllObjectsEntry())
     {
-        SvTreeListEntry* pCatalog = m_rTableList.GetParent(pSchema);
-        if(pCatalog && pCatalog != m_rTableList.getAllObjectsEntry())
-            aCatalog = m_rTableList.GetEntryText(pCatalog);
-        aSchema = m_rTableList.GetEntryText(pSchema);
+        SvTreeListEntry* pCatalog = m_rTableList->GetParent(pSchema);
+        if(pCatalog && pCatalog != m_rTableList->getAllObjectsEntry())
+            aCatalog = m_rTableList->GetEntryText(pCatalog);
+        aSchema = m_rTableList->GetEntryText(pSchema);
     }
-    aTableName = m_rTableList.GetEntryText(pEntry);
+    aTableName = m_rTableList->GetEntryText(pEntry);
 
     OUString aComposedName;
     try
@@ -150,7 +150,7 @@ void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEve
 void TableListFacade::updateTableObjectList( bool _bAllowViews )
 {
     m_bAllowViews = _bAllowViews;
-    m_rTableList.Clear();
+    m_rTableList->Clear();
     try
     {
         Reference< XTablesSupplier > xTableSupp( m_xConnection, UNO_QUERY_THROW );
@@ -195,15 +195,15 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
             sViews = Sequence< OUString>();
         }
 
-        m_rTableList.UpdateTableList( m_xConnection, sTables, sViews );
-        SvTreeListEntry* pEntry = m_rTableList.First();
-        while( pEntry && m_rTableList.GetModel()->HasChildren( pEntry ) )
+        m_rTableList->UpdateTableList( m_xConnection, sTables, sViews );
+        SvTreeListEntry* pEntry = m_rTableList->First();
+        while( pEntry && m_rTableList->GetModel()->HasChildren( pEntry ) )
         {
-            m_rTableList.Expand( pEntry );
-            pEntry = m_rTableList.Next( pEntry );
+            m_rTableList->Expand( pEntry );
+            pEntry = m_rTableList->Next( pEntry );
         }
         if ( pEntry )
-            m_rTableList.Select(pEntry);
+            m_rTableList->Select(pEntry);
     }
     catch( const Exception& )
     {
@@ -213,15 +213,15 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 
 bool TableListFacade::isLeafSelected() const
 {
-    SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
-    return pEntry && !m_rTableList.GetModel()->HasChildren( pEntry );
+    SvTreeListEntry* pEntry = m_rTableList->FirstSelected();
+    return pEntry && !m_rTableList->GetModel()->HasChildren( pEntry );
 }
 
 class QueryListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
 {
-    SvTreeListBox&              m_rQueryList;
+    VclPtr<SvTreeListBox>       m_rQueryList;
     Reference< XConnection >    m_xConnection;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>
                                 m_pContainerListener;
@@ -229,7 +229,7 @@ class QueryListFacade : public ::cppu::BaseMutex
 public:
     QueryListFacade( SvTreeListBox& _rQueryList, const Reference< XConnection >& _rxConnection )
         : ::comphelper::OContainerListener(m_aMutex)
-        ,m_rQueryList( _rQueryList )
+        ,m_rQueryList( &_rQueryList )
         ,m_xConnection( _rxConnection )
     {
     }
@@ -255,7 +255,7 @@ void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent
 {
     OUString sName;
     if ( _rEvent.Accessor >>= sName )
-        m_rQueryList.InsertEntry( sName );
+        m_rQueryList->InsertEntry( sName );
 }
 
 void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -269,14 +269,14 @@ void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEve
 
 void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 {
-    m_rQueryList.Clear();
+    m_rQueryList->Clear();
     try
     {
         ImageProvider aImageProvider( m_xConnection );
         Image aQueryImage( ImageProvider::getDefaultImage( css::sdb::application::DatabaseObject::QUERY ) );
 
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );
+        m_rQueryList->SetDefaultExpandedEntryBmp( aQueryImage );
+        m_rQueryList->SetDefaultCollapsedEntryBmp( aQueryImage );
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
@@ -290,7 +290,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
         const OUString* pQuery = aQueryNames.getConstArray();
         const OUString* pQueryEnd = aQueryNames.getConstArray() + aQueryNames.getLength();
         while ( pQuery != pQueryEnd )
-            m_rQueryList.InsertEntry( *pQuery++ );
+            m_rQueryList->InsertEntry( *pQuery++ );
     }
     catch( const Exception& )
     {
@@ -301,16 +301,16 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 OUString QueryListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
     OUString sSelected;
-    SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
+    SvTreeListEntry* pEntry = m_rQueryList->FirstSelected();
     if ( pEntry )
-        sSelected = _out_rAliasName = m_rQueryList.GetEntryText( pEntry );
+        sSelected = _out_rAliasName = m_rQueryList->GetEntryText( pEntry );
     return sSelected;
 }
 
 bool QueryListFacade::isLeafSelected() const
 {
-    SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
-    return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
+    SvTreeListEntry* pEntry = m_rQueryList->FirstSelected();
+    return pEntry && !m_rQueryList->GetModel()->HasChildren( pEntry );
 }
 
 OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rContext )

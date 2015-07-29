@@ -77,7 +77,7 @@ void ScNavigatorDlg::ReleaseFocus()
 
 ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   SpinField   ( pParent, rResId ),
-        rDlg        ( *pParent ),
+        rDlg        ( pParent ),
         nCol        ( 0 ),
         nKeyGroup   ( KEYGROUP_ALPHA )
 {
@@ -86,6 +86,13 @@ ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
 
 ColumnEdit::~ColumnEdit()
 {
+    disposeOnce();
+}
+
+void ColumnEdit::dispose()
+{
+    rDlg.clear();
+    SpinField::dispose();
 }
 
 bool ColumnEdit::Notify( NotifyEvent& rNEvt )
@@ -174,12 +181,12 @@ void ColumnEdit::EvalText()
 
 void ColumnEdit::ExecuteCol()
 {
-    SCROW nRow = rDlg.aEdRow->GetRow();
+    SCROW nRow = rDlg->aEdRow->GetRow();
 
     EvalText(); // setzt nCol
 
     if ( (nCol > 0) && (nRow > 0) )
-        rDlg.SetCurrentCell( nCol-1, nRow-1 );
+        rDlg->SetCurrentCell( nCol-1, nRow-1 );
 }
 
 void ColumnEdit::SetCol( SCCOL nColNo )
@@ -250,7 +257,7 @@ SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, OUString& rStr )
 
 RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   NumericField( pParent, rResId ),
-        rDlg        ( *pParent )
+        rDlg        ( pParent )
 {
     SetMax( SCNAV_MAXROW);
     SetLast( SCNAV_MAXROW);
@@ -258,6 +265,13 @@ RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
 
 RowEdit::~RowEdit()
 {
+    disposeOnce();
+}
+
+void RowEdit::dispose()
+{
+    rDlg.clear();
+    NumericField::dispose();
 }
 
 bool RowEdit::Notify( NotifyEvent& rNEvt )
@@ -285,23 +299,30 @@ void RowEdit::LoseFocus()
 
 void RowEdit::ExecuteRow()
 {
-    SCCOL nCol = rDlg.aEdCol->GetCol();
+    SCCOL nCol = rDlg->aEdCol->GetCol();
     SCROW nRow = (SCROW)GetValue();
 
     if ( (nCol > 0) && (nRow > 0) )
-        rDlg.SetCurrentCell( nCol-1, nRow-1 );
+        rDlg->SetCurrentCell( nCol-1, nRow-1 );
 }
 
 //  class ScDocListBox
 
 ScDocListBox::ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId )
     :   ListBox ( pParent, rResId ),
-        rDlg    ( *pParent )
+        rDlg    ( pParent )
 {
 }
 
 ScDocListBox::~ScDocListBox()
 {
+    disposeOnce();
+}
+
+void ScDocListBox::dispose()
+{
+    rDlg.clear();
+    ListBox::dispose();
 }
 
 void ScDocListBox::Select()
@@ -309,14 +330,14 @@ void ScDocListBox::Select()
     ScNavigatorDlg::ReleaseFocus();
 
     OUString aDocName = GetSelectEntry();
-    rDlg.aLbEntries->SelectDoc( aDocName );
+    rDlg->aLbEntries->SelectDoc( aDocName );
 }
 
 //  class CommandToolBox
 
 CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     :   ToolBox ( pParent, rResId ),
-        rDlg    ( *pParent )
+        rDlg    ( pParent )
 {
     InitImageList();    // ImageList members of ScNavigatorDlg must be initialized before!
 
@@ -327,6 +348,13 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
 
 CommandToolBox::~CommandToolBox()
 {
+    disposeOnce();
+}
+
+void CommandToolBox::dispose()
+{
+    rDlg.clear();
+    ToolBox::dispose();
 }
 
 void CommandToolBox::Select( sal_uInt16 nSelId )
@@ -335,7 +363,7 @@ void CommandToolBox::Select( sal_uInt16 nSelId )
 
     if ( nSelId == IID_ZOOMOUT || nSelId == IID_SCENARIOS )
     {
-        NavListMode eOldMode = rDlg.eListMode;
+        NavListMode eOldMode = rDlg->eListMode;
         NavListMode eNewMode = eOldMode;
 
         if ( nSelId == IID_SCENARIOS )
@@ -352,23 +380,23 @@ void CommandToolBox::Select( sal_uInt16 nSelId )
             else
                 eNewMode = NAV_LMODE_NONE;
         }
-        rDlg.SetListMode( eNewMode );
+        rDlg->SetListMode( eNewMode );
         UpdateButtons();
     }
     else
         switch ( nSelId )
         {
             case IID_DATA:
-                rDlg.MarkDataArea();
+                rDlg->MarkDataArea();
                 break;
             case IID_UP:
-                rDlg.StartOfDataArea();
+                rDlg->StartOfDataArea();
                 break;
             case IID_DOWN:
-                rDlg.EndOfDataArea();
+                rDlg->EndOfDataArea();
                 break;
             case IID_CHANGEROOT:
-                rDlg.aLbEntries->ToggleRoot();
+                rDlg->aLbEntries->ToggleRoot();
                 UpdateButtons();
                 break;
         }
@@ -391,14 +419,14 @@ IMPL_LINK_NOARG_TYPED(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
     if ( GetCurItemId() == IID_DROPMODE )
     {
         ScPopupMenu aPop( ScResId( RID_POPUP_DROPMODE ) );
-        aPop.CheckItem( RID_DROPMODE_URL + rDlg.GetDropMode() );
+        aPop.CheckItem( RID_DROPMODE_URL + rDlg->GetDropMode() );
         aPop.Execute( this, GetItemRect(IID_DROPMODE), PopupMenuFlags::ExecuteDown );
         sal_uInt16 nId = aPop.GetSelected();
 
         EndSelection();     // bevore SetDropMode (SetDropMode calls SetItemImage)
 
         if ( nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY )
-            rDlg.SetDropMode( nId - RID_DROPMODE_URL );
+            rDlg->SetDropMode( nId - RID_DROPMODE_URL );
 
         //  reset the highlighted button
         Point aPoint;
@@ -409,7 +437,7 @@ IMPL_LINK_NOARG_TYPED(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
 
 void CommandToolBox::UpdateButtons()
 {
-    NavListMode eMode = rDlg.eListMode;
+    NavListMode eMode = rDlg->eListMode;
     CheckItem( IID_SCENARIOS,   eMode == NAV_LMODE_SCENARIOS );
     CheckItem( IID_ZOOMOUT,     eMode != NAV_LMODE_NONE );
 
@@ -422,12 +450,12 @@ void CommandToolBox::UpdateButtons()
     else
     {
         EnableItem( IID_CHANGEROOT, true );
-        bool bRootSet = rDlg.aLbEntries->GetRootType() != SC_CONTENT_ROOT;
+        bool bRootSet = rDlg->aLbEntries->GetRootType() != SC_CONTENT_ROOT;
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
     sal_uInt16 nImageId = 0;
-    switch ( rDlg.nDropMode )
+    switch ( rDlg->nDropMode )
     {
         case SC_DROPMODE_URL:   nImageId = RID_IMG_DROP_URL;  break;
         case SC_DROPMODE_LINK:  nImageId = RID_IMG_DROP_LINK; break;
@@ -438,7 +466,7 @@ void CommandToolBox::UpdateButtons()
 
 void CommandToolBox::InitImageList()
 {
-    ImageList& rImgLst = rDlg.aCmdImageList;
+    ImageList& rImgLst = rDlg->aCmdImageList;
 
     sal_uInt16 nCount = GetItemCount();
     for (sal_uInt16 i = 0; i < nCount; i++)

@@ -47,7 +47,7 @@ class ThesaurusAlternativesCtrl;
 
 class AlternativesString : public SvLBoxString
 {
-    ThesaurusAlternativesCtrl&    m_rControlImpl;
+    VclPtr<ThesaurusAlternativesCtrl>    m_rControlImpl;
 public:
 
     AlternativesString( ThesaurusAlternativesCtrl &rControl,

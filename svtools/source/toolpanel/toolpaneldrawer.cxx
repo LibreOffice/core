@@ -48,18 +48,28 @@ namespace svt
 
     DrawerVisualization::DrawerVisualization( ToolPanelDrawer& i_rParent )
         :Window( &i_rParent )
-        ,m_rDrawer( i_rParent )
+        ,m_rDrawer( &i_rParent )
     {
         SetMouseTransparent( true );
         Show();
         SetAccessibleRole( AccessibleRole::LABEL );
     }
 
+    DrawerVisualization::~DrawerVisualization()
+    {
+        disposeOnce();
+    }
+
+    void DrawerVisualization::dispose()
+    {
+        m_rDrawer.clear();
+        vcl::Window::dispose();
+    }
 
     void DrawerVisualization::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox)
     {
         Window::Paint(rRenderContext, i_rBoundingBox);
-        m_rDrawer.Paint(rRenderContext);
+        m_rDrawer->Paint(rRenderContext);
     }
 
 

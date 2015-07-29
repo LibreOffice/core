@@ -55,7 +55,7 @@ class SvxPopupWindowListBox: public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
     VclPtr<ListBox> m_pListBox;
-    ToolBox &       rToolBox;
+    VclPtr<ToolBox> rToolBox;
     bool            bUserSel;
     sal_uInt16      nTbxId;
 
@@ -73,12 +73,12 @@ public:
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
-    virtual vcl::Window*             GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*        GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
 
 SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx)
     : SfxPopupWindow(nSlotId, "FloatingUndoRedo", "svx/ui/floatingundoredo.ui")
-    , rToolBox(rTbx)
+    , rToolBox(&rTbx)
     , bUserSel(false)
     , nTbxId(nId)
 {
@@ -108,7 +108,7 @@ void SvxPopupWindowListBox::dispose()
 
 void SvxPopupWindowListBox::PopupModeEnd()
 {
-    rToolBox.EndSelection();
+    rToolBox->EndSelection();
     SfxPopupWindow::PopupModeEnd();
     //FloatingWindow::PopupModeEnd();
 
@@ -124,7 +124,7 @@ void SvxPopupWindowListBox::PopupModeEnd()
 void SvxPopupWindowListBox::StateChanged(
         sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SfxItemState::DISABLED) );
+    rToolBox->EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SfxItemState::DISABLED) );
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 

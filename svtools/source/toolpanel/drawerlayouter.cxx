@@ -39,7 +39,7 @@ namespace svt
 
 
     DrawerDeckLayouter::DrawerDeckLayouter( vcl::Window& i_rParentWindow, IToolPanelDeck& i_rPanels )
-        :m_rParentWindow( i_rParentWindow )
+        :m_rParentWindow( &i_rParentWindow )
         ,m_rPanelDeck( i_rPanels )
         ,m_aDrawers()
         ,m_aLastKnownActivePanel()
@@ -151,7 +151,7 @@ namespace svt
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
-        VclPtrInstance<ToolPanelDrawer> pDrawer( m_rParentWindow, i_pPanel->GetDisplayName() );
+        VclPtrInstance<ToolPanelDrawer> pDrawer( *m_rParentWindow.get(), i_pPanel->GetDisplayName() );
         pDrawer->SetHelpId( i_pPanel->GetHelpID() );
         // proper Z-Order
         if ( i_nPosition == 0 )
@@ -182,7 +182,7 @@ namespace svt
     {
         // this is somewhat hacky, it assumes that the parent of our panels is a tool panel deck, which, in its
         // Resize implementation, rearrances all elements.
-        m_rParentWindow.Resize();
+        m_rParentWindow->Resize();
     }
 
 

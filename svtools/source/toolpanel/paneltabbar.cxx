@@ -106,7 +106,7 @@ namespace svt
     {
     public:
         explicit VCLItemRenderer( OutputDevice& i_rTargetDevice )
-            :m_rTargetDevice( i_rTargetDevice )
+            :m_rTargetDevice( &i_rTargetDevice )
         {
         }
         virtual ~VCLItemRenderer() {}
@@ -118,10 +118,10 @@ namespace svt
         virtual void        postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
-        OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
+        OutputDevice&   getTargetDevice() const { return *m_rTargetDevice.get(); }
 
     private:
-        OutputDevice&   m_rTargetDevice;
+        VclPtr<OutputDevice>   m_rTargetDevice;
     };
 
 
@@ -181,7 +181,7 @@ namespace svt
     {
     public:
         explicit NWFToolboxItemRenderer( OutputDevice& i_rTargetDevice )
-            :m_rTargetDevice( i_rTargetDevice )
+            :m_rTargetDevice( &i_rTargetDevice )
         {
         }
         virtual ~NWFToolboxItemRenderer() {}
@@ -193,10 +193,10 @@ namespace svt
         virtual void        postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
-        OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
+        OutputDevice&   getTargetDevice() const { return *m_rTargetDevice.get(); }
 
     private:
-        OutputDevice&   m_rTargetDevice;
+        VclPtr<OutputDevice>   m_rTargetDevice;
     };
 
 
@@ -364,7 +364,7 @@ namespace svt
             (void) i_pPanel;
             (void) i_nPosition;
             m_bItemsDirty = true;
-            m_rTabBar.Invalidate();
+            m_rTabBar->Invalidate();
 
             Relayout();
         }
@@ -372,7 +372,7 @@ namespace svt
         virtual void PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE
         {
             m_bItemsDirty = true;
-            m_rTabBar.Invalidate();
+            m_rTabBar->Invalidate();
 
             if ( i_nPosition < m_nScrollPosition )
                 --m_nScrollPosition;
@@ -419,7 +419,7 @@ namespace svt
         ItemFlags   impl_getItemFlags( const size_t i_nItemIndex ) const;
 
     public:
-        PanelTabBar&                m_rTabBar;
+        VclPtr<PanelTabBar>         m_rTabBar;
         TabBarGeometry              m_aGeometry;
         NormalizedArea              m_aNormalizer;
         TabAlignment                m_eTabAlignment;
@@ -482,8 +482,8 @@ namespace svt
             explicit ClipItemRegion( const PanelTabBar_Impl& i_rImpl )
                 :m_rDevice( i_rImpl.m_rTabBar )
             {
-                m_rDevice.Push( PushFlags::CLIPREGION );
-                m_rDevice.SetClipRegion(vcl::Region(
+                m_rDevice->Push( PushFlags::CLIPREGION );
+                m_rDevice->SetClipRegion(vcl::Region(
                     i_rImpl.m_aNormalizer.getTransformed(
                         i_rImpl.m_aGeometry.getItemsRect(),
                         i_rImpl.m_eTabAlignment )));
@@ -491,11 +491,11 @@ namespace svt
 
             ~ClipItemRegion()
             {
-                m_rDevice.Pop();
+                m_rDevice->Pop();
             }
 
         private:
-            OutputDevice&   m_rDevice;
+            VclPtr<OutputDevice>   m_rDevice;
         };
     }
 
@@ -504,7 +504,7 @@ namespace svt
 
 
     PanelTabBar_Impl::PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-        :m_rTabBar( i_rTabBar )
+        :m_rTabBar( &i_rTabBar )
         ,m_aGeometry( i_eItemContent )
         ,m_aNormalizer()
         ,m_eTabAlignment( i_eAlignment )
@@ -614,7 +614,7 @@ namespace svt
                 aItemContentSize.Width() += ITEM_ICON_TEXT_DISTANCE;
 
             // add space for text
-            const Size aTextSize( m_rTabBar.GetCtrlTextWidth( sItemText ), m_rTabBar.GetTextHeight() );
+            const Size aTextSize( m_rTabBar->GetCtrlTextWidth( sItemText ), m_rTabBar->GetTextHeight() );
             aItemContentSize.Width() += aTextSize.Width();
             aItemContentSize.Height() = ::std::max( aItemContentSize.Height(), aTextSize.Height() );
 
@@ -689,7 +689,7 @@ namespace svt
             }
 
             // draw the text
-            const Size aTextSize(m_rTabBar.GetCtrlTextWidth(sItemText), rRenderContext.GetTextHeight());
+            const Size aTextSize(m_rTabBar->GetCtrlTextWidth(sItemText), rRenderContext.GetTextHeight());
             Point aTextPos(aRenderArea.TopLeft());
             if (IsVertical())
             {
@@ -747,7 +747,7 @@ namespace svt
         const Rectangle aNormalizedBounds( m_pRenderer->calculateDecorations( aNormalizedContent, nItemFlags ) );
 
         const Rectangle aActualBounds = m_aNormalizer.getTransformed( aNormalizedBounds, m_eTabAlignment );
-        m_rTabBar.Invalidate( aActualBounds );
+        m_rTabBar->Invalidate( aActualBounds );
     }
 
 
@@ -794,7 +794,7 @@ namespace svt
                 return;
         }
 
-        m_rTabBar.SetUpdateMode(false);
+        m_rTabBar->SetUpdateMode(false);
 
         // the aligned bounding and content rect
         const Rectangle aActualBounds = m_aNormalizer.getTransformed( aNormalizedBounds, m_eTabAlignment );
@@ -810,9 +810,9 @@ namespace svt
         impl_renderItemContent(rRenderContext, rItem.pPanel, aActualContent, rItem.eContent);
 
         // render item "foreground" layer
-        m_pRenderer->postRenderItem(m_rTabBar, aActualBounds, nItemFlags);
+        m_pRenderer->postRenderItem(*m_rTabBar.get(), aActualBounds, nItemFlags);
 
-        m_rTabBar.SetUpdateMode(true);
+        m_rTabBar->SetUpdateMode(true);
     }
 
 
@@ -833,7 +833,7 @@ namespace svt
     {
         EnsureItemsCache();
 
-        const Size aOutputSize( m_rTabBar.GetOutputSizePixel() );
+        const Size aOutputSize( m_rTabBar->GetOutputSizePixel() );
         m_aNormalizer = NormalizedArea( Rectangle( Point(), aOutputSize ), IsVertical() );
         const Size aLogicalOutputSize( m_aNormalizer.getReferenceSize() );
 
@@ -900,7 +900,7 @@ namespace svt
             GetActualLogicalItemRect( rItem.GetCurrentRect() ),
             m_eTabAlignment ) );
 
-        const Rectangle aTabBarRect( m_rTabBar.GetWindowExtentsRelative( NULL ) );
+        const Rectangle aTabBarRect( m_rTabBar->GetWindowExtentsRelative( NULL ) );
         return Rectangle(
             Point( aTabBarRect.Left() + aItemRect.Left(), aTabBarRect.Top() + aItemRect.Top() ),
             aItemRect.GetSize()
@@ -930,13 +930,13 @@ namespace svt
         {
             OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             --m_nScrollPosition;
-            m_rTabBar.Invalidate();
+            m_rTabBar->Invalidate();
         }
         else if ( i_pButton == m_aScrollForward.get() )
         {
             OSL_ENSURE( m_nScrollPosition < m_aItems.size() - 1, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             ++m_nScrollPosition;
-            m_rTabBar.Invalidate();
+            m_rTabBar->Invalidate();
         }
 
         UpdateScrollButtons();
@@ -1216,7 +1216,7 @@ namespace svt
     {
     public:
         KeyInputHandler( Control& i_rControl, const KeyEvent& i_rKeyEvent )
-            :m_rControl( i_rControl )
+            :m_rControl( &i_rControl )
             ,m_rKeyEvent( i_rKeyEvent )
             ,m_bHandled( false )
         {
@@ -1225,7 +1225,7 @@ namespace svt
         ~KeyInputHandler()
         {
             if ( !m_bHandled )
-                m_rControl.Control::KeyInput( m_rKeyEvent );
+                m_rControl->Control::KeyInput( m_rKeyEvent );
         }
 
         void   setHandled()
@@ -1234,7 +1234,7 @@ namespace svt
         }
 
     private:
-        Control&        m_rControl;
+        VclPtr<Control> m_rControl;
         const KeyEvent& m_rKeyEvent;
         bool            m_bHandled;
     };

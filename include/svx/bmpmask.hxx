@@ -39,7 +39,7 @@ class SvxBmpMask;
 class SvxBmpMaskSelectItem : public SfxControllerItem
 {
 private:
-    SvxBmpMask  &rBmpMask;
+    VclPtr<SvxBmpMask>  rBmpMask;
 
 protected:
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,

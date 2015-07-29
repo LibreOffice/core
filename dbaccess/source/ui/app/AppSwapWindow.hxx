@@ -33,7 +33,7 @@ namespace dbaui
     {
         VclPtr<OApplicationIconControl>     m_aIconControl;
         ElementType                         m_eLastType;
-        OAppBorderWindow&                   m_rBorderWin;
+        VclPtr<OAppBorderWindow>            m_rBorderWin;
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 

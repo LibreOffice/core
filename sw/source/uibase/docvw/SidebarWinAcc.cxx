@@ -97,12 +97,12 @@ SidebarWinAccessible::SidebarWinAccessible( SwSidebarWin& rSidebarWin,
                                             SwViewShell& rViewShell,
                                             const SwSidebarItem& rSidebarItem )
     : VCLXWindow()
-    , mrSidebarWin( rSidebarWin )
+    , mrSidebarWin( &rSidebarWin )
     , mrViewShell( rViewShell )
     , mpAnchorFrm( rSidebarItem.maLayoutInfo.mpAnchorFrm )
     , bAccContextCreated( false )
 {
-    SetWindow( &mrSidebarWin );
+    SetWindow( mrSidebarWin.get() );
 }
 
 SidebarWinAccessible::~SidebarWinAccessible()
@@ -130,7 +130,7 @@ void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem 
 css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessible::CreateAccessibleContext()
 {
     SidebarWinAccessibleContext* pAccContext =
-                                new SidebarWinAccessibleContext( mrSidebarWin,
+                                new SidebarWinAccessibleContext( *mrSidebarWin.get(),
                                                                  mrViewShell,
                                                                  mpAnchorFrm );
     css::uno::Reference< css::accessibility::XAccessibleContext > xAcc( pAccContext );

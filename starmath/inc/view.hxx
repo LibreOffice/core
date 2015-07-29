@@ -148,7 +148,7 @@ public:
 class SmGraphicController: public SfxControllerItem
 {
 protected:
-    SmGraphicWindow &rGraphic;
+    VclPtr<SmGraphicWindow> rGraphic;
 public:
     SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
     virtual void StateChanged(sal_uInt16             nSID,
@@ -159,7 +159,7 @@ public:
 class SmEditController: public SfxControllerItem
 {
 protected:
-    SmEditWindow &rEdit;
+    VclPtr<SmEditWindow> rEdit;
 
 public:
     SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );

@@ -36,7 +36,7 @@ class SidebarTextControlAccessible : public VCLXWindow
                 CreateAccessibleContext() SAL_OVERRIDE;
 
     private:
-        SidebarTextControl& mrSidebarTextControl;
+        VclPtr<SidebarTextControl> mrSidebarTextControl;
 };
 
 } } // end of namespace sw::sidebarwindows

@@ -34,7 +34,7 @@ namespace drawinglayer
 {
     class impBufferDevice
     {
-        OutputDevice&                       mrOutDev;
+        VclPtr<OutputDevice>                mrOutDev;
         VclPtr<VirtualDevice>               mpContent;
         VclPtr<VirtualDevice>               mpMask;
         VclPtr<VirtualDevice>               mpAlpha;

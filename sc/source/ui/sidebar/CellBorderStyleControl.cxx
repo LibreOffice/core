@@ -44,7 +44,7 @@ namespace sc { namespace sidebar {
 
 CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE)),
-    mrCellAppearancePropertyPanel(rPanel),
+    mrCellAppearancePropertyPanel(&rPanel),
     maTBBorder1(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER1))),
     maTBBorder2(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER2))),
     maTBBorder3(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER3))),
@@ -162,8 +162,8 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
         SvxLineItem     aLineItem2( SID_ATTR_BORDER_DIAG_TLBR );
         aLineItem1.SetLine( NULL );     //modify
         aLineItem2.SetLine( NULL );     //modify
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, &aLineItem1, 0L);
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, &aLineItem2, 0L);
+        mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, &aLineItem1, 0L);
+        mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, &aLineItem2, 0L);
         }
         break;
     case TBI_BORDER1_ALL:
@@ -197,8 +197,8 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
-    mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
-    mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
+    mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
+    mrCellAppearancePropertyPanel->EndCellBorderStylePopupMode();
 }
 
 IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
@@ -265,24 +265,24 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
+        mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
     }
     else if(nId == TBI_BORDER2_BLTR)
     {
         editeng::SvxBorderLine aTmp( NULL, 1 );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_BLTR );
         aLineItem.SetLine( &aTmp );
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, &aLineItem, 0L);
+        mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, &aLineItem, 0L);
     }
     else if(nId == TBI_BORDER2_TLBR)
     {
         editeng::SvxBorderLine aTmp( NULL, 1 );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_TLBR );
         aLineItem.SetLine( &aTmp );
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, &aLineItem, 0L);
+        mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, &aLineItem, 0L);
     }
 
-    mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
+    mrCellAppearancePropertyPanel->EndCellBorderStylePopupMode();
 }
 
 IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
@@ -336,12 +336,12 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
-    mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
+    mrCellAppearancePropertyPanel->GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
 
     pTop.reset();
     pBottom.reset();
 
-    mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
+    mrCellAppearancePropertyPanel->EndCellBorderStylePopupMode();
 }
 
 } } // end of namespace svx::sidebar

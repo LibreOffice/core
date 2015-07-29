@@ -74,10 +74,10 @@ namespace svx
 
     private:
         const Reference<XComponentContext>      m_xContext;
-        ::svt::OFileURLControl&                 m_rLocationInput;
-        PushButton&                             m_rBrowseButton;
-        Sequence< OUString >             m_aFilterExtensions;
-        OUString                         m_sFilterUIName;
+        VclPtr<::svt::OFileURLControl>          m_rLocationInput;
+        VclPtr<PushButton>                      m_rBrowseButton;
+        Sequence< OUString >                    m_aFilterExtensions;
+        OUString                                m_sFilterUIName;
         bool                                    m_bNeedExistenceCheck;
     };
 
@@ -85,8 +85,8 @@ namespace svx
     DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
         :m_xContext( _rContext )
-        ,m_rLocationInput( _rLocationInput )
-        ,m_rBrowseButton( _rBrowseButton )
+        ,m_rLocationInput( &_rLocationInput )
+        ,m_rBrowseButton( &_rBrowseButton )
         ,m_aFilterExtensions()
         ,m_sFilterUIName()
         ,m_bNeedExistenceCheck( true )
@@ -103,17 +103,17 @@ namespace svx
             aExtensionList.append( *pExtension );
             aExtensionList.append( ';' );
         }
-        m_rLocationInput.SetFilter( aExtensionList.makeStringAndClear() );
+        m_rLocationInput->SetFilter( aExtensionList.makeStringAndClear() );
 
-        m_rBrowseButton.AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
-        m_rLocationInput.AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
+        m_rBrowseButton->AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
+        m_rLocationInput->AddEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
     }
 
 
     DatabaseLocationInputController_Impl::~DatabaseLocationInputController_Impl()
     {
-        m_rBrowseButton.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
-        m_rLocationInput.RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
+        m_rBrowseButton->RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
+        m_rLocationInput->RemoveEventListener( LINK( this, DatabaseLocationInputController_Impl, OnControlAction ) );
     }
 
 
@@ -128,7 +128,7 @@ namespace svx
         {
             if ( ::utl::UCBContentHelper::Exists( sURL ) )
             {
-                ScopedVclPtrInstance< QueryBox > aBox( m_rLocationInput.GetSystemWindow(), WB_YES_NO, SVX_RESSTR(RID_STR_ALREADYEXISTOVERWRITE) );
+                ScopedVclPtrInstance< QueryBox > aBox( m_rLocationInput->GetSystemWindow(), WB_YES_NO, SVX_RESSTR(RID_STR_ALREADYEXISTOVERWRITE) );
                 if ( aBox->Execute() != RET_YES )
                     return false;
             }
@@ -141,7 +141,7 @@ namespace svx
     void DatabaseLocationInputController_Impl::setURL( const OUString& _rURL )
     {
         ::svt::OFileNotation aTransformer( _rURL );
-        m_rLocationInput.SetText( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
+        m_rLocationInput->SetText( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
     }
 
 
@@ -198,14 +198,14 @@ namespace svx
 
     IMPL_LINK( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent*, _pEvent )
     {
-        if  (   ( _pEvent->GetWindow() == &m_rBrowseButton )
+        if  (   ( _pEvent->GetWindow() == m_rBrowseButton.get() )
             &&  ( _pEvent->GetId() == VCLEVENT_BUTTON_CLICK )
             )
         {
             impl_onBrowseButtonClicked();
         }
 
-        if  (   ( _pEvent->GetWindow() == &m_rLocationInput )
+        if  (   ( _pEvent->GetWindow() == m_rLocationInput.get() )
             &&  ( _pEvent->GetId() == VCLEVENT_EDIT_MODIFY )
             )
         {
@@ -218,7 +218,7 @@ namespace svx
 
     OUString DatabaseLocationInputController_Impl::impl_getCurrentURL() const
     {
-        OUString sCurrentFile( m_rLocationInput.GetText() );
+        OUString sCurrentFile( m_rLocationInput->GetText() );
         if ( !sCurrentFile.isEmpty() )
         {
             ::svt::OFileNotation aCurrentFile( sCurrentFile );
@@ -233,7 +233,7 @@ namespace svx
         ::sfx2::FileDialogHelper aFileDlg(
             TemplateDescription::FILESAVE_AUTOEXTENSION,
             0,
-            m_rLocationInput.GetSystemWindow()
+            m_rLocationInput->GetSystemWindow()
         );
         aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );
 
@@ -246,8 +246,8 @@ namespace svx
             if( aURL.GetProtocol() != INetProtocol::NotValid )
             {
                 ::svt::OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                m_rLocationInput.SetText( aFileNotation.get( ::svt::OFileNotation::N_SYSTEM ) );
-                m_rLocationInput.GetModifyHdl().Call( &m_rLocationInput );
+                m_rLocationInput->SetText( aFileNotation.get( ::svt::OFileNotation::N_SYSTEM ) );
+                m_rLocationInput->GetModifyHdl().Call( &m_rLocationInput );
                 // the dialog already checked for the file's existence, so we don't need to, again
                 m_bNeedExistenceCheck = false;
             }

@@ -30,7 +30,7 @@ class CellAppearancePropertyPanel;
 class CellLineStyleControl : public svx::sidebar::PopupControl
 {
 private:
-    CellAppearancePropertyPanel&       mrCellAppearancePropertyPanel;
+    VclPtr<CellAppearancePropertyPanel> mrCellAppearancePropertyPanel;
     VclPtr<PushButton>                 maPushButtonMoreOptions;
     VclPtr<CellLineStyleValueSet>      maCellLineStyleValueSet;
     OUString                           maStr[CELL_LINE_STYLE_ENTRIES];

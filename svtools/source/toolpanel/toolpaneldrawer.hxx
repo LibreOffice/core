@@ -41,13 +41,15 @@ namespace svt
     {
     public:
         explicit DrawerVisualization(ToolPanelDrawer& i_rParent);
+        virtual ~DrawerVisualization();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // Window overridables
         virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox) SAL_OVERRIDE;
 
     private:
-        ToolPanelDrawer& m_rDrawer;
+        VclPtr<ToolPanelDrawer> m_rDrawer;
     };
 
     class ToolPanelDrawer : public vcl::Window

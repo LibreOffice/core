@@ -236,7 +236,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >          mxWindowPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >             mxPointer;
     SlideshowImpl*                          mpSlideShow;
-    ShowWindow&                             mrOutputWindow;
+    VclPtr<ShowWindow>                      mrOutputWindow;
     SlideShowViewListenersPtr               mpViewListeners;
     SlideShowViewPaintListenersPtr          mpPaintListeners;
     SlideShowViewMouseListenersPtr          mpMouseListeners;

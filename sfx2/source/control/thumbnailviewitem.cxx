@@ -101,7 +101,7 @@ void ResizableMultiLineEdit::Modify()
 }
 
 ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
-    : mrParent(rView)
+    : mrParent(&rView)
     , mnId(nId)
     , mbVisible(true)
     , mbSelected(false)
@@ -183,7 +183,7 @@ void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
     }
     else if (bChangeFocus)
     {
-        mrParent.GrabFocus();
+        mrParent->GrabFocus();
     }
 }
 
@@ -212,7 +212,7 @@ void ThumbnailViewItem::updateTitleEditSize()
 
 void ThumbnailViewItem::setTitle (const OUString& rTitle)
 {
-    if (mrParent.renameItem(this, rTitle))
+    if (mrParent->renameItem(this, rTitle))
         maTitle = rTitle;
 }
 

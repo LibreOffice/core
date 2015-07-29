@@ -81,7 +81,7 @@ namespace accessibility
 
         SdrObject&                      mrObj;
         SdrView&                        mrView;
-        const vcl::Window&                   mrViewWindow;
+        VclPtr<const vcl::Window>       mrViewWindow;
 
         bool                            mbEditSourceEmpty;
     };

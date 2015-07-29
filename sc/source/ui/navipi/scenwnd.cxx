@@ -35,7 +35,7 @@
 
 ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
-    mrParent( rParent )
+    mrParent( &rParent )
 {
     vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
@@ -45,6 +45,13 @@ ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
 
 ScScenarioListBox::~ScScenarioListBox()
 {
+    disposeOnce();
+}
+
+void ScScenarioListBox::dispose()
+{
+    mrParent.clear();
+    ListBox::dispose();
 }
 
 void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryList )
@@ -56,12 +63,12 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
     {
         case 0:
             // no scenarios in current sheet
-            mrParent.SetComment( EMPTY_OUSTRING );
+            mrParent->SetComment( EMPTY_OUSTRING );
         break;
 
         case 1:
             // sheet is a scenario container, comment only
-            mrParent.SetComment( aNewEntryList[0] );
+            mrParent->SetComment( aNewEntryList[0] );
         break;
 
         default:
@@ -91,7 +98,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
             }
             SetUpdateMode( true );
             SetNoSelection();
-            mrParent.SetComment( EMPTY_OUSTRING );
+            mrParent->SetComment( EMPTY_OUSTRING );
         }
     }
 }
@@ -99,7 +106,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
 void ScScenarioListBox::Select()
 {
     if( const ScenarioEntry* pEntry = GetSelectedEntry() )
-        mrParent.SetComment( pEntry->maComment );
+        mrParent->SetComment( pEntry->maComment );
 }
 
 void ScScenarioListBox::DoubleClick()

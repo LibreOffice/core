@@ -73,10 +73,10 @@ namespace svt
         DECL_LINK( OnWindowEvent, VclSimpleEvent* );
 
 private:
-        vcl::Window&                             m_rParentWindow;
-        IToolPanelDeck&                     m_rPanelDeck;
+        VclPtr<vcl::Window>                        m_rParentWindow;
+        IToolPanelDeck&                            m_rPanelDeck;
         ::std::vector< VclPtr<ToolPanelDrawer> >   m_aDrawers;
-        ::boost::optional< size_t >         m_aLastKnownActivePanel;
+        ::boost::optional< size_t >                m_aLastKnownActivePanel;
     };
 
 

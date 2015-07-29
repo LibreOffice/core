@@ -223,13 +223,13 @@ namespace sdr
                 aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
 
                 // prepare cursor handling
-                const bool bTargetIsWindow(OUTDEV_WINDOW == mrOutputDevice.GetOutDevType());
+                const bool bTargetIsWindow(OUTDEV_WINDOW == mrOutputDevice->GetOutDevType());
                 bool bCursorWasEnabled(false);
 
                 // #i80730# switch off VCL cursor during overlay refresh
                 if(bTargetIsWindow)
                 {
-                    vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                    vcl::Window& rWindow = static_cast< vcl::Window& >(*mrOutputDevice.get());
                     vcl::Cursor* pCursor = rWindow.GetCursor();
 
                     if(pCursor && pCursor->IsVisible())
@@ -346,7 +346,7 @@ namespace sdr
                 // To get the update, the windows in question are updated manulally here.
                 if(bTargetIsWindow)
                 {
-                    vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                    vcl::Window& rWindow = static_cast< vcl::Window& >(*mrOutputDevice.get());
 
                     const Rectangle aRegionRectanglePixel(
                         maBufferRememberedRangePixel.getMinX(),
@@ -359,7 +359,7 @@ namespace sdr
                 // #i80730# restore visibility of VCL cursor
                 if(bCursorWasEnabled)
                 {
-                    vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                    vcl::Window& rWindow = static_cast< vcl::Window& >(*mrOutputDevice.get());
                     vcl::Cursor* pCursor = rWindow.GetCursor();
 
                     if(pCursor)

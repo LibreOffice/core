@@ -75,7 +75,7 @@ PageMarginControl::PageMarginControl(
     , mnUserCustomPageBottomMargin(0)
     , mbUserCustomMirrored(false)
     , mbCustomValuesUsed( false )
-    , mrPagePropPanel(rPanel)
+    , mrPagePropPanel(&rPanel)
 {
     maWidthHeightField->Hide();
     SetFieldUnit( *maWidthHeightField.get(), eFUnit );
@@ -377,19 +377,19 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
 
         if ( bApplyNewPageMargins )
         {
-            mrPagePropPanel.StartUndo();
+            mrPagePropPanel->StartUndo();
             mpMarginValueSet->SetNoSelection();
-            mrPagePropPanel.ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
-            mrPagePropPanel.ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
+            mrPagePropPanel->ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
+            mrPagePropPanel->ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
             if ( mbMirrored != bMirrored )
             {
                 mbMirrored = bMirrored;
-                mrPagePropPanel.ExecutePageLayoutChange( mbMirrored );
+                mrPagePropPanel->ExecutePageLayoutChange( mbMirrored );
             }
-            mrPagePropPanel.EndUndo();
+            mrPagePropPanel->EndUndo();
 
             mbCustomValuesUsed = false;
-            mrPagePropPanel.ClosePageMarginPopup();
+            mrPagePropPanel->ClosePageMarginPopup();
         }
         else
         {
@@ -411,7 +411,7 @@ IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, )
 
     mnPageLeftMargin = GetCoreValue( *maLeftMarginEdit.get(), meUnit );
     mnPageRightMargin = GetCoreValue( *maRightMarginEdit.get(), meUnit );
-    mrPagePropPanel.ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
+    mrPagePropPanel->ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
     mbCustomValuesUsed = true;
     return 0;
 }
@@ -426,7 +426,7 @@ IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, )
 
     mnPageTopMargin = GetCoreValue( *maTopMarginEdit.get(), meUnit );
     mnPageBottomMargin = GetCoreValue( *maBottomMarginEdit.get(), meUnit );
-    mrPagePropPanel.ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
+    mrPagePropPanel->ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
     mbCustomValuesUsed = true;
     return 0;
 }

@@ -34,7 +34,7 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
     svx::sidebar::TextPropertyPanel& rPanel,
     SfxBindings* pBindings)
 :   PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_SPACING))
-,   mrTextPropertyPanel(rPanel)
+,   mrTextPropertyPanel(&rPanel)
 ,   mpBindings(pBindings)
 ,   maVSSpacing     (VclPtr<ValueSetWithTextControl>::Create(ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES(VS_SPACING)))
 ,   maLastCus       (VclPtr<FixedText>::Create(this, SVX_RES(FT_LASTCUSTOM)))
@@ -210,7 +210,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         maLBKerning->Enable();
         maFTSpacing->Enable();
 
-        SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
+        SfxMapUnit eUnit = mrTextPropertyPanel->GetSpaceController().GetCoreMetric();
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit( MAP_POINT );
         long nBig = maEditKerning->Normalize(nKerning);
@@ -245,7 +245,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
             maEditKerning->Enable();
             maEditKerning->SetValue( -nKerning );
             maLBKerning->SelectEntryPos( SIDEBAR_SPACE_CONDENSED );
-            long nMax = mrTextPropertyPanel.GetSelFontSize()/6;
+            long nMax = mrTextPropertyPanel->GetSelFontSize()/6;
             maEditKerning->SetMax( maEditKerning->Normalize( nMax ), FUNIT_POINT );
             maEditKerning->SetLast( maEditKerning->GetMax( maEditKerning->GetUnit() ) );
             if( nKerning == -30 )
@@ -313,7 +313,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
     {
         sal_uInt16 iPos = maVSSpacing->GetSelectItemId();
         short nKern = 0;
-        SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
+        SfxMapUnit eUnit = mrTextPropertyPanel->GetSpaceController().GetCoreMetric();
         long nVal = 0;
         if(iPos == 1)
         {
@@ -376,7 +376,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
         }
 
         if(iPos < 6 || (iPos == 6 && mbCusEnable)) //add
-            mrTextPropertyPanel.EndSpacingPopupMode();
+            mrTextPropertyPanel->EndSpacingPopupMode();
     }
 
 
@@ -424,14 +424,14 @@ IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
     }
     sal_uInt16 nPos = maLBKerning->GetSelectEntryPos();
     short nKern = 0;
-    SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
+    SfxMapUnit eUnit = mrTextPropertyPanel->GetSpaceController().GetCoreMetric();
     mnLastCus = SPACING_CLOSE_BY_CUS_EDIT;
     if ( nPos == SIDEBAR_SPACE_EXPAND || nPos == SIDEBAR_SPACE_CONDENSED )
     {
         long nTmp = static_cast<long>(maEditKerning->GetValue());
         if ( nPos == SIDEBAR_SPACE_CONDENSED )
         {
-            long nMax =  mrTextPropertyPanel.GetSelFontSize()/6;
+            long nMax =  mrTextPropertyPanel->GetSelFontSize()/6;
             maEditKerning->SetMax( maEditKerning->Normalize( nMax ), FUNIT_TWIP );
             maEditKerning->SetLast( maEditKerning->GetMax( maEditKerning->GetUnit() ) );
             if(nTmp > maEditKerning->GetMax())

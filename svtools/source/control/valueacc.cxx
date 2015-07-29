@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 
 
 ValueSetItem::ValueSetItem( ValueSet& rParent )
-    : mrParent(rParent)
+    : mrParent(&rParent)
     , mnId(0)
     , meType(VALUESETITEM_NONE)
     , mbVisible(true)
@@ -863,7 +863,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( mpParent )
-        xRet = mpParent->mrParent.GetAccessible();
+        xRet = mpParent->mrParent->GetAccessible();
 
     return xRet;
 }
@@ -882,7 +882,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     {
         bool bDone = false;
 
-        sal_uInt16 nCount = mpParent->mrParent.ImplGetVisibleItemCount();
+        sal_uInt16 nCount = mpParent->mrParent->ImplGetVisibleItemCount();
         ValueSetItem* pItem;
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
@@ -890,7 +890,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the mean time.
             try
             {
-                pItem = mpParent->mrParent.ImplGetItem(i);
+                pItem = mpParent->mrParent->ImplGetItem(i);
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
@@ -908,9 +908,9 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     }
 
     //if this valueset contain a none field(common value is default), then we should increase the real index and set the noitem index value equal 0.
-    if ( mpParent && ( (mpParent->mrParent.GetStyle() & WB_NONEFIELD) != 0 ) )
+    if ( mpParent && ( (mpParent->mrParent->GetStyle() & WB_NONEFIELD) != 0 ) )
     {
-        ValueSetItem* pFirstItem = mpParent->mrParent.ImplGetItem (VALUESET_ITEM_NONEITEM);
+        ValueSetItem* pFirstItem = mpParent->mrParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
         if( pFirstItem && pFirstItem ->GetAccessible(mbIsTransientChildrenDisabled).get() == this )
             nIndexInParent = 0;
         else
@@ -988,7 +988,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
-        if( mpParent->mrParent.GetSelectItemId() == mpParent->mnId )
+        if( mpParent->mrParent->GetSelectItemId() == mpParent->mnId )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
@@ -1088,9 +1088,9 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
+        Rectangle   aRect( mpParent->mrParent->GetItemRect(mpParent->mnId) );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        Rectangle   aParentRect( aOrigin, mpParent->mrParent->GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 
@@ -1123,8 +1123,8 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
 
     if( mpParent )
     {
-        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
-        const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( aPos ) );
+        const Point aPos = mpParent->mrParent->GetItemRect(mpParent->mnId).TopLeft();
+        const Point aScreenPos( mpParent->mrParent->OutputToAbsoluteScreenPixel( aPos ) );
 
         aRet.X = aScreenPos.X();
         aRet.Y = aScreenPos.Y();

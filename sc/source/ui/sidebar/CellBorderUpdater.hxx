@@ -26,8 +26,8 @@ namespace sc { namespace sidebar {
 class CellBorderUpdater
 {
 private:
-    sal_uInt16  mnBtnId;
-    ToolBox&    mrTbx;
+    sal_uInt16      mnBtnId;
+    VclPtr<ToolBox> mrTbx;
 
 public:
     CellBorderUpdater(sal_uInt16 nTbxBtnId, ToolBox& rTbx);

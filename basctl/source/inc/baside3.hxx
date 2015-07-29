@@ -55,10 +55,10 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
 class DialogWindow: public BaseWindow
 {
 private:
-    DialogWindowLayout& rLayout;
-    boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
+    VclPtr<DialogWindowLayout>        rLayout;
+    boost::scoped_ptr<DlgEditor>      pEditor; // never nullptr
     boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
-    OUString            aCurPath;
+    OUString                          aCurPath;
 
 protected:
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
@@ -80,7 +80,8 @@ protected:
 public:
     DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, css::uno::Reference<css::container::XNameContainer> const& xDialogModel);
     DialogWindow( DialogWindow* pCurView ); // never implemented
-
+    virtual ~DialogWindow();
+    virtual void        dispose() SAL_OVERRIDE;
     virtual void        ExecuteCommand( SfxRequest& rReq ) SAL_OVERRIDE;
     virtual void        GetState( SfxItemSet& ) SAL_OVERRIDE;
     DlgEditor&          GetEditor() const   { return *pEditor; }
@@ -147,9 +148,9 @@ private:
     VclPtr<DialogWindow> pChild;
     // dockable windows:
     // object catalog (owned by Shell)
-    ObjectCatalog& rObjectCatalog;
+    VclPtr<ObjectCatalog> rObjectCatalog;
     // property browser (created by this, deleted by toolkit)
-    VclPtr<PropBrw> pPropertyBrowser;
+    VclPtr<PropBrw>       pPropertyBrowser;
 
 private:
     void AddPropertyBrowser ();

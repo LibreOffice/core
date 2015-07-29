@@ -168,7 +168,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
         if (getRemoveIconArea().IsInside(rMEvt.GetPosPixel()))
         {
             SvtHistoryOptions().DeleteItem(ePICKLIST, maURL);
-            mrParent.Reload();
+            mrParent->Reload();
             return;
         }
 
@@ -180,7 +180,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
 void RecentDocsViewItem::OpenDocument()
 {
     // show busy mouse pointer
-    mrParent.SetPointer(Pointer(PointerStyle::Wait));
+    mrParent->SetPointer(Pointer(PointerStyle::Wait));
 
     Reference<frame::XDispatch> xDispatch;
     Reference<frame::XDispatchProvider> xDispatchProvider;

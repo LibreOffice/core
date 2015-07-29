@@ -48,8 +48,8 @@ const sal_uInt16 BUTTON_MARGIN = 6;
 class TabDrawer
 {
 private:
-    TabBar& mrParent;
-    vcl::RenderContext& mrRenderContext;
+    VclPtr<TabBar> mrParent;
+    VclPtr<vcl::RenderContext> mrRenderContext;
     const StyleSettings& mrStyleSettings;
 
     Rectangle maRect;
@@ -65,8 +65,8 @@ private:
 
 public:
     explicit TabDrawer(TabBar& rParent, vcl::RenderContext& rRenderContext)
-        : mrParent(rParent)
-        , mrRenderContext(rRenderContext)
+        : mrParent(&rParent)
+        , mrRenderContext(&rRenderContext)
         , mrStyleSettings(rRenderContext.GetSettings().GetStyleSettings())
         , mbSelected(false)
         , mbCustomColored(false)
@@ -77,62 +77,62 @@ public:
 
     void drawOutputAreaBorder()
     {
-        WinBits nWinStyle = mrParent.GetStyle();
+        WinBits nWinStyle = mrParent->GetStyle();
 
         // draw extra line if above and below border
         if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
         {
-            Size aOutputSize(mrParent.GetOutputSizePixel());
-            Rectangle aOutRect = mrParent.GetPageArea();
+            Size aOutputSize(mrParent->GetOutputSizePixel());
+            Rectangle aOutRect = mrParent->GetPageArea();
 
             // also draw border in 3D for 3D-tabs
             if (nWinStyle & WB_3DTAB)
             {
-                mrRenderContext.SetLineColor(mrStyleSettings.GetShadowColor());
-                mrRenderContext.DrawLine(Point(aOutRect.Left(), 0), Point(aOutputSize.Width(), 0));
+                mrRenderContext->SetLineColor(mrStyleSettings.GetShadowColor());
+                mrRenderContext->DrawLine(Point(aOutRect.Left(), 0), Point(aOutputSize.Width(), 0));
             }
 
             // draw border (line above and line below)
-            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
-            mrRenderContext.DrawLine(aOutRect.TopLeft(), Point(aOutputSize.Width() - 1, aOutRect.Top()));
+            mrRenderContext->SetLineColor(mrStyleSettings.GetDarkShadowColor());
+            mrRenderContext->DrawLine(aOutRect.TopLeft(), Point(aOutputSize.Width() - 1, aOutRect.Top()));
         }
     }
 
     void drawOuterFrame()
     {
-        mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
+        mrRenderContext->SetLineColor(mrStyleSettings.GetDarkShadowColor());
 
         // set correct FillInBrush depending on status
         if (mbSelected)
         {
             // Currently selected Tab
-            mrRenderContext.SetFillColor(maSelectedColor);
+            mrRenderContext->SetFillColor(maSelectedColor);
         }
         else if (mbCustomColored)
         {
-            mrRenderContext.SetFillColor(maCustomColor);
+            mrRenderContext->SetFillColor(maCustomColor);
         }
         else
         {
-            mrRenderContext.SetFillColor(maUnselectedColor);
+            mrRenderContext->SetFillColor(maUnselectedColor);
         }
 
-        mrRenderContext.DrawRect(maRect);
+        mrRenderContext->DrawRect(maRect);
     }
 
     void drawText(const OUString& aText)
     {
         Rectangle aRect = maRect;
-        long nTextWidth = mrRenderContext.GetTextWidth(aText);
-        long nTextHeight = mrRenderContext.GetTextHeight();
+        long nTextWidth = mrRenderContext->GetTextWidth(aText);
+        long nTextHeight = mrRenderContext->GetTextHeight();
         Point aPos = aRect.TopLeft();
         aPos.X() += (aRect.getWidth()  - nTextWidth) / 2;
         aPos.Y() += (aRect.getHeight() - nTextHeight) / 2;
 
         if (mbEnabled)
-            mrRenderContext.DrawText(aPos, aText);
+            mrRenderContext->DrawText(aPos, aText);
         else
-            mrRenderContext.DrawCtrlText(aPos, aText, 0, aText.getLength(), (DrawTextFlags::Disable | DrawTextFlags::Mnemonic));
+            mrRenderContext->DrawCtrlText(aPos, aText, 0, aText.getLength(), (DrawTextFlags::Disable | DrawTextFlags::Mnemonic));
     }
 
     void drawOverTopBorder()
@@ -141,18 +141,18 @@ public:
         Point aTopRight = maRect.TopRight() + Point(-1, 0);
 
         Rectangle aDelRect(aTopLeft, aTopRight);
-        mrRenderContext.DrawRect(aDelRect);
+        mrRenderContext->DrawRect(aDelRect);
     }
 
     void drawColorLine()
     {
-        mrRenderContext.SetFillColor(maCustomColor);
-        mrRenderContext.SetLineColor(maCustomColor);
+        mrRenderContext->SetFillColor(maCustomColor);
+        mrRenderContext->SetLineColor(maCustomColor);
 
         Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
         aLineRect.Top() -= 3;
 
-        mrRenderContext.DrawRect(aLineRect);
+        mrRenderContext->DrawRect(aLineRect);
     }
 
     void drawTab()

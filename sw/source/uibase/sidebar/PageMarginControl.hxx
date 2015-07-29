@@ -98,7 +98,7 @@ private:
 
     bool mbCustomValuesUsed;
 
-    PagePropertyPanel& mrPagePropPanel;
+    VclPtr<PagePropertyPanel> mrPagePropPanel;
 
     DECL_LINK( ImplMarginHdl, void* );
     DECL_LINK( ModifyLRMarginHdl, MetricField* );

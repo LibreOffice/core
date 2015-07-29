@@ -68,7 +68,7 @@ namespace vclcanvas
         ::canvas::vcltools::VCLObject<BitmapEx> maBitmap;
         mutable VclPtr<VirtualDevice>           mpVDev; // created only on demand
 
-        const OutputDevice&                     mrRefDevice;
+        VclPtr<const OutputDevice>              mrRefDevice;
 
         /** When true, the bitmap contains the last valid
             content. When false, and mbVDevContentIsCurrent is true,

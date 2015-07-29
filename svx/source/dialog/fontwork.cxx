@@ -49,7 +49,7 @@ SvxFontWorkControllerItem::SvxFontWorkControllerItem
 
     SfxControllerItem( _nId, rBindings ),
 
-    rFontWorkDlg( rDlg )
+    rFontWorkDlg( &rDlg )
 {
 }
 
@@ -65,7 +65,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextStyleItem* pStateItem =
                                 PTR_CAST(XFormTextStyleItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStyleItem expected");
-            rFontWorkDlg.SetStyle_Impl(pStateItem);
+            rFontWorkDlg->SetStyle_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_ADJUST:
@@ -73,7 +73,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextAdjustItem* pStateItem =
                                 PTR_CAST(XFormTextAdjustItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextAdjustItem expected");
-            rFontWorkDlg.SetAdjust_Impl(pStateItem);
+            rFontWorkDlg->SetAdjust_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_DISTANCE:
@@ -81,7 +81,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextDistanceItem* pStateItem =
                                 PTR_CAST(XFormTextDistanceItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextDistanceItem erwartet");
-            rFontWorkDlg.SetDistance_Impl(pStateItem);
+            rFontWorkDlg->SetDistance_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_START:
@@ -89,7 +89,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextStartItem* pStateItem =
                                 PTR_CAST(XFormTextStartItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStartItem expected");
-            rFontWorkDlg.SetStart_Impl(pStateItem);
+            rFontWorkDlg->SetStart_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_MIRROR:
@@ -97,7 +97,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextMirrorItem* pStateItem =
                                 PTR_CAST(XFormTextMirrorItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextMirrorItem expected");
-            rFontWorkDlg.SetMirror_Impl(pStateItem);
+            rFontWorkDlg->SetMirror_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_HIDEFORM:
@@ -105,7 +105,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextHideFormItem* pStateItem =
                                 PTR_CAST(XFormTextHideFormItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextHideFormItem expected");
-            rFontWorkDlg.SetShowForm_Impl(pStateItem);
+            rFontWorkDlg->SetShowForm_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_OUTLINE:
@@ -113,7 +113,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextOutlineItem* pStateItem =
                                 PTR_CAST(XFormTextOutlineItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextOutlineItem expected");
-            rFontWorkDlg.SetOutline_Impl(pStateItem);
+            rFontWorkDlg->SetOutline_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHADOW:
@@ -121,7 +121,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextShadowItem* pStateItem =
                                 PTR_CAST(XFormTextShadowItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowItem expected");
-            rFontWorkDlg.SetShadow_Impl(pStateItem);
+            rFontWorkDlg->SetShadow_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHDWCOLOR:
@@ -129,7 +129,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextShadowColorItem* pStateItem =
                                 PTR_CAST(XFormTextShadowColorItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowColorItem expected");
-            rFontWorkDlg.SetShadowColor_Impl(pStateItem);
+            rFontWorkDlg->SetShadowColor_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHDWXVAL:
@@ -137,7 +137,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextShadowXValItem* pStateItem =
                                 PTR_CAST(XFormTextShadowXValItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowXValItem expected");
-            rFontWorkDlg.SetShadowXVal_Impl(pStateItem);
+            rFontWorkDlg->SetShadowXVal_Impl(pStateItem);
             break;
         }
         case SID_FORMTEXT_SHDWYVAL:
@@ -145,7 +145,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             const XFormTextShadowYValItem* pStateItem =
                                 PTR_CAST(XFormTextShadowYValItem, pItem);
             DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowYValItem expected");
-            rFontWorkDlg.SetShadowYVal_Impl(pStateItem);
+            rFontWorkDlg->SetShadowYVal_Impl(pStateItem);
             break;
         }
     }

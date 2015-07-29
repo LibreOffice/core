@@ -38,7 +38,7 @@ LineWidthControl::LineWidthControl (
     vcl::Window* pParent,
     LinePropertyPanel& rPanel)
     : svx::sidebar::PopupControl(pParent,SVX_RES(RID_POPUPPANEL_LINEPAGE_WIDTH)),
-      mrLinePropertyPanel(rPanel),
+      mrLinePropertyPanel(&rPanel),
       mpBindings(NULL),
       maVSWidth(VclPtr<LineWidthValueSet>::Create(this, SVX_RES(VS_WIDTH))),
       maFTCus( VclPtr<FixedText>::Create(this, SVX_RES(FT_CUSTOME))),
@@ -57,7 +57,7 @@ LineWidthControl::LineWidthControl (
 {
     Initialize();
     FreeResource();
-    mpBindings = mrLinePropertyPanel.GetBindings();
+    mpBindings = mrLinePropertyPanel->GetBindings();
 }
 
 LineWidthControl::~LineWidthControl()
@@ -269,8 +269,8 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             nVal = maMFWidth->Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
-            mrLinePropertyPanel.SetWidthIcon(iPos);
-            mrLinePropertyPanel.SetWidth(nVal);
+            mrLinePropertyPanel->SetWidthIcon(iPos);
+            mrLinePropertyPanel->SetWidth(nVal);
             mbCloseByEdit = false;
             mnTmpCustomWidth = 0;
         }
@@ -283,7 +283,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
                 nVal = maMFWidth->Denormalize(nVal);
                 XLineWidthItem aWidthItem( nVal );
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
-                mrLinePropertyPanel.SetWidth(nVal);
+                mrLinePropertyPanel->SetWidth(nVal);
                 mbCloseByEdit = false;
                 mnTmpCustomWidth = 0;
             }
@@ -298,7 +298,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             //modify end
         }
         if ((iPos >= 1 && iPos <= 8) || (iPos == 9 && mbCustom)) //add
-            mrLinePropertyPanel.EndLineWidthPopupMode();
+            mrLinePropertyPanel->EndLineWidthPopupMode();
     }
     return 0L;
 }

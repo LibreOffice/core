@@ -206,7 +206,7 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
-    mrFrameSel( rFrameSel ),
+    mrFrameSel( &rFrameSel ),
     mpVirDev( VclPtr<VirtualDevice>::Create() ),
     maILArrows( 16 ),
     maLeft( FRAMEBORDER_LEFT ),
@@ -299,7 +299,7 @@ void FrameSelectorImpl::Initialize( FrameSelFlags nFlags )
 
 void FrameSelectorImpl::InitColors()
 {
-    const StyleSettings& rSettings = mrFrameSel.GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = mrFrameSel->GetSettings().GetStyleSettings();
     maBackCol = rSettings.GetFieldColor();
     mbHCMode = rSettings.GetHighContrastMode();
     maArrowCol = rSettings.GetFieldTextColor();
@@ -330,7 +330,7 @@ void FrameSelectorImpl::InitArrowImageList()
 
 void FrameSelectorImpl::InitGlobalGeometry()
 {
-    Size aCtrlSize( mrFrameSel.CalcOutputSize( mrFrameSel.GetSizePixel() ) );
+    Size aCtrlSize( mrFrameSel->CalcOutputSize( mrFrameSel->GetSizePixel() ) );
     /*  nMinSize is the lower of width and height (control will always be squarish).
         FRAMESEL_GEOM_OUTER is the minimal distance between inner control border
         and any element. */
@@ -494,7 +494,7 @@ void FrameSelectorImpl::sizeChanged()
     InitBorderGeometry();
 
     // correct background around the used area
-    mrFrameSel.SetBackground( Wallpaper( maBackCol ) );
+    mrFrameSel->SetBackground( Wallpaper( maBackCol ) );
     DoInvalidate( true );
 }
 
@@ -586,7 +586,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     }
 
     // Arrow or marker? Do not draw arrows into disabled control.
-    sal_uInt16 nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
+    sal_uInt16 nSelectAdd = (mrFrameSel->IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
     mpVirDev->DrawImage( aPos1, maILArrows.GetImage( nImgId1 + nSelectAdd ) );
     mpVirDev->DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
 }
@@ -677,7 +677,7 @@ void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
 void FrameSelectorImpl::DrawAllTrackingRects()
 {
     tools::PolyPolygon aPPoly;
-    if (mrFrameSel.IsAnyBorderSelected())
+    if (mrFrameSel->IsAnyBorderSelected())
     {
         for(SelFrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt)
             (*aIt)->MergeFocusToPolyPolygon(aPPoly);
@@ -689,7 +689,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
 
     aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
     for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
-        mrFrameSel.InvertTracking(aPPoly.GetObject(nIdx), SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
+        mrFrameSel->InvertTracking(aPPoly.GetObject(nIdx), SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
 }
 
 Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
@@ -700,7 +700,7 @@ Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
 void FrameSelectorImpl::DoInvalidate( bool bFullRepaint )
 {
     mbFullRepaint |= bFullRepaint;
-    mrFrameSel.Invalidate( InvalidateFlags::NoErase );
+    mrFrameSel->Invalidate( InvalidateFlags::NoErase );
 }
 
 // frame border state and style
@@ -735,7 +735,7 @@ void FrameSelectorImpl::SetBorderCoreStyle( FrameBorder& rBorder, const SvxBorde
 
 void FrameSelectorImpl::ToggleBorderState( FrameBorder& rBorder )
 {
-    bool bDontCare = mrFrameSel.SupportsDontCareState();
+    bool bDontCare = mrFrameSel->SupportsDontCareState();
     switch( rBorder.GetState() )
     {
         // same order as tristate check box: visible -> don't care -> hidden
@@ -764,7 +764,7 @@ void FrameSelectorImpl::SilentGrabFocus()
 {
     bool bOldAuto = mbAutoSelect;
     mbAutoSelect = false;
-    mrFrameSel.GrabFocus();
+    mrFrameSel->GrabFocus();
     mbAutoSelect = bOldAuto;
 }
 

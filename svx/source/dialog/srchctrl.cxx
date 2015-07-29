@@ -34,7 +34,7 @@ SvxSearchController::SvxSearchController
 ) :
     SfxControllerItem( _nId, rBind ),
 
-    rSrchDlg( rDlg )
+    rSrchDlg( &rDlg )
 {
 }
 
@@ -50,22 +50,22 @@ void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             SfxObjectShell* pShell = SfxObjectShell::Current();
 
             if ( pShell && pShell->GetStyleSheetPool() )
-                rSrchDlg.TemplatesChanged_Impl( *pShell->GetStyleSheetPool() );
+                rSrchDlg->TemplatesChanged_Impl( *pShell->GetStyleSheetPool() );
         }
         else if ( SID_SEARCH_OPTIONS == nSID )
         {
             DBG_ASSERT( pState->ISA(SfxUInt16Item), "wrong item type" );
             SearchOptionFlags nFlags = (SearchOptionFlags) static_cast<const SfxUInt16Item*>(pState)->GetValue();
-            rSrchDlg.EnableControls_Impl( nFlags );
+            rSrchDlg->EnableControls_Impl( nFlags );
         }
         else if ( SID_SEARCH_ITEM == nSID )
         {
             DBG_ASSERT( pState->ISA(SvxSearchItem), "wrong item type" );
-            rSrchDlg.SetItem_Impl( static_cast<const SvxSearchItem*>(pState) );
+            rSrchDlg->SetItem_Impl( static_cast<const SvxSearchItem*>(pState) );
         }
     }
     else if ( SID_SEARCH_OPTIONS == nSID || SID_SEARCH_ITEM == nSID )
-        rSrchDlg.EnableControls_Impl( SearchOptionFlags::NONE );
+        rSrchDlg->EnableControls_Impl( SearchOptionFlags::NONE );
 }
 
 

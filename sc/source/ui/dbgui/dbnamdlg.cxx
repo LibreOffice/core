@@ -52,12 +52,12 @@ class DBSaveData
 public:
     DBSaveData( Edit& rEd, CheckBox& rHdr, CheckBox& rTot, CheckBox& rSize, CheckBox& rFmt,
                             CheckBox& rStrip, ScRange& rArea )
-        : rEdAssign(rEd)
-        , rBtnHeader(rHdr)
-        , rBtnTotals(rTot)
-        , rBtnSize(rSize)
-        , rBtnFormat(rFmt)
-        , rBtnStrip(rStrip)
+        : rEdAssign(&rEd)
+        , rBtnHeader(&rHdr)
+        , rBtnTotals(&rTot)
+        , rBtnSize(&rSize)
+        , rBtnFormat(&rFmt)
+        , rBtnStrip(&rStrip)
         , rCurArea(rArea)
         , bHeader(false)
         , bTotals(false)
@@ -71,12 +71,12 @@ public:
     void Restore();
 
 private:
-    Edit&       rEdAssign;
-    CheckBox&   rBtnHeader;
-    CheckBox&   rBtnTotals;
-    CheckBox&   rBtnSize;
-    CheckBox&   rBtnFormat;
-    CheckBox&   rBtnStrip;
+    VclPtr<Edit>       rEdAssign;
+    VclPtr<CheckBox>   rBtnHeader;
+    VclPtr<CheckBox>   rBtnTotals;
+    VclPtr<CheckBox>   rBtnSize;
+    VclPtr<CheckBox>   rBtnFormat;
+    VclPtr<CheckBox>   rBtnStrip;
     ScRange&    rCurArea;
     OUString    aStr;
     ScRange     aArea;
@@ -91,12 +91,12 @@ private:
 void DBSaveData::Save()
 {
     aArea   = rCurArea;
-    aStr    = rEdAssign.GetText();
-    bHeader = rBtnHeader.IsChecked();
-    bTotals = rBtnTotals.IsChecked();
-    bSize   = rBtnSize.IsChecked();
-    bFormat = rBtnFormat.IsChecked();
-    bStrip  = rBtnStrip.IsChecked();
+    aStr    = rEdAssign->GetText();
+    bHeader = rBtnHeader->IsChecked();
+    bTotals = rBtnTotals->IsChecked();
+    bSize   = rBtnSize->IsChecked();
+    bFormat = rBtnFormat->IsChecked();
+    bStrip  = rBtnStrip->IsChecked();
     bDirty  = true;
 }
 
@@ -105,12 +105,12 @@ void DBSaveData::Restore()
     if ( bDirty )
     {
         rCurArea = aArea;
-        rEdAssign.SetText( aStr );
-        rBtnHeader.Check ( bHeader );
-        rBtnTotals.Check ( bTotals );
-        rBtnSize.Check   ( bSize );
-        rBtnFormat.Check ( bFormat );
-        rBtnStrip.Check  ( bStrip );
+        rEdAssign->SetText( aStr );
+        rBtnHeader->Check ( bHeader );
+        rBtnTotals->Check ( bTotals );
+        rBtnSize->Check   ( bSize );
+        rBtnFormat->Check ( bFormat );
+        rBtnStrip->Check  ( bStrip );
         bDirty = false;
     }
 }

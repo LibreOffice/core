@@ -73,7 +73,7 @@ TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sa
 
 OCreationList::OCreationList( OTasksWindow& _rParent )
     :SvTreeListBox( &_rParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
-    ,m_rTaskWindow( _rParent )
+    ,m_rTaskWindow( &_rParent )
     ,m_pMouseDownEntry( NULL )
     ,m_pLastActiveEntry( NULL )
 {
@@ -83,6 +83,17 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
     SetNodeDefaultImages( );
     EnableEntryMnemonics();
+}
+
+OCreationList::~OCreationList()
+{
+    disposeOnce();
+}
+
+void OCreationList::dispose()
+{
+    m_rTaskWindow.clear();
+    SvTreeListBox::dispose();
 }
 
 void OCreationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
@@ -300,7 +311,7 @@ void OCreationList::updateHelpText()
     sal_uInt16 nHelpTextId = 0;
     if ( GetCurEntry() )
         nHelpTextId = static_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
-    m_rTaskWindow.setHelpText( nHelpTextId );
+    m_rTaskWindow->setHelpText( nHelpTextId );
 }
 
 void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
@@ -308,7 +319,7 @@ void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
     OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
     aCommand.Complete = static_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
-    m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
+    m_rTaskWindow->getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
 }
 
 void OCreationList::KeyInput( const KeyEvent& rKEvt )
@@ -537,18 +548,18 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
     ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL) )
     ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this,0,WB_BORDER | WB_DIALOGCONTROL) )
-    ,m_rBorderWin(_rParent)
+    ,m_rBorderWin(&_rParent)
 {
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( true, true, true );
 
-    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
+    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(), *m_rBorderWin.get(),_ePreviewMode);
     m_pControlHelper->Show();
     m_aContainer->setChildWindow(m_pControlHelper);
 
     VclPtrInstance<OTasksWindow> pTasks(m_aTasks.get(),this);
     pTasks->Show();
-    pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
+    pTasks->Disable(m_rBorderWin->getView()->getCommandController().isDataSourceReadOnly());
     m_aTasks->setChildWindow(pTasks);
     m_aTasks->SetUniqueId(UID_APP_TASKS_VIEW);
     m_aTasks->Show();

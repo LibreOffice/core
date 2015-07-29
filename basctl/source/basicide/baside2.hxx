@@ -72,16 +72,16 @@ friend class CodeCompleteListBox;
 private:
     class ChangesListener;
 
-    boost::scoped_ptr<ExtTextView>   pEditView;
-    boost::scoped_ptr<ExtTextEngine> pEditEngine;
-    ModulWindow&                     rModulWindow;
+    boost::scoped_ptr<ExtTextView>    pEditView;
+    boost::scoped_ptr<ExtTextEngine>  pEditEngine;
+    VclPtr<ModulWindow>               rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
     osl::Mutex                        mutex_;
     css::uno::Reference< css::beans::XMultiPropertySet >
                                       notifier_;
 
-    long            nCurTextWidth;
+    long                nCurTextWidth;
 
     SyntaxHighlighter   aHighlighter;
     Idle                aSyntaxIdle;
@@ -164,11 +164,11 @@ public:
 class BreakPointWindow : public vcl::Window
 {
 private:
-    ModulWindow&    rModulWindow;
-    long            nCurYOffset;
-    sal_uInt16      nMarkerPos;
-    BreakPointList  aBreakPointList;
-    bool            bErrorMarker;
+    VclPtr<ModulWindow> rModulWindow;
+    long                nCurYOffset;
+    sal_uInt16          nMarkerPos;
+    BreakPointList      aBreakPointList;
+    bool                bErrorMarker;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) SAL_OVERRIDE;
 
@@ -185,7 +185,8 @@ protected:
 
 public:
                     BreakPointWindow (vcl::Window* pParent, ModulWindow*);
-
+    virtual         ~BreakPointWindow();
+    virtual void    dispose() SAL_OVERRIDE;
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
     void            SetNoMarker ();
 
@@ -299,7 +300,7 @@ public:
 class ModulWindow: public BaseWindow
 {
 private:
-    ModulWindowLayout&  rLayout;
+    VclPtr<ModulWindowLayout>  rLayout;
     StarBASICRef        xBasic;
     short               nValid;
     VclPtr<ComplexEditorWindow> aXEditorWindow;
@@ -391,7 +392,7 @@ public:
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     ExtTextView*        GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }
-    ModulWindowLayout&  GetLayout ()            { return rLayout; }
+    ModulWindowLayout&  GetLayout ()            { return *rLayout.get(); }
 
     virtual void        BasicStarted() SAL_OVERRIDE;
     virtual void        BasicStopped() SAL_OVERRIDE;
@@ -399,8 +400,8 @@ public:
     virtual ::svl::IUndoManager*
                         GetUndoManager() SAL_OVERRIDE;
 
-    const OUString&         GetModule() const { return m_aModule; }
-    void                    SetModule( const OUString& aModule ) { m_aModule = aModule; }
+    const OUString&     GetModule() const { return m_aModule; }
+    void                SetModule( const OUString& aModule ) { m_aModule = aModule; }
 
     virtual void Activating () SAL_OVERRIDE;
     virtual void Deactivating () SAL_OVERRIDE;
@@ -440,9 +441,9 @@ private:
     // main child window
     VclPtr<ModulWindow> pChild;
     // dockable windows
-    VclPtr<WatchWindow> aWatchWindow;
-    VclPtr<StackWindow> aStackWindow;
-    ObjectCatalog& rObjectCatalog;
+    VclPtr<WatchWindow>   aWatchWindow;
+    VclPtr<StackWindow>   aStackWindow;
+    VclPtr<ObjectCatalog> rObjectCatalog;
 private:
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 private:

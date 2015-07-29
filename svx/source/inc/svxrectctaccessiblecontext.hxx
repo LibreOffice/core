@@ -468,7 +468,7 @@ private:
     Rectangle*                          mpBoundingBox;
 
     /// window of parent
-    const vcl::Window&                       mrParentWindow;
+    VclPtr<const vcl::Window>           mrParentWindow;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          mnClientId;
@@ -477,7 +477,7 @@ private:
     long                                mnIndexInParent;
 
     /// Indicates, if object is checked
-    bool                            mbIsChecked;
+    bool                                mbIsChecked;
 };
 
 inline bool SvxRectCtlChildAccessibleContext::IsAlive() const

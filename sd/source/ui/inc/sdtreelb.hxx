@@ -91,10 +91,10 @@ public:
         */
         static SotClipboardFormatId mnListBoxDropFormatId;
 
-        SdPageObjsTLB&      mrParent;
-        INetBookmark        maBookmark;
+        VclPtr<SdPageObjsTLB>   mrParent;
+        INetBookmark            maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
-        NavigatorDragType   meDragType;
+        NavigatorDragType       meDragType;
         SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
         SAL_DLLPRIVATE virtual void      AddSupportedFormats() SAL_OVERRIDE;

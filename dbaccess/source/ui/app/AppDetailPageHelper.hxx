@@ -78,7 +78,7 @@ namespace dbaui
     class OAppDetailPageHelper : public vcl::Window
     {
         VclPtr<DBTreeListBox>     m_pLists[ELEMENT_COUNT];
-        OAppBorderWindow&   m_rBorderWin;
+        VclPtr<OAppBorderWindow>  m_rBorderWin;
         VclPtr<FixedLine>         m_aFL;
         VclPtr<ToolBox>           m_aTBPreview;
         VclPtr<Window>            m_aBorder;
@@ -163,7 +163,7 @@ namespace dbaui
         // click a TB slot
         DECL_LINK_TYPED(OnDropdownClickHdl, ToolBox*, void);
 
-        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
+        inline OAppBorderWindow& getBorderWin() const { return *m_rBorderWin.get(); }
         void ImplInitSettings();
 
     public:

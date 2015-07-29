@@ -194,7 +194,7 @@ class SwEnhancedPDFExportHelper
     private:
 
     SwEditShell& mrSh;
-    OutputDevice& mrOut;
+    VclPtr<OutputDevice> mrOut;
 
     StringRangeEnumerator* mpRangeEnum;
     /** The problem is that numbers in StringRangeEnumerator aren't accordant

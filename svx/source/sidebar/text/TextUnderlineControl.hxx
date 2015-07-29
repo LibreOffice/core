@@ -41,7 +41,7 @@ public:
     void Rearrange(FontUnderline eLine);
 
 private:
-    svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
+    VclPtr<svx::sidebar::TextPropertyPanel>     mrTextPropertyPanel;
     SfxBindings*        mpBindings;
     VclPtr<ValueSet>    maVSUnderline;
     VclPtr<PushButton>  maPBOptions;

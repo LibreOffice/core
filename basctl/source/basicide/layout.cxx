@@ -171,7 +171,7 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
 
 // ctor
 Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
-    rLayout(*pParent),
+    rLayout(pParent),
     bVertical(eSide == Left || eSide == Right),
     bLower(eSide == Left || eSide == Top),
     nSize(0),
@@ -206,13 +206,13 @@ void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
     // splitter
     if (!vItems.empty())
     {
-        aItem.pSplit = VclPtr<Splitter>::Create(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
+        aItem.pSplit = VclPtr<Splitter>::Create(rLayout.get(), bVertical ? WB_VSCROLL : WB_HSCROLL);
         aItem.pSplit->SetSplitPosPixel(aItem.nStartPos - nSplitThickness);
         InitSplitter(*aItem.pSplit);
     }
     vItems.push_back(aItem);
     // refresh
-    rLayout.ArrangeWindows();
+    rLayout->ArrangeWindows();
 }
 
 // Remove() -- removes a window from the side (if contains)
@@ -393,7 +393,7 @@ IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter)
         }
     }
     // arranging windows
-    rLayout.ArrangeWindows();
+    rLayout->ArrangeWindows();
 
     return 0;
 }
@@ -424,7 +424,7 @@ void Layout::SplittedSide::InitSplitter (Splitter& rSplitter)
     // link
     rSplitter.SetSplitHdl(LINK(this, SplittedSide, SplitHdl));
     // color
-    Color aColor = rLayout.GetSettings().GetStyleSettings().GetShadowColor();
+    Color aColor = rLayout->GetSettings().GetStyleSettings().GetShadowColor();
     rSplitter.SetLineColor(aColor);
     rSplitter.SetFillColor(aColor);
 }

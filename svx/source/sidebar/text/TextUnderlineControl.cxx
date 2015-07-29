@@ -33,7 +33,7 @@ TextUnderlineControl::TextUnderlineControl (
     svx::sidebar::TextPropertyPanel& rPanel,
     SfxBindings* pBindings)
 :   svx::sidebar::PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_UNDERLINE))
-,   mrTextPropertyPanel(rPanel)
+,   mrTextPropertyPanel(&rPanel)
 ,   mpBindings(pBindings)
 ,   maVSUnderline(VclPtr<ValueSet>::Create(this, SVX_RES(VS_UNDERLINE)))
 ,   maPBOptions (VclPtr<PushButton>::Create(this, SVX_RES(PB_OPTIONS)))
@@ -221,9 +221,9 @@ IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
 
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
 
-        aLineItem.SetColor(mrTextPropertyPanel.GetUnderlineColor());
+        aLineItem.SetColor(mrTextPropertyPanel->GetUnderlineColor());
         mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SfxCallMode::RECORD, &aLineItem, 0L);
-        mrTextPropertyPanel.EndUnderlinePopupMode();
+        mrTextPropertyPanel->EndUnderlinePopupMode();
     }
     return 0L;
 }
@@ -237,7 +237,7 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, PushButton *, pPBtn)
             SfxDispatcher* pDisp = mpBindings->GetDispatcher();
             pDisp->Execute( SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON );
         }
-        mrTextPropertyPanel.EndUnderlinePopupMode();
+        mrTextPropertyPanel->EndUnderlinePopupMode();
     }
     return 0;
 }

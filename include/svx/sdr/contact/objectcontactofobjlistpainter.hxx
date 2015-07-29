@@ -49,7 +49,7 @@ class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
 {
 protected:
     // Target OutputDevice
-    OutputDevice&                                   mrTargetOutputDevice;
+    VclPtr<OutputDevice>                            mrTargetOutputDevice;
 
     // Set StartPoint for next run, also given in constructor
     SdrObjectVector                                 maStartObjects;

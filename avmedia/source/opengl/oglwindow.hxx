@@ -67,7 +67,7 @@ private:
 
     libgltf::glTFHandle& m_rHandle;
     OpenGLContext& m_rContext;
-    vcl::Window& m_rEventHandler;
+    VclPtr<vcl::Window> m_rEventHandler;
 
     bool m_bVisible;
     Point m_aLastMousePos;

@@ -127,6 +127,9 @@ bool containsWindowSubclass(const Type* pType0) {
     if (pType->isPointerType()) {
         QualType pointeeType = pType->getPointeeType();
         return containsWindowSubclass(pointeeType);
+    } else if (pType->isReferenceType()) {
+        QualType pointeeType = pType->getAs<ReferenceType>()->getPointeeType();
+        return containsWindowSubclass(pointeeType);
     } else if (pType->isArrayType()) {
         const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
@@ -501,7 +504,11 @@ bool containsVclPtr(const Type* pType0) {
     if (!pType)
         return false;
     if (pType->isPointerType()) {
-        return false;
+        QualType pointeeType = pType->getPointeeType();
+        return containsVclPtr(pointeeType);
+    } else if (pType->isReferenceType()) {
+        QualType pointeeType = pType->getAs<ReferenceType>()->getPointeeType();
+        return containsVclPtr(pointeeType);
     } else if (pType->isArrayType()) {
         const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
@@ -569,9 +576,6 @@ bool VCLWidgets::VisitDeclRefExpr(const DeclRefExpr* pDeclRefExpr)
         return true;
     }
     QualType pType = pDeclRefExpr->getDecl()->getType();
-    if (pType->isPointerType()) {
-        pType = pType->getPointeeType();
-    }
     if (!containsVclPtr(pType)) {
         return true;
     }

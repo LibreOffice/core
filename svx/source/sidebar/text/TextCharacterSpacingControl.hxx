@@ -55,7 +55,7 @@ public:
     //add end
 
 private:
-    svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
+    VclPtr<svx::sidebar::TextPropertyPanel>     mrTextPropertyPanel;
     SfxBindings*        mpBindings;
 
     VclPtr<ValueSetWithTextControl> maVSSpacing;

@@ -231,7 +231,7 @@ private:
         dp_gui::UpdateData & data) const;
 
     uno::Reference< uno::XComponentContext > m_context;
-    UpdateDialog & m_dialog;
+    VclPtr<UpdateDialog> m_dialog;
     std::vector< uno::Reference< deployment::XPackage > > m_vExtensionList;
     uno::Reference< deployment::XUpdateInformationProvider > m_updateInformation;
     uno::Reference< task::XInteractionHandler > m_xInteractionHdl;
@@ -247,7 +247,7 @@ UpdateDialog::Thread::Thread(
     const std::vector< uno::Reference< deployment::XPackage > > &vExtensionList):
     salhelper::Thread("dp_gui_updatedialog"),
     m_context(context),
-    m_dialog(dialog),
+    m_dialog(&dialog),
     m_vExtensionList(vExtensionList),
     m_updateInformation(
         deployment::UpdateInformationProvider::create(context)),
@@ -377,7 +377,7 @@ void UpdateDialog::Thread::execute()
 
     SolarMutexGuard g;
     if (!m_stop) {
-        m_dialog.checkingDone();
+        m_dialog->checkingDone();
     }
 }
 
@@ -395,7 +395,7 @@ void UpdateDialog::Thread::handleSpecificError(
     }
     SolarMutexGuard g;
     if (!m_stop) {
-        m_dialog.addSpecificError(data);
+        m_dialog->addSpecificError(data);
     }
 }
 
@@ -408,7 +408,7 @@ OUString UpdateDialog::Thread::getUpdateDisplayString(
     {
         SolarMutexGuard g;
         if(!m_stop)
-            b.append(m_dialog.m_version);
+            b.append(m_dialog->m_version);
     }
     b.append(' ');
     if (!version.isEmpty())
@@ -422,7 +422,7 @@ OUString UpdateDialog::Thread::getUpdateDisplayString(
         {
             SolarMutexGuard g;
             if(!m_stop)
-                b.append(m_dialog.m_browserbased);
+                b.append(m_dialog->m_browserbased);
         }
     }
     return  b.makeStringAndClear();
@@ -470,13 +470,13 @@ bool UpdateDialog::Thread::update(
     {
         SolarMutexGuard g;
         if (!m_stop) {
-            m_dialog.addEnabledUpdate(getUpdateDisplayString(data), data);
+            m_dialog->addEnabledUpdate(getUpdateDisplayString(data), data);
         }
         ret = !m_stop;
     } else {
         SolarMutexGuard g;
         if (!m_stop) {
-                m_dialog.addDisabledUpdate(du);
+                m_dialog->addDisabledUpdate(du);
         }
         ret = !m_stop;
     }
@@ -611,9 +611,20 @@ UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & d
     m_ignoreUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
     m_ignoreAllUpdates( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),
     m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
-    m_dialog(dialog)
+    m_dialog(&dialog)
 {
     SetNormalStaticImage(Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)));
+}
+
+UpdateDialog::CheckListBox::~CheckListBox()
+{
+    disposeOnce();
+}
+
+void UpdateDialog::CheckListBox::dispose()
+{
+    m_dialog.clear();
+    SvxCheckListBox::dispose();
 }
 
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
@@ -634,7 +645,7 @@ void UpdateDialog::CheckListBox::MouseButtonDown( MouseEvent const & event )
         handlePopupMenu( event.GetPosPixel() );
     }
 
-    m_dialog.enableOk();
+    m_dialog->enableOk();
 }
 
 
@@ -642,12 +653,12 @@ void UpdateDialog::CheckListBox::MouseButtonUp(MouseEvent const & event) {
     // When clicking on an entry's checkbox in an SvxCheckListBox, the entry's
     // checkbox is toggled on mouse button up:
     SvxCheckListBox::MouseButtonUp(event);
-    m_dialog.enableOk();
+    m_dialog->enableOk();
 }
 
 void UpdateDialog::CheckListBox::KeyInput(KeyEvent const & event) {
     SvxCheckListBox::KeyInput(event);
-    m_dialog.enableOk();
+    m_dialog->enableOk();
 }
 
 
@@ -679,12 +690,12 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
                 if ( p->m_eKind == ENABLED_UPDATE )
                 {
                     RemoveEntry( nEntryPos );
-                    m_dialog.addAdditional( p, SvLBoxButtonKind_disabledCheckbox );
+                    m_dialog->addAdditional( p, SvLBoxButtonKind_disabledCheckbox );
                 }
                 if ( aCmd == CMD_IGNORE_UPDATE )
-                    m_dialog.setIgnoredUpdate( p, true, false );
+                    m_dialog->setIgnoredUpdate( p, true, false );
                 else
-                    m_dialog.setIgnoredUpdate( p, true, true );
+                    m_dialog->setIgnoredUpdate( p, true, true );
                 // TODO: reselect entry to display new description!
             }
             else if ( aCmd == CMD_ENABLE_UPDATE )
@@ -693,9 +704,9 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
                 if ( p->m_eKind == ENABLED_UPDATE )
                 {
                     RemoveEntry( nEntryPos );
-                    m_dialog.insertItem( p, SvLBoxButtonKind_enabledCheckbox );
+                    m_dialog->insertItem( p, SvLBoxButtonKind_enabledCheckbox );
                 }
-                m_dialog.setIgnoredUpdate( p, false, false );
+                m_dialog->setIgnoredUpdate( p, false, false );
             }
         }
     }

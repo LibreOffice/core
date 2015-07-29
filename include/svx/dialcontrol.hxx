@@ -35,7 +35,8 @@ class SAL_WARN_UNUSED DialControlBmp : public VirtualDevice
 {
 public:
     explicit            DialControlBmp( vcl::Window& rParent );
-
+    virtual             ~DialControlBmp();
+    virtual void        dispose() SAL_OVERRIDE;
     void                InitBitmap(const vcl::Font& rFont);
     void                SetSize(const Size& rSize);
     void                CopyBackground( const DialControlBmp& rSrc );
@@ -56,7 +57,7 @@ private:
 
     void                Init();
 
-    vcl::Window&        mrParent;
+    VclPtr<vcl::Window> mrParent;
     long                mnCenterX;
     long                mnCenterY;
 };

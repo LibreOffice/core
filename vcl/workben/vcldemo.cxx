@@ -1347,12 +1347,12 @@ class DemoWin : public WorkWindow
     bool testThreads;
 
     class RenderThread : public salhelper::Thread {
-        DemoWin  &mrWin;
-        TimeValue maDelay;
+        VclPtr<DemoWin>  mrWin;
+        TimeValue        maDelay;
     public:
         RenderThread(DemoWin &rWin, sal_uInt32 nDelaySecs)
             : Thread("vcldemo render thread")
-            , mrWin(rWin)
+            , mrWin(&rWin)
         {
             maDelay.Seconds = nDelaySecs;
             maDelay.Nanosec = 0;
@@ -1368,7 +1368,7 @@ class DemoWin : public WorkWindow
 
             SolarMutexGuard aGuard;
             fprintf (stderr, "render from a different thread\n");
-            mrWin.Invalidate();
+            mrWin->Invalidate();
         }
     };
     rtl::Reference<RenderThread> mxThread;

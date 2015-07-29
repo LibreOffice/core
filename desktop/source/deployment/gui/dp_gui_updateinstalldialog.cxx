@@ -95,7 +95,7 @@ private:
     void installExtensions();
     void removeTempDownloads();
 
-    UpdateInstallDialog & m_dialog;
+    VclPtr<UpdateInstallDialog> m_dialog;
     cssu::Reference< css::deployment::XUpdateInformationProvider >
         m_updateInformation;
 
@@ -152,7 +152,7 @@ UpdateInstallDialog::Thread::Thread(
     UpdateInstallDialog & dialog,
     std::vector< dp_gui::UpdateData > & aVecUpdateData):
     salhelper::Thread("dp_gui_updateinstalldialog"),
-    m_dialog(dialog),
+    m_dialog(&dialog),
     m_xComponentContext(xCtx),
     m_aVecUpdateData(aVecUpdateData),
     m_updateCmdEnv(new UpdateCommandEnv(xCtx, this)),
@@ -193,7 +193,7 @@ void UpdateInstallDialog::Thread::execute()
         //make sure m_dialog is still alive
         SolarMutexGuard g;
         if (! m_stop)
-             m_dialog.updateDone();
+             m_dialog->updateDone();
     }
     //UpdateCommandEnv keeps a reference to Thread and prevents destruction. Therefore remove it.
     m_updateCmdEnv->m_installThread.clear();
@@ -377,10 +377,10 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (m_stop) {
                     return;
                 }
-                m_dialog.m_pFt_extension_name->SetText(curData.aInstalledPackage->getDisplayName());
+                m_dialog->m_pFt_extension_name->SetText(curData.aInstalledPackage->getDisplayName());
                 sal_uInt16 prog = (sal::static_int_cast<sal_uInt16>(100) * ++count) /
                     sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size());
-                m_dialog.m_pStatusbar->SetValue(prog);
+                m_dialog->m_pStatusbar->SetValue(prog);
             }
             dp_misc::DescriptionInfoset info(m_xComponentContext, curData.aUpdateInfo);
             //remember occurring exceptions in case we need to print out error information
@@ -425,7 +425,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                         buf.appendAscii(". ");
                         buf.append(j->second.Message);
                     }
-                    m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, curData.aInstalledPackage->getDisplayName(),
+                    m_dialog->setError(UpdateInstallDialog::ERROR_DOWNLOAD, curData.aInstalledPackage->getDisplayName(),
                         buf.makeStringAndClear());
                 }
             }
@@ -438,7 +438,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.setError(e.Message);
+        m_dialog->setError(e.Message);
     }
 }
 
@@ -450,8 +450,8 @@ void UpdateInstallDialog::Thread::installExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.m_pFt_action->SetText(m_dialog.m_sInstalling);
-        m_dialog.m_pStatusbar->SetValue(0);
+        m_dialog->m_pFt_action->SetText(m_dialog->m_sInstalling);
+        m_dialog->m_pStatusbar->SetValue(0);
     }
 
     sal_uInt16 count = 0;
@@ -466,11 +466,11 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             //we only show progress after an extension has been installed.
             if (count > 0) {
-                m_dialog.m_pStatusbar->SetValue(
+                m_dialog->m_pStatusbar->SetValue(
                 (sal::static_int_cast<sal_uInt16>(100) * count) /
                 sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size()));
              }
-            m_dialog.m_pFt_extension_name->SetText(i->aInstalledPackage->getDisplayName());
+            m_dialog->m_pFt_extension_name->SetText(i->aInstalledPackage->getDisplayName());
         }
         bool bError = false;
         bool bLicenseDeclined = false;
@@ -492,11 +492,11 @@ void UpdateInstallDialog::Thread::installExtensions()
             {
                 css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
                 if (!curData.bIsShared)
-                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                    xExtension = m_dialog->getExtensionManager()->addExtension(
                         curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "user", xAbortChannel, m_updateCmdEnv.get());
                 else
-                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                    xExtension = m_dialog->getExtensionManager()->addExtension(
                         curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "shared", xAbortChannel, m_updateCmdEnv.get());
             }
@@ -509,11 +509,11 @@ void UpdateInstallDialog::Thread::installExtensions()
                 //shared extension was installed using "SUPPRESS_LICENSE".
                 css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
                 if (!curData.bIsShared)
-                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                    xExtension = m_dialog->getExtensionManager()->addExtension(
                         curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "user", xAbortChannel, m_updateCmdEnv.get());
                 else
-                    xExtension = m_dialog.getExtensionManager()->addExtension(
+                    xExtension = m_dialog->getExtensionManager()->addExtension(
                         curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "shared", xAbortChannel, m_updateCmdEnv.get());
             }
@@ -542,7 +542,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             if (m_stop) {
                 return;
             }
-            m_dialog.setError(UpdateInstallDialog::ERROR_LICENSE_DECLINED,
+            m_dialog->setError(UpdateInstallDialog::ERROR_LICENSE_DECLINED,
                 curData.aInstalledPackage->getDisplayName(), OUString());
         }
         else if (!xExtension.is() || bError)
@@ -551,7 +551,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             if (m_stop) {
                 return;
             }
-            m_dialog.setError(UpdateInstallDialog::ERROR_INSTALLATION,
+            m_dialog->setError(UpdateInstallDialog::ERROR_INSTALLATION,
                 curData.aInstalledPackage->getDisplayName(), exc.Message);
         }
     }
@@ -560,9 +560,9 @@ void UpdateInstallDialog::Thread::installExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.m_pStatusbar->SetValue(100);
-        m_dialog.m_pFt_extension_name->SetText(OUString());
-        m_dialog.m_pFt_action->SetText(m_dialog.m_sFinished);
+        m_dialog->m_pStatusbar->SetValue(100);
+        m_dialog->m_pFt_extension_name->SetText(OUString());
+        m_dialog->m_pFt_action->SetText(m_dialog->m_sFinished);
     }
 }
 

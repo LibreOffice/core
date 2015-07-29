@@ -28,7 +28,7 @@ CellBorderUpdater::CellBorderUpdater(
     sal_uInt16 nTbxBtnId,
     ToolBox& rTbx)
 :   mnBtnId(nTbxBtnId),
-    mrTbx(rTbx)
+    mrTbx(&rTbx)
 {
 }
 
@@ -115,7 +115,7 @@ void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool 
         else
             aBmpEx = aBmp;
 
-        mrTbx.SetItemImage( mnBtnId, Image( aBmpEx ) );
+        mrTbx->SetItemImage( mnBtnId, Image( aBmpEx ) );
     }
 }
 

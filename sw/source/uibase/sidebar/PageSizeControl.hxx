@@ -59,7 +59,7 @@ private:
     Paper mePaper;
     ::std::vector< Paper > maPaperList;
 
-    PagePropertyPanel& mrPagePropPanel;
+    VclPtr<PagePropertyPanel> mrPagePropPanel;
 
     DECL_LINK(ImplSizeHdl, void*);
     DECL_LINK(MoreButtonClickHdl_Impl, void*);

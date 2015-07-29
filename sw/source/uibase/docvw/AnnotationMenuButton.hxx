@@ -44,7 +44,7 @@ class AnnotationMenuButton : public MenuButton
         virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
 
     private:
-        sw::sidebarwindows::SwSidebarWin& mrSidebarWin;
+        VclPtr<sw::sidebarwindows::SwSidebarWin> mrSidebarWin;
 };
 
 } } // end of namespace sw::annotation

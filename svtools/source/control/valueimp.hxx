@@ -50,7 +50,7 @@ class ValueSet;
 
 struct ValueSetItem
 {
-    ValueSet&           mrParent;
+    VclPtr<ValueSet>    mrParent;
     sal_uInt16          mnId;
     sal_uInt8           meType;
     bool                mbVisible;

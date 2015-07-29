@@ -37,11 +37,22 @@ const long DIAL_OUTER_WIDTH = 8;
 DialControlBmp::DialControlBmp(vcl::Window& rParent) :
     VirtualDevice(rParent, 0, 0),
     mbEnabled(true),
-    mrParent(rParent),
+    mrParent(&rParent),
     mnCenterX(0),
     mnCenterY(0)
 {
     EnableRTL(false);
+}
+
+DialControlBmp::~DialControlBmp()
+{
+    disposeOnce();
+}
+
+void DialControlBmp::dispose()
+{
+    mrParent.clear();
+    VirtualDevice::dispose();
 }
 
 void DialControlBmp::InitBitmap(const vcl::Font& rFont)
@@ -143,7 +154,7 @@ const Color& DialControlBmp::GetButtonFillColor( bool bMain ) const
 
 void DialControlBmp::Init()
 {
-    SetSettings(mrParent.GetSettings());
+    SetSettings(mrParent->GetSettings());
     SetBackground();
 }
 

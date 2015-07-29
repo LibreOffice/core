@@ -137,7 +137,7 @@ void DlgEditor::ShowDialog()
 
     // create a peer
     uno::Reference< awt::XToolkit> xToolkit = awt::Toolkit::create( xContext );
-    xDlg->createPeer( xToolkit, rWindow.GetComponentInterface() );
+    xDlg->createPeer( xToolkit, rWindow->GetComponentInterface() );
 
     xDlg->execute();
 
@@ -186,9 +186,9 @@ DlgEditor::DlgEditor (
     ,m_ClipboardDataFlavors(1)
     ,m_ClipboardDataFlavorsResource(2)
     ,pObjFac(new DlgEdFactory(xModel))
-    ,rWindow(rWindow_)
+    ,rWindow(&rWindow_)
     ,pFunc(new DlgEdFuncSelect(*this))
-    ,rLayout(rLayout_)
+    ,rLayout(&rLayout_)
     ,eMode( DlgEditor::SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
@@ -223,8 +223,8 @@ DlgEditor::DlgEditor (
     aMarkIdle.SetPriority(SchedulerPriority::LOW);
     aMarkIdle.SetIdleHdl( LINK( this, DlgEditor, MarkTimeout ) );
 
-    rWindow.SetMapMode( MapMode( MAP_100TH_MM ) );
-    pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
+    rWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
+    pDlgEdPage->SetSize( rWindow->PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
     pDlgEdView->SetLayerVisible( OUString( "HiddenLayer" ), false );
@@ -256,7 +256,7 @@ DlgEditor::~DlgEditor()
 Reference< awt::XControlContainer > DlgEditor::GetWindowControlContainer()
 {
     if (!m_xControlContainer.is())
-        m_xControlContainer = VCLUnoHelper::CreateControlContainer(&rWindow);
+        m_xControlContainer = VCLUnoHelper::CreateControlContainer(rWindow.get());
     return m_xControlContainer;
 }
 
@@ -277,7 +277,7 @@ void DlgEditor::InitScrollBars()
     if ( !pHScroll || !pVScroll )
         return;
 
-    Size aOutSize = rWindow.GetOutputSize();
+    Size aOutSize = rWindow->GetOutputSize();
     Size aPgSize  = pDlgEdPage->GetSize();
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));
@@ -300,12 +300,12 @@ void DlgEditor::DoScroll( ScrollBar* )
     if( !pHScroll || !pVScroll )
         return;
 
-    MapMode aMap = rWindow.GetMapMode();
+    MapMode aMap = rWindow->GetMapMode();
     Point aOrg = aMap.GetOrigin();
 
     Size  aScrollPos( pHScroll->GetThumbPos(), pVScroll->GetThumbPos() );
-    aScrollPos = rWindow.LogicToPixel( aScrollPos );
-    aScrollPos = rWindow.PixelToLogic( aScrollPos );
+    aScrollPos = rWindow->LogicToPixel( aScrollPos );
+    aScrollPos = rWindow->PixelToLogic( aScrollPos );
 
     long  nX   = aScrollPos.Width() + aOrg.X();
     long  nY   = aScrollPos.Height() + aOrg.Y();
@@ -313,20 +313,20 @@ void DlgEditor::DoScroll( ScrollBar* )
     if( !nX && !nY )
         return;
 
-    rWindow.Update();
+    rWindow->Update();
 
     // #i31562#
     // When scrolling, someone was rescuing the Wallpaper and forced the window scroll to
     // be done without background refresh. I do not know why, but that causes the repaint
     // problems. Taking that out.
-    //  Wallpaper aOldBackground = rWindow.GetBackground();
-    //  rWindow.SetBackground();
+    //  Wallpaper aOldBackground = rWindow->GetBackground();
+    //  rWindow->SetBackground();
 
     // #i74769# children should be scrolled
-    rWindow.Scroll( -nX, -nY, ScrollFlags::Children);
+    rWindow->Scroll( -nX, -nY, ScrollFlags::Children);
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
-    rWindow.SetMapMode( aMap );
-    rWindow.Update();
+    rWindow->SetMapMode( aMap );
+    rWindow->Update();
 
     DlgEdHint aHint( DlgEdHint::WINDOWSCROLLED );
     Broadcast( aHint );
@@ -335,7 +335,7 @@ void DlgEditor::DoScroll( ScrollBar* )
 
 void DlgEditor::UpdateScrollBars()
 {
-    MapMode aMap = rWindow.GetMapMode();
+    MapMode aMap = rWindow->GetMapMode();
     Point aOrg = aMap.GetOrigin();
 
     if ( pHScroll )
@@ -446,7 +446,7 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
 
 void DlgEditor::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    rWindow.GrabFocus();
+    rWindow->GrabFocus();
     pFunc->MouseButtonDown( rMEvt );
 }
 
@@ -478,7 +478,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
     mnPaintGuard++;
 
     Size aMacSize;
-    if (bFirstDraw && rWindow.IsVisible() && (rRenderContext.GetOutputSize() != aMacSize))
+    if (bFirstDraw && rWindow->IsVisible() && (rRenderContext.GetOutputSize() != aMacSize))
     {
         bFirstDraw = false;
 
@@ -579,7 +579,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 
 IMPL_LINK_NOARG_TYPED(DlgEditor, MarkTimeout, Idle *, void)
 {
-    rLayout.UpdatePropertyBrowser();
+    rLayout->UpdatePropertyBrowser();
 }
 
 
@@ -620,7 +620,7 @@ void DlgEditor::CreateDefaultObject()
     if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj))
     {
         // set position and size
-        Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
+        Size aSize = rWindow->PixelToLogic( Size( 96, 24 ) );
         Point aPoint = (pDlgEdForm->GetSnapRect()).Center();
         aPoint.X() -= aSize.Width() / 2;
         aPoint.Y() -= aSize.Height() / 2;
@@ -1073,7 +1073,7 @@ bool DlgEditor::IsPasteAllowed()
 
 void DlgEditor::ShowProperties()
 {
-    rLayout.ShowPropertyBrowser();
+    rLayout->ShowPropertyBrowser();
 }
 
 
@@ -1222,13 +1222,13 @@ bool DlgEditor::AdjustPageSize()
         if ( pDlgEdForm && pDlgEdForm->TransformFormToSdrCoordinates( nFormXIn, nFormYIn, nFormWidthIn, nFormHeightIn, nFormX, nFormY, nFormWidth, nFormHeight ) )
         {
             Size aPageSizeDelta( 400, 300 );
-            aPageSizeDelta = rWindow.PixelToLogic( aPageSizeDelta, MapMode( MAP_100TH_MM ) );
+            aPageSizeDelta = rWindow->PixelToLogic( aPageSizeDelta, MapMode( MAP_100TH_MM ) );
 
             sal_Int32 nNewPageWidth = nFormX + nFormWidth + aPageSizeDelta.Width();
             sal_Int32 nNewPageHeight = nFormY + nFormHeight + aPageSizeDelta.Height();
 
             Size aPageSizeMin( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN );
-            aPageSizeMin = rWindow.PixelToLogic( aPageSizeMin, MapMode( MAP_100TH_MM ) );
+            aPageSizeMin = rWindow->PixelToLogic( aPageSizeMin, MapMode( MAP_100TH_MM ) );
             sal_Int32 nPageWidthMin = aPageSizeMin.Width();
             sal_Int32 nPageHeightMin = aPageSizeMin.Height();
 

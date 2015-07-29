@@ -88,13 +88,13 @@ void SvSimpleTableContainer::GetFocus()
 
 SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         SvHeaderTabListBox(&rParent, nBits | WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
-        m_rParentTableContainer(rParent),
+        m_rParentTableContainer(&rParent),
         aHeaderBar(VclPtr<HeaderBar>::Create(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP)),
         nHeaderItemId(1),
         bPaintFlag(true),
         aCollator(*(IntlWrapper( Application::GetSettings().GetLanguageTag() ).getCaseCollator()))
 {
-    m_rParentTableContainer.SetTable(this);
+    m_rParentTableContainer->SetTable(this);
 
     bSortDirection = true;
     nSortCol = 0xFFFF;
@@ -124,14 +124,14 @@ SvSimpleTable::~SvSimpleTable()
 
 void SvSimpleTable::dispose()
 {
-    m_rParentTableContainer.SetTable(NULL);
+    m_rParentTableContainer->SetTable(NULL);
     aHeaderBar.disposeAndClear();
     SvHeaderTabListBox::dispose();
 }
 
 void SvSimpleTable::UpdateViewSize()
 {
-    Size theWinSize=m_rParentTableContainer.GetOutputSizePixel();
+    Size theWinSize=m_rParentTableContainer->GetOutputSizePixel();
     Size HbSize=aHeaderBar->GetSizePixel();
 
     HbSize.Width()=theWinSize.Width();
@@ -243,32 +243,32 @@ void SvSimpleTable::ClearHeader()
 
 void SvSimpleTable::ShowTable()
 {
-    m_rParentTableContainer.Show();
+    m_rParentTableContainer->Show();
 }
 
 void SvSimpleTable::HideTable()
 {
-    m_rParentTableContainer.Hide();
+    m_rParentTableContainer->Hide();
 }
 
 bool SvSimpleTable::IsVisible() const
 {
-    return m_rParentTableContainer.IsVisible();
+    return m_rParentTableContainer->IsVisible();
 }
 
 void SvSimpleTable::EnableTable()
 {
-    m_rParentTableContainer.Enable();
+    m_rParentTableContainer->Enable();
 }
 
 void SvSimpleTable::DisableTable()
 {
-    m_rParentTableContainer.Disable();
+    m_rParentTableContainer->Disable();
 }
 
 bool SvSimpleTable::IsEnabled() const
 {
-    return m_rParentTableContainer.IsEnabled();
+    return m_rParentTableContainer->IsEnabled();
 }
 
 sal_uInt16 SvSimpleTable::GetSelectedCol()

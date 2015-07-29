@@ -316,7 +316,7 @@ bool SdPathHdl::isMarkable() const
 
 MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect )
 : SmartTag( rView )
-, mrPane( rPane )
+, mrPane( &rPane )
 , mpEffect( pEffect )
 , mxOrigin( pEffect->getTargetShape() )
 , msLastPath( pEffect->getPath() )
@@ -409,7 +409,7 @@ void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             mbInUpdatePath = true;
             mxPolyPoly = mpPathObj->GetPathPoly();
             rtl::Reference< MotionPathTag > xTag( this );
-            mrPane.updatePathFromMotionPathTag( xTag );
+            mrPane->updatePathFromMotionPathTag( xTag );
             msLastPath = mpEffect->getPath();
             updatePathAttributes();
             mbInUpdatePath = false;
@@ -592,7 +592,7 @@ bool MotionPathTag::KeyInput( const KeyEvent& rKEvt )
 
 bool MotionPathTag::OnDelete()
 {
-    mrPane.remove( mpEffect );
+    mrPane->remove( mpEffect );
     return true;
 }
 

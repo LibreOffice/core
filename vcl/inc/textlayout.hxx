@@ -49,7 +49,7 @@ namespace vcl
     {
     public:
         DefaultTextLayout( OutputDevice& _rTargetDevice )
-            : m_rTargetDevice( _rTargetDevice )
+            : m_rTargetDevice( &_rTargetDevice )
         {
         }
         virtual ~DefaultTextLayout();
@@ -79,7 +79,7 @@ namespace vcl
         virtual bool        DecomposeTextRectAction() const SAL_OVERRIDE;
 
     private:
-        OutputDevice&   m_rTargetDevice;
+        VclPtr<OutputDevice>   m_rTargetDevice;
     };
 
     class ReferenceDeviceTextLayout;

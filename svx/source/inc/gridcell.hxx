@@ -74,7 +74,7 @@ class DbGridColumn
     FmXGridCell*                m_pCell;
 
 protected:
-    DbGridControl&      m_rParent;
+    VclPtr<DbGridControl>   m_rParent;
 
 private:
     sal_Int32               m_nLastVisibleWidth;    // nur gueltig, wenn m_bHidden == sal_True
@@ -98,7 +98,7 @@ private:
 public:
     DbGridColumn(sal_uInt16 _nId, DbGridControl& rParent)
         :m_pCell(NULL)
-        ,m_rParent(rParent)
+        ,m_rParent(&rParent)
         ,m_nLastVisibleWidth(-1)
         ,m_nFormatKey(0)
         ,m_nFieldType(0)
@@ -133,7 +133,7 @@ public:
     sal_Int32   GetKey() const {return m_nFormatKey;}
     const   ::svt::CellControllerRef& GetController() const {return m_bLocked ? s_xEmptyController : m_xController;}
     const   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& GetField() const {return m_xField;}
-    DbGridControl& GetParent() const {return m_rParent;}
+    DbGridControl& GetParent() const {return *m_rParent.get();}
     FmXGridCell* GetCell() const {return m_pCell;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >  GetCurrentFieldValue() const;

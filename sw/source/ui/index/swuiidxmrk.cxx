@@ -79,7 +79,7 @@ using namespace ::com::sun::star;
 // dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     SwWrtShell& rWrtShell)
-    : m_rDialog(rDialog)
+    : m_rDialog(&rDialog)
     , bDel(false)
     , bNewMark(bNewDlg)
     , bSelected(false)
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl)
     }
     else
     {
-        m_rDialog.EndDialog(RET_CANCEL);
+        m_rDialog->EndDialog(RET_CANCEL);
     }
     return 0;
 }
@@ -760,7 +760,7 @@ void SwIndexMarkPane::UpdateDialog()
     if(!pMark)
         return;
 
-    SwViewShell::SetCareWin(&m_rDialog);
+    SwViewShell::SetCareWin(m_rDialog.get());
 
     aOrgStr = pMark->GetText();
     m_pEntryED->SetText(aOrgStr);
@@ -1062,23 +1062,23 @@ static const TextInfo aTextInfoArr[] =
 bool SwAuthorMarkPane::bIsFromComponent = true;
 
 SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, bool bNewDlg)
-    : m_rDialog(rDialog)
+    : m_rDialog(&rDialog)
     , bNewEntry(bNewDlg)
     , bBibAccessInitialized(false)
     , pSh(0)
 {
-    m_rDialog.get(m_pFromComponentRB, "frombibliography");
-    m_rDialog.get(m_pFromDocContentRB, "fromdocument");
-    m_rDialog.get(m_pAuthorFI, "author");
-    m_rDialog.get(m_pTitleFI, "title");
-    m_rDialog.get(m_pEntryED, "entryed");
-    m_rDialog.get(m_pEntryLB, "entrylb");
-    m_rDialog.get(m_pActionBT,
+    m_rDialog->get(m_pFromComponentRB, "frombibliography");
+    m_rDialog->get(m_pFromDocContentRB, "fromdocument");
+    m_rDialog->get(m_pAuthorFI, "author");
+    m_rDialog->get(m_pTitleFI, "title");
+    m_rDialog->get(m_pEntryED, "entryed");
+    m_rDialog->get(m_pEntryLB, "entrylb");
+    m_rDialog->get(m_pActionBT,
         bNewEntry ? OString("insert") : OString("modify"));
     m_pActionBT->Show(true);
-    m_rDialog.get(m_pCloseBT, "close");
-    m_rDialog.get(m_pCreateEntryPB, "new");
-    m_rDialog.get(m_pEditEntryPB, "edit");
+    m_rDialog->get(m_pCloseBT, "close");
+    m_rDialog->get(m_pCreateEntryPB, "new");
+    m_rDialog->get(m_pEditEntryPB, "edit");
 
     m_pFromComponentRB->Show(bNewEntry);
     m_pFromDocContentRB->Show(bNewEntry);
@@ -1093,7 +1093,7 @@ SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, bool bNewDlg)
     m_pFromDocContentRB->SetClickHdl(LINK(this,SwAuthorMarkPane, ChangeSourceHdl));
     m_pEntryED->SetModifyHdl(LINK(this,SwAuthorMarkPane, EditModifyHdl));
 
-    m_rDialog.SetText(SW_RESSTR(
+    m_rDialog->SetText(SW_RESSTR(
                     bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT));
 
     m_pEntryED->Show(!bNewEntry);
@@ -1120,7 +1120,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
     }
     else
     {
-        m_rDialog.EndDialog(RET_CANCEL);
+        m_rDialog->EndDialog(RET_CANCEL);
     }
     return 0;
 }
@@ -1204,7 +1204,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                ScopedVclPtrInstance< MessageDialog > aQuery(m_rDialog.get(), SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if(RET_YES != aQuery->Execute())
                     return 0;
             }

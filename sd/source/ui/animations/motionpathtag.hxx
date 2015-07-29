@@ -101,7 +101,7 @@ protected:
     void selectionChanged();
 
 private:
-    CustomAnimationPane& mrPane;
+    VclPtr<CustomAnimationPane> mrPane;
     CustomAnimationEffectPtr mpEffect;
     ::basegfx::B2DPolyPolygon mxPolyPoly;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxOrigin;

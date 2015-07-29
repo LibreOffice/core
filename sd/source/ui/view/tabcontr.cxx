@@ -60,7 +60,7 @@ bool TabControl::TabControlTransferable::GetData( const css::datatransfer::DataF
 
 void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mrParent.DragFinished( nDropAction );
+    mrParent->DragFinished( nDropAction );
 }
 
 TabControl::TabControl(DrawViewShell* pViewSh, vcl::Window* pParent) :

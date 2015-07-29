@@ -85,7 +85,7 @@ namespace svt { namespace table
 
     private:
         /// the control whose impl-instance we implemnt
-        TableControl&           m_rAntiImpl;
+        VclPtr<TableControl>    m_rAntiImpl;
         /// the model of the table control
         PTableModel             m_pModel;
         /// the input handler to use, usually the input handler as provided by ->m_pModel
@@ -152,8 +152,8 @@ namespace svt { namespace table
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
         inline  ColPos  getLeftColumn() const { return m_nLeftColumn; }
 
-        inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
-        inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
+        inline  const TableControl&   getAntiImpl() const { return *m_rAntiImpl.get(); }
+        inline        TableControl&   getAntiImpl()       { return *m_rAntiImpl.get(); }
 
     public:
         explicit TableControl_Impl( TableControl& _rAntiImpl );

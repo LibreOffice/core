@@ -34,7 +34,7 @@ class SwSidebarWin;
 class SidebarTextControl : public Control
 {
     private:
-        SwSidebarWin& mrSidebarWin;
+        VclPtr<SwSidebarWin> mrSidebarWin;
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
 

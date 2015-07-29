@@ -120,9 +120,9 @@ private:
     css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
     boost::scoped_ptr<DlgEdFactory> pObjFac; // never nullptr
-    vcl::Window&                    rWindow; // DialogWindow
+    VclPtr<vcl::Window>             rWindow; // DialogWindow
     boost::scoped_ptr<DlgEdFunc>    pFunc;
-    DialogWindowLayout& rLayout;
+    VclPtr<DialogWindowLayout>      rLayout;
     Mode                eMode;
     sal_uInt16          eActObj;
     bool                bFirstDraw;
@@ -144,7 +144,7 @@ public:
     );
     virtual ~DlgEditor();
 
-    vcl::Window& GetWindow() const { return rWindow; }
+    vcl::Window& GetWindow() const { return *rWindow.get(); }
 
     /** returns the control container associated with our window
         @see GetWindow

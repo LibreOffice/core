@@ -62,9 +62,9 @@ public:
 class ScSortKeyCtrl
 {
 private:
-    ScSortKeyWindow  m_aSortWin;
-    VclScrolledWindow& m_rScrolledWindow;
-    ScrollBar&       m_rVertScroll;
+    ScSortKeyWindow           m_aSortWin;
+    VclPtr<VclScrolledWindow> m_rScrolledWindow;
+    VclPtr<ScrollBar>         m_rVertScroll;
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 

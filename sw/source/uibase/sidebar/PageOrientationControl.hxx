@@ -45,7 +45,7 @@ private:
 
     bool mbLandscape;
 
-    PagePropertyPanel& mrPagePropPanel;
+    VclPtr<PagePropertyPanel> mrPagePropPanel;
 
     DECL_LINK(ImplOrientationHdl, void*);
 };

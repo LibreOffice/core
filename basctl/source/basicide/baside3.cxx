@@ -73,10 +73,10 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
                            const OUString& aLibName, const OUString& aName,
                            css::uno::Reference<css::container::XNameContainer> const& xDialogModel)
     : BaseWindow(pParent, rDocument, aLibName, aName)
-    ,rLayout(*pParent)
-    ,pEditor(new DlgEditor(*this, rLayout, rDocument.isDocument()
-                                            ? rDocument.getDocument()
-                                            : Reference<frame::XModel>(), xDialogModel))
+    ,rLayout(pParent)
+    ,pEditor(new DlgEditor(*this, *rLayout.get(), rDocument.isDocument()
+                                                  ? rDocument.getDocument()
+                                                  : Reference<frame::XModel>(), xDialogModel))
     ,pUndoMgr(new SfxUndoManager)
 {
     InitSettings( true, true, true );
@@ -94,6 +94,17 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
 
     if ( rDocument.isDocument() && rDocument.isReadOnly() )
         SetReadOnly(true);
+}
+
+DialogWindow::~DialogWindow()
+{
+    disposeOnce();
+}
+
+void DialogWindow::dispose()
+{
+    rLayout.clear();
+    BaseWindow::dispose();
 }
 
 void DialogWindow::LoseFocus()
@@ -669,12 +680,12 @@ bool DialogWindow::RenameDialog( const OUString& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    rLayout.DisablePropertyBrowser();
+    rLayout->DisablePropertyBrowser();
 }
 
 void DialogWindow::UpdateBrowser()
 {
-    rLayout.UpdatePropertyBrowser();
+    rLayout->UpdatePropertyBrowser();
 }
 
 bool DialogWindow::SaveDialog()
@@ -1383,7 +1394,7 @@ ItemType DialogWindow::GetType () const
 DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
-    rObjectCatalog(rObjectCatalog_),
+    rObjectCatalog(&rObjectCatalog_),
     pPropertyBrowser(0)
 {
     ShowPropertyBrowser();
@@ -1443,9 +1454,9 @@ void DialogWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<DialogWindow*>(&rChild));
     pChild = &static_cast<DialogWindow&>(rChild);
-    rObjectCatalog.SetLayoutWindow(this);
-    rObjectCatalog.UpdateEntries();
-    rObjectCatalog.Show();
+    rObjectCatalog->SetLayoutWindow(this);
+    rObjectCatalog->UpdateEntries();
+    rObjectCatalog->Show();
     if (pPropertyBrowser)
         pPropertyBrowser->Show();
     Layout::Activating(rChild);
@@ -1454,7 +1465,7 @@ void DialogWindowLayout::Activating (BaseWindow& rChild)
 void DialogWindowLayout::Deactivating ()
 {
     Layout::Deactivating();
-    rObjectCatalog.Hide();
+    rObjectCatalog->Hide();
     if (pPropertyBrowser)
         pPropertyBrowser->Hide();
     pChild = 0;
@@ -1494,7 +1505,7 @@ void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
 
 void DialogWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 {
-    AddToLeft(&rObjectCatalog, Size(nWidth * 0.25, nHeight * 0.35));
+    AddToLeft(rObjectCatalog.get(), Size(nWidth * 0.25, nHeight * 0.35));
     if (pPropertyBrowser)
         AddPropertyBrowser();
 }

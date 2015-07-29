@@ -98,7 +98,7 @@ typedef std::vector< FrameBorder* > FrameBorderPtrVec;
 
 struct FrameSelectorImpl : public Resource
 {
-    FrameSelector&      mrFrameSel;     /// The control itself.
+    VclPtr<FrameSelector>       mrFrameSel;     /// The control itself.
     ScopedVclPtr<VirtualDevice> mpVirDev; /// For all buffered drawing operations.
     ImageList           maILArrows;     /// Arrows in current system colors.
     Color               maBackCol;      /// Background color.

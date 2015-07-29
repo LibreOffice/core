@@ -61,11 +61,11 @@ SidebarTextControl::SidebarTextControl( SwSidebarWin& rSidebarWin,
                                       SwView& rDocView,
                                       SwPostItMgr& rPostItMgr )
     : Control( &rSidebarWin, nBits )
-    , mrSidebarWin( rSidebarWin )
+    , mrSidebarWin( &rSidebarWin )
     , mrDocView( rDocView )
     , mrPostItMgr( rPostItMgr )
 {
-    AddEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
+    AddEventListener( LINK( mrSidebarWin.get(), SwSidebarWin, WindowEventListener ) );
 }
 
 SidebarTextControl::~SidebarTextControl()
@@ -75,19 +75,19 @@ SidebarTextControl::~SidebarTextControl()
 
 void SidebarTextControl::dispose()
 {
-    RemoveEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
+    RemoveEventListener( LINK( mrSidebarWin.get(), SwSidebarWin, WindowEventListener ) );
     Control::dispose();
 }
 
 OutlinerView* SidebarTextControl::GetTextView() const
 {
-    return mrSidebarWin.GetOutlinerView();
+    return mrSidebarWin->GetOutlinerView();
 }
 
 void SidebarTextControl::GetFocus()
 {
     Window::GetFocus();
-    if ( !mrSidebarWin.IsMouseOver() )
+    if ( !mrSidebarWin->IsMouseOver() )
     {
         Invalidate();
     }
@@ -96,10 +96,10 @@ void SidebarTextControl::GetFocus()
 void SidebarTextControl::LoseFocus()
 {
     // write the visible text back into the SwField
-    mrSidebarWin.UpdateData();
+    mrSidebarWin->UpdateData();
 
     Window::LoseFocus();
-    if ( !mrSidebarWin.IsMouseOver() )
+    if ( !mrSidebarWin->IsMouseOver() )
     {
         Invalidate();
     }
@@ -108,7 +108,7 @@ void SidebarTextControl::LoseFocus()
 void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
 {
     sal_uInt16 nResId = 0;
-    switch( mrSidebarWin.GetLayoutStatus() )
+    switch( mrSidebarWin->GetLayoutStatus() )
     {
         case SwPostItHelper::INSERTED:  nResId = STR_REDLINE_INSERT; break;
         case SwPostItHelper::DELETED:   nResId = STR_REDLINE_DELETE; break;
@@ -117,7 +117,7 @@ void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
 
     SwContentAtPos aContentAtPos( SwContentAtPos::SW_REDLINE );
     if ( nResId &&
-         mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aContentAtPos ) )
+         mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin->GetAnchorPos(), aContentAtPos ) )
     {
         OUString sText = SW_RESSTR( nResId ) + ": " +
                         aContentAtPos.aFnd.pRedl->GetAuthorString() + " - " +
@@ -137,9 +137,9 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& 
         GetTextView()->GetOutliner()->Draw(pDev, Rectangle(rPt, aSize));
     }
 
-    if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
+    if ( mrSidebarWin->GetLayoutStatus()==SwPostItHelper::DELETED )
     {
-        SetLineColor(mrSidebarWin.GetChangeColor());
+        SetLineColor(mrSidebarWin->GetChangeColor());
         pDev->DrawLine( PixelToLogic( GetPosPixel(), pDev->GetMapMode() ),
                   PixelToLogic( GetPosPixel() +
                                 Point( GetSizePixel().Width(),
@@ -155,15 +155,15 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
 {
     if (!rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        if (mrSidebarWin.IsMouseOverSidebarWin() || HasFocus())
+        if (mrSidebarWin->IsMouseOverSidebarWin() || HasFocus())
         {
             rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
-                                        Gradient(GradientStyle_LINEAR, mrSidebarWin.ColorDark(), mrSidebarWin.ColorDark()));
+                                        Gradient(GradientStyle_LINEAR, mrSidebarWin->ColorDark(), mrSidebarWin->ColorDark()));
         }
         else
         {
             rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
-                           Gradient(GradientStyle_LINEAR, mrSidebarWin.ColorLight(), mrSidebarWin.ColorDark()));
+                           Gradient(GradientStyle_LINEAR, mrSidebarWin->ColorLight(), mrSidebarWin->ColorDark()));
         }
     }
 
@@ -172,9 +172,9 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
         GetTextView()->Paint(rRect, &rRenderContext);
     }
 
-    if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED)
+    if (mrSidebarWin->GetLayoutStatus() == SwPostItHelper::DELETED)
     {
-        rRenderContext.SetLineColor(mrSidebarWin.GetChangeColor());
+        rRenderContext.SetLineColor(mrSidebarWin->GetChangeColor());
         rRenderContext.DrawLine(rRenderContext.PixelToLogic(GetPosPixel()),
                                 rRenderContext.PixelToLogic(GetPosPixel() + Point(GetSizePixel().Width(),
                                                                                   GetSizePixel().Height())));
@@ -192,34 +192,34 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
     if ( ( rKeyCode.IsMod1() && rKeyCode.IsMod2() ) &&
          ( (nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN) ) )
     {
-        mrSidebarWin.SwitchToPostIt(nKey);
+        mrSidebarWin->SwitchToPostIt(nKey);
     }
     else if ( nKey == KEY_ESCAPE ||
               ( rKeyCode.IsMod1() &&
                 ( nKey == KEY_PAGEUP ||
                   nKey == KEY_PAGEDOWN ) ) )
     {
-        mrSidebarWin.SwitchToFieldPos();
+        mrSidebarWin->SwitchToFieldPos();
     }
     else if ( nKey == KEY_INSERT )
     {
         if ( !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
         {
-            mrSidebarWin.ToggleInsMode();
+            mrSidebarWin->ToggleInsMode();
         }
     }
     else
     {
         //let's make sure we see our note
-        mrPostItMgr.MakeVisible(&mrSidebarWin);
+        mrPostItMgr.MakeVisible(mrSidebarWin.get());
 
-        long aOldHeight = mrSidebarWin.GetPostItTextHeight();
+        long aOldHeight = mrSidebarWin->GetPostItTextHeight();
         bool bDone = false;
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
-            bool bIsProtected = mrSidebarWin.IsProtected();
+            bool bIsProtected = mrSidebarWin->IsProtected();
             if ( !bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
             {
                 bDone = GetTextView() && GetTextView()->PostKeyEvent( rKeyEvt );
@@ -231,12 +231,12 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
             }
         }
         if (bDone)
-            mrSidebarWin.ResizeIfNecessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );
+            mrSidebarWin->ResizeIfNecessary( aOldHeight, mrSidebarWin->GetPostItTextHeight() );
         else
         {
             // write back data first when showing navigator
             if ( nKey==KEY_F5 )
-                mrSidebarWin.UpdateData();
+                mrSidebarWin->UpdateData();
             if (!mrDocView.KeyInput(rKeyEvt))
                 Window::KeyInput(rKeyEvt);
         }
@@ -328,7 +328,7 @@ IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
 
 IMPL_LINK( SidebarTextControl, Select, Menu*, pSelMenu )
 {
-    mrSidebarWin.ExecuteCommand( pSelMenu->GetCurItemId() );
+    mrSidebarWin->ExecuteCommand( pSelMenu->GetCurItemId() );
     return 0;
 }
 
@@ -336,7 +336,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        if ( !mrSidebarWin.IsProtected() &&
+        if ( !mrSidebarWin->IsProtected() &&
              GetTextView() &&
              GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
@@ -351,7 +351,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             {
                 OUString aText = static_cast<PopupMenu*>(pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
                 SwRewriter aRewriter;
-                aRewriter.AddRule(UndoArg1, mrSidebarWin.GetAuthor());
+                aRewriter.AddRule(UndoArg1, mrSidebarWin->GetAuthor());
                 aText = aRewriter.Apply(aText);
                 static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
             }
@@ -374,7 +374,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
     else
     if (rCEvt.GetCommand() == CommandEventId::Wheel)
     {
-        if (mrSidebarWin.IsScrollbarVisible())
+        if (mrSidebarWin->IsScrollbarVisible())
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if (pData->IsShift() || pData->IsMod1() || pData->IsMod2())
@@ -383,7 +383,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             }
             else
             {
-                HandleScrollCommand( rCEvt, 0 , mrSidebarWin.Scrollbar());
+                HandleScrollCommand( rCEvt, 0 , mrSidebarWin->Scrollbar());
             }
         }
         else

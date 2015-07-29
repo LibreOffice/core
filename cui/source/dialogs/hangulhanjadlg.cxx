@@ -60,18 +60,18 @@ namespace svx
         class FontSwitch
         {
         private:
-            OutputDevice& m_rDev;
+            VclPtr<OutputDevice> m_rDev;
 
         public:
             inline FontSwitch( OutputDevice& _rDev, const vcl::Font& _rTemporaryFont )
-                :m_rDev( _rDev )
+                :m_rDev( &_rDev )
             {
-                m_rDev.Push( PushFlags::FONT );
-                m_rDev.SetFont( _rTemporaryFont );
+                m_rDev->Push( PushFlags::FONT );
+                m_rDev->SetFont( _rTemporaryFont );
             }
             inline ~FontSwitch( )
             {
-                m_rDev.Pop( );
+                m_rDev->Pop( );
             }
         };
     }

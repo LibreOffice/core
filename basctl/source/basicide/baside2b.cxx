@@ -179,25 +179,25 @@ class EditorWindow::ChangesListener:
     public cppu::WeakImplHelper< beans::XPropertiesChangeListener >
 {
 public:
-    explicit ChangesListener(EditorWindow & editor): editor_(editor) {}
+    explicit ChangesListener(EditorWindow & editor): editor_(&editor) {}
 
 private:
     virtual ~ChangesListener() {}
 
     virtual void SAL_CALL disposing(lang::EventObject const &) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
-        osl::MutexGuard g(editor_.mutex_);
-        editor_.notifier_.clear();
+        osl::MutexGuard g(editor_->mutex_);
+        editor_->notifier_.clear();
     }
 
     virtual void SAL_CALL propertiesChange(
         Sequence< beans::PropertyChangeEvent > const &) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         SolarMutexGuard g;
-        editor_.ImplSetFont();
+        editor_->ImplSetFont();
     }
 
-    EditorWindow & editor_;
+    VclPtr<EditorWindow> editor_;
 };
 
 class EditorWindow::ProgressInfo : public SfxProgress
@@ -221,7 +221,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
     pEditView(0),
     pEditEngine(0),
-    rModulWindow(*pModulWindow),
+    rModulWindow(pModulWindow),
     nCurTextWidth(0),
     aHighlighter(HIGHLIGHT_BASIC),
     bHighlightning(false),
@@ -410,8 +410,8 @@ void EditorWindow::Resize()
             aStartDocPos.Y() = nMaxVisAreaStart;
             pEditView->SetStartDocPos( aStartDocPos );
             pEditView->ShowCursor();
-            rModulWindow.GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
-            rModulWindow.GetLineNumberWindow().GetCurYOffset() = aStartDocPos.Y();
+            rModulWindow->GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
+            rModulWindow->GetLineNumberWindow().GetCurYOffset() = aStartDocPos.Y();
         }
         InitScrollBars();
         if ( nVisY != pEditView->GetStartDocPos().Y() )
@@ -463,7 +463,7 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
              ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
              ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
         {
-            HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
+            HandleScrollCommand( rCEvt, rModulWindow->GetHScrollBar(), &rModulWindow->GetEditVScrollBar() );
         } else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
             SfxDispatcher* pDispatcher = GetDispatcher();
             if ( pDispatcher )
@@ -479,13 +479,13 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
 bool EditorWindow::ImpCanModify()
 {
     bool bCanModify = true;
-    if ( StarBASIC::IsRunning() && rModulWindow.GetBasicStatus().bIsRunning )
+    if ( StarBASIC::IsRunning() && rModulWindow->GetBasicStatus().bIsRunning )
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stoped
         if ( ScopedVclPtr<QueryBox>::Create( nullptr, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG).toString() )->Execute() == RET_OK )
         {
-            rModulWindow.GetBasicStatus().bIsRunning = false;
+            rModulWindow->GetBasicStatus().bIsRunning = false;
             StopBasic();
         }
         else
@@ -500,11 +500,11 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-    Range aRange = rModulWindow.GetHScrollBar()->GetRange(); (void)aRange;
-    long nVisSz = rModulWindow.GetHScrollBar()->GetVisibleSize(); (void)nVisSz;
-    long nPapSz = rModulWindow.GetHScrollBar()->GetPageSize(); (void)nPapSz;
-    long nLinSz = rModulWindow.GetHScrollBar()->GetLineSize(); (void)nLinSz;
-    long nThumb = rModulWindow.GetHScrollBar()->GetThumbPos(); (void)nThumb;
+    Range aRange = rModulWindow->GetHScrollBar()->GetRange(); (void)aRange;
+    long nVisSz = rModulWindow->GetHScrollBar()->GetVisibleSize(); (void)nVisSz;
+    long nPapSz = rModulWindow->GetHScrollBar()->GetPageSize(); (void)nPapSz;
+    long nLinSz = rModulWindow->GetHScrollBar()->GetLineSize(); (void)nLinSz;
+    long nThumb = rModulWindow->GetHScrollBar()->GetThumbPos(); (void)nThumb;
 #endif
     bool const bWasModified = pEditEngine->IsModified();
     // see if there is an accelerator to be processed first
@@ -630,8 +630,8 @@ void EditorWindow::HandleAutoCorrect()
     TextPaM aStart( nLine, r.nBegin );
     TextPaM aEnd( nLine, r.nBegin + sStr.getLength() );
     TextSelection sTextSelection( aStart, aEnd );
-    rModulWindow.UpdateModule();
-    rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
+    rModulWindow->UpdateModule();
+    rModulWindow->GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
     // correct the last entered keyword
     if( r.tokenType == TT_KEYWORDS )
     {
@@ -657,7 +657,7 @@ void EditorWindow::HandleAutoCorrect()
         else
         {
             //autocorrect procedures
-            SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods();
+            SbxArray* pArr = rModulWindow->GetSbModule()->GetMethods();
             for( sal_uInt32 i=0; i < pArr->Count32(); ++i )
             {
                 if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
@@ -833,8 +833,8 @@ bool EditorWindow::GetProcedureName(OUString& rLine, OUString& rProcType, OUStri
 
 void EditorWindow::HandleCodeCompletion()
 {
-    rModulWindow.UpdateModule();
-    rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
+    rModulWindow->UpdateModule();
+    rModulWindow->GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
@@ -936,7 +936,7 @@ bool EditorWindow::SetSourceInBasic()
     {
         if ( !StarBASIC::IsRunning() ) // Not at runtime!
         {
-            rModulWindow.UpdateModule();
+            rModulWindow->UpdateModule();
             bChanged = true;
         }
     }
@@ -979,7 +979,7 @@ void EditorWindow::CreateEditEngine()
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...
-    OUString aOUSource(rModulWindow.GetModule());
+    OUString aOUSource(rModulWindow->GetModule());
     sal_Int32 nLines = 0;
     sal_Int32 nIndex = -1;
     do
@@ -999,10 +999,10 @@ void EditorWindow::CreateEditEngine()
 
     pEditView->SetStartDocPos(Point(0, 0));
     pEditView->SetSelection(TextSelection());
-    rModulWindow.GetBreakPointWindow().GetCurYOffset() = 0;
-    rModulWindow.GetLineNumberWindow().GetCurYOffset() = 0;
+    rModulWindow->GetBreakPointWindow().GetCurYOffset() = 0;
+    rModulWindow->GetLineNumberWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode(true);
-    rModulWindow.Update();   // has only been invalidated at UpdateMode = true
+    rModulWindow->Update();   // has only been invalidated at UpdateMode = true
 
     pEditView->ShowCursor(true, true);
 
@@ -1029,21 +1029,21 @@ void EditorWindow::CreateEditEngine()
         pBindings->Invalidate(SID_BASICIDE_STAT_TITLE);
     }
 
-    DBG_ASSERT(rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?");
+    DBG_ASSERT(rModulWindow->GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?");
 
     // set readonly mode for readonly libraries
-    ScriptDocument aDocument(rModulWindow.GetDocument());
-    OUString aOULibName(rModulWindow.GetLibName());
+    ScriptDocument aDocument(rModulWindow->GetDocument());
+    OUString aOULibName(rModulWindow->GetLibName());
     Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     if (xModLibContainer.is()
      && xModLibContainer->hasByName(aOULibName)
      && xModLibContainer->isLibraryReadOnly(aOULibName))
     {
-        rModulWindow.SetReadOnly(true);
+        rModulWindow->SetReadOnly(true);
     }
 
     if (aDocument.isDocument() && aDocument.isReadOnly())
-        rModulWindow.SetReadOnly(true);
+        rModulWindow->SetReadOnly(true);
 }
 
 // virtual
@@ -1081,13 +1081,13 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         TextHint const& rTextHint = *pTextHint;
         if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
         {
-            if ( rModulWindow.GetHScrollBar() )
-                rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
-            rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
-            rModulWindow.GetBreakPointWindow().DoScroll
-                ( 0, rModulWindow.GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
-            rModulWindow.GetLineNumberWindow().DoScroll
-                ( 0, rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+            if ( rModulWindow->GetHScrollBar() )
+                rModulWindow->GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
+            rModulWindow->GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
+            rModulWindow->GetBreakPointWindow().DoScroll
+                ( 0, rModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+            rModulWindow->GetLineNumberWindow().DoScroll
+                ( 0, rModulWindow->GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -1098,21 +1098,21 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 if ( nTextHeight < nOutHeight )
                     pEditView->Scroll( 0, pEditView->GetStartDocPos().Y() );
 
-                rModulWindow.GetLineNumberWindow().Invalidate();
+                rModulWindow->GetLineNumberWindow().Invalidate();
             }
 
             SetScrollBarRanges();
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTFORMATTED )
         {
-            if ( rModulWindow.GetHScrollBar() )
+            if ( rModulWindow->GetHScrollBar() )
             {
                 sal_uLong nWidth = pEditEngine->CalcTextWidth();
                 if ( (long)nWidth != nCurTextWidth )
                 {
                     nCurTextWidth = nWidth;
-                    rModulWindow.GetHScrollBar()->SetRange( Range( 0, (long)nCurTextWidth-1) );
-                    rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
+                    rModulWindow->GetHScrollBar()->SetRange( Range( 0, (long)nCurTextWidth-1) );
+                    rModulWindow->GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
                 }
             }
             long nPrevTextWidth = nCurTextWidth;
@@ -1146,7 +1146,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 OUString EditorWindow::GetActualSubName( sal_uLong nLine )
 {
-    SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
+    SbxArrayRef pMethods = rModulWindow->GetSbModule()->GetMethods();
     for( sal_uInt16 i=0; i < pMethods->Count(); i++ )
     {
         SbxVariable* p = PTR_CAST( SbMethod, pMethods->Get( i ) );
@@ -1170,10 +1170,10 @@ void EditorWindow::SetScrollBarRanges()
     if ( !pEditEngine )
         return;
 
-    if ( rModulWindow.GetHScrollBar() )
-        rModulWindow.GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1 ) );
+    if ( rModulWindow->GetHScrollBar() )
+        rModulWindow->GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1 ) );
 
-    rModulWindow.GetEditVScrollBar().SetRange( Range( 0, pEditEngine->GetTextHeight()-1 ) );
+    rModulWindow->GetEditVScrollBar().SetRange( Range( 0, pEditEngine->GetTextHeight()-1 ) );
 }
 
 void EditorWindow::InitScrollBars()
@@ -1183,19 +1183,19 @@ void EditorWindow::InitScrollBars()
 
     SetScrollBarRanges();
     Size aOutSz(GetOutputSizePixel());
-    rModulWindow.GetEditVScrollBar().SetVisibleSize(aOutSz.Height());
-    rModulWindow.GetEditVScrollBar().SetPageSize(aOutSz.Height() * 8 / 10);
-    rModulWindow.GetEditVScrollBar().SetLineSize(GetTextHeight());
-    rModulWindow.GetEditVScrollBar().SetThumbPos(pEditView->GetStartDocPos().Y());
-    rModulWindow.GetEditVScrollBar().Show();
+    rModulWindow->GetEditVScrollBar().SetVisibleSize(aOutSz.Height());
+    rModulWindow->GetEditVScrollBar().SetPageSize(aOutSz.Height() * 8 / 10);
+    rModulWindow->GetEditVScrollBar().SetLineSize(GetTextHeight());
+    rModulWindow->GetEditVScrollBar().SetThumbPos(pEditView->GetStartDocPos().Y());
+    rModulWindow->GetEditVScrollBar().Show();
 
-    if (rModulWindow.GetHScrollBar())
+    if (rModulWindow->GetHScrollBar())
     {
-        rModulWindow.GetHScrollBar()->SetVisibleSize(aOutSz.Width());
-        rModulWindow.GetHScrollBar()->SetPageSize(aOutSz.Width() * 8 / 10);
-        rModulWindow.GetHScrollBar()->SetLineSize(GetTextWidth( "x" ) );
-        rModulWindow.GetHScrollBar()->SetThumbPos(pEditView->GetStartDocPos().X());
-        rModulWindow.GetHScrollBar()->Show();
+        rModulWindow->GetHScrollBar()->SetVisibleSize(aOutSz.Width());
+        rModulWindow->GetHScrollBar()->SetPageSize(aOutSz.Width() * 8 / 10);
+        rModulWindow->GetHScrollBar()->SetLineSize(GetTextWidth( "x" ) );
+        rModulWindow->GetHScrollBar()->SetThumbPos(pEditView->GetStartDocPos().X());
+        rModulWindow->GetHScrollBar()->Show();
     }
 }
 
@@ -1212,7 +1212,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
         for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
              i != aPortions.end(); ++i)
         {
-            Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(i->tokenType);
+            Color const aColor = rModulWindow->GetLayout().GetSyntaxColor(i->tokenType);
             pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd, true);
         }
 
@@ -1243,8 +1243,8 @@ void EditorWindow::ImplSetFont()
     SetPointFont(*this, aFont); // FIXME RenderContext
     aFont = GetFont();
 
-    rModulWindow.GetBreakPointWindow().SetFont(aFont);
-    rModulWindow.GetLineNumberWindow().SetFont(aFont);
+    rModulWindow->GetBreakPointWindow().SetFont(aFont);
+    rModulWindow->GetLineNumberWindow().SetFont(aFont);
 
     if (pEditEngine)
     {
@@ -1318,25 +1318,25 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 
     if ( !bInserted && ( nPara == TEXT_PARA_ALL ) )
     {
-        rModulWindow.GetBreakPoints().reset();
-        rModulWindow.GetBreakPointWindow().Invalidate();
-        rModulWindow.GetLineNumberWindow().Invalidate();
+        rModulWindow->GetBreakPoints().reset();
+        rModulWindow->GetBreakPointWindow().Invalidate();
+        rModulWindow->GetLineNumberWindow().Invalidate();
     }
     else
     {
-        rModulWindow.GetBreakPoints().AdjustBreakPoints( (sal_uInt16)nPara+1, bInserted );
+        rModulWindow->GetBreakPoints().AdjustBreakPoints( (sal_uInt16)nPara+1, bInserted );
 
         long nLineHeight = GetTextHeight();
-        Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
+        Size aSz = rModulWindow->GetBreakPointWindow().GetOutputSize();
         Rectangle aInvRect( Point( 0, 0 ), aSz );
-        long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
+        long nY = nPara*nLineHeight - rModulWindow->GetBreakPointWindow().GetCurYOffset();
         aInvRect.Top() = nY;
-        rModulWindow.GetBreakPointWindow().Invalidate( aInvRect );
+        rModulWindow->GetBreakPointWindow().Invalidate( aInvRect );
 
-        Size aLnSz(rModulWindow.GetLineNumberWindow().GetWidth(),
+        Size aLnSz(rModulWindow->GetLineNumberWindow().GetWidth(),
                    GetOutputSizePixel().Height() - 2 * DWBORDER);
-        rModulWindow.GetLineNumberWindow().SetPosSizePixel(Point(DWBORDER + 19, DWBORDER), aLnSz);
-        rModulWindow.GetLineNumberWindow().Invalidate();
+        rModulWindow->GetLineNumberWindow().SetPosSizePixel(Point(DWBORDER + 19, DWBORDER), aLnSz);
+        rModulWindow->GetLineNumberWindow().Invalidate();
     }
 }
 
@@ -1365,13 +1365,24 @@ void EditorWindow::ForceSyntaxTimeout()
 
 BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWindow)
     : Window(pParent, WB_BORDER)
-    , rModulWindow(*pModulWindow)
+    , rModulWindow(pModulWindow)
     , nCurYOffset(0) // memorize nCurYOffset and not take it from EditEngine
     , nMarkerPos(NoMarker)
     , bErrorMarker(false)
 {
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
+}
+
+BreakPointWindow::~BreakPointWindow()
+{
+    disposeOnce();
+}
+
+void BreakPointWindow::dispose()
+{
+    rModulWindow.clear();
+    vcl::Window::dispose();
 }
 
 void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
@@ -1474,7 +1485,7 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         {
             long nYPos = aMousePos.Y() + nCurYOffset;
             long nLine = nYPos / nLineHeight + 1;
-            rModulWindow.ToggleBreakPoint( (sal_uLong)nLine );
+            rModulWindow->ToggleBreakPoint( (sal_uLong)nLine );
             Invalidate();
         }
     }
@@ -1497,7 +1508,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
                 case RID_ACTIV:
                 {
                     pBrk->bEnabled = !pBrk->bEnabled;
-                    rModulWindow.UpdateBreakPoint( *pBrk );
+                    rModulWindow->UpdateBreakPoint( *pBrk );
                     Invalidate();
                 }
                 break;
@@ -1530,7 +1541,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
 
 bool BreakPointWindow::SyncYOffset()
 {
-    TextView* pView = rModulWindow.GetEditView();
+    TextView* pView = rModulWindow->GetEditView();
     if ( pView )
     {
         long nViewYOffset = pView->GetStartDocPos().Y();

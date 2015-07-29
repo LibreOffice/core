@@ -66,17 +66,17 @@ namespace rptui
 
     class UpdateLocker
     {
-        vcl::Window& m_rWindow;
+        VclPtr<vcl::Window> m_rWindow;
 
     public:
         explicit UpdateLocker( vcl::Window& _rWindow )
-            :m_rWindow( _rWindow )
+            :m_rWindow( &_rWindow )
         {
             _rWindow.SetUpdateMode( false );
         }
         ~UpdateLocker()
         {
-            m_rWindow.SetUpdateMode( true );
+            m_rWindow->SetUpdateMode( true );
         }
     };
 

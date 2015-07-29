@@ -595,9 +595,9 @@ public:
 class CmisPropertiesControl
 {
 private:
-    CmisPropertiesWindow    m_pPropertiesWin;
-    VclScrolledWindow&      m_rScrolledWindow;
-    ScrollBar&              m_rVertScroll;
+    CmisPropertiesWindow          m_pPropertiesWin;
+    VclPtr<VclScrolledWindow>     m_rScrolledWindow;
+    VclPtr<ScrollBar>             m_rVertScroll;
     DECL_LINK( ScrollHdl, ScrollBar* );
 
     void checkAutoVScroll();

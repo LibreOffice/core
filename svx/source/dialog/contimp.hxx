@@ -31,7 +31,7 @@ class SvxSuperContourDlg;
 
 class SvxContourDlgItem : public SfxControllerItem
 {
-    SvxSuperContourDlg& rDlg;
+    VclPtr<SvxSuperContourDlg> rDlg;
 
 protected:
 

@@ -529,14 +529,14 @@ void CustomAnimationList::update( MainSequencePtr pMainSequence )
 
 struct stl_append_effect_func : public std::unary_function<CustomAnimationEffectPtr, void>
 {
-    stl_append_effect_func( CustomAnimationList& rList ) : mrList( rList ) {}
+    stl_append_effect_func( CustomAnimationList& rList ) : mrList( &rList ) {}
     void operator()(CustomAnimationEffectPtr pEffect);
-    CustomAnimationList& mrList;
+    VclPtr<CustomAnimationList> mrList;
 };
 
 void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
 {
-    mrList.append( pEffect );
+    mrList->append( pEffect );
 }
 
 void CustomAnimationList::update()

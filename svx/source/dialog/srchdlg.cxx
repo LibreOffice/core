@@ -750,17 +750,17 @@ class ToggleSaveToModule
 {
 public:
     ToggleSaveToModule(SvxSearchDialog& rDialog, bool bValue) :
-        mrDialog(rDialog), mbValue(bValue)
+        mrDialog(&rDialog), mbValue(bValue)
     {
-        mrDialog.SetSaveToModule(mbValue);
+        mrDialog->SetSaveToModule(mbValue);
     }
 
     ~ToggleSaveToModule()
     {
-        mrDialog.SetSaveToModule(!mbValue);
+        mrDialog->SetSaveToModule(!mbValue);
     }
 private:
-    SvxSearchDialog& mrDialog;
+    VclPtr<SvxSearchDialog> mrDialog;
     bool mbValue;
 };
 

@@ -2599,17 +2599,17 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
 
 CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
     : m_pPropertiesWin( pParent )
-    , m_rScrolledWindow( *pParent->get<VclScrolledWindow>("CmisScroll"))
-    , m_rVertScroll( m_rScrolledWindow.getVertScrollBar())
+    , m_rScrolledWindow( pParent->get<VclScrolledWindow>("CmisScroll"))
+    , m_rVertScroll( &m_rScrolledWindow->getVertScrollBar())
 {
-    m_rScrolledWindow.setUserManagedScrolling(true);
-    m_rVertScroll.EnableDrag();
-    m_rVertScroll.Show( m_rScrolledWindow.GetStyle() & WB_VSCROLL);
-    m_rVertScroll.SetRangeMin(0);
-    m_rVertScroll.SetVisibleSize( 0xFFFF );
+    m_rScrolledWindow->setUserManagedScrolling(true);
+    m_rVertScroll->EnableDrag();
+    m_rVertScroll->Show( m_rScrolledWindow->GetStyle() & WB_VSCROLL);
+    m_rVertScroll->SetRangeMin(0);
+    m_rVertScroll->SetVisibleSize( 0xFFFF );
 
     Link<> aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
-    m_rVertScroll.SetScrollHdl( aScrollLink );
+    m_rVertScroll->SetScrollHdl( aScrollLink );
 }
 
 void CmisPropertiesControl::ClearAllLines()
@@ -2627,24 +2627,24 @@ IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 
 void CmisPropertiesControl::checkAutoVScroll()
 {
-    WinBits nBits = m_rScrolledWindow.GetStyle();
+    WinBits nBits = m_rScrolledWindow->GetStyle();
     if (nBits & WB_VSCROLL)
         return;
     if (nBits & WB_AUTOVSCROLL)
     {
-        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
-        if (bShow != m_rVertScroll.IsVisible())
-            m_rVertScroll.Show(bShow);
+        bool bShow = m_rVertScroll->GetRangeMax() > m_rVertScroll->GetVisibleSize();
+        if (bShow != m_rVertScroll->IsVisible())
+            m_rVertScroll->Show(bShow);
     }
 }
 
 void CmisPropertiesControl::setScrollRange()
 {
     sal_Int32 nScrollOffset = m_pPropertiesWin.GetItemHeight();
-    sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
-    m_rVertScroll.SetPageSize( nVisibleItems - 1 );
-    m_rVertScroll.SetVisibleSize( nVisibleItems );
-    m_rVertScroll.Scroll();
+    sal_Int32 nVisibleItems = m_rScrolledWindow->getVisibleChildSize().Height() / nScrollOffset;
+    m_rVertScroll->SetPageSize( nVisibleItems - 1 );
+    m_rVertScroll->SetVisibleSize( nVisibleItems );
+    m_rVertScroll->Scroll();
     checkAutoVScroll();
 }
 
@@ -2654,8 +2654,8 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
                                      const bool bOpenChoice, Any& aChoices, Any& rAny
                                      )
 {
-    m_rVertScroll.SetRangeMax( m_pPropertiesWin.GetLineCount() + 1 );
-    m_rVertScroll.DoScroll( m_pPropertiesWin.GetLineCount() + 1 );
+    m_rVertScroll->SetRangeMax( m_pPropertiesWin.GetLineCount() + 1 );
+    m_rVertScroll->DoScroll( m_pPropertiesWin.GetLineCount() + 1 );
     m_pPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
                                bOpenChoice, aChoices, rAny );
     checkAutoVScroll();

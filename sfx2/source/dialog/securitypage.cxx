@@ -134,7 +134,7 @@ static bool lcl_IsPasswordCorrect( const OUString &rPassword )
 
 struct SfxSecurityPage_Impl
 {
-    SfxSecurityPage &   m_rMyTabPage;
+    VclPtr<SfxSecurityPage> m_rMyTabPage;
 
     VclPtr<CheckBox>    m_pOpenReadonlyCB;
     VclPtr<CheckBox>    m_pRecordChangesCB;         // for record changes
@@ -161,7 +161,7 @@ struct SfxSecurityPage_Impl
 
 
 SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const SfxItemSet & ) :
-    m_rMyTabPage                    (rTabPage),
+    m_rMyTabPage                    ( &rTabPage ),
     m_eRedlingMode                  ( RL_NONE ),
     m_bOrigPasswordIsConfirmed      ( false ),
     m_bNewPasswordIsValid           ( false ),
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            ScopedVclPtrInstance<WarningBox> aBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
+            ScopedVclPtrInstance<WarningBox> aBox(m_rMyTabPage->GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
                     m_aEndRedliningWarning );
             if (aBox->Execute() != RET_YES)
                 bAlreadyDone = true;
@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
             OUString aPasswordText;
 
             // dialog canceled or no password provided
-            if (!lcl_GetPassword( m_rMyTabPage.GetParent(), false, aPasswordText ))
+            if (!lcl_GetPassword( m_rMyTabPage->GetParent(), false, aPasswordText ))
                 bAlreadyDone = true;
 
             // ask for password and if dialog is canceled or no password provided return
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     if (bNeedPassword)
     {
         // ask for password and if dialog is canceled or no password provided return
-        if (!lcl_GetPassword( m_rMyTabPage.GetParent(), bNewProtection, aPasswordText ))
+        if (!lcl_GetPassword( m_rMyTabPage->GetParent(), bNewProtection, aPasswordText ))
             return 0;
 
         // provided password still needs to be checked?

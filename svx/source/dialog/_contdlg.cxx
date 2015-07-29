@@ -48,7 +48,7 @@ SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
 SvxContourDlgItem::SvxContourDlgItem( sal_uInt16 _nId, SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
-            rDlg                ( rContourDlg )
+            rDlg                ( &rContourDlg )
 {
 }
 
@@ -59,7 +59,7 @@ void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, 
         const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
         assert(pStateItem); //SfxBoolItem expected
         if (pStateItem)
-            rDlg.SetExecState(!pStateItem->GetValue());
+            rDlg->SetExecState(!pStateItem->GetValue());
     }
 }
 

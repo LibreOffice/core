@@ -31,14 +31,14 @@
 // Usually a MapMode of 1/100th mm will be used.
 
 SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
-    rOutDev(rTheDev)
+    rOutDev(&rTheDev)
 {
-    rOutDev.Push( PushFlags::FONT | PushFlags::MAPMODE |
+    rOutDev->Push( PushFlags::FONT | PushFlags::MAPMODE |
                   PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
-    if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode().GetMapUnit())
+    if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev->GetMapMode().GetMapUnit())
     {
         SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
+        rOutDev->SetMapMode( MAP_100TH_MM );     //format for 100% always
     }
 }
 
@@ -48,13 +48,13 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
     ColorData nNewCol = rColor.GetColor();
     if (COL_AUTO == nNewCol)
     {
-        if (OUTDEV_PRINTER == rOutDev.GetOutDevType())
+        if (OUTDEV_PRINTER == rOutDev->GetOutDevType())
             nNewCol = COL_BLACK;
         else
         {
-            Color aBgCol( rOutDev.GetBackground().GetColor() );
-            if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
-                aBgCol = static_cast<vcl::Window &>(rOutDev).GetDisplayBackground().GetColor();
+            Color aBgCol( rOutDev->GetBackground().GetColor() );
+            if (OUTDEV_WINDOW == rOutDev->GetOutDevType())
+                aBgCol = static_cast<vcl::Window *>(rOutDev.get())->GetDisplayBackground().GetColor();
 
             nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
@@ -71,8 +71,8 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
 
 void SmTmpDevice::SetFont(const vcl::Font &rNewFont)
 {
-    rOutDev.SetFont( rNewFont );
-    rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor() ) );
+    rOutDev->SetFont( rNewFont );
+    rOutDev->SetTextColor( Impl_GetColor( rNewFont.GetColor() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

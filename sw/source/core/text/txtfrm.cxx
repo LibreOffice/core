@@ -288,18 +288,18 @@ void SwTextFrm::SwitchLTRtoRTL( Point& rPoint ) const
 }
 
 SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
-        rOut( rOutp ), nOldLayoutMode( rOutp.GetLayoutMode() )
+        rOut( &rOutp ), nOldLayoutMode( rOutp.GetLayoutMode() )
 {
 }
 
 SwLayoutModeModifier::~SwLayoutModeModifier()
 {
-    const_cast<OutputDevice&>(rOut).SetLayoutMode( nOldLayoutMode );
+    const_cast<OutputDevice*>(rOut.get())->SetLayoutMode( nOldLayoutMode );
 }
 
 void SwLayoutModeModifier::Modify( bool bChgToRTL )
 {
-    const_cast<OutputDevice&>(rOut).SetLayoutMode( bChgToRTL ?
+    const_cast<OutputDevice*>(rOut.get())->SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
                                          TEXT_LAYOUT_BIDI_STRONG );
 }
@@ -307,11 +307,11 @@ void SwLayoutModeModifier::Modify( bool bChgToRTL )
 void SwLayoutModeModifier::SetAuto()
 {
     const ComplexTextLayoutMode nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
-    const_cast<OutputDevice&>(rOut).SetLayoutMode( nNewLayoutMode );
+    const_cast<OutputDevice*>(rOut.get())->SetLayoutMode( nNewLayoutMode );
 }
 
 SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang ) :
-        rOut( rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
+        rOut( &rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
 {
     LanguageType eLang = eCurLang;
     const SvtCTLOptions::TextNumerals nTextNumerals = SW_MOD()->GetCTLOptions().GetCTLTextNumerals();
@@ -323,12 +323,12 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
         eLang = ::GetAppLanguage();
 
-    const_cast<OutputDevice&>(rOut).SetDigitLanguage( eLang );
+    const_cast<OutputDevice*>(rOut.get())->SetDigitLanguage( eLang );
 }
 
 SwDigitModeModifier::~SwDigitModeModifier()
 {
-    const_cast<OutputDevice&>(rOut).SetDigitLanguage( nOldLanguageType );
+    const_cast<OutputDevice*>(rOut.get())->SetDigitLanguage( nOldLanguageType );
 }
 
 void SwTextFrm::Init()

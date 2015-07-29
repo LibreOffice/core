@@ -117,7 +117,8 @@ private:
     private:
         explicit CheckListBox(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
         void operator =(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
-
+        virtual ~CheckListBox();
+        virtual void dispose() SAL_OVERRIDE;
         virtual void MouseButtonDown(MouseEvent const & event) SAL_OVERRIDE;
         virtual void MouseButtonUp(MouseEvent const & event) SAL_OVERRIDE;
         virtual void KeyInput(KeyEvent const & event) SAL_OVERRIDE;
@@ -127,7 +128,7 @@ private:
         OUString m_ignoreUpdate;
         OUString m_ignoreAllUpdates;
         OUString m_enableUpdate;
-        UpdateDialog & m_dialog;
+        VclPtr<UpdateDialog> m_dialog;
     };
 
 

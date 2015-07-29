@@ -35,7 +35,7 @@ PageOrientationControl::PageOrientationControl(
     : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_ORIENTATION) )
     , mpOrientationValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_ORIENTATION) ) )
     , mbLandscape( bLandscape )
-    , mrPagePropPanel(rPanel)
+    , mrPagePropPanel(&rPanel)
 {
     mpOrientationValueSet->SetStyle( mpOrientationValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT );
     mpOrientationValueSet->SetColor(GetSettings().GetStyleSettings().GetMenuColor());
@@ -84,11 +84,11 @@ IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)
         if ( bChanged )
         {
             mbLandscape = !mbLandscape;
-            mrPagePropPanel.ExecuteOrientationChange( mbLandscape );
+            mrPagePropPanel->ExecuteOrientationChange( mbLandscape );
         }
     }
 
-    mrPagePropPanel.ClosePageOrientationPopup();
+    mrPagePropPanel->ClosePageOrientationPopup();
     return 0;
 }
 

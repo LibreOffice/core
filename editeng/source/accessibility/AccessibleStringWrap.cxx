@@ -32,7 +32,7 @@
 
 
 AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText ) :
-    mrDev( rDev ),
+    mrDev( &rDev ),
     mrFont( rFont ),
     maText( rText )
 {
@@ -43,24 +43,24 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
 
-    mrFont.SetPhysFont( &mrDev );
+    mrFont.SetPhysFont( mrDev );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= maText.getLength() )
     {
         // create a caret bounding rect that has the height of the
         // current font and is one pixel wide.
-        rRect.Left() = mrDev.GetTextWidth(maText);
+        rRect.Left() = mrDev->GetTextWidth(maText);
         rRect.Top() = 0;
-        rRect.SetSize( Size(mrDev.GetTextHeight(), 1) );
+        rRect.SetSize( Size(mrDev->GetTextHeight(), 1) );
     }
     else
     {
         long aXArray[2];
-        mrDev.GetCaretPositions( maText, aXArray, static_cast< sal_uInt16 >(nIndex), 1 );
+        mrDev->GetCaretPositions( maText, aXArray, static_cast< sal_uInt16 >(nIndex), 1 );
         rRect.Left() = 0;
         rRect.Top() = 0;
-        rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
+        rRect.SetSize( Size(mrDev->GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
         rRect.Move( ::std::min(aXArray[0], aXArray[1]), 0 );
     }
 

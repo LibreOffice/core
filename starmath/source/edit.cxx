@@ -88,7 +88,7 @@ bool SmEditWindow::IsInlineEditEnabled()
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin),
     DropTargetHelper    ( this ),
-    rCmdBox             (rMyCmdBoxWin)
+    rCmdBox             (&rMyCmdBoxWin)
 {
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);
@@ -170,13 +170,13 @@ void SmEditWindow::InvalidateSlots()
 
 SmViewShell * SmEditWindow::GetView()
 {
-    return rCmdBox.GetView();
+    return rCmdBox->GetView();
 }
 
 
 SmDocShell * SmEditWindow::GetDoc()
 {
-    SmViewShell *pView = rCmdBox.GetView();
+    SmViewShell *pView = rCmdBox->GetView();
     return pView ? pView->GetDoc() : 0;
 }
 
@@ -272,7 +272,7 @@ IMPL_LINK_NOARG_TYPED(SmEditWindow, CursorMoveTimerHdl, Idle *, void)
 
     if (!aNewSelection.IsEqual(aOldSelection))
     {
-        SmViewShell *pView = rCmdBox.GetView();
+        SmViewShell *pView = rCmdBox->GetView();
         if (pView)
         {
             // get row and column to look for
@@ -400,7 +400,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 
 IMPL_LINK( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 {
-    SmViewShell *pViewSh = rCmdBox.GetView();
+    SmViewShell *pViewSh = rCmdBox->GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTCOMMAND, SfxCallMode::RECORD,
@@ -1078,7 +1078,7 @@ void SmEditWindow::Flush()
     if (pEditEngine  &&  pEditEngine->IsModified())
     {
         pEditEngine->ClearModifyFlag();
-        SmViewShell *pViewSh = rCmdBox.GetView();
+        SmViewShell *pViewSh = rCmdBox->GetView();
         if (pViewSh)
         {
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(

@@ -34,8 +34,8 @@ struct OrientationHelper_Impl
     typedef std::pair< VclPtr<vcl::Window>, TriState >  WindowPair;
     typedef std::vector< WindowPair >       WindowVec;
 
-    DialControl&        mrCtrlDial;
-    CheckBox&           mrCbStacked;
+    VclPtr<DialControl> mrCtrlDial;
+    VclPtr<CheckBox>    mrCbStacked;
     WindowVec           maWinVec;
     bool                mbEnabled;
     bool                mbVisible;
@@ -55,14 +55,14 @@ struct OrientationHelper_Impl
 
 
 OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
-    mrCtrlDial( rCtrlDial ),
-    mrCbStacked( rCbStacked ),
+    mrCtrlDial( &rCtrlDial ),
+    mrCbStacked( &rCbStacked ),
     mbEnabled( rCtrlDial.IsEnabled() ),
     mbVisible( rCtrlDial.IsVisible() )
 {
-    maWinVec.push_back( WindowPair( &mrCtrlDial, TRISTATE_TRUE ) );
-    maWinVec.push_back( WindowPair( &mrCbStacked, TRISTATE_INDET ) );
-    mrCbStacked.SetClickHdl( LINK( this, OrientationHelper_Impl, ClickHdl ) );
+    maWinVec.push_back( WindowPair( mrCtrlDial, TRISTATE_TRUE ) );
+    maWinVec.push_back( WindowPair( mrCbStacked, TRISTATE_INDET ) );
+    mrCbStacked->SetClickHdl( LINK( this, OrientationHelper_Impl, ClickHdl ) );
 }
 
 void OrientationHelper_Impl::AddDependentWindow( vcl::Window& rWindow, TriState eDisableIfStacked )
@@ -83,9 +83,9 @@ void OrientationHelper_Impl::EnableWindow( vcl::Window& rWindow, TriState eDisab
     switch( eDisableIfStacked )
     {
         // TRISTATE_TRUE: Disable window, if stacked text is turned on or "don't know".
-        case TRISTATE_TRUE:   bDisableOnStacked = (mrCbStacked.GetState() != TRISTATE_FALSE);  break;
+        case TRISTATE_TRUE:   bDisableOnStacked = (mrCbStacked->GetState() != TRISTATE_FALSE);  break;
         // TRISTATE_FALSE: Disable window, if stacked text is turned off or "don't know".
-        case TRISTATE_FALSE: bDisableOnStacked = (mrCbStacked.GetState() != TRISTATE_TRUE);    break;
+        case TRISTATE_FALSE: bDisableOnStacked = (mrCbStacked->GetState() != TRISTATE_TRUE);    break;
         default: ;//prevent warning
     }
     rWindow.Enable( mbEnabled && !bDisableOnStacked );
@@ -138,19 +138,19 @@ void OrientationHelper::SetStackedState( TriState eState )
 {
     if( eState != GetStackedState() )
     {
-        mpImpl->mrCbStacked.SetState( eState );
+        mpImpl->mrCbStacked->SetState( eState );
         mpImpl->EnableDependentWindows();
     }
 }
 
 TriState OrientationHelper::GetStackedState() const
 {
-    return mpImpl->mrCbStacked.GetState();
+    return mpImpl->mrCbStacked->GetState();
 }
 
 void OrientationHelper::EnableStackedTriState( bool bEnable )
 {
-    mpImpl->mrCbStacked.EnableTriState( bEnable );
+    mpImpl->mrCbStacked->EnableTriState( bEnable );
 }
 
 

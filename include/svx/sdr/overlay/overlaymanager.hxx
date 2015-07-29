@@ -24,6 +24,7 @@
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
@@ -58,7 +59,7 @@ namespace sdr
 
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
-            OutputDevice&                               mrOutputDevice;
+            VclPtr<OutputDevice>                        mrOutputDevice;
             const SdrModel*                             mpModel;
 
             // the vector of registered OverlayObjects
@@ -108,7 +109,7 @@ namespace sdr
             virtual void restoreBackground(const vcl::Region& rRegion) const;
 
             // get the OutputDevice
-            OutputDevice& getOutputDevice() const { return mrOutputDevice; }
+            OutputDevice& getOutputDevice() const { return *mrOutputDevice.get(); }
             // Get the draw model.
             const SdrModel* getModel() const { return mpModel; }
 

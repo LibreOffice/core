@@ -127,16 +127,16 @@ void populateTree(
 
 class TreeUpdateSwitch
 {
-    SvTreeListBox& mrTreeCtrl;
+    VclPtr<SvTreeListBox> mrTreeCtrl;
 public:
-    TreeUpdateSwitch(SvTreeListBox& rTreeCtrl) : mrTreeCtrl(rTreeCtrl)
+    TreeUpdateSwitch(SvTreeListBox& rTreeCtrl) : mrTreeCtrl(&rTreeCtrl)
     {
-        mrTreeCtrl.SetUpdateMode(false);
+        mrTreeCtrl->SetUpdateMode(false);
     }
 
     ~TreeUpdateSwitch()
     {
-        mrTreeCtrl.SetUpdateMode(true);
+        mrTreeCtrl->SetUpdateMode(true);
     }
 };
 

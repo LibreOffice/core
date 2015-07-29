@@ -33,7 +33,7 @@ namespace accessibility
         OutlinerView& rOutlView,
         const vcl::Window& rViewWindow )
         : mrView( rView ),
-          mrWindow( rViewWindow ),
+          mrWindow( &rViewWindow ),
           mpOutliner( &rOutliner ),
           mpOutlinerView( &rOutlView ),
           mTextForwarder( rOutliner, false ),
@@ -54,7 +54,7 @@ namespace accessibility
 
     SvxEditSource* AccessibleOutlineEditSource::Clone() const
     {
-        return new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, mrWindow);
+        return new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, *mrWindow.get());
     }
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()
@@ -124,7 +124,7 @@ namespace accessibility
     {
         if( IsValid() )
         {
-            SdrPaintWindow* pPaintWindow = mrView.FindPaintWindow(mrWindow);
+            SdrPaintWindow* pPaintWindow = mrView.FindPaintWindow(*mrWindow.get());
             Rectangle aVisArea;
 
             if(pPaintWindow)
@@ -132,9 +132,9 @@ namespace accessibility
                 aVisArea = pPaintWindow->GetVisibleArea();
             }
 
-            MapMode aMapMode(mrWindow.GetMapMode());
+            MapMode aMapMode(mrWindow->GetMapMode());
             aMapMode.SetOrigin(Point());
-            return mrWindow.LogicToPixel( aVisArea, aMapMode );
+            return mrWindow->LogicToPixel( aVisArea, aMapMode );
         }
 
         return Rectangle();
@@ -146,9 +146,9 @@ namespace accessibility
         {
             Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
                                                       MapMode(mrView.GetModel()->GetScaleUnit()) ) );
-            MapMode aMapMode(mrWindow.GetMapMode());
+            MapMode aMapMode(mrWindow->GetMapMode());
             aMapMode.SetOrigin(Point());
-            return mrWindow.LogicToPixel( aPoint, aMapMode );
+            return mrWindow->LogicToPixel( aPoint, aMapMode );
         }
 
         return Point();
@@ -158,9 +158,9 @@ namespace accessibility
     {
         if( IsValid() && mrView.GetModel() )
         {
-            MapMode aMapMode(mrWindow.GetMapMode());
+            MapMode aMapMode(mrWindow->GetMapMode());
             aMapMode.SetOrigin(Point());
-            Point aPoint( mrWindow.PixelToLogic( rPoint, aMapMode ) );
+            Point aPoint( mrWindow->PixelToLogic( rPoint, aMapMode ) );
             return OutputDevice::LogicToLogic( aPoint,
                                                MapMode(mrView.GetModel()->GetScaleUnit()),
                                                rMapMode );

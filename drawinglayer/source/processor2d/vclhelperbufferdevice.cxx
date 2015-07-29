@@ -222,18 +222,18 @@ namespace drawinglayer
         OutputDevice& rOutDev,
         const basegfx::B2DRange& rRange,
         bool bAddOffsetToMapping)
-    :   mrOutDev(rOutDev),
+    :   mrOutDev(&rOutDev),
         mpContent(0),
         mpMask(0),
         mpAlpha(0)
     {
         basegfx::B2DRange aRangePixel(rRange);
-        aRangePixel.transform(mrOutDev.GetViewTransformation());
+        aRangePixel.transform(mrOutDev->GetViewTransformation());
         const Rectangle aRectPixel(
             (sal_Int32)floor(aRangePixel.getMinX()), (sal_Int32)floor(aRangePixel.getMinY()),
             (sal_Int32)ceil(aRangePixel.getMaxX()), (sal_Int32)ceil(aRangePixel.getMaxY()));
         const Point aEmptyPoint;
-        maDestPixel = Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
+        maDestPixel = Rectangle(aEmptyPoint, mrOutDev->GetOutputSizePixel());
         maDestPixel.Intersection(aRectPixel);
 
         if(isVisible())
@@ -245,30 +245,30 @@ namespace drawinglayer
             // facto cleared when created on other platforms?
             mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 0);
 #else
-            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, 0);
+            mpContent = getVDevBuffer().alloc(*mrOutDev.get(), maDestPixel.GetSize(), false, 0);
 #endif
 
             // #i93485# assert when copying from window to VDev is used
-            OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
+            OSL_ENSURE(mrOutDev->GetOutDevType() != OUTDEV_WINDOW,
                 "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
 
-            const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
-            mrOutDev.EnableMapMode(false);
-            mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), mrOutDev);
-            mrOutDev.EnableMapMode(bWasEnabledSrc);
+            const bool bWasEnabledSrc(mrOutDev->IsMapModeEnabled());
+            mrOutDev->EnableMapMode(false);
+            mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), *mrOutDev.get());
+            mrOutDev->EnableMapMode(bWasEnabledSrc);
 
-            MapMode aNewMapMode(mrOutDev.GetMapMode());
+            MapMode aNewMapMode(mrOutDev->GetMapMode());
 
             if(bAddOffsetToMapping)
             {
-                const Point aLogicTopLeft(mrOutDev.PixelToLogic(maDestPixel.TopLeft()));
+                const Point aLogicTopLeft(mrOutDev->PixelToLogic(maDestPixel.TopLeft()));
                 aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
             }
 
             mpContent->SetMapMode(aNewMapMode);
 
             // copy AA flag for new target
-            mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
+            mpContent->SetAntialiasing(mrOutDev->GetAntialiasing());
         }
     }
 
@@ -296,10 +296,10 @@ namespace drawinglayer
         {
             const Point aEmptyPoint;
             const Size aSizePixel(maDestPixel.GetSize());
-            const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
+            const bool bWasEnabledDst(mrOutDev->IsMapModeEnabled());
             static bool bDoSaveForVisualControl(false);
 
-            mrOutDev.EnableMapMode(false);
+            mrOutDev->EnableMapMode(false);
             mpContent->EnableMapMode(false);
             Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
 
@@ -320,7 +320,7 @@ namespace drawinglayer
                     WriteDIB(aAlphaMask.GetBitmap(), aNew, false, true);
                 }
 
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+                mrOutDev->DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
             }
             else if(mpMask)
             {
@@ -333,20 +333,20 @@ namespace drawinglayer
                     WriteDIB(aMask, aNew, false, true);
                 }
 
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
+                mrOutDev->DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
             }
             else if(0.0 != fTrans)
             {
                 sal_uInt8 nMaskValue((sal_uInt8)basegfx::fround(fTrans * 255.0));
                 const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+                mrOutDev->DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
             }
             else
             {
-                mrOutDev.DrawBitmap(maDestPixel.TopLeft(), aContent);
+                mrOutDev->DrawBitmap(maDestPixel.TopLeft(), aContent);
             }
 
-            mrOutDev.EnableMapMode(bWasEnabledDst);
+            mrOutDev->EnableMapMode(bWasEnabledDst);
         }
     }
 
@@ -361,7 +361,7 @@ namespace drawinglayer
         assert(mpContent && "impBufferDevice: No content, check isVisible() before accessing (!)");
         if (!mpMask)
         {
-            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 1);
+            mpMask = getVDevBuffer().alloc(*mrOutDev.get(), maDestPixel.GetSize(), true, 1);
             mpMask->SetMapMode(mpContent->GetMapMode());
 
             // do NOT copy AA flag for mask!
@@ -375,7 +375,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpAlpha)
         {
-            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 0);
+            mpAlpha = getVDevBuffer().alloc(*mrOutDev.get(), maDestPixel.GetSize(), true, 0);
             mpAlpha->SetMapMode(mpContent->GetMapMode());
 
             // copy AA flag for new target; masking needs to be smooth

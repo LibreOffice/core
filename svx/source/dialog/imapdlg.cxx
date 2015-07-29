@@ -72,7 +72,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
 SvxIMapDlgItem::SvxIMapDlgItem( sal_uInt16 _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
-            rIMap               ( rIMapDlg )
+            rIMap               ( &rIMapDlg )
 {
 }
 
@@ -86,7 +86,7 @@ void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
         if (pStateItem)
         {
             // Disable Float if possible
-            rIMap.SetExecState( !pStateItem->GetValue() );
+            rIMap->SetExecState( !pStateItem->GetValue() );
         }
     }
 }

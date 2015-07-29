@@ -26,7 +26,7 @@
 
 class SmTmpDevice
 {
-    OutputDevice  &rOutDev;
+    VclPtr<OutputDevice>  rOutDev;
 
     SmTmpDevice(const SmTmpDevice&) SAL_DELETED_FUNCTION;
     SmTmpDevice& operator=(const SmTmpDevice&) SAL_DELETED_FUNCTION;
@@ -35,14 +35,14 @@ class SmTmpDevice
 
 public:
     SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm);
-    ~SmTmpDevice()  { rOutDev.Pop(); }
+    ~SmTmpDevice()  { rOutDev->Pop(); }
 
     void SetFont(const vcl::Font &rNewFont);
 
-    void SetLineColor( const Color& rColor )    { rOutDev.SetLineColor( Impl_GetColor(rColor) ); }
-    void SetFillColor( const Color& rColor )    { rOutDev.SetFillColor( Impl_GetColor(rColor) ); }
+    void SetLineColor( const Color& rColor )    { rOutDev->SetLineColor( Impl_GetColor(rColor) ); }
+    void SetFillColor( const Color& rColor )    { rOutDev->SetFillColor( Impl_GetColor(rColor) ); }
 
-    operator OutputDevice & () { return rOutDev; }
+    operator OutputDevice & () { return *rOutDev.get(); }
 };
 
 #endif

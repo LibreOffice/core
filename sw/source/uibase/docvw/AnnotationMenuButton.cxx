@@ -45,9 +45,9 @@ Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, co
 
 AnnotationMenuButton::AnnotationMenuButton(sw::sidebarwindows::SwSidebarWin& rSidebarWin)
     : MenuButton(&rSidebarWin)
-    , mrSidebarWin(rSidebarWin)
+    , mrSidebarWin(&rSidebarWin)
 {
-    AddEventListener(LINK(&mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
+    AddEventListener(LINK(mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
 
     SetAccessibleName(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_NAME));
     SetAccessibleDescription(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_DESC));
@@ -61,19 +61,19 @@ AnnotationMenuButton::~AnnotationMenuButton()
 
 void AnnotationMenuButton::dispose()
 {
-    RemoveEventListener(LINK(&mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
+    RemoveEventListener(LINK(mrSidebarWin.get(), sw::sidebarwindows::SwSidebarWin, WindowEventListener));
     MenuButton::dispose();
 }
 
 void AnnotationMenuButton::Select()
 {
-    mrSidebarWin.ExecuteCommand( GetCurItemId() );
+    mrSidebarWin->ExecuteCommand( GetCurItemId() );
 }
 
 void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     PopupMenu* pButtonPopup(GetPopupMenu());
-    if (mrSidebarWin.IsReadOnly())
+    if (mrSidebarWin->IsReadOnly())
     {
         pButtonPopup->EnableItem(FN_REPLY, false );
         pButtonPopup->EnableItem(FN_DELETE_COMMENT, false );
@@ -83,13 +83,13 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
-        pButtonPopup->EnableItem(FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
+        pButtonPopup->EnableItem(FN_DELETE_COMMENT, !mrSidebarWin->IsProtected() );
         pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR, true );
         pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES, true );
         pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES, true );
     }
 
-    if (mrSidebarWin.IsProtected())
+    if (mrSidebarWin->IsProtected())
     {
         pButtonPopup->EnableItem(FN_REPLY, false);
     }
@@ -105,7 +105,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
             }
         }
         // do not allow to reply to ourself and no answer possible if this note is in a protected section
-        if (sAuthor == mrSidebarWin.GetAuthor())
+        if (sAuthor == mrSidebarWin->GetAuthor())
         {
             pButtonPopup->EnableItem(FN_REPLY, false);
         }
@@ -125,7 +125,7 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
     if (bHighContrast)
         rRenderContext.SetFillColor(COL_BLACK);
     else
-        rRenderContext.SetFillColor(mrSidebarWin.ColorDark());
+        rRenderContext.SetFillColor(mrSidebarWin->ColorDark());
     rRenderContext.SetLineColor();
     const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
     rRenderContext.DrawRect(aRect);
@@ -142,23 +142,23 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
         Gradient aGradient;
         if (IsMouseOver())
             aGradient = Gradient(GradientStyle_LINEAR,
-                                 ColorFromAlphaColor(80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()),
-                                 ColorFromAlphaColor(15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
+                                 ColorFromAlphaColor(80, mrSidebarWin->ColorAnchor(), mrSidebarWin->ColorDark()),
+                                 ColorFromAlphaColor(15, mrSidebarWin->ColorAnchor(), mrSidebarWin->ColorDark()));
         else
             aGradient = Gradient(GradientStyle_LINEAR,
-                                 ColorFromAlphaColor(15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()),
-                                 ColorFromAlphaColor(80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
+                                 ColorFromAlphaColor(15, mrSidebarWin->ColorAnchor(), mrSidebarWin->ColorDark()),
+                                 ColorFromAlphaColor(80, mrSidebarWin->ColorAnchor(), mrSidebarWin->ColorDark()));
         rRenderContext.DrawGradient(aRect, aGradient);
 
         //draw rect around button
         rRenderContext.SetFillColor();
-        rRenderContext.SetLineColor(ColorFromAlphaColor(90, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
+        rRenderContext.SetLineColor(ColorFromAlphaColor(90, mrSidebarWin->ColorAnchor(), mrSidebarWin->ColorDark()));
     }
     rRenderContext.DrawRect(aRect);
 
-    if (mrSidebarWin.IsPreview())
+    if (mrSidebarWin->IsPreview())
     {
-        vcl::Font aOldFont(mrSidebarWin.GetFont());
+        vcl::Font aOldFont(mrSidebarWin->GetFont());
         vcl::Font aFont(aOldFont);
         Color aCol(COL_BLACK);
         aFont.SetColor(aCol);
@@ -191,8 +191,8 @@ void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     if (rKeyCode.GetCode() == KEY_TAB)
     {
-        mrSidebarWin.ActivatePostIt();
-        mrSidebarWin.GrabFocus();
+        mrSidebarWin->ActivatePostIt();
+        mrSidebarWin->GrabFocus();
     }
     else
     {

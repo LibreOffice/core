@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 class SvtScriptedTextHelper_Impl
 {
 private:
-    OutputDevice&               mrOutDevice;        /// The output device for drawing the text.
+    VclPtr<OutputDevice>        mrOutDevice;        /// The output device for drawing the text.
     vcl::Font                   maLatinFont;        /// The font for latin text portions.
     vcl::Font                   maAsianFont;        /// The font for asian text portions.
     vcl::Font                   maCmplxFont;        /// The font for complex text portions.
@@ -55,7 +55,7 @@ private:
     const vcl::Font&            GetFont( sal_uInt16 _nScript ) const;
                                 /** Sets a font on the output device depending on the script type. */
     inline void                 SetOutDevFont( sal_uInt16 _nScript )
-                                    { mrOutDevice.SetFont( GetFont( _nScript ) ); }
+                                    { mrOutDevice->SetFont( GetFont( _nScript ) ); }
                                 /** Fills maPosVec with positions of all changes of script type.
                                     This method expects correctly initialized maPosVec and maScriptVec. */
     void                        CalculateSizes();
@@ -95,7 +95,7 @@ public:
 SvtScriptedTextHelper_Impl::SvtScriptedTextHelper_Impl(
         OutputDevice& _rOutDevice,
         vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont ) :
-    mrOutDevice( _rOutDevice ),
+    mrOutDevice( &_rOutDevice ),
     maLatinFont( _pLatinFont ? *_pLatinFont : _rOutDevice.GetFont() ),
     maAsianFont( _pAsianFont ? *_pAsianFont : _rOutDevice.GetFont() ),
     maCmplxFont( _pCmplxFont ? *_pCmplxFont : _rOutDevice.GetFont() ),
@@ -135,7 +135,7 @@ const vcl::Font& SvtScriptedTextHelper_Impl::GetFont( sal_uInt16 _nScript ) cons
 void SvtScriptedTextHelper_Impl::CalculateSizes()
 {
     maTextSize.Width() = maTextSize.Height() = 0;
-    maDefltFont = mrOutDevice.GetFont();
+    maDefltFont = mrOutDevice->GetFont();
 
     // calculate text portion widths and total width
     maWidthVec.clear();
@@ -160,7 +160,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
             nScript = maScriptVec[ nScriptVecIndex++ ];
 
             SetOutDevFont( nScript );
-            nCurrWidth = mrOutDevice.GetTextWidth( maText, nThisPos, nNextPos - nThisPos );
+            nCurrWidth = mrOutDevice->GetTextWidth( maText, nThisPos, nNextPos - nThisPos );
             maWidthVec.push_back( nCurrWidth );
             maTextSize.Width() += nCurrWidth;
             nThisPos = nNextPos;
@@ -169,13 +169,13 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
 
     // calculate maximum font height
     SetOutDevFont( i18n::ScriptType::LATIN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice->GetTextHeight() );
     SetOutDevFont( i18n::ScriptType::ASIAN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice->GetTextHeight() );
     SetOutDevFont( i18n::ScriptType::COMPLEX );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice->GetTextHeight() );
 
-    mrOutDevice.SetFont( maDefltFont );
+    mrOutDevice->SetFont( maDefltFont );
 }
 
 void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XBreakIterator >& _xBreakIter )
@@ -221,7 +221,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                                 nScript = i18n::ScriptType::LATIN;
                                 while( (nScript != i18n::ScriptType::WEAK) && (nCharIx == nNextCharIx) )
                                 {
-                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, nCharIx, nNextPos - nCharIx );
+                                    nNextCharIx = mrOutDevice->HasGlyphs( GetFont( nScript ), maText, nCharIx, nNextPos - nCharIx );
                                     if( nCharIx == nNextCharIx )
                                         ++nScript;
                                 }
@@ -277,7 +277,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
     DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
     DBG_ASSERT( maScriptVec.size() == maWidthVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
 
-    maDefltFont = mrOutDevice.GetFont();
+    maDefltFont = mrOutDevice->GetFont();
     Point aCurrPos( _rPos );
     sal_Int32 nThisPos = maPosVec[ 0 ];
     sal_Int32 nNextPos;
@@ -293,12 +293,12 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
         nScript = maScriptVec[ nVecIndex ];
 
         SetOutDevFont( nScript );
-        mrOutDevice.DrawText( aCurrPos, maText, nThisPos, nNextPos - nThisPos );
+        mrOutDevice->DrawText( aCurrPos, maText, nThisPos, nNextPos - nThisPos );
         aCurrPos.X() += maWidthVec[ nVecIndex++ ];
-        aCurrPos.X() += mrOutDevice.GetTextHeight() / 5;   // add 20% of font height as portion spacing
+        aCurrPos.X() += mrOutDevice->GetTextHeight() / 5;   // add 20% of font height as portion spacing
         nThisPos = nNextPos;
     }
-    mrOutDevice.SetFont( maDefltFont );
+    mrOutDevice->SetFont( maDefltFont );
 }
 
 
