@@ -1989,7 +1989,7 @@ bool SdrTextObj::IsChainable() const
     // Read it as item
     const SfxItemSet& rSet = GetObjectItemSet();
     OUString aNextName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
-    return aNextName == "";
+    return aNextName != "";
 
     // XXX
     if (!GetName().startsWith("Chainable")) {
