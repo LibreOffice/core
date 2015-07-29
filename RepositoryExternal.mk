@@ -3170,7 +3170,11 @@ endef
 
 define gb_LinkTarget__use_python
 $(call gb_LinkTarget__use_python_headers,$(1))
+ifeq ($(OS),MACOSX)
+$(call gb_LinkTarget_use_generated_package,$(1),python3)
+else
 $(call gb_LinkTarget_use_package,$(1),python3)
+endif
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
