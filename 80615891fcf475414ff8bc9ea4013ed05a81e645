@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_0ac8bf54",
+        "filename": "external/boost/boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch",
+        "patchSetId": 12
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T11:24:40Z",
+      "side": 1,
+      "message": "Exactly! smh_get and other core devs are strongly against this feature ;-(\n\nI\u0027m procrastinating to fix it and upload a new patch set as this would trigger another 3 jenkins builds jobs. May be merge it as is?",
+      "parentUuid": "1a54edaf_6aa133a9",
+      "revId": "80615891fcf475414ff8bc9ea4013ed05a81e645",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_ea952340",
         "filename": "external/boost/boost_1_59_0.property_tree.wtype-limits.patch",
         "patchSetId": 12
@@ -48,6 +66,24 @@
       "writtenOn": "2015-07-30T09:26:57Z",
       "side": 1,
       "message": "now that you mention it - i notice there was also already a patch for this warning that you removed, which was also submitted upstream:\n\nboost/boost.property_tree.Wtype-limits.warnings.patch.1\n\nhttps://svn.boost.org/trac/boost/ticket/9893\n\n3 patches attached, 0 feedback from upstream",
+      "revId": "80615891fcf475414ff8bc9ea4013ed05a81e645",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_cac14730",
+        "filename": "external/boost/boost_1_59_0.property_tree.wtype-limits.patch",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T11:24:40Z",
+      "side": 1,
+      "message": "Yes. Kind of. It solved old warnings and introduced this new one.",
+      "parentUuid": "1a54edaf_ea952340",
       "revId": "80615891fcf475414ff8bc9ea4013ed05a81e645",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
