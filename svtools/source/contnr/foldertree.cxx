@@ -27,7 +27,14 @@ FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
 
 void FolderTree::RequestingChildren( SvTreeListEntry* pEntry )
 {
+    EnableChildPointerOverwrite( true );
+    SetPointer( PointerStyle::Wait );
+    Invalidate(InvalidateFlags::Update);
+
     FillTreeEntry( pEntry );
+
+    SetPointer( PointerStyle::Arrow );
+    EnableChildPointerOverwrite( false );
 }
 
 void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
