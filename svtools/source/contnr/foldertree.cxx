@@ -75,12 +75,12 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
                 }
             }
         }
-    }
-    else
-    {
-        // this dir was updated recently
-        // next time read this remote folder
-        m_sLastUpdatedDir = "";
+        else
+        {
+            // this dir was updated recently
+            // next time read this remote folder
+            m_sLastUpdatedDir = "";
+        }
     }
 }
 
