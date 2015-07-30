@@ -23,6 +23,9 @@
 #include <textboxhelper.hxx>
 #include <view.hxx>
 #include <hhcwrp.hxx>
+#include <postithelper.hxx>
+#include <PostItMgr.hxx>
+#include <SidebarWin.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -61,6 +64,7 @@ public:
     void testBookmarkUndo();
     void testCp1000115();
     void testDde();
+    void testTdf89720();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -87,6 +91,7 @@ public:
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testDde);
+    CPPUNIT_TEST(testTdf89720);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -677,6 +682,22 @@ void SwUiWriterTest::testDde()
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
+}
+
+void SwUiWriterTest::testTdf89720()
+{
+#ifndef MACOSX
+    SwDoc* pDoc = createDoc("tdf89720.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    for (SwSidebarItem* pItem : *pPostItMgr)
+    {
+        if (pItem->pPostIt->IsFollow())
+            // This was non-0: reply comments had a text range overlay,
+            // resulting in unexpected dark color.
+            CPPUNIT_ASSERT(!pItem->pPostIt->TextRange());
+    }
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
