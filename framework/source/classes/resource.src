@@ -124,6 +124,11 @@ String STR_REMOTE_FILE
     Text [ en-US ] = "Save Remote File...";
 };
 
+String STR_REMOTE_TITLE
+{
+    Text [ en-US ] = " (Remote)";
+};
+
 String STR_TOOLBAR_TITLE_ADDON
 {
     Text [ en-US ] = "Add-On %num%";
