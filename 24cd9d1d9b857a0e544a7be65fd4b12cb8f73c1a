@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_8dd5a944",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "You missed reference and const in some places. Sorry, missed it in my previous review.",
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_2df3550c",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "const should be used to be really sure, that no copy is created:\n\n  std::pair\u003cOUString, Sequence\u003cOUString\u003e \u003e const\u0026 ap",
+      "range": {
+        "startLine": 241,
+        "startChar": 22,
+        "endLine": 241,
+        "endChar": 66
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4df811e6",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "const:\n\n  std::pair\u003cOUString, OUString\u003e const\u0026 cp",
+      "range": {
+        "startLine": 329,
+        "startChar": 35,
+        "endLine": 329,
+        "endChar": 68
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_eddd3d71",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "Here you missed ref and const:\n\n  std::pair\u003cOUString, Sequence\u003cOUString\u003e \u003e const\u0026 ap",
+      "range": {
+        "startLine": 343,
+        "startChar": 35,
+        "endLine": 343,
+        "endChar": 75
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0ddbf97d",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "The same:\n\n  std::pair\u003cOUString, Sequence\u003cOUString\u003e \u003e const\u0026 ap",
+      "range": {
+        "startLine": 354,
+        "startChar": 35,
+        "endLine": 354,
+        "endChar": 78
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ade7453f",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "same:\n\n  std::pair\u003cOUString, Sequence\u003cOUString\u003e \u003e const\u0026 ap",
+      "range": {
+        "startLine": 365,
+        "startChar": 35,
+        "endLine": 365,
+        "endChar": 78
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_cde4013d",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "I prefer const after (well others prefer before ,-)\n\n  OUString const\u0026 src",
+      "range": {
+        "startLine": 396,
+        "startChar": 38,
+        "endLine": 396,
+        "endChar": 57
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_6dd06d54",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T21:22:37Z",
+      "side": 1,
+      "message": "same:\n\n  OUString const\u0026 src",
+      "range": {
+        "startLine": 405,
+        "startChar": 38,
+        "endLine": 405,
+        "endChar": 57
+      },
+      "revId": "24cd9d1d9b857a0e544a7be65fd4b12cb8f73c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
