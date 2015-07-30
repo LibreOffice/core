@@ -55,6 +55,8 @@ const sal_uInt16 SvxAreaTabPage::pAreaRanges[] =
     XATTR_GRADIENTSTEPCOUNT,
     SID_ATTR_FILL_STYLE,
     SID_ATTR_FILL_BITMAP,
+    SID_ATTR_PAGE_COLOR,
+    SID_ATTR_PAGE_FILLSTYLE,
     0
 };
 
