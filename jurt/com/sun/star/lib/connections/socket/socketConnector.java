@@ -146,8 +146,10 @@ public final class socketConnector implements XConnector {
         try {
             // we enable tcpNoDelay for loopback connections because
             // it can make a significant speed difference on linux boxes.
-            if (desc.getTcpNoDelay() != null || isLoopbackAddress)
+            if (desc.getTcpNoDelay() != null)
                 socket.setTcpNoDelay(desc.getTcpNoDelay().booleanValue());
+            else if (isLoopbackAddress)
+                socket.setTcpNoDelay(true);
 
             con = new SocketConnection(connectionDescription, socket);
         } catch (IOException e) {
