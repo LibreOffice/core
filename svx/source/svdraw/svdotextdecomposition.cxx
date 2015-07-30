@@ -1486,7 +1486,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
-    if((rSdrChainedTextPrimitive.getWordWrap() || IsTextFrame()))
+    if(IsTextFrame())
     {
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
     }
