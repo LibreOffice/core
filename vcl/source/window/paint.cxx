@@ -85,8 +85,8 @@ public:
     }
     void DoPaint(const vcl::Region* pRegion);
 
-    /// Create the buffer, and set it up to have the same settings as m_pWindow.
-    void CreateBuffer();
+    /// Start buffered paint: set it up to have the same settings as m_pWindow.
+    void StartBufferedPaint();
 
     /// Setup the buffer according to the settings of the current m_pWindow.
     void SetupBuffer();
@@ -107,12 +107,17 @@ PaintHelper::PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags)
 {
 }
 
-void PaintHelper::CreateBuffer()
+void PaintHelper::StartBufferedPaint()
 {
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    assert(!pFrameData->mpBuffer);
+    assert(!pFrameData->mbInBufferedPaint);
 
-    pFrameData->mpBuffer = VclPtrInstance<VirtualDevice>();
+    // Instead of creating a new VirtualDevice, just erase the area we'll be
+    // painting over, as VirtualDevice::ImplInitVirDev() would do.
+    pFrameData->mpBuffer->SetBackground(Wallpaper(Color(COL_WHITE)));
+    pFrameData->mpBuffer->Erase(m_aPaintRect);
+
+    pFrameData->mbInBufferedPaint = true;
     m_bCreatedBuffer = true;
 
     SetupBuffer();
@@ -164,7 +169,7 @@ void PaintHelper::SetupBuffer()
 void PaintHelper::PaintBuffer()
 {
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    assert(pFrameData->mpBuffer);
+    assert(pFrameData->mbInBufferedPaint);
     assert(m_bCreatedBuffer);
 
     pFrameData->mpBuffer->mnOutOffX = 0;
@@ -178,7 +183,7 @@ void PaintHelper::PaintBuffer()
     if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
     {
         // The map mode of m_pWindow and/or the buffer may have changed since
-        // CreateBuffer(), set it back to what it was, otherwise unwanted
+        // StartBufferedPaint(), set it back to what it was, otherwise unwanted
         // scaling or translating may happen.
         m_pWindow->SetMapMode(m_aPaintRectMapMode);
         pFrameData->mpBuffer->SetMapMode(m_aPaintRectMapMode);
@@ -204,7 +209,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
     vcl::Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL || pFrameData->mpBuffer)
+    if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL || pFrameData->mbInBufferedPaint)
     {
         pWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
     }
@@ -231,16 +236,16 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         m_pWindow->BeginPaint();
 
         // double-buffering: setup the buffer if it does not exist
-        if (!pFrameData->mpBuffer && m_pWindow->SupportsDoubleBuffering())
-            CreateBuffer();
+        if (!pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
+            StartBufferedPaint();
 
         // double-buffering: if this window does not support double-buffering,
         // but we are in the middle of double-buffered paint, we might be
         // losing information
-        if (pFrameData->mpBuffer && !m_pWindow->SupportsDoubleBuffering())
+        if (pFrameData->mbInBufferedPaint && !m_pWindow->SupportsDoubleBuffering())
             SAL_WARN("vcl.doublebuffering", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(*m_pWindow.get()).name());
 
-        if (pFrameData->mpBuffer && m_pWindow->SupportsDoubleBuffering())
+        if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
         {
             // double-buffering
             SetupBuffer();
@@ -518,10 +523,10 @@ PaintHelper::~PaintHelper()
 
     // double-buffering: paint in case we created the buffer, the children are
     // already painted inside
-    if (m_bCreatedBuffer && pFrameData->mpBuffer)
+    if (m_bCreatedBuffer && pFrameData->mbInBufferedPaint)
     {
         PaintBuffer();
-        pFrameData->mpBuffer.disposeAndClear();
+        pFrameData->mbInBufferedPaint = false;
     }
 
     // #98943# draw toolbox selection
