@@ -16,6 +16,47 @@
       "revId": "c0452e388d5de4c971936b4c61642c2978f0ac86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4a46b724",
+        "filename": "external/neon/configs/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:28:46Z",
+      "side": 1,
+      "message": "Opps, sorry. Done.",
+      "parentUuid": "1a54edaf_279ff604",
+      "revId": "c0452e388d5de4c971936b4c61642c2978f0ac86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ea4be329",
+        "filename": "external/neon/configs/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:28:46Z",
+      "side": 1,
+      "message": "Missing comment to the corresponding VS product.",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 340,
+        "endChar": 41
+      },
+      "revId": "c0452e388d5de4c971936b4c61642c2978f0ac86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
