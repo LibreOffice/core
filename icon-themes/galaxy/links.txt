@@ -84,3 +84,7 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
+
+# Open Remote File
+cmd/lc_openremote.png cmd/lc_open.png
+cmd/sc_openremote.png cmd/sc_open.png
