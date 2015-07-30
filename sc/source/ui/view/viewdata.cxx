@@ -453,7 +453,7 @@ ScDocument* ScViewData::GetDocument() const
     else if (pDocShell)
         return &pDocShell->GetDocument();
 
-    OSL_FAIL("kein Document an ViewData");
+    OSL_FAIL("no document on ViewData");
     return NULL;
 }
 
@@ -533,7 +533,7 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 
     if (nDestTab > MAXTAB)
     {
-        OSL_FAIL("Zuviele Tabellen");
+        OSL_FAIL("too many sheets");
         return;
     }
 
@@ -928,7 +928,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if (pEditView[eWhich]->GetWindow() != pWin)
         {
             pEditView[eWhich]->SetWindow(pWin);
-            OSL_FAIL("EditView Window geaendert");
+            OSL_FAIL("EditView Window has changed");
         }
     }
     else
@@ -1001,10 +1001,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         long nSizeXPix;
         if (bBreak && !bAsianVertical)
-            nSizeXPix = aPixRect.GetWidth();    // Papersize -> kein H-Scrolling
+            nSizeXPix = aPixRect.GetWidth();    // papersize -> no horizontal scrolling
         else
         {
-            OSL_ENSURE(pView,"keine View fuer EditView");
+            OSL_ENSURE(pView,"no View for EditView");
 
             if ( bGrowCentered )
             {
@@ -1022,7 +1022,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             if ( nSizeXPix <= 0 )
                 nSizeXPix = aPixRect.GetWidth();    // editing outside to the right of the window -> keep cell width
         }
-        OSL_ENSURE(pView,"keine View fuer EditView");
+        OSL_ENSURE(pView,"no View for EditView");
         long nSizeYPix = pView->GetGridHeight(WhichV(eWhich)) - aPixRect.Top();
         if ( nSizeYPix <= 0 )
             nSizeYPix = aPixRect.GetHeight();   // editing outside below the window -> keep cell height
@@ -1459,7 +1459,7 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
 {
     if (!ValidTab(nNewTab))
     {
-        OSL_FAIL("falsche Tabellennummer");
+        OSL_FAIL("wrong sheet number");
         return;
     }
 
@@ -1468,7 +1468,7 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
     pThisTab = maTabData[nTabNo];
 
     CalcPPT();          //  for common column width correction
-    RecalcPixPos();     //! nicht immer noetig!
+    RecalcPixPos();     //! not always needed!
 }
 
 void ScViewData::SetActivePart( ScSplitPos eNewActive )
@@ -1478,14 +1478,14 @@ void ScViewData::SetActivePart( ScSplitPos eNewActive )
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const
 {
-    OSL_ENSURE( eWhich==SC_SPLIT_LEFT || eWhich==SC_SPLIT_RIGHT, "Falsche Position" );
+    OSL_ENSURE( eWhich==SC_SPLIT_LEFT || eWhich==SC_SPLIT_RIGHT, "wrong position" );
     ScSplitPos ePos = ( eWhich == SC_SPLIT_LEFT ) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
     return GetScrPos( nWhereX, nWhereY, ePos );
 }
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const
 {
-    OSL_ENSURE( eWhich==SC_SPLIT_TOP || eWhich==SC_SPLIT_BOTTOM, "Falsche Position" );
+    OSL_ENSURE( eWhich==SC_SPLIT_TOP || eWhich==SC_SPLIT_BOTTOM, "wrong position" );
     ScSplitPos ePos = ( eWhich == SC_SPLIT_TOP ) ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
     return GetScrPos( nWhereX, nWhereY, ePos );
 }
@@ -1616,7 +1616,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 //      Number of cells on a screen
 SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {
-    OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
+    OSL_ENSURE( nDir==1 || nDir==-1, "wrong CellsAt call" );
 
     if (pView)
         const_cast<ScViewData*>(this)->aScrSize.Width()  = pView->GetGridWidth(eWhichX);
@@ -1626,9 +1626,9 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = (sal_uInt16) aScrSize.Width();
 
     if (nDir==1)
-        nX = nPosX;             // vorwaerts
+        nX = nPosX;             // forwards
     else
-        nX = nPosX-1;           // rueckwaerts
+        nX = nPosX-1;           // backwards
 
     bool bOut = false;
     for ( ; nScrPosX<=nScrSizeX && !bOut; nX = sal::static_int_cast<SCsCOL>(nX + nDir) )
@@ -1658,7 +1658,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
 
 SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeY ) const
 {
-    OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
+    OSL_ENSURE( nDir==1 || nDir==-1, "wrong CellsAt call" );
 
     if (pView)
         const_cast<ScViewData*>(this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
@@ -1844,7 +1844,7 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
             if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
                  ( bVOver && pMerge->GetRowMerge() <= 1 ) )
             {
-                OSL_FAIL("Merge-Fehler gefunden");
+                OSL_FAIL("merge error found");
 
                 pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, SC_MF_HOR | SC_MF_VER );
                 SCCOL nEndCol = MAXCOL;
@@ -2115,31 +2115,31 @@ const ScMarkData& ScViewData::GetMarkData() const
 
 vcl::Window* ScViewData::GetDialogParent()
 {
-    OSL_ENSURE( pViewShell, "GetDialogParent() ohne ViewShell" );
+    OSL_ENSURE( pViewShell, "GetDialogParent() without ViewShell" );
     return pViewShell->GetDialogParent();
 }
 
 ScGridWindow* ScViewData::GetActiveWin()
 {
-    OSL_ENSURE( pView, "GetActiveWin() ohne View" );
+    OSL_ENSURE( pView, "GetActiveWin() without View" );
     return pView->GetActiveWin();
 }
 
 const ScGridWindow* ScViewData::GetActiveWin() const
 {
-    OSL_ENSURE( pView, "GetActiveWin() ohne View" );
+    OSL_ENSURE( pView, "GetActiveWin() without View" );
     return pView->GetActiveWin();
 }
 
 ScDrawView* ScViewData::GetScDrawView()
 {
-    OSL_ENSURE( pView, "GetScDrawView() ohne View" );
+    OSL_ENSURE( pView, "GetScDrawView() without View" );
     return pView->GetScDrawView();
 }
 
 bool ScViewData::IsMinimized()
 {
-    OSL_ENSURE( pView, "IsMinimized() ohne View" );
+    OSL_ENSURE( pView, "IsMinimized() without View" );
     return pView->IsMinimized();
 }
 
@@ -2166,7 +2166,7 @@ void ScViewData::CalcPPT()
 {
     nPPTX = ScGlobal::nScreenPPTX * (double) GetZoomX();
     if (pDocShell)
-        nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Faktor ist Drucker zu Bildschirm
+        nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Factor is printer to screen
     nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
 
     //  if detective objects are present,
@@ -2207,13 +2207,13 @@ void ScViewData::CalcPPT()
 
 void ScViewData::WriteUserData(OUString& rData)
 {
-    //  nZoom (bis 364v) oder nZoom/nPageZoom/bPageMode (ab 364w)
-    //  nTab
-    //  Tab-ControlBreite
-    //  pro Tabelle:
-    //  CursorX/CursorY/HSplitMode/VSplitMode/HSplitPos/VSplitPos/SplitActive/
-    //  PosX[links]/PosX[rechts]/PosY[oben]/PosY[unten]
-    //  wenn Zeilen groesser 8192, "+" statt "/"
+    // nZoom (until 364v) or nZoom/nPageZoom/bPageMode (from 364w)
+    // nTab
+    // Tab control width
+    // per sheet:
+    // CursorX/CursorY/HSplitMode/VSplitMode/HSplitPos/VSplitPos/SplitActive/
+    // PosX[left]/PosX[right]/PosY[top]/PosY[bottom]
+    // when rows bigger than 8192, "+" instead of "/"
 
     sal_uInt16 nZoom = (sal_uInt16)((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
     rData = OUString::number( nZoom ) + "/";
@@ -2230,7 +2230,7 @@ void ScViewData::WriteUserData(OUString& rData)
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
     {
-        rData += ";";                   // Numerierung darf auf keinen Fall durcheinanderkommen
+        rData += ";";                   // Numbering must not get mixed up under any circumstances
         if (i < static_cast<SCTAB>(maTabData.size()) && maTabData[i])
         {
             OUString cTabSep = OUString(SC_OLD_TABSEP);                // like 3.1
@@ -2267,40 +2267,40 @@ void ScViewData::WriteUserData(OUString& rData)
 
 void ScViewData::ReadUserData(const OUString& rData)
 {
-    if (rData.isEmpty())    // Leerer String kommt bei "neu Laden"
+    if (rData.isEmpty())    // empty string on "reload"
         return;             // then exit without assertion
 
     sal_Int32 nCount = comphelper::string::getTokenCount(rData, ';');
     if ( nCount <= 2 )
     {
-        //  beim Reload in der Seitenansicht sind evtl. die Preview-UserData
-        //  stehengelassen worden. Den Zoom von der Preview will man hier nicht...
-        OSL_FAIL("ReadUserData: das sind nicht meine Daten");
+        // when reload, in page preview, the preview UserData may have been left intact.
+        // we don't want the zoom from the page preview here.
+        OSL_FAIL("ReadUserData: This is not my data");
         return;
     }
 
-    // nicht pro Tabelle:
+    // not per sheet:
     SCTAB nTabStart = 2;
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
 
-    OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Modus
+    OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Mode
     sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0,'/').toInt32());
     if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
         aZoomX = aZoomY = Fraction( nNormZoom, 100 );           //  "normal" zoom (always)
     sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(1,'/').toInt32());
     if ( nPageZoom >= MINZOOM && nPageZoom <= MAXZOOM )
-        aPageZoomX = aPageZoomY = Fraction( nPageZoom, 100 );   // Pagebreak-zoom, if set
+        aPageZoomX = aPageZoomY = Fraction( nPageZoom, 100 );   // Pagebreak zoom, if set
     sal_Unicode cMode = aZoomStr.getToken(2,'/')[0];            // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
-    // SetPagebreakMode muss immer gerufen werden wegen CalcPPT / RecalcPixPos()
+    // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
-    //  Tabelle kann ungueltig geworden sein (z.B. letzte Version):
+    // sheet may have become invalid (for instance last version):
     SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(1, ';').toInt32());
     if (pDoc->HasTable( nNewTab ))
         SetTabNo(nNewTab);
 
-    // wenn vorhanden, TabBar-Breite holen:
+    // if available, get tab bar width:
     OUString aTabOpt = rData.getToken(2, ';');
 
     if (aTabOpt.startsWith(TAG_TABBARWIDTH))
@@ -2310,7 +2310,7 @@ void ScViewData::ReadUserData(const OUString& rData)
         nTabStart = 3;
     }
 
-    // per table
+    // per sheet
     SCTAB nPos = 0;
     while ( nCount > nPos+nTabStart )
     {
@@ -2324,7 +2324,7 @@ void ScViewData::ReadUserData(const OUString& rData)
             cTabSep = SC_OLD_TABSEP;
         else if (comphelper::string::getTokenCount(aTabOpt, SC_NEW_TABSEP) >= 11)
             cTabSep = SC_NEW_TABSEP;
-        // '+' ist nur erlaubt, wenn wir mit Zeilen > 8192 umgehen koennen
+        // '+' is only allowed, if we can deal with rows > 8192
 
         if (cTabSep)
         {
@@ -2355,7 +2355,7 @@ void ScViewData::ReadUserData(const OUString& rData)
             maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.getToken(9,cTabSep).toInt32());
             maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.getToken(10,cTabSep).toInt32());
 
-            //  Test, ob der aktive Teil laut SplitMode ueberhaupt existiert
+            // test whether the active part according to SplitMode exists at all
             //  (Bug #44516#)
             ScSplitPos eTest = maTabData[nPos]->eWhichActive;
             if ( ( WhichH( eTest ) == SC_SPLIT_RIGHT &&
@@ -2363,9 +2363,9 @@ void ScViewData::ReadUserData(const OUString& rData)
                  ( WhichV( eTest ) == SC_SPLIT_TOP &&
                     maTabData[nPos]->eVSplitMode == SC_SPLIT_NONE ) )
             {
-                //  dann wieder auf Default (unten links)
+                // then back to default again (bottom left)
                 maTabData[nPos]->eWhichActive = SC_SPLIT_BOTTOMLEFT;
-                OSL_FAIL("SplitPos musste korrigiert werden");
+                OSL_FAIL("SplitPos had to be corrected");
             }
         }
         ++nPos;
@@ -2639,7 +2639,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
         }
     }
 
-    // RecalcPixPos oder so - auch nMPos - auch bei ReadUserData ??!?!
+    // RecalcPixPos or so - also nMPos - also for ReadUserData ??!?!
 }
 
 void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings) const
@@ -2940,7 +2940,7 @@ void ScViewData::SetOptions( const ScViewOptions& rOpt )
 
 Point ScViewData::GetMousePosPixel()
 {
-    OSL_ENSURE( pView, "GetMousePosPixel() ohne View" );
+    OSL_ENSURE( pView, "GetMousePosPixel() without View" );
     return pView->GetMousePosPixel();
 }
 
