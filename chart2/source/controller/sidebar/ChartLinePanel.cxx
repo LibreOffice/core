@@ -224,6 +224,7 @@ void ChartLinePanel::setLineStyle(const XLineStyleItem& rItem)
     if (!xPropSet.is())
         return;
 
+    PreventUpdate aPreventUpdate(mbUpdate);
     xPropSet->setPropertyValue("LineStyle", css::uno::makeAny(rItem.GetValue()));
 }
 
@@ -235,6 +236,7 @@ void ChartLinePanel::setLineDash(const XLineDashItem& rItem)
     if (!xPropSet.is())
         return;
 
+    PreventUpdate aPreventUpdate(mbUpdate);
     css::uno::Any aAny;
     rItem.QueryValue(aAny, MID_LINEDASH);
     OUString aDashName = PropertyHelper::addLineDashUniqueNameToTable(aAny,
@@ -260,6 +262,7 @@ void ChartLinePanel::setLineJoint(const XLineJointItem* pItem)
     if (!xPropSet.is())
         return;
 
+    PreventUpdate aPreventUpdate(mbUpdate);
     if (pItem)
         xPropSet->setPropertyValue("LineJoint", css::uno::makeAny(pItem->GetValue()));
 }
@@ -276,6 +279,7 @@ void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
     if (!xPropSet.is())
         return;
 
+    PreventUpdate aPreventUpdate(mbUpdate);
     xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(rItem.GetValue()));
 }
 
@@ -287,6 +291,7 @@ void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
     if (!xPropSet.is())
         return;
 
+    PreventUpdate aPreventUpdate(mbUpdate);
     xPropSet->setPropertyValue("LineWidth", css::uno::makeAny(rItem.GetValue()));
 }
 
