@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2a833bce",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-30T13:18:38Z",
+      "side": 1,
+      "message": "just return an OUString directly, skip the OUStringBuffer",
+      "revId": "2f8d62f0e878dca4ab5702f2c59cb3a563afcaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4a88f7e7",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-30T13:18:38Z",
+      "side": 1,
+      "message": "...ditto here and in all the other places",
+      "revId": "2f8d62f0e878dca4ab5702f2c59cb3a563afcaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
