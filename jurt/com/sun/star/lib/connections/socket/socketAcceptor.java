@@ -152,8 +152,11 @@ public final class socketAcceptor implements XAcceptor {
             }
             // we enable tcpNoDelay for loopback connections because
             // it can make a significant speed difference on linux boxes.
-            if (tcpNoDelay != null || ((InetSocketAddress)socket.getRemoteSocketAddress()).getAddress().isLoopbackAddress()) {
+            if (tcpNoDelay != null) {
                 socket.setTcpNoDelay(tcpNoDelay.booleanValue());
+            }
+            else if (((InetSocketAddress)socket.getRemoteSocketAddress()).getAddress().isLoopbackAddress()) {
+                socket.setTcpNoDelay(true);
             }
             return new SocketConnection(acceptingDescription, socket);
         }
