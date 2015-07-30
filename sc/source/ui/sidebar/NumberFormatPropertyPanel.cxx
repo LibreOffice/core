@@ -320,7 +320,10 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             }
             mpBtnThousand->Check(bThousand);
             mpBtnNegRed->Check(bNegRed);
-            mpEdDecimals->SetValue(nPrecision);
+            if ( mpLbCategory->GetSelectEntryPos() == 0 )
+                mpEdDecimals->SetText(""); // tdf#44399
+            else
+                mpEdDecimals->SetValue(nPrecision);
             mpEdLeadZeroes->SetValue(nLeadZeroes);
         }
     default:
