@@ -533,7 +533,7 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SdrObjEditView,ImpAfterPasteChainingEventHdl)
+IMPL_LINK_NOARG(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl)
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( GetTextEditObject());
     if (!pTextObj)
@@ -807,7 +807,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
             if (pTextObj->IsChainable()) {
-                pTextEditOutlinerView->SetEndPasteLinkHdl(LINK(this,SdrObjEditView,ImpAfterPasteChainingEventHdl) );
+                pTextEditOutlinerView->SetEndCutPasteLinkHdl(LINK(this,SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl) );
                 /* We should call:
                  *
                     ImpChainingEventHdl(NULL);

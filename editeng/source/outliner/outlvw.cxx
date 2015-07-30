@@ -679,8 +679,8 @@ void OutlinerView::Cut()
         pEditView->Cut();
 
         // Chaining handling
-        if (aEndPasteLink.IsSet())
-            aEndPasteLink.Call(NULL);
+        if (aEndCutPasteLink.IsSet())
+            aEndCutPasteLink.Call(NULL);
     }
 }
 
@@ -712,8 +712,8 @@ void OutlinerView::PasteSpecial()
         pEditView->ShowCursor( true, true );
 
         // XXX: Not sure if this should be called right before ShowCursor
-        if (aEndPasteLink.IsSet())
-            aEndPasteLink.Call(NULL);
+        if (aEndCutPasteLink.IsSet())
+            aEndCutPasteLink.Call(NULL);
     }
 
 }
