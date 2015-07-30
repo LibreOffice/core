@@ -16,6 +16,29 @@
       "revId": "0f2fb06b9e26077568c18e186894c445fb84285b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ca5f070d",
+        "filename": "include/svx/svdtrans.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001053
+      },
+      "writtenOn": "2015-07-30T11:37:26Z",
+      "side": 1,
+      "message": "What about this comment?",
+      "range": {
+        "startLine": 139,
+        "startChar": 37,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "0f2fb06b9e26077568c18e186894c445fb84285b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
