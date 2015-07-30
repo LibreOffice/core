@@ -679,7 +679,6 @@
   <block-list:block block-list:abbreviated-name=":bőrszín4:" block-list:name="🏽"/>
   <block-list:block block-list:abbreviated-name=":bőrszín5:" block-list:name="🏾"/>
   <block-list:block block-list:abbreviated-name=":bőrszín6:" block-list:name="🏿"/>
-  <block-list:block block-list:abbreviated-name=":virág:" block-list:name="🌼"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -1806,7 +1805,8 @@
   <block-list:block block-list:abbreviated-name=":villamos:" block-list:name="🚊"/>
   <block-list:block block-list:abbreviated-name=":villogó:" block-list:name="🚨"/>
   <block-list:block block-list:abbreviated-name=":violinkulcs:" block-list:name="𝄞"/>
-  <block-list:block block-list:abbreviated-name=":virág2:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":virág2:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":virág3:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":virág:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":vitorlás:" block-list:name="⛵"/>
   <block-list:block block-list:abbreviated-name=":Vízöntő:" block-list:name="♒"/>
