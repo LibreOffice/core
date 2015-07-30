@@ -362,7 +362,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_hicontrast.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_industrial.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_tango.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_galaxy.zip
     fi
 
     # remove known duplicities to do not have files packaged in two packages

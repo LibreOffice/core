@@ -5683,9 +5683,9 @@
               <desc>Automatic, chosen according to the desktop</desc>
             </info>
           </enumeration>
-          <enumeration oor:value="default">
+          <enumeration oor:value="galaxy">
             <info>
-              <desc>Default - the OpenOffice.org default theme</desc>
+              <desc>Galaxy - the OpenOffice.org default theme</desc>
             </info>
           </enumeration>
           <enumeration oor:value="hicontrast">
