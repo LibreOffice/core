@@ -356,34 +356,34 @@ void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
     m_nTokenIndex = m_nTokenIndex + nChg;
 }
 
-
-// First character may be any alphabetic
-const sal_Int32 coStartFlags =
+void SmParser::NextToken()
+{
+    // First character may be any alphabetic
+    static const sal_Int32 coStartFlags =
         KParseTokens::ANY_LETTER |
         KParseTokens::IGNORE_LEADING_WS;
 
-// Continuing characters may be any alphabetic
-const sal_Int32 coContFlags =
-    (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS)
-    | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
+    // Continuing characters may be any alphabetic
+    static const sal_Int32 coContFlags =
+        (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS)
+        | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
-// user-defined char continuing characters may be any alphanumeric or dot.
-const sal_Int32 coUserDefinedCharContFlags =
-    ((KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::IGNORE_LEADING_WS | KParseTokens::ASC_DOT)
-        & ~KParseTokens::IGNORE_LEADING_WS)
-    | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
+    // user-defined char continuing characters may be any alphanumeric or dot.
+    static const sal_Int32 coUserDefinedCharContFlags =
+        ((KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::IGNORE_LEADING_WS | KParseTokens::ASC_DOT)
+         & ~KParseTokens::IGNORE_LEADING_WS)
+        | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
-// First character for numbers, may be any numeric or dot
-const sal_Int32 coNumStartFlags =
+    // First character for numbers, may be any numeric or dot
+    static const sal_Int32 coNumStartFlags =
         KParseTokens::ASC_DIGIT |
         KParseTokens::ASC_DOT |
         KParseTokens::IGNORE_LEADING_WS;
-// Continuing characters for numbers, may be any numeric or dot.
-const sal_Int32 coNumContFlags =
-    coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS;
 
-void SmParser::NextToken()
-{
+    // Continuing characters for numbers, may be any numeric or dot.
+    static const sal_Int32 coNumContFlags =
+        coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS;
+
     static const OUString aEmptyStr;
 
     sal_Int32   nBufLen = m_aBufferString.getLength();
