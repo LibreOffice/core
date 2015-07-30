@@ -30,6 +30,7 @@
 #include "NavigatorWrapper.hxx"
 #include "SlideTransitionPanel.hxx"
 #include "TableDesignPanel.hxx"
+#include <SlideBackground.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -129,6 +130,8 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
     else if (EndsWith(rsUIElementResourceURL, "/NavigatorPanel"))
         pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
+    else if (EndsWith(rsUIElementResourceURL, "/SlideBackgroundPanel"))
+        pControl = VclPtr<SlideBackground>::Create(pParentWindow, *pBase, xFrame, pBindings);
 #undef EndsWith
 
     if (!pControl)
