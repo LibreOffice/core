@@ -2700,6 +2700,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_ATTR_PAGE_SIZE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_DISPLAY_MASTER_BACKGROUND
     [
         ExecMethod = FuTemporary ;
