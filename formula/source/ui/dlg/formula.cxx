@@ -69,156 +69,157 @@
 #define TOKEN_SEP   2
 namespace formula
 {
-    using namespace ::com::sun::star;
 
-    class FormulaDlg_Impl
-    {
-    public:
-        ::std::pair<RefButton*,RefEdit*>
-                        RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-        void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
-        void            RefInputDoneAfter( bool bForced );
-        bool        CalcValue( const OUString& rStrExp, OUString& rStrResult );
-        bool        CalcStruct( const OUString& rStrExp);
-        void            UpdateValues();
-        void            DeleteArgs();
-        sal_Int32       GetFunctionPos(sal_Int32 nPos);
-        void            ClearAllParas();
+using namespace ::com::sun::star;
 
-        void            MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count);
-        void            fillTree(IStructHelper* _pTree);
-        void            UpdateTokenArray( const OUString& rStrExp);
-        OUString        RepairFormula(const OUString& aFormula);
-        void            FillDialog(bool nFlag=true);
-        bool            EditNextFunc( bool bForward, sal_Int32 nFStart=NOT_FOUND );
-        void            EditThisFunc(sal_Int32 nFStart);
+class FormulaDlg_Impl
+{
+public:
+    ::std::pair<RefButton*,RefEdit*>
+        RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputDoneAfter( bool bForced );
+    bool        CalcValue( const OUString& rStrExp, OUString& rStrResult );
+    bool        CalcStruct( const OUString& rStrExp);
+    void            UpdateValues();
+    void            DeleteArgs();
+    sal_Int32       GetFunctionPos(sal_Int32 nPos);
+    void            ClearAllParas();
 
-        void            StoreFormEditData(FormEditData* pEditData);
+    void            MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count);
+    void            fillTree(IStructHelper* _pTree);
+    void            UpdateTokenArray( const OUString& rStrExp);
+    OUString        RepairFormula(const OUString& aFormula);
+    void            FillDialog(bool nFlag=true);
+    bool            EditNextFunc( bool bForward, sal_Int32 nFStart=NOT_FOUND );
+    void            EditThisFunc(sal_Int32 nFStart);
 
-        void            Update();
-        void            Update(const OUString& _sExp);
+    void            StoreFormEditData(FormEditData* pEditData);
 
-        void            SaveArg( sal_uInt16 nEd );
-        void            UpdateSelection();
-        void            DoEnter( bool bOk );
-        void            FillListboxes();
-        void            FillControls(bool &rbNext, bool &rbPrev);
+    void            Update();
+    void            Update(const OUString& _sExp);
 
-        FormulaDlgMode  SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);
-        void            SetMeText(const OUString& _sText);
-        bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
+    void            SaveArg( sal_uInt16 nEd );
+    void            UpdateSelection();
+    void            DoEnter( bool bOk );
+    void            FillListboxes();
+    void            FillControls(bool &rbNext, bool &rbPrev);
 
-        void            SetEdSelection();
+    FormulaDlgMode  SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);
+    void            SetMeText(const OUString& _sText);
+    bool            CheckMatrix(OUString& aFormula /*IN/OUT*/);
 
-        bool            UpdateParaWin(Selection& _rSelection);
-        void            UpdateParaWin(const Selection& _rSelection,const OUString& _sRefStr);
+    void            SetEdSelection();
 
-        void            SetData(sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int32 nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd);
-        void            PreNotify( NotifyEvent& rNEvt );
+    bool            UpdateParaWin(Selection& _rSelection);
+    void            UpdateParaWin(const Selection& _rSelection,const OUString& _sRefStr);
 
-        RefEdit*        GetCurrRefEdit();
+    void            SetData(sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int32 nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd);
+    void            PreNotify( NotifyEvent& rNEvt );
 
-        const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
-        uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
+    RefEdit*        GetCurrRefEdit();
 
-        DECL_LINK( ModifyHdl, ParaWin* );
-        DECL_LINK( FxHdl, ParaWin* );
+    const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
+    uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
 
-        DECL_LINK(MatrixHdl, void *);
-        DECL_LINK(FormulaHdl, void *);
-        DECL_LINK(FormulaCursorHdl, void *);
-        DECL_LINK( BtnHdl, PushButton* );
-        DECL_LINK(DblClkHdl, void *);
-        DECL_LINK(FuncSelHdl, void *);
-        DECL_LINK(StructSelHdl, void *);
-    public:
-        mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
-        uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
-        ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
-        mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
-        mutable const sheet::FormulaOpCodeMapEntry*             m_pSpecialOpCodesEnd;
-        mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
-        mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
-        mutable const sheet::FormulaOpCodeMapEntry*             m_pFunctionOpCodesEnd;
-        mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aUnaryOpCodes;
-        mutable const sheet::FormulaOpCodeMapEntry*             m_pUnaryOpCodesEnd;
-        mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
-        mutable const sheet::FormulaOpCodeMapEntry*             m_pBinaryOpCodesEnd;
-        ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
-        IFormulaEditorHelper*                                   m_pHelper;
-        VclPtr<Dialog>          m_pParent;
-        IControlReferenceHandler*  m_pDlg;
-        VclPtr<TabControl>      m_pTabCtrl;
-        VclPtr<VclVBox>         m_pParaWinBox;
-        VclPtr<ParaWin>         pParaWin;
-        VclPtr<FixedText>       m_pFtHeadLine;
-        VclPtr<FixedText>       m_pFtFuncName;
-        VclPtr<FixedText>       m_pFtFuncDesc;
+    DECL_LINK( ModifyHdl, ParaWin* );
+    DECL_LINK( FxHdl, ParaWin* );
 
-        VclPtr<FixedText>       m_pFtEditName;
+    DECL_LINK(MatrixHdl, void *);
+    DECL_LINK(FormulaHdl, void *);
+    DECL_LINK(FormulaCursorHdl, void *);
+    DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK(DblClkHdl, void *);
+    DECL_LINK(FuncSelHdl, void *);
+    DECL_LINK(StructSelHdl, void *);
+public:
+    mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
+    uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
+    ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
+    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
+    mutable const sheet::FormulaOpCodeMapEntry*             m_pSpecialOpCodesEnd;
+    mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
+    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
+    mutable const sheet::FormulaOpCodeMapEntry*             m_pFunctionOpCodesEnd;
+    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aUnaryOpCodes;
+    mutable const sheet::FormulaOpCodeMapEntry*             m_pUnaryOpCodesEnd;
+    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
+    mutable const sheet::FormulaOpCodeMapEntry*             m_pBinaryOpCodesEnd;
+    ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
+    IFormulaEditorHelper*                                   m_pHelper;
+    VclPtr<Dialog>          m_pParent;
+    IControlReferenceHandler*  m_pDlg;
+    VclPtr<TabControl>      m_pTabCtrl;
+    VclPtr<VclVBox>         m_pParaWinBox;
+    VclPtr<ParaWin>         pParaWin;
+    VclPtr<FixedText>       m_pFtHeadLine;
+    VclPtr<FixedText>       m_pFtFuncName;
+    VclPtr<FixedText>       m_pFtFuncDesc;
 
-        VclPtr<FixedText>       m_pFtResult;
-        VclPtr<Edit>            m_pWndResult;
+    VclPtr<FixedText>       m_pFtEditName;
 
-        VclPtr<FixedText>       m_pFtFormula;
-        VclPtr<EditBox>         m_pMEFormula;
+    VclPtr<FixedText>       m_pFtResult;
+    VclPtr<Edit>            m_pWndResult;
 
-        VclPtr<CheckBox>        m_pBtnMatrix;
-        VclPtr<CancelButton>    m_pBtnCancel;
+    VclPtr<FixedText>       m_pFtFormula;
+    VclPtr<EditBox>         m_pMEFormula;
 
-        VclPtr<PushButton>      m_pBtnBackward;
-        VclPtr<PushButton>      m_pBtnForward;
-        VclPtr<OKButton>        m_pBtnEnd;
+    VclPtr<CheckBox>        m_pBtnMatrix;
+    VclPtr<CancelButton>    m_pBtnCancel;
 
-        VclPtr<RefEdit>         m_pEdRef;
-        VclPtr<RefButton>       m_pRefBtn;
+    VclPtr<PushButton>      m_pBtnBackward;
+    VclPtr<PushButton>      m_pBtnForward;
+    VclPtr<OKButton>        m_pBtnEnd;
 
-        VclPtr<FixedText>       m_pFtFormResult;
-        VclPtr<Edit>            m_pWndFormResult;
+    VclPtr<RefEdit>         m_pEdRef;
+    VclPtr<RefButton>       m_pRefBtn;
 
-        VclPtr<RefEdit>        pTheRefEdit;
-        VclPtr<RefButton>      pTheRefButton;
-        VclPtr<FuncPage>       pFuncPage;
-        VclPtr<StructPage>     pStructPage;
-        OUString        aOldFormula;
-        bool        bStructUpdate;
-        VclPtr<MultiLineEdit>  pMEdit;
-        bool        bUserMatrixFlag;
-        Idle            aIdle;
+    VclPtr<FixedText>       m_pFtFormResult;
+    VclPtr<Edit>            m_pWndFormResult;
 
-        const OUString  aTitle1;
-        const OUString  aTitle2;
-        const OUString  aTxtEnd;
-        OUString  aTxtOk;     // behind aBtnEnd
-        FormulaHelper   m_aFormulaHelper;
+    VclPtr<RefEdit>        pTheRefEdit;
+    VclPtr<RefButton>      pTheRefButton;
+    VclPtr<FuncPage>       pFuncPage;
+    VclPtr<StructPage>     pStructPage;
+    OUString        aOldFormula;
+    bool        bStructUpdate;
+    VclPtr<MultiLineEdit>  pMEdit;
+    bool        bUserMatrixFlag;
+    Idle            aIdle;
 
-        OString    m_aEditHelpId;
+    const OUString  aTitle1;
+    const OUString  aTitle2;
+    const OUString  aTxtEnd;
+    OUString  aTxtOk;     // behind aBtnEnd
+    FormulaHelper   m_aFormulaHelper;
 
-        OString    aOldHelp;
-        OString    aOldUnique;
-        OString    aActivWinId;
-        bool            bIsShutDown;
-        bool            bMakingTree; //in method of constructing tree
+    OString    m_aEditHelpId;
 
-        vcl::Font       aFntBold;
-        vcl::Font       aFntLight;
-        sal_uInt16      nEdFocus;
-        bool            bEditFlag;
-        const IFunctionDescription* pFuncDesc;
-        sal_Int32      nArgs;
-        ::std::vector< OUString > m_aArguments;
-        Selection       aFuncSel;
+    OString    aOldHelp;
+    OString    aOldUnique;
+    OString    aActivWinId;
+    bool            bIsShutDown;
+    bool            bMakingTree; //in method of constructing tree
 
-        FormulaDlg_Impl(Dialog* pParent
-                        , bool _bSupportFunctionResult
-                        , bool _bSupportResult
-                        , bool _bSupportMatrix
-                        ,IFormulaEditorHelper* _pHelper
-                        ,const IFunctionManager* _pFunctionMgr
-                        ,IControlReferenceHandler* _pDlg);
-        ~FormulaDlg_Impl();
+    vcl::Font       aFntBold;
+    vcl::Font       aFntLight;
+    sal_uInt16      nEdFocus;
+    bool            bEditFlag;
+    const IFunctionDescription* pFuncDesc;
+    sal_Int32      nArgs;
+    ::std::vector< OUString > m_aArguments;
+    Selection       aFuncSel;
 
-    };
+    FormulaDlg_Impl(Dialog* pParent
+            , bool _bSupportFunctionResult
+            , bool _bSupportResult
+            , bool _bSupportMatrix
+            ,IFormulaEditorHelper* _pHelper
+            ,const IFunctionManager* _pFunctionMgr
+            ,IControlReferenceHandler* _pDlg);
+    ~FormulaDlg_Impl();
+
+};
 
 FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
                                         , bool _bSupportFunctionResult
