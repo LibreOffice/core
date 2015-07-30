@@ -206,6 +206,8 @@ public:
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
 
+    void testBnc762542();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -301,6 +303,9 @@ public:
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
+
+    CPPUNIT_TEST(testBnc762542);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3122,6 +3127,32 @@ void ScFiltersTest::testRefStringConfigXLSX()
     ScCalcConfig aConfig = rDoc.GetCalcConfig();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_OOO,
                             aConfig.meStringRefAddressSyntax);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBnc762542()
+{
+    ScDocShellRef xDocSh = loadDoc("bnc762542.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    const size_t nCount = pPage->GetObjCount();
+    CPPUNIT_ASSERT_MESSAGE("There should be 10 shapes.", nCount == 10);
+
+    // previously, some of the shapes were (incorrectly) rotated by 90 degrees
+    for (size_t i : { 1, 2, 4, 5, 7, 9 })
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+
+        Rectangle aRect(pObj->GetCurrentBoundRect());
+        CPPUNIT_ASSERT_MESSAGE("Drawing object shouldn't be rotated.", aRect.GetWidth() > aRect.GetHeight());
+    }
 
     xDocSh->DoClose();
 }
