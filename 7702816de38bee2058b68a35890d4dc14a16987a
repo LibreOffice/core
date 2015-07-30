@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_8d2b6982",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-30T18:32:19Z",
+      "side": 1,
+      "message": "this variable is a reference to another variable on the stack, thus completely unnecessary. just use \"AdjustItem\"",
+      "revId": "7702816de38bee2058b68a35890d4dc14a16987a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0d38d9d2",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-30T18:32:19Z",
+      "side": 1,
+      "message": "it\u0027s not necessary to clone the item here, just use the \"AdjustItem\"",
+      "revId": "7702816de38bee2058b68a35890d4dc14a16987a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
