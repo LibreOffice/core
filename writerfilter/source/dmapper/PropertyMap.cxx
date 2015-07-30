@@ -432,7 +432,6 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
 {
     static sal_Int32 nNumber = 0;
     nSectionNumber = nNumber++;
-    memset(&m_pBorderLines, 0x00, sizeof(m_pBorderLines));
     for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
     {
         m_nBorderDistances[ nBorder ] = -1;
@@ -471,8 +470,6 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
 
 SectionPropertyMap::~SectionPropertyMap()
 {
-    for( sal_Int16 ePos = BORDER_LEFT; ePos <= BORDER_BOTTOM; ++ePos)
-        delete m_pBorderLines[ePos];
 }
 
 
@@ -564,8 +561,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
 
 void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine, bool bShadow )
 {
-    delete m_pBorderLines[ePos];
-    m_pBorderLines[ePos] = new table::BorderLine2( rBorderLine );
+    m_oBorderLines[ePos] = rBorderLine;
     m_nBorderDistances[ePos] = nLineDistance;
     m_bBorderShadows[ePos] = bShadow;
 }
@@ -639,19 +635,19 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
 
     for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder)
     {
-        if( m_pBorderLines[nBorder] )
+        if( m_oBorderLines[nBorder] )
         {
             const OUString sBorderName = getPropertyName( aBorderIds[nBorder] );
             if (xFirst.is())
-                xFirst->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
+                xFirst->setPropertyValue( sBorderName, uno::makeAny( *m_oBorderLines[nBorder] ));
             if(xSecond.is())
-                xSecond->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
+                xSecond->setPropertyValue( sBorderName, uno::makeAny( *m_oBorderLines[nBorder] ));
         }
         if( m_nBorderDistances[nBorder] >= 0 )
         {
             sal_uInt32 nLineWidth = 0;
-            if (m_pBorderLines[nBorder])
-                nLineWidth = m_pBorderLines[nBorder]->LineWidth;
+            if (m_oBorderLines[nBorder])
+                nLineWidth = m_oBorderLines[nBorder]->LineWidth;
             if(xFirst.is())
                 SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
                   m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
@@ -663,7 +659,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
 
     if (m_bBorderShadows[BORDER_RIGHT])
     {
-        table::ShadowFormat aFormat = getShadowFromBorder(*m_pBorderLines[BORDER_RIGHT]);
+        table::ShadowFormat aFormat = getShadowFromBorder(*m_oBorderLines[BORDER_RIGHT]);
         if (xFirst.is())
             xFirst->setPropertyValue(getPropertyName(PROP_SHADOW_FORMAT), uno::makeAny(aFormat));
         if (xSecond.is())

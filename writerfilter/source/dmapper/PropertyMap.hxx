@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/uno/Any.h>
 #include "PropertyIds.hxx"
 #include <memory>
@@ -190,7 +191,7 @@ class SectionPropertyMap : public PropertyMap
     css::uno::Reference<css::beans::XPropertySet> m_aFirstPageStyle;
     css::uno::Reference<css::beans::XPropertySet> m_aFollowPageStyle;
 
-    css::table::BorderLine2* m_pBorderLines[4];
+    boost::optional<css::table::BorderLine2> m_oBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
     sal_Int32                               m_nBorderParams;
     bool                                    m_bBorderShadows[4];
