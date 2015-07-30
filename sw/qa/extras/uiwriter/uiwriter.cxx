@@ -33,6 +33,9 @@
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
 #include <test/mtfxmldump.hxx>
+#include <postithelper.hxx>
+#include <PostItMgr.hxx>
+#include <SidebarWin.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -98,6 +101,7 @@ public:
     void testTdf90883TableBoxGetCoordinates();
     void testDde();
     void testTdf89954();
+    void testTdf89720();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -137,6 +141,7 @@ public:
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testDde);
     CPPUNIT_TEST(testTdf89954);
+    CPPUNIT_TEST(testTdf89720);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1042,6 +1047,22 @@ void SwUiWriterTest::testTdf89954()
     // As a result, autocorrect did not turn the 't' input into 'T'.
     OUString aExpected("Tes\xef\xbf\xb9t. Test.", 14, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aNodeIndex.GetNode().GetTextNode()->GetText());
+}
+
+void SwUiWriterTest::testTdf89720()
+{
+#ifndef MACOSX
+    SwDoc* pDoc = createDoc("tdf89720.odt");
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    for (SwSidebarItem* pItem : *pPostItMgr)
+    {
+        if (pItem->pPostIt->IsFollow())
+            // This was non-0: reply comments had a text range overlay,
+            // resulting in unexpected dark color.
+            CPPUNIT_ASSERT(!pItem->pPostIt->TextRange());
+    }
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
