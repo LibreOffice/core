@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_aae72b3f",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Looks liks this was unitended change.",
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_cae4e73c",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Not indended and not related to this change.",
+      "range": {
+        "startLine": 56,
+        "startChar": 33,
+        "endLine": 56,
+        "endChar": 34
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_6ad05354",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Is explicit type declaration is needed here? Usually compiler can induce it from the last return statement in the lambda.",
+      "range": {
+        "startLine": 242,
+        "startChar": 71,
+        "endLine": 242,
+        "endChar": 82
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_8ad58f44",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Not needed?",
+      "range": {
+        "startLine": 330,
+        "startChar": 72,
+        "endLine": 330,
+        "endChar": 79
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_2aca5ba2",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Not needed?",
+      "range": {
+        "startLine": 344,
+        "startChar": 82,
+        "endLine": 344,
+        "endChar": 89
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4acf97b0",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Non intentional logical inversion? Apparently copy/paste mistake from the previous lambda?",
+      "range": {
+        "startLine": 346,
+        "startChar": 23,
+        "endLine": 346,
+        "endChar": 25
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0ac2ff85",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Not needed?",
+      "range": {
+        "startLine": 355,
+        "startChar": 82,
+        "endLine": 355,
+        "endChar": 89
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_eac44393",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Non intentional logical inversion?",
+      "range": {
+        "startLine": 357,
+        "startChar": 23,
+        "endLine": 357,
+        "endChar": 25
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_aabe4bfd",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Not needed?",
+      "range": {
+        "startLine": 366,
+        "startChar": 82,
+        "endLine": 366,
+        "endChar": 89
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_cabb870d",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T05:11:14Z",
+      "side": 1,
+      "message": "Non intentional logical inversion?",
+      "range": {
+        "startLine": 368,
+        "startChar": 23,
+        "endLine": 368,
+        "endChar": 25
+      },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
