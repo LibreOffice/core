@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_6a5e13eb",
+        "filename": "external/boost/boost.concept_check.Wunused-local-typedefs.warnings.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T06:04:54Z",
+      "side": 1,
+      "message": "Thanks. Now I understand. So probably I first removed this patch as it was stated: \"fixed upstream\" for it, but later re-added it, because of arning, that might be unrelated to this? Removed the whole patch. Re-compilation without this patch is underway...",
+      "parentUuid": "1a54edaf_a720c6f8",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_07243a0b",
         "filename": "external/boost/boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch",
         "patchSetId": 11
@@ -89,6 +107,24 @@
       "writtenOn": "2015-07-29T08:56:44Z",
       "side": 1,
       "message": "it would be good to have a comment on this patch about what it conflicts with.",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_8a634fb1",
+        "filename": "external/boost/boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T06:04:54Z",
+      "side": 1,
+      "message": "I thought, it\u0027s commented, in comment in makefile I filed the bug repoprt upstream: [1], that was fixed upstream already by the way [2], with exact error description and even reference to the commit SHA1 upstream, that introduced this breakage. Is this all not enough?\n\n  XLib defines Bool as its own type, that collides with var \n  name introduced in this commit in move library:   \n  4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.\n\n* [1] https://svn.boost.org/trac/boost/ticket/11500\n* [2] https://github.com/boostorg/move/commit/4a7a2b8b193b725dd49951864e6032eee4ed1db2",
+      "parentUuid": "1a54edaf_07243a0b",
       "revId": "ef430f1db96f603af73e0b391016762ab2212867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
