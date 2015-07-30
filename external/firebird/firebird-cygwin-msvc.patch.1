@@ -1,6 +1,47 @@
-diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
---- firebird/builds/posix/make.defaults	2013-07-03 16:23:44.804062000 +0100
-+++ firebird/builds/posix/make.defaults	2013-07-05 12:30:01.607151400 +0100
+diff -ur firebird.org/builds/make.new/config/config.h.in firebird/builds/make.new/config/config.h.in
+--- firebird.org/builds/make.new/config/config.h.in	2015-07-30 18:57:00.826593100 +0200
++++ firebird/builds/make.new/config/config.h.in	2015-07-30 19:27:52.139226300 +0200
+@@ -668,3 +668,37 @@
+ #ifndef HAVE_SOCKLEN_T
+ typedef int socklen_t;
+ #endif
++
++/* taken from src/include/gen/autoconfig_msvc.h */
++#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
++/* target architecture */
++#if defined(_M_IX86)
++/* sizeof(void *) */
++#define SIZEOF_VOID_P 4
++/* sizeof(size_t) */
++#define SIZEOF_SIZE_T 4
++/* alignment of long */
++#define FB_ALIGNMENT 4
++#elif defined(_M_AMD64)
++#define AMD64
++/* sizeof(void *) */
++#define SIZEOF_VOID_P 8
++/* sizeof(size_t) */
++#define SIZEOF_SIZE_T 8
++/* alignment of long */
++#define FB_ALIGNMENT 8
++#else
++#error unknown target platform
++#endif
++
++#define HAVE_IO_H
++
++#define HAVE_GETPAGESIZE
++
++#if defined _MSC_VER
++#if _MSC_VER < 1500
++#define vsnprintf _vsnprintf
++#endif
++#define isnan _isnan
++#endif
++#define snprintf _snprintf
+diff -ur firebird.org/builds/posix/make.defaults firebird/builds/posix/make.defaults
+--- firebird.org/builds/posix/make.defaults	2015-07-30 18:56:58.936120900 +0200
++++ firebird/builds/posix/make.defaults	2015-07-30 19:29:23.420338600 +0200
 @@ -49,7 +49,11 @@
  
  FIREBIRD=$(GEN_ROOT)/firebird
@@ -58,7 +99,7 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  SHRLIB_FOREIGN_EXT=	$(SHRLIB_EXT)
  
  #_____________________________________________________________________________
-@@ -179,6 +199,7 @@
+@@ -179,6 +203,7 @@
  vpath %.so $(LIB)
  vpath %.a $(LIB)
  vpath %.dll $(LIB)
@@ -66,7 +107,7 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  
  #_____________________________________________________________________________
  
-@@ -193,9 +214,9 @@
+@@ -193,9 +218,9 @@
  #     Scold me, but I don't want library names to be in configure.in
  # 
  
@@ -79,7 +120,7 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  
  LIBFBEMBED_SO = $(LIB)/$(SharedLibraryName)
  LIBFBEMBED_SOBASENAME = $(LIB)/$(SharedLibrarySoName)
-@@ -219,7 +240,11 @@
+@@ -219,7 +244,11 @@
  
  LIBFBINTL_SO = $(FIREBIRD)/intl/$(LIB_PREFIX)fbintl.$(SHRLIB_EXT)
  
@@ -91,22 +132,18 @@ diff -u firebird/builds/posix/make.defaults firebird/builds/posix/make.defaults
  
  ifeq ($(EDITLINE_FLG),Y)
    ifeq ($(STD_EDITLINE), true)
-unchanged:
---- firebird.org/builds/posix/make.shared.variables	2013-06-26 10:05:19.351343000 +0100
-+++ firebird/builds/posix/make.shared.variables	2013-07-04 08:12:24.432879700 +0100
-@@ -291,7 +291,8 @@
- OS_SPECIFIC_Sources += $(ROOT)/extern/binreloc/binreloc.c
- endif
- OS_SPECIFIC_Objects = $(addprefix $(OBJ)/, $(addsuffix .o, $(basename $(OS_SPECIFIC_Sources))))
--
-+#FBCOMMON_ClientFiles+=$(OS_SPECIFIC_Files)
-+#FBCOMMON_Objects+=$(OS_SPECIFIC_Objects)
+diff -ur firebird.org/builds/posix/make.rules firebird/builds/posix/make.rules
+--- firebird.org/builds/posix/make.rules	2015-07-30 18:56:58.404726100 +0200
++++ firebird/builds/posix/make.rules	2015-07-30 19:29:24.404796300 +0200
+@@ -116,4 +116,4 @@
+ # Rules for making resource files
  
- #________________________________________________________________________
- #
-unchanged:
---- firebird/builds/posix/Makefile.in.examples	2013-07-04 14:22:42.262676600 +0100
-+++ firebird/builds/posix/Makefile.in.examples	2013-07-05 10:14:02.897675100 +0100
+ $(GEN_ROOT)/%.res: $(SRC_ROOT)/%.rc
+-	windres --output-format=coff --include-dir=$(<D) $< $@
++	rc.exe $(SOLARINC) /fo $@ $<
+diff -ur firebird.org/builds/posix/Makefile.in.examples firebird/builds/posix/Makefile.in.examples
+--- firebird.org/builds/posix/Makefile.in.examples	2015-07-30 18:56:58.982902900 +0200
++++ firebird/builds/posix/Makefile.in.examples	2015-07-30 19:29:23.436010500 +0200
 @@ -64,10 +64,13 @@
  EXAMPLES_DEST=	$(GEN_ROOT)/examples
  EXAMPLES_SRC=	$(ROOT)/examples
@@ -123,14 +160,17 @@ unchanged:
  
  INPUT_Files   =	empddl.sql empdml.sql indexoff.sql indexon.sql \
  		job.inp lang.inp proj.inp qtr.inp
-@@ -168,0 +180,3 @@
+@@ -166,3 +169,6 @@
+ 
+ $(EXAMPLES_DEST)/%.h: $(EXAMPLES_SRC)/common/%.h
+ 	$(CP) $^ $@
 +
 +$(EXAMPLES_DEST)/%.obj: $(EXAMPLES_DEST)/%.c 
 +	$(CC) -c $(firstword $<) -Fo$@ $(WCFLAGS)
 \ No newline at end of file
-unchanged:
---- firebird.org/builds/posix/Makefile.in.extlib	2013-06-26 10:05:19.366787100 +0100
-+++ firebird/builds/posix/Makefile.in.extlib	2013-07-04 12:31:37.591067100 +0100
+diff -ur firebird.org/builds/posix/Makefile.in.extlib firebird/builds/posix/Makefile.in.extlib
+--- firebird.org/builds/posix/Makefile.in.extlib	2015-07-30 18:56:58.936120900 +0200
++++ firebird/builds/posix/Makefile.in.extlib	2015-07-30 19:29:23.483041600 +0200
 @@ -76,14 +76,20 @@
  lib_ib_udf: $(LIBIBUTIL_SO) $(UDF)/ib_udf.$(SHRLIB_EXT)
  
@@ -154,9 +194,9 @@ unchanged:
  
  include $(ROOT)/gen/make.shared.targets
  
-unchanged:
---- firebird.org/builds/posix/Makefile.in.firebird	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.firebird	2013-07-04 18:36:17.079544900 +0100
+diff -ur firebird.org/builds/posix/Makefile.in.firebird firebird/builds/posix/Makefile.in.firebird
+--- firebird.org/builds/posix/Makefile.in.firebird	2015-07-30 18:56:58.357870500 +0200
++++ firebird/builds/posix/Makefile.in.firebird	2015-07-30 19:29:23.514113100 +0200
 @@ -145,7 +145,8 @@
  
  firebird : firebird_@FIREBIRD_ARCH_TYPE@ $(PLATFORM_POSTBUILD_TARGET)
@@ -167,7 +207,7 @@ unchanged:
  firebird_super firebird_server: firebird_basic super_targets fbtrace
  
  
-@@ -301,7 +301,7 @@
+@@ -300,7 +301,7 @@
  .PHONY: ref_databases msgs msgs_intl generated_headers intl extlib includes
  
  basic_targets: ref_databases msgs msgs_intl generated_headers \
@@ -176,7 +216,7 @@ unchanged:
  
  # hack to make code regeneration work
  generated_headers :
-@@ -331,8 +336,9 @@
+@@ -331,8 +332,9 @@
  .PHONY: libfbembed inet_server fb_smp_server embed_gfix embed_gbak embed_isql 
  .PHONY: embed_gpre embed_util
  
@@ -188,7 +228,7 @@ unchanged:
  
  libfbembed:
  	$(MAKE) $(CPU_OPTION) -f $(GEN_ROOT)/Makefile.libfbembed $@
-@@ -446,7 +452,7 @@
+@@ -446,7 +448,7 @@
  MAKE_HEADER_Bin = ./makeHeader
  
  $(INCLUDE_DEST)/ibase.h: $(SRC_IBASE_ExtraFiles)
@@ -197,8 +237,9 @@ unchanged:
  	$(CP) $^ .
  	$(MAKE_HEADER_Bin) <ibase.h >$@
  	$(RM) -f ibase.h
---- firebird.org/builds/posix/Makefile.in.intl	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.intl	2013-07-04 12:26:09.029586700 +0100
+diff -ur firebird.org/builds/posix/Makefile.in.intl firebird/builds/posix/Makefile.in.intl
+--- firebird.org/builds/posix/Makefile.in.intl	2015-07-30 18:56:58.936120900 +0200
++++ firebird/builds/posix/Makefile.in.intl	2015-07-30 19:29:23.576732800 +0200
 @@ -81,8 +81,13 @@
  libfbintl : $(LIBFBINTL_SO)
  
@@ -214,9 +255,9 @@ unchanged:
  
  include $(ROOT)/gen/make.shared.targets
  
-diff -u firebird/builds/posix/Makefile.in.libfbembed firebird/builds/posix/Makefile.in.libfbembed
---- firebird/builds/posix/Makefile.in.libfbembed	2013-07-04 17:51:37.197367500 +0100
-+++ firebird/builds/posix/Makefile.in.libfbembed	2013-07-05 12:55:58.287451400 +0100
+diff -ur firebird.org/builds/posix/Makefile.in.libfbembed firebird/builds/posix/Makefile.in.libfbembed
+--- firebird.org/builds/posix/Makefile.in.libfbembed	2015-07-30 18:56:58.826768300 +0200
++++ firebird/builds/posix/Makefile.in.libfbembed	2015-07-30 19:29:23.670532500 +0200
 @@ -62,13 +62,19 @@
  libfbembed : $(LIBIBUTIL_SO) $(LIBFBEMBED_SONAME)
  
@@ -239,9 +280,9 @@ diff -u firebird/builds/posix/Makefile.in.libfbembed firebird/builds/posix/Makef
  
  include $(ROOT)/gen/make.shared.targets
  
-unchanged:
---- firebird.org/builds/posix/Makefile.in.libfbstatic	2013-06-26 10:05:19.382231200 +0100
-+++ firebird/builds/posix/Makefile.in.libfbstatic	2013-07-03 16:23:14.103208000 +0100
+diff -ur firebird.org/builds/posix/Makefile.in.libfbstatic firebird/builds/posix/Makefile.in.libfbstatic
+--- firebird.org/builds/posix/Makefile.in.libfbstatic	2015-07-30 18:56:58.826768300 +0200
++++ firebird/builds/posix/Makefile.in.libfbstatic	2015-07-30 19:29:23.717391000 +0200
 @@ -57,9 +57,9 @@
  # will not be different from the above fbmem_boot.a library
  # compile time macros being the main (if there) difference
@@ -254,9 +295,9 @@ unchanged:
  	-$(RM) $@
  	$(AR) $@ $^
  	-$(RANLIB) $@
-unchanged:
---- firebird.org/builds/posix/prefix.mingw	2013-06-26 10:05:19.413119400 +0100
-+++ firebird/builds/posix/prefix.mingw	2013-07-04 18:13:52.948234400 +0100
+diff -ur firebird.org/builds/posix/prefix.mingw firebird/builds/posix/prefix.mingw
+--- firebird.org/builds/posix/prefix.mingw	2015-07-30 18:56:59.029762200 +0200
++++ firebird/builds/posix/prefix.mingw	2015-07-30 19:29:23.779759400 +0200
 @@ -20,8 +20,8 @@
  # 
  
@@ -294,10 +335,10 @@ unchanged:
  
  # This is required for newly built executable to find newly built shared
  # libraries because on Win32 there is no such thing as LD_LIBRARY_PATH
-unchanged:
---- firebird.org/configure	2013-06-26 10:05:19.675669100 +0100
-+++ firebird/configure	2013-06-26 10:14:11.490867900 +0100
-@@ -2796,7 +2796,7 @@
+diff -ur firebird.org/configure firebird/configure
+--- firebird.org/configure	2015-07-30 18:57:33.826760500 +0200
++++ firebird/configure	2015-07-30 19:29:23.873496600 +0200
+@@ -2878,7 +2878,7 @@
      SHRLIB_EXT=so
      ;;
  
@@ -306,7 +347,7 @@ unchanged:
      MAKEFILE_PREFIX=mingw
      PLATFORM=win32
  
-@@ -8934,6 +8934,9 @@
+@@ -9016,6 +9016,9 @@
  mingw*)
    opt_cr=`echo 'x\{0,1\}' | tr x '\015'` # option cr in regexp
    ;;
@@ -316,7 +357,7 @@ unchanged:
  esac
  
  # If we're using GNU nm, then use its standard symbol codes.
-@@ -9882,7 +9885,7 @@
+@@ -9964,7 +9967,7 @@
         esac
         ;;
  
@@ -325,7 +366,7 @@ unchanged:
        # This hack is so that the source file can tell whether it is being
        # built for inclusion in a dll (and should export symbols for example).
        lt_prog_compiler_pic='-DDLL_EXPORT'
-@@ -14675,7 +14678,7 @@
+@@ -14757,7 +14760,7 @@
      beos* | cygwin* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
        # PIC is the default for these OSes.
        ;;
@@ -334,7 +375,7 @@ unchanged:
        # This hack is so that the source file can tell whether it is being
        # built for inclusion in a dll (and should export symbols for example).
        lt_prog_compiler_pic_CXX='-DDLL_EXPORT'
-@@ -16452,7 +16455,7 @@
+@@ -16534,7 +16537,7 @@
        # PIC is the default for these OSes.
        ;;
  
@@ -343,7 +384,7 @@ unchanged:
        # This hack is so that the source file can tell whether it is being
        # built for inclusion in a dll (and should export symbols for example).
        lt_prog_compiler_pic_F77='-DDLL_EXPORT'
-@@ -16522,7 +16525,7 @@
+@@ -16604,7 +16607,7 @@
         esac
         ;;
  
@@ -352,7 +393,7 @@ unchanged:
        # This hack is so that the source file can tell whether it is being
        # built for inclusion in a dll (and should export symbols for example).
        lt_prog_compiler_pic_F77='-DDLL_EXPORT'
-@@ -19067,7 +19070,7 @@
+@@ -19149,7 +19152,7 @@
        # PIC is the default for these OSes.
        ;;
  
@@ -361,7 +402,7 @@ unchanged:
        # This hack is so that the source file can tell whether it is being
        # built for inclusion in a dll (and should export symbols for example).
        lt_prog_compiler_pic_GCJ='-DDLL_EXPORT'
-@@ -19137,7 +19140,7 @@
+@@ -19219,7 +19222,7 @@
         esac
         ;;
  
@@ -370,174 +411,9 @@ unchanged:
        # This hack is so that the source file can tell whether it is being
        # built for inclusion in a dll (and should export symbols for example).
        lt_prog_compiler_pic_GCJ='-DDLL_EXPORT'
-unchanged:
---- firebird.org/configure.in	2013-06-26 10:05:19.675669100 +0100
-+++ firebird/configure.in	2013-06-26 14:16:35.816845700 +0100
-@@ -1,30 +1,4 @@
--dnl ############################# INITIALISATION ###############################
--
--AC_PREREQ(2.56)
--AC_INIT(src)
--
--AC_CONFIG_AUX_DIR(builds/make.new/config)
--AC_CACHE_VAL(ac_cv_prog_make_set, [AC_PROG_MAKE_SET])
--AC_PREFIX_DEFAULT(/usr/local/firebird)
--
--m4_ifdef([AC_CONFIG_MACRO_DIR],
--         [],
--         [m4_define([AC_CONFIG_MACRO_DIR], [])])
--AC_CONFIG_MACRO_DIR(m4)
--
--AC_CONFIG_HEADER(src/include/gen/autoconfig.h:builds/make.new/config/config.h.in)
--
--dnl XE_APPEND(value, varname)
--define([XE_APPEND],[[$2]="$[$2] [$1]"])
--
--dnl XE_PREPEND(value, varname)
--define([XE_PREPEND],[[$2]="[$1] $[$2]"])
--
--dnl XE_CONF_DIR(param, help, variable, default)
--define([XE_CONF_DIR],[
--AC_ARG_WITH([$1], 
--	[AC_HELP_STRING([--with-$1], [$2])], 
--	[[$3]="$withval"
-+NO
- 	 AC_DEFINE_UNQUOTED([$3], "$[$3]", [$2])], 
- 	[[$3]="[`if test ""x$prefix"" = ""xNONE"" ; then echo ""$ac_default_prefix""; else echo ""$prefix""; fi`][$4]"
- 	 AC_DEFINE_UNQUOTED([$3], [""], [$2])]
-@@ -37,8 +11,8 @@
- 
- dnl ############################# ADD TESTS BELOW ##############################
- 
--AC_CANONICAL_SYSTEM
--CPU_TYPE=$target_cpu
-+AC_CANONICAL_HOST
-+CPU_TYPE=$host_cpu
- AC_SUBST(CPU_TYPE)
- 
- 
-@@ -61,7 +35,7 @@
- dnl Test for special ar options?
- AR_OPT_CHECK=false
- 
--case "$target" in
-+case "$host" in
-   x*64-*-darwin* | x*64_*-darwin*)
-     MAKEFILE_PREFIX=darwin_x86_64
-     MAKEFILE_POSTFIX=darwin
-
-@@ -112,7 +86,7 @@
- 
-   amd64-*-freebsd* | x86_64*-*-freebsd* | x86_64*-*-k*bsd*-gnu)
-     MAKEFILE_PREFIX=freebsd_amd64
--    case "$target" in
-+    case "$host" in
-         x86_64*-*-k*bsd-gnu)      # Debian/kFreeBSD
-             PLATFORM=GENTOOFREEBSD
-             INSTALL_PREFIX=linux
-@@ -138,7 +112,7 @@
- 
-   *-*-freebsd* | *-*-k*bsd*-gnu)
-     MAKEFILE_PREFIX=freebsd
--    case "$target" in
-+    case "$host" in
-         *-*-k*bsd-gnu)      # Debian/kFreeBSD
-             PLATFORM=GENTOOFREEBSD
-             INSTALL_PREFIX=linux
-@@ -394,7 +368,7 @@
-     SHRLIB_EXT=so
-     ;;
- 
--  *-*-mingw*)
-+  *-*-mingw* | *-*-cygwin*)
-     MAKEFILE_PREFIX=mingw
-     PLATFORM=win32
-     AC_DEFINE(WIN_NT, 1, [Define this if OS is Windows NT])
-@@ -756,7 +730,25 @@
- AC_CHECK_FUNCS(swab _swab)
- AC_FUNC_MMAP
- AC_FUNC_FORK
--AC_FUNC_SETPGRP
-+
-+dnl AC_FUNC_SETPGRP does not work if cross compiling
-+dnl Instead, assume we will have a prototype for setpgrp if cross compiling.
-+if test "$cross_compiling" = no; then
-+  AC_FUNC_SETPGRP
-+else
-+  AC_CACHE_CHECK([whether setpgrp takes no argument], ac_cv_func_setpgrp_void,
-+    [AC_TRY_COMPILE([
-+#include <unistd.h>
-+], [
-+  if (setpgrp(1,1) == -1)
-+    exit (0);
-+  else
-+    exit (1);
-+], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes)])
-+if test $ac_cv_func_setpgrp_void = yes; then
-+  AC_DEFINE(SETPGRP_VOID, 1)
-+fi
-+fi
- AC_CHECK_FUNCS(setpgid)
- AC_FUNC_GETPGRP
- AC_CHECK_FUNCS(flock)
-@@ -822,7 +814,9 @@
- [AC_DEFINE(WORKING_SEM_INIT,1,[Define this if sem_init() works on the platform])
- AC_MSG_RESULT(yes)],
- [AC_MSG_RESULT(no)
--AC_SEARCH_LIBS(sem_open, rt pthread)])
-+AC_SEARCH_LIBS(sem_open, rt pthread)]),
-+[AC_DEFINE(WORKING_SEM_INIT,1,[Define this if sem_init() works on the platform])
-+AC_MSG_RESULT(cross-compiling, assuming yes)])
- fi
- fi
- 
-@@ -885,27 +879,13 @@
- 
- dnl EKU: try to determine the alignment of long and double
- dnl      replaces FB_ALIGNMENT and FB_DOUBLE_ALIGN in src/jrd/common.h
--AC_MSG_CHECKING(alignment of long)
--AC_TRY_RUN([main () {
--  struct s {
--    char a;
--    long long b;
--  };
--  exit((int)&((struct s*)0)->b);
--}], ac_cv_c_alignment=$ac_status, ac_cv_c_alignment=$ac_status)
--AC_MSG_RESULT($ac_cv_c_alignment)
--AC_DEFINE_UNQUOTED(FB_ALIGNMENT, $ac_cv_c_alignment, [Alignment of long])
--
--AC_MSG_CHECKING(alignment of double)
--AC_TRY_RUN([main () {
--  struct s {
--    char a;
--    double b;
--  };
--  exit((int)&((struct s*)0)->b);
--}], ac_cv_c_double_align=$ac_status, ac_cv_c_double_align=$ac_status)
--AC_MSG_RESULT($ac_cv_c_double_align)
--AC_DEFINE_UNQUOTED(FB_DOUBLE_ALIGN, $ac_cv_c_double_align, [Alignment of double])
-+AC_CHECK_ALIGNOF(long long)
-+AC_MSG_RESULT($ac_cv_alignof_long_long)
-+AC_DEFINE_UNQUOTED(FB_ALIGNMENT, $ac_cv_alignof_long_long, [Alignment of long])
-+
-+AC_CHECK_ALIGNOF(double)
-+AC_MSG_RESULT($ac_cv_alignof_double)
-+AC_DEFINE_UNQUOTED(FB_DOUBLE_ALIGN, $ac_cv_alignof_double, [Alignment of double])
- 
- dnl EKU: don't know how to convert this into an autoconf test:
- dnl      #define FB_ALIGN(n,b) ...
-@@ -980,7 +960,7 @@
- #define FB_PIPE_NAME "interbas"])
-     AC_DEFINE_UNQUOTED(FB_PIPE_NAME,"$FB_PIPE_NAME")
-     AC_SUBST(FB_PIPE_NAME)
--    XE_PREPEND( -mno-cygwin -mthreads -lmpr -lversion -lws2_32 -lole32,LIBS)
-+    XE_PREPEND( -mthreads -lmpr -lversion -lws2_32 -lole32,LIBS)
-     ;;
- 
-   *)
-unchanged:
---- firebird.org/extern/btyacc/main.c	2013-06-26 10:05:19.907330600 +0100
-+++ firebird/extern/btyacc/main.c	2013-06-26 10:25:20.065917200 +0100
+diff -ur firebird.org/extern/btyacc/main.c firebird/extern/btyacc/main.c
+--- firebird.org/extern/btyacc/main.c	2015-07-30 18:57:01.029880800 +0200
++++ firebird/extern/btyacc/main.c	2015-07-30 19:29:23.920389000 +0200
 @@ -2,7 +2,7 @@
  #include <signal.h>
  #include <stdio.h>
@@ -547,228 +423,9 @@ unchanged:
  #include <io.h>
  #else
  #include <unistd.h>
-unchanged:
---- firebird.org/src/burp/mvol.cpp	2013-06-26 10:05:24.089577700 +0100
-+++ firebird/src/burp/mvol.cpp	2013-07-03 15:29:42.818271200 +0100
-@@ -47,7 +47,7 @@
- #include <fcntl.h>
- #include <sys/types.h>
- 
--#ifdef HAVE_IO_H
-+#if defined(HAVE_IO_H) || defined(WIN_NT)
- #include <io.h>  // isatty
- #endif
- 
-unchanged:
---- firebird.org/src/burp/restore.epp	2013-06-26 10:05:24.089577700 +0100
-+++ firebird/src/burp/restore.epp	2013-07-03 15:25:34.792722000 +0100
-@@ -54,6 +54,10 @@
- #include "../common/classes/SafeArg.h"
- #include "memory_routines.h"
- 
-+#ifdef WIN_NT
-+#define snprintf _snprintf
-+#endif
-+
- using MsgFormat::SafeArg;
- 
- 
-unchanged:
---- firebird.org/src/common/classes/BaseStream.cpp	2013-06-26 10:05:24.106566100 +0100
-+++ firebird/src/common/classes/BaseStream.cpp	2013-06-27 19:12:19.694346700 +0100
-@@ -28,6 +28,10 @@
- #include "BaseStream.h"
- #include <string.h>
- 
-+#if defined(WIN_NT)
-+#include <io.h>
-+#endif
-+
- #ifdef HAVE_UNISTD_H
- #include <unistd.h>
- #endif
-unchanged:
---- firebird.org/src/common/classes/fb_string.cpp	2013-06-26 10:05:24.123554500 +0100
-+++ firebird/src/common/classes/fb_string.cpp	2013-07-03 18:12:28.168333200 +0100
-@@ -32,6 +32,10 @@
- #include <ctype.h>
- #include <stdarg.h>
- 
-+#ifdef WIN_NT
-+#pragma comment(lib, "User32.lib")
-+#endif
-+
- #ifdef HAVE_STRCASECMP
- #define STRNCASECMP strncasecmp
- #else
-unchanged:
---- firebird.org/src/common/classes/FpeControl.h	2013-06-26 10:05:24.123554500 +0100
-+++ firebird/src/common/classes/FpeControl.h	2013-06-28 13:19:21.411841900 +0100
-@@ -204,7 +204,7 @@
- #ifdef WIN_NT
- inline bool isinf(double x)
- {
--	return (!_finite (x) && !isnan(x));
-+	return (!_finite (x) && !_isnan(x));
- }
- #else
- #ifndef isinf
-unchanged:
---- firebird.org/src/isql/isql.epp	2013-06-26 10:05:24.718148500 +0100
-+++ firebird/src/isql/isql.epp	2013-07-03 15:39:19.475181200 +0100
-@@ -98,6 +98,7 @@
- #include "../jrd/common.h"
- #if defined(WIN_NT)
- #include <windows.h>
-+#define isnan _isnan
- #endif
- #include "../jrd/ibase.h"
- #include "../isql/isql.h"
-unchanged:
---- firebird.org/src/jrd/divorce.cpp	2013-06-26 10:05:24.786102100 +0100
-+++ firebird/src/jrd/divorce.cpp	2013-06-29 11:37:36.553854700 +0100
-@@ -54,7 +54,7 @@
- #include "../jrd/divorce.h"
- #include "../common/classes/semaphore.h"
- 
--#ifdef HAVE_IO_H
-+#if defined(HAVE_IO_H) || defined(WIN_NT)
- #include <io.h>
- #endif
- 
-unchanged:
---- firebird.org/src/jrd/fun.epp	2013-06-26 10:05:24.888032500 +0100
-+++ firebird/src/jrd/fun.epp	2013-06-29 11:19:52.564078500 +0100
-@@ -733,7 +733,7 @@
- 				status_exception::raise(Arg::Gds(isc_expression_eval_err) <<
- 									Arg::Gds(isc_udf_fp_overflow) << Arg::Str(function->fun_name));
- 			}
--			else if (isnan(value->vlu_misc.vlu_double))
-+			else if (_isnan(value->vlu_misc.vlu_double))
- 			{
- 				status_exception::raise(Arg::Gds(isc_expression_eval_err) <<
- 									Arg::Gds(isc_udf_fp_nan) << Arg::Str(function->fun_name));
-unchanged:
---- firebird.org/src/jrd/gds.cpp	2013-06-26 10:05:24.888032500 +0100
-+++ firebird/src/jrd/gds.cpp	2013-06-29 10:38:05.140333200 +0100
-@@ -71,6 +71,8 @@
- #include <stdarg.h>
- 
- #if defined(WIN_NT)
-+#pragma comment(lib, "advapi32")
-+#pragma comment(lib, "Shell32")
- #include <io.h> // umask, close, lseek, read, open, _sopen
- #include <process.h>
- #include <sys/types.h>
-@@ -122,7 +124,7 @@
- #ifdef WIN_NT
- #include <shlobj.h>
- #if _MSC_VER <= 1500
--#include <shfolder.h>
-+//#include <shfolder.h>
- #endif
- #define _WINSOCKAPI_
- #include <share.h>
-unchanged:
---- firebird.org/src/jrd/isc.cpp	2013-06-26 10:05:24.922009300 +0100
-+++ firebird/src/jrd/isc.cpp	2013-06-29 10:38:56.698423800 +0100
-@@ -58,7 +58,7 @@
- /* Win32 specific stuff */
- 
- #ifdef WIN_NT
--
-+#pragma comment(lib, "User32")
- #include <windows.h>
- #include <aclapi.h>
- #include <lmcons.h>
-unchanged:
---- firebird.org/src/jrd/isc_sync.cpp	2013-06-26 10:05:24.938997700 +0100
-+++ firebird/src/jrd/isc_sync.cpp	2013-06-30 18:45:43.811961300 +0100
-@@ -127,10 +127,10 @@
- #include <sys/param.h>
- #endif
- 
--#ifndef HAVE_GETPAGESIZE
-+#if !defined(HAVE_GETPAGESIZE) && !defined(WIN_NT)
- static size_t getpagesize()
- {
--	return PAGESIZE;
-+	return _PAGESIZE;
- }
- #endif
- 
-@@ -4320,7 +4320,13 @@
-  *
-  **************************************/
- 	char hostname[64];
--	const int rc = snprintf(buffer, bufsize, object_name, ISC_get_host(hostname, sizeof(hostname)));
-+	const int rc = 
-+	#ifdef WIN_NT
-+		_snprintf(
-+	#else
-+		snprintf(
-+	#endif
-+		buffer, bufsize, object_name, ISC_get_host(hostname, sizeof(hostname)));
- 	if (size_t(rc) == bufsize || rc <= 0)
- 	{
- 		SetLastError(ERROR_FILENAME_EXCED_RANGE);
-unchanged:
---- firebird.org/src/jrd/os/win32/mod_loader.cpp	2013-06-26 10:05:25.006951300 +0100
-+++ firebird/src/jrd/os/win32/mod_loader.cpp	2013-06-27 18:30:42.642374700 +0100
-@@ -95,6 +95,8 @@
-                     "msvcr90.dll",
- #elif _MSC_VER == 1600
-                     "msvcr100.dll",
-+#elif _MSC_VER == 1700
-+                    "msvcr110.dll",
- #else
-                     #error Specify CRT DLL name here !
- #endif
-unchanged:
---- firebird.org/src/jrd/trace/TraceConfigStorage.cpp	2013-06-26 10:05:25.754440900 +0100
-+++ firebird/src/jrd/trace/TraceConfigStorage.cpp	2013-07-02 12:32:31.799779900 +0100
-@@ -42,9 +42,10 @@
- #ifdef HAVE_UNISTD_H
- #include <unistd.h>
- #endif
--#ifdef HAVE_IO_H
-+#if defined(HAVE_IO_H) || defined(WIN_NT)
- #include <io.h>
- #endif
-+
- #include <fcntl.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-unchanged:
---- firebird.org/src/jrd/trace/TraceLog.cpp	2013-06-26 10:05:25.958301700 +0100
-+++ firebird/src/jrd/trace/TraceLog.cpp	2013-07-02 12:32:49.747208200 +0100
-@@ -29,7 +29,7 @@
- #ifdef HAVE_UNISTD_H
- #include <unistd.h>
- #endif
--#ifdef HAVE_IO_H
-+#if defined(HAVE_IO_H) || defined(WIN_NT)
- #include <io.h>
- #endif
- #include <fcntl.h>
-unchanged:
---- firebird.org/src/misc/makeHeader.cpp	2013-06-26 10:05:26.230116100 +0100
-+++ firebird/src/misc/makeHeader.cpp	2013-07-04 12:43:53.149081800 +0100
-@@ -1,9 +1,9 @@
- #include <stdio.h>
- #include <string.h>
- #include <errno.h>
--//#ifdef HAVE_UNISTD_H
-+#ifdef HAVE_UNISTD_H
- #include <unistd.h>
--//#endif
-+#endif
- 
- 
- 
-unchanged:
---- firebird.org/extern/btyacc/Makefile	2013-07-05 07:58:12.591917200 +0100
-+++ firebird/extern/btyacc/Makefile	2013-07-05 09:31:07.589691500 +0100
+diff -ur firebird.org/extern/btyacc/Makefile firebird/extern/btyacc/Makefile
+--- firebird.org/extern/btyacc/Makefile	2015-07-30 18:57:01.201632400 +0200
++++ firebird/extern/btyacc/Makefile	2015-07-30 19:29:24.326742400 +0200
 @@ -42,7 +42,10 @@
  all:		$(PROGRAM)
  
@@ -781,13 +438,70 @@ unchanged:
  
  clean:;		rm -f $(OBJS)
  
-unchanged:
---- firebird.orig/builds/posix/make.rules	2013-08-04 19:06:02.208552600 +0900
-+++ firebird/builds/posix/make.rules	2013-08-04 19:13:59.981368500 +0900
-@@ -116,4 +116,4 @@
- # Rules for making resource files
+diff -ur firebird.org/src/common/classes/fb_string.cpp firebird/src/common/classes/fb_string.cpp
+--- firebird.org/src/common/classes/fb_string.cpp	2015-07-30 18:57:31.357886800 +0200
++++ firebird/src/common/classes/fb_string.cpp	2015-07-30 19:29:24.045626200 +0200
+@@ -32,6 +32,10 @@
+ #include <ctype.h>
+ #include <stdarg.h>
  
- $(GEN_ROOT)/%.res: $(SRC_ROOT)/%.rc
--	windres --output-format=coff --include-dir=$(<D) $< $@
-+	rc.exe $(SOLARINC) /fo $@ $<
-only in patch2:
++#ifdef WIN_NT
++#pragma comment(lib, "User32.lib")
++#endif
++
+ #ifdef HAVE_STRCASECMP
+ #define STRNCASECMP strncasecmp
+ #else
+diff -ur firebird.org/src/jrd/gds.cpp firebird/src/jrd/gds.cpp
+--- firebird.org/src/jrd/gds.cpp	2015-07-30 18:57:25.045586000 +0200
++++ firebird/src/jrd/gds.cpp	2015-07-30 19:29:24.092207700 +0200
+@@ -71,6 +71,8 @@
+ #include <stdarg.h>
+ 
+ #if defined(WIN_NT)
++#pragma comment(lib, "advapi32")
++#pragma comment(lib, "Shell32")
+ #include <io.h> // umask, close, lseek, read, open, _sopen
+ #include <process.h>
+ #include <sys/types.h>
+diff -ur firebird.org/src/jrd/isc.cpp firebird/src/jrd/isc.cpp
+--- firebird.org/src/jrd/isc.cpp	2015-07-30 18:57:24.186115300 +0200
++++ firebird/src/jrd/isc.cpp	2015-07-30 19:29:24.123769900 +0200
+@@ -60,7 +60,7 @@
+ /* Win32 specific stuff */
+ 
+ #ifdef WIN_NT
+-
++#pragma comment(lib, "User32")
+ #include <windows.h>
+ #include <aclapi.h>
+ #include <lmcons.h>
+diff -ur firebird.org/src/jrd/os/win32/mod_loader.cpp firebird/src/jrd/os/win32/mod_loader.cpp
+--- firebird.org/src/jrd/os/win32/mod_loader.cpp	2015-07-30 18:57:24.014278400 +0200
++++ firebird/src/jrd/os/win32/mod_loader.cpp	2015-07-30 19:29:44.029786700 +0200
+@@ -95,6 +95,10 @@
+                     "msvcr90.dll",
+ #elif _MSC_VER == 1600
+                     "msvcr100.dll",
++#elif _MSC_VER == 1700
++                    "msvcr110.dll",
++#elif _MSC_VER == 1800
++                     "mscvr120.dll",
+ #else
+                     #error Specify CRT DLL name here !
+ #endif
+diff -ur firebird.org/src/misc/makeHeader.cpp firebird/src/misc/makeHeader.cpp
+--- firebird.org/src/misc/makeHeader.cpp	2015-07-30 18:57:26.498503700 +0200
++++ firebird/src/misc/makeHeader.cpp	2015-07-30 19:29:24.279812900 +0200
+@@ -1,9 +1,9 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
+-//#ifdef HAVE_UNISTD_H
++#ifdef HAVE_UNISTD_H
+ #include <unistd.h>
+-//#endif
++#endif
+ 
+ 
+ 
