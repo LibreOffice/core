@@ -2719,7 +2719,7 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
                 nTabPos = pTab->GetPos();
                 if( !bIsMouseTriggered || (nClickX > nTabPos && (nNextTabPos == -1 || nClickX < nNextTabPos ) ) )
                 {
-                    pItem = &static_cast<SvLBoxString&>( rTmpItem );
+                    pItem = static_cast<SvLBoxString*>( &rTmpItem );
                     break;
                 }
             }
@@ -3281,7 +3281,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     sal_uInt16 nTabCount = aTabs.size();
     sal_uInt16 nItemCount = pEntry->ItemCount();
     SvLBoxTab* pTab = aTabs.front();
-    SvLBoxItem& rItem = pEntry->GetItem(0);
+    SvLBoxItem* pItem = &pEntry->GetItem(0);
     sal_uInt16 nNextItem = 1;
     nX -= GetMapMode().GetOrigin().X();
     long nRealWidth = pImp->GetOutputSize().Width();
@@ -3302,7 +3302,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
                 nNextTabPos += 50;
         }
 
-        Size aItemSize( rItem.GetSize(this, pEntry));
+        Size aItemSize( pItem->GetSize(this, pEntry));
         nStart += pTab->CalcOffset( aItemSize.Width(), nNextTabPos - nStart );
         long nLen = aItemSize.Width();
         if( pNextTab )
@@ -3317,7 +3317,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
 
         if( nX >= nStart && nX < (nStart+nLen ) )
         {
-            pItemClicked = &rItem;
+            pItemClicked = pItem;
             if( ppTab )
             {
                 *ppTab = pTab;
@@ -3327,7 +3327,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
         if( nNextItem >= nItemCount || nNextItem >= nTabCount)
             break;
         pTab = aTabs[ nNextItem ];
-        rItem = pEntry->GetItem( nNextItem );
+        pItem = &pEntry->GetItem( nNextItem );
         nNextItem++;
     }
     return pItemClicked;
