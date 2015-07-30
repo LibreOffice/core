@@ -108,10 +108,7 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
             return true;
 
         case CTRL_LISTBOX:
-            return (part == PART_ENTIRE_CONTROL
-                 || part == PART_SUB_EDIT
-                 || part == PART_WINDOW
-                 || part == PART_BUTTON_DOWN);
+            return (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE);
 
         case CTRL_SPINBOX:
             return (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE);
@@ -650,12 +647,6 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const OUString&,
                                              Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
-    bool nativeSupport = IsNativeControlSupported( type, part );
-    if( ! nativeSupport ) {
-        assert( ! nativeSupport && "drawNativeControl called without native support!" );
-        return false;
-    }
-
     bool retVal = false;
 
     QRect boundingRect = region2QRect( controlRegion );
@@ -753,6 +744,14 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                         int size = QApplication::style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
                         contentRect.adjust(-size,-size,size,size);
                     }
+                    else {
+                        int hmargin = QApplication::style()->pixelMetric(
+                                QStyle::PM_FocusFrameHMargin, &styleOption);
+                        int vmargin = QApplication::style()->pixelMetric(
+                                QStyle::PM_FocusFrameVMargin, &styleOption);
+                        boundingRect.translate( -hmargin, -vmargin );
+                        boundingRect.adjust( -hmargin, -vmargin, 2 * hmargin, 2 * vmargin );
+                    }
                     retVal = true;
                     break;
                 }
@@ -776,7 +775,6 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
                     contentRect.translate( boundingRect.left() + hmargin, boundingRect.top() + vmargin );
                     contentRect.adjust( 0, 0, -2 * hmargin, -2 * vmargin );
-                    boundingRect = contentRect;
 
                     retVal = true;
                     break;
