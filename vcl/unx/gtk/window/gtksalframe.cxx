@@ -1693,15 +1693,20 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
         for( nX = 0; nX < pBitmap->mnWidth; nX++ )
         {
             BitmapColor aColor;
-            if (pBitmap->mnBitCount == 24)
+            if (pBitmap->mnFormat == BMP_FORMAT_24BIT_TC_BGR)
             {
-                pBitmap->maColorMask.GetColorFor24Bit(aColor, pData);
-                pData+=3;
+                aColor = BitmapColor(pData[2], pData[1], pData[0]);
+                pData += 3;
+            }
+            else if (pBitmap->mnFormat == BMP_FORMAT_24BIT_TC_RGB)
+            {
+                aColor = BitmapColor(pData[0], pData[1], pData[2]);
+                pData += 3;
             }
             else
             {
                 pBitmap->maColorMask.GetColorFor32Bit(aColor, pData);
-                pData+=4;
+                pData += 4;
             }
             *pDestData++ = aColor.GetRed();
             *pDestData++ = aColor.GetGreen();
