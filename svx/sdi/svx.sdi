@@ -2698,6 +2698,24 @@ XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
     GroupId = GID_SPECIAL;
 ]
 
+XFillBitmapItem FillPageBitmap SID_ATTR_PAGE_BITMAP
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_SPECIAL;
+]
 
 XFillColorItem FillColor SID_ATTR_FILL_COLOR
 
@@ -2717,6 +2735,25 @@ XFillColorItem FillColor SID_ATTR_FILL_COLOR
     GroupId = GID_FORMAT;
 ]
 
+XFillColorItem FillPageColor SID_ATTR_PAGE_COLOR
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
 
 XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
 
@@ -2736,6 +2773,24 @@ XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
     GroupId = GID_FORMAT;
 ]
 
+XFillGradientItem FillPageGradient SID_ATTR_PAGE_GRADIENT
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
 
 XFillHatchItem FillHatch SID_ATTR_FILL_HATCH
 
@@ -2755,6 +2810,24 @@ XFillHatchItem FillHatch SID_ATTR_FILL_HATCH
     GroupId = GID_SPECIAL;
 ]
 
+XFillHatchItem FillPageHatch SID_ATTR_PAGE_HATCH
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_SPECIAL;
+]
 
 XFillStyleItem FillStyle SID_ATTR_FILL_STYLE
 
@@ -2768,6 +2841,25 @@ XFillStyleItem FillStyle SID_ATTR_FILL_STYLE
     RecordPerSet;
 
 
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+XFillStyleItem FillPageStyle SID_ATTR_PAGE_FILLSTYLE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
