@@ -45,7 +45,7 @@ namespace accessibility {
 AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
-    :   WeakComponentImplHelper4 (MutexOwner::maMutex),
+    :   WeakComponentImplHelper(MutexOwner::maMutex),
         mxStateSet (NULL),
         mxRelationSet (NULL),
         mxParent(rxParent),
@@ -488,7 +488,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
 
     // This class supports no interfaces on its own.  Just return those
     // supported by the base class.
-    return WeakComponentImplHelper4::getTypes();
+    return WeakComponentImplHelper::getTypes();
 }
 
 uno::Sequence<sal_Int8> SAL_CALL

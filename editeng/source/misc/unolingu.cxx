@@ -37,7 +37,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -72,7 +72,7 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when "real" work needs to be done only.
 class ThesDummy_Impl :
-    public cppu::WeakImplHelper1< XThesaurus >
+    public cppu::WeakImplHelper< XThesaurus >
 {
     uno::Reference< XThesaurus >     xThes;      // the real one...
     Sequence< lang::Locale >         *pLocaleSeq;
@@ -204,7 +204,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when it needs to be done only.
 class SpellDummy_Impl :
-    public cppu::WeakImplHelper1< XSpellChecker1 >
+    public cppu::WeakImplHelper< XSpellChecker1 >
 {
     uno::Reference< XSpellChecker1 >     xSpell;      // the real one...
 
@@ -301,7 +301,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when it needs to be done only.
 class HyphDummy_Impl :
-    public cppu::WeakImplHelper1< XHyphenator >
+    public cppu::WeakImplHelper< XHyphenator >
 {
     uno::Reference< XHyphenator >     xHyph;      // the real one...
 
@@ -429,7 +429,7 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
     return xRes;
 }
 
-class LinguMgrExitLstnr : public cppu::WeakImplHelper1<XEventListener>
+class LinguMgrExitLstnr : public cppu::WeakImplHelper<XEventListener>
 {
     uno::Reference< XDesktop2 >        xDesktop;
 

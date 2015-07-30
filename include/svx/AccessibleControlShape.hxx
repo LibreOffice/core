@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {

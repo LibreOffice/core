@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <editeng/editengdllapi.h>
 
 
@@ -52,7 +52,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
     :   public MutexOwner,
-        public cppu::WeakComponentImplHelper4<
+        public cppu::WeakComponentImplHelper<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleEventBroadcaster,

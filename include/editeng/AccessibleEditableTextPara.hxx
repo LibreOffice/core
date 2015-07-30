@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -46,7 +46,7 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
