@@ -24,12 +24,12 @@
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <rtl/ref.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <editeng/editengdllapi.h>
 
 class SvxForbiddenCharactersTable;
 
-class EDITENG_DLLPUBLIC SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper2<
+class EDITENG_DLLPUBLIC SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper<
                                         com::sun::star::i18n::XForbiddenCharacters,
                                         com::sun::star::linguistic2::XSupportedLocales>
 {

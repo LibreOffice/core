@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_SOURCE_ACCESSIBILITY_ACCESSIBLEHYPERLINK_HXX
 
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -35,7 +35,7 @@ class SvxAccessibleTextAdapter;
 namespace accessibility
 {
 
-    class AccessibleHyperlink : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleHyperlink >
+    class AccessibleHyperlink : public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleHyperlink >
     {
     private:
 

@@ -22,7 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -36,7 +36,7 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakImplHelper5< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
