@@ -982,7 +982,10 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pEdLeadZeroes->Enable();
             m_pBtnNegRed->Enable();
             m_pBtnThousand->Enable();
-            m_pEdDecimals->SetText( OUString::number( nDecimals ) );
+            if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectEntryPos() == 0 )
+                m_pEdDecimals->SetText( "" ); //General format tdf#44399
+            else
+                m_pEdDecimals->SetText( OUString::number( nDecimals ) );
             m_pEdLeadZeroes->SetText( OUString::number( nZeroes ) );
             m_pBtnNegRed->Check( bNegRed );
             m_pBtnThousand->Check( bThousand );
@@ -1569,6 +1572,10 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
         sal_uInt16        nLeadZeroes   = (m_pEdLeadZeroes->IsEnabled())
                                         ? (sal_uInt16)m_pEdLeadZeroes->GetValue()
                                         : (sal_uInt16)0;
+        if ( pNumFmtShell->GetStandardName() == m_pEdFormat->GetText() )
+        {
+            m_pEdDecimals->SetValue( nPrecision );
+        }
 
         pNumFmtShell->MakeFormat( aFormat,
                                   bThousand, bNegRed,
