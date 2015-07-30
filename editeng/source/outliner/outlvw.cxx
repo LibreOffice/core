@@ -675,8 +675,13 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
 void OutlinerView::Cut()
 {
-    if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) )
+    if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) ) {
         pEditView->Cut();
+
+        // Chaining handling
+        if (aEndPasteLink.IsSet())
+            aEndPasteLink.Call(NULL);
+    }
 }
 
 void OutlinerView::Paste()
