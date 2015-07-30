@@ -417,6 +417,21 @@ bool GtkInstance::IsTimerExpired()
     return false;
 }
 
+namespace {
+
+void handleEvents(std::stack<GdkEvent*>& rEvents)
+{
+    while (!rEvents.empty())
+    {
+        GdkEvent* pEvent = rEvents.top();
+        gdk_event_put(pEvent);
+        gdk_event_free(pEvent);
+        rEvents.pop();
+    }
+}
+
+}
+
 bool GtkInstance::AnyInput( VclInputFlags nType )
 {
     EnsureInit();
@@ -440,18 +455,13 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
         VclInputFlags nEventType = categorizeEvent(pEvent);
         if ( (nEventType & nType) || ( nEventType == VclInputFlags::NONE && (nType & VclInputFlags::OTHER) ) )
         {
+            handleEvents(aEvents);
             bRet = true;
             break;
         }
     }
 
-    while (!aEvents.empty())
-    {
-        pEvent = aEvents.top();
-        gdk_event_put(pEvent);
-        gdk_event_free(pEvent);
-        aEvents.pop();
-    }
+    handleEvents(aEvents);
 #endif
     return bRet;
 }
