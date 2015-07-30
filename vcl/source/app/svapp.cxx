@@ -772,66 +772,6 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
     return nEventId;
 }
 
-#if !HAVE_FEATURE_DESKTOP
-
-ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, vcl::Window *pWin, ZoomEvent* pZoomEvent )
-{
-    const SolarMutexGuard aGuard;
-    ImplSVEvent * nEventId = 0;
-
-    if( pWin && pZoomEvent )
-    {
-        Point aTransformedPos( pZoomEvent->GetCenter() );
-
-        aTransformedPos.X() += pWin->GetOutOffXPixel();
-        aTransformedPos.Y() += pWin->GetOutOffYPixel();
-
-        const ZoomEvent aTransformedEvent( aTransformedPos, pZoomEvent->GetScale() );
-
-        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
-
-        nEventId = PostUserEvent(
-                       LINK( NULL, Application, PostEventHandler ),
-                       pPostEventData );
-
-        if( nEventId )
-        {
-            pPostEventData->mnEventId = nEventId;
-            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
-        }
-        else
-            delete pPostEventData;
-    }
-
-    return nEventId;
-}
-
-ImplSVEvent * Application::PostScrollEvent( sal_uLong nEvent, vcl::Window *pWin, ScrollEvent* pScrollEvent )
-{
-    const SolarMutexGuard aGuard;
-    ImplSVEvent * nEventId = 0;
-
-    if( pWin && pScrollEvent )
-    {
-        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pScrollEvent );
-
-        nEventId = PostUserEvent(
-                       LINK( NULL, Application, PostEventHandler ),
-                       pPostEventData );
-
-        if( nEventId )
-        {
-            pPostEventData->mnEventId = nEventId;
-            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
-        }
-        else
-            delete pPostEventData;
-    }
-
-    return nEventId;
-}
-
-#endif // !HAVE_FEATURE_DESKTOP
 
 IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
 {
