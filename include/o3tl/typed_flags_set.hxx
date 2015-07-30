@@ -70,7 +70,10 @@ struct is_typed_flags {
     public:
         explicit Wrap(typename std::underlying_type<E>::type value):
             value_(value)
-        { assert(detail::isNonNegative(value)); }
+        {
+            assert(detail::isNonNegative(value));
+            assert((value & ~M) == 0);
+        }
 
         operator E() { return static_cast<E>(value_); }
 

@@ -82,7 +82,7 @@ enum class FrmTypeFlags {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FrmTypeFlags> : is_typed_flags<FrmTypeFlags, 0x4fff> {};
+    template<> struct typed_flags<FrmTypeFlags> : is_typed_flags<FrmTypeFlags, 0x7fff> {};
 }
 
 //! values can be combined via logical or

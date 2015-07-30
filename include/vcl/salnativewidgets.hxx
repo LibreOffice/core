@@ -240,20 +240,20 @@ typedef sal_uInt32      ControlPart;
  *   in the ControlState.
  */
 enum class ControlState {
-    NONE         = 0,
-    ENABLED      = 0x0001,
-    FOCUSED      = 0x0002,
-    PRESSED      = 0x0004,
-    ROLLOVER     = 0x0008,
-    HIDDEN       = 0x0010,
-    DEFAULT      = 0x0020,
-    SELECTED     = 0x0040,
+    NONE            = 0,
+    ENABLED         = 0x0001,
+    FOCUSED         = 0x0002,
+    PRESSED         = 0x0004,
+    ROLLOVER        = 0x0008,
+    HIDDEN          = 0x0010,
+    DEFAULT         = 0x0020,
+    SELECTED        = 0x0040,
     DOUBLEBUFFERING = 0x4000,  ///< Set when the control is painted using double-buffering via VirtualDevice.
     CACHING_ALLOWED = 0x8000,  ///< Set when the control is completely visible (i.e. not clipped).
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc007f> {};
+    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc07f> {};
 }
 
 class ControlCacheKey
