@@ -180,6 +180,7 @@ struct ImplFrameData
 
     bool                mbInternalDragGestureRecognizer;
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
+    bool mbInBufferedPaint; ///< PaintHelper is in the process of painting into this buffer.
 };
 
 struct ImplAccessibleInfos

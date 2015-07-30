@@ -1074,6 +1074,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
+        if (!(nStyle & WB_DEFAULTWIN) && SupportsDoubleBuffering())
+            mpWindowImpl->mpFrameData->mpBuffer = VclPtrInstance<VirtualDevice>();
+        mpWindowImpl->mpFrameData->mbInBufferedPaint = false;
 
         if ( pRealParent && IsTopWindow() )
         {
