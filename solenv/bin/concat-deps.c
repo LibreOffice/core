@@ -1174,10 +1174,13 @@ const char *env_str;
 #endif
     }
 #if !ENABLE_RUNTIME_OPTIMIZATIONS
-    hash_destroy(dep_hash);
-    for (size_t i = 0; i != file_load_buffer_count; ++i)
     {
-        free(file_load_buffers[i]);
+        size_t i;
+        hash_destroy(dep_hash);
+        for (i = 0; i != file_load_buffer_count; ++i)
+        {
+            free(file_load_buffers[i]);
+        }
     }
 #endif
     return rc;
