@@ -70,6 +70,8 @@
 #include "com/sun/star/text/XTextField.hpp"
 #include "com/sun/star/text/TextMarkupType.hpp"
 #include <osl/file.hxx>
+#include <paratr.hxx>
+#include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -118,6 +120,7 @@ public:
     void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
+    void testTdf79236();
     void testTextSearch();
     void testTdf69282();
     void testTdf69282WithMirror();
@@ -181,6 +184,7 @@ public:
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTdf79236);
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
@@ -1174,6 +1178,64 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTdf79236()
+{
+    SwDoc* pDoc = createDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    //Getting some paragraph style
+    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    const SwAttrSet& attrSet = pTextFormat->GetAttrSet();
+    SfxItemSet* itemSet = attrSet.Clone();
+    sal_uInt16 initialCount = itemSet->Count();
+    SvxAdjustItem AdjustItem = attrSet.GetAdjust(true);
+    SvxAdjust initialAdjust = AdjustItem.GetAdjust();
+    //By default the adjust is LEFT
+    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, initialAdjust);
+    //Changing the adjust to RIGHT
+    AdjustItem.SetAdjust(SVX_ADJUST_RIGHT);
+    //Checking whether the change is made or not
+    SvxAdjust modifiedAdjust = AdjustItem.GetAdjust();
+    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, modifiedAdjust);
+    //Modifying the itemset, putting *one* item
+    itemSet->Put(AdjustItem);
+    //The count should increment by 1
+    sal_uInt16 modifiedCount = itemSet->Count();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(initialCount + 1), modifiedCount);
+    //Setting the updated item set on the style
+    pDoc->ChgFormat(*pTextFormat, *itemSet);
+    //Checking the Changes
+    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    const SwAttrSet& attrSet2 = pTextFormat2->GetAttrSet();
+    const SvxAdjustItem& AdjustItem2 = attrSet2.GetAdjust(true);
+    SvxAdjust Adjust2 = AdjustItem2.GetAdjust();
+    //The adjust should be RIGHT as per the modifications made
+    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust2);
+    //Undo the changes
+    rUndoManager.Undo();
+    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    const SwAttrSet& attrSet3 = pTextFormat3->GetAttrSet();
+    const SvxAdjustItem& AdjustItem3 = attrSet3.GetAdjust(true);
+    SvxAdjust Adjust3 = AdjustItem3.GetAdjust();
+    //The adjust should be back to default, LEFT
+    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust3);
+    //Redo the changes
+    rUndoManager.Redo();
+    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    const SwAttrSet& attrSet4 = pTextFormat4->GetAttrSet();
+    const SvxAdjustItem& AdjustItem4 = attrSet4.GetAdjust(true);
+    SvxAdjust Adjust4 = AdjustItem4.GetAdjust();
+    //The adjust should be RIGHT as per the modifications made
+    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust4);
+    //Undo the changes
+    rUndoManager.Undo();
+    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    const SwAttrSet& attrSet5 = pTextFormat5->GetAttrSet();
+    const SvxAdjustItem& AdjustItem5 = attrSet5.GetAdjust(true);
+    SvxAdjust Adjust5 = AdjustItem5.GetAdjust();
+    //The adjust should be back to default, LEFT
+    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust5);
 }
 
 void SwUiWriterTest::testTextSearch()
