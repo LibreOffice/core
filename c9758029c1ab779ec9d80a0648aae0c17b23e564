@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_ca4b87af",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T17:35:13Z",
+      "side": 1,
+      "message": "Nit: not needed blank.",
+      "range": {
+        "startLine": 241,
+        "startChar": 21,
+        "endLine": 241,
+        "endChar": 22
+      },
+      "revId": "c9758029c1ab779ec9d80a0648aae0c17b23e564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_6ac7f312",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T17:35:13Z",
+      "side": 1,
+      "message": "Nit: Consistently use std without \"::\" prefix in ::std?",
+      "range": {
+        "startLine": 241,
+        "startChar": 23,
+        "endLine": 241,
+        "endChar": 25
+      },
+      "revId": "c9758029c1ab779ec9d80a0648aae0c17b23e564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
