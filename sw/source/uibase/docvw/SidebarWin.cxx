@@ -702,8 +702,9 @@ void SwSidebarWin::SetPosAndSize()
                 mpTextRangeOverlay->HideSolidBorder();
             }
         }
-        else
+        else if (!IsFollow())
         {
+            // This window is not a reply, then draw its range overlay.
             mpTextRangeOverlay =
                 sw::overlay::OverlayRanges::CreateOverlayRange(
                     DocView(),
