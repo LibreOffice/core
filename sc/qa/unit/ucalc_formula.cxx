@@ -4081,14 +4081,11 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
     {
         pDoc->SetString(1, i, 0, OUString::createFromAscii(aChecks[i].pVal));
 
-        OUStringBuffer aBuf;
-        aBuf.appendAscii("=MATCH(B");
-        aBuf.append(static_cast<sal_Int32>(i+1));
-        aBuf.appendAscii(";A1:A");
-        aBuf.append(static_cast<sal_Int32>(nDataSize));
-        aBuf.appendAscii(";");
-        aBuf.append(static_cast<sal_Int32>(_Type));
-        aBuf.appendAscii(")");
+        OUStringBuffer aBuf(
+            "=MATCH(B"+static_cast<sal_Int32>(i+1));
+            +";A1:A"+static_cast<sal_Int32>(nDataSize)
+            +";"+static_cast<sal_Int32>(_Type)+")"
+        );
         OUString aFormula = aBuf.makeStringAndClear();
         pDoc->SetString(2, i, 0, aFormula);
     }
@@ -4121,14 +4118,7 @@ void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrS
         pDoc->SetString(i, 1, 0, OUString::createFromAscii(aChecks[i].pVal));
 
         // Assume we don't have more than 26 data columns..
-        OUStringBuffer aBuf;
-        aBuf.appendAscii("=MATCH(");
-        aBuf.append(static_cast<sal_Unicode>('A'+i));
-        aBuf.appendAscii("2;A1:");
-        aBuf.append(static_cast<sal_Unicode>('A'+nDataSize));
-        aBuf.appendAscii("1;");
-        aBuf.append(static_cast<sal_Int32>(_Type));
-        aBuf.appendAscii(")");
+        OUStringBuffer aBuf("=MATCH("+static_cast<sal_Unicode>('A'+i)+"2;A1:"+static_cast<sal_Unicode>('A'+nDataSize)+"1;"+static_cast<sal_Int32>(_Type)+")");
         OUString aFormula = aBuf.makeStringAndClear();
         pDoc->SetString(i, 2, 0, aFormula);
     }

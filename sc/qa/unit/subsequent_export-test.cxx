@@ -1406,20 +1406,11 @@ void ScExportTest::testCellBordersXLSX()
 
 OUString toString( const ScBigRange& rRange )
 {
-    OUStringBuffer aBuf;
-    aBuf.appendAscii("(columns:");
-    aBuf.append(rRange.aStart.Col());
-    aBuf.append('-');
-    aBuf.append(rRange.aEnd.Col());
-    aBuf.appendAscii(";rows:");
-    aBuf.append(rRange.aStart.Row());
-    aBuf.append('-');
-    aBuf.append(rRange.aEnd.Row());
-    aBuf.appendAscii(";sheets:");
-    aBuf.append(rRange.aStart.Tab());
-    aBuf.append('-');
-    aBuf.append(rRange.aEnd.Tab());
-    aBuf.append(')');
+    OUStringBuffer aBuf(
+        "(columns:"+rRange.aStart.Col()+'-'+rRange.aEnd.Col()
+        +";rows:"+rRange.aStart.Row()+'-'rRange.aEnd.Row()
+        +";sheets:"+rRange.aStart.Tab()+'-'+rRange.aEnd.Tab()')'
+    );
 
     return aBuf.makeStringAndClear();
 }

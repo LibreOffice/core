@@ -619,16 +619,12 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         {
             for(SCROW nRow = 0; nRow < 2; ++nRow)
             {
-                OUStringBuffer aIsErrorFormula("=ISERROR(");
-                aIsErrorFormula.append((char)('A'+nCol)).append(OUString::number(nRow));
-                aIsErrorFormula.append(")");
+                OUStringBuffer aIsErrorFormula("=ISERROR("+(char)('A'+nCol)+OUString::number(nRow)+")");
                 OUString aFormula = aIsErrorFormula.makeStringAndClear();
                 rDoc.SetString(nCol, nRow + 2, 2, aFormula);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), rDoc.GetString(nCol, nRow +2, 2), OUString("TRUE"));
 
-                OUStringBuffer aIsTextFormula("=ISTEXT(");
-                aIsTextFormula.append((char)('A'+nCol)).append(OUString::number(nRow));
-                aIsTextFormula.append(")");
+                OUStringBuffer aIsTextFormula("=ISTEXT("+(char)('A'+nCol)+OUString::number(nRow)+")");
                 rDoc.SetString(nCol, nRow + 4, 2, aIsTextFormula.makeStringAndClear());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("", rDoc.GetString(nCol, nRow +4, 2), OUString("FALSE"));
             }
@@ -1181,8 +1177,7 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     sal_Int32 nCol( static_cast<sal_Int32>(rVDTParams.aPosition.Col()) );
     sal_Int32 nRow( static_cast<sal_Int32>(rVDTParams.aPosition.Row()) );
     sal_Int32 nTab( static_cast<sal_Int32>(rVDTParams.aPosition.Tab()) );
-    OStringBuffer sMsg("Data Validation Entry with base-cell-address: (");
-    sMsg.append(nCol).append(",").append(nRow).append(",").append(nTab).append(") ");
+    OStringBuffer sMsg("Data Validation Entry with base-cell-address: ("+nCol+","+nRow+","+nTab+") ");
     OString aMsgPrefix = sMsg.makeStringAndClear();
 
     OString aMsg = aMsgPrefix + "did not get imported at all.";
@@ -1219,11 +1214,12 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
                 sal_Int32 nCol = static_cast<const sal_Int32>(i);
                 sal_Int32 nRow = static_cast<const sal_Int32>(j);
                 sal_Int32 nTab32 = static_cast<const sal_Int32>(nTab);
-                OStringBuffer sMsg("\nData validation entry base-cell-address: (");
-                sMsg.append( static_cast<const sal_Int32>(nBCol) ).append(",");
-                sMsg.append( static_cast<const sal_Int32>(nBRow) ).append(",");
-                sMsg.append( nTab32 ).append(")\n");
-                sMsg.append("Cell: (").append(nCol).append(",").append(nRow).append(",").append(nTab32).append(")");
+                sal_Int32 nnBCol = static_cast<const sal_Int32>(nBCol);
+                sal_Int32 nnBRow = static_cast<const sal_Int32>(nBRow);
+                OStringBuffer sMsg(
+                    "\nData validation entry base-cell-address: ("+nnBCol+","+nnBRow+","+nTab32+")\n"
+                    +"Cell: ("+nCol+","+nRow+","+nTab32+")"
+                );
                 sal_uInt32 expectedKey(pValData->GetKey());
                 sal_uInt32 actualKey(0);
                 if(pValDataTest)
