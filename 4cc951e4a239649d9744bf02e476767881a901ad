@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_2ab01bdd",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-07-30T11:23:37Z",
+      "side": 1,
+      "message": "No there is no need for it here, but I normally include what I think the lambda will return for documentation purposes.",
+      "parentUuid": "1a54edaf_6ad05354",
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_8ad58f44",
         "filename": "canvas/source/factory/cf_service.cxx",
         "patchSetId": 1
@@ -128,6 +146,24 @@
         "endLine": 346,
         "endChar": 25
       },
+      "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_4ab557cb",
+        "filename": "canvas/source/factory/cf_service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-07-30T11:23:37Z",
+      "side": 1,
+      "message": "Good catch! I\u0027ll switch it.",
+      "parentUuid": "1a54edaf_4acf97b0",
       "revId": "4cc951e4a239649d9744bf02e476767881a901ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
