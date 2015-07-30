@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_ea268315",
+        "filename": "sc/qa/unit/helper/csv_handler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-30T13:13:10Z",
+      "side": 1,
+      "message": "if you\u0027re going to do that, you might as well dispense with the OStringBuffer and just directly return an OString",
+      "revId": "7c455f1084eec9e5967798dd066602289cdf8904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
