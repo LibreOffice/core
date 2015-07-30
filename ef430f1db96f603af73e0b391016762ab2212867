@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_6a05b3c0",
+        "filename": "external/boost/boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T06:27:30Z",
+      "side": 1,
+      "message": "Added the description and the error mesage in this patch file nevertheless.",
+      "parentUuid": "1a54edaf_8a634fb1",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_e7e79e10",
         "filename": "external/boost/boost_1_59_0.multi_array.wshadow.patch",
         "patchSetId": 11
@@ -184,6 +202,24 @@
       "side": 1,
       "message": "Apparently i erroneously assumed, that the mention \"fixed upstream\" comment wa valid and discarded this patch. Later however I got similar warning, but failed to link them to your original patch. Given that i opened new issue and linked to this new path, I would prefer to let it as is.",
       "parentUuid": "1a54edaf_e7e79e10",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ca69478d",
+        "filename": "external/boost/boost_1_59_0.multi_array.wshadow.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T06:27:30Z",
+      "side": 1,
+      "message": "Let it as is, though.",
+      "parentUuid": "1a54edaf_67b64ede",
       "revId": "ef430f1db96f603af73e0b391016762ab2212867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -278,6 +314,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_aa6c0b9d",
+        "filename": "external/boost/boost_1_59_0.property_tree.wtype-limits.patch",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T06:27:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_270cd693",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_07e51a08",
         "filename": "sw/Library_swui.mk",
         "patchSetId": 11
@@ -325,6 +379,24 @@
       "side": 1,
       "message": "yes that would also be better than the current patch.",
       "parentUuid": "1a54edaf_87bb4ac4",
+      "revId": "ef430f1db96f603af73e0b391016762ab2212867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_0a70bf71",
+        "filename": "sw/Library_swui.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-30T06:27:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_4711d2ab",
       "revId": "ef430f1db96f603af73e0b391016762ab2212867",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
