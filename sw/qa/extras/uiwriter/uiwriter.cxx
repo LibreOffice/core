@@ -2051,6 +2051,7 @@ void SwUiWriterTest::testDde()
 
 void SwUiWriterTest::testTdf89954()
 {
+#ifndef MACOSX
     SwDoc* pDoc = createDoc("tdf89954.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara();
@@ -2066,6 +2067,7 @@ void SwUiWriterTest::testTdf89954()
     // As a result, autocorrect did not turn the 't' input into 'T'.
     OUString aExpected("Tes\xef\xbf\xb9t. Test.", 14, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aNodeIndex.GetNode().GetTextNode()->GetText());
+#endif
 }
 
 void SwUiWriterTest::testTdf89720()
