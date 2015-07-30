@@ -138,7 +138,7 @@ static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
         nType = VclInputFlags::MOUSE;
         break;
     case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
+    // case GDK_KEY_RELEASE: //similar to the X11SalInstance one
         nType = VclInputFlags::KEYBOARD;
         break;
     case GDK_EXPOSE:
