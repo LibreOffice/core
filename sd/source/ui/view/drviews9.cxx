@@ -221,6 +221,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLSTYLE);
                         pAttr->Put (XFillStyleItem ((drawing::FillStyle) pFillStyle->GetValue ()), XATTR_FILLSTYLE);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                     }
 #if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
@@ -286,7 +287,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                 XATTR_FILLCOLOR);
                     pAttr->Put (XFillStyleItem (drawing::FillStyle_SOLID), XATTR_FILLSTYLE);
                     rBindings.Invalidate (SID_ATTR_FILL_COLOR);
+                    rBindings.Invalidate (SID_ATTR_PAGE_COLOR);
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                     break;
                 }
 #if HAVE_FEATURE_SCRIPTING
@@ -369,7 +372,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     }
 
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                     rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                    rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
                     break;
                 }
 #if HAVE_FEATURE_SCRIPTING
@@ -423,7 +428,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     }
 
                     rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                    rBindings.Invalidate (SID_ATTR_PAGE_HATCH);
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                     break;
                 }
 #if HAVE_FEATURE_SCRIPTING
@@ -546,7 +553,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         }
 
                         rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                        rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                     }
 #if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
@@ -643,7 +652,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put (XFillGradientItem (pName->GetValue (), pEntry->GetGradient ()), XATTR_FILLGRADIENT);
 
                             rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                            rBindings.Invalidate (SID_ATTR_PAGE_GRADIENT);
                             rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                            rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                             break;
                         }
                     }
@@ -678,7 +689,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put (XFillHatchItem (pName->GetValue (), pEntry->GetHatch ()), XATTR_FILLHATCH);
 
                             rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                            rBindings.Invalidate (SID_ATTR_PAGE_HATCH);
                             rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                            rBindings.Invalidate (SID_ATTR_PAGE_FILLSTYLE);
                             break;
                         }
                     }

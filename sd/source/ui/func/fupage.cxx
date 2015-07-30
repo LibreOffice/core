@@ -42,7 +42,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/sdr/properties/properties.hxx>
-
+#include <sfx2/bindings.hxx>
 #include "glob.hrc"
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
@@ -148,6 +148,15 @@ void FuPage::DoExecute( SfxRequest& )
         // if we now have arguments, apply them to current page
         if( mpArgs )
             ApplyItemSet( mpArgs );
+
+        static sal_uInt16 SidArray[] = {
+                        SID_ATTR_PAGE_COLOR,
+                        SID_ATTR_PAGE_GRADIENT,
+                        SID_ATTR_PAGE_HATCH,
+                        SID_ATTR_PAGE_BITMAP,
+                        SID_ATTR_PAGE_FILLSTYLE,
+                        0 };
+        mpDrawViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
 }
 
@@ -213,6 +222,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                         SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER,
                         SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW,
                         XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                        SID_ATTR_PAGE_COLOR,SID_ATTR_PAGE_FILLSTYLE,
                         EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                         0);
 
@@ -324,6 +334,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             }
         }
     }
+
     else
     {
         // create the dialog
