@@ -1,6 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * This file is part of the LibreOffice project.
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */ /* * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -38,7 +36,6 @@
 #include <boost/bind.hpp>
 #include <vector>
 #include <utility>
-#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 
@@ -56,8 +53,8 @@ class CanvasFactory
 {
     typedef std::pair<OUString,Sequence<OUString> > AvailPair;
     typedef std::pair<OUString,OUString>            CachePair;
-    typedef std::vector< AvailPair >                AvailVector;
-    typedef std::vector< CachePair >                CacheVector;
+    typedef std::vector<AvailPair> AvailVector;
+    typedef std::vector<std::pair<OUString, OUString> >          CacheVector;
 
 
     mutable ::osl::Mutex              m_mutex;
@@ -242,7 +239,9 @@ Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     std::transform(m_aAvailableImplementations.begin(),
                    m_aAvailableImplementations.end(),
                    aServiceNames.getArray(),
-                   o3tl::select1st<AvailPair>());
+                   [] (::std::pair<OUString, Sequence<OUString> >& ap) -> OUString
+                   { return ap.first; }
+            );
     return aServiceNames;
 }
 
@@ -325,14 +324,12 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
     CacheVector::iterator aMatch;
-    if( (aMatch=std::find_if(m_aCachedImplementations.begin(),
-                             aEnd,
-                             boost::bind(&OUString::equals,
-                                         boost::cref(serviceName),
-                                         boost::bind(
-                                             o3tl::select1st<CachePair>(),
-                                             _1)))) != aEnd )
-    {
+    if( (aMatch=std::find_if(
+                    m_aCachedImplementations.begin(),
+                    aEnd,
+                    [&serviceName](::std::pair<OUString, OUString>& cp) -> bool
+                    { return serviceName.equals(cp.first); }
+                    )) != aEnd) {
         Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
         if(xCanvas.is())
             return xCanvas;
@@ -341,40 +338,34 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     // lookup in available service list
     const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
     AvailVector::const_iterator aAvailImplsMatch;
-    if( (aAvailImplsMatch=std::find_if(m_aAvailableImplementations.begin(),
-                                       aAvailEnd,
-                                       boost::bind(&OUString::equals,
-                                                   boost::cref(serviceName),
-                                                   boost::bind(
-                                                       o3tl::select1st<AvailPair>(),
-                                                       _1)))) == aAvailEnd )
-    {
+    if( (aAvailImplsMatch=std::find_if(
+                    m_aAvailableImplementations.begin(),
+                    aAvailEnd,
+                    [&serviceName](::std::pair<OUString, Sequence<OUString> > ap) -> bool
+                    { return serviceName.equals(ap.first); }
+                    )) != aAvailEnd ) {
         return Reference<XInterface>();
     }
 
     const AvailVector::const_iterator aAAEnd(m_aAAImplementations.end());
     AvailVector::const_iterator aAAImplsMatch;
-    if( (aAAImplsMatch=std::find_if(m_aAAImplementations.begin(),
-                                    aAAEnd,
-                                    boost::bind(&OUString::equals,
-                                                boost::cref(serviceName),
-                                                boost::bind(
-                                                    o3tl::select1st<AvailPair>(),
-                                                    _1)))) == aAAEnd )
-    {
+    if( (aAAImplsMatch=std::find_if(
+                    m_aAAImplementations.begin(),
+                    aAAEnd,
+                    [&serviceName](::std::pair<OUString, Sequence<OUString> > ap) -> bool
+                    { return serviceName.equals(ap.first); }
+                    )) != aAAEnd) {
         return Reference<XInterface>();
     }
 
     const AvailVector::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
     AvailVector::const_iterator aAccelImplsMatch;
-    if( (aAccelImplsMatch=std::find_if(m_aAcceleratedImplementations.begin(),
-                                       aAccelEnd,
-                                       boost::bind(&OUString::equals,
-                                                   boost::cref(serviceName),
-                                                   boost::bind(
-                                                       o3tl::select1st<AvailPair>(),
-                                                       _1)))) == aAccelEnd )
-    {
+    if( (aAccelImplsMatch=std::find_if(
+                    m_aAcceleratedImplementations.begin(),
+                    aAccelEnd,
+                    [&serviceName](::std::pair<OUString, Sequence<OUString> > ap) -> bool
+                    { return serviceName.equals(ap.first); }
+                    )) != aAccelEnd ) {
         return Reference<XInterface>();
     }
 
