@@ -20,7 +20,8 @@
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERSTYLEPOPUP_HXX
 
 #include <svx/sidebar/Popup.hxx>
-#include <boost/function.hpp>
+
+#include <functional>
 
 namespace sc { namespace sidebar {
 
@@ -29,7 +30,7 @@ class CellBorderStylePopup : public svx::sidebar::Popup
 public:
     CellBorderStylePopup(
         vcl::Window* pParent,
-        const ::boost::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
+        const ::std::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
     virtual ~CellBorderStylePopup();
 };
 
