@@ -114,6 +114,8 @@ using namespace ::com::sun::star;
 #include <table.hrc>
 #include <frmui.hrc>
 #include <unomid.h>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 #include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
@@ -578,11 +580,16 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
                 FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
                 SID_HTML_MODE,          SID_HTML_MODE,
+                SID_COLOR_TABLE,        SID_BITMAP_LIST,
                 0
             };
 
             SfxItemSet aSet(GetPool(), aFrmAttrRange );
             aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+
+            // For the Area tab page.
+            GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
+
             const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
             SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
             aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));

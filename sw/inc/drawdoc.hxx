@@ -35,6 +35,8 @@ public:
 
     const SwDoc& GetDoc() const { return *m_pDoc; }
           SwDoc& GetDoc()       { return *m_pDoc; }
+    /// Put needed items for XPropertyList entries from the DrawModel.
+    void PutAreaListItems(SfxItemSet& rSet) const;
 
     virtual SdrPage* AllocPage(bool bMasterPage) SAL_OVERRIDE;
 

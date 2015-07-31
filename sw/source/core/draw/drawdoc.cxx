@@ -145,4 +145,12 @@ uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
     return xModel;
 }
 
+void SwDrawModel::PutAreaListItems(SfxItemSet& rSet) const
+{
+    rSet.Put(SvxColorListItem(GetColorList(), SID_COLOR_TABLE));
+    rSet.Put(SvxGradientListItem(GetGradientList(), SID_GRADIENT_LIST));
+    rSet.Put(SvxHatchListItem(GetHatchList(), SID_HATCH_LIST));
+    rSet.Put(SvxBitmapListItem(GetBitmapList(), SID_BITMAP_LIST));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
