@@ -789,10 +789,10 @@ sal_uLong OS2METReader::ReadLittleEndian3BytesLong()
 
 long OS2METReader::ReadCoord(bool b32)
 {
-    sal_Int32 l;
+    sal_Int32 l(0);
 
     if (b32) pOS2MET->ReadInt32( l );
-    else  { short s;pOS2MET->ReadInt16( s ); l=(sal_Int32)s; }
+    else { short s(0); pOS2MET->ReadInt16( s ); l = static_cast<sal_Int32>(s); }
     return l;
 }
 
