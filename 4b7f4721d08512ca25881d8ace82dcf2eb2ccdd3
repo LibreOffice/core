@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_0dcf7957",
+        "filename": "sd/uiconfig/simpress/ui/customanimationspanel.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-31T16:50:51Z",
+      "side": 1,
+      "message": "Is this oversight or on purpose? The box used to be aligned left ...",
+      "revId": "4b7f4721d08512ca25881d8ace82dcf2eb2ccdd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
