@@ -262,6 +262,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString >
         SAL_CALL generateLabel(::com::sun::star::chart2::data::LabelOrigin nOrigin)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    /** Get the number format key for the n-th data entry
+     * If nIndex == -1, then you will get the number format key for the first non-empty entry
+     */
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException,
@@ -416,6 +420,7 @@ private:
         double              mfValue;
         OUString     maString;
         bool                mbIsValue;
+        ScAddress   mAddress;
         Item();
     };
 
@@ -431,7 +436,8 @@ private:
         ScChart2DataSequence& mrParent;
     };
 
-    ::std::list<Item>           m_aDataArray;
+    /** This vector contains the cached data which was calculated with BuildDataCache(). */
+    std::vector<Item>           m_aDataArray;
 
     /**
      * Cached data for getData.  We may also need to cache data for the
