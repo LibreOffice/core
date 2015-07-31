@@ -825,15 +825,20 @@ bool VCartesianAxis::createTextShapes(
                 bool bOverlapsAfterAutoStagger = true;
                 if( !bIsStaggered && isAutoStaggeringOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
                 {
-                    bIsStaggered = true;
-                    rAxisLabelProperties.eStaggering = STAGGER_EVEN;
-                    pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
-                    if( !pLastVisibleNeighbourTickInfo ||
-                        !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
-                            , rAxisLabelProperties.fRotationAngleDegree
-                            , pTickInfo->aTickScreenPosition
-                            , bIsHorizontalAxis, bIsVerticalAxis ) )
-                        bOverlapsAfterAutoStagger = false;
+                    // Compatibility option: starting from LibreOffice 5.1 the rotated
+                    // layout is preferred to staggering for axis labels.
+                    if( m_aAxisProperties.m_bTryStaggeringFirst || !(::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) ) )
+                    {
+                        bIsStaggered = true;
+                        rAxisLabelProperties.eStaggering = STAGGER_EVEN;
+                        pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
+                        if( !pLastVisibleNeighbourTickInfo ||
+                            !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
+                                , rAxisLabelProperties.fRotationAngleDegree
+                                , pTickInfo->aTickScreenPosition
+                                , bIsHorizontalAxis, bIsVerticalAxis ) )
+                            bOverlapsAfterAutoStagger = false;
+                    }
                 }
 
                 if (bOverlapsAfterAutoStagger)

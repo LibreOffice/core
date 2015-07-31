@@ -52,6 +52,7 @@ public:
     void testODPChartSeries();
     void testBnc864396();
     void testBnc882383();
+    void testBnc889755();
     void testSimpleStrictXLSX();
     void testDelayedCellImport(); // chart range referencing content on later sheets
     void testFlatODSStackedColumnChart();
@@ -108,6 +109,7 @@ public:
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testBnc882383);
+    CPPUNIT_TEST(testBnc889755);
     CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST(testDelayedCellImport);
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
@@ -578,6 +580,35 @@ void Chart2ImportTest::testBnc864396()
         OUString aExpected = "cat" + OUString::number(i+1);
         CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);
     }
+}
+
+void Chart2ImportTest::testBnc889755()
+{
+    load("/chart2/qa/extras/data/pptx/", "bnc889755.pptx");
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 6), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
+
+    uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDataArray > xChartDataArray(xDataProvider, uno::UNO_QUERY_THROW);
+    uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL( aRowLabels.getLength(), sal_Int32(16) );
+    CPPUNIT_ASSERT_EQUAL(OUString("Oct-12"), aRowLabels[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Nov-12"), aRowLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dec-12"), aRowLabels[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Jan-13"), aRowLabels[3]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Feb-13"), aRowLabels[4]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mar-13"), aRowLabels[5]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Apr-13"), aRowLabels[6]);
+    CPPUNIT_ASSERT_EQUAL(OUString("May-13"), aRowLabels[7]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Jun-13"), aRowLabels[8]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Jul-13"), aRowLabels[9]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Aug-13"), aRowLabels[10]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sep-13"), aRowLabels[11]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Oct-13"), aRowLabels[12]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Nov-13"), aRowLabels[13]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dec-13"), aRowLabels[14]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Jan-14"), aRowLabels[15]);
 }
 
 void Chart2ImportTest::testBnc882383()
