@@ -934,6 +934,15 @@ void ScTableRefToken::SetIndex( sal_uInt16 n )
     mnIndex = n;
 }
 
+bool ScTableRefToken::IsGlobal() const
+{
+    // Code asking for this may have to be adapted as it might assume an
+    // svIndex token would always be ocName or ocDBArea.
+    SAL_WARN("sc.core","ScTableRefToken::IsGlobal - maybe adapt caller to know about TableRef?");
+    // Database range is always global.
+    return true;
+}
+
 ScTableRefToken::Item ScTableRefToken::GetItem() const
 {
     return meItem;
