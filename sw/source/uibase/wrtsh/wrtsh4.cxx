@@ -106,7 +106,7 @@ bool SwWrtShell::_PrvWrd()
             Pop( false );
             return bRet;
         }
-        bRet = IsStartWord();
+        bRet = IsStartWord() || IsEndPara();
     }
     Push();
     ClearMark();
