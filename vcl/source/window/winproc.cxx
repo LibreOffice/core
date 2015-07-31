@@ -35,6 +35,7 @@
 #include <vcl/help.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/virdev.hxx>
 #include <touch/touch.h>
 
 #include <svdata.hxx>
@@ -1712,6 +1713,12 @@ void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
             }
             else
                 pWindow->ImplGetWindowImpl()->mbCallResize = true;
+
+            if (pWindow->SupportsDoubleBuffering() && pWindow->ImplGetWindowImpl()->mbFrame)
+            {
+                // Propagate resize for the frame's buffer.
+                pWindow->ImplGetWindowImpl()->mpFrameData->mpBuffer->SetOutputSizePixel(pWindow->GetOutputSizePixel());
+            }
         }
     }
 
