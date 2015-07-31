@@ -64,6 +64,9 @@ public:
 
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
+    void setMSODocumentFlag(bool value) { m_bDealingWithMSODocument = value; }
+    bool dealingWithMSODocument() const { return m_bDealingWithMSODocument; }
+
 protected: //methods
     static size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );
     void removeTextShapesFromTicks();
@@ -98,6 +101,8 @@ protected: //member
      */
     TickInfoArraysType m_aAllTickInfos;
     bool m_bReCreateAllTickInfos;
+
+    bool m_bDealingWithMSODocument;
 
     bool m_bRecordMaximumTextSize;
     sal_Int32 m_nMaximumTextWidthSoFar;

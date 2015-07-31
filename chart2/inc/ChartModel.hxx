@@ -610,6 +610,8 @@ public:
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+    bool isMSODocument();
+
     OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
 
 private:

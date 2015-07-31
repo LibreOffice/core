@@ -136,6 +136,9 @@ public:
     bool needSeriesNamesForAxis() const;
     void setSeriesNamesForAxis( const ::com::sun::star::uno::Sequence< OUString >& rSeriesNames );
 
+    void setMSODocumentFlag(bool value) { m_bDealingWithMSODocument = value; }
+    bool dealingWithMSODocument() const { return m_bDealingWithMSODocument; }
+
 protected: //methods
     VCoordinateSystem( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
@@ -209,6 +212,8 @@ private:
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;
 
     std::unique_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
+
+    bool m_bDealingWithMSODocument;
 };
 
 } //namespace chart

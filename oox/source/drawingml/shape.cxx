@@ -45,6 +45,8 @@
 #include <tools/mapunit.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -1326,6 +1328,13 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         }
                     }
 
+                    if( rFilter.isMSODocument() )
+                    {
+                        Reference< document::XDocumentPropertiesSupplier > xDocPropSup( xChartDoc, UNO_QUERY );
+                        Reference< document::XDocumentProperties > xDocumentProperties = xDocPropSup->getDocumentProperties();
+                        xDocumentProperties->setGenerator("Microsoft Office");
+                        SAL_INFO( "oox.drawingml", "we are dealing with a MSO Document" );
+                    }
                 }
             }
             catch( Exception& )

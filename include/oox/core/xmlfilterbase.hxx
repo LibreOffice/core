@@ -233,6 +233,7 @@ public:
     FastParser* createParser() const;
 
     bool isMSO2007Document() const;
+    bool isMSODocument() const;
 
     void checkDocumentProperties(
             com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> xDocProps);
@@ -257,6 +258,7 @@ private:
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
     bool mbMSO2007;
+    bool mbMSO;
 };
 
 typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;

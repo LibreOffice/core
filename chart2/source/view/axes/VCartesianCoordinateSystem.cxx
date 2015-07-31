@@ -158,6 +158,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
             apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
+            apVAxis->setMSODocumentFlag( this->dealingWithMSODocument() );
         }
     }
 }
