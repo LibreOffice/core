@@ -292,7 +292,8 @@ ChartSeriesPanel::ChartSeriesPanel(
     mxFrame(rxFrame),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this)),
-    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_DATA_SERIES))
+    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_DATA_SERIES)),
+    mbModelValid(true)
 {
     get(mpCBLabel, "checkbutton_label");
     get(mpCBTrendline, "checkbutton_trendline");
@@ -366,6 +367,9 @@ void ChartSeriesPanel::Initialize()
 
 void ChartSeriesPanel::updateData()
 {
+    if (!mbModelValid)
+        return;
+
     OUString aCID = getCID(mxModel);
     SolarMutexGuard aGuard;
     bool bLabelVisible = isDataLabelVisible(mxModel, aCID);
@@ -422,16 +426,20 @@ void ChartSeriesPanel::NotifyItemUpdate(
 
 void ChartSeriesPanel::modelInvalid()
 {
-
+    mbModelValid = false;
 }
 
 void ChartSeriesPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    if (mbModelValid)
+    {
+        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->removeModifyListener(mxListener);
+    }
 
     mxModel = xModel;
+    mbModelValid = true;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);

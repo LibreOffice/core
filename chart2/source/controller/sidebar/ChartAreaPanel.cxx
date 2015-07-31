@@ -236,7 +236,8 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
-    mbUpdate(true)
+    mbUpdate(true),
+    mbModelValid(true)
 {
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
     mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
@@ -366,7 +367,7 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
 
 void ChartAreaPanel::updateData()
 {
-    if (!mbUpdate)
+    if (!mbUpdate || !mbModelValid)
         return;
 
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
@@ -423,6 +424,7 @@ void ChartAreaPanel::updateData()
 
 void ChartAreaPanel::modelInvalid()
 {
+    mbModelValid = false;
 }
 
 void ChartAreaPanel::selectionChanged(bool bCorrectType)
@@ -438,10 +440,14 @@ void ChartAreaPanel::SelectionInvalid()
 void ChartAreaPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    if (mbModelValid)
+    {
+        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->removeModifyListener(mxListener);
+    }
 
     mxModel = xModel;
+    mbModelValid = true;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);

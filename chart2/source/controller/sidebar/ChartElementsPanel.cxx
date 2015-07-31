@@ -289,7 +289,8 @@ ChartElementsPanel::ChartElementsPanel(
     mxFrame(rxFrame),
     maContext(),
     mxModel(pController->getModel()),
-    mxListener(new ChartSidebarModifyListener(this))
+    mxListener(new ChartSidebarModifyListener(this)),
+    mbModelValid(true)
 {
     get(mpCBTitle,  "checkbutton_title");
     get(mpCBSubtitle,  "checkbutton_subtitle");
@@ -379,6 +380,9 @@ void ChartElementsPanel::Initialize()
 
 void ChartElementsPanel::updateData()
 {
+    if (!mbModelValid)
+        return;
+
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(mxModel));
     sal_Int32 nDimension = DiagramHelper::getDimension(xDiagram);
     SolarMutexGuard aGuard;
@@ -452,16 +456,20 @@ void ChartElementsPanel::NotifyItemUpdate(
 
 void ChartElementsPanel::modelInvalid()
 {
-
+    mbModelValid = false;
 }
 
 void ChartElementsPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    if (mbModelValid)
+    {
+        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->removeModifyListener(mxListener);
+    }
 
     mxModel = xModel;
+    mbModelValid = true;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);

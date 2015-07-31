@@ -91,6 +91,7 @@ private:
     void Initialize();
 
     bool mbUpdate;
+    bool mbModelValid;
 };
 
 } } // end of namespace svx::sidebar

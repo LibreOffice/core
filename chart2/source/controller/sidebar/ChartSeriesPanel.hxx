@@ -104,6 +104,8 @@ private:
     css::uno::Reference<css::util::XModifyListener> mxListener;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
+    bool mbModelValid;
+
     void Initialize();
 
     DECL_LINK(CheckBoxHdl, CheckBox*);

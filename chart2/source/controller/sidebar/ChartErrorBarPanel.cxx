@@ -244,7 +244,8 @@ ChartErrorBarPanel::ChartErrorBarPanel(
   : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame),
     mxFrame(rxFrame),
     mxModel(pController->getModel()),
-    mxListener(new ChartSidebarModifyListener(this))
+    mxListener(new ChartSidebarModifyListener(this)),
+    mbModelValid(true)
 {
 
     get(mpRBPosAndNeg, "radiobutton_positive_negative");
@@ -302,6 +303,9 @@ void ChartErrorBarPanel::Initialize()
 
 void ChartErrorBarPanel::updateData()
 {
+    if (!mbModelValid)
+        return;
+
     OUString aCID = getCID(mxModel);
     bool bPos = showPositiveError(mxModel, aCID);
     bool bNeg = showNegativeError(mxModel, aCID);
@@ -379,15 +383,20 @@ void ChartErrorBarPanel::NotifyItemUpdate(
 
 void ChartErrorBarPanel::modelInvalid()
 {
+    mbModelValid = false;
 }
 
 void ChartErrorBarPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxListener);
+    if (mbModelValid)
+    {
+        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->removeModifyListener(mxListener);
+    }
 
     mxModel = xModel;
+    mbModelValid = true;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);

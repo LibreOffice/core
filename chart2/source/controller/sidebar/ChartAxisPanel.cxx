@@ -191,7 +191,8 @@ ChartAxisPanel::ChartAxisPanel(
     mxFrame(rxFrame),
     mxModel(pController->getModel()),
     mxModifyListener(new ChartSidebarModifyListener(this)),
-    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS))
+    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS)),
+    mbModelValid(true)
 {
     get(mpCBShowLabel, "checkbutton_show_label");
     get(mpCBReverse, "checkbutton_reverse");
@@ -246,6 +247,9 @@ void ChartAxisPanel::Initialize()
 
 void ChartAxisPanel::updateData()
 {
+    if (!mbModelValid)
+        return;
+
     OUString aCID = getCID(mxModel);
     SolarMutexGuard aGuard;
 
@@ -291,15 +295,20 @@ void ChartAxisPanel::NotifyItemUpdate(
 
 void ChartAxisPanel::modelInvalid()
 {
+    mbModelValid = false;
 }
 
 void ChartAxisPanel::updateModel(
         css::uno::Reference<css::frame::XModel> xModel)
 {
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
-    xBroadcaster->removeModifyListener(mxModifyListener);
+    if (mbModelValid)
+    {
+        css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+        xBroadcaster->removeModifyListener(mxModifyListener);
+    }
 
     mxModel = xModel;
+    mbModelValid = true;
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxModifyListener);

@@ -84,6 +84,8 @@ private:
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
+    bool mbModelValid;
+
     void Initialize();
 
     DECL_LINK(RadioBtnHdl, void*);
