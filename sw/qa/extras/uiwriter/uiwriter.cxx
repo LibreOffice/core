@@ -11,6 +11,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <tools/errcode.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -126,6 +127,7 @@ public:
     void testTextSearch();
     void testTdf69282();
     void testTdf69282WithMirror();
+    void testTdf78742();
     void testUnoParagraph();
     void testSearchWithTransliterate();
     void testTdf80663();
@@ -191,6 +193,7 @@ public:
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
+    CPPUNIT_TEST(testTdf78742);
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf80663);
@@ -1443,6 +1446,36 @@ void SwUiWriterTest::testTdf69282WithMirror()
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
     xSourceDoc->dispose();
+}
+
+void SwUiWriterTest::testTdf78742()
+{
+    //testing with service type and any .ods file
+    OUString path = getURLFromSrc(DATA_DIRECTORY) + "calc-data-source.ods";
+    SfxMedium aMedium(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
+    SfxFilterMatcher aMatcher(OUString("com.sun.star.text.TextDocument"));
+    const SfxFilter* pFilter = nullptr;
+    sal_uInt32 filter = aMatcher.DetectFilter(aMedium, &pFilter, true);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_IO_ABORT, filter);
+    //it should not return any Filter
+    CPPUNIT_ASSERT(!pFilter);
+    //testing without service type and any .ods file
+    SfxMedium aMedium2(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
+    SfxFilterMatcher aMatcher2;
+    const SfxFilter* pFilter2 = nullptr;
+    sal_uInt32 filter2 = aMatcher2.DetectFilter(aMedium2, &pFilter2, true);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter2);
+    //Filter should be returned with proper Name
+    CPPUNIT_ASSERT_EQUAL(OUString("calc8"), pFilter2->GetFilterName());
+    //testing with service type and any .odt file
+    OUString path2 = getURLFromSrc(DATA_DIRECTORY) + "fdo69893.odt";
+    SfxMedium aMedium3(path2, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
+    SfxFilterMatcher aMatcher3(OUString("com.sun.star.text.TextDocument"));
+    const SfxFilter* pFilter3 = nullptr;
+    sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, &pFilter3, true);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter3);
+    //Filter should be returned with proper Name
+    CPPUNIT_ASSERT_EQUAL(OUString("writer8"), pFilter3->GetFilterName());
 }
 
 void SwUiWriterTest::testUnoParagraph()
