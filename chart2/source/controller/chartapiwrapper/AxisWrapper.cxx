@@ -102,7 +102,8 @@ enum
     PROP_AXIS_OVERLAP,
     PROP_AXIS_GAP_WIDTH,
     PROP_AXIS_DISPLAY_UNITS,
-    PROP_AXIS_BUILTINUNIT
+    PROP_AXIS_BUILTINUNIT,
+    PROP_AXIS_TRY_STAGGERING_FIRST
 };
 
 void lcl_AddPropertiesToVector(
@@ -354,6 +355,15 @@ void lcl_AddPropertiesToVector(
         Property( "BuiltInUnit",
                   PROP_AXIS_BUILTINUNIT,
                   cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // Compatibility option: starting from LibreOffice 5.1 the rotated
+    // layout is preferred to staggering for axis labels.
+    rOutProperties.push_back(
+        Property( "TryStaggeringFirst",
+                  PROP_AXIS_TRY_STAGGERING_FIRST,
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -656,6 +666,7 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedProperty("ArrangeOrder","ArrangeOrder") );
     aWrappedProperties.push_back( new WrappedProperty("Visible","Show") );
     aWrappedProperties.push_back( new WrappedDirectStateProperty("DisplayLabels","DisplayLabels") );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty("TryStaggeringFirst","TryStaggeringFirst") );
     aWrappedProperties.push_back( new WrappedDirectStateProperty("TextBreak","TextBreak") );
     aWrappedProperties.push_back( new WrappedNumberFormatProperty(m_spChart2ModelContact) );
     aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(m_spChart2ModelContact) );
