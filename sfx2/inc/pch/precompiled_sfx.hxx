@@ -41,7 +41,6 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxvar.hxx>
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 #include <boost/logic/tribool.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>

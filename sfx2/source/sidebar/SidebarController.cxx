@@ -55,7 +55,6 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 
 using namespace css;
 using namespace css::uno;

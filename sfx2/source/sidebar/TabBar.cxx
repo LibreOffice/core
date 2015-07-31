@@ -43,7 +43,7 @@ namespace sfx2 { namespace sidebar {
 
 TabBar::TabBar(vcl::Window* pParentWindow,
                const Reference<frame::XFrame>& rxFrame,
-               const boost::function<void(const OUString&)>& rDeckActivationFunctor,
+               const std::function<void (const OUString&)>& rDeckActivationFunctor,
                const PopupMenuProvider& rPopupMenuProvider,
                SidebarController* rParentSidebarController
               )

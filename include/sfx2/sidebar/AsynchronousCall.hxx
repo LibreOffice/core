@@ -19,9 +19,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_ASYNCHRONOUSCALL_HXX
 
-#include <boost/function.hpp>
 #include <tools/solar.h>
 #include <tools/link.hxx>
+
+#include <functional>
 
 struct ImplSVEvent;
 
@@ -32,7 +33,7 @@ namespace sfx2 { namespace sidebar {
 class AsynchronousCall
 {
 public:
-    typedef ::boost::function<void()> Action;
+    typedef ::std::function<void()> Action;
 
     AsynchronousCall();
     AsynchronousCall (const Action& rAction);

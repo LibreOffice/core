@@ -28,8 +28,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <boost/function.hpp>
-
 
 class SfxViewFrame;
 class ToolBox;

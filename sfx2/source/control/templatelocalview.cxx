@@ -225,7 +225,7 @@ std::vector<OUString> TemplateLocalView::getFolderNames()
 }
 
 std::vector<TemplateItemProperties>
-TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateItemProperties&) > &rFunc) const
+TemplateLocalView::getFilteredItems(const std::function<bool (const TemplateItemProperties&)> &rFunc) const
 {
     std::vector<TemplateItemProperties> aItems;
 

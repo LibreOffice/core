@@ -13,7 +13,7 @@
 #include <sfx2/dllapi.h>
 
 #include <vector>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -226,9 +226,9 @@ public:
 
     void ShowTooltips( bool bShowTooltips );
 
-    void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
+    void filterItems (const std::function<bool (const ThumbnailViewItem*) > &func);
 
-    void sortItems (const boost::function<bool (const ThumbnailViewItem*,
+    void sortItems (const std::function<bool (const ThumbnailViewItem*,
                                                 const ThumbnailViewItem*) > &func);
 
     void setItemStateHdl (const Link<> &aLink) { maItemStateHdl = aLink; }
@@ -326,7 +326,7 @@ protected:
     Link<> maItemStateHdl;
     ThumbnailItemAttributes* mpItemAttrs;
 
-    boost::function<bool (const ThumbnailViewItem*)> maFilterFunc;
+    std::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
 
 #endif // INCLUDED_SFX2_THUMBNAILVIEW_HXX

@@ -27,9 +27,11 @@
 #include <vcl/window.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <boost/function.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include <functional>
+
 
 class Button;
 class CheckBox;
@@ -61,13 +63,13 @@ public:
         bool mbIsActive;
         bool mbIsEnabled;
     };
-    typedef ::boost::function<void(
+    typedef ::std::function<void (
             const Rectangle&,
             const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
         vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
+        const ::std::function<void (const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider,
         SidebarController* rParentSidebarController);
 
@@ -99,13 +101,13 @@ private:
         DECL_LINK(HandleClick, Button*);
         VclPtr<RadioButton> mpButton;
         ::rtl::OUString msDeckId;
-        ::boost::function<void(const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
+        ::std::function<void (const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;
         bool mbIsHiddenByDefault;
     };
     typedef ::std::vector<Item> ItemContainer;
     ItemContainer maItems;
-    const ::boost::function<void(const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
+    const ::std::function<void (const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
     sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 

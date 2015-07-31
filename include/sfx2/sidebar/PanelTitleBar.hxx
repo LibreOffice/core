@@ -22,7 +22,6 @@
 #include <sfx2/sidebar/TitleBar.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <boost/function.hpp>
 
 namespace sfx2 { namespace sidebar {
 

@@ -33,7 +33,6 @@
 #include <com/sun/star/ui/XUpdateModel.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/function.hpp>
 #include <vcl/vclptr.hxx>
 
 

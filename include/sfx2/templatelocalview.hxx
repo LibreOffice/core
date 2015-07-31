@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
 #include <set>
+#include <functional>
 
 #include <sfx2/templateabstractview.hxx>
 
@@ -56,7 +57,7 @@ public:
     std::vector<OUString> getFolderNames ();
 
     std::vector<TemplateItemProperties>
-        getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
+        getFilteredItems (const std::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
     virtual sal_uInt16 createRegion (const OUString &rName) SAL_OVERRIDE;
 

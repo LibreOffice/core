@@ -1170,7 +1170,7 @@ void ThumbnailView::ShowTooltips( bool bShowTooltips )
     mbShowTooltips = bShowTooltips;
 }
 
-void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)
+void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position
     maFilterFunc = func;
@@ -1221,7 +1221,7 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
     Invalidate();
 }
 
-void ThumbnailView::sortItems (const boost::function<bool (const ThumbnailViewItem*, const ThumbnailViewItem*) > &func)
+void ThumbnailView::sortItems(const std::function<bool (const ThumbnailViewItem*, const ThumbnailViewItem*)> &func)
 {
     std::sort(mItemList.begin(),mItemList.end(),func);
 
