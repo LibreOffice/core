@@ -19,7 +19,6 @@
 
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
-#include <boost/function.hpp>
 #include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>

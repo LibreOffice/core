@@ -18,7 +18,6 @@
  */
 
 #include <bookmrk.hxx>
-#include <boost/function.hpp>
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -129,7 +128,7 @@ namespace
         std::vector<MarkEntry> m_aFlyEntries;
         std::vector<PaMEntry> m_aUnoCrsrEntries;
         std::vector<PaMEntry> m_aShellCrsrEntries;
-        typedef boost::function<void (SwPosition& rPos, sal_Int32 nContent)> updater_t;
+        typedef std::function<void (SwPosition& rPos, sal_Int32 nContent)> updater_t;
         virtual void Clear() SAL_OVERRIDE
         {
             m_aBkmkEntries.clear();
