@@ -104,7 +104,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
 {
     bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = false;
+    m_isWritable        = false;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -120,7 +120,7 @@ SvFileStream::SvFileStream()
 {
     bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = false;
+    m_isWritable        = false;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -273,8 +273,8 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     Close();
     SvStream::ClearBuffer();
 
-    eStreamMode = nMode;
-    eStreamMode &= ~StreamMode::TRUNC; // don't truncate on reopen
+    m_eStreamMode = nMode;
+    m_eStreamMode &= ~StreamMode::TRUNC; // don't truncate on reopen
 
     aFilename = aParsedFilename;
     OString aFileNameA(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
@@ -376,7 +376,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
         bIsOpen     = true;
         // pInstanceData->bIsEof = false;
         if( nAccessMode & GENERIC_WRITE )
-            bIsWritable = true;
+            m_isWritable = true;
     }
     SetErrorMode( nOldErrorMode );
 }
@@ -395,7 +395,7 @@ void SvFileStream::Close()
     }
     bIsOpen     = false;
     nLockCounter= 0;
-    bIsWritable = false;
+    m_isWritable = false;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }

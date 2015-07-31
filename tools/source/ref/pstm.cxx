@@ -62,7 +62,7 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, sal
     , pRefStm( NULL )
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
-    bIsWritable = true;
+    m_isWritable = true;
     if( pStm )
     {
         SetVersion( pStm->GetVersion() );

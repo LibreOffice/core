@@ -32,7 +32,7 @@
 
 StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, bool bWr )
 {
-    bIsWritable = true;
+    m_isWritable = true;
     StreamMode nMode = bWr
                  ? StreamMode::WRITE | StreamMode::SHARE_DENYALL
                  : StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE;

@@ -189,39 +189,39 @@ class TOOLS_DLLPUBLIC SvStream
 {
 private:
     // LockBytes Interface
-    SvLockBytesRef  xLockBytes;  // Default implementation
+    SvLockBytesRef  m_xLockBytes; ///< Default implementation
     sal_uInt64      m_nActPos;
 
-    // Puffer-Verwaltung
-    sal_uInt8*      pRWBuf;         // Points to read/write buffer
-    sal_uInt8*      pBufPos;        // pRWBuf + nBufActualPos
-    sal_uInt16      nBufSize;       // Allocated size of buffer
-    sal_uInt16      nBufActualLen;  // Length of used segment of puffer
-                                // = nBufSize, if EOF did not occur
-    sal_uInt16      nBufActualPos;  // current position in buffer (0..nBufSize-1)
-    sal_uInt16      nBufFree;       // number of free slots in buffer to IO of type eIOMode
-    bool            bIoRead;
-    bool            bIoWrite;
+    // buffer management
+    sal_uInt8*      m_pRWBuf;     ///< Points to read/write buffer
+    sal_uInt8*      m_pBufPos;    ///< m_pRWBuf + m_nBufActualPos
+    sal_uInt16      m_nBufSize;   ///< Allocated size of buffer
+    sal_uInt16      m_nBufActualLen; ///< Length of used segment of puffer
+                                  ///< = m_nBufSize, if EOF did not occur
+    sal_uInt16      m_nBufActualPos; ///< current position in buffer (0..m_nBufSize-1)
+    sal_uInt16      m_nBufFree;   ///< number of free slots in buffer to IO of type eIOMode
+    bool            m_isIoRead;
+    bool            m_isIoWrite;
 
     // Error codes, conversion, compression, ...
-    bool            bIsDirty; // true: Stream != buffer content
-    bool            bIsConsistent;// false: Buffer contains data, which were
-                                // NOT allowed to be written by PutData
-                                // into the derived stream (cf. PutBack)
-    bool            bSwap;
-    bool            bIsEof;
-    sal_uInt32      nError;
-    SvStreamEndian  nEndian;
-    SvStreamCompressFlags nCompressMode;
-    LineEnd         eLineDelimiter;
-    rtl_TextEncoding eStreamCharSet;
+    bool            m_isDirty;  ///< true: Stream != buffer content
+    bool            m_isConsistent; ///< false: Buffer contains data, which were
+                                ///< NOT allowed to be written by PutData
+                                ///< into the derived stream (cf. PutBack)
+    bool            m_isSwap;
+    bool            m_isEof;
+    sal_uInt32      m_nError;
+    SvStreamEndian  m_nEndian;
+    SvStreamCompressFlags m_nCompressMode;
+    LineEnd         m_eLineDelimiter;
+    rtl_TextEncoding m_eStreamCharSet;
 
     // Encryption
     OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
-    unsigned char   nCryptMask;
+    unsigned char   m_nCryptMask;
 
     // Userdata
-    long            nVersion;   // for external use
+    long            m_nVersion;   // for external use
 
     // helper methods
     TOOLS_DLLPRIVATE void ImpInit();
@@ -231,8 +231,8 @@ private:
 
 protected:
     sal_uInt64      m_nBufFilePos; ///< File position of pBuf[0]
-    StreamMode      eStreamMode;
-    bool            bIsWritable;
+    StreamMode      m_eStreamMode;
+    bool            m_isWritable;
 
     virtual sal_Size GetData( void* pData, sal_Size nSize );
     virtual sal_Size PutData( const void* pData, sal_Size nSize );
@@ -255,32 +255,32 @@ public:
                     SvStream( SvLockBytes *pLockBytes);
     virtual         ~SvStream();
 
-    SvLockBytes*    GetLockBytes() const { return xLockBytes; }
+    SvLockBytes*    GetLockBytes() const { return m_xLockBytes; }
 
-    sal_uInt32      GetError() const { return ERRCODE_TOERROR(nError); }
-    sal_uInt32      GetErrorCode() const { return nError; }
+    sal_uInt32      GetError() const { return ERRCODE_TOERROR(m_nError); }
+    sal_uInt32      GetErrorCode() const { return m_nError; }
 
     void            SetError( sal_uInt32 nErrorCode );
     virtual void    ResetError();
 
     void            SetEndian( SvStreamEndian SvStreamEndian );
-    SvStreamEndian  GetEndian() const { return nEndian; }
+    SvStreamEndian  GetEndian() const { return m_nEndian; }
     /// returns status of endian swap flag
-    bool            IsEndianSwap() const { return bSwap; }
+    bool            IsEndianSwap() const { return m_isSwap; }
 
     void            SetCompressMode( SvStreamCompressFlags nNewMode )
-                        { nCompressMode = nNewMode; }
-    SvStreamCompressFlags GetCompressMode() const { return nCompressMode; }
+                        { m_nCompressMode = nNewMode; }
+    SvStreamCompressFlags GetCompressMode() const { return m_nCompressMode; }
 
     void SetCryptMaskKey(const OString& rCryptMaskKey);
 
     void            SetStreamCharSet( rtl_TextEncoding eCharSet )
-                        { eStreamCharSet = eCharSet; }
-    rtl_TextEncoding GetStreamCharSet() const { return eStreamCharSet; }
+                        { m_eStreamCharSet = eCharSet; }
+    rtl_TextEncoding GetStreamCharSet() const { return m_eStreamCharSet; }
 
     void            SetLineDelimiter( LineEnd eLineEnd )
-                        { eLineDelimiter = eLineEnd; }
-    LineEnd         GetLineDelimiter() const { return eLineDelimiter; }
+                        { m_eLineDelimiter = eLineEnd; }
+    LineEnd         GetLineDelimiter() const { return m_eLineDelimiter; }
 
     SvStream&       ReadUInt16( sal_uInt16& rUInt16 );
     SvStream&       ReadUInt32( sal_uInt32& rUInt32 );
@@ -324,11 +324,11 @@ public:
     sal_Size        Write( const void* pData, sal_Size nSize );
     sal_uInt64      Seek( sal_uInt64 nPos );
     sal_uInt64      SeekRel( sal_Int64 nPos );
-    sal_uInt64      Tell() const { return m_nBufFilePos + nBufActualPos;  }
+    sal_uInt64      Tell() const { return m_nBufFilePos + m_nBufActualPos;  }
     // length between current (Tell()) pos and end of stream
     virtual sal_uInt64 remainingSize();
     void            Flush();
-    bool            IsEof() const { return bIsEof; }
+    bool            IsEof() const { return m_isEof; }
     // next Tell() <= nSize
     bool            SetStreamSize( sal_uInt64 nSize );
 
@@ -430,21 +430,21 @@ public:
     bool            WriteUniOrByteChar( sal_Unicode ch )
                     { return WriteUniOrByteChar( ch, GetStreamCharSet() ); }
 
-    void            SetBufferSize( sal_uInt16 nBufSize );
-    sal_uInt16      GetBufferSize() const { return nBufSize; }
+    void            SetBufferSize( sal_uInt16 m_nBufSize );
+    sal_uInt16      GetBufferSize() const { return m_nBufSize; }
 
     void            RefreshBuffer();
 
-    bool            IsWritable() const { return bIsWritable; }
-    StreamMode      GetStreamMode() const { return eStreamMode; }
+    bool            IsWritable() const { return m_isWritable; }
+    StreamMode      GetStreamMode() const { return m_eStreamMode; }
 
-    long            GetVersion() { return nVersion; }
-    void            SetVersion( long n ) { nVersion = n; }
+    long            GetVersion() { return m_nVersion; }
+    void            SetVersion( long n ) { m_nVersion = n; }
 
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
     /// end of input seen during previous i/o operation
-    bool eof() const { return bIsEof; }
+    bool eof() const { return m_isEof; }
 
     /// stream is broken
     bool bad() const { return GetError() != 0; }
@@ -474,7 +474,7 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
 TOOLS_DLLPUBLIC SvStream& endl( SvStream& rStr );
 /// same as endl() but Unicode
 TOOLS_DLLPUBLIC SvStream& endlu( SvStream& rStr );
-/// call endlu() if eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
+/// call endlu() if m_eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
 TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
 /// Attempt to read nUnits 8bit units to an OString, returned OString's

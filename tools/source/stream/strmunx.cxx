@@ -273,7 +273,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = false;
+    m_isWritable        = false;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 1024 );
@@ -291,7 +291,7 @@ SvFileStream::SvFileStream()
 {
     bIsOpen             = false;
     nLockCounter        = 0;
-    bIsWritable         = false;
+    m_isWritable        = false;
     pInstanceData       = new StreamData;
     SetBufferSize( 1024 );
 }
@@ -394,32 +394,32 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     if ( ! IsOpen() )
         return false;
 
-    if ( eStreamMode & StreamMode::SHARE_DENYALL )
-        {
-        if (bIsWritable)
+    if (m_eStreamMode & StreamMode::SHARE_DENYALL)
+    {
+        if (m_isWritable)
             nLockMode = F_WRLCK;
         else
             nLockMode = F_RDLCK;
-        }
+    }
 
-    if ( eStreamMode & StreamMode::SHARE_DENYREAD )
-        {
-        if (bIsWritable)
+    if (m_eStreamMode & StreamMode::SHARE_DENYREAD)
+    {
+        if (m_isWritable)
             nLockMode = F_WRLCK;
         else
         {
             SetError(SVSTREAM_LOCKING_VIOLATION);
             return false;
         }
-        }
+    }
 
-    if ( eStreamMode & StreamMode::SHARE_DENYWRITE )
-        {
-        if (bIsWritable)
+    if (m_eStreamMode & StreamMode::SHARE_DENYWRITE)
+    {
+        if (m_isWritable)
             nLockMode = F_WRLCK;
         else
             nLockMode = F_RDLCK;
-        }
+    }
 
     if (!nLockMode)
         return true;
@@ -463,8 +463,8 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
 
     Close();
     errno = 0;
-    eStreamMode = nOpenMode;
-    eStreamMode &= ~StreamMode::TRUNC; // don't truncat on reopen
+    m_eStreamMode = nOpenMode;
+    m_eStreamMode &= ~StreamMode::TRUNC; // don't truncat on reopen
 
     aFilename = rFilename;
 
@@ -547,13 +547,13 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
         pInstanceData->rHandle = nHandleTmp;
         bIsOpen = true;
         if ( uFlags & osl_File_OpenFlag_Write )
-            bIsWritable = true;
+            m_isWritable = true;
 
         if ( !LockFile() ) // whole file
         {
             rc = osl_closeFile( nHandleTmp );
             bIsOpen = false;
-            bIsWritable = false;
+            m_isWritable = false;
             pInstanceData->rHandle = 0;
         }
     }
@@ -580,7 +580,7 @@ void SvFileStream::Close()
     }
 
     bIsOpen     = false;
-    bIsWritable = false;
+    m_isWritable = false;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }

@@ -107,9 +107,9 @@ SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode )
     , pOwnStm( NULL )
 {
     if( nMode & StreamMode::WRITE )
-        bIsWritable = true;
+        m_isWritable = true;
     else
-        bIsWritable = false;
+        m_isWritable = false;
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
@@ -117,9 +117,9 @@ SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
     if( pStm )
     {
         if( StreamMode::WRITE & pStm->GetMode() )
-            bIsWritable = true;
+            m_isWritable = true;
         else
-            bIsWritable = false;
+            m_isWritable = false;
 
         pOwnStm = pStm;
         SetError( pStm->GetError() );
@@ -128,7 +128,7 @@ SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
     else
     {
         pOwnStm = NULL;
-        bIsWritable = true;
+        m_isWritable = true;
         SetError( SVSTREAM_INVALID_PARAMETER );
     }
 }
@@ -137,7 +137,7 @@ SotStorageStream::SotStorageStream()
     : pOwnStm( NULL )
 {
     // ??? wenn Init virtuell ist, entsprechen setzen
-    bIsWritable = true;
+    m_isWritable = true;
 }
 
 SotStorageStream::~SotStorageStream()
