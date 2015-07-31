@@ -113,25 +113,28 @@ enum class SfxFilterFlags
     EXECUTABLE        = 0x00000200L,
     SUPPORTSSELECTION = 0x00000400L,
     NOTINFILEDLG      = 0x00001000L,
+    NOTINCHOOSER      = 0x00002000L,
+    ASYNCHRON         = 0x00004000L,
     OPENREADONLY      = 0x00010000L,
     MUSTINSTALL       = 0x00020000L,
     CONSULTSERVICE    = 0x00040000L,
-
     STARONEFILTER     = 0x00080000L,
+
     PACKED            = 0x00100000L,
+    BROWSERPREFERRED  = 0x00400000L,
+    COMBINED          = 0x00800000L,
 
     ENCRYPTION        = 0x01000000L,
     PASSWORDTOMODIFY  = 0x02000000L,
 
     PREFERED          = 0x10000000L,
-
     STARTPRESENTATION = 0x20000000L,
 
     NONE              = 0
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x331f17ffL> {};
+    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x33df77ffL> {};
 }
 
 #define SFX_FILTER_NOTINSTALLED (SfxFilterFlags::MUSTINSTALL | SfxFilterFlags::CONSULTSERVICE)
