@@ -97,9 +97,9 @@ public:
     /** Constructor: Sets a copy of the given data.
 
         @param pData_ value
-        @param pType type of value
+        @param pType_ type of value
     */
-    inline Any( const void * pData_, typelib_TypeDescriptionReference * pType );
+    inline Any( const void * pData_, typelib_TypeDescriptionReference * pType_ );
 
     /** Destructor: Destructs any content and frees memory.
     */
@@ -186,9 +186,9 @@ public:
         and its memory freed.
 
         @param pData_ pointer to value
-        @param pType type of value
+        @param pType_ type of value
     */
-    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType );
+    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
 
