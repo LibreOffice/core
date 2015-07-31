@@ -308,27 +308,36 @@ bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
     return SvxXMLXTableExportComponent::save( rURL, createInstance(), xStorage, pOptName );
 }
 
-XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
+XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType aType,
                                                     const OUString& rPath,
                                                     const OUString& rReferer )
 {
     XPropertyListRef pRet;
 
-#define MAP(e,c) \
-        case e: pRet = XPropertyListRef (new c( rPath, rReferer ) ); break
-    switch (t) {
-        MAP( XCOLOR_LIST, XColorList );
-        MAP( XLINE_END_LIST, XLineEndList );
-        MAP( XDASH_LIST, XDashList );
-        MAP( XHATCH_LIST, XHatchList );
-        MAP( XGRADIENT_LIST, XGradientList );
-        MAP( XBITMAP_LIST, XBitmapList );
+    switch (aType) {
+        case XCOLOR_LIST:
+            pRet = XPropertyListRef(new XColorList(rPath, rReferer));
+            break;
+        case XLINE_END_LIST:
+            pRet = XPropertyListRef(new XLineEndList(rPath, rReferer));
+            break;
+        case XDASH_LIST:
+            pRet = XPropertyListRef(new XDashList(rPath, rReferer));
+            break;
+        case XHATCH_LIST:
+            pRet = XPropertyListRef(new XHatchList(rPath, rReferer));
+            break;
+        case XGRADIENT_LIST:
+            pRet = XPropertyListRef(new XGradientList(rPath, rReferer));
+            break;
+        case XBITMAP_LIST:
+            pRet = XPropertyListRef(new XBitmapList(rPath, rReferer));
+            break;
     default:
         OSL_FAIL("unknown xproperty type");
         break;
     }
-#undef MAP
-    OSL_ASSERT( !pRet.is() || pRet->meType == t );
+    OSL_ASSERT( !pRet.is() || pRet->meType == aType );
 
     return pRet;
 }
