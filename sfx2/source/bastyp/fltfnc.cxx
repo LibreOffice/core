@@ -1000,6 +1000,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             {
                 sal_Int32 nTmp(0);
                 lFilterProperties[nFilterProperty].Value >>= nTmp;
+                assert((nTmp & ~o3tl::typed_flags<SfxFilterFlags>::mask) == 0);
                 nFlags = static_cast<SfxFilterFlags>(nTmp);
             }
             else if ( lFilterProperties[nFilterProperty].Name == "UIName" )

@@ -518,9 +518,9 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
                     sal_Int32 nFlags  = 0;
                     aFilter[PROPNAME_FLAGS] >>= nFlags;
 
-                    if ((nFlags & FLAGVAL_IMPORT) == FLAGVAL_IMPORT)
+                    if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::IMPORT)
                         sFilter = *pIt;
-                    if ((nFlags & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED)
+                    if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::PREFERED)
                         break;
                 }
                 catch(const css::uno::Exception&) {}
@@ -603,7 +603,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
                 sal_Int32 nFlags  = 0;
                 aFilter[PROPNAME_FLAGS] >>= nFlags;
 
-                if ((nFlags & FLAGVAL_IMPORT) == FLAGVAL_IMPORT)
+                if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::IMPORT)
                     break;
             }
             catch(const css::uno::Exception&)

@@ -30,6 +30,7 @@
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
+#include <comphelper/documentconstants.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -959,10 +960,9 @@ class FilterCache : public BaseLock
             @param  lNames
                     the list of flag names.
 
-            @return [sal_Int32]
-                    the converted flag field.
+            @return the converted flag field.
          */
-        static sal_Int32 impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames);
+        static SfxFilterFlags impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames);
 
 
 
@@ -974,7 +974,7 @@ class FilterCache : public BaseLock
             @return [seq< string >]
                     the converted flag name list.
          */
-        static css::uno::Sequence< OUString > impl_convertFlagField2FlagNames(sal_Int32 nFlags);
+        static css::uno::Sequence< OUString > impl_convertFlagField2FlagNames(SfxFilterFlags nFlags);
 };
 
     } // namespace config
