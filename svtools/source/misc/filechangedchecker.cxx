@@ -11,11 +11,12 @@
 
 #include <svtools/filechangedchecker.hxx>
 
-FileChangedChecker::FileChangedChecker(const OUString& rFilename, const ::boost::function0<void>& rCallback) :
-    mIdle(),
-    mFileName(rFilename),
-    mLastModTime(),
-    mpCallback(rCallback)
+FileChangedChecker::FileChangedChecker(const OUString& rFilename,
+        const ::std::function<void ()>& rCallback)
+    : mIdle()
+    , mFileName(rFilename)
+    , mLastModTime()
+    , mpCallback(rCallback)
 {
     // Get the curren last file modified Status
     getCurrentModTime(mLastModTime);

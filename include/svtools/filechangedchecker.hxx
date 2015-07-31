@@ -11,10 +11,12 @@
 #define INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <boost/function.hpp>
+
 #include <osl/file.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+
+#include <functional>
 
 /** Periodically checks if a file has been modified
 
@@ -27,7 +29,7 @@ private:
     Idle                    mIdle;
     OUString            mFileName;
     TimeValue                mLastModTime;
-    ::boost::function0<void> mpCallback;
+    ::std::function<void ()> mpCallback;
 
     bool SVT_DLLPRIVATE getCurrentModTime(TimeValue& o_rValue) const;
     DECL_LINK_TYPED(TimerHandler, Idle *, void);
@@ -35,7 +37,8 @@ private:
 public:
     void resetTimer();
     bool hasFileChanged();
-    FileChangedChecker(const OUString& rFilename, const ::boost::function0<void>& rCallback);
+    FileChangedChecker(const OUString& rFilename,
+            const ::std::function<void ()>& rCallback);
 };
 
 #endif
