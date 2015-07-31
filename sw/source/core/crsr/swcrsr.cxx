@@ -1294,7 +1294,7 @@ bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
             g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
-        if (nPtPos < pTextNd->GetText().getLength() && nPtPos >= 0)
+        if (nPtPos <= pTextNd->GetText().getLength() && nPtPos >= 0)
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
