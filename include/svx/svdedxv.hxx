@@ -129,7 +129,8 @@ protected:
     DECL_LINK(ImpOutlinerStatusEventHdl,EditStatus*);
     DECL_LINK(ImpChainingEventHdl,void*);
     DECL_LINK(ImpAfterCutOrPasteChainingEventHdl,void*);
-    DECL_LINK(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*);
+
+    DECL_LINK_TYPED(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,void);
 
     // link for EndTextEditHdl
     DECL_LINK(EndTextEditHdl, SdrUndoManager*);
