@@ -825,15 +825,19 @@ bool VCartesianAxis::createTextShapes(
                 bool bOverlapsAfterAutoStagger = true;
                 if( !bIsStaggered && isAutoStaggeringOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
                 {
-                    bIsStaggered = true;
-                    rAxisLabelProperties.eStaggering = STAGGER_EVEN;
-                    pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
-                    if( !pLastVisibleNeighbourTickInfo ||
-                        !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
-                            , rAxisLabelProperties.fRotationAngleDegree
-                            , pTickInfo->aTickScreenPosition
-                            , bIsHorizontalAxis, bIsVerticalAxis ) )
-                        bOverlapsAfterAutoStagger = false;
+                    // MSO tries first the 45 degree layout and then staggering
+                    if( !( this->dealingWithMSODocument() && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) ) )
+                    {
+                        bIsStaggered = true;
+                        rAxisLabelProperties.eStaggering = STAGGER_EVEN;
+                        pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
+                        if( !pLastVisibleNeighbourTickInfo ||
+                            !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
+                                , rAxisLabelProperties.fRotationAngleDegree
+                                , pTickInfo->aTickScreenPosition
+                                , bIsHorizontalAxis, bIsVerticalAxis ) )
+                            bOverlapsAfterAutoStagger = false;
+                    }
                 }
 
                 if (bOverlapsAfterAutoStagger)

@@ -1436,6 +1436,21 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     mbTimeBased = true;
 }
 
+bool ChartModel::isMSODocument()
+{
+    Reference< document::XDocumentProperties > xDocumentProperties = this->getDocumentProperties();
+    OUString aGenerator = xDocumentProperties->getGenerator();
+    SAL_INFO("chart2", "Generator is '" << aGenerator << "'");
+    if( aGenerator.startsWithIgnoreAsciiCase("Microsoft") )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)
 {

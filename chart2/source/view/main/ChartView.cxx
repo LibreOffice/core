@@ -544,7 +544,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             sal_Int32 nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment( xDiagram, xChartType );
 
             if(pVCooSys)
+            {
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
+                pVCooSys->setMSODocumentFlag( rChartModel.isMSODocument() );
+            }
 
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
@@ -2268,7 +2271,6 @@ bool getAvailablePosAndSizeForDiagram(
     rParam.maRemainingSpace.Width -= 2*nXDistance;
     rParam.maRemainingSpace.Y += nYDistance;
     rParam.maRemainingSpace.Height -= 2*nYDistance;
-
     if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
         return false;
 

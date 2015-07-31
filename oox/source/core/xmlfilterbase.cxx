@@ -228,9 +228,12 @@ XmlFilterBase::~XmlFilterBase()
 void XmlFilterBase::checkDocumentProperties(Reference<XDocumentProperties> xDocProps)
 {
     mbMSO2007 = false;
+    mbMSO = false;
     if (!xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
         return;
 
+    mbMSO = true;
+    SAL_WARN("oox", "a MSO document");
     uno::Reference<beans::XPropertyAccess> xUserDefProps(xDocProps->getUserDefinedProperties(), uno::UNO_QUERY);
     if (!xUserDefProps.is())
         return;
@@ -908,6 +911,11 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 bool XmlFilterBase::isMSO2007Document() const
 {
     return mbMSO2007;
+}
+
+bool XmlFilterBase::isMSODocument() const
+{
+    return mbMSO;
 }
 
 } // namespace core
