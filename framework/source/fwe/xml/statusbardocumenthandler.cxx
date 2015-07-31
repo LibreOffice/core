@@ -352,14 +352,14 @@ throw(  SAXException, RuntimeException, std::exception )
                             }
                             break;
 
-                                          case SB_ATTRIBUTE_HELPURL:
-                                          {
-                                                aHelpURL = xAttribs->getValueByIndex( n );
-                                          }
-                                          break;
+                            case SB_ATTRIBUTE_HELPURL:
+                            {
+                                aHelpURL = xAttribs->getValueByIndex( n );
+                            }
+                            break;
 
-                                          default:
-                                              break;
+                            default:
+                                break;
                         }
                     }
                 } // for
