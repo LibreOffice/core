@@ -48,7 +48,7 @@ ORowSetDataColumn::ORowSetDataColumn( const Reference < XResultSetMetaData >& _x
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const OUString& _rDescription,
                                       const OUString& i_sLabel,
-                                      const boost::function< const ORowSetValue& (sal_Int32)> &_getValue)
+                                      const std::function<const ORowSetValue& (sal_Int32)> &_getValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_pGetValue(_getValue)
     ,m_sLabel(i_sLabel)

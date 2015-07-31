@@ -26,7 +26,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/proparrhlp.hxx>
 
-#include <boost/function.hpp>
+#include <functional>
 
 namespace dbaccess
 {
@@ -38,7 +38,7 @@ namespace dbaccess
                                 public ORowSetDataColumn_PROP
     {
     protected:
-        const boost::function< const ::connectivity::ORowSetValue& ( sal_Int32 ) > m_pGetValue;
+        const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> m_pGetValue;
         ::com::sun::star::uno::Any  m_aOldValue;
 
         OUString             m_sLabel;
@@ -53,7 +53,7 @@ namespace dbaccess
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const OUString& _rDescription,
                           const OUString& i_sLabel,
-                          const boost::function< const ::connectivity::ORowSetValue& ( sal_Int32 ) > &_getValue);
+                          const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
 
 
         // com::sun::star::lang::XTypeProvider

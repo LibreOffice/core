@@ -38,7 +38,7 @@ namespace dbaccess
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                         const OUString& _rDescription,
                         const OUString& i_sLabel,
-                        const boost::function< const ::connectivity::ORowSetValue& ( sal_Int32 ) > &_getValue);
+                        const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
