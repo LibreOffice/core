@@ -118,6 +118,11 @@ struct AxisProperties SAL_FINAL
 
     bool            m_bDisplayLabels;
 
+    // Compatibility option: starting from LibreOffice 5.1 the rotated
+    // layout is preferred to staggering for axis labels.
+    // So the default value of this flag for new documents is `false`.
+    bool            m_bTryStaggeringFirst;
+
     sal_Int32       m_nNumberFormatKey;
 
     /*
