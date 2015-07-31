@@ -215,7 +215,7 @@ public:
     void LogicToPagePos(Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
     void PagePosToLogic(Point& rPnt) const { rPnt+=aPgOrg; }
 
-    void SetVisibleLayers(const SetOfByte& rSet) { aLayerVisi=rSet; InvalidateAllWin(); }
+    void SetVisibleLayers(const SetOfByte& rSet) { aLayerVisi=rSet; }
     const SetOfByte& GetVisibleLayers() const { return aLayerVisi; }
     void SetPrintableLayers(const SetOfByte& rSet) { aLayerPrn=rSet; }
     const SetOfByte& GetPrintableLayers() const { return aLayerPrn;  }
