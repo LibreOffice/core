@@ -52,7 +52,7 @@ ScopeGuard::~ScopeGuard()
 
 void ScopeGuard::dismiss()
 {
-    m_func.clear();
+    m_func = nullptr;
 }
 
 FlagGuard::~FlagGuard()

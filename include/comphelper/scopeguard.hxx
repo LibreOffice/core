@@ -21,7 +21,8 @@
 #define INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 
 #include <comphelper/comphelperdllapi.h>
-#include <boost/function.hpp>
+
+#include <functional>
 
 namespace comphelper {
 
@@ -53,7 +54,7 @@ private:
     ScopeGuard(const ScopeGuard&) SAL_DELETED_FUNCTION;
     ScopeGuard& operator=(const ScopeGuard&) SAL_DELETED_FUNCTION;
 
-    ::boost::function0<void> m_func; // preferring portable syntax
+    ::std::function<void ()> m_func;
     exc_handling const m_excHandling;
 };
 

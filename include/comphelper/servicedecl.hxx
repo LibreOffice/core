@@ -25,10 +25,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <uno/environment.h>
 #include <boost/noncopyable.hpp>
-#include <boost/function.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
+
+#include <functional>
 
 namespace comphelper {
 namespace service_decl {
@@ -36,11 +37,11 @@ namespace service_decl {
 class ServiceDecl;
 
 namespace detail {
-typedef ::boost::function3<
-    css::uno::Reference<css::uno::XInterface> /* return */,
-    ServiceDecl const&,
-    css::uno::Sequence<css::uno::Any> const&,
-    css::uno::Reference<css::uno::XComponentContext> const&> CreateFuncF;
+typedef ::std::function<
+    css::uno::Reference<css::uno::XInterface> /* return */
+    (ServiceDecl const&,
+     css::uno::Sequence<css::uno::Any> const&,
+     css::uno::Reference<css::uno::XComponentContext> const&)> CreateFuncF;
 }
 
 /** Class to declare a service implementation.  There is no need to implement

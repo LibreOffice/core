@@ -30,6 +30,7 @@
 #include <vector>
 #include <list>
 #include <limits>
+#include <algorithm>
 
 using ::com::sun::star::uno::Exception;
 
