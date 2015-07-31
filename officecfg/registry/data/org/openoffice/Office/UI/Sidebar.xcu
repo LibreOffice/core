@@ -728,7 +728,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Impress, Table, visible   ;
+            DrawImpress, Table, visible   ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
