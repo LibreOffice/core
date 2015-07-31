@@ -1229,6 +1229,10 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             // loop through tags:
             for( i = 0; i < nNumTags; i++ )
             {
+                nTagType = 0;
+                nDataType = USHRT_MAX;
+                nDataLen = 0;
+                nOffset = 0;
                 pTIFF->ReadUInt16( nTagType ).ReadUInt16( nDataType ).ReadUInt32( nDataLen ).ReadUInt32( nOffset );
 
                 if( DataTypeSize() * nDataLen > 4 )
