@@ -368,7 +368,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
         else
         {
             // convert to 32 bits RGBA using palette
-            pData = new sal_uInt8[ mnBufHeight * (mnBufWidth << 2) ];
+            pData = new sal_uInt8[mnBufHeight * mnBufWidth * 4];
             bAllocated = true;
             nFormat = GL_RGBA;
             nType = GL_UNSIGNED_BYTE;
@@ -424,13 +424,16 @@ bool OpenGLSalBitmap::ReadTexture()
     if( pData == NULL )
         return false;
 
-    if( mnBits == 16 || mnBits == 24 || mnBits == 32 )
+    if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
     {
         // no conversion needed for truecolor
         pData = maUserBuffer.get();
 
         switch( mnBits )
         {
+        case 8:     nFormat = GL_LUMINANCE;
+                    nType = GL_UNSIGNED_BYTE;
+                    break;
         case 16:    nFormat = GL_RGB;
                     nType = GL_UNSIGNED_SHORT_5_6_5;
                     break;
