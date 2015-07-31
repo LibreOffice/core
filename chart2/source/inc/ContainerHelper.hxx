@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 namespace chart
 {
@@ -143,7 +142,8 @@ template< class Map >
 {
     ::com::sun::star::uno::Sequence< typename Map::key_type > aResult( rCont.size());
     ::std::transform( rCont.begin(), rCont.end(), aResult.getArray(),
-                      ::o3tl::select1st< typename Map::value_type >());
+            []( const ::std::pair< typename Map::key_type, typename Map::mapped_type >& cp )
+            { return cp.first; } );
     return aResult;
 }
 
@@ -160,7 +160,8 @@ template< class Map >
 {
     ::com::sun::star::uno::Sequence< typename Map::mapped_type > aResult( rCont.size());
     ::std::transform( rCont.begin(), rCont.end(), aResult.getArray(),
-                      ::o3tl::select2nd< typename Map::value_type >());
+            []( const ::std::pair< typename Map::key_type, typename Map::mapped_type >& cp )
+            { return cp.second; } );
     return aResult;
 }
 

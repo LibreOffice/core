@@ -50,7 +50,6 @@
 #include <vcl/settings.hxx>
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 #include "ChartElementFactory.hxx"
 
@@ -252,7 +251,8 @@ bool AccessibleBase::ImplUpdateChildren()
         aAccChildren.reserve( aModelChildren.size());
         ::std::transform( m_aChildOIDMap.begin(), m_aChildOIDMap.end(),
                           ::std::back_inserter( aAccChildren ),
-                          ::o3tl::select1st< ChildOIDMap::value_type >());
+                          []( const ::std::pair<ObjectIdentifier, tAccessible>& cp )
+                          { return cp.first; } );
 
         ::std::sort( aModelChildren.begin(), aModelChildren.end());
 

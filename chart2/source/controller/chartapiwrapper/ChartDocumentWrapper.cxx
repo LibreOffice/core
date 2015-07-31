@@ -66,7 +66,6 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
@@ -1460,7 +1459,8 @@ uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceName
 
     ::std::transform( rMap.begin(), rMap.end(),
                       aResult.getArray(),
-                      ::o3tl::select1st< tServiceNameMap::value_type >() );
+                      []( const ::std::pair< OUString, eServiceType >& cp )
+                      { return cp.first; } );
 
     return aResult;
 

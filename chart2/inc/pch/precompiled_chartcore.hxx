@@ -248,7 +248,6 @@
 #include <iterator>
 #include <limits>
 #include <map>
-#include <o3tl/compat_functional.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

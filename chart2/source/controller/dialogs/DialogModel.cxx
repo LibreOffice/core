@@ -47,7 +47,6 @@
 #include <iterator>
 #include <functional>
 #include <numeric>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -110,10 +109,10 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
     {
         tTranslationMap::const_iterator aIt(
             ::std::find_if( aTranslationMap.begin(), aTranslationMap.end(),
-                            ::o3tl::compose1( ::std::bind2nd(
-                                                 ::std::equal_to< tTranslationMap::mapped_type >(),
-                                                 rRoleString ),
-                                             ::o3tl::select2nd< tTranslationMap::value_type >())));
+                [&rRoleString]
+                ( const ::std::pair< OUString, OUString >& cp )
+                { return rRoleString == cp.second; } )
+            );
 
         if( aIt != aTranslationMap.end())
             aResult = (*aIt).first;

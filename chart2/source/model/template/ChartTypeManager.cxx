@@ -45,7 +45,6 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 
@@ -575,7 +574,8 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 
     // get own default templates
     ::std::transform( rMap.begin(), rMap.end(), ::std::back_inserter( aServices ),
-                      ::o3tl::select1st< tTemplateMapType::value_type >());
+            []( const ::std::pair< OUString, TemplateId >& cp )
+            { return cp.first; } );
 
     // add components that were registered in the context's factory
     uno::Reference< container::XContentEnumerationAccess > xEnumAcc(
