@@ -1309,14 +1309,15 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
+        /* Start special handling of keys within a chain */
         // We possibly move to another box before any handling
         bool bHandled = false;
         TextChainCursorManager *pCursorManager =
             ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin, &bHandled);
         if (bHandled)
             return true;
+        /* End special handling of keys within a chain */
 
-        // FIXME(matteocam): Old code from here
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( pMod )
@@ -1325,11 +1326,10 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                     pMod->SetChanged( true );
             }
 
-            // FIXME(matteocam)
-            // Start chaining processing
+            /* Start chaining processing */
             ImpChainingEventHdl(NULL);
             ImpMoveCursorAfterChainingEvent(pCursorManager);
-            // End chaining processing
+            /* End chaining processing */
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL

@@ -227,7 +227,6 @@ protected:
     OverflowingText *mpOverflowingText = NULL;
     bool mbIsUnchainableClone = false;
 
-    //FIXME(matteocam)
     // the successor in a chain
     SdrTextObj *mpNextInChain = NULL;
     SdrTextObj *mpPrevInChain = NULL;

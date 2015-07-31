@@ -98,7 +98,7 @@ private:
 
     SVX_DLLPRIVATE void ImpClearVars();
 
-    // FIXME(matteocam)
+    // FIXME(matteocam):Should we have these fields?
     CursorChainingEvent *maCursorEvent;
     ESelection *maPreChainingSel;
 

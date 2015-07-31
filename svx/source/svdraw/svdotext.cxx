@@ -752,8 +752,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nHgt=1000000;
             }
 
-            // FIXME(matteocam)
-            bool bChainedFrame = true; // XXX: should be returned from a method
+            bool bChainedFrame = IsChainable();
 
             if (!bChainedFrame) {
 

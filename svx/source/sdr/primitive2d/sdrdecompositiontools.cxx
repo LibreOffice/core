@@ -295,10 +295,6 @@ namespace drawinglayer
                 aAnchorTransform = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aAnchorTransform;
 
-                // FIXME(matteocam)
-                SdrTextObj *pReferredTextObj = &rText.getSdrText().GetObject();
-                fprintf(stderr, "[MkTextPrimitive] Referring to text object: %p\n", pReferredTextObj);
-
                 if(rText.isFitToSize())
                 {
                     // stretched text in range
@@ -317,7 +313,7 @@ namespace drawinglayer
                                     aAnchorTransform,
                                     bWordWrap);
                 }
-                else if( rText.isChainable() /*&& !rText.isInEditMode()*/ ) // FIXME(matteocam)
+                else if( rText.isChainable() !rText.isInEditMode() )
                 {
                     fprintf(stderr, "[CHAINABLE?] Making a Chained Primitive for %p\n", pReferredTextObj);
                     pNew = new SdrChainedTextPrimitive2D(

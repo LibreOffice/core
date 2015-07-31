@@ -218,16 +218,13 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pHitTestOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
     ImpSetOutlinerDefaults(pHitTestOutliner, true);
 
-    // FIXME(matteocam)
     /* Start Text Chaining related code */
-
     // Initialize Chaining Outliner
     pChainingOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, *this );
     ImpSetOutlinerDefaults(pChainingOutliner, true);
 
-    // Make a TextChain //XXX: There should not be only one - XXX: Prototype code
+    // Make a TextChain
     pTextChain = new TextChain;
-
     /* End Text Chaining related code */
 
     ImpCreateTables();

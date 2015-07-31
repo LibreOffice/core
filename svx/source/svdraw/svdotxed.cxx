@@ -63,9 +63,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetControlWord(nStat);
     }
 
-    // FIXME(matteocam)
-
-    // disable AUTOPAGESIZE
+    // disable AUTOPAGESIZE if IsChainable
     if ( IsChainable() ) {
         EEControlBits nStat1=rOutl.GetControlWord();
         nStat1 &=~EEControlBits::AUTOPAGESIZE;
@@ -191,9 +189,9 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
             }
 
-            // FIXME(matteocam)
-            bool bChainedFrame = true; // XXX: should be returned from a method
+            bool bChainedFrame = IsChainable();
 
+            // overflow handling may require not modifying width and height this way
             if ( !bChainedFrame ) {
                 // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
                 if(IsVerticalWriting())
