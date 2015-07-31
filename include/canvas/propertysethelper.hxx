@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <canvas/canvastools.hxx>
 
-#include <boost/function.hpp>
+#include <functional>
 #include <vector>
 #include <memory>
 
@@ -50,8 +50,8 @@ namespace canvas
     class CANVASTOOLS_DLLPUBLIC PropertySetHelper
     {
     public:
-        typedef boost::function0< ::com::sun::star::uno::Any >            GetterType;
-        typedef boost::function1<void, const ::com::sun::star::uno::Any&> SetterType;
+        typedef std::function<::com::sun::star::uno::Any ()> GetterType;
+        typedef std::function<void (const ::com::sun::star::uno::Any&)> SetterType;
         struct Callbacks
         {
             GetterType getter;

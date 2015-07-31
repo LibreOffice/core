@@ -110,7 +110,7 @@ namespace canvas
             throwUnknown( aPropertyName );
         }
 
-        if( aCallbacks.setter.empty() )
+        if (!aCallbacks.setter)
             throwVeto( aPropertyName );
 
         aCallbacks.setter(aValue);
@@ -126,7 +126,7 @@ namespace canvas
             throwUnknown( aPropertyName );
         }
 
-        if( !aCallbacks.getter.empty() )
+        if (aCallbacks.getter)
             return aCallbacks.getter();
 
         // TODO(Q1): subtlety, empty getter method silently returns

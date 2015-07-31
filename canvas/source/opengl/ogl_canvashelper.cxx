@@ -37,6 +37,7 @@
 #include <GL/glew.h>
 
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 #include <memory>
 

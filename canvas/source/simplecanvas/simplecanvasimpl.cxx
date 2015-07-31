@@ -38,6 +38,7 @@
 #include <canvas/canvastools.hxx>
 
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 #define SERVICE_NAME "com.sun.star.rendering.SimpleCanvas"
 
