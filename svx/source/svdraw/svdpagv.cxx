@@ -229,7 +229,6 @@ void SdrPageView::Show()
     if(!IsVisible())
     {
         mbVisible = true;
-        InvalidateAllWin();
 
         for(sal_uInt32 a(0L); a < GetView().PaintWindowCount(); a++)
         {
@@ -242,7 +241,10 @@ void SdrPageView::Hide()
 {
     if(IsVisible())
     {
-        InvalidateAllWin();
+        if (!GetView().GetModel()->isTiledRendering())
+        {
+            InvalidateAllWin();
+        }
         mbVisible = false;
         ClearPageWindows();
     }
