@@ -313,9 +313,8 @@ namespace drawinglayer
                                     aAnchorTransform,
                                     bWordWrap);
                 }
-                else if( rText.isChainable() !rText.isInEditMode() )
+                else if( rText.isChainable() && !rText.isInEditMode() )
                 {
-                    fprintf(stderr, "[CHAINABLE?] Making a Chained Primitive for %p\n", pReferredTextObj);
                     pNew = new SdrChainedTextPrimitive2D(
                                     &rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
