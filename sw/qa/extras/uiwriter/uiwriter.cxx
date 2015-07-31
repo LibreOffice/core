@@ -52,6 +52,8 @@
 #include <editeng/wghtitem.hxx>
 
 #include "UndoManager.hxx"
+#include <textsh.hxx>
+#include <frmmgr.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -145,6 +147,7 @@ public:
     void testDde();
     void testTdf89954();
     void testTdf89720();
+    void testTdf88986();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -209,6 +212,7 @@ public:
     CPPUNIT_TEST(testDde);
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
+    CPPUNIT_TEST(testTdf88986);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2144,6 +2148,22 @@ void SwUiWriterTest::testTdf89720()
             // resulting in unexpected dark color.
             CPPUNIT_ASSERT(!pItem->pPostIt->TextRange());
     }
+}
+
+void SwUiWriterTest::testTdf88986()
+{
+    // Create a text shell.
+    SwDoc* pDoc = createDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwTextShell aShell(*pView);
+
+    // Create the item set that is normally passed to the insert frame dialog.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwFlyFrmAttrMgr aMgr(true, pWrtShell, FRMMGR_TYPE_TEXT);
+    SfxItemSet aSet = aShell.CreateInsertFrameItemSet(aMgr);
+
+    // This was missing along with the gradient and other tables.
+    CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
