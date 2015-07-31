@@ -15,7 +15,7 @@
 */
 
 #include <algorithm>
-#include <boost/function.hpp>
+#include <functional>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

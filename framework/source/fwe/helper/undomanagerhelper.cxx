@@ -30,8 +30,8 @@
 #include <osl/conditn.hxx>
 
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 
+#include <functional>
 #include <stack>
 #include <queue>
 
@@ -138,7 +138,7 @@ namespace framework
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
-        UndoManagerRequest( ::boost::function0< void > const& i_request )
+        UndoManagerRequest( ::std::function<void ()> const& i_request )
             :m_request( i_request )
             ,m_caughtException()
             ,m_finishCondition()
@@ -181,7 +181,7 @@ namespace framework
         }
 
     private:
-        ::boost::function0< void >  m_request;
+        ::std::function<void ()>    m_request;
         Any                         m_caughtException;
         ::osl::Condition            m_finishCondition;
     };
@@ -302,7 +302,7 @@ namespace framework
 
     private:
         /// adds a function to be called to the request processor's queue
-        void impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock );
+        void impl_processRequest(::std::function<void ()> const& i_request, IMutexGuard& i_instanceLock);
 
         /// impl-versions of the XUndoManager API.
         void impl_enterUndoContext( const OUString& i_title, const bool i_hidden );
@@ -473,7 +473,7 @@ namespace framework
         // <--- SYNCHRONIZED
     }
 
-    void UndoManagerHelper_Impl::impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock )
+    void UndoManagerHelper_Impl::impl_processRequest(::std::function<void ()> const& i_request, IMutexGuard& i_instanceLock)
     {
         // create the request, and add it to our queue
         ::rtl::Reference< UndoManagerRequest > pRequest( new UndoManagerRequest( i_request ) );
