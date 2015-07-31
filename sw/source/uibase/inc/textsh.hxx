@@ -25,9 +25,10 @@
 
 class AbstractSvxPostItDialog;
 class SwFieldMgr;
+class SwFlyFrmAttrMgr;
 class SvxHyperlinkItem;
 
-class SwTextShell: public SwBaseShell
+class SW_DLLPUBLIC SwTextShell: public SwBaseShell
 {
     SwFieldMgr*   pPostItFieldMgr;
     RotateTransliteration m_aRotateCase;
@@ -80,6 +81,8 @@ public:
 
              SwTextShell(SwView &rView);
     virtual ~SwTextShell();
+    /// Create item set for the insert frame dialog.
+    SfxItemSet CreateInsertFrameItemSet(SwFlyFrmAttrMgr& rMgr);
 };
 
 void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );

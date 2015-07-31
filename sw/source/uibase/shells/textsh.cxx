@@ -572,43 +572,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            static const sal_uInt16 aFrmAttrRange[] =
-            {
-                RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-                SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-                FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-                SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-                FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
-                SID_HTML_MODE,          SID_HTML_MODE,
-                SID_COLOR_TABLE,        SID_BITMAP_LIST,
-                0
-            };
-
-            SfxItemSet aSet(GetPool(), aFrmAttrRange );
-            aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-
-            // For the Area tab page.
-            GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
-
-            const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
-            SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
-            aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
-            aSet.Put(aFrmSize);
-
-            const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
-            SwFormatFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
-            aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
-            aSet.Put(aPrtSize);
-
-            aSet.Put(aMgr.GetAttrSet());
-            aSet.SetParent( aMgr.GetAttrSet().GetParent() );
-
-            // Delete minimum size in columns.
-            SvxBoxInfoItem aBoxInfo(static_cast<const SvxBoxInfoItem &>(aSet.Get(SID_ATTR_BORDER_INNER)));
-            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
-            aBoxInfo.SetMinDist(false);
-            aBoxInfo.SetDefDist(rBox.GetDistance(SvxBoxItemLine::LEFT));
-            aSet.Put(aBoxInfo);
+            SfxItemSet aSet = CreateInsertFrameItemSet(aMgr);
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -967,6 +931,49 @@ SwTextShell::SwTextShell(SwView &_rView) :
 
 SwTextShell::~SwTextShell()
 {
+}
+
+SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrmAttrMgr& rMgr)
+{
+    static const sal_uInt16 aFrmAttrRange[] =
+    {
+        RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
+        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+        FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
+        SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
+        FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
+        SID_HTML_MODE,          SID_HTML_MODE,
+        SID_COLOR_TABLE,        SID_BITMAP_LIST,
+        0
+    };
+
+    SfxItemSet aSet(GetPool(), aFrmAttrRange );
+    aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+
+    // For the Area tab page.
+    GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
+
+    const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
+    SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+    aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
+    aSet.Put(aFrmSize);
+
+    const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
+    SwFormatFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+    aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
+    aSet.Put(aPrtSize);
+
+    aSet.Put(rMgr.GetAttrSet());
+    aSet.SetParent( rMgr.GetAttrSet().GetParent() );
+
+    // Delete minimum size in columns.
+    SvxBoxInfoItem aBoxInfo(static_cast<const SvxBoxInfoItem &>(aSet.Get(SID_ATTR_BORDER_INNER)));
+    const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
+    aBoxInfo.SetMinDist(false);
+    aBoxInfo.SetDefDist(rBox.GetDistance(SvxBoxItemLine::LEFT));
+    aSet.Put(aBoxInfo);
+
+    return aSet;
 }
 
 void SwTextShell::InsertSymbol( SfxRequest& rReq )
