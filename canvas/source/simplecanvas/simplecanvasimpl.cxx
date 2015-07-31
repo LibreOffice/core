@@ -38,7 +38,8 @@
 #include <canvas/canvastools.hxx>
 
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
+
+#include <functional>
 
 #define SERVICE_NAME "com.sun.star.rendering.SimpleCanvas"
 
@@ -91,7 +92,7 @@ namespace
                          decltype(&color2Sequence)>                   m_aFillColor;
         o3tl::LazyUpdate<geometry::RealRectangle2D,
                          uno::Reference< rendering::XPolyPolygon2D >,
-                         boost::function1<uno::Reference<rendering::XPolyPolygon2D>, geometry::RealRectangle2D> > m_aRectClip;
+                         std::function<uno::Reference<rendering::XPolyPolygon2D> (geometry::RealRectangle2D)> > m_aRectClip;
         geometry::AffineMatrix2D                                      m_aTransformation;
 
         explicit SimpleRenderState( uno::Reference<rendering::XGraphicDevice> const& xDevice ) :
@@ -368,7 +369,7 @@ namespace
         typedef o3tl::LazyUpdate<
             rendering::FontRequest,
             uno::Reference< rendering::XCanvasFont >,
-            boost::function1<uno::Reference<rendering::XCanvasFont>, rendering::FontRequest> > SimpleFont;
+            std::function<uno::Reference<rendering::XCanvasFont> (rendering::FontRequest)> > SimpleFont;
 
         uno::Reference<rendering::XCanvas> mxCanvas;
         SimpleFont                         maFont;

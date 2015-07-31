@@ -37,9 +37,9 @@
 #include <GL/glew.h>
 
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 
 #include <memory>
+#include <functional>
 
 
 using namespace ::com::sun::star;
@@ -85,13 +85,13 @@ namespace oglcanvas
         rendering::ARGBColor            maARGBColor;
         ::basegfx::B2DPolyPolygonVector maPolyPolys;
 
-        ::boost::function6< bool,
+        ::std::function< bool (
                             const CanvasHelper&,
                             const ::basegfx::B2DHomMatrix&,
                             GLenum,
                             GLenum,
                             const rendering::ARGBColor&,
-                            const ::basegfx::B2DPolyPolygonVector& > maFunction;
+                            const ::basegfx::B2DPolyPolygonVector&)> maFunction;
     };
 
     namespace
