@@ -39,7 +39,6 @@ m_pProperties( new PropertyMap )
 
 TblStylePrHandler::~TblStylePrHandler( )
 {
-    delete m_pTablePropsHandler, m_pTablePropsHandler = nullptr;
 }
 
 OUString TblStylePrHandler::getTypeString()

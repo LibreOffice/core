@@ -54,7 +54,7 @@ class TblStylePrHandler : public LoggedProperties
 {
 private:
     DomainMapper &              m_rDMapper;
-    TablePropertiesHandler *    m_pTablePropsHandler;
+    std::unique_ptr<TablePropertiesHandler>  m_pTablePropsHandler;
 
     TblStyleType                m_nType;
     PropertyMapPtr              m_pProperties;
