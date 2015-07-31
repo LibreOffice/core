@@ -188,7 +188,7 @@ public:
         @param pData_ pointer to value
         @param pType type of value
     */
-    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType );
+    inline void SAL_CALL setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ );
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
 
