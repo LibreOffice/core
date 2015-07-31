@@ -33,7 +33,7 @@ using namespace sfx2::sidebar;
 namespace svx { namespace sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
-    const boost::function<rtl::OUString()>& rSelectionChangeCallback,
+    const std::function<rtl::OUString()>& rSelectionChangeCallback,
     const Reference<frame::XController>& rxController,
     const EnumContext::Context eDefaultContext)
     : SelectionChangeHandlerInterfaceBase(m_aMutex),

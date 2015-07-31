@@ -21,7 +21,7 @@
 
 #include "svx/sidebar/Popup.hxx"
 
-#include <boost/function.hpp>
+#include <functional>
 
 
 class XFillFloatTransparenceItem;
@@ -35,7 +35,7 @@ class AreaTransparencyGradientPopup
 public:
     AreaTransparencyGradientPopup (
         vcl::Window* pParent,
-        const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
+        ::std::function<PopupControl*(PopupContainer*)> const& rControlCreator);
     virtual ~AreaTransparencyGradientPopup();
 
     void Rearrange (XFillFloatTransparenceItem* pItem);

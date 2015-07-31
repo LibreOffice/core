@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 
-#include <boost/function.hpp>
-
 #include <editeng/lspcitem.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/tbxctrl.hxx>

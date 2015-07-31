@@ -26,7 +26,7 @@
 #include <svx/sidebar/PopupContainer.hxx>
 #include <svx/sidebar/PopupControl.hxx>
 
-#include <boost/function.hpp>
+#include <functional>
 
 namespace vcl { class Window; }
 class ToolBox;
@@ -51,7 +51,7 @@ public:
     */
     Popup (
         vcl::Window* pParent,
-        const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator,
+        const ::std::function<PopupControl*(PopupContainer*)>& rControlCreator,
         const ::rtl::OUString& rsAccessibleName);
     virtual ~Popup();
 
@@ -73,7 +73,7 @@ public:
     /** If you want to be informed when the popup closes then add a
         callback that is called after that.
     */
-    void SetPopupModeEndHandler (const ::boost::function<void()>& rCallback);
+    void SetPopupModeEndHandler (const ::std::function<void()>& rCallback);
 
     void dispose();
 
@@ -92,8 +92,8 @@ protected:
 
 private:
     VclPtr<vcl::Window> mpParent;
-    ::boost::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
-    ::boost::function<void()> maPopupModeEndCallback;
+    ::std::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
+    ::std::function<void()> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;
     VclPtr<PopupContainer> mxContainer;
 

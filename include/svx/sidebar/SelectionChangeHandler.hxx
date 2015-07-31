@@ -28,7 +28,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <boost/function.hpp>
+#include <functional>
 
 class SdrMarkView;
 
@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC SelectionChangeHandler
 {
 public:
     SelectionChangeHandler (
-        const boost::function<rtl::OUString()>& rSelectionChangeCallback,
+        const std::function<rtl::OUString ()>& rSelectionChangeCallback,
         const css::uno::Reference<css::frame::XController>& rxController,
         const sfx2::sidebar::EnumContext::Context eDefaultContext);
     virtual ~SelectionChangeHandler();
@@ -69,7 +69,7 @@ private:
     SelectionChangeHandler(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
     SelectionChangeHandler& operator=(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
 
-    const boost::function<rtl::OUString()> maSelectionChangeCallback;
+    const std::function<rtl::OUString ()> maSelectionChangeCallback;
     css::uno::Reference<css::frame::XController> mxController;
     const sfx2::sidebar::EnumContext::Context meDefaultContext;
     bool mbIsConnected;

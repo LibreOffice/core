@@ -23,7 +23,7 @@
 
 #include <svl/poolitem.hxx>
 
-#include <boost/function.hpp>
+#include <functional>
 
 
 namespace svx { namespace sidebar {
@@ -34,7 +34,7 @@ class LineWidthPopup
 public:
     LineWidthPopup (
         vcl::Window* pParent,
-        const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
+        const ::std::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~LineWidthPopup();
 
     void SetWidthSelect (long lValue, bool bValuable, SfxMapUnit eMapUnit);

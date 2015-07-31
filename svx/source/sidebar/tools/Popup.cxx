@@ -27,7 +27,7 @@ namespace svx { namespace sidebar {
 
 Popup::Popup (
     vcl::Window* pParent,
-    const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator,
+    const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator,
     const ::rtl::OUString& rsAccessibleName)
     : mxControl(),
       mpParent(pParent),
@@ -89,7 +89,7 @@ void Popup::Hide()
             mxContainer->EndPopupMode();
 }
 
-void Popup::SetPopupModeEndHandler (const ::boost::function<void()>& rCallback)
+void Popup::SetPopupModeEndHandler (const ::std::function<void ()>& rCallback)
 {
     maPopupModeEndCallback = rCallback;
     if (mxContainer)
