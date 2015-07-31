@@ -106,6 +106,8 @@ private:
     bool ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel );
     bool ImplScaleArea( double rScaleX, double rScaleY );
 
+    bool getFormatAndType(GLenum& nFormat, GLenum& nType);
+
 public:
 
     bool ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
