@@ -4002,6 +4002,7 @@ define gb_ExternalExecutable__register_xsltproc
 $(call gb_ExternalExecutable_set_internal,xsltproc,$(WORKDIR_FOR_BUILD)/UnpackedTarball/xslt/$(if $(filter MSC,$(COM)),win32/bin.msvc,xsltproc)/xsltproc$(gb_Executable_EXT_for_build),xslt)
 $(call gb_ExternalExecutable_add_dependencies,xsltproc,\
 	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
+	$(call gb_Package_get_target,xml2) \
 	$(call gb_Package_get_target,xslt) \
 )
 
