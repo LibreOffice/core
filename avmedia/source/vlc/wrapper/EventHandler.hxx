@@ -9,7 +9,8 @@
 
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTHANDLER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTHANDLER_HXX
-#include <boost/function.hpp>
+
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <salhelper/thread.hxx>
 #include "ThreadsafeQueue.hxx"
@@ -30,7 +31,7 @@ namespace wrapper
         virtual void SAL_CALL run() SAL_OVERRIDE;
 
     public:
-        typedef boost::function< void() > TCallback;
+        typedef std::function< void() > TCallback;
         ThreadsafeQueue< TCallback > mCallbackQueue;
     };
 }

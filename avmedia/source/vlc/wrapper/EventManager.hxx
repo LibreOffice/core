@@ -10,7 +10,7 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
 
-#include <boost/function.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include "Player.hxx"
 
@@ -29,7 +29,7 @@ namespace wrapper
 
     public:
         static bool LoadSymbols();
-        typedef boost::function<void()> Callback;
+        typedef std::function<void()> Callback;
 
         EventManager( Player& player, EventHandler& eh );
 
@@ -38,7 +38,7 @@ namespace wrapper
 
     private:
         EventHandler& mEventHandler;
-        typedef boost::function< void() > TCallback;
+        typedef std::function< void() > TCallback;
         libvlc_event_manager_t *mManager;
         TCallback mOnPaused;
         TCallback mOnEndReached;
