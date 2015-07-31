@@ -93,6 +93,8 @@ boost_patches += boost_1_59_0.multi_array.wshadow.patch
 boost_patches += boost_1_59_0.signal2.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11501
 boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
+# fixed upstream by bdcd06c4cc1971d763e528b8cb1d0f16fcc5ecf4
+boost_patches += boost.concept_check.Wunused-local-typedefs.warnings.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
