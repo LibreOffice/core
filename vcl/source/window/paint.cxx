@@ -125,9 +125,6 @@ void PaintHelper::StartBufferedPaint()
     // Remember what was the map mode of m_aPaintRect.
     m_aPaintRectMapMode = m_pWindow->GetMapMode();
 
-    // update the output size now, after all the settings were copied
-    pFrameData->mpBuffer->SetOutputSize(m_pWindow->GetOutputSize());
-
     // we need to remember the mnOutOffX / mnOutOffY, but actually really
     // set it just temporarily for the subwidgets - so we are setting it here
     // only to remember the value & to be able to pass it to the descendants
