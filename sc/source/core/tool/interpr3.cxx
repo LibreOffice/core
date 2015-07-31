@@ -31,8 +31,10 @@
 #include "globstr.hrc"
 
 #include <math.h>
-#include <vector>
 #include <algorithm>
+#include <functional>
+#include <utility>
+#include <vector>
 #include <boost/math/special_functions/log1p.hpp>
 #include <comphelper/random.hxx>
 
@@ -2771,28 +2773,21 @@ void ScInterpreter::ScFTest()
     double fSum2    = 0.0;
     double fSumSqr2 = 0.0;
     double fVal;
-    for (i = 0; i < nC1; i++)
-        for (j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsString(i,j))
-            {
-                fVal = pMat1->GetDouble(i,j);
-                fSum1    += fVal;
-                fSumSqr1 += fVal * fVal;
-                fCount1++;
-            }
-        }
-    for (i = 0; i < nC2; i++)
-        for (j = 0; j < nR2; j++)
-        {
-            if (!pMat2->IsString(i,j))
-            {
-                fVal = pMat2->GetDouble(i,j);
-                fSum2    += fVal;
-                fSumSqr2 += fVal * fVal;
-                fCount2++;
-            }
-        }
+    std::vector<std::pair<double, std::function<double(double, double)>>> aValues =
+    {
+        {0.0, [](double r, double a){return r + a;}},
+        {0.0, [](double r, double a){return r + a * a;}}
+    };
+    auto val1 = pMat1->Collect(aValues, false);
+    fSum1 = val1[0];
+    fSumSqr1 = val1[1];
+    fCount1 = val1[2];
+
+    auto val2 = pMat2->Collect(aValues, false);
+    fSum2 = val2[0];
+    fSumSqr2 = val2[1];
+    fCount2 = val2[2];
+
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
