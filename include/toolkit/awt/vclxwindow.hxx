@@ -45,7 +45,8 @@
 
 #include <stdarg.h>
 #include <list>
-#include <boost/function.hpp>
+#include <functional>
+
 
 class VclSimpleEvent;
 class VclWindowEvent;
@@ -56,10 +57,7 @@ namespace toolkit
     class IAccessibleFactory;
 }
 
-
-
 //  class VCLXWINDOW
-
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
@@ -108,7 +106,7 @@ protected:
     ::cppu::OInterfaceContainerHelper&  GetTopWindowListeners();
 
 public:
-    typedef ::boost::function0< void >  Callback;
+    typedef ::std::function<void ()>  Callback;
 
 protected:
     /** executes the given callback asynchronously
