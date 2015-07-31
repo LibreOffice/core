@@ -114,8 +114,12 @@ void PaintHelper::StartBufferedPaint()
 
     // Instead of creating a new VirtualDevice, just erase the area we'll be
     // painting over, as VirtualDevice::ImplInitVirDev() would do.
+    // The painted area is m_aPaintRect, or in case it's empty, then the whole window.
     pFrameData->mpBuffer->SetBackground(Wallpaper(Color(COL_WHITE)));
-    pFrameData->mpBuffer->Erase(m_aPaintRect);
+    if (m_aPaintRect.IsEmpty())
+        pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
+    else
+        pFrameData->mpBuffer->Erase(m_aPaintRect);
 
     pFrameData->mbInBufferedPaint = true;
     m_bCreatedBuffer = true;
@@ -124,9 +128,6 @@ void PaintHelper::StartBufferedPaint()
 
     // Remember what was the map mode of m_aPaintRect.
     m_aPaintRectMapMode = m_pWindow->GetMapMode();
-
-    // update the output size now, after all the settings were copied
-    pFrameData->mpBuffer->SetOutputSize(m_pWindow->GetOutputSize());
 
     // we need to remember the mnOutOffX / mnOutOffY, but actually really
     // set it just temporarily for the subwidgets - so we are setting it here
