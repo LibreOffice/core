@@ -34,7 +34,6 @@
 
 #include <math.h>
 
-#include <vector>
 #include <limits>
 
 #include <mdds/multi_type_matrix.hpp>
@@ -299,6 +298,9 @@ public:
 
     template<typename T>
     void ApplyOperation(T aOp, ScMatrixImpl& rMat);
+
+    template<typename T>
+    std::vector<double> ApplyCollectOperation(std::vector<std::pair<double, T>> aOps, bool bTextAsZero);
 
 #if DEBUG_MATRIX
     void Dump() const;
@@ -2095,6 +2097,93 @@ public:
     }
 };
 
+/** Temporary template for collecting multiply values from a matrix.  With some
+ * improvements (struct for val + lambda maybe?), it (with a bit of lambdas)
+ * will be a lot better (more general and shorter) than functors above, e.g.
+ * Count, Min[/Max]Op, SumOp.
+ *
+ * There is a similar template - WalkElementBlocks, but it has some flaws and
+ * doubts, which make impossible using it with no headache.
+ * TODO: Check if ScInterpreter still needs the IterateResult struct and if
+ * not, fix WalkElementBlocks.
+ *
+ */
+template<typename TOp>
+struct CollectOpWrapper{
+    bool mbTextAsZero;
+    size_t mnCountIndex;
+    std::vector<TOp> mOps;
+    std::vector<double> mResults;
+
+    CollectOpWrapper(std::vector<std::pair<double, TOp>> Values, bool bTextAsZero):
+        mbTextAsZero(bTextAsZero)
+    {
+        std::for_each(std::begin(Values), std::end(Values),
+                [&](std::pair<double, TOp> a)
+                {
+                    mResults.push_back(a.first);
+                    mOps.push_back(a.second);
+                });
+        mnCountIndex = mResults.size();
+        mResults.push_back(0.0); // mnCount
+    }
+
+    std::vector<double> getResults() const
+    {
+        return mResults;
+    }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+
+                for (; it != itEnd; ++it)
+                {
+                    for (auto i = 0u; i < mOps.size(); ++i)
+                    {
+                        mResults[i] = mOps[i](mResults[i], *it);
+                    }
+                }
+                mResults[mnCountIndex] += node.size;
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+
+                for (; it != itEnd; ++it)
+                {
+                    for (auto i = 0u; i < mOps.size(); ++i)
+                    {
+                        mResults[i] = mOps[i](mResults[i], *it);
+                    }
+                }
+                mResults[mnCountIndex] += node.size;
+            }
+            break;
+            case mdds::mtm::element_string:
+                if (mbTextAsZero)
+                {
+                    mResults[mnCountIndex] += node.size;
+                }
+            break;
+            case mdds::mtm::element_empty:
+            default:
+                ;
+        }
+    }
+};
+
 template<typename T>
 void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 {
@@ -2102,7 +2191,16 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
     maMat.walk(aFunc);
 }
 
+template<typename T>
+std::vector<double> ScMatrixImpl::ApplyCollectOperation(std::vector<std::pair<double, T>> aOps, bool bTextAsZero)
+{
+    CollectOpWrapper<T> aFunc(aOps, bTextAsZero);
+    maMat.walk(aFunc);
+    return aFunc.getResults();
+}
+
 #if DEBUG_MATRIX
+
 void ScMatrixImpl::Dump() const
 {
     cout << "-- matrix content" << endl;
@@ -2687,6 +2785,11 @@ void ScMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
         matop::MatOp<decltype(pow_)> aOp(pow_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
+}
+
+std::vector<double> ScMatrix::Collect(std::vector<std::pair<double, std::function<double(double, double)>>> aValues, bool bTextAsZero)
+{
+    return pImpl->ApplyCollectOperation(aValues, bTextAsZero);
 }
 
 ScMatrix& ScMatrix::operator+= ( const ScMatrix& r )

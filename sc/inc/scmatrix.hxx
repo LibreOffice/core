@@ -27,6 +27,9 @@
 #include <rtl/ustring.hxx>
 #include <svl/sharedstring.hxx>
 
+#include <functional>
+#include <utility>
+#include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 
@@ -393,6 +396,8 @@ public:
     void MulOp(double fVal, ScMatrix& rMat);
     void DivOp(bool bFlag, double fVal, ScMatrix& rMat);
     void PowOp(bool bFlag, double fVal, ScMatrix& rMat);
+
+    std::vector<double> Collect(std::vector<std::pair<double, std::function<double(double, double)>>> aValues, bool bTextAsZero);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 
