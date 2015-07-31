@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2d99156f",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-31T13:38:16Z",
+      "side": 1,
+      "message": "It would be nice to keep the original comment here:\n\n // TODO: use nicer heuristic\n // return format of first non-empty cell",
+      "revId": "01586f68c74fd84e8114d744ace571e10a19e5b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_8d94c937",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3296,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-31T13:38:16Z",
+      "side": 1,
+      "message": "For this, nIndex should be checked before if it is actually a valid offset into m_aDataArray. The check is even more important as the function is part of the UNO API so can be called externally with any invalid value.",
+      "range": {
+        "startLine": 3296,
+        "startChar": 83,
+        "endLine": 3296,
+        "endChar": 93
+      },
+      "revId": "01586f68c74fd84e8114d744ace571e10a19e5b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
