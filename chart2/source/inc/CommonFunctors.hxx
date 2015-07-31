@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
@@ -185,10 +184,9 @@ template< class MapType >
     findValueInMap( const MapType & rMap, const typename MapType::mapped_type & rData )
 {
     return ::std::find_if( rMap.begin(), rMap.end(),
-                           ::o3tl::compose1( ::std::bind2nd(
-                                                ::std::equal_to< typename MapType::mapped_type >(),
-                                                rData ),
-                                            ::o3tl::select2nd< typename MapType::value_type >()));
+            [&rData]
+            ( const ::std::pair< typename MapType::key_type, typename MapType::mapped_type >& cp )
+            { return rData == cp.second; } );
 }
 
 } //  namespace CommonFunctors
