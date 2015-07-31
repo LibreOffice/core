@@ -114,8 +114,12 @@ void PaintHelper::StartBufferedPaint()
 
     // Instead of creating a new VirtualDevice, just erase the area we'll be
     // painting over, as VirtualDevice::ImplInitVirDev() would do.
+    // The painted area is m_aPaintRect, or in case it's empty, then the whole window.
     pFrameData->mpBuffer->SetBackground(Wallpaper(Color(COL_WHITE)));
-    pFrameData->mpBuffer->Erase(m_aPaintRect);
+    if (m_aPaintRect.IsEmpty())
+        pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
+    else
+        pFrameData->mpBuffer->Erase(m_aPaintRect);
 
     pFrameData->mbInBufferedPaint = true;
     m_bCreatedBuffer = true;
