@@ -1381,9 +1381,9 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                 }
 
                 if ( bIsSizeValid )
-                    pData->mpImageBitmap->Draw( 0, this, rPos, nStyle, &rSize );
+                    pData->mpImageBitmap->Draw( this, rPos, nStyle, &rSize );
                 else
-                    pData->mpImageBitmap->Draw( 0, this, rPos, nStyle );
+                    pData->mpImageBitmap->Draw( this, rPos, nStyle );
             }
             break;
 

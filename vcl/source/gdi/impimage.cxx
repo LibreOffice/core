@@ -169,20 +169,20 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
             mnSize );
 }
 
-void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
+void ImplImageBmp::Draw( OutputDevice* pOutDev,
                          const Point& rPos, DrawImageFlags nStyle,
                          const Size* pSize )
 {
     if( pOutDev->IsDeviceOutputNecessary() )
     {
-        const Point aSrcPos( nPos * maSize.Width(), 0 );
+        const Point aSrcPos(0, 0);
         Size        aOutSize;
 
         aOutSize = ( pSize ? *pSize : pOutDev->PixelToLogic( maSize ) );
 
         if( nStyle & DrawImageFlags::Disable )
         {
-            ImplUpdateDisabledBmpEx( nPos);
+            ImplUpdateDisabledBmpEx();
             pOutDev->DrawBitmapEx( rPos, aOutSize, aSrcPos, maSize, maDisabledBmpEx );
         }
         else
@@ -193,7 +193,7 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                 BitmapEx        aTmpBmpEx;
                 const Rectangle aCropRect( aSrcPos, maSize );
 
-                if( mpInfoAry[ nPos ] & ( IMPSYSIMAGEITEM_MASK | IMPSYSIMAGEITEM_ALPHA ) )
+                if( mpInfoAry[0] & ( IMPSYSIMAGEITEM_MASK | IMPSYSIMAGEITEM_ALPHA ) )
                     aTmpBmpEx = maBmpEx;
                 else
                     aTmpBmpEx = maBmpEx.GetBitmap();
@@ -347,7 +347,7 @@ pOutDev
     }
 }
 
-void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
+void ImplImageBmp::ImplUpdateDisabledBmpEx()
 {
     const Size aTotalSize( maBmpEx.GetSizePixel() );
 
@@ -357,7 +357,6 @@ void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
         AlphaMask   aGreyAlphaMask( aTotalSize );
 
         maDisabledBmpEx = BitmapEx( aGrey, aGreyAlphaMask );
-        nPos = -1;
     }
 
     Bitmap              aBmp( maBmpEx.GetBitmap() );
@@ -373,9 +372,11 @@ void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
     {
         BitmapColor aGreyVal( 0 );
         BitmapColor aGreyAlphaMaskVal( 0 );
-        const Point aPos( ( nPos < 0 ) ? 0 : ( nPos * maSize.Width() ), 0 );
-        const int  nLeft = aPos.X(), nRight = nLeft + ( ( nPos < 0 ) ? aTotalSize.Width() : maSize.Width() );
-        const int  nTop = aPos.Y(), nBottom = nTop + maSize.Height();
+
+        const int nLeft = 0;
+        const int nRight = nLeft + maSize.Width();
+        const int nTop = 0;
+        const int nBottom = nTop + maSize.Height();
 
         for( int nY = nTop; nY < nBottom; ++nY )
         {

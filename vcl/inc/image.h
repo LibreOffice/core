@@ -35,7 +35,7 @@ public:
 
     void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,sal_uInt16 nInitSize );
     void        ColorTransform();
-    void        Draw( sal_uInt16 nPos, OutputDevice* pDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = NULL );
+    void        Draw( OutputDevice* pDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = NULL );
 
 private:
 
@@ -47,7 +47,7 @@ private:
     sal_uInt16      mnSize;
 
     void        ImplUpdateDisplayBmp( OutputDevice* pOutDev );
-    void        ImplUpdateDisabledBmpEx( int nPos );
+    void        ImplUpdateDisabledBmpEx();
 
 private:
     ImplImageBmp( const ImplImageBmp& ) SAL_DELETED_FUNCTION;
