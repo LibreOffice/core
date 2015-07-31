@@ -277,7 +277,13 @@ void ScDBData::GetArea(ScRange& rRange) const
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (nCol2 - nCol1 != nEndCol - nStartCol)
-        ::std::vector<OUString>().swap( maTableColumnNames);    // invalidate column names/offsets
+    {
+        if (!maTableColumnNames.empty())
+        {
+            SAL_WARN("sc.core", "ScDBData::SetArea - invalidating column names/offsets");
+            ::std::vector<OUString>().swap( maTableColumnNames);
+        }
+    }
 
     nTable  = nTab;
     nStartCol = nCol1;
@@ -564,7 +570,13 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
     SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
     pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
     if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
-        ::std::vector<OUString>().swap( maTableColumnNames);    // invalidate column names/offsets
+    {
+        if (!maTableColumnNames.empty())
+        {
+            SAL_WARN("sc.core", "ScDBData::ExtendDataArea - invalidating column names/offsets");
+            ::std::vector<OUString>().swap( maTableColumnNames);
+        }
+    }
 }
 
 void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
@@ -604,6 +616,9 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
             }
         }
     } // else   empty aNewNames invalidates names/offsets
+
+    SAL_WARN_IF( !maTableColumnNames.empty() && aNewNames.empty(),
+            "sc.core", "ScDBData::AdjustTableColumnNames - invalidating column names/offsets");
     aNewNames.swap( maTableColumnNames);
 }
 
