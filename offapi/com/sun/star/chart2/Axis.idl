@@ -134,6 +134,13 @@ service Axis
         @since LibreOffice 4.3
      */
     [optional, property] string BuiltInUnit;
+
+    /** Compatibility option: determines which strategy should be tried first for fixing axis labels overlapping issues
+
+        @since LibreOffice 5.1
+     */
+    [optional, property] boolean TryStaggeringFirst;
+
 };
 
 } ; // chart2

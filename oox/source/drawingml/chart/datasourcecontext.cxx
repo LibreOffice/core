@@ -21,6 +21,9 @@
 
 #include "oox/drawingml/chart/datasourcemodel.hxx"
 
+#include <comphelper/processfactory.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
 
 namespace oox {
@@ -30,14 +33,21 @@ namespace chart {
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
+using namespace ::com::sun::star;
+
 DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
     DataSequenceContextBase( rParent, rModel ),
-    mnPtIndex( -1 )
+    mnPtIndex( -1 ),
+    mpNumberFormatter( NULL )
 {
 }
 
 DoubleSequenceContext::~DoubleSequenceContext()
 {
+    if( mpNumberFormatter != NULL )
+    {
+        delete mpNumberFormatter;
+    }
 }
 
 ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -98,13 +108,61 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                  * TODO: NumberFormat conversion, remove the check then.
                  */
                 if( isParentElement( C_TOKEN( cat ), 4 ) )
-                    mrModel.maData[ mnPtIndex ] <<= rChars;
+                {
+                    // workaround for bug n#889755
+                    SvNumberFormatter* pNumFrmt = getNumberFormatter();
+                    if( pNumFrmt )
+                    {
+                        sal_uInt32 nKey = pNumFrmt->GetEntryKey( mrModel.maFormatCode );
+                        bool bNoKey = ( nKey == NUMBERFORMAT_ENTRY_NOT_FOUND );
+                        if( bNoKey )
+                        {
+                            OUString aFormatCode = mrModel.maFormatCode;
+                            sal_Int32 nCheckPos = 0;
+                            short nType;
+                            pNumFrmt->PutEntry( aFormatCode, nCheckPos, nType, nKey );
+                            bNoKey = (nCheckPos != 0);
+                        }
+                        if( bNoKey )
+                        {
+                            mrModel.maData[ mnPtIndex ] <<= rChars;
+                        }
+                        else
+                        {
+                            double fValue = rChars.toDouble();
+                            Color* pColor = NULL;
+                            OUString aFormattedValue;
+                            pNumFrmt->GetOutputString( fValue, nKey, aFormattedValue, &pColor );
+                            mrModel.maData[ mnPtIndex ] <<= aFormattedValue;
+                        }
+                    }
+                    else
+                    {
+                        mrModel.maData[ mnPtIndex ] <<= rChars;
+                    }
+                }
                 else
+                {
                     mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
+                }
             }
         break;
     }
 }
+
+
+SvNumberFormatter* DoubleSequenceContext::getNumberFormatter()
+{
+    if( mpNumberFormatter == NULL )
+    {
+        uno::Reference<uno::XComponentContext> rContext =
+                                this->getFilter().getComponentContext();
+        mpNumberFormatter =
+                new SvNumberFormatter(rContext, LANGUAGE_DONTKNOW);
+    }
+    return mpNumberFormatter;
+}
+
 
 StringSequenceContext::StringSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel )
     : DataSequenceContextBase( rParent, rModel )

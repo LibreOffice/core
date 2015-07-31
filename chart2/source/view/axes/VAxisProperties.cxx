@@ -164,6 +164,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_bCrossingAxisHasReverseDirection(false)
     , m_bCrossingAxisIsCategoryAxes(false)
     , m_bDisplayLabels( true )
+    , m_bTryStaggeringFirst( false )
     , m_nNumberFormatKey(0)
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
@@ -189,6 +190,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_bCrossingAxisIsCategoryAxes( rAxisProperties.m_bCrossingAxisIsCategoryAxes )
     , maLabelAlignment( rAxisProperties.maLabelAlignment )
     , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
+    , m_bTryStaggeringFirst( rAxisProperties.m_bTryStaggeringFirst )
     , m_nNumberFormatKey( rAxisProperties.m_nNumberFormatKey )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
@@ -330,6 +332,11 @@ void AxisProperties::init( bool bCartesian )
 
         //init display labels
         xProp->getPropertyValue( "DisplayLabels" ) >>= m_bDisplayLabels;
+
+        // Init layout strategy hint for axis labels.
+        // Compatibility option: starting from LibreOffice 5.1 the rotated
+        // layout is preferred to staggering for axis labels.
+        xProp->getPropertyValue( "TryStaggeringFirst" ) >>= m_bTryStaggeringFirst;
 
         //init TickmarkProperties
         xProp->getPropertyValue( "MajorTickmarks" ) >>= m_nMajorTickmarks;

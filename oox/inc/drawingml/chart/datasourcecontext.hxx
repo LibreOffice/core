@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONTEXT_HXX
 
 #include <drawingml/chart/chartcontextbase.hxx>
+#include <svl/zforlist.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -46,7 +47,11 @@ public:
     virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
 
 private:
+    SvNumberFormatter* getNumberFormatter();
+
+private:
     sal_Int32           mnPtIndex;          /// Current data point index.
+    SvNumberFormatter*   mpNumberFormatter;
 };
 
 
