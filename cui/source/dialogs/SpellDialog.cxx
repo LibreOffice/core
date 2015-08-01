@@ -1601,10 +1601,10 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, css::uno:
 
             ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
 
-            aCursor.GetIndex() = aCursor.GetIndex() + (sal_uInt16)(xEntry->getReplacementText().getLength());
+            aCursor.GetIndex() += xEntry->getReplacementText().getLength();
         // maybe the error found here is already added to the dictionary and has to be ignored
         } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ), Sequence< PropertyValue >() )) {
-            aCursor.GetIndex() = aCursor.GetIndex() + 1;
+            ++aCursor.GetIndex();
         }
         else
             break;
@@ -1853,7 +1853,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
                 pLastError = pError;
 
             }
-            aCursor.GetIndex()++;
+            ++aCursor.GetIndex();
         }
 
         if(nTextLen && aBreakPositions.empty())

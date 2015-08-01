@@ -598,7 +598,7 @@ void EditorWindow::HandleAutoCorrect()
 {
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
-    sal_uInt16 nIndex =  aSel.GetStart().GetIndex();
+    const sal_Int32 nIndex =  aSel.GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
 
@@ -609,7 +609,7 @@ void EditorWindow::HandleAutoCorrect()
         return;
 
     HighlightPortion& r = aPortions.back();
-    if( nIndex != aPortions.size()-1 )
+    if( static_cast<size_t>(nIndex) != aPortions.size()-1 )
     {//cursor is not standing at the end of the line
         for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
              i != aPortions.end(); ++i)
@@ -675,14 +675,14 @@ void EditorWindow::HandleAutoCorrect()
 TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
 {//creates a text selection from the highlight portion on the cursor
     sal_uLong nLine = GetEditView()->GetSelection().GetStart().GetPara();
-    sal_uInt16 nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
+    const sal_Int32 nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( aLine, aPortions );
 
     assert(!aPortions.empty());
     HighlightPortion& r = aPortions.back();
-    if( nIndex != aPortions.size()-1 )
+    if( static_cast<size_t>(nIndex) != aPortions.size()-1 )
     {//cursor is not standing at the end of the line
         for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
              i != aPortions.end(); ++i)
@@ -906,8 +906,8 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     pCodeCompleteWnd->ResizeAndPositionListBox();
     pCodeCompleteWnd->SelectFirstEntry();
     // correct text selection, and set it
-    aSel.GetStart().GetIndex() += 1;
-    aSel.GetEnd().GetIndex() += 1;
+    ++aSel.GetStart().GetIndex();
+    ++aSel.GetEnd().GetIndex();
     pCodeCompleteWnd->SetTextSelection( aSel );
     //give the focus to the EditView
     pEditView->GetWindow()->GrabFocus();

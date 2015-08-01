@@ -882,13 +882,11 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
 
     if ( nNumber >= aMinPaM.GetPara() && nNumber <= aMaxPaM.GetPara() )
     {
-        *pBegin = nNumber > aMinPaM.GetPara()
-            ? 0
-            : static_cast< ::sal_Int32 >( aMinPaM.GetIndex() );
+        *pBegin = nNumber > aMinPaM.GetPara() ? 0 : aMinPaM.GetIndex();
             // XXX numeric overflow
         *pEnd = nNumber < aMaxPaM.GetPara()
-            ? static_cast< ::sal_Int32 >( m_rEngine.GetText(static_cast< ::sal_uLong >(nNumber)).getLength() )
-            : static_cast< ::sal_Int32 >( aMaxPaM.GetIndex() );
+            ? m_rEngine.GetText(static_cast< ::sal_uLong >(nNumber)).getLength()
+            : aMaxPaM.GetIndex();
             // XXX  numeric overflow (3x)
 
         if ( aStartPaM > aEndPaM )
@@ -909,8 +907,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aEndPaM( rSelection.GetEnd() );
 
-    return aEndPaM.GetPara() == nNumber
-        ? static_cast< ::sal_Int32 >(aEndPaM.GetIndex()) : -1;
+    return aEndPaM.GetPara() == nNumber ? aEndPaM.GetIndex() : -1;
 }
 
 css::awt::Rectangle
@@ -974,8 +971,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
     ::TextPaM aPaM(m_rEngine.GetPaM(::Point(static_cast< long >(rPoint.X),
                                             static_cast< long >(rPoint.Y))));
         // XXX  numeric overflow (2x)
-    return aPaM.GetPara() == nNumber
-        ? static_cast< ::sal_Int32 >(aPaM.GetIndex()) : -1;
+    return aPaM.GetPara() == nNumber ? aPaM.GetIndex() : -1;
         // XXX  numeric overflow
 }
 
@@ -2248,13 +2244,11 @@ void Document::handleSelectionChangeNotification()
                "bad TEXT_HINT_VIEWSELECTIONCHANGED event");
     ::sal_Int32 nNewFirstPara
           = static_cast< ::sal_Int32 >(rSelection.GetStart().GetPara());
-    ::sal_Int32 nNewFirstPos
-          = static_cast< ::sal_Int32 >(rSelection.GetStart().GetIndex());
+    ::sal_Int32 nNewFirstPos = rSelection.GetStart().GetIndex();
         // XXX  numeric overflow
     ::sal_Int32 nNewLastPara
           = static_cast< ::sal_Int32 >(rSelection.GetEnd().GetPara());
-    ::sal_Int32 nNewLastPos
-          = static_cast< ::sal_Int32 >(rSelection.GetEnd().GetIndex());
+    ::sal_Int32 nNewLastPos = rSelection.GetEnd().GetIndex();
         // XXX  numeric overflow
 
     // Lose focus:

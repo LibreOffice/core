@@ -53,6 +53,7 @@
 
 #include <unicode/ubidi.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <memory>
 #include <set>
@@ -410,7 +411,7 @@ OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) co
     {
         TextNode* pNode = mpDoc->GetNodes()[ nNode ];
 
-        sal_uInt16 nStartPos = 0;
+        sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pNode->GetText().getLength();
         if ( nNode == nStartPara )
             nStartPos = aSel.GetStart().GetIndex();
@@ -637,10 +638,7 @@ bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelec
     SvtCTLOptions aCTLOptions;
 
     // get the index that really is first
-    sal_uInt16 nFirstPos = rCurSel.GetStart().GetIndex();
-    sal_uInt16 nMaxPos   = rCurSel.GetEnd().GetIndex();
-    if (nMaxPos < nFirstPos)
-        nFirstPos = nMaxPos;
+    const sal_Int32 nFirstPos = std::min(rCurSel.GetStart().GetIndex(), rCurSel.GetEnd().GetIndex());
 
     bool bIsSequenceChecking =
         aCTLOptions.IsCTLFontEnabled() &&
@@ -685,7 +683,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     {
         // if selection, then don't overwrite a character
         TextSelection aTmpSel( aPaM );
-        aTmpSel.GetEnd().GetIndex()++;
+        ++aTmpSel.GetEnd().GetIndex();
         ImpDeleteText( aTmpSel );
     }
 
@@ -721,7 +719,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
                 OUString aChgText( aNewText.copy( nChgPos ) );
 
                 // select text from first pos to be changed to current pos
-                TextSelection aSel( TextPaM( aPaM.GetPara(), (sal_uInt16) nChgPos ), aPaM );
+                TextSelection aSel( TextPaM( aPaM.GetPara(), nChgPos ), aPaM );
 
                 if (!aChgText.isEmpty())
                     // ImpInsertText implicitly handles undo...
@@ -895,7 +893,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
     */
 
     long nY = 0;
-    sal_uInt16 nCurIndex = 0;
+    sal_Int32 nCurIndex = 0;
     TextLine* pLine = 0;
     for ( size_t nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
@@ -1678,7 +1676,7 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
 
     static const com::sun::star::lang::Locale aDefLocale;
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, aDefLocale, pLine->GetStart(), aHyphOptions, aUserOptions );
-    sal_uInt16 nBreakPos = (sal_uInt16)aLBR.breakIndex;
+    sal_Int32 nBreakPos = aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
     {
         nBreakPos = nMaxBreakPos;
@@ -1960,7 +1958,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         {
             // for all lines of the paragraph
             sal_uInt16 nLines = pPortion->GetLines().size();
-            sal_uInt16 nIndex = 0;
+            sal_Int32 nIndex = 0;
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
             {
                 TextLine& pLine = pPortion->GetLines()[nLine];
@@ -2004,8 +2002,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             aFont.SetTransparent( false );
                                         pOutDev->SetFont( aFont );
 
-                                        sal_uInt16 nTmpIndex = nIndex;
-                                        sal_uInt16 nEnd = nTmpIndex + pTextPortion->GetLen();
+                                        sal_Int32 nTmpIndex = nIndex;
+                                        sal_Int32 nEnd = nTmpIndex + pTextPortion->GetLen();
                                         Point aPos = aTmpPos;
                                         if ( pPaintRange )
                                         {
@@ -2030,12 +2028,10 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             TextPaM aTextEnd( nPara, nEnd );
                                             if ( ( aTextStart < *pSelEnd ) && ( aTextEnd > *pSelStart ) )
                                             {
-                                                sal_uInt16 nL;
-
                                                 // 1) vcl::Region before Selection
                                                 if ( aTextStart < *pSelStart )
                                                 {
-                                                    nL = pSelStart->GetIndex() - nTmpIndex;
+                                                    const sal_Int32 nL = pSelStart->GetIndex() - nTmpIndex;
                                                     pOutDev->SetFont( aFont);
                                                     aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
@@ -2043,7 +2039,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 
                                                 }
                                                 // 2) vcl::Region with Selection
-                                                nL = nEnd-nTmpIndex;
+                                                sal_Int32 nL = nEnd - nTmpIndex;
                                                 if ( aTextEnd > *pSelEnd )
                                                     nL = pSelEnd->GetIndex() - nTmpIndex;
                                                 if ( nL )
@@ -2464,8 +2460,8 @@ OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
         TextNode* pNode = mpDoc->GetNodes()[ rCursorPos.GetPara() ];
         uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
-        aSel.GetStart().GetIndex() = (sal_uInt16)aBoundary.startPos;
-        aSel.GetEnd().GetIndex() = (sal_uInt16)aBoundary.endPos;
+        aSel.GetStart().GetIndex() = aBoundary.startPos;
+        aSel.GetEnd().GetIndex() = aBoundary.endPos;
         aWord = pNode->GetText().copy( aSel.GetStart().GetIndex(), aSel.GetEnd().GetIndex() - aSel.GetStart().GetIndex() );
         if ( pStartOfWord )
             *pStartOfWord = aSel.GetStart();
@@ -2541,12 +2537,10 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
     {
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
 
-        sal_Int32  nStartPos = 0;
-        sal_Int32  nEndPos = pNode->GetText().getLength();
-        if ( nPara == aSel.GetStart().GetPara() )
-            nStartPos = aSel.GetStart().GetIndex();
-        if ( nPara == aSel.GetEnd().GetPara() )
-            nEndPos = aSel.GetEnd().GetIndex();
+        const sal_Int32 nStartPos = nPara == aSel.GetStart().GetPara()
+            ? aSel.GetStart().GetIndex() : 0;
+        const sal_Int32 nEndPos = nPara == aSel.GetEnd().GetPara()
+            ? aSel.GetEnd().GetIndex() : pNode->GetText().getLength();
 
         OUStringBuffer aText;
         if ( !bHTML )
@@ -2831,7 +2825,7 @@ void TextEngine::ImpCharsInserted( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nC
                     if ( rPaM.GetPara() == nPara )
                     {
                         if ( rPaM.GetIndex() >= nPos )
-                            rPaM.GetIndex() = rPaM.GetIndex() + nChars;
+                            rPaM.GetIndex() += nChars;
                     }
                 }
             }

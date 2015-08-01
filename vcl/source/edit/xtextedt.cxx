@@ -37,7 +37,7 @@ ExtTextEngine::~ExtTextEngine()
 TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
 {
     TextSelection aSel( rCursor );
-    sal_uInt16 nPos = rCursor.GetIndex();
+    const sal_Int32 nPos = rCursor.GetIndex();
     sal_uLong nPara = rCursor.GetPara();
     sal_uLong nParas = GetParagraphCount();
     if ( ( nPara < nParas ) && ( nPos < GetTextLen( nPara ) ) )
@@ -51,7 +51,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 sal_Unicode nSC = maGroupChars[ nMatchIndex ];
                 sal_Unicode nEC = maGroupChars[ nMatchIndex+1 ];
 
-                sal_uInt16 nCur = nPos+1;
+                sal_Int32 nCur = nPos+1;
                 sal_uInt16 nLevel = 1;
                 while ( nLevel && ( nPara < nParas ) )
                 {
@@ -87,7 +87,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 sal_Unicode nEC = maGroupChars[ nMatchIndex ];
                 sal_Unicode nSC = maGroupChars[ nMatchIndex-1 ];
 
-                sal_uInt16 nCur = rCursor.GetIndex()-1;
+                sal_Int32 nCur = rCursor.GetIndex()-1;
                 sal_uInt16 nLevel = 1;
                 while ( nLevel )
                 {
@@ -124,7 +124,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 if ( nLevel == 0 )  // found
                 {
                     aSel.GetStart() = rCursor;
-                    aSel.GetStart().GetIndex()++;   // behind the char
+                    ++aSel.GetStart().GetIndex();   // behind the char
                     aSel.GetEnd() = TextPaM( nPara, nCur );
                 }
             }
@@ -373,16 +373,16 @@ bool ExtTextView::ImpIndentBlock( bool bRight )
     bool bRange = aSel.HasRange();
     if ( bRight )
     {
-        aSel.GetStart().GetIndex()++;
+        ++aSel.GetStart().GetIndex();
         if ( bRange && ( aSel.GetEnd().GetPara() == nEndPara ) )
-            aSel.GetEnd().GetIndex()++;
+            ++aSel.GetEnd().GetIndex();
     }
     else
     {
         if ( aSel.GetStart().GetIndex() )
-            aSel.GetStart().GetIndex()--;
+            --aSel.GetStart().GetIndex();
         if ( bRange && aSel.GetEnd().GetIndex() )
-            aSel.GetEnd().GetIndex()--;
+            --aSel.GetEnd().GetIndex();
     }
 
     ImpSetSelection( aSel );

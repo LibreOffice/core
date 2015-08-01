@@ -259,7 +259,7 @@ TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM
 void TextUndoInsertChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
-    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.getLength();
+    aSel.GetEnd().GetIndex() += maText.getLength();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
 }
@@ -269,7 +269,7 @@ void TextUndoInsertChars::Redo()
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
     TextPaM aNewPaM( maTextPaM );
-    aNewPaM.GetIndex() = aNewPaM.GetIndex() + maText.getLength();
+    aNewPaM.GetIndex() += maText.getLength();
     SetSelection( TextSelection( aSel.GetStart(), aNewPaM ) );
 }
 
@@ -309,14 +309,14 @@ void TextUndoRemoveChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
-    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.getLength();
+    aSel.GetEnd().GetIndex() += maText.getLength();
     SetSelection( aSel );
 }
 
 void TextUndoRemoveChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
-    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.getLength();
+    aSel.GetEnd().GetIndex() += maText.getLength();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
 }
