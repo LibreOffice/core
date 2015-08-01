@@ -1555,7 +1555,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, css::uno:
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
     ExtTextEngine* pTextEngine = GetTextEngine();
-    sal_uInt16 nTextLen = pTextEngine->GetTextLen(0);
+    const sal_Int32 nTextLen = pTextEngine->GetTextLen(0);
     if(m_nErrorEnd >= nTextLen - 1)
         return false;
     //if it's not already modified the modified flag has to be reset at the end of the marking
@@ -1681,20 +1681,20 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
         const TextCharAttrib*  pLangAttrib =
                 pTextEngine->FindCharAttrib(
                     TextPaM(0, m_nErrorEnd), TEXTATTR_SPELL_LANGUAGE );
-        sal_uInt16 nTextLen = pTextEngine->GetTextLen( 0 );
+        const sal_Int32 nTextLen = pTextEngine->GetTextLen( 0 );
         if(pLangAttrib && !pLangAttrib->GetStart() && pLangAttrib->GetEnd() ==
             nTextLen)
         {
             SpellLanguageAttrib aNewLangAttrib( static_cast<const SpellLanguageAttrib&>(pLangAttrib->GetAttr()).GetLanguage());
             pTextEngine->RemoveAttrib(0, *pLangAttrib);
-            pTextEngine->SetAttrib( aNewLangAttrib, 0, (sal_uInt16)(m_nErrorEnd + nDiffLen) , nTextLen );
+            pTextEngine->SetAttrib( aNewLangAttrib, 0, m_nErrorEnd + nDiffLen, nTextLen );
         }
     }
     // undo expanded attributes!
     if( pBackAttrib && pBackAttrib->GetStart() < m_nErrorStart && pBackAttrib->GetEnd() == m_nErrorEnd + nDiffLen)
     {
         boost::scoped_ptr<TextAttrib> pNewBackground(pBackAttrib->GetAttr().Clone());
-        sal_uInt16 nStart = pBackAttrib->GetStart();
+        const sal_Int32 nStart = pBackAttrib->GetStart();
         pTextEngine->RemoveAttrib(0, *pBackAttrib);
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
     }
@@ -1826,7 +1826,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
 {
     svx::SpellPortions aRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
-    const sal_uInt16 nTextLen = pTextEngine->GetTextLen(0);
+    const sal_Int32 nTextLen = pTextEngine->GetTextLen(0);
     if(nTextLen)
     {
         TextPaM aCursor(0, 0);

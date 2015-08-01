@@ -1324,14 +1324,12 @@ void Document::changeParagraphAttributes(
             if ( rAttributeSet[i].Name == "CharColor" )
                 m_rEngine.SetAttrib(::TextAttribFontColor(
                                         mapFontColor(rAttributeSet[i].Value)),
-                                    nNumber, static_cast< ::sal_uInt16 >(nBegin),
-                                    static_cast< ::sal_uInt16 >(nEnd));
+                                        nNumber, nBegin, nEnd);
                     // XXX  numeric overflow (2x)
             else if ( rAttributeSet[i].Name == "CharWeight" )
                 m_rEngine.SetAttrib(::TextAttribFontWeight(
                                         mapFontWeight(rAttributeSet[i].Value)),
-                                    nNumber, static_cast< ::sal_uInt16 >(nBegin),
-                                    static_cast< ::sal_uInt16 >(nEnd));
+                                        nNumber, nBegin, nEnd);
                     // XXX  numeric overflow (2x)
     }
 }

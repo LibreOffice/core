@@ -296,7 +296,7 @@ sal_uLong TextEngine::GetTextLen( const TextSelection& rSel, LineEnd aSeparator 
     return mpDoc->GetTextLen( static_getLineEndText( aSeparator ), &aSel );
 }
 
-sal_uInt16 TextEngine::GetTextLen( sal_uLong nPara ) const
+sal_Int32 TextEngine::GetTextLen( sal_uLong nPara ) const
 {
     return mpDoc->GetNodes()[ nPara ]->GetText().getLength();
 }
@@ -480,7 +480,7 @@ void TextEngine::CursorMoved( sal_uLong nNode )
         pNode->GetCharAttribs().DeleteEmptyAttribs();
 }
 
-void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndoAction* )
+void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars, SfxUndoAction* )
 {
     DBG_ASSERT( nChars, "ImpRemoveChars: 0 Chars?!" );
     if ( IsUndoEnabled() && !IsInUndo() )
@@ -592,8 +592,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     }
     else
     {
-        sal_uInt16 nChars;
-        nChars = aEndPaM.GetIndex() - aStartPaM.GetIndex();
+        const sal_Int32 nChars = aEndPaM.GetIndex() - aStartPaM.GetIndex();
         ImpRemoveChars( aStartPaM, nChars );
         TEParaPortion* pPortion = mpTEParaPortions->GetObject( nStartNode );
         DBG_ASSERT( pPortion, "ImpDeleteText(5): bad Index" );
@@ -2677,7 +2676,7 @@ void TextEngine::RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib )
     }
 }
 
-void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd, bool bIdleFormatAndUpdate )
+void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate )
 {
 
     // For now do not check if Attributes overlap!
@@ -2690,7 +2689,7 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
 
-        sal_Int32 nMax = pNode->GetText().getLength();
+        const sal_Int32 nMax = pNode->GetText().getLength();
         if ( nStart > nMax )
             nStart = nMax;
         if ( nEnd > nMax )
@@ -2732,7 +2731,7 @@ void TextEngine::ValidatePaM( TextPaM& rPaM ) const
         rPaM.GetIndex() = 0xFFFF;
     }
 
-    sal_uInt16 nMaxIndex = GetTextLen( rPaM.GetPara() );
+    const sal_Int32 nMaxIndex = GetTextLen( rPaM.GetPara() );
     if ( rPaM.GetIndex() > nMaxIndex )
         rPaM.GetIndex() = nMaxIndex;
 }
@@ -2790,7 +2789,7 @@ void TextEngine::ImpParagraphRemoved( sal_uLong nPara )
     Broadcast( TextHint( TEXT_HINT_PARAREMOVED, nPara ) );
 }
 
-void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars )
+void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nChars )
 {
     if ( mpViews->size() > 1 )
     {
@@ -2799,7 +2798,7 @@ void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 n
             TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
             {
-                sal_uInt16 nEnd = nPos+nChars;
+                const sal_Int32 nEnd = nPos + nChars;
                 for ( int n = 0; n <= 1; n++ )
                 {
                     TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
@@ -2817,7 +2816,7 @@ void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 n
     Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, nPara ) );
 }
 
-void TextEngine::ImpCharsInserted( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars )
+void TextEngine::ImpCharsInserted( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nChars )
 {
     if ( mpViews->size() > 1 )
     {

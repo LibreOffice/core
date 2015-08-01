@@ -151,7 +151,7 @@ protected:
     TextPaM             ImpInsertText( const TextSelection& rSel, const OUString& rText );
     TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, bool bKeepEndingAttribs = true );
     TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs = true );
-    void                ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndoAction* pCurUndo = 0 );
+    void                ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars, SfxUndoAction* pCurUndo = 0 );
     TextPaM             ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight );
     void                ImpRemoveParagraph( sal_uLong nPara );
     void                ImpInitWritingDirections( sal_uLong nPara );
@@ -168,8 +168,8 @@ protected:
     // broadcast or adjust selections
     void                ImpParagraphInserted( sal_uLong nPara );
     void                ImpParagraphRemoved( sal_uLong nPara );
-    void                ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars );
-    void                ImpCharsInserted( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars );
+    void                ImpCharsRemoved( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nChars );
+    void                ImpCharsInserted( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nChars );
     void                ImpFormattingParagraph( sal_uLong nPara );
     void                ImpTextHeightChanged();
     void                ImpTextFormatted();
@@ -263,7 +263,7 @@ public:
 
     sal_uLong           GetParagraphCount() const;
     OUString            GetText( sal_uLong nParagraph ) const;
-    sal_uInt16          GetTextLen( sal_uLong nParagraph ) const;
+    sal_Int32           GetTextLen( sal_uLong nParagraph ) const;
     sal_uLong           GetTextHeight( sal_uLong nParagraph ) const;
 
     sal_uInt16          GetLineCount( sal_uLong nParagraph ) const;
@@ -303,7 +303,7 @@ public:
     void                RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, bool bIdleFormatAndUpdate );
     void                RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib );
     void                RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate = true );
-    void                SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd, bool bIdleFormatAndUpdate = true );
+    void                SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate = true );
 
     TxtAlign            GetTextAlign() const { return meAlign; }
     void                SetTextAlign( TxtAlign eAlign );

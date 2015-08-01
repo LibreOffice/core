@@ -2034,7 +2034,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         TextSelection aPrevSel( mpImpl->maSelection );
         aPrevSel.Justify();
         sal_uLong nPrevParaCount = mpImpl->mpTextEngine->GetParagraphCount();
-        sal_uInt16 nPrevStartParaLen = mpImpl->mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() );
+        const sal_Int32 nPrevStartParaLen = mpImpl->mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() );
 
         bool bStarterOfDD = false;
         for ( sal_uInt16 nView = mpImpl->mpTextEngine->GetViewCount(); nView && !bStarterOfDD; )
@@ -2091,7 +2091,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
 
                 if ( mpImpl->mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
                 {
-                    sal_uInt16 nNewChars =
+                    const sal_Int32 nNewChars =
                         mpImpl->mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() ) - nPrevStartParaLen;
 
                     aPrevSel.GetStart().GetIndex() =
