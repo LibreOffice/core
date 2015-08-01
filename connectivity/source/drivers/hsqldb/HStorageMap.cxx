@@ -171,7 +171,7 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                [&_xStorage] (TStorages::value_type storage) {
+                [&_xStorage] (const TStorages::value_type& storage) {
                     // TStoragePair (second) -> TStorageURLPair (first) -> uno::Reference<XStorage> (first)
                     return storage.second.first.first == _xStorage;
                 });
@@ -203,7 +203,7 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                [&_xStorage] (TStorages::value_type storage) {
+                [&_xStorage] (const TStorages::value_type& storage) {
                     // TStoragePair (second) -> TStorageURLPair (first) -> uno::Reference<XStorage> (first)
                     return storage.second.first.first == _xStorage;
                 });

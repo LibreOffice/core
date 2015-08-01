@@ -326,11 +326,11 @@ void OViewsWindow::removeSection(sal_uInt16 _nPosition)
 void OViewsWindow::toggleGrid(bool _bVisible)
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [_bVisible] (TSectionsMap::value_type sectionPtr) {
+        [_bVisible] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().SetGridVisible(_bVisible);
         });
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [] (TSectionsMap::value_type sectionPtr) {
+        [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().Window::Invalidate(InvalidateFlags::NoErase);
         });
 }
@@ -367,7 +367,7 @@ void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 void OViewsWindow::SetMode( DlgEdMode eNewMode )
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [&eNewMode] (TSectionsMap::value_type sectionPtr) {
+        [&eNewMode] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().SetMode(eNewMode);
         });
 }
@@ -385,7 +385,7 @@ void OViewsWindow::Delete()
 {
     m_bInUnmark = true;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [] (TSectionsMap::value_type sectionPtr) {
+        [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().Delete();
         });
     m_bInUnmark = false;
@@ -395,7 +395,7 @@ void OViewsWindow::Copy()
 {
     uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [&aAllreadyCopiedObjects] (TSectionsMap::value_type sectionPtr) {
+        [&aAllreadyCopiedObjects] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().Copy(boost::ref(aAllreadyCopiedObjects));
         });
 
@@ -410,7 +410,7 @@ void OViewsWindow::Paste()
     OReportExchange::TSectionElements aCopies = OReportExchange::extractCopies(aTransferData);
     if ( aCopies.getLength() > 1 )
         ::std::for_each(m_aSections.begin(),m_aSections.end(),
-            [&aCopies] (TSectionsMap::value_type sectionPtr) {
+            [&aCopies] (const TSectionsMap::value_type& sectionPtr) {
                 sectionPtr->getReportSection().Paste(aCopies, false);
             });
     else
@@ -514,7 +514,7 @@ void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
 {
     m_bInUnmark = true;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [&_nObjectType] (TSectionsMap::value_type sectionPtr) {
+        [&_nObjectType] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().SelectAll(_nObjectType);
         });
     m_bInUnmark = false;
@@ -559,11 +559,11 @@ void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void OViewsWindow::showRuler(bool _bShow)
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [_bShow] (TSectionsMap::value_type sectionPtr) {
+        [_bShow] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getStartMarker().showRuler(_bShow);
         });
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [] (TSectionsMap::value_type sectionPtr) {
+        [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getStartMarker().Window::Invalidate(InvalidateFlags::NoErase);
         });
 }
@@ -1689,7 +1689,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 void OViewsWindow::stopScrollTimer()
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        [] (TSectionsMap::value_type sectionPtr) {
+        [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().stopScrollTimer();
         });
 }

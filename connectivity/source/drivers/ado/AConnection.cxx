@@ -599,7 +599,7 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
         ::comphelper::UStringMixEqual aCase(sal_False);
         // search for typeinfo where the typename is equal _sTypeName
         OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(), _rTypeInfo.end(),
-            [&aCase, &_sTypeName] (OTypeInfoMap::value_type typeInfo) {
+            [&aCase, &_sTypeName] (const OTypeInfoMap::value_type& typeInfo) {
                 return aCase(typeInfo.second->getDBName(), _sTypeName);
             });
 

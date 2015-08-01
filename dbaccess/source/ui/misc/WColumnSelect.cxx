@@ -339,7 +339,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     {
         // find the new column in the dest name mapping to obtain the old column
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-            [&_aCase, &_sColumnName] (OCopyTableWizard::TNameMapping::value_type nameMap) {
+            [&_aCase, &_sColumnName] (const OCopyTableWizard::TNameMapping::value_type& nameMap) {
                 return _aCase(nameMap.second, _sColumnName);
             });
 
@@ -388,7 +388,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         {
             // find the new column in the dest name mapping to obtain the old column
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                [&_aCase, &sColumnString] (OCopyTableWizard::TNameMapping::value_type nameMap) {
+                [&_aCase, &sColumnString] (const OCopyTableWizard::TNameMapping::value_type& nameMap) {
                     return _aCase(nameMap.second, sColumnString);
                 });
 

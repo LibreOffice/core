@@ -584,7 +584,7 @@ namespace connectivity
             {
                 OUString sKey = StorageContainer::getRegisteredKey(xStorage);
                 TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),
-                    [&sKey] (TWeakPairVector::value_type conn) {
+                    [&sKey] (const TWeakPairVector::value_type& conn) {
                         return conn.second.first == sKey;
                     });
 
@@ -640,7 +640,7 @@ namespace connectivity
         if ( !sKey.isEmpty() )
         {
             TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(), m_aConnections.end(),
-                [&sKey] (TWeakPairVector::value_type conn) {
+                [&sKey] (const TWeakPairVector::value_type& conn) {
                     return conn.second.first == sKey;
                 });
 

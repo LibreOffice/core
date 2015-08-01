@@ -65,7 +65,7 @@ ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( TCont
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        [&_pDefinition] (NamedDefinitions::value_type namedDef) {
+        [&_pDefinition] (const NamedDefinitions::value_type& namedDef) {
             return namedDef.second == _pDefinition;
         });
 }
@@ -75,7 +75,7 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        [&_pDefinition] (NamedDefinitions::value_type namedDef) {
+        [&_pDefinition] (const NamedDefinitions::value_type& namedDef) {
             return namedDef.second == _pDefinition;
         });
 }
