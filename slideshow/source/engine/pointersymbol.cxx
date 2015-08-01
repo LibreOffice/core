@@ -18,7 +18,6 @@
  */
 
 
-#include <boost/current_function.hpp>
 #include <canvas/canvastools.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -33,7 +32,6 @@
 #include "pointersymbol.hxx"
 #include "eventmultiplexer.hxx"
 
-#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 
@@ -68,9 +66,8 @@ PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitm
 {
     std::for_each( rViewContainer.begin(),
                    rViewContainer.end(),
-                   boost::bind( &PointerSymbol::viewAdded,
-                                this,
-                                _1 ));
+                   [&]( const UnoViewSharedPtr& sp )
+                   { this->viewAdded(sp); } );
 }
 
 void PointerSymbol::setVisible( const bool bVisible )
@@ -147,11 +144,9 @@ void PointerSymbol::viewRemoved( const UnoViewSharedPtr& rView )
     maViews.erase(
         std::remove_if(
             maViews.begin(), maViews.end(),
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ) ) ),
+            [&rView]
+            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            { return rView == cp.first; } ),
         maViews.end() );
 }
 
@@ -162,11 +157,9 @@ void PointerSymbol::viewChanged( const UnoViewSharedPtr& rView )
         std::find_if(
             maViews.begin(),
             maViews.end(),
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
+            [&rView]
+            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            { return rView == cp.first; } ) );
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )

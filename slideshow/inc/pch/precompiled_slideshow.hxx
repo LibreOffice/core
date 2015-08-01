@@ -189,7 +189,6 @@
 #include <limits>
 #include <map>
 #include <math.h>
-#include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <queue>
