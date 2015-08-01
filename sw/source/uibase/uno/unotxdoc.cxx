@@ -3152,6 +3152,50 @@ Size SwXTextDocument::getDocumentSize()
                 aDocSize.Height() + 2L * DOCUMENTBORDER);
 }
 
+void SwXTextDocument::setPart(int nPart)
+{
+    SolarMutexGuard aGuard;
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    if (!pWrtShell)
+        return;
+
+    pWrtShell->GotoPage(nPart + 1, true);
+}
+
+int SwXTextDocument::getParts()
+{
+    SolarMutexGuard aGuard;
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    if (!pWrtShell)
+        return 0;
+
+    return pWrtShell->GetPageCnt();
+}
+
+int SwXTextDocument::getPart()
+{
+    SolarMutexGuard aGuard;
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    if (!pWrtShell)
+        return 0;
+
+    sal_uInt16 nPage, nLogPage;
+    OUString sDisplay;
+    pWrtShell->GetPageNumber(-1, pWrtShell->IsCrsrVisible(), nPage, nLogPage, sDisplay);
+
+    return nPage - 1;
+}
+
+OUString SwXTextDocument::getPartName(int nPart)
+{
+    SolarMutexGuard aGuard;
+
+    return OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1);
+}
+
 void SwXTextDocument::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;

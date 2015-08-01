@@ -67,6 +67,7 @@ MapMode* SwSelPaintRects::s_pMapMode = 0;
 // Starting from here: classes / methods for the non-text-cursor
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     : m_pCrsrShell( pCShell )
+    , m_nPageLastTime(0)
 {
     pCShell->GetWin()->SetCursor( &m_aTextCrsr );
     m_bIsVisible = m_aTextCrsr.IsVisible();
@@ -179,6 +180,17 @@ void SwVisCrsr::_SetPosAndShow()
 
     if (m_pCrsrShell->isTiledRendering())
     {
+        // notify about page number change (if that happened)
+        sal_uInt16 nPage, nVirtPage;
+        const_cast<SwCrsrShell*>(m_pCrsrShell)->GetPageNum(nPage, nVirtPage);
+        if (nPage != m_nPageLastTime)
+        {
+            m_nPageLastTime = nPage;
+            OString aPayload = OString::number(nPage - 1);
+            m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+        }
+
+        // notify about the cursor position & size
         Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
         m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());

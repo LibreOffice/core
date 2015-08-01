@@ -114,6 +114,7 @@ enum
     COMMAND_CHANGED,
     SEARCH_NOT_FOUND,
     PART_CHANGED,
+    SIZE_CHANGED,
     HYPERLINK_CLICKED,
 
     LAST_SIGNAL
@@ -581,6 +582,8 @@ callback (gpointer pData)
         gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                     twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom),
                                     twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom));
+
+        g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, NULL);
     }
     break;
     case LOK_CALLBACK_SET_PART:
@@ -1703,6 +1706,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      0,
                      NULL, NULL,
                      g_cclosure_marshal_VOID__INT,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_INT);
+
+    /**
+     * LOKDocView::size-changed:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @aCommand: NULL, we just notify that want to notify the UI elements that are interested.
+     */
+    doc_view_signals[SIZE_CHANGED] =
+        g_signal_new("size-changed",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 1,
                      G_TYPE_INT);
 

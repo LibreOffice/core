@@ -406,6 +406,14 @@ public:
                             long nTileHeight ) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::getDocumentSize().
     virtual Size getDocumentSize() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::setPart().
+    virtual void setPart(int nPart) SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getParts().
+    virtual int getParts() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getPart().
+    virtual int getPart() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getPartName().
+    virtual OUString getPartName(int nPart) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::registerCallback().
