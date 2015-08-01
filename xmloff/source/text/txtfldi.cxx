@@ -3545,6 +3545,18 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
 {
 }
 
+XMLUrlFieldImportContext::XMLUrlFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_url, Element),
+    sPropertyURL(sAPI_url),
+    sPropertyTargetFrame(sAPI_target_frame),
+    sPropertyRepresentation(sAPI_representation),
+    bFrameOK(false)
+{
+}
+
 void XMLUrlFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )

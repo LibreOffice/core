@@ -1194,6 +1194,9 @@ public:
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
                              const OUString& sLocalName);
+    XMLUrlFieldImportContext(SvXMLImport& rImport,
+                             XMLTextImportHelper& rHlp,
+                             sal_Int32 Element);
 
 protected:
     /// no attributes -> empty method
