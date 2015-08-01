@@ -29,8 +29,6 @@
 #include <boost/bind.hpp>
 #include <algorithm>
 
-#include <o3tl/compat_functional.hxx>
-
 #include "layermanager.hxx"
 
 using namespace ::com::sun::star;
@@ -150,11 +148,10 @@ namespace slideshow
                 // clear all viewlayers, dump everything but the
                 // background layer - this will also remove all shape
                 // sprites
-                std::for_each(maAllShapes.begin(),
-                              maAllShapes.end(),
-                              boost::bind( &Shape::clearAllViewLayers,
-                                           boost::bind( o3tl::select1st<LayerShapeMap::value_type>(),
-                                                        _1 )));
+                std::for_each( maAllShapes.begin(),
+                               maAllShapes.end(),
+                               []( const ::std::pair< ShapeSharedPtr, LayerWeakPtr >& cp )
+                               { cp.first->clearAllViewLayers(); } );
 
                 for (LayerShapeMap::iterator
                          iShape (maAllShapes.begin()),
@@ -262,8 +259,8 @@ namespace slideshow
             // render all shapes
             std::for_each( maAllShapes.begin(),
                            maAllShapes.end(),
-                           boost::bind(&Shape::render,
-                               boost::bind( ::o3tl::select1st<LayerShapeMap::value_type>(), _1)) );
+                           []( const ::std::pair< ShapeSharedPtr, LayerWeakPtr >& cp )
+                           { cp.first->render(); } );
         }
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )

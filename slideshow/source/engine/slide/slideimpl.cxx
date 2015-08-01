@@ -62,7 +62,6 @@
 #include "targetpropertiescreator.hxx"
 #include "tools.hxx"
 
-#include <o3tl/compat_functional.hxx>
 
 #include <boost/bind.hpp>
 #include <iterator>
@@ -582,13 +581,9 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
     const VectorOfVectorOfSlideBitmaps::iterator aEnd( maSlideBitmaps.end() );
     if( (aIter=std::find_if( maSlideBitmaps.begin(),
                              aEnd,
-                             boost::bind(
-                                 std::equal_to<UnoViewSharedPtr>(),
-                                 rView,
-                                 // select view:
-                                 boost::bind(
-                                     o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
-                                     _1 )))) == aEnd )
+                             [&rView]
+                             ( const ::std::pair< UnoViewSharedPtr, VectorOfSlideBitmaps >& cp )
+                             { return rView == cp.first; } ) ) == aEnd )
     {
         // corresponding view not found - maybe view was not
         // added to Slide?
@@ -656,14 +651,10 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
     maSlideBitmaps.erase(
         std::remove_if( maSlideBitmaps.begin(),
                         aEnd,
-                        boost::bind(
-                            std::equal_to<UnoViewSharedPtr>(),
-                            rView,
-                            // select view:
-                            boost::bind(
-                                o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
-                                _1 ))),
-        aEnd );
+                        [&rView]
+                        ( const ::std::pair< UnoViewSharedPtr, VectorOfSlideBitmaps >& cp )
+                        { return rView == cp.first; } ),
+                        aEnd );
 }
 
 void SlideImpl::viewChanged( const UnoViewSharedPtr& rView )

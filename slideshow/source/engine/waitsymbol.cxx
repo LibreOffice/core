@@ -33,7 +33,6 @@
 #include "waitsymbol.hxx"
 #include "eventmultiplexer.hxx"
 
-#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 
@@ -70,9 +69,8 @@ WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
 {
     std::for_each( rViewContainer.begin(),
                    rViewContainer.end(),
-                   boost::bind( &WaitSymbol::viewAdded,
-                                this,
-                                _1 ));
+                   [this]( const UnoViewSharedPtr& sp )
+                   { this->viewAdded(sp); } );
 }
 
 void WaitSymbol::setVisible( const bool bVisible )
@@ -151,11 +149,9 @@ void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
     maViews.erase(
         std::remove_if(
             maViews.begin(), maViews.end(),
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ) ) ),
+            [&rView]
+            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            { return rView == cp.first; } ),
         maViews.end() );
 }
 
@@ -166,11 +162,9 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
         std::find_if(
             maViews.begin(),
             maViews.end(),
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
+            [&rView]
+            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            { return rView == cp.first; } ) );
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
