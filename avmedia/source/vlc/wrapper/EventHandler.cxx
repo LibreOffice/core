@@ -35,7 +35,7 @@ void EventHandler::run()
     {
         mCallbackQueue.pop( callback );
 
-        if ( callback.empty() )
+        if ( callback )
             return;
 
         callback();

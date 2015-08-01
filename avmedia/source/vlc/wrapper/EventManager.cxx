@@ -66,7 +66,7 @@ EventManager::EventManager( Player& player, EventHandler& eh )
 
 void EventManager::registerSignal( int signal, const Callback& callback )
 {
-    if ( callback.empty() )
+    if ( callback )
         libvlc_event_detach( mManager, signal, Handler, this );
     else
         libvlc_event_attach( mManager, signal, Handler, this );
