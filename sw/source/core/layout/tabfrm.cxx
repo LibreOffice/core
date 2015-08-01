@@ -4831,8 +4831,7 @@ void SwCellFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAt
     if ( !FindTabFrm()->IsRebuildLastLine() && text::VertOrientation::NONE != rOri.GetVertOrient() &&
     // #158225# no vertical alignment of covered cells
          !IsCoveredCell() &&
-    // #116532# Do not consider vertical alignment in grid mode
-         !(pPg = FindPageFrm())->HasGrid() )
+         (pPg = FindPageFrm())!=NULL )
     {
         if ( !Lower()->IsContentFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
