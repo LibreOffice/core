@@ -123,6 +123,10 @@ DerivedData
 *.vcxproj*
 *.opensdf
 
+# QtCreator specific
+*.pro
+*.pro.user
+
 # doxygen output
 /docs
 
