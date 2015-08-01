@@ -645,14 +645,26 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
             bool& rIgnLeadSpace );
+    XMLImpRubyBaseContext_Impl(
+            SvXMLImport& rImport,
+            sal_Int32 Element,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList,
+            XMLHints_Impl& rHnts,
+            bool& rIgnLeadSpace );
 
     virtual ~XMLImpRubyBaseContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList )
+            throw(RuntimeException, xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void characters( const OUString& rChars )
+            throw(RuntimeException, xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLImpRubyBaseContext_Impl, SvXMLImportContext );
@@ -665,6 +677,18 @@ XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
         XMLHints_Impl& rHnts,
         bool& rIgnLeadSpace ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    rHints( rHnts ),
+    rIgnoreLeadingSpace( rIgnLeadSpace )
+{
+}
+
+XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 /*Element*/,
+        const Reference< xml::sax::XFastAttributeList >&,
+        XMLHints_Impl& rHnts,
+        bool& rIgnLeadSpace )
+:   SvXMLImportContext( rImport ),
     rHints( rHnts ),
     rIgnoreLeadingSpace( rIgnLeadSpace )
 {
@@ -687,7 +711,27 @@ SvXMLImportContext *XMLImpRubyBaseContext_Impl::CreateChildContext(
                                nToken, rHints, rIgnoreLeadingSpace );
 }
 
+Reference< xml::sax::XFastContextHandler >
+    XMLImpRubyBaseContext_Impl::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception )
+{
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextPElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get( Element );
+
+    return XMLImpSpanContext_Impl::createFastChildContext( GetImport(), Element,
+                            xAttrList, nToken, rHints, rIgnoreLeadingSpace );
+}
+
 void XMLImpRubyBaseContext_Impl::Characters( const OUString& rChars )
+{
+    GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
+}
+
+void XMLImpRubyBaseContext_Impl::characters( const OUString& rChars )
+    throw(RuntimeException, xml::sax::SAXException, std::exception )
 {
     GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
 }
@@ -714,12 +758,22 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
             bool& rIgnLeadSpace );
+    XMLImpRubyContext_Impl(
+            SvXMLImport& rImport,
+            sal_Int32 Element,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList,
+            XMLHints_Impl& rHnts,
+            bool& rIgnLeadSpace );
 
     virtual ~XMLImpRubyContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     void SetTextStyleName( const OUString& s ) { m_sTextStyleName = s; }
     void AppendText( const OUString& s ) { m_sText += s; }
@@ -739,10 +793,17 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLImpRubyContext_Impl & rParent );
+    XMLImpRubyTextContext_Impl(
+            SvXMLImport& rImport,
+            sal_Int32 Element,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList,
+            XMLImpRubyContext_Impl& rParent );
 
     virtual ~XMLImpRubyTextContext_Impl();
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void characters( const OUString& rChars )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
@@ -775,11 +836,31 @@ XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
     }
 }
 
+XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 /*Element*/,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        XMLImpRubyContext_Impl& rParent )
+:   SvXMLImportContext( rImport ),
+    m_rRubyContext( rParent )
+{
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) )
+        m_rRubyContext.SetTextStyleName( xAttrList->getValue(
+            NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) );
+}
+
 XMLImpRubyTextContext_Impl::~XMLImpRubyTextContext_Impl()
 {
 }
 
 void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
+{
+    m_rRubyContext.AppendText( rChars );
+}
+
+void XMLImpRubyTextContext_Impl::characters( const OUString& rChars )
+    throw(RuntimeException, xml::sax::SAXException, std::exception )
 {
     m_rRubyContext.AppendText( rChars );
 }
@@ -814,6 +895,24 @@ XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
             m_sStyleName = rValue;
             break;
         }
+    }
+}
+
+XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 /*Element*/,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        XMLHints_Impl& rHnts,
+        bool& rIgnLeadSpace )
+:   SvXMLImportContext( rImport ),
+    rHints( rHnts ),
+    rIgnoreLeadingSpace( rIgnLeadSpace ),
+    m_xStart( GetImport().GetTextImport()->GetCursorAsRange()->getStart() )
+{
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) )
+    {
+        m_sStyleName = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name );
     }
 }
 
@@ -854,6 +953,27 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
     else
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
                                                             xAttrList );
+
+    return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler >
+    XMLImpRubyContext_Impl::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext = NULL;
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_ruby_base) )
+        pContext = new XMLImpRubyBaseContext_Impl( GetImport(), Element,
+                            xAttrList, rHints, rIgnoreLeadingSpace );
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_ruby_text) )
+        pContext = new XMLImpRubyTextContext_Impl( GetImport(), Element,
+                            xAttrList, *this );
+
+    if( !pContext.is() )
+        pContext = SvXMLImportContext::createFastChildContext(
+                        Element, xAttrList );
 
     return pContext;
 }
