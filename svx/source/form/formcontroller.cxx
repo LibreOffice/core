@@ -507,7 +507,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
         static_cast< svx::OSingleFeatureDispatcher* >( _rxDispatcher.get() )->updateAllListeners();
-        // the return is a dummy only so we can use this struct in a o3tl::compose1 call
+        // the return is a dummy only so we can use this struct in a lambda expression
         return true;
     }
 };
@@ -2607,11 +2607,9 @@ void FormController::updateAllDispatchers() const
     ::std::for_each(
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
-        ::o3tl::compose1(
-            UpdateAllListeners(),
-            ::o3tl::select2nd< DispatcherContainer::value_type >()
-        )
-    );
+        [] (const DispatcherContainer::value_type& dispatcher) {
+            UpdateAllListeners()(dispatcher.second);
+        });
 }
 
 
