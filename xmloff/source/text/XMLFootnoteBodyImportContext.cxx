@@ -29,6 +29,8 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
+using css::xml::sax::XFastContextHandler;
 
 
 TYPEINIT1( XMLFootnoteBodyImportContext, SvXMLImportContext );
@@ -38,6 +40,13 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName)
+{
+}
+
+XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport )
 {
 }
 
@@ -55,6 +64,22 @@ SvXMLImportContext* XMLFootnoteBodyImportContext::CreateChildContext(
                                                        XML_TEXT_TYPE_FOOTNOTE);
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< XFastContextHandler >
+    XMLFootnoteBodyImportContext::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    // return text context
+    Reference< XFastContextHandler > pContext =
+        GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
+                        Element, xAttrList, XML_TEXT_TYPE_FOOTNOTE);
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
