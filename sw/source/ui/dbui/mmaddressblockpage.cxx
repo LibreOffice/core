@@ -1411,15 +1411,16 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
             TextPaM aPaM(nPara, sPara.getLength());
             pTextEngine->ReplaceText(TextSelection( aPaM ), " ");
         }
-        while(true)
+        for(;;)
         {
-            sal_Int32 nStart = sPara.indexOf( '<', nIndex );
-            sal_Int32 nEnd = nStart == -1 ? -1 : sPara.indexOf( '>', nStart );
-            nIndex = nEnd;
-            if(nStart != -1 && nEnd != -1)
-                pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, false );
-            else
+            const sal_Int32 nStart = sPara.indexOf( '<', nIndex );
+            if (nStart < 0)
                 break;
+            const sal_Int32 nEnd = sPara.indexOf( '>', nStart );
+            if (nEnd < 0)
+                break;
+            nIndex = nEnd;
+            pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, false );
         }
 
     }
