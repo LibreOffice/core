@@ -1986,7 +1986,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
     nPrec = ::std::min(nPrec, static_cast<sal_uInt16>(14)); // limit to 14 decimals.
 
     rOutString = ::rtl::math::doubleToUString(fNumber, rtl_math_StringFormat_E2,
-                                              nPrec, rFormatter.GetNumDecimalSep()[0]);
+                                              nPrec, rFormatter.GetNumDecimalSep()[0], true );
 }
 
 sal_Int32 lcl_GetForcedDenominator(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
