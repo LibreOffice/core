@@ -1086,6 +1086,7 @@ enum
     COMMAND_CHANGED,
     SEARCH_NOT_FOUND,
     PART_CHANGED,
+    SIZE_CHANGED,
     LAST_SIGNAL
 };
 
@@ -1149,6 +1150,16 @@ static void lok_docview_class_init( gpointer ptr )
                      G_STRUCT_OFFSET(LOKDocViewClass, part_changed),
                      NULL, NULL,
                      g_cclosure_marshal_VOID__INT,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_INT);
+    pClass->size_changed = 0;
+    docview_signals[SIZE_CHANGED] =
+        g_signal_new("size-changed",
+                     G_TYPE_FROM_CLASS(gobject_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET(LOKDocViewClass, size_changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 1,
                      G_TYPE_INT);
 }

@@ -41,6 +41,7 @@ struct _LOKDocViewClass
   void (* command_changed) (LOKDocView* pView, char* new_state);
   void (* search_not_found) (LOKDocView* pView, char* new_state);
   void (* part_changed) (LOKDocView* pView, int new_part);
+  void (* size_changed) (LOKDocView* pView);
 };
 
 guint           lok_docview_get_type        (void);

@@ -43,6 +43,9 @@ class SwVisCrsr
     vcl::Cursor m_aTextCrsr;
     const SwCrsrShell* m_pCrsrShell;
 
+    /// For LibreOfficeKit only - remember what page we were at the last time.
+    sal_uInt16 m_nPageLastTime;
+
     void _SetPosAndShow();
 
 public:

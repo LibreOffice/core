@@ -300,6 +300,13 @@ static void populatePartSelector()
                               lok_docview_get_part( LOK_DOCVIEW(pDocView) ) );
 }
 
+static void signalSize(LOKDocView* /*pLOKDocView*/, gpointer /*pData*/)
+{
+    g_bPartSelectorBroadcast = false;
+    populatePartSelector();
+    g_bPartSelectorBroadcast = true;
+}
+
 static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
@@ -463,6 +470,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
+    g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);
