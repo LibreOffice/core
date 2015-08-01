@@ -1776,12 +1776,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetCairoFontOptions( pNewOptions );
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
+#if OSL_DEBUG_LEVEL > 1
     gchar* pThemeName = NULL;
     g_object_get( pSettings, "gtk-theme-name", &pThemeName, nullptr );
-    #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
-    #endif
-
+    g_free(pThemeName);
+#endif
 }
 
 bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
