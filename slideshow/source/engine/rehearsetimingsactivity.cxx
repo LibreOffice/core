@@ -46,7 +46,6 @@
 #include "rehearsetimingsactivity.hxx"
 
 #include <boost/bind.hpp>
-#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -355,13 +354,10 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
 void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
 {
     maViews.erase(
-        std::remove_if(
-            maViews.begin(), maViews.end(),
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))),
+        std::remove_if( maViews.begin(), maViews.end(),
+            [&rView]
+            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            { return rView == cp.first; } ),
         maViews.end() );
 }
 
@@ -372,11 +368,10 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
         std::find_if(
             maViews.begin(),
             maViews.end(),
-            boost::bind(
-                std::equal_to<UnoViewSharedPtr>(),
-                rView,
-                // select view:
-                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
+            [&rView]
+            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            { return rView == cp.first; } )
+        );
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )

@@ -33,8 +33,6 @@
 #include "tests.hxx"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
 
-#include <o3tl/compat_functional.hxx>
-
 #include <boost/bind.hpp>
 
 namespace target = slideshow::internal;
@@ -130,20 +128,18 @@ private:
         if( std::none_of(
                 maViewLayers.begin(),
                 maViewLayers.end(),
-                boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
-                             boost::cref( rNewLayer ),
-                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
-                                          _1 ))) )
+                [&rNewLayer]
+                ( const ::std::pair< ViewVector::key_type, ViewVector::mapped_type >& cp )
+                { return cp.first == rNewLayer; } ) )
             throw std::exception();
 
         maViewLayers.erase(
             std::remove_if(
                 maViewLayers.begin(),
                 maViewLayers.end(),
-                boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
-                             boost::cref( rNewLayer ),
-                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
-                                          _1 ))));
+                [&rNewLayer]
+                ( const ::std::pair< ViewVector::key_type, ViewVector::mapped_type >& cp )
+                { return cp.first == rNewLayer; } ) );
         return true;
     }
     virtual bool clearAllViewLayers()
