@@ -212,6 +212,18 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     sServiceName = OUString::createFromAscii(pService);
 }
 
+XMLTextFieldImportContext::XMLTextFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    const sal_Char* pService, sal_Int32 /*Element*/)
+:   SvXMLImportContext( rImport ),
+    rTextImportHelper(rHlp),
+    sServicePrefix(sAPI_textfield_prefix),
+    bValid(false)
+{
+    DBG_ASSERT(NULL != pService, "Need service name!");
+    sServiceName = OUString::createFromAscii(pService);
+}
+
 void XMLTextFieldImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -226,6 +238,24 @@ void XMLTextFieldImportContext::StartElement(
         ProcessAttribute(rTextImportHelper.GetTextFieldAttrTokenMap().
                              Get(nPrefix, sLocalName),
                          xAttrList->getValueByIndex(i) );
+    }
+}
+
+void XMLTextFieldImportContext::startFastElement(
+    sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList)
+    throw (RuntimeException, SAXException, std::exception)
+{
+    // process attributes
+    if( !xAttrList.is() )
+        return;
+    Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    xml::FastAttribute* attribs = attributes.getArray();
+    for(sal_Int16 i=0; i<attributes.getLength(); i++)
+    {
+        xml::FastAttribute attr = attribs[i];
+        ProcessAttribute(rTextImportHelper.GetTextFieldAttrTokenMap().Get(attr.Token),
+                         attr.Value);
     }
 }
 
@@ -275,7 +305,46 @@ void XMLTextFieldImportContext::EndElement()
     rTextImportHelper.InsertString(GetContent());
 }
 
+void XMLTextFieldImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw (RuntimeException, SAXException, std::exception)
+{
+    DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
+    if (bValid)
+    {
+        // create field/service
+        Reference<XPropertySet> xPropSet;
+        if( CreateField(xPropSet, sServicePrefix + GetServiceName()) )
+        {
+            // set field properties
+            PrepareField(xPropSet);
+
+            // attach field to document
+            Reference<XTextContent> xTextContent(xPropSet, UNO_QUERY);
+
+            // workaround for #80606#
+            try
+            {
+                rTextImportHelper.InsertTextContent(xTextContent);
+            }
+            catch (const lang::IllegalArgumentException&)
+            {
+                // ignore
+            }
+            return;
+        }
+    }
+
+    // in case of error: write element content
+    rTextImportHelper.InsertString(GetContent());
+}
+
 void XMLTextFieldImportContext::Characters(const OUString& rContent)
+{
+    sContentBuffer.append(rContent);
+}
+
+void XMLTextFieldImportContext::characters(const OUString& rContent)
+    throw (RuntimeException, SAXException, std::exception)
 {
     sContentBuffer.append(rContent);
 }

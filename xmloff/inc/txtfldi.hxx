@@ -132,19 +132,31 @@ public:
         const sal_Char* pService,               /// name of SO API service
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLTextFieldImportContext(
+        SvXMLImport& rImport,           /// XML Import
+        XMLTextImportHelper& rHlp,      /// Text import helper
+        const sal_Char* pService,       /// name of SO API service
+        sal_Int32 Element);             /// xml element
 
     virtual ~XMLTextFieldImportContext();
 
     /// process character data: will be collected in member sContentBuffer
     virtual void Characters( const OUString& sContent ) SAL_OVERRIDE;
+    virtual void characters( const OUString& sContent )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /// parses attributes and calls ProcessAttribute
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /// create XTextField and insert into document; calls PrepareTextField
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /// create the appropriate field context from
     /// (for use in paragraph import)
