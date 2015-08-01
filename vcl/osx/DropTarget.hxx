@@ -125,7 +125,7 @@ public:
   NSDragOperation draggingUpdated(id sender);
   void draggingExited(id sender);
   BOOL prepareForDragOperation(id sender);
-  BOOL performDragOperation(id sender);
+  BOOL performDragOperation();
   void concludeDragOperation(id sender);
 
   /* If multiple actions are supported by the drag source and
