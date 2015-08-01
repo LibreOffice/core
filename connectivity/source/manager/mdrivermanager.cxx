@@ -646,9 +646,9 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
             aFind = ::std::find_if(
                 m_aDriversBS.begin(),       // begin of search range
                 m_aDriversBS.end(),         // end of search range
-                [&_rURL, this] (DriverAccessArray::value_type driverAccess) {
+                [&_rURL, this] (const DriverAccessArray::value_type& driverAccess) {
                     // extract the driver from the access, then ask the resulting driver for acceptance
-                    const DriverAccess &ensuredAccess = EnsureDriver(m_xContext)(driverAccess);
+                    const DriverAccess& ensuredAccess = EnsureDriver(m_xContext)(driverAccess);
                     const Reference<XDriver> driver = ExtractDriverFromAccess()(ensuredAccess);
                     return AcceptsURL(_rURL)(driver);
                 });
@@ -670,7 +670,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
         DriverCollection::iterator aPos = ::std::find_if(
             m_aDriversRT.begin(),       // begin of search range
             m_aDriversRT.end(),         // end of search range
-            [&_rURL] (DriverCollection::value_type element) {
+            [&_rURL] (const DriverCollection::value_type& element) {
                 // extract the driver from the collection element, then ask the resulting driver for acceptance
                 const Reference<XDriver> driver = ExtractDriverFromCollectionElement()(element);
                 return AcceptsURL(_rURL)(driver);

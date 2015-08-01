@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                     if ( supportsPrimaryKey() )
                     {
                         ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
-                            [] (ODatabaseExport::TColumns::value_type tCol) { return tCol.second->IsPrimaryKey(); });
+                            [] (const ODatabaseExport::TColumns::value_type& tCol) { return tCol.second->IsPrimaryKey(); });
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
@@ -1294,7 +1294,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(
                         m_vColumnPos.begin(),
                         m_vColumnPos.end(),
-                        [nPos] (ODatabaseExport::TPositions::value_type tPos) {
+                        [nPos] (const ODatabaseExport::TPositions::value_type& tPos) {
                             return tPos.first == nPos;
                         }
                     );

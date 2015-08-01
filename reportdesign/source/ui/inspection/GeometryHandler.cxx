@@ -806,7 +806,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 {
                     // add function names
                     ::std::for_each(m_aFunctionNames.begin(), m_aFunctionNames.end(),
-                                    [&xListControl] (TFunctions::value_type func) {
+                                    [&xListControl] (const TFunctions::value_type& func) {
                                         xListControl->appendListEntry(func.first);
                                     });
                 }
