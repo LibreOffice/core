@@ -148,6 +148,10 @@ static hb_bool_t getFontGlyph(hb_font_t* /*font*/, void* pFontData,
     ServerFont* pFont = static_cast<ServerFont*>(pFontData);
     *nGlyphIndex = pFont->GetRawGlyphIndex(ch, vs);
 
+    // tdf#89231 if the font is missing non-breaking space, then use a normal space
+    if (*nGlyphIndex == 0 && ch == 0x202F && !vs)
+        *nGlyphIndex = pFont->GetRawGlyphIndex(' ');
+
     return *nGlyphIndex != 0;
 }
 
@@ -487,12 +491,6 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
-
-                // tdf#89231 if it's just a missing non-breaking space, then use a normal space
-                if (!nGlyphIndex && (SalLayoutFlags::ForFallback & rArgs.mnFlags) && nCharPos >= 0 && rArgs.mpStr[nCharPos] == 0x202F)
-                {
-                    nGlyphIndex = rFont.GetGlyphIndex(' ');
-                }
 
                 // if needed request glyph fallback by updating LayoutArgs
                 if (!nGlyphIndex)
