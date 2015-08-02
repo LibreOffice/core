@@ -1294,10 +1294,10 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
         Rectangle aClip( aPos, aSize );
         pDev->IntersectClipRegion( aClip );
-        sal_uInt16 nLines = (sal_uInt16) ( ( nTextHeight > 0 ) ? ( (aSize.Height()-nEditHeight) / nTextHeight ) : 1 );
+        sal_Int32 nLines = static_cast<sal_Int32>( nTextHeight > 0 ? (aSize.Height()-nEditHeight)/nTextHeight : 1 );
         if ( !nLines )
             nLines = 1;
-        sal_uInt16 nTEntry = IsReallyVisible() ? m_pImpl->m_pImplLB->GetTopEntry() : 0;
+        const sal_Int32 nTEntry = IsReallyVisible() ? m_pImpl->m_pImplLB->GetTopEntry() : 0;
 
         Rectangle aTextRect( aPos, aSize );
 
@@ -1307,7 +1307,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         aTextRect.Bottom() = aTextRect.Top() + nTextHeight;
 
         // the drawing starts here
-        for ( sal_uInt16 n = 0; n < nLines; n++ )
+        for ( sal_Int32 n = 0; n < nLines; ++n )
         {
             pDev->DrawText( aTextRect, m_pImpl->m_pImplLB->GetEntryList()->GetEntryText( n+nTEntry ), nTextStyle );
             aTextRect.Top() += nTextHeight;
