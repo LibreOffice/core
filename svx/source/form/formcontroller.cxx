@@ -1307,7 +1307,7 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
     try
     {
         Reference< XIdentifierReplace > xContainer( getContainer(), UNO_QUERY );
-        DBG_ASSERT( xContainer.is(), "FormController::replaceControl: yes, it's not required by the service description, but XItentifierReplaces would be nice!" );
+        DBG_ASSERT( xContainer.is(), "FormController::replaceControl: yes, it's not required by the service description, but XIdentifierReplace would be nice!" );
         if ( xContainer.is() )
         {
             // look up the ID of _rxExistentControl
