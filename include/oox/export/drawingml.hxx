@@ -103,6 +103,7 @@ protected:
     ::oox::core::XmlFilterBase* mpFB;
     /// If set, this is the parent of the currently handled shape.
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xParent;
+    bool mbIsBackgroundDark;
 
     bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& aName );
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
@@ -122,7 +123,7 @@ protected:
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
-        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ) {}
+        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
@@ -130,6 +131,7 @@ public:
     /// The application-specific text exporter callback, if there is one.
     DMLTextExport* GetTextExport() { return mpTextExport; }
 
+    void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
 
@@ -177,7 +179,7 @@ public:
     void WriteParagraphNumbering( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                                   sal_Int16 nLevel );
     void WriteRun( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
-    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rRun, bool bIsField, sal_Int32 nElement = XML_rPr );
+    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
 
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
