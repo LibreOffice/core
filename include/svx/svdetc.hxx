@@ -29,12 +29,15 @@
 
 
 
-// ExchangeFormat-Id der DrawingEngine holen. Daten koennen dann per
-//   static bool CopyData(pData,nLen,nFormat);
-// bereitgestellt werden, wobei pData/nLen einen SvMemoryStream beschreiben in
-// dem ein SdrModel gestreamt wird an dem fuer die Zeitdauer des Streamens das
-// Flag SdrModel::SetStreamingSdrModel(sal_True) gesetzt wird.
-// sal_uIntPtr SdrGetExchangeFormat(); -- JP 18.01.99 - dafuer gibt es ein define
+/**
+ * Get ExchangeFormatID of the DrawingEngine.
+ * The data can then be made available via
+ *   static bool CopyData(pData,nLen,nFormat);
+ *
+ * However, pData/nLen describe an SvMemoryStream in which an SdrModel is
+ * streamed. For its lifetime, the flag SdrModel::SetStreamingSdrModel(true)
+ * is set.
+ */
 
 class SdrOutliner;
 class SdrModel;
@@ -45,16 +48,20 @@ namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 }}}}
 
-// Einen Outliner mit den engineglobalen
-// Defaulteinstellungen auf dem Heap erzeugen.
-// Ist pMod<>NULL, dann wird der MapMode des uebergebenen
-// Models verwendet. Die resultierende Default-Fonthoehe bleibt
-// jedoch dieselbe (die logische Fonthoehe wird umgerechnet).
+/**
+ * Create an Outliner with the engine-global default settings on the heap.
+ * If pMod != nullptr, the MapMode of the passed model is used.
+ * The resulting default font height, however, stays the same (the logical
+ * font height is converted).
+ */
 SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rMod);
 
-// Globale Defaulteinstellungen fuer die DrawingEngine.
-// Diese Einstellungen sollte man direkt beim Applikationsstart
-// vornehmen, noch bevor andere Methoden der Engine gerufen werden.
+/**
+ * Global default settings for the DrawingEngine.
+ *
+ * One should set these default settings as the first
+ * thing at program start, before any other method is called.
+ */
 class SVX_DLLPUBLIC SdrEngineDefaults
 {
 friend class SdrAttrObj;
@@ -71,66 +78,71 @@ private:
 public:
     SdrEngineDefaults();
 
-    // Default FontColor ist COL_BLACK
+    // Default FontColor is COL_BLACK
     static Color      GetFontColor()                       { return GetDefaults().aFontColor; }
 
-    // Default FontHeight ist 847. Die Fonthoehe wird in logischen Einheiten
-    // (MapUnit/MapFraction (siehe unten)) angegeben. Die Defaulteinstellung
-    // 847/100mm entspricht also ca. 24 Point. Verwendet man stattdessen
-    // beispielsweise Twips (SetMapUnit(MAP_TWIP)) (20 Twip = 1 Point) muss
-    // man als Fonthoehe 480 angeben um 24 Point als default zu erhalten.
+    // Default FontHeight is 847. The font height uses logical units (MapUnit/MapFraction
+    // see below for further details). The default setting 847/100mm corresponds to about
+    // 24 Point. If e.g. one would use Twips (SetMapUnit(MAP_TWIP)) (20 Twip = 1 Point)
+    // instead, one would need to set the font height to 480, in order to get a 24 Point height.
     static sal_uIntPtr      GetFontHeight()                      { return GetDefaults().nFontHeight; }
 
-    // Der MapMode wird fuer den globalen Outliner benoetigt.
-    // Gleichzeitig bekommt auch jedes neu instanziierte SdrModel
-    // diesen MapMode default zugewiesen.
-    // Default MapUnit ist MAP_100TH_MM
+    // The MapMode is needed for the global Outliner.
+    // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
+    // Default MapUnit is MAP_100TH_MM
     static MapUnit    GetMapUnit()                         { return GetDefaults().eMapUnit; }
 
-    // Default MapFraction ist 1/1.
+    // Default MapFraction is 1/1.
     static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }
 
-    // Einen Outliner mit den engineglobalen
-    // Defaulteinstellungen auf dem Heap erzeugen.
-    // Ist pMod<>NULL, dann wird der MapMode des uebergebenen
-    // Models verwendet. Die resultierende Default-Fonthoehe bleibt
-    // jedoch dieselbe (die logische Fonthoehe wird umgerechnet).
+    // Create an Outliner with the engine-global default values on the heap.
+    // If pMod != nullptr, the MapMode of the passed model is used.
+    // The resulting default font height, however, stays the same (the logical font height is converted).
     friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rMod);
 };
 
 class SfxItemSet;
-// Liefert eine Ersatzdarstellung fuer einen XFillStyle
-// Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
+
+/**
+ * Returns a replacement for an XFillStyle
+ *
+ * @returns false for XFILL_NONE and rCol remains unchanged
+ */
 SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
 
 
-// Ein ItemSet auf Outliner- bzw. EditEngine-Items durchsuchen
-// Liefert sal_True, wenn der Set solchen Items enthaelt.
+/**
+ * Search an ItemSet for Outliner/EditEngine Items
+ *
+ * @returns true, if the set contains such items
+ */
 bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE=NULL);
 
-// zurueck erhaelt man einen neuen WhichTable den
-// man dann irgendwann mit delete platthauen muss.
+/**
+ * @returns a new WhichTable, which we need to squash at some point with a delete
+ */
 sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
 
-// Hilfsklasse zur kommunikation zwischen dem Dialog
-// zum aufbrechen von Metafiles (sd/source/ui/dlg/brkdlg.cxx),
-// SdrEditView::DoImportMarkedMtf() und
-// ImpSdrGDIMetaFileImport::DoImport()
+/**
+ * Helper class for the communication between the dialog
+ * In order to break open Metafiles (sd/source/ui/dlg/brkdlg.cxx),
+ * SdrEditView::DoImportMarkedMtf() and ImpSdrGDIMetaFileImport::DoImport()
+ */
 class SVX_DLLPUBLIC SvdProgressInfo
 {
 private:
-    sal_uIntPtr nSumActionCount;    // Summe aller Actions
-    sal_uIntPtr nSumCurAction;  // Summe aller bearbeiteten Actions
+    sal_uIntPtr nSumActionCount; // Sum of all Actions
+    sal_uIntPtr nSumCurAction;   // Sum of all handled Actions
 
-    sal_uIntPtr nActionCount;       // Anzahl der Actions im akt. Obj.
-    sal_uIntPtr nCurAction;     // Anzahl bearbeiteter Act. im akt. Obj.
+    sal_uIntPtr nActionCount;   // Count of Actions in the current object
+    sal_uIntPtr nCurAction;     // Count of handled Actions in the current object
 
-    sal_uIntPtr nInsertCount;       // Anzahl einzufuegender Act. im akt. Obj.
-    sal_uIntPtr nCurInsert;     // Anzahl bereits eingefuegter Actions
+    sal_uIntPtr nInsertCount;   // Count of to-be-inserted Actions in the current object
+    sal_uIntPtr nCurInsert;     // Count of already inserted Actions
 
-    sal_uIntPtr nObjCount;      // Anzahl der selektierten Objekte
-    sal_uIntPtr nCurObj;            // Aktuelles Objekt
+    sal_uIntPtr nObjCount;      // Count of selected objects
+    sal_uIntPtr nCurObj;        // Current object
 
     Link<> *pLink;
 
