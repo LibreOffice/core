@@ -32,6 +32,8 @@ namespace com { namespace sun { namespace star {
     }
     namespace xml { namespace sax {
         class XAttributeList;
+        class XFastAttributeList;
+        class XFastContextHandler;
     } }
 } } }
 class XMLTextImportHelper;
@@ -89,17 +91,30 @@ public:
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
+    XMLTextMarkImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
 protected:
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 public:
     static ::com::sun::star::uno::Reference<
@@ -115,6 +130,8 @@ public:
         SvXMLImport& rImport,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+    bool FindName(
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 };
 
 #endif
