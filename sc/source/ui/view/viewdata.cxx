@@ -996,11 +996,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         //  (existing or started) with default alignment extend to the right.
         bool bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
         bool bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
-        bool bGrowBackwards = bGrowToLeft;                          // logical left
-        if ( bLayoutRTL )
-            bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet
         if ( bAsianVertical )
-            bGrowCentered = bGrowToLeft = bGrowBackwards = false;   // keep old behavior for asian mode
+            bGrowCentered = bGrowToLeft = false;   // keep old behavior for asian mode
 
         long nSizeXPix;
         if (bBreak && !bAsianVertical)
