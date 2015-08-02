@@ -2162,24 +2162,18 @@ bool TextEngine::CreateLines( sal_uLong nPara )
     if ( pTEParaPortion->GetWritingDirectionInfos().empty() )
         ImpInitWritingDirections( nPara );
 
-    if ( pTEParaPortion->GetWritingDirectionInfos().size() == 1 )
+    if ( pTEParaPortion->GetWritingDirectionInfos().size() == 1 && pTEParaPortion->IsSimpleInvalid() )
     {
-        if ( pTEParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) )
-        {
-            bQuickFormat = true;
-        }
-        else if ( ( pTEParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
+        bQuickFormat = nInvalidDiff != 0;
+        if ( nInvalidDiff < 0 )
         {
             // check if deleting across Portion border
-            sal_uInt16 nStart = nInvalidStart;  // duplicate!!!
-            sal_uInt16 nEnd = nStart - nInvalidDiff;  // neg.
-            bQuickFormat = true;
             sal_uInt16 nPos = 0;
             for ( const auto pTP : pTEParaPortion->GetTextPortions() )
             {
                 // there must be no Start/End in the deleted region
                 nPos = nPos + pTP->GetLen();
-                if ( ( nPos > nStart ) && ( nPos < nEnd ) )
+                if ( nPos > nInvalidStart && nPos < nInvalidEnd )
                 {
                     bQuickFormat = false;
                     break;
