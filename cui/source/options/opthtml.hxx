@@ -22,7 +22,6 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/txencbox.hxx>
@@ -42,14 +41,12 @@ class OfaHtmlTabPage : public SfxTabPage
     VclPtr<CheckBox>        aUnknownTagCB;
     VclPtr<CheckBox>        aIgnoreFontNamesCB;
 
-    VclPtr<ListBox>         aExportLB;
     VclPtr<CheckBox>        aStarBasicCB;
     VclPtr<CheckBox>        aStarBasicWarningCB;
     VclPtr<CheckBox>        aPrintExtensionCB;
     VclPtr<CheckBox>        aSaveGrfLocalCB;
     VclPtr<SvxTextEncodingBox> aCharSetLB;
 
-    DECL_LINK(ExportHdl_Impl, ListBox*);
     DECL_LINK(CheckBoxHdl_Impl, CheckBox*);
 
 public:
