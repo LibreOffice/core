@@ -28,10 +28,10 @@
 #include "externalrefmgr.hxx"
 
 #include <vector>
-#include <list>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <unordered_map>
 #include <unordered_set>
 
 class ScDocument;
@@ -128,13 +128,6 @@ public:
 class ScChartListenerCollection
 {
 public:
-    struct RangeListenerItem
-    {
-        ScRange                     maRange;
-        ScChartHiddenRangeListener* mpListener;
-        explicit RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p);
-    };
-
     typedef boost::ptr_map<OUString, ScChartListener> ListenersType;
     typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 private:
@@ -145,7 +138,9 @@ private:
         SC_CLCUPDATE_RUNNING,
         SC_CLCUPDATE_MODIFIED
     } meModifiedDuringUpdate;
-    ::std::list<RangeListenerItem> maHiddenListeners;
+
+    std::unordered_multimap<ScChartHiddenRangeListener*, ScRange> maHiddenListeners;
+
     StringSetType maNonOleObjectNames;
 
     Idle            aIdle;
