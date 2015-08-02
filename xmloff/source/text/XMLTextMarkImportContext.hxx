@@ -45,10 +45,17 @@ public:
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
+    XMLFieldParamImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 

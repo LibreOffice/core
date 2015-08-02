@@ -63,6 +63,15 @@ XMLFieldParamImportContext::XMLFieldParamImportContext(
 {
 }
 
+XMLFieldParamImportContext::XMLFieldParamImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport ),
+    rHelper(rHlp)
+{
+}
+
 
 void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> & xAttrList)
 {
@@ -94,6 +103,30 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
     }
 }
 
+void XMLFieldParamImportContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw (RuntimeException, SAXException, std::exception)
+{
+    if( !xAttrList.is() )
+        return;
+
+    OUString sName;
+    OUString sValue;
+
+    if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_FIELD | XML_name ) )
+    {
+        sName = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_FIELD | XML_name );
+    }
+    if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_FIELD | XML_value ) )
+    {
+        sValue = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_FIELD | XML_value );
+    }
+
+    if( rHelper.hasCurrentFieldCtx() && !sName.isEmpty() )
+    {
+        rHelper.addFieldParam(sName, sValue);
+    }
+}
 
 TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 
