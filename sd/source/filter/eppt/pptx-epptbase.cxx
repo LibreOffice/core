@@ -133,6 +133,7 @@ PPTWriterBase::PPTWriterBase()
     , mbStatusIndicator(false)
     , mbPresObj(false)
     , mbEmptyPresObj(false)
+    , mbIsBackgroundDark(false)
     , mnAngle(0)
     , mnPages(0)
     , mnMasterPages(0)
@@ -324,6 +325,9 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
         mXPagePropSet = Reference< XPropertySet >( mXDrawPage, UNO_QUERY );
         if ( !mXPagePropSet.is() )
             break;
+
+        if (GetPropertyValue( aAny, mXPagePropSet, OUString("IsBackgroundDark") ) )
+            aAny >>= mbIsBackgroundDark;
 
         mXShapes = Reference< XShapes >( mXDrawPage, UNO_QUERY );
         if ( !mXShapes.is() )

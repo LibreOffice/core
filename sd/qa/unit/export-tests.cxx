@@ -111,6 +111,7 @@ public:
 #if !defined WNT
     void testBnc822341();
 #endif
+    void testTdf80224();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testFdo90607);
@@ -146,6 +147,7 @@ public:
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
 #endif
+    CPPUNIT_TEST(testTdf80224);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1214,6 +1216,25 @@ void SdExportTest::testTableCellBorder()
     CPPUNIT_ASSERT(nBottomBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
 
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf80224()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/tdf80224.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc( xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph->getStart(), uno::UNO_QUERY_THROW );
+    sal_Int32 nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6644396), nCharColor);
     xDocShRef->DoClose();
 }
 
