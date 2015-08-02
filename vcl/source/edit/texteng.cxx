@@ -208,7 +208,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
         FormatFullDoc();
         UpdateViews();
 
-        for ( sal_uInt16 nView = mpViews->size(); nView; )
+        for ( auto nView = mpViews->size(); nView; )
         {
             TextView* pView = (*mpViews)[ --nView ];
             pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
@@ -267,8 +267,8 @@ OUString TextEngine::GetTextLines( LineEnd aSeparator ) const
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nP );
 
-        sal_uInt16 nLines = pTEParaPortion->GetLines().size();
-        for ( sal_uInt16 nL = 0; nL < nLines; nL++ )
+        const size_t nLines = pTEParaPortion->GetLines().size();
+        for ( size_t nL = 0; nL < nLines; ++nL )
         {
             TextLine& pLine = pTEParaPortion->GetLines()[nL];
             aText += pTEParaPortion->GetNode()->GetText().copy( pLine.GetStart(), pLine.GetEnd() - pLine.GetStart() );
@@ -1165,7 +1165,7 @@ sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara )
 {
     sal_uLong nParaWidth = 0;
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
-    for ( sal_uInt16 nLine = pPortion->GetLines().size(); nLine; )
+    for ( auto nLine = pPortion->GetLines().size(); nLine; )
     {
         sal_uLong nLineWidth = 0;
         TextLine& pLine = pPortion->GetLines()[ --nLine ];
@@ -1886,10 +1886,10 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
 
         // There must be no Portion reaching into or starting within,
         // thus: nStartPos <= nPos <= nStartPos - nNewChars(neg.)
-        sal_uInt16 nPortion = 0;
+        size_t nPortion = 0;
         sal_uInt16 nPos = 0;
         sal_uInt16 nEnd = nStartPos-nNewChars;
-        sal_uInt16 nPortions = pTEParaPortion->GetTextPortions().size();
+        const size_t nPortions = pTEParaPortion->GetTextPortions().size();
         TETextPortion* pTP = 0;
         for ( nPortion = 0; nPortion < nPortions; nPortion++ )
         {
@@ -1957,11 +1957,9 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                 && ( !pPaintRange || ( ( nPara >= pPaintRange->GetStart().GetPara() ) && ( nPara <= pPaintRange->GetEnd().GetPara() ) ) ) )
         {
             // for all lines of the paragraph
-            sal_uInt16 nLines = pPortion->GetLines().size();
             sal_Int32 nIndex = 0;
-            for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
+            for ( auto &pLine : pPortion->GetLines() )
             {
-                TextLine& pLine = pPortion->GetLines()[nLine];
                 Point aTmpPos( rStartPos.X() + pLine.GetStartX(), nY );
 
                 if ( ( !pPaintArea || ( ( nY + mnCharHeight ) > pPaintArea->Top() ) )
@@ -2133,7 +2131,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     DBG_ASSERT( pTEParaPortion->IsInvalid(), "CreateLines: Portion not invalid!" );
 
-    sal_uInt16 nOldLineCount = pTEParaPortion->GetLines().size();
+    const auto nOldLineCount = pTEParaPortion->GetLines().size();
 
     // fast special case for empty paragraphs
     if ( pTEParaPortion->GetNode()->GetText().isEmpty() )
@@ -2177,11 +2175,9 @@ bool TextEngine::CreateLines( sal_uLong nPara )
             sal_uInt16 nEnd = nStart - nInvalidDiff;  // neg.
             bQuickFormat = true;
             sal_uInt16 nPos = 0;
-            sal_uInt16 nPortions = pTEParaPortion->GetTextPortions().size();
-            for ( sal_uInt16 nTP = 0; nTP < nPortions; nTP++ )
+            for ( const auto pTP : pTEParaPortion->GetTextPortions() )
             {
                 // there must be no Start/End in the deleted region
-                TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
                 nPos = nPos + pTP->GetLen();
                 if ( ( nPos > nStart ) && ( nPos < nEnd ) )
                 {
@@ -2738,7 +2734,7 @@ void TextEngine::ImpParagraphInserted( sal_uLong nPara )
     // but for all passive Views the Selection needs adjusting.
     if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->size(); nView; )
+        for ( auto nView = mpViews->size(); nView; )
         {
             TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
@@ -2759,7 +2755,7 @@ void TextEngine::ImpParagraphRemoved( sal_uLong nPara )
 {
     if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->size(); nView; )
+        for ( auto nView = mpViews->size(); nView; )
         {
             TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
@@ -2787,7 +2783,7 @@ void TextEngine::ImpCharsRemoved( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nCh
 {
     if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->size(); nView; )
+        for ( auto nView = mpViews->size(); nView; )
         {
             TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
@@ -2814,7 +2810,7 @@ void TextEngine::ImpCharsInserted( sal_uLong nPara, sal_Int32 nPos, sal_Int32 nC
 {
     if ( mpViews->size() > 1 )
     {
-        for ( sal_uInt16 nView = mpViews->size(); nView; )
+        for ( auto nView = mpViews->size(); nView; )
         {
             TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
