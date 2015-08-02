@@ -136,7 +136,7 @@ inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
 {
     if (!bVShear) { // Horizontal
-        if (rPnt.Y()!=rRef.Y()) { // sonst nicht noetig
+        if (rPnt.Y()!=rRef.Y()) { // else not needed
             rPnt.X()-=Round((rPnt.Y()-rRef.Y())*tn);
         }
     } else { // or else vertical

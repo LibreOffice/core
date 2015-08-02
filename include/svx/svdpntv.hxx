@@ -37,9 +37,7 @@
 #include <vcl/idle.hxx>
 
 
-//   Pre-Defines
-
-
+// Pre defines
 class SdrPageWindow;
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -64,9 +62,7 @@ namespace sdr { namespace contact {
 }}
 
 
-//   Defines for AnimationMode
-
-
+// Defines for AnimationMode
 enum SdrAnimationMode
 {
     SDR_ANIMATION_ANIMATE,
@@ -75,9 +71,7 @@ enum SdrAnimationMode
 };
 
 
-//   Typedef's und defines
-
-
+// Typedefs and defines
 typedef unsigned char SDR_TRISTATE;
 #define FUZZY                   (2)
 #define SDR_ANYFORMAT           (0xFFFFFFFF)
@@ -93,8 +87,8 @@ namespace sdr
     namespace contact
     {
         class ViewObjectContactRedirector;
-    } // end of namespace contact
-} // end of namespace sdr
+    }
+}
 
 
 
@@ -110,14 +104,15 @@ private:
     HintType meHintType;
 };
 
-// typedefs for a list of SdrPaintWindows
+/// Typedefs for a list of SdrPaintWindows
 class SdrPaintWindow;
 typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
 
-// helper to convert any GDIMetaFile to a good quality BitmapEx,
-// using default parameters and graphic::XPrimitive2DRenderer
-
+/**
+ * Helper to convert any GDIMetaFile to a good quality BitmapEx,
+ * using default parameters and graphic::XPrimitive2DRenderer
+ */
 BitmapEx SVX_DLLPUBLIC convertMetafileToBitmapEx(
     const GDIMetaFile& rMtf,
     const basegfx::B2DRange& rTargetRange,
@@ -136,21 +131,21 @@ protected:
 #ifdef DBG_UTIL
     VclPtr<SdrItemBrowser>      pItemBrowser;
 #endif
-    VclPtr<OutputDevice>        pActualOutDev; // Nur zum vergleichen
+    VclPtr<OutputDevice>        pActualOutDev; // Only for comparison
     VclPtr<OutputDevice>        pDragWin;
     SfxStyleSheet*              pDefaultStyleSheet;
 
-    OUString                    aAktLayer;     // Aktueller Zeichenlayer
-    OUString                    aMeasureLayer; // Aktueller Layer fuer Bemassung
+    OUString                    aAktLayer;     // Current drawing layer
+    OUString                    aMeasureLayer; // Current layer for measurements
 
-//  Container                   aPagV;         // Liste von SdrPageViews
+//  Container                   aPagV;         // List of SdrPageViews
 
     // All windows this view is displayed on
     SdrPaintWindowVector        maPaintWindows;
 
     MapMode                     aActualMapMode;
-    Size                        aGridBig; // muss dann mal raus
-    Size                        aGridFin; // muss dann mal raus
+    Size                        aGridBig;   // FIXME: We need to get rid of this eventually
+    Size                        aGridFin;   // FIXME: We need to get rid of this eventually
     SdrDragStat                 aDragStat;
     Rectangle                   aMaxWorkArea;
     SfxItemSet                  aDefaultAttr;
@@ -164,7 +159,7 @@ protected:
     sal_uInt16                      nMinMovLog;
     GraphicManagerDrawFlags         nGraphicManagerDrawMode;
 
-    // hold an incarnation of Drawinglayer configuration options
+    // Hold an incarnation of Drawinglayer configuration options
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
 
     bool                        bPageVisible : 1;
@@ -174,19 +169,19 @@ protected:
     bool                        bGridFront : 1;
     bool                        bHlplVisible : 1;
     bool                        bHlplFront : 1;
-    bool                        bGlueVisible : 1;    // Persistent. Klebepunkte anzeigen
-    bool                        bGlueVisible2 : 1;   // Klebepunkte auch bei GluePointEdit anzeigen
-    bool                        bGlueVisible3 : 1;   // Klebepunkte auch bei EdgeTool anzeigen
-    bool                        bGlueVisible4 : 1;   // Klebepunkte anzeigen, wenn 1 Edge markiert
-    bool                        bRestoreColors : 1;   // Pens und Brushes werden zurueckgesetzt.
+    bool                        bGlueVisible : 1;    // Persistent; show glue points
+    bool                        bGlueVisible2 : 1;   // Also show glue points for GluePointEdit
+    bool                        bGlueVisible3 : 1;   // Also show glue points for EdgeTool
+    bool                        bGlueVisible4 : 1;   // Show glue points, if one edge is selected
+    bool                        bRestoreColors : 1;  // Pens and Brushes are reset
     bool                        bSomeObjChgdFlag : 1;
     bool                        bSwapAsynchron : 1;
     bool                        bPrintPreview : 1;
 
-    // bool fuer die Verwaltung des anzuzeigenden Status
-    // Gruppe Betreten/Verlassen. Default ist sal_True, wird aber
-    // beispielsweise beim Chart auf sal_False gesetzt, da dort
-    // die Ghosted-Effekte zur Darstellug unerwuenscht sind.
+    // These bools manage, the status that is displayed
+    //
+    // Enter/Leave group: default is true, but is set to false in
+    // e.g. Chart, where we'd get Ghost effects when rendering
     bool                        bVisualizeEnteredGroup : 1;
     bool                        bAnimationPause : 1;
 
@@ -201,13 +196,13 @@ protected:
     // directly painted to OutDev. Default is sal_False.
     bool                        mbBufferedOverlayAllowed : 1;
 
-    // allow page painting at all?
+    // Allow page painting at all?
     bool                        mbPagePaintingAllowed : 1;
 
-    // is this a preview renderer?
+    // Is this a preview renderer?
     bool                        mbPreviewRenderer : 1;
 
-    // flags for calc and sw for suppressing OLE, CHART or DRAW objects
+    // Flags for calc and sw for suppressing OLE, CHART or DRAW objects
     bool                        mbHideOle : 1;
     bool                        mbHideChart : 1;
     bool                        mbHideDraw : 1;             // hide draw objects other than form controls
@@ -215,15 +210,15 @@ protected:
 
 public:
     // #114898#
-    // interface for PagePaintingAllowed flag
+    // Interface for PagePaintingAllowed flag
     bool IsBufferedOutputAllowed() const;
     void SetBufferedOutputAllowed(bool bNew);
 
-    // interface for BufferedOverlayAllowed flag
+    // Interface for BufferedOverlayAllowed flag
     bool IsBufferedOverlayAllowed() const;
     void SetBufferedOverlayAllowed(bool bNew);
 
-    // allow page painting at all?
+    // Allow page painting at all?
     bool IsPagePaintingAllowed() const { return mbPagePaintingAllowed;}
     void SetPagePaintingAllowed(bool bNew);
 
@@ -231,7 +226,7 @@ protected:
     svtools::ColorConfig            maColorConfig;
     Color                           maGridColor;
 
-    // interface to SdrPaintWindow
+    // Interface to SdrPaintWindow
 protected:
     void AppendPaintWindow(SdrPaintWindow& rNew);
     SdrPaintWindow* RemovePaintWindow(SdrPaintWindow& rOld);
@@ -241,7 +236,7 @@ public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }
     SdrPaintWindow* FindPaintWindow(const OutputDevice& rOut) const;
     SdrPaintWindow* GetPaintWindow(sal_uInt32 nIndex) const;
-    // replacement for GetWin(0), may return 0L (!)
+    // Replacement for GetWin(0), may return 0L (!)
     OutputDevice* GetFirstOutputDevice() const;
 
 private:
@@ -252,7 +247,7 @@ protected:
     sal_uInt16 ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const;
     sal_uInt16 ImpGetHitTolLogic(short nHitTol, const OutputDevice* pOut) const;
 
-    // Wenn man den IdleStatus des Systems nicht abwarten will (auf const geschummelt):
+    // If one does not want to wait for the IdleState of the system (cheated as const)
     void FlushComeBackTimer() const;
     void TheresNewMapMode();
     void ImpSetGlueVisible2(bool bOn) { if (bGlueVisible2!=bOn) { bGlueVisible2=bOn; if (!bGlueVisible && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
@@ -266,9 +261,9 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
     void GlueInvalidate() const;
 
-    // ModelHasChanged wird gerufen, sobald nach beliebig vielen HINT_OBJCHG
-    // das System wieder idle ist (StarView-Timer). Wer diese Methode ueberlaed,
-    // muss unbedingt ModelHasChanged() der Basisklasse rufen.
+    // ModelHasChanged is called, as soon as the system is idle again after many HINT_OBJCHG.
+    //
+    // Any sub-class override this method, MUST call the base class' ModelHasChanged() method
     virtual void ModelHasChanged();
 
 protected:
@@ -286,47 +281,48 @@ public:
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BckAction();
-    virtual void BrkAction(); // Alle Actions z.B. Draggen abbrechen.
+    virtual void BrkAction(); // Cancel all Actions (e.g. cancel dragging)
     virtual void TakeActionRect(Rectangle& rRect) const;
 
-    // info about TextEdit. Default is sal_False.
+    // Info about TextEdit. Default is sal_False.
     virtual bool IsTextEdit() const;
 
-    // info about TextEditPageView. Default is 0L.
+    // Info about TextEditPageView. Default is 0L.
     virtual SdrPageView* GetTextEditPageView() const;
 
-    // Muss dann bei jedem Fensterwechsel (wenn die SdrView in mehreren
-    // Fenstern gleichzeitig dargestellt wird (->z.B. Splitter)) und bei
-    // jedem MapMode(Scaling)-wechsel gerufen werden, damit ich aus meinen
-    // Pixelwerten logische Werte berechnen kann.
+    // Must be called for every Window change as well as MapMode (Scaling) change:
+    // If the SdrView is shown in multiple windows at the same time (e.g.
+    // using the split pane), so that I can convert my pixel values to logical
+    // values.
     void SetActualWin(const OutputDevice* pWin);
     void SetMinMoveDistancePixel(sal_uInt16 nVal) { nMinMovPix=nVal; TheresNewMapMode(); }
     void SetHitTolerancePixel(sal_uInt16 nVal) { nHitTolPix=nVal; TheresNewMapMode(); }
     sal_uInt16 GetHitTolerancePixel() const { return (sal_uInt16)nHitTolPix; }
 
-    // data read access on logic HitTolerance and MinMoveTolerance
+    // Data read access on logic HitTolerance and MinMoveTolerance
     sal_uInt16 getHitTolLog() const { return nHitTolLog; }
 
-    // Flag zur Visualisierung von Gruppen abfragen/testen
+    // Flag for group visualization
     bool DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }
 
-    // Am DragStatus laesst sich beispielsweise erfragen, welche
-    // entfernung bereits gedraggd wurde, etc.
+    // Using the DragState we can tell e.g. which distance was
+    // already dragged
     const SdrDragStat& GetDragStat() const { return aDragStat; }
 
-    // Anmelden/Abmelden einer PageView an der View.
-    // Dieselbe // Seite kann nicht mehrfach angemeldet werden.
-    // Methoden mit dem Suffix PgNum erwarten als numerischen Parameter
-    // eine Seitennummer (0...). Methoden mit dem Suffix PvNum erwarten
-    // degagen als numerischen Parameter die Nummer der PageView an der
-    // SdrView (Iterieren ueber alle angemeldeten Pages).
+    // Registering/de-registering a PageView at a View
+    //
+    // The same Page cannot be registered multiple times.
+    //
+    // Methods ending in PgNum expect being passed a Page number.
+    // Methods ending in PvNum, instead, expect the number of the
+    // PageView at the SdrView (iterating over all registered Pages).
     virtual SdrPageView* ShowSdrPage(SdrPage* pPage);
     virtual void HideSdrPage();
 
-    // Iterieren ueber alle angemeldeten PageViews
+    // Iterate over all registered PageViews
     SdrPageView* GetSdrPageView() const { return mpPageView; }
 
-    // Eine SdrView kann auf mehreren Fenstern gleichzeitig abgebiltet sein:
+    // A SdrView can be displayed on multiple Windows at the same time
     virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
@@ -343,45 +339,62 @@ public:
     void PrePaint();
 
 
-    // used internally for Draw/Impress/sch/chart2
+    // Used internally for Draw/Impress/sch/chart2
     virtual void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
 
-    // BeginCompleteRedraw returns (or even creates) a SdrPaintWindow which shall then be used as
+    // BeginCompleteRedraw returns (or even creates) a SdrPaintWindow which will then be used as the
     // target for paints. Since paints may be buffered, use it's GetTargetOutputDevice() method which will
-    // return the buffer in case of bufered.
-    // DoCompleteRedraw draws the DrawingLayer hierarchy then.
-    // EndCompleteRedraw does the necessary refreshes, evtl. paints text edit and overlay and evtl destroys the
-    // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
+    // return the buffer in case it's buffered.
+    //
+    // DoCompleteRedraw then draws the DrawingLayer hierarchy
+    // EndCompleteRedraw does the necessary refreshes, paints text edit and overlay as well as destroys the
+    // SdrPaintWindow again, if needed.
+    // This means: the SdrPaintWindow is no longer safe after this closing call.
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
     void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 
-    // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
+    // Used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
     SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
-    // used when the region passed to BeginDrawLayers needs to be changed
+
+    // Used when the region passed to BeginDrawLayers needs to be changed
     void UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
     void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
 
-    // used to paint the form layer after the PreRender device is flushed (painted) to the window.
+    // Used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow );
 
     static vcl::Region OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
 
 public:
-    bool IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
-    bool IsPageBorderVisible() const { return bPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht
-    bool IsBordVisible() const { return bBordVisible; }             // Seitenrandlinie malen oder nicht
-    bool IsGridVisible() const { return bGridVisible; }             // Rastergitter malen oder nicht
-    bool IsGridFront() const { return bGridFront  ; }               // Rastergitter ueber die Objekte druebermalen oder dahinter
-    bool IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
-    bool IsHlplFront() const { return bHlplFront  ; }               // Hilfslinie ueber die Objekte druebermalen oder dahinter
+    /// Draw Page as a white area or not
+    bool IsPageVisible() const { return bPageVisible; }
+
+    /// Draw Page as a white area or not
+    bool IsPageBorderVisible() const { return bPageBorderVisible; }
+
+    /// Draw Border line or not
+    bool IsBordVisible() const { return bBordVisible; }
+
+    /// Draw Grid or not
+    bool IsGridVisible() const { return bGridVisible; }
+
+    /// Draw Grid in front of objects or behind them
+    bool IsGridFront() const { return bGridFront  ; }
+
+    /// Draw Help line of the Page or not
+    bool IsHlplVisible() const { return bHlplVisible; }
+
+    /// Draw Help line in fron of the objects or beging them
+    bool IsHlplFront() const { return bHlplFront  ; }
+
     Color GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
@@ -396,7 +409,7 @@ public:
     bool IsPreviewRenderer() const { return mbPreviewRenderer; }
     void SetPreviewRenderer(bool bOn) { mbPreviewRenderer=bOn; }
 
-    // access methods for calc and sw hide object modes
+    // Access methods for calc and sw hide object modes
     bool getHideOle() const { return mbHideOle; }
     bool getHideChart() const { return mbHideChart; }
     bool getHideDraw() const { return mbHideDraw; }
@@ -422,19 +435,17 @@ public:
     void SetActiveLayer(const OUString& rName) { aAktLayer=rName; }
     const OUString&  GetActiveLayer() const { return aAktLayer; }
 
-    // Verlassen einer betretenen Objektgruppe aller sichtbaren Seiten.
-    // (wie MsDos chdir ..)
+    /// Leave an object group of all visible Pages (like `chdir ..` in MSDOS)
     void LeaveOneGroup();
 
-    // Verlassen aller betretenen Objektgruppen aller sichtbaren Seiten.
-    // (wie MsDos chdir \)
+    /// Leave all entered object groups of all visible Pages (like `chdir \` in MSDOS)
     void LeaveAllGroup();
 
-    // Feststellen, ob Leave sinnvoll ist.
+    /// Determine, whether Leave is useful or not
     bool IsGroupEntered() const;
 
-    // DefaultAttribute an der View: Neu erzeugte Objekte bekommen diese
-    // Attribute direkt nach dem Erzeugen erstmal zugewiesen.
+    /// Default attributes at the View
+    /// Newly created objects are assigned these attributes by default when they are created.
     void SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
     const SfxItemSet& GetDefaultAttr() const { return aDefaultAttr; }
     void SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
@@ -443,11 +454,11 @@ public:
     void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
     void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
 
-    // SwapIn (z.B. von Grafiken) asynchron durchfuehren. Also nicht
-    // beim Paint sofort nachladen, sondern dort das Nachladen anstossen.
-    // Nach Abschluss des Nachladens wird das Objekt dann angezeigt.
-    // Hat nur z.Zt. Wirkung, wenn SwapGraphics am Model eingeschaltet ist.
-    // Default=FALSE. Flag ist nicht persistent.
+    /// Execute a swap-in of e.g. graphics asynchronously.
+    /// This does not reload all graphics like Paint does, but kicks off
+    /// the loading there. When such an object is done loading, it is displayed.
+    /// TODO: Only works at the moment, if SwapGraphics is enabled in the model.
+    /// The default = false flag is non-persistent
     bool IsSwapAsynchron() const { return bSwapAsynchron; }
     void SetSwapAsynchron(bool bJa=true) { bSwapAsynchron=bJa; }
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
@@ -457,7 +468,6 @@ public:
     virtual bool MouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
     virtual bool Command(const CommandEvent& /*rCEvt*/, vcl::Window* /*pWin*/) { return false; }
 
-    /* new interface src537 */
     bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
 
     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
@@ -466,33 +476,34 @@ public:
 
     virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin);
 
-    // Fuer PlugIn. Wird vom Paint des OLE-Obj gerufen.
+    /// For Plugins
+    /// Is called by the Paint of the OLE object
     virtual void DoConnect(SdrOle2Obj* pOleObj);
 
-    // Animation aktivieren/deaktivieren fuer ::Paint
-    // wird z.Zt. ausgewertet von SdrGrafObj, wenn in dem eine Animation steckt
-    // Das Unterbinden der automatischen Animation wird z.B. fuer die Dia-Show benoetigt
+    /// Enable/disable animations for ::Paint
+    /// Is used by e.g. SdrGrafObj, if it contains an animation
+    /// Preventing automatic animation is needed for e.g. the presentation view
     bool IsAnimationEnabled() const { return ( SDR_ANIMATION_ANIMATE == eAnimationMode ); }
     void SetAnimationEnabled( bool bEnable=true );
 
-    // set/unset pause state for animations
+    /// Set/unset pause state for animations
     void SetAnimationPause( bool bSet );
 
-    // Verhalten beim Starten von Animation im Paint-Handler:
-    // 1. Animation normal starten( SDR_ANIMATION_ANIMATE ) => DEFAULT
-    // 2. Nur die Ersatzdarstellung der Animation zeichnen ( SDR_ANIMATION_DONT_ANIMATE )
-    // 3. Nicht starten und nichts ersatzweise ausgeben ( SDR_ANIMATION_DISABLE )
+    /// Mode when starting an animation in the Paint Handler:
+    /// 1. SDR_ANIMATION_ANIMATE (default): start animation normally
+    /// 2. SDR_ANIMATION_DONT_ANIMATE: only show the replacement picture
+    /// 3. SDR_ANIMATION_DISABLE: don't start and don't show any replacement
     void SetAnimationMode( const SdrAnimationMode eMode );
 
-    // bei bShow=sal_False wird der Browser destruiert
+    /// The Browser is destroyed for bShow=false
 #ifdef DBG_UTIL
     void ShowItemBrowser(bool bShow=true);
     bool IsItemBrowserVisible() const { return pItemBrowser!=nullptr && GetItemBrowser()->IsVisible(); }
     vcl::Window* GetItemBrowser() const;
 #endif
 
-    // Muss von App beim Scrollen usw. gerufen werden, damit ein u.U.
-    // aktives FormularControl mitverschoben werden kann
+    /// Must be called by the App when scrolling etc. in order for
+    /// an active FormularControl to be moved too
     void VisAreaChanged(const OutputDevice* pOut=NULL);
     void VisAreaChanged(const SdrPageWindow& rWindow);
 
@@ -513,7 +524,7 @@ public:
     // Sets the timer for Object animations and restarts.
     void SetAnimationTimer(sal_uInt32 nTime);
 
-    // access to Drawinglayer configuration options
+    // Access to Drawinglayer configuration options
     const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 };
 
