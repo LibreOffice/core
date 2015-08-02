@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "dae33548_61c5565a",
+        "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-02T23:41:41Z",
+      "side": 1,
+      "message": "Good point, I\u0027ll update this",
+      "parentUuid": "dae33548_01f3aa0b",
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dae33548_e1f7a6f3",
         "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
         "patchSetId": 2
@@ -111,6 +129,24 @@
         "endLine": 72,
         "endChar": 22
       },
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae33548_81c85a76",
+        "filename": "slideshow/source/engine/waitsymbol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-02T23:41:41Z",
+      "side": 1,
+      "message": "Shoot! How did i miss that",
+      "parentUuid": "dae33548_41ddb26f",
       "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
