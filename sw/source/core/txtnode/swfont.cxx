@@ -432,7 +432,7 @@ void SwFont::SetVertical( sal_uInt16 nDir, const bool bVertFormat )
     {
         bFntChg = true;
         aSub[0].SetVertical( nDir, bVertFormat );
-        aSub[1].SetVertical( nDir, bVertFormat || nDir > 1000 );
+        aSub[1].SetVertical( nDir, bVertFormat );
         aSub[2].SetVertical( nDir, bVertFormat );
     }
 }
