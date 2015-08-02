@@ -121,17 +121,18 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
         mnImages++;
 
     sal_Int32 insPos = 0;
+    const sal_Int32 nEntriesSize = static_cast<sal_Int32>(maEntries.size());
 
     if ( !bSort || maEntries.empty())
     {
-        if (0 <= nPos && static_cast<size_t>(nPos) < maEntries.size())
+        if (0 <= nPos && nPos < nEntriesSize)
         {
             insPos = nPos;
             maEntries.insert( maEntries.begin() + nPos, pNewEntry );
         }
         else
         {
-            insPos = maEntries.size();
+            insPos = nEntriesSize;
             maEntries.push_back(pNewEntry);
         }
     }
@@ -140,11 +141,8 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
         const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
 
         const OUString& rStr = pNewEntry->maStr;
-        sal_uLong nLow, nHigh, nMid;
 
-        nHigh = maEntries.size();
-
-        ImplEntryType* pTemp = GetEntry( (sal_Int32)(nHigh-1) );
+        ImplEntryType* pTemp = GetEntry( nEntriesSize-1 );
 
         try
         {
@@ -153,13 +151,12 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             // fast insert for sorted data
             if ( nComp >= 0 )
             {
-                insPos = maEntries.size();
+                insPos = nEntriesSize;
                 maEntries.push_back(pNewEntry);
             }
             else
             {
-                nLow  = mnMRUCount;
-                pTemp = GetEntry( (sal_Int32)nLow );
+                pTemp = GetEntry( mnMRUCount );
 
                 nComp = rSorter.compare(rStr, pTemp->maStr);
                 if ( nComp <= 0 )
@@ -169,11 +166,14 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                 }
                 else
                 {
+                    sal_uLong nLow = mnMRUCount;
+                    sal_uLong nHigh = maEntries.size()-1;
+                    sal_Int32 nMid;
+
                     // binary search
-                    nHigh--;
                     do
                     {
-                        nMid = (nLow + nHigh) / 2;
+                        nMid = static_cast<sal_Int32>((nLow + nHigh) / 2);
                         pTemp = GetEntry( nMid );
 
                         nComp = rSorter.compare(rStr, pTemp->maStr);
@@ -228,7 +228,7 @@ void ImplEntryList::RemoveEntry( sal_Int32 nPos )
 
 sal_Int32 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUArea ) const
 {
-    sal_Int32 nEntries = maEntries.size();
+    const sal_Int32 nEntries = static_cast<sal_Int32>(maEntries.size());
     for ( sal_Int32 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
         OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n].maStr ) );
@@ -1910,11 +1910,11 @@ sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
 {
     // FIXME: ListBoxEntryFlags::MultiLine
 
-    sal_Int32 nCount = mpEntryList->GetEntryCount();
+    const sal_Int32 nCount = mpEntryList->GetEntryCount()-mnTop;
     long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
     sal_uInt16 nEntries = static_cast< sal_uInt16 >( ( nHeight + mnMaxHeight - 1 ) / mnMaxHeight );
-    if( nEntries > nCount-mnTop )
-        nEntries = nCount-mnTop;
+    if( nEntries > nCount )
+        nEntries = static_cast<sal_uInt16>(nCount);
 
     return nEntries;
 }

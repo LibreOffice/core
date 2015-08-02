@@ -579,8 +579,8 @@ void LongCurrencyBox::ReformatAll()
 {
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    const sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; ++i )
     {
         ImplLongCurrencyReformat( GetEntry( i ), mnMin, mnMax,
                                   GetDecimalDigits(), GetLocaleDataWrapper(),
