@@ -32,8 +32,6 @@ class OfaMemoryOptionsPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
 private:
-    VclPtr<NumericField>       m_pUndoEdit;
-
     VclPtr<NumericField>       m_pNfGraphicCache;
     VclPtr<NumericField>       m_pNfGraphicObjectCache;
     VclPtr<TimeField>          m_pTfGraphicObjectTime;
