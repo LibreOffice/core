@@ -908,8 +908,8 @@ void PatternBox::ReformatAll()
 {
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    const sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; ++i )
     {
         aStr = ImplPatternReformat( GetEntry( i ), GetEditMask(), GetLiteralMask(), GetFormatFlags() );
         RemoveEntryAt(i);
@@ -1878,8 +1878,8 @@ void DateBox::ReformatAll()
 {
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    const sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; ++i )
     {
         ImplDateReformat( GetEntry( i ), aStr, GetFieldSettings() );
         RemoveEntryAt(i);
@@ -2684,8 +2684,8 @@ void TimeBox::ReformatAll()
 {
     OUString aStr;
     SetUpdateMode( false );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    const sal_Int32 nEntryCount = GetEntryCount();
+    for ( sal_Int32 i=0; i < nEntryCount; ++i )
     {
         ImplTimeReformat( GetEntry( i ), aStr );
         RemoveEntryAt(i);
