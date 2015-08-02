@@ -117,7 +117,7 @@ public:
     bool operator!=( const ScChartListener& r ) const;
 };
 
-class ScChartHiddenRangeListener
+class SC_DLLPUBLIC ScChartHiddenRangeListener
 {
 public:
     ScChartHiddenRangeListener();
@@ -125,7 +125,7 @@ public:
     virtual void notify() = 0;
 };
 
-class ScChartListenerCollection
+class SC_DLLPUBLIC ScChartListenerCollection
 {
 public:
     struct RangeListenerItem
