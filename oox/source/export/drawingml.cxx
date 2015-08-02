@@ -113,6 +113,9 @@ namespace drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
+#define CGETAD(propName) \
+    (( bCheckDirect && GetPropertyAndState( rXPropSet, rXPropState, OUString( #propName ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )||GetProperty( rXPropSet, OUString( #propName ) ))
+
 // not thread safe
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
@@ -1173,7 +1176,7 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
-void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsField, sal_Int32 nElement /*= XML_rPr*/ )
+void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsField, sal_Int32 nElement /*= XML_rPr*/, bool bCheckDirect/* = true */)
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
@@ -1220,7 +1223,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                 break;
         }
 
-    if ( GETAD( CharUnderline ) )
+    if ( CGETAD( CharUnderline ) )
     {
         switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
         {
@@ -1275,7 +1278,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         }
     }
 
-    if ( GETAD( CharStrikeout ) )
+    if ( CGETAD( CharStrikeout ) )
     {
         switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
         {
@@ -1349,16 +1352,14 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                           FSEND );
 
     // mso doesn't like text color to be placed after typeface
-    if( GETAD( CharColor ) )
+    if( CGETAD( CharColor ) )
     {
         sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
         SAL_INFO("oox.shape", "run color: " << color << " auto: " << COL_AUTO);
 
         if( color == COL_AUTO )  // nCharColor depends to the background color
         {
-            bool bIsDark = false;
-            GET( bIsDark, IsBackgroundDark );
-            color = bIsDark ? 0xffffff : 0x000000;
+            color = mbIsBackgroundDark ? 0xffffff : 0x000000;
         }
         color &= 0xffffff;
 
@@ -1367,7 +1368,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         WriteSolidFill( color );
     }
 
-    if( GETAD( CharUnderlineColor ) )
+    if( CGETAD( CharUnderlineColor ) )
     {
         sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
 
@@ -1622,7 +1623,8 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     OUString aGraphicURL;
     sal_Int16 nBulletRelSize = 0;
     sal_Int16 nStartWith = 1;
-    sal_Int32 nBulletColor = 0;
+    sal_uInt32 nBulletColor = 0;
+    bool bHasBulletColor = false;
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
@@ -1649,7 +1651,8 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             }
             else if(aPropName == "BulletColor")
             {
-                nBulletColor = *static_cast<sal_Int32 const *>(pValue);
+                nBulletColor = *static_cast<sal_uInt32 const *>(pValue);
+                bHasBulletColor = true;
             }
             else if ( aPropName == "BulletChar" )
             {
@@ -1709,8 +1712,12 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     }
     else
     {
-        if(nBulletColor)
+        if(bHasBulletColor)
         {
+               if (nBulletColor == COL_AUTO )
+               {
+                   nBulletColor = mbIsBackgroundDark ? 0xffffff : 0x000000;
+               }
                mpFS->startElementNS( XML_a, XML_buClr, FSEND );
                WriteColor( nBulletColor );
                mpFS->endElementNS( XML_a, XML_buClr );
@@ -1904,6 +1911,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
 
     mpFS->startElementNS( XML_a, XML_p, FSEND );
 
+
     bool bPropertiesWritten = false;
     while( enumeration->hasMoreElements() )
     {
@@ -1920,7 +1928,8 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
             WriteRun( run );
         }
     }
-    mpFS->singleElementNS( XML_a, XML_endParaRPr, FSEND );
+    Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
+    WriteRunProperties( rXPropSet , false, XML_endParaRPr, false );
 
     mpFS->endElementNS( XML_a, XML_p );
 }
