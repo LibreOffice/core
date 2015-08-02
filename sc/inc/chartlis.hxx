@@ -117,7 +117,7 @@ public:
     bool operator!=( const ScChartListener& r ) const;
 };
 
-class ScChartHiddenRangeListener
+class SC_DLLPUBLIC ScChartHiddenRangeListener
 {
 public:
     ScChartHiddenRangeListener();
@@ -125,7 +125,7 @@ public:
     virtual void notify() = 0;
 };
 
-class ScChartListenerCollection
+class SC_DLLPUBLIC ScChartListenerCollection
 {
 public:
     typedef boost::ptr_map<OUString, ScChartListener> ListenersType;
@@ -158,7 +158,7 @@ public:
                     // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
-    SC_DLLPUBLIC void insert(ScChartListener* pListener);
+    void insert(ScChartListener* pListener);
     ScChartListener* findByName(const OUString& rName);
     const ScChartListener* findByName(const OUString& rName) const;
     bool hasListeners() const;
@@ -184,7 +184,7 @@ public:
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
-    SC_DLLPUBLIC void SetDirty();
+    void            SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
                         bool bSetChartRangeLists = false );
 
