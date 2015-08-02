@@ -194,7 +194,7 @@ OUString TextUndoDelPara::GetComment () const
     return ResId(STR_TEXTUNDO_DELPARA, *ImplGetResMgr());
 }
 
-TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
+TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nPos )
                     :   TextUndo( pTextEngine )
 {
     mnPara = nPara;
@@ -222,7 +222,7 @@ OUString TextUndoConnectParas::GetComment () const
     return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr()).toString();
 }
 
-TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
+TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nPos )
                     : TextUndo( pTextEngine )
 {
     mnPara = nPara;

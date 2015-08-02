@@ -44,11 +44,11 @@ class TextUndoConnectParas : public TextUndo
 {
 private:
     sal_uLong           mnPara;
-    sal_uInt16          mnSepPos;
+    sal_Int32           mnSepPos;
 
 public:
                     TYPEINFO_OVERRIDE();
-                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
+                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nSepPos );
                     virtual ~TextUndoConnectParas();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -61,11 +61,11 @@ class TextUndoSplitPara : public TextUndo
 {
 private:
     sal_uLong           mnPara;
-    sal_uInt16          mnSepPos;
+    sal_Int32           mnSepPos;
 
 public:
                     TYPEINFO_OVERRIDE();
-                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
+                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nSepPos );
                     virtual ~TextUndoSplitPara();
 
     virtual void    Undo() SAL_OVERRIDE;
