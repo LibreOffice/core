@@ -25,9 +25,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class VCLBitmapCreator : public ::cppu::WeakImplHelper2<
+class VCLBitmapCreator : public ::cppu::WeakImplHelper<
                                                 ::com::sun::star::lang::XSingleServiceFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 

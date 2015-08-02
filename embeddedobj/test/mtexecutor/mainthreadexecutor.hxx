@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <tools/link.hxx>
 
@@ -42,7 +42,7 @@ class MainThreadExecutorRequest
         void doIt();
 };
 
-class MainThreadExecutor : public ::cppu::WeakImplHelper2<
+class MainThreadExecutor : public ::cppu::WeakImplHelper<
                                                 ::com::sun::star::task::XJob,
                                                 ::com::sun::star::lang::XServiceInfo >
 

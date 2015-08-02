@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -32,7 +32,7 @@ class OleEmbeddedObject;
 #define OLECOMP_ONVIEWCHANGE    1
 #define OLECOMP_ONCLOSE         2
 
-class MainThreadNotificationRequest :  public cppu::WeakImplHelper1< com::sun::star::awt::XCallback >
+class MainThreadNotificationRequest :  public cppu::WeakImplHelper< com::sun::star::awt::XCallback >
 {
     OleEmbeddedObject* m_pObject;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XEmbeddedObject > m_xObject;

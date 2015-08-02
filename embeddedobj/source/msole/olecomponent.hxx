@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
@@ -52,7 +52,7 @@ class OleWrapperAdviseSink;
 class OleEmbeddedObject;
 struct OleComponentNative_Impl;
 
-class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCloseable, ::com::sun::star::lang::XComponent,
+class OleComponent : public ::cppu::WeakImplHelper< ::com::sun::star::util::XCloseable, ::com::sun::star::lang::XComponent,
                                                      ::com::sun::star::lang::XUnoTunnel, ::com::sun::star::util::XModifiable,
                                                      ::com::sun::star::datatransfer::XTransferable >
 {

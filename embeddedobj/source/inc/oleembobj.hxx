@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/thread.h>
 
@@ -103,7 +103,7 @@ public:
 
 class OleComponent;
 class OwnView_Impl;
-class OleEmbeddedObject : public ::cppu::WeakImplHelper5
+class OleEmbeddedObject : public ::cppu::WeakImplHelper
                         < ::com::sun::star::embed::XEmbeddedObject
                         , ::com::sun::star::embed::XEmbedPersist
                         , ::com::sun::star::embed::XLinkageSupport
