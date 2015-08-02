@@ -384,7 +384,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbAutoGrowSize->GetState();
     if( m_pTsbAutoGrowSize->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( makeSdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextAutoGrowSizeItem ( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbWordWrapText->GetState();
