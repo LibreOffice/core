@@ -20,16 +20,16 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
   <toolbar:toolbaritem xlink:href=".uno:ExitSearch"/>
   <toolbar:toolbaritem xlink:href=".uno:FindText"/>
-  <toolbar:toolbaritem xlink:href=".uno:DownSearch"/>
   <toolbar:toolbaritem xlink:href=".uno:UpSearch"/>
+  <toolbar:toolbaritem xlink:href=".uno:DownSearch"/>
   <toolbar:toolbaritem xlink:href=".uno:FindAll"/>
   <toolbar:toolbaritem xlink:href=".uno:MatchCase"/>
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:NavigationPopup"/>
-  <toolbar:toolbaritem xlink:href=".uno:ScrollToNext"/>
   <toolbar:toolbaritem xlink:href=".uno:ScrollToPrevious"/>
+  <toolbar:toolbaritem xlink:href=".uno:ScrollToNext"/>
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchLabel"/>
 </toolbar:toolbar>
