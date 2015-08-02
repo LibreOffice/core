@@ -9,9 +9,12 @@
 
 #include <oox/ole/vbaexport.hxx>
 
+#include <tools/stream.hxx>
+
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <oox/helper/binaryoutputstream.hxx>
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
 
@@ -21,9 +24,38 @@ VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
     maProjectName = "How to get the correct project name?";
 }
 
+namespace {
+
+// section 2.3.4.2.1.1
+void writePROJECTSYSKIND(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0001); // id
+    rStrm.WriteUInt32(0x00000004); // size
+    rStrm.WriteUInt32(0x00000002); // SysKind, hard coded to 32-bin windows for now
+}
+
+// section 2.3.4.2.1
+void writePROJECTINFORMATION(SvStream& rStrm)
+{
+    writePROJECTSYSKIND(rStrm);
+}
+
+// section 2.3.4.2
+void exportDirStream(SvStream& rStrm)
+{
+    writePROJECTINFORMATION(rStrm);
+}
+
+}
+
 void VbaExport::exportVBA()
 {
     // start here with the VBA export
+    const OUString aDirFileName("/home/moggi/Documents/temp/vba_dir_out.bin");
+    SvFileStream aDirStream(aDirFileName, StreamMode::WRITE);
+
+    // export
+    exportDirStream(aDirStream);
 }
 
 css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
