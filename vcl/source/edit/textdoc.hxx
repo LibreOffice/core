@@ -53,9 +53,9 @@ public:
 
     bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
 
-    TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    const TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos = 0xFFFF ) const;
-    TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
+    TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
+    const TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos, sal_Int32 nMaxPos = SAL_MAX_INT32 ) const;
+    TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
     bool            HasAttrib( sal_uInt16 nWhich ) const;
     bool            HasBoundingAttrib( sal_uInt16 nBound );
 };
@@ -106,7 +106,7 @@ public:
     std::vector<TextNode*>&       GetNodes()              { return maTextNodes; }
     const std::vector<TextNode*>& GetNodes() const        { return maTextNodes; }
 
-    TextPaM             RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars );
+    TextPaM             RemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
     TextPaM             InsertText( const TextPaM& rPaM, const OUString& rStr );
 

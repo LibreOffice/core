@@ -87,7 +87,7 @@ void TextCharAttribList::ResortAttribs()
     maAttribs.sort(CompareStart);
 }
 
-TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
+TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     for (TextCharAttribs::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
@@ -100,7 +100,7 @@ TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nP
     return NULL;
 }
 
-const TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos ) const
+const TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos, sal_Int32 nMaxPos ) const
 {
     DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
     for (TextCharAttribs::const_iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
@@ -136,7 +136,7 @@ bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
     return false;
 }
 
-TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
+TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     if ( !mbHasEmptyAttribs )
         return 0;
@@ -540,7 +540,7 @@ TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
     return aPaM;
 }
 
-TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars )
+TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
 {
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->RemoveText( rPaM.GetIndex(), nChars );
