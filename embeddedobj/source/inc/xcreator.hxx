@@ -24,10 +24,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
-class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper2<
+class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper<
                                                 ::com::sun::star::embed::XEmbeddedObjectCreator,
                                                 ::com::sun::star::lang::XServiceInfo >
 {

@@ -35,13 +35,13 @@
 #include <com/sun/star/embed/XHatchWindowController.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class OCommonEmbeddedObject;
 class Interceptor;
 
 class DocumentHolder :
-    public ::cppu::WeakImplHelper6<
+    public ::cppu::WeakImplHelper<
                         ::com::sun::star::util::XCloseListener,
                           ::com::sun::star::frame::XTerminateListener,
                         ::com::sun::star::util::XModifyListener,

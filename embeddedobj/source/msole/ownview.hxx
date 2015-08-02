@@ -26,11 +26,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
 
-class OwnView_Impl : public ::cppu::WeakImplHelper2 < ::com::sun::star::util::XCloseListener,
+class OwnView_Impl : public ::cppu::WeakImplHelper < ::com::sun::star::util::XCloseListener,
                                                       ::com::sun::star::document::XEventListener >
 {
     ::osl::Mutex m_aMutex;

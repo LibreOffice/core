@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace embed {
@@ -44,7 +44,7 @@ namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }
 
-class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
+class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
                         < ::com::sun::star::embed::XEmbeddedObject
                         , ::com::sun::star::embed::XEmbedPersist >
 {

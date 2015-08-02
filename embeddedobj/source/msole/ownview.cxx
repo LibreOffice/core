@@ -37,7 +37,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -49,7 +49,7 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
+class DummyHandler_Impl : public ::cppu::WeakImplHelper< task::XInteractionHandler >
 {
 public:
     DummyHandler_Impl() {}

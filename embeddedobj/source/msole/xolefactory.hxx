@@ -24,11 +24,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 
 
-class OleEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<
+class OleEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
                                                 ::com::sun::star::embed::XEmbeddedObjectCreator,
                                                 ::com::sun::star::lang::XServiceInfo >
 {

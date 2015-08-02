@@ -24,11 +24,11 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <tools/link.hxx>
 
-class UNOMainThreadExecutor : public ::cppu::WeakImplHelper2< ::com::sun::star::task::XJob,
+class UNOMainThreadExecutor : public ::cppu::WeakImplHelper< ::com::sun::star::task::XJob,
                                                               ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;

@@ -24,10 +24,10 @@
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
-class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper3<
+class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper<
                                                 ::com::sun::star::embed::XInsertObjectDialog,
                                                 ::com::sun::star::embed::XEmbedObjectClipboardCreator,
                                                 ::com::sun::star::lang::XServiceInfo >

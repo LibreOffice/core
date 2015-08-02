@@ -21,7 +21,7 @@
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_INTERCEPT_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
@@ -31,7 +31,7 @@
 class StatusChangeListenerContainer;
 class DocumentHolder;
 
-class Interceptor : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XDispatchProviderInterceptor,
+class Interceptor : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchProviderInterceptor,
                                                        ::com::sun::star::frame::XInterceptorInfo,
                                                        ::com::sun::star::frame::XDispatch>
 {

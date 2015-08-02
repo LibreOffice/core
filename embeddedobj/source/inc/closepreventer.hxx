@@ -21,9 +21,9 @@
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_CLOSEPREVENTER_HXX
 
 #include <com/sun/star/util/XCloseListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class OClosePreventer : public ::cppu::WeakImplHelper1 < ::com::sun::star::util::XCloseListener >
+class OClosePreventer : public ::cppu::WeakImplHelper < ::com::sun::star::util::XCloseListener >
 {
     virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
