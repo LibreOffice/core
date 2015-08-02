@@ -82,7 +82,6 @@ private:
     bool    mbRepeat;
     sal_Int32   mnStepTime;
     sal_Int32   mnCurStep;
-    sal_Int32   mnStepCount;
     AutoTimer   maWaitTimer;
     ImageSet    meImageSet;
 

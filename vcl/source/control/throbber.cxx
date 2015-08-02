@@ -47,7 +47,6 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style, const ImageSet
     ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
-    ,mnStepCount( 0 )
     ,meImageSet( i_imageSet )
 {
     maWaitTimer.SetTimeout( mnStepTime );
@@ -185,10 +184,11 @@ bool Throbber::isRunning() const
 
 void Throbber::setImageList( ::std::vector< Image > const& i_images )
 {
+    SAL_WARN_IF( i_images.size()>=SAL_MAX_INT32, "vcl.control", "Throbber::setImageList: too many images!" );
+
     maImageList = i_images;
 
-    mnStepCount = maImageList.size();
-    const Image aInitialImage( mnStepCount ? maImageList[ 0 ] : Image() );
+    const Image aInitialImage( maImageList.size() ? maImageList[ 0 ] : Image() );
     SetImage( aInitialImage );
 }
 
@@ -245,8 +245,8 @@ IMPL_LINK_NOARG_TYPED(Throbber, TimeOutHdl, Timer *, void)
     if ( maImageList.empty() )
         return;
 
-    if ( mnCurStep < mnStepCount - 1 )
-        mnCurStep += 1;
+    if ( mnCurStep < static_cast<sal_Int32>(maImageList.size()-1) )
+        ++mnCurStep;
     else
     {
         if ( mbRepeat )
