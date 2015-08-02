@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae33548_41965295",
+        "filename": "slideshow/source/engine/slide/layermanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-02T05:44:58Z",
+      "side": 1,
+      "message": "Nit: not consistent indentation.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 30
+      },
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae33548_81905a97",
+        "filename": "slideshow/source/engine/slide/layermanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-02T05:44:58Z",
+      "side": 1,
+      "message": "Here is the indentation consistent.",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 27
+      },
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae33548_01f3aa0b",
+        "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-02T05:44:58Z",
+      "side": 1,
+      "message": "this is always passed by value to te capture, but may be b eexplicit about it and use:\n\n  [\u0026, this]",
+      "range": {
+        "startLine": 70,
+        "startChar": 24,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae33548_e1f7a6f3",
+        "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-02T05:44:58Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 77,
+        "startChar": 23,
+        "endLine": 77,
+        "endChar": 26
+      },
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae33548_41ddb26f",
+        "filename": "slideshow/source/engine/waitsymbol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-02T05:44:58Z",
+      "side": 1,
+      "message": "Mention this in the lambda capture?",
+      "range": {
+        "startLine": 72,
+        "startChar": 19,
+        "endLine": 72,
+        "endChar": 22
+      },
+      "revId": "97e7412a064428221100bdcf76c95ba7cbdc1ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
