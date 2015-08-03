@@ -470,7 +470,9 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
+#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
+#endif
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);
