@@ -22,8 +22,10 @@
 
 #include "model/SlsSharedPageDescriptor.hxx"
 #include <basegfx/point/b2dpoint.hxx>
+
 #include <boost/noncopyable.hpp>
-#include <boost/function.hpp>
+
+#include <functional>
 #include <vector>
 
 namespace sd { namespace slidesorter { namespace view {
@@ -65,7 +67,7 @@ private:
 class AnimationParametricFunction
 {
 public:
-    typedef ::boost::function<basegfx::B2DPoint(double)> ParametricFunction;
+    typedef ::std::function<basegfx::B2DPoint (double)> ParametricFunction;
     AnimationParametricFunction (const ParametricFunction& rFunction);
 
     double operator() (const double nX);

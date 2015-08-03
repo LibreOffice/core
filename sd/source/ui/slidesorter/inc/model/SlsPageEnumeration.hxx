@@ -27,7 +27,7 @@
 #include "model/SlsEnumeration.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
 
-#include <boost/function.hpp>
+#include <functional>
 #include <memory>
 
 namespace sd { namespace slidesorter { namespace model {
@@ -54,7 +54,7 @@ public:
             enumeration.  Pages for which rPredicate returns <FALSE/> are
             exclude.
     */
-    typedef ::boost::function<bool(const SharedPageDescriptor&)> PagePredicate;
+    typedef ::std::function<bool (const SharedPageDescriptor&)> PagePredicate;
     static PageEnumeration Create (
         const SlideSorterModel& rModel,
         const PagePredicate& rPredicate);

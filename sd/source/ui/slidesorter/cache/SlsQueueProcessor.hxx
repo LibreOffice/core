@@ -32,7 +32,8 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <boost/function.hpp>
+
+#include <functional>
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
@@ -51,7 +52,7 @@ class RequestQueue;
 class QueueProcessor
 {
 public:
-    typedef ::boost::function<bool()> IdleDetectionCallback;
+    typedef ::std::function<bool ()> IdleDetectionCallback;
     QueueProcessor (
         RequestQueue& rQueue,
         const ::boost::shared_ptr<BitmapCache>& rpCache,

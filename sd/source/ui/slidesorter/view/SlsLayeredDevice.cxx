@@ -22,11 +22,12 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
+
+#include <boost/bind.hpp>
+
+#include <functional>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -75,7 +76,7 @@ void DeviceCopy (
         rSourceDevice);
 }
 
-void ForAllRectangles (const vcl::Region& rRegion, ::boost::function<void(const Rectangle&)> aFunction)
+void ForAllRectangles (const vcl::Region& rRegion, ::std::function<void (const Rectangle&)> aFunction)
 {
     OSL_ASSERT(aFunction);
     RectangleVector aRectangles;

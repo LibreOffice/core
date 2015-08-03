@@ -31,7 +31,6 @@
 #include "sdxfer.hxx"
 #include <vector>
 #include <boost/scoped_ptr.hpp>
-#include <boost/function.hpp>
 
 class SdDrawDocument;
 class SfxMedium;

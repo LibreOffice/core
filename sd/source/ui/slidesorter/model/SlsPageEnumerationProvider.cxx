@@ -20,7 +20,6 @@
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsPageDescriptor.hxx"
-#include <boost/function.hpp>
 
 namespace sd { namespace slidesorter { namespace model {
 

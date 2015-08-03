@@ -97,7 +97,7 @@ public:
 private:
     controller::Animator::AnimationId mnAnimationId;
     AnimatorAccess& mrAnimatorAccess;
-    ::boost::function<double(double)> maAccelerationFunction;
+    ::std::function<double (double)> maAccelerationFunction;
 
     void RestartAnimation();
 };
@@ -395,14 +395,13 @@ void PageObjectRun::RestartAnimation()
 
     // Restart the animation.
     mrAnimatorAccess.AddRun(shared_from_this());
+    auto sharedThis(shared_from_this());
     mnAnimationId = mrAnimatorAccess.GetAnimator()->AddAnimation(
-        ::boost::ref(*this),
+        [this] (double const val) { (*this)(val); },
         0,
         300,
-        ::boost::bind(
-            &AnimatorAccess::RemoveRun,
-            ::boost::ref(mrAnimatorAccess),
-            shared_from_this()));
+        [sharedThis] () { sharedThis->mrAnimatorAccess.RemoveRun(sharedThis); }
+        );
 }
 
 void PageObjectRun::operator () (const double nGlobalTime)

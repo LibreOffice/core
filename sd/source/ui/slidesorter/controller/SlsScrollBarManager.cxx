@@ -501,7 +501,7 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 
 bool ScrollBarManager::AutoScroll (
     const Point& rMouseWindowPosition,
-    const ::boost::function<void()>& rAutoScrollFunctor)
+    const ::std::function<void ()>& rAutoScrollFunctor)
 {
     maAutoScrollFunctor = rAutoScrollFunctor;
     CalcAutoScrollOffset(rMouseWindowPosition);
@@ -546,7 +546,7 @@ bool ScrollBarManager::RepeatAutoScroll()
 
 void ScrollBarManager::clearAutoScrollFunctor()
 {
-    maAutoScrollFunctor = ::boost::function<void()>();
+    maAutoScrollFunctor = ::std::function<void ()>();
 }
 
 IMPL_LINK_NOARG_TYPED(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)

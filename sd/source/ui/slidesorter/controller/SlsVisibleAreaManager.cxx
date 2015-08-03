@@ -43,7 +43,7 @@ namespace {
         SlideSorter& mrSlideSorter;
         Point maStart;
         const Point maEnd;
-        const ::boost::function<double(double)> maAccelerationFunction;
+        const ::std::function<double (double)> maAccelerationFunction;
     };
 
 } // end of anonymous namespace

@@ -25,8 +25,9 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <vector>
-#include <boost/function.hpp>
+#include <functional>
 
 namespace sd { namespace tools {
 
@@ -91,7 +92,7 @@ public:
         parameters are the name of key item (often of no further interest)
         and the value of the item.
     */
-    typedef ::boost::function<void(
+    typedef ::std::function<void (
         const OUString&,
         const std::vector<css::uno::Any>&) > Functor;
 

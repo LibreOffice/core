@@ -25,7 +25,8 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
-#include <boost/function.hpp>
+
+#include <functional>
 
 class ScrollBar;
 class ScrollBarBox;
@@ -144,7 +145,7 @@ public:
     */
     bool AutoScroll (
         const Point& rMouseWindowPosition,
-        const ::boost::function<void()>& rAutoScrollFunctor);
+        const ::std::function<void ()>& rAutoScrollFunctor);
 
     void StopAutoScroll();
 
@@ -207,7 +208,7 @@ private:
     */
     VclPtr<sd::Window> mpContentWindow;
 
-    ::boost::function<void()> maAutoScrollFunctor;
+    ::std::function<void ()> maAutoScrollFunctor;
 
     void SetWindowOrigin (
         double nHorizontalPosition,

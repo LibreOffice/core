@@ -21,8 +21,9 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSTRANSFERABLEDATA_HXX
 
 #include "sdxfer.hxx"
-#include <boost/function.hpp>
+
 #include <vector>
+#include <functional>
 
 class SdDrawDocument;
 namespace sd { namespace slidesorter {
@@ -78,7 +79,7 @@ public:
 private:
     SlideSorterViewShell* mpViewShell;
     const ::std::vector<Representative> maRepresentatives;
-    typedef ::std::vector<boost::function<void(sal_uInt8)> > CallbackContainer;
+    typedef ::std::vector<std::function<void (sal_uInt8)> > CallbackContainer;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
 };

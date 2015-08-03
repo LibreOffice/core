@@ -31,7 +31,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/function.hpp>
+
+#include <functional>
 #include <map>
 
 namespace sd {
@@ -146,11 +147,11 @@ public:
     static ::boost::shared_ptr<ViewShell> GetViewShell (
         const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
-    typedef ::boost::function<bool(const css::drawing::framework::ConfigurationChangeEvent&)>
+    typedef ::std::function<bool (const css::drawing::framework::ConfigurationChangeEvent&)>
         ConfigurationChangeEventFilter;
-    typedef ::boost::function<void(bool bEventSeen)> Callback;
-    typedef ::boost::function<
-        void(
+    typedef ::std::function<void (bool bEventSeen)> Callback;
+    typedef ::std::function<
+        void (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>&)
         > ResourceFunctor;

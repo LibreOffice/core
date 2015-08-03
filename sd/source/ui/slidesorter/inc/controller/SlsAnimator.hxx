@@ -26,11 +26,13 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <sal/types.h>
-#include <vector>
-#include <boost/function.hpp>
+
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <functional>
+#include <vector>
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -57,8 +59,8 @@ public:
     /** An animation object is called with values between 0 and 1 as single
         argument to its operator() method.
     */
-    typedef ::boost::function1<void, double> AnimationFunctor;
-    typedef ::boost::function0<void> FinishFunctor;
+    typedef ::std::function<void (double)> AnimationFunctor;
+    typedef ::std::function<void ()> FinishFunctor;
 
     typedef sal_Int32 AnimationId;
     static const AnimationId NotAnAnimationId = -1;

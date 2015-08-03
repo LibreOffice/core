@@ -21,8 +21,9 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_ASYNCHRONOUSCALL_HXX
 
 #include <vcl/timer.hxx>
+
 #include <memory>
-#include <boost/function.hpp>
+#include <functional>
 
 namespace sd { namespace tools {
 
@@ -63,7 +64,7 @@ public:
             The timeout in milliseconds until the function object is
             executed.
     */
-    typedef ::boost::function0<void> AsynchronousFunction;
+    typedef ::std::function<void ()> AsynchronousFunction;
     void Post (
         const AsynchronousFunction& rFunction,
         sal_uInt32 nTimeoutInMilliseconds=10);
