@@ -74,12 +74,10 @@ SotData_Impl * SOTDATA()
 |*    Beschreibung
 *************************************************************************/
 
-SotFactory::SotFactory( const SvGlobalName & rName,
-                        const OUString & rClassName )
+SotFactory::SotFactory( const SvGlobalName & rName )
     : SvGlobalName  ( rName )
     , nSuperCount   ( 0 )
     , pSuperClasses ( NULL )
-    , aClassName    ( rClassName )
 {
 #ifdef DBG_UTIL
     SvGlobalName aEmptyName;

@@ -24,9 +24,8 @@
 class SotObjectFactory : public SotFactory
 {
 public:
-        SotObjectFactory( const SvGlobalName & rName,
-                          const OUString & rClassName )
-            : SotFactory( rName, rClassName )
+        SotObjectFactory( const SvGlobalName & rName )
+            : SotFactory( rName )
         {}
 };
 
@@ -38,8 +37,7 @@ SotFactory * SotObject::ClassFactory()
     {
         *ppFactory = new SotObjectFactory(
                            SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
-                               0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
-                           OUString( "SotObject" ) );
+                               0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) );
     }
     return *ppFactory;
 }

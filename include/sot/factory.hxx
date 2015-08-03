@@ -39,8 +39,6 @@ class SOT_DLLPUBLIC SotFactory : public SvGlobalName
     sal_uInt16          nSuperCount;    // Anzahl der Superklassen
     const SotFactory ** pSuperClasses;  // Superklassen
 
-    OUString            aClassName;
-
 protected:
     virtual             ~SotFactory();
 public:
@@ -51,8 +49,7 @@ public:
     static  const SotFactory *      Find( const SvGlobalName & );
 #endif
 
-            SotFactory( const SvGlobalName &,
-                        const OUString & rClassName );
+            SotFactory( const SvGlobalName & );
 
     void                PutSuperClass( const SotFactory * );
 

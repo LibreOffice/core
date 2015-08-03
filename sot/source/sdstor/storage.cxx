@@ -45,9 +45,8 @@ using namespace ::com::sun::star;
 class SotStorageStreamFactory : public SotFactory
 {
 public:
-        SotStorageStreamFactory( const SvGlobalName & rName,
-                                 const OUString & rClassName )
-            : SotFactory( rName, rClassName )
+        SotStorageStreamFactory( const SvGlobalName & rName )
+            : SotFactory( rName )
         {}
 };
 
@@ -59,8 +58,7 @@ SotFactory * SotStorageStream::ClassFactory()
     {
         *ppFactory = new SotStorageStreamFactory(
                             SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
-                                0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
-                            OUString( "SotStorageStream" ) );
+                                0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) );
         (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
     }
     return *ppFactory;
@@ -306,9 +304,8 @@ bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::sta
 class SotStorageFactory : public SotFactory
 {
 public:
-        SotStorageFactory( const SvGlobalName & rName,
-                           const OUString & rClassName )
-            : SotFactory( rName, rClassName )
+        SotStorageFactory( const SvGlobalName & rName )
+            : SotFactory( rName )
         {}
 };
 
@@ -320,8 +317,7 @@ SotFactory * SotStorage::ClassFactory()
     {
         *ppFactory = new SotStorageFactory(
                                SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
-                                        0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
-                               OUString( "SotStorage" ) );
+                                        0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) );
         (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
     }
     return *ppFactory;
