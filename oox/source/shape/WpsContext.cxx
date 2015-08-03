@@ -13,6 +13,9 @@
 #include <drawingml/shapestylecontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <svx/svdtrans.hxx>
 
 #include <boost/optional.hpp>
 
@@ -76,9 +79,33 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 }
                 else
                 {
-                    comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                    aCustomShapeGeometry["TextPreRotateAngle"] = uno::makeAny(sal_Int32(-270));
-                    xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                    // Get the existing rotation of the shape.
+                    drawing::HomogenMatrix3 aMatrix;
+                    xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
+                    basegfx::B2DHomMatrix aTransformation;
+                    aTransformation.set(0, 0, aMatrix.Line1.Column1);
+                    aTransformation.set(0, 1, aMatrix.Line1.Column2);
+                    aTransformation.set(0, 2, aMatrix.Line1.Column3);
+                    aTransformation.set(1, 0, aMatrix.Line1.Column1);
+                    aTransformation.set(1, 1, aMatrix.Line2.Column2);
+                    aTransformation.set(1, 2, aMatrix.Line3.Column3);
+                    aTransformation.set(2, 0, aMatrix.Line1.Column1);
+                    aTransformation.set(2, 1, aMatrix.Line2.Column2);
+                    aTransformation.set(2, 2, aMatrix.Line3.Column3);
+                    basegfx::B2DTuple aScale;
+                    basegfx::B2DTuple aTranslate;
+                    double fRotate = 0;
+                    double fShearX = 0;
+                    aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                    // If the text is not rotated the way the shape wants it already, set the angle.
+                    const sal_Int32 nRotation = -270;
+                    if (basegfx::rad2deg(fRotate) != NormAngle360(nRotation * 100) / 100)
+                    {
+                        comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+                        aCustomShapeGeometry["TextPreRotateAngle"] = uno::makeAny(nRotation);
+                        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                    }
                 }
             }
 

@@ -2758,6 +2758,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf86374, "tdf86374.docx")
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf87924, "tdf87924.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    // This was -270, the text rotation angle was set when it should not be rotated.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
