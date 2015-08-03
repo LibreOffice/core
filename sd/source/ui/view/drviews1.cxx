@@ -80,7 +80,6 @@
 #include "ViewShellHint.hxx"
 
 #include <sfx2/request.hxx>
-#include <boost/bind.hpp>
 
 using namespace com::sun::star;
 
@@ -772,9 +771,6 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
  * Switch to desired page.
  * nSelectPage refers to the current EditMode
  */
-
-void LclResetFlag (bool& rbFlag) {rbFlag = false;}
-
 bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 {
     /** Under some circumstances there are nested calls to SwitchPage() and
@@ -786,16 +782,15 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
     if (mbIsInSwitchPage)
         return false;
     mbIsInSwitchPage = true;
-    comphelper::ScopeGuard aGuard (::boost::bind(LclResetFlag, ::boost::ref(mbIsInSwitchPage)));
+    comphelper::ScopeGuard aGuard(
+            [this] () { this->mbIsInSwitchPage = false; } );
 
     if (GetActiveWindow()->IsInPaint())
     {
         // Switching the current page while a Paint is being executed is
         // dangerous.  So, post it for later execution and return.
-        maAsynchronousSwitchPageCall.Post(::boost::bind(
-            ::std::mem_fun(&DrawViewShell::SwitchPage),
-            this,
-            nSelectedPage));
+        maAsynchronousSwitchPageCall.Post(
+            [this, nSelectedPage] () { this->SwitchPage(nSelectedPage); } );
         return false;
     }
 
