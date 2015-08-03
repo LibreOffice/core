@@ -2320,4 +2320,15 @@ bool WinSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
     return false;
 }
 
+bool WinSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
+{
+    return false;
+}
+
+bool WinSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
+                                     int nX, int nY , ControlCacheKey& aControlCacheKey)
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
