@@ -21,7 +21,7 @@
 #define INCLUDED_EMBEDSERV_SOURCE_INC_INTERCEPT_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
@@ -36,7 +36,7 @@ class EmbedDocument_Impl;
 class DocumentHolder;
 
 class Interceptor
-    : public ::cppu::WeakImplHelper3<
+    : public ::cppu::WeakImplHelper<
                    ::com::sun::star::frame::XDispatchProviderInterceptor,
                    ::com::sun::star::frame::XInterceptorInfo,
                    ::com::sun::star::frame::XDispatch>
