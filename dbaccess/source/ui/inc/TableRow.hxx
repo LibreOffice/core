@@ -38,7 +38,7 @@ namespace dbaui
     protected:
     public:
         OTableRow();
-        OTableRow(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAffectedCol);
+        OTableRow(const css::uno::Reference< css::beans::XPropertySet >& xAffectedCol);
         OTableRow( const OTableRow& rRow, long nPosition = -1 );
         ~OTableRow();
 

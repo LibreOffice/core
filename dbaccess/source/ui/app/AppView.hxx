@@ -77,8 +77,8 @@ namespace dbaui
             NONE
         };
     private:
-        ::com::sun::star::lang::Locale      m_aLocale;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::lang::Locale                   m_aLocale;
+        css::uno::Reference< css::lang::XComponent >
                                             m_xObject;
         VclPtr<OAppBorderWindow>            m_pWin;
         IApplicationController&             m_rAppController;
@@ -93,13 +93,13 @@ namespace dbaui
         virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
 
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
         // Window
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     public:
         OApplicationView(   vcl::Window* pParent
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                            ,const css::uno::Reference< css::uno::XComponentContext >&
                             ,IApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode
                             );
@@ -117,7 +117,7 @@ namespace dbaui
         virtual void GetFocus() SAL_OVERRIDE;
 
         inline IApplicationController&                  getAppController() const { return m_rAppController; }
-        inline const ::com::sun::star::lang::Locale&    getLocale() const { return m_aLocale;}
+        inline const css::lang::Locale&    getLocale() const { return m_aLocale;}
 
         // IClipboardTest
         virtual bool isCutAllowed() SAL_OVERRIDE;
@@ -197,21 +197,21 @@ namespace dbaui
         */
         void    describeCurrentSelectionForControl(
                     const Control& _rControl,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                    css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
         /** describes the current selection for the given ElementType
         */
         void    describeCurrentSelectionForType(
                     const ElementType _eType,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                    css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
         * \param _aNames the element names
         */
-        void selectElements(const ::com::sun::star::uno::Sequence< OUString>& _aNames);
+        void selectElements(const css::uno::Sequence< OUString>& _aNames);
 
         /** adds a new object to the detail page.
             @param  _eType
@@ -225,7 +225,7 @@ namespace dbaui
         */
         SvTreeListEntry* elementAdded(ElementType _eType
                         ,const OUString& _rName
-                        ,const ::com::sun::star::uno::Any& _rObject );
+                        ,const css::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
             @param  _eType
@@ -276,7 +276,7 @@ namespace dbaui
             @param  _xContent
                 The content which must support the "preview" command.
         */
-        void showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xContent);
+        void showPreview(const css::uno::Reference< css::ucb::XContent >& _xContent);
 
         /** shows the Preview of a table or query
             @param  _sDataSourceName
@@ -290,7 +290,7 @@ namespace dbaui
             @return void
         */
         void showPreview(   const OUString& _sDataSourceName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                             const OUString& _sName,
                             bool _bTable);
 

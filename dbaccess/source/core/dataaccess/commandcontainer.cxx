@@ -39,7 +39,7 @@ namespace dbaccess
 
 // OCommandContainer
 
-OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::uno::XComponentContext >& _xORB
+OCommandContainer::OCommandContainer( const Reference< css::uno::XComponentContext >& _xORB
                                      ,const Reference< XInterface >&    _xParentContainer
                                      ,const TContentPtr& _pImpl
                                      ,bool _bTables

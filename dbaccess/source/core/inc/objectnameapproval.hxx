@@ -60,13 +60,13 @@ namespace dbaccess
                 specifies which type of objects is to be approved with this instance
         */
         ObjectNameApproval(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             ObjectType _eType
         );
         virtual ~ObjectNameApproval();
 
         // IContainerApprove
-        virtual void SAL_CALL approveElement( const OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) SAL_OVERRIDE;
+        virtual void SAL_CALL approveElement( const OUString& _rName, const css::uno::Reference< css::uno::XInterface >& _rxElement ) SAL_OVERRIDE;
 
     };
 

@@ -92,8 +92,7 @@ namespace dbaui
             This selection is used for filling a ContextMenuExecuteEvent event for the given
             control.
         */
-        virtual ::com::sun::star::uno::Any
-                                getCurrentSelection( Control& _rControl ) const = 0;
+        virtual css::uno::Any  getCurrentSelection( Control& _rControl ) const = 0;
 
     protected:
         ~IContextMenuProvider() {}

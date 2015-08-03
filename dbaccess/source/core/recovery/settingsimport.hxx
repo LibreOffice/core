@@ -46,7 +46,7 @@ namespace dbaccess
             const OUString& i_rElementName
         ) = 0;
         void startElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& i_rAttributes
+            const css::uno::Reference< css::xml::sax::XAttributeList >& i_rAttributes
         );
         virtual void endElement();
         void characters( const OUString& i_rCharacters );
@@ -128,7 +128,7 @@ namespace dbaccess
     protected:
         // own overridables
         /// retrieves the value represented by the element
-        virtual void getItemValue( ::com::sun::star::uno::Any& o_rValue ) const;
+        virtual void getItemValue( css::uno::Any& o_rValue ) const;
 
     private:
         // the settings collection to which |this| will contribute a single setting
@@ -152,7 +152,7 @@ namespace dbaccess
 
     protected:
         // ConfigItemImport overridables
-        virtual void getItemValue( ::com::sun::star::uno::Any& o_rValue ) const SAL_OVERRIDE;
+        virtual void getItemValue( css::uno::Any& o_rValue ) const SAL_OVERRIDE;
 
     private:
         /// the settings represented by our child elements

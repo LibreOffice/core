@@ -34,7 +34,7 @@
 namespace dbaccess
 {
 
-    typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
+    typedef ::cppu::ImplHelper1< css::container::XChild > TXChild;
     // OTableColumnDescriptor
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
@@ -44,8 +44,8 @@ namespace dbaccess
                                   ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumnDescriptor >
                                   ,public TXChild
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xParent;
-        const bool                                                              m_bActAsDescriptor;
+        css::uno::Reference< css::uno::XInterface >   m_xParent;
+        const bool                                    m_bActAsDescriptor;
 
     protected:
     //  <properties>
@@ -53,23 +53,23 @@ namespace dbaccess
         OUString           m_aDescription;
         OUString           m_aDefaultValue;
         OUString           m_aAutoIncrementValue;
-        sal_Int32               m_nType;
-        sal_Int32               m_nPrecision;
-        sal_Int32               m_nScale;
-        sal_Int32               m_nIsNullable;
-        bool                m_bAutoIncrement;
-        bool                m_bRowVersion;
-        bool                m_bCurrency;
+        sal_Int32          m_nType;
+        sal_Int32          m_nPrecision;
+        sal_Int32          m_nScale;
+        sal_Int32          m_nIsNullable;
+        bool               m_bAutoIncrement;
+        bool               m_bRowVersion;
+        bool               m_bCurrency;
     //  </properties>
 
     public:
         OTableColumnDescriptor( const bool _bActAsDescriptor )
             :OColumn( !_bActAsDescriptor )
             ,m_bActAsDescriptor( _bActAsDescriptor )
-            ,m_nType( ::com::sun::star::sdbc::DataType::SQLNULL )
+            ,m_nType( css::sdbc::DataType::SQLNULL )
             ,m_nPrecision( 0 )
             ,m_nScale( 0 )
-            ,m_nIsNullable( ::com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN )
+            ,m_nIsNullable( css::sdbc::ColumnValue::NULLABLE_UNKNOWN )
             ,m_bAutoIncrement( false )
             ,m_bRowVersion( false )
             ,m_bCurrency( false )
@@ -79,23 +79,23 @@ namespace dbaccess
 
         DECLARE_XINTERFACE( )
 
-        // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::lang::XTypeProvider
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::lang::XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::container::XChild
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::container::XChild
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
 
         // ::cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     private:
         void    impl_registerProperties();
@@ -116,10 +116,10 @@ namespace dbaccess
         OTableColumn(const OUString& _rName);
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
@@ -142,33 +142,33 @@ namespace dbaccess
         OUString m_sLabel;
         // </properties>
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xOriginalTableColumn;
+        css::uno::Reference< css::beans::XPropertySet >   m_xOriginalTableColumn;
 
     protected:
         virtual ~OQueryColumn();
 
     public:
         OQueryColumn(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::beans::XPropertySet>& _rxParserColumn,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const OUString &i_sLabel
         );
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // *Property*
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                 impl_determineOriginalTableColumn(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                    const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
                 );
 
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -183,31 +183,31 @@ namespace dbaccess
     {
     protected:
         // definition which is provided by a driver!
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                 m_xAggregate;
 
         sal_Int32               m_nColTypeID;
 
     protected:
-        OColumnWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
+        OColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
         virtual ~OColumnWrapper();
 
     public:
         virtual void SAL_CALL getFastPropertyValue(
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 sal_Int32 nHandle
                                  ) const SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                ::com::sun::star::uno::Any & rConvertedValue,
-                                ::com::sun::star::uno::Any & rOldValue,
+                                css::uno::Any & rConvertedValue,
+                                css::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue )
-                                    throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                                const css::uno::Any& rValue )
+                                    throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
+                                    const css::uno::Any& rValue
                                                      )
-                                                     throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                                                     throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     protected:
         OUString impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const;
@@ -228,15 +228,15 @@ namespace dbaccess
         const bool  m_bIsDescriptor;
 
     public:
-        OTableColumnDescriptorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol,
+        OTableColumnDescriptorWrapper(const css::uno::Reference< css::beans::XPropertySet >& rCol,
             const bool _bPureWrap, const bool _bIsDescriptor );
 
-    // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XTypeProvider
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OIdPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const SAL_OVERRIDE;
@@ -244,20 +244,20 @@ namespace dbaccess
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
+                                    css::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                ::com::sun::star::uno::Any & rConvertedValue,
-                                ::com::sun::star::uno::Any & rOldValue,
+                                css::uno::Any & rConvertedValue,
+                                css::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue )
-                                    throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                                const css::uno::Any& rValue )
+                                    throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
+                                    const css::uno::Any& rValue
                                                      )
-                                                     throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                                                     throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     protected:
         using OColumnWrapper::getFastPropertyValue;
@@ -275,16 +275,16 @@ namespace dbaccess
         virtual ~OTableColumnWrapper();
 
     public:
-        OTableColumnWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rColDefintion,
+        OTableColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& rCol,
+                             const css::uno::Reference< css::beans::XPropertySet >& rColDefintion,
                              const bool _bPureWrap );
 
-    // ::com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XTypeProvider
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OIdPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;

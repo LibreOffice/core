@@ -232,7 +232,7 @@ namespace dbaccess
         m_rDelegator.characters( i_rCharacters );
     }
 
-    Reference< com::sun::star::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
+    Reference< css::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
     {
         return m_rContext;
     }

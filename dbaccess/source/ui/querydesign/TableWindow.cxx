@@ -760,17 +760,17 @@ OUString OTableWindow::getTitle() const
     return m_xTitle->GetText();
 }
 
-void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(css::uno::RuntimeException, std::exception)
 {
     FillListBox();
 }
 
-void OTableWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OTableWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     FillListBox();
 }
 
-void OTableWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OTableWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     FillListBox();
 }

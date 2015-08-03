@@ -42,13 +42,13 @@ namespace dbaui
     class OLinkedDocumentsAccess
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                     m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        css::uno::Reference< css::container::XNameAccess >
                     m_xDocumentContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
+        css::uno::Reference< css::sdbc::XConnection>
                     m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
+        css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
         VclPtr<vcl::Window>    m_pDialogParent;
         OUString    m_sCurrentlyEditing;
@@ -57,29 +57,29 @@ namespace dbaui
     public:
         OLinkedDocumentsAccess(
             vcl::Window* _pDialogParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
+            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
             const OUString& _sDataSourceName
         );
         ~OLinkedDocumentsAccess();
 
         inline bool isConnected() const { return m_xConnection.is(); }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
+        css::uno::Reference< css::lang::XComponent>
                 open(
                     const OUString& _rLinkName,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                    css::uno::Reference< css::lang::XComponent>& _xDefinition,
                     ElementOpenMode _eOpenMode,
                     const ::comphelper::NamedValueCollection& _rAdditionalArgs
                 );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
                 newDocument(
                           sal_Int32 i_nActionID,
                     const ::comphelper::NamedValueCollection& i_rCreationArgs,
-                          ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rDefinition
+                          css::uno::Reference< css::lang::XComponent >& o_rDefinition
                 );
 
         void    newFormWithPilot(
@@ -100,10 +100,10 @@ namespace dbaui
             CANCEL
         };
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
             impl_open(
                 const OUString& _rLinkName,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition,
+                css::uno::Reference< css::lang::XComponent >& _xDefinition,
                 ElementOpenMode _eOpenMode,
                 const ::comphelper::NamedValueCollection& _rAdditionalArgs
             );

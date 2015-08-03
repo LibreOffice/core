@@ -52,21 +52,21 @@ namespace dbaccess
 
     class ORowSetValueCompare
     {
-        const ::com::sun::star::uno::Any& m_rAny;
+        const css::uno::Any& m_rAny;
     public:
-        explicit ORowSetValueCompare(const ::com::sun::star::uno::Any& _rAny) : m_rAny(_rAny){}
+        explicit ORowSetValueCompare(const css::uno::Any& _rAny) : m_rAny(_rAny){}
 
         bool operator ()(const ORowSetRow& _rRH)
         {
             switch((_rRH->get())[0].getTypeKind())
             {
-                case ::com::sun::star::sdbc::DataType::TINYINT:
-                case ::com::sun::star::sdbc::DataType::SMALLINT:
-                case ::com::sun::star::sdbc::DataType::INTEGER:
+                case css::sdbc::DataType::TINYINT:
+                case css::sdbc::DataType::SMALLINT:
+                case css::sdbc::DataType::INTEGER:
                     return comphelper::getINT32(m_rAny) == (sal_Int32)(_rRH->get())[0];
                 default:
                 {
-                    ::com::sun::star::uno::Sequence<sal_Int8> aSeq;
+                    css::uno::Sequence<sal_Int8> aSeq;
                     m_rAny >>= aSeq;
                     return aSeq == (_rRH->get())[0];
                 }

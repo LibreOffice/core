@@ -40,7 +40,7 @@ namespace dbaui
     typedef std::vector<sal_Int8> ByteVector;
     typedef std::vector<OUString> StringArray;
 
-    typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
+    typedef ::utl::SharedUNOComponent< css::sdbc::XConnection > SharedConnection;
 
 }   // namespace dbaui
 

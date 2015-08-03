@@ -31,12 +31,12 @@ namespace dbaui
 {
     class ORowUpdateHelper : public IUpdateHelper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xRowUpdate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xResultSetUpdate;
+        css::uno::Reference< css::sdbc::XRowUpdate >          m_xRowUpdate;
+        css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xResultSetUpdate;
     public:
-        explicit ORowUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _xRowSet)
-            :m_xRowUpdate(_xRowSet,::com::sun::star::uno::UNO_QUERY)
-            ,m_xResultSetUpdate(_xRowSet,::com::sun::star::uno::UNO_QUERY)
+        explicit ORowUpdateHelper(const css::uno::Reference< css::sdbc::XRowSet>& _xRowSet)
+            :m_xRowUpdate(_xRowSet,css::uno::UNO_QUERY)
+            ,m_xResultSetUpdate(_xRowSet,css::uno::UNO_QUERY)
         {
         }
         virtual ~ORowUpdateHelper() {}
@@ -48,15 +48,15 @@ namespace dbaui
         {
             m_xRowUpdate->updateDouble(_nPos, _nValue);
         }
-        virtual void updateDate(sal_Int32 _nPos,const ::com::sun::star::util::Date& _nValue) SAL_OVERRIDE
+        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) SAL_OVERRIDE
         {
             m_xRowUpdate->updateDate(_nPos, _nValue);
         }
-        virtual void updateTime(sal_Int32 _nPos,const ::com::sun::star::util::Time& _nValue) SAL_OVERRIDE
+        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) SAL_OVERRIDE
         {
             m_xRowUpdate->updateTime(_nPos, _nValue);
         }
-        virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue) SAL_OVERRIDE
+        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) SAL_OVERRIDE
         {
             m_xRowUpdate->updateTimestamp(_nPos, _nValue);
         }
@@ -80,13 +80,13 @@ namespace dbaui
 
     class OParameterUpdateHelper : public IUpdateHelper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xPrepared;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >         m_xParameters;
+        css::uno::Reference< css::sdbc::XPreparedStatement >  m_xPrepared;
+        css::uno::Reference< css::sdbc::XParameters >         m_xParameters;
 
     public:
-        explicit OParameterUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >& _xPrepared)
+        explicit OParameterUpdateHelper(const css::uno::Reference< css::sdbc::XPreparedStatement >& _xPrepared)
            :m_xPrepared(_xPrepared)
-           ,m_xParameters(_xPrepared,::com::sun::star::uno::UNO_QUERY)
+           ,m_xParameters(_xPrepared,css::uno::UNO_QUERY)
         {
         }
         virtual ~OParameterUpdateHelper() {}
@@ -98,15 +98,15 @@ namespace dbaui
         {
             m_xParameters->setDouble(_nPos, _nValue);
         }
-        virtual void updateDate(sal_Int32 _nPos,const ::com::sun::star::util::Date& _nValue) SAL_OVERRIDE
+        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) SAL_OVERRIDE
         {
             m_xParameters->setDate(_nPos, _nValue);
         }
-        virtual void updateTime(sal_Int32 _nPos,const ::com::sun::star::util::Time& _nValue) SAL_OVERRIDE
+        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) SAL_OVERRIDE
         {
             m_xParameters->setTime(_nPos, _nValue);
         }
-        virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue) SAL_OVERRIDE
+        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) SAL_OVERRIDE
         {
             m_xParameters->setTimestamp(_nPos, _nValue);
         }

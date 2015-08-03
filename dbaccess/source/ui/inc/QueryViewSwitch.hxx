@@ -38,7 +38,7 @@ namespace dbaui
         VclPtr<OQueryTextView>     m_pTextView;
         bool            m_bAddTableDialogWasVisible; // true if so
     public:
-        OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+        OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~OQueryViewSwitch();
 
         bool isCutAllowed();
@@ -80,7 +80,7 @@ namespace dbaui
         OQueryContainerWindow*  getContainer() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
+        css::uno::Reference< css::uno::XComponentContext > getORB() const;
 
     private:
         void    impl_forceSQLView();

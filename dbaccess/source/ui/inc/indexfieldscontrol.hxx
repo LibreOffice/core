@@ -54,7 +54,7 @@ namespace dbaui
         virtual ~IndexFieldsControl();
         virtual void dispose() SAL_OVERRIDE;
 
-        void Init(const ::com::sun::star::uno::Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
+        void Init(const css::uno::Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
 
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);

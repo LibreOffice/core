@@ -104,7 +104,7 @@ using namespace ::cppu;
 ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
-                               ,const ::com::sun::star::uno::Any& _aDataSourceName
+                               ,const css::uno::Any& _aDataSourceName
                                )
     :svt::RoadmapWizard( _pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
 
@@ -299,7 +299,7 @@ void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::co
     }
 }
 
-void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const OUString& _sOldURLPrefix,const OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource)
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const OUString& _sOldURLPrefix,const OUString& _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)
 {
     if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
         return ;
@@ -896,10 +896,10 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             void doLoadAsync();
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         private:
             DECL_LINK( OnOpenDocument, void* );
@@ -973,15 +973,15 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             return 0L;
         }
 
-        void SAL_CALL AsyncLoader::queryTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
+        void SAL_CALL AsyncLoader::queryTermination( const css::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
             throw TerminationVetoException();
         }
 
-        void SAL_CALL AsyncLoader::notifyTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
+        void SAL_CALL AsyncLoader::notifyTermination( const css::lang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
         }
-        void SAL_CALL AsyncLoader::disposing( const com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
+        void SAL_CALL AsyncLoader::disposing( const css::lang::EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
         {
         }
     }

@@ -42,11 +42,11 @@ namespace dbaui
 {
     namespace DataSourceInfoConverter
     {
-        void convert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> & xContext,
+        void convert(const css::uno::Reference< css::uno::XComponentContext> & xContext,
                      const ::dbaccess::ODsnTypeCollection* _pCollection,
                      const OUString& _sOldURLPrefix,
                      const OUString& _sNewURLPrefix,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource);
+                     const css::uno::Reference< css::beans::XPropertySet >& _xDatasource);
     };
     class IItemSetHelper;
     // ODbDataSourceAdministrationHelper
@@ -56,14 +56,14 @@ namespace dbaui
         typedef std::map<sal_Int32, OUString> MapInt2String;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                            m_xContext;                 /// service factory
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
+        css::uno::Reference< css::uno::XComponentContext >
+                                m_xContext;                 /// service factory
+        css::uno::Reference< css::sdb::XDatabaseContext >
                                 m_xDatabaseContext;     /// database context we're working in
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDatasource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
+        css::uno::Reference< css::beans::XPropertySet >   m_xDatasource;
+        css::uno::Reference< css::frame::XModel >         m_xModel;
 
-        ::com::sun::star::uno::Any              m_aDataSourceOrName;
+        css::uno::Any              m_aDataSourceOrName;
         typedef ::std::set< OUString >   StringSet;
         typedef StringSet::const_iterator       ConstStringSetIterator;
 
@@ -73,14 +73,14 @@ namespace dbaui
         IItemSetHelper*         m_pItemSetHelper;
     public:
 
-        ODbDataSourceAdministrationHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
+        ODbDataSourceAdministrationHelper(const css::uno::Reference< css::uno::XComponentContext >& _xORB
                                         ,vcl::Window* _pParent
                                         ,IItemSetHelper* _pItemSetHelper);
 
         /** translate the current dialog SfxItems into driver relevant PropertyValues
             @see successfullyConnected
         */
-        bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
+        bool    getCurrentSettings(css::uno::Sequence< css::beans::PropertyValue >& _rDriverParams);
 
         /** to be called if the settings got from getCurrentSettings have been used for successfully connecting
             @see getCurrentSettings
@@ -90,26 +90,26 @@ namespace dbaui
         /// clear the password in the current data source's item set
         void        clearPassword();
 
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const { return m_xContext; }
+        inline css::uno::Reference< css::uno::XComponentContext > getORB() const { return m_xContext; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext > getDatabaseContext() const { return m_xDatabaseContext; }
+        css::uno::Reference< css::sdb::XDatabaseContext > getDatabaseContext() const { return m_xDatabaseContext; }
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */
-        ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool>      createConnection();
+        ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool>      createConnection();
 
         /** return the corresponding driver for the selected URL
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver();
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver(const OUString& _sURL);
+        css::uno::Reference< css::sdbc::XDriver >         getDriver();
+        css::uno::Reference< css::sdbc::XDriver >         getDriver(const OUString& _sURL);
 
         /** returns the data source the dialog is currently working with
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
+        css::uno::Reference< css::beans::XPropertySet >   getCurrentDataSource();
         // returns the Url of a database document
         static OUString        getDocumentUrl(SfxItemSet& _rDest);
 
-        void setDataSourceOrName( const ::com::sun::star::uno::Any& _rDataSourceOrName );
+        void setDataSourceOrName( const css::uno::Any& _rDataSourceOrName );
 
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
@@ -134,7 +134,7 @@ namespace dbaui
                 The item set to fill.
         */
         void translateProperties(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSource,
+                const css::uno::Reference< css::beans::XPropertySet >& _rxSource,
                 SfxItemSet& _rDest);
 
         /** translate SfxItems into properties of an UNO data source
@@ -145,22 +145,22 @@ namespace dbaui
         */
         void translateProperties(
                 const SfxItemSet& _rSource,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDest);
+                const css::uno::Reference< css::beans::XPropertySet >& _rxDest);
 
         bool saveChanges(const SfxItemSet& _rSource);
     protected:
         /** fill a data source info array with the settings from a given item set
         */
-        void fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);
+        void fillDatasourceInfo(const SfxItemSet& _rSource, css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
         /// translate the given value into an SfxPoolItem, put this into the given set under the given id
-        void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const ::com::sun::star::uno::Any& _rValue);
+        void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const css::uno::Any& _rValue);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>
-        static ::com::sun::star::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
+        static css::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>, set it (under the given name) on the given property set
-        static void implTranslateProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
+        static void implTranslateProperty(const css::uno::Reference< css::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
 
         /** check if the data source described by the given set needs authentication<p/>
             The return value depends on the data source type only.

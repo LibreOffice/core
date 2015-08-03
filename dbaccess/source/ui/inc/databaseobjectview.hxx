@@ -47,18 +47,18 @@ namespace dbaui
     class DatabaseObjectView
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                         m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+        css::uno::Reference< css::frame::XFrame >
                         m_xParentFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >
+        css::uno::Reference< css::frame::XComponentLoader >
                         m_xFrameLoader;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
+        css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                         m_xApplication;
-        OUString m_sComponentURL;
+        OUString        m_sComponentURL;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
                 doDispatch(
                     const ::comphelper::NamedValueCollection& i_rDispatchArgs
                 );
@@ -77,28 +77,28 @@ namespace dbaui
             @param _rCreationArgs
                 the arguments for the view's creation
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
-            const ::com::sun::star::uno::Any& _rDataSource,
+        virtual css::uno::Reference< css::lang::XComponent > doCreateView(
+            const css::uno::Any& _rDataSource,
             const OUString& _rObjectName,
             const ::comphelper::NamedValueCollection& i_rCreationArgs
         );
 
         virtual void fillDispatchArgs(
                           ::comphelper::NamedValueCollection& i_rDispatchArgs,
-                    const ::com::sun::star::uno::Any& _rDataSource,
+                    const css::uno::Any& _rDataSource,
                     const OUString& _rObjectName
                 );
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >&
+        const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >&
                 getApplicationUI() const { return m_xApplication; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                 getConnection() const;
 
     public:
         DatabaseObjectView(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const css::uno::Reference< css::frame::XFrame >& _rxParentFrame,
             const OUString& _rComponentURL
         );
         virtual ~DatabaseObjectView(){}
@@ -108,9 +108,9 @@ namespace dbaui
             By default, the view is loaded into a top-level frame not being part of the
             Desktop.
         */
-        void setTargetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame )
+        void setTargetFrame( const css::uno::Reference< css::frame::XFrame >& _rxFrame )
         {
-            m_xFrameLoader.set( _rxFrame, ::com::sun::star::uno::UNO_QUERY );
+            m_xFrameLoader.set( _rxFrame, css::uno::UNO_QUERY );
         }
 
         /** opens a view for a to-be-created object
@@ -120,9 +120,9 @@ namespace dbaui
             @return
                 the controller of the newly created document
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
             createNew(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _xDataSource,
+                const css::uno::Reference< css::sdbc::XDataSource >& _xDataSource,
                 const ::comphelper::NamedValueCollection& i_rDispatchArgs = ::comphelper::NamedValueCollection()
             );
 
@@ -137,9 +137,9 @@ namespace dbaui
             @return
                 the frame into which the view has been loaded
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
             openExisting(
-                const ::com::sun::star::uno::Any& _aDataSource,
+                const css::uno::Any& _aDataSource,
                 const OUString& _rName,
                 const ::comphelper::NamedValueCollection& i_rDispatchArgs
             );
@@ -154,15 +154,15 @@ namespace dbaui
     protected:
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
-            const ::com::sun::star::uno::Any& _aDataSource,
+            const css::uno::Any& _aDataSource,
             const OUString& _rObjectName
         ) SAL_OVERRIDE;
 
     public:
         QueryDesigner(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const css::uno::Reference< css::frame::XFrame >& _rxParentFrame,
             bool _bCreateView
         );
     };
@@ -173,21 +173,21 @@ namespace dbaui
     protected:
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
-            const ::com::sun::star::uno::Any& _aDataSource,
+            const css::uno::Any& _aDataSource,
             const OUString& _rObjectName
         ) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
-            const ::com::sun::star::uno::Any& _rDataSource,
+        virtual css::uno::Reference< css::lang::XComponent > doCreateView(
+            const css::uno::Any& _rDataSource,
             const OUString& _rObjectName,
             const ::comphelper::NamedValueCollection& i_rCreationArgs
         ) SAL_OVERRIDE;
 
     public:
         TableDesigner(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const css::uno::Reference< css::frame::XFrame >& _rxParentFrame
         );
 
     private:
@@ -197,9 +197,9 @@ namespace dbaui
             @return
                 the designer component, as provided by the connection, or <NULL/>, if the connection
                 does not provide a specialized designer.
-            @see com::sun::star::sdb::application::XTableUIProvider
+            @see css::sdb::application::XTableUIProvider
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                 impl_getConnectionProvidedDesigner_nothrow( const OUString& _rTableName );
     };
 
@@ -212,15 +212,15 @@ namespace dbaui
     protected:
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
-            const ::com::sun::star::uno::Any& _aDataSource,
+            const css::uno::Any& _aDataSource,
             const OUString& _rQualifiedName
         ) SAL_OVERRIDE;
 
     public:
         ResultSetBrowser(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const css::uno::Reference< css::frame::XFrame >& _rxParentFrame,
             bool _bTable
         );
 
@@ -230,9 +230,9 @@ namespace dbaui
     {
     public:
         RelationDesigner(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const css::uno::Reference< css::frame::XFrame >& _rxParentFrame
         );
     };
 }   // namespace dbaui

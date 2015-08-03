@@ -57,17 +57,17 @@ namespace dbaxml
 
         OTableStyleContext( ODBFilter& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                 SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
 
         virtual ~OTableStyleContext();
 
-        virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
+        virtual void FillPropertySet(const css::uno::Reference<
+                    css::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
 
         virtual void SetDefaults() SAL_OVERRIDE;
 
-          void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
+        void AddProperty(sal_Int16 nContextID, const css::uno::Any& aValue);
 
         sal_Int32 GetNumberFormat() { return m_nNumberFormat; }
     };
@@ -94,7 +94,7 @@ namespace dbaxml
                 sal_uInt16 nFamily,
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     public:
 
@@ -102,7 +102,7 @@ namespace dbaxml
 
         OTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
                 const OUString& rLName ,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                 const bool bAutoStyles );
         virtual ~OTableStylesContext();
 
@@ -110,8 +110,8 @@ namespace dbaxml
 
         virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                             sal_uInt16 nFamily ) const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference <
-                        ::com::sun::star::container::XNameContainer >
+        virtual css::uno::Reference <
+                        css::container::XNameContainer >
             GetStylesContainer( sal_uInt16 nFamily ) const SAL_OVERRIDE;
         virtual OUString GetServiceName( sal_uInt16 nFamily ) const SAL_OVERRIDE;
 

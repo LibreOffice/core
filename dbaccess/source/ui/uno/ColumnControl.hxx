@@ -31,9 +31,9 @@ namespace dbaui
     class OColumnControl :  public UnoControl
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
+        css::uno::Reference< css::uno::XComponentContext> m_xContext;
     public:
-        explicit OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext);
+        explicit OColumnControl(const css::uno::Reference< css::uno::XComponentContext>& rxContext);
 
         // UnoControl
         virtual OUString GetComponentServiceName() SAL_OVERRIDE;
@@ -41,8 +41,8 @@ namespace dbaui
         // XServiceInfo
         DECLARE_SERVICE_INFO_STATIC();
 
-        // ::com::sun::star::awt::XControl
-        virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::awt::XControl
+        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }   // namespace dbaui
 

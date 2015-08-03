@@ -41,35 +41,35 @@ namespace dbaccess
             m_aSet.push_back(NULL); // this is the beforefirst record
         }
 
-        virtual void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet) SAL_OVERRIDE;
+        virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) SAL_OVERRIDE;
 
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition) SAL_OVERRIDE;
-        // ::com::sun::star::sdbcx::XRowLocate
-        virtual ::com::sun::star::uno::Any SAL_CALL getBookmark() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual sal_Int32 SAL_CALL compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        // css::sdbcx::XRowLocate
+        virtual css::uno::Any SAL_CALL getBookmark() throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL hasOrderedBookmarks(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
 
-        // ::com::sun::star::sdbc::XResultSet
-        virtual bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL isBeforeFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL isAfterLast(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL beforeFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL afterLast(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL first(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL last(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual sal_Int32 SAL_CALL getRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL absolute( sal_Int32 row ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL previous(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL refreshRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL rowUpdated(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL rowInserted(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual bool SAL_CALL rowDeleted(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        // ::com::sun::star::sdbc::XResultSetUpdate
-        virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        // css::sdbc::XResultSet
+        virtual bool SAL_CALL next(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL isBeforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL isAfterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL beforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL afterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL first(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL last(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL absolute( sal_Int32 row ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL previous(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL refreshRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL rowUpdated(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL rowInserted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL rowDeleted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        // css::sdbc::XResultSetUpdate
+        virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_STATICSET_HXX

@@ -744,7 +744,7 @@ void OTableEditorCtrl::CopyRows()
     if(!vClipboardList.empty())
     {
         OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
-        Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+        Reference< css::datatransfer::XTransferable> xRef = pData;
         pData->CopyToClipboard(GetParent());
     }
 }
@@ -940,7 +940,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
     SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : OUString());
 }
 
-void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
+void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData )
 {
     // Relocate the current pointer
     if( nRow == -1 )
@@ -1311,7 +1311,7 @@ bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
 
     Reference<XPropertySet> xTable = rController.getTable();
     // Key must not be changed
-    // This applies only if the table is not new and not a  ::com::sun::star::sdbcx::View. Otherwise no DROP is executed
+    // This applies only if the table is not new and not a  css::sdbcx::View. Otherwise no DROP is executed
 
     if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW")
         return false;
@@ -1332,7 +1332,7 @@ bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
         {
             // Memo and Image fields cannot be primary keys
             // or if the column cannot be dropped and the Required flag is not set
-            // or if a ::com::sun::star::sdbcx::View is available and the Required flag is not set
+            // or if a css::sdbcx::View is available and the Required flag is not set
             TOTypeInfoSP pTypeInfo = pFieldDescr->getTypeInfo();
             if(     pTypeInfo->nSearchType == ColumnSearch::NONE
                 || (pFieldDescr->IsNullable() && pRow->IsReadOnly())

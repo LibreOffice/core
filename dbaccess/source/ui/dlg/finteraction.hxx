@@ -27,7 +27,7 @@ namespace dbaui
 {
 
     // OFilePickerInteractionHandler
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::task::XInteractionHandler
+    typedef ::cppu::WeakImplHelper<   css::task::XInteractionHandler
                                   >   OFilePickerInteractionHandler_Base;
 
     /** a InteractionHandler implementation which extends another handler with some customizability
@@ -35,18 +35,18 @@ namespace dbaui
     class OFilePickerInteractionHandler : public OFilePickerInteractionHandler_Base
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
+        css::uno::Reference< css::task::XInteractionHandler >
                     m_xMaster;      // our master handler
-        bool    m_bDoesNotExist;
+        bool        m_bDoesNotExist;
 
     public:
-        explicit OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster );
+        explicit OFilePickerInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _rxMaster );
 
         bool isDoesNotExist() const { return m_bDoesNotExist; }
 
     protected:
         // XInteractionHandler
-        virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _rxRequest ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual ~OFilePickerInteractionHandler();
     };

@@ -43,8 +43,8 @@ namespace dbmm
                 passed herein as reference, must live as long as the engine instance lives.
         */
         MigrationEngine(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >& _rxDocument,
+            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< css::sdb::XOfficeDatabaseDocument >& _rxDocument,
             IMigrationProgress& _rProgress,
             MigrationLog& _rLogger
         );

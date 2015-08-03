@@ -289,7 +289,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // kiss our listeners goodbye
-    com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aSelectionListeners.disposeAndClear(aEvt);
     m_aContextMenuInterceptors.disposeAndClear(aEvt);
 
@@ -322,7 +322,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     // check out from all the objects we are listening
     // the frame
     if (m_xCurrentFrameParent.is())
-        m_xCurrentFrameParent->removeFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
     SbaXDataBrowserController::disposing();
 }
 
@@ -590,11 +590,11 @@ void SbaTableQueryBrowser::initializePreviewMode()
     }
 }
 
-bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & xGrid)
+bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XFormComponent > & xGrid)
 {
     try
     {
-        Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(xGrid, UNO_QUERY);
+        Reference< css::form::XGridColumnFactory >  xColFactory(xGrid, UNO_QUERY);
         Reference< XNameContainer >  xColContainer(xGrid, UNO_QUERY);
         clearGridColumns( xColContainer );
 
@@ -655,7 +655,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::star
             }
 
             // get the formats supplier of the database we're working with
-            Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getNumberFormatter()->getNumberFormatsSupplier();
+            Reference< css::util::XNumberFormatsSupplier >  xSupplier = getNumberFormatter()->getNumberFormatsSupplier();
 
             Reference<XConnection> xConnection;
             Reference<XPropertySet> xRowSetProps(getRowSet(),UNO_QUERY);
@@ -854,7 +854,7 @@ void SbaTableQueryBrowser::transferChangedControlProperty(const OUString& _rProp
     }
 }
 
-void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     SbaXDataBrowserController::propertyChange(evt);
 
@@ -904,7 +904,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
                             xProp->setPropertyValue(PROPERTY_ALIGN,evt.NewValue);
                     }
                     else
-                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(::com::sun::star::awt::TextAlign::LEFT));
+                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(css::awt::TextAlign::LEFT));
                 }
             }
             catch( const Exception& )
@@ -1353,12 +1353,12 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
     InvalidateFeature( _nId );
 }
 
-void SAL_CALL SbaTableQueryBrowser::disposing( const com::sun::star::lang::EventObject& _rSource ) throw(RuntimeException, std::exception)
+void SAL_CALL SbaTableQueryBrowser::disposing( const css::lang::EventObject& _rSource ) throw(RuntimeException, std::exception)
 {
     // our frame ?
-    Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(_rSource.Source, UNO_QUERY);
+    Reference< css::frame::XFrame >  xSourceFrame(_rSource.Source, UNO_QUERY);
     if (m_xCurrentFrameParent.is() && (xSourceFrame == m_xCurrentFrameParent))
-        m_xCurrentFrameParent->removeFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
     else
     {
         // search the external dispatcher causing this call in our map
@@ -1499,12 +1499,12 @@ void SAL_CALL SbaTableQueryBrowser::removeSelectionChangeListener( const Referen
     m_aSelectionListeners.removeInterface(_rxListener);
 }
 
-void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & _xFrame) throw( RuntimeException, std::exception )
+void SbaTableQueryBrowser::attachFrame(const Reference< css::frame::XFrame > & _xFrame) throw( RuntimeException, std::exception )
 {
     implRemoveStatusListeners();
 
     if (m_xCurrentFrameParent.is())
-        m_xCurrentFrameParent->removeFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
 
     SbaXDataBrowserController::attachFrame(_xFrame);
 
@@ -1513,7 +1513,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     {
         m_xCurrentFrameParent = xCurrentFrame->findFrame(OUString("_parent"),FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
-            m_xCurrentFrameParent->addFrameActionListener(static_cast<com::sun::star::frame::XFrameActionListener*>(this));
+            m_xCurrentFrameParent->addFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
 
         // obtain our toolbox
         try
@@ -1542,7 +1542,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     connectExternalDispatches();
 }
 
-void SbaTableQueryBrowser::addModelListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
+void SbaTableQueryBrowser::addModelListeners(const Reference< css::awt::XControlModel > & _xGridControlModel)
 {
     SbaXDataBrowserController::addModelListeners(_xGridControlModel);
     Reference< XPropertySet >  xSourceSet(_xGridControlModel, UNO_QUERY);
@@ -1558,7 +1558,7 @@ void SbaTableQueryBrowser::addModelListeners(const Reference< ::com::sun::star::
 
 }
 
-void SbaTableQueryBrowser::removeModelListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
+void SbaTableQueryBrowser::removeModelListeners(const Reference< css::awt::XControlModel > & _xGridControlModel)
 {
     SbaXDataBrowserController::removeModelListeners(_xGridControlModel);
     Reference< XPropertySet >  xSourceSet(_xGridControlModel, UNO_QUERY);
@@ -1635,7 +1635,7 @@ void SbaTableQueryBrowser::LoadFinished(bool _bWasSynch)
     }
 
     // if the form has been loaded, this means that our "selection" has changed
-    com::sun::star::lang::EventObject aEvent( *this );
+    css::lang::EventObject aEvent( *this );
     m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
 }
 
@@ -1768,7 +1768,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     if (xDataSource.is())
                     {
                         sal_Int32 nType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMAND_TYPE));
-                        aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || (nType == ::com::sun::star::sdb::CommandType::QUERY)));
+                        aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || (nType == css::sdb::CommandType::QUERY)));
                     }
                 }
                 catch(DisposedException&)
@@ -2571,7 +2571,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                      || ( nOldType != nCommandType )
                      || ( aName != aOldName );
 
-    Reference< ::com::sun::star::form::XLoadable >  xLoadable = getLoadable();
+    Reference< css::form::XLoadable >  xLoadable = getLoadable();
     bRebuild |= !xLoadable->isLoaded();
     bool bSuccess = true;
     if ( bRebuild )
@@ -3587,7 +3587,7 @@ bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bE
     return false;
 }
 
-void SbaTableQueryBrowser::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException, std::exception )
+void SbaTableQueryBrowser::frameAction(const css::frame::FrameActionEvent& aEvent) throw( RuntimeException, std::exception )
 {
     if (aEvent.Frame == m_xCurrentFrameParent)
     {
@@ -3624,7 +3624,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
     }
     else if ( !m_bPreview )
     {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
+        Reference< css::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
 
         if ( xLayoutManager.is() )
         {

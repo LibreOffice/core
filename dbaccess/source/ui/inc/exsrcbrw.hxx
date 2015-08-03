@@ -32,7 +32,7 @@ namespace dbaui
     class SbaXFormAdapter;
     class SbaExternalSourceBrowser
                 :public SbaXDataBrowserController
-                ,public ::com::sun::star::util::XModifyBroadcaster
+                ,public css::util::XModifyBroadcaster
     {
         ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
             // for multiplexing the modify events
@@ -42,55 +42,55 @@ namespace dbaui
             // recursion
 
     public:
-        SbaExternalSourceBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
+        SbaExternalSourceBrowser(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController)
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses();
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >  getIdlClasses();
 
-        //  static ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  getStaticIdlClass();
+        //  static css::uno::Reference< css::reflection::XIdlClass >  getStaticIdlClass();
 
-        // ::com::sun::star::frame::XDispatch
-        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::frame::XDispatch
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::frame::XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XDispatchProvider
+        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::util::XModifyListener
-        virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& aEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::util::XModifyListener
+        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::util::XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > & aListener) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL removeModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > & aListener) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::util::XModifyBroadcaster
+        virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XComponent
+        // css::lang::XComponent
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-        // ::com::sun::star::form::XLoadListener
-        virtual void SAL_CALL unloading(const ::com::sun::star::lang::EventObject& aEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::form::XLoadListener
+        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::lang::XEventListener
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~SbaExternalSourceBrowser();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm() SAL_OVERRIDE;
-        virtual bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XRowSet >  CreateForm() SAL_OVERRIDE;
+        virtual bool InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
 
         virtual bool LoadForm() SAL_OVERRIDE;
 
-        void Attach(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xMaster);
+        void Attach(const css::uno::Reference< css::sdbc::XRowSet > & xMaster);
 
         void ClearView();
 

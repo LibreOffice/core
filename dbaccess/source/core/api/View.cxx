@@ -46,7 +46,7 @@ namespace dbaccess
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
 
-    OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
+    OUString lcl_getServiceNameForSetting(const Reference< css::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
     {
         OUString sSupportService;
         Any aValue;

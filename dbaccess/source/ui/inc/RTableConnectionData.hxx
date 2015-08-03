@@ -44,7 +44,7 @@ namespace dbaui
         sal_Int32 m_nDeleteRules;
         sal_Int32 m_nCardinality;
 
-        bool checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable, EConnectionSide _eEConnectionSide) const;
+        bool checkPrimaryKey(const css::uno::Reference< css::beans::XPropertySet>& i_xTable, EConnectionSide _eEConnectionSide) const;
         bool IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
         bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 

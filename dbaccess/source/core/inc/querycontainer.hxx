@@ -51,11 +51,11 @@ namespace dbtools
 namespace dbaccess
 {
 
-    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
-                                ,   ::com::sun::star::container::XContainerApproveListener
-                                ,   ::com::sun::star::sdbcx::XDataDescriptorFactory
-                                ,   ::com::sun::star::sdbcx::XAppend
-                                ,   ::com::sun::star::sdbcx::XDrop
+    typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
+                                ,   css::container::XContainerApproveListener
+                                ,   css::sdbcx::XDataDescriptorFactory
+                                ,   css::sdbcx::XAppend
+                                ,   css::sdbcx::XDrop
                                 >   OQueryContainer_Base;
 
     // OQueryContainer
@@ -64,9 +64,9 @@ namespace dbaccess
     {
     private:
         ::dbtools::WarningsContainer*  m_pWarnings;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        css::uno::Reference< css::container::XNameContainer >
                                         m_xCommandDefinitions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                                         m_xConnection;
         // possible actions on our "aggregate"
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
@@ -85,14 +85,14 @@ namespace dbaccess
         };
 
         // ODefinitionContainer
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject( const OUString& _rName) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::ucb::XContent > createObject( const OUString& _rName) SAL_OVERRIDE;
         virtual bool checkExistence(const OUString& _rName) SAL_OVERRIDE;
 
         // helper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
         virtual ~OQueryContainer();
 
-        /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
+        /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
             interface.<BR>
 
             @param _pWarnings
@@ -104,9 +104,9 @@ namespace dbaccess
                 <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
         */
         OQueryContainer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             ::dbtools::WarningsContainer* _pWarnings
             );
 
@@ -114,9 +114,9 @@ namespace dbaccess
 
     public:
         static rtl::Reference<OQueryContainer> create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             ::dbtools::WarningsContainer* _pWarnings
             );
 
@@ -124,35 +124,35 @@ namespace dbaccess
         DECLARE_XTYPEPROVIDER( )
         DECLARE_SERVICE_INFO();
 
-    // ::com::sun::star::container::XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::container::XContainerListener
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XContainerApproveListener
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XVeto > SAL_CALL approveInsertElement( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XVeto > SAL_CALL approveReplaceElement( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XVeto > SAL_CALL approveRemoveElement( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveInsertElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveReplaceElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XVeto > SAL_CALL approveRemoveElement( const css::container::ContainerEvent& Event ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::sdbcx::XDataDescriptorFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::sdbcx::XDataDescriptorFactory
+        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::sdbcx::XAppend
-        virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::sdbcx::XAppend
+        virtual void SAL_CALL appendByDescriptor( const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::sdbcx::XDrop
-        virtual void SAL_CALL dropByName( const OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::sdbcx::XDrop
+        virtual void SAL_CALL dropByName( const OUString& elementName ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::container::XElementAccess
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    // ::com::sun::star::container::XNameAccess
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::container::XElementAccess
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::container::XIndexAccess
+        virtual sal_Int32 SAL_CALL getCount(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::container::XNameAccess
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         // OContentHelper overridables
@@ -163,9 +163,9 @@ namespace dbaccess
             container will be asked for the given name.<BR>
             The returned object is acquired once.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const OUString& _rName);
+        css::uno::Reference< css::ucb::XContent > implCreateWrapper(const OUString& _rName);
         /// create a query object wrapping a CommandDefinition. The returned object is acquired once.
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxCommandDesc);
+        css::uno::Reference< css::ucb::XContent > implCreateWrapper(const css::uno::Reference< css::ucb::XContent >& _rxCommandDesc);
 
     };
 }   // namespace dbaccess

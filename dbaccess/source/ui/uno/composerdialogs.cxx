@@ -134,8 +134,8 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetFilterDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetFilterDialog, "com.sun.star.sdb.FilterDialog")
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL RowsetFilterDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    css::uno::Reference< css::uno::XInterface >
+        SAL_CALL RowsetFilterDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
     }
@@ -150,11 +150,11 @@ namespace dbaui
         if( aArguments.getLength() == 3 )
         {
             // this is the FilterDialog::createWithQuery method
-            Reference<com::sun::star::sdb::XSingleSelectQueryComposer> xQueryComposer;
+            Reference<css::sdb::XSingleSelectQueryComposer> xQueryComposer;
             aArguments[0] >>= xQueryComposer;
-            Reference<com::sun::star::sdbc::XRowSet> xRowSet;
+            Reference<css::sdbc::XRowSet> xRowSet;
             aArguments[1] >>= xRowSet;
-            Reference<com::sun::star::awt::XWindow> xParentWindow;
+            Reference<css::awt::XWindow> xParentWindow;
             aArguments[2] >>= xParentWindow;
             setPropertyValue( "QueryComposer", makeAny( xQueryComposer ) );
             setPropertyValue( "RowSet",        makeAny( xRowSet ) );
@@ -182,8 +182,8 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetOrderDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetOrderDialog, "com.sun.star.sdb.OrderDialog")
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL RowsetOrderDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    css::uno::Reference< css::uno::XInterface >
+        SAL_CALL RowsetOrderDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
     }
@@ -197,9 +197,9 @@ namespace dbaui
     {
         if( aArguments.getLength() == 2 )
         {
-            Reference<com::sun::star::sdb::XSingleSelectQueryComposer> xQueryComposer;
+            Reference<css::sdb::XSingleSelectQueryComposer> xQueryComposer;
             aArguments[0] >>= xQueryComposer;
-            Reference<com::sun::star::beans::XPropertySet> xRowSet;
+            Reference<css::beans::XPropertySet> xRowSet;
             aArguments[1] >>= xRowSet;
             setPropertyValue( "QueryComposer", makeAny( xQueryComposer ) );
             setPropertyValue( "RowSet",        makeAny( xRowSet ) );

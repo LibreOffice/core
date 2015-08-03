@@ -32,7 +32,7 @@ namespace sdbtools
 {
 
     // TableName
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XTableName
+    typedef ::cppu::WeakImplHelper<   css::sdb::tools::XTableName
                                   >   TableName_Base;
     struct TableName_Impl;
     /** default implementation for XTableName
@@ -51,26 +51,26 @@ namespace sdbtools
             @param  _rxConnection
                 the connection to work with. Will be held weak. Must not be <NULL/>.
 
-            @throws ::com::sun::star::lang::NullPointerException
+            @throws css::lang::NullPointerException
                 if _rxConnection is <NULL/>
         */
         TableName(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         // XTableName
-        virtual OUString SAL_CALL getCatalogName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getSchemaName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getTableName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setTableName( const OUString& _tablename ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getNameForSelect() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getTable() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _table ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool _Quote ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getCatalogName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getSchemaName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getTableName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setTableName( const OUString& _tablename ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getNameForSelect() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getTable() throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool _Quote ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~TableName();

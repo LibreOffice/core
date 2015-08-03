@@ -142,13 +142,13 @@ public:
     virtual Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTransactionListener
-    virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// disposes all storages managed by this instance
     void disposeStorages();
@@ -623,7 +623,7 @@ void ODatabaseModelImpl::reset()
     }
 }
 
-void SAL_CALL ODatabaseModelImpl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
+void SAL_CALL ODatabaseModelImpl::disposing( const css::lang::EventObject& Source ) throw(RuntimeException)
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if ( xCon.is() )

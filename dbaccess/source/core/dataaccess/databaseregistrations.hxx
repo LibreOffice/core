@@ -25,8 +25,8 @@
 namespace dbaccess
 {
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
-        createDataSourceRegistrations( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+    css::uno::Reference< css::uno::XAggregation >
+        createDataSourceRegistrations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
 } // namespace dbaccess
 

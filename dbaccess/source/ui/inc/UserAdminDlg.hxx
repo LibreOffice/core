@@ -47,17 +47,17 @@ namespace dbaui
     {
         OModuleClient m_aModuleClient;
         ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
-        SfxItemSet* m_pItemSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-        bool    m_bOwnConnection;
+        SfxItemSet*   m_pItemSet;
+        css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
+        bool          m_bOwnConnection;
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;
     public:
         OUserAdminDlg( vcl::Window* _pParent
                             ,SfxItemSet* _pItems
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
-                            ,const ::com::sun::star::uno::Any& _aDataSourceName
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                            ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+                            ,const css::uno::Any& _aDataSourceName
+                            ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
         virtual ~OUserAdminDlg();
         virtual void dispose() SAL_OVERRIDE;
@@ -68,9 +68,9 @@ namespace dbaui
         virtual short   Execute() SAL_OVERRIDE;
 
         // forwards to ODbDataSourceAdministrationHelper
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const SAL_OVERRIDE;
-        virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::uno::XComponentContext > getORB() const SAL_OVERRIDE;
+        virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDriver > getDriver() SAL_OVERRIDE;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
         virtual void clearPassword() SAL_OVERRIDE;
         virtual bool saveDatasource() SAL_OVERRIDE;

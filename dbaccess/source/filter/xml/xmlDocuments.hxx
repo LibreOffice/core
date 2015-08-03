@@ -29,7 +29,7 @@ namespace dbaxml
     class OXMLDocuments : public SvXMLImportContext
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xContainer;
+        css::uno::Reference< css::container::XNameAccess > m_xContainer;
         OUString     m_sCollectionServiceName;
         OUString     m_sComponentServiceName;
 
@@ -40,7 +40,7 @@ namespace dbaxml
         OXMLDocuments( ODBFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
+                    ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,const OUString& _sCollectionServiceName
                     ,const OUString& _sComponentServiceName);
 
@@ -48,7 +48,7 @@ namespace dbaxml
         OXMLDocuments( ODBFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
+                    ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,const OUString& _sCollectionServiceName = OUString()
                     );
 
@@ -56,7 +56,7 @@ namespace dbaxml
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     };
 } // namespace dbaxml
 

@@ -45,8 +45,8 @@ namespace dbaui
 {
 
     // BasicInteractionHandler
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::lang::XServiceInfo
-                                  ,   ::com::sun::star::task::XInteractionHandler2
+    typedef ::cppu::WeakImplHelper<   css::lang::XServiceInfo
+                                  ,   css::task::XInteractionHandler2
                                   >   BasicInteractionHandler_Base;
     /** implements an <type scope="com.sun.star.task">XInteractionHandler</type> for
         database related interaction requests.
@@ -63,44 +63,44 @@ namespace dbaui
                 :public BasicInteractionHandler_Base
     {
         const OModuleClient m_aModuleClient;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        const css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
         const bool          m_bFallbackToGeneric;
 
     public:
         BasicInteractionHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const bool i_bFallbackToGeneric
         );
 
         // XInteractionHandler2
-        virtual sal_Bool SAL_CALL handleInteractionRequest( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& Request ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInteractionHandler
-        virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& Request ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         bool
-                impl_handle_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_Request );
+                impl_handle_throw( const css::uno::Reference< css::task::XInteractionRequest >& i_Request );
 
         /// handle SQLExceptions (and derived classes)
         static void implHandle(
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle parameter requests
         void    implHandle(
-                    const ::com::sun::star::sdb::ParametersRequest& _rParamRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+                    const css::sdb::ParametersRequest& _rParamRequest,
+                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle document save requests
         void    implHandle(
-                    const ::com::sun::star::sdb::DocumentSaveRequest& _rParamRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+                    const css::sdb::DocumentSaveRequest& _rParamRequest,
+                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handles requests which are not SDB-specific
         bool    implHandleUnknown(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _rxRequest );
+                    const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest );
 
         /// known continuation types
         enum Continuation
@@ -118,7 +118,7 @@ namespace dbaui
         */
         static sal_Int32 getContinuation(
             Continuation _eCont,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+            const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
     };
 
     // SQLExceptionInteractionHandler
@@ -126,7 +126,7 @@ namespace dbaui
     {
     public:
         SQLExceptionInteractionHandler(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+                const css::uno::Reference< css::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, false )
         {
@@ -154,7 +154,7 @@ namespace dbaui
     {
     public:
         LegacyInteractionHandler(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+                const css::uno::Reference< css::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, true )
         {

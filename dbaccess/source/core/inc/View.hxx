@@ -33,13 +33,13 @@ namespace dbaccess
 
     // View
     typedef ::connectivity::sdbcx::OView                                View_Base;
-    typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XAlterView >  View_IBASE;
+    typedef ::cppu::ImplHelper1< css::sdbcx::XAlterView >  View_IBASE;
     class View :public View_Base
                 ,public View_IBASE
     {
     public:
         View(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             bool _bCaseSensitive,
             const OUString& _rCatalogName,
             const OUString& _rSchemaName,
@@ -51,18 +51,18 @@ namespace dbaccess
         DECLARE_XTYPEPROVIDER()
 
         // XAlterView
-        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~View();
 
     protected:
         // OPropertyContainer
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const SAL_OVERRIDE;
 
     private:
-         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XViewAccess>     m_xViewAccess;
-        sal_Int32       m_nCommandHandle;
+         css::uno::Reference< css::sdb::tools::XViewAccess>     m_xViewAccess;
+        sal_Int32                                               m_nCommandHandle;
     private:
         using View_Base::getFastPropertyValue;
     };

@@ -53,22 +53,22 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
 {
     OSL_ENSURE(_xStatement.is() ,"Statement is NULL!");
     m_xAggregateAsSet.set(_xStatement,UNO_QUERY);
-    m_xAggregateAsCancellable = Reference< ::com::sun::star::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
+    m_xAggregateAsCancellable = Reference< css::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
 }
 
 OStatementBase::~OStatementBase()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::exception)
 {
     OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
                            cppu::UnoType<XWarningsSupplier>::get(),
                            cppu::UnoType<XCloseable>::get(),
                            cppu::UnoType<XMultipleResults>::get(),
-                           cppu::UnoType<com::sun::star::util::XCancellable>::get(),
-                            OSubComponent::getTypes() );
+                           cppu::UnoType<css::util::XCancellable>::get(),
+                           OSubComponent::getTypes() );
     Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
     if ( xGRes.is() )
         aTypes = OTypeCollection(cppu::UnoType<XGeneratedResultSet>::get(),aTypes.getTypes());
@@ -79,7 +79,7 @@ Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::except
     return aTypes.getTypes();
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = OSubComponent::queryInterface( rType );
@@ -91,7 +91,7 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
                     static_cast< XWarningsSupplier * >( this ),
                     static_cast< XCloseable * >( this ),
                     static_cast< XMultipleResults * >( this ),
-                    static_cast< ::com::sun::star::util::XCancellable * >( this ));
+                    static_cast< css::util::XCancellable * >( this ));
         if ( !aIface.hasValue() )
         {
             Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
@@ -303,7 +303,7 @@ void OStatementBase::clearWarnings() throw( SQLException, RuntimeException, std:
     Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->clearWarnings();
 }
 
-// ::com::sun::star::util::XCancellable
+// css::util::XCancellable
 void OStatementBase::cancel() throw( RuntimeException, std::exception )
 {
     // no blocking as cancel is typically called from a different thread

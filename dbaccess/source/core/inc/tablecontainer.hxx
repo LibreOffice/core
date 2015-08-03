@@ -38,7 +38,7 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper1< ::com::sun::star::container::XContainerListener> OTableContainer_Base;
+    typedef ::cppu::ImplHelper1< css::container::XContainerListener> OTableContainer_Base;
 
     // OTableContainer
     class OContainerMediator;
@@ -46,8 +46,8 @@ namespace dbaccess
     class OTableContainer :  public OFilteredContainer,
                              public OTableContainer_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
-        ::rtl::Reference< OContainerMediator >                                          m_pTableMediator;
+        css::uno::Reference< css::container::XNameContainer > m_xTableDefinitions;
+        ::rtl::Reference< OContainerMediator >                m_pTableMediator;
         bool                m_bInDrop;                  // set when we are in the drop method
 
         // OFilteredContainer
@@ -57,26 +57,26 @@ namespace dbaccess
 
         // ::connectivity::sdbcx::OCollection
         virtual connectivity::sdbcx::ObjectType     createObject(const OUString& _rName) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor() SAL_OVERRIDE;
-        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::beans::XPropertySet >   createDescriptor() SAL_OVERRIDE;
+        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) SAL_OVERRIDE;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) SAL_OVERRIDE;
 
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OFilteredContainer::acquire();}
         virtual void SAL_CALL release() throw() SAL_OVERRIDE { OFilteredContainer::release();}
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     public:
-        /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
+        /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
             interface.<BR>
             @param          _rParent            the object which acts as parent for the container.
                                                 all refcounting is rerouted to this object
@@ -87,9 +87,9 @@ namespace dbaccess
         */
         OTableContainer( ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
+            const css::uno::Reference< css::sdbc::XConnection >& _xCon,
             bool _bCase,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
+            const css::uno::Reference< css::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
             ::dbtools::WarningsContainer* _pWarningsContainer,
             oslInterlockedCount& _nInAppend

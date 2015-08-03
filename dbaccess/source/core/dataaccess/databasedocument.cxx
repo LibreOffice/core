@@ -417,7 +417,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
                 OUString sDialogUrl = "vnd.sun.star.script:";
                 sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( "." ).concat (  sDialogs[ j ]  ).concat( "?location=document" );
 
-                Reference< ::com::sun::star::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
+                Reference< css::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
                 Reference< XInterface > xModel( xDialog->getModel() );
                 GraphicObject::InspectForGraphicObjectImageURL( xModel, vEmbedImgUrls );
             }
@@ -1362,7 +1362,7 @@ void ODatabaseDocument::impl_setModified_nothrow( bool _bModified, DocumentGuard
     }
 }
 
-// ::com::sun::star::document::XEventBroadcaster
+// css::document::XEventBroadcaster
 void SAL_CALL ODatabaseDocument::addEventListener(const uno::Reference< document::XEventListener >& _Listener ) throw (uno::RuntimeException, std::exception)
 {
     m_aEventNotifier.addLegacyEventListener( _Listener );
@@ -1448,7 +1448,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     if ( !xContainer.is() )
     {
         Any aValue;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
+        css::uno::Reference< css::uno::XInterface > xMy(*this);
         if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "Forms" : "Reports",aValue) )
         {
             OUString sSupportService;
@@ -1564,13 +1564,13 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
     // <- SYNCHRONIZED
 }
 
-void SAL_CALL ODatabaseDocument::addCloseListener( const Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODatabaseDocument::addCloseListener( const Reference< css::util::XCloseListener >& Listener ) throw (RuntimeException, std::exception)
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     m_aCloseListener.addInterface(Listener);
 }
 
-void SAL_CALL ODatabaseDocument::removeCloseListener( const Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODatabaseDocument::removeCloseListener( const Reference< css::util::XCloseListener >& Listener ) throw (RuntimeException, std::exception)
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     m_aCloseListener.removeInterface(Listener);
@@ -1794,7 +1794,7 @@ Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentSubStorage( const O
     return xStorageAccess->getDocumentSubStorage( aStorageName, nMode );
 }
 
-Sequence< OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  ) throw (css::io::IOException, RuntimeException, std::exception)
 {
     Reference< XDocumentSubStorageSupplier > xStorageAccess( m_pImpl->getDocumentSubStorageSupplier() );
     return xStorageAccess->getDocumentSubStoragesNames();

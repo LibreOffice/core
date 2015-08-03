@@ -671,7 +671,7 @@ void ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any
     _rDefault.clear();
 }
 
-void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODocumentContainer::commit(  ) throw (css::io::IOException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Documents::iterator aIter = m_aDocumentMap.begin();
@@ -687,7 +687,7 @@ void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOExce
         xTrans->commit();
 }
 
-void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODocumentContainer::revert(  ) throw (css::io::IOException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Documents::iterator aIter = m_aDocumentMap.begin();

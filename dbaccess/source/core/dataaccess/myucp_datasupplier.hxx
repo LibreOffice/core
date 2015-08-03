@@ -39,10 +39,9 @@ public:
     virtual ~DataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >
+    virtual css::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier( sal_uInt32 nIndex ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
+    virtual css::uno::Reference< css::ucb::XContent >
     queryContent( sal_uInt32 nIndex ) SAL_OVERRIDE;
 
     virtual bool getResult( sal_uInt32 nIndex ) SAL_OVERRIDE;
@@ -51,14 +50,14 @@ public:
     virtual sal_uInt32 currentCount() SAL_OVERRIDE;
     virtual bool isCountFinal() SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
+    virtual css::uno::Reference< css::sdbc::XRow >
     queryPropertyValues( sal_uInt32 nIndex  ) SAL_OVERRIDE;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) SAL_OVERRIDE;
 
     virtual void close() SAL_OVERRIDE;
 
     virtual void validate()
-        throw( com::sun::star::ucb::ResultSetException ) SAL_OVERRIDE;
+        throw( css::ucb::ResultSetException ) SAL_OVERRIDE;
 };
 
 }

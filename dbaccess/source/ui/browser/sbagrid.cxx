@@ -174,7 +174,7 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
 Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
 {
     Any aRet = FmXGridControl::queryInterface(_rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,static_cast<com::sun::star::frame::XDispatch*>(this));
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
 }
 
 Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException, std::exception)
@@ -183,7 +183,7 @@ Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException,
 
     sal_Int32 nTypes = aTypes.getLength();
     aTypes.realloc(nTypes + 1);
-    aTypes[nTypes] = cppu::UnoType<com::sun::star::frame::XDispatch>::get();
+    aTypes[nTypes] = cppu::UnoType<css::frame::XDispatch>::get();
 
     return aTypes;
 }
@@ -193,7 +193,7 @@ Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  ) throw (Ru
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > & rToolkit, const Reference< css::awt::XWindowPeer > & rParentPeer) throw( RuntimeException, std::exception )
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
 
@@ -202,7 +202,7 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 
     // TODO: why the hell this whole class does not use any mutex?
 
-        Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
+        Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
                 ++aIter)
@@ -212,9 +212,9 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
         }
 }
 
-void SAL_CALL SbaXGridControl::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
+    Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
     if (xDisp.is())
         xDisp->dispatch(aURL, aArgs);
 }
@@ -247,7 +247,7 @@ void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListen
     }
 }
 
-void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & _rxListener, const ::com::sun::star::util::URL& _rURL) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame::XStatusListener > & _rxListener, const css::util::URL& _rURL) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -260,7 +260,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
 
     if (getPeer().is() && pMultiplexer->getLength() == 1)
     {
-        Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
+        Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         xDisp->removeStatusListener(pMultiplexer, _rURL);
     }
     pMultiplexer->removeInterface( _rxListener );
@@ -309,13 +309,13 @@ void SAL_CALL SbaXGridPeer::dispose() throw( RuntimeException, std::exception )
     FmXGridPeer::dispose();
 }
 
-void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
+void SbaXGridPeer::NotifyStatusChanged(const css::util::URL& _rUrl, const Reference< css::frame::XStatusListener > & xControl)
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
         return;
 
-    ::com::sun::star::frame::FeatureStateEvent aEvt;
+    css::frame::FeatureStateEvent aEvt;
     aEvt.Source = *this;
     aEvt.IsEnabled = !pGrid->IsReadOnlyDB();
     aEvt.FeatureURL = _rUrl;
@@ -336,26 +336,26 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl,
         {
             ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
             while (aListIter.hasMoreElements())
-                static_cast< ::com::sun::star::frame::XStatusListener*>(aListIter.next())->statusChanged(aEvt);
+                static_cast< css::frame::XStatusListener*>(aListIter.next())->statusChanged(aEvt);
         }
     }
 }
 
 Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
 {
-    Any aRet = ::cppu::queryInterface(_rType,static_cast<com::sun::star::frame::XDispatch*>(this));
+    Any aRet = ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
     if(aRet.hasValue())
         return aRet;
     return FmXGridPeer::queryInterface(_rType);
 }
 
-Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
+Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
 {
     if  (   ( aURL.Complete == ".uno:GridSlots/BrowserAttribs" ) || ( aURL.Complete == ".uno:GridSlots/RowHeight" )
         ||  ( aURL.Complete == ".uno:GridSlots/ColumnAttribs" )  || ( aURL.Complete == ".uno:GridSlots/ColumnWidth" )
         )
     {
-        return static_cast<com::sun::star::frame::XDispatch*>(this);
+        return static_cast<css::frame::XDispatch*>(this);
     }
 
     return FmXGridPeer::queryDispatch(aURL, aTargetFrameName, nSearchFlags);
@@ -496,7 +496,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     }
 }
 
-void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( RuntimeException, std::exception )
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
     if (!pCont)
@@ -506,7 +506,7 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< ::com::sun::star:
     NotifyStatusChanged(aURL, xControl);
 }
 
-void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( RuntimeException, std::exception )
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
     if ( pCont )
@@ -528,13 +528,13 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException, std:
     Sequence< Type > aTypes = FmXGridPeer::getTypes();
     sal_Int32 nOldLen = aTypes.getLength();
     aTypes.realloc(nOldLen + 1);
-    aTypes.getArray()[nOldLen] = cppu::UnoType<com::sun::star::frame::XDispatch>::get();
+    aTypes.getArray()[nOldLen] = cppu::UnoType<css::frame::XDispatch>::get();
 
     return aTypes;
 }
 
 // return implementation specific data
-sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId ) throw(css::uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast< sal_Int64 >( this );
@@ -697,7 +697,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
                 // send it to the clipboard
                 vClipboardList.push_back(::boost::shared_ptr<OTableRow>(new OTableRow(xField)));
                 OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
-                Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+                Reference< css::datatransfer::XTransferable> xRef = pData;
                 pData->CopyToClipboard(GetParent());
             }
             break;
@@ -770,7 +770,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 
 SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), true, getContext());
+    Reference< css::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), true, getContext());
 
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if ( !pSupplierImpl )
@@ -1330,11 +1330,11 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 
         try
         {
-            // assume that text can be dropped into a field if the column has a ::com::sun::star::awt::XTextComponent interface
-            Reference< XIndexAccess >  xColumnControls(static_cast<com::sun::star::form::XGridPeer*>(GetPeer()), UNO_QUERY);
+            // assume that text can be dropped into a field if the column has a css::awt::XTextComponent interface
+            Reference< XIndexAccess >  xColumnControls(static_cast<css::form::XGridPeer*>(GetPeer()), UNO_QUERY);
             if (xColumnControls.is())
             {
-                Reference< ::com::sun::star::awt::XTextComponent >  xColControl(
+                Reference< css::awt::XTextComponent >  xColControl(
                     xColumnControls->getByIndex(GetViewColumnPos(nCol)),
                     css::uno::UNO_QUERY);
                 if (xColControl.is())

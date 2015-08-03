@@ -33,8 +33,8 @@ namespace dbaccess
     {
     public:
         StorageTextOutputStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageTextOutputStream();

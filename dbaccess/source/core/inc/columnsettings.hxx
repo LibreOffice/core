@@ -34,15 +34,15 @@ namespace dbaccess
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     void* _pPointerToMember,
-                    const ::com::sun::star::uno::Type& _rMemberType
+                    const css::uno::Type& _rMemberType
                 ) = 0;
 
         virtual void registerMayBeVoidProperty(
                     const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
-                    ::com::sun::star::uno::Any* _pPointerToMember,
-                    const ::com::sun::star::uno::Type& _rExpectedType
+                    css::uno::Any* _pPointerToMember,
+                    const css::uno::Type& _rExpectedType
                 ) = 0;
 
     protected:
@@ -53,15 +53,15 @@ namespace dbaccess
     class OColumnSettings
     {
         //  <properties>
-        ::com::sun::star::uno::Any  m_aWidth;               // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aFormatKey;           // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aRelativePosition;    // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aAlignment;           // sal_Int32 (::com::sun::star::awt::TextAlign) or void
-        ::com::sun::star::uno::Any  m_aHelpText;            // the description of the column which is visible in the helptext of the column
-        ::com::sun::star::uno::Any  m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Any               m_aWidth;               // sal_Int32 or void
+        css::uno::Any               m_aFormatKey;           // sal_Int32 or void
+        css::uno::Any               m_aRelativePosition;    // sal_Int32 or void
+        css::uno::Any               m_aAlignment;           // sal_Int32 (css::awt::TextAlign) or void
+        css::uno::Any               m_aHelpText;            // the description of the column which is visible in the helptext of the column
+        css::uno::Any               m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
+        css::uno::Reference< css::beans::XPropertySet >
                                     m_xControlModel;
-        bool                    m_bHidden;
+        bool                        m_bHidden;
         //  </properties>
 
     protected:
@@ -76,12 +76,12 @@ namespace dbaccess
         /** determines whether the property with the given handle is handled by the class
         */
         static bool isColumnSettingProperty( const sal_Int32 _nPropertyHandle );
-        static bool isDefaulted( const sal_Int32 _nPropertyHandle, const ::com::sun::star::uno::Any& _rPropertyValue );
+        static bool isDefaulted( const sal_Int32 _nPropertyHandle, const css::uno::Any& _rPropertyValue );
 
     public:
         /** check if the persistent settings have their default value
         */
-        static bool hasDefaultSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn );
+        static bool hasDefaultSettings( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn );
     };
 
 } // namespace dbaccess

@@ -104,7 +104,7 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException)
 {
     bool bRet = true;
     switch(nHandle)
@@ -541,7 +541,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
     );
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODBTableDecorator::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< css::beans::XPropertySetInfo > SAL_CALL ODBTableDecorator::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
@@ -639,7 +639,7 @@ void SAL_CALL ODBTableDecorator::release() throw()
     OTableDescriptor_BASE::release();
 }
 
-void SAL_CALL ODBTableDecorator::setName( const OUString& /*aName*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODBTableDecorator::setName( const OUString& /*aName*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     throwFunctionNotSupportedRuntimeException( "XNamed::setName", *this );
 }

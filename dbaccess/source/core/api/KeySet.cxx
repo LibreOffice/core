@@ -1403,37 +1403,37 @@ Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex ) throw(S
     return m_xRow->getBytes(columnIndex);
 }
 
-::com::sun::star::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ensureRowForData();
     return m_xRow->getDate(columnIndex);
 }
 
-::com::sun::star::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ensureRowForData();
     return m_xRow->getTime(columnIndex);
 }
 
-::com::sun::star::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ensureRowForData();
     return m_xRow->getTimestamp(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ensureRowForData();
     return m_xRow->getBinaryStream(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ensureRowForData();
     return m_xRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
     ensureRowForData();
     return m_xRow->getObject(columnIndex,typeMap);
@@ -1484,7 +1484,7 @@ namespace dbaccess
 {
 
 void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
-                            const ::com::sun::star::uno::Sequence< OUString >& _aColumnNames,
+                            const css::uno::Sequence< OUString >& _aColumnNames,
                             const OUString& _rsUpdateTableName,
                             SelectColumnsMetaData& o_rColumnNames,
                             bool i_bAppendTableName)

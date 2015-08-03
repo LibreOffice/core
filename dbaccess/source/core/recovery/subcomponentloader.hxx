@@ -33,7 +33,7 @@ namespace dbaccess
 {
 
     // SubComponentLoader
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::awt::XWindowListener
+    typedef ::cppu::WeakImplHelper<   css::awt::XWindowListener
                                   >   SubComponentLoader_Base;
     struct SubComponentLoader_Data;
     /** is a helper class which loads/opens a given sub component as soon as the main application
@@ -43,23 +43,23 @@ namespace dbaccess
     {
     public:
         SubComponentLoader(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& i_rApplicationController,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >& i_rSubDocumentDefinition
+            const css::uno::Reference< css::frame::XController >& i_rApplicationController,
+            const css::uno::Reference< css::ucb::XCommandProcessor >& i_rSubDocumentDefinition
         );
 
         SubComponentLoader(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& i_rApplicationController,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rNonDocumentComponent
+            const css::uno::Reference< css::frame::XController >& i_rApplicationController,
+            const css::uno::Reference< css::lang::XComponent >& i_rNonDocumentComponent
         );
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~SubComponentLoader();

@@ -46,7 +46,7 @@ namespace
     {
         bool bGrabFocus = false;
         SbaGridControl* pVclControl = _pView->getVclControl();
-        Reference< ::com::sun::star::awt::XControl > xGrid = _pView->getGridControl();
+        Reference< css::awt::XControl > xGrid = _pView->getGridControl();
         if (pVclControl && xGrid.is())
         {
             bGrabFocus = true;
@@ -67,7 +67,7 @@ namespace
 
 UnoDataBrowserView::UnoDataBrowserView( vcl::Window* pParent,
                                         IController& _rController,
-                                        const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+                                        const Reference< css::uno::XComponentContext >& _rxContext)
     :ODataView(pParent,_rController,_rxContext)
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
@@ -77,7 +77,7 @@ UnoDataBrowserView::UnoDataBrowserView( vcl::Window* pParent,
 
 }
 
-void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
+void UnoDataBrowserView::Construct(const Reference< css::awt::XControlModel >& xModel)
 {
     try
     {
@@ -92,14 +92,14 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);
 
-        Reference< ::com::sun::star::awt::XWindow >  xGridWindow(m_xGrid, UNO_QUERY);
+        Reference< css::awt::XWindow >  xGridWindow(m_xGrid, UNO_QUERY);
         xGridWindow->setVisible(sal_True);
         xGridWindow->setEnable(sal_True);
 
         // introduce the model to the grid
         m_xGrid->setModel(xModel);
         // introduce the container (me) to the grid
-        Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(xModel, UNO_QUERY);
+        Reference< css::beans::XPropertySet >  xModelSet(xModel, UNO_QUERY);
         getContainer()->addControl(::comphelper::getString(xModelSet->getPropertyValue(PROPERTY_NAME)), m_xGrid);
 
         // get the VCL-control
@@ -235,10 +235,10 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
     }
 
     // set the size of grid control
-    Reference< ::com::sun::star::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
+    Reference< css::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
     if (xGridAsWindow.is())
         xGridAsWindow->setPosSize( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
-                                   aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height(), ::com::sun::star::awt::PosSize::POSSIZE);
+                                   aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height(), css::awt::PosSize::POSSIZE);
 
     // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
@@ -257,7 +257,7 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
         OSL_ENSURE(m_xGrid.is(),"Grid not set!");
         if ( m_xGrid.is() )
         {
-            Reference< ::com::sun::star::awt::XWindowPeer >  xPeer = m_xGrid->getPeer();
+            Reference< css::awt::XWindowPeer >  xPeer = m_xGrid->getPeer();
             if ( xPeer.is() )
             {
                 SbaXGridPeer* pPeer = SbaXGridPeer::getImplementation(xPeer);
@@ -292,7 +292,7 @@ void UnoDataBrowserView::GetFocus()
     }
 }
 
-void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
+void UnoDataBrowserView::_disposing( const css::lang::EventObject& /*_rSource*/ )
 {
     stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
     m_pVclControl = NULL;

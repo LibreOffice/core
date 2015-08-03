@@ -40,17 +40,17 @@ namespace dbaui
     {
     protected:
         VclPtr<vcl::Window>  m_pErrorMessageParent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                              m_xContext;
         OUString             m_sContextInformation;
 
     public:
         ODatasourceConnector(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             vcl::Window* _pMessageParent
         );
         ODatasourceConnector(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             vcl::Window* _pMessageParent,
             const OUString& _rContextInformation
         );
@@ -60,7 +60,7 @@ namespace dbaui
 
         /** creates a connection to the data source, displays the possible error to the user, or returns it
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                     connect(
                         const OUString& _rDataSourceName,
                         ::dbtools::SQLExceptionInfo* _pErrorInfo
@@ -68,9 +68,9 @@ namespace dbaui
 
         /** creates a connection to the data source, displays the possible error to the user, or returns it
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                     connect(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource,
+                        const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource,
                         ::dbtools::SQLExceptionInfo* _pErrorInfo
                     ) const;
     };

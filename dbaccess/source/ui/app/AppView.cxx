@@ -496,7 +496,7 @@ void OApplicationView::showPreview(const Reference< XContent >& _xContent)
 }
 
 void OApplicationView::showPreview( const OUString& _sDataSourceName,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                    const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                     const OUString& _sName,
                                     bool _bTable)
 {
@@ -541,7 +541,7 @@ void OApplicationView::GetFocus()
     }
 }
 
-void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
+void OApplicationView::_disposing( const css::lang::EventObject& /*_rSource*/ )
 {
     if ( m_pWin && getDetailView() )
         showPreview(NULL);

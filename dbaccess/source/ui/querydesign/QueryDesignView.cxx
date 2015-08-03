@@ -188,7 +188,7 @@ namespace
     OUString ParseCondition( OQueryController& rController
                                     ,const ::connectivity::OSQLParseNode* pCondition
                                     ,const OUString& _sDecimal
-                                    ,const ::com::sun::star::lang::Locale& _rLocale
+                                    ,const css::lang::Locale& _rLocale
                                     ,sal_uInt32 _nStartIndex)
     {
         OUString aCondition;
@@ -1330,10 +1330,10 @@ namespace
                                     bool bHaving,
                                     bool bAddOrOnOneLine)
     {
-        const ::com::sun::star::lang::Locale    aLocale = _pView->getLocale();
+        const css::lang::Locale    aLocale = _pView->getLocale();
         const OUString sDecimal = _pView->getDecimalSeparator();
 
-        // I will need a cast pointer to my com::sun::star::sdbcx::Container
+        // I will need a cast pointer to my css::sdbcx::Container
         OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
         SqlParseError eErrorCode = eOk;
 

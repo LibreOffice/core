@@ -587,12 +587,12 @@ OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vec
     return aSql.makeStringAndClear();
 }
 
-OUString SAL_CALL OSingleSelectQueryComposer::getElementaryQuery() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getElementaryQuery() throw (css::uno::RuntimeException, std::exception)
 {
     return composeStatementFromParts( m_aElementaryParts );
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _rElementary ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -962,7 +962,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 }
 
 bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLParseTreeIterator& _rIterator,
-                                    ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
+                                    ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
     // Round brackets around the expression
     if (pCondition->count() == 3 &&
@@ -1114,7 +1114,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
 }
 
 bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
-                                            ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
+                                            ::std::vector < PropertyValue >& rFilter, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
     OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
     if (SQL_ISRULE(pCondition->getChild(0), column_ref) ||
@@ -1532,7 +1532,7 @@ namespace
     }
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection, &m_aParseContext);
     setFilter(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));

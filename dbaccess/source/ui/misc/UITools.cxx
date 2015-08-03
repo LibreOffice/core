@@ -131,10 +131,10 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::frame::XModel;
 
 SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
-                                     const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
-                                    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                                    Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
-                                    Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
+                                     const Reference< css::container::XNameAccess >& _xDatabaseContext,
+                                    const Reference< css::uno::XComponentContext >& _rxContext,
+                                    Reference< css::lang::XEventListener>& _rEvtLst,
+                                    Reference< css::sdbc::XConnection>& _rOUTConnection )
 {
     Reference<XPropertySet> xProp;
     try
@@ -149,10 +149,10 @@ SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
     return createConnection(xProp,_rxContext,_rEvtLst,_rOUTConnection);
 }
 
-SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource,
-                                    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                                    Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
-                                    Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
+SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& _xDataSource,
+                                    const Reference< css::uno::XComponentContext >& _rxContext,
+                                    Reference< css::lang::XEventListener>& _rEvtLst,
+                                    Reference< css::sdbc::XConnection>& _rOUTConnection )
 {
     SQLExceptionInfo aInfo;
     if ( !_xDataSource.is() )
@@ -425,7 +425,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     return pTypeInfo;
 }
 
-void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
+void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
                     const OUString& _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,
                     ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters)
@@ -704,7 +704,7 @@ OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const
     return sDefaultName;
 }
 
-bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
+bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< css::uno::XComponentContext >& _xContext)
 {
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
     bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
@@ -723,13 +723,13 @@ bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< 
 
 sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
 {
-    sal_Int32 nAlignment = com::sun::star::awt::TextAlign::LEFT;
+    sal_Int32 nAlignment = css::awt::TextAlign::LEFT;
     switch (_eAlignment)
     {
         case SVX_HOR_JUSTIFY_STANDARD:
-        case SVX_HOR_JUSTIFY_LEFT:      nAlignment = ::com::sun::star::awt::TextAlign::LEFT;    break;
-        case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
-        case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
+        case SVX_HOR_JUSTIFY_LEFT:      nAlignment = css::awt::TextAlign::LEFT;    break;
+        case SVX_HOR_JUSTIFY_CENTER:    nAlignment = css::awt::TextAlign::CENTER;  break;
+        case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = css::awt::TextAlign::RIGHT;   break;
         default:
             SAL_WARN("dbaccess.ui", "Invalid TextAlign!");
     }
@@ -741,9 +741,9 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
     SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_LEFT;
     switch (_nAlignment)
     {
-        case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-        case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-        case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+        case css::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
+        case css::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
+        case css::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
         default:
             SAL_WARN("dbaccess.ui", "Invalid TextAlign!");
     }
@@ -1114,7 +1114,7 @@ namespace
         try
         {
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
-                                 Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                 Reference< css::ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
             if ( ( aCnt.getPropertyValue("AnchorName") >>= sAnchor ) )
             {
@@ -1138,9 +1138,9 @@ namespace
     }
 } // anonymous
 
-::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
+css::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
 {
-    ::com::sun::star::util::URL aURL;
+    css::util::URL aURL;
     aURL.Complete = "vnd.sun.star.help://" +
         _sModuleName + "/" + OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
 
@@ -1157,12 +1157,12 @@ namespace
     return aURL;
 }
 
-void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
+void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");
     if ( _rxFormatter.is() )
     {
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
+        Reference< css::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
 
         Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
         SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
@@ -1489,14 +1489,14 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
     return true;
 }
 
-Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
+Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< css::uno::XComponentContext >& _rxContext )
 {
     // create a formatter working with the connections format supplier
     Reference< XNumberFormatter > xFormatter;
 
     try
     {
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, true, _rxContext));
+        Reference< css::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, true, _rxContext));
 
         if ( xSupplier.is() )
         {

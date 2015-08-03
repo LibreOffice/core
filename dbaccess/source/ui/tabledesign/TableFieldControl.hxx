@@ -36,14 +36,14 @@ namespace dbaui
         virtual void        CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
         virtual bool        IsReadOnly() SAL_OVERRIDE;
         virtual void        SetModified(bool bModified) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XNumberFormatter >    GetFormatter() const SAL_OVERRIDE;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
+        virtual css::lang::Locale  GetLocale() const SAL_OVERRIDE;
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
         virtual const OTypeInfoMap*             getTypeInfo() const SAL_OVERRIDE;
         virtual bool                            isAutoIncrementValueEnabled() const SAL_OVERRIDE;
-        virtual OUString                 getAutoIncrementValue() const SAL_OVERRIDE;
+        virtual OUString                        getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:
         OTableFieldControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
@@ -51,8 +51,8 @@ namespace dbaui
         OUString BoolStringPersistent(const OUString& rUIString) const { return OFieldDescControl::BoolStringPersistent(rUIString); }
         OUString BoolStringUI(const OUString& rPersistentString) const { return OFieldDescControl::BoolStringUI(rPersistentString); }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX

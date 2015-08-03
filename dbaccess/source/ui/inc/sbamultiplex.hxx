@@ -70,17 +70,17 @@ namespace dbaui
         classname( ::cppu::OWeakObject& rSource,                                            \
             ::osl::Mutex& rMutex);                                                          \
         DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(                        \
-            const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+        virtual css::uno::Any  SAL_CALL queryInterface(                        \
+            const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
                                                                                             \
-        /* ::com::sun::star::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
+        /* css::lang::XEventListener */                                        \
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
 
     #define DECLARE_MULTIPLEXER_VOID_METHOD(methodname, eventtype)                          \
-        virtual void SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+        virtual void SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
 
     #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
-        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;   \
+        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;   \
 
     #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
     /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators */    \
@@ -98,25 +98,25 @@ namespace dbaui
     {                                                                                       \
     }                                                                                       \
                                                                                             \
-    ::com::sun::star::uno::Any  SAL_CALL classname::queryInterface(                         \
-        const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    css::uno::Any  SAL_CALL classname::queryInterface(                         \
+        const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) \
     {                                                                                       \
-        ::com::sun::star::uno::Any aReturn =                                                \
+        css::uno::Any aReturn =                                                \
             OSbaWeakSubObject::queryInterface(_rType);                                          \
         if (!aReturn.hasValue())                                                            \
             aReturn = ::cppu::queryInterface(_rType,                                        \
                 static_cast< listenerclass* >(this),                                        \
-                static_cast< ::com::sun::star::lang::XEventListener* >(static_cast< listenerclass* >(this)) \
+                static_cast< css::lang::XEventListener* >(static_cast< listenerclass* >(this)) \
             );                                                                              \
                                                                                             \
         return aReturn;                                                                     \
     }                                                                                       \
-    void SAL_CALL classname::disposing(const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException, std::exception)\
+    void SAL_CALL classname::disposing(const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)\
     {                                                                                       \
     }                                                                                       \
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(classname, listenerclass, methodname, eventtype) \
-    void SAL_CALL classname::methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) \
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
@@ -126,7 +126,7 @@ namespace dbaui
     }                                                                                       \
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(classname, listenerclass, methodname, eventtype) \
-    sal_Bool SAL_CALL classname::methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    sal_Bool SAL_CALL classname::methodname(const eventtype& e) throw (css::uno::RuntimeException, std::exception) \
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
@@ -139,21 +139,21 @@ namespace dbaui
 
     // helper for classes which do event multiplexing
     #define IMPLEMENT_LISTENER_ADMINISTRATION(classname, listenernamespace, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
-    void SAL_CALL classname::add##listenerdesc(const ::com::sun::star::uno::Reference< ::com::sun::star::listenernamespace::X##listenerdesc >& l) throw(::com::sun::star::uno::RuntimeException, std::exception)\
+    void SAL_CALL classname::add##listenerdesc(const css::uno::Reference< css::listenernamespace::X##listenerdesc >& l) throw(css::uno::RuntimeException, std::exception)\
     {                                                                                       \
         multiplexer.addInterface(l);                                                            \
         if (multiplexer.getLength() == 1)                                                   \
         {                                                                                   \
-            ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->add##listenerdesc(&multiplexer);                              \
         }                                                                                   \
     }                                                                                       \
-    void SAL_CALL classname::remove##listenerdesc(const ::com::sun::star::uno::Reference< ::com::sun::star::listenernamespace::X##listenerdesc >& l) throw(::com::sun::star::uno::RuntimeException, std::exception)\
+    void SAL_CALL classname::remove##listenerdesc(const css::uno::Reference< css::listenernamespace::X##listenerdesc >& l) throw(css::uno::RuntimeException, std::exception)\
     {                                                                                       \
         if (multiplexer.getLength() == 1)                                                   \
         {                                                                                   \
-            ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->remove##listenerdesc(&multiplexer);                           \
         }                                                                                   \
@@ -163,7 +163,7 @@ namespace dbaui
     #define STOP_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
     if (multiplexer.getLength())                                                            \
     {                                                                                   \
-        ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                          \
             xBroadcaster->remove##listenerdesc(&multiplexer);                           \
     }                                                                                   \
@@ -171,7 +171,7 @@ namespace dbaui
     #define START_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
     if (multiplexer.getLength())                                                        \
     {                                                                                   \
-        ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                          \
             xBroadcaster->add##listenerdesc(&multiplexer);                              \
     }                                                                                   \
@@ -191,17 +191,17 @@ namespace dbaui
     public:                                                                                 \
         classname( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );                    \
         DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(                        \
-            const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+        virtual css::uno::Any  SAL_CALL queryInterface(                        \
+            const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
                                                                                             \
-        /* ::com::sun::star::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
+        /* css::lang::XEventListener */                                        \
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
                                                                                             \
         virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions SAL_OVERRIDE;             \
                                                                                             \
     public:                                                                                 \
-        void addInterface(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener);    \
-        void removeInterface(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener); \
+        void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);    \
+        void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener); \
                                                                                             \
         void disposeAndClear();                                                             \
                                                                                             \
@@ -222,20 +222,20 @@ namespace dbaui
     {                                                                                       \
     }                                                                                       \
                                                                                             \
-    ::com::sun::star::uno::Any  SAL_CALL classname::queryInterface(                         \
-        const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) \
+    css::uno::Any  SAL_CALL classname::queryInterface(                         \
+        const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) \
     {                                                                                       \
-        ::com::sun::star::uno::Any aReturn =                                                \
+        css::uno::Any aReturn =                                                \
             OSbaWeakSubObject::queryInterface(_rType);                                          \
         if (!aReturn.hasValue())                                                            \
             aReturn = ::cppu::queryInterface(_rType,                                        \
                 static_cast< listenerclass* >(this),                                        \
-                static_cast< ::com::sun::star::lang::XEventListener* >(static_cast< listenerclass* >(this)) \
+                static_cast< css::lang::XEventListener* >(static_cast< listenerclass* >(this)) \
             );                                                                              \
                                                                                             \
         return aReturn;                                                                     \
     }                                                                                       \
-    void SAL_CALL classname::disposing(const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException, std::exception)\
+    void SAL_CALL classname::disposing(const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)\
     {                                                                                       \
     }                                                                                       \
                                                                                             \
@@ -252,27 +252,27 @@ namespace dbaui
     }                                                                                       \
                                                                                             \
     void classname::addInterface(const OUString& rName,                              \
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener)    \
+            const css::uno::Reference< css::uno::XInterface > & rListener)    \
     {                                                                                       \
         m_aListeners.addInterface(rName, rListener);                                        \
     }                                                                                       \
                                                                                             \
     void classname::removeInterface(const OUString& rName,                           \
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener)    \
+            const css::uno::Reference< css::uno::XInterface > & rListener)    \
     {                                                                                       \
         m_aListeners.removeInterface(rName, rListener);                                     \
     }                                                                                       \
                                                                                             \
     void classname::disposeAndClear()                                                       \
     {                                                                                       \
-        ::com::sun::star::lang::EventObject aEvt(m_rParent);                                \
+        css::lang::EventObject aEvt(m_rParent);                                \
         m_aListeners.disposeAndClear(aEvt);                                                             \
     }                                                                                       \
                                                                                             \
     sal_Int32 classname::getOverallLen() const                                              \
     {                                                                                       \
         sal_Int32 nLen = 0;                                                                 \
-        ::com::sun::star::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes();   \
+        css::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes();   \
         const OUString* pContained = aContained.getConstArray();                            \
         for (   sal_Int32 i=0; i<aContained.getLength(); ++i, ++pContained)                 \
         {                                                                                   \
@@ -295,21 +295,21 @@ namespace dbaui
 
     // helper for classes which do property event multiplexing
     #define IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(classname, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
-    void SAL_CALL classname::add##listenerdesc(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)\
+    void SAL_CALL classname::add##listenerdesc(const OUString& rName, const css::uno::Reference< css::beans::X##listenerdesc >& l ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)\
     {                                                                                       \
         multiplexer.addInterface(rName, l);                                                 \
         if (multiplexer.getOverallLen() == 1)                                               \
         {                                                                                   \
-            ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                           \
         }                                                                                   \
     }                                                                                       \
-    void SAL_CALL classname::remove##listenerdesc(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)\
+    void SAL_CALL classname::remove##listenerdesc(const OUString& rName, const css::uno::Reference< css::beans::X##listenerdesc >& l ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)\
     {                                                                                       \
         if (multiplexer.getOverallLen() == 1)                                               \
         {                                                                                   \
-            ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                        \
         }                                                                                   \
@@ -319,7 +319,7 @@ namespace dbaui
     #define STOP_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
     if (multiplexer.getOverallLen())                                                        \
     {                                                                                       \
-        ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                              \
             xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                            \
     }                                                                                       \
@@ -327,75 +327,75 @@ namespace dbaui
     #define START_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
     if (multiplexer.getOverallLen())                                                        \
     {                                                                                       \
-        ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
+        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                              \
             xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                               \
     }                                                                                       \
 
     // some listener multiplexers
-    // ::com::sun::star::frame::XStatusListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXStatusMultiplexer, ::com::sun::star::frame::XStatusListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(statusChanged, ::com::sun::star::frame::FeatureStateEvent)
+    // css::frame::XStatusListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXStatusMultiplexer, css::frame::XStatusListener)
+        DECLARE_MULTIPLEXER_VOID_METHOD(statusChanged, css::frame::FeatureStateEvent)
 
     private:
-        ::com::sun::star::frame::FeatureStateEvent  m_aLastKnownStatus;
+        css::frame::FeatureStateEvent  m_aLastKnownStatus;
     public:                                                                                 \
-        inline ::com::sun::star::frame::FeatureStateEvent getLastEvent( ) const { return m_aLastKnownStatus; }
+        inline css::frame::FeatureStateEvent getLastEvent( ) const { return m_aLastKnownStatus; }
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::form::XLoadListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(loaded, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(unloaded, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(unloading, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(reloading, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(reloaded, ::com::sun::star::lang::EventObject)
+    // css::form::XLoadListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXLoadMultiplexer, css::form::XLoadListener)
+        DECLARE_MULTIPLEXER_VOID_METHOD(loaded, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(unloaded, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(unloading, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(reloading, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(reloaded, css::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::form::XDatabaseParameterListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXParameterMultiplexer, ::com::sun::star::form::XDatabaseParameterListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveParameter, ::com::sun::star::form::DatabaseParameterEvent)
+    // css::form::XDatabaseParameterListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener)
+        DECLARE_MULTIPLEXER_BOOL_METHOD(approveParameter, css::form::DatabaseParameterEvent)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::form::XSubmitListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXSubmitMultiplexer, ::com::sun::star::form::XSubmitListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveSubmit, ::com::sun::star::lang::EventObject)
+    // css::form::XSubmitListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXSubmitMultiplexer, css::form::XSubmitListener)
+        DECLARE_MULTIPLEXER_BOOL_METHOD(approveSubmit, css::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::form::XResetListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXResetMultiplexer, ::com::sun::star::form::XResetListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveReset, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(resetted, ::com::sun::star::lang::EventObject)
+    // css::form::XResetListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXResetMultiplexer, css::form::XResetListener)
+        DECLARE_MULTIPLEXER_BOOL_METHOD(approveReset, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(resetted, css::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::sdbc::XRowSetListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRowSetMultiplexer, ::com::sun::star::sdbc::XRowSetListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(cursorMoved, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(rowChanged, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_VOID_METHOD(rowSetChanged, ::com::sun::star::lang::EventObject)
+    // css::sdbc::XRowSetListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener)
+        DECLARE_MULTIPLEXER_VOID_METHOD(cursorMoved, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(rowChanged, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_VOID_METHOD(rowSetChanged, css::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::sdb::XRowSetApproveListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRowSetApproveMultiplexer, ::com::sun::star::sdb::XRowSetApproveListener)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveCursorMove, ::com::sun::star::lang::EventObject)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveRowChange, ::com::sun::star::sdb::RowChangeEvent)
-        DECLARE_MULTIPLEXER_BOOL_METHOD(approveRowSetChange, ::com::sun::star::lang::EventObject)
+    // css::sdb::XRowSetApproveListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener)
+        DECLARE_MULTIPLEXER_BOOL_METHOD(approveCursorMove, css::lang::EventObject)
+        DECLARE_MULTIPLEXER_BOOL_METHOD(approveRowChange, css::sdb::RowChangeEvent)
+        DECLARE_MULTIPLEXER_BOOL_METHOD(approveRowSetChange, css::lang::EventObject)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::sdb::XSQLErrorListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXSQLErrorMultiplexer, ::com::sun::star::sdb::XSQLErrorListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(errorOccured, ::com::sun::star::sdb::SQLErrorEvent)
+    // css::sdb::XSQLErrorListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener)
+        DECLARE_MULTIPLEXER_VOID_METHOD(errorOccured, css::sdb::SQLErrorEvent)
     END_DECLARE_LISTENER_MULTIPLEXER()
 
-    // ::com::sun::star::beans::XPropertyChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, ::com::sun::star::beans::XPropertyChangeListener, propertyChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::uno::RuntimeException, std::exception))
+    // css::beans::XPropertyChangeListener
+    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, css::beans::XPropertyChangeListener, propertyChange, css::beans::PropertyChangeEvent, (css::uno::RuntimeException, std::exception))
 
-    // ::com::sun::star::beans::XVetoableChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, ::com::sun::star::beans::XVetoableChangeListener, vetoableChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException, std::exception))
+    // css::beans::XVetoableChangeListener
+    DECLARE_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, css::beans::XVetoableChangeListener, vetoableChange, css::beans::PropertyChangeEvent, (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception))
 
-    // ::com::sun::star::beans::XPropertiesChangeListener
-    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPropertiesChangeMultiplexer, ::com::sun::star::beans::XPropertiesChangeListener)
-        DECLARE_MULTIPLEXER_VOID_METHOD(propertiesChange, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >)
+    // css::beans::XPropertiesChangeListener
+    BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener)
+        DECLARE_MULTIPLEXER_VOID_METHOD(propertiesChange, css::uno::Sequence< css::beans::PropertyChangeEvent >)
     END_DECLARE_LISTENER_MULTIPLEXER()
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
     // forwards _all_ changes to _all_ listeners

@@ -49,7 +49,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
+namespace CopyTableOperation = css::sdb::application::CopyTableOperation;
 
 // Klasse OCopyTable
 OCopyTable::OCopyTable(vcl::Window * pParent)

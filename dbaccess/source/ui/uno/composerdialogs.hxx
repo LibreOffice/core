@@ -44,14 +44,14 @@ namespace dbaui
         OModuleClient m_aModuleClient;
     protected:
         // <properties>
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
+        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
                         m_xComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+        css::uno::Reference< css::sdbc::XRowSet >
                         m_xRowSet;
         // </properties>
 
     protected:
-        ComposerDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        ComposerDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         virtual ~ComposerDialog();
 
     public:
@@ -64,8 +64,8 @@ namespace dbaui
         // own overridables
         virtual VclPtr<Dialog> createComposerDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::container::XNameAccess >& _rxColumns
         ) = 0;
 
     private:
@@ -78,7 +78,7 @@ namespace dbaui
     {
     public:
         RowsetFilterDialog(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         DECLARE_SERVICE_INFO_STATIC( );
@@ -87,14 +87,14 @@ namespace dbaui
         // own overridables
         virtual VclPtr<Dialog> createComposerDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::container::XNameAccess >& _rxColumns
         ) SAL_OVERRIDE;
 
         // OGenericUnoDialog overridables
         virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     };
 
@@ -103,7 +103,7 @@ namespace dbaui
     {
     public:
         RowsetOrderDialog(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         DECLARE_SERVICE_INFO_STATIC( );
@@ -112,14 +112,14 @@ namespace dbaui
         // own overridables
         virtual VclPtr<Dialog> createComposerDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::container::XNameAccess >& _rxColumns
         ) SAL_OVERRIDE;
 
         // OGenericUnoDialog overridables
         virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 }   // namespace dbaui

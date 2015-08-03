@@ -176,7 +176,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     saveCurrentFieldDescData();
 }
 
-::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
+css::lang::Locale  OWizTypeSelectControl::GetLocale() const
 {
     return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->GetLocale();
 }
@@ -196,12 +196,12 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
     return &static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->getDestTypeInfo();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
+css::uno::Reference< css::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
     return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->m_xDestConnection->getMetaData();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OWizTypeSelectControl::getConnection()
+css::uno::Reference< css::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
     return static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pParent->m_xDestConnection;
 }

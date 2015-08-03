@@ -32,10 +32,10 @@ class OCommandBase
 {
 public: // need public access
 // <properties>
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
-                                                m_aLayoutInformation;
+    css::uno::Sequence< css::beans::PropertyValue>
+                                         m_aLayoutInformation;
     OUString                             m_sCommand;
-    bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
+    bool                                 m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
     OUString                             m_sUpdateTableName;
     OUString                             m_sUpdateSchemaName;
     OUString                             m_sUpdateCatalogName;

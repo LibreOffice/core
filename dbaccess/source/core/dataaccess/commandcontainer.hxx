@@ -30,7 +30,7 @@ namespace dbaccess
 {
 // OCommandContainer
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XSingleServiceFactory
+typedef ::cppu::ImplHelper1 <   css::lang::XSingleServiceFactory
                             >   OCommandContainer_BASE;
 
 class OCommandContainer : public ODefinitionContainer
@@ -42,8 +42,8 @@ public:
     /** constructs the container.<BR>
     */
     OCommandContainer(
-         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+         const css::uno::Reference< css::uno::XComponentContext >& _xORB
+        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,bool _bTables
         );
@@ -56,14 +56,14 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSingleServiceFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual ~OCommandContainer();
 
     // ODefinitionContainer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(const OUString& _rName) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::ucb::XContent > createObject(const OUString& _rName) SAL_OVERRIDE;
 
 protected:
     // OContentHelper overridables

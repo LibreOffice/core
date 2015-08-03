@@ -28,15 +28,15 @@ namespace dbaxml
     class ODBFilter;
     class OXMLColumn : public SvXMLImportContext
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xParentContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    m_xTable;
+        css::uno::Reference< css::container::XNameAccess > m_xParentContainer;
+        css::uno::Reference< css::beans::XPropertySet >    m_xTable;
 
-        OUString m_sName;
-        OUString m_sStyleName;
-        OUString m_sCellStyleName;
-        OUString m_sHelpMessage;
-        ::com::sun::star::uno::Any m_aDefaultValue;
-        bool        m_bHidden;
+        OUString      m_sName;
+        OUString      m_sStyleName;
+        OUString      m_sCellStyleName;
+        OUString      m_sHelpMessage;
+        css::uno::Any m_aDefaultValue;
+        bool          m_bHidden;
 
         ODBFilter& GetOwnImport();
     public:
@@ -44,9 +44,9 @@ namespace dbaxml
         OXMLColumn( ODBFilter& rImport
                     , sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&    _xTable
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
+                    ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLColumn();
         virtual void EndElement() SAL_OVERRIDE;

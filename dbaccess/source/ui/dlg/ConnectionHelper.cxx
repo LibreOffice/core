@@ -297,7 +297,7 @@ namespace dbaui
                 Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);
 
                 // collect all Mozilla Profiles
-                ::com::sun::star::uno::Sequence< OUString > list;
+                css::uno::Sequence< OUString > list;
 
                 xMozillaBootstrap->getProfileList( profileType, list );
                 const OUString * pArray = list.getConstArray();
@@ -539,7 +539,7 @@ namespace dbaui
     {
         ::ucbhelper::Content aCheckExistence;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
-        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler(
+        Reference< css::task::XInteractionHandler > xInteractionHandler(
             task::InteractionHandler::createWithParent(m_xORB, 0), UNO_QUERY );
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;

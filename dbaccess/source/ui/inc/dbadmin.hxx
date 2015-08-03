@@ -55,7 +55,7 @@ private:
 
     bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
-    sal_uInt16                  m_nMainPageID;
+    sal_uInt16          m_nMainPageID;
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -63,7 +63,7 @@ public:
     */
     ODbAdminDialog(vcl::Window* pParent,
         SfxItemSet* _pItems,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+        const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
     virtual ~ODbAdminDialog();
     virtual void dispose() SAL_OVERRIDE;
@@ -81,15 +81,15 @@ public:
         @param  _rName
             The name of the data source
     */
-    void selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName);
+    void selectDataSource(const css::uno::Any& _aDataSourceName);
 
     virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
     virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const SAL_OVERRIDE;
-    virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const SAL_OVERRIDE;
+    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::sdbc::XDriver > getDriver() SAL_OVERRIDE;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
     virtual void clearPassword() SAL_OVERRIDE;
     virtual bool saveDatasource() SAL_OVERRIDE;
@@ -109,9 +109,9 @@ protected:
 
 private:
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
-    void impl_selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName);
+    void impl_selectDataSource(const css::uno::Any& _aDataSourceName);
     /// reset the tag pages according to m_sCurrentDatasource and <arg>_rxDatasource</arg>
-    void impl_resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
+    void impl_resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);
 
     enum ApplyResult
     {

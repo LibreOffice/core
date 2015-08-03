@@ -60,10 +60,10 @@ namespace dbaui
     class OTableDesignCellUndoAct : public OTableDesignUndoAct
     {
     protected:
-        sal_uInt16  m_nCol;
-        long    m_nRow;
-        ::com::sun::star::uno::Any  m_sOldText;
-        ::com::sun::star::uno::Any  m_sNewText;
+        sal_uInt16     m_nCol;
+        long           m_nRow;
+        css::uno::Any  m_sOldText;
+        css::uno::Any  m_sNewText;
 
         virtual void    Undo() SAL_OVERRIDE;
         virtual void    Redo() SAL_OVERRIDE;

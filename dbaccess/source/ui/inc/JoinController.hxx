@@ -55,10 +55,10 @@ namespace dbaui
         ::std::unique_ptr< AddTableDialogContext >    m_pDialogContext;
         Point                                   m_aMinimumTableViewSize;
 
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
+        // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         /** loads the information for the windows.
             @param  i_rViewSettings
@@ -80,7 +80,7 @@ namespace dbaui
 
         virtual ~OJoinController();
     public:
-        OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
+        OJoinController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         // attribute access
         inline TTableWindowData&        getTableWindowData()     { return m_vTableData; }
@@ -117,12 +117,12 @@ namespace dbaui
 
         // UNO interface overridables
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XComponent
+        // css::lang::XComponent
         virtual void    SAL_CALL disposing() SAL_OVERRIDE;
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XController
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // misc
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state

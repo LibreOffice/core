@@ -238,7 +238,7 @@ OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) cons
 
 void OFieldDescControl::Init()
 {
-    Reference< ::com::sun::star::util::XNumberFormatter > xFormatter = GetFormatter();
+    Reference< css::util::XNumberFormatter > xFormatter = GetFormatter();
     ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
@@ -1664,7 +1664,7 @@ bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr, sal_
     {
         if (!_nFormatKey)
         {
-            Reference< ::com::sun::star::util::XNumberFormatTypes> xNumberTypes(GetFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
+            Reference< css::util::XNumberFormatTypes> xNumberTypes(GetFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
             OSL_ENSURE(xNumberTypes.is(),"XNumberFormatTypes is null!");
 
             _nFormatKey = ::dbtools::getDefaultNumberFormat( _pFieldDescr->GetType(),
@@ -1674,7 +1674,7 @@ bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr, sal_
                 GetLocale());
         }
         sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(GetFormatter(),_nFormatKey);
-        bTextFormat = (nNumberFormat == ::com::sun::star::util::NumberFormat::TEXT);
+        bTextFormat = (nNumberFormat == css::util::NumberFormat::TEXT);
     }
     catch(const Exception&)
     {
@@ -1716,7 +1716,7 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
             else
                 _pFieldDescr->GetControlDefault() >>= nValue;
 
-            Reference< ::com::sun::star::util::XNumberFormatter> xNumberFormatter = GetFormatter();
+            Reference< css::util::XNumberFormatter> xNumberFormatter = GetFormatter();
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             OUString sFormat;
@@ -1728,13 +1728,13 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
                 ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,OUString("Locale")) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
-                if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE
-                    || (nNumberFormat & ::com::sun::star::util::NumberFormat::DATETIME) == ::com::sun::star::util::NumberFormat::DATETIME )
+                if(     (nNumberFormat & css::util::NumberFormat::DATE)    == css::util::NumberFormat::DATE
+                    || (nNumberFormat & css::util::NumberFormat::DATETIME) == css::util::NumberFormat::DATETIME )
                 {
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
 
-                Reference< ::com::sun::star::util::XNumberFormatPreviewer> xPreviewer(xNumberFormatter,UNO_QUERY);
+                Reference< css::util::XNumberFormatPreviewer> xPreviewer(xNumberFormatter,UNO_QUERY);
                 OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
                 sDefault = xPreviewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }

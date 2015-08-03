@@ -114,7 +114,7 @@ namespace dbaccess
             virtual void SAL_CALL queryTermination( const lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL notifyTermination( const lang::EventObject& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
 
         DatabaseDocumentLoader::DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext )
@@ -270,7 +270,7 @@ Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( 
 void ODatabaseContext::disposing()
 {
     // notify our listener
-    com::sun::star::lang::EventObject aDisposeEvent(static_cast< XContainer* >(this));
+    css::lang::EventObject aDisposeEvent(static_cast< XContainer* >(this));
     m_aContainerListeners.disposeAndClear(aDisposeEvent);
 
     // dispose the data sources
@@ -590,7 +590,7 @@ void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Refer
     m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( _Listener );
 }
 
-// ::com::sun::star::container::XElementAccess
+// css::container::XElementAccess
 Type ODatabaseContext::getElementType(  ) throw(RuntimeException, std::exception)
 {
     return cppu::UnoType<XDataSource>::get();
@@ -604,14 +604,14 @@ sal_Bool ODatabaseContext::hasElements() throw( RuntimeException, std::exception
     return 0 != getElementNames().getLength();
 }
 
-// ::com::sun::star::container::XEnumerationAccess
-Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration() throw( RuntimeException, std::exception )
+// css::container::XEnumerationAccess
+Reference< css::container::XEnumeration >  ODatabaseContext::createEnumeration() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByName(static_cast<XNameAccess*>(this));
 }
 
-// ::com::sun::star::container::XNameAccess
+// css::container::XNameAccess
 Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementException,
                                                           WrappedTargetException, RuntimeException, std::exception )
 {

@@ -50,8 +50,8 @@ using namespace dbaccess;
 using namespace dbtools;
 
 
-OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xStatement,
+OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
+                       const css::uno::Reference< css::uno::XInterface >& _xStatement,
                        bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
@@ -100,7 +100,7 @@ OResultSet::~OResultSet()
 
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > OResultSet::getTypes() throw (RuntimeException, std::exception)
 {
     OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
@@ -114,7 +114,7 @@ Sequence< sal_Int8 > OResultSet::getImplementationId() throw (RuntimeException, 
     return css::uno::Sequence<sal_Int8>();
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 Any OResultSet::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = OResultSetBase::queryInterface( rType );
@@ -186,7 +186,7 @@ Sequence< OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeExce
     return aSNS;
 }
 
-// com::sun::star::beans::XPropertySet
+// css::beans::XPropertySet
 Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
@@ -275,7 +275,7 @@ void OResultSet::clearWarnings() throw( SQLException, RuntimeException, std::exc
     m_aWarnings.clearWarnings();
 }
 
-// ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+// css::sdbc::XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > OResultSet::getMetaData() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
@@ -284,7 +284,7 @@ Reference< XResultSetMetaData > OResultSet::getMetaData() throw( SQLException, R
     return Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY)->getMetaData();
 }
 
-// ::com::sun::star::sdbc::XColumnLocate
+// css::sdbc::XColumnLocate
 sal_Int32 OResultSet::findColumn(const OUString& columnName) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
@@ -318,8 +318,8 @@ namespace
     }
 }
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns() throw( RuntimeException, std::exception )
+// css::sdbcx::XColumnsSupplier
+Reference< css::container::XNameAccess > OResultSet::getColumns() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -388,7 +388,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns() t
     return m_pColumns;
 }
 
-// ::com::sun::star::sdbc::XRow
+// css::sdbc::XRow
 sal_Bool OResultSet::wasNull() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
@@ -469,7 +469,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getBytes(columnIndex);
 }
 
-::com::sun::star::util::Date OResultSet::getDate(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
+css::util::Date OResultSet::getDate(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -477,7 +477,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getDate(columnIndex);
 }
 
-::com::sun::star::util::Time OResultSet::getTime(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
+css::util::Time OResultSet::getTime(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -485,7 +485,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getTime(columnIndex);
 }
 
-::com::sun::star::util::DateTime OResultSet::getTimestamp(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
+css::util::DateTime OResultSet::getTimestamp(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -493,7 +493,7 @@ Sequence< sal_Int8 > OResultSet::getBytes(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getTimestamp(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
+Reference< css::io::XInputStream >  OResultSet::getBinaryStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -501,7 +501,7 @@ Reference< ::com::sun::star::io::XInputStream >  OResultSet::getBinaryStream(sal
     return m_xDelegatorRow->getBinaryStream(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
+Reference< css::io::XInputStream >  OResultSet::getCharacterStream(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -509,7 +509,7 @@ Reference< ::com::sun::star::io::XInputStream >  OResultSet::getCharacterStream(
     return m_xDelegatorRow->getCharacterStream(columnIndex);
 }
 
-Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException, std::exception )
+Any OResultSet::getObject(sal_Int32 columnIndex, const Reference< css::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -549,7 +549,7 @@ Reference< XArray >  OResultSet::getArray(sal_Int32 columnIndex) throw( SQLExcep
     return m_xDelegatorRow->getArray(columnIndex);
 }
 
-// ::com::sun::star::sdbc::XRowUpdate
+// css::sdbc::XRowUpdate
 void OResultSet::updateNull(sal_Int32 columnIndex) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
@@ -650,7 +650,7 @@ void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& 
     m_xDelegatorRowUpdate->updateBytes(columnIndex, x);
 }
 
-void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util::Date& x) throw( SQLException, RuntimeException, std::exception )
+void OResultSet::updateDate(sal_Int32 columnIndex, const css::util::Date& x) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -660,7 +660,7 @@ void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util:
     m_xDelegatorRowUpdate->updateDate(columnIndex, x);
 }
 
-void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException, std::exception )
+void OResultSet::updateTime(sal_Int32 columnIndex, const css::util::Time& x) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -670,7 +670,7 @@ void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util:
     m_xDelegatorRowUpdate->updateTime(columnIndex, x);
 }
 
-void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException, std::exception )
+void OResultSet::updateTimestamp(sal_Int32 columnIndex, const css::util::DateTime& x) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -680,7 +680,7 @@ void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::
     m_xDelegatorRowUpdate->updateTimestamp(columnIndex, x);
 }
 
-void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException, std::exception )
+void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -690,7 +690,7 @@ void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::co
     m_xDelegatorRowUpdate->updateBinaryStream(columnIndex, x, length);
 }
 
-void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException, std::exception )
+void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
@@ -720,7 +720,7 @@ void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x) throw( SQLExc
     m_xDelegatorRowUpdate->updateObject(columnIndex, x);
 }
 
-// ::com::sun::star::sdbc::XResultSet
+// css::sdbc::XResultSet
 sal_Bool OResultSet::next() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
@@ -865,7 +865,7 @@ Reference< XInterface > OResultSet::getStatement() throw( SQLException, RuntimeE
     return m_aStatement;
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
+// css::sdbcx::XRowLocate
 Any OResultSet::getBookmark() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
@@ -926,7 +926,7 @@ sal_Int32 OResultSet::hashBookmark(const Any& bookmark) throw( SQLException, Run
     return Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY)->hashBookmark(bookmark);
 }
 
-// ::com::sun::star::sdbc::XResultSetUpdate
+// css::sdbc::XResultSetUpdate
 void OResultSet::insertRow() throw( SQLException, RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);

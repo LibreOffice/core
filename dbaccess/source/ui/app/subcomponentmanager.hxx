@@ -37,7 +37,7 @@ namespace dbaui
     class OApplicationController;
 
     // SubComponentManager
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                   >   SubComponentManager_Base;
     class SubComponentManager : public SubComponentManager_Base
     {
@@ -48,13 +48,13 @@ namespace dbaui
         void    disposing();
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDatabaseDocumentUI helpers
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> >
+        css::uno::Sequence< css::uno::Reference< css::lang::XComponent> >
                     getSubComponents() const;
         bool        closeSubComponents();
 
@@ -63,7 +63,7 @@ namespace dbaui
                         const OUString&  _rName,
                         const sal_Int32         _nComponentType,
                         const ElementOpenMode   _eOpenMode,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
+                        const css::uno::Reference< css::lang::XComponent >&
                                                 _rxComponent
                     );
         bool        empty() const;
@@ -78,7 +78,7 @@ namespace dbaui
                         const OUString& _rName,
                         const sal_Int32 _nComponentType,
                         const ElementOpenMode _eOpenMode,
-                              ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rComponent
+                              css::uno::Reference< css::lang::XComponent >& o_rComponent
                     ) const;
 
         /** closes all frames of the given component
@@ -107,7 +107,7 @@ namespace dbaui
                 <TRUE/> if and only if the component was found
         */
         bool        lookupSubComponent(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rComponent,
+                        const css::uno::Reference< css::lang::XComponent >& i_rComponent,
                               OUString&  o_rName,
                               sal_Int32&        o_rComponentType
                     );

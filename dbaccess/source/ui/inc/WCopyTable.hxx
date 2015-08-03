@@ -113,30 +113,30 @@ namespace dbaui
         /** copies the UI settings of the object to the given target object. Might be
             ignored by implementations which do not have Ui settings.
         */
-        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const = 0;
+        virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const = 0;
         /// retrieves the column names of the to-be-copied object
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual css::uno::Sequence< OUString >
                                     getColumnNames() const = 0;
         /// retrieves the names of the primary keys of the to-be-copied object
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual css::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const = 0;
         /// creates a OFieldDescription for the given column of the to-be-copied object
         virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const = 0;
         /// returns the SELECT statement which can be used to retrieve the data of the to-be-copied object
-        virtual OUString     getSelectStatement() const = 0;
+        virtual OUString            getSelectStatement() const = 0;
 
         /** copies the filter and sorting
         *
         * \return
         */
-        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const = 0;
+        virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection,const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const = 0;
 
         /** returns the prepared statement which can be used to retrieve the data of the to-be-copied object
 
             The default implementation of this method will simply prepare a statement with the return value
             of ->getSelectStatement.
         */
-        virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+        virtual ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement >
                                     getPreparedSelectStatement() const = 0;
 
         virtual ~ICopyTableSourceObject();
@@ -146,30 +146,30 @@ namespace dbaui
     class ObjectCopySource : public ICopyTableSourceObject
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xObjectPSI;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xObjectColumns;
+        css::uno::Reference< css::sdbc::XConnection >         m_xConnection;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
+        css::uno::Reference< css::beans::XPropertySet >       m_xObject;
+        css::uno::Reference< css::beans::XPropertySetInfo >   m_xObjectPSI;
+        css::uno::Reference< css::container::XNameAccess >    m_xObjectColumns;
 
     public:
         ObjectCopySource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxObject
         );
 
         // ICopyTableSourceObject overridables
-        virtual OUString     getQualifiedObjectName() const SAL_OVERRIDE;
+        virtual OUString            getQualifiedObjectName() const SAL_OVERRIDE;
         virtual bool                isView() const SAL_OVERRIDE;
-        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
-        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+        virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection, const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >
                                     getColumnNames() const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual css::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const SAL_OVERRIDE;
         virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const SAL_OVERRIDE;
         virtual OUString     getSelectStatement() const SAL_OVERRIDE;
-        virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+        virtual ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement >
                                     getPreparedSelectStatement() const SAL_OVERRIDE;
     };
 
@@ -177,38 +177,38 @@ namespace dbaui
     class NamedTableCopySource : public ICopyTableSourceObject
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
-        OUString                                                                 m_sTableName;
-        OUString                                                                 m_sTableCatalog;
-        OUString                                                                 m_sTableSchema;
-        OUString                                                                 m_sTableBareName;
-        ::std::vector< OFieldDescription >                                              m_aColumnInfo;
-        ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >         m_xStatement;
+        css::uno::Reference< css::sdbc::XConnection >                      m_xConnection;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >                m_xMetaData;
+        OUString                                                           m_sTableName;
+        OUString                                                           m_sTableCatalog;
+        OUString                                                           m_sTableSchema;
+        OUString                                                           m_sTableBareName;
+        ::std::vector< OFieldDescription >                                 m_aColumnInfo;
+        ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement >         m_xStatement;
 
     public:
         NamedTableCopySource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const OUString& _rTableName
         );
 
         // ICopyTableSourceObject overridables
         virtual OUString     getQualifiedObjectName() const SAL_OVERRIDE;
         virtual bool                isView() const SAL_OVERRIDE;
-        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
-        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+        virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection,const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString >
                                     getColumnNames() const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual css::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const SAL_OVERRIDE;
         virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const SAL_OVERRIDE;
         virtual OUString     getSelectStatement() const SAL_OVERRIDE;
-        virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+        virtual ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement >
                                     getPreparedSelectStatement() const SAL_OVERRIDE;
 
     private:
         void    impl_ensureColumnInfo_throw();
-        ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+        ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement >
                 impl_ensureStatement_throw();
     };
 
@@ -254,20 +254,20 @@ namespace dbaui
         ODatabaseExport::TPositions             m_vColumnPos;
         ::std::vector<sal_Int32>                m_vColumnTypes;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xDestConnection;
+        css::uno::Reference< css::sdbc::XConnection >         m_xDestConnection;
 
-        const ICopyTableSourceObject&                                                   m_rSourceObject;
+        const ICopyTableSourceObject&                         m_rSourceObject;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>  m_xInteractionHandler;
+        css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
+        css::uno::Reference< css::uno::XComponentContext>     m_xContext;
+        css::uno::Reference< css::task::XInteractionHandler>  m_xInteractionHandler;
 
         OUString                m_sTypeNames;       // these type names are the ones out of the resource file
         sal_uInt32              m_nPageCount;
         bool                    m_bDeleteSourceColumns;
         bool                    m_bInterConnectionCopy;    // are we copying between different connections?
 
-        ::com::sun::star::lang::Locale  m_aLocale;
+        css::lang::Locale        m_aLocale;
         OUString                 m_sName;    // for a table the name is composed
         OUString                 m_sSourceName;
         OUString                 m_aKeyName;
@@ -289,8 +289,8 @@ namespace dbaui
                        ODatabaseExport::TColumnVector& _rColVector );
         void construct();
         // need for table creation
-        static void appendColumns( ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns = false );
-        static void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
+        static void appendColumns( css::uno::Reference< css::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns = false );
+        static void appendKey(css::uno::Reference< css::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
         // checks if the type is supported in the destination database
         bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
@@ -303,10 +303,10 @@ namespace dbaui
             const OUString& _rDefaultName,
             sal_Int16 _nOperation,
             const ICopyTableSourceObject&                                                           _rSourceObject,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xSourceConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&     _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>&   _xInteractionHandler
+            const css::uno::Reference< css::sdbc::XConnection >&          _xSourceConnection,
+            const css::uno::Reference< css::sdbc::XConnection >&          _xConnection,
+            const css::uno::Reference< css::uno::XComponentContext >&     _rxContext,
+            const css::uno::Reference< css::task::XInteractionHandler>&   _xInteractionHandler
         );
 
         // used for importing rtf/html sources
@@ -316,11 +316,11 @@ namespace dbaui
             sal_Int16 _nOperation,
             const ODatabaseExport::TColumns& _rDestColumns,
             const ODatabaseExport::TColumnVector& _rSourceColVec,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
+            const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+            const css::uno::Reference< css::util::XNumberFormatter >& _xFormatter,
             TypeSelectionPageFactory _pTypeSelectionPageFactory,
             SvStream& _rTypeSelectionPageArg,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         virtual ~OCopyTableWizard();
@@ -358,10 +358,10 @@ namespace dbaui
         bool            shouldCreatePrimaryKey() const { return m_bCreatePrimaryKeyColumn;}
         void            setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
 
-        static bool     supportsPrimaryKey( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+        static bool     supportsPrimaryKey( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
         bool            supportsPrimaryKey() const { return supportsPrimaryKey( m_xDestConnection ); }
 
-        static bool     supportsViews( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+        static bool     supportsViews( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
         bool            supportsViews() const { return supportsViews( m_xDestConnection ); }
 
         /** returns the name of the primary key
@@ -376,9 +376,9 @@ namespace dbaui
         TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap& getDestTypeInfo()                   const { return m_aDestTypeInfo; }
 
-        ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> GetComponentContext() const { return m_xContext; }
+        css::lang::Locale  GetLocale() const { return m_aLocale; }
+        css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
+        css::uno::Reference< css::uno::XComponentContext> GetComponentContext() const { return m_xContext; }
 
         const ODatabaseExport::TColumns&        getSourceColumns() const{ return m_vSourceColumns; }
         const ODatabaseExport::TColumnVector&   getSrcVector() const    { return m_vSourceVec; }
@@ -390,8 +390,8 @@ namespace dbaui
         */
         void clearDestColumns();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createTable();
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createView() const;
+        css::uno::Reference< css::beans::XPropertySet > createTable();
+        css::uno::Reference< css::beans::XPropertySet > createView() const;
         sal_Int32 getMaxColumnNameLength() const;
 
         void setOperation( const sal_Int16 _nOperation );
@@ -410,7 +410,7 @@ namespace dbaui
 
         void removeColumnNameFromNameMap(const OUString& _sName);
         void showError(const OUString& _sErrorMessage);
-        void showError(const ::com::sun::star::uno::Any& _aError);
+        void showError(const css::uno::Any& _aError);
     };
 }
 

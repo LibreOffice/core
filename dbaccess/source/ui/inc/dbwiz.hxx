@@ -72,8 +72,8 @@ public:
     */
     ODbTypeWizDialog(vcl::Window* pParent
         ,SfxItemSet* _pItems
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
-        ,const ::com::sun::star::uno::Any& _aDataSourceName
+        ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+        ,const css::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialog();
     virtual void dispose() SAL_OVERRIDE;
@@ -82,9 +82,9 @@ public:
     virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const SAL_OVERRIDE;
-    virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const SAL_OVERRIDE;
+    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::sdbc::XDriver > getDriver() SAL_OVERRIDE;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
     virtual void clearPassword() SAL_OVERRIDE;
     virtual bool saveDatasource() SAL_OVERRIDE;
@@ -106,7 +106,7 @@ protected:
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void implSelectDatasource(const OUString& _rRegisteredName);
-    void resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
+    void resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);
 
     enum ApplyResult
     {

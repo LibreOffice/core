@@ -187,7 +187,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(pHelper->aURL, "_self", 0 );
             if ( xDispatch.is() )
             {
-                Reference< ::com::sun::star::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
+                Reference< css::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
                 if ( xEvtB.is() )
                     xEvtB->removeDocumentEventListener(this);
 
@@ -253,7 +253,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         }
 
         m_pStatCL->addInterface(_URL.Complete,Control);
-        Reference< ::com::sun::star::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
+        Reference< css::document::XDocumentEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
         if ( xEvtB.is() )
             xEvtB->addDocumentEventListener(this);
     }
@@ -397,7 +397,7 @@ void SAL_CALL OInterceptor::setMasterDispatchProvider(
     m_xMasterDispatchProvider = NewSupplier;
 }
 
-void SAL_CALL OInterceptor::documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OInterceptor::documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard _rGuard(m_aMutex);
     if ( m_pStatCL &&   Event.EventName == "OnModifyChanged" )
@@ -437,7 +437,7 @@ void SAL_CALL OInterceptor::documentEventOccured( const ::com::sun::star::docume
     }
 }
 
-void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OInterceptor::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 

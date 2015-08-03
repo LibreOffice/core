@@ -69,7 +69,7 @@ namespace dbaui
         m_pBeamer.clear();
         if ( m_xBeamer.is() )
         {
-            Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
+            Reference< css::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
             m_xBeamer = NULL;
             if(xCloseable.is())
                 xCloseable->close(sal_False); // false - holds the ownership of this frame

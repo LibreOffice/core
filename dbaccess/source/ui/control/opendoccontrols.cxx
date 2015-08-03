@@ -121,7 +121,7 @@ namespace dbaui
                 do
                 {
                     // Retrieve popup menu labels
-                    Reference< com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     if ( !xContext.is() )
                         break;
 

@@ -97,7 +97,7 @@ namespace dbaui
         inline OJoinTableView*                  GetParent() const { return m_pParent; }
         virtual void Draw(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         using Window::Draw;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
     };
 }
 #endif

@@ -83,7 +83,7 @@ void OTableColumnDescriptor::impl_registerProperties()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OTableColumnDescriptor");
@@ -406,10 +406,10 @@ OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< X
     OColumnSettings::registerProperties( *this );
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OTableColumnDescriptorWrapper");

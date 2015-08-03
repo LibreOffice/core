@@ -81,13 +81,13 @@ private:
 
 // ODefinitionContainer -  base class of collections of database definition
 //                         documents
-typedef ::cppu::ImplHelper7 <   ::com::sun::star::container::XIndexAccess
-                            ,   ::com::sun::star::container::XNameContainer
-                            ,   ::com::sun::star::container::XEnumerationAccess
-                            ,   ::com::sun::star::container::XContainer
-                            ,   ::com::sun::star::container::XContainerApproveBroadcaster
-                            ,   ::com::sun::star::beans::XPropertyChangeListener
-                            ,   ::com::sun::star::beans::XVetoableChangeListener
+typedef ::cppu::ImplHelper7 <   css::container::XIndexAccess
+                            ,   css::container::XNameContainer
+                            ,   css::container::XEnumerationAccess
+                            ,   css::container::XContainer
+                            ,   css::container::XContainerApproveBroadcaster
+                            ,   css::beans::XPropertyChangeListener
+                            ,   css::beans::XVetoableChangeListener
                             >   ODefinitionContainer_Base;
 
 class ODefinitionContainer
@@ -95,7 +95,7 @@ class ODefinitionContainer
             ,public ODefinitionContainer_Base
 {
 protected:
-    typedef std::map< OUString, ::com::sun::star::uno::WeakReference< ::com::sun::star::ucb::XContent > > Documents;
+    typedef std::map< OUString, css::uno::WeakReference< css::ucb::XContent > > Documents;
     typedef std::vector<Documents::iterator> DocumentsIndexAccess;
 
     enum ContainerOperation
@@ -125,7 +125,7 @@ protected:
     ::cppu::OInterfaceContainerHelper
                             m_aContainerListeners;
 
-    bool                m_bInPropertyChange;
+    bool                    m_bInPropertyChange;
     bool                    m_bCheckSlash;
 
 protected:
@@ -155,13 +155,13 @@ public:
     /** constructs the container.
     */
     ODefinitionContainer(
-          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  _xParentContainer
+          const css::uno::Reference< css::uno::XComponentContext >& _xORB
+        , const css::uno::Reference< css::uno::XInterface >&  _xParentContainer
         , const TContentPtr& _pImpl
         , bool _bCheckSlash = true
         );
 
-// ::com::sun::star::uno::XInterface
+// css::uno::XInterface
     DECLARE_XINTERFACE( )
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
@@ -169,48 +169,48 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XEnumerationAccess
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 _nIndex ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 _nIndex ) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeByName( const OUString& _rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XNameContainer
+    virtual void SAL_CALL insertByName( const OUString& _rName, const css::uno::Any& aElement ) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeByName( const OUString& _rName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XNameReplace
+    virtual void SAL_CALL replaceByName( const OUString& _rName, const css::uno::Any& aElement ) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XNameAccess
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::container::XContainer
-    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::container::XContainer
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContainerApproveBroadcaster
-    virtual void SAL_CALL addContainerApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerApproveListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeContainerApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerApproveListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addContainerApproveListener( const css::uno::Reference< css::container::XContainerApproveListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeContainerApproveListener( const css::uno::Reference< css::container::XContainerApproveListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XVetoableChangeListener
-    virtual void SAL_CALL vetoableChange( const ::com::sun::star::beans::PropertyChangeEvent& aEvent ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL vetoableChange( const css::beans::PropertyChangeEvent& aEvent ) throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     // helper
@@ -220,7 +220,7 @@ protected:
         @param      _rName          the name the object has within the container
         @return                     the newly created object or an empty reference if something went wrong
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(
+    virtual css::uno::Reference< css::ucb::XContent > createObject(
         const OUString& _rName) = 0;
 
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
@@ -231,8 +231,8 @@ protected:
         @throws                         NoSuchElementException if there is no object with the given name.
         @see    createObject
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
-                implGetByName(const OUString& _rName, bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
+    css::uno::Reference< css::ucb::XContent >
+                implGetByName(const OUString& _rName, bool _bCreateIfNecessary) throw (css::container::NoSuchElementException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
@@ -254,7 +254,7 @@ protected:
     */
     void    implAppend(
         const OUString& _rName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxNewObject
+        const css::uno::Reference< css::ucb::XContent >& _rxNewObject
         );
 
     /** remove all references to an object from the container. No plausibility checks are done, e.g. whether
@@ -280,7 +280,7 @@ protected:
     */
     void implReplace(
         const OUString& _rName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxNewObject
+        const css::uno::Reference< css::ucb::XContent >& _rxNewObject
         );
 
     /** notifies our container/approve listeners
@@ -288,20 +288,20 @@ protected:
     void notifyByName(
             ::osl::ResettableMutexGuard& _rGuard,
             const OUString& _rName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewElement,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& xOldElement,
+            const css::uno::Reference< css::ucb::XContent >& _xNewElement,
+            const css::uno::Reference< css::ucb::XContent >& xOldElement,
             ContainerOperation _eOperation,
             ListenerType _eType
         );
 
-    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () const
+    inline SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
     {
         return const_cast< XContainer* >( static_cast< const XContainer* >( this ) );
     }
 
 private:
-    void    addObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
-    void    removeObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
+    void    addObjectListener(const css::uno::Reference< css::ucb::XContent >& _xNewObject);
+    void    removeObjectListener(const css::uno::Reference< css::ucb::XContent >& _xNewObject);
 
     /** approve that the object given may be inserted into the container.
         Should be overridden by derived classes,
@@ -317,7 +317,7 @@ private:
     */
     void approveNewObject(
             const OUString& _sName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxObject
+            const css::uno::Reference< css::ucb::XContent >& _rxObject
         ) const;
 
     inline bool impl_haveAnyListeners_nothrow() const

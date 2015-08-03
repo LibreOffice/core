@@ -32,37 +32,37 @@ namespace dbaccess
 {
 
     // OPropertyForward
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                   >   OPropertyForward_Base;
     class OPropertyForward  :public ::comphelper::OBaseMutex
                             ,public OPropertyForward_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDest;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDestInfo;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDestContainer;
-        OUString     m_sName;
+        css::uno::Reference< css::beans::XPropertySet >       m_xSource;
+        css::uno::Reference< css::beans::XPropertySet >       m_xDest;
+        css::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
+        css::uno::Reference< css::container::XNameAccess >    m_xDestContainer;
+        OUString        m_sName;
         bool            m_bInInsert;
 
     protected:
         virtual ~OPropertyForward();
 
     public:
-        OPropertyForward( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSource,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xDestContainer,
+        OPropertyForward( const css::uno::Reference< css::beans::XPropertySet>& _xSource,
+                          const css::uno::Reference< css::container::XNameAccess>& _xDestContainer,
                           const OUString& _sName,
                           const ::std::vector< OUString >& _aPropertyList
                          );
 
-        // ::com::sun::star::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::beans::XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::lang::XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         inline void setName( const OUString& _sName ) { m_sName = _sName; }
-        void setDefinition( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDest);
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDefinition() const { return m_xDest; }
+        void setDefinition( const css::uno::Reference< css::beans::XPropertySet >& _xDest);
+        inline css::uno::Reference< css::beans::XPropertySet > getDefinition() const { return m_xDest; }
     };
 
 }   // namespace dbaccess

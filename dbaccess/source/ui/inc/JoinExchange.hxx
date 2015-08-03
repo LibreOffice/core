@@ -30,7 +30,7 @@ namespace dbaui
 {
     // OJoinExchObj: Additional data to create Joins in the JoinShell
 
-    typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XUnoTunnel > OJoinExchObj_Base;
+    typedef ::cppu::ImplHelper1< css::lang::XUnoTunnel > OJoinExchObj_Base;
     class OJoinExchObj : public TransferableHelper, public OJoinExchObj_Base
     {
         static OUString         m_sJoinFormat;
@@ -47,16 +47,16 @@ namespace dbaui
 
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
         virtual void SAL_CALL release(  ) throw() SAL_OVERRIDE;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
 
-        static OJoinExchangeData    GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
+        static OJoinExchangeData    GetSourceDescription(const css::uno::Reference< css::datatransfer::XTransferable >& _rxObject);
         static bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID=SotClipboardFormatId::SBA_JOIN);
 
     protected:
@@ -64,7 +64,7 @@ namespace dbaui
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
         virtual void                DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     private:
         using TransferableHelper::StartDrag;

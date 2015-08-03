@@ -324,15 +324,15 @@ namespace dbaui
                 OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
                 sMessage = sMessage.replaceFirst("$file$",_rLinkName);
 
-                com::sun::star::sdbc::SQLException aSQLException;
+                css::sdbc::SQLException aSQLException;
                 aSQLException.Message = sMessage;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
             }
             return xRet;
         }
-        catch(const com::sun::star::io::WrongFormatException &e)
+        catch(const css::io::WrongFormatException &e)
         {
-            com::sun::star::sdbc::SQLException aSQLException;
+            css::sdbc::SQLException aSQLException;
             aSQLException.Message = e.Message;
             aSQLException.Context = e.Context;
             aInfo = dbtools::SQLExceptionInfo(aSQLException);
@@ -349,10 +349,10 @@ namespace dbaui
         catch(const Exception& e)
         {
             Any aAny = ::cppu::getCaughtException();
-            com::sun::star::sdbc::SQLException a;
+            css::sdbc::SQLException a;
             if ( !(aAny >>= a) || (a.ErrorCode != dbtools::ParameterInteractionCancelled) )
             {
-                com::sun::star::sdbc::SQLException aSQLException;
+                css::sdbc::SQLException aSQLException;
                 aSQLException.Message = e.Message;
                 aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);

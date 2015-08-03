@@ -450,7 +450,7 @@ void ODocumentDefinition::closeObject()
     {
         try
         {
-            Reference< com::sun::star::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
+            Reference< css::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
             if ( xCloseable.is() )
                 xCloseable->close(sal_True);
         }
@@ -1200,7 +1200,7 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
             }
             try
             {
-                Reference< com::sun::star::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
+                Reference< css::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
                 if ( xCloseable.is() )
                     xCloseable->close(sal_True);
             }
@@ -1594,7 +1594,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                     Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
                     if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                     {
-                        com::sun::star::io::WrongFormatException aWFE;
+                        css::io::WrongFormatException aWFE;
                         aWFE.Message = DBACORE_RESSTRING( RID_STR_MISSING_EXTENSION );
                         throw aWFE;
                     }

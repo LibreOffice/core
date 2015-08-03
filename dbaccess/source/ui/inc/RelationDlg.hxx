@@ -48,13 +48,13 @@ namespace dbaui
         VclPtr<RadioButton> m_pRB_CascDelNull;
         VclPtr<RadioButton> m_pRB_CascDelDefault;
 
-        VclPtr<OKButton>   m_pPB_OK;
+        VclPtr<OKButton>    m_pPB_OK;
 
-        TTableConnectionData::value_type                                        m_pConnData;
-        TTableConnectionData::value_type                                        m_pOrigConnData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
+        TTableConnectionData::value_type                 m_pConnData;
+        TTableConnectionData::value_type                 m_pOrigConnData;
+        css::uno::Reference< css::sdbc::XConnection >    m_xConnection;
 
-        bool                                                                    m_bTriedOneUpdate;
+        bool                                             m_bTriedOneUpdate;
 
     public:
         ORelationDialog(OJoinTableView* pParent,
@@ -63,7 +63,7 @@ namespace dbaui
         virtual ~ORelationDialog();
         virtual void dispose() SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 
         virtual short Execute() SAL_OVERRIDE;
 

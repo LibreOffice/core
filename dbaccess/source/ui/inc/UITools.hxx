@@ -84,10 +84,10 @@ namespace dbaui
     */
     ::dbtools::SQLExceptionInfo createConnection(
                                     const OUString& _rsDataSourceName,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
+                                    const css::uno::Reference< css::container::XNameAccess >& _xDatabaseContext,
+                                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                                    css::uno::Reference< css::lang::XEventListener>& _rEvtLst,
+                                    css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
     /** creates a new connection and appends the eventlistener
         @param  _xDataSource            the datasource
         @param  _rxContext              the UNO component context
@@ -96,10 +96,10 @@ namespace dbaui
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
     */
     ::dbtools::SQLExceptionInfo createConnection(
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDataSource,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
+                                    const css::uno::Reference< css::beans::XPropertySet >& _xDataSource,
+                                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                                    css::uno::Reference< css::lang::XEventListener>& _rEvtLst,
+                                    css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
 
     /**  creates a error dialog which displays the SQLExceptionInfo. Also it supports a "more" button where detailed information are available
         @param  _rInfo                  the error which should be shown, if the info is not valid no error dialog will appear
@@ -108,7 +108,7 @@ namespace dbaui
     */
     void showError( const ::dbtools::SQLExceptionInfo& _rInfo,
                     vcl::Window* _pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
     /** fills a map and a vector with localized type names
         @param  _rxConnection   the connection to access the metadata
@@ -116,7 +116,7 @@ namespace dbaui
         @param  _rTypeInfoMap   the filled map with the type names
         @param  _rTypeInfoIters the vector filled with map iterators
     */
-    void fillTypeInfo(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
+    void fillTypeInfo(  const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
                         const OUString& _rsTypeNames,
                         OTypeInfoMap& _rTypeInfoMap,
                         ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
@@ -126,30 +126,30 @@ namespace dbaui
         @param  _pFieldDesc the source of the data
     */
     class OFieldDescription;
-    void setColumnProperties(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
+    void setColumnProperties(   const css::uno::Reference< css::beans::XPropertySet>& _rxColumn,
                                 const OFieldDescription* _pFieldDesc);
 
-    OUString createDefaultName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTables,
-                                        const OUString& _sName);
+    OUString createDefaultName(  const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
+                                 const css::uno::Reference< css::container::XNameAccess>& _xTables,
+                                 const OUString& _sName);
 
     /** checks if the given name exists in the database context
     */
     bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+                                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
-    /** maps SvxCellHorJustify to com::sun::star::awt::TextAlign
+    /** maps SvxCellHorJustify to css::awt::TextAlign
         @param SvxCellHorJustify& _eAlignment
-        @return the corresponding com::sun::star::awt::TextAlign
+        @return the corresponding css::awt::TextAlign
     */
     sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment);
 
     /** retrieves a data source given by name or URL, and displays an error if this fails
 
-        Any <type scope="com::sun::star::sdbc">SQLException</type>s which occur will be displayed.
+        Any <type scope="css::sdbc">SQLException</type>s which occur will be displayed.
         Additionally, and Exceptions which indicate a data source name pointing to a non-existent database
         URL will also be denoted. Yet more additionally, and other exceptions will be forwarded to
-        a <type scope="com::sun::star::sdb">InteractionHandler</type>.
+        a <type scope="css::sdb">InteractionHandler</type>.
 
         @param _rDataSourceName
             the URL of the database document, or the name of a registered data source
@@ -160,11 +160,11 @@ namespace dbaui
         @param _pErrorInfo
             takes the error info in case of failure. If <NULL/>, the error is displayed to the user.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >
+    css::uno::Reference< css::sdbc::XDataSource >
         getDataSourceByName(
                 const OUString& _rDataSourceName,
                 vcl::Window* _pErrorMessageParent,
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > _rxContext,
+                css::uno::Reference< css::uno::XComponentContext > _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
 
@@ -172,10 +172,10 @@ namespace dbaui
         or returns a data source when a model is given.
         @param _xObject Either a data source or a model.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getDataSourceOrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
+    css::uno::Reference< css::uno::XInterface > getDataSourceOrModel(const css::uno::Reference< css::uno::XInterface >& _xObject);
 
-    /** maps com::sun::star::awt::TextAlign to SvxCellHorJustify
-        @param com::sun::star::awt::TextAlign& _nAlignment
+    /** maps css::awt::TextAlign to SvxCellHorJustify
+        @param css::awt::TextAlign& _nAlignment
         @return the corresponding SvxCellHorJustify
     */
     SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment);
@@ -184,8 +184,8 @@ namespace dbaui
         @param  _xAffectedCol   Font to be converted
         @param  _xField         Font to be converted
     */
-    void callColumnFormatDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xAffectedCol,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xField,
+    void callColumnFormatDialog(const css::uno::Reference< css::beans::XPropertySet>& _xAffectedCol,
+                                const css::uno::Reference< css::beans::XPropertySet>& _xField,
                                 SvNumberFormatter* _pFormatter,
                                 vcl::Window* _pParent);
 
@@ -204,9 +204,9 @@ namespace dbaui
         @param  _pParent        needed when an error must be shown
         @return false when datsource is not available otherwise true
     */
-    bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+    bool appendToFilter(const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                             const OUString& _sName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                             vcl::Window* _pParent);
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
@@ -238,7 +238,7 @@ namespace dbaui
         @return
             <TRUE/> if so otherwise <FALSE/>
     */
-    bool isSQL92CheckEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+    bool isSQL92CheckEnabled(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
     /** check if the alias name of the table should be added at select statements
         @param  _xConnection
@@ -246,11 +246,11 @@ namespace dbaui
         @return
             <TRUE/> if so otherwise <FALSE/>
     */
-    bool isAppendTableAliasEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+    bool isAppendTableAliasEnabled(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
     /** determines whether when generating SQL statements, AS should be placed before a table alias
     */
-    bool generateAsBeforeTableAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection );
+    bool generateAsBeforeTableAlias( const css::uno::Reference< css::sdbc::XConnection>& _rxConnection );
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
@@ -260,7 +260,7 @@ namespace dbaui
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
-    void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDatasource
+    void fillAutoIncrementValue(const css::uno::Reference< css::beans::XPropertySet>& _xDatasource
                                 ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
@@ -272,7 +272,7 @@ namespace dbaui
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
-    void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+    void fillAutoIncrementValue(const css::uno::Reference< css::sdbc::XConnection>& _xConnection
                                 ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
@@ -282,12 +282,12 @@ namespace dbaui
         @return
             The URL for the help agent to dispatch.
     */
-    ::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName,const OString& _rHelpId);
+    css::util::URL createHelpAgentURL(const OUString& _sModuleName,const OString& _rHelpId);
 
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter
     */
-    void setEvalDateFormatForFormatter(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter);
+    void setEvalDateFormatForFormatter(css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter);
 
     /** query for a type info which can be used to create a primary key column
         @param  _rTypeInfo
@@ -339,15 +339,15 @@ namespace dbaui
         @return
             The created view.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView( const OUString& _sName
-                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
-                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSourceObject);
+    css::uno::Reference< css::beans::XPropertySet> createView( const OUString& _sName
+                                                    ,const css::uno::Reference< css::sdbc::XConnection >& _xConnection
+                                                    ,const css::uno::Reference< css::beans::XPropertySet>& _xSourceObject);
 
     /** creates a view with the given command
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView(
+    css::uno::Reference< css::beans::XPropertySet> createView(
         const OUString& _rName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
         const OUString& _rCommand
     );
 
@@ -359,7 +359,7 @@ namespace dbaui
         @return
             The stripped database name either the registered name or if it is a file url the last segment.
     */
-    OUString getStrippedDatabaseName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource
+    OUString getStrippedDatabaseName(const css::uno::Reference< css::beans::XPropertySet>& _xDataSource
                                             ,OUString& _rsDatabaseName);
 
     /** returns the standard database filter
@@ -390,12 +390,12 @@ namespace dbaui
     */
     bool insertHierachyElement(
                 vcl::Window* _pParent,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames,
+                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< css::container::XHierarchicalNameContainer>& _xNames,
                 const OUString& _sParentFolder,
                 bool _bForm,
                 bool _bCollection = true,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = NULL,
+                const css::uno::Reference< css::ucb::XContent>& _xContent = NULL,
                 bool _bMove = false
             );
 
@@ -405,7 +405,7 @@ namespace dbaui
         @param  _rxContext
             The multi service factory
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+    css::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     // this completes a help url with the system parameters "Language" and "System"
     // detect installed locale

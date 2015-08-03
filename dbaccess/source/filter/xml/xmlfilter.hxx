@@ -58,7 +58,7 @@ class ODBFilter : public SvXMLImport
 {
 public:
     typedef std::map< OUString, Sequence<PropertyValue> > TPropertyNameMap;
-    typedef ::std::vector< ::com::sun::star::beans::PropertyValue> TInfoSequence;
+    typedef ::std::vector< css::beans::PropertyValue> TInfoSequence;
 private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
@@ -101,7 +101,7 @@ protected:
     // SvXMLImport
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+                                      const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
     virtual ~ODBFilter()  throw();
 public:
@@ -121,8 +121,8 @@ public:
         css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
 
     // helper class
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
+    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
+    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
 
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 
@@ -147,14 +147,14 @@ public:
     /** add a Info to the sequence which will be appended to the data source
         @param  _rInfo The property to append.
     */
-    inline void addInfo(const ::com::sun::star::beans::PropertyValue& _rInfo)
+    inline void addInfo(const css::beans::PropertyValue& _rInfo)
     {
         m_aInfoSequence.push_back(_rInfo);
     }
 
     void setPropertyInfo();
 
-    const ::std::map< sal_uInt16,com::sun::star::beans::Property>& GetDataSourceInfoDefaulValueMap() const;
+    const ::std::map< sal_uInt16,css::beans::Property>& GetDataSourceInfoDefaulValueMap() const;
 
     inline bool isNewFormat() const { return m_bNewFormat; }
     inline void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }

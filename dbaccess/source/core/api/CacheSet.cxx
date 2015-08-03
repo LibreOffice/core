@@ -449,32 +449,32 @@ Sequence< sal_Int8 > SAL_CALL OCacheSet::getBytes( sal_Int32 columnIndex ) throw
     return m_xDriverRow->getBytes(columnIndex);
 }
 
-::com::sun::star::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_xDriverRow->getDate(columnIndex);
 }
 
-::com::sun::star::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_xDriverRow->getTime(columnIndex);
 }
 
-::com::sun::star::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_xDriverRow->getTimestamp(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_xDriverRow->getBinaryStream(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_xDriverRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
     return m_xDriverRow->getObject(columnIndex,typeMap);
 }

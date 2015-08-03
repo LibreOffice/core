@@ -66,7 +66,7 @@ namespace dbaui
 
         VclPtr<Splitter>                    m_aSplitter;
 
-        ::com::sun::star::lang::Locale      m_aLocale;
+        css::lang::Locale                   m_aLocale;
         OUString                            m_sDecimalSep;
 
         VclPtr<OSelectionBrowseBox>         m_pSelectionBox;    // presents the lower window
@@ -74,7 +74,7 @@ namespace dbaui
         bool                                m_bInSplitHandler;
 
     public:
-        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~OQueryDesignView();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -105,7 +105,7 @@ namespace dbaui
         void setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
         void setNoneVisbleRow(sal_Int32 _nRows);
 
-        ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
+        css::lang::Locale      getLocale() const           { return m_aLocale;}
         OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bVis = true, bool bActivate = true);
@@ -137,13 +137,13 @@ namespace dbaui
         bool    initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
         void    initByFieldDescriptions(
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rFieldDescriptions
+                    const css::uno::Sequence< css::beans::PropertyValue >& i_rFieldDescriptions
                 );
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const OUString& _sCriteria,
                                                                     OUString& _rsErrorMessage,
-                                                                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;
+                                                                    css::uno::Reference< css::beans::XPropertySet>& _rxColumn) const;
 
         void fillFunctionInfo(   const ::connectivity::OSQLParseNode* pNode
                                 ,const OUString& sFunctionTerm

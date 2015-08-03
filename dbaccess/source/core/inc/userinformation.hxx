@@ -26,12 +26,12 @@
 
 class UserInformation
 {
-    ::com::sun::star::lang::Locale  m_aUserLocale;
+    css::lang::Locale  m_aUserLocale;
 
 public:
     UserInformation();
 
-    ::com::sun::star::lang::Locale      getUserLanguage() const { return m_aUserLocale; }
+    css::lang::Locale      getUserLanguage() const { return m_aUserLocale; }
 };
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_USERINFORMATION_HXX

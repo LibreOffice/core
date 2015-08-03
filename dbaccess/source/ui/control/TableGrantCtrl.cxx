@@ -107,7 +107,7 @@ void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _
     OSL_ENSURE(m_xTables.is(),"No tables supported!");
 }
 
-void OTableGrantControl::setComponentContext(const Reference< ::com::sun::star::uno::XComponentContext>& _rxContext)
+void OTableGrantControl::setComponentContext(const Reference< css::uno::XComponentContext>& _rxContext)
 {
   m_xContext = _rxContext;
 }

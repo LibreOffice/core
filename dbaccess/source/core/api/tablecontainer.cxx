@@ -448,7 +448,7 @@ void SAL_CALL OTableContainer::disposing()
     m_pTableMediator = NULL;
 }
 
-void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OTableContainer::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 

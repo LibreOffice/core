@@ -174,7 +174,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         Sequence< Any > aArgs(3);
         sal_Int32 nArgPos = 0;
 
-        Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
+        Reference< css::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
         {
             OSL_ENSURE( getContainer(), "OApplicationController::Construct: have no view!" );
@@ -657,7 +657,7 @@ bool OApplicationController::isRenameDeleteAllowed(ElementType _eType, bool _bDe
     return bEnabled;
 }
 
-void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OApplicationController::onLoadedMenu(const Reference< css::frame::XLayoutManager >& _xLayoutManager)
 {
 
     if ( _xLayoutManager.is() )

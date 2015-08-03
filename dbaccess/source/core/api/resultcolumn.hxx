@@ -32,10 +32,10 @@ namespace dbaccess
                           public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
     {
     protected:
-        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData > m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xDBMetaData;
-        sal_Int32                   m_nPos;
-        ::com::sun::star::uno::Any  m_aIsRowVersion;
+        css::uno::Reference < css::sdbc::XResultSetMetaData > m_xMetaData;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xDBMetaData;
+        sal_Int32                             m_nPos;
+        css::uno::Any                         m_aIsRowVersion;
         mutable ::boost::optional< sal_Bool > m_isSigned;
         mutable ::boost::optional< sal_Bool > m_isCurrency;
         mutable ::boost::optional< sal_Bool > m_bSearchable;
@@ -54,16 +54,16 @@ namespace dbaccess
         virtual ~OResultColumn();
     public:
         OResultColumn(
-            const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
+            const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
             sal_Int32 _nPos,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta );
+            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta );
 
-    // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XTypeProvider
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // com::sun::star::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // cppu::OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -73,10 +73,7 @@ namespace dbaccess
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-        virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     private:
         void    impl_determineIsRowVersion_nothrow();

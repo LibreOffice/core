@@ -87,7 +87,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         updateFromModel();
 
         xV->setZoom( aComponentInfos.nZoomX, aComponentInfos.nZoomY );
-        setPosSize( aComponentInfos.nX, aComponentInfos.nY, aComponentInfos.nWidth, aComponentInfos.nHeight, ::com::sun::star::awt::PosSize::POSSIZE );
+        setPosSize( aComponentInfos.nX, aComponentInfos.nY, aComponentInfos.nWidth, aComponentInfos.nHeight, css::awt::PosSize::POSSIZE );
 
         Reference<XPropertySet> xProp(getModel(), UNO_QUERY);
         if ( xProp.is() )
@@ -125,7 +125,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         if (maPaintListeners.getLength())
             xW->addPaintListener( &maPaintListeners );
 
-        Reference< ::com::sun::star::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
+        Reference< css::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
         xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
         xPeerView->setGraphics( xGraphics );
 

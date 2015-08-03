@@ -169,7 +169,7 @@ namespace dbaui
             @param  _xConnection
                 The connection to get the table names
         */
-        void createTablesPage(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        void createTablesPage(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
         /** creates the page for the specific type.
             @param  _eType
@@ -177,7 +177,7 @@ namespace dbaui
             @param  _xContainer
                 The container of the elements to be inserted.
         */
-        void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
+        void createPage(ElementType _eType,const css::uno::Reference< css::container::XNameAccess >& _xContainer);
 
         void setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
 
@@ -264,21 +264,21 @@ namespace dbaui
         */
         void    describeCurrentSelectionForControl(
                     const Control& _rControl,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                    css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
         /** describes the current selection for the given ElementType
         */
         void    describeCurrentSelectionForType(
                     const ElementType _eType,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                    css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
         * \param _aNames the element names
         */
-        void selectElements(const ::com::sun::star::uno::Sequence< OUString>& _aNames);
+        void selectElements(const css::uno::Sequence< OUString>& _aNames);
 
         /** adds a new object to the detail page.
             @param  _eType
@@ -292,7 +292,7 @@ namespace dbaui
         */
         SvTreeListEntry* elementAdded(ElementType eType
                         ,const OUString& _rName
-                        ,const ::com::sun::star::uno::Any& _rObject );
+                        ,const css::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
             @param  _eType
@@ -337,7 +337,7 @@ namespace dbaui
             @param  _xContent
                 The content which must support the "preview" command.
         */
-        void showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xContent);
+        void showPreview(const css::uno::Reference< css::ucb::XContent >& _xContent);
 
         /** shows the Preview of a table or query
             @param  _sDataSourceName
@@ -358,8 +358,8 @@ namespace dbaui
     private:
         void                impl_createPage(
                                 ElementType _eType,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxNonTableElements
+                                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                                const css::uno::Reference< css::container::XNameAccess >& _rxNonTableElements
                             );
 
         const TaskPaneData& impl_getTaskPaneData( ElementType _eType );

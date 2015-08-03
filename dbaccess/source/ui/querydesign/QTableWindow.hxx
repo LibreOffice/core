@@ -72,8 +72,8 @@ namespace dbaui
             @return
                 the user data which will be append at the listbox entry, may be <NULL/>
         */
-        virtual void* createUserData(const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet>& _xColumn,
+        virtual void* createUserData(const css::uno::Reference<
+                                    css::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey) SAL_OVERRIDE;
     };
 }

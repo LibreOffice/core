@@ -32,17 +32,17 @@ namespace dbaccess
 
     {
     public:
-        ORowSetColumn(  const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
-                        const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
+        ORowSetColumn(  const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
+                        const css::uno::Reference < css::sdbc::XRow >& _xRow,
                         sal_Int32 _nPos,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
+                        const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
                         const OUString& _rDescription,
                         const OUString& i_sLabel,
                         const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const css::uno::Any& rValue )throw (css::uno::Exception, std::exception ) SAL_OVERRIDE;
     };
 
 }

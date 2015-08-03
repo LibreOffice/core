@@ -60,12 +60,12 @@ namespace dbaccess
 {
 class DatabaseDocumentLoader;
 // ODatabaseContext
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+css::uno::Reference< css::uno::XInterface >
+    ODatabaseContext_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::lang::XServiceInfo
-                                       ,   ::com::sun::star::sdb::XDatabaseContext
-                                       ,   ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
+                                       ,   css::sdb::XDatabaseContext
+                                       ,   css::lang::XUnoTunnel
                                        >   DatabaseAccessContext_Base;
 
 class ODatabaseContext  :public DatabaseAccessContext_Base
@@ -76,8 +76,8 @@ private:
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject( const OUString& _rURL );
+    css::uno::Reference< css::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
+    css::uno::Reference< css::uno::XInterface > getObject( const OUString& _rURL );
 
     /** sets all properties which were transient at the data source. e.g. password
         @param  _sURL       The file URL of the data source
@@ -87,23 +87,23 @@ private:
 
     /** creates a new data source
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
             impl_createNewDataSource();
 
 protected:
     ::osl::Mutex                    m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                                     m_aContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
+    css::uno::Reference< css::uno::XAggregation >
                                     m_xDBRegistrationAggregate;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseRegistrations >
+    css::uno::Reference< css::sdb::XDatabaseRegistrations >
                                     m_xDatabaseRegistrations;
 
     typedef std::map<OUString, ODatabaseModelImpl*> ObjectCache;
     ObjectCache     m_aDatabaseObjects;
 
-    typedef std::map< OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > PropertyCache;
+    typedef std::map< OUString, css::uno::Sequence< css::beans::PropertyValue > > PropertyCache;
     PropertyCache   m_aDatasourceProperties;
         // as we hold our data sources weak, we have to cache all properties on the data sources which are
         // transient but stored as long as the session lasts. The database context is the session (as it lives
@@ -115,62 +115,62 @@ protected:
     DatabaseDocumentLoader*                 m_pDatabaseDocumentLoader;
 
 public:
-    explicit ODatabaseContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+    explicit ODatabaseContext( const css::uno::Reference< css::uno::XComponentContext >& );
     virtual ~ODatabaseContext();
 
     // OComponentHelper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XSingleServiceFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(  ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& _rArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static() throw( ::com::sun::star::uno::RuntimeException );
-    static OUString getImplementationName_static() throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
+    static OUString getImplementationName_static() throw( css::uno::RuntimeException );
+    static css::uno::Reference< css::uno::XInterface >
+        SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNamingService
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDatabaseRegistrations
-    virtual sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getRegistrationNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addDatabaseRegistrationsListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseRegistrationsListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeDatabaseRegistrationsListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseRegistrationsListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getRegistrationNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) throw (css::lang::IllegalArgumentException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContainer
-    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // com::sun::star::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+    // css::lang::XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     void registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl);
     void revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl);
@@ -182,7 +182,7 @@ public:
 private:
     // BasicManagerCreationListener
     virtual void onBasicManagerCreated(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxForDocument,
+        const css::uno::Reference< css::frame::XModel >& _rxForDocument,
         BasicManager& _rBasicManager
     ) SAL_OVERRIDE;
 };

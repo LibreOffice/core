@@ -28,21 +28,21 @@ namespace dbaccess
 {
 
     // Veto
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::util::XVeto
+    typedef ::cppu::WeakImplHelper<   css::util::XVeto
                                   >   Veto_Base;
-    /** implements ::com::sun::star::util::XVeto
+    /** implements css::util::XVeto
     */
     class Veto : public Veto_Base
     {
     private:
-        const OUString               m_sReason;
-        const ::com::sun::star::uno::Any    m_aDetails;
+        const OUString         m_sReason;
+        const css::uno::Any    m_aDetails;
 
     public:
-        Veto( const OUString& _rReason, const ::com::sun::star::uno::Any& _rDetails );
+        Veto( const OUString& _rReason, const css::uno::Any& _rDetails );
 
-        virtual OUString SAL_CALL getReason() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any SAL_CALL getDetails() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getReason() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getDetails() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~Veto();

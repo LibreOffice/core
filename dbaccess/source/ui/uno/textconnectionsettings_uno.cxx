@@ -57,14 +57,14 @@ namespace dbaui
 
     class OTextConnectionSettingsDialog;
     typedef ::cppu::ImplInheritanceHelper<   ODatabaseAdministrationDialog
-                                         ,   ::com::sun::star::sdb::XTextConnectionSettings
+                                         ,   css::sdb::XTextConnectionSettings
                                          >   OTextConnectionSettingsDialog_BASE;
     typedef ::comphelper::OPropertyArrayUsageHelper< OTextConnectionSettingsDialog >    OTextConnectionSettingsDialog_PBASE;
 
     class OTextConnectionSettingsDialog
             :public OTextConnectionSettingsDialog_BASE
             ,public OTextConnectionSettingsDialog_PBASE
-            ,public ::cppu::WeakImplHelper< com::sun::star::sdb::XTextConnectionSettings >
+            ,public ::cppu::WeakImplHelper< css::sdb::XTextConnectionSettings >
     {
         OModuleClient   m_aModuleClient;
         PropertyValues  m_aPropertyValues;
@@ -105,7 +105,7 @@ namespace dbaui
     protected:
         // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
-        virtual void implInitialize( const com::sun::star::uno::Any& _rValue ) SAL_OVERRIDE;
+        virtual void implInitialize( const css::uno::Any& _rValue ) SAL_OVERRIDE;
     protected:
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
@@ -132,8 +132,8 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_SUPPORTS(OTextConnectionSettingsDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(OTextConnectionSettingsDialog, "com.sun.star.sdb.TextConnectionSettings")
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL OTextConnectionSettingsDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    css::uno::Reference< css::uno::XInterface >
+        SAL_CALL OTextConnectionSettingsDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new OTextConnectionSettingsDialog( comphelper::getComponentContext(_rxORB)));
     }

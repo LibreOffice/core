@@ -122,7 +122,7 @@ namespace dbaui
         virtual void LoseFocus() SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
         // Accessibility
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         // own methods
         ScrollBar& GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }

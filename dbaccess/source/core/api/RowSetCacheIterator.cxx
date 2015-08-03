@@ -104,7 +104,7 @@ bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) cons
     return m_aIter->second.aIterator == _rRH;
 }
 
-void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBookmark)
+void ORowSetCacheIterator::setBookmark(const css::uno::Any&    _rBookmark)
 {
     m_aIter->second.aBookmark = _rBookmark;
 }

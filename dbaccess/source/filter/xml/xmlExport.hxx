@@ -79,11 +79,11 @@ class ODBExport : public SvXMLExport
 
     struct TypedPropertyValue
     {
-        OUString               Name;
-        ::com::sun::star::uno::Type   Type;
-        ::com::sun::star::uno::Any    Value;
+        OUString         Name;
+        css::uno::Type   Type;
+        css::uno::Any    Value;
 
-        TypedPropertyValue( const OUString& _name, const ::com::sun::star::uno::Type& _type, const ::com::sun::star::uno::Any& _value )
+        TypedPropertyValue( const OUString& _name, const css::uno::Type& _type, const css::uno::Any& _value )
             :Name( _name )
             ,Type( _type )
             ,Value( _value )
@@ -167,8 +167,8 @@ protected:
     virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() SAL_OVERRIDE;
 
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
+    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) SAL_OVERRIDE;
+    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) SAL_OVERRIDE;
 
     virtual                 ~ODBExport(){};
 public:
@@ -188,7 +188,7 @@ public:
     rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 };

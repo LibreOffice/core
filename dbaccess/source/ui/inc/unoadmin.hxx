@@ -37,7 +37,7 @@ typedef ::svt::OGenericUnoDialog ODatabaseAdministrationDialogBase;
 class ODatabaseAdministrationDialog
         :public ODatabaseAdministrationDialogBase
 {
-    OModuleClient    m_aModuleClient;
+    OModuleClient           m_aModuleClient;
 protected:
     SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
@@ -45,16 +45,16 @@ protected:
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;          // datasource type collection
 
-    ::com::sun::star::uno::Any          m_aInitialSelection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
+    css::uno::Any           m_aInitialSelection;
+    css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
 
 protected:
-    ODatabaseAdministrationDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+    ODatabaseAdministrationDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
     virtual ~ODatabaseAdministrationDialog();
 protected:
 // OGenericUnoDialog overridables
     virtual void destroyDialog() SAL_OVERRIDE;
-    virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
+    virtual void implInitialize(const css::uno::Any& _rValue) SAL_OVERRIDE;
 };
 
 }   // namespace dbaui

@@ -74,7 +74,7 @@ bool OTableWindowData::HasSize() const
     return ( (m_aSize.Width() != -1) && (m_aSize.Height() !=-1) );
 }
 
-void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
+void OTableWindowData::_disposing( const css::lang::EventObject& /*_rSource*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // it doesn't matter which one was disposed

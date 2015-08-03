@@ -97,10 +97,10 @@ namespace dbaui
         bool        m_abEnableRoadmap;
     protected:
         IDatabaseSettingsDialog*   m_pAdminDialog;
-        IItemSetHelper* m_pItemSetHelper;
+        IItemSetHelper*            m_pItemSetHelper;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                            m_xORB;
+        css::uno::Reference< css::uno::XComponentContext >
+                                   m_xORB;
     public:
         OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
         /// set a handler which gets called every time something on the page has been modified
@@ -123,7 +123,7 @@ namespace dbaui
             @param  _rxORB
                 The service factory.
         */
-        void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxORB)
+        void SetServiceFactory(const css::uno::Reference< css::uno::XComponentContext >& rxORB)
         {
             m_xORB = rxORB;
         }

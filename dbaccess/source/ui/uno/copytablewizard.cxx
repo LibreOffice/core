@@ -205,7 +205,7 @@ namespace dbaui
 
         /** returns our typed dialog
 
-            @throws ::com::sun::star::uno::RuntimeException
+            @throws css::uno::RuntimeException
                 if we don't have a dialog at the moment the method is called
         */
         OCopyTableWizard&

@@ -87,7 +87,7 @@ namespace dbaui
     {
         return AccessibleRole::VIEW_PORT;
     }
-    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return this;
     }

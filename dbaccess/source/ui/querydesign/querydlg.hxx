@@ -51,7 +51,7 @@ namespace dbaui
         EJoinType                           eJoinType;
         TTableConnectionData::value_type    m_pConnData; // contains left and right table
         TTableConnectionData::value_type    m_pOrigConnData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
+        css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
 
         DECL_LINK( OKClickHdl, Button* );
@@ -66,7 +66,7 @@ namespace dbaui
         DlgQryJoin( OQueryTableView * pParent,
                     const TTableConnectionData::value_type& pData,
                     OJoinTableView::OTableWindowMap*    _pTableMap,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                    const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                     bool _bAllowTableSelect);
         virtual ~DlgQryJoin();
         virtual void dispose() SAL_OVERRIDE;
@@ -82,7 +82,7 @@ namespace dbaui
         */
         virtual void setValid(bool _bValid) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables

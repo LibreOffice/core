@@ -99,7 +99,7 @@ public:
     void            execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs );
 
 private:
-    ::com::sun::star::uno::WeakReference< XController > m_aController;
+    css::uno::WeakReference< XController > m_aController;
 };
 
 UserDefinedFeatures::UserDefinedFeatures( const Reference< XController >& _rxController )
@@ -376,7 +376,7 @@ Reference<XSidebarProvider> SAL_CALL OGenericUnoController::getSidebar() throw (
         return NULL;
 }
 
-OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString( "Default" );
 }
@@ -1279,7 +1279,7 @@ void OGenericUnoController::openHelpAgent( const URL& _rURL )
 
 Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
 {
-    Reference< ::com::sun::star::awt::XWindow> xWindow;
+    Reference< css::awt::XWindow> xWindow;
 
     // get the top most window
     Reference< XFrame > xFrame( m_aCurrentFrame.getFrame() );
@@ -1522,7 +1522,7 @@ void OGenericUnoController::fillSupportedFeatures()
 #endif
 }
 
-void SAL_CALL OGenericUnoController::dispose() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OGenericUnoController::dispose() throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     OGenericUnoController_Base::dispose();

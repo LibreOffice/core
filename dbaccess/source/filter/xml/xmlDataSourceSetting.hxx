@@ -28,25 +28,25 @@ namespace dbaxml
     class ODBFilter;
     class OXMLDataSourceSetting : public SvXMLImportContext
     {
-        ::com::sun::star::beans::PropertyValue m_aSetting;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aInfoSequence;
-        OXMLDataSourceSetting* m_pContainer;
-        ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
-        bool m_bIsList;
+        css::beans::PropertyValue          m_aSetting;
+        css::uno::Sequence< css::uno::Any> m_aInfoSequence;
+        OXMLDataSourceSetting*             m_pContainer;
+        css::uno::Type                     m_aPropType;    // the type of the property the instance imports currently
+        bool                               m_bIsList;
 
         ODBFilter& GetOwnImport();
-        static ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
+        static css::uno::Any convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
     public:
 
         OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,OXMLDataSourceSetting* _pContainer = NULL);
         virtual ~OXMLDataSourceSetting();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
         virtual void EndElement() SAL_OVERRIDE;
 

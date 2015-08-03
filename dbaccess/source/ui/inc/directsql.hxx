@@ -64,13 +64,13 @@ namespace dbaui
         sal_Int32       m_nHistoryLimit;
         sal_Int32       m_nStatusCount;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                         m_xConnection;
 
     public:
         DirectSQLDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConn);
         virtual ~DirectSQLDialog();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -82,7 +82,7 @@ namespace dbaui
         void switchToHistory(sal_Int32 _nHistoryPos, bool _bUpdateListBox = true);
 
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
     protected:
         DECL_LINK( OnExecute, void* );

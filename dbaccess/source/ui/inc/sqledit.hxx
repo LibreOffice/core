@@ -44,14 +44,13 @@ namespace dbaui
         Link<>                  m_lnkTextModifyHdl;
         OUString                m_strOrigText;      // is restored on undo
         VclPtr<OQueryTextView>         m_pView;
-        bool                m_bAccelAction;     // is set on cut, copy, paste
-        bool                m_bStopTimer;
+        bool                    m_bAccelAction;     // is set on cut, copy, paste
+        bool                    m_bStopTimer;
         svtools::ColorConfig    m_ColorConfig;
 
         rtl::Reference< ChangesListener > m_listener;
-        osl::Mutex m_mutex;
-        com::sun::star::uno::Reference<
-            com::sun::star::beans::XMultiPropertySet > m_notifier;
+        osl::Mutex              m_mutex;
+        css::uno::Reference<  css::beans::XMultiPropertySet > m_notifier;
 
         DECL_LINK_TYPED(OnUndoActionTimer, Timer*, void);
         DECL_LINK_TYPED(OnInvalidateTimer, Timer*, void);

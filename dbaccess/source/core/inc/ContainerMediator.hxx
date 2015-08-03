@@ -37,33 +37,33 @@ namespace dbaccess
     class OPropertyForward;
 
     class OContainerMediator :   public ::comphelper::OBaseMutex
-                                ,public ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener >
+                                ,public ::cppu::WeakImplHelper< css::container::XContainerListener >
     {
     private:
-        typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;
-        typedef ::std::map< OUString, TPropertyForward >     PropertyForwardList;
-        PropertyForwardList                                                             m_aForwardList;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;    // can not be weak
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;   // can not be weak
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_aConnection;
+        typedef ::rtl::Reference< OPropertyForward >          TPropertyForward;
+        typedef ::std::map< OUString, TPropertyForward >      PropertyForwardList;
+        PropertyForwardList                                   m_aForwardList;
+        css::uno::Reference< css::container::XNameAccess >    m_xSettings;    // can not be weak
+        css::uno::Reference< css::container::XContainer >     m_xContainer;   // can not be weak
+        css::uno::WeakReference< css::sdbc::XConnection >     m_aConnection;
 
     protected:
         virtual ~OContainerMediator();
 
     public:
         OContainerMediator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xSettings,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::container::XContainer >& _xContainer,
+            const css::uno::Reference< css::container::XNameAccess >& _xSettings,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
        );
 
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         void notifyElementCreated(const OUString& _sElementName
-                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xElement);
+                                ,const css::uno::Reference< css::beans::XPropertySet>& _xElement);
 
     private:
         /** cleans up the instance, by deregistering as listener at the containers,
@@ -75,7 +75,7 @@ namespace dbaccess
         */
         void    impl_initSettings_nothrow(
                     const OUString& _rName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDestination
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxDestination
                 );
     };
 

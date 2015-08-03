@@ -35,11 +35,11 @@ namespace sdbtools
 {
 
     // ConnectionTools
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XConnectionTools
-                                  ,   ::com::sun::star::lang::XServiceInfo
-                                  ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakImplHelper<   css::sdb::tools::XConnectionTools
+                                  ,   css::lang::XServiceInfo
+                                  ,   css::lang::XInitialization
                                   >   ConnectionTools_Base;
-    /** implements the com::sun::star::sdb::tools::XConnectionTools functionality
+    /** implements the css::sdb::tools::XConnectionTools functionality
     */
     class ConnectionTools   :public ConnectionTools_Base
                             ,public ConnectionDependentComponent
@@ -53,28 +53,28 @@ namespace sdbtools
             @param _rxContext
                 the context of the component
         */
-        explicit ConnectionTools( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext );
+        explicit ConnectionTools( const css::uno::Reference< css::uno::XComponentContext >& _rContext );
 
         // XConnectionTools
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableName > SAL_CALL createTableName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XObjectNames > SAL_CALL getObjectNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XDataSourceMetaData > SAL_CALL getDataSourceMetaData() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& keepFieldsAlive ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer > SAL_CALL getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdb::tools::XTableName > SAL_CALL createTableName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdb::tools::XObjectNames > SAL_CALL getObjectNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdb::tools::XDataSourceMetaData > SAL_CALL getDataSourceMetaData() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdb::XSingleSelectQueryComposer > SAL_CALL getComposer( ::sal_Int32 commandType, const OUString& command ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static versions
         static OUString SAL_CALL getImplementationName_static();
-        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
         // XInitialization
-        virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~ConnectionTools();

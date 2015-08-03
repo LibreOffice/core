@@ -70,7 +70,7 @@ namespace dbmm
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
         virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) SAL_OVERRIDE;

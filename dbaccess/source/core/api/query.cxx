@@ -218,7 +218,7 @@ void OQuery::rebuildColumns()
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition")
 
-// ::com::sun::star::beans::XPropertyChangeListener
+// css::beans::XPropertyChangeListener
 void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) throw(RuntimeException, std::exception)
 {
     sal_Int32 nOwnHandle = -1;

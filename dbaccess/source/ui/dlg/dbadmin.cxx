@@ -103,7 +103,7 @@ void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, Cre
     m_aCurrentDetailPages.push(_nPageId);
 }
 
-void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName)
+void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -255,7 +255,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     return AR_LEAVE_MODIFIED;
 }
 
-void ODbAdminDialog::selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName)
+void ODbAdminDialog::selectDataSource(const css::uno::Any& _aDataSourceName)
 {
     impl_selectDataSource(_aDataSourceName);
 }

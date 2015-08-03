@@ -79,32 +79,32 @@ sal_Bool SAL_CALL OPrivateRow::wasNull(  ) throw (SQLException, RuntimeException
         m_nPos = columnIndex;
         return m_aRow[m_nPos];
     }
-    ::com::sun::star::util::Date SAL_CALL OPrivateRow::getDate( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
+    css::util::Date SAL_CALL OPrivateRow::getDate( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos];
     }
-    ::com::sun::star::util::Time SAL_CALL OPrivateRow::getTime( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
+    css::util::Time SAL_CALL OPrivateRow::getTime( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos];
     }
-    ::com::sun::star::util::DateTime SAL_CALL OPrivateRow::getTimestamp( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
+    css::util::DateTime SAL_CALL OPrivateRow::getTimestamp( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos];
     }
-    Reference< ::com::sun::star::io::XInputStream > SAL_CALL OPrivateRow::getBinaryStream( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
+    Reference< css::io::XInputStream > SAL_CALL OPrivateRow::getBinaryStream( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
-        return Reference< ::com::sun::star::io::XInputStream >(m_aRow[m_nPos].makeAny(),UNO_QUERY);
+        return Reference< css::io::XInputStream >(m_aRow[m_nPos].makeAny(),UNO_QUERY);
     }
-    Reference< ::com::sun::star::io::XInputStream > SAL_CALL OPrivateRow::getCharacterStream( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
+    Reference< css::io::XInputStream > SAL_CALL OPrivateRow::getCharacterStream( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
-        return Reference< ::com::sun::star::io::XInputStream >(m_aRow[m_nPos].makeAny(),UNO_QUERY);
+        return Reference< css::io::XInputStream >(m_aRow[m_nPos].makeAny(),UNO_QUERY);
     }
-    Any SAL_CALL OPrivateRow::getObject( ::sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >&  ) throw (SQLException, RuntimeException, std::exception)
+    Any SAL_CALL OPrivateRow::getObject( ::sal_Int32 columnIndex, const Reference< css::container::XNameAccess >&  ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos].makeAny();

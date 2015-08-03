@@ -69,7 +69,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 break;
             case XML_TOK_DATA_SOURCE_SETTING_TYPE:
                 {
-                    // needs to be translated into a ::com::sun::star::uno::Type
+                    // needs to be translated into a css::uno::Type
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (s_aTypeNameMap.empty())
                     {
@@ -170,7 +170,7 @@ ODBFilter& OXMLDataSourceSetting::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
+Any OXMLDataSourceSetting::convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
     switch (_rExpectedType.getTypeClass())

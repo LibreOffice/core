@@ -41,10 +41,10 @@ namespace dbaui
             ,public ODirectSQLDialog_PBASE
     {
         OModuleClient m_aModuleClient;
-        OUString m_sInitialSelection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
+        OUString      m_sInitialSelection;
+        css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
     protected:
-        ODirectSQLDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        ODirectSQLDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         virtual ~ODirectSQLDialog();
 
     public:
@@ -58,7 +58,7 @@ namespace dbaui
     protected:
         // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
+        virtual void implInitialize(const css::uno::Any& _rValue) SAL_OVERRIDE;
     };
 
 }   // namespace dbaui

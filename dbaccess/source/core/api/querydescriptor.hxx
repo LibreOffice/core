@@ -40,9 +40,9 @@ namespace dbaccess
 
 // OQueryDescriptor_Base - a query descriptor (as the name suggests :)
 typedef ::cppu::ImplHelper3<
-        ::com::sun::star::sdbcx::XColumnsSupplier,
-        ::com::sun::star::lang::XUnoTunnel,
-        ::com::sun::star::lang::XServiceInfo >  OQueryDescriptor_BASE;
+        css::sdbcx::XColumnsSupplier,
+        css::lang::XUnoTunnel,
+        css::lang::XServiceInfo >  OQueryDescriptor_BASE;
 
 class OQueryDescriptor_Base
         :public OQueryDescriptor_BASE
@@ -74,24 +74,24 @@ public:
     */
     OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf);
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::sdbcx::XColumnsSupplier
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     DECLARE_IMPLEMENTATION_ID( );
 
-// ::com::sun::star::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
 
 // IColumnFactory
     virtual OColumn*    createColumn(const OUString& _rName) const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor() SAL_OVERRIDE;
-    virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() SAL_OVERRIDE;
+    virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) SAL_OVERRIDE;
     virtual void columnDropped(const OUString& _sName) SAL_OVERRIDE;
 
     /** rebuild our columns set
@@ -133,11 +133,11 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::uno::XInterface
+// css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-    // ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 }   // namespace dbaccess

@@ -75,7 +75,7 @@ OColumn::~OColumn()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > OColumn::getTypes() throw (RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
@@ -84,10 +84,10 @@ Sequence< Type > OColumn::getTypes() throw (RuntimeException, std::exception)
     );
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyContainer )
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 OUString OColumn::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.sdb.OColumn");
@@ -111,18 +111,18 @@ void OColumn::disposing()
     OPropertyContainer::disposing();
 }
 
-// com::sun::star::beans::XPropertySet
+// css::beans::XPropertySet
 Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OColumn::getName(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return m_sName;
 }
 
-void SAL_CALL OColumn::setName( const OUString& _rName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OColumn::setName( const OUString& _rName ) throw(css::uno::RuntimeException, std::exception)
 {
     m_sName = _rName;
 }
@@ -164,7 +164,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
 }
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
+        const css::uno::Reference< css::container::XNameAccess >& _rxDrvColumns,
         bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
@@ -232,7 +232,7 @@ void SAL_CALL OColumns::disposing()
     OColumns_BASE::disposing();
 }
 
-void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
+void OColumns::impl_refresh() throw(css::uno::RuntimeException)
 {
     if (m_pRefreshColumns)
         m_pRefreshColumns->refreshColumns();
@@ -361,7 +361,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Refer
     {
         if ( m_bAddColumn )
         {
-            Reference< ::com::sun::star::sdb::tools::XTableAlteration> xAlterService = m_pTable->getAlterService();
+            Reference< css::sdb::tools::XTableAlteration> xAlterService = m_pTable->getAlterService();
             if ( xAlterService.is() )
             {
                 xAlterService->addColumn(m_pTable,descriptor);
@@ -396,7 +396,7 @@ void OColumns::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     {
         if ( m_bDropColumn )
         {
-            Reference< ::com::sun::star::sdb::tools::XTableAlteration> xAlterService = m_pTable->getAlterService();
+            Reference< css::sdb::tools::XTableAlteration> xAlterService = m_pTable->getAlterService();
             if ( xAlterService.is() )
                 xAlterService->dropColumn(m_pTable,_sElementName);
             else

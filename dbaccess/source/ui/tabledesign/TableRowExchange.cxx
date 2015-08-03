@@ -30,7 +30,7 @@ namespace dbaui
         : m_vTableRow(_rvTableRow)
     {
     }
-    bool OTableRowExchange::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool OTableRowExchange::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if(nUserObjectId == SotClipboardFormatId::SBA_TABED)
         {

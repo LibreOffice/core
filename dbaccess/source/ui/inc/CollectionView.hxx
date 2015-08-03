@@ -40,9 +40,9 @@ namespace dbaui
         VclPtr<SvtFileView>    m_pView;
         VclPtr<Edit>           m_pName;
         VclPtr<PushButton>     m_pPB_OK;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        bool        m_bCreateForm;
+        css::uno::Reference< css::ucb::XContent>                  m_xContent;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        bool                   m_bCreateForm;
 
         DECL_LINK(Up_Click,void*);
         DECL_LINK(NewFolder_Click,void*);
@@ -53,12 +53,12 @@ namespace dbaui
         void initCurrentPath();
     public:
         OCollectionView( vcl::Window * pParent
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
+                        ,const css::uno::Reference< css::ucb::XContent>& _xContent
                         ,const OUString& _sDefaultName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+                        ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         virtual ~OCollectionView();
         virtual void dispose() SAL_OVERRIDE;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const { return m_xContent;}
+        css::uno::Reference< css::ucb::XContent> getSelectedFolder() const { return m_xContent;}
         OUString getName() const;
     };
 }   // namespace dbaui

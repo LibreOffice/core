@@ -42,10 +42,10 @@ namespace dbaccess
         DocumentEventNotifier( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex );
         ~DocumentEventNotifier();
 
-        void addLegacyEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& _Listener );
-        void removeLegacyEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& _Listener );
-        void addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener );
-        void removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener );
+        void addLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& _Listener );
+        void removeLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& _Listener );
+        void addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener );
+        void removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener );
 
         /** disposes the instance
             @precond
@@ -71,8 +71,8 @@ namespace dbaccess
         */
         void    notifyDocumentEvent(
                     const OUString& _EventName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _rxViewController = NULL,
-                    const ::com::sun::star::uno::Any& _Supplement = ::com::sun::star::uno::Any()
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = NULL,
+                    const css::uno::Any& _Supplement = css::uno::Any()
                 );
 
         /** notifies a document event, described by the given parameters, asynchronously
@@ -84,8 +84,8 @@ namespace dbaccess
         */
         void    notifyDocumentEventAsync(
                     const OUString& _EventName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController = NULL,
-                    const ::com::sun::star::uno::Any& _Supplement = ::com::sun::star::uno::Any()
+                    const css::uno::Reference< css::frame::XController2 >& _ViewController = NULL,
+                    const css::uno::Any& _Supplement = css::uno::Any()
                 );
 
         /** notifies a document event to all registered listeners
@@ -97,8 +97,8 @@ namespace dbaccess
         */
         void    notifyDocumentEvent(
                     const sal_Char* _pAsciiEventName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _rxViewController = NULL,
-                    const ::com::sun::star::uno::Any& _rSupplement = ::com::sun::star::uno::Any()
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = NULL,
+                    const css::uno::Any& _rSupplement = css::uno::Any()
                 )
         {
             notifyDocumentEvent( OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
@@ -113,8 +113,8 @@ namespace dbaccess
         */
         void    notifyDocumentEventAsync(
                     const sal_Char* _pAsciiEventName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _rxViewController = NULL,
-                    const ::com::sun::star::uno::Any& _rSupplement = ::com::sun::star::uno::Any()
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = NULL,
+                    const css::uno::Any& _rSupplement = css::uno::Any()
                 )
         {
             notifyDocumentEventAsync( OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );

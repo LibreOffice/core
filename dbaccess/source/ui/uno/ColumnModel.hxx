@@ -35,10 +35,10 @@ namespace dbaui
 {
 
 // OColumnControlModel
-typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::awt::XControlModel
-                                        ,   ::com::sun::star::lang::XServiceInfo
-                                        ,   ::com::sun::star::util::XCloneable
-                                        ,   ::com::sun::star::io::XPersistObject
+typedef ::cppu::WeakAggComponentImplHelper4 <   css::awt::XControlModel
+                                        ,   css::lang::XServiceInfo
+                                        ,   css::util::XCloneable
+                                        ,   css::io::XPersistObject
                                         >   OColumnControlModel_BASE;
 
 class OColumnControlModel;
@@ -49,31 +49,31 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
                             ,public OColumnControlModel_BASE
 {
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
+    css::uno::Reference< css::lang::XMultiServiceFactory> m_xORB;
 // [properties]
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xColumn;
-    OUString                 m_sDefaultControl;
-    ::com::sun::star::uno::Any      m_aTabStop;
+    css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
+    css::uno::Reference< css::beans::XPropertySet >       m_xColumn;
+    OUString                    m_sDefaultControl;
+    css::uno::Any               m_aTabStop;
     bool                        m_bEnable;
-    sal_Int16                       m_nBorder;
-    sal_Int32                       m_nWidth;
+    sal_Int16                   m_nBorder;
+    sal_Int32                   m_nWidth;
 // [properties]
 
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> getORB() const { return m_xORB; }
+    inline css::uno::Reference< css::lang::XMultiServiceFactory> getORB() const { return m_xORB; }
     void registerProperties();
 protected:
 
     virtual ~OColumnControlModel();
     OColumnControlModel(const OColumnControlModel* _pSource
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+                        ,const css::uno::Reference< css::lang::XMultiServiceFactory>& _rxFactory);
 public:
-    explicit OColumnControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    explicit OColumnControlModel(const css::uno::Reference< css::lang::XMultiServiceFactory>& _rxFactory);
 
 // UNO Anbindung
     DECLARE_XINTERFACE( )
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
     DECLARE_SERVICE_INFO_STATIC();
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
@@ -81,18 +81,18 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// com::sun::star::uno::XAggregation
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::uno::XAggregation
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-//  ::com::sun::star::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+//  css::io::XPersistObject
+    virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OPropertyArrayUsageHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }   // namespace dbaui
