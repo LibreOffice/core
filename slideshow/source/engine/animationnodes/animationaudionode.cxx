@@ -98,6 +98,23 @@ void AnimationAudioNode::activate_st()
 // TODO(F2): generate deactivation event, when sound
 // is over
 
+// libc++ and MSVC std::bind doesn't cut it here, and it's not possible to use
+// a lambda because the preprocessor thinks that comma in capture list
+// separates macro parameters
+struct NotifyAudioStopped
+{
+    EventMultiplexer & m_rEventMultiplexer;
+    ::boost::shared_ptr<BaseNode> m_pSelf;
+    NotifyAudioStopped(EventMultiplexer & rEventMultiplexer,
+            ::boost::shared_ptr<BaseNode> const& pSelf)
+        : m_rEventMultiplexer(rEventMultiplexer), m_pSelf(pSelf) { }
+
+    void operator()()
+    {
+        m_rEventMultiplexer.notifyAudioStopped(m_pSelf);
+    }
+};
+
 void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {
     AnimationEventHandlerSharedPtr aHandler(
@@ -115,9 +132,7 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 
     // notify _after_ state change:
     getContext().mrEventQueue.addEvent(
-        makeEvent( std::bind( &EventMultiplexer::notifyAudioStopped,
-                              std::ref(getContext().mrEventMultiplexer),
-                                getSelf() ),
+        makeEvent( NotifyAudioStopped(getContext().mrEventMultiplexer, getSelf()),
                    "AnimationAudioNode::notifyAudioStopped") );
 }
 
