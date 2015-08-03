@@ -50,12 +50,10 @@ namespace io_TextInputStream
 
 // Implementation XTextInputStream
 
-typedef WeakImplHelper2< XTextInputStream2, XServiceInfo > TextInputStreamHelper;
-
 #define INITIAL_UNICODE_BUFFER_CAPACITY     0x100
 #define READ_BYTE_COUNT                     0x100
 
-class OTextInputStream : public TextInputStreamHelper
+class OTextInputStream : public WeakImplHelper2< XTextInputStream2, XServiceInfo >
 {
     Reference< XInputStream > mxStream;
 

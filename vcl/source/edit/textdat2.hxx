@@ -78,9 +78,7 @@ public:
     bool        HasValidSize() const        { return nWidth != (-1); }
 };
 
-typedef std::vector<TETextPortion*> TextPortionArray;
-
-class TETextPortionList : public TextPortionArray
+class TETextPortionList : public std::vector<TETextPortion*>
 {
 public:
     TETextPortionList();

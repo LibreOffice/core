@@ -47,7 +47,7 @@ TextBody::~TextBody()
 
 TextParagraph& TextBody::addParagraph()
 {
-    TextParagraphPtr xPara( new TextParagraph );
+    std::shared_ptr< TextParagraph > xPara( new TextParagraph );
     maParagraphs.push_back( xPara );
     return *xPara;
 }
