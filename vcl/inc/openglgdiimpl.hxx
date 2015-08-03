@@ -40,6 +40,12 @@ namespace basegfx
 class B2DTrapezoid;
 };
 
+struct TextureCombo
+{
+    std::unique_ptr<OpenGLTexture> mpTexture;
+    std::unique_ptr<OpenGLTexture> mpMask;
+};
+
 class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 protected:
