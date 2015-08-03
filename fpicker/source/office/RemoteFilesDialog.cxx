@@ -1099,12 +1099,11 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     if( nPos >= 0 && m_bServiceChanged && rURL == m_aServices[nPos]->GetUrl() )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
-        OUString sName = m_aServices[nPos]->GetName();
 
         m_pPath->SetRootName( m_sRootLabel );
         m_pTreeView->Clear();
 
-        SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( sName, NULL, true );
+        SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( m_sRootLabel, NULL, true );
         OUString* sData = new OUString( rURL );
         pRoot->SetUserData( static_cast< void* >( sData ) );
 
