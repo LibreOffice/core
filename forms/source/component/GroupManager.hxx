@@ -131,15 +131,12 @@ public:
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 
-typedef std::vector<OGroupCompAcc> OGroupCompAccArr;
-
-
 class OGroup
 {
-    OGroupCompArr       m_aCompArray;
-    OGroupCompAccArr    m_aCompAccArray;
+    OGroupCompArr              m_aCompArray;
+    std::vector<OGroupCompAcc> m_aCompAccArray;
 
-    OUString m_aGroupName;
+    OUString    m_aGroupName;
     sal_uInt16  m_nInsertPos; // The insertion position of the GroupComps is determind by the Group
 
     friend class OGroupLess;

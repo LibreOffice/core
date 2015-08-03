@@ -22,7 +22,6 @@
 
 namespace {
 
-typedef int lt_bool_t;
 typedef void* lt_pointer_t;
 
 struct lt_error_t {
@@ -326,7 +325,7 @@ static void lt_tag_unref(lt_tag_t *tag)
     any i-* irregular and x-* privateuse. Subtags are not checked for validity
     (alpha, digit, registered, ...).
  */
-static lt_bool_t lt_tag_parse(lt_tag_t *tag,
+static int lt_tag_parse(lt_tag_t *tag,
                               const char *tag_string,
                               lt_error_t **error)
 {

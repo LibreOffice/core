@@ -97,7 +97,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
     else if( rInStm.GetToken().Is( SvHash_enum() ) )
     {
-        SvMetaTypeEnumRef aEnum = new SvMetaTypeEnum();
+        tools::SvRef<SvMetaTypeEnum> aEnum = new SvMetaTypeEnum();
 
         if( aEnum->ReadSvIdl( rBase, rInStm ) )
         {

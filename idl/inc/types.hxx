@@ -190,7 +190,6 @@ public:
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SvMetaEnumValue> SvMetaEnumValueRef;
 
 class SvMetaEnumValueMemberList : public SvRefMemberList<SvMetaEnumValue *> {};
 
@@ -211,7 +210,6 @@ public:
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SvMetaTypeEnum> SvMetaTypeEnumRef;
 
 class SvMetaTypeEnumMemberList : public SvRefMemberList<SvMetaTypeEnum *> {};
 

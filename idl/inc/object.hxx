@@ -62,8 +62,6 @@ public:
                     { return xClass; }
 };
 
-typedef tools::SvRef<SvClassElement> SvClassElementRef;
-
 class SvClassElementMemberList : public SvRefMemberList<SvClassElement *> {};
 
 class SvMetaClassMemberList : public SvRefMemberList<SvMetaClass *> {};

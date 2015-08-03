@@ -65,7 +65,6 @@ public:
 
     void                WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
 };
-typedef tools::SvRef<SvMetaModule> SvMetaModuleRef;
 
 class SvMetaModuleMemberList : public SvRefMemberList<SvMetaModule *> {};
 

@@ -35,13 +35,11 @@
 Serialize an XObject
 */
 
-typedef std::map<OUString, OUString> PropMap;
-
 class CSerialization
 {
 protected:
     css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
-    PropMap m_properties;
+    std::map<OUString, OUString> m_properties;
 
 public:
     virtual ~CSerialization() {}

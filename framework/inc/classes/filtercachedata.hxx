@@ -355,17 +355,6 @@ class PerformanceHash   :   public  std::unordered_map< OUString,
 {
 };
 
-// Define easy usable types
-
-typedef SetNodeHash< FileType >                                     FileTypeHash;
-typedef SetNodeHash< Filter >                                       FilterHash;
-typedef SetNodeHash< Detector >                                     DetectorHash;
-typedef SetNodeHash< Loader >                                       LoaderHash;
-typedef SetNodeHash< ContentHandler >                               ContentHandlerHash;
-typedef OUStringHashMap                                             PreferredHash;
-typedef OUStringList                                                OrderList;
-
-
 
 // Use private static data container to hold all values of configuration!
 
@@ -398,16 +387,16 @@ class DataContainer
 
         DataContainer();
 
-        FileTypeHash            m_aTypeCache;               /// hold all information about registered file types
-        FilterHash              m_aFilterCache;             /// hold all information about registered filters
-        DetectorHash            m_aDetectorCache;           /// hold all information about registered detect services
-        LoaderHash              m_aLoaderCache;             /// hold all information about registered loader services
-        ContentHandlerHash      m_aContentHandlerCache;     /// hold all information about registered content handler services
+        SetNodeHash< FileType > m_aTypeCache;               /// hold all information about registered file types
+        SetNodeHash< Filter >   m_aFilterCache;             /// hold all information about registered filters
+        SetNodeHash< Detector > m_aDetectorCache;           /// hold all information about registered detect services
+        SetNodeHash< Loader >   m_aLoaderCache;             /// hold all information about registered loader services
+        SetNodeHash< ContentHandler > m_aContentHandlerCache;     /// hold all information about registered content handler services
         PerformanceHash         m_aFastFilterCache;         /// hold all registered filter for a special file type
         PerformanceHash         m_aFastDetectorCache;       /// hold all registered detect services for a special file type
         PerformanceHash         m_aFastLoaderCache;         /// hold all registered loader services for a special file type
         PerformanceHash         m_aFastContentHandlerCache; /// hold all registered content handler services for a special file type
-        PreferredHash           m_aPreferredTypesCache;     /// assignment of extensions to preferred types for it
+        OUStringHashMap         m_aPreferredTypesCache;     /// assignment of extensions to preferred types for it
         Loader                  m_aGenericLoader;           /// information about our default frame loader
         OUString                m_sLocale;                  /// current set locale of configuration to handle right UIName from set of all UINames!
         bool                    m_bTypesModified;

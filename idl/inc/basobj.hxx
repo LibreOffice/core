@@ -100,12 +100,10 @@ public:
 
 class SvMetaNameMemberList : public SvRefMemberList<SvMetaName *> {};
 
-class SvMetaReference;
-typedef tools::SvRef<SvMetaReference> SvMetaReferenceRef;
 class SvMetaReference : public SvMetaName
 {
 protected:
-    SvMetaReferenceRef  aRef;
+    tools::SvRef<SvMetaReference>  aRef;
 public:
             TYPEINFO_OVERRIDE();
             SvMetaReference();

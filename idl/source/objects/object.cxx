@@ -58,7 +58,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
         if( pClass )
         {
-            SvClassElementRef xEle = new SvClassElement();
+            tools::SvRef<SvClassElement> xEle = new SvClassElement();
             xEle->SetClass( pClass );
             aClassList.push_back( xEle );
 

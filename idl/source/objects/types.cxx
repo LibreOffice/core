@@ -704,7 +704,7 @@ void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
 {
     sal_uInt32 nTokPos = rInStm.Tell();
 
-    SvMetaEnumValueRef aEnumVal = new SvMetaEnumValue();
+    tools::SvRef<SvMetaEnumValue> aEnumVal = new SvMetaEnumValue();
     bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
     if( bOk )
     {

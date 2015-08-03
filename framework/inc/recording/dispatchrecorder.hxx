@@ -45,8 +45,6 @@
 
 namespace framework{
 
-typedef ::std::vector < com::sun::star::frame::DispatchStatement > DispatchStatementList;
-
 class DispatchRecorder
     : public  ::cppu::WeakImplHelper3<
                 css::lang::XServiceInfo
@@ -55,7 +53,7 @@ class DispatchRecorder
 {
     // private member
     private:
-        DispatchStatementList                                  m_aStatements;
+        ::std::vector < css::frame::DispatchStatement >        m_aStatements;
         sal_Int32                                              m_nRecordingID;
         css::uno::Reference< css::script::XTypeConverter >     m_xConverter;
 

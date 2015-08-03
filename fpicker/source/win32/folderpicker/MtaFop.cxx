@@ -39,9 +39,6 @@ const sal_Bool MANUAL_RESET     = sal_True;
 const sal_Bool AUTO_RESET       = sal_False;
 const sal_Bool INIT_NONSIGNALED = sal_False;
 
-typedef sal::systools::COMReference<IMalloc> IMallocPtr;
-typedef sal::systools::COMReference<IShellFolder> IShellFolderPtr;
-
 namespace
 {
     const char* FOLDERPICKER_SRV_DLL_NAME = "fps.dll";
@@ -416,7 +413,7 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
 
 void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
 {
-    IMallocPtr pIMalloc;
+    sal::systools::COMReference<IMalloc> pIMalloc;
     SHGetMalloc(&pIMalloc);
     if (pIMalloc.is())
     {
@@ -437,7 +434,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& a
 
     LPITEMIDLIST lpItemIdList(NULL);
 
-    IShellFolderPtr pIShellFolder;
+    sal::systools::COMReference<IShellFolder> pIShellFolder;
     SHGetDesktopFolder(&pIShellFolder);
 
     if (pIShellFolder.is())
