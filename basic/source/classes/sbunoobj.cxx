@@ -105,8 +105,6 @@ TYPEINIT1(SbUnoService,SbxObject)
 TYPEINIT1(SbUnoServiceCtor,SbxMethod)
 TYPEINIT1(SbUnoSingleton,SbxObject)
 
-typedef WeakImplHelper< XAllListener > BasicAllListenerHelper;
-
 // Identifiers for creating the strings for dbg_Properties
 static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
 static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
@@ -3882,7 +3880,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 // Implementation of an EventAttacher-drawn AllListener, which
 // solely transmits several events to an general AllListener
-class BasicAllListener_Impl : public BasicAllListenerHelper
+class BasicAllListener_Impl : public WeakImplHelper< XAllListener >
 {
     void firing_impl(const AllEventObject& Event, Any* pRet);
 
@@ -4322,10 +4320,8 @@ protected:
 };
 } // namespace
 
-typedef WeakImplHelper< XInvocation, XComponent > ModuleInvocationProxyHelper;
-
 class ModuleInvocationProxy : public OMutexBasis,
-                              public ModuleInvocationProxyHelper
+                              public WeakImplHelper< XInvocation, XComponent >
 {
     OUString            m_aPrefix;
     SbxObjectRef        m_xScopeObj;

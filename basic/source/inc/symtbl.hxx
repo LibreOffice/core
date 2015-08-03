@@ -49,17 +49,16 @@ public:
 };
 
 
-typedef boost::ptr_vector<SbiSymDef> SbiSymbols;
-
 class SbiSymPool {
     friend class SbiSymDef;
     friend class SbiProcDef;
 protected:
     SbiStringPool& rStrings;
-    SbiSymbols  aData;
-    SbiSymPool* pParent;
-    SbiParser*  pParser;
-    SbiSymScope eScope;
+    boost::ptr_vector<SbiSymDef>
+                   aData;
+    SbiSymPool*    pParent;
+    SbiParser*     pParser;
+    SbiSymScope    eScope;
     sal_uInt16     nProcId;             // for STATIC-variable
     sal_uInt16     nCur;                // iterator
 public:

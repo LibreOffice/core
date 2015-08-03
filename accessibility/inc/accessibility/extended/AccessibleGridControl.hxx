@@ -159,9 +159,9 @@ private:
     <p>The instance holds its XAccessibleContext with a hard reference, while
     the context holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper< css::accessibility::XAccessible > AccessibleGridControlAccess_Base;
 
-class AccessibleGridControlAccess :public AccessibleGridControlAccess_Base
+class AccessibleGridControlAccess :
+     public ::cppu::WeakImplHelper< css::accessibility::XAccessible >
     ,public ::svt::table::IAccessibleTableControl
 {
 private:

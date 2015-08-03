@@ -66,12 +66,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 
-typedef ::cppu::WeakImplHelper< task::XInteractionHandler > HandlerImpl_BASE;
-
 namespace
 {
 
-class DummyInteractionHandler  : public HandlerImpl_BASE
+class DummyInteractionHandler  : public ::cppu::WeakImplHelper< task::XInteractionHandler >
 {
     Reference< task::XInteractionHandler2 > m_xHandler;
 public:
@@ -1167,9 +1165,8 @@ void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetUR
 }
 
 // Implementation XCommandEnvironment
-typedef cppu::WeakImplHelper< XCommandEnvironment > LibCommandEnvironmentHelper;
 
-class OLibCommandEnvironment : public LibCommandEnvironmentHelper
+class OLibCommandEnvironment : public cppu::WeakImplHelper< XCommandEnvironment >
 {
     Reference< task::XInteractionHandler > mxInteraction;
 

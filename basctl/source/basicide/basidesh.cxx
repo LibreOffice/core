@@ -62,9 +62,7 @@ namespace basctl
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper< container::XContainerListener > ContainerListenerBASE;
-
-class ContainerListenerImpl : public ContainerListenerBASE
+class ContainerListenerImpl : public ::cppu::WeakImplHelper< container::XContainerListener >
 {
     Shell* mpShell;
 public:

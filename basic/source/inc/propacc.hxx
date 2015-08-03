@@ -86,8 +86,6 @@ public:
 
 
 
-typedef ::cppu::WeakImplHelper< css::beans::XPropertySetInfo > SbPropertySetInfoHelper;
-
 // AB 20.3.2000 Help Class for XPropertySetInfo implementation
 class PropertySetInfoImpl
 {
@@ -109,7 +107,7 @@ public:
         throw ( css::uno::RuntimeException );
 };
 
-class SbPropertySetInfo:    public SbPropertySetInfoHelper
+class SbPropertySetInfo: public ::cppu::WeakImplHelper< css::beans::XPropertySetInfo >
 {
     PropertySetInfoImpl aImpl;
 

@@ -75,8 +75,6 @@ using namespace cppu;
 
 typedef WeakImplHelper< container::XNameContainer > NameContainerHelper;
 typedef WeakImplHelper< script::XStarBasicModuleInfo > ModuleInfoHelper;
-typedef WeakImplHelper< script::XStarBasicDialogInfo > DialogInfoHelper;
-typedef WeakImplHelper< script::XStarBasicLibraryInfo > LibraryInfoHelper;
 typedef WeakImplHelper< script::XStarBasicAccess > StarBasicAccessHelper;
 
 // Version 1
@@ -1721,7 +1719,7 @@ public:
 
 
 
-class DialogInfo_Impl : public DialogInfoHelper
+class DialogInfo_Impl : public WeakImplHelper< script::XStarBasicDialogInfo >
 {
     OUString maName;
     uno::Sequence< sal_Int8 > mData;
@@ -1740,7 +1738,7 @@ public:
 
 
 
-class LibraryInfo_Impl : public LibraryInfoHelper
+class LibraryInfo_Impl : public WeakImplHelper< script::XStarBasicLibraryInfo >
 {
     OUString maName;
     uno::Reference< container::XNameContainer > mxModuleContainer;

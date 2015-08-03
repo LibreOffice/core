@@ -27,9 +27,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo;
 
-typedef ::cppu::WeakImplHelper< vba::XErrObject, script::XDefaultProperty > ErrObjectImpl_BASE;
-
-class ErrObject : public ErrObjectImpl_BASE
+class ErrObject : public ::cppu::WeakImplHelper< vba::XErrObject,
+                                                 script::XDefaultProperty >
 {
     OUString m_sHelpFile;
     OUString m_sSource;
