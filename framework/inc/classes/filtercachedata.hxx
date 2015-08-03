@@ -365,8 +365,6 @@ typedef SetNodeHash< ContentHandler >                               ContentHandl
 typedef OUStringHashMap                                             PreferredHash;
 typedef OUStringList                                                OrderList;
 
-typedef CheckedIterator< OUStringList >                             CheckedStringListIterator;
-typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator;
 
 
 // Use private static data container to hold all values of configuration!
