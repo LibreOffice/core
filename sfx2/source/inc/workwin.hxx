@@ -155,9 +155,6 @@ enum class SfxDockingConfig
     MOVEDOCKINGWINDOW
 };
 
-typedef std::vector<SfxChild_Impl*> SfxChildList_Impl;
-typedef std::vector<SfxChildWin_Impl*> SfxChildWindows_Impl;
-
 
 struct SfxObjectBarList_Impl
 {
@@ -221,8 +218,10 @@ protected:
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
     VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
-    SfxChildList_Impl       aChildren;
-    SfxChildWindows_Impl    aChildWins;
+    std::vector<SfxChild_Impl*>
+                            aChildren;
+    std::vector<SfxChildWin_Impl*>
+                            aChildWins;
     SfxBindings*            pBindings;
     VclPtr<vcl::Window>     pWorkWin;
     SfxShell*               pConfigShell;
@@ -237,10 +236,10 @@ protected:
     bool                    bIsFullScreen : 1;
     bool                    bShowStatusBar : 1;
     sal_Int32               m_nLock;
-    OUString           m_aStatusBarResName;
-    OUString           m_aLayoutManagerPropName;
-    OUString           m_aTbxTypeName;
-    OUString           m_aProgressBarResName;
+    OUString                m_aStatusBarResName;
+    OUString                m_aLayoutManagerPropName;
+    OUString                m_aTbxTypeName;
+    OUString                m_aProgressBarResName;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xLayoutManagerListener;
 
 protected:

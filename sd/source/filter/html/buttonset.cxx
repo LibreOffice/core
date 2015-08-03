@@ -133,7 +133,6 @@ bool ButtonsImpl::copyGraphic( const OUString& rName, const OUString& rPath )
     return false;
 }
 
-typedef std::vector< boost::shared_ptr< ButtonsImpl > > ButtonVector;
 class ButtonSetImpl
 {
 public:
@@ -148,7 +147,7 @@ public:
 
     Reference< XGraphicProvider > getGraphicProvider();
 
-    ButtonVector maButtons;
+    std::vector< boost::shared_ptr< ButtonsImpl > >  maButtons;
     Reference< XGraphicProvider > mxGraphicProvider;
 };
 

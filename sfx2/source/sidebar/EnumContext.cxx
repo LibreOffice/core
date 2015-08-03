@@ -27,14 +27,14 @@ namespace sfx2 { namespace sidebar {
 namespace {
 
 typedef ::std::map<rtl::OUString,EnumContext::Application> ApplicationMap;
-typedef ::std::vector<rtl::OUString> ApplicationVector;
+
 static ApplicationMap maApplicationMap;
-static ApplicationVector maApplicationVector;
+static ::std::vector<rtl::OUString> maApplicationVector;
 
 typedef ::std::map<rtl::OUString,EnumContext::Context> ContextMap;
-typedef ::std::vector<rtl::OUString> ContextVector;
+
 static ContextMap maContextMap;
-static ContextVector maContextVector;
+static ::std::vector<rtl::OUString> maContextVector;
 
 }
 
@@ -211,8 +211,7 @@ EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsConte
 {
     ProvideContextContainers();
 
-    ContextMap::const_iterator iContext(
-        maContextMap.find(rsContextName));
+    ContextMap::const_iterator iContext( maContextMap.find(rsContextName) );
     if (iContext != maContextMap.end())
         return iContext->second;
     else

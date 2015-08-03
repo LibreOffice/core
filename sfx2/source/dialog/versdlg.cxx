@@ -64,12 +64,10 @@ struct SfxVersionInfo
                             SfxVersionInfo();
 };
 
-typedef vector< SfxVersionInfo* > _SfxVersionTable;
-
 class SfxVersionTableDtor: private boost::noncopyable
 {
 private:
-    _SfxVersionTable        aTableList;
+    std::vector< SfxVersionInfo* >  aTableList;
 public:
                             SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
                             SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );

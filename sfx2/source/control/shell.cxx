@@ -53,24 +53,22 @@ typedef boost::ptr_map<sal_uInt16, SfxPoolItem> SfxItemPtrMap;
 
 TYPEINIT0(SfxShell);
 
-typedef boost::ptr_vector<SfxSlot> SfxVerbSlotArr_Impl;
-
 using namespace com::sun::star;
 
 struct SfxShell_Impl: public SfxBroadcaster
 {
-    OUString                 aObjectName;   // Name of Sbx-Objects
-    SfxItemPtrMap            aItems;        // Data exchange on Item level
-    SfxViewShell*            pViewSh;       // SfxViewShell if Shell is
+    OUString                    aObjectName;   // Name of Sbx-Objects
+    SfxItemPtrMap               aItems;        // Data exchange on Item level
+    SfxViewShell*               pViewSh;       // SfxViewShell if Shell is
                                             // ViewFrame/ViewShell/SubShell list
-    SfxViewFrame*            pFrame;        // Frame, if  <UI-active>
-    SfxRepeatTarget*         pRepeatTarget; // SbxObjectRef xParent;
+    SfxViewFrame*               pFrame;        // Frame, if  <UI-active>
+    SfxRepeatTarget*            pRepeatTarget; // SbxObjectRef xParent;
     bool                        bActive;
     sal_uIntPtr                 nDisableFlags;
     sal_uIntPtr                 nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
-    SfxVerbSlotArr_Impl         aSlotArr;
+    boost::ptr_vector<SfxSlot>  aSlotArr;
 
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;

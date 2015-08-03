@@ -114,8 +114,6 @@ protected:
     ::osl::Mutex& mrMutex;
 };
 
-typedef ::std::unique_ptr< SlideShowViewListeners >   SlideShowViewListenersPtr;
-
 // SlideShowViewPaintListeners
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XPaintListener,
                                                 ::com::sun::star::awt::PaintEvent >         SlideShowViewPaintListeners_Base;
@@ -128,7 +126,6 @@ public:
 protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener, const ::com::sun::star::awt::PaintEvent& rEvent ) throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 };
-typedef ::std::unique_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
 
 // SlideShowViewMouseListeners
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseListener, WrappedMouseEvent > SlideShowViewMouseListeners_Base;
@@ -143,7 +140,6 @@ protected:
                              const WrappedMouseEvent&                   rEvent ) throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 };
 
-typedef ::std::unique_ptr< SlideShowViewMouseListeners >  SlideShowViewMouseListenersPtr;
 
 // SlideShowViewMouseMotionListeners
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseMotionListener,
@@ -158,7 +154,6 @@ protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >&    rListener,
                              const WrappedMouseMotionEvent&                 rEvent ) throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 };
-typedef ::std::unique_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMouseMotionListenersPtr;
 
 // SlideShowView
 class ShowWindow;
@@ -237,10 +232,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >             mxPointer;
     SlideshowImpl*                          mpSlideShow;
     ShowWindow&                             mrOutputWindow;
-    SlideShowViewListenersPtr               mpViewListeners;
-    SlideShowViewPaintListenersPtr          mpPaintListeners;
-    SlideShowViewMouseListenersPtr          mpMouseListeners;
-    SlideShowViewMouseMotionListenersPtr    mpMouseMotionListeners;
+    ::std::unique_ptr< SlideShowViewListeners >
+                                            mpViewListeners;
+    ::std::unique_ptr< SlideShowViewPaintListeners >
+                                            mpPaintListeners;
+    ::std::unique_ptr< SlideShowViewMouseListeners >
+                                            mpMouseListeners;
+    ::std::unique_ptr< SlideShowViewMouseMotionListeners >
+                                            mpMouseMotionListeners;
     SdDrawDocument*                         mpDoc;
     bool                                    mbIsMouseMotionListener;
     Rectangle                               maPresentationArea;

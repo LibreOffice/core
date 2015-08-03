@@ -153,7 +153,6 @@ class Updater_Impl;
 class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
 
-typedef vector< NamePair_Impl* > NameList_Impl;
 typedef vector< GroupData_Impl* > GroupList_Impl;
 
 
@@ -185,12 +184,12 @@ class SfxDocTplService_Impl
     Sequence< OUString >        maTemplateDirs;
     Sequence< OUString >        maInternalTemplateDirs;
     OUString                    maRootURL;
-    NameList_Impl               maNames;
-    lang::Locale                      maLocale;
+    std::vector< NamePair_Impl* > maNames;
+    lang::Locale                maLocale;
     Content                     maRootContent;
     Updater_Impl*               mpUpdater;
-    bool                    mbIsInitialized : 1;
-    bool                    mbLocaleSet     : 1;
+    bool                        mbIsInitialized : 1;
+    bool                        mbLocaleSet     : 1;
 
     SfxURLRelocator_Impl        maRelocator;
 
@@ -198,7 +197,7 @@ class SfxDocTplService_Impl
     void                        getDefaultLocale();
     void                        getDirList();
     void                        readFolderList();
-    bool                    needsUpdate();
+    bool                        needsUpdate();
     OUString                    getLongName( const OUString& rShortName );
     bool                    setTitleForURL( const OUString& rURL, const OUString& aTitle );
     bool                    getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, bool& bDocHasTitle );

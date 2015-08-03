@@ -281,8 +281,6 @@ private:
     iso_lang_identifier active_iso_lang_;
 };
 
-typedef std::map< unsigned short , std::string , std::less< unsigned short > > shortmap;
-
 void add_group_entries(
     Config& aConfig,
     const OString& GroupName,
@@ -292,7 +290,7 @@ void add_group_entries(
 
     aConfig.SetGroup(GroupName);
     size_t key_count = aConfig.GetKeyCount();
-    shortmap map;
+    std::map< unsigned short , std::string > map;
 
     for (size_t i = 0; i < key_count; i++)
     {

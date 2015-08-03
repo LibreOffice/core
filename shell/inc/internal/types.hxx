@@ -33,13 +33,9 @@ typedef std::vector<std::wstring> StringList_t;
 //              XmlTags_t, tags defined with tag name and xml tag.
 //  Contents:   Definitions of xml tag used in parser.
 
-typedef std::wstring Name_t;
-typedef std::wstring Value_t;
-typedef std::wstring Characters_t;
-
-typedef std::map<Name_t, Value_t>                   XmlTagAttributes_t;
-typedef std::pair<Characters_t, XmlTagAttributes_t> XmlTag_t;
-typedef std::map<Name_t, XmlTag_t>                  XmlTags_t;
+typedef std::map<std::wstring, std::wstring>          XmlTagAttributes_t;
+typedef std::pair<std::wstring, XmlTagAttributes_t>   XmlTag_t;
+typedef std::map<std::wstring, XmlTag_t>              XmlTags_t;
 
 const XmlTag_t EMPTY_XML_TAG = std::make_pair(std::wstring(), XmlTagAttributes_t());
 

@@ -167,8 +167,6 @@ void ColorListBoxWrapper::SetControlValue( Color aColor )
 
 
 typedef std::vector< ControlWrapperBase* >  ControlWrpVec;
-typedef ControlWrpVec::iterator             ControlWrpVecI;
-typedef ControlWrpVec::const_iterator       ControlWrpVecCI;
 
 struct MultiControlWrapperHelper_Impl
 {
@@ -191,21 +189,21 @@ void MultiControlWrapperHelper::RegisterControlWrapper( ControlWrapperBase& rWra
 
 void MultiControlWrapperHelper::ModifyControl( TriState eEnable, TriState eShow )
 {
-    for( ControlWrpVecI aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
+    for( ControlWrpVec::iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
         (*aIt)->ModifyControl( eEnable, eShow );
 }
 
 bool MultiControlWrapperHelper::IsControlDontKnow() const
 {
     bool bIs = !mxImpl->maVec.empty();
-    for( ControlWrpVecCI aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); bIs && (aIt != aEnd); ++aIt )
+    for( ControlWrpVec::const_iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); bIs && (aIt != aEnd); ++aIt )
         bIs &= (*aIt)->IsControlDontKnow();
     return bIs;
 }
 
 void MultiControlWrapperHelper::SetControlDontKnow( bool bSet )
 {
-    for( ControlWrpVecI aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
+    for( ControlWrpVec::iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
         (*aIt)->SetControlDontKnow( bSet );
 }
 
