@@ -236,8 +236,6 @@ public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 };
 
-typedef ::std::vector< FilterEntry* > FilterEntryList_impl;
-
 class TPGalleryThemeProperties : public SfxTabPage
 {
     friend class SearchThread;
@@ -254,7 +252,8 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     ExchangeData*           pData;
     StringList              aFoundList;
-    FilterEntryList_impl    aFilterEntryList;
+    ::std::vector< FilterEntry* >
+                            aFilterEntryList;
     Timer                   aPreviewTimer;
     OUString                aLastFilterName;
     OUString                aPreviewString;

@@ -40,14 +40,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-typedef std::map<OUString, Any> GenericAnyMapImpl;
-
 namespace comphelper
 {
     struct IMPL_GenericPropertySet_MutexContainer
     {
-        Mutex maMutex ;
-    } ;
+        Mutex maMutex;
+    };
 
     class GenericPropertySet :  public OWeakAggObject,
                                 public XServiceInfo,
@@ -56,7 +54,7 @@ namespace comphelper
                                 private IMPL_GenericPropertySet_MutexContainer
     {
     private:
-        GenericAnyMapImpl   maAnyMap;
+        std::map<OUString, Any>   maAnyMap;
         cppu::OMultiTypeInterfaceContainerHelperVar<OUString> m_aListener;
 
     protected:

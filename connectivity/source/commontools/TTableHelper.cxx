@@ -50,12 +50,13 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
 namespace
 {
     /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper< XContainerListener > OTableContainerListener_BASE;
 class OTableContainerListener:
-    public OTableContainerListener_BASE, private boost::noncopyable
+    public ::cppu::WeakImplHelper< XContainerListener >,
+    private boost::noncopyable
 {
     OTableHelper* m_pComponent;
     ::std::map< OUString,bool> m_aRefNames;

@@ -211,7 +211,6 @@ struct DoubleString
 };
 
 typedef std::vector<DoubleString> DoubleStringArray;
-typedef std::map<LanguageType, DoubleStringArray> DoubleStringTable;
 
 struct StringChangeList
 {
@@ -240,8 +239,9 @@ private:
         OUString        sModify;
         OUString        sNew;
 
-        std::set<OUString> aFormatText;
-        DoubleStringTable       aDoubleStringTable;
+        std::set<OUString>      aFormatText;
+        std::map<LanguageType, DoubleStringArray>
+                                aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
         CharClass*              pCharClass;
         LanguageType            eLang;

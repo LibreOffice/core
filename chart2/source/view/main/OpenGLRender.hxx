@@ -42,8 +42,6 @@ struct Bubble2DPointList
     float yScale;
 };
 
-typedef std::vector<GLfloat> Bubble2DCircle;
-
 struct RectanglePointList
 {
     float points[12];
@@ -159,7 +157,7 @@ private:
 
     glm::vec4 m_2DColor;
 
-    Bubble2DCircle m_Bubble2DCircle;
+    std::vector<GLfloat> m_Bubble2DCircle;
 
     std::list <Bubble2DPointList> m_Bubble2DShapePointList;
     GLint m_CommonProID;

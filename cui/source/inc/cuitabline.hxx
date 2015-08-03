@@ -82,7 +82,6 @@ public:
 /*************************************************************************/
 
 struct SvxBmpItemInfo;
-typedef ::std::vector< SvxBmpItemInfo* > SvxBmpItemInfoList;
 
 class SvxLineTabPage : public SvxTabPage
 {
@@ -136,17 +135,18 @@ private:
     VclPtr<MetricField>        m_pSymbolWidthMF;
     VclPtr<MetricField>        m_pSymbolHeightMF;
     VclPtr<CheckBox>           m_pSymbolRatioCB;
-    std::vector<OUString> aGrfNames;
-    SvxBmpItemInfoList  aGrfBrushItems;
-    bool            bLastWidthModified;
+    std::vector<OUString>      aGrfNames;
+    ::std::vector< SvxBmpItemInfo* >
+                               aGrfBrushItems;
+    bool                bLastWidthModified;
     Size                aSymbolLastSize;
     Graphic             aSymbolGraphic;
     Size                aSymbolSize;
-    bool            bSymbols;
+    bool                bSymbols;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
-    bool            bObjSelected;
+    bool                bObjSelected;
 
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;

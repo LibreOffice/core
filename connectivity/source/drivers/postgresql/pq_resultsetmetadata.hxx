@@ -61,9 +61,6 @@ struct ColDesc
 
 class ResultSet;
 
-typedef std::vector< ColDesc > ColDescVector;
-
-
 class ResultSetMetaData :
         public ::cppu::WeakImplHelper< com::sun::star::sdbc::XResultSetMetaData >
 {
@@ -73,7 +70,7 @@ class ResultSetMetaData :
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_table;
     OUString m_tableName;
     OUString m_schemaName;
-    ColDescVector m_colDesc;
+    std::vector< ColDesc > m_colDesc;
     ResultSet *m_pResultSet;
 
     bool m_checkedForTable;
