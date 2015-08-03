@@ -94,7 +94,7 @@ FILE * init(int argc, char ** argv)
 
     if (aArgs.m_bMergeMode) {
         global::exporter.reset(new Export(aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
-                                          aArgs.m_sLanguage, aArgs.m_bUTF8BOM));
+                                          aArgs.m_bUTF8BOM));
     } else {
         global::exporter.reset(new Export(aArgs.m_sOutputFile));
     }
@@ -203,7 +203,6 @@ Export::Export(const OString &rOutput)
                 bError( false ),
                 bReadOver( false ),
                 sFilename( global::inputPathname ),
-                sLanguages( OString() ),
                 pParseQueue( new ParserQueue( *this ) )
 {
     aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
@@ -216,7 +215,7 @@ Export::Export(const OString &rOutput)
 
 Export::Export(
     const OString &rMergeSource, const OString &rOutput,
-    const OString &rLanguage, bool bUTF8BOM)
+    bool bUTF8BOM)
                 :
                 bDefine( false ),
                 bNextMustBeDefineEOL( false ),
@@ -229,7 +228,6 @@ Export::Export(
                 bError( false ),
                 bReadOver( false ),
                 sFilename( global::inputPathname ),
-                sLanguages( rLanguage ),
                 pParseQueue( new ParserQueue( *this ) )
 {
     aOutput.mSimple = new std::ofstream();

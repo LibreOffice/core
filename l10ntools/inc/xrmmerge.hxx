@@ -30,7 +30,6 @@ class XRMResParser
 {
 private:
     OString sGID;
-    OString sLID;
 
     bool bError;
     bool bText;

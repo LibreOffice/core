@@ -139,7 +139,6 @@ private:
     bool bError;                        // any errors while export?
     bool bReadOver;
     OString sFilename;
-    OString sLanguages;
 
     std::vector<OString> aLanguages;
 
@@ -172,7 +171,7 @@ private:
 
 public:
     Export( const OString &rOutput );
-    Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage, bool bUTF8BOM);
+    Export(const OString &rMergeSource, const OString &rOutput, bool bUTF8BOM);
     ~Export();
 
     void Init();
