@@ -138,7 +138,11 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
     rRegion.SetMark();
     if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
-        rRegion.GetPoint()->nNode = rPtPos.m_nNode.GetIndex() + 1;
+        sal_uLong n = rPtPos.m_nNode.GetIndex() + 1;
+        SwNodes& rNodes = rRegion.GetPoint()->nNode.GetNodes();
+        if (n >= rNodes.Count())
+            return false;
+        rRegion.GetPoint()->nNode = n;
         pCNd = GetContentNode(pDoc, rRegion.GetPoint()->nNode, false);
     }
     rRegion.GetPoint()->nContent.Assign(pCNd, rPtPos.m_nContent);
