@@ -34,10 +34,9 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 {
     if( pEntry )
     {
-        while( GetChildCount( pEntry ) > 0 )
+        while (SvTreeListEntry* pChild = FirstChild(pEntry))
         {
-            SvTreeListEntry* pChild = FirstChild( pEntry );
-            GetModel()->Remove( pChild );
+            GetModel()->Remove(pChild);
         }
 
         ::std::vector< SortingData_Impl* > aContent;
