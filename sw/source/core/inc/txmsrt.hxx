@@ -54,8 +54,6 @@ struct SwTOXSource
     }
 };
 
-typedef std::vector<SwTOXSource> SwTOXSources;
-
 struct TextAndReading
 {
     OUString sText;
@@ -120,7 +118,7 @@ public:
  */
 struct SwTOXSortTabBase
 {
-    SwTOXSources aTOXSources;
+    std::vector<SwTOXSource>       aTOXSources;
     ::com::sun::star::lang::Locale aLocale;
     const SwTextNode* pTOXNd;
     const SwTextTOXMark* pTextMark;

@@ -27,8 +27,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper< container::XEnumeration > FramesEnumeration_Base;
-class FramesEnumeration : public FramesEnumeration_Base
+class FramesEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

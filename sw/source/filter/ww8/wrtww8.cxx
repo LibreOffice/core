@@ -175,7 +175,6 @@ public:
 };
 
 typedef std::map<OUString,long> BKMKNames;
-typedef BKMKNames::iterator BKMKNmItr;
 typedef std::pair<bool,OUString> BKMK;
 typedef std::pair<long,BKMK> BKMKCP;
 typedef std::multimap<long,BKMKCP*> BKMKCPs;
@@ -216,7 +215,7 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
 
 void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm, const ::sw::mark::IMark*)
 {
-    std::pair<BKMKNmItr,bool> aResult = maSwBkmkNms.insert(std::pair<OUString,long>(rNm,0L));
+    std::pair<BKMKNames::iterator, bool> aResult = maSwBkmkNms.insert(std::pair<OUString,long>(rNm,0L));
     if (aResult.second)
     {
         BKMK aBK(false,rNm);

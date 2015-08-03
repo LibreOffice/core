@@ -55,18 +55,15 @@ struct SwRedlineDataParent
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
-typedef boost::ptr_vector<SwRedlineDataParent> SwRedlineDataParentArr;
-
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
 
 typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
 
-typedef std::vector<SvTreeListEntry*> SvLBoxEntryArr;
-
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
     VclPtr<vcl::Window>     pParentDlg;
-    SwRedlineDataParentArr  aRedlineParents;
+    boost::ptr_vector<SwRedlineDataParent>
+                            aRedlineParents;
     SwRedlineDataChildArr   aRedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
     VclPtr<SvxAcceptChgCtr>    aTabPagesCTRL;

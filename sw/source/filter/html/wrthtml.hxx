@@ -209,8 +209,6 @@ public:
     ~HTMLControls() { DeleteAndDestroyAll(); }
 };
 
-typedef std::vector<SwFormatINetFormat*> INetFormats;
-
 struct SwHTMLFormatInfo
 {
     const SwFormat *pFormat;      // das Format selbst
@@ -308,7 +306,7 @@ public:
     HTMLControls aHTMLControls;     // die zu schreibenden Forms
     SwHTMLFormatInfos m_CharFormatInfos;
     SwHTMLFormatInfos m_TextCollInfos;
-    INetFormats aINetFormats;             // die "offenen" INet-Attribute
+    std::vector<SwFormatINetFormat*> aINetFormats; // die "offenen" INet-Attribute
     SwHTMLTextFootnotes *pFootEndNotes;
 
     OUString aCSS1Selector;           // der Selektor eines Styles

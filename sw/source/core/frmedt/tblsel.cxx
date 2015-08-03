@@ -95,8 +95,6 @@ struct _Sort_CellFrm
         : pFrm( &rCFrm ) {}
 };
 
-typedef std::deque< _Sort_CellFrm > _Sort_CellFrms;
-
 static const SwLayoutFrm *lcl_FindCellFrm( const SwLayoutFrm *pLay )
 {
     while ( pLay && !pLay->IsCellFrm() )
@@ -484,7 +482,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                 break;
             }
 
-            _Sort_CellFrms aCellFrms;
+            std::deque< _Sort_CellFrm > aCellFrms;
 
             // Skip any repeated headlines in the follow:
             const SwLayoutFrm* pRow = pTable->IsFollow() ?

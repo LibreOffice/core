@@ -24,8 +24,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 // I assume there is only one pane in Writer
-typedef ::cppu::WeakImplHelper<container::XIndexAccess > PanesIndexAccess_Base;
-class PanesIndexAccess : public PanesIndexAccess_Base
+class PanesIndexAccess : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

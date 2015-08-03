@@ -38,20 +38,18 @@ struct SW_DLLPUBLIC SwSortKey
     bool            bIsNumeric;
 };
 
-typedef std::vector<SwSortKey*> SwSortKeys;
-
 struct SW_DLLPUBLIC SwSortOptions
 {
     SwSortOptions();
     ~SwSortOptions();
     SwSortOptions(const SwSortOptions& rOpt);
 
-    SwSortKeys      aKeys;
-    SwSortDirection eDirection;
-    sal_Unicode     cDeli;
-    sal_uInt16          nLanguage;
-    bool            bTable;
-    bool            bIgnoreCase;
+    std::vector<SwSortKey*> aKeys;
+    SwSortDirection         eDirection;
+    sal_Unicode             cDeli;
+    sal_uInt16              nLanguage;
+    bool                    bTable;
+    bool                    bIgnoreCase;
 };
 
 #endif // INCLUDED_SW_INC_SORTOPT_HXX

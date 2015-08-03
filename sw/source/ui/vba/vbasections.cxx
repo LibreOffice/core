@@ -28,11 +28,9 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper< container::XEnumeration > SectionEnumeration_BASE;
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > SectionCollectionHelper_Base;
 typedef std::vector< uno::Reference< beans::XPropertySet > > XSectionVec;
 
-class SectionEnumeration : public SectionEnumeration_BASE
+class SectionEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     XSectionVec mxSections;
     XSectionVec::iterator mIt;
@@ -53,7 +51,8 @@ public:
 };
 
 // here I regard pagestyle as section
-class SectionCollectionHelper : public SectionCollectionHelper_Base
+class SectionCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                               container::XEnumerationAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

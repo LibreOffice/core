@@ -38,8 +38,6 @@ static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaP
     xParaProps->setPropertyValue("ParaTabStops", uno::makeAny( aSeq ) );
 }
 
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > TabStopCollectionHelper_Base;
-
 class TabStopsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference< container::XIndexAccess > mxIndexAccess;
@@ -64,7 +62,8 @@ public:
     }
 };
 
-class TabStopCollectionHelper : public TabStopCollectionHelper_Base
+class TabStopCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                               container::XEnumerationAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

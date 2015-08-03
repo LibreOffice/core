@@ -26,8 +26,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > CellCollectionHelper_Base;
-
 class CellsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference< container::XIndexAccess > mxIndexAccess;
@@ -52,7 +50,8 @@ public:
     }
 };
 
-class CellCollectionHelper : public CellCollectionHelper_Base
+class CellCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                            container::XEnumerationAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

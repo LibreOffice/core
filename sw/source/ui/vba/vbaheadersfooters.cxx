@@ -25,8 +25,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 // I assume there is only one headersfooters in Writer
-typedef ::cppu::WeakImplHelper<container::XIndexAccess > HeadersFootersIndexAccess_Base;
-class HeadersFootersIndexAccess : public HeadersFootersIndexAccess_Base
+class HeadersFootersIndexAccess : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

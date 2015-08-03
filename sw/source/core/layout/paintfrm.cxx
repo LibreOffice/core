@@ -2490,11 +2490,7 @@ struct lt_SwLineEntry
 };
 
 typedef std::set< SwLineEntry, lt_SwLineEntry > SwLineEntrySet;
-typedef std::set< SwLineEntry, lt_SwLineEntry >::iterator SwLineEntrySetIter;
-typedef std::set< SwLineEntry, lt_SwLineEntry >::const_iterator SwLineEntrySetConstIter;
 typedef std::map< SwTwips, SwLineEntrySet > SwLineEntryMap;
-typedef std::map< SwTwips, SwLineEntrySet >::iterator SwLineEntryMapIter;
-typedef std::map< SwTwips, SwLineEntrySet >::const_iterator SwLineEntryMapConstIter;
 
 class SwTabFrmPainter
 {
@@ -2560,7 +2556,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
 
-    SwLineEntryMapConstIter aIter = maHoriLines.begin();
+    SwLineEntryMap::const_iterator aIter = maHoriLines.begin();
     bool bHori = true;
 
     // color for subsidiary lines:
@@ -2595,7 +2591,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             break;
 
         const SwLineEntrySet& rEntrySet = (*aIter).second;
-        for (SwLineEntrySetConstIter aSetIter = rEntrySet.begin();
+        for (SwLineEntrySet::const_iterator aSetIter = rEntrySet.begin();
                  aSetIter != rEntrySet.end(); ++aSetIter)
         {
             const SwLineEntry& rEntry = *aSetIter;
@@ -2801,10 +2797,10 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     // pStyles[ 5 ] = bHori ? aRFromR : BFromB,
     // pStyles[ 6 ] = bHori ? aRFromB : BFromR,
 
-    SwLineEntryMapConstIter aMapIter = maVertLines.find( rStartPoint.X() );
+    SwLineEntryMap::const_iterator aMapIter = maVertLines.find( rStartPoint.X() );
     OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
     const SwLineEntrySet& rVertSet = (*aMapIter).second;
-    SwLineEntrySetConstIter aIter = rVertSet.begin();
+    SwLineEntrySet::const_iterator aIter = rVertSet.begin();
 
     while ( aIter != rVertSet.end() )
     {
@@ -3022,7 +3018,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
     // get all lines from structure, that have key entry of pLE
     SwLineEntryMap* pLine2 = bHori ? &maHoriLines : &maVertLines;
     const SwTwips nKey = rNew.mnKey;
-    SwLineEntryMapIter aMapIter = pLine2->find( nKey );
+    SwLineEntryMap::iterator aMapIter = pLine2->find( nKey );
 
     SwLineEntrySet* pLineSet = aMapIter != pLine2->end() ? &((*aMapIter).second) : 0;
     if ( !pLineSet )
@@ -3031,7 +3027,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
         (*pLine2)[ nKey ] = aNewSet;
         pLineSet = &(*pLine2)[ nKey ];
     }
-    SwLineEntrySetIter aIter = pLineSet->begin();
+    SwLineEntrySet::iterator aIter = pLineSet->begin();
 
     while ( aIter != pLineSet->end() && rNew.mnStartPos < rNew.mnEndPos )
     {

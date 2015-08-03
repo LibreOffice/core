@@ -157,9 +157,9 @@ static const MSOStyleNameTable aMSOStyleNameTable[] =
     { 0, 0, 0 }
 };
 
-typedef ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
-
-class StyleCollectionHelper : public StyleCollectionHelper_BASE
+class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAccess,
+                                                             container::XIndexAccess,
+                                                             container::XEnumerationAccess >
 {
 private:
     uno::Reference< frame::XModel > mxModel;

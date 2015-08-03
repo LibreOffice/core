@@ -70,7 +70,6 @@ struct TextBlockInfo_Impl
     OUString sLongName;
     OUString sGroupName;
 };
-typedef boost::ptr_vector<TextBlockInfo_Impl> TextBlockInfoArr;
 
 // Dialog for edit templates
 void SwGlossaryHdl::GlossaryDlg()
@@ -393,7 +392,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                             SwGlossaries *pGlossaries,
                             SwTextBlocks *pGlossary  )
 {
-    TextBlockInfoArr aFoundArr;
+    boost::ptr_vector<TextBlockInfo_Impl> aFoundArr;
     OUString aShortName( rShortName );
     bool bCancel = false;
     // search for text block

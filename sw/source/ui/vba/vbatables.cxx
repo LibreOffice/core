@@ -59,11 +59,10 @@ static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTab
     return false;
 }
 
-typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumBase;
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XNameAccess > TableCollectionHelper_Base;
 typedef std::vector< uno::Reference< text::XTextTable > > XTextTableVec;
 
-class TableCollectionHelper : public TableCollectionHelper_Base
+class TableCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                             container::XNameAccess >
 {
     XTextTableVec mxTables;
     XTextTableVec::iterator cachePos;
@@ -132,7 +131,7 @@ public:
     }
 };
 
-class TableEnumerationImpl : public EnumBase
+class TableEnumerationImpl : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;

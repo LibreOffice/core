@@ -42,11 +42,9 @@ public:
     { return aRect == rSwURLNote.aRect; }
 };
 
-typedef boost::ptr_vector<SwURLNote> SwURLNoteList;
-
 class SwNoteURL
 {
-    SwURLNoteList aList;
+    boost::ptr_vector<SwURLNote>  aList;
 public:
     SwNoteURL() {}
     void InsertURLNote( const OUString& rURL, const OUString& rTarget,

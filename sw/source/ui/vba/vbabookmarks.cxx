@@ -46,8 +46,8 @@ public:
 };
 
 // Bookmarks use case-insensitive name lookup in MS Word.
-typedef ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess > BookmarkCollectionHelper_BASE;
-class BookmarkCollectionHelper : public BookmarkCollectionHelper_BASE
+class BookmarkCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAccess,
+                                                                container::XIndexAccess >
 {
 private:
     uno::Reference< container::XNameAccess > mxNameAccess;

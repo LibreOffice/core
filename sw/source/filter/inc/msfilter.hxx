@@ -50,8 +50,6 @@ template<class C> class StyleMapperImpl;
 
 class SwTextFormatColl;
 class SwCharFormat;
-typedef myImplHelpers::StyleMapperImpl<SwTextFormatColl> ParaMapper;
-typedef myImplHelpers::StyleMapperImpl<SwCharFormat> CharMapper;
 
 namespace sw
 {
@@ -182,7 +180,7 @@ namespace sw
         {
         private:
             //I hate these things stupid pImpl things, but its warranted here
-            ParaMapper *mpImpl;
+             ::myImplHelpers::StyleMapperImpl<SwTextFormatColl> *mpImpl;
         public:
             explicit ParaStyleMapper(SwDoc &rDoc);
             ~ParaStyleMapper();
@@ -242,7 +240,7 @@ namespace sw
         {
         private:
             //I hate these things stupid pImpl things, but its warranted here
-            CharMapper *mpImpl;
+            ::myImplHelpers::StyleMapperImpl<SwCharFormat> *mpImpl;
         public:
             explicit CharStyleMapper(SwDoc &rDoc);
             ~CharStyleMapper();

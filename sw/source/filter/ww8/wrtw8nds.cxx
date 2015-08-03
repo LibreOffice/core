@@ -698,8 +698,8 @@ bool SwWW8AttrIter::IsDropCap( int nSwPos )
 
 bool SwWW8AttrIter::RequiresImplicitBookmark()
 {
-    SwImplBookmarksIter bkmkIterEnd = m_rExport.m_aImplicitBookmarks.end();
-    for ( SwImplBookmarksIter aIter = m_rExport.m_aImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
+    std::vector<aBookmarkPair>::iterator bkmkIterEnd = m_rExport.m_aImplicitBookmarks.end();
+    for ( std::vector<aBookmarkPair>::iterator aIter = m_rExport.m_aImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
     {
         sal_uLong sample  = aIter->second;
 
@@ -915,8 +915,8 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
         if ( sRefType == "outline" )
         {
             OUString sLink = sMark.copy(0, nPos);
-            SwImplBookmarksIter bkmkIterEnd = GetExport().m_aImplicitBookmarks.end();
-            for ( SwImplBookmarksIter aIter = GetExport().m_aImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
+            std::vector<aBookmarkPair>::iterator bkmkIterEnd = GetExport().m_aImplicitBookmarks.end();
+            for ( std::vector<aBookmarkPair>::iterator aIter = GetExport().m_aImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
             {
                 if ( aIter->first == sLink )
                 {

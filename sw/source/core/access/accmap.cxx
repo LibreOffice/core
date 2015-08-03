@@ -500,9 +500,7 @@ public:
     }
 };
 
-typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
-
-class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
+class SwAccessibleEventList_Impl: public ::std::list < SwAccessibleEvent_Impl >
 {
     bool mbFiring;
 
@@ -562,9 +560,7 @@ void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
 
-typedef ::std::list < uno::Reference < drawing::XShape > > _SwShapeList_Impl;
-
-class SwShapeList_Impl: public _SwShapeList_Impl
+class SwShapeList_Impl: public ::std::list < uno::Reference < drawing::XShape > >
 {
 public:
     SwShapeList_Impl() {}

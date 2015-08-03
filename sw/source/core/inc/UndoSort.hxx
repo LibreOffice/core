@@ -54,16 +54,16 @@ struct SwSortUndoElement
     ~SwSortUndoElement();
 };
 
-typedef boost::ptr_vector<SwSortUndoElement> SwSortList;
 typedef std::vector<SwNodeIndex*> SwUndoSortList;
 
 class SwUndoSort : public SwUndo, private SwUndRng
 {
-    SwSortOptions*  pSortOpt;
-    SwSortList      aSortList;
+    SwSortOptions*    pSortOpt;
+    boost::ptr_vector<SwSortUndoElement>
+                      aSortList;
     SwUndoAttrTable*  pUndoTableAttr;
-    SwRedlineData*  pRedlData;
-    sal_uLong           nTableNd;
+    SwRedlineData*    pRedlData;
+    sal_uLong         nTableNd;
 
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );

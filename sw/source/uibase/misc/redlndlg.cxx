@@ -647,7 +647,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     sal_uInt16 nCount = pSh->GetRedlineCount();
 
-    SvLBoxEntryArr aLBoxArr;
+    std::vector<SvTreeListEntry*> aLBoxArr;
 
     // because of Bug of TLB that ALWAYS calls the SelectHandler at Remove:
     pTable->SetSelectHdl(aOldSelectHdl);

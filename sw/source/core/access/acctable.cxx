@@ -58,11 +58,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
 
-typedef ::std::less < sal_Int32 > Int32Less_Impl;
-typedef ::std::set < sal_Int32, Int32Less_Impl > Int32Set_Impl;
-
+typedef ::std::set < sal_Int32 > Int32Set_Impl;
 typedef ::std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
-typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
 
 const unsigned int SELECTION_WITH_NUM = 10;
 
@@ -80,7 +77,7 @@ class SwAccessibleTableData_Impl
     SwAccessibleMap& mrAccMap;
     Int32Set_Impl   maRows;
     Int32Set_Impl   maColumns;
-    Int32PairList_Impl maExtents;   // cell extends for event processing only
+    ::std::list < Int32Pair_Impl > maExtents;   // cell extends for event processing only
     Point   maTabFrmPos;
     const SwTabFrm *mpTabFrm;
     bool mbIsInPagePreview;

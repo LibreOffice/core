@@ -157,7 +157,6 @@ public:
 };
 
 typedef ::std::multiset<CellInfo, ::std::less<CellInfo> > CellInfoMultiSet;
-typedef boost::shared_ptr<CellInfoMultiSet> CellInfoMultiSetPtr;
 typedef ::std::map<sal_uInt32, WW8TableNodeInfoInner*,
             ::std::greater<sal_uInt32> > RowEndInners_t;
 
@@ -233,7 +232,7 @@ struct hashTable
 
 class WW8TableCellGridRow
 {
-    CellInfoMultiSetPtr m_pCellInfos;
+    boost::shared_ptr<CellInfoMultiSet> m_pCellInfos;
     TableBoxVectorPtr m_pTableBoxVector;
     WidthsPtr m_pWidths;
     RowSpansPtr m_pRowSpans;

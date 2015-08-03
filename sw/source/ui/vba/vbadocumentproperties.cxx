@@ -638,8 +638,7 @@ typedef ::cppu::WeakImplHelper< com::sun::star::container::XIndexAccess
 
 typedef std::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
-typedef ::cppu::WeakImplHelper< com::sun::star::container::XEnumeration > DocPropEnumeration_BASE;
-class DocPropEnumeration : public DocPropEnumeration_BASE
+class DocPropEnumeration : public ::cppu::WeakImplHelper< com::sun::star::container::XEnumeration >
 {
     DocProps mDocProps;
     DocProps::iterator mIt;

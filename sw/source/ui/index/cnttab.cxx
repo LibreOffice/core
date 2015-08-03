@@ -135,7 +135,6 @@ struct AutoMarkEntry
         bCase(false),
         bWord(false){}
 };
-typedef boost::ptr_vector<AutoMarkEntry> AutoMarkEntryArr;
 
 typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
 
@@ -154,7 +153,7 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     OUString  sYes;
     OUString  sNo;
 
-    AutoMarkEntryArr    aEntryArr;
+    boost::ptr_vector<AutoMarkEntry> aEntryArr;
 
     ::svt::CellControllerRef    xController;
     ::svt::CellControllerRef    xCheckController;

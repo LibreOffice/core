@@ -227,10 +227,7 @@ static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xPare
     return uno::makeAny( xField );
 }
 
-typedef ::cppu::WeakImplHelper< css::container::XEnumeration > FieldEnumeration_BASE;
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > FieldCollectionHelper_BASE;
-
-class FieldEnumeration : public FieldEnumeration_BASE
+class FieldEnumeration : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
@@ -252,7 +249,8 @@ public:
     }
 };
 
-class FieldCollectionHelper : public FieldCollectionHelper_BASE
+class FieldCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                             container::XEnumerationAccess >
 {
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;

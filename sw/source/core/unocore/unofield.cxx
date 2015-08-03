@@ -814,8 +814,6 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
         return static_cast<SwFieldType*>(m_pImpl->GetRegisteredIn());
 }
 
-typedef std::vector<SwFormatField*> SwDependentFields;
-
 uno::Any SAL_CALL
 SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
@@ -840,7 +838,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         else if(rPropertyName == UNO_NAME_DEPENDENT_TEXT_FIELDS)
         {
             //fill all text fields into a sequence
-            SwDependentFields aFieldArr;
+            std::vector<SwFormatField*>  aFieldArr;
             SwIterator<SwFormatField,SwFieldType> aIter( *pType );
             SwFormatField* pField = aIter.First();
             while(pField)

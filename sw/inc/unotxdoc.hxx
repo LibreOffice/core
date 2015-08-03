@@ -87,8 +87,6 @@ class SwPrintData;
 class SwRenderData;
 class SwViewShell;
 
-typedef std::deque<UnoActionContext*> ActionContextArr;
-
 typedef cppu::WeakImplHelper
 <
     css::text::XTextDocument,
@@ -136,7 +134,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    ActionContextArr        aActionArr;
+    std::deque<UnoActionContext*> aActionArr;
 
     const SfxItemPropertySet* pPropSet;
 

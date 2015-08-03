@@ -25,7 +25,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > TableOfContentsCollectionHelper_Base;
 typedef std::vector< uno::Reference< text::XDocumentIndex > > XTocVec;
 
 class TablesOfContentsEnumWrapper : public EnumerationHelper_BASE
@@ -52,7 +51,8 @@ public:
     }
 };
 
-class TableOfContentsCollectionHelper : public TableOfContentsCollectionHelper_Base
+class TableOfContentsCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                                       container::XEnumerationAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

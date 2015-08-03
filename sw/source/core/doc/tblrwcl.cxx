@@ -75,8 +75,6 @@ using namespace ::com::sun::star;
 #define CHECK_TABLE(t)
 #endif
 
-typedef std::map<SwTableLine*, sal_uInt16> SwTableLineWidthMap_t;
-
 // In order to set the Frame Formats for the Boxes, it's enough to look
 // up the current one in the array. If it's already there return the new one.
 struct _CpyTabFrm
@@ -101,7 +99,7 @@ struct _CpyTabFrm
 struct CR_SetBoxWidth
 {
     SwSelBoxes m_Boxes;
-    SwTableLineWidthMap_t m_LineWidthMap;
+    std::map<SwTableLine*, sal_uInt16> m_LineWidthMap;
     SwShareBoxFormats aShareFormats;
     SwTableNode* pTableNd;
     SwUndoTableNdsChg* pUndo;

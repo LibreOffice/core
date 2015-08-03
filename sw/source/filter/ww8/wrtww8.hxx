@@ -403,8 +403,6 @@ private:
 };
 
 typedef ::std::pair<OUString, sal_uLong> aBookmarkPair;
-typedef std::vector<aBookmarkPair> SwImplBookmarks;
-typedef std::vector<aBookmarkPair>::iterator SwImplBookmarksIter;
 
 class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {
@@ -478,7 +476,7 @@ public:
 
 public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
-    SwImplBookmarks m_aImplicitBookmarks;
+    std::vector<aBookmarkPair> m_aImplicitBookmarks;
     sw::Frames m_aFrames;             // The floating frames in this document
     const SwPageDesc *m_pAktPageDesc;
     bool m_bPrevTextNodeIsEmpty;

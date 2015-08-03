@@ -25,11 +25,9 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper< container::XEnumeration > RevisionEnumeration_BASE;
-typedef ::cppu::WeakImplHelper< container::XIndexAccess, container::XEnumerationAccess > RevisionCollectionHelper_BASE;
 typedef std::vector< uno::Reference< beans::XPropertySet > > RevisionMap;
 
-class RedlinesEnumeration : public RevisionEnumeration_BASE
+class RedlinesEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     RevisionMap mRevisionMap;
     RevisionMap::iterator mIt;
@@ -48,7 +46,8 @@ public:
     }
 };
 
-class RevisionCollectionHelper : public RevisionCollectionHelper_BASE
+class RevisionCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAccess,
+                                                                container::XEnumerationAccess >
 {
     RevisionMap mRevisionMap;
 public:

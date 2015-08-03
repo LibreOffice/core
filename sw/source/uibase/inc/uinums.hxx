@@ -31,8 +31,6 @@ namespace sw { class StoredChapterNumberingRules; }
 
 #define MAX_NUM_RULES 9
 
-typedef boost::ptr_vector<SfxPoolItem> _SwNumFormatsAttrs;
-
 class SW_DLLPUBLIC SwNumRulesWithName
 {
     OUString maName;
@@ -44,7 +42,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
         SwNumFormat aFormat;
         OUString sCharFormatName;
         sal_uInt16 nCharPoolId;
-        _SwNumFormatsAttrs aItems;
+        boost::ptr_vector<SfxPoolItem> aItems;
 
         _SwNumFormatGlobal& operator=( const _SwNumFormatGlobal& ) SAL_DELETED_FUNCTION;
 

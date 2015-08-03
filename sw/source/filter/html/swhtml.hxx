@@ -332,7 +332,6 @@ class SwCSS1Parser;
 class SwHTMLNumRuleInfo;
 
 typedef boost::ptr_vector<ImageMap> ImageMaps;
-typedef std::vector<SwFrameFormat *> SwHTMLFrameFormats;
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001
 #define HTML_CNTXT_STRIP_PARA       0x0002
@@ -381,7 +380,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrs      aParaAttrs; // vorlauefige Absatz-Attribute
     _HTMLAttrTable  aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
-    SwHTMLFrameFormats   aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    std::vector<SwFrameFormat *> aMoveFlyFrms;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *pAppletImpl; // das aktuelle Applet

@@ -27,8 +27,6 @@ class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
 typedef std::map<sal_uInt16,Color> RtfColorTable;
-typedef std::map<sal_uInt16,OString> RtfStyleTable;
-typedef std::map<OUString,sal_uInt16> RtfRedlineTable;
 class SwNode;
 class SwTextNode;
 class SwGrfNode;
@@ -208,8 +206,8 @@ private:
     void WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr, bool bTitlepg = false);
 
     RtfColorTable m_aColTable;
-    RtfStyleTable m_aStyTable;
-    RtfRedlineTable m_aRedlineTable;
+    std::map<sal_uInt16, OString>   m_aStyTable;
+    std::map<OUString, sal_uInt16>  m_aRedlineTable;
     /// If set, then Strm() returns this tream, instead of m_pWriter's stream.
     std::unique_ptr<SvMemoryStream> m_pStream;
 };

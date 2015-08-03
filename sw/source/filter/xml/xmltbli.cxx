@@ -284,17 +284,14 @@ inline void SwXMLTableCell_Impl::Dispose()
         xSubTable = 0;
 }
 
-typedef boost::ptr_vector<SwXMLTableCell_Impl> SwXMLTableCells_Impl;
-
 class SwXMLTableRow_Impl
 {
-    OUString aStyleName;
-    OUString aDfltCellStyleName;
-    OUString mXmlId;
-
-    SwXMLTableCells_Impl aCells;
-
-    bool bSplitable;
+    OUString   aStyleName;
+    OUString   aDfltCellStyleName;
+    OUString   mXmlId;
+    boost::ptr_vector<SwXMLTableCell_Impl>
+               aCells;
+    bool       bSplitable;
 
 public:
 

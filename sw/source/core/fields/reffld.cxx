@@ -941,8 +941,6 @@ public:
     OUString GetName() { return aName; }
 };
 
-typedef boost::ptr_vector<_RefIdsMap> _RefIdsMaps;
-
 /// Get a sorted list of the field IDs from a document.
 /// @param[in]     rDoc The document to search.
 /// @param[in,out] rIds The list of IDs found in the document.
@@ -1096,7 +1094,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
         // need to be converted to have unique IDs for both documents
         _RefIdsMap aFntMap( aEmptyOUStr );
-        _RefIdsMaps aFieldMap;
+        boost::ptr_vector<_RefIdsMap> aFieldMap;
 
         SwIterator<SwFormatField,SwFieldType> aIter( *this );
         for( SwFormatField* pField = aIter.First(); pField; pField = aIter.Next() )
