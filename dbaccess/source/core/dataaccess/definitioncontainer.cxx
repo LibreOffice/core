@@ -36,7 +36,6 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/types.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -309,7 +309,6 @@
 #include <limits>
 #include <list>
 #include <map>
-#include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>

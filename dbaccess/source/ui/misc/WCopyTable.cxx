@@ -61,7 +61,6 @@
 #include <vcl/waitobj.hxx>
 
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
