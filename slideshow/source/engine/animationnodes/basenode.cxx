@@ -463,8 +463,9 @@ bool BaseNode::resolve()
         // shape).
         uno::Any const aBegin( mxAnimationNode->getBegin() );
         if (aBegin.hasValue()) {
+            auto self(mpSelf);
             mpCurrentEvent = generateEvent(
-                aBegin, boost::bind( &AnimationNode::activate, mpSelf ),
+                aBegin, [self] () { self->activate(); },
                 maContext, mnStartDelay );
         }
         else {
@@ -545,9 +546,10 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
         // but what if it does not schedule anything?
 
         // TODO(F2): Handle end time attribute, too
+        auto self(mpSelf);
         mpCurrentEvent = generateEvent(
             mxAnimationNode->getDuration(),
-            boost::bind( &AnimationNode::deactivate, mpSelf ),
+            [self] () { self->deactivate(); },
             maContext, 0.0 );
     }
 }
