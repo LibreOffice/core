@@ -23,6 +23,9 @@ class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 private:
     WinSalGraphics& mrParent;
 
+    bool RenderCompatibleDC(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
+                            int nX, int nY, TextureCombo& rCombo);
+
 public:
     WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics,
                              SalGeometryProvider *mpProvider);
@@ -33,6 +36,12 @@ protected:
 
 public:
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
+
+
+    bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY);
+
+    bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
+                                     int nX, int nY , ControlCacheKey& aControlCacheKey);
 
 };
 

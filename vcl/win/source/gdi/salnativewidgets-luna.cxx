@@ -1170,6 +1170,16 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     bool bOk = false;
     HTHEME hTheme = NULL;
 
+    Rectangle buttonRect = rControlRegion;
+
+    WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+
+    ControlCacheKey aControlCacheKey(nType, nPart, nState, buttonRect.GetSize());
+    if (pImpl != NULL && pImpl->TryRenderCachedNativeControl(aControlCacheKey, buttonRect.Left(), buttonRect.Top()))
+    {
+        return true;
+    }
+
     switch( nType )
     {
         case CTRL_PUSHBUTTON:
@@ -1256,7 +1266,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     if( !hTheme )
         return false;
 
-    Rectangle buttonRect = rControlRegion;
     RECT rc;
     rc.left   = buttonRect.Left();
     rc.right  = buttonRect.Right()+1;
@@ -1265,7 +1274,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
 
     OUString aCaptionStr(aCaption.replace('~', '&')); // translate mnemonics
 
-    WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
     if (pImpl == NULL)
     {
         // set default text alignment
@@ -1290,18 +1298,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         if (ImplDrawNativeControl(aBlackDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
             ImplDrawNativeControl(aWhiteDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
         {
-            pImpl->PreDraw();
-
-            std::unique_ptr<OpenGLTexture> xBlackTexture(aBlackDC.getTexture());
-            std::unique_ptr<OpenGLTexture> xWhiteTexture(aWhiteDC.getTexture());
-
-            if (xBlackTexture && xWhiteTexture)
-            {
-                pImpl->DrawTextureDiff(*xWhiteTexture, *xBlackTexture, aBlackDC.getTwoRect());
-                bOk = true;
-            }
-
-            pImpl->PostDraw();
+            bOk = pImpl->RenderAndCacheNativeControl(aWhiteDC, aBlackDC, buttonRect.Left(), buttonRect.Top(), aControlCacheKey);
         }
     }
 

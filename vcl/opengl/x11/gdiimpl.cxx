@@ -113,12 +113,6 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     return true;
 }
 
-struct TextureCombo
-{
-    std::unique_ptr<OpenGLTexture> mpTexture;
-    std::unique_ptr<OpenGLTexture> mpMask;
-};
-
 typedef typename std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
 typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
 
