@@ -107,8 +107,8 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 GalleryBrowser1::GalleryBrowser1(
     vcl::Window* pParent,
     Gallery* pGallery,
-    const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
-    const ::boost::function<void()>& rThemeSlectionHandler)
+    const ::std::function<sal_Bool (const KeyEvent&,Window*)>& rKeyInputHandler,
+    const ::std::function<void ()>& rThemeSlectionHandler)
     :
     Control               ( pParent, WB_TABSTOP ),
     maNewTheme            ( VclPtr<GalleryButton>::Create(this, WB_3DLOOK) ),

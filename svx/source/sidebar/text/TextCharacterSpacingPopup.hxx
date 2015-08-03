@@ -21,7 +21,7 @@
 
 #include "svx/sidebar/Popup.hxx"
 
-#include <boost/function.hpp>
+#include <functional>
 
 namespace svx { namespace sidebar {
 
@@ -31,7 +31,7 @@ class TextCharacterSpacingPopup
 public:
     TextCharacterSpacingPopup (
         vcl::Window* pParent,
-        const ::boost::function<VclPtr<PopupControl>(PopupContainer*)>& rControlCreator);
+        const ::std::function<VclPtr<PopupControl> (PopupContainer*)>& rControlCreator);
     virtual ~TextCharacterSpacingPopup();
 
     void Rearrange (bool bLBAvailable,bool bAvailable, long nKerning);

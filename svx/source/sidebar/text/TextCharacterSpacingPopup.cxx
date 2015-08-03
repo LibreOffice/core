@@ -25,7 +25,7 @@ namespace svx { namespace sidebar {
 
 TextCharacterSpacingPopup::TextCharacterSpacingPopup (
     vcl::Window* pParent,
-    const ::boost::function<VclPtr<PopupControl>(PopupContainer*)>& rControlCreator)
+    const ::std::function<VclPtr<PopupControl>(PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,
         rControlCreator,

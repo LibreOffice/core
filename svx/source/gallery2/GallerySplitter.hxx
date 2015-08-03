@@ -20,7 +20,8 @@
 #define INCLUDED_SVX_SOURCE_GALLERY2_GALLERYSPLITTER_HXX
 
 #include <vcl/split.hxx>
-#include <boost/function.hpp>
+
+#include <functional>
 
 class GallerySplitter : public Splitter
 {
@@ -28,13 +29,13 @@ public:
     GallerySplitter(
         vcl::Window* pParent,
         WinBits nStyle,
-        const ::boost::function<void()>& rDataChangeFunctor);
+        const ::std::function<void ()>& rDataChangeFunctor);
 
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
-    ::boost::function<void()> maDataChangeFunctor;
+    ::std::function<void ()> maDataChangeFunctor;
 };
 
 

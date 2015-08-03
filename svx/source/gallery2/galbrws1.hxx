@@ -26,7 +26,7 @@
 #include <svl/lstner.hxx>
 #include <vector>
 
-#include <boost/function.hpp>
+#include <functional>
 
 class GalleryBrowser1;
 
@@ -91,8 +91,8 @@ private:
     Image                   aImgReadOnly;
     Image                   aImgImported;
 
-    ::boost::function<sal_Bool(const KeyEvent&,Window*)> maKeyInputHandler;
-    ::boost::function<void()> maThemeSlectionHandler;
+    ::std::function<sal_Bool (const KeyEvent&,Window*)> maKeyInputHandler;
+    ::std::function<void ()> maThemeSlectionHandler;
 
     void                    ImplAdjustControls();
     sal_uIntPtr             ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
@@ -122,8 +122,8 @@ public:
                             GalleryBrowser1(
                                 vcl::Window* pParent,
                                 Gallery* pGallery,
-                                const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
-                                const ::boost::function<void()>& rThemeSlectionHandler);
+                                const ::std::function<sal_Bool (const KeyEvent&,Window*)>& rKeyInputHandler,
+                                const ::std::function<void ()>& rThemeSlectionHandler);
                             virtual ~GalleryBrowser1();
     virtual void            dispose() SAL_OVERRIDE;
 

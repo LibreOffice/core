@@ -21,8 +21,10 @@
 
 #include "svx/sidebar/Popup.hxx"
 
-#include <boost/function.hpp>
 #include <vcl/vclenum.hxx>
+
+#include <functional>
+
 namespace svx { namespace sidebar {
 
 class TextUnderlinePopup
@@ -31,7 +33,7 @@ class TextUnderlinePopup
 public:
     TextUnderlinePopup (
         vcl::Window* pParent,
-        const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
+        const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator);
     virtual ~TextUnderlinePopup();
 
     void Rearrange (FontUnderline eLine);

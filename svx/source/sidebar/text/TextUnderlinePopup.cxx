@@ -23,7 +23,7 @@ namespace svx { namespace sidebar {
 
 TextUnderlinePopup::TextUnderlinePopup (
     vcl::Window* pParent,
-    const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
+    const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,
         rControlCreator,
