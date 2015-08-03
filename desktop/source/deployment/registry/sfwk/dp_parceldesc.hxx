@@ -37,9 +37,7 @@ namespace backend
 namespace sfwk
 {
 
-typedef ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > t_DocHandlerImpl;
-
-class ParcelDescDocHandler : public t_DocHandlerImpl
+class ParcelDescDocHandler : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
 private:
     bool m_bIsParsed;

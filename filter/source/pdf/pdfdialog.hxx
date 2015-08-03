@@ -31,9 +31,8 @@
 
 namespace vcl { class Window; }
 
-typedef ::svt::OGenericUnoDialog             PDFDialog_DialogBase;
 typedef ::cppu::ImplInheritanceHelper2  <
-                                             PDFDialog_DialogBase,
+                                             ::svt::OGenericUnoDialog,
                                              XPropertyAccess,
                                              XExporter
                                         >    PDFDialog_Base;

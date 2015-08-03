@@ -454,7 +454,6 @@ std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
 }
 
 typedef std::vector<std::wstring> FileList_t;
-typedef FileList_t::value_type FileList_ValueType_t;
 typedef Sequence<sal_Int8> ByteSequence_t;
 
 /* Calculate the size required for turning a string list into
@@ -470,7 +469,7 @@ size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
     {
         size += iter->length() + 1; // length including terminating '\0'
     }
-    return (size * sizeof(FileList_ValueType_t::value_type));
+    return (size * sizeof(FileList_t::value_type::value_type));
 }
 
 ByteSequence_t FileListToByteSequence(const FileList_t& fileList)

@@ -162,15 +162,12 @@ public:
                         ~FontEntry();
 };
 
-
-
-typedef ::std::vector< FontEntry* > FontEntryList;
-
 class CGMFList
 {
     sal_uInt32      nFontNameCount;
     sal_uInt32      nCharSetCount;
-    FontEntryList   aFontEntryList;
+    ::std::vector< FontEntry* >
+                    aFontEntryList;
     void            ImplDeleteList();
 
 public:

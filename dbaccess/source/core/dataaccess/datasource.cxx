@@ -95,8 +95,6 @@ using namespace ::comphelper;
 namespace dbaccess
 {
 
-// FlushNotificationAdapter
-typedef ::cppu::WeakImplHelper< XFlushListener > FlushNotificationAdapter_Base;
 /** helper class which implements a XFlushListener, and forwards all
     notification events to another XFlushListener
 
@@ -107,7 +105,7 @@ typedef ::cppu::WeakImplHelper< XFlushListener > FlushNotificationAdapter_Base;
     their listeners with a hard reference, if you simply do not *want*
     to be held hard-ref-wise.
 */
-class FlushNotificationAdapter : public FlushNotificationAdapter_Base
+class FlushNotificationAdapter : public ::cppu::WeakImplHelper< XFlushListener >
 {
 private:
     WeakReference< XFlushable >     m_aBroadcaster;
@@ -260,7 +258,6 @@ void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentic
 /** The class OSharedConnectionManager implements a structure to share connections.
     It owns the master connections which will be disposed when the last connection proxy is gone.
 */
-typedef ::cppu::WeakImplHelper< XEventListener > OConnectionHelper_BASE;
 // need to hold the digest
 struct TDigestHolder
 {
@@ -272,7 +269,7 @@ struct TDigestHolder
 
 };
 
-class OSharedConnectionManager : public OConnectionHelper_BASE
+class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
 {
 
      // contains the currently used master connections

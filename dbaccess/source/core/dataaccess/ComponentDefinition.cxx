@@ -52,9 +52,9 @@ namespace dbaccess
 {
 
 /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper< XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener:
-    public TColumnPropertyListener_BASE, private boost::noncopyable
+    public ::cppu::WeakImplHelper< XPropertyChangeListener >,
+    private boost::noncopyable
 {
     OComponentDefinition* m_pComponent;
 protected:

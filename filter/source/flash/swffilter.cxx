@@ -63,9 +63,7 @@ using ::com::sun::star::frame::XModel;
 
 namespace swf {
 
-typedef ::cppu::WeakImplHelper1<com::sun::star::io::XOutputStream> OslOutputStreamWrapper_Base;
-    // needed for some compilers
-class OslOutputStreamWrapper : public OslOutputStreamWrapper_Base
+class OslOutputStreamWrapper : public ::cppu::WeakImplHelper1<com::sun::star::io::XOutputStream>
 {
     osl::File   mrFile;
 

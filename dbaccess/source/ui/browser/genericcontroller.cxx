@@ -84,7 +84,6 @@ using namespace ::comphelper;
 #define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
 
 typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
-typedef ::std::list< DispatchInformation > DispatchInfoList;
 
 namespace dbaui
 {
@@ -1487,7 +1486,7 @@ namespace
 
 Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) throw (RuntimeException, std::exception)
 {
-    DispatchInfoList    aInformationList;
+    ::std::list< DispatchInformation > aInformationList;
     DispatchInformation aDispatchInfo;
     for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             aIter != m_aSupportedFeatures.end();

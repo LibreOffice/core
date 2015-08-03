@@ -97,9 +97,6 @@ public:
         mnBlueScreenColor( 0 ) {}
 };
 
-typedef ::std::vector<ShapeInfo*> ShapeInfoVector;
-
-
 
 struct ShapeAnimationInfo
 {
@@ -114,8 +111,8 @@ struct ShapeAnimationInfo
 
 struct PageInfo
 {
-    ::com::sun::star::presentation::FadeEffect      meFadeEffect;
-    ::com::sun::star::presentation::AnimationSpeed  meFadeSpeed;
+    css::presentation::FadeEffect      meFadeEffect;
+    css::presentation::AnimationSpeed  meFadeSpeed;
 
     sal_Int32       mnDuration;
     sal_Int32       mnChange;
@@ -124,19 +121,16 @@ struct PageInfo
     sal_uInt16      mnObjectsID;
     sal_uInt16      mnForegroundID;
 
-    bool mbBackgroundVisible;
-    bool mbBackgroundObjectsVisible;
+    bool            mbBackgroundVisible;
+    bool            mbBackgroundObjectsVisible;
 
-    ShapeInfoVector maShapesVector;
+    ::std::vector<ShapeInfo*>
+                    maShapesVector;
 
     PageInfo();
     ~PageInfo();
 
 };
-
-
-
-typedef ::std::map<sal_uInt32, PageInfo> PageInfoMap;
 
 
 
@@ -176,7 +170,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XGraphicExportFilter > mxGraphicExporter;
 
-    PageInfoMap maPagesMap;
+    ::std::map<sal_uInt32, PageInfo> maPagesMap;
 
     sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage);
     sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xMasterPage);

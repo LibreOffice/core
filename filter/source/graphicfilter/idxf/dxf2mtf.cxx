@@ -572,7 +572,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
         tools::PolyPolygon aPolyPoly;
         for ( j = 0; j < rE.nBoundaryPathCount; j++ )
         {
-            DXFPointArray aPtAry;
+            std::deque< Point > aPtAry;
             const DXFBoundaryPathData& rPathData = rE.pBoundaryPathData[ j ];
             if ( rPathData.bIsPolyLine )
             {

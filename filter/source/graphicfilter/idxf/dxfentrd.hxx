@@ -25,8 +25,6 @@
 
 #include <deque>
 
-typedef std::deque< Point > DXFPointArray;
-
 enum DXFEntityType {
     DXF_LINE,
     DXF_POINT,
@@ -400,8 +398,6 @@ struct DXFEdgeTypeSpline : public DXFEdgeType
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 
-typedef std::deque< DXFEdgeType* > DXFEdgeTypeArray;
-
 struct DXFBoundaryPathData
 {
     sal_Int32           nFlags;                 // 92
@@ -412,11 +408,12 @@ struct DXFBoundaryPathData
     sal_Int32           nSourceBoundaryObjects; // 97
     sal_Int32           nEdgeCount;             // 93
 
-    bool            bIsPolyLine;
+    bool                bIsPolyLine;
     sal_Int32           nPointIndex;
 
     DXFVector*          pP;
-    DXFEdgeTypeArray    aEdges;
+    std::deque< DXFEdgeType* >
+                        aEdges;
 
     DXFBoundaryPathData();
     ~DXFBoundaryPathData();
