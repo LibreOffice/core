@@ -19,6 +19,8 @@
 #include <tools/errinf.hxx>
 #include <tools/resid.hxx>
 
+#include <unotools/viewoptions.hxx>
+
 #include <vcl/button.hxx>
 #include <vcl/fpicker.hrc>
 #include <vcl/menubtn.hxx>
@@ -121,6 +123,8 @@ private:
     bool m_bIsConnected;
     bool m_bServiceChanged;
 
+    OUString m_sIniKey;
+
     OUString m_sPath;
     OUString m_sStdDir;
     OUString m_sLastServiceUrl;
@@ -146,6 +150,8 @@ private:
 
     std::vector< ServicePtr > m_aServices;
     std::vector< std::pair< OUString, OUString > > m_aFilters;
+
+    void InitSize();
 
     void FillServicesListbox();
 

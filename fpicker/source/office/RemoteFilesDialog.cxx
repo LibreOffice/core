@@ -249,6 +249,9 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pContainer->Show();
     m_pContainer->Enable( false );
 
+    m_sIniKey = "RemoteFilesDialog";
+    InitSize();
+
     m_pName_ed->SetGetFocusHdl( LINK( this, RemoteFilesDialog, FileNameGetFocusHdl ) );
     m_pName_ed->SetModifyHdl( LINK( this, RemoteFilesDialog, FileNameModifyHdl ) );
 
@@ -273,6 +276,17 @@ void RemoteFilesDialog::dispose()
 {
     m_pFileView->SetSelectHdl( Link<>() );
 
+    // save window state
+    if( !m_sIniKey.isEmpty() )
+    {
+        SvtViewOptions aDlgOpt( E_DIALOG, m_sIniKey );
+        aDlgOpt.SetWindowState( OStringToOUString( GetWindowState(), osl_getThreadTextEncoding() ) );
+        OUString sUserData = m_pFileView->GetConfigString();
+        aDlgOpt.SetUserItem( OUString( "UserData" ),
+                             makeAny( sUserData ) );
+    }
+
+    // save services
     std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_context ) );
 
     officecfg::Office::Common::Misc::FilePickerLastService::set( m_sLastServiceUrl, batch );
@@ -378,6 +392,25 @@ OUString lcl_GetServiceType( ServicePtr pService )
             return OUString( "SSH" );
         default:
             return OUString( "" );
+    }
+}
+
+void RemoteFilesDialog::InitSize()
+{
+    if( m_sIniKey.isEmpty() )
+        return;
+
+    // initialize from config
+    SvtViewOptions aDlgOpt( E_DIALOG, m_sIniKey );
+
+    if( aDlgOpt.Exists() )
+    {
+        SetWindowState( OUStringToOString( aDlgOpt.GetWindowState(), osl_getThreadTextEncoding() ) );
+
+        Any aUserData = aDlgOpt.GetUserItem( OUString( "UserData" ) );
+        OUString sCfgStr;
+        if( aUserData >>= sCfgStr )
+            m_pFileView->SetConfigString( sCfgStr );
     }
 }
 
