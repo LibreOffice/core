@@ -587,7 +587,7 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
         // only one import at the very beginning
         if( pTok->Is( SvHash_module() ) )
         {
-            SvMetaModuleRef aModule = new SvMetaModule( rInStm.GetFileName(), bImported );
+            SvMetaModuleRef aModule = new SvMetaModule( bImported );
             if( aModule->ReadSvIdl( *this, rInStm ) )
                 GetModuleList().push_back( aModule );
             else

@@ -29,9 +29,8 @@
 
 TYPEINIT1( SvMetaModule, SvMetaExtern );
 
-SvMetaModule::SvMetaModule( const OUString & rIdlFileName, bool bImp )
-    : aIdlFileName( rIdlFileName )
-    , bImported( bImp ), bIsModified( false )
+SvMetaModule::SvMetaModule( bool bImp )
+    : bImported( bImp ), bIsModified( false )
 {
 }
 

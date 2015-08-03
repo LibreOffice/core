@@ -38,7 +38,6 @@ class SvMetaModule : public SvMetaExtern
     SvMetaTypeMemberList        aTypeList;
     SvMetaAttributeMemberList   aAttrList;
 // browser
-    OUString                aIdlFileName;
     SvString                aHelpFileName;
     SvString                aSlotIdFile;
     SvString                aTypeLibFile;
@@ -57,8 +56,7 @@ public:
 
     virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
 
-                        SvMetaModule( const OUString & rIdlFileName,
-                                      bool bImported );
+                        SvMetaModule( bool bImported );
 
     bool                FillNextName( SvGlobalName * );
     bool                IsImported() const { return bImported; }
