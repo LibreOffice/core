@@ -53,8 +53,6 @@ private:
     OUString msUuid;
 };
 
-typedef std::shared_ptr< TextField > TextFieldPtr;
-
 } }
 
 #endif

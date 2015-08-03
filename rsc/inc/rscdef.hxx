@@ -222,7 +222,6 @@ public:
     bool            IsIncFile(){  return bIncFile; };
 };
 
-typedef UniqueIndex<RscFile> RscSubFileTab;
 #define NOFILE_INDEX UNIQUEINDEX_ENTRY_NOTFOUND
 
 class RscDefTree
@@ -238,7 +237,7 @@ public:
     void        Remove( RscDefine * pDef );
 };
 
-class RscFileTab : public RscSubFileTab
+class RscFileTab : public UniqueIndex<RscFile>
 {
     RscDefTree aDefTree;
     sal_uLong       Find(const OString& rName);

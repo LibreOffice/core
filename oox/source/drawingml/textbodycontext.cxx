@@ -73,7 +73,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         }
         case A_TOKEN( fld ):    // "CT_TextField" Text Field.
         {
-            TextFieldPtr pField( new TextField );
+            std::shared_ptr< TextField > pField( new TextField );
             mrParagraph.addRun( pField );
             return new TextFieldContext( *this, rAttribs, *pField );
         }

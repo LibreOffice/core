@@ -147,8 +147,6 @@ private:
     sal_Int32 mnOperator;
 };
 
-typedef boost::shared_ptr< ConstraintAtom > ConstraintAtomPtr;
-
 class AlgAtom
     : public LayoutAtom
 {

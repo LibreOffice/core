@@ -48,12 +48,10 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-typedef ::cppu::WeakImplHelper2< XSeekable, XOutputStream > OleOutputStreamBase;
-
 /** Implementation of an OLE storage output stream that inserts itself into the
     storage when it is closed.
  */
-class OleOutputStream : public OleOutputStreamBase
+class OleOutputStream : public ::cppu::WeakImplHelper2< XSeekable, XOutputStream >
 {
 public:
     explicit            OleOutputStream(

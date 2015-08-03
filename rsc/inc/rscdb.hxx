@@ -53,9 +53,6 @@ struct WriteRcContext
     RscCmdLine*         pCmdLine;
 };
 
-// Liste die alle Basistypen enthaelt
-typedef ::std::vector< RscTop* > RscBaseList;
-
 // Tabelle fuer Systemabhaengige Resourcen
 struct RscSysEntry
 {
@@ -65,8 +62,6 @@ struct RscSysEntry
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
-
-typedef ::std::vector< RscSysEntry* > RscSysList;
 
 class RscTypCont
 {
@@ -84,8 +79,10 @@ class RscTypCont
     RscTop  *           pRoot;              // Zeiger auf die Wurzel vom Typenbaum
     RSCINST             aVersion;           // Versionskontrollinstanz
 
-    RscBaseList         aBaseLst;           // Liste der einfachen Resourceklasse
-    RscSysList          aSysLst;            // Liste der Systemresourcen
+    ::std::vector< RscTop* >
+                        aBaseLst;           // Liste der einfachen Resourceklasse
+    ::std::vector< RscSysEntry* >
+                        aSysLst;            // Liste der Systemresourcen
 
     Atom                nWinBitVarId;       // Name der Winbitvariablen
     Atom                nBorderId;

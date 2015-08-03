@@ -94,8 +94,6 @@ inline ::rtl::OUString getExecutablePath()
 //rtl::OUString CWD = getExecutablePath();
 
 typedef std::vector<OString> string_container_t;
-typedef string_container_t::const_iterator string_container_const_iter_t;
-typedef string_container_t::iterator       string_container_iter_t;
 
 class exclude : public std::unary_function<OString, bool>
 {
@@ -103,8 +101,8 @@ public:
 
     exclude(const string_container_t& exclude_list)
     {
-        string_container_const_iter_t iter     = exclude_list.begin();
-        string_container_const_iter_t iter_end = exclude_list.end();
+        string_container_t::const_iterator iter     = exclude_list.begin();
+        string_container_t::const_iterator iter_end = exclude_list.end();
         for (/**/; iter != iter_end; ++iter)
             exclude_list_.push_back(env_var_name(*iter));
     }
@@ -307,7 +305,7 @@ public:
         //are different to the parent environment (they come first)
         //and the variables that should be equal between parent
         //and child environment
-        string_container_iter_t iter_logical_end =
+        string_container_t::iterator iter_logical_end =
             std::stable_partition(child_env.begin(), child_env.end(), exclude(different_env_vars));
 
         string_container_t different_child_env_vars(child_env.begin(), iter_logical_end);

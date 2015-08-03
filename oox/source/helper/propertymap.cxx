@@ -92,14 +92,12 @@ using ::com::sun::star::drawing::TextVerticalAdjust;
 
 namespace {
 
-typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetBase;
-
 /** This class implements a generic XPropertySet.
 
     Properties of all names and types can be set and later retrieved.
     TODO: move this to comphelper or better find an existing implementation
  */
-class GenericPropertySet : public GenericPropertySetBase
+class GenericPropertySet : public ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo >
 {
 public:
     explicit            GenericPropertySet( const PropertyMap& rPropMap );
