@@ -226,6 +226,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pFileView->EnableAutoResize();
     m_pFileView->SetDoubleClickHdl( LINK( this, RemoteFilesDialog, DoubleClickHdl ) );
     m_pFileView->SetSelectHdl( LINK( this, RemoteFilesDialog, SelectHdl ) );
+    m_pFileView->EnableDelete( true );
 
     m_pSplitter = VclPtr< Splitter >::Create( m_pContainer, WB_HSCROLL );
     m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ) );
