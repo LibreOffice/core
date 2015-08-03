@@ -534,8 +534,7 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
         // sprite hiding and shape redraw (at the end of the animation of a
         // shape), which would cause a flicker.
         mrEventQueue.addEventForNextRound(
-            makeEvent(
-                boost::bind( &SlideShowImpl::notifySlideAnimationsEnded, boost::ref(mrShow) ),
+            makeEvent( [this] () { this->mrShow.notifySlideAnimationsEnded(); },
                 "SlideShowImpl::notifySlideAnimationsEnded"));
         return true;
     }
@@ -861,12 +860,10 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     // displaySlide() has finished - sometimes, view size has not yet
     // reached final size
     maEventQueue.addEvent(
-        makeEvent(
-            boost::bind(
-                &::slideshow::internal::Animation::prefetch,
-                pTransition,
-                AnimatableShapeSharedPtr(),
-                ShapeAttributeLayerSharedPtr()),
+        makeEvent( [pTransition] () {
+                        pTransition->prefetch(
+                            AnimatableShapeSharedPtr(),
+                            ShapeAttributeLayerSharedPtr()); },
             "Animation::prefetch"));
 
     return ActivitySharedPtr(
@@ -1156,10 +1153,7 @@ void SlideShowImpl::displaySlide(
                     mpPreviousSlide,
                     mpCurrentSlide,
                     makeEvent(
-                        boost::bind(
-                            &SlideShowImpl::notifySlideTransitionEnded,
-                            this,
-                            false ),
+                        [this] () { this->notifySlideTransitionEnded(false); },
                         "SlideShowImpl::notifySlideTransitionEnded")));
 
             if (bSkipSlideTransition)
@@ -1182,10 +1176,7 @@ void SlideShowImpl::displaySlide(
                 // effect start event right away.
                 maEventQueue.addEvent(
                     makeEvent(
-                        boost::bind(
-                            &SlideShowImpl::notifySlideTransitionEnded,
-                            this,
-                            true ),
+                        [this] () { this->notifySlideTransitionEnded(true); },
                         "SlideShowImpl::notifySlideTransitionEnded"));
             }
         }
@@ -1219,11 +1210,7 @@ void SlideShowImpl::redisplayCurrentSlide()
     // No transition effect on this slide - schedule slide
     // effect start event right away.
     maEventQueue.addEvent(
-        makeEvent(
-            boost::bind(
-                &SlideShowImpl::notifySlideTransitionEnded,
-                this,
-                true ),
+        makeEvent( [this] () { this->notifySlideTransitionEnded(true); },
             "SlideShowImpl::notifySlideTransitionEnded"));
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
@@ -2287,8 +2274,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             // generate interruptable event here, there's no
             // timeout involved.
             aNotificationEvents.mpImmediateEvent =
-                makeEvent( boost::bind<void>(
-                    boost::mem_fn(&SlideShowImpl::notifySlideEnded), this, false ),
+                makeEvent( [this] () { this->notifySlideEnded(false); },
                     "SlideShowImpl::notifySlideEnded");
         }
     }

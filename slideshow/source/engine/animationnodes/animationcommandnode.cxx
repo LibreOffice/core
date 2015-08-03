@@ -30,7 +30,6 @@
 #include "tools.hxx"
 #include "nodetools.hxx"
 
-#include <boost/bind.hpp>
 
 using namespace com::sun::star;
 
@@ -108,8 +107,9 @@ void AnimationCommandNode::activate_st()
     }
 
     // deactivate ASAP:
+    auto self(getSelf());
     scheduleDeactivationEvent(
-        makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
+        makeEvent( [self] () { self->deactivate(); },
                    "AnimationCommandNode::deactivate" ) );
 }
 

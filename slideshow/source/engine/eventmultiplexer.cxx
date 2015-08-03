@@ -351,7 +351,7 @@ void SAL_CALL EventMultiplexerListener::mousePressed(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mousePressed,
+            makeEvent( std::bind( &EventMultiplexerImpl::mousePressed,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mousePressed") );
@@ -366,7 +366,7 @@ void SAL_CALL EventMultiplexerListener::mouseReleased(
     // this might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mouseReleased,
+            makeEvent( std::bind( &EventMultiplexerImpl::mouseReleased,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mouseReleased") );
@@ -394,7 +394,7 @@ void SAL_CALL EventMultiplexerListener::mouseDragged(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mouseDragged,
+            makeEvent( std::bind( &EventMultiplexerImpl::mouseDragged,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mouseDragged") );
@@ -409,7 +409,7 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mouseMoved,
+            makeEvent( std::bind( &EventMultiplexerImpl::mouseMoved,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mouseMoved") );
@@ -514,8 +514,7 @@ void EventMultiplexerImpl::tick()
 void EventMultiplexerImpl::scheduleTick()
 {
     EventSharedPtr pEvent(
-        makeDelay( boost::bind( &EventMultiplexerImpl::tick,
-                                this ),
+        makeDelay( [this] () { this->tick(); },
                    mnTimeout,
                    "EventMultiplexerImpl::tick with delay"));
 

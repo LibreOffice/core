@@ -28,7 +28,6 @@
 #include "nodetools.hxx"
 #include "delayevent.hxx"
 
-#include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <algorithm>
 
@@ -154,7 +153,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
         {
             bFinished = false;
             EventSharedPtr aRepetitionEvent =
-                    makeDelay( boost::bind( &BaseContainerNode::repeat, this ),
+                    makeDelay( [this] () { this->repeat(); },
                                0.0,
                                "BaseContainerNode::repeat");
             getContext().mrEventQueue.addEvent( aRepetitionEvent );

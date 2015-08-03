@@ -28,8 +28,6 @@
 #include "tools.hxx"
 #include "delayevent.hxx"
 
-#include <boost/bind.hpp>
-
 using namespace com::sun::star;
 
 namespace slideshow {
@@ -66,8 +64,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
         ENSURE_OR_THROW(
             pSelf, "cannot cast getSelf() to my type!" );
         aParms.mpEndEvent = makeEvent(
-            boost::bind( &AnimationSetNode::implScheduleDeactivationEvent,
-                         pSelf ),
+            [pSelf] () { pSelf->implScheduleDeactivationEvent(); },
             "AnimationSetNode::implScheduleDeactivationEvent");
     }
 

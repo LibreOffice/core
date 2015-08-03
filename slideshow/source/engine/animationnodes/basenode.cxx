@@ -474,8 +474,9 @@ bool BaseNode::resolve()
 
             // schedule delayed activation event. Take iterate node
             // timeout into account
+            auto self(mpSelf);
             mpCurrentEvent = makeDelay(
-                boost::bind( &AnimationNode::activate, mpSelf ),
+                [self] () { self->activate(); },
                 mnStartDelay,
                 "AnimationNode::activate with delay");
             maContext.mrEventQueue.addEvent( mpCurrentEvent );

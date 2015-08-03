@@ -27,7 +27,6 @@
 #include "delayevent.hxx"
 #include "tools.hxx"
 #include "nodetools.hxx"
-#include "boost/bind.hpp"
 
 using namespace com::sun::star;
 
@@ -79,17 +78,19 @@ void AnimationAudioNode::activate_st()
         else
         {
             // no node duration. Take inherent media time, then
+            auto self(getSelf());
             scheduleDeactivationEvent(
-                makeDelay( boost::bind( &AnimationNode::deactivate, getSelf() ),
-                                        mpPlayer->getDuration(),
+                makeDelay( [self] () { self->deactivate(); },
+                           mpPlayer->getDuration(),
                            "AnimationAudioNode::deactivate with delay") );
         }
     }
     else
     {
         // deactivate ASAP:
+        auto self(getSelf());
         scheduleDeactivationEvent(
-            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
+            makeEvent( [self] () { self->deactivate(); },
                                     "AnimationAudioNode::deactivate without delay") );
     }
 }
@@ -114,8 +115,8 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 
     // notify _after_ state change:
     getContext().mrEventQueue.addEvent(
-        makeEvent( boost::bind( &EventMultiplexer::notifyAudioStopped,
-                                boost::ref(getContext().mrEventMultiplexer),
+        makeEvent( std::bind( &EventMultiplexer::notifyAudioStopped,
+                              std::ref(getContext().mrEventMultiplexer),
                                 getSelf() ),
                    "AnimationAudioNode::notifyAudioStopped") );
 }

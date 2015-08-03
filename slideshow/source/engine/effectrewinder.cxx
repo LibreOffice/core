@@ -198,7 +198,7 @@ bool EffectRewinder::rewind (
         // No main sequence effects to rewind on the current slide.
         // Go back to the previous slide.
         mpAsynchronousRewindEvent = makeEvent(
-            ::boost::bind(
+            ::std::bind(
                 &EffectRewinder::asynchronousRewindToPreviousSlide,
                 this,
                 rPreviousSlideFunctor),
@@ -209,7 +209,7 @@ bool EffectRewinder::rewind (
         // The actual rewinding is done asynchronously so that we can safely
         // call other methods.
         mpAsynchronousRewindEvent = makeEvent(
-            ::boost::bind(
+            ::std::bind(
                 &EffectRewinder::asynchronousRewind,
                 this,
                 nSkipCount,
@@ -238,7 +238,7 @@ void EffectRewinder::skipAllMainSequenceEffects()
 
     const int nTotalMainSequenceEffectCount (countMainSequenceEffects());
     mpAsynchronousRewindEvent = makeEvent(
-        ::boost::bind(
+        ::std::bind(
             &EffectRewinder::asynchronousRewind,
             this,
             nTotalMainSequenceEffectCount,
@@ -365,7 +365,7 @@ void EffectRewinder::asynchronousRewind (
         if (rSlideRewindFunctor)
             rSlideRewindFunctor();
         mpAsynchronousRewindEvent = makeEvent(
-            ::boost::bind(
+            ::std::bind(
                 &EffectRewinder::asynchronousRewind,
                 this,
                 nEffectCount,

@@ -268,9 +268,9 @@ private:
                 // someone has registerered above for next effects
                 // (multiplexer prio=0) at the user event queue.
                 return mrEventQueue.addEventWhenQueueIsEmpty(
-                    makeEvent( boost::bind( &EventMultiplexer::notifyNextEffect,
-                                            boost::ref(mrEventMultiplexer) ),
-                               "EventMultiplexer::notifyNextEffect") );
+                    makeEvent( [this] () {
+                            this->mrEventMultiplexer.notifyNextEffect();
+                        }, "EventMultiplexer::notifyNextEffect") );
             }
             else
                 return true;
