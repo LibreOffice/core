@@ -55,7 +55,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 
 #include <vcl/group.hxx>
 

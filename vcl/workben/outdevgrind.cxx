@@ -44,8 +44,9 @@
 
 #include <osl/time.h>
 
-#include <boost/function.hpp>
 #include <boost/bind.hpp>
+
+#include <functional>
 
 #include <stdio.h>
 
@@ -75,7 +76,7 @@ class TestWindow : public Dialog
         virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 };
 
-typedef boost::function1<void, OutputDevice*>   functor_type;
+typedef std::function<void (OutputDevice*)>   functor_type;
 typedef std::vector< std::pair<const char*,
                                functor_type> >  functor_vector_type;
 
