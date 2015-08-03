@@ -682,13 +682,14 @@ public:
 
 enum class AllSettingsFlags {
     NONE     = 0x0000,
+    MOUSE    = 0x0001,
     STYLE    = 0x0002,
     MISC     = 0x0004,
     LOCALE   = 0x0020,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<AllSettingsFlags> : is_typed_flags<AllSettingsFlags, 0x026> {};
+    template<> struct typed_flags<AllSettingsFlags> : is_typed_flags<AllSettingsFlags, 0x0027> {};
 }
 
 class VCL_DLLPUBLIC AllSettings
