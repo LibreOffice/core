@@ -52,7 +52,7 @@ private:
     sal_uInt16 m_nPaintFlags;
     bool m_bPop : 1;
     bool m_bRestoreCursor : 1;
-    bool m_bCreatedBuffer : 1; ///< This PaintHelper created the buffer for the double-buffering, and should dispose it when being destructed (if it is still alive by then).
+    bool m_bStartedBufferedPaint : 1; ///< This PaintHelper started a buffered paint, and should paint it on the screen when being destructed.
 public:
     PaintHelper(vcl::Window* pWindow, sal_uInt16 nPaintFlags);
     void SetPop()
@@ -103,7 +103,7 @@ PaintHelper::PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags)
     , m_nPaintFlags(nPaintFlags)
     , m_bPop(false)
     , m_bRestoreCursor(false)
-    , m_bCreatedBuffer(false)
+    , m_bStartedBufferedPaint(false)
 {
 }
 
@@ -122,7 +122,7 @@ void PaintHelper::StartBufferedPaint()
         pFrameData->mpBuffer->Erase(m_aPaintRect);
 
     pFrameData->mbInBufferedPaint = true;
-    m_bCreatedBuffer = true;
+    m_bStartedBufferedPaint = true;
 
     SetupBuffer();
 
@@ -171,7 +171,7 @@ void PaintHelper::PaintBuffer()
 {
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
     assert(pFrameData->mbInBufferedPaint);
-    assert(m_bCreatedBuffer);
+    assert(m_bStartedBufferedPaint);
 
     pFrameData->mpBuffer->mnOutOffX = 0;
     pFrameData->mpBuffer->mnOutOffY = 0;
@@ -524,7 +524,7 @@ PaintHelper::~PaintHelper()
 
     // double-buffering: paint in case we created the buffer, the children are
     // already painted inside
-    if (m_bCreatedBuffer && pFrameData->mbInBufferedPaint)
+    if (m_bStartedBufferedPaint && pFrameData->mbInBufferedPaint)
     {
         PaintBuffer();
         pFrameData->mbInBufferedPaint = false;
