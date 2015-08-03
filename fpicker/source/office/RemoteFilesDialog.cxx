@@ -354,6 +354,7 @@ short RemoteFilesDialog::Execute()
     if( !m_bIsConnected )
     {
         m_pServices_lb->SetNoSelection();
+        m_pAddService_btn->SetPopupMenu( NULL );
     }
 
     short nRet = SvtFileDialog_Base::Execute();
@@ -654,6 +655,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
     if( nPos >= 0 )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
+        m_pAddService_btn->SetPopupMenu( m_pAddMenu );
 
         m_bServiceChanged = true;
         OpenURL( sURL );
