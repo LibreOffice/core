@@ -233,7 +233,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pSplitter->Show();
 
     m_pTreeView = VclPtr< FolderTree >::Create( m_pContainer, WB_BORDER );
-    Size aSize( 100, 200 );
+    Size aSize( 150, 200 );
     m_pTreeView->set_height_request( aSize.Height() );
     m_pTreeView->set_width_request( aSize.Width() );
     m_pTreeView->SetSizePixel( aSize );
