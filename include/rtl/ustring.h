@@ -1716,7 +1716,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllAsciiL(
     @param to  pointer to the replacing substring; must not be null and must
     point to memory of at least \p toLength ASCII bytes
 
-    @param fromLength  the length of the \p to substring; must be non-negative
+    @param toLength  the length of the \p to substring; must be non-negative
 
     @since LibreOffice 5.1
 */
