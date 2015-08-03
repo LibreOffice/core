@@ -41,8 +41,6 @@
 namespace framework{
 
 typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContainer;
-typedef TFrameContainer::iterator                                   TFrameIterator;
-typedef TFrameContainer::const_iterator                             TConstFrameIterator;
 
 /*-************************************************************************************************************
     @short          implement a container to hold children of frame, task or desktop

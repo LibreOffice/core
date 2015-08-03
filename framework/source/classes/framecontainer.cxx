@@ -86,7 +86,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 {
     SolarMutexGuard g;
 
-    TFrameIterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
+    TFrameContainer::iterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
     if (aSearchedItem!=m_aContainer.end())
     {
         m_aContainer.erase( aSearchedItem );
@@ -188,7 +188,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::
     SolarMutexGuard g;
     sal_Int32                                                       nPosition = 0;
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lElements ( (sal_uInt32)m_aContainer.size() );
-    for (TConstFrameIterator pItem=m_aContainer.begin(); pItem!=m_aContainer.end(); ++pItem)
+    for (TFrameContainer::const_iterator pItem=m_aContainer.begin(); pItem!=m_aContainer.end(); ++pItem)
         lElements[nPosition++] = *pItem;
     return lElements;
 }
@@ -245,7 +245,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
     // Step over all child frames. But if direct child isn't the right one search on his children first - before
     // you go to next direct child of this container!
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
-    for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+    for( TFrameContainer::const_iterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
     {
         if ((*pIterator)->getName()==sName)
         {
@@ -277,7 +277,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
 {
     SolarMutexGuard g;
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
-    for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+    for( TFrameContainer::const_iterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
     {
         if ((*pIterator)->getName()==sName)
         {

@@ -63,8 +63,6 @@ private:
     TextRunVector               maRuns;
 };
 
-typedef std::shared_ptr< TextParagraph > TextParagraphPtr;
-
 } }
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX

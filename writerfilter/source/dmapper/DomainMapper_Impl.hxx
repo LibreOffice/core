@@ -226,13 +226,6 @@ struct AnchoredContext
 
 typedef std::shared_ptr<FieldContext>  FieldContextPtr;
 
-typedef std::stack<ContextType>                 ContextStack;
-typedef std::stack<PropertyMapPtr>              PropertyStack;
-typedef std::stack< TextAppendContext >         TextAppendStack;
-typedef std::stack<HeaderFooterContext> HeaderFooterStack;
-typedef std::stack<FieldContextPtr>                FieldStack;
-typedef std::stack< AnchoredContext >           TextContentStack;
-
 /*-------------------------------------------------------------------------
     extended tab stop struct
   -----------------------------------------------------------------------*/
@@ -340,12 +333,10 @@ private:
     css::uno::Reference<css::text::XText> m_xBodyText;
     css::uno::Reference<css::text::XTextContent> m_xEmbedded;
 
-    TextAppendStack                                                                 m_aTextAppendStack;
-
-    TextContentStack                                                                m_aAnchoredStack;
-
-    HeaderFooterStack m_aHeaderFooterStack;
-    FieldStack                                                                      m_aFieldStack;
+    std::stack<TextAppendContext>                                                   m_aTextAppendStack;
+    std::stack<AnchoredContext>                                                     m_aAnchoredStack;
+    std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
+    std::stack<FieldContextPtr>                                                     m_aFieldStack;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;
     bool                                                                            m_bSetDateValue;
@@ -379,8 +370,8 @@ private:
     std::shared_ptr<DomainMapperTableHandler> m_pTableHandler;
 
     //each context needs a stack of currently used attributes
-    PropertyStack           m_aPropertyStacks[NUMBER_OF_CONTEXTS];
-    ContextStack            m_aContextStack;
+    std::stack<PropertyMapPtr>  m_aPropertyStacks[NUMBER_OF_CONTEXTS];
+    std::stack<ContextType> m_aContextStack;
     FontTablePtr            m_pFontTable;
     ListsManager::Pointer   m_pListTable;
     std::deque< css::uno::Reference<css::drawing::XShape> > m_aPendingShapes;

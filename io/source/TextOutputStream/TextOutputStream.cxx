@@ -50,9 +50,7 @@ namespace io_TextOutputStream
 
 // Implementation XTextOutputStream
 
-typedef WeakImplHelper2< XTextOutputStream2, XServiceInfo > TextOutputStreamHelper;
-
-class OTextOutputStream : public TextOutputStreamHelper
+class OTextOutputStream : public WeakImplHelper2< XTextOutputStream2, XServiceInfo >
 {
     Reference< XOutputStream > mxStream;
 
