@@ -4579,8 +4579,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                  Size( (sal_Int32)( aLogicRect.GetWidth() * fXScale ), (sal_Int32)( aLogicRect.GetHeight() * fYScale ) ) );
 
                             // creating the text frame -> scaling into (0,0),(21600,21600) destination coordinate system
-                            double fTextFrameScaleX = (double)21600 / (double)aPolyBoundRect.GetWidth();
-                            double fTextFrameScaleY = (double)21600 / (double)aPolyBoundRect.GetHeight();
+                            double fTextFrameScaleX = 0.0;
+                            double fTextFrameScaleY = 0.0;
+                            if (aPolyBoundRect.GetWidth())
+                                fTextFrameScaleX = (double)21600 / (double)aPolyBoundRect.GetWidth();
+                            if (aPolyBoundRect.GetHeight())
+                                fTextFrameScaleY = (double)21600 / (double)aPolyBoundRect.GetHeight();
+
                             sal_Int32 nLeft  = (sal_Int32)(( aPolyPieRect.Left()  - aPolyBoundRect.Left() ) * fTextFrameScaleX );
                             sal_Int32 nTop   = (sal_Int32)(( aPolyPieRect.Top()   - aPolyBoundRect.Top() )  * fTextFrameScaleY );
                             sal_Int32 nRight = (sal_Int32)(( aPolyPieRect.Right() - aPolyBoundRect.Left() ) * fTextFrameScaleX );
