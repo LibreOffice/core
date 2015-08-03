@@ -206,7 +206,28 @@ struct LOEvent
 
     /// Constructor to instantiate an object of type `type`.
     LOEvent(int type)
-        : m_nType(type) {}
+        : m_nType(type)
+        , m_pCommand(0)
+        , m_pArguments(0)
+        , m_pPath(0)
+        , m_bEdit(false)
+        , m_nPartMode(0)
+        , m_nPart(0)
+        , m_nKeyEvent(0)
+        , m_nCharCode(0)
+        , m_nKeyCode(0)
+        , m_nPaintTileX(0)
+        , m_nPaintTileY(0)
+        , m_fPaintTileZoom(0)
+        , m_nPostMouseEventType(0)
+        , m_nPostMouseEventX(0)
+        , m_nPostMouseEventY(0)
+        , m_nPostMouseEventCount(0)
+        , m_nSetGraphicSelectionType(0)
+        , m_nSetGraphicSelectionX(0)
+        , m_nSetGraphicSelectionY(0)
+    {
+    }
 };
 
 #endif // INCLUDED_TILEBUFFER_HXX
