@@ -23,7 +23,6 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/thread.hxx>
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <set>
 #include <iterator>
@@ -274,8 +273,7 @@ void SAL_CALL TimerScheduler::run()
         else
         {
             // Execute task.
-            if ( ! pTask->maTask.empty()
-                && ! pTask->mbIsCanceled)
+            if (pTask->maTask && !pTask->mbIsCanceled)
             {
                 pTask->maTask(aCurrentTime);
 

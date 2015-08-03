@@ -24,7 +24,8 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <rtl/ref.hxx>
-#include <boost/function.hpp>
+
+#include <functional>
 
 namespace sdext { namespace presenter {
 
@@ -45,7 +46,7 @@ public:
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
         const rtl::Reference<PresenterPaneContainer>& rpPaneContainer);
 
-    ::boost::function<void(const css::awt::Rectangle& rRepaintBox)>
+    ::std::function<void (const css::awt::Rectangle& rRepaintBox)>
         GetInvalidator (
             const css::uno::Reference<css::awt::XWindow>& rxWindow,
             const bool bSynchronous = false);

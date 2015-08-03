@@ -1874,9 +1874,9 @@ void AccessibleNotes::SetTextView (
     if (mpTextView)
     {
         mpTextView->GetCaret()->SetCaretMotionBroadcaster(
-            ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)>());
+            ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>());
         mpTextView->SetTextChangeBroadcaster(
-            ::boost::function<void()>());
+            ::std::function<void ()>());
     }
 
     mpTextView = rpTextView;

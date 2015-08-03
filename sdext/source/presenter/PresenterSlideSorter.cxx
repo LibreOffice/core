@@ -101,7 +101,7 @@ public:
         const sal_Int32 nRelativeHorizontalPosition,
         const sal_Int32 nRelativeVerticalPosition) const;
     css::awt::Rectangle GetBoundingBox (const sal_Int32 nSlideIndex) const;
-    void ForAllVisibleSlides (const ::boost::function<void(sal_Int32)>& rAction);
+    void ForAllVisibleSlides (const ::std::function<void (sal_Int32)>& rAction);
     sal_Int32 GetFirstVisibleSlideIndex() const;
     sal_Int32 GetLastVisibleSlideIndex() const;
     bool SetHorizontalOffset (const double nOffset);
@@ -1394,7 +1394,8 @@ awt::Rectangle PresenterSlideSorter::Layout::GetBoundingBox (const sal_Int32 nSl
                                                                                aWindowPosition.Y + maPreviewSize.Height));
 }
 
-void PresenterSlideSorter::Layout::ForAllVisibleSlides (const ::boost::function<void(sal_Int32)>& rAction)
+void PresenterSlideSorter::Layout::ForAllVisibleSlides(
+        const ::std::function<void (sal_Int32)>& rAction)
 {
     for (sal_Int32 nRow=mnFirstVisibleRow; nRow<=mnLastVisibleRow; ++nRow)
     {

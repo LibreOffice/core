@@ -82,7 +82,7 @@ bool PresenterFrameworkObserver::True()
 
 void SAL_CALL PresenterFrameworkObserver::disposing()
 {
-    if ( ! maAction.empty())
+    if (maAction)
         maAction(false);
     Shutdown();
 }
@@ -108,7 +108,7 @@ void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rE
     if (rEvent.Source == mxConfigurationController)
     {
         mxConfigurationController = NULL;
-        if ( ! maAction.empty())
+        if (maAction)
             maAction(false);
     }
 }
@@ -124,7 +124,7 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
     if (rEvent.Type == "ConfigurationUpdateEnd")
     {
         Shutdown();
-        aAction(aPredicate);
+        aAction(aPredicate());
         bDispose = true;
     }
     else if (aPredicate())
@@ -136,7 +136,7 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
 
     if (bDispose)
     {
-        maAction.clear();
+        maAction = nullptr;
         dispose();
     }
 }

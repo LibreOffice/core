@@ -40,7 +40,7 @@ PresenterPaintManager::PresenterPaintManager (
 {
 }
 
-::boost::function<void(const css::awt::Rectangle& rRepaintBox)>
+::std::function<void (const css::awt::Rectangle& rRepaintBox)>
     PresenterPaintManager::GetInvalidator (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         const bool bSynchronous)

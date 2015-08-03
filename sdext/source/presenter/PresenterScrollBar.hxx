@@ -28,10 +28,12 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include <boost/function.hpp>
+
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <functional>
 
 namespace sdext { namespace presenter {
 
@@ -55,7 +57,7 @@ class PresenterScrollBar
       public PresenterScrollBarInterfaceBase
 {
 public:
-    typedef ::boost::function<void(double)> ThumbMotionListener;
+    typedef ::std::function<void (double)> ThumbMotionListener;
     virtual ~PresenterScrollBar();
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -171,7 +173,7 @@ protected:
     double mnThumbSize;
     double mnLineHeight;
     css::geometry::RealPoint2D maDragAnchor;
-    ::boost::function<void(double)> maThumbMotionListener;
+    ::std::function<void (double)> maThumbMotionListener;
     Area meButtonDownArea;
     Area meMouseMoveArea;
     css::geometry::RealRectangle2D maBox[__AreaCount__];
@@ -205,7 +207,7 @@ protected:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
-        const ::boost::function<void(double)>& rThumbMotionListener);
+        const ::std::function<void (double)>& rThumbMotionListener);
 
     void Repaint (
         const css::geometry::RealRectangle2D& rBox,
@@ -250,7 +252,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
-        const ::boost::function<void(double)>& rThumbMotionListener);
+        const ::std::function<void (double)>& rThumbMotionListener);
     virtual ~PresenterVerticalScrollBar();
     virtual sal_Int32 GetSize() const SAL_OVERRIDE;
 

@@ -34,6 +34,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
+#include <functional>
 
 namespace sdext { namespace presenter {
 
@@ -41,9 +42,9 @@ class PresenterTextCaret
 {
 public:
     PresenterTextCaret (
-        const ::boost::function<css::awt::Rectangle(const sal_Int32,const sal_Int32)>&
+        const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>&
             rCharacterBoundsAccess,
-        const ::boost::function<void(const css::awt::Rectangle&)>&
+        const ::std::function<void (const css::awt::Rectangle&)>&
             rInvalidator);
     ~PresenterTextCaret();
 
@@ -64,7 +65,7 @@ public:
         when the caret changes position.
     */
     void SetCaretMotionBroadcaster (
-        const ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster);
+        const ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster);
 
     css::awt::Rectangle GetBounds() const;
 
@@ -73,9 +74,9 @@ private:
     sal_Int32 mnCharacterIndex;
     sal_Int32 mnCaretBlinkTaskId;
     bool mbIsCaretVisible;
-    const ::boost::function<css::awt::Rectangle(const sal_Int32,const sal_Int32)> maCharacterBoundsAccess;
-    const ::boost::function<void(const css::awt::Rectangle&)> maInvalidator;
-    ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)> maBroadcaster;
+    const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)> maCharacterBoundsAccess;
+    const ::std::function<void (const css::awt::Rectangle&)> maInvalidator;
+    ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)> maBroadcaster;
     css::awt::Rectangle maCaretBounds;
 
     void InvertCaret();
@@ -219,9 +220,9 @@ public:
     PresenterTextView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const ::boost::function<void(const css::awt::Rectangle&)>& rInvalidator);
+        const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator);
     void SetText (const css::uno::Reference<css::text::XText>& rxText);
-    void SetTextChangeBroadcaster (const ::boost::function<void()>& rBroadcaster);
+    void SetTextChangeBroadcaster(const ::std::function<void ()>& rBroadcaster);
 
     void SetLocation (const css::geometry::RealPoint2D& rLocation);
     void SetSize (const css::geometry::RealSize2D& rSize);
@@ -264,10 +265,10 @@ private:
     SharedPresenterTextCaret mpCaret;
     double mnLeftOffset;
     double mnTopOffset;
-    const ::boost::function<void(const css::awt::Rectangle&)> maInvalidator;
+    const ::std::function<void (const css::awt::Rectangle&)> maInvalidator;
     bool mbIsFormatPending;
     sal_Int32 mnCharacterCount;
-    ::boost::function<void()> maTextChangeBroadcaster;
+    ::std::function<void ()> maTextChangeBroadcaster;
 
     void RequestFormat();
     void Format();

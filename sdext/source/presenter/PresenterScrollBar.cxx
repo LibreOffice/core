@@ -72,7 +72,7 @@ PresenterScrollBar::PresenterScrollBar (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<awt::XWindow>& rxParentWindow,
     const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
-    const ::boost::function<void(double)>& rThumbMotionListener)
+    const ::std::function<void (double)>& rThumbMotionListener)
     : PresenterScrollBarInterfaceBase(m_aMutex),
       mxComponentContext(rxComponentContext),
       mxParentWindow(rxParentWindow),
@@ -630,7 +630,7 @@ PresenterVerticalScrollBar::PresenterVerticalScrollBar (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<awt::XWindow>& rxParentWindow,
     const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
-    const ::boost::function<void(double)>& rThumbMotionListener)
+    const ::std::function<void (double)>& rThumbMotionListener)
     : PresenterScrollBar(rxComponentContext, rxParentWindow, rpPaintManager, rThumbMotionListener),
       mnScrollBarWidth(0)
 {

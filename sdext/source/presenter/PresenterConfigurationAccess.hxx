@@ -25,8 +25,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <vector>
-#include <boost/function.hpp>
+#include <functional>
 
 namespace sdext { namespace presenter {
 
@@ -48,7 +49,7 @@ class PresenterConfigurationAccess
 {
 public:
     enum WriteMode { READ_WRITE, READ_ONLY };
-    typedef ::boost::function<bool(
+    typedef ::std::function<bool (
         const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&)> Predicate;
     static const OUString msPresenterScreenRootName;
@@ -121,10 +122,10 @@ public:
     */
     void CommitChanges();
 
-    typedef ::boost::function<void(
+    typedef ::std::function<void (
         const OUString&,
         const ::std::vector<css::uno::Any>&) > ItemProcessor;
-    typedef ::boost::function<void(
+    typedef ::std::function<void (
         const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&) > PropertySetProcessor;
 

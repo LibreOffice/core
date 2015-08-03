@@ -33,10 +33,12 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ref.hxx>
-#include <vector>
-#include <boost/function.hpp>
+
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <vector>
+#include <functional>
 
 namespace sdext { namespace presenter {
 
@@ -65,7 +67,7 @@ public:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    typedef ::boost::function1<void, const css::uno::Reference<css::drawing::framework::XView>&>
+    typedef ::std::function<void (const css::uno::Reference<css::drawing::framework::XView>&)>
         ViewInitializationFunction;
 
     /** Each pane descriptor holds references to one pane and the view
@@ -79,8 +81,8 @@ public:
     class PaneDescriptor
     {
     public:
-        typedef ::boost::function<void(bool)> Activator;
-        typedef ::boost::function<boost::shared_ptr<PresenterSprite>()> SpriteProvider;
+        typedef ::std::function<void (bool)> Activator;
+        typedef ::std::function<boost::shared_ptr<PresenterSprite> ()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
         OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;

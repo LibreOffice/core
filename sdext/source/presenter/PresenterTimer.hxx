@@ -28,7 +28,10 @@
 #include <osl/time.h>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
-#include <boost/function.hpp>
+
+#include <boost/shared_ptr.hpp>
+
+#include <functional>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -45,7 +48,7 @@ class PresenterTimer
 public:
     /** A task is called with the current time.
     */
-    typedef ::boost::function<void(const TimeValue&)> Task;
+    typedef ::std::function<void (const TimeValue&)> Task;
 
     static const sal_Int32 NotAValidTaskId = 0;
 

@@ -64,7 +64,7 @@ namespace sdext { namespace presenter {
 PresenterTextView::PresenterTextView (
     const Reference<XComponentContext>& rxContext,
     const Reference<rendering::XCanvas>& rxCanvas,
-    const ::boost::function<void(const css::awt::Rectangle&)>& rInvalidator)
+    const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
     : mxCanvas(rxCanvas),
       mbDoOuput(true),
       mxBreakIterator(),
@@ -139,7 +139,7 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
 }
 
 void PresenterTextView::SetTextChangeBroadcaster (
-    const ::boost::function<void()>& rBroadcaster)
+    const ::std::function<void ()>& rBroadcaster)
 {
     maTextChangeBroadcaster = rBroadcaster;
 }
@@ -1084,8 +1084,8 @@ void PresenterTextParagraph::SetupCellArray (
 //===== PresenterTextCaret ================================================----
 
 PresenterTextCaret::PresenterTextCaret (
-    const ::boost::function<css::awt::Rectangle(const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
-    const ::boost::function<void(const css::awt::Rectangle&)>& rInvalidator)
+    const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
+    const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
     : mnParagraphIndex(-1),
       mnCharacterIndex(-1),
       mnCaretBlinkTaskId(0),
@@ -1164,7 +1164,7 @@ void PresenterTextCaret::SetPosition (
 
 
 void PresenterTextCaret::SetCaretMotionBroadcaster (
-    const ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster)
+    const ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster)
 {
     maBroadcaster = rBroadcaster;
 }

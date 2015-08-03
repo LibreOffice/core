@@ -43,8 +43,10 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <boost/function.hpp>
+
 #include <boost/noncopyable.hpp>
+
+#include <functional>
 
 namespace {
     typedef cppu::WeakComponentImplHelper5<
@@ -76,7 +78,7 @@ class PresenterToolBar
       public CachablePresenterView
 {
 public:
-    typedef ::boost::function<void()> Action;
+    typedef ::std::function<void ()> Action;
 
     enum Anchor { Left, Center, Right };
 

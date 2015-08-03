@@ -24,8 +24,10 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
-#include <boost/function.hpp>
+
 #include <boost/noncopyable.hpp>
+
+#include <functional>
 
 namespace sdext { namespace presenter {
 
@@ -42,8 +44,8 @@ class PresenterFrameworkObserver
       public PresenterFrameworkObserverInterfaceBase
 {
 public:
-    typedef ::boost::function<bool()> Predicate;
-    typedef ::boost::function<void(bool)> Action;
+    typedef ::std::function<bool ()> Predicate;
+    typedef ::std::function<void (bool)> Action;
 
     static void RunOnUpdateEnd (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
