@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#define TRANSLITERATION_casemapping
 #include <transliteration_body.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {

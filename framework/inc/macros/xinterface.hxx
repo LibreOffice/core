@@ -63,18 +63,6 @@ ________________________________________________________________________________
     }
 
 //  private
-//  implementation of XInterface::queryInterface() without any other interfaces!
-
-#define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_PURE( CLASS, BASECLASS )                                                                                   \
-    ::com::sun::star::uno::Any SAL_CALL CLASS::queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException )  \
-    {                                                                                                                                                       \
-        /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
-        /* I have no own supported interfaces ...                                           */                                                              \
-        /* ... ask baseclass for interfaces!                                                */                                                              \
-        return BASECLASS::queryInterface( aType );                                                                                                          \
-    }
-
-//  private
 //  implementation of XInterface::queryInterface() with max. 12 other interfaces!
 
 #define PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                            \
@@ -122,10 +110,6 @@ ________________________________________________________________________________
 
 //  private
 //  complete implementation of XInterface for different use cases
-
-#define PRIVATE_DEFINE_XINTERFACE_PURE( CLASS, BASECLASS )                                                                                                  \
-    PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \
-    PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_PURE( CLASS, BASECLASS )
 
 #define PRIVATE_DEFINE_XINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                                           \
     PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \

@@ -139,56 +139,6 @@ ________________________________________________________________________________
     }
 
 //  private
-//  implementation of XTypeProvider::getTypes() with using max. 12 interfaces + baseclass!
-
-#define PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_BASECLASS( CLASS, BASECLASS, TYPES )                                                              \
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL CLASS::getTypes() throw( ::com::sun::star::uno::RuntimeException )  \
-    {                                                                                                                                           \
-        /* Optimize this method !                                       */                                                                      \
-        /* We initialize a static variable only one time.               */                                                                      \
-        /* And we don't must use a mutex at every call!                 */                                                                      \
-        /* For the first call; pTypeCollection is NULL -                */                                                                      \
-        /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >* pTypeCollection = NULL;                                         \
-        if ( pTypeCollection == NULL )                                                                                                          \
-        {                                                                                                                                       \
-            /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );                                                                         \
-            /* Control these pointer again ... it can be, that another instance will be faster then these! */                                   \
-            if ( pTypeCollection == NULL )                                                                                                      \
-            {                                                                                                                                   \
-                /* Create static typecollection for my own interfaces!  */                                                                      \
-                static ::cppu::OTypeCollection aTypeCollection TYPES;                                                                          \
-                /* Copy all items from my list sequences and from my baseclass  */                                                              \
-                /* to one result list!                                          */                                                              \
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes1   = aTypeCollection.getTypes();               \
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes2   = BASECLASS::getTypes();                    \
-                sal_Int32                                                               nCount1     = seqTypes1.getLength();                    \
-                sal_Int32                                                               nCount2     = seqTypes2.getLength();                    \
-                static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >   seqResult   ( nCount1+nCount2 );                        \
-                sal_Int32                                                               nSource     = 0;                                        \
-                sal_Int32                                                               nDestination= 0;                                        \
-                while( nSource<nCount1 )                                                                                                        \
-                {                                                                                                                               \
-                    seqResult[nDestination] = seqTypes1[nSource];                                                                               \
-                    ++nSource;                                                                                                                  \
-                    ++nDestination;                                                                                                             \
-                }                                                                                                                               \
-                nSource = 0;                                                                                                                    \
-                while( nSource<nCount2 )                                                                                                        \
-                {                                                                                                                               \
-                    seqResult[nDestination] = seqTypes2[nSource];                                                                               \
-                    ++nSource;                                                                                                                  \
-                    ++nDestination;                                                                                                             \
-                }                                                                                                                               \
-                /* ... and set his address to static pointer! */                                                                                \
-                pTypeCollection = &seqResult;                                                                                                   \
-            }                                                                                                                                   \
-        }                                                                                                                                       \
-        return *pTypeCollection;                                                                                                                \
-    }
-
-//  private
 //  help macros to replace TYPES in getTypes() [see before]
 
 #define PRIVATE_DEFINE_TYPE_1( TYPE1 )                                                                                                          \
@@ -241,10 +191,6 @@ ________________________________________________________________________________
 //  private
 //  complete implementation of XTypeProvider
 
-#define PRIVATE_DEFINE_XTYPEPROVIDER_PURE( CLASS )                                                                                                          \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, cppu::UnoType<com::sun::star::lang::XTypeProvider>::get())
-
 #define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                                                                                                        \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, TYPES )
@@ -252,10 +198,6 @@ ________________________________________________________________________________
 #define PRIVATE_DEFINE_XTYPEPROVIDER_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )                                                                              \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_LARGE( CLASS, TYPES_FIRST, TYPES_SECOND )
-
-#define PRIVATE_DEFINE_XTYPEPROVIDER_BASECLASS( CLASS, BASECLASS, TYPES )                                                                                   \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_BASECLASS( CLASS, BASECLASS, TYPES )
 
 //  public
 //  declaration of XTypeProvider

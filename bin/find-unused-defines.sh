@@ -19,9 +19,9 @@
 ( git grep -hP '^\w*#define\s+\w+.*\\' -- "[!e][!x][!t]*" \
   && \
   git grep -hP '^\w*#define\s+\w+\s*$' -- "[!e][!x][!t]*" ) \
+  | sed -r 's/[ ]*#define[ ]+([a-zA-Z0-9_]+).*/\1/' \
   | grep -v '_idl' \
   | grep -vE '^INCLUDED_' \
-  | sed -r 's/[ ]*#define[ ]+([a-zA-Z0-9_]+).*/\1/' \
   | sort \
   | uniq \
   | xargs -Ixxx -n 1 -P 8 sh -c \

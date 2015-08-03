@@ -182,9 +182,6 @@ public:
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
     static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId() \
 
-#define DECLARE_GETTYPES( ) \
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-
 #define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
 ::com::sun::star::uno::Sequence< sal_Int8 > classname::getUnoTunnelImplementationId() \
 {   \
