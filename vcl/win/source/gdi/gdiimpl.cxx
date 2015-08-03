@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svsys.h>
+
 #include "gdiimpl.hxx"
 
 #include <string.h>
-#include <svsys.h>
 #include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
@@ -2316,6 +2317,17 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
 
 bool WinSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
         const Gradient& /*rGradient*/)
+{
+    return false;
+}
+
+bool WinSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& /*rControlCacheKey*/, int /*nX*/, int /*nY*/)
+{
+    return false;
+}
+
+bool WinSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& /*rWhite*/, OpenGLCompatibleDC& /*rBlack*/,
+        int /*nX*/, int /*nY*/ , ControlCacheKey& /*aControlCacheKey*/)
 {
     return false;
 }

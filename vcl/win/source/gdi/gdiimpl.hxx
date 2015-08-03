@@ -18,6 +18,7 @@
  */
 
 #include "salgdiimpl.hxx"
+#include "win/salgdi.h"
 
 #include <vcl/gradient.hxx>
 
@@ -221,6 +222,11 @@ public:
 
     virtual void beginPaint() SAL_OVERRIDE { }
     virtual void endPaint() SAL_OVERRIDE { }
+
+    virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY);
+
+    virtual bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
+                                             int nX, int nY , ControlCacheKey& aControlCacheKey);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
