@@ -1442,13 +1442,14 @@ void SwRegHistory::_MakeSetWhichIds()
         if( pSet && pSet->Count() )
         {
             SfxItemIter aIter( *pSet );
-            sal_uInt16 nW = aIter.FirstItem()->Which();
-            while( true )
+            const SfxPoolItem* pItem = aIter.FirstItem();
+            while(pItem)
             {
+                sal_uInt16 nW = pItem->Which();
                 m_WhichIdSet.insert( nW );
                 if( aIter.IsAtEnd() )
                     break;
-                nW = aIter.NextItem()->Which();
+                pItem = aIter.NextItem();
             }
         }
     }
