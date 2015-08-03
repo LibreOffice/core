@@ -93,18 +93,19 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
 }
 
 TEParaPortion::TEParaPortion( TextNode* pN )
+    : mpNode {pN}
+    , mnInvalidPosStart {0}
+    , mnInvalidDiff {0}
+    , mbInvalid {true}
+    , mbSimple {false}
 {
-    mpNode = pN;
-    mnInvalidPosStart = mnInvalidDiff = 0;
-    mbInvalid = true;
-    mbSimple = false;
 }
 
 TEParaPortion::~TEParaPortion()
 {
 }
 
-void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
+void TEParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
     if ( !mbInvalid )
     {
@@ -128,7 +129,7 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
         else
         {
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
-            mnInvalidPosStart = std::min( mnInvalidPosStart, (sal_uInt16) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
+            mnInvalidPosStart = std::min( mnInvalidPosStart, nDiff < 0 ? nStart+nDiff : nDiff );
             mnInvalidDiff = 0;
             mbSimple = false;
         }
@@ -139,7 +140,7 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
     mbInvalid = true;
 }
 
-void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/ )
+void TEParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /*nEnd*/ )
 {
     if ( !mbInvalid )
     {
@@ -159,7 +160,7 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
     mbSimple = false;
 }
 
-sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, bool bInclEnd )
+sal_uInt16 TEParaPortion::GetLineNumber( sal_Int32 nChar, bool bInclEnd )
 {
     for ( size_t nLine = 0; nLine < maLines.size(); nLine++ )
     {

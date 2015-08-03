@@ -168,8 +168,8 @@ private:
     TETextPortionList       maTextPortions;
     std::vector<TEWritingDirectionInfo> maWritingDirectionInfos;
 
-    sal_uInt16          mnInvalidPosStart;
-    short               mnInvalidDiff;
+    sal_Int32           mnInvalidPosStart;
+    sal_Int32           mnInvalidDiff;
 
     bool                mbInvalid;
     bool                mbSimple;   // only type linearly
@@ -185,18 +185,18 @@ public:
     void                SetNotSimpleInvalid()       { mbSimple = false; }
     void                SetValid()                  { mbInvalid = false; mbSimple = true;}
 
-    void                MarkInvalid( sal_uInt16 nStart, short nDiff);
-    void                MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 nEnd );
+    void                MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff );
+    void                MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 nEnd );
 
-    sal_uInt16              GetInvalidPosStart() const  { return mnInvalidPosStart; }
-    short               GetInvalidDiff() const      { return mnInvalidDiff; }
+    sal_Int32           GetInvalidPosStart() const  { return mnInvalidPosStart; }
+    sal_Int32           GetInvalidDiff() const      { return mnInvalidDiff; }
 
     TextNode*           GetNode() const             { return mpNode; }
     boost::ptr_vector<TextLine>& GetLines()         { return maLines; }
     TETextPortionList&  GetTextPortions()           { return maTextPortions; }
     std::vector<TEWritingDirectionInfo>& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
-    sal_uInt16              GetLineNumber( sal_uInt16 nIndex, bool bInclEnd );
+    sal_uInt16          GetLineNumber( sal_Int32 nIndex, bool bInclEnd );
     void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 };
 

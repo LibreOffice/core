@@ -2154,9 +2154,9 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         pTEParaPortion->GetLines().push_back( pL );
     }
 
-    const int nInvalidDiff = pTEParaPortion->GetInvalidDiff();
-    const sal_uInt16 nInvalidStart = pTEParaPortion->GetInvalidPosStart();
-    const sal_uInt16 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
+    const sal_Int32 nInvalidDiff = pTEParaPortion->GetInvalidDiff();
+    const sal_Int32 nInvalidStart = pTEParaPortion->GetInvalidPosStart();
+    const sal_Int32 nInvalidEnd = nInvalidStart + std::abs( nInvalidDiff );
     bool bQuickFormat = false;
 
     if ( pTEParaPortion->GetWritingDirectionInfos().empty() )
@@ -2168,7 +2168,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         if ( nInvalidDiff < 0 )
         {
             // check if deleting across Portion border
-            sal_uInt16 nPos = 0;
+            sal_Int32 nPos = 0;
             for ( const auto pTP : pTEParaPortion->GetTextPortions() )
             {
                 // there must be no Start/End in the deleted region
