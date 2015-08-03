@@ -63,7 +63,6 @@ class SmStructureNode;
 typedef std::shared_ptr<SmNode> SmNodePointer;
 typedef boost::ptr_deque<SmNode> SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
-typedef std::vector< SmStructureNode * > SmStructureNodeArray;
 
 template < typename T >
 T* popOrZero( boost::ptr_deque<T> & rStack )

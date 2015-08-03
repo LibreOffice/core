@@ -20,8 +20,8 @@
 #define INCLUDED_STARMATH_INC_PARSE_HXX
 
 #include <vcl/svapp.hxx>
-
 #include <set>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "types.hxx"
 #include "token.hxx"
@@ -33,7 +33,7 @@ class SmParser
     OUString        m_aBufferString;
     SmToken         m_aCurToken;
     SmNodeStack     m_aNodeStack;
-    SmErrDescList   m_aErrDescList;
+    boost::ptr_vector< SmErrorDesc > m_aErrDescList;
     int             m_nCurError;
     LanguageType    m_nLang;
     sal_Int32       m_nBufferIndex,

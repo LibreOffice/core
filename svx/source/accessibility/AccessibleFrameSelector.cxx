@@ -55,16 +55,6 @@ using ::com::sun::star::awt::XFocusListener;
 
 using namespace ::com::sun::star::accessibility;
 
-namespace AwtKey                    = ::com::sun::star::awt::Key;
-namespace AwtKeyModifier            = ::com::sun::star::awt::KeyModifier;
-namespace AwtFocusChangeReason      = ::com::sun::star::awt::FocusChangeReason;
-
-typedef ::com::sun::star::awt::Point        AwtPoint;
-typedef ::com::sun::star::awt::Size         AwtSize;
-typedef ::com::sun::star::awt::Rectangle    AwtRectangle;
-typedef ::com::sun::star::awt::FocusEvent   AwtFocusEvent;
-
-
 
 AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
@@ -270,7 +260,7 @@ Locale AccFrameSelector::getLocale(  )
     return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
-sal_Bool AccFrameSelector::containsPoint( const AwtPoint& aPt )
+sal_Bool AccFrameSelector::containsPoint( const css::awt::Point& aPt )
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -280,7 +270,7 @@ sal_Bool AccFrameSelector::containsPoint( const AwtPoint& aPt )
 }
 
 Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
-    const AwtPoint& aPt )
+    const css::awt::Point& aPt )
         throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -289,7 +279,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
     return mpFrameSel->GetChildAccessible( Point( aPt.X, aPt.Y ) );
 }
 
-AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException, std::exception)
+css::awt::Rectangle AccFrameSelector::getBounds(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -306,7 +296,7 @@ AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException, std::excep
             aPos = aSpot.TopLeft();
             aSz = aSpot.GetSize();
     }
-    AwtRectangle aRet;
+    css::awt::Rectangle aRet;
     aRet.X = aPos.X();
     aRet.Y = aPos.Y();
     aRet.Width = aSz.Width();
@@ -316,7 +306,7 @@ AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException, std::excep
 
 
 
-AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException, std::exception)
+css::awt::Point AccFrameSelector::getLocation(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -330,13 +320,13 @@ AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException, std::excepti
             const Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
             aPos = aSpot.TopLeft();
     }
-    AwtPoint aRet(aPos.X(), aPos.Y());
+    css::awt::Point aRet(aPos.X(), aPos.Y());
     return aRet;
 }
 
 
 
-AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException, std::exception)
+css::awt::Point AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -351,13 +341,13 @@ AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException, std:
             aPos = aSpot.TopLeft();
     }
     aPos = mpFrameSel->OutputToAbsoluteScreenPixel( aPos );
-    AwtPoint aRet(aPos.X(), aPos.Y());
+    css::awt::Point aRet(aPos.X(), aPos.Y());
     return aRet;
 }
 
 
 
-AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException, std::exception)
+css::awt::Size AccFrameSelector::getSize(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsValid();
@@ -371,7 +361,7 @@ AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException, std::exception)
             const Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
             aSz = aSpot.GetSize();
     }
-    AwtSize aRet(aSz.Width(), aSz.Height());
+    css::awt::Size aRet(aSz.Width(), aSz.Height());
     return aRet;
 }
 
@@ -457,28 +447,28 @@ void AccFrameSelector::IsValid() throw (RuntimeException)
         throw RuntimeException();
 }
 
-void    AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
+void AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
 {
     SolarMutexGuard aGuard;
-    AwtFocusEvent aEvent;
+    css::awt::FocusEvent aEvent;
     aEvent.FocusFlags = 0;
     if(bGetFocus)
     {
         GetFocusFlags nFocusFlags = mpFrameSel->GetGetFocusFlags();
         if(nFocusFlags & GetFocusFlags::Tab)
-            aEvent.FocusFlags |= AwtFocusChangeReason::TAB;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::TAB;
         if(nFocusFlags & GetFocusFlags::CURSOR)
-            aEvent.FocusFlags |= AwtFocusChangeReason::CURSOR;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::CURSOR;
         if(nFocusFlags & GetFocusFlags::Mnemonic)
-            aEvent.FocusFlags |= AwtFocusChangeReason::MNEMONIC;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::MNEMONIC;
         if(nFocusFlags & GetFocusFlags::Forward)
-            aEvent.FocusFlags |= AwtFocusChangeReason::FORWARD;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::FORWARD;
         if(nFocusFlags & GetFocusFlags::Backward)
-            aEvent.FocusFlags |= AwtFocusChangeReason::BACKWARD;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::BACKWARD;
         if(nFocusFlags & GetFocusFlags::Around)
-            aEvent.FocusFlags |= AwtFocusChangeReason::AROUND;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::AROUND;
         if(nFocusFlags & GetFocusFlags::UniqueMnemonic)
-            aEvent.FocusFlags |= AwtFocusChangeReason::UNIQUEMNEMONIC;
+            aEvent.FocusFlags |= css::awt::FocusChangeReason::UNIQUEMNEMONIC;
     }
     aEvent.Temporary = sal_False;
 

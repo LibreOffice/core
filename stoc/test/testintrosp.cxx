@@ -54,10 +54,6 @@ using namespace css::beans::PropertyAttribute;
 
 
 
-typedef WeakImplHelper4< XIntroTest, XPropertySet, XNameAccess, XIndexAccess > ImplIntroTestHelper;
-typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
-
-
 #define DEFAULT_INDEX_ACCESS_COUNT  10
 #define DEFAULT_NAME_ACCESS_COUNT   5
 
@@ -176,7 +172,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
 
 // XPropertySetInfo for test class
 
-class ImplPropertySetInfo : public ImplPropertySetInfoHelper
+class ImplPropertySetInfo : public WeakImplHelper1< XPropertySetInfo >
 {
      friend class ImplIntroTest;
 
@@ -257,7 +253,7 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
 }
 
 
-class ImplIntroTest : public ImplIntroTestHelper
+class ImplIntroTest : public WeakImplHelper4< XIntroTest, XPropertySet, XNameAccess, XIndexAccess >
 {
       Reference< XMultiServiceFactory > mxMgr;
 

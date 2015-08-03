@@ -21,8 +21,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 class SmNode;
 
 enum SmParseError
@@ -47,8 +45,6 @@ struct SmErrorDesc
     SmNode       *pNode;
     OUString      Text;
 };
-
-typedef boost::ptr_vector< SmErrorDesc > SmErrDescList;
 
 #endif
 

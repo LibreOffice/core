@@ -35,8 +35,6 @@ typedef rtl::Reference< Cell > CellRef;
 typedef rtl::Reference< TableModel > TableModelRef;
 typedef rtl::Reference< TableRow > TableRowRef;
 typedef rtl::Reference< TableColumn > TableColumnRef;
-typedef rtl::Reference< TableRows > TableRowsRef;
-typedef rtl::Reference< TableColumns > TableColumnsRef;
 typedef std::vector< CellRef > CellVector;
 typedef std::vector< TableRowRef > RowVector;
 typedef std::vector< TableColumnRef > ColumnVector;

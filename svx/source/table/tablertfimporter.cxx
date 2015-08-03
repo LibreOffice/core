@@ -75,8 +75,6 @@ typedef std::vector< RTFCellInfoPtr > RTFColumnVector;
 
 typedef boost::shared_ptr< RTFColumnVector > RTFColumnVectorPtr;
 
-typedef std::vector< RTFColumnVectorPtr > RTFRowVector;
-
 class SdrTableRTFParser
 {
 public:
@@ -115,8 +113,7 @@ private:
     sal_Int32       mnColMax;
 
     std::vector< sal_Int32 > maColumnEdges;
-
-    RTFRowVector    maRows;
+    std::vector< RTFColumnVectorPtr > maRows;
 
     RTFCellDefault* mpInsDefault;
     RTFCellDefault* mpActDefault;

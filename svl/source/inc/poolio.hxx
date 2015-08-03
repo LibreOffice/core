@@ -61,7 +61,6 @@ struct SfxPoolVersion_Impl
 typedef std::vector<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
 
 typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
-typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
 
 /**
  * This array contains a set of SfxPoolItems, if those items are
@@ -90,14 +89,14 @@ struct SfxItemPool_Impl
 {
     SfxBroadcaster                  aBC;
     std::vector<SfxPoolItemArray_Impl*> maPoolItems;
-    std::vector<SfxItemPoolUser*> maSfxItemPoolUsers; /// ObjectUser section
+    std::vector<SfxItemPoolUser*>   maSfxItemPoolUsers; /// ObjectUser section
     OUString                        aName;
     SfxPoolItem**                   ppPoolDefaults;
     SfxPoolItem**                   ppStaticDefaults;
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     sal_uInt16*                     mpPoolRanges;
-    SfxPoolVersionArr_Impl          aVersions;
+    std::deque< SfxPoolVersion_ImplPtr > aVersions;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     sal_uInt16                      mnFileFormatVersion;

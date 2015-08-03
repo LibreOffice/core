@@ -106,14 +106,9 @@ bool ImpRemap3DDepth::operator<(const ImpRemap3DDepth& rComp) const
     }
 }
 
-// typedefs for a vector of ImpRemap3DDepths
-typedef ::std::vector< ImpRemap3DDepth > ImpRemap3DDepthVector;
-
-
-
 class Imp3DDepthRemapper
 {
-    ImpRemap3DDepthVector       maVector;
+    std::vector< ImpRemap3DDepth > maVector;
 
 public:
     explicit Imp3DDepthRemapper(E3dScene& rScene);

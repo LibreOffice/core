@@ -169,8 +169,8 @@ private:
     RowVector       maRows;
     ColumnVector    maColumns;
 
-    TableColumnsRef mxTableColumns;
-    TableRowsRef mxTableRows;
+    rtl::Reference< TableColumns > mxTableColumns;
+    rtl::Reference< TableRows >    mxTableRows;
 
     SdrTableObj* mpTableObj;
 

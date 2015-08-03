@@ -1523,8 +1523,8 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
             }
             else if (    TokenInGroup(TGATTRIBUT)
                      ||  TokenInGroup(TGFONTATTR))
-            {   SmStructureNodeArray  aArray;
-
+            {
+                std::vector< SmStructureNode * > aArray;
                 bool    bIsAttr;
                 sal_uInt16  n = 0;
                 while ( (bIsAttr = TokenInGroup(TGATTRIBUT))

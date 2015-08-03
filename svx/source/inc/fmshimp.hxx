@@ -64,7 +64,6 @@
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-typedef std::vector<SdrObject*> SdrObjArray;
 typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > > FmFormArray;
 
 // catch database exceptions if they occur
@@ -164,7 +163,7 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
 
     // timer for delayed mark
     Timer               m_aMarkTimer;
-    SdrObjArray         m_arrSearchedControls;
+    std::vector<SdrObject*> m_arrSearchedControls;
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_aSearchForms;
 
@@ -569,11 +568,10 @@ public:
 };
 
 
-typedef boost::ptr_vector<SfxStatusForwarder> StatusForwarderArray;
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
 protected:
-    StatusForwarderArray    m_aStatusForwarders;
+    boost::ptr_vector<SfxStatusForwarder> m_aStatusForwarders;
     Menu*                   m_pMainMenu;
     PopupMenu*              m_pConversionMenu;
 
