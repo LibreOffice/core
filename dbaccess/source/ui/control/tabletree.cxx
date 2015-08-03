@@ -45,7 +45,6 @@
 #include "svtools/treelistentry.hxx"
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 namespace dbaui
 {

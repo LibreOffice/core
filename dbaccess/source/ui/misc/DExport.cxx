@@ -45,7 +45,6 @@
 #include "FieldDescriptions.hxx"
 #include "UITools.hxx"
 #include <unotools/configmgr.hxx>
-#include <o3tl/compat_functional.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/contnr.hxx>

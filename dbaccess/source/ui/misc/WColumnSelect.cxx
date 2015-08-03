@@ -30,7 +30,6 @@
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include "dbustrings.hrc"
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
