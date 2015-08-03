@@ -206,6 +206,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pOk_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
     m_pCancel_btn->SetClickHdl( LINK( this, RemoteFilesDialog, CancelHdl ) );
 
+    m_sRootLabel = ResId( STR_SVT_ROOTLABEL, *ResMgrHolder::getOrCreate() );
     m_pPath = VclPtr<Breadcrumb>::Create( get< vcl::Window >( "breadcrumb_container" ) );
     m_pPath->set_hexpand( true );
     m_pPath->SetClickHdl( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
@@ -1099,7 +1100,7 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
         OUString sURL = m_aServices[nPos]->GetUrl();
         OUString sName = m_aServices[nPos]->GetName();
 
-        m_pPath->SetRootName( sName );
+        m_pPath->SetRootName( m_sRootLabel );
         m_pTreeView->Clear();
 
         SvTreeListEntry* pRoot = m_pTreeView->InsertEntry( sName, NULL, true );

@@ -28,6 +28,7 @@
 #define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    (STR_SVT_FILEPICKER_START+13)
 #define STR_SVT_ALREADYEXISTOVERWRITE               (STR_SVT_FILEPICKER_START+14)
 #define STR_SVT_DELETESERVICE                       (STR_SVT_FILEPICKER_START+15)
+#define STR_SVT_ROOTLABEL                           (STR_SVT_FILEPICKER_START+16)
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

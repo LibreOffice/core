@@ -110,6 +110,11 @@ String STR_SVT_DELETESERVICE
     Text [ en-US ] = "Are you sure you want to delete the service?\n\"$servicename$\"" ;
 };
 
+String STR_SVT_ROOTLABEL
+{
+    Text [ en-US ] = "Root" ;
+};
+
 String STR_SVT_NEW_FOLDER
 {
     Text [ en-US ] = "Folder" ;
