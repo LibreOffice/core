@@ -2706,7 +2706,8 @@ ImplAllSettingsData::ImplAllSettingsData()
         maLocale( LANGUAGE_SYSTEM ),
         maUILocale( LANGUAGE_SYSTEM )
 {
-    mnWindowUpdate              = AllSettingsFlags::STYLE | AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
+    mnWindowUpdate              = AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
+                                  AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
     mpI18nHelper                = NULL;
@@ -2767,6 +2768,16 @@ AllSettingsFlags AllSettings::Update( AllSettingsFlags nFlags, const AllSettings
 {
 
     AllSettingsFlags nChangeFlags = AllSettingsFlags::NONE;
+
+    if ( nFlags & AllSettingsFlags::MOUSE )
+    {
+        if ( mxData->maMouseSettings != rSet.mxData->maMouseSettings )
+        {
+            CopyData();
+            mxData->maMouseSettings = rSet.mxData->maMouseSettings;
+            nChangeFlags |= AllSettingsFlags::MOUSE;
+        }
+    }
 
     if ( nFlags & AllSettingsFlags::STYLE )
     {
