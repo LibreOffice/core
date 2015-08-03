@@ -19,10 +19,11 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
 
-#include <boost/function.hpp>
-
 #include "event.hxx"
+
 #include <boost/noncopyable.hpp>
+
+#include <functional>
 
 namespace slideshow {
 namespace internal {
@@ -32,7 +33,7 @@ namespace internal {
 class Delay : public Event, private ::boost::noncopyable
 {
 public:
-    typedef ::boost::function0<void> FunctorT;
+    typedef ::std::function<void ()> FunctorT;
 
     template <typename FuncT>
         Delay( FuncT const& func,
@@ -41,7 +42,7 @@ public:
             ) : Event(rsDescription),
             mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
 
-    Delay( const boost::function0<void>& func,
+    Delay( const std::function<void ()>& func,
            double nTimeout
         , const OUString& rsDescription
         ) : Event(rsDescription),

@@ -30,7 +30,7 @@ bool Delay::fire()
     if (isCharged()) {
         mbWasFired = true;
         maFunc();
-        maFunc.clear(); // early release of payload
+        maFunc = nullptr; // early release of payload
     }
     return true;
 }
@@ -50,7 +50,7 @@ void Delay::dispose()
     // don't clear unconditionally, because it may currently be executed:
     if (isCharged()) {
         mbWasFired = true;
-        maFunc.clear(); // release of payload
+        maFunc = nullptr; // release of payload
     }
 }
 

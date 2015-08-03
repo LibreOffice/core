@@ -27,8 +27,10 @@
 #include "screenupdater.hxx"
 
 #include <com/sun/star/presentation/XSlideShow.hpp>
+
 #include <boost/scoped_ptr.hpp>
-#include <boost/function.hpp>
+
+#include <functional>
 #include <vector>
 
 namespace slideshow { namespace internal {
@@ -90,8 +92,8 @@ public:
     */
     bool rewind (
         const ::boost::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
-        const ::boost::function<void()>& rSlideRewindFunctor,
-        const ::boost::function<void()>& rPreviousSlideFunctor);
+        const ::std::function<void ()>& rSlideRewindFunctor,
+        const ::std::function<void ()>& rPreviousSlideFunctor);
 
     /** Call this method after gotoPreviousEffect() triggered a slide change
         to the previous slide.
@@ -152,7 +154,7 @@ private:
     void asynchronousRewind (
         sal_Int32 nEffectCount,
         const bool bRedisplayCurrentSlide,
-        const boost::function<void()>& rSlideRewindFunctor);
+        const ::std::function<void ()>& rSlideRewindFunctor);
 
     /** Go to the previous slide and replay all of its main sequence effects
         (or effect groups).
@@ -160,7 +162,7 @@ private:
             This functor is used to go to the previous slide.
     */
     void asynchronousRewindToPreviousSlide (
-        const ::boost::function<void()>& rPreviousSlideFunctor);
+        const ::std::function<void ()>& rPreviousSlideFunctor);
 };
 
 } } // end of namespace ::slideshow::internal
