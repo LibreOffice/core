@@ -24,13 +24,13 @@
 #include "common.h"
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 
 
 class ContainerWindowWrapper:
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
                  ::com::sun::star::awt::XWindow,
                  ::com::sun::star::awt::XSystemDependentWindowPeer>
 {

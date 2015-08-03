@@ -27,7 +27,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -43,7 +43,7 @@ namespace winwrap {
 
 
 class DocumentHolder :
-    public ::cppu::WeakImplHelper4<
+    public ::cppu::WeakImplHelper<
                         ::com::sun::star::util::XCloseListener,
                           ::com::sun::star::frame::XTerminateListener,
                         ::com::sun::star::util::XModifyListener,

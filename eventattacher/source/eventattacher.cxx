@@ -36,8 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
@@ -60,7 +59,7 @@ namespace comp_EventAttacher {
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener
 
-class InvocationToAllListenerMapper : public WeakImplHelper1< XInvocation >
+class InvocationToAllListenerMapper : public WeakImplHelper< XInvocation >
 {
 public:
     InvocationToAllListenerMapper( const Reference< XIdlClass >& ListenerType,
@@ -209,7 +208,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 //  class EventAttacherImpl
 //  represents an implementation of the EventAttacher service
 
-class EventAttacherImpl : public WeakImplHelper3 < XEventAttacher2, XInitialization, XServiceInfo >
+class EventAttacherImpl : public WeakImplHelper < XEventAttacher2, XInitialization, XServiceInfo >
 {
 public:
     EventAttacherImpl( const Reference< XComponentContext >& );
@@ -431,7 +430,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 
 // Implementation of an EventAttacher-related AllListeners, which brings
 // a few Events to a general AllListener
-class FilterAllListenerImpl : public WeakImplHelper1< XAllListener  >
+class FilterAllListenerImpl : public WeakImplHelper< XAllListener  >
 {
 public:
     FilterAllListenerImpl( EventAttacherImpl * pEA_, const OUString& EventMethod_,
