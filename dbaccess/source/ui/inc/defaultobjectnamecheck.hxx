@@ -50,11 +50,11 @@ namespace dbaui
             checked
         @param _rRelativeRoot
             the root in the hierarchy against which given names should be checked
-        @throws ::com::sun::star::lang::IllegalArgumentException
+        @throws css::lang::IllegalArgumentException
             if the given container is <NULL/>
         */
         HierarchicalNameCheck(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& _rxNames,
+            const css::uno::Reference< css::container::XHierarchicalNameAccess >& _rxNames,
             const OUString& _rRelativeRoot
         );
 
@@ -83,7 +83,7 @@ namespace dbaui
         or vice versa.
 
         @seealso dbtools::DatabaseMetaData::supportsSubqueriesInFrom
-        @seealso com::sun::star::sdb::tools::XObjectNames::checkNameForCreate
+        @seealso css::sdb::tools::XObjectNames::checkNameForCreate
     */
     class DynamicTableOrQueryNameCheck  :public ::boost::noncopyable
                                         ,public IObjectNameCheck
@@ -99,12 +99,12 @@ namespace dbaui
         @param _nCommandType
             specifies whether table names or query names should be checked. Only valid values
             are CommandType::TABLE and CommandType::QUERY.
-        @throws ::com::sun::star::lang::IllegalArgumentException
+        @throws css::lang::IllegalArgumentException
             if the given connection is <NULL/>, or the given command type is neither
             CommandType::TABLE nor CommandType::QUERY.
         */
         DynamicTableOrQueryNameCheck(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxSdbLevelConnection,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxSdbLevelConnection,
             sal_Int32 _nCommandType
         );
 

@@ -59,13 +59,13 @@ namespace dbaccess
 
         typedef ::std::vector< TORowSetOldRowHelperRef >    TOldRowSetRows;
 
-        ::std::map<sal_Int32,sal_Int32> m_aKeyColumns;
+        ::std::map<sal_Int32,sal_Int32>                       m_aKeyColumns;
         //the set can be static, bookmarkable or keyset
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_aContext;
+        css::uno::WeakReference< css::sdbc::XResultSet>       m_xSet;
+        css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
+        css::uno::Reference< css::uno::XComponentContext>     m_aContext;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xCacheSet;
+        css::uno::Reference< css::sdbc::XRow>                 m_xCacheSet;
 
         OCacheSet*                      m_pCacheSet;            // is a bookmarkable, keyset or static resultset
         ORowSetMatrix*                  m_pMatrix;              // represent the table struct
@@ -114,11 +114,11 @@ namespace dbaccess
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
-        bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
+        bool checkJoin( const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                            const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                             const OUString& _sUpdateTableName);
         bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                            ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
                             ,const OUString& _sUpdateTableName);
 
         // clears the insert row
@@ -130,9 +130,9 @@ namespace dbaccess
         // is called when after a moveToInsertRow a movement (next, etc) was called
         void cancelRowModification();
     public:
-        ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
+        ORowSetCache(const css::uno::Reference< css::sdbc::XResultSet >& _xRs,
+                     const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
+                     const css::uno::Reference< css::uno::XComponentContext >& _rContext,
                      const OUString& _rUpdateTableName,
                      bool&  _bModified,
                      bool&  _bNew,
@@ -152,28 +152,28 @@ namespace dbaccess
         TORowSetOldRowHelperRef registerOldRow();
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
-    // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > getMetaData(  ) { return m_xMetaData;}
+    // css::sdbc::XResultSetMetaDataSupplier
+        css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) { return m_xMetaData;}
 
-    // ::com::sun::star::sdbcx::XRowLocate
-        ::com::sun::star::uno::Any getBookmark(  );
-        bool moveToBookmark( const ::com::sun::star::uno::Any& bookmark );
-        bool moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows );
-        sal_Int32 compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second );
+    // css::sdbcx::XRowLocate
+        css::uno::Any getBookmark(  );
+        bool moveToBookmark( const css::uno::Any& bookmark );
+        bool moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows );
+        sal_Int32 compareBookmarks( const css::uno::Any& first, const css::uno::Any& second );
         bool hasOrderedBookmarks(  );
-        sal_Int32 hashBookmark( const ::com::sun::star::uno::Any& bookmark );
+        sal_Int32 hashBookmark( const css::uno::Any& bookmark );
 
-    // ::com::sun::star::sdbc::XRowUpdate
-        void updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_ChangedColumns
+    // css::sdbc::XRowUpdate
+        void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_ChangedColumns
              );
-        void updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,::std::vector<sal_Int32>& o_ChangedColumns);
-        void updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale,ORowSetValueVector::Vector& io_aRow ,::std::vector<sal_Int32>& o_ChangedColumns);
+        void updateObject( sal_Int32 columnIndex, const css::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,::std::vector<sal_Int32>& o_ChangedColumns);
+        void updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale,ORowSetValueVector::Vector& io_aRow ,::std::vector<sal_Int32>& o_ChangedColumns);
         void updateNull(sal_Int32 columnIndex
                         ,ORowSetValueVector::Vector& io_aRow
                         ,::std::vector<sal_Int32>& o_ChangedColumns
                         );
 
-    // ::com::sun::star::sdbc::XResultSet
+    // css::sdbc::XResultSet
         bool next(  );
         bool isBeforeFirst(  ) { return m_bBeforeFirst;}
         bool isAfterLast(  ) { return m_bAfterLast;}
@@ -191,18 +191,18 @@ namespace dbaccess
         bool rowUpdated(  );
         bool rowInserted(  );
 
-    // ::com::sun::star::sdbc::XResultSetUpdate
-        bool insertRow(::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks);
+    // css::sdbc::XResultSetUpdate
+        bool insertRow(::std::vector< css::uno::Any >& o_aBookmarks);
         void resetInsertRow(bool _bClearInsertRow);
 
-        void updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks );
+        void updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< css::uno::Any >& o_aBookmarks );
         bool deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );
 
         const ::std::map<sal_Int32,sal_Int32>& getKeyColumns() const { return m_aKeyColumns; }
         bool isResultSetChanged() const;
-        void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet);
     };
 }
 #endif

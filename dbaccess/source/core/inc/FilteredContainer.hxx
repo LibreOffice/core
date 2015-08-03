@@ -44,9 +44,9 @@ namespace dbaccess
         oslInterlockedCount&            m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterContainer;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+        css::uno::Reference< css::container::XNameAccess >    m_xMasterContainer;
+        css::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
 
         /** returns a string denoting the only type of tables allowed in this container, or an empty string
             if there is no such restriction
@@ -57,7 +57,7 @@ namespace dbaccess
         inline virtual void removeMasterContainerListener(){}
 
         // ::connectivity::sdbcx::OCollection
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void impl_refresh() throw(css::uno::RuntimeException) SAL_OVERRIDE;
 
         virtual OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject) SAL_OVERRIDE;
 
@@ -84,13 +84,13 @@ namespace dbaccess
             oslInterlockedCount&   m_rValue;
         };
 
-        /** retrieve a table type filter to pass to <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTables</member>,
+        /** retrieve a table type filter to pass to <member scope="css::sdbc">XDatabaseMetaData::getTables</member>,
             according to the current data source settings
         */
-        void    getAllTableTypeFilter( ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rFilter ) const;
+        void    getAllTableTypeFilter( css::uno::Sequence< OUString >& /* [out] */ _rFilter ) const;
 
     public:
-        /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
+        /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
             interface.<BR>
             @param          _rParent            the object which acts as parent for the container.
                                                 all refcounting is rerouted to this object
@@ -101,7 +101,7 @@ namespace dbaccess
         */
         OFilteredContainer( ::cppu::OWeakObject& _rParent,
                             ::osl::Mutex& _rMutex,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
+                            const css::uno::Reference< css::sdbc::XConnection >& _xCon,
                             bool _bCase,
                             IRefreshListener*   _pRefreshListener,
                             ::dbtools::WarningsContainer* _pWarningsContainer,
@@ -114,17 +114,17 @@ namespace dbaccess
             filters given (the connection is the parent object you passed in the ctor).
         */
         void construct(
-            const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< OUString >& _rTableTypeFilter
+            const css::uno::Sequence< OUString >& _rTableFilter,
+            const css::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
         /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
             name container.
         */
         void construct(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxMasterContainer,
-            const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< OUString >& _rTableTypeFilter
+            const css::uno::Reference< css::container::XNameAccess >& _rxMasterContainer,
+            const css::uno::Sequence< OUString >& _rTableFilter,
+            const css::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
         inline bool isInitialized() const { return m_bConstructed; }

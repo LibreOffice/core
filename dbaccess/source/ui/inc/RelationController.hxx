@@ -28,17 +28,17 @@ namespace dbaui
 {
     class ORelationController : public OJoinController
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
+        css::uno::Reference< css::container::XNameAccess >    m_xTables;
         ::std::unique_ptr<WaitObject> m_pWaitObject;
         sal_uLong       m_nThreadEvent;
-        bool    m_bRelationsPossible;
+        bool            m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() SAL_OVERRIDE;
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
+        // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
@@ -46,9 +46,9 @@ namespace dbaui
 
         // load the window positions out of the datasource
         void loadLayoutInformation();
-        void loadTableData(const ::com::sun::star::uno::Any& _aTable);
+        void loadTableData(const css::uno::Any& _aTable);
     public:
-        ORelationController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
+        ORelationController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         virtual ~ORelationController();
         // temp
@@ -59,13 +59,13 @@ namespace dbaui
         virtual bool Construct(vcl::Window* pParent) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // OJoinController overridables
         virtual bool allowViews() const SAL_OVERRIDE;

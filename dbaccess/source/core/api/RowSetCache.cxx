@@ -491,7 +491,7 @@ static Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
     }
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
+// css::sdbcx::XRowLocate
 Any ORowSetCache::getBookmark(  )
 {
     if(m_bAfterLast)
@@ -604,7 +604,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
     }
 }
 
-void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x
+void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x
                                          , sal_Int32 length,ORowSetValueVector::Vector& io_aRow
                                          ,::std::vector<sal_Int32>& o_ChangedColumns
                                          )

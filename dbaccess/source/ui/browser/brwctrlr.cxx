@@ -113,7 +113,7 @@ using namespace ::svt;
     catch(SQLException& e)                                                  \
     {                                                                       \
         SQLException aError = ::dbtools::prependErrorInfo(e, *this, context); \
-        ::com::sun::star::sdb::SQLErrorEvent aEvent;                        \
+        css::sdb::SQLErrorEvent aEvent;                        \
         aEvent.Reason <<= aError;                                           \
         errorOccured(aEvent);                                               \
     }                                                                       \
@@ -150,8 +150,8 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
 // (we can't derive from XFormController as it's base class is XTabController and the XTabController::getModel collides
 // with the XController::getModel implemented in our base class SbaXDataBrowserController)
 class SbaXDataBrowserController::FormControllerImpl
-    : public ::cppu::WeakAggImplHelper2< ::com::sun::star::form::runtime::XFormController,
-                                         ::com::sun::star::frame::XFrameActionListener >
+    : public ::cppu::WeakAggImplHelper2< css::form::runtime::XFormController,
+                                         css::frame::XFrameActionListener >
 {
     friend class SbaXDataBrowserController;
     ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
@@ -161,82 +161,82 @@ public:
     explicit FormControllerImpl(SbaXDataBrowserController* pOwner);
 
     // XFormController
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addChildController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _ChildController ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setContext( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext >& _context ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _interactionHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getCurrentControl() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& _ChildController ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XChild, base of XFormController
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent, base of XFormController
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexAccess, base of XFormController
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess, base of XIndexAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEnumerationAccess, base of XElementAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XModifyBroadcaster, base of XFormController
-    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XConfirmDeleteBroadcaster, base of XFormController
-    virtual void SAL_CALL addConfirmDeleteListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeConfirmDeleteListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSQLErrorBroadcaster, base of XFormController
-    virtual void SAL_CALL addSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XRowSetApproveBroadcaster, base of XFormController
-    virtual void SAL_CALL addRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDatabaseParameterBroadcaster2, base of XFormController
-    virtual void SAL_CALL addDatabaseParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeDatabaseParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDatabaseParameterBroadcaster, base of XDatabaseParameterBroadcaster2
-    virtual void SAL_CALL addParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XModeSelector, base of XFormController
-    virtual void SAL_CALL setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setMode( const OUString& aMode ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getMode(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTabController, base of XFormController
-    virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL getContainer() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  > SAL_CALL getControls() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL autoTabOrder() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL activateTabOrder() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL activateFirst() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL activateLast() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::awt::XTabControllerModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & _Container) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::awt::XControlContainer >  SAL_CALL getContainer() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL autoTabOrder() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL activateTabOrder() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL activateFirst() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL activateLast() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XFrameActionListener
-    virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     virtual ~FormControllerImpl();
@@ -260,17 +260,17 @@ Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormCo
     return FormOperations::createWithFormController( m_pOwner->m_xContext, this );
 }
 
-Reference< ::com::sun::star::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl() throw( RuntimeException, std::exception )
+Reference< css::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl() throw( RuntimeException, std::exception )
 {
-    return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< ::com::sun::star::awt::XControl > ();
+    return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< css::awt::XControl > ();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< css::form::XFormControllerListener > & l) throw( RuntimeException, std::exception )
 {
     m_aActivateListeners.addInterface(l);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< css::form::XFormControllerListener > & l) throw( RuntimeException, std::exception )
 {
     m_aActivateListeners.removeInterface(l);
 }
@@ -440,36 +440,36 @@ sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( c
     return aMode == "DataMode";
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< css::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException, std::exception )
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
 
-Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getModel() throw( RuntimeException, std::exception )
+Reference< css::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getModel() throw( RuntimeException, std::exception )
 {
     return Reference< XTabControllerModel >(m_pOwner->getRowSet(), UNO_QUERY);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & /*_Container*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > & /*_Container*/) throw( RuntimeException, std::exception )
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
 
-Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContainer() throw( RuntimeException, std::exception )
+Reference< css::awt::XControlContainer >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContainer() throw( RuntimeException, std::exception )
 {
     if (m_pOwner->getBrowserView())
         return m_pOwner->getBrowserView()->getContainer();
-    return Reference< ::com::sun::star::awt::XControlContainer > ();
+    return Reference< css::awt::XControlContainer > ();
 }
 
-Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getControls() throw( RuntimeException, std::exception )
+Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getControls() throw( RuntimeException, std::exception )
 {
     if (m_pOwner->getBrowserView())
     {
-        Reference< ::com::sun::star::awt::XControl >  xGrid = m_pOwner->getBrowserView()->getGridControl();
-        return Sequence< Reference< ::com::sun::star::awt::XControl > >(&xGrid, 1);
+        Reference< css::awt::XControl >  xGrid = m_pOwner->getBrowserView()->getGridControl();
+        return Sequence< Reference< css::awt::XControl > >(&xGrid, 1);
     }
-    return Sequence< Reference< ::com::sun::star::awt::XControl > >();
+    return Sequence< Reference< css::awt::XControl > >();
 }
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder() throw( RuntimeException, std::exception )
@@ -494,11 +494,11 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateLast() thro
         m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const ::com::sun::star::frame::FrameActionEvent& /*aEvent*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const css::frame::FrameActionEvent& /*aEvent*/) throw( RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const css::lang::EventObject& /*Source*/) throw( RuntimeException, std::exception )
 {
     // nothing to do
     // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
@@ -531,7 +531,7 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
     return aRet;
 }
 
-SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::uno::XComponentContext >& _rM)
+SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
     ,m_pClipbordNotifier( NULL )
@@ -686,7 +686,7 @@ bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoa
 void SbaXDataBrowserController::initFormatter()
 {
     // create a formatter working with the connections format supplier
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
+    Reference< css::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
 
     if(xSupplier.is())
     {
@@ -750,7 +750,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
 
 
     // marry them
-    Reference< ::com::sun::star::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
+    Reference< css::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
     {
         OUString sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
         xNameCont->insertByName(OUString(sText), makeAny(m_xGridModel));
@@ -815,16 +815,16 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
         xFormSet->addPropertyChangeListener(PROPERTY_HAVING_CLAUSE, static_cast<XPropertyChangeListener*>(this));
         xFormSet->addPropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
-    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    Reference< css::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->addSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
+        xFormError->addSQLErrorListener(static_cast<css::sdb::XSQLErrorListener*>(this));
 
     if (m_xLoadable.is())
         m_xLoadable->addLoadListener(this);
 
-    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
+    Reference< css::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
-        xFormParameter->addParameterListener(static_cast<com::sun::star::form::XDatabaseParameterListener*>(this));
+        xFormParameter->addParameterListener(static_cast<css::form::XDatabaseParameterListener*>(this));
 
     addModelListeners(getControlModel());
     addControlListeners(getBrowserView()->getGridControl());
@@ -855,26 +855,26 @@ Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
       UNO_QUERY);
 }
 
-Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
+Reference< css::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
-    return Reference< ::com::sun::star::form::XFormComponent > (
+    return Reference< css::form::XFormComponent > (
       getORB()->getServiceManager()->createInstanceWithContext("com.sun.star.form.component.GridControl", getORB()),
       UNO_QUERY);
 }
 
-void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
+void SbaXDataBrowserController::addModelListeners(const Reference< css::awt::XControlModel > & _xGridControlModel)
 {
     // ... all the grid columns
     addColumnListeners(_xGridControlModel);
 
     // (we are interested in all columns the grid has (and only in these) so we have to listen to the container, too)
-    Reference< ::com::sun::star::container::XContainer >  xColContainer(_xGridControlModel, UNO_QUERY);
+    Reference< css::container::XContainer >  xColContainer(_xGridControlModel, UNO_QUERY);
     if (xColContainer.is())
-        xColContainer->addContainerListener(static_cast<com::sun::star::container::XContainerListener*>(this));
+        xColContainer->addContainerListener(static_cast<css::container::XContainerListener*>(this));
 
-    Reference< ::com::sun::star::form::XReset >  xReset(_xGridControlModel, UNO_QUERY);
+    Reference< css::form::XReset >  xReset(_xGridControlModel, UNO_QUERY);
     if (xReset.is())
-        xReset->addResetListener(static_cast<com::sun::star::form::XResetListener*>(this));
+        xReset->addResetListener(static_cast<css::form::XResetListener*>(this));
 }
 
 void SbaXDataBrowserController::removeModelListeners(const Reference< XControlModel > & _xGridControlModel)
@@ -900,7 +900,7 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< XControlMo
         xReset->removeResetListener( this );
 }
 
-void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
+void SbaXDataBrowserController::addControlListeners(const Reference< css::awt::XControl > & _xGridControl)
 {
     // to ge the 'modified' for the current cell
     Reference< XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
@@ -918,7 +918,7 @@ void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun:
         xWindow->addFocusListener(this);
 }
 
-void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
+void SbaXDataBrowserController::removeControlListeners(const Reference< css::awt::XControl > & _xGridControl)
 {
     Reference< XModifyBroadcaster >  xBroadcaster(_xGridControl, UNO_QUERY);
     if (xBroadcaster.is())
@@ -975,17 +975,17 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
         SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::focusLost : why is my control not commitable ?");
 }
 
-void SbaXDataBrowserController::disposingGridControl(const ::com::sun::star::lang::EventObject& /*Source*/)
+void SbaXDataBrowserController::disposingGridControl(const css::lang::EventObject& /*Source*/)
 {
     removeControlListeners(getBrowserView()->getGridControl());
 }
 
-void SbaXDataBrowserController::disposingGridModel(const ::com::sun::star::lang::EventObject& /*Source*/)
+void SbaXDataBrowserController::disposingGridModel(const css::lang::EventObject& /*Source*/)
 {
     removeModelListeners(getControlModel());
 }
 
-void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang::EventObject& Source)
+void SbaXDataBrowserController::disposingFormModel(const css::lang::EventObject& Source)
 {
     Reference< XPropertySet >  xSourceSet(Source.Source, UNO_QUERY);
     if (xSourceSet.is())
@@ -1000,19 +1000,19 @@ void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang:
         xSourceSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
 
-    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(Source.Source, UNO_QUERY);
+    Reference< css::sdb::XSQLErrorBroadcaster >  xFormError(Source.Source, UNO_QUERY);
     if (xFormError.is())
-        xFormError->removeSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
+        xFormError->removeSQLErrorListener(static_cast<css::sdb::XSQLErrorListener*>(this));
 
     if (m_xLoadable.is())
         m_xLoadable->removeLoadListener(this);
 
-    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(Source.Source, UNO_QUERY);
+    Reference< css::form::XDatabaseParameterBroadcaster >  xFormParameter(Source.Source, UNO_QUERY);
     if (xFormParameter.is())
-        xFormParameter->removeParameterListener(static_cast<com::sun::star::form::XDatabaseParameterListener*>(this));
+        xFormParameter->removeParameterListener(static_cast<css::form::XDatabaseParameterListener*>(this));
 }
 
-void SbaXDataBrowserController::disposingColumnModel(const ::com::sun::star::lang::EventObject& Source)
+void SbaXDataBrowserController::disposingColumnModel(const css::lang::EventObject& Source)
 {
     RemoveColumnListener(Reference< XPropertySet > (Source.Source, UNO_QUERY));
 }
@@ -1031,7 +1031,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
     // is it the grid control ?
     if (getBrowserView())
     {
-        Reference< ::com::sun::star::awt::XControl >  xSourceControl(Source.Source, UNO_QUERY);
+        Reference< css::awt::XControl >  xSourceControl(Source.Source, UNO_QUERY);
         if (xSourceControl == getBrowserView()->getGridControl())
             disposingGridControl(Source);
     }
@@ -1118,12 +1118,12 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     }
 }
 
-void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::modified(const css::lang::EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     setCurrentModified( true );
 }
 
-void SbaXDataBrowserController::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::elementInserted(const css::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
 {
     OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
@@ -1132,7 +1132,7 @@ void SbaXDataBrowserController::elementInserted(const ::com::sun::star::containe
         AddColumnListener(xNewColumn);
 }
 
-void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::elementRemoved(const css::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
 {
     OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
@@ -1141,7 +1141,7 @@ void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container
         RemoveColumnListener(xOldColumn);
 }
 
-void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::elementReplaced(const css::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
 {
     OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
@@ -1183,16 +1183,16 @@ void SbaXDataBrowserController::disposing()
         xFormSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
 
-    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    Reference< css::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->removeSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
+        xFormError->removeSQLErrorListener(static_cast<css::sdb::XSQLErrorListener*>(this));
 
     if (m_xLoadable.is())
         m_xLoadable->removeLoadListener(this);
 
-    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
+    Reference< css::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
-        xFormParameter->removeParameterListener(static_cast<com::sun::star::form::XDatabaseParameterListener*>(this));
+        xFormParameter->removeParameterListener(static_cast<css::form::XDatabaseParameterListener*>(this));
 
     removeModelListeners(getControlModel());
 
@@ -1231,7 +1231,7 @@ void SbaXDataBrowserController::disposing()
         // don't dispose, just reset - it's owned by the RowSet
 }
 
-void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& aEvent) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -1277,7 +1277,7 @@ IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError )
     return 0L;
 }
 
-void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEvent) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -1297,7 +1297,7 @@ void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErr
     }
 }
 
-sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::form::DatabaseParameterEvent& aEvent) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabaseParameterEvent& aEvent) throw( RuntimeException, std::exception )
 {
     if (aEvent.Source != getRowSet())
     {
@@ -1306,7 +1306,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         return sal_True;
     }
 
-    Reference< ::com::sun::star::container::XIndexAccess >  xParameters = aEvent.Parameters;
+    Reference< css::container::XIndexAccess >  xParameters = aEvent.Parameters;
     SolarMutexGuard aSolarGuard;
 
     // default handling: instantiate an interaction handler and let it handle the parameter request
@@ -1372,19 +1372,19 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     return sal_True;
 }
 
-sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
 {
     return sal_True;
 }
 
-void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObject& rEvent) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     OSL_ENSURE(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
     (void)rEvent;
     setCurrentModified( false );
 }
 
-sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     if (ScopedVclPtrInstance<MessageDialog>::Create(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() != RET_YES)
         return sal_False;
@@ -1572,9 +1572,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;  // no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowInserts"));
-                bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowUpdates"));
-                bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowDeletes"));
+                bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowInserts"));
+                bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowUpdates"));
+                bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & css::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowDeletes"));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
@@ -1760,7 +1760,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
     Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
     try
     {
-        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
+        Reference< css::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
@@ -1813,11 +1813,11 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
 void SbaXDataBrowserController::ExecuteSearch()
 {
     // calculate the control source of the active field
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-    OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an ::com::sun::star::form::XGrid interface !");
+    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an css::form::XGrid interface !");
 
-    Reference< ::com::sun::star::form::XGridPeer >  xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
-    Reference< ::com::sun::star::container::XIndexContainer >  xColumns = xGridPeer->getColumns();
+    Reference< css::form::XGridPeer >  xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< css::container::XIndexContainer >  xColumns = xGridPeer->getColumns();
     OSL_ENSURE(xGridPeer.is() && xColumns.is(), "SbaXDataBrowserController::ExecuteSearch : invalid peer !");
 
     sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
@@ -1828,7 +1828,7 @@ void SbaXDataBrowserController::ExecuteSearch()
 
     // the text within the current cell
     OUString sInitialText;
-    Reference< ::com::sun::star::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
+    Reference< css::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
     Reference< XInterface >  xCurControl(xColControls->getByIndex(nViewCol),UNO_QUERY);
     OUString aInitialText;
     if (IsSearchableControl(xCurControl, &aInitialText))
@@ -1841,7 +1841,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(true));
     xModelSet->setPropertyValue("CursorColor", makeAny(sal_Int32(COL_LIGHTRED)));
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
+    Reference< css::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;
@@ -2027,7 +2027,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             OUString sName;
             xField->getPropertyValue(PROPERTY_NAME) >>= sName;
             Reference< XColumnsSupplier > xColumnsSupplier(m_xParser, UNO_QUERY);
-            Reference< ::com::sun::star::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
+            Reference< css::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< css::container::XNameAccess > ();
             if ( xCols.is() && xCols->hasByName(sName) )
             {
                 Reference<XPropertySet> xProp(xCols->getByName(sName),UNO_QUERY);
@@ -2152,7 +2152,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                     xCursor->cancelRowUpdates();
 
                     // restore the grids state
-                    Reference< ::com::sun::star::form::XReset >  xReset(getControlModel(), UNO_QUERY);
+                    Reference< css::form::XReset >  xReset(getControlModel(), UNO_QUERY);
                     if (xReset.is())
                         xReset->reset();
                 }
@@ -2222,15 +2222,15 @@ bool SbaXDataBrowserController::CommitCurrent()
     if (!getBrowserView())
         return true;
 
-    Reference< ::com::sun::star::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
-    Reference< ::com::sun::star::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
+    Reference< css::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
+    Reference< css::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
     bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
         // zunaechst das Control fragen ob es das IFace unterstuetzt
-        Reference< ::com::sun::star::form::XBoundComponent >  xBoundControl(xActiveControl, UNO_QUERY);
+        Reference< css::form::XBoundComponent >  xBoundControl(xActiveControl, UNO_QUERY);
         if (!xBoundControl.is())
-            xBoundControl  = Reference< ::com::sun::star::form::XBoundComponent > (xActiveControl->getModel(), UNO_QUERY);
+            xBoundControl  = Reference< css::form::XBoundComponent > (xActiveControl->getModel(), UNO_QUERY);
         if (xBoundControl.is() && !xBoundControl->commit())
             return false;
     }
@@ -2306,7 +2306,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
     // get the current column from the grid
     if (nViewPos == (sal_uInt16)-1)
     {
-        Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+        Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
         if (!xGrid.is())
             return xEmptyReturn;
         nViewPos = xGrid->getCurrentColumnPosition();
@@ -2316,7 +2316,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
         return xEmptyReturn;
 
     // get the according column from the model
-    Reference< ::com::sun::star::container::XIndexContainer >  xCols(getControlModel(), UNO_QUERY);
+    Reference< css::container::XIndexContainer >  xCols(getControlModel(), UNO_QUERY);
     Reference< XPropertySet >  xCurrentCol(xCols->getByIndex(nCurrentCol),UNO_QUERY);
     if (!xCurrentCol.is())
         return xEmptyReturn;
@@ -2327,10 +2327,10 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
 
 IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, pContext)
 {
-    Reference< ::com::sun::star::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< css::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
 
     // check all grid columns for their control source
-    Reference< ::com::sun::star::container::XIndexAccess >  xModelColumns(getFormComponent(), UNO_QUERY);
+    Reference< css::container::XIndexAccess >  xModelColumns(getFormComponent(), UNO_QUERY);
     OSL_ENSURE(xModelColumns.is(), "SbaXDataBrowserController::OnSearchContextRequest : there is a grid control without columns !");
         // the case 'no columns' should be indicated with an empty container, I think ...
     OSL_ENSURE(xModelColumns->getCount() >= xPeerContainer->getCount(), "SbaXDataBrowserController::OnSearchContextRequest : impossible : have more view than model columns !");
@@ -2373,7 +2373,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 
 IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pInfo)
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
     OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : xCursor is empty");
 
     // move the cursor
@@ -2387,7 +2387,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
 
     // and move to the field
-    Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< css::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     sal_uInt16 nViewPos;
 
     for ( nViewPos = 0; nViewPos < aColumnControls->getCount(); ++nViewPos )
@@ -2402,7 +2402,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
         }
     }
 
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     xGrid->setCurrentColumnPosition(nViewPos);
 
     return 0;
@@ -2410,7 +2410,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
 
 IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation*, pInfo)
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
 
     try
     {
@@ -2580,7 +2580,7 @@ bool SbaXDataBrowserController::isValidCursor() const
 {
     if (!m_xColumnsSupplier.is())
         return false;
-    Reference< ::com::sun::star::container::XNameAccess >  xCols = m_xColumnsSupplier->getColumns();
+    Reference< css::container::XNameAccess >  xCols = m_xColumnsSupplier->getColumns();
     if (!xCols.is() || !xCols->hasElements())
         return false;
 
@@ -2599,7 +2599,7 @@ bool SbaXDataBrowserController::isValidCursor() const
 
 sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
 {
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     sal_Int16 nViewPos = -1;
     try
     {
@@ -2612,7 +2612,7 @@ sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
 
 void SbaXDataBrowserController::setCurrentColumnPosition( sal_Int16 _nPos )
 {
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     try
     {
         if ( -1 != _nPos )
@@ -2623,22 +2623,22 @@ void SbaXDataBrowserController::setCurrentColumnPosition( sal_Int16 _nPos )
 
 void SbaXDataBrowserController::BeforeDrop()
 {
-    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    Reference< css::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->removeSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
+        xFormError->removeSQLErrorListener(static_cast<css::sdb::XSQLErrorListener*>(this));
 }
 
 void SbaXDataBrowserController::AfterDrop()
 {
-    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    Reference< css::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
-        xFormError->addSQLErrorListener(static_cast<com::sun::star::sdb::XSQLErrorListener*>(this));
+        xFormError->addSQLErrorListener(static_cast<css::sdb::XSQLErrorListener*>(this));
 }
 
-void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
+void SbaXDataBrowserController::addColumnListeners(const Reference< css::awt::XControlModel > & _xGridControlModel)
 {
 // ... all the grid columns
-    Reference< ::com::sun::star::container::XIndexContainer >  xColumns(_xGridControlModel, UNO_QUERY);
+    Reference< css::container::XIndexContainer >  xColumns(_xGridControlModel, UNO_QUERY);
     if (xColumns.is())
     {
         sal_Int32 nCount = xColumns->getCount();
@@ -2650,7 +2650,7 @@ void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::
     }
 }
 
-bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & /*xGrid*/)
+bool SbaXDataBrowserController::InitializeGridModel(const Reference< css::form::XFormComponent > & /*xGrid*/)
 {
     return true;
 }

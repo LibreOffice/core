@@ -42,11 +42,11 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSingleSelectQueryComposer,
-                                    ::com::sun::star::sdb::XParametersSupplier,
-                                    ::com::sun::star::sdbcx::XColumnsSupplier,
-                                    ::com::sun::star::sdbcx::XTablesSupplier,
-                                    ::com::sun::star::lang::XServiceInfo    > OSingleSelectQueryComposer_BASE;
+    typedef ::cppu::ImplHelper5<    css::sdb::XSingleSelectQueryComposer,
+                                    css::sdb::XParametersSupplier,
+                                    css::sdbcx::XColumnsSupplier,
+                                    css::sdbcx::XTablesSupplier,
+                                    css::lang::XServiceInfo    > OSingleSelectQueryComposer_BASE;
 
     class OPrivateColumns;
     class OPrivateTables;
@@ -85,22 +85,22 @@ namespace dbaccess
 
         ::std::vector< OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionTables;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionQueries;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_aContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
+        css::uno::Reference< css::sdbc::XConnection>              m_xConnection;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData>        m_xMetaData;
+        css::uno::Reference< css::container::XNameAccess>         m_xConnectionTables;
+        css::uno::Reference< css::container::XNameAccess>         m_xConnectionQueries;
+        css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
+        css::uno::Reference< css::container::XNameAccess>         m_xColumns;
+        css::uno::Reference< css::uno::XComponentContext>         m_aContext;
+        css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
 
         ::std::vector<OPrivateColumns*>         m_aCurrentColumns;
         OPrivateTables*                         m_pTables;      // currently used tables
 
-        OUString                         m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
-        OUString                         m_sDecimalSep;
-        OUString                         m_sCommand;
-        ::com::sun::star::lang::Locale          m_aLocale;
+        OUString                                m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
+        OUString                                m_sDecimalSep;
+        OUString                                m_sCommand;
+        css::lang::Locale                       m_aLocale;
         sal_Int32                               m_nBoolCompareMode; // how to compare bool values
         sal_Int32                               m_nCommandType;
 
@@ -110,14 +110,14 @@ namespace dbaccess
 
 
         bool setORCriteria(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            ::std::vector< ::std::vector < ::com::sun::star::beans::PropertyValue > >& rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
+            ::std::vector< ::std::vector < css::beans::PropertyValue > >& rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setANDCriteria(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
+            ::std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setComparsionPredicate(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
+            ::std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
 
         static OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef,::connectivity::OSQLParseTreeIterator& _rIterator);
-        OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
+        OUString getTableAlias(const css::uno::Reference< css::beans::XPropertySet >& column ) const;
         static sal_Int32 getPredicateType(::connectivity::OSQLParseNode * _pPredicate);
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
@@ -131,7 +131,7 @@ namespace dbaccess
         OUString getStatementPart( TGetParseNode& _aGetFunctor, ::connectivity::OSQLParseTreeIterator& _rIterator );
         void setQuery_Impl( const OUString& command );
 
-        void setConditionByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column
+        void setConditionByColumn( const css::uno::Reference< css::beans::XPropertySet >& column
                                 , bool andCriteria
                                 ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor
                                 ,sal_Int32 filterOperator);
@@ -143,10 +143,10 @@ namespace dbaccess
             @return
                 The structured filter
         */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >
                     getStructuredCondition( TGetParseNode& _aGetFunctor );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
+        css::uno::Reference< css::container::XIndexAccess >
                     setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
@@ -186,7 +186,7 @@ namespace dbaccess
 
             @param bGroupBy: for GROUP BY clause? In that case, throw exception if trying to use an unrelated column and the database does not support that.
         */
-        OUString impl_getColumnRealName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, bool bGroupBy);
+        OUString impl_getColumnRealName_throw(const css::uno::Reference< css::beans::XPropertySet >& column, bool bGroupBy);
 
         /** return the name of the column in the *query*
 
@@ -196,15 +196,15 @@ namespace dbaccess
 
             @param bOrderBy: for ORDER BY clause? In that case, throw exception if trying to use an unrelated column and the database does not support that.
         */
-        OUString impl_getColumnName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, bool bOrderBy);
+        OUString impl_getColumnName_throw(const css::uno::Reference< css::beans::XPropertySet >& column, bool bOrderBy);
 
     protected:
         virtual ~OSingleSelectQueryComposer();
     public:
 
-        OSingleSelectQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rContext);
+        OSingleSelectQueryComposer( const css::uno::Reference< css::container::XNameAccess>& _xTableSupplier,
+                        const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                        const css::uno::Reference< css::uno::XComponentContext>& _rContext);
 
 
         void SAL_CALL disposing() SAL_OVERRIDE;
@@ -214,7 +214,7 @@ namespace dbaccess
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::uno::XInterface
+        // css::uno::XInterface
         DECLARE_XINTERFACE( )
 
         // XServiceInfo
@@ -222,40 +222,40 @@ namespace dbaccess
 
         DECLARE_PROPERTYCONTAINER_DEFAULTS();
 
-        // ::com::sun::star::sdb::XSingleSelectQueryComposer
-        virtual OUString SAL_CALL getElementaryQuery() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setElementaryQuery( const OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setFilter( const OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setStructuredFilter( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL appendFilterByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL appendGroupByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setGroup( const OUString& group ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setHavingClause( const OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setStructuredHavingClause( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL appendHavingClauseByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL appendOrderByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool ascending ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setOrder( const OUString& order ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::sdb::XSingleSelectQueryComposer
+        virtual OUString SAL_CALL getElementaryQuery() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setElementaryQuery( const OUString& _rElementary ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setFilter( const OUString& filter ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setStructuredFilter( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& filter ) throw (css::sdbc::SQLException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (css::sdbc::SQLException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL appendGroupByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setGroup( const OUString& group ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setHavingClause( const OUString& filter ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setStructuredHavingClause( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& filter ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL appendHavingClauseByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (css::sdbc::SQLException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, sal_Bool ascending ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setOrder( const OUString& order ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XSingleSelectQueryAnalyzer
-        virtual OUString SAL_CALL getQuery(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setQuery( const OUString& command ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setCommand( const OUString& command,sal_Int32 CommandType ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getFilter(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getGroup(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getGroupColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getHavingClause(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getStructuredHavingClause(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getOrder(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getOrderColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getQueryWithSubstitution(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getQuery(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setQuery( const OUString& command ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setCommand( const OUString& command,sal_Int32 CommandType ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getFilter(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getGroup(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getGroupColumns(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getHavingClause(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredHavingClause(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getOrder(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getOrderColumns(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getQueryWithSubstitution(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XColumnsSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XTablesSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XParametersSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getParameters(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getParameters(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_SINGLESELECTQUERYCOMPOSER_HXX

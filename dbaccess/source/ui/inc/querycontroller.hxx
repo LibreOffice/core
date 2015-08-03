@@ -60,15 +60,15 @@ namespace dbaui
         OTableFields                            m_vTableFieldDesc;
         OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aFieldInformation;
+        css::uno::Sequence< css::beans::PropertyValue >       m_aFieldInformation;
 
         ::svxform::OSystemParseContext*         m_pParseContext;
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
+        css::uno::Reference< css::sdb::XSQLQueryComposer >    m_xComposer;
         /// if we're editing an existing view, this is non-NULL
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAlterView >         m_xAlterView;
+        css::uno::Reference< css::sdbcx::XAlterView >         m_xAlterView;
 
         OUString m_sStatement;           // contains the current sql statement
         OUString m_sUpdateCatalogName;   // catalog for update data
@@ -95,14 +95,14 @@ namespace dbaui
 
             Not allowed to be called if we design an independent SQL command.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        css::uno::Reference< css::container::XNameAccess >
             getObjectContainer() const;
 
-        inline  bool    editingView() const    { return m_nCommandType == ::com::sun::star::sdb::CommandType::TABLE; }
-        inline  bool    editingQuery() const   { return m_nCommandType == ::com::sun::star::sdb::CommandType::QUERY; }
-        inline  bool    editingCommand() const { return m_nCommandType == ::com::sun::star::sdb::CommandType::COMMAND; }
+        inline  bool    editingView() const    { return m_nCommandType == css::sdb::CommandType::TABLE; }
+        inline  bool    editingQuery() const   { return m_nCommandType == css::sdb::CommandType::QUERY; }
+        inline  bool    editingCommand() const { return m_nCommandType == css::sdb::CommandType::COMMAND; }
 
-        bool askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
+        bool askForNewName( const css::uno::Reference< css::container::XNameAccess>& _xElements,
                             bool _bSaveAs);
         // creates the querycomposer
         void setQueryComposer();
@@ -121,10 +121,10 @@ namespace dbaui
     protected:
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() SAL_OVERRIDE;
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
+        // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         virtual void            reconnect( bool _bUI ) SAL_OVERRIDE;
         virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
@@ -132,7 +132,7 @@ namespace dbaui
         OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
     public:
-        OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
+        OQueryController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         virtual ~OQueryController();
         OTableFields&   getTableFieldDesc()         { return m_vTableFieldDesc; }
@@ -159,7 +159,7 @@ namespace dbaui
 
         sal_Int32       getColWidth(sal_uInt16 _nColPos) const;
 
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+        const css::uno::Sequence< css::beans::PropertyValue >&
                         getFieldInformation() const { return m_aFieldInformation; }
 
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
@@ -170,45 +170,45 @@ namespace dbaui
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         // XPropertySet
-        virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XComponent
+        // css::lang::XComponent
         virtual void        SAL_CALL disposing() SAL_OVERRIDE;
 
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XController
-        virtual ::com::sun::star::uno::Any SAL_CALL getViewData() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager) SAL_OVERRIDE;
+        virtual void    onLoadedMenu(const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager) SAL_OVERRIDE;
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         // OPropertySetHelper
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rConvertedValue,
-                                    ::com::sun::star::uno::Any& rOldValue,
+                                    css::uno::Any& rConvertedValue,
+                                    css::uno::Any& rOldValue,
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                ) throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                                    const css::uno::Any& rValue
+                                ) throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                ) throw (::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
+                                    const css::uno::Any& rValue
+                                ) throw (css::uno::Exception, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
+                                    css::uno::Any& rValue,
                                     sal_Int32 nHandle
                                 ) const SAL_OVERRIDE;
 
@@ -220,7 +220,7 @@ namespace dbaui
 
         void    impl_reset( const bool i_bIgnoreQuerySettings = false );
         /// tells the user that we needed to switch to SQL view automatically
-        void    impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails );
+        void    impl_showAutoSQLViewError( const css::uno::Any& _rErrorDetails );
 
         /** switches to the graphical or SQL view mode, as determined by m_bGraphicalDesign
         */

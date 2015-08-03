@@ -100,7 +100,7 @@ OResultColumn::~OResultColumn()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

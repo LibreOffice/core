@@ -44,7 +44,7 @@ namespace dbaui
                             getTypeSelectionPageFactory() SAL_OVERRIDE;
 
         void                TableDataOn(SvxCellHorJustify& eVal);
-        void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
+        void                TableFontOn(css::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
         sal_Int16           GetWidthPixel( const HTMLOption& rOption );
         void                setTextEncoding();
         void                fetchOptions();
@@ -53,16 +53,16 @@ namespace dbaui
     public:
         OHTMLReader(SvStream& rIn,
                     const SharedConnection& _rxConnection,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList = 0,
                     const OTypeInfoMap* _pInfoMap = 0);
         // required for automatic type recognition
         OHTMLReader(SvStream& rIn,
                     sal_Int32 nRows,
                     const TPositions &_rColumnPositions,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,
                     const OTypeInfoMap* _pInfoMap,
                     bool _bAutoIncrementEnabled);

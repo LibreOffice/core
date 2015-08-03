@@ -1510,7 +1510,7 @@ OApplicationView*   OApplicationController::getContainer() const
     return static_cast< OApplicationView* >( getView() );
 }
 
-// ::com::sun::star::container::XContainerListener
+// css::container::XContainerListener
 void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;

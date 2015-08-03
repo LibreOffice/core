@@ -38,31 +38,31 @@ namespace dbaccess
     {
     public:
         DatabaseDocumentRecovery(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext
         );
         ~DatabaseDocumentRecovery();
 
         /** saves the modified sub components of the given controller(s) to the "recovery" sub storage of the document
             storage.
 
-            @throws ::com::sun::star::uno::Exception
+            @throws css::uno::Exception
                 in case of an error.
         */
         void saveModifiedSubComponents(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rTargetStorage,
-                const ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >& i_rControllers
+                const css::uno::Reference< css::embed::XStorage >& i_rTargetStorage,
+                const ::std::vector< css::uno::Reference< css::frame::XController > >& i_rControllers
             );
 
         /** recovery sub components from the given document storage, if applicable
 
             If the given document storage does not contain a recovery folder, the method silently returns.
 
-            @throws ::com::sun::star::uno::Exception
+            @throws css::uno::Exception
                 in case of an error.
         */
         void recoverSubDocuments(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rDocumentStorage,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& i_rTargetController
+                const css::uno::Reference< css::embed::XStorage >& i_rDocumentStorage,
+                const css::uno::Reference< css::frame::XController >& i_rTargetController
             );
 
     private:

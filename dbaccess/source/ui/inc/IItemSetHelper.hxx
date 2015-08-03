@@ -50,9 +50,9 @@ namespace dbaui
     class SAL_NO_VTABLE IDatabaseSettingsDialog
     {
     public:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const = 0;
-        virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() = 0;
+        virtual css::uno::Reference< css::uno::XComponentContext > getORB() const = 0;
+        virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() = 0;
+        virtual css::uno::Reference< css::sdbc::XDriver > getDriver() = 0;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;
         virtual void clearPassword() = 0;
         virtual bool saveDatasource() = 0;

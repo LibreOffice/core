@@ -147,7 +147,7 @@ namespace
     };
 }
 
-void OTableFieldDesc::Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria )
+void OTableFieldDesc::Load( const css::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria )
 {
 
     ::comphelper::NamedValueCollection aFieldDesc( i_rSettings.Value );

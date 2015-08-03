@@ -43,49 +43,49 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaui
 {
-    struct SbaURLCompare : public ::std::binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
+    struct SbaURLCompare : public ::std::binary_function< css::util::URL, css::util::URL, bool>
     {
-        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const { return x.Complete == y.Complete; }
+        bool operator() (const css::util::URL& x, const css::util::URL& y) const { return x.Complete == y.Complete; }
     };
 
     class SbaXStatusMultiplexer;
     class SbaXGridControl
                 :public FmXGridControl
-                ,public ::com::sun::star::frame::XDispatch
+                ,public css::frame::XDispatch
     {
         typedef std::map<css::util::URL, SbaXStatusMultiplexer*, SbaURLCompare> StatusMultiplexerArray;
         StatusMultiplexerArray      m_aStatusMultiplexer;
 
     public:
-        SbaXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        SbaXGridControl(const css::uno::Reference< css::uno::XComponentContext >&);
         virtual ~SbaXGridControl();
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XServiceInfo
+        // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
         // need by registration
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
-        // ::com::sun::star::frame::XDispatch
-        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XDispatch
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::lang::XComponent
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
         virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent) SAL_OVERRIDE;
@@ -95,53 +95,53 @@ namespace dbaui
 
     class SbaXGridPeer
                 :public FmXGridPeer
-                ,public ::com::sun::star::frame::XDispatch
+                ,public css::frame::XDispatch
     {
         cppu::OMultiTypeInterfaceContainerHelperVar<
             css::util::URL, void, SbaURLCompare>  m_aStatusListeners;
 
     public:
-        SbaXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        SbaXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
         virtual ~SbaXGridPeer();
 
         // UNO
         virtual void SAL_CALL  acquire() throw() SAL_OVERRIDE { FmXGridPeer::acquire(); }
         virtual void SAL_CALL release() throw() SAL_OVERRIDE { FmXGridPeer::release(); }
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 > & rId ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        static SbaXGridPeer* getImplementation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxIFace);
+        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+        sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 > & rId ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        static SbaXGridPeer* getImplementation(const css::uno::Reference< css::uno::XInterface>& _rxIFace);
 
-        // ::com::sun::star::frame::XDispatch
-        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XDispatch
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::frame::XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XDispatchProvider
+        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::lang::XComponent
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
         virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) SAL_OVERRIDE;
 #ifdef _MSC_VER
-        typedef ::com::sun::star::frame::XStatusListener xstlist_type;
-        typedef ::com::sun::star::uno::Reference< xstlist_type > xlistener_type;
-        void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const xlistener_type & xControl = xlistener_type() );
+        typedef css::frame::XStatusListener xstlist_type;
+        typedef css::uno::Reference< xstlist_type > xlistener_type;
+        void NotifyStatusChanged(const css::util::URL& aUrl, const xlistener_type & xControl = xlistener_type() );
 #else
-        void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > ());
+        void NotifyStatusChanged(const css::util::URL& aUrl, const css::uno::Reference< css::frame::XStatusListener > & xControl = css::uno::Reference< css::frame::XStatusListener > ());
 #endif // # _MSC_VER
 
     private:
         // for any execution of XDispatch::dispatch
         struct DispatchArgs
         {
-            ::com::sun::star::util::URL                                                 aURL;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aArgs;
+            css::util::URL                                                 aURL;
+            css::uno::Sequence< css::beans::PropertyValue >   aArgs;
         };
         ::std::queue< DispatchArgs >    m_aDispatchArgs;
         DECL_LINK( OnDispatchEvent, void* );
@@ -156,7 +156,7 @@ namespace dbaui
 
             dtUnknown
         };
-        static DispatchType classifyDispatchURL( const ::com::sun::star::util::URL& _rURL );
+        static DispatchType classifyDispatchURL( const css::util::URL& _rURL );
 
         typedef std::map<DispatchType, sal_Bool> MapDispatchToBool;
         MapDispatchToBool   m_aDispatchStates;
@@ -229,7 +229,7 @@ namespace dbaui
         sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
 
     public:
-        SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
+        SbaGridControl(css::uno::Reference< css::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
         virtual ~SbaGridControl();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -290,10 +290,10 @@ namespace dbaui
         void AfterDrop();
 
         // get a fields property set from a model pos
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
+        css::uno::Reference< css::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
 
         // get my data source
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  getDataSource() const;
+        css::uno::Reference< css::beans::XPropertySet >  getDataSource() const;
 
         // drag events
         void DoColumnDrag(sal_uInt16 nColumnPos);

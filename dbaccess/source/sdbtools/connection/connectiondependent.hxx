@@ -35,9 +35,9 @@ namespace sdbtools
     {
     private:
         mutable ::osl::Mutex    m_aMutex;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >
+        css::uno::WeakReference< css::sdbc::XConnection >
                                 m_aConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
                                 m_aContext;
 
         /** a hard reference to the connection we're working for
@@ -46,20 +46,20 @@ namespace sdbtools
             The guard will, in its constructor, set the member, and reset it in its destructor.
             This ensures that the connection is only held hard when it's needed, and weak otherwise.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        css::uno::Reference< css::sdbc::XConnection >
                                 m_xConnection;
 
     protected:
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                         getContext() const { return m_aContext; }
 
     protected:
         class EntryGuard;
 
     protected:
-        explicit ConnectionDependentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rContext )
+        explicit ConnectionDependentComponent( const css::uno::Reference< css::uno::XComponentContext > & _rContext )
             :m_aContext( _rContext )
         {
         }
@@ -71,12 +71,12 @@ namespace sdbtools
             @param  _rxConnection
                 the connection to set
         */
-        void    setWeakConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection )
+        void    setWeakConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection )
         {
             m_aConnection = _rxConnection;
         }
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+        const css::uno::Reference< css::sdbc::XConnection >&
                 getConnection() const { return m_xConnection; }
 
     public:
@@ -90,7 +90,7 @@ namespace sdbtools
 
         inline bool acquireConnection( GuardAccess )
         {
-            m_xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >(m_aConnection);
+            m_xConnection = css::uno::Reference< css::sdbc::XConnection >(m_aConnection);
             return m_xConnection.is();
         }
         inline void releaseConnection( GuardAccess )
@@ -122,7 +122,7 @@ namespace sdbtools
             ,m_rComponent( _rComponent )
         {
             if ( !m_rComponent.acquireConnection( ConnectionDependentComponent::GuardAccess() ) )
-                throw ::com::sun::star::lang::DisposedException();
+                throw css::lang::DisposedException();
         }
 
         ~EntryGuard()

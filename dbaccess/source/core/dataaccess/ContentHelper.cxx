@@ -552,7 +552,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
     }
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

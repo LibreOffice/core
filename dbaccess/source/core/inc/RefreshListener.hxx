@@ -35,7 +35,7 @@ namespace dbaccess
     class SAL_NO_VTABLE IRefreshListener
     {
     public:
-        virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed) = 0;
+        virtual void refresh(const css::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) = 0;
 
     protected:
         ~IRefreshListener() {}

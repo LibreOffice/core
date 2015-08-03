@@ -44,28 +44,28 @@ namespace dbaui
     class UnoDataBrowserView : public ODataView, public ::utl::OEventListenerAdapter
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xGrid;            // our grid's UNO representation
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
-        VclPtr<DBTreeView>      m_pTreeView;
-        VclPtr<Splitter>        m_pSplitter;
+        css::uno::Reference< css::awt::XControl >                 m_xGrid;            // our grid's UNO representation
+        css::uno::Reference< css::awt::XControlContainer >        m_xMe;              // our own UNO representation
+        VclPtr<DBTreeView>             m_pTreeView;
+        VclPtr<Splitter>               m_pSplitter;
         mutable VclPtr<SbaGridControl> m_pVclControl;  // our grid's VCL representation
-        VclPtr<vcl::Window>     m_pStatus;
+        VclPtr<vcl::Window>            m_pStatus;
 
         DECL_LINK( SplitHdl, void* );
     // attribute access
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             getGridControl() const  { return m_xGrid; }
+        css::uno::Reference< css::awt::XControl >             getGridControl() const  { return m_xGrid; }
         SbaGridControl*         getVclControl() const;
 
     public:
         UnoDataBrowserView( vcl::Window* pParent,
                             IController& _rController,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+                            const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~UnoDataBrowserView();
         virtual void dispose() SAL_OVERRIDE;
 
         /// late construction
-        void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
+        void Construct(const css::uno::Reference< css::awt::XControlModel >& xModel);
 
         /** as columns may be hidden there is a difference between a columns model pos and its view pos
             so we you may use these translation function
@@ -79,13 +79,13 @@ namespace dbaui
         void    showStatus( const OUString& _rStatus );
         void    hideStatus();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >     getContainer() { return m_xMe; }
+        css::uno::Reference< css::awt::XControlContainer >     getContainer() { return m_xMe; }
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
     private:
         using ODataView::Construct;

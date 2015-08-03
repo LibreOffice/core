@@ -84,13 +84,13 @@ public:
         return OUString("org.openoffice.comp.dbu.DBContentLoader");
     }
     static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    static css::uno::Reference< css::uno::XInterface >
+            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                const Reference< XLoadEventListener > & _rListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL cancel() throw(std::exception) SAL_OVERRIDE;
 };
 
@@ -145,7 +145,7 @@ Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static() throw(  
 
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException, std::exception)
+        const Reference< XLoadEventListener > & rListener) throw(css::uno::RuntimeException, std::exception)
 {
     m_xFrame    = rFrame;
     m_xListener = rListener;

@@ -58,41 +58,41 @@ namespace dbaui
         VclPtr<OKButton>       m_pOKBtn;
         VclPtr<CancelButton>   m_pCancelBtn;
 
-        sal_Int32       m_nCurrentlySelected;
+        sal_Int32              m_nCurrentlySelected;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
-                        m_xParams;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                        m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
-                        m_xFormatter;
+        css::uno::Reference< css::container::XIndexAccess >
+                               m_xParams;
+        css::uno::Reference< css::sdbc::XConnection >
+                               m_xConnection;
+        css::uno::Reference< css::util::XNumberFormatter >
+                               m_xFormatter;
         ::dbtools::OPredicateInputController
-                        m_aPredicateInput;
+                               m_aPredicateInput;
 
-        ByteVector      m_aVisitedParams;
-        Timer       m_aResetVisitFlag;
+        ByteVector             m_aVisitedParams;
+        Timer                  m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
-        bool    m_bNeedErrorOnCurrent;
+        bool                   m_bNeedErrorOnCurrent;
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                    m_aFinalValues;     /// the final values as entered by the user
+        css::uno::Sequence< css::beans::PropertyValue >
+                               m_aFinalValues;     /// the final values as entered by the user
 
     public:
         OParameterDialog(vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & _rParamContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
+            const css::uno::Reference< css::container::XIndexAccess > & _rParamContainer,
+            const css::uno::Reference< css::sdbc::XConnection > & _rxConnection,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog();
         virtual void dispose() SAL_OVERRIDE;
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+        css::uno::Sequence< css::beans::PropertyValue >
                     getValues() const { return m_aFinalValues; }
 
     protected:
         void Construct();
 
-        ::connectivity::OSQLParseNode* implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField);
+        ::connectivity::OSQLParseNode* implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const css::uno::Reference< css::beans::XPropertySet > & _rxField);
 
     private:
         DECL_LINK_TYPED(OnVisitedTimeout, Timer*, void);

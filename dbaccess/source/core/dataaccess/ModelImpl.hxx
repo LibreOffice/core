@@ -79,7 +79,7 @@ namespace comphelper
 namespace dbaccess
 {
 
-typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
+typedef css::uno::WeakReference< css::sdbc::XConnection > OWeakConnection;
 typedef std::vector< OWeakConnection > OWeakConnectionArray;
 
 struct AsciiPropertyValue
@@ -87,9 +87,9 @@ struct AsciiPropertyValue
     // note: the canonic member order would be AsciiName / DefaultValue, but
     // this crashes on unxlngi6.pro, since there's a bug which somehow results in
     // getDefaultDataSourceSettings returning corrupted Any instances then.
-    ::com::sun::star::uno::Any          DefaultValue;
-    const sal_Char*                     AsciiName;
-    const ::com::sun::star::uno::Type&  ValueType;
+    css::uno::Any          DefaultValue;
+    const sal_Char*        AsciiName;
+    const css::uno::Type&  ValueType;
 
     AsciiPropertyValue()
         :DefaultValue( )
@@ -98,20 +98,20 @@ struct AsciiPropertyValue
     {
     }
 
-    AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rDefaultValue )
+    AsciiPropertyValue( const sal_Char* _pAsciiName, const css::uno::Any& _rDefaultValue )
         :DefaultValue( _rDefaultValue )
         ,AsciiName( _pAsciiName )
         ,ValueType( _rDefaultValue.getValueType() )
     {
-        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+        OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
     }
-    AsciiPropertyValue( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Type& _rValeType )
+    AsciiPropertyValue( const sal_Char* _pAsciiName, const css::uno::Type& _rValeType )
         :DefaultValue()
         ,AsciiName( _pAsciiName )
         ,ValueType( _rValeType )
     {
-        OSL_ENSURE( ValueType.getTypeClass() != ::com::sun::star::uno::TypeClass_VOID,
+        OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: VOID property values not supported!" );
     }
 };
@@ -139,7 +139,7 @@ private:
 };
 
 // ODatabaseModelImpl
-typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedStorage;
+typedef ::utl::SharedUNOComponent< css::embed::XStorage >  SharedStorage;
 
 class ODatabaseContext;
 class DocumentStorageAccess;
@@ -168,27 +168,27 @@ public:
 
 private:
     OModuleClient                                                               m_aModuleClient;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
+    css::uno::WeakReference< css::frame::XModel >                     m_xModel;
+    css::uno::WeakReference< css::sdbc::XDataSource >                 m_xDataSource;
 
-    DocumentStorageAccess*                                                      m_pStorageAccess;
-    ::comphelper::SharedMutex                                                   m_aMutex;
-    VosMutexFacade                                                              m_aMutexFacade;
-    ::std::vector< TContentPtr >                                                m_aContainer;   // one for each ObjectType
-    ::sfx2::DocumentMacroMode                                                   m_aMacroMode;
-    sal_Int16                                                                   m_nImposedMacroExecMode;
+    DocumentStorageAccess*                                            m_pStorageAccess;
+    ::comphelper::SharedMutex                                         m_aMutex;
+    VosMutexFacade                                                    m_aMutexFacade;
+    ::std::vector< TContentPtr >                                      m_aContainer;   // one for each ObjectType
+    ::sfx2::DocumentMacroMode                                         m_aMacroMode;
+    sal_Int16                                                         m_nImposedMacroExecMode;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > m_xBasicLibraries;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > m_xDialogLibraries;
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer > m_xBasicLibraries;
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer > m_xDialogLibraries;
 
-    SharedStorage                                                               m_xDocumentStorage;
-    ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >                   m_pStorageModifyListener;
-    ODatabaseContext*                                                           m_pDBContext;
-    DocumentEventsData                                                          m_aDocumentEvents;
+    SharedStorage                                                     m_xDocumentStorage;
+    ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >         m_pStorageModifyListener;
+    ODatabaseContext*                                                 m_pDBContext;
+    DocumentEventsData                                                m_aDocumentEvents;
 
-    ::comphelper::NamedValueCollection                                          m_aMediaDescriptor;
+    ::comphelper::NamedValueCollection                                m_aMediaDescriptor;
     /// the URL the document was loaded from
-    OUString                                                             m_sDocFileLocation;
+    OUString                                                          m_sDocFileLocation;
 
     oslInterlockedCount                                 m_refCount;
 
@@ -213,33 +213,33 @@ private:
 
 public:
     OWeakConnectionArray                                                        m_aConnections;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_aContext;
+    const css::uno::Reference< css::uno::XComponentContext >  m_aContext;
 
 public:
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
+    css::uno::WeakReference< css::container::XNameAccess >    m_xCommandDefinitions;
+    css::uno::WeakReference< css::container::XNameAccess >    m_xTableDefinitions;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
-                                                        m_xNumberFormatsSupplier;
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
+                                                              m_xNumberFormatsSupplier;
     OUString                                     m_sConnectURL;
     OUString                                     m_sName;        // transient, our creator has to tell us the title
     OUString                                     m_sUser;
     OUString                                     m_aPassword;    // transient !
     OUString                                     m_sFailedPassword;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
-                                                        m_aLayoutInformation;
-    sal_Int32                                           m_nLoginTimeout;
+    css::uno::Sequence< css::beans::PropertyValue>
+                                                    m_aLayoutInformation;
+    sal_Int32                                       m_nLoginTimeout;
     bool                                            m_bReadOnly : 1;
     bool                                            m_bPasswordRequired : 1;
     bool                                            m_bSuppressVersionColumns : 1;
     bool                                            m_bModified : 1;
     bool                                            m_bDocumentReadOnly : 1;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyBag >
+    css::uno::Reference< css::beans::XPropertyBag >
                                                         m_xSettings;
-    ::com::sun::star::uno::Sequence< OUString >  m_aTableFilter;
-    ::com::sun::star::uno::Sequence< OUString >  m_aTableTypeFilter;
+    css::uno::Sequence< OUString >                      m_aTableFilter;
+    css::uno::Sequence< OUString >                      m_aTableTypeFilter;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >
+    css::uno::Reference< css::lang::XEventListener >
                                                         m_xSharedConnectionManager;
     sal_uInt16                                          m_nControllerLockCount;
 
@@ -264,19 +264,19 @@ public:
     void commitStorages();
 
     ODatabaseModelImpl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _pDBContext
     );
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
         const OUString& _rRegistrationName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _rDBContext
         );
 
     // XEventListener
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException);
 
     void setModified( bool bModified );
 
@@ -285,12 +285,12 @@ public:
     inline OUString getURL() const               { return m_sDocumentURL;     }
     inline OUString getDocFileLocation() const   { return m_sDocFileLocation; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
             getStorage(
-                const ObjectType _eType, const sal_Int32 _nDesiredMode = ::com::sun::star::embed::ElementModes::READWRITE );
+                const ObjectType _eType, const sal_Int32 _nDesiredMode = css::embed::ElementModes::READWRITE );
 
 // helper
-    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
+    const css::uno::Reference< css::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
 
     DocumentEventsData&
@@ -301,7 +301,7 @@ public:
 
     void    setResource(
                 const OUString& _rURL,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs
+                const css::uno::Sequence< css::beans::PropertyValue >& _rArgs
             );
     void    setDocFileLocation(
                 const OUString& i_rLoadedFrom
@@ -315,8 +315,8 @@ public:
     // disposes all elements in m_aStorages, and clears it
     void    disposeStorages();
 
-    /// creates a ->com::sun::star::embed::StorageFactory
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+    /// creates a ->css::embed::StorageFactory
+    css::uno::Reference< css::lang::XSingleServiceFactory >
             createStorageFactory() const;
 
     /// commits our storage
@@ -324,22 +324,22 @@ public:
 
     /// commits a given storage if it's not readonly, ignoring (but asserting) all errors
     static  bool    commitStorageIfWriteable_ignoreErrors(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                const css::uno::Reference< css::embed::XStorage >& _rxStorage
             );
 
     void clearConnections();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getOrCreateRootStorage();
-    inline  ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
+            css::uno::Reference< css::embed::XStorage > getOrCreateRootStorage();
+    inline  css::uno::Reference< css::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
     inline  void resetRootStorage() { impl_switchToStorage_throw( NULL ); }
 
     /** returns the data source. If it doesn't exist it will be created
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getOrCreateDataSource();
+    css::uno::Reference< css::sdbc::XDataSource> getOrCreateDataSource();
 
     /** returns the model, if there already exists one
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel_noCreate() const;
+    css::uno::Reference< css::frame::XModel > getModel_noCreate() const;
 
     /** returns a new ->ODatabaseDocument
 
@@ -352,7 +352,7 @@ public:
         @seealso
             getModel_noCreate
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > createNewModel_deliverOwnership( bool _bInitialize );
+    css::uno::Reference< css::frame::XModel > createNewModel_deliverOwnership( bool _bInitialize );
 
     struct ResetModelAccess { friend class ODatabaseDocument; private: ResetModelAccess() { } };
 
@@ -367,7 +367,7 @@ public:
     DocumentStorageAccess*
             getDocumentStorageAccess();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentSubStorageSupplier >
+    css::uno::Reference< css::document::XDocumentSubStorageSupplier >
             getDocumentSubStorageSupplier();
 
     inline const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
@@ -395,7 +395,7 @@ public:
     /** determines whether a given object storage contains macros
     */
     static bool     objectHasMacros(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
+                        const css::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
                         const OUString& _rPersistentName
                     );
 
@@ -432,26 +432,26 @@ public:
         @throws RuntimeException
             if something does wrong, which indicates a server error in the installation
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
             getLibraryContainer( bool _bScript );
 
     /** lets our library containers store themself into the given root storage
     */
-    void    storeLibraryContainersTo( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxToRootStorage );
+    void    storeLibraryContainersTo( const css::uno::Reference< css::embed::XStorage >& _rxToRootStorage );
 
     /** rebases the document to the given storage
 
         No actual committing, copying, saving, whatsoever happens. The storage is just remembered as the documents
         new storage, nothing more.
 
-        @throws ::com::sun::star::lang::IllegalArgumentException
+        @throws css::lang::IllegalArgumentException
             if the given storage is <NULL/>
-        @throws ::com::sun::star::lang::RuntimeException
+        @throws css::lang::RuntimeException
             if any of the invoked operations does so
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
             switchToStorage(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage
+                const css::uno::Reference< css::embed::XStorage >& _rxNewRootStorage
             );
 
     /** returns the macro mode imposed by an external instance, which passed it to attachResource
@@ -471,10 +471,10 @@ public:
     virtual bool setCurrentMacroExecMode( sal_uInt16 ) SAL_OVERRIDE;
     virtual OUString getDocumentLocation() const SAL_OVERRIDE;
     virtual bool documentStorageHasMacros() const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
+    virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
     virtual SignatureState getScriptingSignatureState() SAL_OVERRIDE;
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) SAL_OVERRIDE;
-    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const SAL_OVERRIDE;
+    virtual void showBrokenSignatureWarning( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) const SAL_OVERRIDE;
 
     // IModifiableDocument
     virtual void storageIsModified() SAL_OVERRIDE;
@@ -486,8 +486,8 @@ public:
 
 private:
     void    impl_construct_nothrow();
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-            impl_switchToStorage_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage );
+    css::uno::Reference< css::embed::XStorage >
+            impl_switchToStorage_throw( const css::uno::Reference< css::embed::XStorage >& _rxNewRootStorage );
 
     /** switches to the given document URL, which denotes the logical URL of the document, not necessariy the
         URL where the doc was loaded/recovered from
@@ -512,7 +512,7 @@ protected:
 
     /** returns the component itself
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() const = 0;
+    virtual css::uno::Reference< css::uno::XInterface > getThis() const = 0;
 
     inline ::osl::Mutex& getMutex() const
     {
@@ -524,7 +524,7 @@ public:
 
     /** returns the mutex used for thread safety
 
-        @throws ::com::sun::star::lang::DisposedException
+        @throws css::lang::DisposedException
             if m_pImpl is <NULL/>. Usually, you will set this member in your derived
             component's <code>dispose</code> method to <NULL/>.
     */
@@ -537,7 +537,7 @@ public:
     inline void checkDisposed() const
     {
         if ( !m_pImpl.is() )
-            throw ::com::sun::star::lang::DisposedException( "Component is already disposed.", getThis() );
+            throw css::lang::DisposedException( "Component is already disposed.", getThis() );
     }
 
     inline void lockModify()
@@ -585,7 +585,7 @@ public:
         @param _component
             the component whose functionality depends on a ODatabaseModelImpl instance
 
-        @throws ::com::sun::star::lang::DisposedException
+        @throws css::lang::DisposedException
             If the given component is already disposed
     */
     explicit ModelMethodGuard( const ModelDependentComponent& _component )

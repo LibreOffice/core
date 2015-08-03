@@ -43,17 +43,17 @@ namespace dbaui
         OTypeInfoMap                                    m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
+        css::uno::Reference< css::beans::XPropertySet >       m_xTable;
 
-        OUString m_sCatalogName;         // catalog for update data
-        OUString m_sSchemaName;          // schema for update data
-        OUString m_sName;                // table for update data
-        OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
+        OUString        m_sCatalogName;         // catalog for update data
+        OUString        m_sSchemaName;          // schema for update data
+        OUString        m_sName;                // table for update data
+        OUString        m_sAutoIncrementValue;  // the autoincrement value set in the datasource
         OUString        m_sTypeNames;           // these type names are the ones out of the resource file
         TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
-        bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
-        bool        m_bNew      : 1;        // is true when we create a new table
+        bool            m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
+        bool            m_bNew      : 1;        // is true when we create a new table
 
 
         void reSyncRows();
@@ -62,22 +62,22 @@ namespace dbaui
         bool checkColumns(bool _bNew)
             throw (css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception);      // check if we have double column names
-        OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const OUString& _rDefault);
-        void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns = false);
-        void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup, bool _bNew);
+        OUString createUniqueName(const css::uno::Reference< css::container::XNameAccess>& _rxTables,const OUString& _rDefault);
+        void appendColumns(css::uno::Reference< css::sdbcx::XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns = false);
+        void appendPrimaryKey(css::uno::Reference< css::sdbcx::XKeysSupplier>& _rxSup, bool _bNew);
         void alterColumns();
         void dropPrimaryKey();
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
+        css::uno::Reference< css::container::XNameAccess> getKeyColumns() const;
         OUString createUniqueName(const OUString& _rName);
 
         void reload();
 
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() SAL_OVERRIDE;
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
+        // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         virtual void losingConnection( ) SAL_OVERRIDE;
 
@@ -88,9 +88,9 @@ namespace dbaui
 
         virtual ~OTableController();
     public:
-        OTableController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
+        OTableController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       getTable() { return m_xTable;}
+        css::uno::Reference< css::beans::XPropertySet >       getTable() { return m_xTable;}
 
         bool     isAddAllowed()     const;
         bool     isDropAllowed()    const;
@@ -116,22 +116,22 @@ namespace dbaui
 
         virtual bool                        Construct(vcl::Window* pParent) SAL_OVERRIDE;
         // XEventListener
-        virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XController
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::lang::XComponent
+        // css::lang::XComponent
         virtual void        SAL_CALL disposing() SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     protected:
         void startTableListening();

@@ -134,7 +134,7 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    bool ODataClipboard::WriteObject( ::tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool ODataClipboard::WriteObject( ::tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if (nUserObjectId == SotClipboardFormatId::RTF || nUserObjectId == SotClipboardFormatId::HTML )
         {
@@ -209,7 +209,7 @@ namespace dbaui
         ODataAccessObjectTransferable::ObjectReleased( );
     }
 
-    void SAL_CALL ODataClipboard::disposing( const ::com::sun::star::lang::EventObject& i_rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ODataClipboard::disposing( const css::lang::EventObject& i_rSource ) throw (css::uno::RuntimeException, std::exception)
     {
         ODataAccessDescriptor& rDescriptor( getDescriptor() );
 

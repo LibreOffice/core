@@ -32,7 +32,7 @@ namespace sdbtools
 {
 
     // ObjectNames
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XObjectNames
+    typedef ::cppu::WeakImplHelper<   css::sdb::tools::XObjectNames
                                   >   ObjectNames_Base;
     struct ObjectNames_Impl;
     /** default implementation for XObjectNames
@@ -51,20 +51,20 @@ namespace sdbtools
             @param  _rxConnection
                 the connection to work with. Will be held weak. Must not be <NULL/>.
 
-            @throws ::com::sun::star::lang::NullPointerException
+            @throws css::lang::NullPointerException
                 if _rxConnection is <NULL/>
         */
         ObjectNames(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         // XObjectNames
-        virtual OUString SAL_CALL suggestName( ::sal_Int32 CommandType, const OUString& BaseName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL convertToSQLName( const OUString& Name ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isNameValid( ::sal_Int32 CommandType, const OUString& Name ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL suggestName( ::sal_Int32 CommandType, const OUString& BaseName ) throw (css::lang::IllegalArgumentException, css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL convertToSQLName( const OUString& Name ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) throw (css::lang::IllegalArgumentException, css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isNameValid( ::sal_Int32 CommandType, const OUString& Name ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~ObjectNames();

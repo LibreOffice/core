@@ -222,7 +222,7 @@ namespace dbaui
         return pMenu;
     }
 
-    Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException, std::exception)
+    Reference< css::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException, std::exception)
     {
         // execute the menu
         SolarMutexGuard aSolarMutexGuard;
@@ -256,7 +256,7 @@ namespace dbaui
 
             }
         }
-        return Reference< ::com::sun::star::awt::XWindow >();
+        return Reference< css::awt::XWindow >();
     }
 } // dbaui
 

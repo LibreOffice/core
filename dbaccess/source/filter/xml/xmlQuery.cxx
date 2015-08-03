@@ -41,7 +41,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
-                ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
+                ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                 ) :
     OXMLTable( rImport, nPrfx, _sLocalName,_xAttrList,_xParentContainer, "com.sun.star.sdb.CommandDefinition" )
         ,m_bEscapeProcessing(true)

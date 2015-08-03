@@ -26,10 +26,10 @@ namespace dbaui
 
     enum ElementType
     {
-        E_TABLE     = ::com::sun::star::sdb::application::DatabaseObject::TABLE,
-        E_QUERY     = ::com::sun::star::sdb::application::DatabaseObject::QUERY,
-        E_FORM      = ::com::sun::star::sdb::application::DatabaseObject::FORM,
-        E_REPORT    = ::com::sun::star::sdb::application::DatabaseObject::REPORT,
+        E_TABLE     = css::sdb::application::DatabaseObject::TABLE,
+        E_QUERY     = css::sdb::application::DatabaseObject::QUERY,
+        E_FORM      = css::sdb::application::DatabaseObject::FORM,
+        E_REPORT    = css::sdb::application::DatabaseObject::REPORT,
 
         E_NONE      = 4,
         E_ELEMENT_TYPE_COUNT = E_NONE

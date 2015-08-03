@@ -44,7 +44,7 @@ namespace dbaui
     class IAddTableDialogContext
     {
     public:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+        virtual css::uno::Reference< css::sdbc::XConnection >
                         getConnection() const = 0;
         virtual bool    allowViews() const = 0;
         virtual bool    allowQueries() const = 0;

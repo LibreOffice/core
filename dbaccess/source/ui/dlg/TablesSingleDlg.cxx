@@ -40,7 +40,7 @@ using namespace com::sun::star::container;
 OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XComponentContext >& _rxORB
-            ,const ::com::sun::star::uno::Any& _aDataSourceName)
+            ,const css::uno::Any& _aDataSourceName)
     : SfxSingleTabDialog(pParent, _pItems, "TablesFilterDialog",
         "dbaccess/ui/tablesfilterdialog.ui")
     , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )

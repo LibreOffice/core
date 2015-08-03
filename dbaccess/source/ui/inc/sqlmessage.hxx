@@ -67,7 +67,7 @@ public:
     /** display an SQLException with auto-recognizing a main and a detailed message
 
         The first two messages from the exception chain are used as main and detailed message (recognizing the
-        detailed field of an <type scope="com::sun::star::sdb">SQLContext</type>).
+        detailed field of an <type scope="css::sdb">SQLContext</type>).
     */
     OSQLMessageBox(
         vcl::Window* _pParent,

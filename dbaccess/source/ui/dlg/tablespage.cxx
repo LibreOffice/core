@@ -202,7 +202,7 @@ namespace dbaui
         m_pTablesList->CheckButtons();
     }
 
-    void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter )
+    void OTableSubscriptionPage::implCompleteTablesCheck( const css::uno::Sequence< OUString >& _rTableFilter )
     {
         if (!_rTableFilter.getLength())
         {   // no tables visible
@@ -289,7 +289,7 @@ namespace dbaui
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
 
                     xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< OUString >() ) );
-                    Reference< ::com::sun::star::lang::XEventListener> xEvt;
+                    Reference< css::lang::XEventListener> xEvt;
                     aErrorInfo = ::dbaui::createConnection(xProp, m_xORB, xEvt, m_xCurrentConnection);
 
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,aTableFilter);

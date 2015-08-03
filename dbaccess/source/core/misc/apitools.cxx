@@ -44,7 +44,7 @@ OSubComponent::~OSubComponent()
 
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > OSubComponent::getTypes() throw (RuntimeException, std::exception)
 {
     OTypeCollection aTypes(cppu::UnoType<XComponent>::get(),

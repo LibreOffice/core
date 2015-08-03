@@ -43,8 +43,8 @@ namespace dbaui
 
         virtual void        CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
+        virtual css::lang::Locale  GetLocale() const SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
         virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
         virtual bool                isAutoIncrementValueEnabled() const SAL_OVERRIDE;
@@ -55,12 +55,12 @@ namespace dbaui
         virtual ~OWizTypeSelectControl();
         virtual void dispose() SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() SAL_OVERRIDE;
     };
 
     // Wizard Page: OWizTypeSelectList
-    // just defines the ::com::sun::star::ucb::Command for the Contextmenu
+    // just defines the css::ucb::Command for the Contextmenu
     class OWizTypeSelectList : public MultiListBox
     {
         bool                    m_bPKey;

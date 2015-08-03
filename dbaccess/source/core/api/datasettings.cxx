@@ -106,8 +106,8 @@ ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,bool _bQuery)
 ODataSettings_Base::ODataSettings_Base()
     :m_bApplyFilter(false)
     ,m_aFont(::comphelper::getDefaultFont())
-    ,m_nFontEmphasis(::com::sun::star::awt::FontEmphasisMark::NONE)
-    ,m_nFontRelief(::com::sun::star::awt::FontRelief::NONE)
+    ,m_nFontEmphasis(css::awt::FontEmphasisMark::NONE)
+    ,m_nFontRelief(css::awt::FontRelief::NONE)
 {
 }
 
@@ -132,7 +132,7 @@ ODataSettings_Base::~ODataSettings_Base()
 
 void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
 {
-    static ::com::sun::star::awt::FontDescriptor aFD = ::comphelper::getDefaultFont();
+    static css::awt::FontDescriptor aFD = ::comphelper::getDefaultFont();
     switch( _nHandle )
     {
         case PROPERTY_ID_HAVING_CLAUSE:
@@ -148,10 +148,10 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
             _rDefault <<= sal_False;
             break;
         case PROPERTY_ID_TEXTRELIEF:
-            _rDefault <<= ::com::sun::star::awt::FontRelief::NONE;
+            _rDefault <<= css::awt::FontRelief::NONE;
             break;
         case PROPERTY_ID_TEXTEMPHASIS:
-            _rDefault <<= ::com::sun::star::awt::FontEmphasisMark::NONE;
+            _rDefault <<= css::awt::FontEmphasisMark::NONE;
             break;
         case PROPERTY_ID_FONTNAME:
             _rDefault <<= aFD.Name;

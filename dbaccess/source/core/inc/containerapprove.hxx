@@ -52,7 +52,7 @@ namespace dbaccess
         */
         virtual void SAL_CALL   approveElement(
             const OUString& _rName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement
+            const css::uno::Reference< css::uno::XInterface >& _rxElement
         ) = 0;
     };
 

@@ -33,8 +33,8 @@ namespace dbaui
     class SAL_NO_VTABLE PropertyStorage
     {
     public:
-        virtual void getPropertyValue( ::com::sun::star::uno::Any& _out_rValue ) const = 0;
-        virtual void setPropertyValue( const ::com::sun::star::uno::Any& _rValue ) = 0;
+        virtual void getPropertyValue( css::uno::Any& _out_rValue ) const = 0;
+        virtual void setPropertyValue( const css::uno::Any& _rValue ) = 0;
 
         virtual ~PropertyStorage();
     };
@@ -60,8 +60,8 @@ namespace dbaui
         {
         }
 
-        virtual void getPropertyValue( ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
-        virtual void setPropertyValue( const ::com::sun::star::uno::Any& _rValue ) SAL_OVERRIDE;
+        virtual void getPropertyValue( css::uno::Any& _out_rValue ) const SAL_OVERRIDE;
+        virtual void setPropertyValue( const css::uno::Any& _rValue ) SAL_OVERRIDE;
 
     private:
         SfxItemSet&     m_rItemSet;

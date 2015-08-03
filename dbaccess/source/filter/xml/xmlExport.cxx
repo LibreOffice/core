@@ -68,14 +68,14 @@ namespace dbaxml
     public:
         static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
-        static Reference< XInterface > SAL_CALL Create(const Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static Reference< XInterface > SAL_CALL Create(const Reference< css::lang::XMultiServiceFactory >&);
     };
     class ODBFullExportHelper
     {
     public:
         static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
-        static Reference< XInterface > SAL_CALL Create(const Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static Reference< XInterface > SAL_CALL Create(const Reference< css::lang::XMultiServiceFactory >&);
     };
 }
 
@@ -263,8 +263,8 @@ css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()
     return s;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    SAL_CALL ODBExport::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+css::uno::Reference< css::uno::XInterface >
+    SAL_CALL ODBExport::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
 {
     return static_cast< XServiceInfo* >(new ODBExport( comphelper::getComponentContext(_rxORB), getImplementationName_Static()));
 }
@@ -1225,7 +1225,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                                 break;
                             case CTF_DB_COLUMN_TEXT_ALIGN:
                                 if ( !aItr->maValue.hasValue() )
-                                    aItr->maValue <<= ::com::sun::star::awt::TextAlign::LEFT;
+                                    aItr->maValue <<= css::awt::TextAlign::LEFT;
                                 break;
                         }
                     }

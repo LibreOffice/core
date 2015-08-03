@@ -178,7 +178,7 @@ namespace dbaui
         m_pParent.clear();
         vcl::Window::dispose();
     }
-    Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return this;
     }

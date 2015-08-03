@@ -41,10 +41,10 @@ namespace dbaui
     struct DBTreeListUserData
     {
         /// if the entry denotes a table or query, this is the respective UNO object
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                         xObjectProperties;
         /// if the entry denotes a object container, this is the UNO interface for this container
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                                         xContainer;
         /// if the entry denotes a data source, this is the connection for this data source (if already connection)
         SharedConnection                xConnection;

@@ -300,7 +300,7 @@ void ODbaseIndexDialog::Init()
     bool bFolder=true;
     try
     {
-        aFile = ::ucbhelper::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
+        aFile = ::ucbhelper::Content(m_aDSN,Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
         bFolder = aFile.isFolder();
     }
     catch(Exception&)

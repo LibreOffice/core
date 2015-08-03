@@ -65,7 +65,7 @@ using namespace com::sun::star::container;
 ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
-                               ,const ::com::sun::star::uno::Any& _aDataSourceName
+                               ,const css::uno::Any& _aDataSourceName
                                )
     :OWizardMachine(_pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
     ,m_pOutSet(NULL)

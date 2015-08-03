@@ -112,7 +112,7 @@ namespace dbaccess
         }
     }
 
-    void SAL_CALL OPropertyForward::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL OPropertyForward::disposing( const css::lang::EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -126,7 +126,7 @@ namespace dbaccess
         m_xDest = NULL;
     }
 
-    void OPropertyForward::setDefinition( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest )
+    void OPropertyForward::setDefinition( const css::uno::Reference< css::beans::XPropertySet>& _xDest )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_bInInsert )

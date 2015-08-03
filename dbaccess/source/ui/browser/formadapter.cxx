@@ -91,87 +91,87 @@ Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType) throw (RuntimeE
 void SbaXFormAdapter::StopListening()
 {
     // log off all our multiplexers
-    STOP_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, ::com::sun::star::form::XLoadable, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, ::com::sun::star::sdbc::XRowSet, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, ::com::sun::star::sdb::XRowSetApproveBroadcaster, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(SQLErrorListener, m_aErrorListeners, ::com::sun::star::sdb::XSQLErrorBroadcaster, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(SubmitListener, m_aSubmitListeners, ::com::sun::star::form::XSubmit, m_xMainForm);
-    STOP_MULTIPLEXER_LISTENING(ResetListener, m_aResetListeners, ::com::sun::star::form::XReset, m_xMainForm);
+    STOP_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm);
+    STOP_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm);
+    STOP_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, css::sdb::XRowSetApproveBroadcaster, m_xMainForm);
+    STOP_MULTIPLEXER_LISTENING(SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm);
+    STOP_MULTIPLEXER_LISTENING(SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm);
+    STOP_MULTIPLEXER_LISTENING(ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm);
 
     if (m_aParameterListeners.getLength())
     {
-        Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->removeParameterListener(&m_aParameterListeners);
     }
 
-    STOP_PROPERTY_MULTIPLEXER_LISTENING(PropertyChangeListener, m_aPropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
-    STOP_PROPERTY_MULTIPLEXER_LISTENING(VetoableChangeListener, m_aVetoablePropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
+    STOP_PROPERTY_MULTIPLEXER_LISTENING(PropertyChangeListener, m_aPropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
+    STOP_PROPERTY_MULTIPLEXER_LISTENING(VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
     if (m_aPropertiesChangeListeners.getLength())
     {
-        Reference< ::com::sun::star::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->removePropertiesChangeListener(&m_aPropertiesChangeListeners);
     }
 
     // log off ourself
-    Reference< ::com::sun::star::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
+    Reference< css::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
     if (xComp.is())
-        xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
+        xComp->removeEventListener(static_cast<css::lang::XEventListener*>(static_cast<css::beans::XPropertyChangeListener*>(this)));
 }
 
 void SbaXFormAdapter::StartListening()
 {
     // log off all our multiplexers
-    START_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, ::com::sun::star::form::XLoadable, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, ::com::sun::star::sdbc::XRowSet, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, ::com::sun::star::sdb::XRowSetApproveBroadcaster, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(SQLErrorListener, m_aErrorListeners, ::com::sun::star::sdb::XSQLErrorBroadcaster, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(SubmitListener, m_aSubmitListeners, ::com::sun::star::form::XSubmit, m_xMainForm);
-    START_MULTIPLEXER_LISTENING(ResetListener, m_aResetListeners, ::com::sun::star::form::XReset, m_xMainForm);
+    START_MULTIPLEXER_LISTENING(LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm);
+    START_MULTIPLEXER_LISTENING(RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm);
+    START_MULTIPLEXER_LISTENING(RowSetApproveListener, m_aRowSetApproveListeners, css::sdb::XRowSetApproveBroadcaster, m_xMainForm);
+    START_MULTIPLEXER_LISTENING(SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm);
+    START_MULTIPLEXER_LISTENING(SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm);
+    START_MULTIPLEXER_LISTENING(ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm);
 
     if (m_aParameterListeners.getLength())
     {
-        Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->addParameterListener(&m_aParameterListeners);
     }
 
-    START_PROPERTY_MULTIPLEXER_LISTENING(PropertyChangeListener, m_aPropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
-    START_PROPERTY_MULTIPLEXER_LISTENING(VetoableChangeListener, m_aVetoablePropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
+    START_PROPERTY_MULTIPLEXER_LISTENING(PropertyChangeListener, m_aPropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
+    START_PROPERTY_MULTIPLEXER_LISTENING(VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
     if (m_aPropertiesChangeListeners.getLength())
     {
-        Reference< ::com::sun::star::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         OUString sEmpty;
         if (xBroadcaster.is())
             xBroadcaster->addPropertiesChangeListener(::comphelper::StringSequence(&sEmpty, 1), &m_aPropertiesChangeListeners);
     }
 
     // log off ourself
-    Reference< ::com::sun::star::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
+    Reference< css::lang::XComponent >  xComp(m_xMainForm, UNO_QUERY);
     if (xComp.is())
-        xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<com::sun::star::beans::XPropertyChangeListener*>(this)));
+        xComp->addEventListener(static_cast<css::lang::XEventListener*>(static_cast<css::beans::XPropertyChangeListener*>(this)));
 }
 
-void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSet >& xNewMaster)
+void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMaster)
 {
     if (xNewMaster == m_xMainForm)
         return;
 
-    OSL_ENSURE(xNewMaster.get() != static_cast< ::com::sun::star::sdbc::XRowSet* >(this), "SbaXFormAdapter::AttachForm : invalid argument !");
+    OSL_ENSURE(xNewMaster.get() != static_cast< css::sdbc::XRowSet* >(this), "SbaXFormAdapter::AttachForm : invalid argument !");
 
     if (m_xMainForm.is())
     {
         StopListening();
 
         // if our old master is loaded we have to send an 'unloaded' event
-        Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
+        Reference< css::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
         if (xLoadable->isLoaded())
         {
-            ::com::sun::star::lang::EventObject aEvt(*this);
+            css::lang::EventObject aEvt(*this);
             ::cppu::OInterfaceIteratorHelper aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
-                static_cast< ::com::sun::star::form::XLoadListener*>(aIt.next())->unloaded(aEvt);
+                static_cast< css::form::XLoadListener*>(aIt.next())->unloaded(aEvt);
         }
     }
 
@@ -182,13 +182,13 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
         StartListening();
 
         // if our new master is loaded we have to send an 'loaded' event
-        Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
+        Reference< css::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
         if (xLoadable->isLoaded())
         {
-            ::com::sun::star::lang::EventObject aEvt(*this);
+            css::lang::EventObject aEvt(*this);
             ::cppu::OInterfaceIteratorHelper aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
-                static_cast< ::com::sun::star::form::XLoadListener*>(aIt.next())->loaded(aEvt);
+                static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aEvt);
         }
     }
 
@@ -196,27 +196,27 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
     // (nearly every aspect of us may have changed with new master form)
 }
 
-// ::com::sun::star::sdbc::XCloseable
-void SAL_CALL SbaXFormAdapter::close() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XCloseable
+void SAL_CALL SbaXFormAdapter::close() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XCloseable >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XCloseable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->close();
 }
 
-// ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter::getMetaData() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XResultSetMetaDataSupplier
+Reference< css::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter::getMetaData() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetMetaDataSupplier >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetMetaDataSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getMetaData();
-    return Reference< ::com::sun::star::sdbc::XResultSetMetaData > ();
+    return Reference< css::sdbc::XResultSetMetaData > ();
 }
 
-// ::com::sun::star::sdbc::XColumnLocate
-sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XColumnLocate
+sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XColumnLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XColumnLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->findColumn(columnName);
 
@@ -225,801 +225,801 @@ sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw
     return 0; // Never reached
 }
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL SbaXFormAdapter::getColumns() throw( RuntimeException, std::exception )
+// css::sdbcx::XColumnsSupplier
+Reference< css::container::XNameAccess > SAL_CALL SbaXFormAdapter::getColumns() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XColumnsSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getColumns();
-    return Reference< ::com::sun::star::container::XNameAccess > ();
+    return Reference< css::container::XNameAccess > ();
 }
 
-// ::com::sun::star::sdbc::XRow
-sal_Bool SAL_CALL SbaXFormAdapter::wasNull() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XRow
+sal_Bool SAL_CALL SbaXFormAdapter::wasNull() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->wasNull();
     return sal_True;
 }
 
-OUString SAL_CALL SbaXFormAdapter::getString(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+OUString SAL_CALL SbaXFormAdapter::getString(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getString(columnIndex);
     return OUString();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::getBoolean(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::getBoolean(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getBoolean(columnIndex);
     return sal_False;
 }
 
-sal_Int8 SAL_CALL SbaXFormAdapter::getByte(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int8 SAL_CALL SbaXFormAdapter::getByte(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getByte(columnIndex);
     return 0;
 }
 
-sal_Int16 SAL_CALL SbaXFormAdapter::getShort(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int16 SAL_CALL SbaXFormAdapter::getShort(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getShort(columnIndex);
     return 0;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::getInt(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::getInt(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getInt(columnIndex);
     return 0;
 }
 
-sal_Int64 SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int64 SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getLong(columnIndex);
     return 0;
 }
 
-float SAL_CALL SbaXFormAdapter::getFloat(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+float SAL_CALL SbaXFormAdapter::getFloat(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getFloat(columnIndex);
     return 0.0;
 }
 
-double SAL_CALL SbaXFormAdapter::getDouble(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+double SAL_CALL SbaXFormAdapter::getDouble(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getDouble(columnIndex);
     return 0.0;
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getBytes(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getBytes(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getBytes(columnIndex);
     return Sequence <sal_Int8> ();
 }
 
-::com::sun::star::util::Date SAL_CALL SbaXFormAdapter::getDate(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+css::util::Date SAL_CALL SbaXFormAdapter::getDate(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getDate(columnIndex);
-    return ::com::sun::star::util::Date();
+    return css::util::Date();
 }
 
-::com::sun::star::util::Time SAL_CALL SbaXFormAdapter::getTime(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+css::util::Time SAL_CALL SbaXFormAdapter::getTime(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getTime(columnIndex);
-    return ::com::sun::star::util::Time();
+    return css::util::Time();
 }
 
-::com::sun::star::util::DateTime SAL_CALL SbaXFormAdapter::getTimestamp(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+css::util::DateTime SAL_CALL SbaXFormAdapter::getTimestamp(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getTimestamp(columnIndex);
-    return ::com::sun::star::util::DateTime();
+    return css::util::DateTime();
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL SbaXFormAdapter::getBinaryStream(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getBinaryStream(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getBinaryStream(columnIndex);
-    return Reference< ::com::sun::star::io::XInputStream > ();
+    return Reference< css::io::XInputStream > ();
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL SbaXFormAdapter::getCharacterStream(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getCharacterStream(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getCharacterStream(columnIndex);
-    return Reference< ::com::sun::star::io::XInputStream > ();
+    return Reference< css::io::XInputStream > ();
 }
 
-Any SAL_CALL SbaXFormAdapter::getObject(sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getObject(sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getObject(columnIndex, typeMap);
     return Any();
 }
 
-Reference< ::com::sun::star::sdbc::XRef > SAL_CALL SbaXFormAdapter::getRef(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XRef > SAL_CALL SbaXFormAdapter::getRef(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getRef(columnIndex);
-    return Reference< ::com::sun::star::sdbc::XRef > ();
+    return Reference< css::sdbc::XRef > ();
 }
 
-Reference< ::com::sun::star::sdbc::XBlob > SAL_CALL SbaXFormAdapter::getBlob(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XBlob > SAL_CALL SbaXFormAdapter::getBlob(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getBlob(columnIndex);
-    return Reference< ::com::sun::star::sdbc::XBlob > ();
+    return Reference< css::sdbc::XBlob > ();
 }
 
-Reference< ::com::sun::star::sdbc::XClob > SAL_CALL SbaXFormAdapter::getClob(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XClob > SAL_CALL SbaXFormAdapter::getClob(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getClob(columnIndex);
-    return Reference< ::com::sun::star::sdbc::XClob > ();
+    return Reference< css::sdbc::XClob > ();
 }
 
-Reference< ::com::sun::star::sdbc::XArray > SAL_CALL SbaXFormAdapter::getArray(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XArray > SAL_CALL SbaXFormAdapter::getArray(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getArray(columnIndex);
-    return Reference< ::com::sun::star::sdbc::XArray > ();
+    return Reference< css::sdbc::XArray > ();
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
-Any SAL_CALL SbaXFormAdapter::getBookmark() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbcx::XRowLocate
+Any SAL_CALL SbaXFormAdapter::getBookmark() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getBookmark();
     return Any();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::moveToBookmark(const Any& bookmark) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::moveToBookmark(const Any& bookmark) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->moveToBookmark(bookmark);
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->moveRelativeToBookmark(bookmark,rows);
     return sal_False;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const Any& _second) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const Any& _second) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->compareBookmarks(_first, _second);
     return 0;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::hasOrderedBookmarks() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::hasOrderedBookmarks() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->hasOrderedBookmarks();
     return sal_False;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->hashBookmark(bookmark);
     return 0;
 }
 
-// ::com::sun::star::sdbc::XRowUpdate
-void SAL_CALL SbaXFormAdapter::updateNull(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XRowUpdate
+void SAL_CALL SbaXFormAdapter::updateNull(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateNull(columnIndex);
 }
 
-void SAL_CALL SbaXFormAdapter::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateBoolean(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateByte(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateShort(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateInt(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateLong(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateFloat(sal_Int32 columnIndex, float x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateFloat(sal_Int32 columnIndex, float x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateFloat(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateDouble(sal_Int32 columnIndex, double x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateDouble(sal_Int32 columnIndex, double x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateDouble(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateString(sal_Int32 columnIndex, const OUString& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateString(sal_Int32 columnIndex, const OUString& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateString(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateBytes(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util::Date& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateDate(sal_Int32 columnIndex, const css::util::Date& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateDate(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util::Time& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateTime(sal_Int32 columnIndex, const css::util::Time& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateTime(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateTimestamp(sal_Int32 columnIndex, const css::util::DateTime& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateTimestamp(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateBinaryStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateBinaryStream(columnIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::updateCharacterStream(sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateCharacterStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateCharacterStream(columnIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::updateObject(sal_Int32 columnIndex, const Any& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateObject(sal_Int32 columnIndex, const Any& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateObject(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateNumericObject(columnIndex, x, scale);
 }
 
-// ::com::sun::star::sdbc::XResultSet
-sal_Bool SAL_CALL SbaXFormAdapter::next() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XResultSet
+sal_Bool SAL_CALL SbaXFormAdapter::next() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->next();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isBeforeFirst() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isBeforeFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isBeforeFirst();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isAfterLast() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isAfterLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isAfterLast();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isFirst() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isFirst();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isLast() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->isLast();
     return sal_False;
 }
 
-void SAL_CALL SbaXFormAdapter::beforeFirst() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::beforeFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         m_xMainForm->beforeFirst();
 }
 
-void SAL_CALL SbaXFormAdapter::afterLast() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::afterLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         m_xMainForm->afterLast();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::first() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::first() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->first();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::last() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::last() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->last();
     return sal_False;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::getRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::getRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->getRow();
     return 0;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::absolute(sal_Int32 row) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::absolute(sal_Int32 row) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->absolute(row);
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::relative(sal_Int32 rows) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::relative(sal_Int32 rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->relative(rows);
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::previous() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::previous() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->previous();
     return sal_False;
 }
 
-void SAL_CALL SbaXFormAdapter::refreshRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::refreshRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         m_xMainForm->refreshRow();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::rowUpdated() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::rowUpdated() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowUpdated();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::rowInserted() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::rowInserted() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowInserted();
     return sal_False;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::rowDeleted() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::rowDeleted() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowDeleted();
     return sal_False;
 }
 
-Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         return m_xMainForm->getStatement();
     return NULL;
 }
 
-// ::com::sun::star::sdbc::XResultSetUpdate
-void SAL_CALL SbaXFormAdapter::insertRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XResultSetUpdate
+void SAL_CALL SbaXFormAdapter::insertRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->insertRow();
 }
 
-void SAL_CALL SbaXFormAdapter::updateRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateRow();
 }
 
-void SAL_CALL SbaXFormAdapter::deleteRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::deleteRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->deleteRow();
 }
 
-void SAL_CALL SbaXFormAdapter::cancelRowUpdates() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::cancelRowUpdates() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->cancelRowUpdates();
 }
 
-void SAL_CALL SbaXFormAdapter::moveToInsertRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::moveToInsertRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->moveToInsertRow();
 }
 
-void SAL_CALL SbaXFormAdapter::moveToCurrentRow() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::moveToCurrentRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->moveToCurrentRow();
 }
 
-// ::com::sun::star::sdbc::XRowSet
-void SAL_CALL SbaXFormAdapter::execute() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XRowSet
+void SAL_CALL SbaXFormAdapter::execute() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
     if (m_xMainForm.is())
         m_xMainForm->execute();
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdbc, RowSetListener, m_aRowSetListeners, ::com::sun::star::sdbc::XRowSet, m_xMainForm)
+IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdbc, RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm)
 
-// ::com::sun::star::sdbcx::XDeleteRows
-Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& rows) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbcx::XDeleteRows
+Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbcx::XDeleteRows >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbcx::XDeleteRows >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->deleteRows(rows);
     return Sequence<sal_Int32>();
 }
 
-// ::com::sun::star::sdbc::XWarningsSupplier
-Any SAL_CALL SbaXFormAdapter::getWarnings() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XWarningsSupplier
+Any SAL_CALL SbaXFormAdapter::getWarnings() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->getWarnings();
     return Any();
 }
 
-void SAL_CALL SbaXFormAdapter::clearWarnings() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::clearWarnings() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->clearWarnings();
 }
 
-// ::com::sun::star::sdb::XRowSetApproveBroadcaster
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, RowSetApproveListener, m_aRowSetApproveListeners, ::com::sun::star::sdb::XRowSetApproveBroadcaster, m_xMainForm)
+// css::sdb::XRowSetApproveBroadcaster
+IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, RowSetApproveListener, m_aRowSetApproveListeners, css::sdb::XRowSetApproveBroadcaster, m_xMainForm)
 
-// com::sun::star::sdbc::XSQLErrorBroadcaster
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, SQLErrorListener, m_aErrorListeners, ::com::sun::star::sdb::XSQLErrorBroadcaster, m_xMainForm)
+// css::sdbc::XSQLErrorBroadcaster
+IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm)
 
-// ::com::sun::star::sdb::XResultSetAccess
-Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdb::XResultSetAccess
+Reference< css::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdb::XResultSetAccess >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdb::XResultSetAccess >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->createResultSet();
-    return Reference< ::com::sun::star::sdbc::XResultSet > ();
+    return Reference< css::sdbc::XResultSet > ();
 }
 
-// com::sun::star::form::XLoadable
+// css::form::XLoadable
 void SAL_CALL SbaXFormAdapter::load() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->load();
 }
 
 void SAL_CALL SbaXFormAdapter::unload() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->unload();
 }
 
 void SAL_CALL SbaXFormAdapter::reload() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->reload();
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::isLoaded() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->isLoaded();
     return sal_False;
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, LoadListener, m_aLoadListeners, ::com::sun::star::form::XLoadable, m_xMainForm)
+IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm)
 
-// ::com::sun::star::sdbc::XParameters
-void SAL_CALL SbaXFormAdapter::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+// css::sdbc::XParameters
+void SAL_CALL SbaXFormAdapter::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setNull(parameterIndex, sqlType);
 }
 
-void SAL_CALL SbaXFormAdapter::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setObjectNull(parameterIndex, sqlType, typeName);
 }
 
-void SAL_CALL SbaXFormAdapter::setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBoolean(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setByte(sal_Int32 parameterIndex, sal_Int8 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setByte(sal_Int32 parameterIndex, sal_Int8 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setByte(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setShort(sal_Int32 parameterIndex, sal_Int16 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setShort(sal_Int32 parameterIndex, sal_Int16 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setShort(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setInt(sal_Int32 parameterIndex, sal_Int32 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setInt(sal_Int32 parameterIndex, sal_Int32 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setInt(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setLong(sal_Int32 parameterIndex, sal_Int64 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setLong(sal_Int32 parameterIndex, sal_Int64 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setLong(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setFloat(sal_Int32 parameterIndex, float x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setFloat(sal_Int32 parameterIndex, float x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setFloat(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setDouble(sal_Int32 parameterIndex, double x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setDouble(sal_Int32 parameterIndex, double x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setDouble(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setString(sal_Int32 parameterIndex, const OUString& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setString(sal_Int32 parameterIndex, const OUString& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setString(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setBytes(sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBytes(sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBytes(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setDate(sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setDate(sal_Int32 parameterIndex, const css::util::Date& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setDate(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setTime(sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setTime(sal_Int32 parameterIndex, const css::util::Time& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setTime(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setTimestamp(sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setTimestamp(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setBinaryStream(sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBinaryStream(sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBinaryStream(parameterIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::setCharacterStream(sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setCharacterStream(sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setCharacterStream(parameterIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::setObject(sal_Int32 parameterIndex, const Any& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setObject(sal_Int32 parameterIndex, const Any& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setObject(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setObjectWithInfo(sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setObjectWithInfo(sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
 
-void SAL_CALL SbaXFormAdapter::setRef(sal_Int32 parameterIndex, const Reference< ::com::sun::star::sdbc::XRef >& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setRef(sal_Int32 parameterIndex, const Reference< css::sdbc::XRef >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setRef(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setBlob(sal_Int32 parameterIndex, const Reference< ::com::sun::star::sdbc::XBlob >& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBlob(sal_Int32 parameterIndex, const Reference< css::sdbc::XBlob >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBlob(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setClob(sal_Int32 parameterIndex, const Reference< ::com::sun::star::sdbc::XClob >& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setClob(sal_Int32 parameterIndex, const Reference< css::sdbc::XClob >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setClob(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setArray(sal_Int32 parameterIndex, const Reference< ::com::sun::star::sdbc::XArray >& x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setArray(sal_Int32 parameterIndex, const Reference< css::sdbc::XArray >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setArray(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::clearParameters() throw( ::com::sun::star::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::clearParameters() throw( css::sdbc::SQLException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
+    Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->clearParameters();
 }
 
-// ::com::sun::star::form::XDatabaseParameterBroadcaster
-void SAL_CALL SbaXFormAdapter::addParameterListener(const Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener) throw( RuntimeException, std::exception )
+// css::form::XDatabaseParameterBroadcaster
+void SAL_CALL SbaXFormAdapter::addParameterListener(const Reference< css::form::XDatabaseParameterListener >& aListener) throw( RuntimeException, std::exception )
 {
     m_aParameterListeners.addInterface(aListener);
     if (m_aParameterListeners.getLength() == 1)
     {
-        Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->addParameterListener(&m_aParameterListeners);
     }
 }
 
-void SAL_CALL SbaXFormAdapter::removeParameterListener(const Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeParameterListener(const Reference< css::form::XDatabaseParameterListener >& aListener) throw( RuntimeException, std::exception )
 {
     if (m_aParameterListeners.getLength() == 1)
     {
-        Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::form::XDatabaseParameterBroadcaster >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->removeParameterListener(&m_aParameterListeners);
     }
     m_aParameterListeners.removeInterface(aListener);
 }
 
-// ::com::sun::star::container::XChild
+// css::container::XChild
 Reference< XInterface > SAL_CALL SbaXFormAdapter::getParent() throw( RuntimeException, std::exception )
 {
     return m_xParent;
 }
 
-void SAL_CALL SbaXFormAdapter::setParent(const Reference< XInterface >& Parent) throw( ::com::sun::star::lang::NoSupportException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setParent(const Reference< XInterface >& Parent) throw( css::lang::NoSupportException, RuntimeException, std::exception )
 {
     m_xParent = Parent;
 }
 
-// ::com::sun::star::form::XSubmit
-void SAL_CALL SbaXFormAdapter::submit(const Reference< ::com::sun::star::awt::XControl >& aControl, const ::com::sun::star::awt::MouseEvent& aMouseEvt) throw( RuntimeException, std::exception )
+// css::form::XSubmit
+void SAL_CALL SbaXFormAdapter::submit(const Reference< css::awt::XControl >& aControl, const css::awt::MouseEvent& aMouseEvt) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::form::XSubmit >  xSubmit(m_xMainForm, UNO_QUERY);
+    Reference< css::form::XSubmit >  xSubmit(m_xMainForm, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit(aControl, aMouseEvt);
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubmitListeners, ::com::sun::star::form::XSubmit, m_xMainForm)
+IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm)
 
-// ::com::sun::star::awt::XTabControllerModel
+// css::awt::XTabControllerModel
 sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupControl : not supported !");
@@ -1031,18 +1031,18 @@ void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool /*GroupControl*/) throw(
     OSL_FAIL("SAL_CALL SbaXFormAdapter::setGroupControl : not supported !");
 }
 
-void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*Controls*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< css::awt::XControlModel >  >& /*Controls*/) throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::setControlModels : not supported !");
 }
 
-Sequence< Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL SbaXFormAdapter::getControlModels() throw( RuntimeException, std::exception )
+Sequence< Reference< css::awt::XControlModel > > SAL_CALL SbaXFormAdapter::getControlModels() throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getControlModels : not supported !");
-    return Sequence< Reference< ::com::sun::star::awt::XControlModel > >();
+    return Sequence< Reference< css::awt::XControlModel > >();
 }
 
-void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/, const OUString& /*GroupName*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/, const OUString& /*GroupName*/) throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::setGroup : not supported !");
 }
@@ -1053,24 +1053,24 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getGroupCount() throw( RuntimeException, std
     return 0;
 }
 
-void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/, OUString& /*Name*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/, OUString& /*Name*/) throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroup : not supported !");
 }
 
-void SAL_CALL SbaXFormAdapter::getGroupByName(const OUString& /*Name*/, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::getGroupByName(const OUString& /*Name*/, Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/) throw( RuntimeException, std::exception )
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupByName : not supported !");
 }
 
-// ::com::sun::star::lang::XComponent
+// css::lang::XComponent
 void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException, std::exception )
 {
     // log off all multiplexers
     if (m_xMainForm.is())
         StopListening();
 
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aLoadListeners.disposeAndClear(aEvt);
     m_aRowSetListeners.disposeAndClear(aEvt);
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
@@ -1087,51 +1087,51 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException, std::exception
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose all children
-    for (   ::std::vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
+    for (   ::std::vector< Reference< css::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
             aIter != m_aChildren.end();
             ++aIter
         )
     {
-        Reference< ::com::sun::star::beans::XPropertySet >  xSet(*aIter, UNO_QUERY);
+        Reference< css::beans::XPropertySet >  xSet(*aIter, UNO_QUERY);
         if (xSet.is())
-            xSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
+            xSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
 
-        Reference< ::com::sun::star::container::XChild >  xChild(*aIter, UNO_QUERY);
+        Reference< css::container::XChild >  xChild(*aIter, UNO_QUERY);
         if (xChild.is())
             xChild->setParent(Reference< XInterface > ());
 
-        Reference< ::com::sun::star::lang::XComponent >  xComp(*aIter, UNO_QUERY);
+        Reference< css::lang::XComponent >  xComp(*aIter, UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }
     m_aChildren.clear();
 }
 
-void SAL_CALL SbaXFormAdapter::addEventListener(const Reference< ::com::sun::star::lang::XEventListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::addEventListener(const Reference< css::lang::XEventListener >& xListener) throw( RuntimeException, std::exception )
 {
     m_aDisposeListeners.addInterface(xListener);
 }
 
-void SAL_CALL SbaXFormAdapter::removeEventListener(const Reference< ::com::sun::star::lang::XEventListener >& aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeEventListener(const Reference< css::lang::XEventListener >& aListener) throw( RuntimeException, std::exception )
 {
     m_aDisposeListeners.removeInterface(aListener);
 }
 
-// ::com::sun::star::beans::XFastPropertySet
-void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+// css::beans::XFastPropertySet
+void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) throw( css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::setFastPropertyValue : have no master form !");
 
     if (m_nNamePropHandle == nHandle)
     {
         if (aValue.getValueType().getTypeClass() != TypeClass_STRING)
         {
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         }
 
         // for notifying property listeners
-        ::com::sun::star::beans::PropertyChangeEvent aEvt;
+        css::beans::PropertyChangeEvent aEvt;
         aEvt.Source = *this;
         aEvt.PropertyName = PROPERTY_NAME;
         aEvt.PropertyHandle = m_nNamePropHandle;
@@ -1142,7 +1142,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
 
         ::cppu::OInterfaceIteratorHelper aIt(*m_aPropertyChangeListeners.getContainer(PROPERTY_NAME));
         while (aIt.hasMoreElements())
-            static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(aIt.next())->propertyChange(aEvt);
+            static_cast< css::beans::XPropertyChangeListener*>(aIt.next())->propertyChange(aEvt);
 
         return;
     }
@@ -1150,9 +1150,9 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
     xSet->setFastPropertyValue(nHandle, aValue);
 }
 
-Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::getFastPropertyValue : have no master form !");
 
     if (m_nNamePropHandle == nHandle)
@@ -1161,7 +1161,7 @@ Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( ::c
     return xSet->getFastPropertyValue(nHandle);
 }
 
-// ::com::sun::star::container::XNamed
+// css::container::XNamed
 OUString SAL_CALL SbaXFormAdapter::getName() throw( RuntimeException, std::exception )
 {
     return ::comphelper::getString(getPropertyValue(PROPERTY_NAME));
@@ -1172,42 +1172,42 @@ void SAL_CALL SbaXFormAdapter::setName(const OUString& aName) throw( RuntimeExce
     setPropertyValue(PROPERTY_NAME, makeAny(aName));
 }
 
-// ::com::sun::star::io::XPersistObject
+// css::io::XPersistObject
 OUString SAL_CALL SbaXFormAdapter::getServiceName() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
+    Reference< css::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
     if (xPersist.is())
         return xPersist->getServiceName();
     return OUString();
 }
 
-void SAL_CALL SbaXFormAdapter::write(const Reference< ::com::sun::star::io::XObjectOutputStream >& _rxOutStream) throw( ::com::sun::star::io::IOException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::write(const Reference< css::io::XObjectOutputStream >& _rxOutStream) throw( css::io::IOException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
+    Reference< css::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
     if (xPersist.is())
         xPersist->write(_rxOutStream);
 }
 
-void SAL_CALL SbaXFormAdapter::read(const Reference< ::com::sun::star::io::XObjectInputStream >& _rxInStream) throw( ::com::sun::star::io::IOException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::read(const Reference< css::io::XObjectInputStream >& _rxInStream) throw( css::io::IOException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
+    Reference< css::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
     if (xPersist.is())
         xPersist->read(_rxInStream);
 }
 
-// ::com::sun::star::beans::XMultiPropertySet
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertySetInfo() throw( RuntimeException, std::exception )
+// css::beans::XMultiPropertySet
+Reference< css::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
-        return Reference< ::com::sun::star::beans::XPropertySetInfo > ();
+        return Reference< css::beans::XPropertySetInfo > ();
 
-    Reference< ::com::sun::star::beans::XPropertySetInfo >  xReturn = xSet->getPropertySetInfo();
+    Reference< css::beans::XPropertySetInfo >  xReturn = xSet->getPropertySetInfo();
     if (-1 == m_nNamePropHandle)
     {
         // we need to determine the handle for the NAME property
- Sequence< ::com::sun::star::beans::Property> aProps = xReturn->getProperties();
-        const ::com::sun::star::beans::Property* pProps = aProps.getConstArray();
+ Sequence< css::beans::Property> aProps = xReturn->getProperties();
+        const css::beans::Property* pProps = aProps.getConstArray();
 
         for (sal_Int32 i=0; i<aProps.getLength(); ++i, ++pProps)
         {
@@ -1221,16 +1221,16 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter:
     return xReturn;
 }
 
-void SAL_CALL SbaXFormAdapter::setPropertyValues(const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values) throw( ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setPropertyValues(const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values) throw( css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (xSet.is())
         xSet->setPropertyValues(PropertyNames, Values);
 }
 
 Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUString >& aPropertyNames) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
         return Sequence< Any>(aPropertyNames.getLength());
 
@@ -1250,41 +1250,41 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
     return aReturn;
 }
 
-void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUString>& /*aPropertyNames*/, const Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUString>& /*aPropertyNames*/, const Reference< css::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException, std::exception )
 {
     // we completely ignore the property names, _all_ changes of _all_ properties will be forwarded to _all_ listeners
     m_aPropertiesChangeListeners.addInterface(xListener);
     if (m_aPropertiesChangeListeners.getLength() == 1)
     {
-        Reference< ::com::sun::star::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         OUString sEmpty;
         if (xBroadcaster.is())
             xBroadcaster->addPropertiesChangeListener(Sequence< OUString>(&sEmpty, 1), &m_aPropertiesChangeListeners);
     }
 }
 
-void SAL_CALL SbaXFormAdapter::removePropertiesChangeListener(const Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removePropertiesChangeListener(const Reference< css::beans::XPropertiesChangeListener >& Listener) throw( RuntimeException, std::exception )
 {
     if (m_aPropertiesChangeListeners.getLength() == 1)
     {
-        Reference< ::com::sun::star::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
+        Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->removePropertiesChangeListener(&m_aPropertiesChangeListeners);
     }
     m_aPropertiesChangeListeners.removeInterface(Listener);
 }
 
-void SAL_CALL SbaXFormAdapter::firePropertiesChangeEvent(const Sequence< OUString >& aPropertyNames, const Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::firePropertiesChangeEvent(const Sequence< OUString >& aPropertyNames, const Reference< css::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (xSet.is())
         xSet->firePropertiesChangeEvent(aPropertyNames, xListener);
 }
 
-// ::com::sun::star::beans::XPropertySet
-void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+// css::beans::XPropertySet
+void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue) throw( css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
         return;
 
@@ -1295,9 +1295,9 @@ void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, c
     xSet->setPropertyValue(aPropertyName, aValue);
 }
 
-Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
         return Any();
 
@@ -1308,86 +1308,86 @@ Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) thr
     return xSet->getPropertyValue(PropertyName);
 }
 
-IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, PropertyChangeListener, m_aPropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
-IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, VetoableChangeListener, m_aVetoablePropertyChangeListeners, ::com::sun::star::beans::XPropertySet, m_xMainForm);
+IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, PropertyChangeListener, m_aPropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
+IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
 
-// ::com::sun::star::util::XCancellable
+// css::util::XCancellable
 void SAL_CALL SbaXFormAdapter::cancel() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::util::XCancellable >  xCancel(m_xMainForm, UNO_QUERY);
+    Reference< css::util::XCancellable >  xCancel(m_xMainForm, UNO_QUERY);
     if (xCancel.is())
         return;
     xCancel->cancel();
 }
 
-// ::com::sun::star::beans::XPropertyState
-::com::sun::star::beans::PropertyState SAL_CALL SbaXFormAdapter::getPropertyState(const OUString& PropertyName) throw( ::com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception )
+// css::beans::XPropertyState
+css::beans::PropertyState SAL_CALL SbaXFormAdapter::getPropertyState(const OUString& PropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
         return xState->getPropertyState(PropertyName);
-    return ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+    return css::beans::PropertyState_DEFAULT_VALUE;
 }
 
-Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates(const Sequence< OUString >& aPropertyName) throw( ::com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception )
+Sequence< css::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates(const Sequence< OUString >& aPropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
         return xState->getPropertyStates(aPropertyName);
 
     // set them all to DEFAULT
-     Sequence< ::com::sun::star::beans::PropertyState> aReturn(aPropertyName.getLength());
-    ::com::sun::star::beans::PropertyState* pStates = aReturn.getArray();
+     Sequence< css::beans::PropertyState> aReturn(aPropertyName.getLength());
+    css::beans::PropertyState* pStates = aReturn.getArray();
     for (sal_Int32 i=0; i<aPropertyName.getLength(); ++i, ++pStates)
-        *pStates = ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+        *pStates = css::beans::PropertyState_DEFAULT_VALUE;
     return aReturn;
 }
 
-void SAL_CALL SbaXFormAdapter::setPropertyToDefault(const OUString& PropertyName) throw( ::com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setPropertyToDefault(const OUString& PropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
         xState->setPropertyToDefault(PropertyName);
 }
 
-Any SAL_CALL SbaXFormAdapter::getPropertyDefault(const OUString& aPropertyName) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getPropertyDefault(const OUString& aPropertyName) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
+    Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
         return xState->getPropertyDefault(aPropertyName);
     return Any();
 }
 
-// ::com::sun::star::form::XReset
+// css::form::XReset
 void SAL_CALL SbaXFormAdapter::reset() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::form::XReset >  xReset(m_xMainForm, UNO_QUERY);
+    Reference< css::form::XReset >  xReset(m_xMainForm, UNO_QUERY);
     if (xReset.is())
         xReset->reset();
 }
 
-IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, ResetListener, m_aResetListeners, ::com::sun::star::form::XReset, m_xMainForm)
+IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm)
 
-// ::com::sun::star::container::XNameContainer
-void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName) throw( ::com::sun::star::lang::IllegalArgumentException )
+// css::container::XNameContainer
+void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName) throw( css::lang::IllegalArgumentException )
 {
     // extract the form component
     if (aElement.getValueType().getTypeClass() != TypeClass_INTERFACE)
     {
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    Reference< ::com::sun::star::form::XFormComponent >  xElement(*static_cast<Reference< XInterface > const *>(aElement.getValue()), UNO_QUERY);
+    Reference< css::form::XFormComponent >  xElement(*static_cast<Reference< XInterface > const *>(aElement.getValue()), UNO_QUERY);
     if (!xElement.is())
     {
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
     // for the name we need the propset
-    Reference< ::com::sun::star::beans::XPropertySet >  xElementSet(xElement, UNO_QUERY);
+    Reference< css::beans::XPropertySet >  xElementSet(xElement, UNO_QUERY);
     if (!xElementSet.is())
     {
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
      }
     OUString sName;
     try
@@ -1400,7 +1400,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     catch(Exception&)
     {
         // the set didn't support the name prop
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
     // check the index
@@ -1413,19 +1413,19 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     m_aChildNames.insert(m_aChildNames.begin() + nIndex, sName);
 
     // listen for a changes of the name
-    xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
+    xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
 
     // we are now the parent of the new element
-    xElement->setParent(static_cast<com::sun::star::container::XContainer*>(this));
+    xElement->setParent(static_cast<css::container::XContainer*>(this));
 
     // notify the container listeners
-    ::com::sun::star::container::ContainerEvent aEvt;
+    css::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Accessor <<= nIndex;
     aEvt.Element <<= xElement;
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        static_cast< ::com::sun::star::container::XContainerListener*>(aIt.next())->elementInserted(aEvt);
+        static_cast< css::container::XContainerListener*>(aIt.next())->elementInserted(aEvt);
 }
 
 sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
@@ -1440,39 +1440,39 @@ sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
     return -1;
 }
 
-void SAL_CALL SbaXFormAdapter::insertByName(const OUString& aName, const Any& aElement) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::insertByName(const OUString& aName, const Any& aElement) throw( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     implInsert(aElement, m_aChildren.size(), &aName);
 }
 
-void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     sal_Int32 nPos = implGetPos(Name);
     if (-1 == nPos)
     {
-        throw ::com::sun::star::container::NoSuchElementException();
+        throw css::container::NoSuchElementException();
     }
     removeByIndex(nPos);
 }
 
-// ::com::sun::star::container::XNameReplace
-void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& aElement) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+// css::container::XNameReplace
+void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& aElement) throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
     {
-        throw ::com::sun::star::container::NoSuchElementException();
+        throw css::container::NoSuchElementException();
     }
     replaceByIndex(nPos, aElement);
 }
 
-// ::com::sun::star::container::XNameAccess
-Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+// css::container::XNameAccess
+Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
     {
-        throw ::com::sun::star::container::NoSuchElementException();
+        throw css::container::NoSuchElementException();
     }
     return makeAny(m_aChildren[nPos]);
 }
@@ -1487,10 +1487,10 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasByName(const OUString& aName) throw( Runti
     return (-1 != implGetPos(aName));
 }
 
-// ::com::sun::star::container::XElementAccess
+// css::container::XElementAccess
 Type SAL_CALL SbaXFormAdapter::getElementType() throw(RuntimeException, std::exception)
 {
-    return cppu::UnoType<com::sun::star::form::XFormComponent>::get();
+    return cppu::UnoType<css::form::XFormComponent>::get();
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::hasElements() throw(RuntimeException, std::exception)
@@ -1498,65 +1498,65 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasElements() throw(RuntimeException, std::ex
     return m_aChildren.size() > 0;
 }
 
-// ::com::sun::star::container::XIndexContainer
-void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+// css::container::XIndexContainer
+void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element) throw( css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
     implInsert(Element, _rIndex);
 }
 
-void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
 
-    Reference< ::com::sun::star::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
+    Reference< css::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
 
     OSL_ENSURE(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::removeByIndex : inconsistent container state !");
     m_aChildren.erase(m_aChildren.begin() + _rIndex);
     m_aChildNames.erase(m_aChildNames.begin() + _rIndex);
 
     // no need to listen anymore
-    Reference< ::com::sun::star::beans::XPropertySet >  xAffectedSet(xAffected, UNO_QUERY);
-    xAffectedSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
+    Reference< css::beans::XPropertySet >  xAffectedSet(xAffected, UNO_QUERY);
+    xAffectedSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
 
     // we are no longer the parent
     xAffected->setParent(Reference< XInterface > ());
 
     // notify container listeners
-    ::com::sun::star::container::ContainerEvent aEvt;
+    css::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Element <<= xAffected;
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        static_cast< ::com::sun::star::container::XContainerListener*>(aIt.next())->elementRemoved(aEvt);
+        static_cast< css::container::XContainerListener*>(aIt.next())->elementRemoved(aEvt);
 
 }
 
-// ::com::sun::star::container::XIndexReplace
-void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+// css::container::XIndexReplace
+void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element) throw( css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
 
     // extract the form component
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
     {
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    Reference< ::com::sun::star::form::XFormComponent >  xElement(*static_cast<Reference< XInterface > const *>(Element.getValue()), UNO_QUERY);
+    Reference< css::form::XFormComponent >  xElement(*static_cast<Reference< XInterface > const *>(Element.getValue()), UNO_QUERY);
     if (!xElement.is())
     {
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
     // for the name we need the propset
-    Reference< ::com::sun::star::beans::XPropertySet >  xElementSet(xElement, UNO_QUERY);
+    Reference< css::beans::XPropertySet >  xElementSet(xElement, UNO_QUERY);
     if (!xElementSet.is())
     {
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
      }
     OUString sName;
     try
@@ -1566,26 +1566,26 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     catch(Exception&)
     {
         // the set didn't support the name prop
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    Reference< ::com::sun::star::form::XFormComponent >  xOld = *(m_aChildren.begin() + _rIndex);
+    Reference< css::form::XFormComponent >  xOld = *(m_aChildren.begin() + _rIndex);
 
     OSL_ENSURE(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::replaceByIndex : inconsistent container state !");
     *(m_aChildren.begin() + _rIndex) = xElement;
     *(m_aChildNames.begin() + _rIndex) = sName;
 
     // correct property change listening
-    Reference< ::com::sun::star::beans::XPropertySet >  xOldSet(xOld, UNO_QUERY);
-    xOldSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
-    xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<com::sun::star::beans::XPropertyChangeListener*>(this));
+    Reference< css::beans::XPropertySet >  xOldSet(xOld, UNO_QUERY);
+    xOldSet->removePropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
+    xElementSet->addPropertyChangeListener(PROPERTY_NAME, static_cast<css::beans::XPropertyChangeListener*>(this));
 
     // parent reset
     xOld->setParent(Reference< XInterface > ());
-    xElement->setParent(static_cast<com::sun::star::container::XContainer*>(this));
+    xElement->setParent(static_cast<css::container::XContainer*>(this));
 
     // notify container listeners
-    ::com::sun::star::container::ContainerEvent aEvt;
+    css::container::ContainerEvent aEvt;
     aEvt.Source = *this;
     aEvt.Accessor <<= (sal_Int32)_rIndex;
     aEvt.Element <<= xElement;
@@ -1593,49 +1593,49 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
 
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        static_cast< ::com::sun::star::container::XContainerListener*>(aIt.next())->elementReplaced(aEvt);
+        static_cast< css::container::XContainerListener*>(aIt.next())->elementReplaced(aEvt);
 }
 
-// ::com::sun::star::container::XIndexAccess
+// css::container::XIndexAccess
 sal_Int32 SAL_CALL SbaXFormAdapter::getCount() throw( RuntimeException, std::exception )
 {
     return m_aChildren.size();
 }
 
-Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex) throw( css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
 
-    Reference< ::com::sun::star::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);
+    Reference< css::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);
     return makeAny(xElement);
 }
 
-// ::com::sun::star::container::XContainer
-void SAL_CALL SbaXFormAdapter::addContainerListener(const Reference< ::com::sun::star::container::XContainerListener >& xListener) throw( RuntimeException, std::exception )
+// css::container::XContainer
+void SAL_CALL SbaXFormAdapter::addContainerListener(const Reference< css::container::XContainerListener >& xListener) throw( RuntimeException, std::exception )
 {
     m_aContainerListeners.addInterface(xListener);
 }
 
-void SAL_CALL SbaXFormAdapter::removeContainerListener(const Reference< ::com::sun::star::container::XContainerListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeContainerListener(const Reference< css::container::XContainerListener >& xListener) throw( RuntimeException, std::exception )
 {
     m_aContainerListeners.removeInterface(xListener);
 }
 
-// ::com::sun::star::container::XEnumerationAccess
-Reference< ::com::sun::star::container::XEnumeration > SAL_CALL SbaXFormAdapter::createEnumeration() throw( RuntimeException, std::exception )
+// css::container::XEnumerationAccess
+Reference< css::container::XEnumeration > SAL_CALL SbaXFormAdapter::createEnumeration() throw( RuntimeException, std::exception )
 {
     return new ::comphelper::OEnumerationByName(this);
 }
 
-// ::com::sun::star::beans::XPropertyChangeListener
-void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
+// css::beans::XPropertyChangeListener
+void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
 {
     if (evt.PropertyName == PROPERTY_NAME)
     {
-        ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
+        ::std::vector<  css::uno::Reference< css::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
-                                                                ::std::bind2nd(::std::equal_to< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >(),evt.Source));
+                                                                ::std::bind2nd(::std::equal_to< css::uno::Reference< css::uno::XInterface > >(),evt.Source));
 
         if(aIter != m_aChildren.end())
         {
@@ -1646,16 +1646,16 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::Pro
     }
 }
 
-// ::com::sun::star::lang::XEventListener
-void SAL_CALL SbaXFormAdapter::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException, std::exception )
+// css::lang::XEventListener
+void SAL_CALL SbaXFormAdapter::disposing(const css::lang::EventObject& Source) throw( RuntimeException, std::exception )
 {
     // was it our main form ?
     if (Source.Source == m_xMainForm)
         dispose();
 
-    ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
+    ::std::vector<  css::uno::Reference< css::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),
-                                                                ::std::bind2nd(::std::equal_to< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >(),Source.Source));
+                                                                ::std::bind2nd(::std::equal_to< css::uno::Reference< css::uno::XInterface > >(),Source.Source));
     if(aIter != m_aChildren.end())
             removeByIndex(aIter - m_aChildren.begin());
 }

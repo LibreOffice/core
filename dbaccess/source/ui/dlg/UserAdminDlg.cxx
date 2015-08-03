@@ -49,7 +49,7 @@ namespace dbaui
     OUserAdminDlg::OUserAdminDlg(vcl::Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XComponentContext >& _rxORB
-                                            ,const ::com::sun::star::uno::Any& _aDataSourceName
+                                            ,const css::uno::Any& _aDataSourceName
                                             ,const Reference< XConnection >& _xConnection)
         : SfxTabDialog(_pParent, "UserAdminDialog", "dbaccess/ui/useradmindialog.ui", _pItems)
         , m_pItemSet(_pItems)

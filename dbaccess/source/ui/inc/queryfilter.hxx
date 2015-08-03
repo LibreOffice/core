@@ -83,10 +83,10 @@ namespace dbaui
 
         OUString        m_aSTR_COMPARE_OPERATORS;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
+        css::uno::Reference< css::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
+        css::uno::Reference< css::container::XNameAccess>             m_xColumns;
+        css::uno::Reference< css::sdbc::XConnection>                  m_xConnection;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
 
         ::dbtools::OPredicateInputController    m_aPredicateInput;
 
@@ -94,23 +94,23 @@ namespace dbaui
         DECL_LINK( ListSelectHdl, ListBox * );
         DECL_LINK( ListSelectCompHdl, ListBox * );
 
-        void            SetLine( sal_uInt16 nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,bool _bOr );
+        void            SetLine( sal_uInt16 nIdx,const css::beans::PropertyValue& _rItem,bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
         static sal_uInt16  GetSelectionPos(sal_Int32 eType,const ListBox& rListBox);
-        bool            getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
-        void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);
+        bool            getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,css::beans::PropertyValue& _rFilter) const;
+        void            fillLines(const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
+        css::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
+        css::uno::Reference< css::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
+        css::uno::Reference< css::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
 
     public:
         DlgFilterCrit(  vcl::Window * pParent,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols
+                        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+                        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
+                        const css::uno::Reference< css::container::XNameAccess>& _rxCols
                     );
         virtual ~DlgFilterCrit();
         virtual void dispose() SAL_OVERRIDE;

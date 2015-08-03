@@ -36,8 +36,8 @@ namespace dbaccess
     {
     public:
         StorageXMLOutputStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageXMLOutputStream();
@@ -67,14 +67,14 @@ namespace dbaccess
     {
     public:
         StorageXMLInputStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageXMLInputStream();
 
         void    import(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& i_rHandler
+                    const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_rHandler
                 );
 
     private:

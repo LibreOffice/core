@@ -59,8 +59,8 @@ using namespace ::com::sun::star::awt;
 // ORTFReader
 ORTFReader::ORTFReader( SvStream& rIn,
                         const SharedConnection& _rxConnection,
-                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                        const Reference< css::util::XNumberFormatter >& _rxNumberF,
+                        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
     :SvRTFParser(rIn)
@@ -72,8 +72,8 @@ ORTFReader::ORTFReader( SvStream& rIn,
 ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
                        const TPositions &_rColumnPositions,
-                       const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                       const Reference< css::util::XNumberFormatter >& _rxNumberF,
+                       const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                        const TColumnVector* pList,
                        const OTypeInfoMap* _pInfoMap,
                        bool _bAutoIncrementEnabled)
@@ -289,16 +289,16 @@ bool ORTFReader::CreateTable(int nToken)
             case RTF_CF:
                 break;
             case RTF_B:
-                aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
+                aFont.Weight = css::awt::FontWeight::BOLD;
                 break;
             case RTF_I:
-                aFont.Slant = ::com::sun::star::awt::FontSlant_ITALIC;
+                aFont.Slant = css::awt::FontSlant_ITALIC;
                 break;
             case RTF_UL:
-                aFont.Underline = ::com::sun::star::awt::FontUnderline::SINGLE;
+                aFont.Underline = css::awt::FontUnderline::SINGLE;
                 break;
             case RTF_STRIKE:
-                aFont.Strikeout = ::com::sun::star::awt::FontStrikeout::SINGLE;
+                aFont.Strikeout = css::awt::FontStrikeout::SINGLE;
                 break;
         }
         nToken = GetNextToken();

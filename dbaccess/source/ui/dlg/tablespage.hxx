@@ -39,13 +39,13 @@ namespace dbaui
         VclPtr<VclContainer>           m_pTables;
         VclPtr<OTableTreeListBox>      m_pTablesList;
 
-        OUString         m_sCatalogSeparator;
-        bool                m_bCatalogAtStart : 1;
+        OUString                       m_sCatalogSeparator;
+        bool                           m_bCatalogAtStart : 1;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                                m_xCurrentConnection;   /// valid as long as the page is active
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
-                                m_xCollator;
+        css::uno::Reference< css::sdbc::XConnection >
+                                       m_xCurrentConnection;   /// valid as long as the page is active
+        css::uno::Reference< css::i18n::XCollator >
+                                       m_xCollator;
         VclPtr<OTableSubscriptionDialog> m_pTablesDlg;
 
     public:
@@ -71,14 +71,14 @@ namespace dbaui
 
         /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */
-        void implCheckTables(const ::com::sun::star::uno::Sequence< OUString >& _rTables);
+        void implCheckTables(const css::uno::Sequence< OUString >& _rTables);
 
         /// returns the next sibling, if not available, the next sibling of the parent, a.s.o.
         SvTreeListEntry* implNextSibling(SvTreeListEntry* _pEntry) const;
 
         /** return the current selection in <member>m_aTablesList</member>
         */
-        ::com::sun::star::uno::Sequence< OUString > collectDetailedSelection() const;
+        css::uno::Sequence< OUString > collectDetailedSelection() const;
 
         /// (un)check all entries
         void CheckAll( bool bCheck = true );
@@ -87,7 +87,7 @@ namespace dbaui
 
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
-        void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter );
+        void implCompleteTablesCheck( const css::uno::Sequence< OUString >& _rTableFilter );
     };
 
 }   // namespace dbaui

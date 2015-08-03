@@ -181,7 +181,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard(m_aMutex);
 
         OUString sStatus;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
+        css::uno::Reference< css::sdbc::XResultSet > xResultSet;
         try
         {
             // create a statement
@@ -197,7 +197,7 @@ namespace dbaui
                     // execute it as a query
                     xResultSet = xStatement->executeQuery(_rStatement);
                     // get a handle for the rows
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow > xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
+                    css::uno::Reference< css::sdbc::XRow > xRow( xResultSet, css::uno::UNO_QUERY );
                     // work through each of the rows
                     while (xResultSet->next())
                     {

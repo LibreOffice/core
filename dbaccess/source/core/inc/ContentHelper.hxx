@@ -80,34 +80,32 @@ namespace dbaccess
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;
     typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
-    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::ucb::XContent
-                                           ,   ::com::sun::star::ucb::XCommandProcessor
-                                           ,   ::com::sun::star::lang::XServiceInfo
-                                           ,   ::com::sun::star::beans::XPropertiesChangeNotifier
-                                           ,   ::com::sun::star::beans::XPropertyContainer
-                                           ,   ::com::sun::star::lang::XInitialization
-                                           ,   ::com::sun::star::lang::XUnoTunnel
-                                           ,   ::com::sun::star::container::XChild
-                                           ,   ::com::sun::star::sdbcx::XRename
+    typedef ::cppu::WeakComponentImplHelper<   css::ucb::XContent
+                                           ,   css::ucb::XCommandProcessor
+                                           ,   css::lang::XServiceInfo
+                                           ,   css::beans::XPropertiesChangeNotifier
+                                           ,   css::beans::XPropertyContainer
+                                           ,   css::lang::XInitialization
+                                           ,   css::lang::XUnoTunnel
+                                           ,   css::container::XChild
+                                           ,   css::sdbcx::XRename
                                            >   OContentHelper_COMPBASE;
 
     class OContentHelper :   public OContentHelper_MBASE
                             ,public OContentHelper_COMPBASE
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-            setPropertyValues( const ::com::sun::star::uno::Sequence<
-                                ::com::sun::star::beans::PropertyValue >& rValues,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+        css::uno::Sequence< css::uno::Any >
+            setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+                               const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 
     protected:
         ::cppu::OInterfaceContainerHelper       m_aContentListeners;
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                                                 m_xParentContainer;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        const css::uno::Reference< css::uno::XComponentContext >
                                                 m_aContext;
         const ::connectivity::SQLError          m_aErrorHelper;
         TContentPtr                             m_pImpl;
@@ -123,62 +121,61 @@ namespace dbaccess
         *
         * @param evt is a sequence of property change events.
         */
-        void notifyPropertiesChange( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& evt ) const;
+        void notifyPropertiesChange( const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) const;
 
         OUString impl_getHierarchicalName( bool _includingRootContainer ) const;
 
     public:
 
-        OContentHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+        OContentHelper( const css::uno::Reference< css::uno::XComponentContext >& _xORB
+                        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
                         ,const TContentPtr& _pImpl
                     );
 
-        // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
-        // ::com::sun::star::lang::XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::lang::XTypeProvider
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        static css::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
+        // css::lang::XServiceInfo
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XContent
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual OUString SAL_CALL getContentType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual void SAL_CALL addContentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentEventListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual void SAL_CALL removeContentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentEventListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL getIdentifier(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual OUString SAL_CALL getContentType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL addContentEventListener( const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL removeContentEventListener( const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         // XCommandProcessor
-        virtual sal_Int32 SAL_CALL createCommandIdentifier(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::ucb::Command& aCommand, sal_Int32 CommandId, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw (::com::sun::star::uno::Exception, ::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual void SAL_CALL abort( sal_Int32 CommandId ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual sal_Int32 SAL_CALL createCommandIdentifier(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) throw (css::uno::Exception, css::ucb::CommandAbortedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL abort( sal_Int32 CommandId ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         // XPropertiesChangeNotifier
-        virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         // XPropertyContainer
-        virtual void SAL_CALL addProperty( const OUString& Name, sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual void SAL_CALL removeProperty( const OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL addProperty( const OUString& Name, sal_Int16 Attributes, const css::uno::Any& DefaultValue ) throw (css::beans::PropertyExistException, css::beans::IllegalTypeException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual void SAL_CALL removeProperty( const OUString& Name ) throw (css::beans::UnknownPropertyException, css::beans::NotRemoveableException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // com::sun::star::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        static OContentHelper* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+        // css::lang::XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        static OContentHelper* getImplementation( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
-        // ::com::sun::star::container::XChild
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::container::XChild
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XRename
-        virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL rename( const OUString& newName ) throw (css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         inline const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-            getPropertyValues( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::Property >& rProperties );
+        css::uno::Reference< css::sdbc::XRow >
+            getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
 
         const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_aContext; }
 

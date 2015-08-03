@@ -56,7 +56,7 @@ bool OTableFieldControl::IsReadOnly()
     bool bRead(GetCtrl()->IsReadOnly());
     if( !bRead )
     {
-        // The columns of a ::com::sun::star::sdbcx::View could not be locked
+        // The columns of a css::sdbcx::View could not be locked
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
         if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW")
             bRead = true;
@@ -99,12 +99,12 @@ void OTableFieldControl::SetModified(bool bModified)
     GetCtrl()->GetView()->getController().setModified(bModified);
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OTableFieldControl::getConnection()
+css::uno::Reference< css::sdbc::XConnection> OTableFieldControl::getConnection()
 {
     return GetCtrl()->GetView()->getController().getConnection();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaData()
+css::uno::Reference< css::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaData()
 {
     Reference<XConnection> xCon = GetCtrl()->GetView()->getController().getConnection();
     if(!xCon.is())

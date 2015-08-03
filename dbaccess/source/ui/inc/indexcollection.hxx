@@ -32,7 +32,7 @@ namespace dbaui
     class OIndexCollection
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        css::uno::Reference< css::container::XNameAccess >
                     m_xIndexes;
 
         // cached information
@@ -42,7 +42,7 @@ namespace dbaui
         // construction
         OIndexCollection();
         OIndexCollection(const OIndexCollection& _rSource);
-        //  OIndexCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
+        //  OIndexCollection(const css::uno::Reference< css::container::XNameAccess >& _rxIndexes);
 
         const OIndexCollection& operator=(const OIndexCollection& _rSource);
 
@@ -76,7 +76,7 @@ namespace dbaui
         void resetIndex(const Indexes::iterator& _rPos);
 
         // attach to a new key container
-        void attach(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
+        void attach(const css::uno::Reference< css::container::XNameAccess >& _rxIndexes);
         // detach from the container
         void detach();
 
@@ -91,8 +91,8 @@ namespace dbaui
         bool    dropNoRemove(const Indexes::iterator& _rPos);
 
     protected:
-        void implConstructFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
-        static void implFillIndexInfo(OIndex& _rIndex, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxDescriptor);
+        void implConstructFrom(const css::uno::Reference< css::container::XNameAccess >& _rxIndexes);
+        static void implFillIndexInfo(OIndex& _rIndex, css::uno::Reference< css::beans::XPropertySet > _rxDescriptor);
         void implFillIndexInfo(OIndex& _rIndex);
     };
 

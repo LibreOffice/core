@@ -56,18 +56,17 @@ public:
     VclPtr<FixedText>          m_pLabel;
     VclPtr<OSQLNameEdit>       m_pTitle;
     VclPtr<OKButton>           m_pPB_OK;
-    OUString            m_aQryLabel;
-    OUString            m_sTblLabel;
-    OUString            m_aName;
-    const IObjectNameCheck&
-                        m_rObjectNameCheck;
-    OUString            m_sParentURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>            m_xMetaData;
-    sal_Int32           m_nType;
-    sal_Int32           m_nFlags;
+    OUString                   m_aQryLabel;
+    OUString                   m_sTblLabel;
+    OUString                   m_aName;
+    const IObjectNameCheck&    m_rObjectNameCheck;
+    OUString                   m_sParentURL;
+    css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
+    sal_Int32                  m_nType;
+    sal_Int32                  m_nFlags;
 
     OSaveAsDlgImpl( OSaveAsDlg* pParent,const sal_Int32& _rType,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                    const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);

@@ -147,7 +147,7 @@ namespace dbaccess
         m_rSettings.put( sItemName, aValue );
     }
 
-    void ConfigItemImport::getItemValue( ::com::sun::star::uno::Any& o_rValue ) const
+    void ConfigItemImport::getItemValue( css::uno::Any& o_rValue ) const
     {
         o_rValue.clear();
 

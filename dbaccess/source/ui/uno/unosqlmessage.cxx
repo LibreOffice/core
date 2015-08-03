@@ -85,21 +85,21 @@ OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeExceptio
     return aSupported;
 }
 
-void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
+void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-  OUString title;
-  Reference< com::sun::star::awt::XWindow > parentWindow;
-  com::sun::star::uno::Any sqlException;
+    OUString title;
+    Reference< css::awt::XWindow > parentWindow;
+    css::uno::Any sqlException;
 
-  if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow) && (args[2] >>= sqlException)) {
-    Sequence<Any> s(3);
-    s[0] <<= PropertyValue( "Title", -1, makeAny(title), PropertyState_DIRECT_VALUE);
-    s[1] <<= PropertyValue( "ParentWindow", -1, makeAny(parentWindow), PropertyState_DIRECT_VALUE);
-    s[2] <<= PropertyValue( "SQLException", -1, sqlException, PropertyState_DIRECT_VALUE);
-    OGenericUnoDialog::initialize(s);
-  } else {
-    OGenericUnoDialog::initialize(args);
-  }
+    if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow) && (args[2] >>= sqlException)) {
+        Sequence<Any> s(3);
+        s[0] <<= PropertyValue( "Title", -1, makeAny(title), PropertyState_DIRECT_VALUE);
+        s[1] <<= PropertyValue( "ParentWindow", -1, makeAny(parentWindow), PropertyState_DIRECT_VALUE);
+        s[2] <<= PropertyValue( "SQLException", -1, sqlException, PropertyState_DIRECT_VALUE);
+        OGenericUnoDialog::initialize(s);
+    } else {
+        OGenericUnoDialog::initialize(args);
+    }
 }
 
 sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)

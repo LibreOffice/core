@@ -43,7 +43,7 @@ void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
     _rRow = *m_aSetIter;
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
+// css::sdbcx::XRowLocate
 Any SAL_CALL OStaticSet::getBookmark() throw(SQLException, RuntimeException)
 {
     return makeAny(getRow());
@@ -246,7 +246,7 @@ bool SAL_CALL OStaticSet::rowDeleted(  ) throw(SQLException, RuntimeException)
     return m_bDeleted;
 }
 
-void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     OCacheSet::insertRow( _rInsertRow,_xTable);
     if(m_bInserted)

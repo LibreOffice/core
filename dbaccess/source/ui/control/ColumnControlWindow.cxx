@@ -78,7 +78,7 @@ void OColumnControlWindow::CellModified(long /*nRow*/, sal_uInt16 /*nColId*/ )
     saveCurrentFieldDescData();
 }
 
-::com::sun::star::lang::Locale  OColumnControlWindow::GetLocale() const
+css::lang::Locale  OColumnControlWindow::GetLocale() const
 {
     return m_aLocale;
 }

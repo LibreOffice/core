@@ -122,7 +122,7 @@ Any SAL_CALL OColumnControlModel::queryInterface( const Type& _rType ) throw (Ru
     return OColumnControlModel_BASE::queryInterface( _rType );
 }
 
-// com::sun::star::XAggregation
+// css::XAggregation
 Any SAL_CALL OColumnControlModel::queryAggregation( const Type& rType ) throw(RuntimeException, std::exception)
 {
     Any aRet(OColumnControlModel_BASE::queryAggregation(rType));
@@ -136,12 +136,12 @@ OUString SAL_CALL OColumnControlModel::getServiceName() throw ( RuntimeException
     return OUString();
 }
 
-void OColumnControlModel::write(const Reference<XObjectOutputStream>& /*_rxOutStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException, std::exception)
+void OColumnControlModel::write(const Reference<XObjectOutputStream>& /*_rxOutStream*/) throw ( css::io::IOException, RuntimeException, std::exception)
 {
     // TODO
 }
 
-void OColumnControlModel::read(const Reference<XObjectInputStream>& /*_rxInStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException, std::exception)
+void OColumnControlModel::read(const Reference<XObjectInputStream>& /*_rxInStream*/) throw ( css::io::IOException, RuntimeException, std::exception)
 {
     // TODO
 }

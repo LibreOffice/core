@@ -41,8 +41,8 @@ namespace dbmm
             if one is specified in the document's media descriptor.
         */
         InteractionHandler(
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+                 const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+                 const css::uno::Reference< css::frame::XModel >& _rxDocument );
 
         /** destructor
         */
@@ -66,7 +66,7 @@ namespace dbmm
             to the user
         */
         void    reportError(
-                    const ::com::sun::star::uno::Any& _rError
+                    const css::uno::Any& _rError
                 );
 
     private:

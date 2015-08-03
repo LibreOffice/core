@@ -43,7 +43,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
                 ,const uno::Reference< XAttributeList > & _xAttrList
-                ,const uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
+                ,const uno::Reference< css::container::XNameAccess >& _xParentContainer
                 ,const OUString& _sServiceName
                 )
     :SvXMLImportContext( _rImport, nPrfx, _sLocalName )

@@ -63,7 +63,7 @@ OPreparedStatement::~OPreparedStatement()
 
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > OPreparedStatement::getTypes() throw (RuntimeException, std::exception)
 {
     OTypeCollection aTypes(cppu::UnoType<XServiceInfo>::get(),
@@ -81,7 +81,7 @@ Sequence< sal_Int8 > OPreparedStatement::getImplementationId() throw (RuntimeExc
     return css::uno::Sequence<sal_Int8>();
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 Any OPreparedStatement::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = OStatementBase::queryInterface( rType );
@@ -138,8 +138,8 @@ void OPreparedStatement::disposing()
     OStatementBase::disposing();
 }
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getColumns() throw( RuntimeException, std::exception )
+// css::sdbcx::XColumnsSupplier
+Reference< css::container::XNameAccess > OPreparedStatement::getColumns() throw( RuntimeException, std::exception )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -314,7 +314,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
     m_xAggregateAsParameters->setBytes(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -322,7 +322,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const ::com
     m_xAggregateAsParameters->setDate(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -330,7 +330,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const ::com
     m_xAggregateAsParameters->setTime(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -338,7 +338,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
     m_xAggregateAsParameters->setTimestamp(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -346,7 +346,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     m_xAggregateAsParameters->setBinaryStream(parameterIndex, x, length);
 }
 
-void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);

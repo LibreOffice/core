@@ -127,9 +127,9 @@ protected:
 
 protected:
     // XFlushListener
-    virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flushed( const css::lang::EventObject& rEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
@@ -308,7 +308,7 @@ protected:
 public:
     explicit OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
 
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     Reference<XConnection> getConnection(   const OUString& url,
                                             const OUString& user,
                                             const OUString& password,
@@ -326,7 +326,7 @@ OSharedConnectionManager::~OSharedConnectionManager()
 {
 }
 
-void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception)
+void SAL_CALL OSharedConnectionManager::disposing( const css::lang::EventObject& Source ) throw(RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
@@ -517,7 +517,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
         rModelImpl.m_pImpl->m_sName = _rNewName;
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException, std::exception)
 {
     OTypeCollection aPropertyHelperTypes(   cppu::UnoType<XFastPropertySet>::get(),
@@ -535,7 +535,7 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeExcept
     return css::uno::Sequence<sal_Int8>();
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aIface = ODatabaseSource_Base::queryInterface( rType );
@@ -554,7 +554,7 @@ void ODatabaseSource::release() throw ()
     ODatabaseSource_Base::release();
 }
 
-void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception)
+void SAL_CALL ODatabaseSource::disposing( const css::lang::EventObject& Source ) throw(RuntimeException, std::exception)
 {
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
@@ -1211,7 +1211,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     if ( !xContainer.is() )
     {
         Any aValue;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
+        css::uno::Reference< css::uno::XInterface > xMy(*this);
         if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitions",aValue) )
         {
             OUString sSupportService;
@@ -1308,12 +1308,12 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     m_pImpl->setModified( bWasModified );
 }
 
-void SAL_CALL ODatabaseSource::addFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODatabaseSource::addFlushListener( const Reference< css::util::XFlushListener >& _xListener ) throw (RuntimeException, std::exception)
 {
     m_aFlushListeners.addInterface(_xListener);
 }
 
-void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< css::util::XFlushListener >& _xListener ) throw (RuntimeException, std::exception)
 {
     m_aFlushListeners.removeInterface(_xListener);
 }

@@ -83,7 +83,7 @@ void SAL_CALL OQueryComposer::disposing()
     ::comphelper::disposeComponent(m_xComposer);
 }
 
-// ::com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > SAL_CALL OQueryComposer::getTypes() throw (RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(OSubComponent::getTypes(),OQueryComposer_BASE::getTypes());

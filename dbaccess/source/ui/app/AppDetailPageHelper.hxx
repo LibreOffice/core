@@ -78,7 +78,7 @@ namespace dbaui
     class OAppDetailPageHelper : public vcl::Window
     {
         VclPtr<DBTreeListBox>     m_pLists[ELEMENT_COUNT];
-        OAppBorderWindow&   m_rBorderWin;
+        OAppBorderWindow&         m_rBorderWin;
         VclPtr<FixedLine>         m_aFL;
         VclPtr<ToolBox>           m_aTBPreview;
         VclPtr<Window>            m_aBorder;
@@ -87,13 +87,13 @@ namespace dbaui
                                   m_aDocumentInfo;
         VclPtr<vcl::Window>       m_pTablePreview;
         ::std::unique_ptr<PopupMenu> m_aMenu;
-        PreviewMode         m_ePreviewMode;
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
-                            m_xFrame;
-        ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist >
-                            m_xDocInfo;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
-                            m_xWindow;
+        PreviewMode               m_ePreviewMode;
+        css::uno::Reference < css::frame::XFrame2 >
+                                  m_xFrame;
+        css::uno::Reference < css::io::XPersist >
+                                  m_xDocInfo;
+        css::uno::Reference< css::awt::XWindow >
+                                  m_xWindow;
 
         /// returns the index of the visible control
         int getVisibleControlIndex() const;
@@ -120,7 +120,7 @@ namespace dbaui
             @param  _pParent
                 The parent of the entries to be inserted.
         */
-        void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
+        void fillNames( const css::uno::Reference< css::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
                         const sal_uInt16 _nImageId,
                         SvTreeListEntry* _pParent );
@@ -179,7 +179,7 @@ namespace dbaui
             @param  _xConnection
                 The connection to get the table names
         */
-        void createTablesPage(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        void createTablesPage(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
         /** creates the page for the specific type.
             @param  _eType
@@ -187,7 +187,7 @@ namespace dbaui
             @param  _xContainer
                 The container of the elements to be inserted.
         */
-        void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
+        void createPage(ElementType _eType,const css::uno::Reference< css::container::XNameAccess >& _xContainer);
 
         /** returns the current visible tree list box
         */
@@ -219,21 +219,21 @@ namespace dbaui
         */
         void    describeCurrentSelectionForControl(
                     const Control& _rControl,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                    css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
         /** describes the current selection for the given ElementType
         */
         void    describeCurrentSelectionForType(
                     const ElementType _eType,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                    css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
         * \param _aNames the element names
         */
-        void selectElements(const ::com::sun::star::uno::Sequence< OUString>& _aNames);
+        void selectElements(const css::uno::Sequence< OUString>& _aNames);
 
         /** return the qualified name.
             @param  _pEntry
@@ -287,7 +287,7 @@ namespace dbaui
         */
         SvTreeListEntry*  elementAdded(ElementType eType
                         ,const OUString& _rName
-                        ,const ::com::sun::star::uno::Any& _rObject );
+                        ,const css::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
             @param  _eType
@@ -332,7 +332,7 @@ namespace dbaui
             @param  _xContent
                 The content which must support the "preview" command.
         */
-        void showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xContent);
+        void showPreview(const css::uno::Reference< css::ucb::XContent >& _xContent);
 
         /** shows the Preview of a table or query
             @param  _sDataSourceName

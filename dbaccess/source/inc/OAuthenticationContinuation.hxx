@@ -33,7 +33,7 @@ namespace dbaccess
 {
 
 class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
-    public comphelper::OInteraction< com::sun::star::ucb::XInteractionSupplyAuthentication >
+    public comphelper::OInteraction< css::ucb::XInteractionSupplyAuthentication >
 {
     bool    m_bRemberPassword : 1;      // remember the password for this session ?
 
@@ -44,18 +44,18 @@ class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
 public:
     OAuthenticationContinuation();
 
-    sal_Bool SAL_CALL canSetRealm(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRealm( const OUString& Realm ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL canSetUserName(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setUserName( const OUString& UserName ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL canSetPassword(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setPassword( const OUString& Password ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    com::sun::star::uno::Sequence< com::sun::star::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( com::sun::star::ucb::RememberAuthentication& Default ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRememberPassword( com::sun::star::ucb::RememberAuthentication Remember ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL canSetAccount(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setAccount( const OUString& Account ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    com::sun::star::uno::Sequence< com::sun::star::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( com::sun::star::ucb::RememberAuthentication& Default ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setRememberAccount( com::sun::star::ucb::RememberAuthentication Remember ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL canSetRealm(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setRealm( const OUString& Realm ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL canSetUserName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setUserName( const OUString& UserName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL canSetPassword(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setPassword( const OUString& Password ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setRememberPassword( css::ucb::RememberAuthentication Remember ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL canSetAccount(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setAccount( const OUString& Account ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( css::ucb::RememberAuthentication& Default ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setRememberAccount( css::ucb::RememberAuthentication Remember ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }
     OUString getUser() const             { return m_sUser; }

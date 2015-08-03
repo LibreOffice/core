@@ -699,7 +699,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
     lcl_putProperty(_rxDest,PROPERTY_INFO, makeAny(aInfo));
 }
 
-void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rSource, Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo)
+void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rSource, Sequence< css::beans::PropertyValue >& _rInfo)
 {
     // within the current "Info" sequence, replace the ones we can examine from the item set
     // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to

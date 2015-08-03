@@ -49,20 +49,20 @@ namespace dbaccess
         virtual void makeNewStatement( ) SAL_OVERRIDE;
         virtual ~OptimisticSet();
     public:
-        OptimisticSet(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rContext,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_xConnection,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
+        OptimisticSet(const css::uno::Reference< css::uno::XComponentContext>& _rContext,
+                      const css::uno::Reference< css::sdbc::XConnection>& i_xConnection,
+                      const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                       const ORowSetValueVector& _aParameterValueForCache,
                       sal_Int32 i_nMaxRows,
                       sal_Int32& o_nRowCount);
 
         // late ctor which can throw exceptions
-        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) SAL_OVERRIDE;
+        virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) SAL_OVERRIDE;
 
-        // ::com::sun::star::sdbc::XResultSetUpdate
-        virtual void SAL_CALL updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable   ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable   ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-        virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::sdbc::XResultSetUpdate
+        virtual void SAL_CALL updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable   ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL deleteRow(const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable   ) throw(css::sdbc::SQLException, css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // CacheSet
         virtual bool isResultSetChanged() const SAL_OVERRIDE;

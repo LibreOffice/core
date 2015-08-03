@@ -40,7 +40,7 @@ namespace dbaui
     public:
         OJoinDesignView(vcl::Window* pParent,
                         OJoinController& _rController,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+                        const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~OJoinDesignView();
         virtual void dispose() SAL_OVERRIDE;
 

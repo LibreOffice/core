@@ -31,19 +31,19 @@ namespace dbaui
     */
     class OPropertySetItem : public SfxPoolItem
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSet;
+        css::uno::Reference< css::beans::XPropertySet >   m_xSet;
 
     public:
         TYPEINFO_OVERRIDE();
         OPropertySetItem(sal_Int16 nWhich);
         OPropertySetItem(sal_Int16 nWhich,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet);
+            const css::uno::Reference< css::beans::XPropertySet >& _rxSet);
         OPropertySetItem(const OPropertySetItem& _rSource);
 
         virtual bool             operator==(const SfxPoolItem& _rItem) const SAL_OVERRIDE;
         virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const SAL_OVERRIDE;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                 getPropertySet() const { return m_xSet; }
     };
 

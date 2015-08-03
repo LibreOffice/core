@@ -51,18 +51,18 @@ class ODbDataSourceAdministrationHelper;
 
         OTableSubscriptionDialog(vcl::Window* pParent
             ,SfxItemSet* _pItems
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
-            ,const ::com::sun::star::uno::Any& _aDataSourceName
+            ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            ,const css::uno::Any& _aDataSourceName
         );
         virtual ~OTableSubscriptionDialog();
         virtual void dispose() SAL_OVERRIDE;
 
         // forwards from ODbDataSourceAdministrationHelper
         void        successfullyConnected();
-        bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
+        bool        getCurrentSettings(css::uno::Sequence< css::beans::PropertyValue >& _rDriverParams);
         void        clearPassword();
         OUString    getConnectionURL() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
+        css::uno::Reference< css::beans::XPropertySet >   getCurrentDataSource();
         inline void endExecution() { m_bStopExecution = true; }
 
         virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;

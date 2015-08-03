@@ -110,10 +110,10 @@ public:
         return OUString("org.openoffice.comp.dbflt.DBTypeDetection");
     }
     static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    static css::uno::Reference< css::uno::XInterface >
+            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContext)
@@ -121,7 +121,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContex
 {
 }
 
-OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -247,13 +247,13 @@ public:
         return OUString("org.openoffice.comp.dbflt.DBContentLoader2");
     }
     static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    static css::uno::Reference< css::uno::XInterface >
+            SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                const Reference< XLoadEventListener > & _rListener) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL cancel() throw(std::exception) SAL_OVERRIDE;
 
 private:
@@ -375,7 +375,7 @@ bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxMod
 
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException, std::exception)
+        const Reference< XLoadEventListener > & rListener) throw(css::uno::RuntimeException, std::exception)
 {
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
@@ -461,7 +461,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             }
 
             // initially select the "Tables" category (will be done below)
-            nInitialSelection = ::com::sun::star::sdb::application::DatabaseObjectContainer::TABLES;
+            nInitialSelection = css::sdb::application::DatabaseObjectContainer::TABLES;
         }
     }
 

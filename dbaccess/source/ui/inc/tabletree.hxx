@@ -38,11 +38,11 @@ namespace dbaui
 class OTableTreeListBox : public OMarkableTreeListBox
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+    css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     boost::scoped_ptr< ImageProvider >
                     m_xImageProvider;   // provider for our images
-    bool        m_bVirtualRoot;     // should the first entry be visible
+    bool            m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
@@ -74,11 +74,11 @@ public:
         @param _rxConnection
             the connection, which must support the service com.sun.star.sdb.Connection
         @throws
-            <type scope="com::sun::star::sdbc">SQLException</type> if no connection could be created
+            <type scope="css::sdbc">SQLException</type> if no connection could be created
     */
     void    UpdateTableList(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
-            )   throw(::com::sun::star::sdbc::SQLException, std::exception);
+                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            )   throw(css::sdbc::SQLException, std::exception);
 
     /** fill the table list with the tables and views determined by the two given containers.
         The views sequence is used to determine which table is of type view.
@@ -88,14 +88,14 @@ public:
         @param      _rViews         view sequence
     */
     void    UpdateTableList(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                const ::com::sun::star::uno::Sequence< OUString>& _rTables,
-                const ::com::sun::star::uno::Sequence< OUString>& _rViews
+                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                const css::uno::Sequence< OUString>& _rTables,
+                const css::uno::Sequence< OUString>& _rViews
             );
 
     /** returns a NamedDatabaseObject record which describes the given entry
     */
-    ::com::sun::star::sdb::application::NamedDatabaseObject
+    css::sdb::application::NamedDatabaseObject
             describeObject( SvTreeListEntry* _pEntry );
 
     /** to be used if a foreign instance added a table
@@ -141,16 +141,16 @@ protected:
             belong.
     */
     SvTreeListEntry* implAddEntry(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMeta,
             const OUString& _rTableName,
             bool _bCheckName = true
         );
 
     void    implSetDefaultImages();
 
-    void    implOnNewConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+    void    implOnNewConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
 
-    bool    impl_getAndAssertMetaData( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
+    bool    impl_getAndAssertMetaData( css::uno::Reference< css::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
 
     bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
@@ -160,7 +160,7 @@ protected:
         @param      _rTables        table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
     */
     void    UpdateTableList(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                 const TNames& _rTables
             );
 

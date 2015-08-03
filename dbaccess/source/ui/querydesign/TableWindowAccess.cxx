@@ -249,7 +249,7 @@ namespace dbaui
             sAccessibleName = m_pTable->getTitle();
         return sAccessibleName;
     }
-    Reference< XAccessibleContext > SAL_CALL OTableWindowAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    Reference< XAccessibleContext > SAL_CALL OTableWindowAccess::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return this;
     }

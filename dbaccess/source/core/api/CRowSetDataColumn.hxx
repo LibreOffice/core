@@ -39,37 +39,36 @@ namespace dbaccess
     {
     protected:
         const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> m_pGetValue;
-        ::com::sun::star::uno::Any  m_aOldValue;
-
+        css::uno::Any        m_aOldValue;
         OUString             m_sLabel;
         OUString             m_aDescription;     // description
 
         virtual ~ORowSetDataColumn();
     public:
-        ORowSetDataColumn(const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
-                          const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
-                          const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
+        ORowSetDataColumn(const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
+                          const css::uno::Reference < css::sdbc::XRow >& _xRow,
+                          const css::uno::Reference < css::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
+                          const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const OUString& _rDescription,
                           const OUString& i_sLabel,
                           const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
 
 
-        // com::sun::star::lang::XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::lang::XTypeProvider
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue,
-                                                            ::com::sun::star::uno::Any & rOldValue,
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue,
+                                                            css::uno::Any & rOldValue,
                                                             sal_Int32 nHandle,
-                                                            const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                                                            const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue )throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue) SAL_OVERRIDE;
     protected:
@@ -82,7 +81,7 @@ namespace dbaccess
         ::rtl::Reference< ::connectivity::OSQLColumns> m_aColumns;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void impl_refresh() throw(css::uno::RuntimeException) SAL_OVERRIDE;
     public:
         ORowSetDataColumns(
                         bool _bCase,

@@ -37,13 +37,13 @@ namespace dbmm
     public:
         MacroMigrationDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >& _rxDocument
+            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< css::sdb::XOfficeDatabaseDocument >& _rxDocument
         );
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                 getComponentContext() const;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >&
+        const css::uno::Reference< css::sdb::XOfficeDatabaseDocument >&
                 getDocument() const;
 
     protected:

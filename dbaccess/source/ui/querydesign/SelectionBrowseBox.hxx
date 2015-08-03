@@ -179,7 +179,7 @@ namespace dbaui
         @param nRow  The row index of the cell.
         @param nColumnId  The column ID of the cell.
         @return  The XAccessible interface of the specified cell. */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
 
     protected:
         virtual bool                SeekRow( long nRow ) SAL_OVERRIDE;
@@ -272,12 +272,12 @@ namespace dbaui
                 <TRUE/> if an error occurred otherwise <FALSE/>
         */
         bool            fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                                        const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                                         OTableFieldDescRef& _pEntry,
                                         bool& _bListAction);
         bool            fillColumnRef(  const OUString& _sColumnName,
                                         const OUString& _sTableRange,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
+                                        const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
                                         OTableFieldDescRef& _pEntry,
                                         bool& _bListAction);
 

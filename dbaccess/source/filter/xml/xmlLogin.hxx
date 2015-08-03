@@ -31,7 +31,7 @@ namespace dbaxml
 
         OXMLLogin( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
         virtual ~OXMLLogin();
 
     };

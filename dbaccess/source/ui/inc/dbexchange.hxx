@@ -52,34 +52,34 @@ namespace dbaui
             const OUString&  _rDatasource,
             const sal_Int32         _nCommandType,
             const OUString&  _rCommand,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         ODataClipboard(
             const OUString&  _rDatasource,
             const sal_Int32         _nCommandType,
             const OUString&  _rCommand,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
         ODataClipboard(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_rAliveForm,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelectedRows,
+            const css::uno::Reference< css::beans::XPropertySet >& i_rAliveForm,
+            const css::uno::Sequence< css::uno::Any >& i_rSelectedRows,
             const bool i_bBookmarkSelection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rORB
+            const css::uno::Reference< css::uno::XComponentContext >& i_rORB
         );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
         virtual void        ObjectReleased() SAL_OVERRIDE;
-        virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+        virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
     };
 }
 

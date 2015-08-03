@@ -38,14 +38,14 @@
 namespace dbaccess
 {
 
-    typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XColumnsSupplier > OComponentDefinition_BASE;
+    typedef ::cppu::ImplHelper1< css::sdbcx::XColumnsSupplier > OComponentDefinition_BASE;
 
     class OComponentDefinition_Impl : public OContentHelper_Impl
                                      ,public ODataSettings_Base
     {
     public:
         typedef ::std::map  <   OUString
-                            ,   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                            ,   css::uno::Reference< css::beans::XPropertySet >
                             >   Columns;
     typedef Columns::iterator           iterator;
     typedef Columns::const_iterator     const_iterator;
@@ -70,7 +70,7 @@ namespace dbaccess
 
         inline void erase( const OUString& _rName ) { m_aColumns.erase( _rName ); }
 
-        inline void insert( const OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
+        inline void insert( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
         {
             OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element with this name!" );
             m_aColumns.insert( Columns::value_type( _rName, _rxColumn ) );
@@ -96,8 +96,8 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 protected:
-    OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+    OComponentDefinition(const css::uno::Reference< css::uno::XComponentContext >&
+        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,bool _bTable = true);
 
@@ -106,9 +106,9 @@ protected:
 public:
 
     OComponentDefinition(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
+             const css::uno::Reference< css::uno::XInterface >& _rxContainer
             ,const OUString& _rElementName
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+            ,const css::uno::Reference< css::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
             ,bool _bTable = true
         );
@@ -118,34 +118,34 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::uno::XInterface
+// css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-    // ::com::sun::star::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static() throw( ::com::sun::star::uno::RuntimeException );
-    static OUString getImplementationName_static() throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
+    static OUString getImplementationName_static() throw( css::uno::RuntimeException );
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     // XInitialization
-    virtual void SAL_CALL initialize( com::sun::star::uno::Sequence< com::sun::star::uno::Any > const & rArguments) throw (com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( css::uno::Sequence< css::uno::Any > const & rArguments) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XColumnsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // IColumnFactory
     virtual OColumn*    createColumn(const OUString& _rName) const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor() SAL_OVERRIDE;
-    virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() SAL_OVERRIDE;
+    virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) SAL_OVERRIDE;
     virtual void columnDropped(const OUString& _sName) SAL_OVERRIDE;
     virtual void notifyDataSourceModified() SAL_OVERRIDE { OContentHelper::notifyDataSourceModified(); }
 
@@ -155,7 +155,7 @@ protected:
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                                    const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // OContentHelper overridables
     virtual OUString determineContentType() const SAL_OVERRIDE;

@@ -48,9 +48,9 @@ protected:
     VclPtr<PushButton>          m_pDELETEUSER;
     VclPtr<OTableGrantControl>  m_TableCtrl; // show the grant rights of one user
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
-    ::com::sun::star::uno::Sequence< OUString>                               m_aUserNames;
+    css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
+    css::uno::Reference< css::container::XNameAccess >    m_xUsers;
+    css::uno::Sequence< OUString>                         m_aUserNames;
 
     OUString            m_UserName;
 

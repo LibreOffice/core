@@ -36,22 +36,22 @@ namespace dbaccess
 
     struct DocumentEventExecutor_Data;
     // DocumentEventExecutor
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::document::XDocumentEventListener
+    typedef ::cppu::WeakImplHelper1 <   css::document::XDocumentEventListener
                                     >   DocumentEventExecutor_Base;
     class DocumentEventExecutor : public DocumentEventExecutor_Base
     {
     public:
         DocumentEventExecutor(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventsSupplier >& _rxDocument );
+            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< css::document::XEventsSupplier >& _rxDocument );
 
     protected:
         virtual ~DocumentEventExecutor();
 
         // css.document.XDocumentEventListener
-        virtual void SAL_CALL documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         ::std::unique_ptr< DocumentEventExecutor_Data >   m_pData;

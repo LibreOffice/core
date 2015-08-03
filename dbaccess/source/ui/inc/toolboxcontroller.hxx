@@ -31,7 +31,7 @@
 class PopupMenu;
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo> TToolboxController_BASE;
+    typedef ::cppu::ImplHelper1 <   css::lang::XServiceInfo> TToolboxController_BASE;
 
     class OToolboxController : public ::svt::ToolboxController
                               ,public TToolboxController_BASE
@@ -43,21 +43,21 @@ namespace dbaui
 
         ::std::unique_ptr<PopupMenu> getMenu();
     public:
-        OToolboxController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        OToolboxController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
         virtual void SAL_CALL release() throw () SAL_OVERRIDE;
         // XServiceInfo
         DECLARE_SERVICE_INFO_STATIC();
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         // XToolbarController
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 } // dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TOOLBOXCONTROLLER_HXX

@@ -29,10 +29,10 @@ namespace dbaui
     // OColumnControlWindow
     class OColumnControlWindow : public OFieldDescControl
     {
-        ::com::sun::star::lang::Locale      m_aLocale;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        css::lang::Locale      m_aLocale;
+        css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
+        mutable css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
         OTypeInfoMap                m_aDestTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
@@ -45,8 +45,8 @@ namespace dbaui
         virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
         virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
+        virtual css::lang::Locale  GetLocale() const SAL_OVERRIDE;
+        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
         virtual bool                isAutoIncrementValueEnabled() const SAL_OVERRIDE;
         virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
@@ -54,12 +54,12 @@ namespace dbaui
 
     public:
         OColumnControlWindow(vcl::Window* pParent
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
+                            ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
-        void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xCon);
+        void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() SAL_OVERRIDE;
         virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
         TOTypeInfoSP getDefaultTyp() const;
     };

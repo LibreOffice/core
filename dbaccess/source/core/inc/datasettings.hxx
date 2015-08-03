@@ -38,17 +38,17 @@ class ODataSettings_Base
 {
 public:
 // <properties>
-    OUString                             m_sFilter;
-    OUString                             m_sHavingClause;
-    OUString                             m_sGroupBy;
-    OUString                             m_sOrder;
-    bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
-    ::com::sun::star::awt::FontDescriptor       m_aFont;
-    ::com::sun::star::uno::Any                  m_aRowHeight;
-    ::com::sun::star::uno::Any                  m_aTextColor;
-    ::com::sun::star::uno::Any                  m_aTextLineColor;
-    sal_Int16                                   m_nFontEmphasis;
-    sal_Int16                                   m_nFontRelief;
+    OUString                       m_sFilter;
+    OUString                       m_sHavingClause;
+    OUString                       m_sGroupBy;
+    OUString                       m_sOrder;
+    bool                           m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
+    css::awt::FontDescriptor       m_aFont;
+    css::uno::Any                  m_aRowHeight;
+    css::uno::Any                  m_aTextColor;
+    css::uno::Any                  m_aTextLineColor;
+    sal_Int16                      m_nFontEmphasis;
+    sal_Int16                      m_nFontRelief;
 // </properties>
 
 protected:
@@ -66,7 +66,7 @@ class ODataSettings : public ::comphelper::OPropertyStateContainer
     bool m_bQuery;
 protected:
     ODataSettings(::cppu::OBroadcastHelper& _rBHelper,bool _bQuery = false);
-    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const SAL_OVERRIDE;
+    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const SAL_OVERRIDE;
 
     /** register the properties from the param given. The parameter instance must be alive as long as tis object live.
         @param  _pItem

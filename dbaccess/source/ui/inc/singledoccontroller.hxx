@@ -35,12 +35,12 @@ namespace dbaui
     // OSingleDocumentController
     struct OSingleDocumentController_Data;
     typedef ::cppu::ImplInheritanceHelper<   DBSubComponentController
-                                         ,   ::com::sun::star::document::XUndoManagerSupplier
+                                         ,   css::document::XUndoManagerSupplier
                                          >   OSingleDocumentController_Base;
     class OSingleDocumentController : public OSingleDocumentController_Base
     {
     protected:
-        OSingleDocumentController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxORB );
+        OSingleDocumentController( const css::uno::Reference< css::uno::XComponentContext>& _rxORB );
         virtual ~OSingleDocumentController();
 
         // OComponentHelper
@@ -61,13 +61,13 @@ namespace dbaui
 
         // OGenericUnoController
         virtual FeatureState    GetState( sal_uInt16 nId ) const SAL_OVERRIDE;
-        virtual void            Execute( sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs ) SAL_OVERRIDE;
+        virtual void            Execute( sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs ) SAL_OVERRIDE;
 
         // XUndoManagerSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;

@@ -231,7 +231,7 @@ void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColu
     reFill(_rVector);
 }
 
-void ORowSetDataColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
+void ORowSetDataColumns::impl_refresh() throw(css::uno::RuntimeException)
 {
 }
 

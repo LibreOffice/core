@@ -239,8 +239,8 @@ css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
     return s;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    SAL_CALL ODBFilter::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+css::uno::Reference< css::uno::XInterface >
+    SAL_CALL ODBFilter::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
 {
     return static_cast< XServiceInfo* >(new ODBFilter( comphelper::getComponentContext(_rxORB)));
 }
@@ -248,7 +248,7 @@ css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException, std::exception)
 {
-    uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
+    uno::Reference< css::awt::XWindow > xWindow;
     {
         SolarMutexGuard aGuard;
         vcl::Window*     pFocusWindow = Application::GetFocusWindow();
@@ -381,7 +381,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
 SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+                                      const uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 

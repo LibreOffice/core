@@ -90,7 +90,7 @@ public:
     virtual ~AddTableDialogContext() {}
 
     // IAddTableDialogContext
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+    virtual css::uno::Reference< css::sdbc::XConnection >
                     getConnection() const SAL_OVERRIDE;
     virtual bool    allowViews() const SAL_OVERRIDE;
     virtual bool    allowQueries() const SAL_OVERRIDE;

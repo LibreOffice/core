@@ -58,7 +58,7 @@ using namespace comphelper;
 OCollectionView::OCollectionView( vcl::Window * pParent
                                  ,const Reference< XContent>& _xContent
                                  ,const OUString& _sDefaultName
-                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+                                 ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     : ModalDialog( pParent, "CollectionView", "dbaccess/ui/collectionviewdialog.ui")
     , m_xContent(_xContent)
     , m_xContext(_rxContext)
@@ -157,7 +157,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                     aValues[1] <<= aValue;
 
                     InteractionClassification eClass = InteractionClassification_ERROR;
-                    ::com::sun::star::ucb::IOErrorCode eError = IOErrorCode_NOT_EXISTING_PATH;
+                    css::ucb::IOErrorCode eError = IOErrorCode_NOT_EXISTING_PATH;
                     OUString sTemp;
                     InteractiveAugmentedIOException aException(sTemp,Reference<XInterface>(),eClass,eError,aValues);
 

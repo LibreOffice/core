@@ -164,9 +164,9 @@ sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequ
     {
         if ( pArgIter->Name == "DataRowSource" )
         {
-            ::com::sun::star::chart::ChartDataRowSource eRowSource = ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
+            css::chart::ChartDataRowSource eRowSource = css::chart::ChartDataRowSource_COLUMNS;
             pArgIter->Value >>= eRowSource;
-            if ( eRowSource != ::com::sun::star::chart::ChartDataRowSource_COLUMNS )
+            if ( eRowSource != css::chart::ChartDataRowSource_COLUMNS )
                 return sal_False;
         }
         else if ( pArgIter->Name == "CellRangeRepresentation" )
@@ -281,7 +281,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationP
 
 uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const
 {
-    ::std::map< OUString,com::sun::star::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
+    ::std::map< OUString,css::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
     if ( aFind != m_aNumberFormats.end() )
         return aFind->second;
     return uno::makeAny(sal_Int32(0));
@@ -360,12 +360,12 @@ uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()
 }
 
 // ____ XChartData (base of XChartDataArray) ____
-void SAL_CALL DatabaseDataProvider::addChartDataChangeEventListener(const uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException, std::exception)
+void SAL_CALL DatabaseDataProvider::addChartDataChangeEventListener(const uno::Reference< css::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException, std::exception)
 {
     m_xComplexDescriptionAccess->addChartDataChangeEventListener(x);
 }
 
-void SAL_CALL DatabaseDataProvider::removeChartDataChangeEventListener(const uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException, std::exception)
+void SAL_CALL DatabaseDataProvider::removeChartDataChangeEventListener(const uno::Reference< css::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException, std::exception)
 {
     m_xComplexDescriptionAccess->removeChartDataChangeEventListener(x);
 }
@@ -851,7 +851,7 @@ bool DatabaseDataProvider::impl_fillParameters_nothrow( ::osl::ResettableMutexGu
     return true;
 }
 
-// com::sun::star::sdbc::XParameters
+// css::sdbc::XParameters
 void SAL_CALL DatabaseDataProvider::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( SQLException, RuntimeException, std::exception )
 {
     m_aParameterManager.setNull(parameterIndex, sqlType);
@@ -967,7 +967,7 @@ void SAL_CALL DatabaseDataProvider::clearParameters() throw( SQLException, Runti
     m_aParameterManager.clearParameters();
 }
 
-// com::sun::star::sdbc::XRowSet
+// css::sdbc::XRowSet
 void SAL_CALL DatabaseDataProvider::execute() throw( SQLException, RuntimeException, std::exception )
 {
     uno::Sequence< beans::PropertyValue > aEmpty;
@@ -986,7 +986,7 @@ void SAL_CALL DatabaseDataProvider::removeRowSetListener(const uno::Reference<sd
         m_xRowSet->removeRowSetListener(_rListener);
 }
 
-// com::sun::star::sdbc::XResultSet
+// css::sdbc::XResultSet
 sal_Bool SAL_CALL DatabaseDataProvider::next() throw( SQLException, RuntimeException, std::exception )
 {
     return m_xRowSet->next();

@@ -77,7 +77,7 @@ namespace dbaui
         virtual void previewChanged( sal_Int32 _nMode ) = 0;
 
         /// called when an object container of any kind was found during enumerating tree view elements
-        virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) = 0;
+        virtual void containerFound( const css::uno::Reference< css::container::XContainer >& _xContainer) = 0;
 
     protected:
         ~IApplicationController() {}

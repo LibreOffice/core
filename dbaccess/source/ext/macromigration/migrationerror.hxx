@@ -61,9 +61,9 @@ namespace dbmm
     */
     struct MigrationError
     {
-        const MigrationErrorType            eType;
+        const MigrationErrorType     eType;
         ::std::vector< OUString >    aErrorDetails;
-        const ::com::sun::star::uno::Any    aCaughtException;
+        const css::uno::Any          aCaughtException;
 
         explicit MigrationError(
                 const MigrationErrorType _eType )
@@ -73,7 +73,7 @@ namespace dbmm
 
         MigrationError(
                 const MigrationErrorType _eType,
-                const ::com::sun::star::uno::Any& _rCaughtException )
+                const css::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
         {
@@ -90,7 +90,7 @@ namespace dbmm
         MigrationError(
                 const MigrationErrorType _eType,
                 const OUString& _rDetail,
-                const ::com::sun::star::uno::Any& _rCaughtException )
+                const css::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
         {
@@ -110,7 +110,7 @@ namespace dbmm
                 const MigrationErrorType _eType,
                 const OUString& _rDetail1,
                 const OUString& _rDetail2,
-                const ::com::sun::star::uno::Any& _rCaughtException )
+                const css::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
         {
@@ -122,7 +122,7 @@ namespace dbmm
                 const OUString& _rDetail1,
                 const OUString& _rDetail2,
                 const OUString& _rDetail3,
-                const ::com::sun::star::uno::Any& _rCaughtException )
+                const css::uno::Any& _rCaughtException )
             :eType( _eType )
             ,aCaughtException( _rCaughtException )
         {

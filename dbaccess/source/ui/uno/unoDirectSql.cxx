@@ -70,8 +70,8 @@ namespace dbaui
     IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODirectSQLDialog, SERVICE_SDB_DIRECTSQLDIALOG)
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL ODirectSQLDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    css::uno::Reference< css::uno::XInterface >
+        SAL_CALL ODirectSQLDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new ODirectSQLDialog( comphelper::getComponentContext(_rxORB)));
     }

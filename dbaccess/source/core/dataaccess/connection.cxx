@@ -396,7 +396,7 @@ namespace
     }
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > OConnection::getTypes() throw (RuntimeException, std::exception)
 {
     TypeBag aNormalizedTypes;
@@ -422,7 +422,7 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException,
     return css::uno::Sequence<sal_Int8>();
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     if ( !m_bSupportsViews && rType.equals( cppu::UnoType<XViewsSupplier>::get() ) )
@@ -598,8 +598,8 @@ Reference< XNameAccess >  OConnection::getQueries() throw( RuntimeException, std
     return m_xQueries;
 }
 
-// ::com::sun::star::sdb::XCommandPreparation
-Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
+// css::sdb::XCommandPreparation
+Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUString& command, sal_Int32 commandType ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -741,7 +741,7 @@ Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  )
     return m_xConnectionTools->getDataSourceMetaData();
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& keepFieldsAlive ) throw (::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) throw (css::sdbc::SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -750,7 +750,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getF
     return m_xConnectionTools->getFieldsByCommandDescriptor(commandType,command,keepFieldsAlive);
 }
 
-Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();

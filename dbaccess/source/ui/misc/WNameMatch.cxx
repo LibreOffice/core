@@ -184,7 +184,7 @@ bool OWizNameMatching::LeavePage()
                 pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(), bNotConvert);
             }
 
-            sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
+            sal_Int32 nType = css::sdbc::DataType::VARCHAR;
             if ( pTypeInfo.get() )
                 nType = pTypeInfo->nType;
             m_pParent->m_vColumnTypes[nPos] = nType;

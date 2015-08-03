@@ -31,45 +31,45 @@ namespace dbaui
     class OFieldDescription
     {
     private:
-        ::com::sun::star::uno::Any      m_aDefaultValue;    // the default value from the database
-        ::com::sun::star::uno::Any      m_aControlDefault;  // the value which the control inserts as default
-        ::com::sun::star::uno::Any      m_aWidth;               // sal_Int32 or void
-        ::com::sun::star::uno::Any      m_aRelativePosition;    // sal_Int32 or void
+        css::uno::Any      m_aDefaultValue;    // the default value from the database
+        css::uno::Any      m_aControlDefault;  // the value which the control inserts as default
+        css::uno::Any      m_aWidth;               // sal_Int32 or void
+        css::uno::Any      m_aRelativePosition;    // sal_Int32 or void
 
-        TOTypeInfoSP    m_pType;
+        TOTypeInfoSP       m_pType;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDest;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDestInfo;
+        css::uno::Reference< css::beans::XPropertySet >       m_xDest;
+        css::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
 
         OUString     m_sName;
         OUString     m_sTypeName;
         OUString     m_sDescription;
         OUString     m_sHelpText;
 
-        OUString     m_sAutoIncrementValue;
+        OUString            m_sAutoIncrementValue;
         sal_Int32           m_nType;    // only used when m_pType is null
         sal_Int32           m_nPrecision;
         sal_Int32           m_nScale;
         sal_Int32           m_nIsNullable;
         sal_Int32           m_nFormatKey;
         SvxCellHorJustify   m_eHorJustify;
-        bool            m_bIsAutoIncrement;
-        bool            m_bIsPrimaryKey;
-        bool            m_bIsCurrency;
-        bool            m_bHidden;
+        bool                m_bIsAutoIncrement;
+        bool                m_bIsPrimaryKey;
+        bool                m_bIsCurrency;
+        bool                m_bHidden;
 
     public:
         OFieldDescription();
         OFieldDescription( const OFieldDescription& rDescr );
-        OFieldDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xAffectedCol
+        OFieldDescription(const css::uno::Reference< css::beans::XPropertySet >& _xAffectedCol
                          ,bool _bUseAsDest = false);
         ~OFieldDescription();
 
         void SetName(const OUString& _rName);
         void SetDescription(const OUString& _rDescription);
         void SetHelpText(const OUString& _sHelptext);
-        void SetDefaultValue(const ::com::sun::star::uno::Any& _rDefaultValue);
-        void SetControlDefault(const ::com::sun::star::uno::Any& _rControlDefault);
+        void SetDefaultValue(const css::uno::Any& _rDefaultValue);
+        void SetControlDefault(const css::uno::Any& _rControlDefault);
         void SetAutoIncrementValue(const OUString& _sAutoIncValue);
         void SetType(TOTypeInfoSP _pType);
         void SetTypeValue(sal_Int32 _nType);
@@ -86,14 +86,14 @@ namespace dbaui
         /** copies the content of the field eescription into the column
             @param  _rxColumn the dest
         */
-        void copyColumnSettingsTo(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn);
+        void copyColumnSettingsTo(const css::uno::Reference< css::beans::XPropertySet >& _rxColumn);
 
         void FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset);
 
         OUString             GetName()               const;
         OUString             GetDescription()        const;
         OUString             GetHelpText()           const;
-        ::com::sun::star::uno::Any  GetControlDefault()     const;
+        css::uno::Any  GetControlDefault()     const;
         OUString             GetAutoIncrementValue() const;
         sal_Int32                   GetType()               const;
         OUString             GetTypeName()           const;

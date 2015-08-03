@@ -39,7 +39,7 @@ namespace dbaui
         */
         virtual void setValid(bool _bValid) = 0;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() = 0;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection() = 0;
 
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables

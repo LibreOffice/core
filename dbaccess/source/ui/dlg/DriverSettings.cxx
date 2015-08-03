@@ -30,7 +30,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::NamedValue;
 
 using namespace dbaui;
-void ODriversSettings::getSupportedIndirectSettings( const OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext, ::std::vector< sal_Int32>& _out_rDetailsIds )
+void ODriversSettings::getSupportedIndirectSettings( const OUString& _sURLPrefix,const css::uno::Reference< css::uno::XComponentContext >& _xContext, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.

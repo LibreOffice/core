@@ -37,21 +37,21 @@ namespace dbaui
         void listen();
     protected:
         // the columns of the table
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable; // can either be a table or a query
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xKeys;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
+        css::uno::Reference< css::beans::XPropertySet >       m_xTable; // can either be a table or a query
+        css::uno::Reference< css::container::XIndexAccess>    m_xKeys;
+        css::uno::Reference< css::container::XNameAccess >    m_xColumns;
 
-        OUString m_aTableName;
-        OUString m_aWinName;
-        OUString m_sComposedName;
+        OUString        m_aTableName;
+        OUString        m_aWinName;
+        OUString        m_sComposedName;
         Point           m_aPosition;
         Size            m_aSize;
-        bool        m_bShowAll;
+        bool            m_bShowAll;
         bool            m_bIsQuery;
         bool            m_bIsValid;
 
     public:
-        explicit OTableWindowData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
+        explicit OTableWindowData(  const css::uno::Reference< css::beans::XPropertySet>& _xTable
                                    ,const OUString& _rComposedName
                                    ,const OUString& strTableName
                                    ,const OUString& rWinName = OUString() );
@@ -63,7 +63,7 @@ namespace dbaui
         * \param _bAllowQueries when true, queries are allowed
         * \return false if the table was unaccessible otherwise true
         */
-        bool init(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection  >& _xConnection
+        bool init(const css::uno::Reference< css::sdbc::XConnection  >& _xConnection
                  ,bool _bAllowQueries);
 
         inline OUString GetComposedName()    const { return m_sComposedName; }
@@ -82,12 +82,12 @@ namespace dbaui
         inline void SetSize( const Size& rSize )                        { m_aSize = rSize; }
         inline void ShowAll( bool bAll )                                { m_bShowAll = bAll; }
 
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> getKeys() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xKeys; }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
+        inline css::uno::Reference< css::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
+        inline css::uno::Reference< css::container::XIndexAccess> getKeys() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xKeys; }
+        inline css::uno::Reference< css::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
 
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
     };
 
     typedef ::std::vector< ::boost::shared_ptr<OTableWindowData> >      TTableWindowData;

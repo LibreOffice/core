@@ -44,11 +44,11 @@ namespace dbaui
         OQueryViewSwitch*   m_pViewSwitch;
         VclPtr<OBeamer>     m_pBeamer;
         VclPtr<Splitter>    m_pSplitter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xBeamer;
+        css::uno::Reference< css::frame::XFrame2 > m_xBeamer;
 
         DECL_LINK( SplitHdl, void* );
     public:
-        OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >&);
         virtual ~OQueryContainerWindow();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -57,11 +57,11 @@ namespace dbaui
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
         // show the beamer
-        void    showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+        void    showPreview(const css::uno::Reference< css::frame::XFrame >& _xFrame);
             // called when the beamer has been disposed
         void    disposingPreview();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
+        css::uno::Reference< css::frame::XFrame2 >
                 getPreviewFrame() const { return m_xBeamer; }
 
         OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }

@@ -84,7 +84,7 @@ const static char sFontSize[]       = "font-size: ";
 
 ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XComponentContext >& _rM,
-                                             const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                                             const Reference< css::util::XNumberFormatter >& _rxNumberF,
                                              const OUString& rExchange)
     :m_bBookmarkSelection( false )
     ,m_xFormatter(_rxNumberF)
@@ -119,7 +119,7 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
-    ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
+    ,m_nCommandType(css::sdb::CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
     ,m_pReader(NULL)
     ,m_pRowMarker(NULL)
@@ -169,7 +169,7 @@ void ODatabaseImportExport::dispose()
     m_xFormatter.clear();
 }
 
-void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(css::uno::RuntimeException, std::exception)
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)
@@ -370,10 +370,10 @@ bool ORTFImportExport::Write()
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
-    bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-    bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-    bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-    bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    bool bBold          = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
+    bool bItalic        = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    bool bUnderline     = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
+    bool bStrikeout     = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -555,10 +555,10 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
-        const bool bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-        const bool bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-        const bool bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-        const bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+        const bool bBold            = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
+        const bool bItalic      = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
+        const bool bUnderline       = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
+        const bool bStrikeout       = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
         m_pStream->WriteChar( '{' );
@@ -638,7 +638,7 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 
 OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
-                                     const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                                     const Reference< css::util::XNumberFormatter >& _rxNumberF,
                                      const OUString& rExchange)
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
@@ -934,7 +934,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + pChar;
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
+    Reference< css::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
     if(pFormatter)
@@ -956,10 +956,10 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
 
     FontOn();
 
-    bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-    bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-    bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-    bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    bool bBold          = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
+    bool bItalic        = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    bool bUnderline     = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
+    bool bStrikeout     = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );

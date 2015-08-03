@@ -130,7 +130,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     m_pOrderCell->SetHelpId(HID_QRYDGN_ROW_ORDER);
     m_pFunctionCell->SetHelpId(HID_QRYDGN_ROW_FUNCTION);
 
-    // switch off triState of ::com::sun::star::form::CheckBox
+    // switch off triState of css::form::CheckBox
     m_pVisibleCell->GetBox().EnableTriState( false );
 
     vcl::Font aTitleFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE,Window::GetSettings().GetLanguageTag().getLanguageType(),GetDefaultFontFlags::OnlyOne);

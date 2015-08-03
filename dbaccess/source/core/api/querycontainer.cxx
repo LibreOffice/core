@@ -230,7 +230,7 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLExcepti
     dropByName(sName);
 }
 
-void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OQueryContainer::elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception)
 {
     Reference< XContent > xNewElement;
     OUString sElementName;
@@ -252,7 +252,7 @@ void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::containe
     insertByName(sElementName,makeAny(xNewElement));
 }
 
-void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OQueryContainer::elementRemoved( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception)
 {
     OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
@@ -265,7 +265,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container
     removeByName(sAccessor);
 }
 
-void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OQueryContainer::elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception)
 {
     Reference< XPropertySet > xReplacedElement;
     Reference< XContent > xNewElement;
@@ -313,7 +313,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const Contain
     return NULL;
 }
 
-void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource ) throw(css::uno::RuntimeException, std::exception)
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
     {   // our "master container" (with the command definitions) is being disposed

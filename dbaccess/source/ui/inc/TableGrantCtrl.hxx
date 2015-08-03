@@ -45,16 +45,16 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     OModuleClient        m_aModuleClient;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>       m_xGrantUser;
-    ::com::sun::star::uno::Sequence< OUString>                               m_aTableNames;
+    css::uno::Reference< css::container::XNameAccess >    m_xUsers;
+    css::uno::Reference< css::container::XNameAccess >    m_xTables;
+    css::uno::Reference< css::uno::XComponentContext>     m_xContext;
+    css::uno::Reference< css::sdbcx::XAuthorizable>       m_xGrantUser;
+    css::uno::Sequence< OUString>                         m_aTableNames;
 
     mutable TTablePrivilegeMap  m_aPrivMap;
-    OUString             m_sUserName;
+    OUString                    m_sUserName;
     VclPtr< ::svt::CheckBoxControl>     m_pCheckCell;
-    VclPtr<Edit>                       m_pEdit;
+    VclPtr<Edit>                        m_pEdit;
     long                        m_nDataPos;
     ImplSVEvent *               m_nDeactivateEvent;
 
@@ -64,10 +64,10 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     void UpdateTables();
     void setUserName(const OUString& _sUserName);
-    void setGrantUser(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>& _xGrantUser);
+    void setGrantUser(const css::uno::Reference< css::sdbcx::XAuthorizable>& _xGrantUser);
 
-    void setTablesSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >& _xTablesSup);
-    void setComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
+    void setTablesSupplier(const css::uno::Reference< css::sdbcx::XTablesSupplier >& _xTablesSup);
+    void setComponentContext(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
     virtual void Init() SAL_OVERRIDE;
 
@@ -76,8 +76,8 @@ public:
         @param nRow  The row index of the cell.
         @param nColumnId  The column ID of the cell.
         @return  The XAccessible interface of the specified cell. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
 
 protected:

@@ -29,9 +29,9 @@ namespace dbaxml
     class ODBFilter;
     class OXMLHierarchyCollection : public SvXMLImportContext
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xParentContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    m_xTable;
+        css::uno::Reference< css::container::XNameAccess > m_xParentContainer;
+        css::uno::Reference< css::container::XNameAccess > m_xContainer;
+        css::uno::Reference< css::beans::XPropertySet >    m_xTable;
         OUString     m_sName;
         OUString     m_sCollectionServiceName;
         OUString     m_sComponentServiceName;
@@ -42,22 +42,22 @@ namespace dbaxml
         OXMLHierarchyCollection( ODBFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sCollectionServiceName
                     ,const OUString& _sComponentServiceName
                     );
         OXMLHierarchyCollection( ODBFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&    _xTable
+                    ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
+                    ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLHierarchyCollection();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     };
 } // namespace dbaxml
 

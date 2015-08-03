@@ -50,7 +50,7 @@ namespace dbaccess
         }
     }
 // ODsnTypeCollection
-ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
+ODsnTypeCollection::ODsnTypeCollection(const css::uno::Reference< css::uno::XComponentContext >& _xContext)
 :m_aDriverConfig(_xContext)
 ,m_xContext(_xContext)
 #if OSL_DEBUG_LEVEL > 0

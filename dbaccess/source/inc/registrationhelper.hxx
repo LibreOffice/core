@@ -21,24 +21,24 @@
 #error "don't include this file directly! use dbu_reghelper.hxx instead!"
 #endif
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
+typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
         (
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& _rServiceManager,
             const OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< OUString > & _rServiceNames,
+            const css::uno::Sequence< OUString > & _rServiceNames,
             rtl_ModuleCount*
         );
 
 class OModuleRegistration
 {
-    static  ::com::sun::star::uno::Sequence< OUString >*
+    static  css::uno::Sequence< OUString >*
         s_pImplementationNames;
-    static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > >*
+    static  css::uno::Sequence< css::uno::Sequence< OUString > >*
         s_pSupportedServices;
-    static  ::com::sun::star::uno::Sequence< sal_Int64 >*
+    static  css::uno::Sequence< sal_Int64 >*
         s_pCreationFunctionPointers;
-    static  ::com::sun::star::uno::Sequence< sal_Int64 >*
+    static  css::uno::Sequence< sal_Int64 >*
         s_pFactoryFunctionPointers;
 
     // no direct instantiation, only static members/methods
@@ -54,7 +54,7 @@ public:
     */
     static void registerComponent(
         const OUString& _rImplementationName,
-        const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
+        const css::uno::Sequence< OUString >& _rServiceNames,
         ::cppu::ComponentInstantiation _pCreateFunction,
         FactoryInstantiation _pFactoryFunction);
 
@@ -69,9 +69,9 @@ public:
         @param      _pImplementationName    the implementation name of the component
         @return                             the XInterface access to a factory for the component
     */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
+    static css::uno::Reference< css::uno::XInterface > getComponentFactory(
         const OUString& _rImplementationName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxServiceManager
         );
 };
 
@@ -81,10 +81,10 @@ class OMultiInstanceAutoRegistration
 public:
     /** assumed that the template argument has the three methods<BR>
         <code>static OUString getImplementationName_Static()</code><BR>
-        <code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
+        <code>static css::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
         and<BR>
-        <code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code><BR>
+        <code>static css::uno::Reference< css::uno::XInterface >
+            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code><BR>
         the instantiation of this object will automatically register the class via <code>OModuleRegistration::registerComponent</code>.
         The factory creation function used is <code>::cppu::createSingleFactory</code>.<BR>
         @see OOneInstanceAutoRegistration
@@ -116,10 +116,10 @@ class OOneInstanceAutoRegistration
 public:
     /** provided that the template argument has three methods<BR>
         <code>static OUString getImplementationName_Static()</code><BR>
-        <code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
+        <code>static css::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
         and<BR>
-        <code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code><BR>
+        <code>static css::uno::Reference< css::uno::XInterface >
+            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code><BR>
         the instantiation of this object will automatically register the class via <code>OModuleRegistration::registerComponent</code>.
         The factory creation function used is <code>::cppu::createSingleFactory</code>.<BR>
         @see OMultiInstanceAutoRegistration

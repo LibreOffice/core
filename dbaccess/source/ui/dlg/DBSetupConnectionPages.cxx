@@ -556,7 +556,7 @@ using namespace ::com::sun::star;
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText());
             }
         }
-        catch(::com::sun::star::uno::Exception&)
+        catch(css::uno::Exception&)
         {
         }
 #endif
@@ -679,7 +679,7 @@ using namespace ::com::sun::star;
                 bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_pETDriverClass->GetText());
             }
         }
-        catch(::com::sun::star::uno::Exception&)
+        catch(css::uno::Exception&)
         {
         }
 #endif

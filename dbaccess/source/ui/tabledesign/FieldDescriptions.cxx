@@ -457,7 +457,7 @@ void OFieldDescription::SetPrimaryKey(bool _bPKey)
 {
     m_bIsPrimaryKey = _bPKey;
     if ( _bPKey )
-        SetIsNullable(::com::sun::star::sdbc::ColumnValue::NO_NULLS);
+        SetIsNullable(css::sdbc::ColumnValue::NO_NULLS);
 }
 
 void OFieldDescription::SetCurrency(bool _bIsCurrency)
@@ -489,7 +489,7 @@ OUString             OFieldDescription::GetHelpText()            const
         return m_sHelpText;
 }
 
-::com::sun::star::uno::Any  OFieldDescription::GetControlDefault()      const
+css::uno::Any  OFieldDescription::GetControlDefault()      const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
         return m_xDest->getPropertyValue(PROPERTY_CONTROLDEFAULT);
@@ -601,9 +601,9 @@ bool                    OFieldDescription::IsAutoIncrement()        const
 bool                    OFieldDescription::IsNullable()             const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISNULLABLE) )
-        return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_ISNULLABLE)) == ::com::sun::star::sdbc::ColumnValue::NULLABLE;
+        return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_ISNULLABLE)) == css::sdbc::ColumnValue::NULLABLE;
     else
-        return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE;
+        return m_nIsNullable == css::sdbc::ColumnValue::NULLABLE;
 }
 
 void OFieldDescription::SetTypeName(const OUString& _sTypeName)

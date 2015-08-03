@@ -83,7 +83,7 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TPositions &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                                 const Reference< css::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  bool _bAutoIncrementEnabled,
@@ -138,7 +138,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 
 ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                                 const Reference< css::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  SvStream& _rInputStream)
@@ -745,7 +745,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     return bError;
 }
 
-void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException& e)
+void ODatabaseExport::showErrorDialog(const css::sdbc::SQLException& e)
 {
     if(!m_bDontAskAgain)
     {

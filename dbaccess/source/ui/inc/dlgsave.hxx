@@ -50,17 +50,17 @@ namespace dbaui
     {
     private:
         OSaveAsDlgImpl* m_pImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     public:
         OSaveAsDlg( vcl::Window * pParent,const sal_Int32& _rType,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
         OSaveAsDlg( vcl::Window* _pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,
                     const OUString& _sLabel,
                     const IObjectNameCheck& _rObjectNameCheck,

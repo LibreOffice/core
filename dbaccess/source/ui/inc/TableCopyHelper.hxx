@@ -177,14 +177,14 @@ namespace dbaui
         */
         void insertTable(
             const OUString& i_rSourceDataSource,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rSourceConnection,
+            const css::uno::Reference< css::sdbc::XConnection>& i_rSourceConnection,
             const OUString& i_rCommand,
             const sal_Int32 i_nCommandType,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& i_rSourceRows,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelection,
+            const css::uno::Reference< css::sdbc::XResultSet >& i_rSourceRows,
+            const css::uno::Sequence< css::uno::Any >& i_rSelection,
             const bool i_bBookmarkSelection,
             const OUString& i_rDestDataSource,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rDestConnection
+            const css::uno::Reference< css::sdbc::XConnection>& i_rDestConnection
         );
 
     };

@@ -65,25 +65,25 @@ namespace dbaui
         ::std::vector<sal_Int32>        m_vColumnTypes; ///< ColumnTypes for faster access
         ::std::vector<sal_Int32>        m_vColumnSize;
         ::std::vector<sal_Int16>        m_vNumberFormat;
-        ::com::sun::star::lang::Locale  m_aLocale;
+        css::lang::Locale               m_aLocale;
 
         TColumns                        m_aDestColumns; ///< container for new created columns
         TColumnVector                   m_vDestVector;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;       ///< dest table
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      ///< container
-        SharedConnection                                                                m_xConnection;  ///< dest conn
+        css::uno::Reference< css::beans::XPropertySet >       m_xTable;       ///< dest table
+        css::uno::Reference< css::container::XNameAccess>     m_xTables;      ///< container
+        SharedConnection                                      m_xConnection;  ///< dest conn
 
-        ::boost::shared_ptr<IUpdateHelper>                                              m_pUpdateHelper;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
-        ::com::sun::star::util::Date                                                    m_aNullDate;
+        ::boost::shared_ptr<IUpdateHelper>                    m_pUpdateHelper;
+        css::uno::Reference< css::sdbc::XResultSet >          m_xResultSet;
+        css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
+        css::uno::Reference< css::uno::XComponentContext>     m_xContext;
+        css::util::Date                                       m_aNullDate;
 
         SvNumberFormatter*  m_pFormatter;
         SvStream&           m_rInputStream;
         /// for saving the selected tablename
-        OUString     m_sDefaultTableName;
+        OUString            m_sDefaultTableName;
 
         OUString            m_sTextToken;   ///< cell content
         OUString            m_sNumToken;    ///< SDNUM value
@@ -115,7 +115,7 @@ namespace dbaui
         void                eraseTokens();
         void                insertValueIntoColumn();
         bool                createRowSet();
-        void                showErrorDialog(const ::com::sun::star::sdbc::SQLException& e);
+        void                showErrorDialog(const css::sdbc::SQLException& e);
         void                ensureFormatter();
 
         /** executeWizard calls a wizard to create/append data
@@ -127,16 +127,16 @@ namespace dbaui
             @return true when an error occurs
         */
         bool                executeWizard( const OUString& _sTableName,
-                                           const ::com::sun::star::uno::Any& _aTextColor,
-                                           const ::com::sun::star::awt::FontDescriptor& _rFont);
+                                           const css::uno::Any& _aTextColor,
+                                           const css::awt::FontDescriptor& _rFont);
 
         virtual ~ODatabaseExport();
 
     public:
         ODatabaseExport(
             const SharedConnection& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
             SvStream& _rInputStream
@@ -146,8 +146,8 @@ namespace dbaui
         ODatabaseExport(
             sal_Int32 nRows,
             const TPositions& _rColumnPositions,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
             bool _bAutoIncrementEnabled,
@@ -163,8 +163,8 @@ namespace dbaui
         void enableCheckOnly() { m_bCheckOnly = true; }
         bool isCheckEnabled() const { return m_bCheckOnly; }
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > createPreparedStatment( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData
-                                                       ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDestTable
+        static css::uno::Reference< css::sdbc::XPreparedStatement > createPreparedStatment( const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData
+                                                       ,const css::uno::Reference< css::beans::XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns);
     };
 }

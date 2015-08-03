@@ -31,20 +31,20 @@ namespace dbaxml
         OUString m_sTable;
         bool        m_bEscapeProcessing;
     protected:
-        virtual void setProperties(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xProp) SAL_OVERRIDE;
+        virtual void setProperties(css::uno::Reference< css::beans::XPropertySet > & _xProp) SAL_OVERRIDE;
     public:
 
         OXMLQuery( ODBFilter& rImport
                     , sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     );
         virtual ~OXMLQuery();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     };
 } // namespace dbaxml
 

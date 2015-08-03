@@ -48,10 +48,10 @@ namespace dbaccess
 // ODocumentDefinition - a database "document" which is simply a link to a real
 //                   document
 
-typedef ::cppu::ImplHelper4 <   ::com::sun::star::embed::XComponentSupplier
-                            ,   ::com::sun::star::sdb::XSubDocument
-                            ,   ::com::sun::star::util::XCloseListener
-                            ,   ::com::sun::star::container::XHierarchicalName
+typedef ::cppu::ImplHelper4 <   css::embed::XComponentSupplier
+                            ,   css::sdb::XSubDocument
+                            ,   css::util::XCloseListener
+                            ,   css::container::XHierarchicalName
                             >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
@@ -60,16 +60,16 @@ class ODocumentDefinition
         ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
         ,public ODocumentDefinition_Base
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>         m_xEmbeddedObject;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >   m_xListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xLastKnownConnection;
+    css::uno::Reference< css::embed::XEmbeddedObject>         m_xEmbeddedObject;
+    css::uno::Reference< css::embed::XStateChangeListener >   m_xListener;
+    css::uno::Reference< css::sdbc::XConnection >             m_xLastKnownConnection;
 
-    OInterceptor*                                                                       m_pInterceptor;
-    bool                                                                            m_bForm; // <TRUE/> if it is a form
-    bool                                                                            m_bOpenInDesign;
-    bool                                                                            m_bInExecute;
-    bool                                                                            m_bRemoveListener;
-    OEmbeddedClientHelper*                                                              m_pClientHelper;
+    OInterceptor*                                             m_pInterceptor;
+    bool                                                      m_bForm; // <TRUE/> if it is a form
+    bool                                                      m_bOpenInDesign;
+    bool                                                      m_bInExecute;
+    bool                                                      m_bRemoveListener;
+    OEmbeddedClientHelper*                                    m_pClientHelper;
 
 protected:
     virtual ~ODocumentDefinition();
@@ -77,16 +77,16 @@ protected:
 public:
 
     ODocumentDefinition(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
+            const css::uno::Reference< css::uno::XInterface >& _rxContainer,
+            const css::uno::Reference< css::uno::XComponentContext >&,
             const TContentPtr& _pImpl,
             bool _bForm
         );
 
     void    initialLoad(
-                const ::com::sun::star::uno::Sequence< sal_Int8 >& i_rClassID,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& i_rConnection
+                const css::uno::Sequence< sal_Int8 >& i_rClassID,
+                const css::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs,
+                const css::uno::Reference< css::sdbc::XConnection >& i_rConnection
             );
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
@@ -94,51 +94,51 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::uno::XInterface
+// css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-// ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertySetHelper
     virtual void SAL_CALL getFastPropertyValue(
-                                ::com::sun::star::uno::Any& o_rValue,
+                                css::uno::Any& o_rValue,
                                 sal_Int32 i_nHandle
                             ) const SAL_OVERRIDE;
 
     // XComponentSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloseable > SAL_CALL getComponent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSubDocument
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL open(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL openDesign(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL store(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL close(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL open(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL openDesign(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL store(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL close(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XHierarchicalName
-    virtual OUString SAL_CALL getHierarchicalName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getHierarchicalName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // XCommandProcessor
-    virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::ucb::Command& aCommand, sal_Int32 CommandId, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw (::com::sun::star::uno::Exception, ::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) throw (css::uno::Exception, css::ucb::CommandAbortedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL rename( const OUString& newName ) throw (css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (css::util::CloseVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** returns the forms/reports container storage, depending on m_bForm. Our own storage
         inside this container storage is the one with the name as indicated by m_pImpl->m_aProps.sPersistentName.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
         getContainerStorage() const;
 
     bool save(bool _bApprove);
@@ -148,12 +148,12 @@ public:
     inline bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     static void fillReportData(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& _rxComponent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActiveConnection
+                    const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
+                    const css::uno::Reference< css::util::XCloseable >& _rxComponent,
+                    const css::uno::Reference< css::sdbc::XConnection >& _rxActiveConnection
                 );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+    const css::uno::Reference< css::sdbc::XConnection >&
         getConnection() const { return m_xLastKnownConnection; }
 
     /** prepares closing the document component
@@ -168,22 +168,22 @@ public:
 
     static OUString GetDocumentServiceFromMediaType(
         const OUString& _rMediaType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
-        ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
+        const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
+        css::uno::Sequence< sal_Int8 >& _rClassId
     );
     static OUString GetDocumentServiceFromMediaType(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
+        const css::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
         const OUString& _rEntityName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
-        ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
+        const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
+        css::uno::Sequence< sal_Int8 >& _rClassId
     );
 
     struct NotifierAccess { friend class NameChangeNotifier; private: NotifierAccess() { } };
     const OUString& getCurrentName() const { return m_pImpl->m_aProps.aTitle; }
     void firePropertyChange(
                   sal_Int32 i_nHandle,
-            const ::com::sun::star::uno::Any& i_rNewValue,
-            const ::com::sun::star::uno::Any& i_rOldValue,
+            const css::uno::Any& i_rNewValue,
+            const css::uno::Any& i_rOldValue,
                   bool i_bVetoable,
             const NotifierAccess&
         );
@@ -201,19 +201,19 @@ private:
         @param  _rxController
             the controller which belongs to the XModel of our (active) embedded object
     */
-    static void impl_initFormEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
+    static void impl_initFormEditView( const css::uno::Reference< css::frame::XController >& _rxController );
 
     /** removes the given frame from the desktop's frame collection
-        @raises ::com::sun::star::uno::RuntimeException
+        @raises css::uno::RuntimeException
     */
     static void impl_removeFrameFromDesktop_throw(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContxt,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+                    const css::uno::Reference< css::uno::XComponentContext >& _rContxt,
+                    const css::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
 
     /** opens the UI for this sub document
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+    css::uno::Reference< css::lang::XComponent >
             impl_openUI_nolck_throw( bool _bForEditing );
 
     /** stores our document, if it's already loaded
@@ -226,7 +226,7 @@ private:
 
     /** returns our component, creates it if necessary
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >
+    css::uno::Reference< css::util::XCloseable >
             impl_getComponent_throw( const bool i_ForceCreate = true );
 
     /** shows or hides our component
@@ -238,7 +238,7 @@ private:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
-    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const SAL_OVERRIDE;
+    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const SAL_OVERRIDE;
 
     // helper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -248,13 +248,13 @@ private:
 
     /** fills the load arguments
     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
         fillLoadArgs(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
             const bool _bSuppressMacros,
             const bool _bReadOnly,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rOpenCommandArguments,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
+            const css::uno::Sequence< css::beans::PropertyValue >& i_rOpenCommandArguments,
+            css::uno::Sequence< css::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
         );
 
     /** splits the given arguments to an "open*" command into arguments for loading the document, and arguments to be
@@ -272,7 +272,7 @@ private:
             the EmbeddedObjectDescriptor to be passed when initializing the embedded object
     */
     static void separateOpenCommandArguments(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    i_rOpenCommandArguments,
+            const css::uno::Sequence< css::beans::PropertyValue >&    i_rOpenCommandArguments,
             ::comphelper::NamedValueCollection&                                                 o_rDocumentLoadArgs,
             ::comphelper::NamedValueCollection&                                                 o_rEmbeddedObjectDescriptor
         );
@@ -282,9 +282,9 @@ private:
             If set, it will be used to create the embedded object.
     */
     void loadEmbeddedObject(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rAdditionalArgs,
+                const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                const css::uno::Sequence< sal_Int8 >& _aClassID,
+                const css::uno::Sequence< css::beans::PropertyValue >& _rAdditionalArgs,
                 const bool _bSuppressMacros,
                 const bool _bReadOnly
             );
@@ -296,8 +296,8 @@ private:
     {
         loadEmbeddedObject(
             NULL,
-            ::com::sun::star::uno::Sequence< sal_Int8 >(),
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >(),
+            css::uno::Sequence< sal_Int8 >(),
+            css::uno::Sequence< css::beans::PropertyValue >(),
             true,
             true
         );
@@ -318,14 +318,14 @@ private:
 
     //- commands
 
-    void onCommandGetDocumentProperties( ::com::sun::star::uno::Any& _rProps );
-    void onCommandInsert( const OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
-    void onCommandPreview( ::com::sun::star::uno::Any& _rImage );
-    ::com::sun::star::uno::Any
+    void onCommandGetDocumentProperties( css::uno::Any& _rProps );
+    void onCommandInsert( const OUString& _sURL, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) throw( css::uno::Exception );
+    void onCommandPreview( css::uno::Any& _rImage );
+    css::uno::Any
         onCommandOpenSomething(
-            const ::com::sun::star::uno::Any& _rArgument,
+            const css::uno::Any& _rArgument,
             const bool _bActivate,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& _rxEnvironment
         );
 private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -343,8 +343,8 @@ public:
 
 private:
             ODocumentDefinition&            m_rDocumentDefinition;
-    const   ::com::sun::star::uno::Any      m_aOldValue;
-    const   ::com::sun::star::uno::Any      m_aNewValue;
+    const   css::uno::Any                   m_aOldValue;
+    const   css::uno::Any                   m_aNewValue;
     ::osl::ResettableMutexGuard&            m_rClearForNotify;
 
     void    impl_fireEvent_throw( const bool i_bVetoable );

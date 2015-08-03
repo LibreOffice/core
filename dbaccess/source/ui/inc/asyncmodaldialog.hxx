@@ -39,7 +39,7 @@ namespace dbaui
                 allow for a callback for the result
         */
         static void executeModalDialogAsync(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XExecutableDialog >& _rxDialog
+            const css::uno::Reference< css::ui::dialogs::XExecutableDialog >& _rxDialog
         );
     };
 

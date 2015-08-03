@@ -42,7 +42,7 @@ namespace dbaui
     class DbaIndexList : public SvTreeListBox
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
+        css::uno::Reference< css::sdbc::XConnection > m_xConnection;
         Link<>      m_aSelectHdl;
         Link<>      m_aEndEditHdl;
         bool    m_bSuspendSelectHdl;
@@ -63,7 +63,7 @@ namespace dbaui
 
         void SelectNoHandlerCall( SvTreeListEntry* pEntry );
 
-        inline void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection)
+        inline void setConnection(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection)
         {
              m_xConnection = _rxConnection;
         }
@@ -82,8 +82,8 @@ namespace dbaui
                             public OToolBoxHelper
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
-        SvtViewOptions          m_aGeometrySettings;
+        css::uno::Reference< css::sdbc::XConnection > m_xConnection;
+        SvtViewOptions                  m_aGeometrySettings;
 
         VclPtr<ToolBox>                 m_pActions;
         VclPtr<DbaIndexList>            m_pIndexList;
@@ -95,19 +95,19 @@ namespace dbaui
         VclPtr<IndexFieldsControl>      m_pFields;
         VclPtr<PushButton>              m_pClose;
 
-        OIndexCollection*       m_pIndexes;
-        SvTreeListEntry*            m_pPreviousSelection;
-        bool                m_bEditAgain;
+        OIndexCollection*               m_pIndexes;
+        SvTreeListEntry*                m_pPreviousSelection;
+        bool                            m_bEditAgain;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                                m_xContext;
+        css::uno::Reference< css::uno::XComponentContext >
+                                        m_xContext;
     public:
         DbaIndexDialog(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Sequence< OUString >& _rFieldNames,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+            const css::uno::Sequence< OUString >& _rFieldNames,
+            const css::uno::Reference< css::container::XNameAccess >& _rxIndexes,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             sal_Int32 _nMaxColumnsInIndex
             );
         virtual ~DbaIndexDialog();

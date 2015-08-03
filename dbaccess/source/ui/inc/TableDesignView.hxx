@@ -62,7 +62,7 @@ namespace dbaui
             NONE
         };
     private:
-        ::com::sun::star::lang::Locale      m_aLocale;
+        css::lang::Locale                   m_aLocale;
         VclPtr<OTableBorderWindow>          m_pWin;
         OTableController&                   m_rController;
         ChildFocusState                     m_eChildFocus;
@@ -75,7 +75,7 @@ namespace dbaui
 
     public:
         OTableDesignView(   vcl::Window* pParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
+                            const css::uno::Reference< css::uno::XComponentContext >&,
                             OTableController& _rController);
         virtual ~OTableDesignView();
         virtual void dispose() SAL_OVERRIDE;
@@ -88,7 +88,7 @@ namespace dbaui
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
         OTableController&       getController() const { return m_rController; }
 
-        ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
+        css::lang::Locale      getLocale() const { return m_aLocale;}
 
         // IClipboardTest
         virtual bool isCutAllowed() SAL_OVERRIDE;

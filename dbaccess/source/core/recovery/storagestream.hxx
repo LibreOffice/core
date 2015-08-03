@@ -35,8 +35,8 @@ namespace dbaccess
     {
     public:
         StorageOutputStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageOutputStream();
@@ -46,15 +46,15 @@ namespace dbaccess
         virtual void close();
 
     protected:
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                                                 getContext() const { return m_rContext; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >&
+        const css::uno::Reference< css::io::XOutputStream >&
                                                 getOutputStream() const { return m_xOutputStream; }
 
     private:
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                                                 m_rContext;
-              ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+              css::uno::Reference< css::io::XOutputStream >
                                                 m_xOutputStream;
     };
 
@@ -65,8 +65,8 @@ namespace dbaccess
     {
     public:
         StorageInputStream(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageInputStream();
@@ -76,15 +76,15 @@ namespace dbaccess
         void close();
 
     protected:
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                                                 getContext() const { return m_rContext; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >&
+        const css::uno::Reference< css::io::XInputStream >&
                                                 getInputStream() const { return m_xInputStream; }
 
     private:
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                                                 m_rContext;
-              ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+              css::uno::Reference< css::io::XInputStream >
                                                 m_xInputStream;
     };
 

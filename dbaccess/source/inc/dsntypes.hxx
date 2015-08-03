@@ -104,7 +104,7 @@ protected:
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
     ::connectivity::DriversConfig m_aDriverConfig;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 #if OSL_DEBUG_LEVEL > 0
     sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
@@ -114,7 +114,7 @@ public:
     class TypeIterator;
     friend class ODsnTypeCollection::TypeIterator;
 
-    ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
+    ODsnTypeCollection(const css::uno::Reference< css::uno::XComponentContext >& _xContext);
     ~ODsnTypeCollection();
 
     /// get the datasource type display name from a DSN string
@@ -167,7 +167,7 @@ public:
 
     /** returns default settings for newly created databases of the given type.
     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
+    css::uno::Sequence< css::beans::PropertyValue>
             getDefaultDBSettings( const OUString& _sURL ) const;
 
     /// get access to the first element of the types collection

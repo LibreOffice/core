@@ -129,7 +129,7 @@ namespace dbaui
 
         const ::std::vector< OUString>&  GetCriteria() const { return m_aCriteria; }
 
-        void Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria );
+        void Load( const css::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria );
         void Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria );
     };
 

@@ -82,7 +82,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         }
         if( rEvt.GetKeyCode().GetCode() == KEY_F2 )
         {
-            ::com::sun::star::util::URL aUrl;
+            css::util::URL aUrl;
             aUrl.Complete = ".uno:DSBEditDoc";
             GetView()->getController().dispatch( aUrl,Sequence< PropertyValue >() );
         }

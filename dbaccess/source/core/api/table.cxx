@@ -178,7 +178,7 @@ void ODBTable::construct()
                     &m_bApplyFilter, cppu::UnoType<bool>::get());
 
     registerProperty(PROPERTY_FONT, PROPERTY_ID_FONT, PropertyAttribute::BOUND,
-                    &m_aFont, cppu::UnoType<com::sun::star::awt::FontDescriptor>::get());
+                    &m_aFont, cppu::UnoType<css::awt::FontDescriptor>::get());
 
     registerMayBeVoidProperty(PROPERTY_ROW_HEIGHT, PROPERTY_ID_ROW_HEIGHT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
                     &m_aRowHeight, cppu::UnoType<sal_Int32>::get());

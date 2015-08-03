@@ -152,9 +152,9 @@ namespace dbaui
         virtual void        DeactivateAggregate( EControlType eType );
         virtual bool        IsReadOnly() { return false; };
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const = 0;
+        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const = 0;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
+        virtual css::lang::Locale               GetLocale() const = 0;
 
         virtual void                            CellModified(long nRow, sal_uInt16 nColId ) = 0;
         virtual void                            SetModified(bool bModified);    // base implementation is empty
@@ -162,8 +162,8 @@ namespace dbaui
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;
         virtual const OTypeInfoMap*             getTypeInfo() const  = 0;
 
-        virtual bool                        isAutoIncrementValueEnabled() const = 0;
-        virtual OUString                 getAutoIncrementValue() const = 0;
+        virtual bool                            isAutoIncrementValueEnabled() const = 0;
+        virtual OUString                        getAutoIncrementValue() const = 0;
 
         OUString                                BoolStringPersistent(const OUString& rUIString) const;
         OUString                                BoolStringUI(const OUString& rPersistentString) const;
@@ -200,8 +200,8 @@ namespace dbaui
         virtual void        LoseFocus() SAL_OVERRIDE;
         virtual void        Resize() SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
+        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;
 
         OUString            getControlDefault( const OFieldDescription* _pFieldDescr, bool _bCheck = true) const;
 

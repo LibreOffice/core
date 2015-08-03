@@ -23,7 +23,7 @@
 
 namespace dbaccess
 {
-    using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
@@ -143,7 +143,7 @@ sal_Int32 SAL_CALL OSharedConnection::getTransactionIsolation(  ) throw(SQLExcep
     return m_xConnection->getTransactionIsolation();
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OSharedConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OSharedConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);

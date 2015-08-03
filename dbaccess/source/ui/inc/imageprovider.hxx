@@ -56,7 +56,7 @@ namespace dbaui
                 denotes the connection to work for. Must not be <NULL/>.
         */
         ImageProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         /** returns the image to be used for a database object with the given name

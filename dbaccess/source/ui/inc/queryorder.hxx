@@ -65,12 +65,12 @@ namespace dbaui
         VclPtr<ListBox>        m_pLB_ORDERVALUE2;
         VclPtr<ListBox>        m_pLB_ORDERFIELD3;
         VclPtr<ListBox>        m_pLB_ORDERVALUE3;
-        OUString        aSTR_NOENTRY;
-        OUString        m_sOrgOrder;
+        OUString               aSTR_NOENTRY;
+        OUString               m_sOrgOrder;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      m_xConnection;
+        css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
+        css::uno::Reference< css::container::XNameAccess>          m_xColumns;
+        css::uno::Reference< css::sdbc::XConnection>               m_xConnection;
 
         VclPtr<ListBox>        m_aColumnList[DOG_ROWS];
         VclPtr<ListBox>        m_aValueList[DOG_ROWS];
@@ -80,9 +80,9 @@ namespace dbaui
 
     public:
         DlgOrderCrit(   vcl::Window * pParent,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);
+                        const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+                        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
+                        const css::uno::Reference< css::container::XNameAccess>& _rxCols);
         virtual ~DlgOrderCrit();
         virtual void dispose() SAL_OVERRIDE;
 

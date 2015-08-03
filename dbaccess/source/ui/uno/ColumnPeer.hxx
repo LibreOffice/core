@@ -29,19 +29,19 @@ namespace dbaui
     class OFieldDescription;
     class OColumnPeer   :   public VCLXWindow
     {
-        OFieldDescription*                                                              m_pActFieldDescr;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xColumn;
+        OFieldDescription*                                    m_pActFieldDescr;
+        css::uno::Reference< css::beans::XPropertySet>        m_xColumn;
     public:
 
         OColumnPeer(vcl::Window* _pParent
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
+                    ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
-        void setColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
-        void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xCon);
+        void setColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn);
+        void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
         void setEditWidth(sal_Int32 _nWidth);
         // VCLXWindow
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }   // namespace dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNPEER_HXX

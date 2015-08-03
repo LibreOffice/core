@@ -39,9 +39,9 @@ namespace dbaccess
 {
 
 // OQuery - an object implementing the sdb.Query service
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                ::com::sun::star::beans::XPropertyChangeListener,
-                                ::com::sun::star::sdbcx::XRename
+typedef ::cppu::ImplHelper3 <   css::sdbcx::XDataDescriptorFactory,
+                                css::beans::XPropertyChangeListener,
+                                css::sdbcx::XRename
                             >   OQuery_Base;
 class OQuery;
 class OColumn;
@@ -60,12 +60,12 @@ public:
 
 protected:
 //  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xCommandDefinition;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xCommandPropInfo;
-    ::rtl::Reference< OContainerMediator >                                              m_pColumnMediator;
-    ::dbtools::WarningsContainer*                                                       m_pWarnings;
-    bool                                                                                m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
+    css::uno::Reference< css::beans::XPropertySet >           m_xCommandDefinition;
+    css::uno::Reference< css::sdbc::XConnection >             m_xConnection;
+    css::uno::Reference< css::beans::XPropertySetInfo >       m_xCommandPropInfo;
+    ::rtl::Reference< OContainerMediator >                    m_pColumnMediator;
+    ::dbtools::WarningsContainer*                             m_pWarnings;
+    bool                                                      m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
     // possible actions on our "aggregate"
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
@@ -92,9 +92,9 @@ protected:
 
 public:
     OQuery(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
+            const css::uno::Reference< css::beans::XPropertySet >& _rxCommandDefinition,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const css::uno::Reference< css::uno::XComponentContext >& _xORB
         );
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
@@ -102,39 +102,39 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::uno::XInterface
+// css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-// ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
 
-// ::com::sun::star::sdbcx::XDataDescriptorFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::sdbcx::XDataDescriptorFactory
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::beans::XPropertyChangeListener
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// ::com::sun::star::lang::XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::lang::XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OPropertySetHelper
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
-                    const ::com::sun::star::uno::Any& rValue )
-            throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+                    const css::uno::Any& rValue )
+            throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
 public:
     // the caller is responsible for the lifetime!
     void                            setWarningsContainer( ::dbtools::WarningsContainer* _pWarnings )   { m_pWarnings = _pWarnings; }
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL rename( const OUString& newName ) throw (css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;

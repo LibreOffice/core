@@ -32,7 +32,7 @@ namespace sdbtools
 {
 
     // DataSourceMetaData
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XDataSourceMetaData
+    typedef ::cppu::WeakImplHelper<   css::sdb::tools::XDataSourceMetaData
                                   >   DataSourceMetaData_Base;
     struct DataSourceMetaData_Impl;
     /** default implementation for XDataSourceMetaData
@@ -49,16 +49,16 @@ namespace sdbtools
                 the component's context
             @param  _rxConnection
                 the connection to work with. Will be held weak. Must not be <NULL/>.
-            @throws ::com::sun::star::lang::NullPointerException
+            @throws css::lang::NullPointerException
                 if _rxConnection is <NULL/>
         */
         DataSourceMetaData(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         // XDataSourceMetaData
-        virtual sal_Bool SAL_CALL supportsQueriesInFrom() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsQueriesInFrom() throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~DataSourceMetaData();

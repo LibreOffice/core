@@ -69,8 +69,8 @@ using namespace ::com::sun::star::awt;
 
 // OHTMLReader
 OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
-                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                        const Reference< css::util::XNumberFormatter >& _rxNumberF,
+                        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
     : HTMLParser(rIn)
@@ -89,8 +89,8 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
 OHTMLReader::OHTMLReader(SvStream& rIn,
                          sal_Int32 nRows,
                          const TPositions &_rColumnPositions,
-                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+                         const Reference< css::util::XNumberFormatter >& _rxNumberF,
+                         const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                          const TColumnVector* pList,
                          const OTypeInfoMap* _pInfoMap,
                          bool _bAutoIncrementEnabled)
@@ -478,16 +478,16 @@ bool OHTMLReader::CreateTable(int nToken)
                 TableFontOn(aFont,nTextColor);
                 break;
             case HTML_BOLD_ON:
-                aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
+                aFont.Weight = css::awt::FontWeight::BOLD;
                 break;
             case HTML_ITALIC_ON:
-                aFont.Slant = ::com::sun::star::awt::FontSlant_ITALIC;
+                aFont.Slant = css::awt::FontSlant_ITALIC;
                 break;
             case HTML_UNDERLINE_ON:
-                aFont.Underline = ::com::sun::star::awt::FontUnderline::SINGLE;
+                aFont.Underline = css::awt::FontUnderline::SINGLE;
                 break;
             case HTML_STRIKE_ON:
-                aFont.Strikeout = ::com::sun::star::awt::FontStrikeout::SINGLE;
+                aFont.Strikeout = css::awt::FontStrikeout::SINGLE;
                 break;
         }
         nToken = GetNextToken();

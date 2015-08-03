@@ -26,7 +26,7 @@
 namespace dbaui
 {
     class OJoinTableView;
-    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessible
+    typedef ::cppu::ImplHelper1< css::accessibility::XAccessible
                                             > OJoinDesignViewAccess_BASE;
     /** the class OJoinDesignViewAccess represents the accessible object for join views
         like the QueryDesign and the RelationDesign
@@ -45,24 +45,24 @@ namespace dbaui
         DECLARE_XTYPEPROVIDER( )
 
         // XServiceInfo - static methods
-        static OUString getImplementationName_Static() throw( com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
 
-        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XAccessible
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XAccessibleContext
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException,css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         OJoinTableView* getTableView() const { return m_pTableView; }
 
         void notifyAccessibleEvent(
                     const sal_Int16 _nEventId,
-                    const ::com::sun::star::uno::Any& _rOldValue,
-                    const ::com::sun::star::uno::Any& _rNewValue
+                    const css::uno::Any& _rOldValue,
+                    const css::uno::Any& _rNewValue
                 )
         {
             NotifyAccessibleEvent(_nEventId,_rOldValue,_rNewValue);

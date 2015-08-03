@@ -31,26 +31,26 @@
 namespace dbaccess
 {
 
-    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,bool _bModified);
+    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject,bool _bModified);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        getDataSource( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDependentObject );
+    css::uno::Reference< css::uno::XInterface >
+        getDataSource( const css::uno::Reference< css::uno::XInterface >& _rxDependentObject );
 
     /** retrieves a to-be-displayed string for a given caught exception;
     */
-    OUString extractExceptionMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext, const ::com::sun::star::uno::Any& _rError );
+    OUString extractExceptionMessage( const css::uno::Reference< css::uno::XComponentContext >& _rContext, const css::uno::Any& _rError );
 
     namespace tools
     {
         namespace stor
         {
             bool    storageIsWritable_nothrow(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                        const css::uno::Reference< css::embed::XStorage >& _rxStorage
                     );
 
             /// commits a given storage if it's not readonly
             bool    commitStorageIfWriteable(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                        const css::uno::Reference< css::embed::XStorage >& _rxStorage
                     );
         }
 

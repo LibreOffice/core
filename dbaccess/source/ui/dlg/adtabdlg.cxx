@@ -80,9 +80,9 @@ private:
     virtual OUString  getSelectedName( OUString& _out_rAliasName ) const SAL_OVERRIDE;
     virtual bool    isLeafSelected() const SAL_OVERRIDE;
     // OContainerListener
-    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 TableListFacade::~TableListFacade()
@@ -133,17 +133,17 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
     return aComposedName;
 }
 
-void TableListFacade::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException, std::exception)
+void TableListFacade::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(css::uno::RuntimeException, std::exception)
 {
     updateTableObjectList(m_bAllowViews);
 }
 
-void TableListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void TableListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     updateTableObjectList(m_bAllowViews);
 }
 
-void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -240,9 +240,9 @@ private:
     virtual OUString  getSelectedName( OUString& _out_rAliasName ) const SAL_OVERRIDE;
     virtual bool    isLeafSelected() const SAL_OVERRIDE;
     // OContainerListener
-    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 QueryListFacade::~QueryListFacade()
@@ -251,19 +251,19 @@ QueryListFacade::~QueryListFacade()
         m_pContainerListener->dispose();
 }
 
-void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )  throw(::com::sun::star::uno::RuntimeException, std::exception)
+void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )  throw(css::uno::RuntimeException, std::exception)
 {
     OUString sName;
     if ( _rEvent.Accessor >>= sName )
         m_rQueryList.InsertEntry( sName );
 }
 
-void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     updateTableObjectList(true);
 }
 
-void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 

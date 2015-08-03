@@ -23,75 +23,75 @@ using namespace dbaui;
 // the listener multiplexers
 
 // XStatusListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXStatusMultiplexer, ::com::sun::star::frame::XStatusListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXStatusMultiplexer, css::frame::XStatusListener)
 
-void SAL_CALL SbaXStatusMultiplexer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& e) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStateEvent& e) throw (css::uno::RuntimeException, std::exception)
 {
     m_aLastKnownStatus = e;
     m_aLastKnownStatus.Source = &m_rParent;
     ::cppu::OInterfaceIteratorHelper aIt( *this );
     while ( aIt.hasMoreElements() )
-        static_cast< ::com::sun::star::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
+        static_cast< css::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
 }                                                                                       \
 
 // LoadListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener, loaded, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener, unloaded, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener, unloading, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener, reloading, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener, reloaded, ::com::sun::star::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, css::form::XLoadListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, loaded, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, unloaded, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, unloading, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, reloading, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXLoadMultiplexer, css::form::XLoadListener, reloaded, css::lang::EventObject)
 
-// ::com::sun::star::sdbc::XRowSetListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetMultiplexer, ::com::sun::star::sdbc::XRowSetListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, ::com::sun::star::sdbc::XRowSetListener, cursorMoved, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, ::com::sun::star::sdbc::XRowSetListener, rowChanged, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, ::com::sun::star::sdbc::XRowSetListener, rowSetChanged, ::com::sun::star::lang::EventObject)
+// css::sdbc::XRowSetListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener, cursorMoved, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener, rowChanged, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRowSetMultiplexer, css::sdbc::XRowSetListener, rowSetChanged, css::lang::EventObject)
 
-// ::com::sun::star::sdb::XRowSetApproveListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetApproveMultiplexer, ::com::sun::star::sdb::XRowSetApproveListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, ::com::sun::star::sdb::XRowSetApproveListener, approveCursorMove, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, ::com::sun::star::sdb::XRowSetApproveListener, approveRowChange, ::com::sun::star::sdb::RowChangeEvent)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, ::com::sun::star::sdb::XRowSetApproveListener, approveRowSetChange, ::com::sun::star::lang::EventObject)
+// css::sdb::XRowSetApproveListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener, approveCursorMove, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener, approveRowChange, css::sdb::RowChangeEvent)
+IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, css::sdb::XRowSetApproveListener, approveRowSetChange, css::lang::EventObject)
 
-// ::com::sun::star::sdb::XSQLErrorListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSQLErrorMultiplexer, ::com::sun::star::sdb::XSQLErrorListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXSQLErrorMultiplexer, ::com::sun::star::sdb::XSQLErrorListener, errorOccured, ::com::sun::star::sdb::SQLErrorEvent)
+// css::sdb::XSQLErrorListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXSQLErrorMultiplexer, css::sdb::XSQLErrorListener, errorOccured, css::sdb::SQLErrorEvent)
 
-// ::com::sun::star::form::XDatabaseParameterListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXParameterMultiplexer, ::com::sun::star::form::XDatabaseParameterListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXParameterMultiplexer, ::com::sun::star::form::XDatabaseParameterListener, approveParameter, ::com::sun::star::form::DatabaseParameterEvent)
+// css::form::XDatabaseParameterListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXParameterMultiplexer, css::form::XDatabaseParameterListener, approveParameter, css::form::DatabaseParameterEvent)
 
-// ::com::sun::star::form::XSubmitListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSubmitMultiplexer, ::com::sun::star::form::XSubmitListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXSubmitMultiplexer, ::com::sun::star::form::XSubmitListener, approveSubmit, ::com::sun::star::lang::EventObject)
+// css::form::XSubmitListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSubmitMultiplexer, css::form::XSubmitListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXSubmitMultiplexer, css::form::XSubmitListener, approveSubmit, css::lang::EventObject)
 
-// ::com::sun::star::form::XResetListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXResetMultiplexer, ::com::sun::star::form::XResetListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXResetMultiplexer, ::com::sun::star::form::XResetListener, approveReset, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXResetMultiplexer, ::com::sun::star::form::XResetListener, resetted, ::com::sun::star::lang::EventObject)
+// css::form::XResetListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXResetMultiplexer, css::form::XResetListener)
+IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXResetMultiplexer, css::form::XResetListener, approveReset, css::lang::EventObject)
+IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXResetMultiplexer, css::form::XResetListener, resetted, css::lang::EventObject)
 
-// ::com::sun::star::beans::XPropertyChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, ::com::sun::star::beans::XPropertyChangeListener, propertyChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::uno::RuntimeException, std::exception))
+// css::beans::XPropertyChangeListener
+IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, css::beans::XPropertyChangeListener, propertyChange, css::beans::PropertyChangeEvent, (css::uno::RuntimeException, std::exception))
 
-// ::com::sun::star::beans::XVetoableChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, ::com::sun::star::beans::XVetoableChangeListener, vetoableChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException, std::exception))
+// css::beans::XVetoableChangeListener
+IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, css::beans::XVetoableChangeListener, vetoableChange, css::beans::PropertyChangeEvent, (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception))
 
-// ::com::sun::star::beans::XPropertiesChangeListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPropertiesChangeMultiplexer, ::com::sun::star::beans::XPropertiesChangeListener);
-void SbaXPropertiesChangeMultiplexer::propertiesChange(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent>& aEvts) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::beans::XPropertiesChangeListener
+IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener);
+void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& aEvts) throw(css::uno::RuntimeException, std::exception)
 {
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
     // forwards _all_ changes to _all_ listeners
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent> aMulti(aEvts);
-    ::com::sun::star::beans::PropertyChangeEvent* pMulti = aMulti.getArray();
+    css::uno::Sequence< css::beans::PropertyChangeEvent> aMulti(aEvts);
+    css::beans::PropertyChangeEvent* pMulti = aMulti.getArray();
     for (sal_Int32 i=0; i<aMulti.getLength(); ++i, ++pMulti)
         pMulti->Source = &m_rParent;
 
     ::cppu::OInterfaceIteratorHelper aIt(*this);
     while (aIt.hasMoreElements())
-        static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(aIt.next())->propertiesChange(aMulti);
+        static_cast< css::beans::XPropertiesChangeListener*>(aIt.next())->propertiesChange(aMulti);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

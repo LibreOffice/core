@@ -48,53 +48,53 @@ namespace dbaui
 {
     // ODatabaseImportExport base class for import/export
     class ODatabaseExport;
-    typedef ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
+    typedef ::cppu::WeakImplHelper< css::lang::XEventListener> ODatabaseImportExport_BASE;
     class ODatabaseImportExport : public ODatabaseImportExport_BASE
     {
     private:
         void impl_initializeRowMember_throw();
 
     protected:
-        ::com::sun::star::lang::Locale                                                  m_aLocale;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>                    m_aSelection;
-        bool                                                                        m_bBookmarkSelection;
-        SvStream*                                                                       m_pStream;
-        ::com::sun::star::awt::FontDescriptor                                           m_aFont;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;      // table/query
+        css::lang::Locale                                     m_aLocale;
+        css::uno::Sequence< css::uno::Any>                    m_aSelection;
+        bool                                                  m_bBookmarkSelection;
+        SvStream*                                             m_pStream;
+        css::awt::FontDescriptor                              m_aFont;
+        css::uno::Reference< css::beans::XPropertySet >       m_xObject;      // table/query
         SharedConnection                                                                m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >         m_xRowLocate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xRowSetColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< css::sdbc::XResultSet >          m_xResultSet;
+        css::uno::Reference< css::sdbc::XRow >                m_xRow;
+        css::uno::Reference< css::sdbcx::XRowLocate >         m_xRowLocate;
+        css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xResultSetMetaData;
+        css::uno::Reference< css::container::XIndexAccess >   m_xRowSetColumns;
+        css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
-        OUString m_sName;
+        OUString            m_sName;
 
         //for transfor the tablename
-        OUString m_sDefaultTableName;
+        OUString            m_sDefaultTableName;
 
-        OUString m_sDataSourceName;
-        sal_Int32       m_nCommandType;
-        bool            m_bNeedToReInitialize;
+        OUString            m_sDataSourceName;
+        sal_Int32           m_nCommandType;
+        bool                m_bNeedToReInitialize;
 
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // if set, then copy only these rows
         rtl_TextEncoding    m_eDestEnc;
-        bool            m_bInInitialize;
-        bool            m_bCheckOnly;
+        bool                m_bInInitialize;
+        bool                m_bCheckOnly;
 
         // export data
         ODatabaseImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                                const css::uno::Reference< css::uno::XComponentContext >& _rM,
+                                const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
                                 const OUString& rExchange = OUString());
 
         // import data
         ODatabaseImportExport(  const SharedConnection& _rxConnection,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
+                                const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+                                const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         virtual ~ODatabaseImportExport();
 
@@ -115,7 +115,7 @@ namespace dbaui
         bool isCheckEnabled() const { return m_bCheckOnly; }
 
     private:
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         void impl_initFromDescriptor( const svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 
@@ -127,15 +127,15 @@ namespace dbaui
     public:
         // export data
         ORTFImportExport(   const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM,
+                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
                             const OUString& rExchange = OUString())
                             : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
 
         // import data
         ORTFImportExport(   const SharedConnection& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
+                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM)
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
@@ -171,13 +171,13 @@ namespace dbaui
     public:
         // export data
         OHTMLImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM,
+                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
                             const OUString& rExchange = OUString());
         // import data
         OHTMLImportExport(  const SharedConnection& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
+                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM)
             : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
             , m_nIndent(0)
         {}
@@ -190,12 +190,12 @@ namespace dbaui
 
     class ORowSetImportExport : public ODatabaseImportExport
     {
-        OModuleClient       m_aModuleClient;
+        OModuleClient               m_aModuleClient;
         ::std::vector<sal_Int32>    m_aColumnMapping;
         ::std::vector<sal_Int32>    m_aColumnTypes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xTargetRowUpdate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData;
+        css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;
+        css::uno::Reference< css::sdbc::XRowUpdate >          m_xTargetRowUpdate;
+        css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData;
         VclPtr<vcl::Window>         m_pParent;
         bool                        m_bAlreadyAsked;
 
@@ -206,14 +206,14 @@ namespace dbaui
     public:
         // export data
         ORowSetImportExport(vcl::Window* _pParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
+                            const css::uno::Reference< css::sdbc::XResultSetUpdate >& _xResultSetUpdate,
                             const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM,
                             const OUString& rExchange = OUString());
 
         // import data
         ORowSetImportExport(const SharedConnection& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM)
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM)
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 

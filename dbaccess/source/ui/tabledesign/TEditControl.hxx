@@ -140,8 +140,8 @@ namespace dbaui
         void DisplayData( long nRow, bool bGrabFocus = true );
 
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) SAL_OVERRIDE;
-        virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any  GetCellData( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
+        virtual void SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rSaveData ) SAL_OVERRIDE;
+        virtual css::uno::Any  GetCellData( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
         virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText ) SAL_OVERRIDE;
         virtual OUString GetControlText( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 

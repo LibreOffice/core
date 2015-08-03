@@ -255,7 +255,7 @@ namespace
 {
     void ensureToolbars( OQueryController& _rController, bool _bDesign )
     {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
+        Reference< css::frame::XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
@@ -726,7 +726,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         case SID_DB_QUERY_PREVIEW:
             try
             {
-                Reference< ::com::sun::star::util::XCloseable > xCloseFrame( getContainer()->getPreviewFrame(), UNO_QUERY );
+                Reference< css::util::XCloseable > xCloseFrame( getContainer()->getPreviewFrame(), UNO_QUERY );
                 if ( xCloseFrame.is() )
                 {
                     try
@@ -811,7 +811,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
     InvalidateFeature(_nId);
 }
 
-void OQueryController::impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails )
+void OQueryController::impl_showAutoSQLViewError( const css::uno::Any& _rErrorDetails )
 {
     SQLContext aErrorContext;
     aErrorContext.Message = lcl_getObjectResourceString( STR_ERROR_PARSING_STATEMENT, m_nCommandType );
@@ -1064,7 +1064,7 @@ void OQueryController::impl_initialize()
     }
 }
 
-void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& /*_xLayoutManager*/)
+void OQueryController::onLoadedMenu(const Reference< css::frame::XLayoutManager >& /*_xLayoutManager*/)
 {
     ensureToolbars( *this, m_bGraphicalDesign );
 }

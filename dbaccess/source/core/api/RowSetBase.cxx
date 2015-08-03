@@ -116,13 +116,13 @@ ORowSetBase::~ORowSetBase()
     delete m_pEmptyCollection;
 }
 
-// com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 Sequence< Type > ORowSetBase::getTypes() throw (RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(ORowSetBase_BASE::getTypes(),OPropertyStateContainer::getTypes());
 }
 
-// com::sun::star::uno::XInterface
+// css::uno::XInterface
 Any ORowSetBase::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
     Any aRet = ORowSetBase_BASE::queryInterface(rType);
@@ -307,25 +307,25 @@ Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) thr
     return getValue(columnIndex);
 }
 
-::com::sun::star::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
-::com::sun::star::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
-::com::sun::star::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -356,10 +356,10 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
         return new ::comphelper::SequenceInputStream(((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
 
     // we should normally never reach this
-    return Reference< ::com::sun::star::io::XInputStream >();
+    return Reference< css::io::XInputStream >();
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     return getBinaryStream(columnIndex);
 }
@@ -394,7 +394,7 @@ Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) 
     return NULL;
 }
 
-// ::com::sun::star::sdbcx::XRowLocate
+// css::sdbcx::XRowLocate
 Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ORowSetBase::getBookmark() Clone = " << m_bClone);
@@ -548,7 +548,7 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const OUString& columnName ) throw(S
     return m_pColumns ? m_pColumns->findColumn(columnName) : sal_Int32(0);
 }
 
-// ::com::sun::star::sdbcx::XColumnsSupplier
+// css::sdbcx::XColumnsSupplier
 Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);

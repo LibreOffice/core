@@ -32,7 +32,7 @@ namespace dbaui
     class ORelationDesignView : public OJoinDesignView
     {
     public:
-        ORelationDesignView(vcl::Window* pParent, ORelationController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+        ORelationDesignView(vcl::Window* pParent, ORelationController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
 
         // set the statement for representation
         /// late construction
