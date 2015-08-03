@@ -278,6 +278,7 @@ bool OpenGLProgram::DrawTexture( OpenGLTexture& rTexture )
     rTexture.GetWholeCoord( aTexCoord );
     SetVertices( aPosition );
     SetTextureCoord( aTexCoord );
+    ApplyMatrix(fWidth, fHeight);
     glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
     CHECK_GL_ERROR();
 
