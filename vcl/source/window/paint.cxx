@@ -124,8 +124,6 @@ void PaintHelper::StartBufferedPaint()
     pFrameData->mbInBufferedPaint = true;
     m_bStartedBufferedPaint = true;
 
-    SetupBuffer();
-
     // Remember what was the map mode of m_aPaintRect.
     m_aPaintRectMapMode = m_pWindow->GetMapMode();
 
