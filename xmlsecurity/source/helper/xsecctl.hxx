@@ -138,8 +138,6 @@ public:
     }
 };
 
-typedef ::std::vector< InternalSignatureInformation > InternalSignatureInformations;
-
 class XSecController : public cppu::WeakImplHelper4
 <
     com::sun::star::xml::crypto::sax::XSecurityController,
@@ -207,7 +205,7 @@ private:
     /*
      * Signature information
      */
-    InternalSignatureInformations m_vInternalSignatureInformations;
+    std::vector< InternalSignatureInformation > m_vInternalSignatureInformations;
 
     /*
      * the previous node on the SAX chain.

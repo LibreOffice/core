@@ -38,13 +38,11 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-typedef ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess > ArrayWrapImpl;
-
 typedef  std::unordered_map< OUString, sal_Int32, OUStringHash,
                              std::equal_to< OUString >  > ControlIndexMap;
 typedef  std::vector< uno::Reference< awt::XControl > > ControlVec;
 
-class ControlArrayWrapper : public ArrayWrapImpl
+class ControlArrayWrapper : public ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess >
 {
     uno::Reference< awt::XControlContainer > mxDialog;
     uno::Sequence< OUString > msNames;

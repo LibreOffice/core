@@ -43,13 +43,10 @@ namespace basegfx
     class B3DHomMatrix;
 }
 
-typedef ::std::vector< ImpSdXMLExpTransObj2DBase* > ImpSdXMLExpTransObj2DBaseList;
-typedef ::std::vector< ImpSdXMLExpTransObj3DBase* > ImpSdXMLExpTransObj3DBaseList;
-
 class SdXMLImExTransform2D
 {
-    ImpSdXMLExpTransObj2DBaseList   maList;
-    OUString                   msString;
+    std::vector< ImpSdXMLExpTransObj2DBase* > maList;
+    OUString                                  msString;
 
     void EmptyList();
 
@@ -69,8 +66,8 @@ public:
 
 class SdXMLImExTransform3D
 {
-    ImpSdXMLExpTransObj3DBaseList   maList;
-    OUString                   msString;
+    std::vector< ImpSdXMLExpTransObj3DBase* > maList;
+    OUString                                  msString;
 
     void EmptyList();
 

@@ -60,12 +60,10 @@ struct SvXMLNumFmtEntry
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
-typedef ::boost::ptr_vector<SvXMLNumFmtEntry> SvXMLNumFmtEntryArr;
-
 struct SvXMLEmbeddedElement
 {
-    sal_Int32       nFormatPos;
-    OUString   aText;
+    sal_Int32    nFormatPos;
+    OUString     aText;
 
     SvXMLEmbeddedElement( sal_Int32 nFP, const OUString& rT ) :
         nFormatPos(nFP), aText(rT) {}
@@ -83,7 +81,7 @@ class SvXMLNumImpData
     SvXMLTokenMap*      pStyleAttrTokenMap;
     SvXMLTokenMap*      pStyleElemAttrTokenMap;
     LocaleDataWrapper*  pLocaleData;
-    SvXMLNumFmtEntryArr aNameEntries;
+    boost::ptr_vector<SvXMLNumFmtEntry>      aNameEntries;
 
     uno::Reference< uno::XComponentContext > m_xContext;
 

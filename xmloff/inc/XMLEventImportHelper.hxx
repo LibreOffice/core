@@ -36,7 +36,6 @@ struct XMLEventNameTranslation;
 
 typedef ::std::map< OUString, XMLEventContextFactory* > FactoryMap;
 typedef ::std::map< XMLEventName, OUString > NameMap;
-typedef ::std::list< NameMap* > NameMapList;
 
 
 /**
@@ -61,7 +60,7 @@ class XMLEventImportHelper
     NameMap* pEventNameMap;
 
     /// stack of previous aEventNameMap
-    NameMapList aEventNameMapList;
+    std::list< NameMap* > aEventNameMapList;
 
 public:
     XMLEventImportHelper();

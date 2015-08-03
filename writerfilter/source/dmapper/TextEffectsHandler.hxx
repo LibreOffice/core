@@ -69,8 +69,6 @@ public:
 
 };
 
-typedef std::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
-
 }}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX

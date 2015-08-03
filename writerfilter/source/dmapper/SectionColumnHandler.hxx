@@ -59,7 +59,7 @@ public:
     const std::vector<_Column>& GetColumns() const { return m_aCols;}
 
 };
-typedef std::shared_ptr< SectionColumnHandler >          SectionColumnHandlerPtr;
+
 }}
 
 #endif

@@ -27,8 +27,6 @@
 
 #include "atkwrapper.hxx"
 
-typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleVector;
-
 class AtkListener : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 public:
@@ -43,7 +41,8 @@ public:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     AtkObjectWrapper *mpWrapper;
-    AccessibleVector m_aChildList;
+    std::vector< css::uno::Reference< css::accessibility::XAccessible > >
+                      m_aChildList;
 
 private:
 

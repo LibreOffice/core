@@ -73,10 +73,8 @@ using namespace ::com::sun::star::util;
 // we probably will need both a hash of control models and hash of controls
 // => use some template magic
 
-typedef ::cppu::WeakImplHelper1< container::XNameContainer > SimpleNameContainer_BASE;
-
 template< typename T >
-class SimpleNamedThingContainer : public SimpleNameContainer_BASE
+class SimpleNamedThingContainer : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
     typedef std::unordered_map< OUString, Reference< T >, OUStringHash,
        std::equal_to< OUString > > NamedThingsHash;

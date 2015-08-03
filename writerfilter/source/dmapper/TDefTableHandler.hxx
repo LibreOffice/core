@@ -79,7 +79,6 @@ public:
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
 };
-typedef std::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
 }}
 
 #endif

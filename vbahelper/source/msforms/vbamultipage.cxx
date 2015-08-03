@@ -26,8 +26,7 @@ using namespace ooo::vba;
 
 const OUString SVALUE( "MultiPageValue" );
 
-typedef cppu::WeakImplHelper1< container::XIndexAccess > PagesImpl_Base;
-class PagesImpl : public PagesImpl_Base
+class PagesImpl : public cppu::WeakImplHelper1< container::XIndexAccess >
 {
     sal_Int32 mnPages;
 public:

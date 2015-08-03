@@ -121,15 +121,8 @@ using namespace ucbhelper_impl;
 namespace ucbhelper
 {
 
-
-
 // class PropertyValues.
-
-
-
-typedef std::vector< ucbhelper_impl::PropertyValue > PropertyValuesVector;
-
-class PropertyValues : public PropertyValuesVector {};
+class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
 
 } // namespace ucbhelper
 

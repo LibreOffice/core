@@ -59,17 +59,15 @@ static const char aSpreadsheetDocument[] = "com.sun.star.sheet.SpreadsheetDocume
 static const char aTextDocument[] = "com.sun.star.text.TextDocument";
 
 typedef  std::unordered_map< OUString,
-sal_Int32, OUStringHash,
-::std::equal_to< OUString > > NameIndexHash;
+                             sal_Int32, OUStringHash,
+                             ::std::equal_to< OUString > > NameIndexHash;
 
 typedef std::vector < uno::Reference< frame::XModel > > Documents;
-
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > DocumentsEnumImpl_BASE;
 
 // #FIXME clearly this is a candidate for some sort of helper base class as
 // this is a copy of SelectedSheetsEnum ( vbawindow.cxx )
 
-class DocumentsEnumImpl : public DocumentsEnumImpl_BASE
+class DocumentsEnumImpl : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     Documents m_documents;

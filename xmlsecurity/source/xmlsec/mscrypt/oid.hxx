@@ -20,12 +20,10 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
 
-typedef struct OIDItemStr OIDItem;
-
-struct OIDItemStr {
+typedef struct {
     char *oid;
     char *desc;
-};
+} OIDItem;
 
 OIDItem OIDs[] = {
     {"1.2.840.113549",  "RSA Data Security Inc."},

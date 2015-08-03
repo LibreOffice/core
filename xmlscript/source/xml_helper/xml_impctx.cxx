@@ -79,8 +79,6 @@ struct ElementEntry
         { m_prefixes.reserve( 2 ); }
 };
 
-typedef ::std::vector< ElementEntry * > t_ElementVector;
-
 class ExtendedAttributes;
 
 struct MGuard
@@ -116,7 +114,7 @@ class DocumentHandlerImpl :
     sal_Int32 m_nLastPrefix_lookup;
     OUString m_aLastPrefix_lookup;
 
-    t_ElementVector m_elements;
+    std::vector< ElementEntry * > m_elements;
     sal_Int32 m_nSkipElements;
 
     Mutex * m_pMutex;

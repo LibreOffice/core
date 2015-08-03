@@ -86,7 +86,6 @@ private:
             m_pCurrentProperties->InsertProps(pProps);
     };
 };
-typedef std::shared_ptr<TablePropertiesHandler> TablePropertiesHandlerPtr;
 
 } }
 
