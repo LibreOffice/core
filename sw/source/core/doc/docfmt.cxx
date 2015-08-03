@@ -183,7 +183,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
                 SfxItemIter aIter( *pPara->pDelSet );
                 pItem = aIter.FirstItem();
-                while( true )
+                while(pItem)
                 {
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
