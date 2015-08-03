@@ -1340,10 +1340,8 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             {
                 pNewHstr = new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet );
             }
-            else
+            else if (const SfxPoolItem* pItem = SfxItemIter( rSet ).FirstItem())
             {
-                const SfxPoolItem* pItem = SfxItemIter( rSet ).FirstItem();
-
                 if ( m_WhichIdSet.count( pItem->Which() ) )
                 {
                     pNewHstr = new SwHistorySetFormat( pItem, m_nNodeIndex );
