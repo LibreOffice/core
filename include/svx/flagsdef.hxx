@@ -47,7 +47,7 @@ enum class SvxBackgroundTabFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxBackgroundTabFlags> : is_typed_flags<SvxBackgroundTabFlags, 0x0f> {};
+    template<> struct typed_flags<SvxBackgroundTabFlags> : is_typed_flags<SvxBackgroundTabFlags, 0x19> {};
 }
 
 // flags for SvxBorderTabPage

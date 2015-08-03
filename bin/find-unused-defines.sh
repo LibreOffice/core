@@ -16,11 +16,15 @@
 #   (6) use awk to to check if only one match for a given constant was found
 #   (7) if so, generate a sed command to remove the #define
 #
-git grep -hP '^#define\s+\w+.*\\' -- "[!e][!x][!t]*" \
-  | sed -r 's/#define[ ]+([a-zA-Z0-9_]+).*/\1/' \
+( git grep -hP '^\w*#define\s+\w+.*\\' -- "[!e][!x][!t]*" \
+  && \
+  git grep -hP '^\w*#define\s+\w+\s*$' -- "[!e][!x][!t]*" ) \
+  | grep -v '_idl' \
+  | grep -vE '^INCLUDED_' \
+  | sed -r 's/[ ]*#define[ ]+([a-zA-Z0-9_]+).*/\1/' \
   | sort \
   | uniq \
-  | xargs -Ixxx sh -c \
+  | xargs -Ixxx -n 1 -P 8 sh -c \
     "git grep -w 'xxx' | awk -f bin/find-unused-defines.awk -v p1=xxx && echo \"xxx\" 1>&2"
 
 
