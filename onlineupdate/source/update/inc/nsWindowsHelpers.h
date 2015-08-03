@@ -119,10 +119,6 @@ public:
   }
 };
 
-typedef nsAutoRef<HKEY> nsAutoRegKey;
-typedef nsAutoRef<SC_HANDLE> nsAutoServiceHandle;
-typedef nsAutoRef<HANDLE> nsAutoHandle;
-typedef nsAutoRef<HMODULE> nsModuleHandle;
 
 namespace {
 

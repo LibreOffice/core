@@ -62,7 +62,6 @@ namespace AwtFocusChangeReason      = ::com::sun::star::awt::FocusChangeReason;
 typedef ::com::sun::star::awt::Point        AwtPoint;
 typedef ::com::sun::star::awt::Size         AwtSize;
 typedef ::com::sun::star::awt::Rectangle    AwtRectangle;
-typedef ::com::sun::star::awt::KeyEvent     AwtKeyEvent;
 typedef ::com::sun::star::awt::FocusEvent   AwtFocusEvent;
 
 

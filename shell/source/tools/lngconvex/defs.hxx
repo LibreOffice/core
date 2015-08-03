@@ -26,7 +26,6 @@
 
 typedef std::vector<std::string> StringList_t;
 
-typedef std::vector<int> IntegerList_t;
 
 #endif
 

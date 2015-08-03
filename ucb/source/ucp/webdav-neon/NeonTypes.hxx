@@ -46,7 +46,6 @@
 
 typedef ne_session                  HttpSession;
 typedef ne_status                   HttpStatus;
-typedef ne_server_capabilities      HttpServerCapabilities;
 
 typedef ne_propname                 NeonPropName;
 typedef ne_prop_result_set          NeonPropFindResultSet;
