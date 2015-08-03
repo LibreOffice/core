@@ -1008,7 +1008,7 @@ namespace //local functions originally from docfmt.cxx
         {
             SfxItemIter aIter( rChgSet );
             const SfxPoolItem* pItem = aIter.FirstItem();
-            if (!IsInvalidItem(pItem))
+            if (pItem && !IsInvalidItem(pItem))
             {
                 const sal_uInt16 nWhich = pItem->Which();
 
