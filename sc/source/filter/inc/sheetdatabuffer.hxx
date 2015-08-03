@@ -229,7 +229,8 @@ private:
     CellBlockBuffer     maCellBlocks;           /// Manages all open cell blocks.
     ArrayFormulaList    maArrayFormulas;        /// All array formulas in the sheet.
     TableOperationList  maTableOperations;      /// All table operations in the sheet.
-    SharedFormulaMap    maSharedFormulas;       /// Maps shared formula base address to defined name token index.
+    ::std::map< BinAddress, ApiTokenSequence >
+                        maSharedFormulas;       /// Maps shared formula base address to defined name token index.
     ::com::sun::star::table::CellAddress
                         maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
     css::table::CellAddress maSharedBaseAddr;       /// Base address of the pending shared formula.

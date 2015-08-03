@@ -62,9 +62,6 @@ struct SheetCodeNameInfo
                             maSheetProps( rSheetProps ), maPrefix( rPrefix ) {}
 };
 
-typedef ::std::set< OUString >              CodeNameSet;
-typedef ::std::list< SheetCodeNameInfo >    SheetCodeNameInfoList;
-
 } // namespace
 
 void ExcelVbaProject::prepareImport()
@@ -74,10 +71,10 @@ void ExcelVbaProject::prepareImport()
     if( mxDocument.is() ) try
     {
         // collect existing codenames (do not use them when creating new codenames)
-        CodeNameSet aUsedCodeNames;
+        ::std::set< OUString > aUsedCodeNames;
 
         // collect sheets without codenames
-        SheetCodeNameInfoList aCodeNameInfos;
+        ::std::list< SheetCodeNameInfo >  aCodeNameInfos;
 
         // iterate over all imported sheets
         Reference< XEnumerationAccess > xSheetsEA( mxDocument->getSheets(), UNO_QUERY_THROW );
@@ -103,7 +100,7 @@ void ExcelVbaProject::prepareImport()
         }
 
         // create new codenames if sheets do not have one
-        for( SheetCodeNameInfoList::iterator aIt = aCodeNameInfos.begin(), aEnd = aCodeNameInfos.end(); aIt != aEnd; ++aIt )
+        for( ::std::list< SheetCodeNameInfo >::iterator aIt = aCodeNameInfos.begin(), aEnd = aCodeNameInfos.end(); aIt != aEnd; ++aIt )
         {
             // search for an unused codename
             sal_Int32 nCounter = 1;

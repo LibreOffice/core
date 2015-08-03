@@ -28,8 +28,6 @@
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-typedef CollTestImplHelper< ov::excel::XFormatConditions > ScVbaFormatConditions_BASE;
-
 // This class is used only as a target for casting, it seems,
 // and no objects of this type are created as such, I think.
 // So avoid MSVC warnings:
@@ -42,7 +40,7 @@ typedef CollTestImplHelper< ov::excel::XFormatConditions > ScVbaFormatConditions
 #pragma warning(disable: 4610)
 #endif
 
-class ScVbaFormatConditions: public ScVbaFormatConditions_BASE
+class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatConditions >
 {
     css::table::CellAddress maCellAddress;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;

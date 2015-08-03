@@ -107,10 +107,11 @@ uno::Reference< awt::XWindow > lclGetWindowForController( const uno::Reference< 
 
 } // namespace
 
-typedef ::cppu::WeakImplHelper4< awt::XTopWindowListener, awt::XWindowListener, frame::XBorderResizeListener, util::XChangesListener > ScVbaEventListener_BASE;
-
 // This class is to process Workbook window related event
-class ScVbaEventListener : public ScVbaEventListener_BASE
+class ScVbaEventListener : public ::cppu::WeakImplHelper4< awt::XTopWindowListener,
+                                                           awt::XWindowListener,
+                                                           frame::XBorderResizeListener,
+                                                           util::XChangesListener >
 {
 public:
     ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell );

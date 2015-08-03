@@ -309,9 +309,9 @@ public:
 
 // very simple class to pass to ScVbaCollectionBaseImpl containing
 // just one item
-typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > SingleRange_BASE;
 
-class SingleRangeIndexAccess : public SingleRange_BASE
+class SingleRangeIndexAccess : public ::cppu::WeakImplHelper2< container::XIndexAccess,
+                                                               container::XEnumerationAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

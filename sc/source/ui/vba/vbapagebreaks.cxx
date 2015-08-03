@@ -22,8 +22,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef ::cppu::WeakImplHelper1<container::XIndexAccess > RangePageBreaks_Base;
-class RangePageBreaks : public RangePageBreaks_Base
+class RangePageBreaks : public ::cppu::WeakImplHelper1<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

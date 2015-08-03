@@ -491,7 +491,7 @@ void ScHTMLLayoutParser::Adjust()
 {
     xLockedList->RemoveAll();
 
-    ScHTMLAdjustStack aStack;
+    ::std::stack< ScHTMLAdjustStackEntry* > aStack;
     ScHTMLAdjustStackEntry* pS = NULL;
     sal_uInt16 nTab = 0;
     SCCOL nLastCol = SCCOL_MAX;

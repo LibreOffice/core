@@ -109,9 +109,7 @@ using namespace ::comphelper;
 
 //OleNameOverrideContainer
 
-typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideContainer_BASE;
-
-class OleNameOverrideContainer : public OleNameOverrideContainer_BASE
+class OleNameOverrideContainer : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
 private:
     typedef std::unordered_map< OUString, uno::Reference< container::XIndexContainer >, OUStringHash,

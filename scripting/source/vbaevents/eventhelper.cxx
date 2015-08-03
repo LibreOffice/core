@@ -545,9 +545,7 @@ ReadOnlyEventsNameContainer::hasByName( const OUString& aName ) throw (RuntimeEx
     return sal_True;
 }
 
-typedef ::cppu::WeakImplHelper< XScriptEventsSupplier > EventsSupplier_BASE;
-
-class ReadOnlyEventsSupplier : public EventsSupplier_BASE
+class ReadOnlyEventsSupplier : public ::cppu::WeakImplHelper< XScriptEventsSupplier >
 {
 public:
     ReadOnlyEventsSupplier( const Sequence< OUString >& eventMethods, const OUString& sCodeName )

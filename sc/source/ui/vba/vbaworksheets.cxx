@@ -52,8 +52,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > SheetEnumeration_BASE;
-typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > SheetCollectionHelper_BASE;
 // a map ( or hashmap ) wont do as we need also to preserve the order
 // (as added ) of the items
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
@@ -61,7 +59,7 @@ typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
 // #FIXME #TODO the implementation of the Sheets collections sucks,
 // e.g. there is no support for tracking sheets added/removed from the collection
 
-class WorkSheetsEnumeration : public SheetEnumeration_BASE
+class WorkSheetsEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
     SheetMap mSheetMap;
     SheetMap::iterator mIt;
@@ -80,7 +78,9 @@ public:
     }
 };
 
-class SheetCollectionHelper : public SheetCollectionHelper_BASE
+class SheetCollectionHelper : public ::cppu::WeakImplHelper3< container::XNameAccess,
+                                                              container::XIndexAccess,
+                                                              container::XEnumerationAccess >
 {
     SheetMap mSheetMap;
     SheetMap::iterator cachePos;

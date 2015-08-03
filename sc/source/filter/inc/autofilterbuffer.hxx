@@ -64,7 +64,6 @@ public:
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );
 };
 
-typedef ::boost::shared_ptr< FilterSettingsBase > FilterSettingsRef;
 
 /** Settings for a discrete filter, specifying a list of values to be shown in
     the filtered range.
@@ -177,7 +176,8 @@ public:
     ApiFilterSettings   finalizeImport( sal_Int32 nMaxCount );
 
 private:
-    FilterSettingsRef   mxSettings;
+    ::boost::shared_ptr< FilterSettingsBase >
+                        mxSettings;
     sal_Int32           mnColId;
     bool                mbHiddenButton;
     bool                mbShowButton;

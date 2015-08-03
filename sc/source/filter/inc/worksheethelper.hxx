@@ -61,8 +61,6 @@ class WorksheetSettings;
 
 typedef ::std::map< OUString, ScDataBarFormatData* >  ExtLst;
 
-typedef ::std::map< BinAddress, ApiTokenSequence > SharedFormulaMap;
-
 /** An enumeration for all types of sheets in a workbook. */
 enum WorksheetType
 {

@@ -24,9 +24,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "excelvbahelper.hxx"
 
-typedef cppu::WeakImplHelper1< ov::excel::XPane > ScVbaPane_BASE;
-
-class ScVbaPane : public ScVbaPane_BASE
+class ScVbaPane : public cppu::WeakImplHelper1< ov::excel::XPane >
 {
 public:
     ScVbaPane(

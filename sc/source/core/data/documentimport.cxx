@@ -42,8 +42,6 @@ struct TabAttr
     std::vector<ColAttr> maCols;
 };
 
-typedef std::vector<TabAttr> TabAttrsType;
-
 }
 
 struct ScDocumentImportImpl
@@ -52,8 +50,7 @@ struct ScDocumentImportImpl
     sc::StartListeningContext maListenCxt;
     sc::ColumnBlockPositionSet maBlockPosSet;
     SvtScriptType mnDefaultScriptNumeric;
-
-    TabAttrsType maTabAttrs;
+    std::vector<TabAttr> maTabAttrs;
 
     ScDocumentImportImpl(ScDocument& rDoc) :
         mrDoc(rDoc),

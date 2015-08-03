@@ -817,7 +817,6 @@ struct ScMyImportValidation
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
-typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
 class ScMyStylesImportHelper;
 class ScXMLEditAttributeMap;
 
@@ -836,8 +835,8 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    ScMyViewContextList                 aViewContextList;
-    ScMyStylesImportHelper*             pStylesImportHelper;
+    std::list<SvXMLImportContext*>      aViewContextList;
+    ScMyStylesImportHelper*        pStylesImportHelper;
     OUString                       sNumberFormat;
     OUString                       sLocale;
     OUString                       sCellStyle;

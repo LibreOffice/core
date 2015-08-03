@@ -1361,8 +1361,7 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
 #define SC_EVENTACC_SCRIPT      "Script"
 #define SC_EVENTACC_EVENTTYPE   "EventType"
 
-typedef ::cppu::WeakImplHelper1< container::XNameReplace > ShapeUnoEventAcess_BASE;
-class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
+class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper1< container::XNameReplace >
 {
 private:
     ScShapeObj* mpShape;

@@ -52,11 +52,6 @@ public:
     bool            bIsAcceptable;
 };
 
-typedef long LExpNum;
-
-//@ Expand entrys are ambiguous and therefore removed
-//DECLARE_TABLE( ScChgTrackExps, LExpNum)
-
 class ScAcceptChgDlg : public SfxModelessDialog
 {
 private:

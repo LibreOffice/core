@@ -105,12 +105,11 @@ public:
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
     void SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport);
 };
-typedef tools::SvRef<ScMyStyleRanges> ScMyStyleRangesRef;
 
 struct ScMyStyle
 {
-    OUString       sStyleName;
-    ScMyStyleRangesRef  xRanges;
+    OUString                      sStyleName;
+    tools::SvRef<ScMyStyleRanges> xRanges;
 
     ScMyStyle() : xRanges(new ScMyStyleRanges()) {}
     ~ScMyStyle() {}
@@ -125,18 +124,17 @@ struct LessStyle
 };
 
 typedef std::set<ScMyStyle, LessStyle>  ScMyStylesSet;
-typedef std::vector<ScMyStylesSet::iterator> ScMyStyles;
 
 class ScMyStylesImportHelper
 {
     ScMyStylesSet       aCellStyles;
-    ScMyStyles          aColDefaultStyles;
+    std::vector<ScMyStylesSet::iterator>  aColDefaultStyles;
     ScMyStylesSet::iterator aRowDefaultStyle;
     ScXMLImport&        rImport;
-    OUString*      pStyleName;
-    OUString*      pPrevStyleName;
-    OUString*      pCurrency;
-    OUString*      pPrevCurrency;
+    OUString*           pStyleName;
+    OUString*           pPrevStyleName;
+    OUString*           pCurrency;
+    OUString*           pPrevCurrency;
     ScRange             aPrevRange;
     sal_Int16           nCellType;
     sal_Int16           nPrevCellType;

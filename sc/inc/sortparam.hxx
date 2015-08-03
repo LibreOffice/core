@@ -38,8 +38,6 @@ struct ScSortKeyState
     bool     bAscending;
 };
 
-typedef ::std::vector<ScSortKeyState> ScSortKeyStateVec;
-
 struct SC_DLLPUBLIC ScSortParam
 {
     SCCOL       nCol1;
@@ -57,9 +55,10 @@ struct SC_DLLPUBLIC ScSortParam
     SCTAB       nDestTab;
     SCCOL       nDestCol;
     SCROW       nDestRow;
-    ScSortKeyStateVec maKeyState;
+    ::std::vector<ScSortKeyState>
+                maKeyState;
     ::com::sun::star::lang::Locale aCollatorLocale;
-    OUString aCollatorAlgorithm;
+    OUString    aCollatorAlgorithm;
     sal_uInt16  nCompatHeader;
 
     ScSortParam();

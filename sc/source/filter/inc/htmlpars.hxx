@@ -130,7 +130,6 @@ struct ScHTMLTableStackEntry
                             {}
                         ~ScHTMLTableStackEntry() {}
 };
-typedef ::std::stack< ScHTMLTableStackEntry* > ScHTMLTableStack;
 
 struct ScHTMLAdjustStackEntry
 {
@@ -143,7 +142,6 @@ struct ScHTMLAdjustStackEntry
                             nCurRow( nCRow )
                             {}
 };
-typedef ::std::stack< ScHTMLAdjustStackEntry* > ScHTMLAdjustStack;
 
 class EditEngine;
 class ScDocument;
@@ -157,23 +155,24 @@ class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
     Size                aPageSize;
-    OUString       aBaseURL;
-    ScHTMLTableStack    aTableStack;
-    OUString       aString;
+    OUString            aBaseURL;
+    ::std::stack< ScHTMLTableStackEntry* >
+                        aTableStack;
+    OUString            aString;
     ScRangeListRef      xLockedList;        // je Table
     OuterMap*           pTables;
     ScHTMLColOffset*    pColOffset;
     ScHTMLColOffset*    pLocalColOffset;    // je Table
-    sal_uLong               nFirstTableCell;    // je Table
+    sal_uLong           nFirstTableCell;    // je Table
     short               nTableLevel;
-    sal_uInt16              nTable;
-    sal_uInt16              nMaxTable;
+    sal_uInt16          nTable;
+    sal_uInt16          nMaxTable;
     SCCOL               nColCntStart;       // erste Col je Table
     SCCOL               nMaxCol;            // je Table
-    sal_uInt16              nTableWidth;        // je Table
-    sal_uInt16              nColOffset;         // aktuell, Pixel
-    sal_uInt16              nColOffsetStart;    // Startwert je Table, in Pixel
-    sal_uInt16              nOffsetTolerance;   // for use with SeekOffset and related
+    sal_uInt16          nTableWidth;        // je Table
+    sal_uInt16          nColOffset;         // aktuell, Pixel
+    sal_uInt16          nColOffsetStart;    // Startwert je Table, in Pixel
+    sal_uInt16          nOffsetTolerance;   // for use with SeekOffset and related
     bool                bTabInTabCell:1;
     bool                bFirstRow:1;          // je Table, ob in erster Zeile
     bool                bInCell:1;

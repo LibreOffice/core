@@ -350,8 +350,6 @@ private:
     ApiAlignmentData    maApiData;          /// Alignment data converted to API constants.
 };
 
-typedef std::shared_ptr< Alignment > AlignmentRef;
-
 /** Contains all XML cell protection attributes, e.g. from a protection element. */
 struct ProtectionModel
 {
@@ -397,8 +395,6 @@ private:
     ProtectionModel     maModel;            /// Protection model data.
     ApiProtectionData   maApiData;          /// Protection data converted to API constants.
 };
-
-typedef std::shared_ptr< Protection > ProtectionRef;
 
 /** Contains XML attributes of a single border line. */
 struct BorderLineModel
@@ -715,8 +711,10 @@ public:
 private:
     FontRef             mxFont;             /// Font data.
     NumberFormatRef     mxNumFmt;           /// Number format data.
-    AlignmentRef        mxAlignment;        /// Alignment data.
-    ProtectionRef       mxProtection;       /// Protection data.
+    std::shared_ptr< Alignment >
+                        mxAlignment;        /// Alignment data.
+    std::shared_ptr< Protection >
+                        mxProtection;       /// Protection data.
     BorderRef           mxBorder;           /// Border data.
     FillRef             mxFill;             /// Fill data.
 };

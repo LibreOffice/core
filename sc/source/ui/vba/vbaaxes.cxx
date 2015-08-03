@@ -37,8 +37,6 @@ using namespace ::ooo::vba::excel::XlAxisGroup;
 typedef ::std::pair<sal_Int32, sal_Int32 > AxesCoordinate; // type and group combination
 typedef ::std::vector< AxesCoordinate > vecAxesIndices;
 
-typedef ::cppu::WeakImplHelper1< container::XIndexAccess > AxisIndexWrapper_BASE;
-
 namespace {
 
 class EnumWrapper : public EnumerationHelper_BASE
@@ -84,7 +82,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
 
 namespace {
 
-class AxisIndexWrapper : public AxisIndexWrapper_BASE
+class AxisIndexWrapper : public ::cppu::WeakImplHelper1< container::XIndexAccess >
 {
     // if necessary for better performance we could change this into a map and cache the
     // indices -> Axis, currently we create a new Axis object

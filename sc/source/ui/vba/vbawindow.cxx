@@ -54,14 +54,12 @@ SCTAB, OUStringHash,
 
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > > Sheets;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > Enumeration_BASE;
-
 typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess
     , com::sun::star::container::XIndexAccess
     , com::sun::star::container::XNameAccess
     > SelectedSheets_BASE;
 
-class SelectedSheetsEnum : public Enumeration_BASE
+class SelectedSheetsEnum : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
 public:
     uno::Reference< uno::XComponentContext > m_xContext;
