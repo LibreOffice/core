@@ -26,6 +26,7 @@
 
 #if defined(ENABLE_LIBLANGTAG)
 #if LIBLANGTAG_INLINE_FIX
+#define LT_HAVE_INLINE
 #endif
 #include <liblangtag/langtag.h>
 #else
