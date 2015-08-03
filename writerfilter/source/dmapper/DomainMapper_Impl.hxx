@@ -266,7 +266,6 @@ struct AnnotationPosition
     css::uno::Reference<css::text::XTextRange> m_xStart;
     css::uno::Reference<css::text::XTextRange> m_xEnd;
 };
-typedef std::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
 
 struct LineNumberSettings
 {
@@ -434,7 +433,7 @@ private:
     //annotation import
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
-    AnnotationPositions_t m_aAnnotationPositions;
+    std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
     void GetCurrentLocale(css::lang::Locale& rLocale);
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);

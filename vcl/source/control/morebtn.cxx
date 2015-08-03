@@ -22,13 +22,11 @@
 #include <tools/rc.h>
 #include <vector>
 
-typedef ::std::vector< VclPtr<vcl::Window> > ImplMoreWindowList;
-
 struct ImplMoreButtonData
 {
-    ImplMoreWindowList *mpItemList;
-    OUString            maMoreText;
-    OUString            maLessText;
+    std::vector< VclPtr<vcl::Window> >*  mpItemList;
+    OUString                             maMoreText;
+    OUString                             maLessText;
 };
 
 void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )

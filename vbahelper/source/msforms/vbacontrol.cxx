@@ -767,8 +767,7 @@ void ScVbaControl::setLocked( bool bLocked ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( "ReadOnly" , uno::makeAny( bLocked ) );
 }
 
-typedef cppu::WeakImplHelper1< XControlProvider > ControlProvider_BASE;
-class ControlProviderImpl : public ControlProvider_BASE
+class ControlProviderImpl : public cppu::WeakImplHelper1< XControlProvider >
 {
     uno::Reference< uno::XComponentContext > m_xCtx;
 public:

@@ -68,7 +68,6 @@ public:
     };
     void SetBorders( SectionPropertyMap* pSectContext );
 };
-typedef std::shared_ptr< PageBordersHandler > PageBordersHandlerPtr;
 
 } }
 

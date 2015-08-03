@@ -444,7 +444,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             if ( nType == STYLE_TYPE_TABLE )
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
-                TableStyleSheetEntryPtr pTableEntry( new TableStyleSheetEntry( *pEntry.get( ), this ) );
+                std::shared_ptr<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry.get( ), this ) );
                 m_pImpl->m_pCurrentEntry = pTableEntry;
             }
             else
@@ -732,7 +732,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if (pProperties.get())
             {
-                LatentStyleHandlerPtr pLatentStyleHandler(new LatentStyleHandler());
+                std::shared_ptr<LatentStyleHandler> pLatentStyleHandler(new LatentStyleHandler());
                 pProperties->resolve(*pLatentStyleHandler);
                 beans::PropertyValue aValue;
                 aValue.Name = "lsdException";
@@ -750,7 +750,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 if (!m_pImpl->m_pCurrentEntry)
                     break;
 
-                TablePropertiesHandlerPtr pTblHandler(new TablePropertiesHandler());
+                std::shared_ptr<TablePropertiesHandler> pTblHandler(new TablePropertiesHandler());
                 pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
                 if ( !pTblHandler->sprm( rSprm ) )
                 {

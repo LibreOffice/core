@@ -22,8 +22,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > CommandBarControlEnumeration_BASE;
-class CommandBarControlEnumeration : public CommandBarControlEnumeration_BASE
+class CommandBarControlEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
 {
     //uno::Reference< uno::XComponentContext > m_xContext;
     CommandBarControls_BASE* m_pCommandBarControls;

@@ -55,8 +55,6 @@ struct ltint32
   }
 };
 
-typedef std::map<sal_Int32,com::sun::star::uno::Reference< com::sun::star::drawing::XShape >,ltint32> IdShapeMap;
-
 struct ConnectionHint
 {
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxConnector;
@@ -97,7 +95,8 @@ struct XMLShapeImportHelperImpl
     // context for sorting shapes
     ShapeSortContext*           mpSortContext;
 
-    IdShapeMap                  maShapeIds;
+    std::map<sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XShape >, ltint32>
+                                maShapeIds;
 
     std::vector<ConnectionHint> maConnections;
 

@@ -151,8 +151,6 @@ struct SdXMLltXDrawPageId
   }
 };
 
-typedef std::map< sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >, SdXMLltXDrawPageId > DrawPageIdMap;
-
 class SvXMLUnitConverter;
 class SvXMLTokenMap;
 class SdXMLMasterStylesContext;
@@ -194,14 +192,15 @@ class SdXMLImport: public SvXMLImport
     sal_Int32                   mnNewPageCount;
     sal_Int32                   mnNewMasterPageCount;
 
-    bool                    mbIsDraw;
-    bool                    mbLoadDoc;
-    bool                    mbPreview;
+    bool                        mbIsDraw;
+    bool                        mbLoadDoc;
+    bool                        mbPreview;
 
-    DrawPageIdMap               maDrawPageIds;
+    std::map< sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >, SdXMLltXDrawPageId >
+                                maDrawPageIds;
 
-    OUString             msPageLayouts;
-    OUString             msPreview;
+    OUString                    msPageLayouts;
+    OUString                    msPreview;
 
     HeaderFooterDeclMap         maHeaderDeclsMap;
     HeaderFooterDeclMap         maFooterDeclsMap;

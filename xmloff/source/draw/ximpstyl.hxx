@@ -120,7 +120,6 @@ public:
     const OUString& GetDisplayName() const { return msDisplayName; }
 
 };
-typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
 
 // presentation:placeholder context
 
@@ -146,15 +145,15 @@ public:
     const OUString& GetName() const { return msName; }
     sal_Int32 GetX() const { return mnX; }
 };
-typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList;
 
 // style:presentation-page-layout context
 
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 {
     OUString               msName;
-    ImpPlaceholderList          maList;
-    sal_uInt16                  mnTypeId;
+    std::vector< SdXMLPresentationPlaceholderContext* >
+                           maList;
+    sal_uInt16             mnTypeId;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -235,7 +234,7 @@ public:
 
 class SdXMLMasterStylesContext : public SvXMLImportContext
 {
-    ImpMasterPageList           maMasterPageList;
+    std::vector< SdXMLMasterPageContext* > maMasterPageList;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }

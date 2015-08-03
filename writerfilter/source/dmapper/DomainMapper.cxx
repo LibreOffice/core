@@ -1907,7 +1907,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         if( pProperties.get())
         {
 
-            SectionColumnHandlerPtr pSectHdl( new SectionColumnHandler );
+            std::shared_ptr< SectionColumnHandler > pSectHdl( new SectionColumnHandler );
             pProperties->resolve(*pSectHdl);
             if(pSectionContext && !m_pImpl->isInIndexContext())
             {
@@ -1968,7 +1968,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get( ) && pSectionContext )
         {
-            PageBordersHandlerPtr pHandler( new PageBordersHandler );
+            std::shared_ptr< PageBordersHandler > pHandler( new PageBordersHandler );
             pProperties->resolve( *pHandler );
 
             // Set the borders to the context and apply them to the styles
@@ -2462,7 +2462,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_stylisticSets_stylisticSets:
     case NS_ooxml::LN_cntxtAlts_cntxtAlts:
     {
-        TextEffectsHandlerPtr pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
+        std::shared_ptr<TextEffectsHandler> pTextEffectsHandlerPtr( new TextEffectsHandler(nSprmId) );
         boost::optional<PropertyIds> aPropertyId = pTextEffectsHandlerPtr->getGrabBagPropertyId();
         if(aPropertyId)
         {

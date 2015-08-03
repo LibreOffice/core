@@ -152,7 +152,7 @@ public:
 protected:
     PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );
 };
-typedef std::shared_ptr<TableStyleSheetEntry> TableStyleSheetEntryPtr;
+
 
 }}
 
