@@ -198,22 +198,6 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
-
-
-#define DECLIMPL_SUPPORTS_SERVICE( ) \
-    sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
-    { \
-        ::com::sun::star::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() ); \
-        const OUString* pSupported = aServiceNames.getConstArray(); \
-        const OUString* pSupportedEnd = pSupported + aServiceNames.getLength(); \
-        for ( ; pSupported != pSupportedEnd; ++pSupported ) \
-            if ( *pSupported == rServiceName ) \
-                return sal_True; \
-        return sal_False; \
-    }
-
-
-
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
     OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("stardiv.Toolkit." #ImplName ); } \
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE   \

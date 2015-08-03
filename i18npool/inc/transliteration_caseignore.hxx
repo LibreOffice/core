@@ -19,7 +19,6 @@
 #ifndef INCLUDED_I18NPOOL_INC_TRANSLITERATION_CASEIGNORE_HXX
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATION_CASEIGNORE_HXX
 
-#define TRANSLITERATION_UPPER_LOWER
 #include "transliteration_body.hxx"
 
 namespace com { namespace sun { namespace star { namespace i18n {
