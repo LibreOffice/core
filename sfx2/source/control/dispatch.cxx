@@ -115,7 +115,8 @@ struct SfxDispatcher_Impl
     std::deque<SfxToDo_Impl> aToDoStack;    // not processed Push/Pop
     SfxViewFrame*        pFrame;        // NULL or associated Frame
     SfxDispatcher*       pParent;       // AppDispatcher, NULL if possible
-    SfxHintPosterRef     xPoster;       // Execute asynchronous
+    tools::SvRef<SfxHintPoster>
+                         xPoster;       // Execute asynchronous
     bool                 bFlushing;     // sal_True during Flush //?
     bool                 bUpdated;      // Update_Impl has run
     bool                 bLocked;       // No Execute

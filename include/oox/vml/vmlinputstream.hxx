@@ -34,8 +34,6 @@ namespace vml {
 
 
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream > InputStream_BASE;
-
 /** An input stream class for VML streams, implementing the UNO interface
     com.sun.star.io.XInputStream needed by the Expat XML parsers.
 
@@ -53,7 +51,7 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream > InputStrea
     3)  Line breaks represented by a single <br> element (without matching
         </br> element) are replaced by a literal LF character.
  */
-class InputStream : public InputStream_BASE
+class InputStream : public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream >
 {
 public:
     explicit            InputStream(

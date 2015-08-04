@@ -51,9 +51,6 @@ public:
     const OUString & GetArgument() const { return aArgument; }
 };
 
-typedef ::std::vector< SvCommand > SvCommandList_impl;
-
-
 class SVL_DLLPUBLIC SvCommandList
 /*
   The list contains objects of type SvCommand.
@@ -62,7 +59,7 @@ class SVL_DLLPUBLIC SvCommandList
  */
 {
 private:
-    SvCommandList_impl  aCommandList;
+    ::std::vector< SvCommand >  aCommandList;
 
 public:
     SvCommand&      Append( const OUString & rCommand, const OUString & rArg );

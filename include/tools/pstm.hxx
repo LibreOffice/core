@@ -95,7 +95,6 @@ public:
                                           SvPersistBase *& rpObj );
 };
 
-typedef UniqueIndex<SvPersistBase> SvPersistUIdx;
 typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;
 
 class SvStream;
@@ -138,7 +137,8 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     SvClassManager &    rClassMgr;
     SvStream *          pStm;
     PersistBaseMap      aPTable; // reversed pointer and key
-    SvPersistUIdx       aPUIdx;
+    UniqueIndex<SvPersistBase>
+                        aPUIdx;
     sal_uIntPtr         nStartIdx;
     const SvPersistStream * pRefStm;
 

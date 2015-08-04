@@ -31,14 +31,12 @@ class Size;
 class Fraction;
 class IMapObject;
 
-typedef ::std::vector< IMapObject* > IMapObjectList_impl;
-
 class SVT_DLLPUBLIC ImageMap
 {
 private:
 
-    IMapObjectList_impl maList;
-    OUString            aName;
+    ::std::vector< IMapObject* > maList;
+    OUString                     aName;
 
 protected:
 

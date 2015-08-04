@@ -47,12 +47,10 @@ struct SFX2_DLLPUBLIC SfxEventName
                 , maUIName( rUIName ) {}
 };
 
-typedef ::std::vector< SfxEventName* > _SfxEventNamesList;
-
 class SFX2_DLLPUBLIC SfxEventNamesList
 {
 private:
-    _SfxEventNamesList  aEventNamesList;
+    ::std::vector< SfxEventName* > aEventNamesList;
     void DelDtor();
 
 public:

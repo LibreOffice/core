@@ -183,7 +183,6 @@ namespace systools
 /* Typedefs for some popular COM interfaces */
 typedef sal::systools::COMReference<IDataObject> IDataObjectPtr;
 typedef sal::systools::COMReference<IStream> IStreamPtr;
-typedef sal::systools::COMReference<IEnumFORMATETC> IEnumFORMATETCPtr;
 
 #endif // INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
 

@@ -25,11 +25,9 @@
 
 #include <vector>
 
-typedef ::std::vector< OUString > FileStringList;
-
 class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {
-    FileStringList  aStrList;
+    ::std::vector< OUString >  aStrList;
 
 protected:
 

@@ -92,10 +92,9 @@ const sal_Unicode OOX_DUMP_CMDPROMPT        = '?';
 const sal_Unicode OOX_DUMP_PLACEHOLDER      = '\x01';
 
 typedef ::std::pair< OUString, OUString > OUStringPair;
-typedef ::std::pair< sal_Int64, sal_Int64 >             Int64Pair;
 
-typedef ::std::vector< OUString >    OUStringVector;
-typedef ::std::vector< sal_Int64 >          Int64Vector;
+typedef ::std::vector< OUString >         OUStringVector;
+typedef ::std::vector< sal_Int64 >        Int64Vector;
 
 
 
@@ -447,7 +446,6 @@ static const String EMPTY_STRING;
 
 
 class Base;
-typedef std::shared_ptr< Base > BaseRef;
 
 /** Base class for all dumper classes.
 
@@ -504,7 +502,7 @@ public:
     virtual             ~Base();
 
     bool         isValid() const { return implIsValid(); }
-    static bool  isValid( const BaseRef& rxBase ) { return rxBase.get() && rxBase->isValid(); }
+    static bool  isValid( const std::shared_ptr< Base >& rxBase ) { return rxBase.get() && rxBase->isValid(); }
 
 protected:
                         Base() {}
@@ -744,7 +742,7 @@ private:
     struct ExtItemFormatKey
     {
         sal_Int64           mnKey;
-        Int64Pair           maFilter;
+        ::std::pair< sal_Int64, sal_Int64 >  maFilter;
         explicit            ExtItemFormatKey( sal_Int64 nKey ) : mnKey( nKey ), maFilter( 0, 0 ) {}
         bool                operator<( const ExtItemFormatKey& rRight ) const;
 

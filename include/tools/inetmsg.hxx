@@ -80,8 +80,6 @@ public:
     }
 };
 
-typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
-
 /**
   RFC822 fields
 */
@@ -129,11 +127,11 @@ enum INetMessageContainerType
 };
 
 class INetMIMEMessage;
-typedef ::std::vector< INetMIMEMessage* > INetMIMEMessgeList_impl;
 
 class TOOLS_DLLPUBLIC INetMIMEMessage
 {
-    HeaderList_impl m_aHeaderList;
+    ::std::vector< INetMessageHeader* >
+                    m_aHeaderList;
 
     sal_uIntPtr     m_nDocSize;
     OUString        m_aDocName;
@@ -145,8 +143,8 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     ::std::map<InetMessageField, sal_uIntPtr> m_nRFC822Index;
 
     ::std::map<InetMessageMime, sal_uIntPtr>  m_nMIMEIndex;
-    INetMIMEMessage*        pParent;
-    INetMIMEMessgeList_impl aChildren;
+    INetMIMEMessage*                          pParent;
+    ::std::vector< INetMIMEMessage* >         aChildren;
     OString                 m_aBoundary;
     bool                    bHeaderParsed;
 

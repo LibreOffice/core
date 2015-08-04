@@ -53,8 +53,6 @@ public:
     void            SetEventHdl(const Link<SfxRequest*,void>& rLink);
 };
 
-typedef tools::SvRef<SfxHintPoster> SfxHintPosterRef;
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

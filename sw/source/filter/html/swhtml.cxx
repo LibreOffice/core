@@ -211,7 +211,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
     // damit keiner das Doc klaut!
     rDoc.acquire();
     sal_uLong nRet = 0;
-    SvParserRef xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
+    tools::SvRef<SvParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, rBaseURL, !bInsertMode, pMedium,
                                             IsReadUTF8(),
                                             bIgnoreHTMLComments );

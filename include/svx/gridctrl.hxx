@@ -47,7 +47,6 @@ namespace svxform
 {
     class DataColumn;
 }
-typedef ::std::vector< ::svxform::DataColumn* > DbDataColumns;
 
 enum GridRowStatus
 {
@@ -64,7 +63,8 @@ enum GridRowStatus
 class DbGridRow : public SvRefBase
 {
     ::com::sun::star::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
-    DbDataColumns               m_aVariants;
+    ::std::vector< ::svxform::DataColumn* >
+                                m_aVariants;
     GridRowStatus               m_eStatus;
     bool                        m_bIsNew;
                                                     // row is no longer valid

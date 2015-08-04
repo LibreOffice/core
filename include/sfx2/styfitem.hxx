@@ -59,11 +59,9 @@ public:
     void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
-typedef ::std::vector< SfxStyleFamilyItem* > SfxStyleFamilyList;
-
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {
-    SfxStyleFamilyList  aEntryList;
+    ::std::vector< SfxStyleFamilyItem* >  aEntryList;
 
 public:
                         SfxStyleFamilies( const ResId &);

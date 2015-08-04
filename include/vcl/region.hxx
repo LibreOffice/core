@@ -33,9 +33,6 @@ namespace vcl { class Window; }
 class OutputDevice;
 class Bitmap;
 
-typedef std::shared_ptr< RegionBand > RegionBandPtr;
-typedef std::shared_ptr< tools::PolyPolygon > PolyPolygonPtr;
-typedef std::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
 typedef std::vector< Rectangle > RectangleVector;
 
 namespace vcl {
@@ -48,9 +45,12 @@ private:
     friend class ::Bitmap;
 
     // possible contents
-    B2DPolyPolygonPtr           mpB2DPolyPolygon;
-    PolyPolygonPtr              mpPolyPolygon;
-    RegionBandPtr               mpRegionBand;
+    std::shared_ptr< basegfx::B2DPolyPolygon >
+                                mpB2DPolyPolygon;
+    std::shared_ptr< tools::PolyPolygon >
+                                mpPolyPolygon;
+    std::shared_ptr< RegionBand >
+                                mpRegionBand;
 
     /// bitfield
     bool                        mbIsNull : 1;

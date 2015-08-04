@@ -34,15 +34,13 @@ struct RtfParserState_Impl
     {}
 };
 
-typedef std::stack< RtfParserState_Impl > RtfParserStates_Impl;
-
 class SVT_DLLPUBLIC SvRTFParser : public SvParser
 {
-    RtfParserStates_Impl aParserStates;
-
-    int nOpenBrakets;
-    rtl_TextEncoding eCodeSet, eUNICodeSet;
-    sal_uInt8 nUCharOverread;
+    std::stack< RtfParserState_Impl > aParserStates;
+    int              nOpenBrakets;
+    rtl_TextEncoding eCodeSet,
+                     eUNICodeSet;
+    sal_uInt8        nUCharOverread;
 
 private:
     static short _inSkipGroup;

@@ -55,8 +55,6 @@ struct XMLTableInfo
     std::vector< OUString > maDefaultRowCellStyles;
 };
 
-typedef std::map< const ::com::sun::star::uno::Reference< com::sun::star::table::XColumnRowRange >, std::shared_ptr< XMLTableInfo > > TableInfoMap;
-
 class XMLOFF_DLLPUBLIC XMLTableExport : public salhelper::SimpleReferenceObject
 {
 public:
@@ -82,7 +80,8 @@ private:
     rtl::Reference< SvXMLExportPropertyMapper >     mxCellExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxRowExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxColumnExportPropertySetMapper;
-    TableInfoMap                                    maTableInfoMap;
+    std::map< const css::uno::Reference< css::table::XColumnRowRange >, std::shared_ptr< XMLTableInfo > >
+                                                    maTableInfoMap;
     bool                                            mbExportTables;
 
 protected:

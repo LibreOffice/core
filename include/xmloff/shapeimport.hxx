@@ -199,15 +199,14 @@ public:
 
 
 
-typedef ::std::vector< SdXML3DLightContext* > Imp3DLightList;
-
 class SdXML3DSceneAttributesHelper
 {
 protected:
     SvXMLImport& mrImport;
 
     // list for local light contexts
-    Imp3DLightList              maList;
+    ::std::vector< SdXML3DLightContext* >
+                                maList;
 
     // local parameters which need to be read
     com::sun::star::drawing::HomogenMatrix mxHomMat;

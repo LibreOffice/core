@@ -42,16 +42,14 @@ struct SvAddressEntry_Impl
 };
 
 
-typedef ::std::vector< SvAddressEntry_Impl* > SvAddressList_Impl;
-
-
 class SVL_DLLPUBLIC SvAddressParser
 {
     friend class SvAddressParser_Impl;
 
     SvAddressEntry_Impl m_aFirst;
-    SvAddressList_Impl m_aRest;
-    bool m_bHasFirst;
+    ::std::vector< SvAddressEntry_Impl* >
+                        m_aRest;
+    bool                m_bHasFirst;
 
 public:
     SvAddressParser(const OUString& rInput);

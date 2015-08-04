@@ -418,7 +418,6 @@ struct SdPageCapsule {
     SdrPage * page;
 };
 
-typedef ::std::vector< PPTOleEntry* > PPTOleEntryList;
 class PPTExtParaProv;
 class MSFILTER_DLLPUBLIC SdrEscherImport : public SvxMSDffManager
 {
@@ -432,7 +431,7 @@ protected:
     PptDocumentAtom     aDocAtom;
     DffRecordManager    aDocRecManager;             // contains all first level container and atoms of the document container
 
-    PPTOleEntryList     aOleObjectList;             // contains PPTOleEntrys
+    ::std::vector< PPTOleEntry* > aOleObjectList;
 
     PptFontCollection*  m_pFonts;
 
@@ -526,7 +525,6 @@ struct ProcessData
 
 
 
-typedef ::std::vector< SdHyperlinkEntry* > SdHyperlinkEntryList;
 class SdrTextObj;
 class SfxObjectShell;
 
@@ -542,7 +540,7 @@ protected:
     bool                    bOk;
     PptUserEditAtom         aUserEditAtom;
     PptColorSchemeAtom      aPageColors;
-    SdHyperlinkEntryList    aHyperList;
+    ::std::vector< SdHyperlinkEntry* > aHyperList;
     sal_uInt32*             pPersistPtr;
     sal_uLong               nPersistPtrAnz;
 
@@ -669,11 +667,10 @@ struct PPTTextSpecInfo
     ~PPTTextSpecInfo();
 };
 
-typedef ::std::vector< PPTTextSpecInfo* > PPTTextSpecInfoList;
 struct  PPTTextSpecInfoAtomInterpreter
 {
     bool                bValid;
-    PPTTextSpecInfoList aList;
+    ::std::vector< PPTTextSpecInfo* > aList;
 
                     PPTTextSpecInfoAtomInterpreter();
                     ~PPTTextSpecInfoAtomInterpreter();
@@ -717,11 +714,9 @@ struct PPTBuGraEntry
                 PPTBuGraEntry( Graphic& rGraphic, sal_uInt32 nInstance );
 };
 
-typedef ::std::vector< PPTBuGraEntry* > PPTBuGraEntryList;
-
 class PPTExtParaProv
 {
-    PPTBuGraEntryList   aBuGraList;
+    ::std::vector< PPTBuGraEntry* > aBuGraList;
 
 public:
     bool                bStyles;

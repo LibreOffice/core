@@ -41,12 +41,10 @@ struct DataFlavorEx : public ::com::sun::star::datatransfer::DataFlavor
     SotClipboardFormatId mnSotId;
 };
 
-typedef ::std::vector< DataFlavorEx >                               _DataFlavorExVector;
-
 // JP 23.03.2001 - this struct is only for "hide" the STD of the vetor,
-// because our makefile filter all this symbols and so nowbody can use
+// because our makefile filter all this symbols and so nobody can use
 // these struct in any interfacses.
-struct DataFlavorExVector : public _DataFlavorExVector
+struct DataFlavorExVector : public ::std::vector< DataFlavorEx >
 {
 };
 

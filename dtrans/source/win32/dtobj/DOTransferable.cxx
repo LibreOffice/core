@@ -161,7 +161,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 
 void SAL_CALL CDOTransferable::initFlavorList( )
 {
-    IEnumFORMATETCPtr pEnumFormatEtc;
+    sal::systools::COMReference<IEnumFORMATETC> pEnumFormatEtc;
     HRESULT hr = m_rDataObject->EnumFormatEtc( DATADIR_GET, &pEnumFormatEtc );
     if ( SUCCEEDED( hr ) )
     {

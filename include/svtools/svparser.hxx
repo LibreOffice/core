@@ -168,11 +168,6 @@ public:
 };
 
 
-#ifndef GOODIES_DECL_SVPARSER_DEFINED
-#define GOODIES_DECL_SVPARSER_DEFINED
-typedef tools::SvRef<SvParser> SvParserRef;
-#endif
-
 inline sal_uLong SvParser::SetLineNr( sal_uLong nlNum )
 {   sal_uLong nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
 

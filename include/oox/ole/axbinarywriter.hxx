@@ -73,11 +73,6 @@ private:
 /** A pair of integer values as a property. */
 typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
 
-/** An array of string values as a property. */
-typedef ::std::vector< OUString > AxStringArray;
-
-
-
 /** Export helper to write simple and complex ActiveX form control properties
     to a binary input stream. */
 class AxBinaryPropertyWriter
@@ -158,8 +153,9 @@ private:
     ComplexPropVector   maStreamProps;      ///< Stores info for all used stream data properties.
     AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
     StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
-    OUString     maDummyString;      ///< Dummy string for unsupported properties.
-    AxStringArray       maDummyStringArray; ///< Dummy string array for unsupported properties.
+    OUString            maDummyString;      ///< Dummy string for unsupported properties.
+    ::std::vector< OUString >
+                        maDummyStringArray; ///< Dummy string array for unsupported properties.
     sal_Int16           mnBlockSize;
     sal_Int64           mnPropFlagsStart;     ///< pos of Prop flags
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.

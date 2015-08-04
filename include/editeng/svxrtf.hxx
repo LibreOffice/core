@@ -76,7 +76,6 @@ public:
 };
 
 
-typedef std::deque< Color* > SvxRTFColorTbl;
 typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
 typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 
@@ -170,12 +169,12 @@ struct RTFPardAttrMapIds
 
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {
-    SvStream &rStrm;
-    SvxRTFColorTbl  aColorTbl;
-    SvxRTFFontTbl   m_FontTable;
-    SvxRTFStyleTbl  m_StyleTable;
-    SvxRTFItemStack aAttrStack;
-    SvxRTFItemStackList m_AttrSetList;
+    SvStream &            rStrm;
+    std::deque< Color* >  aColorTbl;
+    SvxRTFFontTbl         m_FontTable;
+    SvxRTFStyleTbl        m_StyleTable;
+    SvxRTFItemStack       aAttrStack;
+    SvxRTFItemStackList   m_AttrSetList;
 
     RTFPlainAttrMapIds aPlainMap;
     RTFPardAttrMapIds aPardMap;

@@ -180,11 +180,9 @@ struct SvxMSDffConnectorRule
     friend SvStream& ReadSvxMSDffConnectorRule( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
 
-typedef ::std::vector< SvxMSDffConnectorRule* > SvxMSDffConnectorRuleList;
-
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 {
-    SvxMSDffConnectorRuleList   aCList;
+    ::std::vector< SvxMSDffConnectorRule* > aCList;
 
     SvxMSDffSolverContainer();
     ~SvxMSDffSolverContainer();
