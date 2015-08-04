@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_a03bda9b",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-08-04T15:35:18Z",
+      "side": 1,
+      "message": "With current design, I\u0027ll have to create a new method to calculate SumAndSumSquare for ScMatrixImpl and ScMatrix. I\u0027m thinking about a general function, which can be used without adding more methods and which can be use in similar way as below.\n\nauto results \u003d pMat-\u003eCollect(SumOp(), SumSquareOp(), Op([](double r, double b){return r + a * a * a;}));",
+      "parentUuid": "bae84128_40ddae6f",
+      "revId": "ef664b5252ebd67aa7cd7fd6fd824e0ed1ebff5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_804b3659",
         "filename": "sc/source/core/tool/scmatrix.cxx",
         "patchSetId": 2
