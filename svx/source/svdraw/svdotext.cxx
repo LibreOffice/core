@@ -2153,7 +2153,9 @@ void SdrTextObj::SetNextLinkInChain(SdrTextObj *pNextObj)
 
     // Deal with new next link's prev link
     if (mpNextInChain) {
-        if (mpNextInChain->mpPrevInChain)
+        // If there is a prev already at all and this is not already the current object
+        if (mpNextInChain->mpPrevInChain &&
+            mpNextInChain->mpPrevInChain != this)
             mpNextInChain->mpPrevInChain->mpNextInChain = NULL;
         mpNextInChain->mpPrevInChain = this;
     }
