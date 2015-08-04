@@ -39,14 +39,6 @@ namespace cppcanvas
         {
         }
 
-        Color::IntSRGBA ImplColor::getIntSRGBA( uno::Sequence< double >& rDeviceColor ) const
-        {
-            OSL_ENSURE( mxDevice.is(), "ImplColor::getIntSRGBA(): Invalid graphic device" );
-
-            // TODO(F1): Color space handling
-            return tools::doubleSequenceToIntSRGBA( mxDevice, rDeviceColor );
-        }
-
         uno::Sequence< double > ImplColor::getDeviceColor( Color::IntSRGBA aSRGBA ) const
         {
             OSL_ENSURE( mxDevice.is(), "ImplColor::getDeviceColor(): Invalid graphic device" );

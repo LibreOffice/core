@@ -58,10 +58,6 @@ namespace connectivity
         public:
             explicit OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
-            inline bool hasAlias( const OUString& _rAlias ) const
-            {
-                return m_aAliasMap.find( _rAlias ) != m_aAliasMap.end();
-            }
             OString getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const;
 
             inline AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }

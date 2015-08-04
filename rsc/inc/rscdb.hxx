@@ -148,10 +148,8 @@ class RscTypCont
     inline void SETCONST( RscConst *p1, Atom p2, ToolBoxItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, WindowBorderStyle p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, KeyFuncType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
-    inline void SETCONST( RscConst *p1, const char * p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, ToolBoxItemType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
-    inline void SETCONST( RscConst *p1, Atom p2, ButtonType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, ButtonType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, WindowAlign p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     RscEnum *   InitLangType();
@@ -162,7 +160,6 @@ class RscTypCont
     RscEnum *   InitTriState();
     RscTupel *  InitGeometry();
     RscArray *  InitLangGeometry( RscTupel * pGeo );
-    RscArray *  InitSystemGeometry( RscTupel * pGeo );
     RscCont  *  InitStringList();
     RscArray *  InitLangStringList( RscCont * pStrLst );
     RscTupel *  InitStringTupel();
@@ -190,7 +187,6 @@ class RscTypCont
     RscTop *    InitClassImageButton( RscTop * pSuper, RscTop * pClassImage,
                                     RscEnum * pTriState );
     RscTop *    InitClassEdit( RscTop * pSuper );
-    RscTop *    InitClassScrollBar( RscTop * pSuper );
     RscTop *    InitClassListBox( RscTop * pSuper, RscArray * pStrLst );
     RscTop *    InitClassComboBox( RscTop * pSuper, RscArray * pStrLst );
     RscTop *    InitClassFixedText( RscTop * pSuper );
@@ -261,11 +257,6 @@ public:
     ~RscTypCont();
 
     Atom AddLanguage( const char* );
-
-    bool              IsPreload() const
-                          { return (nFlags & PRELOAD_FLAG) != 0; }
-    bool              IsSysResTest() const
-                          { return (nFlags & NOSYSRESTEST_FLAG) == 0; }
     bool              IsSrsDefault() const
                           { return (nFlags & SRSDEFAULT_FLAG) != 0; }
     OString           ChangeLanguage(const OString & rNewLang);
@@ -280,7 +271,6 @@ public:
                               nSourceCharSet = aCharSet;
                               return aOld;
                           }
-    void              SetSearchPath( const OString& rStr) { aSearchPath = rStr; }
     OString           GetSearchPath() const { return aSearchPath; }
     void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
     void              InsertType( RscTop * pType )

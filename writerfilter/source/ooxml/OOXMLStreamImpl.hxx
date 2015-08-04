@@ -81,7 +81,6 @@ public:
 
     virtual css::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() SAL_OVERRIDE;
 
-    void setInputStream(css::uno::Reference<css::io::XInputStream> rxInputStream);
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
     css::uno::Reference<css::io::XStream> accessDocumentStream() { return mxDocumentStream;}
 };

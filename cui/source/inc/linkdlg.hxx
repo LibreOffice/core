@@ -71,7 +71,6 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( AutomaticClickHdl, RadioButton * );
     DECL_LINK( ManualClickHdl, RadioButton * );
     DECL_LINK(UpdateNowClickHdl, void *);
-    DECL_LINK( OpenSourceClickHdl, PushButton * );
     DECL_LINK( ChangeSourceClickHdl, PushButton * );
     DECL_LINK( BreakLinkClickHdl, PushButton * );
     DECL_LINK_TYPED( UpdateWaitingHdl, Idle *, void );

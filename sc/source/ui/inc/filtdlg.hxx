@@ -218,7 +218,6 @@ private:
     DECL_LINK( FilterAreaSelHdl, ListBox* );
     DECL_LINK( FilterAreaModHdl, formula::RefEdit* );
     DECL_LINK( EndDlgHdl,        Button* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput control
     DECL_LINK_TYPED( TimeOutHdl, Idle*, void );

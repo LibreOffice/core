@@ -91,8 +91,6 @@ namespace connectivity
             //  OConnection(const SQLHANDLE _pConnectionHandle);
             virtual ~OConnection();
 
-            void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
-
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
@@ -133,15 +131,11 @@ namespace connectivity
             inline bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
             inline bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
             inline bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
-            inline SQLHANDLE        getDriverHandle()               const { return m_pDriverHandleCopy;}
             inline ODBCDriver*      getDriver()                     const { return m_pDriver;}
-            inline OUString getUserName()                    const { return m_sUser; }
 
             SQLHANDLE       createStatementHandle();
             // close and free the handle and set it to SQL_NULLHANDLE
             void            freeStatementHandle(SQLHANDLE& _pHandle);
-
-            const TTypeInfoVector&  getTypeInfo() const { return m_aTypeInfo; }
         };
     }
 }

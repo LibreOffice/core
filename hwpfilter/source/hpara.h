@@ -135,20 +135,9 @@ class DLLEXPORT HWPPara
  */
         HWPPara *Next(void) { return _next;}
 
-        int HomePos(int line) const;
-
     private:
         HBox *readHBox(HWPFile &);
 };
-
-// inline functions
-
-inline int HWPPara::HomePos(int line) const
-{
-    if( nline < line + 1 ) return nch;
-    return linfo[line].pos;
-}
-
 
 #endif // INCLUDED_HWPFILTER_SOURCE_HPARA_H
 

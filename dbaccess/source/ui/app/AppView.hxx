@@ -117,13 +117,11 @@ namespace dbaui
         virtual void GetFocus() SAL_OVERRIDE;
 
         inline IApplicationController&                  getAppController() const { return m_rAppController; }
-        inline const css::lang::Locale&    getLocale() const { return m_aLocale;}
 
         // IClipboardTest
         virtual bool isCutAllowed() SAL_OVERRIDE;
         virtual bool isCopyAllowed() SAL_OVERRIDE;
         virtual bool isPasteAllowed() SAL_OVERRIDE;
-        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
         virtual void copy() SAL_OVERRIDE;
         virtual void cut() SAL_OVERRIDE;
         virtual void paste() SAL_OVERRIDE;

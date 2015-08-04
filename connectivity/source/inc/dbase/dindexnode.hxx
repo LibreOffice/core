@@ -70,9 +70,6 @@ namespace connectivity
             bool operator >  (const ONDXKey& rKey) const;
             bool operator >= (const ONDXKey& rKey) const;
 
-            bool Load (SvFileStream& rStream, bool bText);
-            bool Write(SvFileStream& rStream, bool bText);
-
             static bool IsText(sal_Int32 eType);
 
         private:
@@ -157,7 +154,6 @@ namespace connectivity
             bool IsLeaf() const;
             bool IsModified() const;
             bool HasParent();
-            bool HasChild() const;
 
             bool IsFull() const;
 
@@ -224,7 +220,6 @@ namespace connectivity
         inline bool ONDXPage::IsLeaf() const {return !aChild.HasPage();}
         inline bool ONDXPage::IsModified() const {return bModified;}
         inline bool ONDXPage::HasParent() {return aParent.Is();}
-        inline bool ONDXPage::HasChild() const {return aChild.HasPage();}
         inline ONDXPagePtr ONDXPage::GetParent() {return aParent;}
 
         inline void ONDXPage::SetParent(ONDXPagePtr aPa = ONDXPagePtr())
@@ -269,40 +264,10 @@ namespace connectivity
 
             // Setting the child, via reference to retain the PagePos
             void            SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = NULL);
-            void            SetKey(ONDXKey& rKey) {aKey = rKey;}
 
             void Write(SvStream &rStream, const ONDXPage& rPage) const;
             void Read(SvStream &rStream, ODbaseIndex&);
         };
-
-        // inline implementation
-
-//      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
-//          : ONDXKey_BASE(eType)
-//          , nRecord(nRec),xValue(rVal)
-//      {
-//      }
-
-
-//      inline ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
-//                  : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
-//                   ,nRecord(nRec)
-//      {
-//          if (aStr.len())
-//              xValue = aStr;
-//      }
-
-//      inline ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
-//                   : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
-//                   ,nRecord(nRec)
-//                   ,xValue(aVal)
-//      {
-//      }
-
-//      inline ONDXKey::ONDXKey(sal_uInt32 nRec)
-//                   :nRecord(nRec)
-//      {
-//      }
 
         inline ONDXKey::ONDXKey(const ONDXKey& rKey)
                      : ONDXKey_BASE(rKey.getDBType())

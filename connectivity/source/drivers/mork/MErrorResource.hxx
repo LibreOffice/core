@@ -41,12 +41,6 @@ namespace connectivity
             {
             }
 
-            inline void set( const sal_uInt16 _nErrorResourceId, const sal_Int32 _nErrorCondition, const OUString& _rParam )
-            {
-                m_nErrorResourceId = _nErrorResourceId;
-                m_nErrorCondition = _nErrorCondition;
-                m_sParameter = _rParam;
-            }
             inline void setResId( const sal_uInt16 _nErrorResourceId )
             {
                 m_nErrorResourceId = _nErrorResourceId;

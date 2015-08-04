@@ -43,7 +43,7 @@ public:
     virtual ~OOXMLValue();
 
     virtual int getInt() const SAL_OVERRIDE;
-    virtual bool getBool() const;
+    ;
     virtual OUString getString() const SAL_OVERRIDE;
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
@@ -77,7 +77,6 @@ public:
     virtual std::string getName() const SAL_OVERRIDE;
     virtual std::string toString() const SAL_OVERRIDE;
 #endif
-    virtual Sprm * clone() SAL_OVERRIDE;
     virtual void resolve(Properties & rProperties) SAL_OVERRIDE;
 };
 
@@ -108,7 +107,6 @@ public:
     virtual ~OOXMLBooleanValue();
 
     virtual int getInt() const SAL_OVERRIDE;
-    virtual bool getBool() const SAL_OVERRIDE;
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() const SAL_OVERRIDE;
@@ -174,8 +172,6 @@ public:
     OOXMLProperties_t::iterator end();
     OOXMLProperties_t::const_iterator begin() const;
     OOXMLProperties_t::const_iterator end() const;
-
-    virtual void setType(const std::string & rsType) SAL_OVERRIDE;
 
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() SAL_OVERRIDE;

@@ -1901,13 +1901,6 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     return xSpellAlt;
 }
 
-void ImpEditEngine::StartSpelling(EditView& rEditView, bool bMultipleDoc)
-{
-    DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");
-    rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
-    pSpellInfo = CreateSpellInfo( bMultipleDoc );
-}
-
 Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& rSelection)
 {
     EditSelection aCurSel( rSelection.Min() );

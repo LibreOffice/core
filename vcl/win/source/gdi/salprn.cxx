@@ -1607,59 +1607,6 @@ bool WinSalPrinter::EndJob()
     return TRUE;
 }
 
-bool WinSalPrinter::AbortJob()
-{
-    mbAbort = TRUE;
-
-    // trigger Abort asynchronously
-    HDC hDC = mhDC;
-    if ( hDC )
-    {
-        SalData* pSalData = GetSalData();
-        PostMessageW( pSalData->mpFirstInstance->mhComWnd,
-                         SAL_MSG_PRINTABORTJOB, (WPARAM)hDC, 0 );
-    }
-
-    return TRUE;
-}
-
-void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
-{
-    SalData*    pSalData = GetSalData();
-    WinSalPrinter* pPrinter = pSalData->mpFirstPrinter;
-
-    // check if printer still exists
-    while ( pPrinter )
-    {
-        if ( pPrinter->mhDC == hPrnDC )
-            break;
-
-        pPrinter = pPrinter->mpNextPrinter;
-    }
-
-    // if printer still exists, cancel the job
-    if ( pPrinter )
-    {
-        HDC hDC = pPrinter->mhDC;
-        if ( hDC )
-        {
-            if ( pPrinter->mpGraphics )
-            {
-                pPrinter->mpGraphics->DeInitGraphics();
-                delete pPrinter->mpGraphics;
-                pPrinter->mpGraphics = NULL;
-            }
-
-            CATCH_DRIVER_EX_BEGIN;
-            ::AbortDoc( hDC );
-            CATCH_DRIVER_EX_END( "exception in AbortDoc", pPrinter );
-
-            DeleteDC( hDC );
-            pPrinter->mhDC = 0;
-        }
-    }
-}
-
 SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobData )
 {
     if( ! isValid() || mhDC == 0 )

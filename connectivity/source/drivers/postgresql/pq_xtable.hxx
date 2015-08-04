@@ -73,46 +73,43 @@ public:
     Table( const ::rtl::Reference< RefCountedMutex > & refMutex,
            const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
            ConnectionSettings *pSettings);
-public:
-    void refetch();
 
-public: // XInterface
+    // XInterface
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
     virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XTypeProvider, first implemented by OPropertySetHelper
+    // XTypeProvider, first implemented by OPropertySetHelper
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-public: // XDataDescriptorFactory
+    // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
     createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XColumnsSupplier
+    // XColumnsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
     getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XIndexesSupplier
+    // XIndexesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
     getIndexes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XKeysSupplier
+    // XKeysSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
     getKeys(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XRename
+    // XRename
     virtual void SAL_CALL rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XAlterTable
-    // Methods
+    // XAlterTable
     virtual void SAL_CALL alterColumnByName(
         const OUString& colName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
@@ -127,11 +124,11 @@ public: // XAlterTable
                ::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // TODO: remove again
+    // TODO: remove again
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const OUString& aPropertyName)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XNamed
+    // XNamed
     virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };

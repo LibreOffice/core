@@ -32,7 +32,6 @@ namespace dbaxml
         OUString m_sComponentServiceName;
         bool        m_bAsTemplate;
 
-        ODBFilter& GetOwnImport();
     public:
 
         OXMLComponent( ODBFilter& rImport

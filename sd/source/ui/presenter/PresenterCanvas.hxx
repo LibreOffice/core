@@ -119,19 +119,6 @@ public:
         const css::rendering::ViewState& rViewState,
         const css::awt::Point& raOffset);
 
-    css::uno::Reference<css::rendering::XCanvas> GetSharedCanvas() const;
-
-    /** This method is typically called by CanvasPane objects to set the
-        repaint rectangle of a windowPaint() call as clip rectangle.  When
-        no or an empty rectangle is given then the window bounds are used
-        instead.
-        @param rClipRectangle
-            A valid rectangle is used to clip the view state clip polygon.
-            When an empty rectangle is given then the view state clip
-            polygons are clipped against the window bounds.
-    */
-    void SetClip (const css::awt::Rectangle& rClipRectangle);
-
     /** Called by custom sprites to update their clip polygon so that they
         are clipped at the borders of the canvas.  This method has to be
         called after each change of the sprite location so that the bounds

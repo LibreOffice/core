@@ -705,10 +705,6 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 
     switch ( nMsg )
     {
-        case SAL_MSG_PRINTABORTJOB:
-            ImplSalPrinterAbortJobAsync( (HDC)wParam );
-            rDef = FALSE;
-            break;
         case SAL_MSG_THREADYIELD:
             ImplSalYield( (bool)wParam, (bool)lParam );
             rDef = FALSE;

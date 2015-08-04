@@ -215,7 +215,6 @@ namespace connectivity
         ::rtl::Reference<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
         ::rtl::Reference<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
         ::rtl::Reference<OSQLColumns> getParameters()   const { return m_aParameters; }
-        ::rtl::Reference<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
 
         /** return the columname and the table range
             @param  _pColumnRef

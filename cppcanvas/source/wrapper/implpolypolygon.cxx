@@ -62,50 +62,6 @@ namespace cppcanvas
         {
         }
 
-        void ImplPolyPolygon::addPolygon( const ::basegfx::B2DPolygon& rPoly )
-        {
-            OSL_ENSURE( mxPolyPoly.is(),
-                        "ImplPolyPolygon::addPolygon(): Invalid polygon" );
-
-            if( !mxPolyPoly.is() )
-                return;
-
-            uno::Reference< rendering::XGraphicDevice > xDevice( getGraphicDevice() );
-
-            OSL_ENSURE( xDevice.is(),
-                        "ImplPolyPolygon::addPolygon(): Invalid graphic device" );
-
-            if( !xDevice.is() )
-                return;
-
-            mxPolyPoly->addPolyPolygon( geometry::RealPoint2D(0.0, 0.0),
-                                        ::basegfx::unotools::xPolyPolygonFromB2DPolygon(
-                                            xDevice,
-                                            rPoly) );
-        }
-
-        void ImplPolyPolygon::addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
-        {
-            OSL_ENSURE( mxPolyPoly.is(),
-                        "ImplPolyPolygon::addPolyPolygon(): Invalid polygon" );
-
-            if( !mxPolyPoly.is() )
-                return;
-
-            uno::Reference< rendering::XGraphicDevice > xDevice( getGraphicDevice() );
-
-            OSL_ENSURE( xDevice.is(),
-                        "ImplPolyPolygon::addPolyPolygon(): Invalid graphic device" );
-
-            if( !xDevice.is() )
-                return;
-
-            mxPolyPoly->addPolyPolygon( geometry::RealPoint2D(0.0, 0.0),
-                                        ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                                            xDevice,
-                                            rPoly) );
-        }
-
         void ImplPolyPolygon::setRGBAFillColor( Color::IntSRGBA aColor )
         {
             maFillColor = tools::intSRGBAToDoubleSequence( getGraphicDevice(),
@@ -118,12 +74,6 @@ namespace cppcanvas
             maStrokeColor = tools::intSRGBAToDoubleSequence( getGraphicDevice(),
                                                              aColor );
             mbStrokeColorSet = true;
-        }
-
-        Color::IntSRGBA ImplPolyPolygon::getRGBAFillColor() const
-        {
-            return tools::doubleSequenceToIntSRGBA( getGraphicDevice(),
-                                                    maFillColor );
         }
 
         Color::IntSRGBA ImplPolyPolygon::getRGBALineColor() const

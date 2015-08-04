@@ -340,24 +340,6 @@ bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 
 
 
-bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
-{
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    bool                            bRet = false;
-
-    while( aIter != aEnd )
-    {
-        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
-        {
-            bRet = true;
-            aIter = aEnd;
-        }
-    }
-
-    return bRet;
-}
-
-
 // TransferDataContainer
 
 

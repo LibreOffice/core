@@ -29,8 +29,6 @@ namespace dbaui
         virtual bool isCopyAllowed()        = 0;
         virtual bool isPasteAllowed()       = 0;
 
-        virtual bool hasChildPathFocus()    = 0;
-
         virtual void copy()     = 0;
         virtual void cut()      = 0;
         virtual void paste()    = 0;

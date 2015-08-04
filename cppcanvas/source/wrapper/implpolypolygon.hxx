@@ -48,12 +48,8 @@ namespace cppcanvas
 
             virtual ~ImplPolyPolygon();
 
-            virtual void            addPolygon( const ::basegfx::B2DPolygon& rPoly ) SAL_OVERRIDE;
-            virtual void            addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly ) SAL_OVERRIDE;
-
             virtual void            setRGBAFillColor( Color::IntSRGBA ) SAL_OVERRIDE;
             virtual void            setRGBALineColor( Color::IntSRGBA ) SAL_OVERRIDE;
-            virtual Color::IntSRGBA getRGBAFillColor() const SAL_OVERRIDE;
             virtual Color::IntSRGBA getRGBALineColor() const SAL_OVERRIDE;
 
             virtual void            setStrokeWidth( const double& rStrokeWidth ) SAL_OVERRIDE;

@@ -78,7 +78,6 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK(UpDownHdl_Impl, PushButton *);
     DECL_LINK(ClickHdl_Impl, void *);
     DECL_LINK(BackHdl_Impl, void *);
-    DECL_LINK( SelectHdlLB_Impl, ListBox * );
     DECL_LINK( LangSelectHdl_Impl, ListBox* );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
     DECL_LINK(OpenURLHdl_Impl, void *);

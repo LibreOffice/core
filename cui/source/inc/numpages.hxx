@@ -223,7 +223,6 @@ class SvxBitmapPickTabPage : public SfxTabPage
 protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
-        DECL_LINK(LinkBmpHdl_Impl, void *);
         DECL_LINK(ClickAddBrowseHdl_Impl, void * );
 
 
@@ -335,8 +334,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_LINK( BulColorHdl_Impl, ColorListBox* );
         DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
         DECL_LINK_TYPED(PreviewInvalidateHdl_Impl, Timer *, void);
-
-        DECL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
 
 public:
         SvxNumOptionsTabPage(vcl::Window* pParent,

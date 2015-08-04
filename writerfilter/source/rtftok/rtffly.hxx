@@ -71,11 +71,6 @@ public:
         return nAnchor;
     }
 
-    sal_uInt16 GetValue() const
-    {
-        return nVal;
-    }
-
 private:
     sal_uInt16 nVal;
 };
@@ -97,11 +92,6 @@ public:
     sal_uInt16 GetRelation() const
     {
         return OSL_LONIBBLE(OSL_HIBYTE(nVal));
-    }
-
-    sal_uInt16 GetRelAnchor() const
-    {
-        return OSL_HINIBBLE(OSL_LOBYTE(nVal));
     }
 
     sal_Int32 GetAlign() const
@@ -146,11 +136,6 @@ public:
         }
 
         return nAnchor;
-    }
-
-    sal_uInt16 GetValue() const
-    {
-        return nVal;
     }
 
 private:

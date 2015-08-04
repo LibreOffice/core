@@ -78,10 +78,6 @@ private:
                                                          OUStringHash,
                                                          std::equal_to< OUString > >
     {
-        inline void free()
-        {
-            MenuControllerMap().swap( *this );// get rid of reserved capacity
-        }
     };
 
     bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;

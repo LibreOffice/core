@@ -44,8 +44,6 @@ namespace connectivity
             explicit OCatalog(OConnection* _pCon);
 
             OConnection*            getConnection()     const { return m_pConnection; }
-            sdbcx::OCollection*     getPrivateTables()  const { return m_pTables;}
-            sdbcx::OCollection*     getPrivateViews()   const { return m_pViews; }
 
         };
     }

@@ -99,25 +99,6 @@ namespace cppcanvas
                                       mpTransformArbiter ) );
         }
 
-        SpriteSharedPtr ImplSpriteCanvas::createClonedSprite( const SpriteSharedPtr& rSprite ) const
-        {
-            OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::createCustomSprite(): Invalid canvas" );
-            OSL_ENSURE( rSprite.get() != NULL && rSprite->getUNOSprite().is(),
-                        "ImplSpriteCanvas::createCustomSprite(): Invalid sprite" );
-
-            if( !mxSpriteCanvas.is() ||
-                rSprite.get() == NULL ||
-                !rSprite->getUNOSprite().is() )
-            {
-                return SpriteSharedPtr();
-            }
-
-            return SpriteSharedPtr(
-                new ImplSprite( mxSpriteCanvas,
-                                mxSpriteCanvas->createClonedSprite( rSprite->getUNOSprite() ),
-                                mpTransformArbiter ) );
-        }
-
         CanvasSharedPtr ImplSpriteCanvas::clone() const
         {
             return SpriteCanvasSharedPtr( new ImplSpriteCanvas( *this ) );

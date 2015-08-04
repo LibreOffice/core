@@ -60,8 +60,6 @@ namespace cppcanvas
             virtual void                             setClip() SAL_OVERRIDE;
             virtual ::basegfx::B2DPolyPolygon const* getClip() const SAL_OVERRIDE;
 
-            virtual FontSharedPtr                    createFont( const OUString& rFontName, const double& rCellSize ) const SAL_OVERRIDE;
-
             virtual ColorSharedPtr                   createColor() const SAL_OVERRIDE;
 
             virtual CanvasSharedPtr                  clone() const SAL_OVERRIDE;

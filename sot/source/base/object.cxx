@@ -42,15 +42,6 @@ SotFactory * SotObject::ClassFactory()
     return *ppFactory;
 }
 
-void * SotObject::CreateInstance( SotObject ** ppObj )
-{
-    SotObject * p = new SotObject();
-    if( ppObj )
-        *ppObj = p;
-    return p;
-}
-
-
 void * SotObject::Cast( const SotFactory * pFact )
 {
     void * pRet = NULL;

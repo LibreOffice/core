@@ -43,14 +43,6 @@ namespace cppcanvas
     {
     public:
         virtual ::basegfx::B2ISize      getSize() const = 0;
-
-        // shared_ptr does not allow for covariant return types
-        BitmapCanvasSharedPtr           cloneBitmapCanvas() const
-        {
-            BitmapCanvasSharedPtr p( ::boost::dynamic_pointer_cast< BitmapCanvas >(this->clone()) );
-            OSL_ENSURE(p.get(), "BitmapCanvas::cloneBitmapCanvas(): dynamic cast failed");
-            return p;
-        }
     };
 
 }

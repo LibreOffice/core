@@ -170,15 +170,6 @@ namespace pcr
         */
         bool impl_trySuspendDesigner_nothrow() const;
 
-        /** gets the current value of the command property
-        */
-        OUString
-                impl_getCommandPropertyValue_nothrow();
-
-        /** sets anew value for the command property
-        */
-        void    impl_setCommandPropertyValue_nothrow( const OUString& _rCommand ) const;
-
     private:
         SQLCommandDesigner( const SQLCommandDesigner& ) SAL_DELETED_FUNCTION;
         SQLCommandDesigner& operator=( const SQLCommandDesigner& ) SAL_DELETED_FUNCTION;

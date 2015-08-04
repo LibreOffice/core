@@ -54,9 +54,6 @@ public:
     BroadcasterHelperHolder( osl::Mutex& rMutex ) :
             m_aHelper( rMutex ) {}
     ~BroadcasterHelperHolder() {}
-
-    ::cppu::OBroadcastHelper& getHelper() { return m_aHelper; }
-
 };
 
 class PluginModel : public BroadcasterHelperHolder,
@@ -83,10 +80,6 @@ class PluginModel : public BroadcasterHelperHolder,
     PluginModel();
     PluginModel( const OUString& rURL, const OUString& rMimeType );
     virtual ~PluginModel();
-
-
-    const OUString& getCreationURL() { return m_aCreationURL; }
-    void setMimeType( const OUString& rMime ) { m_aMimeType = rMime; }
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE

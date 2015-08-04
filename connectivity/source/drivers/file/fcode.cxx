@@ -66,11 +66,6 @@ OCode::~OCode()
 }
 
 
-OEvaluateSet* OOperand::preProcess(OBoolOperator* /*pOp*/, OOperand* /*pRight*/)
-{
-    return NULL;
-}
-
 OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
     : OOperand(_rType)
     , m_nRowPos(_nPos)
@@ -178,8 +173,6 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
 // Implementation of the operators
 
 
-sal_uInt16 OOperator::getRequestedOperands() const {return 2;}
-
 
 bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 {
@@ -217,12 +210,6 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
         delete pOperand;
 }
 
-sal_uInt16 OOp_NOT::getRequestedOperands() const
-{
-    return 1;
-}
-
-
 bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     return pLeft->isValid() && pRight->isValid();
@@ -232,12 +219,6 @@ bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
 bool OOp_OR::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     return pLeft->isValid() || pRight->isValid();
-}
-
-
-sal_uInt16 OOp_ISNULL::getRequestedOperands() const
-{
-    return 1;
 }
 
 
@@ -388,11 +369,6 @@ double OOp_DIV::operate(const double& fLeft,const double& fRight) const
     return fLeft / fRight;
 }
 
-OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* /*pOp*/, OOperand* /*pRight*/)
-{
-    return NULL;
-}
-
 void ONthOperator::Exec(OCodeStack& rCodeStack)
 {
     ::std::vector<ORowSetValue> aValues;
@@ -449,7 +425,6 @@ void OUnaryOperator::Exec(OCodeStack& rCodeStack)
         delete pOperand;
 }
 
-sal_uInt16 OUnaryOperator::getRequestedOperands() const {return 1;}
 
 
 

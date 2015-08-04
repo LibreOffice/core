@@ -237,8 +237,6 @@ public:
     void                SetFont( const vcl::Font& rFont );
     const vcl::Font&    GetFont() const { return maFont; }
 
-    sal_uInt16          GetDefTab() const;
-
     void                SetLeftMargin( sal_uInt16 n );
 
     void                SetUpdateMode( bool bUpdate );

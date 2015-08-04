@@ -54,25 +54,11 @@ public:
 
     void                Click() SAL_OVERRIDE;
 
-    void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
-    sal_uLong           GetDelta() const { return mnDelta; }
-
-    void                SetMapUnit( MapUnit eNewUnit = MAP_PIXEL ) { meUnit = eNewUnit; }
-    MapUnit             GetMapUnit() const { return meUnit; }
-
     using PushButton::SetState;
-    void                SetState( bool bNewState = true );
-    bool            GetState() const { return mbState; }
 
     void                SetText( const OUString& rNewText ) SAL_OVERRIDE;
     OUString            GetText() const SAL_OVERRIDE;
 };
-
-inline void MoreButton::SetState( bool bNewState )
-{
-    if ( mbState != bNewState )
-        Click();
-}
 
 #endif // INCLUDED_VCL_MOREBTN_HXX
 

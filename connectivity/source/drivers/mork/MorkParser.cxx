@@ -88,11 +88,6 @@ bool MorkParser::open( const std::string &path )
     return parse();
 }
 
-inline MorkErrors MorkParser::error()
-{
-    return error_;
-}
-
 void MorkParser::initVars()
 {
     error_ = NoError;

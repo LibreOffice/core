@@ -42,12 +42,10 @@ public:
     PluginComm( const OString& rLibName, bool bReusable = true );
     virtual ~PluginComm();
 
-    int getRefCount() { return m_nRefCount; }
     void addRef() { m_nRefCount++; }
     void decRef() { m_nRefCount--; if( ! m_nRefCount ) delete this; }
 
     const OString& getLibName() { return m_aLibName; }
-    void setLibName( const OString& rName ) { m_aLibName = rName; }
 
     void addFileToDelete( const OUString& filename )
         { m_aFilesToDelete.push_back( filename ); }
@@ -55,7 +53,6 @@ public:
     virtual NPError NPP_Destroy( NPP instance, NPSavedData** save ) = 0;
     virtual NPError NPP_DestroyStream( NPP instance, NPStream* stream,
                                NPError reason ) = 0;
-    virtual void* NPP_GetJavaClass() = 0;
     virtual NPError NPP_Initialize() = 0;
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
                              uint16_t mode, int16_t argc,
@@ -64,7 +61,6 @@ public:
     virtual NPError NPP_NewStream( NPP instance, NPMIMEType type,
                                    NPStream* stream,
                                    NPBool seekable, uint16_t* stype ) = 0;
-    virtual void NPP_Print( NPP instance, NPPrint* platformPrint ) = 0;
     virtual NPError NPP_SetWindow( NPP instance, NPWindow* window ) = 0;
     virtual void NPP_Shutdown() = 0;
     virtual void NPP_StreamAsFile( NPP instance, NPStream* stream,
@@ -74,9 +70,6 @@ public:
     virtual int32_t NPP_Write( NPP instance, NPStream* stream, int32_t offset,
                                int32_t len, void* buffer ) = 0;
     virtual int32_t NPP_WriteReady( NPP instance, NPStream* stream ) = 0;
-    virtual NPError NPP_GetValue( NPP instance, NPPVariable  variable, void* value ) = 0;
-    virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
-                                 void *value) = 0;
 
     NPError NPP_SetWindow( XPlugin_Impl* );
     NPError NPP_Destroy( XPlugin_Impl*, NPSavedData** save );

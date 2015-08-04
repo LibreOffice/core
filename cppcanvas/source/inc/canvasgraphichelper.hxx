@@ -48,12 +48,9 @@ namespace cppcanvas
 
             // CanvasGraphic implementation
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) SAL_OVERRIDE;
-            virtual ::basegfx::B2DHomMatrix          getTransformation() const SAL_OVERRIDE;
             virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) SAL_OVERRIDE;
             virtual void                             setClip() SAL_OVERRIDE;
-            virtual ::basegfx::B2DPolyPolygon const* getClip() const SAL_OVERRIDE;
             virtual void                             setCompositeOp( CompositeOp aOp ) SAL_OVERRIDE;
-            virtual CompositeOp                      getCompositeOp() const SAL_OVERRIDE;
 
         protected:
             // for our clients

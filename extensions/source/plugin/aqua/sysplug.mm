@@ -761,24 +761,6 @@ NPError MacPluginComm::NPP_GetValue( NPP instance, NPPVariable variable, void *r
 }
 
 
-NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *set_value )
-{
-    DBG_ASSERT( m_aNPPfuncs.setvalue, "### NPP_SetValue(): null pointer in NPP functions table!" );
-    m_eCall = eNPP_SetValue;
-    m_aArgs[0] = (void*)instance;
-    m_aArgs[1] = (void*)variable;
-    m_aArgs[2] = set_value;
-    return (NPError)execute();
-}
-
-
-void * MacPluginComm::NPP_GetJavaClass()
-{
-    OSL_FAIL( "no java class available!" );
-    return 0;
-}
-
-
 NPError MacPluginComm::NPP_Initialize()
 {
     return NPERR_NO_ERROR;

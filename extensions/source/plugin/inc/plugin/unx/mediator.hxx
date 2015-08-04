@@ -60,22 +60,11 @@ struct MediatorMessage
                 delete [] m_pBytes;
         }
 
-    void Set( sal_uLong nBytes, char* pBytes )
-        {
-            if( m_pBytes )
-                delete [] m_pBytes;
-            m_nBytes = nBytes;
-            m_pBytes = new char[ m_nBytes ];
-            memcpy( m_pBytes, pBytes, (size_t)m_nBytes );
-        }
-
     sal_uLong   ExtractULONG();
-    char*   GetString();
+    char*       GetString();
     sal_uInt32  GetUINT32();
-    void*   GetBytes( sal_uLong& );
-    void*   GetBytes() { sal_uLong nBytes; return GetBytes( nBytes ); }
-
-    void    Rewind() { m_pRun = NULL; }
+    void*       GetBytes( sal_uLong& );
+    void*       GetBytes() { sal_uLong nBytes; return GetBytes( nBytes ); }
 };
 
 class MediatorListener;
@@ -110,10 +99,6 @@ public:
     void invalidate() { m_bValid = false; }
 
     sal_uLong SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong nMessageID = 0 );
-    sal_uLong SendMessage( const OString& rMessage, sal_uLong nMessageID = 0 )
-    {
-        return SendMessage( rMessage.getLength(), rMessage.getStr(), nMessageID );
-    }
 
     bool WaitForMessage( sal_uLong nTimeOut = 5000 );
     // timeout in ms

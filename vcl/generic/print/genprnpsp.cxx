@@ -951,13 +951,6 @@ bool PspSalPrinter::EndJob()
     return bSuccess;
 }
 
-bool PspSalPrinter::AbortJob()
-{
-    bool bAbort = m_aPrintJob.AbortJob();
-    GetSalData()->m_pInstance->jobEndedPrinterUpdate();
-    return bAbort;
-}
-
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
 {
     OSL_TRACE("PspSalPrinter::StartPage");

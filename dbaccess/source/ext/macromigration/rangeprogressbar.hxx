@@ -59,11 +59,6 @@ namespace dbmm
             m_pBar->SetValue( (sal_uInt16)( 100.0 * _nValue / m_nRange ) );
         }
 
-        sal_uInt32 GetValue() const
-        {
-            return (sal_uInt32)(m_pBar->GetValue() / 100.0 * m_nRange);
-        }
-
     private:
         VclPtr<ProgressBar> m_pBar;
         sal_uInt32  m_nRange;

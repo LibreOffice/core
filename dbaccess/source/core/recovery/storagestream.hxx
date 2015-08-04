@@ -35,7 +35,6 @@ namespace dbaccess
     {
     public:
         StorageOutputStream(
-            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
@@ -46,14 +45,10 @@ namespace dbaccess
         virtual void close();
 
     protected:
-        const css::uno::Reference< css::uno::XComponentContext >&
-                                                getContext() const { return m_rContext; }
         const css::uno::Reference< css::io::XOutputStream >&
                                                 getOutputStream() const { return m_xOutputStream; }
 
     private:
-        const css::uno::Reference< css::uno::XComponentContext >&
-                                                m_rContext;
               css::uno::Reference< css::io::XOutputStream >
                                                 m_xOutputStream;
     };
@@ -65,25 +60,16 @@ namespace dbaccess
     {
     public:
         StorageInputStream(
-            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageInputStream();
 
-        /** simply calls closeInput on our input stream, override to extend/modify this behavior
-        */
-        void close();
-
     protected:
-        const css::uno::Reference< css::uno::XComponentContext >&
-                                                getContext() const { return m_rContext; }
         const css::uno::Reference< css::io::XInputStream >&
                                                 getInputStream() const { return m_xInputStream; }
 
     private:
-        const css::uno::Reference< css::uno::XComponentContext >&
-                                                m_rContext;
               css::uno::Reference< css::io::XInputStream >
                                                 m_xInputStream;
     };

@@ -36,12 +36,6 @@ GdkPixbuf* Tile::getBuffer()
     return m_pBuffer;
 }
 
-void Tile::release()
-{
-    g_object_unref (m_pBuffer);
-    m_pBuffer = NULL;
-}
-
 void Tile::setPixbuf(GdkPixbuf *buffer)
 {
     m_pBuffer = buffer;

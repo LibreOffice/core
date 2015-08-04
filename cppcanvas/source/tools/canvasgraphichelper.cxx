@@ -64,13 +64,6 @@ namespace cppcanvas
             ::canvas::tools::setRenderStateTransform( maRenderState, rMatrix );
         }
 
-        ::basegfx::B2DHomMatrix CanvasGraphicHelper::getTransformation() const
-        {
-            ::basegfx::B2DHomMatrix aMatrix;
-            return ::canvas::tools::getRenderStateTransform( aMatrix,
-                                                             maRenderState );
-        }
-
         void CanvasGraphicHelper::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
@@ -82,11 +75,6 @@ namespace cppcanvas
         {
             maClipPolyPolygon.reset();
             maRenderState.Clip.clear();
-        }
-
-        ::basegfx::B2DPolyPolygon const* CanvasGraphicHelper::getClip() const
-        {
-            return !maClipPolyPolygon ? NULL : &(*maClipPolyPolygon);
         }
 
         const rendering::RenderState& CanvasGraphicHelper::getRenderState() const
@@ -109,13 +97,6 @@ namespace cppcanvas
         {
             maRenderState.CompositeOperation = (sal_Int8)aOp;
         }
-
-        CanvasGraphic::CompositeOp CanvasGraphicHelper::getCompositeOp() const
-        {
-            return static_cast<CompositeOp>(maRenderState.CompositeOperation);
-        }
-
-
 
     }
 }

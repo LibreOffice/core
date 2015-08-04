@@ -158,10 +158,6 @@ private:
     class Implementation;
     ::boost::shared_ptr<Implementation> mpImpl;
     PreviewSize mePreviewSize;
-
-    /** Retrieve the preview of the document specified by the given URL.
-    */
-    static BitmapEx LoadPreviewFromURL (const OUString& aURL);
 };
 
 /** For some changes to the set of master pages in a MasterPageContainer or

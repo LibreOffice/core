@@ -77,9 +77,6 @@ protected:
     sal_Int32 m_fieldCount;
     bool  m_wasNull;
 
-public:
-    inline cppu::OBroadcastHelper & getRBHelper() { return OComponentHelper::rBHelper;}
-
 protected:
     /** mutex should be locked before called
      */

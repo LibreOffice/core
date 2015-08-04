@@ -34,10 +34,6 @@ public:
     virtual ~SdHTMLFilter();
 
     virtual bool        Export() SAL_OVERRIDE;
-
-private:
-    DECL_LINK( IOProgressHdl, sal_uInt16* );
-
 };
 
 #endif // INCLUDED_SD_INC_SDHTMLFILTER_HXX

@@ -365,20 +365,7 @@ bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, bool bDel )
 // Move node to a different tree. Returns true is found and moved. This routine
 // may be called when the key has changed.
 
-bool StgAvlNode::Move( StgAvlNode** pRoot1, StgAvlNode** pRoot2, StgAvlNode* pMove )
-{
-    if ( !pRoot1 )
-        return false;
 
-    // special case - empty tree
-    if( *pRoot1 == NULL )
-        return false;
-    pMove = Rem( pRoot1, pMove, false );
-    if( pMove )
-        return Insert( pRoot2, pMove );
-    else
-        return false;
-}
 
 ////////////////////////// class AvlIterator
 

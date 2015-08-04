@@ -58,13 +58,6 @@ ERRTYPE RscConst::SetConstant( Atom nVarName, sal_Int32 lValue )
     return ERR_OK;
 }
 
-Atom RscConst::GetConstant( sal_uInt32 nPos )
-{
-     if( nPos < nEntries )
-        return pVarArray[ nPos ].nId;
-    return InvalidAtom;
-}
-
 bool RscConst::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
 {
     sal_uInt32 i = 0;

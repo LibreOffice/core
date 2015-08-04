@@ -70,10 +70,6 @@ public:
     ObjNode*    pObjBiTree; // Zeiger auf Objektbaum
                 RefNode( Atom nTyp );
     sal_uInt32  GetId() const SAL_OVERRIDE;
-    RefNode*    Search( Atom typ ) const //< search the index in the b-tree
-                    {
-                        return static_cast<RefNode *>(IdNode::Search( typ ));
-                    }
     bool        Insert( RefNode* pTN ) //< insert a new node in the b-tree
                     {
                         return IdNode::Insert( static_cast<IdNode *>(pTN) );

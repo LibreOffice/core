@@ -37,7 +37,6 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
-        IControlActionListener* getControlActionListener( ) const { return m_pActionListener; }
 
     protected:
         // DropTargetHelper overridables

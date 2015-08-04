@@ -66,7 +66,6 @@ namespace framework
         protected:
             void                            impl_fillCommandToImageNameMap();
             ImageList*                      impl_getImageList( sal_Int16 nImageType );
-            std::vector< OUString >&        impl_getImageNameVector() { return m_aImageNameVector;}
             std::vector< OUString >&        impl_getImageCommandNameVector() { return m_aImageCommandNameVector;}
 
         private:

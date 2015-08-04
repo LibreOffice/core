@@ -329,8 +329,6 @@ public:
 
     bool                restorePosition();
 
-    inline BiffInputStream& getStream() { return mrStrm; }
-
 private:
     BiffInputStream&    mrStrm;
     sal_Int64           mnRecHandle;
