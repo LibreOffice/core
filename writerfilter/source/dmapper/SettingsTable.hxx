@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <map>
+#include <memory>
 
 namespace com{ namespace sun{ namespace star{
 namespace lang{
@@ -41,7 +42,7 @@ struct SettingsTable_Impl;
 
 class SettingsTable : public LoggedProperties, public LoggedTable
 {
-    SettingsTable_Impl *m_pImpl;
+    std::unique_ptr<SettingsTable_Impl> m_pImpl;
 
  public:
     SettingsTable(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory);

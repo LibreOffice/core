@@ -131,7 +131,6 @@ SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang:
 
 SettingsTable::~SettingsTable()
 {
-    delete m_pImpl;
 }
 
 void SettingsTable::lcl_attribute(Id nName, Value & val)
