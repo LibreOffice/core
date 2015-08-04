@@ -1333,7 +1333,7 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
         else if (pOld && RES_ATTRSET_CHG == pNew->Which())
         {
-            SwHistoryHint* pNewHstr;
+            SwHistoryHint* pNewHstr(0);
             const SfxItemSet& rSet = *static_cast< const SwAttrSetChg* >(pOld)->GetChgSet();
 
             if ( 1 < rSet.Count() )
@@ -1352,7 +1352,8 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 }
             }
 
-            m_pHistory->m_SwpHstry.push_back( pNewHstr );
+            if (pNewHstr)
+                m_pHistory->m_SwpHstry.push_back( pNewHstr );
         }
     }
 }
