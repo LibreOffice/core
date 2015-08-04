@@ -50,6 +50,14 @@ public:
 
     bool VisitFieldDecl(const FieldDecl *);
     bool VisitVarDecl(const VarDecl *);
+
+    bool WalkUpFromObjCIvarDecl(ObjCIvarDecl * decl) {
+        // Don't recurse into WalkUpFromFieldDecl, as VisitFieldDecl calls
+        // FieldDecl::getParent, which triggers an assertion at least with
+        // current trunk towards Clang 3.7 when the FieldDecl is actually an
+        // ObjCIvarDecl.
+        return VisitObjCIvarDecl(decl);
+    }
 };
 
 bool BaseCheckNotSubclass(const CXXRecordDecl *BaseDefinition, void *p) {
