@@ -394,9 +394,9 @@ void Application::ReAcquireSolarMutex(sal_uLong const nReleased)
 {
     // 0 would mean that events/timers will be handled without locking
     // SolarMutex (racy)
-    assert(nReleased != 0);
+    SAL_WARN_IF(nReleased == 0, "vcl", "SolarMutexReleaser without SolarMutex");
 #ifdef WNT
-    if (ImplGetSVData()->mbDeInit) // do not Yield in DeInitVCL
+    if (nReleased == 0 || ImplGetSVData()->mbDeInit) //do not Yield in DeInitVCL
         AcquireSolarMutex(nReleased);
     else
         ImplYield(false, false, nReleased);
