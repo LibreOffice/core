@@ -116,24 +116,22 @@ void PaintHelper::StartBufferedPaint()
     // painting over, as VirtualDevice::ImplInitVirDev() would do.
     // The painted area is m_aPaintRect, or in case it's empty, then the whole window.
     pFrameData->mpBuffer->SetBackground(Wallpaper(Color(COL_WHITE)));
+    long nOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
+    long nOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
+    pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
+    pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
     if (m_aPaintRect.IsEmpty())
         pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
     else
         pFrameData->mpBuffer->Erase(m_aPaintRect);
+    pFrameData->mpBuffer->mnOutOffX = nOutOffX;
+    pFrameData->mpBuffer->mnOutOffY = nOutOffY;
 
     pFrameData->mbInBufferedPaint = true;
     m_bStartedBufferedPaint = true;
 
     // Remember what was the map mode of m_aPaintRect.
     m_aPaintRectMapMode = m_pWindow->GetMapMode();
-
-    // we need to remember the mnOutOffX / mnOutOffY, but actually really
-    // set it just temporarily for the subwidgets - so we are setting it here
-    // only to remember the value & to be able to pass it to the descendants
-    // FIXME: once everything's double-buffered, this is (hopefully) not
-    // necessary as the buffer is always created for the main window.
-    pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
-    pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
 }
 
 void PaintHelper::SetupBuffer()
@@ -171,9 +169,6 @@ void PaintHelper::PaintBuffer()
     assert(pFrameData->mbInBufferedPaint);
     assert(m_bStartedBufferedPaint);
 
-    pFrameData->mpBuffer->mnOutOffX = 0;
-    pFrameData->mpBuffer->mnOutOffY = 0;
-
     // copy the buffer content to the actual window
     // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
     // painting directly instead of using Invalidate()
@@ -199,7 +194,13 @@ void PaintHelper::PaintBuffer()
             aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
         }
 
+        long nOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
+        long nOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
+        pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
+        pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
         m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *pFrameData->mpBuffer.get());
+        pFrameData->mpBuffer->mnOutOffX = nOutOffX;
+        pFrameData->mpBuffer->mnOutOffY = nOutOffY;
     }
 }
 
@@ -250,19 +251,12 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             SetupBuffer();
             m_pWindow->ApplySettings(*pFrameData->mpBuffer.get());
 
-            // temporarily decrease the mnOutOffX/Y of the buffer for the
-            // subwidgets (because the buffer is our base here)
-            // FIXME: once everything's double-buffered, this is (hopefully) not
-            // necessary as the buffer is always created for the main window.
             long nOutOffX = pFrameData->mpBuffer->mnOutOffX;
             long nOutOffY = pFrameData->mpBuffer->mnOutOffY;
-            pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel() - pFrameData->mpBuffer->mnOutOffX;
-            pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel() - pFrameData->mpBuffer->mnOutOffY;
-
+            pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
+            pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
             m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer.get());
             m_pWindow->Paint(*pFrameData->mpBuffer.get(), m_aPaintRect);
-
-            // restore the mnOutOffX/Y value
             pFrameData->mpBuffer->mnOutOffX = nOutOffX;
             pFrameData->mpBuffer->mnOutOffY = nOutOffY;
         }
