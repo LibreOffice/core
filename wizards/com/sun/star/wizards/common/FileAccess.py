@@ -303,10 +303,12 @@ class FileAccess(object):
             i += 1
         return url
 
-    def getURL(self, parentPath, childPath):
-        parent = self.filenameConverter.getSystemPathFromFileURL(parentPath);
-        path = parent + "/" + childPath
-        return self.filenameConverter.getFileURLFromSystemPath(parentPath, path)
+    def getURL(self, parentURL, childPath):
+        if len(childPath) > 0 and childPath[0] == "/":
+            path = parentURL + childPath
+        else:
+            path = parentURL + "/" + childPath
+        return path
 
     def getURL1(self, path):
         f = "/"
