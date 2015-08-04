@@ -138,6 +138,8 @@ static std::vector<std::string> PROBABLY_GOOD_TEMPLATES = {
     "sdbtools::OAutoRegistration",
     "stoc_connector::ReferenceEqual",
     "stoc_connector::ReferenceHash",
+    "std::__1::mem_fun_t",
+    "std::__1::mem_fun1_t",
     "std::mem_fun_t",
     "std::mem_fun1_t",
     "SwIterator",
