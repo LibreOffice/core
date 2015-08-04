@@ -26,9 +26,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
@@ -60,7 +58,7 @@ typedef std::unordered_multimap<OUString, unsigned int, OUStringHash> TLBFuncInd
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper_Impl : public WeakImplHelper7< XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >,
+class IUnknownWrapper_Impl : public WeakImplHelper< XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >,
 
                              public UnoConversionUtilities<IUnknownWrapper_Impl>
 

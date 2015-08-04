@@ -40,6 +40,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/componentbase.hxx>
 #include <tools/diagnose_ex.h>
@@ -123,7 +124,7 @@ namespace pcr
         in the XShape implementation, which broadcasts way too generous and unspecified
     */
     typedef ::comphelper::ComponentBase ShapeGeometryChangeNotifier_CBase;
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   ShapeGeometryChangeNotifier_IBase;
 
     class ShapeGeometryChangeNotifier   :public BroadcastHelperBase

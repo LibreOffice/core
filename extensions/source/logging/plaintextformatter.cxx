@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -48,7 +48,7 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
-    typedef ::cppu::WeakImplHelper2 <   XLogFormatter
+    typedef ::cppu::WeakImplHelper <   XLogFormatter
                                     ,   XServiceInfo
                                     >   PlainTextFormatter_Base;
     class PlainTextFormatter : public PlainTextFormatter_Base

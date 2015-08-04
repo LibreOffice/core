@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -36,7 +36,7 @@ namespace pcr
     //= PropertyControlExtender
 
     struct PropertyControlExtender_Data;
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XKeyListener
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XKeyListener
                                     >   PropertyControlExtender_Base;
     class PropertyControlExtender : public PropertyControlExtender_Base
     {

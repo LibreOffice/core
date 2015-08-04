@@ -21,7 +21,7 @@
 
 #include "updatecheck.hxx"
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -301,7 +301,7 @@ public:
 };
 
 
-class MenuBarButtonJob : public ::cppu::WeakImplHelper1< task::XJob >
+class MenuBarButtonJob : public ::cppu::WeakImplHelper< task::XJob >
 {
 public:
     MenuBarButtonJob(const rtl::Reference< UpdateCheck >& rUpdateCheck);

@@ -25,6 +25,7 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <algorithm>
 
@@ -69,7 +70,7 @@ namespace pcr
 
     typedef void (ComposedPropertyUIUpdate::*FNotifySingleUIChange)();
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::inspection::XObjectInspectorUI
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
     struct CachedInspectorUI:
         public CachedInspectorUI_Base, private boost::noncopyable

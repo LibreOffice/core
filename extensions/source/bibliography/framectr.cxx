@@ -30,7 +30,7 @@
 #include "bib.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "bibconfig.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include "bibliography.hrc"
 #include <comphelper/processfactory.hxx>
@@ -130,7 +130,7 @@ const CmdToInfoCache& GetCommandToInfoCache()
 }
 
 
-class BibFrameCtrl_Impl : public cppu::WeakImplHelper1 < XFrameActionListener >
+class BibFrameCtrl_Impl : public cppu::WeakImplHelper < XFrameActionListener >
 {
 public:
     Mutex                               aMutex;

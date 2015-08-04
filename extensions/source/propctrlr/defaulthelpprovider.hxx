@@ -25,7 +25,7 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace vcl { class Window; }
 
@@ -37,7 +37,7 @@ namespace pcr
 
     //= DefaultHelpProvider
 
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::inspection::XPropertyControlObserver
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::inspection::XPropertyControlObserver
                                     ,   ::com::sun::star::lang::XInitialization
                                     >   DefaultHelpProvider_Base;
     class DefaultHelpProvider : public DefaultHelpProvider_Base

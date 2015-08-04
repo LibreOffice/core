@@ -19,8 +19,7 @@
 
 #include <config_folders.h>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -75,7 +74,7 @@ namespace
 
 #ifdef DEBUG
 
-class InputStreamWrapper : public ::cppu::WeakImplHelper1< io::XInputStream >
+class InputStreamWrapper : public ::cppu::WeakImplHelper< io::XInputStream >
 {
     uno::Reference< io::XInputStream > m_xStream;
 
@@ -117,7 +116,7 @@ public:
 
 
 
-class ActiveDataSink : public ::cppu::WeakImplHelper1< io::XActiveDataSink >
+class ActiveDataSink : public ::cppu::WeakImplHelper< io::XActiveDataSink >
 {
     uno::Reference< io::XInputStream > m_xStream;
 
@@ -133,7 +132,7 @@ public:
 
 
 class UpdateInformationProvider :
-    public ::cppu::WeakImplHelper3< deployment::XUpdateInformationProvider,
+    public ::cppu::WeakImplHelper< deployment::XUpdateInformationProvider,
                                     ucb::XWebDAVCommandEnvironment,
                                     lang::XServiceInfo >
 {
@@ -223,7 +222,7 @@ private:
 
 
 
-class UpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class UpdateInformationEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
     UpdateInformationEnumeration(const uno::Reference< xml::dom::XNodeList >& xNodeList,
@@ -290,7 +289,7 @@ private:
 
 
 
-class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
     SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)

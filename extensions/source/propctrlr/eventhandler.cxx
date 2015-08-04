@@ -54,7 +54,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -319,7 +319,7 @@ namespace pcr
         }
     }
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::container::XNameReplace
                                     >   EventHolder_Base;
     /* An UNO component holding assigned event descriptions, for use with a SvxMacroAssignDlg */
     class EventHolder : public EventHolder_Base

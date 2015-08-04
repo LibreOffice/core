@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/listenernotification.hxx>
 
 
@@ -71,7 +71,7 @@ namespace pcr
 
     //= EventHandler
 
-    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::inspection::XPropertyHandler
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 >   EventHandler_Base;
     class EventHandler : public EventHandler_Base

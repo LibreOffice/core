@@ -26,7 +26,7 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "bibmod.hxx"
@@ -50,7 +50,7 @@ public:
 
 typedef boost::ptr_vector<BibStatusDispatch> BibStatusDispatchArr;
 
-class BibFrameController_Impl : public cppu::WeakImplHelper5 <
+class BibFrameController_Impl : public cppu::WeakImplHelper <
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::frame::XController,
     ::com::sun::star::frame::XDispatch,

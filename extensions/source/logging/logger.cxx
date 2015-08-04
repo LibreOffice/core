@@ -31,7 +31,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
@@ -57,7 +57,7 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    typedef ::cppu::WeakImplHelper2 <   XLogger
+    typedef ::cppu::WeakImplHelper <   XLogger
                                     ,   XServiceInfo
                                     >   EventLogger_Base;
     class EventLogger   :public ::cppu::BaseMutex
@@ -103,7 +103,7 @@ namespace logging
         bool    impl_nts_isLoggable_nothrow( ::sal_Int32 _nLevel );
     };
 
-    typedef ::cppu::WeakImplHelper2 <   XLoggerPool
+    typedef ::cppu::WeakImplHelper <   XLoggerPool
                                     ,   XServiceInfo
                                     >   LoggerPool_Base;
     /** administrates a pool of XLogger instances, where a logger is keyed by its name,

@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -61,7 +61,7 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    typedef ::cppu::WeakComponentImplHelper3    <   XConsoleHandler
+    typedef ::cppu::WeakComponentImplHelper    <   XConsoleHandler
                                                 ,   XServiceInfo
                                                 ,   XInitialization
                                                 >   ConsoleHandler_Base;
