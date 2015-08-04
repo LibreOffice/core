@@ -87,6 +87,24 @@
       "revId": "ef664b5252ebd67aa7cd7fd6fd824e0ed1ebff5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_806cd69d",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-04T17:03:36Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s necessary, the existing implementation of FTEST doesn\u0027t have it. The multiplication and further calculation with the values probably makes these specific rounding errors not appear (but others instead ;-)",
+      "parentUuid": "bae84128_20da2a79",
+      "revId": "ef664b5252ebd67aa7cd7fd6fd824e0ed1ebff5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
