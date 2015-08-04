@@ -70,7 +70,6 @@ namespace rptui
         OSectionView*                       m_pCurrentView;
         VclPtr<ONavigator>                  m_pReportExplorer;
         Idle                                m_aMarkIdle;
-        Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;
         sal_uInt16                          m_eActObj;
         Size                                m_aGridSizeCoarse;
