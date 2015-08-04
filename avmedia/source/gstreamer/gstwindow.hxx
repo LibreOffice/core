@@ -81,7 +81,6 @@ private:
 
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 
-    ::osl::Mutex                                maMutex;
     css::media::ZoomLevel                       meZoomLevel;
     int                                         mnPointerType;
 };
