@@ -358,9 +358,6 @@ public:
     static inline bool startsWithLineBreak(const sal_Unicode * pBegin,
                                            const sal_Unicode * pEnd);
 
-    static inline bool startsWithLineFolding(const sal_Char * pBegin,
-                                             const sal_Char * pEnd);
-
     static inline bool startsWithLineFolding(const sal_Unicode * pBegin,
                                              const sal_Unicode * pEnd);
 
@@ -567,17 +564,6 @@ inline bool INetMIME::startsWithLineBreak(const sal_Unicode * pBegin,
 
     return pEnd - pBegin >= 2 && pBegin[0] == 0x0D && pBegin[1] == 0x0A;
         // CR, LF
-}
-
-// static
-inline bool INetMIME::startsWithLineFolding(const sal_Char * pBegin,
-                                            const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::startsWithLineFolding(): Bad sequence");
-
-    return pEnd - pBegin >= 3 && pBegin[0] == 0x0D && pBegin[1] == 0x0A
-           && isWhiteSpace(pBegin[2]); // CR, LF
 }
 
 // static

@@ -79,13 +79,9 @@ namespace dbtools
         void        clear();
 
         // access to the details of the formatting we determined
-        sal_Int32   getFormatKey() const;
-        sal_Int32   getFieldType() const;
         sal_Int16   getKeyType() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >&
                     getColumn() const;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >&
-                    getColumnUpdate() const;
 
         bool        setFormattedValue( const OUString& _rFormattedStringValue ) const;
         OUString    getFormattedValue() const;

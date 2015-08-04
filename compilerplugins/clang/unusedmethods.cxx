@@ -62,7 +62,7 @@ public:
         for (const std::string & s : definitionSet)
             output += "definition:\t" + s + "\t\n";
         ofstream myfile;
-        myfile.open("/home/noel/libo4/unusedmethods.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/unusedmethods.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

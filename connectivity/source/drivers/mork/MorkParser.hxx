@@ -89,10 +89,6 @@ public:
 
     bool open( const std::string &path );
 
-    /// Return error status
-
-    MorkErrors error();
-
     /// Returns all tables of specified scope
 
     MorkTableMap *getTables( int tableScope );

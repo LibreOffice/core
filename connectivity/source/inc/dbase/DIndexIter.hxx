@@ -39,9 +39,8 @@ namespace connectivity
             ODbaseIndex*            m_pIndex;
             ONDXPagePtr             m_aRoot,
                                     m_aCurLeaf;
-            sal_uInt16                  m_nCurNode;
+            sal_uInt16              m_nCurNode;
 
-        protected:
             sal_uIntPtr Find(bool bFirst);
             sal_uIntPtr GetCompare(bool bFirst);
             sal_uIntPtr GetLike(bool bFirst);
@@ -51,8 +50,6 @@ namespace connectivity
             ONDXKey* GetFirstKey(ONDXPage* pPage,
                                 const file::OOperand& rKey);
             ONDXKey* GetNextKey();
-            ODbaseIndex* GetIndex() const {return m_pIndex;}
-
 
         public:
             OIndexIterator(ODbaseIndex* pInd,

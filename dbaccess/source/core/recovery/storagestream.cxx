@@ -44,11 +44,9 @@ namespace dbaccess
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
     // StorageOutputStream
-    StorageOutputStream::StorageOutputStream(   const Reference<XComponentContext>& i_rContext,
-                                                const Reference< XStorage >& i_rParentStorage,
+    StorageOutputStream::StorageOutputStream(   const Reference< XStorage >& i_rParentStorage,
                                                 const OUString& i_rStreamName
                                              )
-        :m_rContext( i_rContext )
     {
         ENSURE_OR_THROW( i_rParentStorage.is(), "illegal stream" );
 
@@ -72,11 +70,9 @@ namespace dbaccess
     }
 
     // StorageInputStream
-    StorageInputStream::StorageInputStream( const Reference<XComponentContext>& i_rContext,
-                                            const Reference< XStorage >& i_rParentStorage,
+    StorageInputStream::StorageInputStream( const Reference< XStorage >& i_rParentStorage,
                                             const OUString& i_rStreamName
                                           )
-        :m_rContext( i_rContext )
     {
         ENSURE_OR_THROW( i_rParentStorage.is(), "illegal stream" );
 
@@ -87,16 +83,6 @@ namespace dbaccess
 
     StorageInputStream::~StorageInputStream()
     {
-    }
-
-    void StorageInputStream::close()
-    {
-        ENSURE_OR_RETURN_VOID( m_xInputStream.is(), "already closed" );
-        m_xInputStream->closeInput();
-        m_xInputStream.clear();
-
-        // if you add additional functionality here, be aware that there are derived classes which
-        // (legitimately) do not call this method here.
     }
 
 } // namespace dbaccess

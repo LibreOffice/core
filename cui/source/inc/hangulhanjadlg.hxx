@@ -180,7 +180,6 @@ namespace svx
         void            EnableRubySupport( bool bVal );
 
     private:
-        DECL_LINK( OnClose, void* );
         DECL_LINK( OnOption, void* );
         DECL_LINK( OnSuggestionModified, void* );
         DECL_LINK( OnSuggestionSelected, void* );
@@ -212,9 +211,6 @@ namespace svx
         css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
         DECL_LINK( OkHdl, void* );
-        DECL_LINK( OnNew, void* );
-        DECL_LINK( OnEdit, void* );
-        DECL_LINK( OnDelete, void* );
         DECL_LINK( DictsLB_SelectHdl, void* );
         DECL_LINK( NewDictHdl, void* );
         DECL_LINK( EditDictHdl, void* );

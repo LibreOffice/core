@@ -81,7 +81,6 @@ public:
     static OUString                         getImplementationName_Static() throw();
     static Sequence< OUString >             getSupportedServiceNames_Static() throw();
 
-    void*                                   GetData() const { return mpData; }
     void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }
  };
 

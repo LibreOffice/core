@@ -350,8 +350,7 @@ public:
         SAX_ARGS_FUNC_SUBST( arg, convert, 13 ) SAX_ARGS_FUNC_SUBST( arg, convert, 14 ) \
         SAX_ARGS_FUNC_SUBST( arg, convert, 15 ) SAX_ARGS_FUNC_SUBST( arg, convert, 16 ) \
         SAX_ARGS_FUNC_SUBST( arg, convert, 17 ) SAX_ARGS_FUNC_SUBST( arg, convert, 18 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 19 ) SAX_ARGS_FUNC_SUBST( arg, convert, 20 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 21 ) SAX_ARGS_FUNC_SUBST( arg, convert, 22 )
+        SAX_ARGS_FUNC_SUBST( arg, convert, 19 ) SAX_ARGS_FUNC_SUBST( arg, convert, 20 )
     SAX_ARGS_FUNC( const char*, )
     SAX_ARGS_FUNC( const OString&, .getStr() )
     #undef SAX_ARGS_FUNC_DECL

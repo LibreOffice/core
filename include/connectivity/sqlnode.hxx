@@ -368,8 +368,6 @@ namespace connectivity
 
         const OUString& getTokenValue() const {return m_aNodeValue;}
 
-        void setTokenValue(const OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
-
         bool isLeaf() const {return m_aChildren.empty();}
 
         // negate only a searchcondition, any other rule could cause a gpf

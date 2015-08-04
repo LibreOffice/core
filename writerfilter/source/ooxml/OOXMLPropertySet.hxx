@@ -40,8 +40,6 @@ public:
     virtual std::string toString() const SAL_OVERRIDE = 0;
 #endif
     virtual void resolve(Properties & rProperties) = 0;
-
-    virtual Sprm * clone() = 0;
 };
 
 class OOXMLPropertySet : public writerfilter::Reference<Properties>
@@ -55,7 +53,6 @@ public:
     virtual void add(OOXMLProperty::Pointer_t pProperty) = 0;
     virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) = 0;
     virtual OOXMLPropertySet * clone() const = 0;
-    virtual void setType(const std::string & rsType) = 0;
 
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() = 0;

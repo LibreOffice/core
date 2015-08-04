@@ -939,8 +939,6 @@ public:
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellAlternatives >
                     ImpFindNextError(EditSelection& rSelection);
-    //initialize sentence spelling
-    void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     //spell and return a sentence
     bool                SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     //put spelling back to start of current sentence - needed after switch of grammar support

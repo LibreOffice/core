@@ -84,7 +84,6 @@ private:
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;
     std::vector<ScRange> aRemoveList;
-    DECL_LINK( FocusToComoboxHdl, Timer* );
 
 private:
     void            Init();

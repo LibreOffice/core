@@ -81,10 +81,6 @@ namespace connectivity
 
             // XProxyRunner
             virtual ::sal_Int32 SAL_CALL Run( const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy >& aCode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        & getMSFactory() const { return m_xMSFactory; }
-
         };
     }
 

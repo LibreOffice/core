@@ -135,7 +135,6 @@ protected:
                            RscExpression * pExpression );
                 virtual ~RscDefine();
     void        IncRef(){ nRefCount++; }
-    sal_uInt32  GetRefCount() const    { return nRefCount; }
     void        DecRef();
     void        DefineToNumber();
     void        SetName(const OString& rNewName) { m_aName = rNewName; }

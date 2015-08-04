@@ -40,7 +40,6 @@ public:
     bool    GetRenameTable          () const { return bRenameTable; }
     void    GetTabNameString( OUString& rString ) const;
     void    SetForceCopyTable       ();
-    void    EnableCopyTable         (bool bFlag=true);
     void    EnableRenameTable       (bool bFlag=true);
 
 private:

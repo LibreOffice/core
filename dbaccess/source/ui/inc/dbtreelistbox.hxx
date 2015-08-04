@@ -95,8 +95,6 @@ namespace dbaui
         void    setCopyHandler(const Link<>& _rHdl)       { m_aCopyHandler = _rHdl; }
         void    setPasteHandler(const Link<>& _rHdl)      { m_aPasteHandler = _rHdl; }
         void    setDeleteHandler(const Link<>& _rHdl)     { m_aDeleteHandler = _rHdl; }
-        void    setEditingHandler(const Link<>& _rHdl)    { m_aEditingHandler = _rHdl; }
-        void    setEditedHandler(const Link<>& _rHdl)     { m_aEditedHandler = _rHdl; }
 
         // modified the given entry so that the expand handler is called whenever the entry is expanded
         // (normally, the expand handler is called only once)

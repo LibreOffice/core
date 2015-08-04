@@ -181,8 +181,7 @@ namespace connectivity
                   std::exception);
 
             ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
-            bool        isEmbedded()        const   {return m_bIsEmbedded;}
-            ::rtl::OUString getUserName()       const   {return m_sUser;}
+            bool            isEmbedded()        const   {return m_bIsEmbedded;}
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
             isc_tr_handle&  getTransaction()
                 throw(::com::sun::star::sdbc::SQLException);

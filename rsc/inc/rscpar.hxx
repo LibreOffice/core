@@ -55,7 +55,6 @@ public:
     bool        IsEof() const { return bEof; }
     void        SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
     sal_uLong   GetFileIndex()                { return lFileIndex;  }
-    sal_uLong   GetSrcIndex()                 { return lSrcIndex;   }
     void        SetLineNo( sal_uInt32 nLine ) { nLineNo = nLine;    }
     sal_uInt32  GetLineNo()                   { return nLineNo;     }
     sal_uInt32  GetScanPos()                  { return nScanPos;    }
@@ -69,9 +68,6 @@ public:
     void        GetNewLine();
                 // Fehlerbehandlung
     void        SetError( ERRTYPE aError );
-    ERRTYPE     GetError()                    { return aFirstError;    }
-    sal_uInt32  GetErrorLine()                { return nErrorLine;     }
-    sal_uInt32  GetErrorPos()                 { return nErrorPos;      }
 };
 
 void IncludeParser( RscFileInst * pFileInst );

@@ -60,10 +60,6 @@ namespace dbaui
 
         inline IController& getCommandController() const { return *m_xController.get(); }
 
-        /** will be called when the controls need to be resized.
-        */
-        void resizeControls(const Size& /*_rDiff*/) { Resize(); }
-
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )

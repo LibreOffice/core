@@ -26,8 +26,6 @@ namespace sd { namespace sidebar {
 class ISidebarReceiver
 {
 public:
-    virtual void SetSidebar (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::ui::XSidebar>& rxSidebar) = 0;
     virtual ~ISidebarReceiver();
 };
 

@@ -564,18 +564,6 @@ void OTools::GetInfo(OConnection* _pConnection,
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 
-void OTools::GetInfo(OConnection* _pConnection,
-                     SQLHANDLE _aConnectionHandle,
-                     SQLUSMALLINT _nInfo,
-                     bool &_rValue,
-                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
-{
-    SQLSMALLINT nValueLen;
-    OTools::ThrowException(_pConnection,
-                            (*reinterpret_cast<T3SQLGetInfo>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetInfo)))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
-                            _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
-}
-
 sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
 {
     sal_Int32 nValue = DataType::VARCHAR;

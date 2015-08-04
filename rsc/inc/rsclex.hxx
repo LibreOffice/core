@@ -73,9 +73,6 @@ class ObjectStack
 
         const RSCINST & Top  ()     { return pRoot->aInst; }
         bool        IsEmpty()   { return( pRoot == NULL ); }
-        void        IncTupelRec() { pRoot->nTupelRec++; }
-        void        DecTupelRec() { pRoot->nTupelRec--; }
-        sal_uInt32  TupelRecCount() const { return pRoot->nTupelRec; }
         void        Push( RSCINST aInst )
                     {
                         Node* pTmp;

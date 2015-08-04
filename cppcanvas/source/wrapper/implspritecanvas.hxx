@@ -50,7 +50,6 @@ namespace cppcanvas
             virtual bool                    updateScreen( bool bUpdateAll ) const SAL_OVERRIDE;
 
             virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const SAL_OVERRIDE;
-            virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const SAL_OVERRIDE;
 
             virtual CanvasSharedPtr         clone() const SAL_OVERRIDE;
 

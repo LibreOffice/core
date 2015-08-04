@@ -58,7 +58,6 @@ namespace connectivity
                           nsILocalFile * aProfilePath
 #endif
                             );
-            MozillaProductType getProductType() { return product;}
             OUString getProfileName(){ return profileName;}
             OUString getProfilePath() ;
 #ifndef MINIMAL_PROFILEDISCOVER
@@ -77,10 +76,7 @@ namespace connectivity
         class ProductStruct
         {
         public:
-            void setCurrentProfile(const OUString& aProfileName){mCurrentProfileName = aProfileName;}
-
             OUString mCurrentProfileName;
-
             ProfileList mProfileList;
         };
 

@@ -56,7 +56,7 @@ namespace dbaccess
                                                         const Reference< XStorage >& i_rParentStorage,
                                                         const OUString& i_rStreamName
                                                     )
-        :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
+        :StorageOutputStream( i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageTextOutputStream_Data )
     {
         m_pData->xTextOutput = TextOutputStream::create( i_rContext );

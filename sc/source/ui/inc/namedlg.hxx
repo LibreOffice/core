@@ -106,7 +106,6 @@ private:
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );
     DECL_LINK( RemoveBtnHdl, void * );
-    DECL_LINK( SelectBtnHdl, void * );
     DECL_LINK( EdModifyHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
     DECL_LINK( SelectionChangedHdl_Impl, void* );

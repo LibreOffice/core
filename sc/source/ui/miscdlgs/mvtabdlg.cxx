@@ -92,14 +92,6 @@ void ScMoveTableDlg::SetForceCopyTable()
     pBtnCopy->Disable();
 }
 
-void ScMoveTableDlg::EnableCopyTable(bool bFlag)
-{
-    if(bFlag)
-        pBtnCopy->Enable();
-    else
-        pBtnCopy->Disable();
-}
-
 void ScMoveTableDlg::EnableRenameTable(bool bFlag)
 {
     bRenameTable = bFlag;

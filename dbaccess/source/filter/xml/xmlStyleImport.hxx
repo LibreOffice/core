@@ -68,8 +68,6 @@ namespace dbaxml
         virtual void SetDefaults() SAL_OVERRIDE;
 
         void AddProperty(sal_Int16 nContextID, const css::uno::Any& aValue);
-
-        sal_Int32 GetNumberFormat() { return m_nNumberFormat; }
     };
 
     class OTableStylesContext : public SvXMLStylesContext

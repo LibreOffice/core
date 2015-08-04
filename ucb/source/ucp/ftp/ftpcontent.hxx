@@ -89,10 +89,6 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
-            css::lang::XMultiServiceFactory >& rxServiceMgr );
-
     // XContent
     virtual OUString SAL_CALL getContentType()
         throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

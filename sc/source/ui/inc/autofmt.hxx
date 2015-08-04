@@ -95,13 +95,6 @@ private:
 
     SAL_DLLPRIVATE void MakeFonts(sal_uInt16 nIndex, vcl::Font& rFont,
                                   vcl::Font& rCJKFont, vcl::Font& rCTLFont );
-
-    SAL_DLLPRIVATE void CheckPriority(sal_uInt16 nCurLine, AutoFmtLine eLine, editeng::SvxBorderLine& rLine);
-    SAL_DLLPRIVATE void GetLines(sal_uInt16 nIndex, AutoFmtLine eLine,
-                                 editeng::SvxBorderLine& rLineD, editeng::SvxBorderLine& rLineLT,
-                                 editeng::SvxBorderLine& rLineL, editeng::SvxBorderLine& rLineLB,
-                                 editeng::SvxBorderLine& rLineRT, editeng::SvxBorderLine& rLineR,
-                                 editeng::SvxBorderLine& rLineRB);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX

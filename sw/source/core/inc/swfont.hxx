@@ -65,9 +65,6 @@ class SwSubFont : public SvxFont
                           const sal_uInt16 nOldAscent ) const;
     void CalcEsc( SwDrawTextInfo& rInf, Point& rPos );
 
-    inline void CopyMagic( const SwSubFont& rFnt )
-        { pMagic = rFnt.pMagic; nFntIndex = rFnt.nFntIndex; }
-
     SwSubFont& operator=( const SwSubFont &rFont );
 
     short _CheckKerning( );
@@ -999,12 +996,6 @@ public:
     }
 
     inline SvStatistics() { Reset(); }
-
-    inline bool IsEmpty() const
-    {
-        return !( nGetTextSize || nDrawText ||
-                  nDrawStretchText || nChangeFont || nGetFontMetric );
-    }
 };
 
 // global variable, implemented in swfont.cxx

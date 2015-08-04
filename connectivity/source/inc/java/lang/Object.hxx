@@ -92,7 +92,6 @@ namespace connectivity
 
         void                saveRef( JNIEnv * pEnv, jobject myObj );
         jobject             getJavaObject() const { return object; }
-        java_lang_Object *  GetWrapper() { return this; }
         void clearObject(JNIEnv& rEnv);
         void clearObject();
 

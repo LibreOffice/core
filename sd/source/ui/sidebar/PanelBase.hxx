@@ -49,14 +49,8 @@ public:
 
     virtual void Resize() SAL_OVERRIDE;
 
-    // IDisposable
-    virtual void Dispose() SAL_OVERRIDE;
-
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
-
-    // ISidebarReceiver
-    virtual void SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
 
 protected:
     VclPtr<vcl::Window> mpWrappedControl;

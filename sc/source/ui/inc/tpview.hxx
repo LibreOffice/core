@@ -106,14 +106,10 @@ class ScTpLayoutOptions : public SfxTabPage
 
     SvxStringArray  aUnitArr;
 
-    DECL_LINK( CBHdl, CheckBox* );
-
     DECL_LINK(MetricHdl, void *);
     DECL_LINK( AlignHdl, CheckBox* );
 
     ScDocument *pDoc;
-
-    DECL_LINK(  UpdateHdl, CheckBox* );
 
             ScTpLayoutOptions( vcl::Window*          pParent,
                              const SfxItemSet&  rArgSet );

@@ -115,9 +115,6 @@ namespace cppcanvas
         /** Set object transformation matrix
          */
         virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
-        /** Get object transformation matrix
-         */
-        virtual ::basegfx::B2DHomMatrix          getTransformation() const = 0;
 
         /** Set object clipping polygon
          */
@@ -125,18 +122,10 @@ namespace cppcanvas
         /** Clear object clipping polygon
          */
         virtual void                             setClip() = 0;
-        /** Get object clipping polygon
-
-            @return NULL, if no clip is set; otherwise, the current clip poly-polygon is returned
-         */
-        virtual ::basegfx::B2DPolyPolygon const* getClip() const = 0;
 
         /** Set object composite mode
          */
         virtual void                             setCompositeOp( CompositeOp aOp ) = 0;
-        /** Get object composite mode
-         */
-        virtual CompositeOp                      getCompositeOp() const = 0;
 
         /** Render to parent canvas
 

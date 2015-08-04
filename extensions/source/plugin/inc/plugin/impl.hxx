@@ -198,7 +198,6 @@ public:
     rtl_TextEncoding getTextEncoding() { return m_aEncoding; }
     NPP_t&          getNPPInstance() { return m_aInstance; }
     NPWindow&       getNPWindow() { return m_aNPWindow; }
-    SysPlugData&    getSysPlugData() { return *m_pSysPlugData; }
 
     void            enterPluginCallback() { m_nCalledFromPlugin++; }
     void            leavePluginCallback() { m_nCalledFromPlugin--; }
@@ -231,10 +230,6 @@ public:
     const Reference< com::sun::star::plugin::XPluginContext > & getPluginContext() const
         { return m_rBrowserContext; }
     void setPluginContext( const Reference< com::sun::star::plugin::XPluginContext > & );
-
-    void secondLevelDispose();
-
-//  static const Reference< com::sun::star::reflection::XIdlClass > &   staticGetIdlClass();
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -340,7 +335,6 @@ public:
     virtual ~PluginStream();
 
     NPStream& getStream() { return m_aNPStream; }
-    XPlugin_Impl* getPlugin() { return m_pPlugin; }
 
     virtual PluginStreamType getStreamType() = 0;
 };

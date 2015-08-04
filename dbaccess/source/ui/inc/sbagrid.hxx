@@ -215,18 +215,15 @@ namespace dbaui
     // Attributes
     protected:
         svx::ODataAccessDescriptor    m_aDataDescriptor;
-        SbaGridListener*                m_pMasterListener;
+        SbaGridListener*              m_pMasterListener;
 
-        ImplSVEvent *                   m_nAsyncDropEvent;
+        ImplSVEvent *                 m_nAsyncDropEvent;
 
-        sal_uInt16                          m_nCurrentActionColId;
+        sal_uInt16                    m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 
-        bool                        m_bActivatingForDrop;
-    // Attribute Access
-    public:
-        sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
+        bool                          m_bActivatingForDrop;
 
     public:
         SbaGridControl(css::uno::Reference< css::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);

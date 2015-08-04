@@ -49,10 +49,6 @@ public:
          OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
          OString    aCallParType;   // Klassenaufruf mit Typen
 
-            void    SetSuperClass( RscTop * pClass )
-                    {
-                        pSuperClass = pClass;
-                    }
             RscTop* GetSuperClass() const
                     { return pSuperClass; }
                     // Gibt den Typidentifier zurueck
@@ -60,13 +56,8 @@ public:
                     { return nTypId; };
                     // Gibt die Oberklasse zurueck
             bool    InHierarchy( RscTop * pClass );
-            bool    IsCodeWriteable() const
-                    {
-                        return( 0 != aCallParType.getLength() );
-                    }
             void    SetCallPar( const OString& rPar1, const OString& rPar2,
                                 const OString& rParType );
-            void    SetRefClass( RscTop * pRef ) { pRefClass = pRef; }
             RscTop* GetRefClass() const { return pRefClass; }
     virtual RSCCLASS_TYPE GetClassType() const = 0;
             RSCINST GetDefault();
@@ -76,8 +67,6 @@ public:
                     // aufweisen koennen, kann man im dtor nicht davon
                     // ausgehen, dass alle Klassenzeiger noch gueltig sind
     virtual void    Pre_dtor();
-
-    virtual Atom    GetConstant( sal_uInt32 );
 
     virtual RscTop* GetTypeClass() const;
 

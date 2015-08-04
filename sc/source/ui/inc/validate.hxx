@@ -171,8 +171,6 @@ class ScValidationDlg
 {
     typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
 
-    DECL_LINK( OkHdl, Button * );
-
     ScTabViewShell *m_pTabVwSh;
     VclPtr<VclHBox> m_pHBox;
     sal_uInt16 m_nValuePageId;

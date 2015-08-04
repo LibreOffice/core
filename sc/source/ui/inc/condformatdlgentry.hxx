@@ -57,8 +57,6 @@ protected:
     ScDocument* mpDoc;
     ScAddress maPos;
 
-    DECL_LINK( EdModifyHdl, Edit* );
-
     virtual void Select();
     virtual void Deselect();
 

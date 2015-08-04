@@ -201,10 +201,6 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 
 
         /** TODO document me */
-        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openGlobalConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-
-
-        /** TODO document me */
         static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                                                                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 

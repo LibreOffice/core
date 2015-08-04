@@ -62,8 +62,6 @@ class Tile
 
     /// Function to get the pointer to enclosing GdkPixbuf
     GdkPixbuf* getBuffer();
-    /// Destroys the enclosing GdkPixbuf object pointed to by m_pBuffer
-    void release();
     /// Used to set the pixel buffer of this object
     void setPixbuf(GdkPixbuf*);
 

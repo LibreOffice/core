@@ -41,7 +41,6 @@ namespace cppcanvas
 
         virtual ~Color() {}
 
-        virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const = 0;
         virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const = 0;
     };
 

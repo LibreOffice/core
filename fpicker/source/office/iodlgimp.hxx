@@ -120,9 +120,6 @@ class SvtURLBox;
 class SvtExpFileDlg_Impl
 {
 private:
-    DECL_STATIC_LINK( SvtExpFileDlg_Impl, UnClickHdl, Button* );
-
-private:
     const SvtFileDialogFilter_Impl* _pCurFilter;
     OUString                        m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
 

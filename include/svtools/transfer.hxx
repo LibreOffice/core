@@ -478,7 +478,6 @@ public:
 
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)
     bool                IsDropFormatSupported( SotClipboardFormatId nFormat );
-    bool                IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
     DataFlavorExVector& GetDataFlavorExVector() const {return *mpFormats; }
 

@@ -272,8 +272,6 @@ namespace pcr
             return ( m_aDependencyHandlers.find( _rPropertyName ) != m_aDependencyHandlers.end() );
         }
 
-        sal_uInt32      GetPropertyPos(const OUString& _rPropName);
-
         /** retrieves the value of the given property, by asking the appropriate XPropertyHandler
             @param  _rPropertyName
                 the name whose handler is to be obtained. Must be the name of a property

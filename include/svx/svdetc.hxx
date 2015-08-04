@@ -70,30 +70,24 @@ private:
 
 public:
     SdrEngineDefaults();
-    // Default Fontname ist "Times New Roman"
-    static void       SetFontName(const OUString& rFontName) { GetDefaults().aFontName=rFontName; }
-    static OUString   GetFontName()                        { return GetDefaults().aFontName; }
-    // Default FontFamily ist FAMILY_ROMAN
-    static void       SetFontFamily(FontFamily eFam)       { GetDefaults().eFontFamily=eFam; }
-    static FontFamily GetFontFamily()                      { return GetDefaults().eFontFamily; }
+
     // Default FontColor ist COL_BLACK
-    static void       SetFontColor(const Color& rColor)    { GetDefaults().aFontColor=rColor; }
     static Color      GetFontColor()                       { return GetDefaults().aFontColor; }
+
     // Default FontHeight ist 847. Die Fonthoehe wird in logischen Einheiten
     // (MapUnit/MapFraction (siehe unten)) angegeben. Die Defaulteinstellung
     // 847/100mm entspricht also ca. 24 Point. Verwendet man stattdessen
     // beispielsweise Twips (SetMapUnit(MAP_TWIP)) (20 Twip = 1 Point) muss
     // man als Fonthoehe 480 angeben um 24 Point als default zu erhalten.
-    static void       SetFontHeight(sal_uIntPtr nHeight)         { GetDefaults().nFontHeight=nHeight; }
     static sal_uIntPtr      GetFontHeight()                      { return GetDefaults().nFontHeight; }
+
     // Der MapMode wird fuer den globalen Outliner benoetigt.
     // Gleichzeitig bekommt auch jedes neu instanziierte SdrModel
     // diesen MapMode default zugewiesen.
     // Default MapUnit ist MAP_100TH_MM
-    static void       SetMapUnit(MapUnit eMap)             { GetDefaults().eMapUnit=eMap; }
     static MapUnit    GetMapUnit()                         { return GetDefaults().eMapUnit; }
+
     // Default MapFraction ist 1/1.
-    static void       SetMapFraction(const Fraction& rMap) { GetDefaults().aMapFraction=rMap; }
     static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }
 
     // Einen Outliner mit den engineglobalen

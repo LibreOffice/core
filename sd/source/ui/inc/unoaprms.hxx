@@ -69,8 +69,6 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     ::com::sun::star::presentation::ClickAction     eNewClickAction;
     OUString        aOldBookmark;
     OUString        aNewBookmark;
-    bool            bOldInvisibleInPres;
-    bool            bNewInvisibleInPres;
     sal_uInt16          nOldVerb;
     sal_uInt16          nNewVerb;
     sal_uLong           nOldPresOrder;
@@ -112,8 +110,6 @@ public:
         , pNewPathObj(NULL)
         , eOldClickAction(css::presentation::ClickAction_NONE)
         , eNewClickAction(css::presentation::ClickAction_NONE)
-        , bOldInvisibleInPres(false)
-        , bNewInvisibleInPres(false)
         , nOldVerb(0)
         , nNewVerb(0)
         , nOldPresOrder(0)
@@ -140,8 +136,6 @@ public:
             { bOldSoundOn = bTheOldSoundOn; bNewSoundOn = bTheNewSoundOn; }
         void SetSound(const OUString& aTheOldSound, const OUString& aTheNewSound)
             { aOldSoundFile = aTheOldSound; aNewSoundFile = aTheNewSound; }
-        void SetBlueScreen(Color aTheOldBlueScreen, Color aTheNewBlueScreen)
-            { aOldBlueScreen = aTheOldBlueScreen; aNewBlueScreen = aTheNewBlueScreen; }
         void SetPlayFull(bool bTheOldPlayFull, bool bTheNewPlayFull)
             { bOldPlayFull = bTheOldPlayFull; bNewPlayFull = bTheNewPlayFull; }
         void SetPathObj(SdrPathObj* pTheOldPath, SdrPathObj* pTheNewPath)
@@ -150,8 +144,6 @@ public:
             { eOldClickAction = eTheOldAction; eNewClickAction = eTheNewAction; }
         void SetBookmark(const OUString& aTheOldBookmark, const OUString& aTheNewBookmark)
             { aOldBookmark = aTheOldBookmark; aNewBookmark = aTheNewBookmark; }
-        void SetInvisibleInPres(bool bTheOldInvisibleInPres, bool bTheNewInvisibleInPres)
-            { bOldInvisibleInPres = bTheOldInvisibleInPres; bNewInvisibleInPres = bTheNewInvisibleInPres; }
         void SetVerb(sal_uInt16 nTheOldVerb, sal_uInt16 nTheNewVerb)
             { nOldVerb = nTheOldVerb; nNewVerb = nTheNewVerb; }
         void SetSecondEffect(::com::sun::star::presentation::AnimationEffect eTheOldEffect, ::com::sun::star::presentation::AnimationEffect eTheNewEffect)
@@ -162,8 +154,6 @@ public:
             { bOldSecondSoundOn = bTheOldSoundOn; bNewSecondSoundOn = bTheNewSoundOn; }
         void SetSecondPlayFull(bool bTheOldPlayFull, bool bTheNewPlayFull)
             { bOldSecondPlayFull = bTheOldPlayFull; bNewSecondPlayFull = bTheNewPlayFull; }
-        void SetPresOrder(sal_uLong nTheOldPresOrder, sal_uLong nTheNewPresOrder)
-            { nOldPresOrder = nTheOldPresOrder; nNewPresOrder = nTheNewPresOrder; }
 
     virtual ~SdAnimationPrmsUndoAction();
     virtual void Undo() SAL_OVERRIDE;

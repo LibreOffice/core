@@ -205,7 +205,6 @@ sal_Int32 ReadThroughComponent(
 
 ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
     : SvXMLImport(_rxContext, getImplementationName_Static())
-    , m_nPreviewMode(0)
     , m_bNewFormat(false)
 {
 

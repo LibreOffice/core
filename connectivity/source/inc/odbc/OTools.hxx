@@ -134,12 +134,6 @@ namespace connectivity
                                 SQLUINTEGER &_rValue,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            static void GetInfo(OConnection* _pConnection,
-                                SQLHANDLE _aConnectionHandle,
-                                SQLUSMALLINT _nInfo,
-                                bool &_rValue,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
             static sal_Int32 MapOdbcType2Jdbc(SQLSMALLINT _nType);
             static SQLSMALLINT jdbcTypeToOdbc(sal_Int32 jdbcType);
 

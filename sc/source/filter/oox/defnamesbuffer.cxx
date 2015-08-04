@@ -227,25 +227,6 @@ Any DefinedNameBase::getReference( const CellAddress& rBaseAddr ) const
     return Any();
 }
 
-ApiTokenSequence DefinedNameBase::importOoxFormula( sal_Int16 nBaseSheet )
-{
-    return (!maModel.maFormula.isEmpty()) ?
-        getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), maModel.maFormula ) :
-        getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
-}
-
-ApiTokenSequence DefinedNameBase::importBiff12Formula( sal_Int16 nBaseSheet, SequenceInputStream& rStrm )
-{
-    return getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), FORMULATYPE_DEFINEDNAME, rStrm );
-}
-
-ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
-{
-    return (!pnFmlaSize || (*pnFmlaSize > 0)) ?
-        getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), FORMULATYPE_DEFINEDNAME, rStrm, pnFmlaSize ) :
-        getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
-}
-
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
     mpScRangeData(NULL),

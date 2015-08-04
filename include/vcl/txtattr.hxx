@@ -107,15 +107,7 @@ public:
                             TextAttribHyperLink( const TextAttribHyperLink& rAttr );
                             virtual ~TextAttribHyperLink();
 
-    void                    SetURL( const OUString& rURL )             { maURL = rURL; }
     const OUString&         GetURL() const                              { return maURL; }
-
-    void                    SetDescription( const OUString& rDescr )   { maDescription = rDescr; }
-    const OUString&         GetDescription() const                      { return maDescription; }
-
-    void                    SetColor( const Color& rColor )             { maColor = rColor; }
-    const Color&            GetColor() const                            { return maColor; }
-
     virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;

@@ -111,10 +111,8 @@ namespace connectivity
             void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
             void SetPageCount(sal_uInt32 nCount)    {m_nPageCount = nCount;}
 
-            sal_uInt32 GetRootPos()                 {return m_nRootPage;}
             sal_uInt32 GetPageCount()               {return m_nPageCount;}
 
-            bool IsText() const                 {return m_aHeader.db_keytype == 0;}
             sal_uInt16 GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
 
             bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
@@ -136,7 +134,6 @@ namespace connectivity
             bool isUnique() const { return m_IsUnique; }
             bool UseCollector() const {return m_bUseCollector;}
             // Tree operations
-            void Insert(ONDXPagePtr aCurPage, ONDXNode& rNode);
             void Release(bool bSave = true);
             bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
         };

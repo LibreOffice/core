@@ -122,22 +122,6 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) th
     }
 }
 
-IMPL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
-{
-   try
-   {
-       // Asynchronous execution as this can lead to our own destruction!
-       // Framework can recycle our current frame and the layout manager disposes all user interface
-       // elements if a component gets detached from its frame!
-       pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-   }
-   catch ( const Exception& )
-   {
-   }
-   delete pExecuteInfo;
-   return 0;
-}
-
 OUString MacrosMenuController::RetrieveLabelFromCommand(const OUString& rCmdURL)
 {
     bool bModuleIdentified = !m_aModuleIdentifier.isEmpty();

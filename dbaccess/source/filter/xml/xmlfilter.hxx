@@ -80,7 +80,6 @@ private:
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XPropertySet>                         m_xDataSource;
-    sal_Int32                                       m_nPreviewMode;
     bool                                            m_bNewFormat;
 
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
@@ -127,7 +126,6 @@ public:
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 
     inline const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
-    inline const TPropertyNameMap& getTableSettings() const { return m_aTablesSettings;}
 
     const SvXMLTokenMap& GetDocElemTokenMap() const;
     const SvXMLTokenMap& GetDatabaseElemTokenMap() const;
@@ -153,8 +151,6 @@ public:
     }
 
     void setPropertyInfo();
-
-    const ::std::map< sal_uInt16,css::beans::Property>& GetDataSourceInfoDefaulValueMap() const;
 
     inline bool isNewFormat() const { return m_bNewFormat; }
     inline void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }

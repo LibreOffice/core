@@ -49,9 +49,6 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             m_xFacetInfo;
 
-    protected:
-        inline ::com::sun::star::xsd::XDataType* getDataTypeInterface() const { return m_xDataType.get(); }
-
     public:
         XSDDataType(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >& _rxDataType

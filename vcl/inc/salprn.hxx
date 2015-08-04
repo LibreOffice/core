@@ -107,7 +107,6 @@ public:
                                               vcl::PrinterController& rController );
 
     virtual bool                    EndJob() = 0;
-    virtual bool                    AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual bool                    EndPage() = 0;
     virtual sal_uLong               GetErrorCode() = 0;
