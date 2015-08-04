@@ -47,6 +47,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/miscopt.hxx>
@@ -221,11 +222,10 @@ static void showDocument( const char* pBaseName )
 {
     try {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        Sequence < com::sun::star::beans::PropertyValue > args(2);
-        args[0].Name = "ViewOnly";
-        args[0].Value <<= sal_True;
-        args[1].Name = "ReadOnly";
-        args[1].Value <<= sal_True;
+        auto args(::comphelper::InitPropertySequence({
+            {"ViewOnly",    makeAny(sal_True)},
+            {"ReadOnly",    makeAny(sal_True)}
+        }));
 
         OUString aURL;
         if ( checkURL ( pBaseName, ".fodt", aURL ) ||
