@@ -211,6 +211,7 @@ class TextDocument(object):
     @return the page count of the document.
     '''
 
+    @classmethod
     def getPageCount(self, model):
         xController = model.getCurrentController()
         xPC = xController.getViewCursor()
