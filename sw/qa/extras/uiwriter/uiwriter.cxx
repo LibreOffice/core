@@ -123,6 +123,7 @@ public:
     void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
+    void testTdf60967();
     void testTdf79236();
     void testTextSearch();
     void testTdf69282();
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testTdf79236);
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
@@ -1185,6 +1187,56 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTdf60967()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    pWrtShell->ChangeHeaderOrFooter(OUString("Default Style"), true, true, true);
+    //Inserting table
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    pWrtShell->InsertTable(TableOpt, 2, 2);
+    //getting the cursor's position just after the table insert
+    SwPosition xPosAfterTable(*(pCrsr->GetPoint()));
+    //moving cursor to B2 (bottom right cell)
+    pCrsr->Move(fnMoveBackward);
+    //deleting paragraph following table with Ctrl+Shift+Del
+    sal_Int32 val = pWrtShell->DelToEndOfSentence();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), val);
+    //getting the cursor's position just after the paragraph deletion
+    SwPosition xPosAfterDel(*(pCrsr->GetPoint()));
+    //moving cursor forward to check whether there is any node following the table, BTW there should not be any such node
+    pCrsr->Move(fnMoveForward);
+    SwPosition xPosMoveAfterDel(*(pCrsr->GetPoint()));
+    //checking the positons to verify that the paragraph is actually deleted
+    CPPUNIT_ASSERT(xPosAfterDel==xPosMoveAfterDel);
+    //Undo the changes
+    rUndoManager.Undo();
+    {
+        //paragraph *text node* should be back
+        SwPosition xPosAfterUndo(*(pCrsr->GetPoint()));
+        //after undo xPosAfterTable increases the node position by one, since this contains the position *text node* so xPosAfterUndo should be less than xPosAfterTable
+        CPPUNIT_ASSERT(xPosAfterTable>xPosAfterUndo);
+        //moving cursor forward to check whether there is any node following the paragraph, BTW there should not be any such node as paragraph node is the last one in header
+        pCrsr->Move(fnMoveForward);
+        SwPosition xPosMoveAfterUndo(*(pCrsr->GetPoint()));
+        //checking positions to verify that paragraph node is the last one and we are paragraph node only
+        CPPUNIT_ASSERT(xPosAfterTable>xPosMoveAfterUndo);
+        CPPUNIT_ASSERT(xPosMoveAfterUndo==xPosAfterUndo);
+    }
+    //Redo the changes
+    rUndoManager.Redo();
+    //paragraph *text node* should not be there
+    SwPosition xPosAfterRedo(*(pCrsr->GetPoint()));
+    //position should be exactly same as it was after deletion of *text node*
+    CPPUNIT_ASSERT(xPosMoveAfterDel==xPosAfterRedo);
+    //moving the cursor forward, but it should not actually move as there is no *text node* after the table due to this same postion is expected after move as it was before move
+    pCrsr->Move(fnMoveForward);
+    SwPosition xPosAfterUndoMove(*(pCrsr->GetPoint()));
+    CPPUNIT_ASSERT(xPosAfterUndoMove==xPosAfterRedo);
 }
 
 void SwUiWriterTest::testTdf79236()
