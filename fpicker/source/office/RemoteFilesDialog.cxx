@@ -719,15 +719,8 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                 m_aServices.erase( m_aServices.begin() + nPos );
                 m_pServices_lb->RemoveEntry( nSelected );
 
-                if( m_pServices_lb->GetEntryCount() > 0 )
-                {
-                    m_pServices_lb->SelectEntryPos( 0 );
-                }
-                else
-                {
-                    m_pServices_lb->SetNoSelection();
-                    m_pAddService_btn->SetPopupMenu( NULL );
-                }
+                m_pServices_lb->SetNoSelection();
+                m_pAddService_btn->SetPopupMenu( NULL );
 
                 m_bIsUpdated = true;
             }
