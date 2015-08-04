@@ -375,6 +375,7 @@ class Process(ProcessErrors):
             self.tf.start()
             while (not self.tfCompleted):
                 pass
+            self.tf.terminate()
             task.advance(True)
 
 
@@ -400,7 +401,6 @@ class Process(ProcessErrors):
         print ("DEBUG !!! Stream 'error' event handler")
 
     def streamClosedHandler(self, parent):
-        parent.tf.terminate()
         parent.tfCompleted = True
 
     # I broke the export method to two methods
