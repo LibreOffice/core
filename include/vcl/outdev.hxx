@@ -318,7 +318,6 @@ namespace vcl {
 
 class VCL_DLLPUBLIC OutputDevice
 {
-    friend class PaintHelper;
     friend class Printer;
     friend class VirtualDevice;
     friend class vcl::Window;
@@ -499,6 +498,8 @@ public:
     long                        GetOutputHeightPixel() const { return mnOutHeight; }
     long                        GetOutOffXPixel() const { return mnOutOffX; }
     long                        GetOutOffYPixel() const { return mnOutOffY; }
+    void                        SetOutOffXPixel(long nOutOffX);
+    void                        SetOutOffYPixel(long nOutOffY);
 
     Size                        GetOutputSize() const
                                     { return PixelToLogic( GetOutputSizePixel() ); }

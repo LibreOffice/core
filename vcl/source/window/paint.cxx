@@ -40,6 +40,88 @@
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
+/// Sets up the buffer to have settings matching the window, and restore the original state in the dtor.
+class PaintBufferGuard
+{
+    ImplFrameData* mpFrameData;
+    bool mbBackground;
+    Wallpaper maBackground;
+    AllSettings maSettings;
+    long mnOutOffX;
+    long mnOutOffY;
+public:
+    PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
+        : mpFrameData(pFrameData),
+        mbBackground(false),
+        mnOutOffX(0),
+        mnOutOffY(0)
+    {
+        // transfer various settings
+        // FIXME: this must disappear as we move to RenderContext only,
+        // the painting must become state-less, so that no actual
+        // vcl::Window setting affects this
+        mbBackground = pFrameData->mpBuffer->IsBackground();
+        if (pWindow->IsBackground())
+        {
+            maBackground = pFrameData->mpBuffer->GetBackground();
+            pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
+        }
+        //else
+            //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
+
+        PushFlags nFlags = PushFlags::NONE;
+        nFlags |= PushFlags::CLIPREGION;
+        nFlags |= PushFlags::FILLCOLOR;
+        nFlags |= PushFlags::FONT;
+        nFlags |= PushFlags::LINECOLOR;
+        nFlags |= PushFlags::MAPMODE;
+        maSettings = pFrameData->mpBuffer->GetSettings();
+        nFlags |= PushFlags::REFPOINT;
+        nFlags |= PushFlags::TEXTCOLOR;
+        nFlags |= PushFlags::TEXTLINECOLOR;
+        nFlags |= PushFlags::OVERLINECOLOR;
+        nFlags |= PushFlags::TEXTFILLCOLOR;
+        nFlags |= PushFlags::TEXTALIGN;
+        nFlags |= PushFlags::RASTEROP;
+        nFlags |= PushFlags::TEXTLAYOUTMODE;
+        nFlags |= PushFlags::TEXTLANGUAGE;
+        pFrameData->mpBuffer->Push(nFlags);
+        pFrameData->mpBuffer->SetClipRegion(pWindow->GetClipRegion());
+        pFrameData->mpBuffer->SetFillColor(pWindow->GetFillColor());
+        pFrameData->mpBuffer->SetFont(pWindow->GetFont());
+        pFrameData->mpBuffer->SetLineColor(pWindow->GetLineColor());
+        pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
+        pFrameData->mpBuffer->SetRefPoint(pWindow->GetRefPoint());
+        pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
+        pFrameData->mpBuffer->SetTextColor(pWindow->GetTextColor());
+        pFrameData->mpBuffer->SetTextLineColor(pWindow->GetTextLineColor());
+        pFrameData->mpBuffer->SetOverlineColor(pWindow->GetOverlineColor());
+        pFrameData->mpBuffer->SetTextFillColor(pWindow->GetTextFillColor());
+        pFrameData->mpBuffer->SetTextAlign(pWindow->GetTextAlign());
+        pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
+        pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
+        pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
+
+        mnOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
+        mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
+        pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
+        pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
+    }
+    ~PaintBufferGuard()
+    {
+        // Restore buffer state.
+        mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
+        mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
+
+        mpFrameData->mpBuffer->Pop();
+        mpFrameData->mpBuffer->SetSettings(maSettings);
+        if (mbBackground)
+            mpFrameData->mpBuffer->SetBackground(maBackground);
+        else
+            mpFrameData->mpBuffer->SetBackground();
+    }
+};
+
 class PaintHelper
 {
 private:
@@ -47,7 +129,6 @@ private:
     vcl::Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
-    MapMode m_aPaintRectMapMode;
     vcl::Region m_aPaintRegion;
     sal_uInt16 m_nPaintFlags;
     bool m_bPop : 1;
@@ -88,9 +169,6 @@ public:
     /// Start buffered paint: set it up to have the same settings as m_pWindow.
     void StartBufferedPaint();
 
-    /// Setup the buffer according to the settings of the current m_pWindow.
-    void SetupBuffer();
-
     /// Paint the content of the buffer to the current m_pWindow.
     void PaintBuffer();
 
@@ -116,53 +194,16 @@ void PaintHelper::StartBufferedPaint()
     // painting over, as VirtualDevice::ImplInitVirDev() would do.
     // The painted area is m_aPaintRect, or in case it's empty, then the whole window.
     pFrameData->mpBuffer->SetBackground(Wallpaper(Color(COL_WHITE)));
-    if (m_aPaintRect.IsEmpty())
-        pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
-    else
-        pFrameData->mpBuffer->Erase(m_aPaintRect);
+    {
+        PaintBufferGuard g(pFrameData, m_pWindow);
+        if (m_aPaintRect.IsEmpty())
+            pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
+        else
+            pFrameData->mpBuffer->Erase(m_aPaintRect);
+    }
 
     pFrameData->mbInBufferedPaint = true;
     m_bStartedBufferedPaint = true;
-
-    // Remember what was the map mode of m_aPaintRect.
-    m_aPaintRectMapMode = m_pWindow->GetMapMode();
-
-    // we need to remember the mnOutOffX / mnOutOffY, but actually really
-    // set it just temporarily for the subwidgets - so we are setting it here
-    // only to remember the value & to be able to pass it to the descendants
-    // FIXME: once everything's double-buffered, this is (hopefully) not
-    // necessary as the buffer is always created for the main window.
-    pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
-    pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
-}
-
-void PaintHelper::SetupBuffer()
-{
-    ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    // transfer various settings
-    // FIXME: this must disappear as we move to RenderContext only,
-    // the painting must become state-less, so that no actual
-    // vcl::Window setting affects this
-    if (m_pWindow->IsBackground())
-        pFrameData->mpBuffer->SetBackground(m_pWindow->GetBackground());
-    else
-        SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
-
-    pFrameData->mpBuffer->SetClipRegion(m_pWindow->GetClipRegion());
-    pFrameData->mpBuffer->SetFillColor(m_pWindow->GetFillColor());
-    pFrameData->mpBuffer->SetFont(m_pWindow->GetFont());
-    pFrameData->mpBuffer->SetLineColor(m_pWindow->GetLineColor());
-    pFrameData->mpBuffer->SetMapMode(m_pWindow->GetMapMode());
-    pFrameData->mpBuffer->SetRefPoint(m_pWindow->GetRefPoint());
-    pFrameData->mpBuffer->SetSettings(m_pWindow->GetSettings());
-    pFrameData->mpBuffer->SetTextColor(m_pWindow->GetTextColor());
-    pFrameData->mpBuffer->SetTextLineColor(m_pWindow->GetTextLineColor());
-    pFrameData->mpBuffer->SetOverlineColor(m_pWindow->GetOverlineColor());
-    pFrameData->mpBuffer->SetTextFillColor(m_pWindow->GetTextFillColor());
-    pFrameData->mpBuffer->SetTextAlign(m_pWindow->GetTextAlign());
-    pFrameData->mpBuffer->SetRasterOp(m_pWindow->GetRasterOp());
-    pFrameData->mpBuffer->SetLayoutMode(m_pWindow->GetLayoutMode());
-    pFrameData->mpBuffer->SetDigitLanguage(m_pWindow->GetDigitLanguage());
 }
 
 void PaintHelper::PaintBuffer()
@@ -171,9 +212,6 @@ void PaintHelper::PaintBuffer()
     assert(pFrameData->mbInBufferedPaint);
     assert(m_bStartedBufferedPaint);
 
-    pFrameData->mpBuffer->mnOutOffX = 0;
-    pFrameData->mpBuffer->mnOutOffY = 0;
-
     // copy the buffer content to the actual window
     // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
     // painting directly instead of using Invalidate()
@@ -181,12 +219,6 @@ void PaintHelper::PaintBuffer()
     // window either above or in eg. an event handler]
     if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
     {
-        // The map mode of m_pWindow and/or the buffer may have changed since
-        // StartBufferedPaint(), set it back to what it was, otherwise unwanted
-        // scaling or translating may happen.
-        m_pWindow->SetMapMode(m_aPaintRectMapMode);
-        pFrameData->mpBuffer->SetMapMode(m_aPaintRectMapMode);
-
         // Make sure that the +1 value GetSize() adds to the size is in pixels.
         Size aPaintRectSize;
         if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
@@ -199,6 +231,7 @@ void PaintHelper::PaintBuffer()
             aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
         }
 
+        PaintBufferGuard g(pFrameData, m_pWindow);
         m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *pFrameData->mpBuffer.get());
     }
 }
@@ -247,24 +280,11 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
         {
             // double-buffering
-            SetupBuffer();
+            PaintBufferGuard g(pFrameData, m_pWindow);
             m_pWindow->ApplySettings(*pFrameData->mpBuffer.get());
-
-            // temporarily decrease the mnOutOffX/Y of the buffer for the
-            // subwidgets (because the buffer is our base here)
-            // FIXME: once everything's double-buffered, this is (hopefully) not
-            // necessary as the buffer is always created for the main window.
-            long nOutOffX = pFrameData->mpBuffer->mnOutOffX;
-            long nOutOffY = pFrameData->mpBuffer->mnOutOffY;
-            pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel() - pFrameData->mpBuffer->mnOutOffX;
-            pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel() - pFrameData->mpBuffer->mnOutOffY;
 
             m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer.get());
             m_pWindow->Paint(*pFrameData->mpBuffer.get(), m_aPaintRect);
-
-            // restore the mnOutOffX/Y value
-            pFrameData->mpBuffer->mnOutOffX = nOutOffX;
-            pFrameData->mpBuffer->mnOutOffY = nOutOffY;
         }
         else
         {
