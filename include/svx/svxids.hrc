@@ -1015,6 +1015,8 @@
 
 #define SID_EDIT_POSTIT                                 ( SID_SVX_START + 1152 )
 
+// 1153 is used by editeng (SID_ATTR_CHAR_BACK_COLOR)
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
 
