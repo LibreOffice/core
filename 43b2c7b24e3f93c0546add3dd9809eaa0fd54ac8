@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_80be96fd",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-04T14:48:52Z",
+      "side": 1,
+      "message": "... actually this moves the cursor to the start of the body text.  you need to move it into the table in the header.  i thought this would be done automatically when inserting that but apparently not.",
+      "revId": "43b2c7b24e3f93c0546add3dd9809eaa0fd54ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_60bb920f",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-04T14:48:52Z",
+      "side": 1,
+      "message": "this moves the cursor out of the header and into the main document body. there is always a paragraph at the end of the document body (before the SwEndNode).\n\nso i\u0027m afraid this doesn\u0027t test that the paragraph in the header of the document following the table has been deleted. (and by deleted i mean, there is no SwTextNode there)\n\nnot sure if i\u0027ve ever explained that but the Nodes-Array has multiple \"sections\" of nodes bracketed by SwStartNode / SwEndNode; the nesting structure becomes pretty obvious if you print pDoc-\u003eGetNodes() in gdb.\n\nthe body text is bracketed by the last top-level start/end-node pair; each header gets its own section inside one of the earlier top-level section.\n\nfor the nodes array there is some documentation with examples here:\nhttps://wiki.openoffice.org/wiki/Writer/Core_And_Layout",
+      "revId": "43b2c7b24e3f93c0546add3dd9809eaa0fd54ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
