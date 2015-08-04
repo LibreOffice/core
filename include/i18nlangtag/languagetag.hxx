@@ -104,6 +104,10 @@ public:
      */
     const OUString &                getBcp47( bool bResolveSystem = true ) const;
 
+    /** Obtain RFC3066bis language.
+     */
+    const OUString &                getRFC3066bisLanguage() const;
+
     /** Obtain language tag as Locale.
 
         As a convention, language tags that can not be expressed as "pure"
@@ -513,7 +517,9 @@ private:
 
     mutable com::sun::star::lang::Locale    maLocale;
     mutable OUString                        maBcp47;
+    mutable OUString                        maRFC3066bis;
     mutable LanguageType                    mnLangID;
+
     mutable ImplPtr                         mpImpl;
             bool                            mbSystemLocale      : 1;
     mutable bool                            mbInitializedBcp47  : 1;

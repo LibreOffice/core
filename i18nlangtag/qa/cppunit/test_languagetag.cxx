@@ -43,10 +43,12 @@ public:
 
     void testAllTags();
     void testAllIsoLangEntries();
+    void testAllrfc3066bisConverter();
 
     CPPUNIT_TEST_SUITE(TestLanguageTag);
     CPPUNIT_TEST(testAllTags);
     CPPUNIT_TEST(testAllIsoLangEntries);
+    CPPUNIT_TEST(testAllrfc3066bisConverter);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -748,6 +750,339 @@ void TestLanguageTag::testAllIsoLangEntries()
 
     // Uncommenting this makes the test break and output SAL_WARN/INFO
     //CPPUNIT_ASSERT( true == false );
+}
+
+void TestLanguageTag::testAllrfc3066bisConverter()
+{
+    {
+        OUString s_ja_JP( "ja-JP" );
+        LanguageTag ja_JP( s_ja_JP, true );
+        OUString aBcp47 = ja_JP.getBcp47();
+        lang::Locale aLocale = ja_JP.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "ja-JP" );
+        CPPUNIT_ASSERT( ja_JP.getRFC3066bisLanguage() == "ja" );
+    }
+
+    {
+        OUString s_zh_CN( "zh-CN" );
+        LanguageTag zh_CN( s_zh_CN, true );
+        OUString aBcp47 = zh_CN.getBcp47();
+        lang::Locale aLocale = zh_CN.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "zh-CN" );
+        CPPUNIT_ASSERT( zh_CN.getRFC3066bisLanguage() == "zh-Hans" );
+    }
+
+    {
+        OUString s_zh_TW( "zh-TW" );
+        LanguageTag zh_TW( s_zh_TW, true );
+        OUString aBcp47 = zh_TW.getBcp47();
+        lang::Locale aLocale = zh_TW.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "zh-TW" );
+        CPPUNIT_ASSERT( zh_TW.getRFC3066bisLanguage() == "zh-Hant" );
+    }
+
+    {
+        OUString s_de_DE( "de-DE" );
+        LanguageTag de_DE( s_de_DE, true );
+        OUString aBcp47 = de_DE.getBcp47();
+        lang::Locale aLocale = de_DE.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "de-DE" );
+        CPPUNIT_ASSERT( de_DE.getRFC3066bisLanguage() == "de" );
+    }
+
+    {
+        OUString s_fr_FR( "fr-FR" );
+        LanguageTag fr_FR( s_fr_FR, true );
+        OUString aBcp47 = fr_FR.getBcp47();
+        lang::Locale aLocale = fr_FR.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "fr-FR" );
+        CPPUNIT_ASSERT( fr_FR.getRFC3066bisLanguage() == "fr" );
+    }
+
+    {
+        OUString s_es_ES( "es-ES" );
+        LanguageTag es_ES( s_es_ES, true );
+        OUString aBcp47 = es_ES.getBcp47();
+        lang::Locale aLocale = es_ES.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "es-ES" );
+        CPPUNIT_ASSERT( es_ES.getRFC3066bisLanguage() == "es" );
+    }
+
+    {
+        OUString s_it_IT( "it-IT" );
+        LanguageTag it_IT( s_it_IT, true );
+        OUString aBcp47 = it_IT.getBcp47();
+        lang::Locale aLocale = it_IT.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "it-IT" );
+        CPPUNIT_ASSERT( it_IT.getRFC3066bisLanguage() == "it" );
+    }
+
+    {
+        OUString s_nl_NL( "nl-NL" );
+        LanguageTag nl_NL( s_nl_NL, true );
+        OUString aBcp47 = nl_NL.getBcp47();
+        lang::Locale aLocale = nl_NL.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "nl-NL" );
+        CPPUNIT_ASSERT( nl_NL.getRFC3066bisLanguage() == "nl" );
+    }
+
+    {
+        OUString s_ko_KR( "ko-KR" );
+        LanguageTag ko_KR( s_ko_KR, true );
+        OUString aBcp47 = ko_KR.getBcp47();
+        lang::Locale aLocale = ko_KR.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "ko-KR" );
+        CPPUNIT_ASSERT( ko_KR.getRFC3066bisLanguage() == "ko" );
+    }
+
+    {
+        OUString s_pt_BR( "pt-BR" );
+        LanguageTag pt_BR( s_pt_BR, true );
+        OUString aBcp47 = pt_BR.getBcp47();
+        lang::Locale aLocale = pt_BR.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "pt-BR" );
+        CPPUNIT_ASSERT( pt_BR.getRFC3066bisLanguage() == "pt" );
+    }
+
+    {
+        OUString s_pt_PT( "pt-PT" );
+        LanguageTag pt_PT( s_pt_PT, true );
+        OUString aBcp47 = pt_PT.getBcp47();
+        lang::Locale aLocale = pt_PT.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "pt-PT" );
+        CPPUNIT_ASSERT( pt_PT.getRFC3066bisLanguage() == "pt-PT" );
+    }
+
+    {
+        OUString s_da_DK( "da-DK" );
+        LanguageTag da_DK( s_da_DK, true );
+        OUString aBcp47 = da_DK.getBcp47();
+        lang::Locale aLocale = da_DK.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "da-DK" );
+        CPPUNIT_ASSERT( da_DK.getRFC3066bisLanguage() == "da" );
+    }
+
+    {
+        OUString s_fi_FI( "fi-FI" );
+        LanguageTag fi_FI( s_fi_FI, true );
+        OUString aBcp47 = fi_FI.getBcp47();
+        lang::Locale aLocale = fi_FI.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "fi-FI" );
+        CPPUNIT_ASSERT( fi_FI.getRFC3066bisLanguage() == "fi" );
+    }
+
+    {
+        OUString s_nb_NO( "nb-NO" );
+        LanguageTag nb_NO( s_nb_NO, true );
+        OUString aBcp47 = nb_NO.getBcp47();
+        lang::Locale aLocale = nb_NO.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "nb-NO" );
+        CPPUNIT_ASSERT( nb_NO.getRFC3066bisLanguage() == "nb" );
+    }
+
+    {
+        OUString s_sv_SE( "sv-SE" );
+        LanguageTag sv_SE( s_sv_SE, true );
+        OUString aBcp47 = sv_SE.getBcp47();
+        lang::Locale aLocale = sv_SE.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "sv-SE" );
+        CPPUNIT_ASSERT( sv_SE.getRFC3066bisLanguage() == "sv" );
+    }
+
+    {
+        OUString s_ru_RU( "ru-RU" );
+        LanguageTag ru_RU( s_ru_RU, true );
+        OUString aBcp47 = ru_RU.getBcp47();
+        lang::Locale aLocale = ru_RU.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "ru-RU" );
+        CPPUNIT_ASSERT( ru_RU.getRFC3066bisLanguage() == "ru" );
+    }
+
+    {
+        OUString s_pl_PL( "pl-PL" );
+        LanguageTag pl_PL( s_pl_PL, true );
+        OUString aBcp47 = pl_PL.getBcp47();
+        lang::Locale aLocale = pl_PL.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "pl-PL" );
+        CPPUNIT_ASSERT( pl_PL.getRFC3066bisLanguage() == "pl" );
+    }
+
+    {
+        OUString s_tr_TR( "tr-TR" );
+        LanguageTag tr_TR( s_tr_TR, true );
+        OUString aBcp47 = tr_TR.getBcp47();
+        lang::Locale aLocale = tr_TR.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "tr-TR" );
+        CPPUNIT_ASSERT( tr_TR.getRFC3066bisLanguage() == "tr" );
+    }
+
+    {
+        OUString s_ar_SA( "ar-SA" );
+        LanguageTag ar_SA( s_ar_SA, true );
+        OUString aBcp47 = ar_SA.getBcp47();
+        lang::Locale aLocale = ar_SA.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "ar-SA" );
+        CPPUNIT_ASSERT( ar_SA.getRFC3066bisLanguage() == "ar" );
+    }
+
+    {
+        OUString s_th_TH( "th-TH" );
+        LanguageTag th_TH( s_th_TH, true );
+        OUString aBcp47 = th_TH.getBcp47();
+        lang::Locale aLocale = th_TH.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "th-TH" );
+        CPPUNIT_ASSERT( th_TH.getRFC3066bisLanguage() == "th" );
+    }
+
+    {
+        OUString s_cs_CZ( "cs-CZ" );
+        LanguageTag cs_CZ( s_cs_CZ, true );
+        OUString aBcp47 = cs_CZ.getBcp47();
+        lang::Locale aLocale = cs_CZ.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "cs-CZ" );
+        CPPUNIT_ASSERT( cs_CZ.getRFC3066bisLanguage() == "cs" );
+    }
+
+    {
+        OUString s_hu_HU( "hu-HU" );
+        LanguageTag hu_HU( s_hu_HU, true );
+        OUString aBcp47 = hu_HU.getBcp47();
+        lang::Locale aLocale = hu_HU.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "hu-HU" );
+        CPPUNIT_ASSERT( hu_HU.getRFC3066bisLanguage() == "hu" );
+    }
+
+    {
+        OUString s_ca_ES( "ca-ES" );
+        LanguageTag ca_ES( s_ca_ES, true );
+        OUString aBcp47 = ca_ES.getBcp47();
+        lang::Locale aLocale = ca_ES.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "ca-ES" );
+        CPPUNIT_ASSERT( ca_ES.getRFC3066bisLanguage() == "ca" );
+    }
+
+    {
+        OUString s_hr_HR( "hr-HR" );
+        LanguageTag hr_HR( s_hr_HR, true );
+        OUString aBcp47 = hr_HR.getBcp47();
+        lang::Locale aLocale = hr_HR.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "hr-HR" );
+        CPPUNIT_ASSERT( hr_HR.getRFC3066bisLanguage() == "hr" );
+    }
+
+    {
+        OUString s_el_GR( "el-GR" );
+        LanguageTag el_GR( s_el_GR, true );
+        OUString aBcp47 = el_GR.getBcp47();
+        lang::Locale aLocale = el_GR.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "el-GR" );
+        CPPUNIT_ASSERT( el_GR.getRFC3066bisLanguage() == "el" );
+    }
+
+    {
+        OUString s_he_IL( "he-IL" );
+        LanguageTag he_IL( s_he_IL, true );
+        OUString aBcp47 = he_IL.getBcp47();
+        lang::Locale aLocale = he_IL.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "he-IL" );
+        CPPUNIT_ASSERT( he_IL.getRFC3066bisLanguage() == "he" );
+    }
+
+    {
+        OUString s_ro_RO( "ro-RO" );
+        LanguageTag ro_RO( s_ro_RO, true );
+        OUString aBcp47 = ro_RO.getBcp47();
+        lang::Locale aLocale = ro_RO.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "ro-RO" );
+        CPPUNIT_ASSERT( ro_RO.getRFC3066bisLanguage() == "ro" );
+    }
+
+    {
+        OUString s_sk_SK( "sk-SK" );
+        LanguageTag sk_SK( s_sk_SK, true );
+        OUString aBcp47 = sk_SK.getBcp47();
+        lang::Locale aLocale = sk_SK.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "sk-SK" );
+        CPPUNIT_ASSERT( sk_SK.getRFC3066bisLanguage() == "sk" );
+    }
+
+    {
+        OUString s_uk_UA( "uk-UA" );
+        LanguageTag uk_UA( s_uk_UA, true );
+        OUString aBcp47 = uk_UA.getBcp47();
+        lang::Locale aLocale = uk_UA.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "uk-UA" );
+        CPPUNIT_ASSERT( uk_UA.getLanguageAndScript() == "uk" );
+    }
+
+    {
+        OUString s_id_ID( "id-ID" );
+        LanguageTag id_ID( s_id_ID, true );
+        OUString aBcp47 = id_ID.getBcp47();
+        lang::Locale aLocale = id_ID.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "id-ID" );
+        CPPUNIT_ASSERT( id_ID.getRFC3066bisLanguage() == "id" );
+    }
+
+    {
+        OUString s_vi_VN( "vi-VN" );
+        LanguageTag vi_VN( s_vi_VN, true );
+        OUString aBcp47 = vi_VN.getBcp47();
+        lang::Locale aLocale = vi_VN.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "vi-VN" );
+        CPPUNIT_ASSERT( vi_VN.getRFC3066bisLanguage() == "vi" );
+    }
+
+    {
+        OUString s_en_GB( "en-GB" );
+        LanguageTag en_GB( s_en_GB, true );
+        OUString aBcp47 = en_GB.getBcp47();
+        lang::Locale aLocale = en_GB.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "en-GB" );
+        CPPUNIT_ASSERT( en_GB.getRFC3066bisLanguage() == "en-GB" );
+    }
+
+    {
+        OUString s_is_IS( "is-IS" );
+        LanguageTag is_IS( s_is_IS, true );
+        OUString aBcp47 = is_IS.getBcp47();
+        lang::Locale aLocale = is_IS.getLocale();
+
+        CPPUNIT_ASSERT_MESSAGE("Default script should be stripped after canonicalize.", aBcp47 == "is-IS" );
+        CPPUNIT_ASSERT( is_IS.getRFC3066bisLanguage() == "is" );
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLanguageTag );

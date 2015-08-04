@@ -281,6 +281,7 @@ private:
     mutable bool                            mbCachedVariants    : 1;
 
     const OUString &    getBcp47() const;
+    const OUString &    getRFC3066bisLanguage() const;
     OUString            getLanguage() const;
     OUString            getScript() const;
     OUString            getCountry() const;
@@ -1524,6 +1525,38 @@ const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
         const_cast<LanguageTag*>(this)->syncFromImpl();
     }
     return maBcp47;
+}
+
+static OUString lcl_convertBcp47ToRFC3066bis( OUString aBcp47String, OUString aLanguage )
+{
+    if ( aBcp47String == OUString("zh-CN") )
+    {
+        return OUString("zh-Hans");
+    }
+    else if ( aBcp47String == OUString("zh-TW") )
+    {
+        return OUString("zh-Hant");
+    }
+    else if ( aBcp47String == OUString("pt-PT") )
+    {
+        return OUString("pt-PT");
+    }
+    else if ( aBcp47String == OUString("en-GB") )
+    {
+        return OUString("en-GB");
+    }
+    else
+        return aLanguage;
+}
+
+const OUString & LanguageTag::getRFC3066bisLanguage() const
+{
+    OUString aBcp47String = getBcp47();
+    OUString aLanguage = getLanguage();
+
+    maRFC3066bis = lcl_convertBcp47ToRFC3066bis( aBcp47String, aLanguage );
+
+    return maRFC3066bis;
 }
 
 
