@@ -63,13 +63,6 @@ public:
     */
     static bool isFolderEntry( const SvTreeListEntry* _pEntry );
 
-    /** determines whether the given entry denotes a table or view
-    */
-    static bool isTableOrViewEntry( const SvTreeListEntry* _pEntry )
-    {
-        return !isFolderEntry( _pEntry );
-    }
-
     /** fill the table list with the tables belonging to the connection described by the parameters
         @param _rxConnection
             the connection, which must support the service com.sun.star.sdb.Connection

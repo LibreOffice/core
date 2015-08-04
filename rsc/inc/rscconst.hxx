@@ -38,13 +38,11 @@ public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
                     virtual ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
-    sal_uInt32      GetEntryCount() const { return nEntries; }
                     // Die erlaubten Werte werden gesetzt
     ERRTYPE         SetConstant( Atom nVarName, sal_Int32 lValue );
-    Atom            GetConstant( sal_uInt32 nPos ) SAL_OVERRIDE;
     bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
     bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
-    sal_uInt32          GetConstPos( Atom nConstId );
+    sal_uInt32      GetConstPos( Atom nConstId );
 };
 
 class RscEnum : public RscConst

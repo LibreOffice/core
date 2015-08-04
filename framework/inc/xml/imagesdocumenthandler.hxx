@@ -113,11 +113,6 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper1< ::com::sun::s
                                                         OUStringHash,
                                                         std::equal_to< OUString > >
         {
-            public:
-                inline void free()
-                {
-                    ImageHashMap().swap( *this );// get rid of reserved capacity
-                }
         };
 
         bool                                                                    m_bImageContainerStartFound;

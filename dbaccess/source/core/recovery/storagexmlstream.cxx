@@ -70,7 +70,7 @@ namespace dbaccess
     StorageXMLOutputStream::StorageXMLOutputStream( const Reference<XComponentContext>& i_rContext,
                                                     const Reference< XStorage >& i_rParentStorage,
                                                     const OUString& i_rStreamName )
-        :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
+        :StorageOutputStream( i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLOutputStream_Data )
     {
         const Reference< XWriter > xSaxWriter = Writer::create( i_rContext );
@@ -142,7 +142,7 @@ namespace dbaccess
     StorageXMLInputStream::StorageXMLInputStream( const Reference<XComponentContext>& i_rContext,
                                                   const Reference< XStorage >& i_rParentStorage,
                                                   const OUString& i_rStreamName )
-        :StorageInputStream( i_rContext, i_rParentStorage, i_rStreamName )
+        :StorageInputStream( i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLInputStream_Data )
     {
         m_pData->xParser.set( Parser::create(i_rContext) );

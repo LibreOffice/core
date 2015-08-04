@@ -84,14 +84,6 @@ public:
     ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddr ) const;
 
 protected:
-    /** Converts the OOXML formula string stored in the own model. */
-    ApiTokenSequence    importOoxFormula( sal_Int16 nBaseSheet );
-    /** Imports the BIFF12 formula from the passed stream. */
-    ApiTokenSequence    importBiff12Formula( sal_Int16 nBaseSheet, SequenceInputStream& rStrm );
-    /** Imports the BIFF formula from the passed stream. */
-    ApiTokenSequence    importBiffFormula( sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
-
-protected:
     DefinedNameModel    maModel;            /// Model data for this defined name.
     mutable OUString maUpModelName;  /// Model name converted to uppercase ASCII.
     OUString     maCalcName;         /// Final name used in the Calc document.

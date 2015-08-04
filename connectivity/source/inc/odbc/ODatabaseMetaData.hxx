@@ -58,17 +58,9 @@ namespace connectivity
             OUString getURLImpl();
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw() SAL_OVERRIDE;
             virtual ~ODatabaseMetaData();
+
         public:
-
-            inline OConnection* getOwnConnection() const { return m_pConnection; }
-            inline oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
-            {
-                return m_pConnection->getOdbcFunction(_nIndex);
-            }
-
             ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon);
-
-
 
             // XDatabaseMetaData
             virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

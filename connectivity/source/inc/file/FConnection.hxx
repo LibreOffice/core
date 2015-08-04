@@ -83,9 +83,6 @@ namespace connectivity
                        css::uno::RuntimeException,
                        css::uno::DeploymentException);
 
-
-            void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
-
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface

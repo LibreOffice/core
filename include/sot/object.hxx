@@ -43,7 +43,6 @@ private:
     static SotFactory **       GetFactoryAdress()
                               { return &(SOTDATA()->pSotObjectFactory); }
 public:
-    static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
     virtual void *             Cast( const SotFactory * );
 

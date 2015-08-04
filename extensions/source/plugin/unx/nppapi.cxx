@@ -395,11 +395,6 @@ NPError UnxPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
     return aRet;
 }
 
-void* UnxPluginComm::NPP_GetJavaClass()
-{
-    return NULL;
-}
-
 NPError UnxPluginComm::NPP_Initialize()
 {
     MediatorMessage* pMes =
@@ -503,10 +498,6 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
     return aRet;
 }
 
-void UnxPluginComm::NPP_Print( NPP /*instance*/, NPPrint* /*platformPrint*/ )
-{
-}
-
 NPError UnxPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
 {
     NPError aRet = NPERR_GENERIC_ERROR;
@@ -599,16 +590,6 @@ int32_t UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
     delete pMes;
 
     return aRet;
-}
-
-NPError UnxPluginComm::NPP_GetValue( NPP /*instance*/, NPPVariable /*variable*/, void* /*value*/ )
-{
-    return 0;
-}
-
-NPError UnxPluginComm::NPP_SetValue( NPP /*instance*/, NPNVariable /*variable*/, void* /*value*/ )
-{
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

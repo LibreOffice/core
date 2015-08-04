@@ -93,7 +93,6 @@ public:
     using PluginComm::NPP_Destroy;
     virtual NPError     NPP_Destroy( NPP instance, NPSavedData** save );
     virtual NPError     NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason );
-    virtual void *      NPP_GetJavaClass();
     virtual NPError     NPP_Initialize();
     virtual NPError     NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                                  char* argn[], char* argv[], NPSavedData *saved );
@@ -111,7 +110,6 @@ public:
                                    int32_t len, void* buffer );
     virtual int32_t     NPP_WriteReady( NPP instance, NPStream* stream );
     virtual NPError     NPP_GetValue( NPP instance, NPPVariable variable, void *ret_alue );
-    virtual NPError     NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue );
 
 private:
     BOOL                retrieveFunction( TCHAR const * pName, void** ppFunc ) const;

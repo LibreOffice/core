@@ -156,7 +156,6 @@ protected:
     const OUString m_renameDupStr;
     const OUString m_renameErrTitleStr;
 
-    DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet >& xProps, OUString& propName );

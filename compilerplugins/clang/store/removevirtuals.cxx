@@ -53,7 +53,7 @@ static size_t getFilesize(const char* filename)
 
 RemoveVirtuals::RemoveVirtuals(InstantiationData const & data): RewritePlugin(data)
 {
-    static const char sInputFile[] = "/home/noel/libo5/result.txt";
+    static const char sInputFile[] = SRCDIR "/result.txt";
     mmapFilesize = getFilesize(sInputFile);
     //Open file
     mmapFD = open(sInputFile, O_RDONLY, 0);

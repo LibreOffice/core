@@ -56,8 +56,6 @@ namespace cppcanvas
     class PolyPolygon : public virtual CanvasGraphic
     {
     public:
-        virtual void addPolygon( const ::basegfx::B2DPolygon& rPoly ) = 0;
-        virtual void addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly ) = 0;
 
         /** Set polygon fill color
          */
@@ -65,9 +63,6 @@ namespace cppcanvas
         /** Set polygon line color
          */
         virtual void                        setRGBALineColor( Color::IntSRGBA ) = 0;
-        /** Get polygon fill color
-         */
-        virtual Color::IntSRGBA             getRGBAFillColor() const = 0;
         /** Get polygon line color
          */
         virtual Color::IntSRGBA             getRGBALineColor() const = 0;

@@ -74,8 +74,6 @@ namespace connectivity
 
         bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
-
-        inline OUString getDBName() const { return aTypeName; }
     };
 }
 

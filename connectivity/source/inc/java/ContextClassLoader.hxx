@@ -57,8 +57,6 @@ namespace connectivity { namespace jdbc
 
         ~ContextClassLoaderScope() { pop(true); }
 
-        void pop() { pop(false); }
-
         bool isActive() const
         {
             return  ( m_currentThread.is() )

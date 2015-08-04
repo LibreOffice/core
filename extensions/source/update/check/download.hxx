@@ -64,10 +64,6 @@ public:
     // stops the download after the next write operation
     void stop();
 
-    // returns true if the stop condition is set
-    bool isStopped() const
-        { return const_cast <Download *> (this)->m_aCondition.check(); };
-
 protected:
 
     // Determines the appropriate proxy settings for the given URL. Returns true if a proxy should be used

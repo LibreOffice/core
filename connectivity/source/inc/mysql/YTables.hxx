@@ -51,20 +51,6 @@ namespace connectivity
 
             // XDrop
             void appendNew(const OUString& _rsNewTable);
-            // some helper functions
-            /**
-                returns a sql string which contains the column definition part for create or alter statements
-            */
-            static OUString getColumnSqlType(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
-            /**
-                returns the "not null" part or the default part of the table statement
-            */
-            static OUString getColumnSqlNotNullDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
-            /**
-                returns the corresponding typename
-                can contain () which have to filled with values
-            */
-            static OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
 
             /** convert the sql statement to fit MySQL notation
                 @param  _sSql in/out

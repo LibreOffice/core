@@ -985,27 +985,4 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     return pRes;
 }
 
-// Rename the given entry.
-
-bool StgDirStrm::Rename( StgDirEntry& rStg, const OUString& rOld, const OUString& rNew )
-{
-    StgDirEntry* p = Find( rStg, rOld );
-    if( p )
-    {
-
-        if( !StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&rStg.pDown), p, false ) )
-            return false;
-        p->aEntry.SetName( rNew );
-        if( !StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.pDown), p ) )
-            return false;
-        p->bRenamed = p->bDirty   = true;
-        return true;
-    }
-    else
-    {
-        rIo.SetError( SVSTREAM_FILE_NOT_FOUND );
-        return false;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

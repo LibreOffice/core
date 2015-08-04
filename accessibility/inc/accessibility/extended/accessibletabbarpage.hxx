@@ -51,26 +51,25 @@ namespace accessibility
 
     private:
         sal_uInt16              m_nPageId;
-        bool                m_bEnabled;
-        bool                m_bShowing;
-        bool                m_bSelected;
+        bool                    m_bEnabled;
+        bool                    m_bShowing;
+        bool                    m_bSelected;
         OUString                m_sPageText;
 
         css::uno::Reference< css::accessibility::XAccessible >        m_xParent;
 
     protected:
-        bool                IsEnabled();
-        bool                IsShowing();
-        bool                IsSelected();
+        bool                    IsEnabled();
+        bool                    IsShowing();
+        bool                    IsSelected();
 
-        void                    SetEnabled( bool bEnabled );
         void                    SetShowing( bool bShowing );
         void                    SetSelected( bool bSelected );
         void                    SetPageText( const OUString& sPageText );
 
         sal_uInt16              GetPageId() const { return m_nPageId; }
 
-        void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+        void                    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
         // OCommonAccessibleComponent
         virtual css::awt::Rectangle implGetBounds(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE;

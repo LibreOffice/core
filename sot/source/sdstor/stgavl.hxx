@@ -45,7 +45,6 @@ public:
     StgAvlNode* Find( StgAvlNode* );
     static bool Insert( StgAvlNode**, StgAvlNode* );
     static bool Remove( StgAvlNode**, StgAvlNode*, bool bDel = true );
-    static bool Move( StgAvlNode**, StgAvlNode**, StgAvlNode* );
     virtual short Compare( const StgAvlNode* ) const = 0;
 };
 

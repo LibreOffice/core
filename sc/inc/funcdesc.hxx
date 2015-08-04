@@ -235,9 +235,6 @@ public:
 
     const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const;
 
-    sal_Int32 GetMaxFuncNameLen() const
-               { return nMaxFuncNameLen; }
-
 private:
     ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
     ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */

@@ -26,7 +26,6 @@ namespace dbaxml
     class ODBFilter;
     class OXMLDataSourceInfo : public SvXMLImportContext
     {
-        ODBFilter& GetOwnImport();
     public:
 
         OXMLDataSourceInfo( ODBFilter& rImport, sal_uInt16 nPrfx,

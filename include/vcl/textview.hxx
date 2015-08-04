@@ -66,7 +66,6 @@ protected:
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
-    void                ImpSetSelection( const TextSelection& rNewSel, bool bUI );
     bool                IsInSelection( const TextPaM& rPaM );
 
     void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0);
@@ -80,7 +79,7 @@ protected:
     void                ImpShowDDCursor();
 
     bool                ImplTruncateNewText( OUString& rNewText ) const;
-    bool            ImplCheckTextLen( const OUString& rNewText );
+    bool                ImplCheckTextLen( const OUString& rNewText );
 
     VirtualDevice*      GetVirtualDevice();
 

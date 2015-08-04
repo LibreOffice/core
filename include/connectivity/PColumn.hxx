@@ -81,15 +81,8 @@ namespace connectivity
             void setFunction(bool _bFunction)            { m_bFunction  = _bFunction; }
             void setAggregateFunction(bool _bFunction)   { m_bAggregateFunction = _bFunction; }
             void setIsSearchable( bool _bIsSearchable )  { m_bIsSearchable = _bIsSearchable; }
-            void setDbasePrecisionChanged(bool _bDbasePrecisionChanged) { m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
-
             const OUString& getRealName()   const { return  m_aRealName; }
-            const OUString& getLabel()      const { return  m_sLabel; }
-            const OUString& getTableName()  const { return  m_TableName; }
-            bool            getFunction()   const { return  m_bFunction; }
-            bool            getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
 
-        public:
             /** creates a collection of OParseColumn, as described by a result set meta data instance.
             */
             static ::rtl::Reference< OSQLColumns >

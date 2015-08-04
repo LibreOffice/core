@@ -603,11 +603,6 @@ bool AquaSalPrinter::EndJob()
     return mpInfoPrinter->EndJob();
 }
 
-bool AquaSalPrinter::AbortJob()
-{
-    return mpInfoPrinter->AbortJob();
-}
-
 SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );

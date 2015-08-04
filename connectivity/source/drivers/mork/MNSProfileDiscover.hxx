@@ -45,7 +45,6 @@ namespace connectivity
             ProfileStruct(MozillaProductType aProduct = MozillaProductType_Default, const OUString& aProfileName = OUString(),
                           const OUString &aProfilePath = OUString()
                             );
-            MozillaProductType getProductType() { return product;}
             OUString getProfileName(){ return profileName;}
             OUString getProfilePath()  {  return profilePath; }
         protected:
@@ -59,10 +58,7 @@ namespace connectivity
         class ProductStruct
         {
         public:
-            void setCurrentProfile(const OUString& aProfileName){mCurrentProfileName = aProfileName;}
-
             OUString mCurrentProfileName;
-
             ProfileList mProfileList;
         };
 

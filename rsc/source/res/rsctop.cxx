@@ -58,11 +58,6 @@ void RscTop :: Pre_dtor()
     };
 }
 
-Atom    RscTop :: GetConstant( sal_uInt32 )
-{
-    return InvalidAtom;
-}
-
 RscTop * RscTop::GetTypeClass() const
 {
     if( pSuperClass )

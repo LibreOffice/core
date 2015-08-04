@@ -123,11 +123,6 @@ string OOXMLPropertyImpl::toString() const
 }
 #endif
 
-Sprm * OOXMLPropertyImpl::clone()
-{
-    return new OOXMLPropertyImpl(*this);
-}
-
 void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
 {
     writerfilter::Properties * pProperties = nullptr;
@@ -155,11 +150,6 @@ OOXMLValue::OOXMLValue()
 
 OOXMLValue::~OOXMLValue()
 {
-}
-
-bool OOXMLValue::getBool() const
-{
-    return false;
 }
 
 int OOXMLValue::getInt() const
@@ -263,11 +253,6 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 
 OOXMLBooleanValue::~OOXMLBooleanValue()
 {
-}
-
-bool OOXMLBooleanValue::getBool() const
-{
-    return mbValue;
 }
 
 int OOXMLBooleanValue::getInt() const
@@ -458,11 +443,6 @@ void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
 OOXMLPropertySet * OOXMLPropertySetImpl::clone() const
 {
     return new OOXMLPropertySetImpl(*this);
-}
-
-void OOXMLPropertySetImpl::setType(const string & rsType)
-{
-    maType = OString(rsType.c_str(), rsType.size());
 }
 
 #ifdef DEBUG_WRITERFILTER

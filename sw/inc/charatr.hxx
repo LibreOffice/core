@@ -85,8 +85,6 @@ inline const SvxFontHeightItem   &SwAttrSet::GetCJKSize(bool bInP) const
     {   return static_cast<const SvxFontHeightItem&>(Get( RES_CHRATR_CJK_FONTSIZE,bInP)); }
 inline const SvxFontHeightItem   &SwAttrSet::GetCTLSize(bool bInP) const
     {   return static_cast<const SvxFontHeightItem&>(Get( RES_CHRATR_CTL_FONTSIZE,bInP)); }
-inline const SvxPropSizeItem     &SwAttrSet::GetPropSize(bool bInP) const
-    {   return static_cast<const SvxPropSizeItem&>(Get( RES_CHRATR_PROPORTIONALFONTSIZE,bInP)); }
 inline const SvxFontItem         &SwAttrSet::GetFont(bool bInP) const
     {   return static_cast<const SvxFontItem&>(Get( RES_CHRATR_FONT,bInP)); }
 inline const SvxFontItem         &SwAttrSet::GetCJKFont(bool bInP) const
@@ -95,8 +93,6 @@ inline const SvxFontItem         &SwAttrSet::GetCTLFont(bool bInP) const
     {   return static_cast<const SvxFontItem&>(Get( RES_CHRATR_CTL_FONT,bInP)); }
 inline const SvxColorItem        &SwAttrSet::GetColor(bool bInP) const
     {   return static_cast<const SvxColorItem&>(Get( RES_CHRATR_COLOR,bInP)); }
-inline const SvxCharSetColorItem &SwAttrSet::GetCharSetColor(bool bInP) const
-    {   return static_cast<const SvxCharSetColorItem&>(Get( RES_CHRATR_CHARSETCOLOR,bInP)); }
 inline const SvxLanguageItem     &SwAttrSet::GetLanguage(bool bInP) const
     {   return static_cast<const SvxLanguageItem&>(Get( RES_CHRATR_LANGUAGE,bInP)); }
 inline const SvxLanguageItem     &SwAttrSet::GetCJKLanguage(bool bInP) const
@@ -111,10 +107,6 @@ inline const SvxNoHyphenItem     &SwAttrSet::GetNoHyphenHere(bool bInP) const
     {   return static_cast<const SvxNoHyphenItem&>(Get( RES_CHRATR_NOHYPHEN,bInP)); }
 inline const SvxBlinkItem        &SwAttrSet::GetBlink(bool bInP) const
     {   return static_cast<const SvxBlinkItem&>(Get( RES_CHRATR_BLINK,bInP)); }
-inline const SvxBrushItem        &SwAttrSet::GetChrBackground( bool bInP ) const
-    {   return static_cast<const SvxBrushItem&>(Get( RES_CHRATR_BACKGROUND, bInP )); }
-inline const SvxBrushItem        &SwAttrSet::GetChrHighlight( bool bInP ) const
-    {   return static_cast<const SvxBrushItem&>(Get( RES_CHRATR_HIGHLIGHT, bInP )); }
 inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( bool bInP ) const
     {   return static_cast<const SvxEmphasisMarkItem&>(Get( RES_CHRATR_EMPHASIS_MARK, bInP )); }
 inline const SvxTwoLinesItem     &SwAttrSet::Get2Lines( bool bInP ) const
@@ -127,10 +119,6 @@ inline const SvxCharReliefItem   &SwAttrSet::GetCharRelief( bool bInP ) const
     {   return static_cast<const SvxCharReliefItem&>(Get( RES_CHRATR_RELIEF, bInP )); }
 inline const SvxCharHiddenItem   &SwAttrSet::GetCharHidden( bool bInP ) const
     {   return static_cast<const SvxCharHiddenItem&>(Get( RES_CHRATR_HIDDEN, bInP )); }
-inline const SvxBoxItem          &SwAttrSet::GetCharBorder( bool bInP ) const
-    {   return static_cast<const SvxBoxItem&>(Get( RES_CHRATR_BOX, bInP )); }
-inline const SvxShadowItem       &SwAttrSet::GetCharShadow( bool bInP ) const
-    {   return static_cast<const SvxShadowItem&>(Get( RES_CHRATR_SHADOW, bInP )); }
 
 // implementation of the character attribute methods of SwFormat
 

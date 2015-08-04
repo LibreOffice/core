@@ -51,7 +51,6 @@ namespace dbaui
         bool isCutAllowed() SAL_OVERRIDE      { return false; }
         bool isCopyAllowed() SAL_OVERRIDE     { return false; }
         bool isPasteAllowed() SAL_OVERRIDE    { return false; }
-        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
         void copy() SAL_OVERRIDE  { }
         void cut() SAL_OVERRIDE   { }
         void paste() SAL_OVERRIDE { }

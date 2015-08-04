@@ -230,17 +230,13 @@ public:
     inline const SvxOverlineItem        &GetOverline( bool = true ) const;
     inline const SvxCrossedOutItem      &GetCrossedOut( bool = true ) const;
     inline const SvxFontHeightItem        &GetSize( bool = true ) const;
-    inline const SvxPropSizeItem        &GetPropSize( bool = true ) const;
     inline const SvxFontItem            &GetFont( bool = true ) const;
     inline const SvxColorItem           &GetColor( bool = true ) const;
-    inline const SvxCharSetColorItem    &GetCharSetColor( bool = true ) const;
     inline const SvxLanguageItem        &GetLanguage( bool = true ) const;
     inline const SvxEscapementItem      &GetEscapement( bool = true ) const;
     inline const SvxCaseMapItem         &GetCaseMap( bool = true ) const;
     inline const SvxNoHyphenItem      &GetNoHyphenHere( bool = true ) const;
     inline const SvxBlinkItem         &GetBlink( bool = true ) const;
-    inline const SvxBrushItem         &GetChrBackground( bool = true ) const;
-    inline const SvxBrushItem         &GetChrHighlight( bool = true ) const;
     inline const SvxFontItem          &GetCJKFont( bool = true ) const;
     inline const SvxFontHeightItem    &GetCJKSize( bool = true ) const;
     inline const SvxLanguageItem      &GetCJKLanguage( bool = true ) const;
@@ -257,8 +253,6 @@ public:
     inline const SvxCharRotateItem        &GetCharRotate( bool = true ) const;
     inline const SvxCharReliefItem        &GetCharRelief( bool = true ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( bool = true ) const;
-    inline const SvxBoxItem      &GetCharBorder( bool = true ) const;
-    inline const SvxShadowItem      &GetCharShadow( bool = true ) const;
 
     // Frame attributes. Implementation in frmatr.hxx.
     inline const SwFormatFillOrder       &GetFillOrder( bool = true ) const;

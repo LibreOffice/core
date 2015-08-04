@@ -77,17 +77,11 @@ public:
     void            SetRangeMax( long nNewRange );
     long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
-    Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
     void            SetValue( long nValue );
     long            GetValue() const { return mnValue; }
     void            SetValueStep( long nNewStep ) { mnValueStep = nNewStep; }
     long            GetValueStep() const { return mnValueStep; }
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-
-    void            SetUpHdl( const Link<>& rLink ) { maUpHdlLink = rLink; }
-    const Link<>&   GetUpHdl() const   { return maUpHdlLink;   }
-    void            SetDownHdl( const Link<>& rLink ) { maDownHdlLink = rLink; }
-    const Link<>&   GetDownHdl() const { return maDownHdlLink; }
 
 private:
     // moves the focus to the upper or lower rect. Return sal_True if the focus rect actually changed.

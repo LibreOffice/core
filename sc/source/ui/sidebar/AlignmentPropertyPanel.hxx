@@ -101,7 +101,6 @@ private:
     DECL_LINK( CBOXMergnCellClkHdl, void * );
     DECL_LINK( CBOXWrapTextClkHdl, void * );
     DECL_LINK( AngleModifiedHdl, void * );
-    DECL_LINK( RotationHdl, void * );
     DECL_LINK( ClickStackHdl, void * );
     DECL_LINK( ReferenceEdgeHdl, Control* );
 

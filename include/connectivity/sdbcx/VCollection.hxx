@@ -78,7 +78,6 @@ namespace connectivity
             virtual void disposeAndErase(sal_Int32 _nIndex) = 0;
             virtual void disposeElements() = 0;
             virtual sal_Int32 findColumn( const OUString& columnName ) = 0;
-            virtual OUString findColumnAtIndex(  sal_Int32 _nIndex) = 0;
             virtual ObjectType getObject(sal_Int32 _nIndex) = 0;
             virtual ObjectType getObject(const OUString& columnName) = 0;
             virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject) = 0;

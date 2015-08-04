@@ -56,27 +56,6 @@ namespace cppcanvas
         {
         }
 
-        OUString ImplFont::getName() const
-        {
-            OSL_ENSURE( mxFont.is(), "ImplFont::getName(): Invalid Font" );
-
-            return mxFont->getFontRequest().FontDescription.FamilyName;
-        }
-
-        double ImplFont::getCellSize() const
-        {
-            OSL_ENSURE( mxFont.is(), "ImplFont::getCellSize(): Invalid Font" );
-
-            return mxFont->getFontRequest().CellSize;
-        }
-
-        uno::Reference< rendering::XCanvasFont > ImplFont::getUNOFont() const
-        {
-            OSL_ENSURE( mxFont.is(), "ImplFont::getUNOFont(): Invalid Font" );
-
-            return mxFont;
-        }
-
     }
 }
 

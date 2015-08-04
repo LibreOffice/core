@@ -93,9 +93,6 @@ struct BinAddress
     inline explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
     inline explicit     BinAddress( const ::com::sun::star::table::CellAddress& rAddr ) : mnCol( rAddr.Column ), mnRow( rAddr.Row ) {}
 
-    inline void         set( sal_Int32 nCol, sal_Int32 nRow ) { mnCol = nCol; mnRow = nRow; }
-    inline void         set( const ::com::sun::star::table::CellAddress& rAddr ) { mnCol = rAddr.Column; mnRow = rAddr.Row; }
-
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };

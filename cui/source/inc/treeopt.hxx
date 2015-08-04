@@ -187,7 +187,6 @@ protected:
     DECL_LINK(ShowPageHdl_Impl, void *);
     DECL_LINK(BackHdl_Impl, void *);
     DECL_LINK(OKHdl_Impl, void *);
-    DECL_LINK( HintHdl_Impl, Timer * );
     void SelectHdl_Impl();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

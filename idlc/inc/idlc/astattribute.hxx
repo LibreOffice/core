@@ -73,10 +73,6 @@ public:
         { return ((m_flags & AF_READONLY) == AF_READONLY); }
     bool isOptional() const
         { return ((m_flags & AF_OPTIONAL) == AF_OPTIONAL); }
-    bool isAttribute() const
-        { return ((m_flags & AF_ATTRIBUTE) == AF_ATTRIBUTE); }
-    bool isProperty() const
-        { return ((m_flags & AF_PROPERTY) == AF_PROPERTY); }
     bool isBound() const
         { return ((m_flags & AF_BOUND) == AF_BOUND); }
     bool isMayBeVoid() const

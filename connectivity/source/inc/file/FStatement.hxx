@@ -112,7 +112,6 @@ namespace connectivity
             OSQLAnalyzer* createAnalyzer();
 
             void closeResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
-            sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             void disposeResultSet();
             void GetAssignValues();

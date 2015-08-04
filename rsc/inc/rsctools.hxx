@@ -119,9 +119,6 @@ public:
                 {
                     return GetPointer( nPos );
                 }
-
-
-    RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
     sal_uInt32  Size(){ return nLen; }
     void        Put( sal_uInt64 lVal )
                 {
@@ -192,10 +189,6 @@ public:
     void        PutAt( sal_uInt32 nPos, sal_uInt32 lVal )
                 {
                     PutAt( nPos, (sal_Int32)lVal);
-                }
-    void        PutAt( sal_uInt32 nPos, short nVal )
-                {
-                    PutAt( nPos, (sal_uInt16)nVal );
                 }
     void        PutAt( sal_uInt32 nPos, sal_uInt16 nVal )
                 {

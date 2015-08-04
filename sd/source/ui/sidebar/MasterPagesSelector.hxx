@@ -67,19 +67,6 @@ public:
 
     virtual void LateInit();
 
-    /** Return the height that this control needs to show all of its lines.
-    */
-    long GetRequiredHeight (int nWidth) const;
-
-    /** The given master page, either the master page of a slide or a notes
-        page, is cloned and inserted into mrDocument.  The necessary styles
-        are copied as well.
-    */
-    static SdPage* AddMasterPage (
-        SdDrawDocument* pTargetDocument,
-        SdPage* pMasterPage,
-        sal_uInt16 nInsertionIndex);
-
     sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
 
     /** Update the selection of previews according to whatever
@@ -95,8 +82,6 @@ public:
         influenced by its changes.
     */
     virtual void UpdateSelection();
-
-    void FillPageSet();
 
     /** Make the selector empty.  This method clear the value set from any
         entries. Override this method to add functionality, especially to

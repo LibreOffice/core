@@ -51,7 +51,6 @@ public:
     virtual NPError NPP_Destroy( NPP instance, NPSavedData** save ) SAL_OVERRIDE;
     virtual NPError NPP_DestroyStream( NPP instance, NPStream* stream,
                                        NPError reason ) SAL_OVERRIDE;
-    virtual void* NPP_GetJavaClass() SAL_OVERRIDE;
     virtual NPError NPP_Initialize() SAL_OVERRIDE;
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
                              uint16_t mode, int16_t argc,
@@ -59,7 +58,6 @@ public:
     virtual NPError NPP_NewStream( NPP instance, NPMIMEType type,
                                    NPStream* stream,
                                    NPBool seekable, uint16_t* stype ) SAL_OVERRIDE;
-    virtual void NPP_Print( NPP instance, NPPrint* platformPrint ) SAL_OVERRIDE;
 
     using PluginComm::NPP_SetWindow;
     virtual NPError NPP_SetWindow( NPP instance, NPWindow* window ) SAL_OVERRIDE;
@@ -71,9 +69,6 @@ public:
     virtual int32_t NPP_Write( NPP instance, NPStream* stream, int32_t offset,
                                int32_t len, void* buffer ) SAL_OVERRIDE;
     virtual int32_t NPP_WriteReady( NPP instance, NPStream* stream ) SAL_OVERRIDE;
-    virtual NPError NPP_GetValue( NPP instance, NPPVariable variable, void* value ) SAL_OVERRIDE;
-    virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
-                                 void *value) SAL_OVERRIDE;
 
     static bool getPluginappPath(OString * path);
 };

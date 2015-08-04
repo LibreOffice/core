@@ -51,7 +51,6 @@ public:
     void            DeleteEmptyAttribs();
     void            ResortAttribs();
 
-    bool            HasEmptyAttribs() const { return mbHasEmptyAttribs; }
     bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
 
     TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
