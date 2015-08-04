@@ -4652,7 +4652,8 @@ void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
     // Like UpdateOverflowingParaNum but for each line in the first
     //  overflowing paragraph.
     for ( sal_Int32 nLine = 0; nLine < pPara->GetLines().Count(); nLine++ ) {
-        EditLine aLine = pPara->GetLines()[nLine];
+        // XXX: We must use a reference here because the copy constructor resets the height
+        EditLine &aLine = pPara->GetLines()[nLine];
         nLH = aLine.GetHeight();
         nY += nLH;
         if ( nY > nPaperHeight ) // found first line overflowing
