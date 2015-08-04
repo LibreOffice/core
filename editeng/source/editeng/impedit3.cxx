@@ -4070,6 +4070,7 @@ void ImpEditEngine::CallStatusHdl()
 
 void ImpEditEngine::CallChainingEventHdl()
 {
+    // XXX: We don't use this method any more at the moment.
     // only if it's the right ImpEditEngine (with right info on changes in text)
     if ( aChainingHdlLink.IsSet() /* && aStatus.GetStatusWord() */)
     {
@@ -4662,7 +4663,7 @@ void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
         }
     }
 
-
+    assert(0); // You should never get here
 
 }
 
