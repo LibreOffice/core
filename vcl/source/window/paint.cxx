@@ -129,7 +129,6 @@ private:
     vcl::Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
-    MapMode m_aPaintRectMapMode;
     vcl::Region m_aPaintRegion;
     sal_uInt16 m_nPaintFlags;
     bool m_bPop : 1;
@@ -205,9 +204,6 @@ void PaintHelper::StartBufferedPaint()
 
     pFrameData->mbInBufferedPaint = true;
     m_bStartedBufferedPaint = true;
-
-    // Remember what was the map mode of m_aPaintRect.
-    m_aPaintRectMapMode = m_pWindow->GetMapMode();
 }
 
 void PaintHelper::PaintBuffer()
@@ -223,12 +219,6 @@ void PaintHelper::PaintBuffer()
     // window either above or in eg. an event handler]
     if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
     {
-        // The map mode of m_pWindow and/or the buffer may have changed since
-        // StartBufferedPaint(), set it back to what it was, otherwise unwanted
-        // scaling or translating may happen.
-        m_pWindow->SetMapMode(m_aPaintRectMapMode);
-        pFrameData->mpBuffer->SetMapMode(m_aPaintRectMapMode);
-
         // Make sure that the +1 value GetSize() adds to the size is in pixels.
         Size aPaintRectSize;
         if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
