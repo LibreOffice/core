@@ -40,6 +40,76 @@
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
+/// Sets up the buffer to have settings matching the window, and restore the original state in the dtor.
+class PaintBufferGuard
+{
+    ImplFrameData* mpFrameData;
+    bool mbBackground;
+    Wallpaper maBackground;
+    AllSettings maSettings;
+public:
+    PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
+        : mpFrameData(pFrameData),
+        mbBackground(false)
+    {
+        // transfer various settings
+        // FIXME: this must disappear as we move to RenderContext only,
+        // the painting must become state-less, so that no actual
+        // vcl::Window setting affects this
+        mbBackground = pFrameData->mpBuffer->IsBackground();
+        if (pWindow->IsBackground())
+        {
+            maBackground = pFrameData->mpBuffer->GetBackground();
+            pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
+        }
+        //else
+            //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
+
+        PushFlags nFlags = PushFlags::NONE;
+        nFlags |= PushFlags::CLIPREGION;
+        nFlags |= PushFlags::FILLCOLOR;
+        nFlags |= PushFlags::FONT;
+        nFlags |= PushFlags::LINECOLOR;
+        nFlags |= PushFlags::MAPMODE;
+        maSettings = pFrameData->mpBuffer->GetSettings();
+        nFlags |= PushFlags::REFPOINT;
+        nFlags |= PushFlags::TEXTCOLOR;
+        nFlags |= PushFlags::TEXTLINECOLOR;
+        nFlags |= PushFlags::OVERLINECOLOR;
+        nFlags |= PushFlags::TEXTFILLCOLOR;
+        nFlags |= PushFlags::TEXTALIGN;
+        nFlags |= PushFlags::RASTEROP;
+        nFlags |= PushFlags::TEXTLAYOUTMODE;
+        nFlags |= PushFlags::TEXTLANGUAGE;
+        pFrameData->mpBuffer->Push(nFlags);
+        pFrameData->mpBuffer->SetClipRegion(pWindow->GetClipRegion());
+        pFrameData->mpBuffer->SetFillColor(pWindow->GetFillColor());
+        pFrameData->mpBuffer->SetFont(pWindow->GetFont());
+        pFrameData->mpBuffer->SetLineColor(pWindow->GetLineColor());
+        pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
+        pFrameData->mpBuffer->SetRefPoint(pWindow->GetRefPoint());
+        pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
+        pFrameData->mpBuffer->SetTextColor(pWindow->GetTextColor());
+        pFrameData->mpBuffer->SetTextLineColor(pWindow->GetTextLineColor());
+        pFrameData->mpBuffer->SetOverlineColor(pWindow->GetOverlineColor());
+        pFrameData->mpBuffer->SetTextFillColor(pWindow->GetTextFillColor());
+        pFrameData->mpBuffer->SetTextAlign(pWindow->GetTextAlign());
+        pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
+        pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
+        pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
+    }
+    ~PaintBufferGuard()
+    {
+        // Restore buffer state.
+        mpFrameData->mpBuffer->Pop();
+        mpFrameData->mpBuffer->SetSettings(maSettings);
+        if (mbBackground)
+            mpFrameData->mpBuffer->SetBackground(maBackground);
+        else
+            mpFrameData->mpBuffer->SetBackground();
+    }
+};
+
 class PaintHelper
 {
 private:
@@ -88,9 +158,6 @@ public:
     /// Start buffered paint: set it up to have the same settings as m_pWindow.
     void StartBufferedPaint();
 
-    /// Setup the buffer according to the settings of the current m_pWindow.
-    void SetupBuffer();
-
     /// Paint the content of the buffer to the current m_pWindow.
     void PaintBuffer();
 
@@ -132,35 +199,6 @@ void PaintHelper::StartBufferedPaint()
 
     // Remember what was the map mode of m_aPaintRect.
     m_aPaintRectMapMode = m_pWindow->GetMapMode();
-}
-
-void PaintHelper::SetupBuffer()
-{
-    ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
-    // transfer various settings
-    // FIXME: this must disappear as we move to RenderContext only,
-    // the painting must become state-less, so that no actual
-    // vcl::Window setting affects this
-    if (m_pWindow->IsBackground())
-        pFrameData->mpBuffer->SetBackground(m_pWindow->GetBackground());
-    //else
-        //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
-
-    pFrameData->mpBuffer->SetClipRegion(m_pWindow->GetClipRegion());
-    pFrameData->mpBuffer->SetFillColor(m_pWindow->GetFillColor());
-    pFrameData->mpBuffer->SetFont(m_pWindow->GetFont());
-    pFrameData->mpBuffer->SetLineColor(m_pWindow->GetLineColor());
-    pFrameData->mpBuffer->SetMapMode(m_pWindow->GetMapMode());
-    pFrameData->mpBuffer->SetRefPoint(m_pWindow->GetRefPoint());
-    pFrameData->mpBuffer->SetSettings(m_pWindow->GetSettings());
-    pFrameData->mpBuffer->SetTextColor(m_pWindow->GetTextColor());
-    pFrameData->mpBuffer->SetTextLineColor(m_pWindow->GetTextLineColor());
-    pFrameData->mpBuffer->SetOverlineColor(m_pWindow->GetOverlineColor());
-    pFrameData->mpBuffer->SetTextFillColor(m_pWindow->GetTextFillColor());
-    pFrameData->mpBuffer->SetTextAlign(m_pWindow->GetTextAlign());
-    pFrameData->mpBuffer->SetRasterOp(m_pWindow->GetRasterOp());
-    pFrameData->mpBuffer->SetLayoutMode(m_pWindow->GetLayoutMode());
-    pFrameData->mpBuffer->SetDigitLanguage(m_pWindow->GetDigitLanguage());
 }
 
 void PaintHelper::PaintBuffer()
@@ -248,7 +286,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
         {
             // double-buffering
-            SetupBuffer();
+            PaintBufferGuard g(pFrameData, m_pWindow);
             m_pWindow->ApplySettings(*pFrameData->mpBuffer.get());
 
             long nOutOffX = pFrameData->mpBuffer->mnOutOffX;
