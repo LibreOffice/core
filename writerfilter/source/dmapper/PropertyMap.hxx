@@ -428,8 +428,6 @@ typedef std::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
-
-    OUString         msCT_Fonts_ascii;
     sal_Int32               mnCT_TrPrBase_jc;
 
     sal_Int32               mnCT_TblWidth_w;

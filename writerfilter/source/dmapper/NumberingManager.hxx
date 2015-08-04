@@ -48,7 +48,6 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nFPrev;          //LN_FPREV
     sal_Int32                                     m_nFPrevSpace;     //LN_FPREVSPACE
     sal_Int32                                     m_nFWord6;         //LN_FWORD6
-    OUString                               m_sRGBXchNums;     //LN_RGBXCHNUMS
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     OUString                               m_sGraphicURL;
@@ -126,7 +125,6 @@ class AbstractListDef
 {
 private:
     sal_Int32                            m_nTmpl;
-    OUString                      m_sRGISTD;        //LN_RGISTD
 
     // The ID member reflects either the abstractNumId or the numId
     // depending on the use of the class
