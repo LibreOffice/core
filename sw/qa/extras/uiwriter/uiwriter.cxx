@@ -123,6 +123,7 @@ public:
     void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
+    void testTdf60967();
     void testTdf79236();
     void testTextSearch();
     void testTdf69282();
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testTdf79236);
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
@@ -1185,6 +1187,46 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTdf60967()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    pWrtShell->ChangeHeaderOrFooter(OUString("Default Style"), true, true, true);
+    //Inserting table
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    pWrtShell->InsertTable(TableOpt, 2, 2);
+    SwPosition* xPosAfterTable(pCrsr->GetPoint());
+    //moving cursor to B2 (bottom right cell)
+    pCrsr->Move(fnMoveBackward);
+    sal_Int32 val = pWrtShell->DelToEndOfSentence();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), val);
+    SwPosition* xPosAfterDel(pCrsr->GetPoint());
+    pCrsr->Move(fnMoveForward);
+    SwPosition* xPosMoveAfterDel(pCrsr->GetPoint());
+    //checking that the paragraph is actually deleted
+    CPPUNIT_ASSERT_EQUAL(*xPosAfterDel, *xPosMoveAfterDel);
+    //Undo the changes
+    rUndoManager.Undo();
+    //paragraph *text node* should be back
+    SwPosition* xPosAfterUndo(pCrsr->GetPoint());
+    CPPUNIT_ASSERT_EQUAL(*xPosAfterTable, *xPosAfterUndo);
+    //Redo the changes
+    rUndoManager.Redo();
+    SwPosition* xPosAfterRedo(pCrsr->GetPoint());
+    CPPUNIT_ASSERT_EQUAL(*xPosAfterDel, *xPosAfterRedo);
+    //paragraph *text node* should not be there, checking via MoveForward
+    pCrsr->Move(fnMoveForward);
+    SwPosition* xPosMoveAfterRedo(pCrsr->GetPoint());
+    CPPUNIT_ASSERT_EQUAL(*xPosAfterRedo, *xPosMoveAfterRedo);
+    //Undo the changes
+    rUndoManager.Undo();
+    //paragraph *text node* should be back
+    SwPosition* xPosAfterUndo2(pCrsr->GetPoint());
+    CPPUNIT_ASSERT_EQUAL(*xPosAfterTable, *xPosAfterUndo2);
 }
 
 void SwUiWriterTest::testTdf79236()
