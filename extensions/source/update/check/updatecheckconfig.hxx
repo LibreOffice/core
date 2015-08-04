@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -77,7 +77,7 @@ private:
  * component, as this is not supported by the OOo configuration for extendable groups.
  */
 
-class UpdateCheckConfig : public ::cppu::WeakImplHelper3<
+class UpdateCheckConfig : public ::cppu::WeakImplHelper<
     ::com::sun::star::container::XNameReplace,
     ::com::sun::star::util::XChangesBatch,
     ::com::sun::star::lang::XServiceInfo >

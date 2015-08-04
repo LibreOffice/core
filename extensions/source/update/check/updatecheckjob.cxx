@@ -25,7 +25,7 @@
 #include "updateprotocol.hxx"
 
 #include <boost/scoped_ptr.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -63,7 +63,7 @@ private:
 };
 
 class UpdateCheckJob :
-    public ::cppu::WeakImplHelper3< task::XJob, lang::XServiceInfo, frame::XTerminateListener >
+    public ::cppu::WeakImplHelper< task::XJob, lang::XServiceInfo, frame::XTerminateListener >
 {
     virtual ~UpdateCheckJob();
 

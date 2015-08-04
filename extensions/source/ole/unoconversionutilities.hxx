@@ -30,6 +30,7 @@
 #include "com/sun/star/bridge/oleautomation/Decimal.hpp"
 #include "typelib/typedescription.hxx"
 #include "ole2uno.hxx"
+#include <cppuhelper/weakref.hxx>
 
 #include "unotypewrapper.hxx"
 #include <unordered_map>

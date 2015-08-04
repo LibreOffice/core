@@ -36,8 +36,6 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
-#include <cppuhelper/implbase1.hxx>
-
 namespace container = css::container ;
 namespace deployment = css::deployment ;
 namespace lang = css::lang ;

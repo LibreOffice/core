@@ -29,7 +29,7 @@
 
 #include <connectivity/dbtools.hxx>
 #include <tools/link.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
@@ -42,7 +42,7 @@ namespace pcr
 
     //= SQLCommandDesigner
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   SQLCommandDesigner_Base;
     /** encapsulates the code for calling and managing a query design frame, used
         for interactively designing the Command property of a ->RowSet

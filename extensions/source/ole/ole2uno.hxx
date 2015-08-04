@@ -36,8 +36,6 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
 #include <sal/types.h>

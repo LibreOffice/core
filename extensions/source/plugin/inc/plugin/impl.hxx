@@ -68,7 +68,6 @@
 #include "com/sun/star/awt/XGraphics.hpp"
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
 

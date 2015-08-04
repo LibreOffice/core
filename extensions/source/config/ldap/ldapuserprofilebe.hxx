@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include "ldapaccess.hxx"
 
@@ -41,7 +41,7 @@ namespace container = css::container;
 
 struct LdapDefinition;
 
-typedef cppu::WeakComponentImplHelper2<css::beans::XPropertySet,
+typedef cppu::WeakComponentImplHelper<css::beans::XPropertySet,
                                        lang::XServiceInfo> BackendBase ;
 
 struct LdapProfileMutexHolder { osl::Mutex mMutex; };

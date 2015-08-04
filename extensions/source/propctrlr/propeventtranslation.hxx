@@ -21,7 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPEVENTTRANSLATION_HXX
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace pcr
@@ -31,7 +31,7 @@ namespace pcr
 
     //= PropertyEventTranslation
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   PropertyEventTranslation_Base;
 
     class PropertyEventTranslation : public PropertyEventTranslation_Base

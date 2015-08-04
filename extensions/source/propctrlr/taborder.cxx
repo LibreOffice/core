@@ -24,7 +24,7 @@
 #include "formstrings.hxx"
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <vcl/scrbar.hxx>
@@ -43,7 +43,7 @@ namespace pcr
 
     //= OSimpleTabModel
 
-    class OSimpleTabModel : public ::cppu::WeakImplHelper1< XTabControllerModel>
+    class OSimpleTabModel : public ::cppu::WeakImplHelper< XTabControllerModel>
     {
         Sequence< Reference< XControlModel > > m_aModels;
 

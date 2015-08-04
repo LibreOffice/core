@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/asyncnotification.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -119,7 +119,7 @@ namespace pcr
     /** implementation for of <type scope="com::sun::star::inspection">XPropertyControlContext</type>
         which forwards all events to a non-UNO version of this interface
     */
-    typedef ::cppu::WeakImplHelper1< XPropertyControlContext > PropertyControlContext_Impl_Base;
+    typedef ::cppu::WeakImplHelper< XPropertyControlContext > PropertyControlContext_Impl_Base;
     class PropertyControlContext_Impl   :public PropertyControlContext_Impl_Base
                                         ,public ::comphelper::IEventProcessor
     {

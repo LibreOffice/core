@@ -22,7 +22,7 @@
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 
 
@@ -120,7 +120,7 @@ namespace bib
         virtual void _reloaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
     };
 
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::form::XLoadListener >    OLoadListenerAdapter_Base;
+    typedef ::cppu::WeakImplHelper< ::com::sun::star::form::XLoadListener >    OLoadListenerAdapter_Base;
     class OLoadListenerAdapter
         :public OLoadListenerAdapter_Base
         ,public OComponentAdapterBase

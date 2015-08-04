@@ -25,14 +25,14 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <comphelper/broadcasthelper.hxx>
 // #100312# --------------------
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
@@ -50,7 +50,7 @@ struct BibDBDescriptor;
 
 // #100312# ---------------------
 class BibInterceptorHelper
-    :public cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchProviderInterceptor >
+    :public cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchProviderInterceptor >
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > xMasterDispatchProvider;
@@ -76,7 +76,7 @@ public:
     virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-typedef cppu::WeakComponentImplHelper2  <   ::com::sun::star::beans::XPropertyChangeListener
+typedef cppu::WeakComponentImplHelper  <   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::form::XLoadable
                                         >   BibDataManager_Base;
 class BibDataManager

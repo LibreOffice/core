@@ -35,8 +35,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include <cppuhelper/implbase7.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -67,7 +66,7 @@ using namespace com::sun::star::reflection;
 #define KEY1 L"/oletest.OleTestImpl/UNO/SERVICES"
 #define KEY2 L"oletest.OleTest"
 
-class OComponent : public WeakImplHelper7<
+class OComponent : public WeakImplHelper<
          XTestSequence, XTestStruct, XTestOther, XTestInterfaces,
                    XSimple, XTestInParameters, XIdentity >
 {
@@ -304,7 +303,7 @@ public: // XTestSequence
     virtual Reference< XInterface > SAL_CALL getThis(  ) throw (RuntimeException);
 };
 
-class EventListener: public WeakImplHelper1<XEventListener>
+class EventListener: public WeakImplHelper<XEventListener>
 {
 public:
     EventListener(): bCalled( sal_False)

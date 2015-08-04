@@ -26,7 +26,6 @@
 #include <com/sun/star/form/XForm.hpp>
 // #100312# -----------------
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <vcl/splitwin.hxx>
 #include "toolbar.hxx"
 #include "formcontrolcontainer.hxx"

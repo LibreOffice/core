@@ -34,7 +34,7 @@
 #include "com/sun/star/frame/XTerminateListener.hpp"
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include "cppuhelper/implbase4.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "actionlistener.hxx"
 
@@ -68,7 +68,7 @@ enum UpdateState {
 };
 
 class UpdateHandler : ::boost::noncopyable,
-                      public cppu::WeakImplHelper4< com::sun::star::awt::XActionListener,
+                      public cppu::WeakImplHelper< com::sun::star::awt::XActionListener,
                                                     com::sun::star::awt::XTopWindowListener,
                                                     com::sun::star::task::XInteractionHandler,
                                                     com::sun::star::frame::XTerminateListener >

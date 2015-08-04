@@ -22,7 +22,7 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
@@ -175,7 +175,7 @@ namespace pcr
     */
     template < class CONTROL_INTERFACE, class CONTROL_WINDOW >
     class CommonBehaviourControl    :public ::comphelper::OBaseMutex
-                                    ,public ::cppu::WeakComponentImplHelper1< CONTROL_INTERFACE >
+                                    ,public ::cppu::WeakComponentImplHelper< CONTROL_INTERFACE >
                                     ,public IModifyListener
     {
     protected:
@@ -183,7 +183,7 @@ namespace pcr
         typedef CONTROL_WINDOW      WindowType;
 
         typedef ::comphelper::OBaseMutex                                MutexBaseClass;
-        typedef ::cppu::WeakComponentImplHelper1< CONTROL_INTERFACE >   ComponentBaseClass;
+        typedef ::cppu::WeakComponentImplHelper< CONTROL_INTERFACE >   ComponentBaseClass;
 
     protected:
         ControlHelper   m_aImplControl;
