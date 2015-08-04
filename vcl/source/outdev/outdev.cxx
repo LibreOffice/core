@@ -426,6 +426,16 @@ sal_uInt16 OutputDevice::GetBitCount() const
     return (sal_uInt16)mpGraphics->GetBitCount();
 }
 
+void OutputDevice::SetOutOffXPixel(long nOutOffX)
+{
+    mnOutOffX = nOutOffX;
+}
+
+void OutputDevice::SetOutOffYPixel(long nOutOffY)
+{
+    mnOutOffY = nOutOffY;
+}
+
 sal_uLong OutputDevice::GetColorCount() const
 {
 

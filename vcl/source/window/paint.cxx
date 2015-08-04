@@ -47,10 +47,14 @@ class PaintBufferGuard
     bool mbBackground;
     Wallpaper maBackground;
     AllSettings maSettings;
+    long mnOutOffX;
+    long mnOutOffY;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
         : mpFrameData(pFrameData),
-        mbBackground(false)
+        mbBackground(false),
+        mnOutOffX(0),
+        mnOutOffY(0)
     {
         // transfer various settings
         // FIXME: this must disappear as we move to RenderContext only,
@@ -97,10 +101,18 @@ public:
         pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
         pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
         pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
+
+        mnOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
+        mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
+        pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
+        pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
     }
     ~PaintBufferGuard()
     {
         // Restore buffer state.
+        mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
+        mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
+
         mpFrameData->mpBuffer->Pop();
         mpFrameData->mpBuffer->SetSettings(maSettings);
         if (mbBackground)
@@ -183,16 +195,13 @@ void PaintHelper::StartBufferedPaint()
     // painting over, as VirtualDevice::ImplInitVirDev() would do.
     // The painted area is m_aPaintRect, or in case it's empty, then the whole window.
     pFrameData->mpBuffer->SetBackground(Wallpaper(Color(COL_WHITE)));
-    long nOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
-    long nOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
-    pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
-    pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
-    if (m_aPaintRect.IsEmpty())
-        pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
-    else
-        pFrameData->mpBuffer->Erase(m_aPaintRect);
-    pFrameData->mpBuffer->mnOutOffX = nOutOffX;
-    pFrameData->mpBuffer->mnOutOffY = nOutOffY;
+    {
+        PaintBufferGuard g(pFrameData, m_pWindow);
+        if (m_aPaintRect.IsEmpty())
+            pFrameData->mpBuffer->Erase(Rectangle(Point(0, 0), m_pWindow->GetOutputSize()));
+        else
+            pFrameData->mpBuffer->Erase(m_aPaintRect);
+    }
 
     pFrameData->mbInBufferedPaint = true;
     m_bStartedBufferedPaint = true;
@@ -232,13 +241,8 @@ void PaintHelper::PaintBuffer()
             aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
         }
 
-        long nOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
-        long nOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
-        pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
-        pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
+        PaintBufferGuard g(pFrameData, m_pWindow);
         m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *pFrameData->mpBuffer.get());
-        pFrameData->mpBuffer->mnOutOffX = nOutOffX;
-        pFrameData->mpBuffer->mnOutOffY = nOutOffY;
     }
 }
 
@@ -289,14 +293,8 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             PaintBufferGuard g(pFrameData, m_pWindow);
             m_pWindow->ApplySettings(*pFrameData->mpBuffer.get());
 
-            long nOutOffX = pFrameData->mpBuffer->mnOutOffX;
-            long nOutOffY = pFrameData->mpBuffer->mnOutOffY;
-            pFrameData->mpBuffer->mnOutOffX = m_pWindow->GetOutOffXPixel();
-            pFrameData->mpBuffer->mnOutOffY = m_pWindow->GetOutOffYPixel();
             m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer.get());
             m_pWindow->Paint(*pFrameData->mpBuffer.get(), m_aPaintRect);
-            pFrameData->mpBuffer->mnOutOffX = nOutOffX;
-            pFrameData->mpBuffer->mnOutOffY = nOutOffY;
         }
         else
         {
