@@ -72,6 +72,7 @@ inline bool forallBases(
     bool AllowShortCircuit)
 {
 #if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+    (void) callbackParam;
     return decl.forallBases(BaseMatches, AllowShortCircuit);
 #else
     return decl.forallBases(BaseMatches, callbackParam, AllowShortCircuit);
