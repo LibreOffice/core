@@ -1108,7 +1108,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
             sd::DrawDocShell* pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
             if (pSdDrawDocShell)
             {
-                pSdDrawDocShell->GotoTreeBookmark(aStr);
+                pSdDrawDocShell->GetObjectIsmarked(aStr, true);
                 bMarked = pSdDrawDocShell->GetObjectIsmarked(aStr);
             }
             pNewEntry->SetMarked(bMarked);

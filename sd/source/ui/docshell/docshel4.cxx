@@ -618,7 +618,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
         }
     }
 
-    return  bRet;
+    return bRet;
 }
 
 /**
@@ -829,7 +829,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 
-    return (bFound);
+    return bFound;
 }
 
 // If object is marked return true else return false.
@@ -845,11 +845,11 @@ bool DrawDocShell::IsMarked( SdrObject* pObject )
               bisMarked = pDrViewSh->GetView()->IsObjMarked(pObject);
         }
      }
-    return  bisMarked;
+    return bisMarked;
 }
 
-// If object is marked return true else return false.
-bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
+// If object is marked return true else return false. Optionally realize multi-selection of objects.
+bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark, bool bRealizeMultiSelectionOfObjects /* = false */)
 {
     OSL_TRACE("GotoBookmark %s",
         OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
@@ -922,99 +922,23 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
                                        *pDrViewSh->GetActiveWindow());
 
                 bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
+                if (bRealizeMultiSelectionOfObjects)
+                {
+                    pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetSdrPageView(), bUnMark);
+                }
             }
+        }
+        if (bRealizeMultiSelectionOfObjects)
+        {
+            SfxBindings& rBindings = ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
+                                     mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
+
+            rBindings.Invalidate(SID_NAVIGATOR_STATE, true, false);
+            rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
         }
     }
 
-    return ( bUnMark);
-}
-
-// realize multi-selection of objects
-bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
-{
-    OSL_TRACE("GotoBookmark %s",
-        OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
-    bool bFound = false;
-
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
-    {
-        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
-
-        OUString aBookmark( rBookmark );
-
-        if( rBookmark.startsWith("#") )
-            aBookmark = rBookmark.copy( 1 );
-
-        // is the bookmark a page ?
-        bool        bIsMasterPage;
-        sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
-        SdrObject*  pObj = NULL;
-
-        if (nPgNum == SDRPAGE_NOTFOUND)
-        {
-            // is the bookmark an object ?
-            pObj = mpDoc->GetObj(aBookmark);
-
-            if (pObj)
-            {
-                nPgNum = pObj->GetPage()->GetPageNum();
-            }
-        }
-
-        if (nPgNum != SDRPAGE_NOTFOUND)
-        {
-            /********************
-             * Skip to the page *
-             ********************/
-            bFound = true;
-            SdPage* pPage = static_cast<SdPage*>( mpDoc->GetPage(nPgNum) );
-
-            PageKind eNewPageKind = pPage->GetPageKind();
-
-            if (eNewPageKind != pDrViewSh->GetPageKind())
-            {
-                // change workspace
-                GetFrameView()->SetPageKind(eNewPageKind);
-                ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
-                  mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-                  GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
-
-                // The current ViewShell changed
-                pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
-            }
-
-            setEditMode(pDrViewSh, bIsMasterPage);
-
-            // Jump to the page.  This is done by using the API because this
-            // takes care of all the little things to be done.  Especially
-            // writing the view data to the frame view (see bug #107803#).
-            SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
-                *pDrViewSh,
-                *pDrViewSh->GetView());
-            ::com::sun::star::uno::Reference<
-                  ::com::sun::star::drawing::XDrawPage> xDrawPage (
-                      pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
-            pUnoDrawView->setCurrentPage (xDrawPage);
-            delete pUnoDrawView;
-
-            if (pObj)
-            {
-                // Show and select object
-                pDrViewSh->MakeVisible(pObj->GetLogicRect(),
-                                       *pDrViewSh->GetActiveWindow());
-                bool bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
-                pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetSdrPageView(), bUnMark);
-            }
-        }
-
-        SfxBindings& rBindings = ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
-                                 mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
-
-        rBindings.Invalidate(SID_NAVIGATOR_STATE, true, false);
-        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
-    }
-
-    return (bFound);
+    return bUnMark;
 }
 
 /**
