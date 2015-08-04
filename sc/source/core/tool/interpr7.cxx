@@ -231,12 +231,12 @@ void ScInterpreter::ScEncodeURL()
         for ( int i = 0; i < nLen; i++ )
         {
             sal_Char c = aUtf8Str[ i ];
-            if ( rtl::isAsciiAlphanumeric( static_cast<sal_uChar>( c ) ) || c == '-' || c == '_' )
+            if ( rtl::isAsciiAlphanumeric( static_cast<unsigned char>( c ) ) || c == '-' || c == '_' )
                 aUrlBuf.append( c );
             else
             {
                 aUrlBuf.append( '%' );
-                aUrlBuf.append( OString::number( static_cast<sal_uChar>( c ), 16 ).toAsciiUpperCase() );
+                aUrlBuf.append( OString::number( static_cast<unsigned char>( c ), 16 ).toAsciiUpperCase() );
             }
         }
         PushString( OUString::fromUtf8( aUrlBuf.makeStringAndClear() ) );
