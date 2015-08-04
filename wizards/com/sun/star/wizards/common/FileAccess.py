@@ -310,10 +310,6 @@ class FileAccess(object):
             path = parentURL + "/" + childPath
         return path
 
-    def getURL1(self, path):
-        f = "/"
-        return self.filenameConverter.getFileURLFromSystemPath(path, f)
-
     '''
     return the filename out of a system-dependent path
     '''
