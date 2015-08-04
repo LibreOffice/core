@@ -123,6 +123,7 @@ public:
     void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
+    void testTdf60967();
     void testTdf79236();
     void testTextSearch();
     void testTdf69282();
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testTdf79236);
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
@@ -1185,6 +1187,42 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTdf60967()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    pWrtShell->ChangeHeaderOrFooter(OUString("Default Style"), true, true, true);
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    pWrtShell->InsertTable(TableOpt, 2, 2);
+    pWrtShell->EndDoc();
+    pWrtShell->Insert("Hello World!");
+    pWrtShell->SttDoc();
+    pWrtShell->GoNextCell(); //moves to B1
+    pWrtShell->GoNextCell(); //moves to A2
+    pWrtShell->GoNextCell(); //moves to B2 (bottom right cell)
+    sal_Int32 val = pWrtShell->DelToEndOfSentence();
+    //checking that the paragraph is actually deleted
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), val);
+    pWrtShell->SttDoc();
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetText());
+    //Undo the changes
+    rUndoManager.Undo();
+    pWrtShell->SttDoc();
+    //paragraph should be there
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World!"), pWrtShell->GetText());
+    //Redo the changes
+    rUndoManager.Redo();
+    pWrtShell->SttDoc();
+    //paragraph must be deleted
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetText());
+    //Undo the changes
+    rUndoManager.Undo();
+    pWrtShell->SttDoc();
+    //paragraph should be there
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World!"), pWrtShell->GetText());
 }
 
 void SwUiWriterTest::testTdf79236()
