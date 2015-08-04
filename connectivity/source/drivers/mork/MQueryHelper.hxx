@@ -69,7 +69,6 @@ namespace connectivity
         public:
             virtual ~MQueryExpressionBase() {}
 
-            bool   isUnknown( ) const { return m_eNodeType == Unknown; }
             bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
             bool   isExpr( ) const { return m_eNodeType == Expr; }
         };
@@ -182,23 +181,12 @@ namespace connectivity
             ErrorDescriptor     m_aError;
             OUString     m_aAddressbook;
 
-/*
-            void            clearResultOrComplete();
-            void            notifyResultOrComplete();
-            sal_Bool        waitForResultOrComplete( );
-            void            getCardValues(nsIAbCard  *card,sal_uInt32 rowIndex=0);
-*/
-
-            sal_Int32 doQueryDefaultTable(OConnection* xConnection);
-            sal_Int32 doQueryListTable(OConnection* xConnection, OString& ouStringTable);
-
         public:
             explicit                   MQueryHelper(const OColumnAlias& _ca);
             virtual                    ~MQueryHelper();
 
             void                       reset();
             MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );
-            bool                       isError() const;
             static bool                queryComplete() { return true; }
             sal_Int32                  getResultCount() const;
             bool                       checkRowAvailable( sal_Int32 nDBRow );

@@ -62,10 +62,6 @@ namespace framework {
                                                             OUStringHash,
                                                             std::equal_to< OUString > >
         {
-            inline void free()
-            {
-                FactoryManagerMap().swap( *this );// get rid of reserved capacity
-            }
         };
 
         bool impl_getElementProps( const ::com::sun::star::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;

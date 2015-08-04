@@ -70,9 +70,6 @@ public:
     void                    SetValue(const BigInt& rNewValue);
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
-    bool                IsEmptyValue() const { return GetField()->GetText().isEmpty(); }
-
-    BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
 };
 
 
@@ -122,9 +119,6 @@ public:
 
     void            Modify() SAL_OVERRIDE;
     void            ReformatAll() SAL_OVERRIDE;
-
-    BigInt          GetValue() const
-                        { return LongCurrencyFormatter::GetValue(); }
 };
 
 #endif // INCLUDED_VCL_LONGCURR_HXX

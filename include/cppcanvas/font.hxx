@@ -39,12 +39,6 @@ namespace cppcanvas
     {
     public:
         virtual ~Font() {}
-
-        virtual OUString getName() const = 0;
-        virtual double          getCellSize() const = 0;
-
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XCanvasFont > getUNOFont() const = 0;
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Font > FontSharedPtr;

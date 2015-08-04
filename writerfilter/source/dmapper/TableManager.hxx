@@ -120,21 +120,6 @@ class TableManager
             mbCellEnd = false;
         }
 
-        void resetProps()
-        {
-            mpProps.reset();
-        }
-
-        void setProps(TablePropertyMapPtr pProps)
-        {
-            mpProps = pProps;
-        }
-
-        TablePropertyMapPtr getProps()
-        {
-            return mpProps;
-        }
-
         void resetCellProps()
         {
             mpCellProps.reset();

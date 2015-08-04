@@ -145,7 +145,6 @@ public:
     DECL_LINK( ReplaceBtnHdl_Impl, Button * );
     DECL_LINK( LeftBtnHdl_Impl, Button * );
     DECL_LINK( LanguageHdl_Impl, ListBox * );
-    DECL_LINK( LookUpHdl_Impl, Button * );
     DECL_LINK( WordSelectHdl_Impl, ComboBox * );
     DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );

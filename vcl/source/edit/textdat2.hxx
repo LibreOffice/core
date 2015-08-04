@@ -48,9 +48,9 @@ class TETextPortion
 {
 private:
     sal_uInt16      nLen;
-    long        nWidth;
+    long            nWidth;
     sal_uInt8       nKind;
-    sal_uInt8        nRightToLeft;
+    sal_uInt8       nRightToLeft;
 
                 TETextPortion()             { nLen = 0; nKind = PORTIONKIND_TEXT; nWidth = -1; nRightToLeft = 0;}
 
@@ -61,21 +61,12 @@ public:
                                                 nWidth= -1;
                                                 nRightToLeft = 0;
                                             }
-
-    sal_uInt16      GetLen() const              { return nLen; }
     sal_uInt16&     GetLen()                    { return nLen; }
-
-    long        GetWidth()const             { return nWidth; }
-    long&       GetWidth()                  { return nWidth; }
-
-    sal_uInt8       GetKind() const             { return nKind; }
+    long&           GetWidth()                  { return nWidth; }
     sal_uInt8&      GetKind()                   { return nKind; }
-
-    sal_uInt8       GetRightToLeft() const      { return nRightToLeft; }
     sal_uInt8&      GetRightToLeft()            { return nRightToLeft; }
-    bool        IsRightToLeft() const       { return (nRightToLeft&1); }
-
-    bool        HasValidSize() const        { return nWidth != (-1); }
+    bool            IsRightToLeft() const       { return (nRightToLeft&1); }
+    bool            HasValidSize() const        { return nWidth != (-1); }
 };
 
 class TETextPortionList : public std::vector<TETextPortion*>
@@ -86,7 +77,6 @@ public:
 
     void    Reset();
     sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, bool bPreferStartingPortion = false );
-    sal_uInt16  GetPortionStartIndex( sal_uInt16 nPortion );
     void    DeleteFromPortion( sal_uInt16 nDelFrom );
 };
 
@@ -123,9 +113,6 @@ public:
                                     mbInvalid = true;
                                 }
 
-    bool            IsIn( sal_uInt16 nIndex ) const
-                        { return ( (nIndex >= mnStart ) && ( nIndex < mnEnd ) ); }
-
     bool            IsIn( sal_uInt16 nIndex, bool bInclEnd ) const
                         { return ( ( nIndex >= mnStart ) && ( bInclEnd ? ( nIndex <= mnEnd ) : ( nIndex < mnEnd ) ) ); }
 
@@ -151,8 +138,6 @@ public:
     bool            IsValid() const                 { return !mbInvalid; }
     void            SetInvalid()                    { mbInvalid = true; }
     void            SetValid()                      { mbInvalid = false; }
-
-    bool            IsEmpty() const                 { return mnEnd <= mnStart; }
 
     short           GetStartX() const               { return mnStartX; }
     void            SetStartX( short n )            { mnStartX = n; }

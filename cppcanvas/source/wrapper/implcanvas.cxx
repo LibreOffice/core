@@ -84,11 +84,6 @@ namespace cppcanvas
             return !maClipPolyPolygon ? NULL : &(*maClipPolyPolygon);
         }
 
-        FontSharedPtr ImplCanvas::createFont( const OUString& rFontName, const double& rCellSize ) const
-        {
-            return FontSharedPtr( new ImplFont( getUNOCanvas(), rFontName, rCellSize ) );
-        }
-
         ColorSharedPtr ImplCanvas::createColor() const
         {
             return ColorSharedPtr( new ImplColor( getUNOCanvas()->getDevice() ) );

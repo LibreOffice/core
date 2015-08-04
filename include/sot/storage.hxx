@@ -60,7 +60,6 @@ private:
     static SotFactory **       GetFactoryAdress()
                               { return &(SOTDATA()->pSotStorageStreamFactory); }
 public:
-    static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
     virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
 
@@ -113,7 +112,6 @@ private:
     static SotFactory **       GetFactoryAdress()
                               { return &(SOTDATA()->pSotStorageFactory); }
 public:
-    static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
     virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
 

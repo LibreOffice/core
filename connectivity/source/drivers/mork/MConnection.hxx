@@ -64,7 +64,6 @@ namespace connectivity
 
             MorkDriver* getDriver() {return m_pDriver;};
             MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory : m_pBook;};
-            void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -99,8 +98,6 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             const OColumnAlias & getColumnAlias() const   { return m_aColumnAlias; }
-
-            static OUString getDriverImplementationName();
 
             static bool getForceLoadTables() {return true;}
 

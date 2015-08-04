@@ -14,11 +14,15 @@ exclusionSet = set([
     "int basegfx::Int32Traits::minVal()",
     "int basegfx::Int32Traits::neutral()",
     "unsigned long UniqueIndexImpl::Insert(void *)",
+    "class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetFootnoteBP()",
+    "class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetSequenceIdBP()",
+    "void XclExpPivotCache::SaveXml(class XclExpXmlStream &)",
 
     # used from a yacc lexer
     "struct unoidl::detail::SourceProviderExpr unoidl::detail::SourceProviderExpr::Float(double)",
     "struct unoidl::detail::SourceProviderExpr unoidl::detail::SourceProviderExpr::Int(long)",
     "struct unoidl::detail::SourceProviderExpr unoidl::detail::SourceProviderExpr::Uint(unsigned long)",
+    "struct unoidl::detail::SourceProviderExpr unoidl::detail::SourceProviderExpr::Bool(_Bool)",
     "class rtl::OUString unoidl::detail::SourceProviderType::getName() const",
     "_Bool unoidl::detail::SourceProviderType::equals(const struct unoidl::detail::SourceProviderType &) const",
     "_Bool unoidl::detail::SourceProviderEntityPad::isPublished() const",
@@ -65,11 +69,40 @@ exclusionSet = set([
     "class AstDeclaration * FeInheritanceHeader::getInherits()",
     "const class std::__debug::vector<class rtl::OString, class std::allocator<class rtl::OString> > & FeInheritanceHeader::getTypeParameters() const",
     "const class AstType * FeDeclarator::compose(const class AstDeclaration *)",
+    "const class AstType * AstStructInstance::getTypeTemplate() const",
+    "class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class AstDeclaration *>, class std::__debug::list<class AstDeclaration *, class std::allocator<class AstDeclaration *> > > AstStructInstance::getTypeArgumentsBegin() const",
+    "class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class AstDeclaration *>, class std::__debug::list<class AstDeclaration *, class std::allocator<class AstDeclaration *> > > AstStructInstance::getTypeArgumentsEnd() const",
+    "void AstAttribute::setExceptions(const class rtl::OUString *,const class std::__debug::list<class AstDeclaration *, class std::allocator<class AstDeclaration *> > *,const class rtl::OUString *,const class std::__debug::list<class AstDeclaration *, class std::allocator<class AstDeclaration *> > *)",
+
     "const class rtl::OString & FeDeclarator::getName()",
     "_Bool FeDeclarator::checkType(const class AstDeclaration *)",
     "enum connectivity::IParseContext::InternationalKeyCode connectivity::IParseContext::getIntlKeyCode(const class rtl::OString &) const",
     "void connectivity::OSQLParser::error(const char *)",
+    "int connectivity::OSQLParser::SQLlex()",
     "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)",
+    "const class rtl::OUString & connectivity::OSQLParser::getFieldName() const",
+    "short connectivity::OSQLParser::buildLikeRule(class connectivity::OSQLParseNode *,class connectivity::OSQLParseNode *&,const class connectivity::OSQLParseNode *)",
+    "void connectivity::OSQLParser::reduceLiteral(class connectivity::OSQLParseNode *&,_Bool)",
+    "short connectivity::OSQLParser::buildComparsionRule(class connectivity::OSQLParseNode *&,class connectivity::OSQLParseNode *)",
+    "enum connectivity::IParseContext::InternationalKeyCode connectivity::OSQLScanner::getInternationalTokenID(const char *) const",
+    "class rtl::OString connectivity::OSQLScanner::getStatement() const",
+    "void connectivity::OSQLScanner::SQLyyerror(const char *)",
+    "int connectivity::OSQLScanner::GetCurrentPos() const",
+    "int connectivity::OSQLScanner::SQLyygetc()",
+    "void connectivity::OSQLParser::setParseTree(class connectivity::OSQLParseNode *)",
+    "short connectivity::OSQLParser::buildPredicateRule(class connectivity::OSQLParseNode *&,class connectivity::OSQLParseNode *const,class connectivity::OSQLParseNode *,class connectivity::OSQLParseNode *)",
+    "int connectivity::OSQLScanner::SQLlex()",
+
+    "const struct RSCINST & ObjectStack::Top()",
+    "void ObjectStack::Push(struct RSCINST)",
+    "_Bool RefNode::PutObjNode(class ObjNode *)",
+    "void RscFileInst::SetFileIndex(unsigned long)",
+    "void RscFileInst::SetLineNo(unsigned int)",
+    "class RscDefine * RscFileTab::NewDef(unsigned long,const class rtl::OString &,class RscExpression *,unsigned long)",
+    "class RscDefine * RscFileTab::NewDef(unsigned long,const class rtl::OString &,int,unsigned long)",
+    "class RscTop * RscTypCont::GetRoot()",
+    "class RscTop * RscTypCont::SearchType(unsigned int)",
+    "void RscTypCont::InsertType(class RscTop *)",
 
     # TODO track instantiations of template class constructors
     "void comphelper::IEventProcessor::release()",
@@ -146,6 +179,38 @@ exclusionSet = set([
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handlePicture()",
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleHdrFtr()",
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleBreak()",
+    "int writerfilter::ooxml::OOXMLPropertySetEntryToInteger::getValue() const",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::fieldSeparator()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::startField()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerStream::sendProperty(unsigned int)",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleXNotes()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::propagateTableProperties()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerTextTableRow::endRow()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::propagateCellProperties()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::endSdt()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerTextTableCell::endCell()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::propagateRowProperties()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::sendTableProperties()",
+    "_Bool writerfilter::ooxml::OOXMLPropertySetEntryToBool::getValue() const",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::lockField()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerStream::handleHyperlink()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setLastParagraphInSection()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::startSdt()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setHandle()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::sendTableDepth() const",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::startTxbxContent()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::handleLastParagraphInSection()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerTextTableCell::startCell()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerTextTableRow::startRow()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::propagateCharacterProperties()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleFontRel()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::ignore()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::resolvePropertySetAttrs()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerXNote::checkId(class std::shared_ptr<class writerfilter::ooxml::OOXMLValue>)",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerTextTableRow::handleGridBefore(class std::shared_ptr<class writerfilter::ooxml::OOXMLValue>)",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerXNote::checkType(class std::shared_ptr<class writerfilter::ooxml::OOXMLValue>)",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setXNoteId(class std::shared_ptr<class writerfilter::ooxml::OOXMLValue>)",
+
     # deep template magic in SW
     "Ring<value_type> * sw::Ring::Ring_node_traits::get_next(const Ring<value_type> *)",
     "Ring<value_type> * sw::Ring::Ring_node_traits::get_previous(const Ring<value_type> *)",
@@ -202,7 +267,7 @@ for clazz in sorted(definitionSet - callSet - exclusionSet):
         clazz2 = clazz.replace("::iterator", "::const_iterator") + " const"
         if (clazz2 in callSet):
            continue
-    # There is lots of macro magic going on in /home/noel/libo4/include/sax/fshelper.hxx that should be using C++11 varag templates
+    # There is lots of macro magic going on in SRCDIR/include/sax/fshelper.hxx that should be using C++11 varag templates
     if clazz.startswith("void sax_fastparser::FastSerializerHelper::"):
        continue
     # used by Windows build
@@ -219,7 +284,15 @@ for clazz in sorted(definitionSet - callSet - exclusionSet):
     if (clazz.find("::StaticType()") != -1
         or clazz.find("::IsOf(void *(*)(void))") != -1):
        continue
+    # too much template magic here for my plugin
+    if (clazz.find(" cairocanvas::") != -1 
+        or clazz.find(" canvas::") != -1
+        or clazz.find(" oglcanvas::") != -1
+        or clazz.find(" vclcanvas::") != -1):
+       continue
     print clazz
+    
+    
 
 # add an empty line at the end to make it easier for the unusedmethodsremove plugin to mmap() the output file 
 print

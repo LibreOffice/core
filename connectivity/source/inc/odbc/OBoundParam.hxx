@@ -61,15 +61,6 @@ namespace connectivity
             }
 
 
-            // getBindDataBuffer
-            // Returns the data buffer to be used when binding to a parameter
-
-            void* getBindDataBuffer ()
-            {
-                return binaryData;
-            }
-
-
             // getBindLengthBuffer
             // Returns the length buffer to be used when binding to a parameter
 
@@ -112,45 +103,6 @@ namespace connectivity
                 return paramInputStreamLen;
             }
 
-
-            // setSqlType
-            // Sets the Java sql type used to register an OUT parameter
-
-
-            void setSqlType(sal_Int32 type)
-            {
-                sqlType = type;
-            }
-
-
-            // getSqlType
-            // Gets the Java sql type used to register an OUT parameter
-
-
-            sal_Int32 getSqlType ()
-            {
-                return sqlType;
-            }
-
-
-            // setOutputParameter
-            // Sets the flag indicating if this is an OUTPUT parameter
-
-
-            void setOutputParameter (bool output)
-            {
-                outputParameter = output;
-            }
-
-
-            // isOutputParameter
-            // Gets the OUTPUT parameter flag
-
-
-            bool isOutputParameter ()
-            {
-                return outputParameter;
-            }
 
         protected:
 

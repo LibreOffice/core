@@ -96,16 +96,6 @@ namespace cppcanvas
                 eDx = eDy = eM12 = eM21 = 0.0f;
             }
 
-            void Set (float m11, float m12, float dx, float m21, float m22, float dy)
-            {
-                eM11 = m11;
-                eM12 = m12;
-                eDx  = dx;
-                eM21 = m21;
-                eM22 = m22;
-                eDy  = dy;
-            }
-
             void Set (const XForm& f)
             {
                 eM11 = f.eM11;
@@ -114,16 +104,6 @@ namespace cppcanvas
                 eM22 = f.eM22;
                 eDx  = f.eDx;
                 eDy  = f.eDy;
-            }
-
-            void Multiply (float m11, float m12, float dx, float m21, float m22, float dy)
-            {
-                eM11 = eM11*m11 + eM12*m21;
-                eM12 = eM11*m12 + eM12*m22;
-                eM21 = eM21*m11 + eM22*m21;
-                eM22 = eM21*m12 + eM22*m22;
-                eDx *= eDx*m11  + eDy*m21 + dx;
-                eDy *= eDx*m12  + eDy*m22 + dy;
             }
 
             void Multiply (const XForm& f)

@@ -41,10 +41,8 @@ namespace connectivity
 
         protected:
             virtual ~ODatabaseMetaData();
+
         public:
-
-            inline OConnection* getOwnConnection() const { return m_pConnection; }
-
             explicit ODatabaseMetaData(OConnection* _pCon);
 
         private:

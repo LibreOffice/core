@@ -102,31 +102,6 @@ namespace accessibility
     }
 
 
-
-    void AccessibleTabBarPage::SetEnabled( bool bEnabled )
-    {
-        if ( m_bEnabled != bEnabled )
-        {
-            Any aOldValue[2], aNewValue[2];
-            if ( m_bEnabled )
-            {
-                aOldValue[0] <<= AccessibleStateType::SENSITIVE;
-                aOldValue[1] <<= AccessibleStateType::ENABLED;
-            }
-            else
-            {
-
-                aNewValue[0] <<= AccessibleStateType::ENABLED;
-                aNewValue[1] <<= AccessibleStateType::SENSITIVE;
-            }
-            m_bEnabled = bEnabled;
-            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[0], aNewValue[0] );
-            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[1], aNewValue[1] );
-        }
-    }
-
-
-
     void AccessibleTabBarPage::SetShowing( bool bShowing )
     {
         if ( m_bShowing != bShowing )

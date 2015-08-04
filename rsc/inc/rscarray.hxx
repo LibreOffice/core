@@ -67,7 +67,6 @@ public:
                     virtual ~RscArray();
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
 
-    void            SetTypeClass( RscEnum * pClass ) { pTypeClass = pClass; }
     virtual RscTop *    GetTypeClass() const SAL_OVERRIDE;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
     void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;

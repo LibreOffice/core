@@ -360,7 +360,6 @@ public:
     {
         return *m_pMapperStream;
     }
-    void setSubstream(bool bIsSubtream);
     void setSuperstream(RTFDocumentImpl* pSuperstream);
     void setStreamType(Id nId);
     void setAuthor(OUString& rAuthor);
@@ -564,8 +563,6 @@ private:
     RTFReferenceTable::Entries_t m_aStyleTableEntries;
     int m_nCurrentStyleIndex;
     bool m_bFormField;
-    /// If a frame start token is already sent to dmapper (nesting them is not OK).
-    bool m_bIsInFrame;
     // Unicode characters are collected here so we don't have to send them one by one.
     OUStringBuffer m_aUnicodeBuffer;
     /// Same for hex characters.

@@ -212,8 +212,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 #define SAL_MOUSELEAVE_TIMEOUT      300
 
-// wParam == hDC; lParam == 0
-#define SAL_MSG_PRINTABORTJOB       (WM_USER+110)
 // wParam == bWait; lParam == 0
 #define SAL_MSG_THREADYIELD         (WM_USER+111)
 // wParam == 0; lParam == 0

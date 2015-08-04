@@ -400,7 +400,6 @@ namespace dbaui
 
         void ImplInvalidateFeature( sal_Int32 _nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _xListener, bool _bForceBroadcast );
 
-        bool ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState);
         void ImplBroadcastFeatureState(const OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, bool _bIgnoreCache);
 
         // link methods

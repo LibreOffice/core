@@ -40,7 +40,6 @@ public:
 
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
-    DECL_LINK( NumModifiedHdl, void * );
     DECL_LINK( EditModifiedHdl, Edit * );
     DECL_STATIC_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton* );
     DECL_LINK( AsZeroModifiedHdl, CheckBox*);

@@ -139,8 +139,6 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
             NOTIFY_DEACTIVATED
         };
 
-        sal_Int32   impl_GetPageIdFromIndex( ::sal_Int32 nIndex ) const;
-        bool        impl_CheckIndex( ::sal_Int32 nIndex ) const;
         void        implts_LayoutWindows() const;
         void        impl_SetTitle( const OUString& rTitle );
         TabControl* impl_GetTabControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xTabControlWindow ) const;

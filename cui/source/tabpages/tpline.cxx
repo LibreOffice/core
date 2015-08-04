@@ -1733,44 +1733,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
     InitSymbols(pButton);
     return 0;
 }
-// #58425# Symbols on a list (e.g. StarChart)
-// Handler for the symbol selection's popup menu (NumMenueButton)
-// The following link originates from SvxNumOptionsTabPage
-IMPL_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
-{
-    PopupMenu* pPopup = m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-
-    SvxBmpItemInfo* pBmpInfo = 0;
-    for ( size_t i = 0; i < aGrfBrushItems.size(); i++ )
-    {
-        SvxBmpItemInfo* pInfo = aGrfBrushItems[ i ];
-        if( pInfo->pBrushItem == pItem )
-        {
-            pBmpInfo = pInfo; break;
-        }
-    }
-    if( pBmpInfo )
-    {
-        const Graphic* pGraphic = pItem->GetGraphic();
-        if (pGraphic)
-        {
-            Bitmap aBitmap(pGraphic->GetBitmap());
-            Size aSize(aBitmap.GetSizePixel());
-            if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-            {
-                bool bWidth = aSize.Width() > aSize.Height();
-                double nScale = bWidth ?
-                    (double)MAX_BMP_WIDTH / (double)aSize.Width():
-                    (double)MAX_BMP_HEIGHT / (double)aSize.Height();
-                aBitmap.Scale(nScale, nScale);
-            }
-            Image aImage(aBitmap);
-            pPopup->SetItemImage( pBmpInfo->nItemId, aImage );
-        }
-    }
-
-    return 0;
-}
 
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for menu button

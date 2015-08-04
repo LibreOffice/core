@@ -34,9 +34,6 @@ public:
     static void exportTimeStyle( SdXMLExport& rExport, sal_Int32 nStyle );
     static void exportDateStyle( SdXMLExport& rExport, sal_Int32 nStyle );
 
-    static sal_Int32 getDateStyleCount() { return SdXMLDateFormatCount; }
-    static sal_Int32 getTimeStyleCount() { return SdXMLTimeFormatCount; }
-
     static OUString getTimeStyleName(const sal_Int32 nTimeFormat );
     static OUString getDateStyleName(const sal_Int32 nDateFormat );
 };

@@ -67,8 +67,6 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    void            CreateResFile( const char * pRc );
-
     static bool     GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                       const WriteRcContext& rContext,
                                       const OString& rBaseFileName,

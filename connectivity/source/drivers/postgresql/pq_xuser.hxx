@@ -57,35 +57,30 @@ public:
     User( const ::rtl::Reference< RefCountedMutex > & refMutex,
           const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings);
-public:
-    void refetch();
 
-public: // XInterface
+    // XInterface
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
     virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XTypeProvider, first implemented by OPropertySetHelper
+    // XTypeProvider, first implemented by OPropertySetHelper
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-public: // XDataDescriptorFactory
+    // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
     createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XUser : XAuthorizable
-    // Methods
+    // XUser : XAuthorizable
     virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL changePassword( const OUString& oldPassword, const OUString& newPassword ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-
 };
 
 class UserDescriptor : public ReflectionBase

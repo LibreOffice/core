@@ -64,16 +64,6 @@ SotFactory * SotStorageStream::ClassFactory()
     return *ppFactory;
 }
 
-void * SotStorageStream::CreateInstance( SotObject ** ppObj )
-{
-    SotStorageStream * p = new SotStorageStream();
-    SotObject* pSuper1 = p;
-    SotObject* pBasicObj = pSuper1;
-    if( ppObj )
-        *ppObj = pBasicObj;
-    return p;
-}
-
 void * SotStorageStream::Cast( const SotFactory * pFact )
 {
     void * pRet = NULL;
@@ -321,16 +311,6 @@ SotFactory * SotStorage::ClassFactory()
         (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
     }
     return *ppFactory;
-}
-
-void * SotStorage::CreateInstance( SotObject ** ppObj )
-{
-    SotStorage * p = new SotStorage();
-    SotObject* pSuper1 = p;
-    SotObject* pBasicObj = pSuper1;
-    if( ppObj )
-        *ppObj = pBasicObj;
-    return p;
 }
 
 void * SotStorage::Cast( const SotFactory * pFact )

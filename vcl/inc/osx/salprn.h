@@ -137,7 +137,6 @@ class AquaSalPrinter : public SalPrinter
                                               vcl::PrinterController& i_rListener ) SAL_OVERRIDE;
 
     virtual bool                    EndJob() SAL_OVERRIDE;
-    virtual bool                    AbortJob() SAL_OVERRIDE;
     virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) SAL_OVERRIDE;
     virtual bool                    EndPage() SAL_OVERRIDE;
     virtual sal_uLong               GetErrorCode() SAL_OVERRIDE;

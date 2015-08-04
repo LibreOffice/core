@@ -66,12 +66,6 @@ public:
 
 class SchXMLTableHelper
 {
-private:
-    static void GetCellAddress( const OUString& rStr, sal_Int32& rCol, sal_Int32& rRow );
-    static bool GetCellRangeAddress( const OUString& rStr, SchNumericCellRangeAddress& rResult );
-    static void AdjustMax( const SchNumericCellRangeAddress& rAddr,
-                           sal_Int32& nRows, sal_Int32& nColumns );
-
 public:
     static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
                             com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );

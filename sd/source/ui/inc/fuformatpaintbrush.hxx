@@ -45,7 +45,6 @@ public:
     virtual void Deactivate() SAL_OVERRIDE;
 
     static void GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet );
-    static bool CanCopyThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );
 
 private:
     FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);

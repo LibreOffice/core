@@ -175,7 +175,6 @@ namespace pcr
             when the hyperlink has been clicked by the user
         */
         void        SetClickHdl( const Link<>& _rHdl ) { m_aClickHandler = _rHdl; }
-        const Link<>& GetClickHdl( ) const { return m_aClickHandler; }
 
     protected:
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

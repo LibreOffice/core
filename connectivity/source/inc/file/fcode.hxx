@@ -76,7 +76,6 @@ namespace connectivity
             virtual void setValue(const ORowSetValue& _rVal) = 0;
 
             sal_Int32 getDBType() const {return m_eDBType;}
-            virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             inline bool isValid() const;
 
             TYPEINFO_OVERRIDE();
@@ -90,7 +89,6 @@ namespace connectivity
 
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
-            sal_uInt16 getRowPos() const {return m_nRowPos;}
             virtual const ORowSetValue& getValue() const SAL_OVERRIDE;
             virtual void setValue(const ORowSetValue& _rVal) SAL_OVERRIDE;
             void bindValue(const OValueRefRow& _pRow); // Bind to the value that the operand represents
@@ -108,7 +106,6 @@ namespace connectivity
             OOperandAttr(sal_uInt16 _nPos,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
 
-            virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0) SAL_OVERRIDE;
             TYPEINFO_OVERRIDE();
         };
 
@@ -202,8 +199,6 @@ namespace connectivity
         {
         public:
             virtual void Exec(OCodeStack&) = 0;
-            virtual sal_uInt16 getRequestedOperands() const;    // Count of requested operands
-                                                                // Defaults to 2
             TYPEINFO_OVERRIDE();
         };
 
@@ -225,7 +220,6 @@ namespace connectivity
         protected:
             virtual void Exec(OCodeStack&) SAL_OVERRIDE;
             virtual bool operate(const OOperand*, const OOperand* = NULL) const SAL_OVERRIDE;
-            virtual sal_uInt16 getRequestedOperands() const SAL_OVERRIDE;
         };
 
         class OOp_AND : public OBoolOperator
@@ -251,7 +245,6 @@ namespace connectivity
             TYPEINFO_OVERRIDE();
         public:
             virtual void Exec(OCodeStack&) SAL_OVERRIDE;
-            virtual sal_uInt16 getRequestedOperands() const SAL_OVERRIDE;
             virtual bool operate(const OOperand*, const OOperand* = NULL) const SAL_OVERRIDE;
         };
 
@@ -366,7 +359,6 @@ namespace connectivity
         {
         public:
             virtual void Exec(OCodeStack&) SAL_OVERRIDE;
-            virtual sal_uInt16 getRequestedOperands() const SAL_OVERRIDE;
             virtual ORowSetValue operate(const ORowSetValue& lhs) const = 0;
 
             TYPEINFO_OVERRIDE();

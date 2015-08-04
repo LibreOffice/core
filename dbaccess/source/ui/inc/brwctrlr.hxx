@@ -139,9 +139,6 @@ namespace dbaui
         void    onStartLoading( const css::uno::Reference< css::form::XLoadable >& _rxLoadable );
         void    setLoadingCancelled()   { m_bLoadCanceled = true; }
 
-        const TransferableDataHelper&
-            getViewClipboard() const { return m_aSystemClipboard; }
-
     public:
         SbaXDataBrowserController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 

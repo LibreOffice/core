@@ -54,11 +54,6 @@ namespace svxform
             ,nBorderColor( 0x00000000 )
         {
         }
-        inline void clear()
-        {
-            nBorderType = ::com::sun::star::awt::VisualEffect::FLAT;
-            nBorderColor = 0x00000000;
-        }
     };
 
     struct UnderlineDescriptor
@@ -76,12 +71,6 @@ namespace svxform
             :nUnderlineType( _nUnderlineType )
             ,nUnderlineColor( _nUnderlineColor )
         {
-        }
-
-        inline void clear()
-        {
-            nUnderlineType = ::com::sun::star::awt::FontUnderline::NONE;
-            nUnderlineColor = 0x00000000;
         }
     };
 

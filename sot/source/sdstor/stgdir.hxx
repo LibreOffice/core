@@ -103,7 +103,6 @@ public:
     StgDirEntry* GetRoot() { return pRoot; }
     StgDirEntry* Find( StgDirEntry&, const OUString& );
     StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
-    bool         Rename( StgDirEntry&, const OUString&, const OUString& );
 };
 
 class StgIterator : public StgAvlIterator

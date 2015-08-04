@@ -159,7 +159,6 @@ namespace dbaui
         DECL_LINK( OnPasteEntry,                void* );
         DECL_LINK( OnDeleteEntry,               void* );
 
-        DECL_LINK(PreviewChangeHdl, void*);
         // click a TB slot
         DECL_LINK_TYPED(OnDropdownClickHdl, ToolBox*, void);
 

@@ -65,8 +65,6 @@ private:
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~AllMasterPagesSelector();
 
-    void AddTemplate (const TemplateEntry& rEntry);
-
     void AddItem (MasterPageContainer::Token aToken);
 
     /** Add all items in the internal master page list into the given list.

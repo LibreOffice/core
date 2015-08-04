@@ -313,7 +313,6 @@ public:
     bool            IsTrackingSelect() const        { return mbTrackingSelect; }
 
     void            SetUserItemSize( const Size& rSz );
-    const Size&     GetUserItemSize() const             { return maUserItemSize; }
 
     void            EnableUserDraw( bool bUserDraw ) { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const   { return mbUserDrawEnabled; }
@@ -325,7 +324,6 @@ public:
     bool            IsMultiSelectionSimpleMode() const          { return mbSimpleMode; }
 
     void            EnableMouseMoveSelect( bool bMouseMoveSelect ) { mbMouseMoveSelect = bMouseMoveSelect; }
-    bool            IsMouseMoveSelectEnabled() const    { return mbMouseMoveSelect; }
     bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
 
     Size            CalcSize(sal_Int32 nMaxLines) const;
@@ -335,7 +333,6 @@ public:
     long            GetMaxEntryWidth() const            { return mnMaxWidth; }
 
     void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
-    const Link<>&   GetScrollHdl() const                { return maScrollHdl; }
     void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
     const Link<>&   GetSelectHdl() const                { return maSelectHdl; }
     void            SetCancelHdl( const Link<>& rLink ) { maCancelHdl = rLink; }
@@ -343,7 +340,6 @@ public:
     void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
     const Link<>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
     void            SetMRUChangedHdl( const Link<>& rLink ) { maMRUChangedHdl = rLink; }
-    const Link<>&   GetMRUChangedHdl() const                { return maMRUChangedHdl; }
     void            SetFocusHdl( const Link<>& rLink )  { maFocusHdl = rLink ; }
     const Link<>&   GetFocusHdl() const             { return maFocusHdl; }
 
@@ -370,7 +366,6 @@ public:
     void EnableQuickSelection( const bool& b );
 
     using Control::ImplInitSettings;
-    void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
 protected:
@@ -450,11 +445,9 @@ public:
     bool            IsVisible( sal_Int32  nEntry ) const { return maLBWindow->IsVisible( nEntry ); }
 
     void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow->SetProminentEntryType( eType ); }
-    ProminentEntry  GetProminentEntryType() const { return maLBWindow->GetProminentEntryType(); }
 
     long            GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
     void            SetLeftIndent( sal_uInt16 n )       { maLBWindow->SetLeftIndent( n ); }
-    void            ScrollHorz( short nDiff )       { maLBWindow->ScrollHorz( nDiff ); }
 
     void            SetTravelSelect( bool bTravelSelect ) { maLBWindow->SetTravelSelect( bTravelSelect ); }
     bool            IsTravelSelect() const          { return maLBWindow->IsTravelSelect(); }
@@ -464,7 +457,6 @@ public:
     bool            IsMultiSelectionEnabled() const     { return maLBWindow->IsMultiSelectionEnabled(); }
 
     void            SetMultiSelectionSimpleMode( bool bSimple ) { maLBWindow->SetMultiSelectionSimpleMode( bSimple ); }
-    bool            IsMultiSelectionSimpleMode() const  { return maLBWindow->IsMultiSelectionSimpleMode(); }
 
     void            SetReadOnly( bool b )           { maLBWindow->SetReadOnly( b ); }
     bool            IsReadOnly() const              { return maLBWindow->IsReadOnly(); }
@@ -474,20 +466,14 @@ public:
     long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
     void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
-    const Link<>&   GetScrollHdl() const                { return maScrollHdl; }
     void            SetSelectHdl( const Link<>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
-    const Link<>&   GetSelectHdl() const                { return maLBWindow->GetSelectHdl(); }
     void            SetCancelHdl( const Link<>& rLink ) { maLBWindow->SetCancelHdl( rLink ); }
-    const Link<>&   GetCancelHdl() const                { return maLBWindow->GetCancelHdl(); }
     void            SetDoubleClickHdl( const Link<>& rLink ) { maLBWindow->SetDoubleClickHdl( rLink ); }
-    const Link<>&   GetDoubleClickHdl() const               { return maLBWindow->GetDoubleClickHdl(); }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetFocusHdl( const Link<>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
-    const Link<>&   GetFocusHdl() const             { return maLBWindow->GetFocusHdl(); }
     void            SetListItemSelectHdl( const Link<>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
-    const Link<>&   GetListItemSelectHdl() const    { return maLBWindow->GetListItemSelectHdl(); }
     void            SetSelectionChangedHdl( const Link<>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
@@ -530,7 +516,6 @@ public:
     const Size&     GetPrefSize() const                 { return maPrefSz; }
 
     void            SetAutoWidth( bool b )              { mbAutoWidth = b; }
-    bool            IsAutoWidth() const                 { return mbAutoWidth; }
 
     Size            CalcFloatSize();
     void            StartFloat( bool bStartTracking );
@@ -581,10 +566,8 @@ public:
     sal_Int32       GetItemPos() const { return mnItemPos; }
     void            SetItemPos( sal_Int32  n ) { mnItemPos = n; }
 
-    const OUString& GetString() const { return maString; }
     void            SetString( const OUString& rStr ) { maString = rStr; }
 
-    const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
     void            MBDown();
@@ -593,7 +576,6 @@ public:
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetUserItemSize( const Size& rSz )  { maUserItemSize = rSz; }
-    const Size&     GetUserItemSize() const             { return maUserItemSize; }
 
     void            EnableUserDraw( bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }

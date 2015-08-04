@@ -39,11 +39,8 @@ public:
                         ExtTextEngine();
                         virtual ~ExtTextEngine();
 
-    const OUString&     GetGroupChars() const { return maGroupChars; }
-    void                SetGroupChars( const OUString& r ) { maGroupChars = r; }
     TextSelection       MatchGroup( const TextPaM& rCursor ) const;
-
-    bool            Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bForward = true );
+    bool                Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bForward = true );
 };
 
 class VCL_DLLPUBLIC ExtTextView : public TextView

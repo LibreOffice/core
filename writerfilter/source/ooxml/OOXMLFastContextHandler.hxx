@@ -123,8 +123,6 @@ public:
 
     OUString getTargetForId(const OUString & rId);
 
-    css::uno::Reference < css::xml::sax::XFastContextHandler > createFromStart(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs);
-
     void setDocument(OOXMLDocumentImpl* pDocument);
     OOXMLDocumentImpl* getDocument();
     void setXNoteId(OOXMLValue::Pointer_t pValue);
@@ -197,7 +195,6 @@ public:
 
     void sendPropertyToParent();
 
-    sal_uInt32 getInstanceNumber() { return mnInstanceNumber; }
 protected:
     OOXMLFastContextHandler * mpParent;
     Id mId;

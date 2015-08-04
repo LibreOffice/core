@@ -116,7 +116,6 @@ public:
 public:
     virtual NPError     NPP_Destroy( NPP instance, NPSavedData** save );
     virtual NPError     NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason );
-    virtual void *      NPP_GetJavaClass();
     virtual NPError     NPP_Initialize();
     virtual NPError     NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc,
                                  char* argn[], char* argv[], NPSavedData *saved );
@@ -132,7 +131,6 @@ public:
                                    int32_t len, void* buffer );
     virtual int32_t     NPP_WriteReady( NPP instance, NPStream* stream );
     virtual NPError     NPP_GetValue( NPP instance, NPPVariable variable, void *ret_value );
-    virtual NPError     NPP_SetValue( NPP instance, NPNVariable variable, void *ret_value );
     virtual int16_t     NPP_HandleEvent( NPP instance, void* event );
 
     virtual NPError     NPP_SetWindow( XPlugin_Impl* );

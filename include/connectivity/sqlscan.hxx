@@ -55,8 +55,6 @@ namespace connectivity
 
         sal_Int32 SQLyygetc();
         void SQLyyerror(char const *fmt);
-        static void output(sal_Int32) { OSL_FAIL("Internal error in sdblex.l: output not possible"); }
-        static void ECHO() { OSL_FAIL("Internal error in sdblex.l: ECHO not possible"); }
         IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning

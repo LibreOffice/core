@@ -394,10 +394,6 @@ namespace dbaui
 
     protected:
         // initalizing members
-        /** forces usage of a connection which we do not own
-            <p>To be used from within XInitialization::initialize only.</p>
-        */
-        void                    initializeConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxForeignConn );
 
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
@@ -483,9 +479,6 @@ namespace dbaui
 
         /// determines whether we're currently connected to the database
         bool isConnected() const { return m_xDataSourceConnection.is(); }
-
-        const css::uno::Reference< css::sdbc::XDatabaseMetaData >&
-            getConnectionMetaData() const { return m_xMetaData; }
 
         /** refreshes the tables
         */

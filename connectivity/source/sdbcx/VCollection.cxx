@@ -186,12 +186,6 @@ namespace
             return m_aElements.size() - (m_aElements.end() - ::std::find(m_aElements.begin(),m_aElements.end(),aIter));
         }
 
-        virtual OUString findColumnAtIndex(  sal_Int32 _nIndex) SAL_OVERRIDE
-        {
-            OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
-            return m_aElements[_nIndex]->first;
-        }
-
         virtual ObjectType getObject(sal_Int32 _nIndex) SAL_OVERRIDE
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");

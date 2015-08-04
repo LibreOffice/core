@@ -50,11 +50,6 @@ namespace cppcanvas
 
             virtual ~ImplFont();
 
-            virtual OUString getName() const SAL_OVERRIDE;
-            virtual double   getCellSize() const SAL_OVERRIDE;
-
-            virtual css::uno::Reference< css::rendering::XCanvasFont > getUNOFont() const SAL_OVERRIDE;
-
         private:
             css::uno::Reference< css::rendering::XCanvas >        mxCanvas;
             css::uno::Reference< css::rendering::XCanvasFont >    mxFont;

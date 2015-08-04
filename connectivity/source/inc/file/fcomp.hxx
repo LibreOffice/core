@@ -65,7 +65,6 @@ namespace connectivity
             void Clean();
             bool isClean() const {return m_aCodeList.empty();}
             bool hasCode() const {return !isClean();}
-            bool hasORCondition() const {return m_bORCondition;}
             void     setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
             const OFileColumns getOrigColumns() const { return m_orgColumns; }
         protected:

@@ -55,15 +55,6 @@ namespace cppcanvas
         virtual bool                    updateScreen( bool bUpdateAll ) const = 0;
 
         virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const = 0;
-        virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const = 0;
-
-        // shared_ptr does not allow for covariant return types
-        SpriteCanvasSharedPtr           cloneSpriteCanvas() const
-        {
-            SpriteCanvasSharedPtr p( ::boost::dynamic_pointer_cast< SpriteCanvas >(this->clone()) );
-            OSL_ENSURE(p.get(), "SpriteCanvas::cloneSpriteCanvas(): dynamic cast failed");
-            return p;
-        }
 
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;

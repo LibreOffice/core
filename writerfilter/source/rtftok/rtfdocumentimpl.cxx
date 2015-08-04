@@ -260,7 +260,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_aStyleTableEntries(),
       m_nCurrentStyleIndex(0),
       m_bFormField(false),
-      m_bIsInFrame(false),
       m_aUnicodeBuffer(),
       m_aHexBuffer(),
       m_bMathNor(false),
