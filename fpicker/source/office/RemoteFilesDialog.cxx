@@ -342,11 +342,6 @@ void RemoteFilesDialog::Resize()
 
 short RemoteFilesDialog::Execute()
 {
-    if( m_pServices_lb->GetEntryCount() == 0 )
-    {
-        Show();
-        AddServiceHdl( NULL );
-    }
     if( m_pServices_lb->GetEntryCount() > 0 )
     {
         Show();
