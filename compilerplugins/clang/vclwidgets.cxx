@@ -81,7 +81,7 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotWindowSubclass, true)) {
+        !compat::forallBases(*decl, BaseCheckNotWindowSubclass, nullptr, true)) {
         return true;
     }
     return false;

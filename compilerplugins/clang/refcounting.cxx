@@ -90,7 +90,7 @@ bool isDerivedFrom(const CXXRecordDecl *decl, const char *pString) {
                 { return BaseCheckNotSubclass(
                         BaseDefinition, const_cast<char *>(pString)); },
 #endif
-            true))
+            static_cast<void*>(const_cast<char*>(pString)), true))
     {
         return true;
     }

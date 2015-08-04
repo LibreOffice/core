@@ -73,7 +73,7 @@ bool isDerivedFromDialog(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotDialogSubclass, true)) {
+        !compat::forallBases(*decl, BaseCheckNotDialogSubclass, nullptr, true)) {
         return true;
     }
     return false;

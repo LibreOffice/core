@@ -55,7 +55,7 @@ bool isDerivedFromTestFixture(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotTestFixtureSubclass, true)) {
+        !compat::forallBases(*decl, BaseCheckNotTestFixtureSubclass, nullptr, true)) {
         return true;
     }
     return false;

@@ -68,12 +68,13 @@ inline bool isInExternCContext(clang::FunctionDecl const & decl) {
 inline bool forallBases(
     clang::CXXRecordDecl const & decl,
     clang::CXXRecordDecl::ForallBasesCallback BaseMatches,
+    void* callbackParam,
     bool AllowShortCircuit)
 {
 #if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
     return decl.forallBases(BaseMatches, AllowShortCircuit);
 #else
-    return decl.forallBases(BaseMatches, nullptr, AllowShortCircuit);
+    return decl.forallBases(BaseMatches, callbackParam, AllowShortCircuit);
 #endif
 }
 
