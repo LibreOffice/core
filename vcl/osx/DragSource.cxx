@@ -34,7 +34,6 @@
 #include "osx/salframe.h"
 
 #include <cassert>
-#include <memory>
 
 using namespace cppu;
 using namespace osl;
@@ -48,7 +47,6 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace comphelper;
-using namespace std;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
@@ -234,7 +232,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   m_MouseButton= mMouseEvent.Buttons;
   mXDragSrcListener = listener;
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext);
-  unique_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
+  rtl::Reference<AquaClipboard> clipb(new AquaClipboard(NULL, false));
   g_XTransferable = transferable;
   clipb->setContents(g_XTransferable, uno::Reference<XClipboardOwner>());
   mDragSourceActions = sourceActions;
