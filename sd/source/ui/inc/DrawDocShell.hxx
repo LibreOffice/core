@@ -133,10 +133,9 @@ public:
 
     bool                    GotoBookmark(const OUString& rBookmark);
 
-    //realize multi-selection of objects
-    bool                    GotoTreeBookmark(const OUString& rBookmark);
     bool                    IsMarked(  SdrObject* pObject  );
-    bool                    GetObjectIsmarked(const OUString& rBookmark);
+    // Optionally realize multi-selection of objects
+    bool                    GetObjectIsmarked(const OUString& rBookmark, bool bRealizeMultiSelectionOfObjects = false);
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
     /** checks, if the given name is a valid new name for a slide
