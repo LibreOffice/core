@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_40ddae6f",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-08-04T12:48:52Z",
+      "side": 1,
+      "message": "I had some problems connected to static InitVal. I\u0027ve tried to make WalkElementBlocks a variadic template, but it results a few lines of ugly code with tuples (and problems with missing constexpr, which I couldn\u0027t resolve).\n\nNext, I\u0027ve created a base class for SumOp, SumSquareOp and ProductOp with virtual () operator, but it caused problems with initialization, because of pointers to Op (base class) in WalkElementBlocks.\n\nI\u0027m thinking now, that I could add a non-static member InitVal, initialized with the static one (or only default argument in constructor). I\u0027ll try to do so.",
+      "parentUuid": "bae84128_203eaab8",
+      "revId": "ef664b5252ebd67aa7cd7fd6fd824e0ed1ebff5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_804b3659",
         "filename": "sc/source/core/tool/scmatrix.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-04T08:56:58Z",
       "side": 1,
       "message": "Yes, IterateResult is needed, the first/rest mechanism eliminates some precision errors, e.g. without \u003dSUM(A1:A3) with A1:A3\u003d{0.1,0.2,-0.3} does not result in 0.0\n\nIt\u0027s cumbersome and does not work for all constellations, but in many.",
+      "revId": "ef664b5252ebd67aa7cd7fd6fd824e0ed1ebff5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_20da2a79",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-08-04T12:48:52Z",
+      "side": 1,
+      "message": "So should I use it here, yes?",
+      "parentUuid": "bae84128_804b3659",
       "revId": "ef664b5252ebd67aa7cd7fd6fd824e0ed1ebff5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
