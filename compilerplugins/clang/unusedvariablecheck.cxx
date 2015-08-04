@@ -16,6 +16,7 @@
 // (LO classes won't get duplicated warnings, as the attribute is different).
 #if !HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL
 
+#include "compat.hxx"
 #include "unusedvariablecheck.hxx"
 
 #include <clang/AST/Attr.h>
@@ -48,7 +49,13 @@ void UnusedVariableCheck::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool BaseCheckNotDialogSubclass(const CXXRecordDecl *BaseDefinition, void *) {
+bool BaseCheckNotDialogSubclass(
+    const CXXRecordDecl *BaseDefinition
+#if __clang_major__ == 3 && __clang_minor__ < 7
+    , void *
+#endif
+    )
+{
     if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("Dialog") == 0) {
         return false;
     }
@@ -66,7 +73,7 @@ bool isDerivedFromDialog(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotDialogSubclass, nullptr, true)) {
+        !compat::forallBases(*decl, BaseCheckNotDialogSubclass, true)) {
         return true;
     }
     return false;

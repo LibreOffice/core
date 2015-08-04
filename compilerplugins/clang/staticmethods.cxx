@@ -36,7 +36,13 @@ private:
     std::string getFilename(SourceLocation loc);
 };
 
-bool BaseCheckNotTestFixtureSubclass(const CXXRecordDecl *BaseDefinition, void *) {
+bool BaseCheckNotTestFixtureSubclass(
+    const CXXRecordDecl *BaseDefinition
+#if __clang_major__ == 3 && __clang_minor__ < 7
+    , void *
+#endif
+    )
+{
     if (BaseDefinition->getQualifiedNameAsString().compare("CppUnit::TestFixture") == 0) {
         return false;
     }
@@ -49,7 +55,7 @@ bool isDerivedFromTestFixture(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotTestFixtureSubclass, nullptr, true)) {
+        !compat::forallBases(*decl, BaseCheckNotTestFixtureSubclass, true)) {
         return true;
     }
     return false;

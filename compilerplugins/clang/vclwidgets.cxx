@@ -57,7 +57,13 @@ static bool startsWith(const std::string& s, const char* other)
     return s.compare(0, strlen(other), other) == 0;
 }
 
-bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
+bool BaseCheckNotWindowSubclass(
+    const CXXRecordDecl *BaseDefinition
+#if __clang_major__ == 3 && __clang_minor__ < 7
+    , void *
+#endif
+    )
+{
     if (BaseDefinition && BaseDefinition->getQualifiedNameAsString() == "OutputDevice") {
         return false;
     }
@@ -75,7 +81,7 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotWindowSubclass, nullptr, true)) {
+        !compat::forallBases(*decl, BaseCheckNotWindowSubclass, true)) {
         return true;
     }
     return false;

@@ -65,6 +65,18 @@ inline bool isInExternCContext(clang::FunctionDecl const & decl) {
 #endif
 }
 
+inline bool forallBases(
+    clang::CXXRecordDecl const & decl,
+    clang::CXXRecordDecl::ForallBasesCallback BaseMatches,
+    bool AllowShortCircuit)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+    return decl.forallBases(BaseMatches, AllowShortCircuit);
+#else
+    return decl.forallBases(BaseMatches, nullptr, AllowShortCircuit);
+#endif
+}
+
 #if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
 typedef clang::LinkageInfo LinkageInfo;
 #else
@@ -126,6 +138,26 @@ inline clang::QualType getParamType(
     return type.getParamType(i);
 #else
     return type.getArgType(i);
+#endif
+}
+
+inline clang::Stmt::const_child_iterator begin(
+    clang::Stmt::const_child_range const & range)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+    return range.begin();
+#else
+    return range.first;
+#endif
+}
+
+inline clang::Stmt::const_child_iterator end(
+    clang::Stmt::const_child_range const & range)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+    return range.end();
+#else
+    return range.second;
 #endif
 }
 

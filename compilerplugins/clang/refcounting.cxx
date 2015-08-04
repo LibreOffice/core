@@ -73,7 +73,17 @@ bool isDerivedFrom(const CXXRecordDecl *decl, const char *pString) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSubclass, static_cast<void*>(const_cast<char*>(pString)), true)) {
+        !compat::forallBases(
+            *decl,
+#if __clang_major__ == 3 && __clang_minor__ < 7
+            BaseCheckNotSubclass,
+#else
+            [pString](const CXXRecordDecl *BaseDefinition) -> bool
+                { return BaseCheckNotSubclass(
+                        BaseDefinition, const_cast<char *>(pString)); },
+#endif
+            true))
+    {
         return true;
     }
     return false;

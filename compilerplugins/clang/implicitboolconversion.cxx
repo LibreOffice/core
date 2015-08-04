@@ -18,6 +18,8 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
+#if __clang_major__ == 3 && __clang_minor__ < 7
+
 template<> struct std::iterator_traits<ExprIterator> {
     typedef std::ptrdiff_t difference_type;
     typedef Expr * value_type;
@@ -33,6 +35,8 @@ template<> struct std::iterator_traits<ConstExprIterator> {
     typedef Expr const & reference;
     typedef std::random_access_iterator_tag iterator_category;
 };
+
+#endif
 
 namespace {
 
