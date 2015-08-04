@@ -438,6 +438,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 
     if (pthread_equal (pthread_self(), pImpl->m_hThread))
     {
+        assert(false); // Win32 implementation would deadlock here!
         /* self join */
         pthread_mutex_unlock (&(pImpl->m_Lock));
         return; /* EDEADLK */
