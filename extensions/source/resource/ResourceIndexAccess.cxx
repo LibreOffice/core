@@ -11,6 +11,7 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
@@ -36,7 +37,7 @@ namespace
         return ::boost::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName.getStr()));
     }
 
-    class ResourceIndexAccessBase : public cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess>
+    class ResourceIndexAccessBase : public cppu::WeakImplHelper< ::com::sun::star::container::XIndexAccess>
     {
         public:
             ResourceIndexAccessBase( ::boost::shared_ptr<ResMgr> pResMgr)

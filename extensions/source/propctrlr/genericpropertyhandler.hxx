@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ref.hxx>
 
@@ -50,7 +50,7 @@ namespace pcr
 
     //= GenericPropertyHandler
 
-    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::inspection::XPropertyHandler
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 >   GenericPropertyHandler_Base;
     class GenericPropertyHandler : public GenericPropertyHandler_Base

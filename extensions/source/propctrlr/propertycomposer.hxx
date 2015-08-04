@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/listenernotification.hxx>
 
@@ -44,7 +44,7 @@ namespace pcr
 
     //= PropertyComposer
 
-    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::inspection::XPropertyHandler
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
                                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                                 >   PropertyComposer_Base;
     /** implements an <type>XPropertyHandler</type> which composes it's information

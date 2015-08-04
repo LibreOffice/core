@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <comphelper/broadcasthelper.hxx>
@@ -42,7 +42,7 @@ namespace pcr
 
     //= ImplInspectorModel
 
-    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::inspection::XObjectInspectorModel
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::inspection::XObjectInspectorModel
                                     ,   ::com::sun::star::lang::XInitialization
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     >   ImplInspectorModel_Base;

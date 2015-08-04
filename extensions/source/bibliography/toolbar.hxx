@@ -29,13 +29,13 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class BibDataManager;
 class BibToolBar;
 
-class BibToolBarListener: public cppu::WeakImplHelper1 < ::com::sun::star::frame::XStatusListener>
+class BibToolBarListener: public cppu::WeakImplHelper < ::com::sun::star::frame::XStatusListener>
 {
 private:
 

@@ -38,7 +38,7 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/interlck.h>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -64,7 +64,7 @@ namespace pcr
     //= PropertyHandler
 
     class OPropertyInfoService;
-    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::inspection::XPropertyHandler
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::inspection::XPropertyHandler
                                                 >   PropertyHandler_Base;
     /** the base class for property handlers
     */

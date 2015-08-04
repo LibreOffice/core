@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -50,7 +50,7 @@ namespace logging
     using ::com::sun::star::uno::XInterface;
 
     // formats for csv files as defined by RFC4180
-    typedef ::cppu::WeakImplHelper2 <   XCsvLogFormatter
+    typedef ::cppu::WeakImplHelper <   XCsvLogFormatter
                                     ,   XServiceInfo
                                     >   CsvFormatter_Base;
     class CsvFormatter : public CsvFormatter_Base

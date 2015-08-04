@@ -22,7 +22,7 @@
 #include "boost/noncopyable.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/implbase3.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/inspection/XStringRepresentation.hpp"
@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 class StringRepresentation:
-    public ::cppu::WeakImplHelper3<
+    public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
         inspection::XStringRepresentation,
         lang::XInitialization>,

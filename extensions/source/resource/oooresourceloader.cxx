@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include <tools/simplerm.hxx>
 #include <tools/rcid.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -89,7 +89,7 @@ namespace extensions { namespace resource
         return aResource;
     }
 
-    typedef ::cppu::WeakImplHelper1 <   XResourceBundle
+    typedef ::cppu::WeakImplHelper <   XResourceBundle
                                     >   OpenOfficeResourceBundle_Base;
     class OpenOfficeResourceBundle : public OpenOfficeResourceBundle_Base
     {

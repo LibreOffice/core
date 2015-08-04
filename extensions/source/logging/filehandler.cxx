@@ -33,7 +33,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -68,7 +68,7 @@ namespace logging
     using ::com::sun::star::util::XStringSubstitution;
     using ::com::sun::star::beans::NamedValue;
 
-    typedef ::cppu::WeakComponentImplHelper3    <   XLogHandler
+    typedef ::cppu::WeakComponentImplHelper    <   XLogHandler
                                                 ,   XServiceInfo
                                                 ,   XInitialization
                                                 >   FileHandler_Base;

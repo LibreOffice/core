@@ -20,7 +20,7 @@
 
 #include <list>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -119,7 +119,7 @@ public:
 };
 
 
-class UpdateCheckUI : public ::cppu::WeakImplHelper3
+class UpdateCheckUI : public ::cppu::WeakImplHelper
                         < lang::XServiceInfo, document::XDocumentEventListener, beans::XPropertySet >
 {
     uno::Reference< uno::XComponentContext > m_xContext;

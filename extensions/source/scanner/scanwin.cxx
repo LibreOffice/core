@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <prewin.h>
@@ -74,7 +74,7 @@ enum TwainState
     TWAIN_STATE_CANCELED = 3
 };
 
-class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
+class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
 {
     friend LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam );
 

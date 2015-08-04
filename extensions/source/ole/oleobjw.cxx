@@ -149,7 +149,7 @@ Any IUnknownWrapper_Impl::queryInterface(const Type& t)
     // properties. Note: Currently the basic runtime doesn't call put properties directly, it should... after all the basic runtime should know whether it is calling a put or get property.
     // For the moment for ease of merging we will let the XDirectInvoke and XAuthomationInvocation interfaces stay side by side ( and for the momemnt at least I would prefer the basic
     // runtime to call XAutomationInvocation instead of XDirectInvoke
-    return WeakImplHelper7<XBridgeSupplier2,
+    return WeakImplHelper<XBridgeSupplier2,
         XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation, XAutomationInvocation >::queryInterface(t);
 }
 

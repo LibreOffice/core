@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/InvocationInfo.hpp>
 #include <salhelper/simplereferenceobject.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "comifaces.hxx"
 #include "ole2uno.hxx"
@@ -102,7 +103,7 @@ typedef std::unordered_map
 
 *****************************************************************************/
 
-class InterfaceOleWrapper_Impl : public WeakImplHelper2<XBridgeSupplier2, XInitialization>,
+class InterfaceOleWrapper_Impl : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
                                  public IDispatchEx,
                                  public UnoConversionUtilities<InterfaceOleWrapper_Impl>,
                                  public IUnoObjectWrapper

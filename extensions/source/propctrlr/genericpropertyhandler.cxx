@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <tools/debug.hxx>
@@ -174,7 +175,7 @@ namespace pcr
         return sDescription;
     }
 
-    typedef ::cppu::WeakImplHelper1 <   XActionListener
+    typedef ::cppu::WeakImplHelper <   XActionListener
                                     >   UrlClickHandler_Base;
     class UrlClickHandler : public UrlClickHandler_Base
     {

@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
 #include "general.hxx"
@@ -68,7 +68,7 @@ static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos
     return sRet;
 }
 
-class BibPosListener    :public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
+class BibPosListener    :public cppu::WeakImplHelper <sdbc::XRowSetListener>
 {
     VclPtr<BibGeneralPage>     pParentPage;
 public:

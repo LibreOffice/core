@@ -52,7 +52,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <map>
@@ -71,7 +71,7 @@ namespace pcr
     struct OLineDescriptor;
 
     // #95343#------------------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
                                     ,   ::com::sun::star::awt::XLayoutConstrains
                                     ,   ::com::sun::star::beans::XPropertyChangeListener
