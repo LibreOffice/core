@@ -30,6 +30,8 @@ IMPL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
 IMPL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
 IMPL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
 IMPL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
+IMPL_CHAIN_PROP_INTERFACE(PendingOverflowCheck, bool)
+
 
 /* End Definition of Properties Interface */
 
@@ -45,69 +47,6 @@ TextChain::~TextChain()
 {
     // XXX: Should free all LinkProperties
 }
-
-/*
-bool TextChain::IsLinkInChain(SdrTextObj *) const
-{
-    return true;    // XXX: Should make an actual check
-}
-
-void TextChain::AppendLink(SdrTextObj *)
-{
-    // XXX
-}
-
-SdrTextObj *TextChain::GetNextLink(const SdrTextObj *pTextObj) const
-{
-    return impGetNextLink(pTextObj);
-}
-
-SdrTextObj *TextChain::GetPrevLink(const SdrTextObj *pTextObj) const
-{
-    return impGetPrevLink(pTextObj);
-}
-
-SdrTextObj *TextChain::impGetNextLink(const SdrTextObj *pTextObj) const
-{
-    // XXX: Temporary implementation based on index number
-
-    SdrTextObj *pNextTextObj = NULL;
-    SdrPage *pPage = pTextObj->pPage;
-
-    if ( pPage && pPage->GetObjCount() > 1) {
-
-        sal_uInt32 nextIndex = (pTextObj->GetOrdNum()+1);
-
-        if (nextIndex < pPage->GetObjCount())
-            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
-
-        return pNextTextObj;
-    } else {
-        fprintf(stderr, "Make New Object please\n");
-        return NULL;
-    }
-}
-
-SdrTextObj *TextChain::impGetPrevLink(const SdrTextObj *pTextObj) const
-{
-    SdrTextObj *pPrevTextObj = NULL;
-    SdrPage *pPage = pTextObj->pPage;
-
-    if ( pPage && pPage->GetObjCount() > 1) {
-
-        sal_Int32 prevIndex = (pTextObj->GetOrdNum()-1);
-
-        if (prevIndex >= 0)
-            pPrevTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( prevIndex ) );
-
-        return pPrevTextObj;
-    } else {
-        fprintf(stderr, "Make New Object please\n");
-        return NULL;
-    }
-}
-*/
-
 
 ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
 {

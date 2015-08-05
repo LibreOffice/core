@@ -28,6 +28,7 @@
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
+#include <svx/textchain.hxx>
 
 
 bool SdrTextObj::HasTextEdit() const
@@ -280,8 +281,23 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         SetOutlinerParaObject(pNewText);
     }
 
+    /* Beginning Chaining-related code */
     // we do not need the bookmark at the overflowing check anymore.
     rOutl.ClearOverflowingParaNum();
+    // XXX: Experiment
+    /* Flush overflow for next textbox */
+    if (IsChainable() &&
+        GetNextLinkInChain() &&
+        GetTextChain()->GetPendingOverflowCheck(GetNextLinkInChain()) )
+    {
+        GetTextChain()->SetPendingOverflowCheck(GetNextLinkInChain(), false);
+        // NEXT: Prepare outliner for overflow
+        SdrOutliner rDrawOutl = GetNextLinkInChain()->ImpGetDrawOutliner();
+        rDrawOutl.SetUpdateMode(true);
+        // XXX: Change name of method above to impHandleChainingEventsNonEditMode
+        GetNextLinkInChain()->impHandleChainingEventsDuringDecomposition(rDrawOutl);
+    }
+    /* End Chaining-related code */
 
     pEdtOutl = NULL;
     rOutl.Clear();

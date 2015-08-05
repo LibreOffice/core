@@ -38,10 +38,10 @@
  *    in constructor of ImpChainLinkProperties below
  *    (V is the initialization value for PROPNAME)
  *
- * 2) Add
+ * 3) Add
  *      "DECL_CHAIN_PROP_INTERFACE(PROPNAME, T)"
  *    in class TextChain (under "public:");
- * 3)  Add
+ * 4)  Add
  *       "IMPL_CHAIN_PROP_INTERFACE(PROPNAME, T)"
  *    in file "svx/source/svdraw/textchain.cxx"
 */
@@ -119,15 +119,17 @@ class ImpChainLinkProperties
         INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
         INIT_CHAIN_PROP(PostChainingSel, ESelection(0,0,0,0));
         INIT_CHAIN_PROP(IsPartOfLastParaInNextLink, false) // XXX: Should come from file
+        INIT_CHAIN_PROP(PendingOverflowCheck, false)
     }
 
     private:
-    // NOTE: Remember to set default value in contructor when adding field
+    // NOTE: Remember to set default value in constructor when adding field
     DECL_CHAIN_PROP(NilChainingEvent, bool)
     DECL_CHAIN_PROP(CursorEvent, CursorChainingEvent)
     DECL_CHAIN_PROP(PreChainingSel, ESelection)
     DECL_CHAIN_PROP(PostChainingSel, ESelection)
     DECL_CHAIN_PROP(IsPartOfLastParaInNextLink, bool)
+    DECL_CHAIN_PROP(PendingOverflowCheck, bool)
 
 };
 
@@ -154,6 +156,8 @@ class TextChain {
     DECL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
     // return whether a paragraph is split between this box and the next
     DECL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
+    // return whether there is a pending overflow check (usually when we move cursor after an overflow in the prev link)
+    DECL_CHAIN_PROP_INTERFACE(PendingOverflowCheck, bool)
 
 
 
