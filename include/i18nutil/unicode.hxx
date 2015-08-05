@@ -21,6 +21,7 @@
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <sal/types.h>
+#include <rtl/ustrbuf.hxx>
 #include <unicode/uscript.h>
 #include <i18nutil/i18nutildllapi.h>
 
@@ -57,6 +58,53 @@ public:
     static OUString SAL_CALL formatPercent(double dNumber,
         const LanguageTag &rLangTag);
 };
+
+/*
+    Alt-X:  Toggle between a character and its Unicode Notation.
+        -implements the concept found in Microsoft Word's Alt-X
+        -accepts sequences of up to 8 hex characters and converts into the corresponding Unicode Character
+            -example:  0000A78c   or   2bc
+        -accepts sequences of up to 256 characters in Unicode notation
+            -example:  U+00000065u+0331u+308
+        -handles complex characters (with combining elements) and the all of the Unicode planes.
+*/
+class I18NUTIL_DLLPUBLIC AltX
+{
+private:
+    OUStringBuffer sInput;
+    OUStringBuffer sOutput;
+    OUStringBuffer sUtf16;
+    OUStringBuffer sCombining;
+    bool bAllowMoreChars = true;
+    bool bRequiresU = false;
+    bool bIsHexString = false;
+
+public:
+    AltX();
+
+    /*
+    Build an input string of valid UTF16 units to toggle.
+        -do not call the other functions until the input process is complete
+        -build string from Right to Left.  (Start from the character to the left of the cursor: move left.)
+    */
+    bool AllowMoreInput(sal_Unicode uChar);
+
+    /*
+    Validates (!!AND POTENTIALLY MODIFIES!!) the input string.
+        -all output functions call this function first to validate the input string
+        -!!additional input may be prevented after this function is called!!
+    */
+    OUString StringToReplace();
+    OUString ReplacementString();
+
+    /*
+    While sInput.getLength() returns the number of utf16 units to delete,
+    this function returns the number of "characters" to delete - potentially a smaller number
+    */
+    sal_uInt32 CharsToDelete();
+};
+
+
 
 #endif
 

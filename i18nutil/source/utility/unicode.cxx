@@ -27,6 +27,8 @@
 #include <sal/log.hxx>
 #include <unicode/numfmt.h>
 #include "unicode_data.h"
+#include <com/sun/star/i18n/UnicodeType.hpp>
+#include <rtl/character.hxx>
 
 // Workaround for glibc braindamage:
 // glibc 2.4's langinfo.h does "#define CURRENCY_SYMBOL __CURRENCY_SYMBOL"
@@ -996,6 +998,256 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
         return aRet.replace(0x00A0, 0x202F);
     }
     return aRet;
+}
+
+// Alt-X:  Toggle between a character and its Unicode Notation.
+AltX::AltX ()
+{
+    sInput = OUStringBuffer();
+    sOutput = OUStringBuffer();
+    sUtf16 = OUStringBuffer();
+    sCombining = OUStringBuffer();
+}
+
+bool AltX::AllowMoreInput(sal_Unicode uChar)
+{
+    //arbitrarily chosen maximum length allowed - normal max usage would be around 30.
+    if( sInput.getLength() > 255 )
+        bAllowMoreChars = false;
+
+    if( !bAllowMoreChars )
+        return false;
+
+    bool bPreventNonHex = false;
+    if( sInput.indexOf("U+") != -1 )
+        bPreventNonHex = true;
+
+    switch ( unicode::getUnicodeType(uChar) )
+    {
+        case ::com::sun::star::i18n::UnicodeType::SURROGATE:
+            if( bPreventNonHex )
+            {
+                bAllowMoreChars = false;
+                return false;
+            }
+
+            if( rtl::isLowSurrogate(uChar) && sUtf16.isEmpty() && sInput.isEmpty()  )
+            {
+                sUtf16.append(uChar);
+                return true;
+            }
+            if( rtl::isHighSurrogate(uChar) && sInput.isEmpty() )
+                sUtf16.insert(0, uChar );
+            //end of hex strings, or unexpected order of high/low, so don't accept more
+            if( !sUtf16.isEmpty() )
+                sInput.append(sUtf16);
+            if( !sCombining.isEmpty() )
+                sInput.append(sCombining);
+            bAllowMoreChars = false;
+            break;
+
+        case ::com::sun::star::i18n::UnicodeType::NON_SPACING_MARK:
+        case ::com::sun::star::i18n::UnicodeType::COMBINING_SPACING_MARK:
+            if( bPreventNonHex )
+            {
+                bAllowMoreChars = false;
+                return false;
+            }
+
+            //extreme edge case: already invalid high/low surrogates with preceding combining chars, and now an extra combining mark.
+            if( !sUtf16.isEmpty() )
+            {
+                sInput = sUtf16;
+                if( !sCombining.isEmpty() )
+                    sInput.append(sCombining);
+                bAllowMoreChars = false;
+                return false;
+            }
+            sCombining.insert(0, uChar);
+            break;
+
+        default:
+            //extreme edge case: already invalid high/low surrogates with preceding combining chars, and now an extra character.
+            if( !sUtf16.isEmpty() )
+            {
+                sInput = sUtf16;
+                if( !sCombining.isEmpty() )
+                    sInput.append(sCombining);
+                bAllowMoreChars = false;
+                return false;
+            }
+
+            if( !sCombining.isEmpty() )
+            {
+                sCombining.insert(0, uChar);
+                sInput = sCombining;
+                bAllowMoreChars = false;
+                return false;
+            }
+
+            switch( uChar )
+            {
+                case 'u':
+                case 'U':
+                    // U+ notation found.  Continue looking for another one.
+                    if( bRequiresU )
+                    {
+                        bRequiresU = false;
+                        sInput.insert(0,"U+");
+                    }
+                    // treat as a normal character
+                    else
+                    {
+                        bAllowMoreChars = false;
+                        if( !bPreventNonHex )
+                            sInput.insertUtf32(0, uChar);
+                    }
+                    break;
+                case '+':
+                    // + already found: skip when not U, or edge case of +U+xxxx
+                    if( bRequiresU || (sInput.indexOf("U+") == 0) )
+                        bAllowMoreChars = false;
+                    // hex chars followed by '+' - now require a 'U'
+                    else if ( !sInput.isEmpty() )
+                        bRequiresU = true;
+                    // treat as a normal character
+                    else
+                    {
+                        bAllowMoreChars = false;
+                        if( !bPreventNonHex )
+                            sInput.insertUtf32(0, uChar);
+                    }
+                    break;
+                case 0:
+                    bAllowMoreChars = false;
+                    break;
+                default:
+                    // + already found. Since not U, cancel further input
+                    if( bRequiresU )
+                        bAllowMoreChars = false;
+                    // maximum digits per notation is 8: only one notation
+                    else if( sInput.indexOf("U+") == -1 && sInput.getLength() == 8 )
+                        bAllowMoreChars = false;
+                    // maximum digits per notation is 8: previous notation found
+                    else if( sInput.indexOf("U+") == 8 )
+                        bAllowMoreChars = false;
+                    // a hex character. Add to string.
+                    else if( isxdigit(uChar) )
+                    {
+                        bIsHexString = true;
+                        sInput.insertUtf32(0, uChar);
+                    }
+                    // not a hex character: stop input. keep if it is the first input provided
+                    else
+                    {
+                        bAllowMoreChars = false;
+                        if( sInput.isEmpty() )
+                            sInput.insertUtf32(0, uChar);
+                    }
+            }
+    }
+    return bAllowMoreChars;
+}
+
+OUString AltX::StringToReplace()
+{
+    if( sInput.isEmpty() )
+    {
+        //edge case - input finished with incomplete low surrogate or combining characters without a base
+        if( bAllowMoreChars )
+        {
+            if( !sUtf16.isEmpty() )
+                sInput = sUtf16;
+            if( !sCombining.isEmpty() )
+                sInput.append(sCombining);
+        }
+        return sInput.toString();
+    }
+
+    if( !bIsHexString )
+        return sInput.toString();
+
+    //this function potentially modifies the input string.  Prevent addition of further characters
+    bAllowMoreChars = false;
+
+    //validate unicode notation.
+    OUStringBuffer sIn;
+    sal_uInt32 nUnicode = 0;
+    sal_Int32 nUPlus = sInput.indexOf("U+");
+    //if U+ notation used, strip off all extra chars added not in U+ notation
+    if( nUPlus != -1 )
+    {
+        sInput = sInput.copy(nUPlus);
+        sIn = sInput.copy(2);
+        nUPlus = sIn.indexOf("U+");
+    }
+    else
+        sIn = sInput;
+    while( nUPlus != -1 )
+    {
+        nUnicode = sIn.copy(0, nUPlus).toString().toUInt32(16);
+        //strip out all null or invalid Unicode values
+        if( !nUnicode || nUnicode > 0x10ffff )
+            sInput = sIn.copy(nUPlus);
+        sIn = sIn.copy(nUPlus+2);
+        nUPlus =  sIn.indexOf("U+");
+    }
+
+    nUnicode = sIn.toString().toUInt32(16);
+    if( !nUnicode || nUnicode > 0x10ffff )
+       sInput.truncate(0).append( sIn[sIn.getLength()-1] );
+    return sInput.toString();
+}
+
+sal_uInt32 AltX::CharsToDelete()
+{
+    OUString sIn = StringToReplace();
+    sal_Int32 nPos = 0;
+    sal_uInt32 counter = 0;
+    while( nPos < sIn.getLength() )
+    {
+        sIn.iterateCodePoints(&nPos,1);
+        ++counter;
+    }
+    return counter;
+}
+
+OUString AltX::ReplacementString()
+{
+    OUString sIn = StringToReplace();
+    sOutput = "";
+    sal_Int32 nUPlus = sIn.indexOf("U+");
+    // convert from hex notation to glyph
+    if( nUPlus != -1 || (sIn.getLength() > 1 && bIsHexString) )
+    {
+        sal_uInt32 nUnicode = 0;
+        if( nUPlus == 0)
+        {
+            sIn = sIn.copy(2);
+            nUPlus = sIn.indexOf("U+");
+        }
+        while( nUPlus > 0 )
+        {
+            nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
+            sOutput.appendUtf32( nUnicode );
+
+            sIn = sIn.copy(nUPlus+2);
+            nUPlus = sIn.indexOf("U+");
+        }
+        nUnicode = sIn.toUInt32(16);
+        sOutput.appendUtf32( nUnicode );
+    }
+    // convert from glyph to hex notation
+    else
+    {
+        sal_Int32 nPos = 0;
+        while( nPos < sIn.getLength() )
+        {
+            sOutput.append( "U+" );
+            sOutput.append( OUString::number(sIn.iterateCodePoints(&nPos,1),16) );
+        }
+    }
+    return sOutput.toString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
