@@ -2481,6 +2481,10 @@ void Window::Show(bool bVisible, sal_uInt16 nFlags)
                 mpWindowImpl->mpFrame->GetClientSize( nOutWidth, nOutHeight );
                 ImplHandleResize( this, nOutWidth, nOutHeight );
             }
+
+            if (mpWindowImpl->mpFrameData->mpBuffer && mpWindowImpl->mpFrameData->mpBuffer->GetOutputSizePixel() != GetOutputSizePixel())
+                // Make sure that the buffer size matches the window size, even if no resize was needed.
+                mpWindowImpl->mpFrameData->mpBuffer->SetOutputSizePixel(GetOutputSizePixel());
         }
 
         if( aDogTag.IsDead() )
