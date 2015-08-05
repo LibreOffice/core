@@ -144,6 +144,7 @@ public:
     void testTdf90883TableBoxGetCoordinates();
     void testEmbeddedDataSource();
     void testUnoCursorPointer();
+    void testUnicodeNotationToggle();
     void testTextTableCellNames();
     void testShapeAnchorUndo();
     void testDde();
@@ -210,6 +211,7 @@ public:
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
     CPPUNIT_TEST(testUnoCursorPointer);
+    CPPUNIT_TEST(testUnicodeNotationToggle);
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST(testDde);
@@ -2072,6 +2074,43 @@ void SwUiWriterTest::testUnoCursorPointer()
     CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
 }
 
+void SwUiWriterTest::testUnicodeNotationToggle()
+{
+/*
+    SwDoc* pDoc = createDoc("unicodeAltX.doc");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    OUString sOriginalDocString;
+    OUString sDocString;
+    OUString sExpectedString;
+
+    pWrtShell->SttPara();
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', KEY_MOD2);
+    sOriginalDocString = sDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
+    sExpectedString = "";
+SAL_WARN("JCL","line0["<<sDocString<<"] expected["<<sExpectedString<<"]");
+SAL_WARN_IF(!sDocString.equals(sExpectedString),"JCL","line 0 does not match expected value");
+
+SAL_WARN("JCL","move down to line1");
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+SAL_WARN("JCL","got to paragraph end");
+    pWrtShell->EndPara();
+SAL_WARN("JCL","press Alt-X");
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', KEY_MOD2);
+SAL_WARN("JCL","getting originalstring");
+    sOriginalDocString = sDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
+SAL_WARN("JCL","setting expected string");
+    sExpectedString = "u+";
+SAL_WARN("JCL","line1["<<sDocString<<"] expected["<<sExpectedString<<"]");
+SAL_WARN_IF(!sDocString.equals(sExpectedString),"JCL","line 1 does not match expected value");
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', KEY_MOD2);
+    sDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
+SAL_WARN("JCL","line1["<<sDocString<<"] expected["<<sOriginalDocString<<"]");
+SAL_WARN_IF(!sDocString.equals(sOriginalDocString),"JCL","line 1 does not match expected value");
+
+  //  CPPUNIT_ASSERT(false);
+*/
+}
 void SwUiWriterTest::testTextTableCellNames()
 {
     sal_Int32 nCol, nRow2;

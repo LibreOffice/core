@@ -1630,6 +1630,11 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
     ]
 
+    SID_UNICODE_NOTATION_TOGGLE
+    [
+        ExecMethod = Execute;
+    ]
+
     SID_THES
     [
         ExecMethod = Execute ;

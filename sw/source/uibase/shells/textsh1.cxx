@@ -23,6 +23,7 @@
 #include <cmdid.h>
 #include <helpid.h>
 
+#include <i18nutil/unicode.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
@@ -287,6 +288,29 @@ void SwTextShell::Execute(SfxRequest &rReq)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
     switch( nSlot )
     {
+        case SID_UNICODE_NOTATION_TOGGLE:
+        {
+            int nMaxUnits = 256;
+            if( rWrtSh.IsSelection() && !rWrtSh.IsMultiSelection() )
+                nMaxUnits = rWrtSh.GetSelText().getLength();
+
+            int index = 0;
+            AltX toggle = AltX();
+            while( nMaxUnits-- && toggle.AllowMoreInput(rWrtSh.GetChar(true, index-1)) )
+                --index;
+
+            OUString sReplacement = toggle.ReplacementString();
+            if( !sReplacement.isEmpty() )
+            {
+                rWrtSh.GetCrsr()->Normalize(false);
+                rWrtSh.ClearMark();
+                for( sal_uInt32 i=toggle.CharsToDelete(); i > 0; --i )
+                    rWrtSh.DelLeft();
+                rWrtSh.Insert2( sReplacement );
+            }
+        }
+        break;
+
         case SID_LANGUAGE_STATUS:
         {
             // get the language
