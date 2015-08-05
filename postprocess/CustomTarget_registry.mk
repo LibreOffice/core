@@ -568,13 +568,15 @@ postprocess_main_SED := \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
 	-e 's,$${SYSTEM_LIBEXTTEXTCAT_DATA},$(SYSTEM_LIBEXTTEXTCAT_DATA),g' \
 
-$(call gb_XcdTarget_get_target,main.xcd) : \
+$(call gb_XcdTarget_get_target,main.xcd) \
+		: $(SRCDIR)/config_host.mk.stamp \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,main,$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-			$(SRCDIR)/solenv/bin/packregistry.xslt $< \
+			$(SRCDIR)/solenv/bin/packregistry.xslt \
+			$(call gb_CustomTarget_get_workdir,postprocess/registry)/main.list \
 		|  sed $(postprocess_main_SED) > $@ \
 	)
 
