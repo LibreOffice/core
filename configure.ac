@@ -949,8 +949,8 @@ AC_ARG_ENABLE(mergelibs,
 )
 
 AC_ARG_ENABLE(graphite,
-    AS_HELP_STRING([--enable-graphite],
-        [Enables the compilation of Graphite smart font rendering.])
+    AS_HELP_STRING([--disable-graphite],
+        [Disables the compilation of Graphite smart font rendering.])
 )
 
 AC_ARG_ENABLE(orcus,
