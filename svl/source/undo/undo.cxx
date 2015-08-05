@@ -18,7 +18,7 @@
  */
 
 #include <svl/undo.hxx>
-
+#include <limits.h>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <osl/mutex.hxx>
