@@ -119,6 +119,7 @@ public:
     void testRightToLeftParaghraph();
     void testTableCellBorder();
     void testBulletColor();
+    void testTdf62176();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
     void testTransparentBackground();
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
+    CPPUNIT_TEST(testTdf62176);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTransparentBackground);
@@ -972,6 +974,51 @@ void SdExportTest::testBulletColor()
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor().GetColor());
+}
+
+void SdExportTest::testTdf62176()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/Tdf62176.odp"), ODP);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    //there should be only *one* shape
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    //checking Paragraph's Left Margin with expected value
+    sal_Int32 nParaLeftMargin = 0;
+    xShape->getPropertyValue("ParaLeftMargin") >>= nParaLeftMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nParaLeftMargin);
+    //checking Paragraph's First Line Indent with expected value
+    sal_Int32 nParaFirstLineIndent = 0;
+    xShape->getPropertyValue("ParaFirstLineIndent") >>= nParaFirstLineIndent;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1300), nParaFirstLineIndent);
+    //Checking the *Text* in TextBox
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph->getString());
+    //Saving and Reloading the file
+    xDocShRef = saveAndReload(xDocShRef, ODP);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    //there should be only *one* shape
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage2->getCount());
+    uno::Reference<beans::XPropertySet> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY);
+    //checking Paragraph's Left Margin with expected value
+    sal_Int32 nParaLeftMargin2 = 0;
+    xShape2->getPropertyValue("ParaLeftMargin") >>= nParaLeftMargin2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nParaLeftMargin2);
+    //checking Paragraph's First Line Indent with expected value
+    sal_Int32 nParaFirstLineIndent2 = 0;
+    xShape2->getPropertyValue("ParaFirstLineIndent") >>= nParaFirstLineIndent2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1300), nParaFirstLineIndent2);
+    //Checking the *Text* in TextBox
+    uno::Reference<text::XText> xText2 = uno::Reference<text::XTextRange>(xShape2, uno::UNO_QUERY)->getText();
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess2(xText2, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum2(paraEnumAccess2->createEnumeration());
+    uno::Reference<text::XTextRange> xParagraph2(paraEnum2->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
 }
 
 void SdExportTest::testTdf91378()
