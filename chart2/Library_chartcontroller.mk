@@ -184,6 +184,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/main/SelectionHelper \
     chart2/source/controller/main/ShapeController \
     chart2/source/controller/main/StatusBarCommandDispatch \
+    chart2/source/controller/main/ToolbarController \
     chart2/source/controller/main/UndoActions \
     chart2/source/controller/main/UndoCommandDispatch \
     chart2/source/controller/main/UndoGuard \

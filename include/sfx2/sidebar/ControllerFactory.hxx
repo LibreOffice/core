@@ -39,6 +39,7 @@ public:
         const sal_uInt16 nItemId,
         const ::rtl::OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const sal_Int32 nItemWidth);
 
@@ -47,6 +48,7 @@ private:
         ToolBox* pToolBox,
         const ::rtl::OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XController>& rxController,
         const sal_Int32 nWidth);
 };
 

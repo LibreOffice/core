@@ -669,7 +669,7 @@ void SidebarController::SwitchToDeck (
             {
                 pTitleBar->SetMoreOptionsCommand(
                     rPanelContexDescriptor.msMenuCommand,
-                    mxFrame);
+                    mxFrame, xController);
             }
 
             ++nWriteIndex;

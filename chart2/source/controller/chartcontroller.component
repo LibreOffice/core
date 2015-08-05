@@ -51,4 +51,8 @@
       constructor="org_libreoffice_comp_chart2_sidebar_ChartPanelFactory">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
+  <implementation name="org.libreoffice.chart2.Chart2ToolboxController"
+      constructor="org_libreoffice_chart2_Chart2ToolboxController">
+    <service name="com.sun.star.frame.ToolbarContoller"/>
+  </implementation>
 </component>

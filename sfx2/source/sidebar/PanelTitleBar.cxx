@@ -69,7 +69,8 @@ void PanelTitleBar::dispose()
 }
 
 void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
-                                          const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                          const css::uno::Reference<css::frame::XController>& rxController)
 {
     if (!rsCommandName.equals(msMoreOptionsCommand))
     {
@@ -89,7 +90,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
                     maToolBox.get(),
                     mnMenuItemIndex,
                     msMoreOptionsCommand,
-                    rxFrame,
+                    rxFrame, rxController,
                     VCLUnoHelper::GetInterface(maToolBox.get()),
                     0));
             maToolBox->SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);

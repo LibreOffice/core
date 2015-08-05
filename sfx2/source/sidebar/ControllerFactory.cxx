@@ -42,6 +42,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     const sal_uInt16 nItemId,
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame,
+    const Reference<frame::XController>& rxController,
     const Reference<awt::XWindow>& rxParentWindow,
     const sal_Int32 nWidth)
 {
@@ -49,7 +50,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         CreateToolBarController(
             pToolBox,
             rsCommandName,
-            rxFrame,
+            rxFrame, rxController,
             nWidth));
 
     // Create a controller for the new item.
@@ -137,13 +138,14 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     ToolBox* pToolBox,
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame,
+    const Reference<frame::XController>& rxController,
     const sal_Int32 nWidth)
 {
     try
     {
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         Reference<frame::XUIControllerFactory> xFactory = frame::theToolbarControllerFactory::get( xContext );
-        OUString sModuleName (Tools::GetModuleName(rxFrame->getController()));
+        OUString sModuleName (Tools::GetModuleName(rxController));
 
         if (xFactory.is() && xFactory->hasController(rsCommandName,  sModuleName))
         {

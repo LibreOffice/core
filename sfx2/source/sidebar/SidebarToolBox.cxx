@@ -140,7 +140,7 @@ void SidebarToolBox::CreateController (
     const OUString sCommandName (GetItemCommand(nItemId));
 
     aDescriptor.mxController = sfx2::sidebar::ControllerFactory::CreateToolBoxController(
-                                                this, nItemId, sCommandName, rxFrame,
+                                                this, nItemId, sCommandName, rxFrame, rxFrame->getController(),
                                                 VCLUnoHelper::GetInterface(this), nItemWidth);
     if (aDescriptor.mxController.is())
     {

@@ -475,6 +475,17 @@
           <value>org.libreoffice.comp.dbu.LimitBoxController</value>
         </prop>
       </node>
+      <node oor:name="ChartProperties" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartProperties</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.chart2.ChartDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.libreoffice.chart2.Chart2ToolboxController</value>
+        </prop>
+      </node>
       <node oor:name="c2" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Refresh</value>

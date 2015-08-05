@@ -36,7 +36,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                               const css::uno::Reference<css::frame::XController>& rxController);
 
     virtual void DataChanged(const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
