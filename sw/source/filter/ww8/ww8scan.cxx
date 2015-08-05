@@ -1511,13 +1511,13 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     if (!checkSeek(*pStr, nClxPos))
         return NULL;
 
-    while( true ) // Zaehle Zahl der Grpprls
+    while( true ) // count number of Grpprls
     {
         sal_uInt8 clxt(2);
         pStr->ReadUChar( clxt );
         nLeft--;
         if( 2 == clxt )                         // PLCFfpcd ?
-            break;                              // PLCFfpcd gefunden
+            break;                              // PLCFfpcd found
         if( 1 == clxt )                         // clxtGrpprl ?
         {
             if (nGrpprl == SHRT_MAX)
@@ -1529,7 +1529,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
             return NULL;                        // gone wrong
-        pStr->SeekRel( nLen );                  // ueberlies grpprl
+        pStr->SeekRel( nLen );                  // ignore grpprl
     }
 
     if (!checkSeek(*pStr, nClxPos))
@@ -1557,18 +1557,18 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             if (nLen > pStr->remainingSize())
                 return NULL;
             sal_uInt8* p = new sal_uInt8[nLen+2];         // allocate
-            ShortToSVBT16(nLen, p);             // trage Laenge ein
+            ShortToSVBT16(nLen, p);             // add length
             if (!checkRead(*pStr, p+2, nLen))   // read grpprl
             {
                 delete[] p;
                 return NULL;
             }
-            pPieceGrpprls[nAktGrpprl++] = p;    // trage in Array ein
+            pPieceGrpprls[nAktGrpprl++] = p;    // add to array
         }
         else
-            pStr->SeekRel( nLen );              // ueberlies nicht-Grpprl
+            pStr->SeekRel( nLen );              // non-Grpprl left
     }
-    // lies Piece Table PLCF ein
+    // read Piece Table PLCF
     sal_Int32 nPLCFfLen(0);
     if (pWwF->GetFIBVersion() <= ww::eWW2)
     {
@@ -1761,7 +1761,6 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pSepPLCF;
     delete pPapPLCF;
     delete pChpPLCF;
-    // vergessene Schaeflein
     delete pMainFdoa;
     delete pHdFtFdoa;
     delete pMainTxbx;
@@ -4050,17 +4049,19 @@ long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
     return pBook[nIsEnd]->GetIdx();
 }
 
-// Der Operator ++ hat eine Tuecke: Wenn 2 Bookmarks aneinandergrenzen, dann
-// sollte erst das Ende des ersten und dann der Anfang des 2. erreicht werden.
-// Liegen jedoch 2 Bookmarks der Laenge 0 aufeinander, *muss* von jedem Bookmark
-// erst der Anfang und dann das Ende gefunden werden.
-// Der Fall: ][
-//            [...]
-//           ][
-// ist noch nicht geloest, dabei muesste ich in den Anfangs- und Endindices
-// vor- und zurueckspringen, wobei ein weiterer Index oder ein Bitfeld
-// oder etwas aehnliches zum Merken der bereits abgearbeiteten Bookmarks
-// noetig wird.
+// The operator ++ has a pitfall: If 2 bookmarks adjoin each other,
+// we should first go to the end of the first one
+// and then to the beginning of the second one.
+// But if 2 bookmarks with the length of 0 lie on top of each other,
+// we *must* first find the start and end of each bookmark.
+// The case of: ][
+//               [...]
+//              ][
+// is not solved yet.
+// Because I must jump back and forth in the start- and end-indices then.
+// This would require one more index or bitfield to remember
+// the already processed bookmarks.
+
 void WW8PLCFx_Book::advance()
 {
     if( pBook[0] && pBook[1] && nIMax )
@@ -4353,9 +4354,9 @@ bool WW8PLCFx_AtnBook::getIsEnd() const
 
 #ifndef DUMP
 
-// Am Ende eines Absatzes reichen bei WW6 die Attribute bis hinter das <CR>.
-// Das wird fuer die Verwendung mit dem SW um 1 Zeichen zurueckgesetzt, wenn
-// dadurch kein AErger zu erwarten ist.
+// In the end of an paragraph in WW6 the attribute extends behind the <CR>.
+// This will be reset by one character to be used with SW,
+// if we don't expect trouble thereby.
 void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 {
     //Store old end position for supercool new property finder that uses
@@ -4377,20 +4378,20 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     {
         if ( pPap->nEndPos != WW8_CP_MAX )    // Para adjust
         {
-            nLineEnd = pPap->nEndPos;// nLineEnd zeigt *hinter* das <CR>
-            pPap->nEndPos--;        // Absatzende um 1 Zeichen verkuerzen
+            nLineEnd = pPap->nEndPos;// nLineEnd points *behind* the <CR>
+            pPap->nEndPos--;        // shorten paragraph end by one character
 
-            // gibt es bereits ein Sep-Ende, das auf das jetzige Absatzende
-            // zeigt ?  ... dann auch um 1 Zeichen verkuerzen
+            // Is there already a sep end, which points to the current paragraph end?
+            // Then we also must shorten by one character
             if( pSep->nEndPos == nLineEnd )
                 pSep->nEndPos--;
         }
     }
     else if (&rDesc == pSep)
     {
-        // Sep Adjust Wenn Ende Char-Attr == Absatzende ...
+        // Sep Adjust if end Char-Attr == paragraph end ...
         if( (rDesc.nEndPos == nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
-            rDesc.nEndPos--;            // ... dann um 1 Zeichen verkuerzen
+            rDesc.nEndPos--;            // ... then shorten by one character
     }
 }
 
@@ -4476,7 +4477,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 
     if( MAN_MAINTEXT == nType )
     {
-        // Suchreihenfolge der Attribute
+        // search order of the attributes
         nPLCF = MAN_ANZ_PLCF;
         pField = &aD[0];
         pBkm = &aD[1];
@@ -4503,7 +4504,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     }
     else
     {
-        // Suchreihenfolge der Attribute
+        // search order of the attributes
         nPLCF = 7;
         pField = &aD[0];
         pBkm = ( pBase->pBook ) ? &aD[1] : 0;
@@ -4516,7 +4517,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pPap = &aD[5];
         pSep = &aD[6]; // Dummy
 
-        pAnd = pAtnBkm = pFootnote = pEdn = 0;     // unbenutzt bei SpezText
+        pAnd = pAtnBkm = pFootnote = pEdn = 0;     // not used at SpezText
     }
 
     pChp->pPLCFx = pBase->pChpPLCF;
@@ -4532,7 +4533,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     pSubdocs = pBase->pSubdocs;
     pExtendedAtrds = pBase->pExtendedAtrds;
 
-    switch( nType )                 // Feld-Initialisierung
+    switch( nType )                 // field initialization
     {
         case MAN_HDFT:
             pField->pPLCFx = pBase->pFieldHdFtPLCF;
@@ -4575,9 +4576,9 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     nCpO = pWwFib->GetBaseCp(nType);
 
     if( nStartCp || nCpO )
-        SeekPos( nStartCp );    // PLCFe auf Text-StartPos einstellen
+        SeekPos( nStartCp );    // adjust PLCFe at text StartPos
 
-    // initialisieren der Member-Vars Low-Level
+    // initialization to the member vars Low-Level
     GetChpPLCF()->ResetAttrStartEnd();
     GetPapPLCF()->ResetAttrStartEnd();
     for( sal_uInt16 i=0; i < nPLCF; ++i)
@@ -4604,7 +4605,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
             p->nStartPos = p->nEndPos = WW8_CP_MAX;
     }
 
-    // initialisieren der Member-Vars High-Level
+    // initialization to the member vars High-Level
     for( sal_uInt16 i=0; i<nPLCF; ++i){
         WW8PLCFxDesc* p = &aD[i];
 
@@ -4616,7 +4617,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 
         if( p->pPLCFx->IsSprm() )
         {
-            // Vorsicht: nEndPos muss bereits
+            // Careful: nEndPos must be
             p->pIdStk = new std::stack<sal_uInt16>;
             if ((p == pChp) || (p == pPap))
             {
@@ -4630,7 +4631,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
                     GetNewSprms( *p );
             }
             else
-                GetNewSprms( *p );      // bei allen PLCFen initialisiert sein
+                GetNewSprms( *p );      // initialized at all PLCFs
         }
         else if( p->pPLCFx )
             GetNewNoSprms( *p );
@@ -4643,15 +4644,15 @@ WW8PLCFMan::~WW8PLCFMan()
         delete aD[i].pIdStk;
 }
 
-// 0. welche Attr.-Klasse,
-// 1. ob ein Attr.-Start ist,
-// 2. CP, wo ist naechste Attr.-Aenderung
+// 0. which attr class,
+// 1. if it's a attr start,
+// 2. CP, where is next attr change
 sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
 {
     OSL_ENSURE(nPLCF,"What the hell");
-    long nNext = LONG_MAX;  // SuchReihenfolge:
+    long nNext = LONG_MAX;  // search order:
     sal_uInt16 nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
-    bool bStart = true;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
+    bool bStart = true;     // now find beginnings ( ( SEP ), PAP, CHP )
     const WW8PLCFxDesc* pD;
     for (sal_uInt16 i=0; i < nPLCF; ++i)
     {
@@ -4660,7 +4661,7 @@ sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
         {
             if( (pD->nEndPos < nNext) && (pD->nStartPos == WW8_CP_MAX) )
             {
-                // sonst ist Anfang = Ende
+                // otherwise start = end
                 nNext = pD->nEndPos;
                 nNextIdx = i;
                 bStart = false;
@@ -4687,7 +4688,7 @@ sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
     return nNextIdx;
 }
 
-// gibt die CP-Pos der naechsten Attribut-Aenderung zurueck
+// gives the CP pos of the next attr change
 WW8_CP WW8PLCFMan::Where() const
 {
     long l;
@@ -4697,8 +4698,8 @@ WW8_CP WW8PLCFMan::Where() const
 
 void WW8PLCFMan::SeekPos( long nNewCp )
 {
-    pChp->pPLCFx->SeekPos( nNewCp + nCpO ); // Attribute neu
-    pPap->pPLCFx->SeekPos( nNewCp + nCpO ); // aufsetzen
+    pChp->pPLCFx->SeekPos( nNewCp + nCpO ); // create new attr
+    pPap->pPLCFx->SeekPos( nNewCp + nCpO );
     pField->pPLCFx->SeekPos( nNewCp );
     if( pPcd )
         pPcd->pPLCFx->SeekPos( nNewCp + nCpO );
@@ -4736,7 +4737,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
 
-    // Pruefen !!!
+    // verifying !!!
 
     pRes->nMemLen = 0;
 
@@ -4755,7 +4756,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->nCp2OrIdx = p->nCp2OrIdx;
     if ((p == pFootnote) || (p == pEdn) || (p == pAnd))
         pRes->nMemLen = p->nSprmsLen;
-    else if (p->nSprmsLen >= maSprmParser.MinSprmLen()) //Normal
+    else if (p->nSprmsLen >= maSprmParser.MinSprmLen()) //normal
     {
         // Length of actual sprm
         pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos);
@@ -4809,7 +4810,7 @@ void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 
 void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 {
-    pRes->nMemLen = -1;     // Ende-Kennzeichen
+    pRes->nMemLen = -1;     // end tag
 
     if( &aD[nIdx] == pBkm )
         pRes->nSprmId = eBKN;
@@ -4843,30 +4844,30 @@ bool WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
 
 void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
 {
-    WW8PLCFxDesc* p = &aD[nIdx];    // Sprm-Klasse(!) ermitteln
+    WW8PLCFxDesc* p = &aD[nIdx];    // determine sprm class(!)
 
     p->bFirstSprm = false;
     if( bStart )
     {
         const sal_uInt16 nLastId = GetId(p);
-        p->pIdStk->push(nLastId);   // merke Id fuer Attribut-Ende
+        p->pIdStk->push(nLastId);   // remember Id for attribute end
 
         if( p->nSprmsLen )
         {   /*
-                Pruefe, ob noch Sprm(s) abzuarbeiten sind
+                Check, if we have to process more sprm(s).
             */
             if( p->pMemPos )
             {
                 // Length of last sprm
                 const sal_uInt16 nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos);
 
-                // Gesamtlaenge Sprms um SprmLaenge verringern
+                // Reduce length of all sprms by length of last sprm
                 p->nSprmsLen -= nSprmL;
 
-                // Pos des evtl. naechsten Sprm
+                // pos of next possible sprm
                 if (p->nSprmsLen < maSprmParser.MinSprmLen())
                 {
-                    // sicherheitshalber auf Null setzen, da Enden folgen!
+                    // preventively set to 0, because the end follows!
                     p->pMemPos = 0;
                     p->nSprmsLen = 0;
                 }
@@ -4877,7 +4878,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nSprmsLen = 0;
         }
         if (p->nSprmsLen < maSprmParser.MinSprmLen())
-            p->nStartPos = WW8_CP_MAX;    // es folgen Enden
+            p->nStartPos = WW8_CP_MAX;    // the ending follows
     }
     else
     {
@@ -4999,9 +5000,9 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
         }
     }
     else
-    {                                  // NoSprm ohne Ende
+    {                                  // NoSprm without end
         p->pPLCFx->advance();
-        p->pMemPos = 0;                     // MemPos ungueltig
+        p->pMemPos = 0;                     // MemPos invalid
         p->nSprmsLen = 0;
         GetNewNoSprms( *p );
     }
@@ -5024,10 +5025,9 @@ void WW8PLCFMan::advance()
     }
 }
 
-// Rueckgabe true fuer Anfang eines Attributes oder Fehler,
-//           false fuer Ende d. Attr
-// Restliche Rueckgabewerte werden in der vom Aufrufer zu stellenden Struktur
-// WW8PclxManResults geliefert.
+// return true for the beginning of an attribute or error,
+//           false for the end of an attribute
+// remaining return values are delivered to the caller from WW8PclxManResults.
 bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
@@ -5074,7 +5074,7 @@ sal_uInt16 WW8PLCFMan::GetColl() const
         return  pPap->pPLCFx->GetIstd();
     else
     {
-        OSL_ENSURE( false, "GetColl ohne PLCF_Pap" );
+        OSL_ENSURE( false, "GetColl without PLCF_Pap" );
         return 0;
     }
 }
@@ -5305,11 +5305,11 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     memset(this, 0, sizeof(*this));
     sal_uInt8 aBits1;
     sal_uInt8 aBits2;
-    sal_uInt8 aVer8Bits1;    // nur ab WinWord 8 benutzt
+    sal_uInt8 aVer8Bits1;    // only used starting with WinWord 8
     rSt.Seek( nOffset );
     /*
-        Wunsch-Nr vermerken, File-Versionsnummer ermitteln
-        und gegen Wunsch-Nr. checken !
+        note desired number, identify file version number
+        and check against desired number!
     */
     nVersion = nWantedVersion;
     rSt.ReadUInt16( wIdent );
@@ -5323,43 +5323,43 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         switch( nVersion )
         {
             case 6:
-                nFibMin = 0x0065;   // von 101 WinWord 6.0
+                nFibMin = 0x0065;   // from 101 WinWord 6.0
                                     //     102    "
-                                    // und 103 WinWord 6.0 fuer Macintosh
+                                    // and 103 WinWord 6.0 for Macintosh
                                     //     104    "
-                nFibMax = 0x0069;   // bis 105 WinWord 95
+                nFibMax = 0x0069;   // to 105 WinWord 95
                 break;
             case 7:
-                nFibMin = 0x0069;   // von 105 WinWord 95
-                nFibMax = 0x0069;   // bis 105 WinWord 95
+                nFibMin = 0x0069;   // from 105 WinWord 95
+                nFibMax = 0x0069;   // to 105 WinWord 95
                 break;
             case 8:
-                nFibMin = 0x006A;   // von 106 WinWord 97
-                nFibMax = 0x00c1;   // bis 193 WinWord 97 (?)
+                nFibMin = 0x006A;   // from 106 WinWord 97
+                nFibMax = 0x00c1;   // to 193 WinWord 97 (?)
                 break;
             default:
-                nFibMin = 0;            // Programm-Fehler!
+                nFibMin = 0;            // programm error!
                 nFibMax = 0;
                 nFib    = 1;
-                OSL_ENSURE( false, "Es wurde vergessen, nVersion zu kodieren!" );
+                OSL_ENSURE( false, "It was forgotten to encode nVersion!" );
                 break;
         }
         if ( (nFib < nFibMin) || (nFib > nFibMax) )
         {
-            nFibError = ERR_SWG_READ_ERROR; // Error melden
-            return;                         // und hopp raus!
+            nFibError = ERR_SWG_READ_ERROR; // report error
+            return;
         }
     }
 
     ww::WordVersion eVer = GetFIBVersion();
 
-    // Hilfs-Varis fuer Ver67:
+    // helper vars for Ver67:
     sal_Int16 pnChpFirst_Ver67=0;
     sal_Int16 pnPapFirst_Ver67=0;
     sal_Int16 cpnBteChp_Ver67=0;
     sal_Int16 cpnBtePap_Ver67=0;
 
-    // und auf gehts: FIB einlesen
+    // read FIB
     rSt.ReadInt16( lid );
     rSt.ReadInt16( pnNext );
     rSt.ReadUChar( aBits1 );
@@ -5368,8 +5368,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadUInt16( nHash );
     rSt.ReadUInt16( nKey );
     rSt.ReadUChar( envr );
-    rSt.ReadUChar( aVer8Bits1 );      // unter Ver67  nur leeres Reservefeld
-                            // Inhalt von aVer8Bits1
+    rSt.ReadUChar( aVer8Bits1 );      // only have an empty reserve field under Ver67
+                            // content from aVer8Bits1
 
                             // sal_uInt8 fMac              :1;
                             // sal_uInt8 fEmptySpecial     :1;
@@ -5382,7 +5382,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadInt32( fcMin );
     rSt.ReadInt32( fcMac );
 
-// Einschub fuer WW8
+// insertion for WW8
     if (IsEightPlus(eVer))
     {
         rSt.ReadUInt16( csw );
@@ -5395,7 +5395,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.SeekRel( 9 * sizeof( sal_Int16 ) );
 
         /*
-        // dies sind die 9 unused Felder:
+        // these are the 9 unused fields:
         && (bVer67 || WW8ReadINT16(  rSt, pnFbpChpFirst_W6          ))  // 1
         && (bVer67 || WW8ReadINT16(  rSt, pnChpFirst_W6                 ))  // 2
         && (bVer67 || WW8ReadINT16(  rSt, cpnBteChp_W6                  ))  // 3
@@ -5410,15 +5410,15 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadUInt16( clw );
     }
 
-// Ende des Einschubs fuer WW8
+// end of the insertion for WW8
 
         // Marke: "rglw"  Beginning of the array of longs
     rSt.ReadInt32( cbMac );
 
-        // 2 Longs uebergehen, da unwichtiger Quatsch
+        // ignore 2 longs, because they are unimportant
     rSt.SeekRel( 2 * sizeof( sal_Int32) );
 
-        // weitere 2 Longs nur bei Ver67 ueberspringen
+        // skipping 2 more longs only at Ver67
     if (IsSevenMinus(eVer))
         rSt.SeekRel( 2 * sizeof( sal_Int32) );
 
@@ -5431,12 +5431,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadInt32( ccpTxbx );
     rSt.ReadInt32( ccpHdrTxbx );
 
-        // weiteres Long nur bei Ver67 ueberspringen
+        // only skip one more long at Ver67
     if (IsSevenMinus(eVer))
         rSt.SeekRel( 1 * sizeof( sal_Int32) );
     else
     {
-// Einschub fuer WW8
+// insertion for WW8
         rSt.ReadInt32( pnFbpChpFirst );
         rSt.ReadInt32( pnChpFirst );
         rSt.ReadInt32( cpnBteChp );
@@ -5451,7 +5451,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadUInt16( cfclcb );
     }
 
-// Ende des Einschubs fuer WW8
+// end of the insertion for WW8
 
     // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
     rSt.ReadInt32( fcStshfOrig );
@@ -5539,7 +5539,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadInt32( fcSttbfAtnbkmk );
     lcbSttbfAtnbkmk = Readcb(rSt, eVer);
 
-    // weiteres short nur bei Ver67 ueberspringen
+    // only skip more shot at Ver67
     if (IsSevenMinus(eVer))
     {
         if (eVer == ww::eWW1)
@@ -5610,7 +5610,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
 
     if( 0 == rSt.GetError() )
     {
-        // Bit-Flags setzen
+        // set bit flag
         fDot        =   aBits1 & 0x01       ;
         fGlsy       = ( aBits1 & 0x02 ) >> 1;
         fComplex    = ( aBits1 & 0x04 ) >> 2;
@@ -5626,8 +5626,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         // dummy    = ( aBits2 & 0x80 ) >> 7;
 
         /*
-            ggfs. Ziel-Varaiblen, aus xxx_Ver67 fuellen
-            oder Flags setzen
+            p.r.n. fill targeted variable with xxx_Ver67
+            or set flags
         */
         if (IsSevenMinus(eVer))
         {
@@ -5646,9 +5646,9 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
           fWord2000Saved    = ( aVer8Bits1  & 0x20 ) >> 5;
 
             /*
-                speziell fuer WW8:
-                ermittle die Werte fuer PLCF LST und PLF LFO
-                und PLCF fuer TextBox-Break-Deskriptoren
+                especially for WW8:
+                identify the values for PLCF and PLF LFO
+                and PLCF for the textbox break descriptors
             */
             long nOldPos = rSt.Tell();
 
@@ -5697,7 +5697,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     }
     else
     {
-        nFibError = ERR_SWG_READ_ERROR;     // Error melden
+        nFibError = ERR_SWG_READ_ERROR;     // report error
     }
 }
 
@@ -5714,7 +5714,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
         nProduct = 0x204D;
         fDot = bDot;
 
-        csw = 0x0e;     // muss das sein ???
+        csw = 0x0e;     // Is this really necessary???
         cfclcb = 0x88;  //      -""-
         clw = 0x16;     //      -""-
         pnFbpChpFirst = pnFbpPapFirst = pnFbpLvcFirst = 0x000fffff;
@@ -5814,7 +5814,7 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt32( pData, fcMin );
     Set_UInt32( pData, fcMac );
 
-// Einschub fuer WW8
+// insertion for WW8
 
     // Marke: "rgsw"  Beginning of the array of shorts
     if( bVer8 )
@@ -5829,7 +5829,7 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
         Set_UInt16( pData, clw );
     }
 
-// Ende des Einschubs fuer WW8
+// end of the insertion for WW8
 
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, cbMac );
@@ -5855,10 +5855,10 @@ bool WW8Fib::Write(SvStream& rStrm)
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
     rStrm.Seek( nPos );
 
-    // 2 Longs uebergehen, da unwichtiger Quatsch
+    // ignore 2 longs, because they are unimportant
     pData += 2 * sizeof( sal_Int32);
 
-    // weitere 2 Longs nur bei Ver67 ueberspringen
+    // skipping 2 more longs only at Ver67
     if( !bVer8 )
         pData += 2 * sizeof( sal_Int32);
 
@@ -5871,11 +5871,11 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, ccpTxbx );
     Set_UInt32( pData, ccpHdrTxbx );
 
-        // weiteres Long nur bei Ver67 ueberspringen
+        // only skip one more long at Ver67
     if( !bVer8 )
         pData += 1 * sizeof( sal_Int32);
 
-// Einschub fuer WW8
+// insertion for WW8
     if( bVer8 )
     {
         Set_UInt32( pData, pnFbpChpFirst );
@@ -5891,7 +5891,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, fcIslandLim );
         Set_UInt16( pData, cfclcb );
     }
-// Ende des Einschubs fuer WW8
+// end of the insertion for WW8
 
     // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
     Set_UInt32( pData, fcStshfOrig );
@@ -5971,7 +5971,7 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, fcSttbfAtnbkmk );
     Set_UInt32( pData, lcbSttbfAtnbkmk );
 
-    // weiteres short nur bei Ver67 ueberspringen
+    // only skip one more short at Ver67
     if( !bVer8 )
     {
         pData += 1*sizeof( sal_Int16);
@@ -5981,15 +5981,15 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt16( pData, (sal_uInt16)cpnBtePap );
     }
 
-    Set_UInt32( pData, fcPlcfdoaMom ); // nur bei Ver67, in Ver8 unused
-    Set_UInt32( pData, lcbPlcfdoaMom ); // nur bei Ver67, in Ver8 unused
-    Set_UInt32( pData, fcPlcfdoaHdr ); // nur bei Ver67, in Ver8 unused
-    Set_UInt32( pData, lcbPlcfdoaHdr ); // nur bei Ver67, in Ver8 unused
+    Set_UInt32( pData, fcPlcfdoaMom ); // only at Ver67, in Ver8 unused
+    Set_UInt32( pData, lcbPlcfdoaMom ); // only at Ver67, in Ver8 unused
+    Set_UInt32( pData, fcPlcfdoaHdr ); // only at Ver67, in Ver8 unused
+    Set_UInt32( pData, lcbPlcfdoaHdr ); // only at Ver67, in Ver8 unused
 
-    Set_UInt32( pData, fcPlcfspaMom ); // in Ver67 leere Reserve
-    Set_UInt32( pData, lcbPlcfspaMom ); // in Ver67 leere Reserve
-    Set_UInt32( pData, fcPlcfspaHdr ); // in Ver67 leere Reserve
-    Set_UInt32( pData, lcbPlcfspaHdr ); // in Ver67 leere Reserve
+    Set_UInt32( pData, fcPlcfspaMom ); // in Ver67 empty reserve
+    Set_UInt32( pData, lcbPlcfspaMom ); // in Ver67 empty reserve
+    Set_UInt32( pData, fcPlcfspaHdr ); // in Ver67 empty reserve
+    Set_UInt32( pData, lcbPlcfspaHdr ); // in Ver67 empty reserve
 
     Set_UInt32( pData, fcPlcfAtnbkf );
     Set_UInt32( pData, lcbPlcfAtnbkf );
@@ -6007,8 +6007,8 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbPlcffldEdn );
     Set_UInt32( pData, fcPlcfpgdEdn );
     Set_UInt32( pData, lcbPlcfpgdEdn );
-    Set_UInt32( pData, fcDggInfo ); // in Ver67 leere Reserve
-    Set_UInt32( pData, lcbDggInfo ); // in Ver67 leere Reserve
+    Set_UInt32( pData, fcDggInfo ); // in Ver67 empty reserve
+    Set_UInt32( pData, lcbDggInfo ); // in Ver67 empty reserve
     Set_UInt32( pData, fcSttbfRMark );
     Set_UInt32( pData, lcbSttbfRMark );
     Set_UInt32( pData, fcSttbfCaption );
@@ -6017,8 +6017,8 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbSttbAutoCaption );
     Set_UInt32( pData, fcPlcfwkb );
     Set_UInt32( pData, lcbPlcfwkb );
-    Set_UInt32( pData, fcPlcfspl ); // in Ver67 leere Reserve
-    Set_UInt32( pData, lcbPlcfspl ); // in Ver67 leere Reserve
+    Set_UInt32( pData, fcPlcfspl ); // in Ver67 empty reserve
+    Set_UInt32( pData, lcbPlcfspl ); // in Ver67 empty reserve
     Set_UInt32( pData, fcPlcftxbxText );
     Set_UInt32( pData, lcbPlcftxbxText );
     Set_UInt32( pData, fcPlcffldTxbx );
@@ -6112,7 +6112,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         {
             if (nRemaining < sizeof(cbStshi))
                 return;
-            // lies die Laenge der in der Datei gespeicherten Struktur
+            // reads the length of the structure in the file
             rSt.ReadUInt16( cbStshi );
             nRemaining-=2;
         }
@@ -6158,12 +6158,12 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         if ( 20 > nRead ) break;
         rSt.ReadUInt16( ftcBi );
 
-        // ggfs. den Rest ueberlesen
+        // p.r.n. ignore the rest
         if( 20 < nRead )
             rSt.SeekRel( nRead-20 );
     }
-    while( false ); // Trick: obiger Block wird genau einmal durchlaufen
-                //   und kann vorzeitig per "break" verlassen werden.
+    while( false ); // trick: the block above will be passed through exactly one time
+                //            and that's why we can early exit with "break".
 
     nRemaining -= cbStshi;
 
@@ -6177,21 +6177,21 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     cstd = std::min(cstd, nMaxPossibleRecords);
 }
 
-// Read1STDFixed() liest ein Style ein. Wenn der Style vollstaendig vorhanden
-// ist, d.h. kein leerer Slot, dann wird Speicher alloziert und ein Pointer auf
-// die ( evtl. mit Nullen aufgefuellten ) STD geliefert. Ist es ein leerer
-// Slot, dann wird ein Nullpointer zurueckgeliefert.
+// Read1STDFixed() reads a style. If the style is completely existent,
+// so it has no empty slot, we should allocate memory and a pointer should
+// reference to STD (perhaps filled with 0). If the slot is empty,
+// it will return a null pointer.
 WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 {
     WW8_STD* pStd = 0;
 
     sal_uInt16 cbStd(0);
-    rSt.ReadUInt16( cbStd );   // lies Laenge
+    rSt.ReadUInt16( cbStd );   // read length
 
     const sal_uInt16 nRead = cbSTDBaseInFile;
     if( cbStd >= cbSTDBaseInFile )
     {
-        // Fixed part vollst. vorhanden
+        // Fixed part completely available
 
         // read fixed part of STD
         pStd = new WW8_STD;
@@ -6225,30 +6225,28 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             a16Bit = 0;
             rSt.ReadUInt16( pStd->bchUpe );
 
-            // ab Ver8 sollten diese beiden Felder dazukommen:
+            // from Ver8 this two fields should be added:
             if(10 > nRead ) break;
             a16Bit = 0;
             rSt.ReadUInt16( a16Bit );
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
             pStd->fHidden    = ( a16Bit & 0x0002 ) >> 1;
-
-            // man kann nie wissen: vorsichtshalber ueberlesen
-            // wir eventuelle Fuellsel, die noch zum BASE-Part gehoeren...
+            // You never know: cautionary skipped
             if( 10 < nRead )
                 rSt.SeekRel( nRead-10 );
         }
-        while( false ); // Trick: obiger Block wird genau einmal durchlaufen
-                    //   und kann vorzeitig per "break" verlassen werden.
+        while( false ); // trick: the block above will passed through exactly one time
+                    //   and can be left early with a "break"
 
         if( (0 != rSt.GetError()) || !nRead )
-            DELETEZ( pStd );        // per NULL den Error melden
+            DELETEZ( pStd );        // report error with NULL
 
       rSkip = cbStd - cbSTDBaseInFile;
     }
     else
-    {           // Fixed part zu kurz
+    {           // Fixed part too short
         if( cbStd )
-            rSt.SeekRel( cbStd );           // ueberlies Reste
+            rSt.SeekRel( cbStd );           // skip leftovers
         rSkip = 0;
     }
     if( pcbStd )
@@ -6261,18 +6259,18 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
     // Attention: MacWord-Documents have their Stylenames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
 
-    WW8_STD* pStd = Read1STDFixed( rSkip, pcbStd );         // lese STD
+    WW8_STD* pStd = Read1STDFixed( rSkip, pcbStd );         // read STD
 
-    // String gewuenscht ?
+    // string desired?
     if( pString )
-    {   // echter Style ?
+    {   // real style?
         if ( pStd )
         {
             switch( rFib.nVersion )
             {
                 case 6:
                 case 7:
-                    // lies Pascal-String
+                    // read pascal string
                     *pString = read_uInt8_BeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
                     // leading len and trailing zero --> 2
                     rSkip -= pString->getLength() + 2;
@@ -6308,14 +6306,14 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
             }
         }
         else
-            pString->clear();   // Kann keinen Namen liefern
+            pString->clear();   // can not return a name
     }
     return pStd;
 }
 
 struct WW8_FFN_Ver6 : public WW8_FFN_BASE
 {
-    // ab Ver6
+    // from Ver6
     sal_Char szFfn[65]; // 0x6 bzw. 0x40 ab Ver8 zero terminated string that
                         // records name of font.
                         // Maximal size of szFfn is 65 characters.
@@ -6326,16 +6324,16 @@ struct WW8_FFN_Ver6 : public WW8_FFN_BASE
 };
 struct WW8_FFN_Ver8 : public WW8_FFN_BASE
 {
-    // ab Ver8 sind folgende beiden Felder eingeschoben,
-    // werden von uns ignoriert.
+    // from Ver8 two more fields are present,
+    // we ignore this.
     sal_Char panose[ 10 ];  //  0x6   PANOSE
     sal_Char fs[ 24     ];  //  0x10  FONTSIGNATURE
 
-    // ab Ver8 als Unicode
+    // from Ver8 as unicode
     sal_uInt16 szFfn[65];   // 0x6 bzw. 0x40 ab Ver8 zero terminated string that
                         // records name of font.
                         // Maximal size of szFfn is 65 characters.
-                        // Vorsicht: Dieses Array kann auch kleiner sein!!!
+                        // Attention: This array can be smaller!!!
                         // Possibly followed by a second sz which records the
                         // name of an alternate font to use if the first named
                         // font does not exist on this system.
@@ -6486,7 +6484,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
                 p->prg       =  c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
-                // ein Reserve-Bit ueberspringen
+                // skip a reserve bit
                 p->ff        = (c2 & 0x70) >> 4;
 
                 p->wWeight   = SVBT16ToShort( *reinterpret_cast<SVBT16*>(&pVer6->wWeight) );
@@ -6550,7 +6548,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
                 p->prg = c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
-                // ein Reserve-Bit ueberspringen
+                // skip a reserve bit
                 p->ff = (c2 & 0x70) >> 4;
 
                 p->wWeight = SVBT16ToShort(*reinterpret_cast<SVBT16*>(pVer8));
@@ -6589,7 +6587,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 // #i43762# check font name for illegal characters
                 lcl_checkFontname( p->sFontname );
 
-                // Zeiger auf Ursprungsarray einen Font nach hinten setzen
+                // set pointer one font back to original array
                 pRaw += p->cbFfnM1;
                 nRemainingFFn -= p->cbFfnM1;
                 ++nValidFonts;
@@ -6609,18 +6607,19 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
     return &pFontA[ nNum ];
 }
 
-// Suche zu einem Header / Footer den Index in der WW-Liste von Headern / Footern
+// Search after a header/footer for a index in the ww list from header/footer
 
-// Pferdefuesse bei WinWord6 und -7:
-// 1) Am Anfang des Einlesens muss WWPLCF_HdFt mit Fib und Dop konstruiert werden
-// 2) Der Haupttext muss sequentiell ueber alle Sections gelesen werden
-// 3) Fuer jedes vorkommende Header / Footer - Attribut des Haupttextes
-//  ( Darf pro Section maximal eins sein ) muss UpdateIndex() genau einmal
-//  mit dem Parameter des Attributes gerufen werden. Dieser Aufruf muss *nach*
-//  dem letzten Aufruf von GetTextPos() passieren.
-// 4) GetTextPos() darf mit genau einem der obenstehen WW_... aufgerufen werden
-//   ( nicht verodern ! )
-// -> dann liefert GetTextPos() vielleicht auch ein richtiges Ergebnis
+// specials for WinWord6 and -7:
+//
+// 1) At the start of reading we must build WWPLCF_HdFt with Fib and Dop
+// 2) The main text must be read sequentially over all sections
+// 3) For every header/footer in the main text, we must call UpdateIndex()
+//    exactly once with the parameter from the attribute.
+//    (per section can be maximally one). This call must take place *after*
+//    the last call from GetTextPos().
+// 4) GetTextPos() can be called with exactly one flag
+//    out of WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST} (Do not change!)
+//  -> maybe we can get a right result then
 
 WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
     : aPLCF(*pSt, rFib.fcPlcfhdd , rFib.lcbPlcfhdd , 0)
@@ -6640,11 +6639,11 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
       footers in this PLCF, UpdateIndex does that task.
       */
     for( sal_uInt8 nI = 0x1; nI <= 0x20; nI <<= 1 )
-        if( nI & rDop.grpfIhdt )                // Bit gesetzt ?
+        if( nI & rDop.grpfIhdt )                // bit set?
             nIdxOffset++;
 
-    nTextOfs = rFib.ccpText + rFib.ccpFootnote;  // Groesse des Haupttextes
-                                            // und der Fussnoten
+    nTextOfs = rFib.ccpText + rFib.ccpFootnote;  // size of the main text
+                                            // and from the footnotes
 }
 
 bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart,
@@ -6662,7 +6661,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
         if( nI > 0x20 )
             return false;               // not found
     }
-                                        // nIdx ist HdFt-Index
+                                        // nIdx is HdFt-Index
     WW8_CP nEnd;
     void* pData;
 
@@ -6705,13 +6704,13 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
     sal_uInt32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
     rSt.Seek( nPos );
     if (2 > nSize || nRead != rSt.Read(pData, nRead))
-        nDopError = ERR_SWG_READ_ERROR;     // Error melden
+        nDopError = ERR_SWG_READ_ERROR;     // report error
     else
     {
         if (nMaxDopSize > nRead)
             memset( pData + nRead, 0, nMaxDopSize - nRead );
 
-        // dann mal die Daten auswerten
+        // interpret the data
         sal_uInt32 a32Bit;
         sal_uInt16 a16Bit;
         sal_uInt8   a8Bit;
@@ -6820,9 +6819,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
         zkSaved     = ( a16Bit & 0x3000 ) >> 12;
         fRotateFontW6 = ( a16Bit & 0x4000 ) >> 14;
         iGutterPos = ( a16Bit &  0x8000 ) >> 15;
-        /*
-            bei nFib >= 103 gehts weiter:
-        */
+
         if (nFib >= 103) // Word 6/32bit, 95, 97, 2000, 2002, 2003, 2007
         {
             a32Bit = Get_ULong( pData );     // 84 0x54
@@ -6833,9 +6830,6 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
         if (nFib <= 104) // Word 95
             fUsePrinterMetrics = true;
 
-        /*
-            bei nFib > 105 gehts weiter:
-        */
         if (nFib > 105) // Word 97, 2000, 2002, 2003, 2007
         {
             adt = Get_Short( pData );            // 88 0x58
@@ -6846,7 +6840,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
             pData += sizeof( WW8_DOGRID );
 
             a16Bit = Get_UShort( pData );        // 410 0x19a
-            // die untersten 9 Bit sind uninteressant
+            // the following 9 bit are uninteresting
             fHtmlDoc                = ( a16Bit &  0x0200 ) >>  9 ;
             fSnapBorder             = ( a16Bit &  0x0800 ) >> 11 ;
             fIncludeHeader          = ( a16Bit &  0x1000 ) >> 12 ;
@@ -7133,7 +7127,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     memset( aData, 0, nMaxDopLen );
     sal_uInt8* pData = aData;
 
-    // dann mal die Daten auswerten
+    // analyse the data
     sal_uInt16 a16Bit;
     sal_uInt8   a8Bit;
 
@@ -7266,7 +7260,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         memcpy( pData, &dogrid, sizeof( WW8_DOGRID ));
         pData += sizeof( WW8_DOGRID );
 
-        a16Bit = 0x12;      // lvl auf 9 setzen        // 410 0x19a
+        a16Bit = 0x12;      // set lvl to 9            // 410 0x19a
         if( fHtmlDoc )          a16Bit |= 0x0200;
         if( fSnapBorder )       a16Bit |= 0x0800;
         if( fIncludeHeader )    a16Bit |= 0x1000;
@@ -7513,7 +7507,7 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
     while (nLen >= MinSprmLen())
     {
         const sal_uInt16 nAktId = GetSprmId(pSprms);
-        // gib Zeiger auf Daten
+        // set pointer to data
         sal_uInt16 nSize = GetSprmSize(nAktId, pSprms);
 
         bool bValid = nSize <= nLen;
