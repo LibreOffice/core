@@ -50,6 +50,7 @@
 #include <oox/token/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/ole/vbaexport.hxx>
 #include <excelvbaproject.hxx>
 
 #include <sfx2/docfile.hxx>
@@ -1090,6 +1091,9 @@ bool XclExpXmlStream::exportDocument()
                                     Reference <XOutputStream>(),
                                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
                                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
+
+    VbaExport aExport(getModel());
+    aExport.exportVBA();
 
     // destruct at the end of the block
     {
