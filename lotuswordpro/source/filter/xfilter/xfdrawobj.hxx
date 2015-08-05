@@ -98,7 +98,7 @@ public:
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
-    XFContentContainer  m_aContents;
+    rtl::Reference<XFContentContainer>  m_aContents;
     OUString        m_strTextStyle;
     double          m_fRotate;
     XFPoint         m_aRotatePoint;

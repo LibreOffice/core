@@ -72,7 +72,7 @@ namespace dbaccess
 
     typedef ::std::pair<ORowSetRow,::std::pair<sal_Int32,css::uno::Reference< css::sdbc::XRow> > > OKeySetValue;
     typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
-    typedef ::std::map<sal_Int32,ORowSetValueVector > OUpdatedParameter;
+    typedef ::std::map<sal_Int32, rtl::Reference<ORowSetValueVector> > OUpdatedParameter;
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
@@ -83,7 +83,7 @@ namespace dbaccess
         ::std::vector< OUString >                               m_aAutoColumns;  // contains all columns which are autoincrement ones
 
         OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
-        ORowSetValueVector                                      m_aParameterValueForCache;
+        rtl::Reference<ORowSetValueVector>                      m_aParameterValueForCache;
         ::std::unique_ptr<SelectColumnsMetaData>                m_pKeyColumnNames;      // contains all key column names
         ::std::unique_ptr<SelectColumnsMetaData>                m_pColumnNames;         // contains all column names
         ::std::unique_ptr<SelectColumnsMetaData>                m_pParameterNames;      // contains all parameter names

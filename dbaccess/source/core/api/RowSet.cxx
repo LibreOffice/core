@@ -134,6 +134,8 @@ ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
     :ORowSet_BASE1(m_aMutex)
     ,ORowSetBase( _rxContext, ORowSet_BASE1::rBHelper, &m_aMutex )
     ,m_pParameters( NULL )
+    ,m_aPrematureParamValues(new ORowSetValueVector)
+    ,m_aParameterValueForCache(new ORowSetValueVector)
     ,m_aRowsetListeners(*m_pMutex)
     ,m_aApproveListeners(*m_pMutex)
     ,m_aRowsChangeListener(*m_pMutex)
@@ -170,7 +172,7 @@ ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
     sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
     sal_Int32 nBT   = PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
-    m_aPrematureParamValues.get().resize( 0 );
+    m_aPrematureParamValues->get().resize( 0 );
 
     // sdb.RowSet Properties
     registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   cppu::UnoType<XConnection>::get());
@@ -1681,14 +1683,14 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
 {
     impl_ensureStatement_throw();
 
-    m_aParameterValueForCache.get().resize(1);
+    m_aParameterValueForCache->get().resize(1);
     Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
-    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
+    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues->get().size() );
     for ( size_t i=1; i<=nParamCount; ++i )
     {
         ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
         ::dbtools::setObjectWithInfo( xParam, i, rParamValue.makeAny(), rParamValue.getTypeKind() );
-        m_aParameterValueForCache.get().push_back(rParamValue);
+        m_aParameterValueForCache->get().push_back(rParamValue);
     }
     m_bParametersDirty = false;
 
@@ -1703,7 +1705,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     {
         DELETEZ(m_pCache);
     }
-    m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter,m_nMaxRows );
+    m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew, *m_aParameterValueForCache.get(),m_aFilter,m_nMaxRows );
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
     {
         m_nPrivileges = Privilege::SELECT;
@@ -2432,10 +2434,10 @@ void ORowSet::impl_initParametersContainer_nothrow()
 
     m_pParameters = new param::ParameterWrapperContainer( m_xComposer.get() );
     // copy the premature parameters into the final ones
-    size_t nParamCount( ::std::min( m_pParameters->size(), m_aPrematureParamValues.get().size() ) );
+    size_t nParamCount( ::std::min( m_pParameters->size(), m_aPrematureParamValues->get().size() ) );
     for ( size_t i=0; i<nParamCount; ++i )
     {
-        (*m_pParameters)[i] = m_aPrematureParamValues.get()[i];
+        (*m_pParameters)[i] = m_aPrematureParamValues->get()[i];
     }
 }
 
@@ -2446,10 +2448,10 @@ void ORowSet::impl_disposeParametersContainer_nothrow()
 
     // copy the actual values to our "premature" ones, to preserve them for later use
     size_t nParamCount( m_pParameters->size() );
-    m_aPrematureParamValues.get().resize( nParamCount );
+    m_aPrematureParamValues->get().resize( nParamCount );
     for ( size_t i=0; i<nParamCount; ++i )
     {
-        m_aPrematureParamValues.get()[i] = (*m_pParameters)[i];
+        m_aPrematureParamValues->get()[i] = (*m_pParameters)[i];
     }
 
     m_pParameters->dispose();
@@ -2480,9 +2482,9 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
         }
     }
 
-    if ( m_aPrematureParamValues.get().size() < (size_t)parameterIndex )
-        m_aPrematureParamValues.get().resize( parameterIndex );
-    return m_aPrematureParamValues.get()[ parameterIndex - 1 ];
+    if ( m_aPrematureParamValues->get().size() < (size_t)parameterIndex )
+        m_aPrematureParamValues->get().resize( parameterIndex );
+    return m_aPrematureParamValues->get()[ parameterIndex - 1 ];
 }
 
 // XParameters
@@ -2655,7 +2657,7 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException,
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
-    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
+    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues->get().size() );
     for ( size_t i=1; i<=nParamCount; ++i )
         getParameterStorage( (sal_Int32)i ).setNull();
     m_aParametersSet.clear();

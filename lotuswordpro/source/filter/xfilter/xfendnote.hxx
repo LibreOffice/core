@@ -79,7 +79,7 @@ public:
 private:
     OUString   m_strID;
     OUString   m_strLabel;
-    XFContentContainer  m_aContents;
+    rtl::Reference<XFContentContainer>  m_aContents;
 };
 
 inline XFEndNote::XFEndNote()

@@ -3560,8 +3560,8 @@ SchXMLExport::SchXMLExport(
     OUString const & implementationName, SvXMLExportFlags nExportFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
         ::xmloff::token::XML_CHART, nExportFlags ),
-    maAutoStylePool( *this ),
-    maExportHelper( *this, maAutoStylePool )
+    maAutoStylePool( new SchXMLAutoStylePoolP(*this) ),
+    maExportHelper( new SchXMLExportHelper(*this, *maAutoStylePool.get()) )
 {
     if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
@@ -3579,11 +3579,11 @@ SchXMLExport::~SchXMLExport()
 
 sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
-    maExportHelper.SetSourceShellID(GetSourceShellID());
-    maExportHelper.SetDestinationShellID(GetDestinationShellID());
+    maExportHelper->SetSourceShellID(GetSourceShellID());
+    maExportHelper->SetDestinationShellID(GetDestinationShellID());
 
     Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
-    maExportHelper.m_pImpl->InitRangeSegmentationProperties( xChartDoc );
+    maExportHelper->m_pImpl->InitRangeSegmentationProperties( xChartDoc );
     return SvXMLExport::exportDoc( eClass );
 }
 
@@ -3606,8 +3606,8 @@ void SchXMLExport::_ExportAutoStyles()
         Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
         if( xChartDoc.is())
         {
-            maExportHelper.m_pImpl->collectAutoStyles( xChartDoc );
-            maExportHelper.m_pImpl->exportAutoStyles();
+            maExportHelper->m_pImpl->collectAutoStyles( xChartDoc );
+            maExportHelper->m_pImpl->exportAutoStyles();
         }
         else
         {
@@ -3654,13 +3654,13 @@ void SchXMLExport::_ExportContent()
                             aAny = xProp->getPropertyValue(
                                 OUString( "ChartRangeAddress" ));
                             aAny >>= sChartAddress;
-                            maExportHelper.m_pImpl->SetChartRangeAddress( sChartAddress );
+                            maExportHelper->m_pImpl->SetChartRangeAddress( sChartAddress );
 
                             OUString sTableNumberList;
                             aAny = xProp->getPropertyValue(
                                 OUString( "TableNumberList" ));
                             aAny >>= sTableNumberList;
-                            maExportHelper.m_pImpl->SetTableNumberList( sTableNumberList );
+                            maExportHelper->m_pImpl->SetTableNumberList( sTableNumberList );
 
                             // do not include own table if there are external addresses
                             bIncludeTable = sChartAddress.isEmpty();
@@ -3673,7 +3673,7 @@ void SchXMLExport::_ExportContent()
                 }
             }
         }
-        maExportHelper.m_pImpl->exportChart( xChartDoc, bIncludeTable );
+        maExportHelper->m_pImpl->exportChart( xChartDoc, bIncludeTable );
     }
     else
     {
@@ -3683,7 +3683,7 @@ void SchXMLExport::_ExportContent()
 
 rtl::Reference< XMLPropertySetMapper > SchXMLExport::GetPropertySetMapper() const
 {
-    return maExportHelper.m_pImpl->GetPropertySetMapper();
+    return maExportHelper->m_pImpl->GetPropertySetMapper();
 }
 
 void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )
