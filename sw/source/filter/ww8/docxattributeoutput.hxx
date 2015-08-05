@@ -35,7 +35,6 @@
 #include <fldbas.hxx>
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/drawingml.hxx>
@@ -742,7 +741,7 @@ private:
     std::unique_ptr<docx::FootnotesList> m_pFootnotesList;
     std::unique_ptr<docx::FootnotesList> m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
-    boost::scoped_ptr< const WW8_SepInfo > m_pSectionInfo;
+    std::unique_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.
     const SwRedlineData *m_pRedlineData;
@@ -878,7 +877,7 @@ private:
         OString fontKey;
     };
 
-    boost::scoped_ptr<TableReference> m_tableReference;
+    std::unique_ptr<TableReference> m_tableReference;
 
     std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
 
