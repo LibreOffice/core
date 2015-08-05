@@ -415,6 +415,7 @@
 #define SID_OBJECTMENU3                     (SID_SFX_START + 783)
 #define SID_OBJECTMENU_LAST                 SID_OBJECTMENU3
 #define SID_FORMATMENUSTATE                 (SID_SFX_START + 791)
+#define SID_UNICODE_NOTATION_TOGGLE         (SID_SFX_START + 792)
 
 // default-ids for macros
 #define SID_RECORDING_FLOATWINDOW           (SID_SFX_START + 800)

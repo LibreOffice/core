@@ -46,6 +46,7 @@
 #define CMD_SID_PRINTPREVIEW                        ".uno:PrintPreview"
 #define CMD_SID_RELOAD                              ".uno:Reload"
 #define CMD_SID_BASICIDE_RENAMECURRENT              ".uno:RenameCurrent"
+#define CMD_SID_UNICODE_NOTATION_TOGGLE             ".uno:UnicodeNotationToggle"
 
 #endif
 

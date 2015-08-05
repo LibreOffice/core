@@ -96,6 +96,11 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
+    SID_UNICODE_NOTATION_TOGGLE
+    [
+        ExecMethod = FuSupport;
+        StateMethod = GetMenuState;
+    ]
     SID_PASTE_UNFORMATTED
     [
         ExecMethod = FuSupport ;
