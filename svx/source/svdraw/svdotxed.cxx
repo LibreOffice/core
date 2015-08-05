@@ -316,6 +316,8 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
         // Set parameters // Code from ImpSetTextEditParams
         ImpUpdateOutlParamsForOverflow(&rDrawOutl, GetNextLinkInChain());
+        const OutlinerParaObject *pObj = GetNextLinkInChain()->GetOutlinerParaObject();
+        rDrawOutl.SetText(*pObj);
 
         rDrawOutl.SetUpdateMode(true);
         // XXX: Change name of method above to impHandleChainingEventsNonEditMode
