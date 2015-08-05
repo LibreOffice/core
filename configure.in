@@ -1691,6 +1691,23 @@ if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
    AC_PROG_CC
 fi
 
+if test "$_os" = "FreeBSD"; then
+    FBSD_GCC_RPATH=
+    if $CC --version 2>&1 | grep clang > /dev/null ; then
+        COM_IS=CLANG
+    else
+        COM_IS=GCC
+        rpath=`$CC --print-file-name libstdc++.so`
+        rpath=`realpath $rpath`
+        rpath=`dirname $rpath`
+	if test "$rpath" != "/usr/lib" ; then
+            FBSD_GCC_RPATH="-Wl,-rpath=$rpath"
+	fi
+    fi
+    AC_SUBST(COM_IS)
+    AC_SUBST(FBSD_GCC_RPATH)
+fi
+
 COMPATH=`dirname "$CC"`
 if test "$COMPATH" = "." ; then
     AC_PATH_PROGS(COMPATH, $CC)
@@ -6828,6 +6845,18 @@ dnl ===================================================================
 
 SYSTEM_GETTEXT=YES
 AC_SUBST(SYSTEM_GETTEXT)
+
+if test "$_os" = "FreeBSD"; then
+    LIBINTL_PREFIX=
+    for dir in $CPPFLAGS; do
+      if dir=`expr -- $dir : '-I\(.*\)'`; then
+        if test -f "$dir/libintl.h" ; then
+          LIBINTL_PREFIX=`dirname $dir`
+        fi
+      fi
+    done
+    AC_SUBST(LIBINTL_PREFIX)
+fi
 
 dnl ===================================================================
 dnl always rely on the system version of pango

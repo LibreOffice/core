@@ -358,7 +358,7 @@ elsif ( $platform =~ m/kfreebsd/ )
 }
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
+      $COM            = "@COM_IS@";
       $COMPATH        = '@COMPATH@' . '/bin'; 
       $CVER           = "C300";
       $GUI            = "UNX";
@@ -1723,6 +1723,11 @@ if ( $platform =~ m/darwin/ )
 # http://developer.apple.com/technotes/tn2002/tn2064.html
     ToFile( "MACOSX_DEPLOYMENT_TARGET",       "@MACOSX_DEPLOYMENT_TARGET@",       "e" );
     ToFile( "MACOSX_SDK_PATH",       "@MACOSX_SDK_PATH@",       "e" );
+}
+if ( $platform =~ m/freebsd/ )
+{
+    ToFile( "FBSD_GCC_RPATH",       "@FBSD_GCC_RPATH@", "e" );
+    ToFile( "LIBINTL_PREFIX",       "@LIBINTL_PREFIX@", "e" );
 }
 
 #

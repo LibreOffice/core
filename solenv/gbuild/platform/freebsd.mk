@@ -20,7 +20,6 @@
 #*************************************************************************
 
 GUI := UNX
-COM := GCC
 
 # BSD mktemp -t expects a prefix, not a pattern
 gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
@@ -95,8 +94,12 @@ gb_CXXFLAGS := \
 	-fno-use-cxa-atexit \
 	-fvisibility-inlines-hidden \
 	-fvisibility=hidden \
-	-pipe \
-	-DHAVE_STL_INCLUDE_PATH \
+	-pipe
+ifeq ($(COM),CLANG)
+gb_CXXFLAGS += -DHAVE_STL_INCLUDE_PATH
+else
+gb_CXXFLAGS += -DBOOST_TR1_DISABLE_INCLUDE_NEXT -DBOOST_TR1_GCC_INCLUDE_PATH=c++
+endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
@@ -110,7 +113,10 @@ gb_LinkTarget_LDFLAGS := -Wl,--sysroot=$(SYSBASE)
 endif
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
-	-fexceptions \
+	-fexceptions
+ifeq ($(COM),GCC)
+gb_LinkTarget_EXCEPTIONFLAGS +=  -fno-enforce-eh-specs
+endif
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
@@ -121,7 +127,7 @@ gb_LinkTarget_LDFLAGS += \
 	-Wl,-z,combreloc \
 	-Wl,-z,defs \
 	$(subst -L../lib , ,$(SOLARLIB)) \
-	${FBSD_LDFLAGS} \
+	${FBSD_GCC_RPATH} \
 	 \
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)

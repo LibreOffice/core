@@ -139,7 +139,7 @@
 .INCLUDE : unxbsds.mk
 .ENDIF
 
-.IF "$(COM)$(OS)" == "GCCFREEBSD"
+.IF "$(OS)" == "FREEBSD"
 .INCLUDE : unxfbsd.mk
 .ENDIF
 

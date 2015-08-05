@@ -132,8 +132,13 @@ COMNAME=MipsPro
 .ENDIF
 
 .IF "$(COM)"=="CLANG"
+.IF "$(OS)" == "FREEBSD"
+COMID=gcc3
+COMNAME=gcc3
+.ELSE
 COMID=s5abi
 COMNAME=s5abi
+.ENDIF
 .ENDIF
 
 .IF "$(COMNAME)"==""

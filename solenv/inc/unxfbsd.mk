@@ -49,7 +49,12 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=450 -DHAVE_STL_INCLUDE_PATH
+CDEFS+=$(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=450
+.IF "$(COM)"=="CLANG"
+CDEFS+=-DHAVE_STL_INCLUDE_PATH
+.ELSE
+CDEFS+=-DBOOST_TR1_DISABLE_INCLUDE_NEXT -DBOOST_TR1_GCC_INCLUDE_PATH=c++
+.ENDIF
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -88,7 +93,11 @@ CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS) 
 # Flags for enabling exception handling
+.IF "$(COM)"=="CLANG"
 CFLAGSEXCEPTIONS=-fexceptions
+.ELSE
+CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+.ENDIF
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
@@ -199,11 +208,11 @@ STDSHLCUIMT+=-ltcmalloc
 .ENDIF
 
 # libraries for linking applications
-STDLIBGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_LDFLAGS}
-STDLIBCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_LDFLAGS}
+STDLIBGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_GCC_RPATH}
+STDLIBCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_GCC_RPATH}
 # libraries for linking shared libraries
-STDSHLGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_LDFLAGS}
-STDSHLCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_LDFLAGS}
+STDSHLGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_GCC_RPATH}
+STDSHLCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed ${FBSD_GCC_RPATH}
 
 X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 
