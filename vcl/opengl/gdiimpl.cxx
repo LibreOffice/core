@@ -658,7 +658,8 @@ void OpenGLSalGraphicsImpl::DrawEdgeAA( double nX1, double nY1, double nX2, doub
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA )
 {
-    std::vector<GLfloat> aVertices(nPoints * 2);
+    std::vector<GLfloat> aVertices;
+    aVertices.resize(nPoints * 2);
     sal_uInt32 i, j;
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
@@ -700,7 +701,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blockAA )
 {
     sal_uInt16 nPoints = rPolygon.GetSize() - 1;
-    std::vector<GLfloat> aVertices(nPoints * 2);
+    std::vector<GLfloat> aVertices;
+    aVertices.resize(nPoints * 2);
     sal_uInt32 i, j;
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
@@ -744,7 +746,8 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
 {
     const basegfx::B2DPolygon& rPolygon = trapezoid.getB2DPolygon();
     sal_uInt16 nPoints = rPolygon.count();
-    std::vector<GLfloat> aVertices(nPoints * 2);
+    std::vector<GLfloat> aVertices;
+    aVertices.resize(nPoints * 2);
     sal_uInt32 i, j;
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )

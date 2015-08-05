@@ -289,7 +289,8 @@ namespace MinimumRaggednessWrap
         ++nLineWidth;
 
         size_t nWidthsCount = rWidthsOf.size();
-        std::vector<sal_Int32> aCosts(nWidthsCount * nWidthsCount);
+        std::vector<sal_Int32> aCosts;
+        aCosts.resize(nWidthsCount * nWidthsCount);
 
         // cost function c(i, j) that computes the cost of a line consisting of
         // the words Word[i] to Word[j]
@@ -312,8 +313,10 @@ namespace MinimumRaggednessWrap
             }
         }
 
-        std::vector<sal_Int32> aFunction(nWidthsCount);
-        std::vector<sal_Int32> aWrapPoints(nWidthsCount);
+        std::vector<sal_Int32> aFunction;
+        aFunction.resize(nWidthsCount);
+        std::vector<sal_Int32> aWrapPoints;
+        aWrapPoints.resize(nWidthsCount);
 
         // f(j) in aFunction[], collect wrap points in aWrapPoints[]
         for (size_t j = 0; j < nWidthsCount; ++j)

@@ -2536,7 +2536,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
 
     // Now for each reference fallback test the fallbacks of the list in order.
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
-    ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
+    ::std::vector< ::std::vector< OUString > > aListFallbacks;
+    aListFallbacks.resize( rList.size());
     size_t i = 0;
     for (it = rList.begin(); it != rList.end(); ++it, ++i)
     {

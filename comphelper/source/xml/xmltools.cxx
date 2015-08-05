@@ -82,7 +82,8 @@ namespace comphelper
 
             sal_Int32 nLength = 1024+n;
             // coverity[tainted_data] - 1024 deliberate random minus max -127/plus max 128
-            std::vector<sal_uInt8> aChaff(nLength);
+            std::vector<sal_uInt8> aChaff;
+            aChaff.resize(nLength);
             rtl_random_getBytes(pool, &aChaff[0], nLength);
 
             rtl_random_destroyPool(pool);

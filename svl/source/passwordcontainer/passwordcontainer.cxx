@@ -188,7 +188,8 @@ static Sequence< OUString > copyVectorToSequence( const vector< OUString >& orig
 
 static vector< OUString > copySequenceToVector( const Sequence< OUString >& original )
 {
-    vector< OUString > newOne ( original.getLength() );
+    vector< OUString > newOne;
+    newOne.resize( original.getLength() );
     for( int i = 0; i < original.getLength() ; i++ )
         newOne[i] = original[i];
 
@@ -869,7 +870,7 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
                     if( aRMode == PasswordRequestMode_PASSWORD_CREATE )
                     {
                         m_aMasterPasswd = aPass;
-                        vector< OUString > aMaster( 1, m_aMasterPasswd );
+                        vector< OUString > aMaster { m_aMasterPasswd };
 
                         m_pStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
                     }
@@ -1142,7 +1143,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
 
                 // store the new master password
                 m_aMasterPasswd = aPass;
-                vector< OUString > aMaster( 1, m_aMasterPasswd );
+                vector< OUString > aMaster { m_aMasterPasswd };
                 m_pStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
 
                 // store all the entries with the new password

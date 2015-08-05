@@ -81,7 +81,8 @@ namespace {
 
         if ( InfoLogLength > 0 )
         {
-            std::vector<char> ErrorMessage(InfoLogLength+1);
+            std::vector<char> ErrorMessage;
+            ErrorMessage.resize(InfoLogLength+1);
             if (bShaderNotProgram)
                 glGetShaderInfoLog (nId, InfoLogLength, NULL, &ErrorMessage[0]);
             else

@@ -472,7 +472,8 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
     if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
 
-    std::vector< OUString > aNames( nCount );
+    std::vector< OUString > aNames;
+    aNames.resize( nCount );
     InsertFromHorizontalStrip( aBmpEx, aNames );
 }
 

@@ -701,8 +701,10 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
             InverseColorMap aColorMap(aPalette);
             BitmapColor aColor;
             ImpErrorQuad aErrQuad;
-            std::vector<ImpErrorQuad> pErrQuad1(nWidth);
-            std::vector<ImpErrorQuad> pErrQuad2(nWidth);
+            std::vector<ImpErrorQuad> pErrQuad1;
+            pErrQuad1.resize(nWidth);
+            std::vector<ImpErrorQuad> pErrQuad2;
+            pErrQuad2.resize(nWidth);
             ImpErrorQuad* pQLine1 = pErrQuad1.data();
             ImpErrorQuad* pQLine2 = NULL;
             long nYTmp = 0L;

@@ -387,9 +387,10 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 }
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
-    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT ),
+    m_aPathArray(),
     m_aLanguageTag( LANGUAGE_DONTKNOW )
 {
+    m_aPathArray.resize( (sal_Int32)SvtPathOptions::PATH_COUNT );
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create necessary services

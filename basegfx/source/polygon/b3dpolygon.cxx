@@ -73,8 +73,9 @@ class CoordinateDataArray3D
 
 public:
     explicit CoordinateDataArray3D(sal_uInt32 nCount)
-    :   maVector(nCount)
+    :   maVector()
     {
+        maVector.resize(nCount);
     }
 
     explicit CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal)
@@ -254,9 +255,10 @@ class BColorArray
 
 public:
     explicit BColorArray(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :   maVector(),
         mnUsedEntries(0L)
     {
+        maVector.resize(nCount);
     }
 
     explicit BColorArray(const BColorArray& rOriginal)
@@ -412,9 +414,10 @@ class NormalsArray3D
 
 public:
     explicit NormalsArray3D(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :   maVector(),
         mnUsedEntries(0L)
     {
+        maVector.resize(nCount);
     }
 
     explicit NormalsArray3D(const NormalsArray3D& rOriginal)
@@ -579,9 +582,10 @@ class TextureCoordinate2D
 
 public:
     explicit TextureCoordinate2D(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :   maVector(),
         mnUsedEntries(0L)
     {
+        maVector.resize(nCount);
     }
 
     explicit TextureCoordinate2D(const TextureCoordinate2D& rOriginal)

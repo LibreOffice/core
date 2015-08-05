@@ -117,7 +117,8 @@ public:
     void iterator_test()
     {
         typedef std::vector<char>::const_iterator   test_it;
-        const std::vector<char>            hv(200,'x');
+        std::vector<char>            hv;
+        hv.resize(200,'x');
 
 
         test_it hit1 = hv.begin() + 12;
@@ -199,8 +200,10 @@ public:
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to4", t1.distance_to(t11) == 2);
         CPPUNIT_ASSERT_MESSAGE("ivec distance_to5", t1.distance_to(t3) == -88);
 
-        const std::vector< int* >   h2(20, nullptr);
-        std::deque< double >        h3(30, 0.0);
+        std::vector< int* >         h2;
+        h2.resize(20, nullptr);
+        std::deque< double >        h3;
+        h3.resize(30, 0.0);
 
         CPPUNIT_ASSERT_MESSAGE("range_of1", range_of(h2).begin() == h2.begin());
         CPPUNIT_ASSERT_MESSAGE("range_of2", range_of(h3).end() == h3.end());

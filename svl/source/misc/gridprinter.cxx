@@ -81,7 +81,8 @@ void GridPrinter::print( const char* pHeader ) const
         cout << pHeader << endl;
 
     MatrixImplType::size_pair_type ns = mpImpl->maMatrix.size();
-    vector<sal_Int32> aColWidths(ns.column, 0);
+    vector<sal_Int32> aColWidths;
+    aColWidths.resize(ns.column, 0);
 
     // Calculate column widths first.
     for (size_t row = 0; row < ns.row; ++row)

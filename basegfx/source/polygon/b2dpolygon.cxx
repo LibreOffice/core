@@ -58,8 +58,9 @@ class CoordinateDataArray2D
 
 public:
     explicit CoordinateDataArray2D(sal_uInt32 nCount)
-    :   maVector(nCount)
+    :   maVector()
     {
+        maVector.resize(nCount);
     }
 
     explicit CoordinateDataArray2D(const CoordinateDataArray2D& rOriginal)
@@ -252,9 +253,11 @@ class ControlVectorArray2D
 
 public:
     explicit ControlVectorArray2D(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :   maVector(),
         mnUsedVectors(0)
-    {}
+    {
+        maVector.resize(nCount);
+    }
 
     ControlVectorArray2D(const ControlVectorArray2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(),

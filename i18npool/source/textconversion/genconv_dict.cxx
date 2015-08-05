@@ -343,10 +343,13 @@ int Index_comp(const void* s1, const void* s2)
 // Simplified/Traditional Chinese word conversion
 void make_stc_word(FILE *sfp, FILE *cfp)
 {
+    const size_t NO_WORD_ENTRIES = 0x10000;
     sal_Int32 count, i, length;
-    sal_Unicode STC_WordData[0x10000];
-    std::vector<Index> STC_WordEntry_S2T(0x10000);
-    std::vector<Index> STC_WordEntry_T2S(0x10000);
+    sal_Unicode STC_WordData[NO_WORD_ENTRIES];
+    std::vector<Index> STC_WordEntry_S2T;
+    STC_WordEntry_S2T.resize(NO_WORD_ENTRIES);
+    std::vector<Index> STC_WordEntry_T2S;
+    STC_WordEntry_T2S.resize(NO_WORD_ENTRIES);
     sal_Int32 count_S2T = 0, count_T2S = 0;
     sal_Int32 line = 0, char_total = 0;
     sal_Char Cstr[1024];

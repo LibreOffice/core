@@ -51,9 +51,10 @@ namespace basegfx
         }
 
         KeyStopLerp::KeyStopLerp( const ::css::uno::Sequence<double>& rKeyStops ) :
-            maKeyStops(rKeyStops.getLength()),
+            maKeyStops(),
             mnLastIndex(0)
         {
+            maKeyStops.resize(rKeyStops.getLength());
             std::copy( rKeyStops.begin(), rKeyStops.end(), maKeyStops.begin() );
             validateInput(maKeyStops);
         }

@@ -1405,7 +1405,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
     aMapVDev->EnableOutput( false );
     aMapVDev->SetMapMode( GetPrefMapMode() );
 
-    std::vector<Rectangle> aClipStack( 1, Rectangle() );
+    std::vector<Rectangle> aClipStack { Rectangle() };
     std::vector<PushFlags> aPushFlagStack;
 
     Rectangle aBound;
@@ -2977,7 +2977,8 @@ MetaCommentAction* makePluggableRendererAction( const OUString& rRendererService
         rGraphicServiceName.getLength(),
         RTL_TEXTENCODING_ASCII_US);
 
-    std::vector<sal_uInt8> aMem(
+    std::vector<sal_uInt8> aMem;
+    aMem.resize(
         aRendererServiceName.getLength()+
         aGraphicServiceName.getLength()+2+nDataSize);
     sal_uInt8* pMem=&aMem[0];

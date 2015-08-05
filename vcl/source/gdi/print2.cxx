@@ -1077,7 +1077,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         // settings for all cases.
 
         // maps mtf actions to CC list entries
-        ::std::vector< const ConnectedComponents* > aCCList_MemberMap( rInMtf.GetActionSize() );
+        ::std::vector< const ConnectedComponents* > aCCList_MemberMap;
+        aCCList_MemberMap.resize( rInMtf.GetActionSize() );
 
         // iterate over all aCCList members and their contained metaactions
         ConnectedComponentsList::iterator       aCurr( aCCList.begin() );

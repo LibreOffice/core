@@ -1544,7 +1544,8 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::OUString val;
-    std::vector< char > v(s); // assuming sal_uInt32 fits into vector::size_type
+    std::vector< char > v;
+    v.resize(s); // assuming sal_uInt32 fits into vector::size_type
     if (subkey.getValue(rtl::OUString(), &v[0]) != RegError::NO_ERROR
         || v.back() != '\0'
         || !rtl_convertStringToUString(

@@ -794,8 +794,10 @@ VclGrid::array_type VclGrid::assembleGrid() const
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
 
-    std::vector<bool> aNonEmptyCols(nMaxX);
-    std::vector<bool> aNonEmptyRows(nMaxY);
+    std::vector<bool> aNonEmptyCols;
+    aNonEmptyCols.resize(nMaxX);
+    std::vector<bool> aNonEmptyRows;
+    aNonEmptyRows.resize(nMaxY);
 
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
@@ -1102,8 +1104,10 @@ void VclGrid::setAllocation(const Size& rAllocation)
     sal_Int32 nMaxY = A.shape()[1];
 
     Size aRequisition;
-    std::vector<Value> aWidths(nMaxX);
-    std::vector<Value> aHeights(nMaxY);
+    std::vector<Value> aWidths;
+    aWidths.resize(nMaxX);
+    std::vector<Value> aHeights;
+    aHeights.resize(nMaxY);
     if (!get_column_homogeneous() || !get_row_homogeneous())
     {
         aRequisition = calculateRequisition();

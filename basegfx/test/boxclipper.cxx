@@ -193,7 +193,8 @@ public:
                 aTmp.flip();
 
             aTmp=tools::removeNeutralPoints(aTmp);
-            std::vector<B2DPoint> aTmp2(aTmp.count());
+            std::vector<B2DPoint> aTmp2;
+            aTmp2.resize(aTmp.count());
             for(sal_uInt32 j=0; j<aTmp.count(); ++j)
                 aTmp2[j] = aTmp.getB2DPoint(j);
 

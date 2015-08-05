@@ -110,7 +110,7 @@ class NfKeywordTable
     Keywords_t m_keywords;
 
 public:
-    NfKeywordTable() : m_keywords(NF_KEYWORD_ENTRIES_COUNT) {};
+    NfKeywordTable() : m_keywords() { m_keywords.resize(NF_KEYWORD_ENTRIES_COUNT); };
     virtual ~NfKeywordTable() {}
 
     OUString & operator[] (Keywords_t::size_type n) { return m_keywords[n]; }

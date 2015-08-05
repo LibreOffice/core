@@ -112,7 +112,7 @@ struct SfxItemPool_Impl
     bool                            mbPersistentRefCounts;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
-        : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(NULL))
+        : maPoolItems()
         , aName(rName)
         , ppPoolDefaults(new SfxPoolItem* [nEnd - nStart + 1])
         , ppStaticDefaults(0)
@@ -137,6 +137,7 @@ struct SfxItemPool_Impl
         , mbPersistentRefCounts(false)
     {
         DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
+        maPoolItems.resize(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(NULL));
         memset( ppPoolDefaults, 0, sizeof( SfxPoolItem* ) * (nEnd - nStart + 1));
     }
 

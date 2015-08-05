@@ -1396,10 +1396,12 @@ static sal_uInt32 checkValueDifference(
 
         if ( bEqual)
         {
-            std::vector< sal_uInt8 > value1(size1);
+            std::vector< sal_uInt8 > value1;
+            value1.resize(size1);
             key1.getValue(tmpName, &value1[0]);
 
-            std::vector< sal_uInt8 > value2(size2);
+            std::vector< sal_uInt8 > value2;
+            value2.resize(size2);
             key2.getValue(tmpName, &value2[0]);
 
             bEqual = (memcmp(&value1[0], &value2[0], value1.size()) == 0 );
@@ -1436,7 +1438,8 @@ static sal_uInt32 checkValueDifference(
             break;
         case RegValueType::LONG:
             {
-                std::vector< sal_uInt8 > value1(size1);
+                std::vector< sal_uInt8 > value1;
+                value1.resize(size1);
                 key1.getValue(tmpName, &value1[0]);
 
                 fprintf(stdout, "    Registry 1: Value: Type = RegValueType::LONG\n");
@@ -1448,7 +1451,8 @@ static sal_uInt32 checkValueDifference(
             break;
         case RegValueType::STRING:
             {
-                std::vector< sal_uInt8 > value1(size1);
+                std::vector< sal_uInt8 > value1;
+                value1.resize(size1);
                 key1.getValue(tmpName, &value1[0]);
 
                 fprintf(stdout, "    Registry 1: Value: Type = RegValueType::STRING\n");
@@ -1460,7 +1464,8 @@ static sal_uInt32 checkValueDifference(
             break;
         case RegValueType::UNICODE:
             {
-                std::vector< sal_uInt8 > value1(size1);
+                std::vector< sal_uInt8 > value1;
+                value1.resize(size1);
                 key1.getValue(tmpName, &value1[0]);
 
                 OUString uStrValue(reinterpret_cast<sal_Unicode const*>(&value1[0]));
@@ -1538,7 +1543,8 @@ static sal_uInt32 checkValueDifference(
             break;
         case RegValueType::LONG:
             {
-                std::vector< sal_uInt8 > value2(size2);
+                std::vector< sal_uInt8 > value2;
+                value2.resize(size2);
                 key2.getValue(tmpName, &value2[0]);
 
                 fprintf(stdout, "    Registry 2: Value: Type = RegValueType::LONG\n");
@@ -1550,7 +1556,8 @@ static sal_uInt32 checkValueDifference(
             break;
         case RegValueType::STRING:
             {
-                std::vector< sal_uInt8 > value2(size2);
+                std::vector< sal_uInt8 > value2;
+                value2.resize(size2);
                 key2.getValue(tmpName, &value2[0]);
 
                 fprintf(stdout, "    Registry 2: Value: Type = RegValueType::STRING\n");
@@ -1562,7 +1569,8 @@ static sal_uInt32 checkValueDifference(
             break;
         case RegValueType::UNICODE:
             {
-                std::vector< sal_uInt8 > value2(size2);
+                std::vector< sal_uInt8 > value2;
+                value2.resize(size2);
                 key2.getValue(tmpName, &value2[0]);
 
                 OUString uStrValue(reinterpret_cast<sal_Unicode const*>(&value2[0]));
@@ -1678,7 +1686,8 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
                 else if (type == RegValueType::BINARY)
                 {
                     bool published = false;
-                    std::vector< sal_uInt8 > value(size);
+                    std::vector< sal_uInt8 > value;
+                    value.resize(size);
                     if (subKey.getValue(OUString(), &value[0]) != RegError::NO_ERROR)
                     {
                         if (options.forceOutput())
@@ -1779,7 +1788,8 @@ static sal_uInt32 checkDifferences(
                         }
                         else if (type == RegValueType::BINARY)
                         {
-                            std::vector< sal_uInt8 > value(size);
+                            std::vector< sal_uInt8 > value;
+                            value.resize(size);
                             if (subKey.getValue(OUString(), &value[0]) != RegError::NO_ERROR)
                             {
                                 if (options.forceOutput())

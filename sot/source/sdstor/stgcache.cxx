@@ -91,13 +91,14 @@ StgCache::StgCache()
    , nPages( 0 )
    , nRef( 0 )
    , nReplaceIdx( 0 )
-   , maLRUPages( 8 ) // entries in the LRU lookup
+   , maLRUPages()
    , nPageSize( 512 )
    , pStorageStream( NULL )
    , pStrm( NULL )
    , bMyStream( false )
    , bFile( false )
 {
+   maLRUPages.resize( 8 ); // entries in the LRU lookup
 }
 
 StgCache::~StgCache()

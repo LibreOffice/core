@@ -59,8 +59,8 @@ struct ResultSetMetaData_Impl
     bool                                        m_bGlobalReadOnlyValue;
 
     explicit ResultSetMetaData_Impl( sal_Int32 nSize )
-    : m_aColumnData( nSize ), m_bObtainedTypes( false ),
-      m_bGlobalReadOnlyValue( true ) {}
+    : m_aColumnData(), m_bObtainedTypes( false ),
+      m_bGlobalReadOnlyValue( true ) { m_aColumnData.resize( nSize ); }
 
     explicit ResultSetMetaData_Impl(
         const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )

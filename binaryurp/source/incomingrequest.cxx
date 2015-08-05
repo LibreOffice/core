@@ -211,11 +211,11 @@ bool IncomingRequest::execute_throw(
                                 css::uno::TypeDescription(
                                     mtd->pParams[j].pTypeRef));
                         } else {
-                            outBufs.push_back(
-                                std::vector< char >(size_t_round(
+                            std::vector< char > aTmp;
+                            aTmp.resize(size_t_round(
                                     css::uno::TypeDescription(
-                                        mtd->pParams[j].pTypeRef).
-                                    get()->nSize)));
+                                        mtd->pParams[j].pTypeRef).get()->nSize));
+                            outBufs.push_back(aTmp);
                             p = &outBufs.back()[0];
                         }
                         args.push_back(p);
@@ -233,7 +233,8 @@ bool IncomingRequest::execute_throw(
             size_t nSize = 0;
             if (retType.is())
                 nSize = size_t_round(retType.get()->nSize);
-            std::vector< char > retBuf(nSize);
+            std::vector< char > retBuf;
+            retBuf.resize(nSize);
             uno_Any exc;
             uno_Any * pexc = &exc;
             (*object_.get()->pDispatcher)(
