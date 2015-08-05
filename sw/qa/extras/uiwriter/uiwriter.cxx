@@ -123,6 +123,7 @@ public:
     void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
+    void testTdf77340();
     void testTdf79236();
     void testTextSearch();
     void testTdf69282();
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTdf77340);
     CPPUNIT_TEST(testTdf79236);
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
@@ -1185,6 +1187,28 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTdf77340()
+{
+    createDoc();
+    //Getting some paragraph style in our document
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xFactory->createInstance("com.sun.star.style.ParagraphStyle"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY_THROW);
+    xPropSet->setPropertyValue(OUString("ParaBackColor"), uno::makeAny(sal_Int32(0xFF00FF)));
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNameAccess(xSupplier->getStyleFamilies());
+    uno::Reference<container::XNameContainer> xNameCont;
+    xNameAccess->getByName("ParagraphStyles") >>= xNameCont;
+    xNameCont->insertByName(OUString("myStyle"), uno::makeAny(xStyle));
+    CPPUNIT_ASSERT_EQUAL(OUString("myStyle"), xStyle->getName());
+    //Setting the properties with proper values
+    xPropSet->setPropertyValue(OUString("PageDescName"), uno::makeAny(OUString("First Page")));
+    xPropSet->setPropertyValue(OUString("PageNumberOffset"), uno::makeAny(sal_Int16(3)));
+    //Getting the properties and checking that they have proper values
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("First Page")), xPropSet->getPropertyValue(OUString("PageDescName")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(3)), xPropSet->getPropertyValue(OUString("PageNumberOffset")));
 }
 
 void SwUiWriterTest::testTdf79236()
