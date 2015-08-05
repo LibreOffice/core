@@ -17,7 +17,7 @@
 -->
     <node oor:name="StarOffice XML (Base) Report" oor:op="replace">
       <prop oor:name="Flags">
-        <value>IMPORT EXPORT OWN DEFAULT 3RDPARTYFILTER NOTINFILEDIALOG NOTINCHOOSER</value>
+        <value>IMPORT EXPORT OWN DEFAULT 3RDPARTYFILTER NOTINFILEDIALOG</value>
       </prop>
       <prop oor:name="UIComponent"/>
       <prop oor:name="FilterService"/>

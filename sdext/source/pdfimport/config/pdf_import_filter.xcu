@@ -116,7 +116,7 @@
     <value>org.libreoffice.comp.documents.HybridPDFImport</value>
    </prop>
    <prop oor:name="Flags" oor:type="oor:string-list">
-    <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
+    <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG</value>
    </prop>
    <prop oor:name="TemplateName" oor:type="xs:string">
     <value/>

@@ -1917,15 +1917,12 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
 
     if (nFlags & SfxFilterFlags::STARONEFILTER    ) lFlagNames.push_back(FLAGNAME_3RDPARTYFILTER   );
     if (nFlags & SfxFilterFlags::ALIEN            ) lFlagNames.push_back(FLAGNAME_ALIEN            );
-    if (nFlags & SfxFilterFlags::ASYNCHRON        ) lFlagNames.push_back(FLAGNAME_ASYNCHRON        );
-    if (nFlags & SfxFilterFlags::BROWSERPREFERRED ) lFlagNames.push_back(FLAGNAME_BROWSERPREFERRED );
     if (nFlags & SfxFilterFlags::CONSULTSERVICE   ) lFlagNames.push_back(FLAGNAME_CONSULTSERVICE   );
     if (nFlags & SfxFilterFlags::DEFAULT          ) lFlagNames.push_back(FLAGNAME_DEFAULT          );
     if (nFlags & SfxFilterFlags::ENCRYPTION       ) lFlagNames.push_back(FLAGNAME_ENCRYPTION       );
     if (nFlags & SfxFilterFlags::EXPORT           ) lFlagNames.push_back(FLAGNAME_EXPORT           );
     if (nFlags & SfxFilterFlags::IMPORT           ) lFlagNames.push_back(FLAGNAME_IMPORT           );
     if (nFlags & SfxFilterFlags::INTERNAL         ) lFlagNames.push_back(FLAGNAME_INTERNAL         );
-    if (nFlags & SfxFilterFlags::NOTINCHOOSER     ) lFlagNames.push_back(FLAGNAME_NOTINCHOOSER     );
     if (nFlags & SfxFilterFlags::NOTINFILEDLG     ) lFlagNames.push_back(FLAGNAME_NOTINFILEDIALOG  );
     if (nFlags & SfxFilterFlags::MUSTINSTALL      ) lFlagNames.push_back(FLAGNAME_NOTINSTALLED     );
     if (nFlags & SfxFilterFlags::OWN              ) lFlagNames.push_back(FLAGNAME_OWN              );
@@ -1937,7 +1934,6 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
     if (nFlags & SfxFilterFlags::SUPPORTSSELECTION) lFlagNames.push_back(FLAGNAME_SUPPORTSSELECTION);
     if (nFlags & SfxFilterFlags::TEMPLATE         ) lFlagNames.push_back(FLAGNAME_TEMPLATE         );
     if (nFlags & SfxFilterFlags::TEMPLATEPATH     ) lFlagNames.push_back(FLAGNAME_TEMPLATEPATH     );
-    if (nFlags & SfxFilterFlags::USESOPTIONS      ) lFlagNames.push_back(FLAGNAME_USESOPTIONS      );
     if (nFlags & SfxFilterFlags::COMBINED         ) lFlagNames.push_back(FLAGNAME_COMBINED         );
 
     return comphelper::containerToSequence(lFlagNames);
@@ -1962,16 +1958,6 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
         if (pNames[i] == FLAGNAME_ALIEN)
         {
             nField |= SfxFilterFlags::ALIEN;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_ASYNCHRON)
-        {
-            nField |= SfxFilterFlags::ASYNCHRON;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_BROWSERPREFERRED)
-        {
-            nField |= SfxFilterFlags::BROWSERPREFERRED;
             continue;
         }
         if (pNames[i] == FLAGNAME_CONSULTSERVICE)
@@ -2002,11 +1988,6 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
         if (pNames[i] == FLAGNAME_INTERNAL)
         {
             nField |= SfxFilterFlags::INTERNAL;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_NOTINCHOOSER)
-        {
-            nField |= SfxFilterFlags::NOTINCHOOSER;
             continue;
         }
         if (pNames[i] == FLAGNAME_NOTINFILEDIALOG)
@@ -2062,11 +2043,6 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
         if (pNames[i] == FLAGNAME_TEMPLATEPATH)
         {
             nField |= SfxFilterFlags::TEMPLATEPATH;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_USESOPTIONS)
-        {
-            nField |= SfxFilterFlags::USESOPTIONS;
             continue;
         }
         if (pNames[i] == FLAGNAME_COMBINED)

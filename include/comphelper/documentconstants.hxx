@@ -69,16 +69,11 @@
 
 // filter flags
 // TODO/LATER: The flags should be part of the UNO specification
-
-// Note that these flag bits have parallel names in
-// filter/source/config/cache/constant.hxx. Some of the bits are
-// missing from there, and some have different names. But the meaning
-// is presumably the same, and the values are the same.
-
+//
 // http://www.mail-archive.com/dev@openoffice.org/msg05047.html says:
-
+//
 // I can just sum up what comes into my mind, hope I don't miss one:
-
+//
 // Import                  - should be self explaining
 // Export                  - should be self explaining
 // Template                - deprecated
@@ -86,20 +81,14 @@
 // Own                     - one of the OOo file formats
 // Alien                   - no zip container based format
 // Preferred               - preferred filter for a particular type
-// Asynchron               - deprecated, only HTML-filter isn't synchron
 // 3rdPartyFilter          - implemented as a UNO component
 // Default                 - default filter for this document type
-// NotInFileDialog         - should be self explaining
-// NotInChooser            - as above
-
+//
 // (The 3rdPartyFilter flag is here called StarONE)
-
-// At some point (4.0?) we should drop the duplicate set of names over
-// in filter, and rename the obscure ones to describe their meaning
-// using terms that are understandable.
-
+//
 enum class SfxFilterFlags
 {
+    NONE              = 0,
     IMPORT            = 0x00000001L,
     EXPORT            = 0x00000002L,
     TEMPLATE          = 0x00000004L,
@@ -107,34 +96,26 @@ enum class SfxFilterFlags
     TEMPLATEPATH      = 0x00000010L,
     OWN               = 0x00000020L,
     ALIEN             = 0x00000040L,
-    USESOPTIONS       = 0x00000080L,
 
     DEFAULT           = 0x00000100L,
-    EXECUTABLE        = 0x00000200L,
     SUPPORTSSELECTION = 0x00000400L,
     NOTINFILEDLG      = 0x00001000L,
-    NOTINCHOOSER      = 0x00002000L,
-    ASYNCHRON         = 0x00004000L,
+
     OPENREADONLY      = 0x00010000L,
     MUSTINSTALL       = 0x00020000L,
     CONSULTSERVICE    = 0x00040000L,
     STARONEFILTER     = 0x00080000L,
-
     PACKED            = 0x00100000L,
-    BROWSERPREFERRED  = 0x00400000L,
     COMBINED          = 0x00800000L,
 
     ENCRYPTION        = 0x01000000L,
     PASSWORDTOMODIFY  = 0x02000000L,
-
     PREFERED          = 0x10000000L,
     STARTPRESENTATION = 0x20000000L,
-
-    NONE              = 0
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x33df77ffL> {};
+    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x339f157fL> {};
 }
 
 #define SFX_FILTER_NOTINSTALLED (SfxFilterFlags::MUSTINSTALL | SfxFilterFlags::CONSULTSERVICE)
