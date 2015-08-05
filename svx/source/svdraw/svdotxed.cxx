@@ -262,6 +262,18 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     if (pViewInit!=NULL) *pViewInit=aViewInit;
 }
 
+void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
+{
+    Size aPaperMin;
+    Size aPaperMax;
+    Rectangle aEditArea;
+    pTextObj->TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
+
+    pOutl->SetMinAutoPaperSize(aPaperMin);
+    pOutl->SetMaxAutoPaperSize(aPaperMax);
+    pOutl->SetPaperSize(Size());
+}
+
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 {
     OutlinerParaObject* pNewText = NULL;
@@ -286,13 +298,25 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     rOutl.ClearOverflowingParaNum();
     // XXX: Experiment
     /* Flush overflow for next textbox */
-    if (IsChainable() &&
+    if (
+        IsChainable() &&
         GetNextLinkInChain() &&
         GetTextChain()->GetPendingOverflowCheck(GetNextLinkInChain()) )
     {
         GetTextChain()->SetPendingOverflowCheck(GetNextLinkInChain(), false);
         // NEXT: Prepare outliner for overflow
+        /* FIXME
+         * Outliner needs to be prepared in the same way it is prepared
+         * in SdrTextObj::impDecomposeChainedTextPrimitive.
+         * This is not immediately feasible because that code needs some parameters
+         * that are specific of decomposition.
+         * Is there any other part where we get those parameters, e.g. who prepares the editing outliner? XXX
+        */
         SdrOutliner rDrawOutl = GetNextLinkInChain()->ImpGetDrawOutliner();
+
+        // Set parameters // Code from ImpSetTextEditParams
+        ImpUpdateOutlParamsForOverflow(&rDrawOutl, GetNextLinkInChain());
+
         rDrawOutl.SetUpdateMode(true);
         // XXX: Change name of method above to impHandleChainingEventsNonEditMode
         GetNextLinkInChain()->impHandleChainingEventsDuringDecomposition(rDrawOutl);
