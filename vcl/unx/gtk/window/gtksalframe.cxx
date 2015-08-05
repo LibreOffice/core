@@ -1085,15 +1085,15 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
 //    g_signal_connect( G_OBJECT(m_pWindow), "state-flags-changed", G_CALLBACK(signalFlagsChanged), this );
 #if GTK_CHECK_VERSION(3,14,0)
-    GtkGesture *pSwipe = gtk_gesture_swipe_new(m_pWindow);
+    GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pSwipe), GTK_PHASE_TARGET);
-    g_object_weak_ref(G_OBJECT(m_pWindow), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
+    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
 
-    GtkGesture *pLongPress = gtk_gesture_long_press_new(m_pWindow);
+    GtkGesture *pLongPress = gtk_gesture_long_press_new(pEventWidget);
     g_signal_connect(pLongPress, "pressed", G_CALLBACK(gestureLongPress), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pLongPress), GTK_PHASE_TARGET);
-    g_object_weak_ref(G_OBJECT(m_pWindow), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
+    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
 
 #endif
 
