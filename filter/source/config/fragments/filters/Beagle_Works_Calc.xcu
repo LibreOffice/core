@@ -9,7 +9,7 @@
 
 <node oor:name="Beagle_Works_Calc" oor:op="replace">
     <prop oor:name="Flags">
-        <value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value>
+        <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value>
     </prop>
     <prop oor:name="FilterService">
         <value>com.sun.star.comp.Calc.MWAWCalcImportFilter</value>

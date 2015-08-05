@@ -26,5 +26,5 @@
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (Master Document)</value>
         </prop>
-        <prop oor:name="Flags"><value>EXPORT INTERNAL NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+        <prop oor:name="Flags"><value>EXPORT INTERNAL NOTINFILEDIALOG</value></prop>
     </node>
