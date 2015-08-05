@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_e002026f",
+        "filename": "include/svx/svdpntv.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-05T10:20:22Z",
+      "side": 0,
+      "message": "this is another instance of uneducated programmers calling any kind of polymorphism \"overloading\", please translate it to \"override\"",
+      "revId": "71ace488448b64e6c4cd9065e109d2c9850b031a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_60ef12b1",
+        "filename": "include/svx/svdetc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-05T10:20:22Z",
+      "side": 1,
+      "message": "\"heap\", not \"head\"",
+      "revId": "563a7befee0ced2397300ef36ca63e8908fbc09a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_20f50a83",
+        "filename": "include/svx/svdpntv.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-05T10:20:22Z",
+      "side": 1,
+      "message": "\"defaul\" missing a t",
+      "revId": "563a7befee0ced2397300ef36ca63e8908fbc09a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
