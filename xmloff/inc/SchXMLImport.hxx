@@ -160,7 +160,7 @@ class SchXMLImport : public SvXMLImport
 private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
 
-    SchXMLImportHelper maImportHelper;
+    rtl::Reference<SchXMLImportHelper> maImportHelper;
 
 protected:
     virtual SvXMLImportContext *CreateContext(

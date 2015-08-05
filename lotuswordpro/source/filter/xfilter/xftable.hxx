@@ -109,7 +109,7 @@ private:
     OUString   m_strName;
     bool    m_bSubTable;
     XFCell      *m_pOwnerCell;
-    XFContentContainer  m_aHeaderRows;
+    rtl::Reference<XFContentContainer>  m_aHeaderRows;
     std::map<sal_uInt16, XFRow*>  m_aRows;
     std::map<sal_Int32,OUString>   m_aColumns;
     OUString   m_strDefCellStyle;

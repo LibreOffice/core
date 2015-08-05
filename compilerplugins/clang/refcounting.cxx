@@ -229,6 +229,8 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
             std::string aName = pTemplate->getQualifiedNameAsString();
+            if (aName == "tools::SvRef")
+                return false;
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
@@ -251,6 +253,43 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
     }
 }
 
+bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
+    if (!pType0)
+        return false;
+    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    if (!pType)
+        return false;
+    const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
+    if (pRecordDecl) {
+        pRecordDecl = pRecordDecl->getCanonicalDecl();
+    }
+    if (pRecordDecl) {
+        const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
+        if (pTemplate) {
+            std::string aName = pTemplate->getQualifiedNameAsString();
+            if (aName == "rtl::Reference" || aName == "store::OStoreHandle")
+                return false;
+            for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
+                const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
+                if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
+                    containsSalhelperReferenceObjectSubclass(rArg.getAsType().getTypePtr()))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    if (pType->isPointerType()) {
+        // ignore
+        return false;
+    } else if (pType->isArrayType()) {
+        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        QualType elementType = pArrayType->getElementType();
+        return containsSalhelperReferenceObjectSubclass(elementType.getTypePtr());
+    } else {
+        return isDerivedFrom(pRecordDecl, "salhelper::SimpleReferenceObject");
+    }
+}
 
 bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
@@ -266,6 +305,16 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
         report(
             DiagnosticsEngine::Warning,
             "SvRefBase subclass being directly heap managed, should be managed via tools::SvRef, "
+            + fieldDecl->getType().getAsString()
+            + ", parent is " + aParentName,
+            fieldDecl->getLocation())
+          << fieldDecl->getSourceRange();
+    }
+
+    if (containsSalhelperReferenceObjectSubclass(fieldDecl->getType().getTypePtr())) {
+        report(
+            DiagnosticsEngine::Warning,
+            "salhelper::SimpleReferenceObject subclass being directly heap managed, should be managed via rtl::Reference, "
             + fieldDecl->getType().getAsString()
             + ", parent is " + aParentName,
             fieldDecl->getLocation())
@@ -297,10 +346,25 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
     if (ignoreLocation(varDecl)) {
         return true;
     }
+    if (isa<ParmVarDecl>(varDecl)) {
+        return true;
+    }
     if (containsSvRefBaseSubclass(varDecl->getType().getTypePtr())) {
         report(
             DiagnosticsEngine::Warning,
             "SvRefBase subclass being directly stack managed, should be managed via tools::SvRef, "
+            + varDecl->getType().getAsString(),
+            varDecl->getLocation())
+          << varDecl->getSourceRange();
+    }
+    if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
+        StringRef name { compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
+        // this is playing games that it believes is safe
+        if (name == SRCDIR "/stoc/source/security/permissions.cxx")
+            return true;
+        report(
+            DiagnosticsEngine::Warning,
+            "salhelper::SimpleReferenceObject subclass being directly stack managed, should be managed via rtl::Reference, "
             + varDecl->getType().getAsString(),
             varDecl->getLocation())
           << varDecl->getSourceRange();

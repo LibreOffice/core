@@ -87,13 +87,13 @@ public:
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    XFContentContainer  m_aChildren;
+    rtl::Reference<XFContentContainer>  m_aChildren;
 };
 
 inline void XFDrawGroup::Add(XFFrame *pFrame)
 {
     if( pFrame )
-        m_aChildren.Add(pFrame);
+        m_aChildren->Add(pFrame);
 }
 
 inline void XFDrawGroup::ToXml(IXFStream *pStrm)
@@ -105,7 +105,7 @@ inline void XFDrawGroup::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( "draw:g" );
 
-    m_aChildren.ToXml(pStrm);
+    m_aChildren->ToXml(pStrm);
 
     pStrm->EndElement( "draw:g" );
 
