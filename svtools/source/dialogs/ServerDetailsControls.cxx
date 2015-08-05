@@ -77,7 +77,7 @@ HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_u
     pBuilder->get( m_pEDHost, "host" );
     m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
 
-    pBuilder->get( m_pEDPort, "port" );
+    pBuilder->get( m_pEDPort, "port-nospin" );
     m_pEDPort->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
 
     pBuilder->get( m_pEDPath, "path" );
