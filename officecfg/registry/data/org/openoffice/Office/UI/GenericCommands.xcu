@@ -33,6 +33,11 @@
           <value xml:lang="en-US">New Presentation</value>
         </prop>
       </node>
+      <node oor:name=".uno:UnicodeNotationToggle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Unicode Notation</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FontworkGalleryFloater" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Fontwork Gallery...</value>

@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <i18nutil/unicode.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -834,6 +835,47 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
 
             rReq.Ignore ();
+        }
+        break;
+
+        case SID_UNICODE_NOTATION_TOGGLE:
+        {
+            if ( mpDrawView->IsTextEdit() )
+            {
+                OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+                if (pOLV)
+                {
+                    OUString sInput = pOLV->GetSurroundingText();
+                    ESelection aSel( pOLV->GetSelection() );
+                    if ( aSel.nStartPos > aSel.nEndPos )
+                        aSel.nEndPos = aSel.nStartPos;
+
+                    //calculate a valid end-position by reading logical characters
+                    sal_Int32 nUtf16Pos=0;
+                    while( (nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.nEndPos) )
+                    {
+                        sInput.iterateCodePoints(&nUtf16Pos);
+                        //The mouse can set the cursor in the middle of a multi-unit character,
+                        //    so reset to the proper end of the logical characters
+                        if( nUtf16Pos > aSel.nEndPos )
+                            aSel.nEndPos = nUtf16Pos;
+                    }
+
+                    ToggleUnicodeCodepoint aToggle = ToggleUnicodeCodepoint();
+                    while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+                        --nUtf16Pos;
+                    OUString sReplacement = aToggle.ReplacementString();
+                    if( !sReplacement.isEmpty() )
+                    {
+                        OUString sStringToReplace = aToggle.StringToReplace();
+                        mpDrawView->BegUndo(sStringToReplace +"->"+ sReplacement);
+                        aSel.nStartPos = aSel.nEndPos - sStringToReplace.getLength();
+                        pOLV->SetSelection( aSel );
+                        pOLV->InsertText(sReplacement, true);
+                        mpDrawView->EndUndo();
+                    }
+                }
+            }
         }
         break;
 

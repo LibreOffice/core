@@ -147,6 +147,7 @@ public:
     void testTdf90883TableBoxGetCoordinates();
     void testEmbeddedDataSource();
     void testUnoCursorPointer();
+    void testUnicodeNotationToggle();
     void testTextTableCellNames();
     void testShapeAnchorUndo();
     void testDde();
@@ -215,6 +216,7 @@ public:
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
     CPPUNIT_TEST(testUnoCursorPointer);
+    CPPUNIT_TEST(testUnicodeNotationToggle);
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST(testDde);
@@ -2174,6 +2176,29 @@ void SwUiWriterTest::testDde()
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
+}
+
+void SwUiWriterTest::testUnicodeNotationToggle()
+{
+    SwDoc* pDoc = createDoc("unicodeAltX.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    OUString sOriginalDocString;
+    OUString sDocString;
+    OUString sExpectedString;
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+
+    pWrtShell->EndPara();
+    sOriginalDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT( sOriginalDocString.equals("uU+2b") );
+
+    lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
+    sExpectedString = "u+";
+    sDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT( sDocString.equals(sExpectedString) );
+
+    lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
+    sDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT( sDocString.equals(sOriginalDocString) );
 }
 
 void SwUiWriterTest::testTdf89954()

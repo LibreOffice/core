@@ -23,6 +23,7 @@
 #include <cmdid.h>
 #include <helpid.h>
 
+#include <i18nutil/unicode.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
@@ -113,7 +114,7 @@
 #include <tools/diagnose_ex.h>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
-
+#include <SwRewriter.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 #include <numrule.hxx>
@@ -287,6 +288,35 @@ void SwTextShell::Execute(SfxRequest &rReq)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
     switch( nSlot )
     {
+        case SID_UNICODE_NOTATION_TOGGLE:
+        {
+            int nMaxUnits = 256;
+            if( rWrtSh.IsSelection() && !rWrtSh.IsMultiSelection() )
+                nMaxUnits = rWrtSh.GetSelText().getLength();
+
+            int index = 0;
+            ToggleUnicodeCodepoint aToggle = ToggleUnicodeCodepoint();
+            while( nMaxUnits-- && aToggle.AllowMoreInput(rWrtSh.GetChar(true, index-1)) )
+                --index;
+
+            OUString sReplacement = aToggle.ReplacementString();
+            if( !sReplacement.isEmpty() )
+            {
+                SwRewriter aRewriter;
+                aRewriter.AddRule( UndoArg1, aToggle.StringToReplace() );
+                aRewriter.AddRule( UndoArg2, "->" );
+                aRewriter.AddRule( UndoArg3, sReplacement );
+                rWrtSh.StartUndo(UNDO_REPLACE, &aRewriter);
+                rWrtSh.GetCrsr()->Normalize(false);
+                rWrtSh.ClearMark();
+                for( sal_uInt32 i=aToggle.CharsToDelete(); i > 0; --i )
+                    rWrtSh.DelLeft();
+                rWrtSh.Insert2( sReplacement );
+                rWrtSh.EndUndo(UNDO_REPLACE, &aRewriter);
+            }
+        }
+        break;
+
         case SID_LANGUAGE_STATUS:
         {
             // get the language
