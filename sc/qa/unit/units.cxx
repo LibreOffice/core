@@ -948,6 +948,18 @@ void UnitsTest::testRangeConversion() {
         // TODO: we need to test:
         // 1. actual sensible ranges
     }
+
+    // test purely local annotations (tdf#92455)
+    ScAddress headerAddressCol4(3, 0, nTab);
+
+    mpDoc->SetValue(headerAddressCol4, 3);
+    setNumberFormatUnit(headerAddressCol4, "m");
+
+    aRange = ScRange(headerAddressCol4);
+    CPPUNIT_ASSERT(mpUnitsImpl->convertCellUnits(aRange, mpDoc, "cm"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetValue(headerAddressCol4), 300, 1e-7);
+
+    CPPUNIT_ASSERT(UnitsImpl::extractUnitStringForCell(headerAddressCol4, mpDoc) == "cm");
 }
 
 void UnitsTest::testConvertCellUnits()
