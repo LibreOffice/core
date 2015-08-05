@@ -143,7 +143,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
                     }
                 }
 
-                OSL_ENSURE( bFound, "OColumnAlias::setAlias: did not find a programmatic name which exists in the configuration!" ); (void)bFound;
+                OSL_ENSURE( bFound, "OColumnAlias::setAlias: did not find a programmatic name which exists in the configuration!" );
             }
         }
         catch( const Exception& )
