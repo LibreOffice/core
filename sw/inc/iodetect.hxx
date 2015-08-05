@@ -94,10 +94,6 @@ public:
 
     static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
-
-    static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
-            rtl_TextEncoding *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
-
     static const OUString GetSubStorageName( const SfxFilter& rFltr );
 };
 

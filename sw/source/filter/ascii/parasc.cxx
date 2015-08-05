@@ -248,34 +248,47 @@ sal_uLong SwASCIIParser::ReadChars()
     sal_Unicode *pStt = 0, *pEnd = 0, *pLastStt = 0;
     long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
-    bool bSwapUnicode = false;
 
-    const SwAsciiOptions *pUseMe=&rOpt;
-    SwAsciiOptions aEmpty;
-    if (nFileSize >= 2 &&
-        aEmpty.GetFontName() == rOpt.GetFontName() &&
-        aEmpty.GetCharSet() == rOpt.GetCharSet() &&
-        aEmpty.GetLanguage() == rOpt.GetLanguage() &&
-        aEmpty.GetParaFlags() == rOpt.GetParaFlags())
+    rtl_TextEncoding currentCharSet = RTL_TEXTENCODING_DONTKNOW;
+    rInput.StartReadingUnicodeText( currentCharSet );
+    switch ( rInput.Tell() )
     {
-        sal_uLong nLen, nOrig;
-        nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
-        rtl_TextEncoding eCharSet;
-        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
-        OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
-        if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
+    // Even if something else was preselected, this is UTF-8/UTF-16 for sure.
+    case 2: currentCharSet = RTL_TEXTENCODING_UNICODE; break;
+    case 3: currentCharSet = RTL_TEXTENCODING_UTF8; break;
+    default:
+        SwAsciiOptions aEmpty;
+        if ( aEmpty.GetFontName() != rOpt.GetFontName() ||
+             aEmpty.GetCharSet() != rOpt.GetCharSet() ||
+             aEmpty.GetLanguage() != rOpt.GetLanguage() ||
+             aEmpty.GetParaFlags() != rOpt.GetParaFlags() )
+            currentCharSet = rOpt.GetCharSet();
+
+        if ( currentCharSet == RTL_TEXTENCODING_DONTKNOW ||
+             currentCharSet == RTL_TEXTENCODING_UNICODE )
         {
-            aEmpty.SetCharSet(eCharSet);
-            rInput.SeekRel(-(long(nLen)));
+            // Try to guess bare Unicode endianness
+            sal_uInt8 nRead = 0;
+            rInput.ReadUChar( nRead );
+            if ( nRead == 0 )
+                rInput.SetEndian( SvStreamEndian::BIG );
+            else
+            {
+                rInput.ReadUChar( nRead );
+                if ( nRead == 0 )
+                    rInput.SetEndian( SvStreamEndian::LITTLE );
+            }
+            rInput.Seek( STREAM_SEEK_TO_BEGIN );
+
+            if ( nRead == 0 )
+                // Assuming nothing else will have 0x0
+                currentCharSet = RTL_TEXTENCODING_UNICODE;
         }
-        else
-            rInput.SeekRel(-(long(nOrig)));
-        pUseMe=&aEmpty;
     }
+    bool bSwapUnicode = rInput.IsEndianSwap();
 
     rtl_TextToUnicodeConverter hConverter=0;
     rtl_TextToUnicodeContext hContext=0;
-    rtl_TextEncoding currentCharSet = pUseMe->GetCharSet();
     if (RTL_TEXTENCODING_UCS2 != currentCharSet)
     {
         if( currentCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -284,13 +297,7 @@ sal_uLong SwASCIIParser::ReadChars()
         OSL_ENSURE( hConverter, "no string convert available" );
         if (!hConverter)
             return ERROR_SW_READ_BASE;
-        bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
-    }
-    else if (pUseMe != &aEmpty)  //Already successfully figured out type
-    {
-        rInput.StartReadingUnicodeText( currentCharSet );
-        bSwapUnicode = rInput.IsEndianSwap();
     }
 
     std::unique_ptr<sal_Unicode[]> aWork;
@@ -380,7 +387,7 @@ sal_uLong SwASCIIParser::ReadChars()
         switch( *pStt )
         {
 
-        case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
+        case 0x0a:  if( LINEEND_LF == rOpt.GetParaFlags() )
                     {
                         bIns = false;
                         *pStt = 0;
@@ -392,14 +399,14 @@ sal_uLong SwASCIIParser::ReadChars()
                     }
                     break;
 
-        case 0x0d:  if( LINEEND_LF != pUseMe->GetParaFlags() )
+        case 0x0d:  if( LINEEND_LF != rOpt.GetParaFlags() )
                     {
                         bIns = false;
                         *pStt = 0;
                         ++pStt;
 
                         bool bChkSplit = false;
-                        if( LINEEND_CRLF == pUseMe->GetParaFlags() )
+                        if( LINEEND_CRLF == rOpt.GetParaFlags() )
                         {
                             if( pStt == pEnd )
                                 cLastCR = 0x0d;
