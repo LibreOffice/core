@@ -81,7 +81,7 @@ public:
         pStrm->EndElement( "style:header" );
     }
 private:
-    XFContentContainer  m_aContents;
+    rtl::Reference<XFContentContainer>  m_aContents;
 };
 
 #endif

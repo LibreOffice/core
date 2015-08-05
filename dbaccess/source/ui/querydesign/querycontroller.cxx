@@ -1252,7 +1252,7 @@ sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
 {
     if ( _nColPos < m_aFieldInformation.getLength() )
     {
-        ::std::unique_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
+        rtl::Reference<OTableFieldDesc> pField( new OTableFieldDesc());
         pField->Load( m_aFieldInformation[ _nColPos ], false );
         return pField->GetColWidth();
     }

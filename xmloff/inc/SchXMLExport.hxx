@@ -37,9 +37,9 @@ class SchXMLExport : public SvXMLExport
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
-    SchXMLAutoStylePoolP maAutoStylePool;
+    rtl::Reference<SchXMLAutoStylePoolP> maAutoStylePool;
 
-    SchXMLExportHelper maExportHelper;
+    rtl::Reference<SchXMLExportHelper> maExportHelper;
 
 protected:
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) SAL_OVERRIDE;

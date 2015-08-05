@@ -506,7 +506,8 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
 SchXMLImport::SchXMLImport(
     const Reference< uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags ) :
-    SvXMLImport( xContext, implementationName, nImportFlags )
+    SvXMLImport( xContext, implementationName, nImportFlags ),
+    maImportHelper(new SchXMLImportHelper)
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
@@ -540,7 +541,7 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
         ( IsXMLToken( rLocalName, XML_DOCUMENT_STYLES) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT) ))
     {
-        pContext = new SchXMLDocContext( maImportHelper, *this, nPrefix, rLocalName );
+        pContext = new SchXMLDocContext( *maImportHelper.get(), *this, nPrefix, rLocalName );
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
                   (IsXMLToken(rLocalName, XML_DOCUMENT_META)
@@ -556,12 +557,12 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
                             xDPS->getDocumentProperties())
                 // flat OpenDocument file format
                 : new SchXMLFlatDocContext_Impl(
-                            maImportHelper, *this, nPrefix, rLocalName,
+                            *maImportHelper.get(), *this, nPrefix, rLocalName,
                             xDPS->getDocumentProperties());
         } else {
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList )
-                : new SchXMLDocContext( maImportHelper, *this,
+                : new SchXMLDocContext( *maImportHelper.get(), *this,
                                         nPrefix, rLocalName );
         }
     } else {
@@ -583,7 +584,7 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
 
     // set context at base class, so that all auto-style classes are imported
     SetAutoStyles( pStylesCtxt );
-    maImportHelper.SetAutoStylesContext( pStylesCtxt );
+    maImportHelper->SetAutoStylesContext( pStylesCtxt );
 
     return pStylesCtxt;
 }

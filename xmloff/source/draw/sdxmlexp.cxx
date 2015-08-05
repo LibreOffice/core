@@ -1717,13 +1717,13 @@ void SdXMLExport::ImpWritePresentationStyles()
                 // write presentation styles (ONLY if presentation)
                 if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
                 {
-                    XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
+                    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, OUString(), GetAutoStylePool().get()));
                     const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
                     OUString aPrefix( xNamed->getName() );
 
                     aPrefix += "-";
-                    aStEx.exportStyleFamily(xNamed->getName(),
+                    aStEx->exportStyleFamily(xNamed->getName(),
                         OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
                         aMapperRef, false,
                         XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);

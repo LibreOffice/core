@@ -1893,7 +1893,7 @@ void ScXMLExport::_ExportStyles( bool bUsed )
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
     }
-    ScXMLStyleExport aStylesExp(*this, OUString(), GetAutoStylePool().get());
+    rtl::Reference<ScXMLStyleExport> aStylesExp(new ScXMLStyleExport(*this, OUString(), GetAutoStylePool().get()));
     if (GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
@@ -1901,7 +1901,7 @@ void ScXMLExport::_ExportStyles( bool bUsed )
         {
             uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
             if (xProperties.is())
-                aStylesExp.exportDefaultStyle(xProperties, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper);
+                aStylesExp->exportDefaultStyle(xProperties, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper);
             if (pSharedData->HasShapes())
             {
                 GetShapeExport()->ExportGraphicDefaults();
@@ -1934,7 +1934,7 @@ void ScXMLExport::_ExportStyles( bool bUsed )
     }
     exportDataStyles();
 
-    aStylesExp.exportStyleFamily(OUString("CellStyles"),
+    aStylesExp->exportStyleFamily(OUString("CellStyles"),
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper, false, XML_STYLE_FAMILY_TABLE_CELL);
 
     SvXMLExport::_ExportStyles(bUsed);

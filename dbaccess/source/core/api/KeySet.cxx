@@ -111,7 +111,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  sal_Int32 i_nMaxRows,
                  sal_Int32& o_nRowCount)
             :OCacheSet(i_nMaxRows)
-            ,m_aParameterValueForCache(_aParameterValueForCache)
+            ,m_aParameterValueForCache(new ORowSetValueVector(_aParameterValueForCache))
             ,m_xTable(_xTable)
             ,m_xTableKeys(_xTableKeys)
             ,m_xComposer(_xComposer)
@@ -824,8 +824,8 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->get().begin();
 
     // check the if the parameter values have been changed
-    OSL_ENSURE((m_aParameterValueForCache.get().size()-1) == m_pParameterNames->size(),"OKeySet::copyRowValue: Parameter values and names differ!");
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache.get().begin() +1;
+    OSL_ENSURE((m_aParameterValueForCache->get().size()-1) == m_pParameterNames->size(),"OKeySet::copyRowValue: Parameter values and names differ!");
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache->get().begin() +1;
 
     bool bChanged = false;
     SelectColumnsMetaData::const_iterator aParaIter = (*m_pParameterNames).begin();
@@ -836,8 +836,8 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
         aValue.setSigned(m_aSignedFlags[aParaIter->second.nPosition]);
         if ( (_rInsertRow->get())[aParaIter->second.nPosition] != aValue )
         {
-            ORowSetValueVector aCopy(m_aParameterValueForCache);
-            (aCopy.get())[i] = (_rInsertRow->get())[aParaIter->second.nPosition];
+            rtl::Reference<ORowSetValueVector> aCopy(new ORowSetValueVector(*m_aParameterValueForCache.get()));
+            (aCopy->get())[i] = (_rInsertRow->get())[aParaIter->second.nPosition];
             m_aUpdatedParameter[i_nBookmark] = aCopy;
             bChanged = true;
         }
@@ -1192,13 +1192,13 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
     OUpdatedParameter::iterator aUpdateFind = m_aUpdatedParameter.find(m_aKeyIter->first);
     if ( aUpdateFind == m_aUpdatedParameter.end() )
     {
-        aParaIter = m_aParameterValueForCache.get().begin();
-        aParaEnd = m_aParameterValueForCache.get().end();
+        aParaIter = m_aParameterValueForCache->get().begin();
+        aParaEnd = m_aParameterValueForCache->get().end();
     }
     else
     {
-        aParaIter = aUpdateFind->second.get().begin();
-        aParaEnd = aUpdateFind->second.get().end();
+        aParaIter = aUpdateFind->second->get().begin();
+        aParaEnd = aUpdateFind->second->get().end();
     }
 
     for(++aParaIter;aParaIter != aParaEnd;++aParaIter,++nPos)

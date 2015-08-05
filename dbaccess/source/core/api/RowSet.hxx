@@ -86,8 +86,8 @@ namespace dbaccess
         /** our parameters values, used when we do not yet have a parameters container
             (since we have not been executed, yet)
         */
-        ORowSetValueVector                          m_aPrematureParamValues;
-        ORowSetValueVector                          m_aParameterValueForCache;
+        rtl::Reference<ORowSetValueVector>          m_aPrematureParamValues;
+        rtl::Reference<ORowSetValueVector>          m_aParameterValueForCache;
         ::std::vector<bool>                         m_aParametersSet;
         ::std::vector<bool>                         m_aReadOnlyDataColumns;
 

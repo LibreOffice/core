@@ -1247,7 +1247,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
 
 void XMLShapeExport::ExportGraphicDefaults()
 {
-    XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
+    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
 
     // construct PropertySetMapper
     rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( mrExport ) );
@@ -1268,10 +1268,10 @@ void XMLShapeExport::ExportGraphicDefaults()
             uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance("com.sun.star.drawing.Defaults"), uno::UNO_QUERY );
             if( xDefaults.is() )
             {
-                aStEx.exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );
+                aStEx->exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );
 
                 // write graphic family styles
-                aStEx.exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx->exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
         catch(const lang::ServiceNotRegisteredException&)

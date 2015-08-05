@@ -1391,7 +1391,7 @@ sal_Int8 OSelectionBrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& _rEvt 
         return DND_ACTION_NONE;
     }
 
-    OTableFieldDesc aInfo;
+    rtl::Reference<OTableFieldDesc> aInfo;
     // insert the field at the selected position
     OJoinExchangeData jxdSource = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
     InsertField(jxdSource);
