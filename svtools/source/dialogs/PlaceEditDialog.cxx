@@ -150,18 +150,20 @@ void PlaceEditDialog::InitDetails( )
     for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
     {
         OUString sUrl = aTypesUrlsList[i];
-        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) &&
-             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
-             !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
+        nPos = m_pLBServerType->InsertEntry( aTypesNamesList[i], nPos );
+
+        std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
+        xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+        m_aDetailsContainers.push_back(xCmisDetails);
+
+        if ( ( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) ||
+             ( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) ||
+             ( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
         {
-            nPos = m_pLBServerType->InsertEntry( aTypesNamesList[i], nPos );
-
-            std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
-            xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-            m_aDetailsContainers.push_back(xCmisDetails);
-
-            nPos++;
+            xCmisDetails->setActive( false );
         }
+
+        nPos++;
     }
 
     // Create WebDAV / FTP / SSH details control

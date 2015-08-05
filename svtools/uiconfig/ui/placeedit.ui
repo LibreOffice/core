@@ -478,9 +478,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="UserDetails">
+          <object class="GtkGrid" id="CommonDetails">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="label16">
@@ -508,18 +509,6 @@
                 <property name="top_attach">0</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="LabelGrid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="labelLabel">
                 <property name="visible">True</property>
@@ -531,7 +520,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -543,14 +532,14 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>

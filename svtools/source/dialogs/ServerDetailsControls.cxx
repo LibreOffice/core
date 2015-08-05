@@ -31,9 +31,11 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame )
+DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame ) :
+    m_bIsActive ( true )
 {
     pBuilder->get( m_pFrame, rFrame );
+    pBuilder->get( m_pCommon, "CommonDetails" );
 }
 
 DetailsContainer::~DetailsContainer( )
@@ -43,6 +45,9 @@ DetailsContainer::~DetailsContainer( )
 void DetailsContainer::show( bool bShow )
 {
     m_pFrame->Show( bShow );
+
+    m_pFrame->Enable( m_bIsActive );
+    m_pCommon->Enable( m_bIsActive );
 }
 
 INetURLObject DetailsContainer::getUrl( )
@@ -61,6 +66,11 @@ bool DetailsContainer::setUrl( const INetURLObject& )
 void DetailsContainer::notifyChange( )
 {
     m_aChangeHdl.Call( this );
+}
+
+void DetailsContainer::setActive( bool bActive )
+{
+    m_bIsActive = bActive;
 }
 
 IMPL_LINK_NOARG( DetailsContainer, ValueChangeHdl )

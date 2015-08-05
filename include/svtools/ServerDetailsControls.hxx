@@ -25,8 +25,10 @@
 class DetailsContainer
 {
     private:
-        Link<> m_aChangeHdl;
-        VclPtr<VclGrid>       m_pFrame;
+        Link<>             m_aChangeHdl;
+        VclPtr<VclGrid>    m_pFrame;
+        VclPtr<VclGrid>    m_pCommon;
+        bool               m_bIsActive;
 
     public:
         DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame );
@@ -45,6 +47,8 @@ class DetailsContainer
         virtual bool setUrl( const INetURLObject& rUrl );
 
         virtual void setUsername( const OUString& /*rUsername*/ ) { };
+
+        virtual void setActive( bool bActive = true );
 
     protected:
         void notifyChange( );
