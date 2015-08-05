@@ -114,6 +114,13 @@ void ZipOutputEntry::closeBufferFile()
     m_xOutStream.clear();
 }
 
+void ZipOutputEntry::deleteBufferFile()
+{
+    assert(!m_xOutStream.is() && !m_aTempURL.isEmpty());
+    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(m_xContext));
+    xAccess->kill(m_aTempURL);
+}
+
 uno::Reference< io::XInputStream > ZipOutputEntry::getData() const
 {
     uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
