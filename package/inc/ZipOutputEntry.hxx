@@ -69,6 +69,7 @@ public:
     css::uno::Reference< css::io::XInputStream > getData() const;
     ::css::uno::Any getParallelDeflateException() const { return m_aParallelDeflateException; }
     void closeBufferFile();
+    void deleteBufferFile();
 
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
