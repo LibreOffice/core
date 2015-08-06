@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_filters_test, \
 	orcus \
 	orcus-parser \
 	libxml2 \
+    udunits2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \

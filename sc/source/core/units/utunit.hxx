@@ -65,10 +65,6 @@ private:
         mpUnit.reset(pUnit, &freeUt);
     }
 
-    ut_unit* get() const {
-        return mpUnit.get();
-    }
-
 public:
     /**
      * return false if we try to create in invalid unit.
@@ -91,6 +87,10 @@ public:
     }
 
     OUString getString() const;
+
+    ut_unit* get() const {
+        return mpUnit.get();
+    }
 
     bool isValid() const {
         // We use a null pointer/empty unit to indicate an invalid unit.

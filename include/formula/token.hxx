@@ -33,6 +33,8 @@
 #include <svl/sharedstring.hxx>
 #include <osl/interlck.h>
 
+#include "formulaunit.hxx"
+
 class ScJumpMatrix;
 class ScMatrix;
 struct ScComplexRefData;
@@ -94,10 +96,10 @@ class FormulaTokenArray;
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
     OpCode                      eOp;
-            FormulaToken&            operator=( const FormulaToken& ) SAL_DELETED_FUNCTION;
+    FormulaToken   &            operator=( const FormulaToken& ) SAL_DELETED_FUNCTION;
 protected:
 
-            const StackVar      eType;          // type of data
+            const StackVar              eType;          // type of data
             mutable oslInterlockedCount mnRefCnt;        // reference count
 
 public:
@@ -125,8 +127,8 @@ public:
             const_cast<FormulaToken*>(this)->Delete();
     }
 
-    inline oslInterlockedCount GetRef() const { return mnRefCnt; }
-    inline OpCode               GetOpCode() const       { return eOp; }
+    inline oslInterlockedCount GetRef() const       { return mnRefCnt; }
+    inline OpCode              GetOpCode() const    { return eOp; }
 
     /**
         Dummy methods to avoid switches and casts where possible,
@@ -149,7 +151,8 @@ public:
     virtual void                SetForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual svl::SharedString GetString() const;
+    virtual FormulaUnit         GetUnit() const;
+    virtual svl::SharedString   GetString() const;
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
     virtual bool                IsGlobal() const;
@@ -267,11 +270,32 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaDoubleToken(*this); }
     virtual double              GetDouble() const SAL_OVERRIDE;
     virtual double&             GetDoubleAsReference() SAL_OVERRIDE;
+    virtual FormulaUnit         GetUnit() const;
     virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 };
 
+class FORMULA_DLLPUBLIC FormulaDoubleUnitToken : public FormulaDoubleToken
+{
+private:
+            FormulaUnit         maUnit;
+public:
+    using FormulaDoubleToken::GetUnit;
+            FormulaUnit         GetUnit() const      { return maUnit; }
+
+                                FormulaDoubleUnitToken( double f, FormulaUnit& aUnit ) :
+                                    FormulaDoubleToken( f )
+                                    {
+                                        maUnit = FormulaUnit( ut_clone(aUnit.get()) );
+                                        maUnit.isValid();
+                                    }
+                                FormulaDoubleUnitToken( const FormulaDoubleUnitToken& r ) :
+                                    FormulaDoubleToken( r ), maUnit( r.maUnit )
+                                    {}
+
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleUnitToken )
+};
 
 class FORMULA_DLLPUBLIC FormulaStringToken : public FormulaToken
 {

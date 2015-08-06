@@ -1,0 +1,74 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+#ifndef INCLUDED_FORMULAUNIT_HXX
+#define INCLUDED_FORMULAUNIT_HXX
+
+#include <rtl/ustring.hxx>
+
+#include <boost/optional.hpp>
+#include <boost/shared_ptr.hpp>
+
+#include <udunits2/udunits2.h>
+
+class FormulaUnit {
+public:
+    FormulaUnit(ut_unit* pUnit,
+           const boost::optional< OUString > pInputString = boost::optional< OUString >())
+        : mpUnit(pUnit, &freeUt)
+        , msInputString(pInputString)
+    {}
+    FormulaUnit( const FormulaUnit& aUnit )
+        : mpUnit( ut_clone(aUnit.get()), &freeUt )
+        , msInputString( aUnit.getInputString() )
+    {}
+
+    /*
+     * Default constructor returns an empty/invalid unit.
+     * (Note: this is different from the dimensionless unit which is valid.)
+     */
+    FormulaUnit() {};
+
+    bool isValid() const {
+        // We use a null pointer/empty unit to indicate an invalid unit.
+        return mpUnit.get() != 0;
+    }
+
+    ut_unit* get() const                                { return mpUnit.get(); }
+    boost::optional< OUString > getInputString() const  { return msInputString; }
+
+    bool setNewUnit( ut_unit* pNewUnit )
+    {
+        mpUnit.reset(pNewUnit, &freeUt);
+        return true;
+    }
+
+private:
+    ::boost::shared_ptr< ut_unit > mpUnit;
+
+    /**
+     * The original input string used in createUnit.
+     * We can't necessarily convert a ut_unit back into the
+     * original representation (e.g. cm gets formatted as 0.01m
+     * by default), hence we should store the original string
+     * as may need to display it to the user again.
+     *
+     * There is no input string for units that are created when manipulating
+     * other units (i.e. multiplication/division of other UtUnits).
+     */
+    boost::optional< OUString > msInputString;
+
+    static void freeUt(ut_unit* pUnit) {
+        ut_free(pUnit);
+    }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

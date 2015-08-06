@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_core))
 
 $(eval $(call gb_CppunitTest_use_externals,sc_core, \
 	boost_headers \
+	udunits2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sc_core, \

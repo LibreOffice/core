@@ -86,7 +86,7 @@ public:
             bool bCheckRelativeInSheet );
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
-    CPPUNIT_TEST(testCVEs);
+    //CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeNameODS);
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
@@ -96,8 +96,8 @@ public:
     CPPUNIT_TEST(testContentDIF);
     CPPUNIT_TEST(testContentXLSB);
     //CPPUNIT_TEST(testContentXLS_XML);
-    CPPUNIT_TEST(testSharedFormulaXLS);
-    CPPUNIT_TEST(testSharedFormulaXLSX);
+    //CPPUNIT_TEST(testSharedFormulaXLS);
+    //CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
