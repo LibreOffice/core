@@ -640,7 +640,8 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
     }
     else
     {
-        JoinMainLoopThread();
+        // having the thread join itself is pretty stupid.
+        // but we can't get the osl_Thread to destroy here so just leak it.
     }
 }
 }
