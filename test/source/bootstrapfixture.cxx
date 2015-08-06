@@ -25,6 +25,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/link.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <osl/file.hxx>
@@ -83,6 +84,15 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
     }
 }
 
+struct InitHook {
+    DECL_STATIC_LINK(InitHook, deinitHook, void*);
+};
+
+IMPL_STATIC_LINK_NOARG(InitHook, deinitHook) {
+    // nothing to do for now
+    return 0;
+}
+
 // this is called from pyuno
 SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
 {
@@ -104,6 +114,9 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
         InitVCL();
         if (test::isHeadless())
             Application::EnableHeadlessMode(true);
+
+        // avoid VCLXToolkit thinking that InitVCL hasn't been called
+        Application::setDeInitHook(LINK(nullptr, InitHook, deinitHook));
 
         test_init_impl(false, true, pFactory);
     }
