@@ -427,8 +427,6 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 
 void SAL_CALL osl_joinWithThread(oslThread Thread)
 {
-    pthread_t thread;
-    bool attached;
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
 
     if (!pImpl)
@@ -436,7 +434,13 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
-    if (pthread_equal (pthread_self(), pImpl->m_hThread))
+    pthread_t const thread = pImpl->m_hThread;
+    bool const attached = ((pImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED) > 0);
+
+    // check this only if *this* thread is still attached - if it's not,
+    // then it could have terminated and another newly created thread could
+    // have recycled the same id as m_hThread!
+    if (attached && pthread_equal(pthread_self(), pImpl->m_hThread))
     {
         assert(false); // Win32 implementation would deadlock here!
         /* self join */
@@ -444,8 +448,6 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
         return; /* EDEADLK */
     }
 
-    thread = pImpl->m_hThread;
-    attached = ((pImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED) > 0);
     pImpl->m_Flags &= ~THREADIMPL_FLAGS_ATTACHED;
 
     pthread_mutex_unlock (&(pImpl->m_Lock));
