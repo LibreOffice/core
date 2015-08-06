@@ -175,8 +175,8 @@ struct WW8_STD
     sal_uInt16  cupx : 4;          // # of UPXs (and UPEs)
     sal_uInt16  istdNext : 12;     // next style
     sal_uInt16  bchUpe;            // offset to end of upx's, start of upe's
-    // jetzt neu:
-    // ab Ver8 gibts zwei Felder mehr:
+    // new:
+    // from Ver8 on there are two more fields:
   sal_uInt16    fAutoRedef : 1;    /* auto redefine style when appropriate */
   sal_uInt16    fHidden : 1;       /* hidden from UI? */
   sal_uInt16    : 14;              /* unused bits */
@@ -191,7 +191,7 @@ struct WW8_STD
 
 static_assert(sizeof (WW8_STD) == 10, "this has to match the msword size");
 
-/** Basis zum Einlesen UND zum Arbeiten (wird jeweils unter schiedlich beerbt)
+/** base for reading AND working on (will have different subclasses */
 */
 struct WW8_FFN_BASE     // Font Descriptor
 {
@@ -211,15 +211,15 @@ struct WW8_FFN_BASE     // Font Descriptor
 
 static_assert(sizeof (WW8_FFN_BASE) == 6, "this has to match the msword size");
 
-/** Hiermit arbeiten wir im Parser (und Dumper)
+/** This is what we use in the Parser (and Dumper)
 */
 struct WW8_FFN : public WW8_FFN_BASE
 {
     // ab Ver8 als Unicode
-    OUString sFontname;// 0x6 bzw. 0x40 ab Ver8 zero terminated string that
+    OUString sFontname;// 0x6 or 0x40 resp. from Ver8 on zero terminated string that
                                         // records name of font.
                                         // Maximal size of szFfn is 65 characters.
-                                        // Vorsicht: Dieses Array kann auch kleiner sein!!!
+                                        // Attention: This array can be smaller!!!
                                         // Possibly followed by a second sz which records the
                                         // name of an alternate font to use if the first named
                                         // font does not exist on this system.
@@ -429,10 +429,9 @@ struct WW8_DOGRID
     short dxaGrid;  // width of each grid square
     short dyaGrid;  // height of each grid square
 
-    /* a c h t u n g :     es duerfen keine solchen Bitfelder ueber einen eingelesenes Byte-Array
-                            gelegt werden!!
-                            stattdessen ist ein aBits1 darueber zu legen, das mit & auszulesen ist
-    GRUND: Compiler auf Intel und Sparc sortieren die Bits unterschiedlich
+    /* attention: you must not put bit fields on top of such a byte array read from a file!
+       instead put an aBits1 on it and read it out with &.
+       reason: compilers on Intel and Sparc sort the bits differently
     */
 
     short dyGridDisplay:7;  // the number of grid squares (in the y direction)
@@ -530,7 +529,7 @@ struct WW8_TBD
 //  *   int :2  C0  reserved
 };
 
-struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend dem Ver8-Format)
+struct WW8_TCell    // this is the base for further work (corresponds mostly to the Ver8 format)
 {
     // The single-bit fields should ideally be bool, but probably need to keep
     // them as sal_uInt8 to make them combine with the following two-bit
@@ -546,7 +545,7 @@ struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend d
                                                     //          0 top
                                                     //          1 center
                                                     //          2 bottom
-    sal_uInt16 fUnused      : 7;// reserved - nicht loeschen: macht das sal_uInt16 voll !!
+    sal_uInt16 fUnused      : 7;// reserved - do not remove, fills up the sal_uInt16!
 
     WW8_BRCVer9 rgbrc[4];   // border codes
 //notational convenience for referring to brcTop, brcLeft, etc fields.
@@ -557,7 +556,7 @@ struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend d
 };
 // cbTC (count of bytes of a TC) is 18(decimal), 12(hex).
 
-struct WW8_TCellVer6    // wird aus der Datei gelesen
+struct WW8_TCellVer6    // read from file
 {
     sal_uInt8  aBits1Ver6;
     sal_uInt8  aBits2Ver6;
@@ -573,22 +572,22 @@ struct WW8_TCellVer6    // wird aus der Datei gelesen
 };
 // cbTC (count of bytes of a TC) is 10(decimal), A(hex).
 
-struct WW8_TCellVer8    // wird aus der Datei gelesen
+struct WW8_TCellVer8    // read from file
 {
-    SVBT16 aBits1Ver8;      // Dokumentation siehe oben unter WW8_TCell
+    SVBT16 aBits1Ver8;      // Documentation: see above at WW8_TCell
     SVBT16 aUnused;         // reserve
-    WW8_BRC rgbrcVer8[4];   // Dokumentation siehe oben unter WW8_TCell
+    WW8_BRC rgbrcVer8[4];   // Documentation: see above at WW8_TCell
 };
 // cbTC (count of bytes of a TC) is 20(decimal), 14(hex).
 
-struct WW8_SHD              // struct SHD fehlt in der Beschreibung
+struct WW8_SHD              // struct SHD is missing from the description
 {
 private:
     sal_uInt16 maBits;
 //  sal_uInt16 nFore : 5;       // 0x001f ForegroundColor
 //  sal_uInt16 nBack : 5;       // 0x03e0 BackgroundColor
 //  sal_uInt16 nStyle : 5;      // 0x7c00 Percentage and Style
-//  sal_uInt16 nDontKnow : 1;   // 0x8000 ???   ab Ver8: ebenfalls fuer Style
+//  sal_uInt16 nDontKnow : 1;   // 0x8000 ???   from Ver8: also for Style
 
 public:
     WW8_SHD() : maBits(0) {}
@@ -727,7 +726,7 @@ struct WW8_DP_LINETYPE
                             // 2=Dotted, 3=Dash Dot, 4=Dash Dot Dot, 5=Hollow
 };
 
-struct WW8_DP_SHADOW    // Schattierung!
+struct WW8_DP_SHADOW    // shading!
 {
     SVBT16 shdwpi;          // Shadow Property Intensity
     SVBT16 xaOffset;        // x offset of shadow
@@ -852,7 +851,7 @@ struct WW8_PCD
 };
 
 // AnnoTation References Descriptor (ATRD)
-struct WW8_ATRD                 // fuer die 8-Version
+struct WW8_ATRD                 // for version 8
 {
     SVBT16 xstUsrInitl[ 10 ];       // pascal-style String holding initials
                                     // of annotation author
@@ -876,7 +875,7 @@ struct WW8_ATRDEXTRA
     SVBT32 Discussitem;
 };
 
-struct WW67_ATRD                // fuer die 6/7-Version
+struct WW67_ATRD                // for versions 6/7
 {
     sal_Char xstUsrInitl[ 10 ];     // pascal-style String holding initials
                                     // of annotation author
@@ -952,8 +951,8 @@ public:
     enum FSPAOrient {RelPgMargin, RelPageBorder, RelText};
 };
 
-struct WW8_FSPA_SHADOW  // alle Member an gleicher Position und Groesse,
-{                                               // wegen:  pF = (WW8_FSPA*)pFS;
+struct WW8_FSPA_SHADOW  // all members at same position and size
+{                                               // due to:  pF = (WW8_FSPA*)pFS;
     SVBT32 nSpId;
     SVBT32 nXaLeft;
     SVBT32 nYaTop;
