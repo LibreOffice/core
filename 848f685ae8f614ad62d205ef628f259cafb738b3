@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_400c8e42",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 0,
+      "message": "keine ahnung was das heissen soll, besser loeschen",
+      "revId": "848f685ae8f614ad62d205ef628f259cafb738b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

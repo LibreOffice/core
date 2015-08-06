@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_e0168254",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "\"ignore grpprl\" would be better i think",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_20098a32",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4382,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "not \"exhibits\", \"points\"",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_8006961e",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4580,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "\"to\" would be better than \"at\" here",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_831d0069",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5031,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "the return values aren\u0027t delivered *from* the caller, but the WW8PclxManResults is.\n\n\"delivered to the caller\" makes more sense with your sentence",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_631a7c70",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6328,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "not sure what \"interjectionally\" means, but the old comment meant to say that 2 more fields are present",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_2337d4e4",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6615,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "\"Dop\", not \"Drop\" - it\u0027s something from the file format",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_233eb4b8",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6622,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-06T11:57:10Z",
+      "side": 1,
+      "message": "\"verodern\" means or operator - not obvious what the WW_ is...\n\n...\n\nah i think this refers to WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST}\n\nso better spell that out like\n\n\"GetTextPos() can be called with exactly one flag out of WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST}\"",
+      "revId": "800c9588127c218ba6b2ba58950606b50744d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
