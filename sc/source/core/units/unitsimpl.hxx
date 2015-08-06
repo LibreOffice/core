@@ -81,6 +81,7 @@ private:
 
 public:
     static ::boost::shared_ptr< UnitsImpl > GetUnits();
+    ::boost::shared_ptr< ut_system > GetUnitSystem() const { return mpUnitSystem; }
 
     UnitsImpl();
     virtual ~UnitsImpl();
@@ -108,6 +109,14 @@ public:
                                         ScDocument* pDoc) SAL_OVERRIDE;
 
     virtual bool isValidUnit(const OUString& rsUnit) SAL_OVERRIDE;
+    /**
+     * Retrieve the units for a given cell. This probes based on the usual rules
+     * for cell annotation/column header.
+     * Retrieving units for a formula cell is not yet supported.
+     *
+     * Units are undefined for any text cell (including header cells).
+     */
+    UtUnit getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc);
 
 private:
     UnitsResult getOutputUnitsForOpCode(std::stack< RAUSItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc);
@@ -139,14 +148,6 @@ private:
     static OUString extractUnitStringFromFormat(const OUString& rFormatString);
     static OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
 
-    /**
-     * Retrieve the units for a given cell. This probes based on the usual rules
-     * for cell annotation/column header.
-     * Retrieving units for a formula cell is not yet supported.
-     *
-     * Units are undefined for any text cell (including header cells).
-     */
-    UtUnit getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc);
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
                          const ScAddress& rFormulaAddress,
                          ScDocument* pDoc);

@@ -92,6 +92,10 @@ public:
 
     OUString getString() const;
 
+    ::boost::shared_ptr< ut_unit > getUnit() const {
+        return mpUnit;
+    }
+
     bool isValid() const {
         // We use a null pointer/empty unit to indicate an invalid unit.
         return mpUnit.get() != 0;
@@ -99,6 +103,12 @@ public:
 
     bool isDimensionless() const {
         return ut_is_dimensionless(this->get());
+    }
+
+    UtUnit& operator=(const UtUnit& rUnit) {
+        //mpUnit = rUnit.getUnit();
+        msInputString = rUnit.msInputString;
+        return *this;
     }
 
     bool operator==(const UtUnit& rUnit) const {

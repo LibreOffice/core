@@ -24,6 +24,9 @@ $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 $(eval $(call gb_Library_use_externals,vbaobj,\
 	boost_headers \
 	mdds_headers \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        udunits2 \
+    ) \
 ))
 
 $(eval $(call gb_Library_use_api,vbaobj,\

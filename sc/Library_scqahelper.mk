@@ -20,6 +20,9 @@ $(eval $(call gb_Library_use_externals,scqahelper, \
 	mdds_headers \
 	cppunit \
 	libxml2 \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        udunits2 \
+    ) \
 ))
 
 ifneq ($(SYSTEM_LIBORCUS),)

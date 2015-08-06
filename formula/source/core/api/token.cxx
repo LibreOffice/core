@@ -39,6 +39,7 @@ namespace formula
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleUnitToken )
 // Need a lot of FormulaDoubleToken
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 // Need a lot of FormulaByteToken
@@ -319,6 +320,12 @@ const std::vector<ScComplexRefData>* FormulaToken::GetRefList() const
 std::vector<ScComplexRefData>* FormulaToken::GetRefList()
 {
     OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
+    return NULL;
+}
+
+FormulaUnit* FormulaToken::GetUnit() const
+{
+    SAL_WARN("formula", "call virtual dummy function: GetUnit()");
     return NULL;
 }
 

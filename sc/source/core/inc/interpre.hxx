@@ -32,6 +32,7 @@
 #include "calcconfig.hxx"
 #include "token.hxx"
 #include "math.hxx"
+#include "formulaunit.hxx"
 
 #include <map>
 #include <vector>
@@ -273,6 +274,7 @@ formula::FormulaTokenRef PopToken();
 void Pop();
 void PopError();
 double PopDouble();
+double PopDouble( FormulaUnit& rUnit );
 svl::SharedString PopString();
 void ValidateRef( const ScSingleRefData & rRef );
 void ValidateRef( const ScComplexRefData & rRef );
@@ -321,6 +323,7 @@ sc::RangeMatrix PopRangeMatrix();
 void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
 
 void PushDouble(double nVal);
+void PushDouble(double nVal, FormulaUnit* pUnit);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
 void PushString( const OUString& rStr );
@@ -349,6 +352,7 @@ sal_uInt8 GetByte() { return cPar; }
 bool DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
+double GetDouble( FormulaUnit& rUnit );
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
 bool GetBool() { return GetDouble() != 0.0; }
@@ -496,6 +500,7 @@ void ScUnichar();
 void ScMin( bool bTextAsZero = false );
 void ScMax( bool bTextAsZero = false );
 double IterateParameters( ScIterFunc, bool bTextAsZero = false );
+double IterateParameters( ScIterFunc, FormulaUnit* pUnit, bool bTextAsZero = false );
 void ScSumSQ();
 void ScSum();
 void ScProduct();

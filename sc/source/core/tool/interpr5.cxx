@@ -39,6 +39,9 @@
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
 #include "formulagroup.hxx"
+#include "formulaopt.hxx"
+#include "scmod.hxx"
+#include "../units/unitsimpl.hxx"
 
 #include <vector>
 
@@ -1206,6 +1209,9 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
+    bool bUnitsEnabled = SC_MOD()->GetFormulaOptions().GetUnitValidat();
+    FormulaUnit* pUnit1 = NULL;
+    FormulaUnit* pUnit2 = NULL;
     short nFmt1, nFmt2;
     nFmt1 = nFmt2 = css::util::NumberFormat::UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
@@ -1215,7 +1221,10 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         pMat2 = GetMatrix();
     else
     {
-        fVal2 = GetDouble();
+        if ( pUnit2 && bUnitsEnabled )
+            fVal2 = GetDouble( *pUnit2 );
+        else
+            fVal2 = GetDouble();
         switch ( nCurFmtType )
         {
             case css::util::NumberFormat::DATE :
@@ -1236,7 +1245,10 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         pMat1 = GetMatrix();
     else
     {
-        fVal1 = GetDouble();
+        if ( pUnit1 && bUnitsEnabled )
+            fVal1 = GetDouble( *pUnit1 );
+        else
+            fVal1 = GetDouble();
         switch ( nCurFmtType )
         {
             case css::util::NumberFormat::DATE :
@@ -1305,9 +1317,49 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             PushIllegalArgument();
     }
     else if ( _bSub )
-        PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+    {
+        // TODO: moggi: memory leak?
+        //FormulaUnit* pInvalidUnit = new FormulaUnit();
+        if ( pUnit1 && pUnit1->isValid() && pUnit2 && pUnit2->isValid() )
+        {
+            if ( ut_compare( pUnit1->getUnit().get(), pUnit2->getUnit().get()  ) == 0 )
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 )/*, pUnit1 */);
+            else
+            {
+                SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 )/*, pInvalidUnit*/ );
+            }
+        }
+        else
+        {
+            if ( bUnitsEnabled )
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 )/*, pInvalidUnit*/ );
+            else
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+        }
+    }
     else
-        PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+    {
+        // TODO: moggi: memory leak?
+        //FormulaUnit* pInvalidUnit = new FormulaUnit();
+        if ( pUnit1 && pUnit1->isValid() && pUnit2 && pUnit2->isValid() )
+        {
+            if ( ut_compare( pUnit1->getUnit().get(), pUnit2->getUnit().get()  ) == 0 )
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 )/*, pUnit1*/ );
+            else
+            {
+                SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 )/*, pInvalidUnit*/ );
+            }
+        }
+        else
+        {
+            if ( bUnitsEnabled )
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 )/*, pInvalidUnit*/ );
+            else
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+        }
+    }
     if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;
@@ -1424,13 +1476,15 @@ void ScInterpreter::ScMul()
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
+    //FormulaUnit aUnit1;
+    //FormulaUnit aUnit2;
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
     {
-        fVal2 = GetDouble();
+        fVal2 = GetDouble( );
         switch ( nCurFmtType )
         {
             case css::util::NumberFormat::CURRENCY :
@@ -1443,7 +1497,7 @@ void ScInterpreter::ScMul()
         pMat1 = GetMatrix();
     else
     {
-        fVal1 = GetDouble();
+        fVal1 = GetDouble( );
         switch ( nCurFmtType )
         {
             case css::util::NumberFormat::CURRENCY :
@@ -1483,7 +1537,25 @@ void ScInterpreter::ScMul()
             PushIllegalArgument();
     }
     else
-        PushDouble(fVal1 * fVal2);
+    {
+        /*if ( fUnit1.isValid() && fUnit2.isValid() )
+        {
+            using namespace sc::units;
+            ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
+            mpUnitsImpl = UnitsImpl::GetUnits();
+            OUString sUnit1 = fUnit1.getInputString().get();
+            OUString sUnit2 = fUnit2.getInputString().get();
+            UtUnit aUtUnit1, aUtUnit2;
+            UtUnit::createUnit( sUnit1, aUtUnit1, mpUnitsImpl->GetUnitSystem() );
+            UtUnit::createUnit( sUnit2, aUtUnit2, mpUnitsImpl->GetUnitSystem() );
+            UtUnit aUtUnit3 = aUtUnit1*aUtUnit2;
+            OUString sUnit3 = aUtUnit3.getString();
+            FormulaUnit aNewUnit = aUtUnit3;
+            PushDouble( fVal1 * fVal2, aNewUnit );
+        }
+        else*/
+            PushDouble(fVal1 * fVal2);
+    }
     if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;

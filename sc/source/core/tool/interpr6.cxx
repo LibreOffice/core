@@ -25,6 +25,7 @@
 #include "dociter.hxx"
 #include "mtvcellfunc.hxx"
 #include "scmatrix.hxx"
+#include "../units/unitsimpl.hxx"
 
 #include <formula/token.hxx>
 
@@ -839,6 +840,478 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     return fRes;
 }
 
+double ScInterpreter::IterateParameters( ScIterFunc eFunc, FormulaUnit* pUnit, bool bTextAsZero )
+{
+    short nParamCount = GetByte();
+    double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
+    double fVal = 0.0;
+    double fMem = 0.0;  // first numeric value != 0.0
+    ::boost::shared_ptr< ut_unit > pResUnit;
+    ::boost::shared_ptr< sc::units::UnitsImpl > pUnitsImpl
+        = sc::units::UnitsImpl::GetUnits(); // TODO: don't perform if units feature disabled
+    sal_uLong nCount = 0;
+    ScAddress aAdr;
+    ScRange aRange;
+    size_t nRefInList = 0;
+    if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+         ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+        nGlobalError = 0;
+    while (nParamCount-- > 0)
+    {
+        bool bFirstParam = true;
+        switch (GetStackType())
+        {
+            case svString:
+            {
+                if( eFunc == ifCOUNT )
+                {
+                    OUString aStr = PopString().getString();
+                    if ( bTextAsZero )
+                        nCount++;
+                    else
+                    {
+                        // Only check if string can be converted to number, no
+                        // error propagation.
+                        sal_uInt16 nErr = nGlobalError;
+                        nGlobalError = 0;
+                        ConvertStringToValue( aStr );
+                        if (!nGlobalError)
+                            ++nCount;
+                        nGlobalError = nErr;
+                    }
+                }
+                else
+                {
+                    switch ( eFunc )
+                    {
+                        case ifAVERAGE:
+                        case ifSUM:
+                        case ifSUMSQ:
+                        case ifPRODUCT:
+                        {
+                            if ( bTextAsZero )
+                            {
+                                Pop();
+                                nCount++;
+                                if ( eFunc == ifPRODUCT )
+                                    fRes = 0.0;
+                            }
+                            else
+                            {
+                                while (nParamCount-- > 0)
+                                    Pop();
+                                SetError( errNoValue );
+                            }
+                        }
+                        break;
+                        default:
+                            Pop();
+                            nCount++;
+                    }
+                }
+            }
+            break;
+            case svDouble    :
+                fVal = GetDouble();
+                nCount++;
+                switch( eFunc )
+                {
+                    case ifAVERAGE:
+                    case ifSUM:
+                        if ( fMem )
+                            fRes += fVal;
+                        else
+                            fMem = fVal;
+                        // unit check: double token is dimensionless
+                        if ( bFirstParam || pResUnit )
+                        {
+                            using namespace sc::units;
+                            UtUnit aNewUnit;
+                            if ( UtUnit::createUnit( "", aNewUnit, pUnitsImpl->GetUnitSystem() ) )
+                            {
+                                if ( bFirstParam || ut_compare( pResUnit.get(), aNewUnit.getUnit().get() ) == 0 )
+                                    pResUnit = aNewUnit.getUnit();
+                                else
+                                {
+                                    pResUnit = nullptr;
+                                    SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                                }
+                            }
+                            bFirstParam = false;
+                        }
+                        else
+                            SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                        break;
+                    case ifSUMSQ:   fRes += fVal * fVal; break;
+                    case ifPRODUCT: fRes *= fVal; break;
+                    default: ; // nothing
+                }
+                nFuncFmtType = css::util::NumberFormat::NUMBER;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                {
+                    nGlobalError = 0;
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                        ++nCount;
+                    break;
+                }
+
+                if (!pToken)
+                    break;
+
+                StackVar eType = pToken->GetType();
+                if (eFunc == ifCOUNT2)
+                {
+                    if ( eType != formula::svEmptyCell &&
+                         ( ( pToken->GetOpCode() != ocSubTotal &&
+                             pToken->GetOpCode() != ocAggregate ) ||
+                           ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) ) )
+                        nCount++;
+                    if (nGlobalError)
+                        nGlobalError = 0;
+                }
+                else if (eType == formula::svDouble)
+                {
+                    nCount++;
+                    fVal = pToken->GetDouble();
+                    if (aFmt.mbIsSet)
+                    {
+                        nFuncFmtType = aFmt.mnType;
+                        nFuncFmtIndex = aFmt.mnIndex;
+                    }
+                    switch( eFunc )
+                    {
+                        case ifAVERAGE:
+                        case ifSUM:
+                            if ( fMem )
+                                fRes += fVal;
+                            else
+                                fMem = fVal;
+                            break;
+                        case ifSUMSQ:   fRes += fVal * fVal; break;
+                        case ifPRODUCT: fRes *= fVal; break;
+                        case ifCOUNT:
+                            if ( nGlobalError )
+                            {
+                                nGlobalError = 0;
+                                nCount--;
+                            }
+                            break;
+                        default: ; // nothing
+                    }
+                }
+                else if (bTextAsZero && eType == formula::svString)
+                {
+                    nCount++;
+                    if ( eFunc == ifPRODUCT )
+                        fRes = 0.0;
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                PopSingleRef( aAdr );
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                {
+                    nGlobalError = 0;
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                        ++nCount;
+                    break;
+                }
+                if ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) )
+                {
+                    break;
+                }
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
+                {
+                    if( eFunc == ifCOUNT2 )
+                    {
+                        CellType eCellType = aCell.meType;
+                        if ( eCellType != CELLTYPE_NONE )
+                            nCount++;
+                        if ( nGlobalError )
+                            nGlobalError = 0;
+                    }
+                    else if (aCell.hasNumeric())
+                    {
+                        nCount++;
+                        fVal = GetCellValue(aAdr, aCell);
+                        CurFmtToFuncFmt();
+                        switch( eFunc )
+                        {
+                            case ifAVERAGE:
+                            case ifSUM:
+                                if ( fMem )
+                                    fRes += fVal;
+                                else
+                                    fMem = fVal;
+                                // check units of SingleRef
+                                using namespace sc::units;
+                                if (pUnitsImpl->getUnitsForRange(ScRangeList(ScRange(aAdr)), pDok).units.size() == 1
+                                    && ( bFirstParam || pResUnit ) )
+                                {
+                                    // all refs in range have the same unit
+                                    using namespace sc::units;
+                                    pUnitsImpl = UnitsImpl::GetUnits();
+                                    UtUnit aNewUnit( pUnitsImpl->getUnitForCell( aAdr, pDok ) );
+                                    if ( bFirstParam || ut_compare( pResUnit.get(), aNewUnit.getUnit().get() ) == 0 )
+                                    {
+                                        pResUnit = aNewUnit.getUnit();
+                                    }
+                                    else
+                                    {
+                                        pResUnit = nullptr;
+                                        SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                                    }
+                                    bFirstParam = false;
+                                }
+                                else
+                                {
+                                    SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                                }
+                                break;
+                            case ifSUMSQ:   fRes += fVal * fVal; break;
+                            case ifPRODUCT: fRes *= fVal; break;
+                            case ifCOUNT:
+                                if ( nGlobalError )
+                                {
+                                    nGlobalError = 0;
+                                    nCount--;
+                                }
+                                break;
+                            default: ; // nothing
+                        }
+                    }
+                    else if (bTextAsZero && aCell.hasString())
+                    {
+                        nCount++;
+                        if ( eFunc == ifPRODUCT )
+                            fRes = 0.0;
+                    }
+                }
+            }
+            break;
+            case svDoubleRef :
+            case svRefList :
+            {
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                {
+                    nGlobalError = 0;
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                        ++nCount;
+                    if ( eFunc == ifCOUNT2 || eFunc == ifCOUNT )
+                        break;
+                }
+                if( eFunc == ifCOUNT2 )
+                {
+                    ScCellIterator aIter( pDok, aRange, mnSubTotalFlags );
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+                    {
+                        if ( !aIter.hasEmptyData() )
+                        {
+                            ++nCount;
+                        }
+                    }
+
+                    if ( nGlobalError )
+                        nGlobalError = 0;
+                }
+                else if ( ( eFunc == ifSUM || eFunc == ifCOUNT ) && !mnSubTotalFlags )
+                {
+                    sc::ColumnSpanSet aSet( false );
+                    aSet.set( aRange, true );
+
+                    if ( eFunc == ifSUM )
+                    {
+                        FuncSum aAction;
+                        aSet.executeColumnAction( *pDok, aAction, fMem );
+                        sal_uInt16 nErr = aAction.getError();
+                        if ( nErr )
+                        {
+                            SetError( nErr );
+                            return fRes;
+                        }
+                        fRes += aAction.getSum();
+
+                        // Get the number format of the last iterated cell.
+                        nFuncFmtIndex = aAction.getNumberFormat();
+                    }
+                    else
+                    {
+                        FuncCount aAction;
+                        aSet.executeColumnAction(*pDok, aAction);
+                        nCount += aAction.getCount();
+
+                        // Get the number format of the last iterated cell.
+                        nFuncFmtIndex = aAction.getNumberFormat();
+                    }
+
+                    nFuncFmtType = pDok->GetFormatTable()->GetType( nFuncFmtIndex );
+                }
+                else
+                {
+                    ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
+                    sal_uInt16 nErr = 0;
+                    if (aValIter.GetFirst(fVal, nErr))
+                    {
+                        // placed the loop on the inside for performance reasons:
+                        aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
+                        switch( eFunc )
+                        {
+                            case ifAVERAGE:
+                            case ifSUM:
+                                    if ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL )
+                                    {
+                                        do
+                                        {
+                                            if ( !nErr )
+                                            {
+                                                SetError(nErr);
+                                                if ( fMem )
+                                                    fRes += fVal;
+                                                else
+                                                    fMem = fVal;
+                                                nCount++;
+                                            }
+                                        }
+                                        while (aValIter.GetNext(fVal, nErr));
+                                    }
+                                    else
+                                    {
+                                        do
+                                        {
+                                            SetError(nErr);
+                                            if ( fMem )
+                                                fRes += fVal;
+                                            else
+                                                fMem = fVal;
+                                            nCount++;
+                                        }
+                                        while (aValIter.GetNext(fVal, nErr));
+                                    }
+                                    break;
+                            case ifSUMSQ:
+                                    if ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL )
+                                    {
+                                        do
+                                        {
+                                            if ( !nErr )
+                                            {
+                                                SetError(nErr);
+                                                fRes += fVal * fVal;
+                                                nCount++;
+                                            }
+                                        }
+                                        while (aValIter.GetNext(fVal, nErr));
+                                    }
+                                    else
+                                    {
+                                        do
+                                        {
+                                            SetError(nErr);
+                                            fRes += fVal * fVal;
+                                            nCount++;
+                                        }
+                                        while (aValIter.GetNext(fVal, nErr));
+                                    }
+                                    break;
+                            case ifPRODUCT:
+                                    do
+                                    {
+                                        if ( !( nErr && ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                                        {
+                                            SetError(nErr);
+                                            fRes *= fVal;
+                                            nCount++;
+                                        }
+                                    }
+                                    while (aValIter.GetNext(fVal, nErr));
+                                    break;
+                            case ifCOUNT:
+                                    do
+                                    {
+                                        if ( !nErr )
+                                            nCount++;
+                                    }
+                                    while (aValIter.GetNext(fVal, nErr));
+                                    break;
+                            default: ;  // nothing
+                        }
+                        SetError( nErr );
+                    }
+                }
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef pMat;
+                PopExternalDoubleRef(pMat);
+                if ( nGlobalError && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    break;
+
+                IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
+            }
+            break;
+            case svMatrix :
+            {
+                ScMatrixRef pMat = PopMatrix();
+
+                IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
+            }
+            break;
+            case svError:
+            {
+                PopError();
+                if ( eFunc == ifCOUNT || ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                {
+                    nGlobalError = 0;
+                }
+                else if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                {
+                    nCount++;
+                    nGlobalError = 0;
+                }
+            }
+            break;
+            default :
+                while (nParamCount-- > 0)
+                    PopError();
+                SetError(errIllegalParameter);
+        }
+    }
+    switch( eFunc )
+    {
+        case ifSUM:     fRes = ::rtl::math::approxAdd( fRes, fMem ); break;
+        case ifAVERAGE: fRes = div(::rtl::math::approxAdd( fRes, fMem ), nCount); break;
+        case ifCOUNT2:
+        case ifCOUNT:   fRes  = nCount; break;
+        case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
+        default: ; // nothing
+    }
+    // return units
+    if ( pUnit && pResUnit )
+    {
+        pUnit->setNewUnit( pResUnit );
+    }
+    // A boolean return type makes no sense on sums et al.
+    // Counts are always numbers.
+    if( nFuncFmtType == css::util::NumberFormat::LOGICAL || eFunc == ifCOUNT || eFunc == ifCOUNT2 )
+        nFuncFmtType = css::util::NumberFormat::NUMBER;
+    return fRes;
+}
+
 void ScInterpreter::ScSumSQ()
 {
     PushDouble( IterateParameters( ifSUMSQ ) );
@@ -846,7 +1319,12 @@ void ScInterpreter::ScSumSQ()
 
 void ScInterpreter::ScSum()
 {
-    PushDouble( IterateParameters( ifSUM ) );
+    FormulaUnit* pResUnit = NULL;
+    double fRes = IterateParameters( ifSUM, pResUnit );
+    if ( pResUnit && pResUnit->isValid() )
+        PushDouble( fRes/*, pResUnit*/ );
+    else
+        PushDouble( fRes );
 }
 
 void ScInterpreter::ScProduct()
