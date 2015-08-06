@@ -179,9 +179,11 @@ public:
     SdrObjMacroHitRec();
 };
 
-// User data of a drawing object, e.g. application specific data.
-// Every drawing object can have arbitrarily many such records (SV list).
-// Whoever wants to save data here, must inherit from this and set a corresponding link in the factory.
+/**
+ * User data of a drawing object, e.g. application specific data.
+ * Every drawing object can have an arbitrary amount of such records (SV list).
+ * Whoever wants to save data here, must inherit from this and set a corresponding link in the factory.
+ */
 class SVX_DLLPUBLIC SdrObjUserData
 {
 protected:
@@ -204,7 +206,9 @@ public:
     sal_uInt16 GetId() const { return nIdentifier;}
 };
 
-// all geometrical data of an arbitrary object for use in undo/redo
+/**
+ * All geometrical data of an arbitrary object for use in undo/redo
+ */
 class SVX_DLLPUBLIC SdrObjGeoData
 {
 public:
@@ -223,7 +227,9 @@ public:
     virtual ~SdrObjGeoData();
 };
 
-// provides information about various ZObject properties
+/**
+ * Provides information about various ZObject properties
+ */
 class SVX_DLLPUBLIC SdrObjTransformInfoRec
 {
 public:
@@ -241,7 +247,7 @@ public:
     bool bShearAllowed : 1;            // if false, object cannot be sheared
     bool bEdgeRadiusAllowed : 1;
     bool bNoOrthoDesired : 1;          // is true for Rect; is false for BMP, MTF
-    bool bNoContortion : 1;            // if false, Kein verzerren (bei Crook) moeglich (nur true bei PathObj und Gruppierten PathObjs)
+    bool bNoContortion : 1;            // if false, contortion not possible (for crook, only true for PathObj and grouped PathObjs)
     bool bCanConvToPath : 1;           // if false, no conversion into PathObj possible
     bool bCanConvToPoly : 1;           // if false, no conversion into PolyObj possible
     bool bCanConvToContour : 1;        // if false, no conversion down to whole contour possible
@@ -251,7 +257,7 @@ public:
     SdrObjTransformInfoRec();
 };
 
-// Abstract DrawObject
+/// Abstract DrawObject
 
 class SvxShape;
 class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrObject >
@@ -305,7 +311,7 @@ protected:
     SfxGrabBagItem*             pGrabBagItem; // holds the GrabBagItem property
 
 
-    // Position in the navigation order.  SAL_MAX_UINT32 when not used.
+    // Position in the navigation order. SAL_MAX_UINT32 when not used.
     sal_uInt32                  mnNavigationPosition;
     SdrLayerID                  mnLayerID;
 
@@ -321,12 +327,13 @@ protected:
     bool                        bSizProt : 1;   // if true, the size is protected
     bool                        bNoPrint : 1;   // if true, the object is not printed.
     bool                        mbVisible : 1;  // if false, the object is not visible on screen (but maybe on printer, depending on bNoprint
+
     // If bEmptyPresObj is true, it is a presentation object that has no content yet.
     // The flag's default value is false.
     // The management is done by the application.
     // Neither assign operator nor cloning copies the flag!
     // The flag is persistent.
-    bool                        bEmptyPresObj : 1;     // empty presentation object (Draw)
+    bool                        bEmptyPresObj : 1; // empty presentation object (Draw)
 
     // if true, object is invisible as object of the MasterPage
     bool                        bNotVisibleAsMaster : 1;
@@ -378,9 +385,10 @@ protected:
     OUString GetAngleStr(long nAngle, bool bNoDegChar = false) const;
     OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
-    // bNotMyself=true means: set only ObjList to dirty, don't mark this object as dirty.
-    // This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
-    // at the same time to avoid recomputation.
+    /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
+    ///
+    /// This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
+    /// at the same time to avoid recomputation.
 public:
     virtual void SetRectsDirty(bool bNotMyself = false);
 protected:
@@ -744,8 +752,8 @@ public:
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const;
 
     // Connectors
-    // (see also documentation in SvdoEdge.hxx, SdrEdgeObj,
-    // as well as SvdGlue.hxx and SvdGlEV.hxx)
+    // (see also documentation in SvdoEdge.hxx, SdrEdgeObj, as well as SvdGlue.hxx and SvdGlEV.hxx)
+    //
     // There are nodes and edges. In theory an edge can also be a node, but this isn't implemented yet.
     // A node has a number of glue points, onto which edges can glued to
     // An edge can be either
@@ -880,8 +888,8 @@ public:
     static SdrObject* getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt );
 
     // sets a new UNO representation of the shape
-    //  This is only a public interface function. The actual work is
-    //  done by impl_setUnoShape().
+    // This is only a public interface function. The actual work is
+    // done by impl_setUnoShape().
     // Calling this function is only allowed for the UNO representation
     // itself!
     void setUnoShape(
@@ -895,15 +903,14 @@ public:
     //     There already exists an SvxShape instance associated with the SdrObject
     // @throws ::com::sun::star::uno::RuntimeException
     //     if there does nt yet exists an SvxShape instance associated with the SdrObject.
-    svx::PropertyChangeNotifier&
-        getShapePropertyChangeNotifier();
+    svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
     // notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
     //
     // This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
     // exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
     // case the method will silently return without doing anything.
-    void    notifyShapePropertyChange( const svx::ShapeProperty _eProperty ) const;
+    void notifyShapePropertyChange( const svx::ShapeProperty _eProperty ) const;
 
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
@@ -947,16 +954,16 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 protected:
-    // Sets a new UNO shape
-    //
-    // The default implementation of this function sets the new UNO
-    // shape. Derived classes should override the function to handle
-    // any other actions that are needed when the shape is being
-    // changed.
-    //
-    // The implementation _must_ call the same method of its parent
-    // class (preferably as the first step)!
-    virtual void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
+    /// Sets a new UNO shape
+    ///
+    /// The default implementation of this function sets the new UNO
+    /// shape. Derived classes should override the function to handle
+    /// any other actions that are needed when the shape is being
+    /// changed.
+    ///
+    /// The implementation _must_ call the same method of its parent
+    /// class (preferably as the first step)!
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
 
     // helper function for reimplementing Clone().
     template< typename T > T* CloneHelper() const;
@@ -974,12 +981,14 @@ private:
     bool mbDoNotInsertIntoPageAutomatically;
 };
 
-// Whoever creates his own objects must set a link in the SdrObjFactory class.
-// The handler must have the following signature:
-//    void Hdl(SdrObjFactory*)
-// He must take a look at the referenced instance's nInventor and nIdentifier values,
-// and must create a new drawing object instance accordingly.
-// He must also make the pNewObj pointer reference to this instance.
+/**
+ * Whoever creates his own objects must set a link in the SdrObjFactory class.
+ * The handler must have the following signature:
+ *      void Hdl(SdrObjFactory*)
+ * He must take a look at the referenced instance's nInventor and nIdentifier values,
+ * and must create a new drawing object instance accordingly.
+ * He must also make the pNewObj pointer reference to this instance.
+ */
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:

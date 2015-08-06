@@ -39,7 +39,9 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-/* options for GetTransformedGraphic() */
+/**
+ * Options for GetTransformedGraphic()
+ */
 enum class SdrGrafObjTransformsAttrs
 {
     NONE       = 0x00,
@@ -85,19 +87,19 @@ private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
-    void                    ImpSetAttrToGrafInfo(); // Werte vom Pool kopieren
-    GraphicAttr             aGrafInfo;
+    void ImpSetAttrToGrafInfo(); // Copy values from the pool
+    GraphicAttr aGrafInfo;
 
-    OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
+    OUString aFileName; // If it's a Link, the filename can be found in here
     OUString aReferer;
     OUString aFilterName;
-    GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
-    GraphicObject*          mpReplacementGraphic;
-    SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
-    bool                    bMirrored:1;        // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
+    GraphicObject* pGraphic; // In order to speed up output of bitmaps, especially rotated ones
+    GraphicObject* mpReplacementGraphic;
+    SdrGraphicLink* pGraphicLink; // And here a pointer for linked graphics
+    bool bMirrored:1; // True: the graphic is horizontal, which means it's mirrored along the y-axis
 
     // #111096#
-    // Flag for allowing text animation. Default is sal_true.
+    // Flag for allowing text animation. Default is true.
     bool mbGrafAnimationAllowed:1;
 
     // #i25616#

@@ -65,23 +65,23 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 class SVX_DLLPUBLIC SdrPageView
 {
 private:
-    SdrView& mrView;
-    SdrPage* mpPage;
-    Point         aPgOrg;   // Nullpunkt der Page
+    SdrView&     mrView;
+    SdrPage*     mpPage;
+    Point        aPgOrg;   // The Page's point of origin
 
-    Rectangle     aMarkBound; // wird
-    Rectangle     aMarkSnap;  // von
-    bool          mbHasMarked;
-    bool          mbVisible;
+    Rectangle    aMarkBound;
+    Rectangle    aMarkSnap;
+    bool         mbHasMarked;
+    bool         mbVisible;
 
-    SetOfByte    aLayerVisi;   // Menge der sichtbaren Layer
-    SetOfByte    aLayerLock;   // Menge der nicht editierbaren Layer
-    SetOfByte    aLayerPrn;    // Menge der druckbaren Layer
+    SetOfByte    aLayerVisi;   // Set of visible Layers
+    SetOfByte    aLayerLock;   // Set of non-editable Layers
+    SetOfByte    aLayerPrn;    // Set of printable Layers
 
-    SdrObjList*  pAktList;     // Aktuelle Liste, in der Regel die Page.
-    SdrObject*   pAktGroup;    // Aktuelle Gruppe. NULL=Keine.
+    SdrObjList*  pAktList;     // Current List, usually the Page
+    SdrObject*   pAktGroup;    // Current Group; nullptr means none
 
-    SdrHelpLineList aHelpLines; // Hilfslinien und -punkte
+    SdrHelpLineList aHelpLines; // Helper lines and points
 
     // #103911# Use one reserved slot (bReserveBool2) for the document color
     Color         maDocumentColor;
@@ -106,12 +106,12 @@ public:
     SdrPageWindow* FindPageWindow( const OutputDevice& rOutDev ) const;
     SdrPageWindow* GetPageWindow(sal_uInt32 nIndex) const;
 
-    /** finds the page window whose PaintWindow belongs to the given output device
-
-        In opposite to FindPageWindow, this method also cares possibly patched PaintWindow instances.
-        That is, a SdrPageWindow might have an original, and a patched SdrPaintWindow instance - if
-        this is the case, then the original SdrPaintWindow is examined before the patched one.
-    */
+    /**
+     * Finds the page window whose PaintWindow belongs to the given output device
+     * In opposite to FindPageWindow, this method also cares possibly patched PaintWindow instances.
+     * That is, a SdrPageWindow might have an original, and a patched SdrPaintWindow instance - if
+     * this is the case, then the original SdrPaintWindow is examined before the patched one.
+     */
     const SdrPageWindow* FindPatchedPageWindow( const OutputDevice& rOutDev ) const;
 
 private:
@@ -122,7 +122,7 @@ private:
     void SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa);
     bool IsLayer(const OUString& rName, const SetOfByte& rBS) const;
 
-    // Nachsehen, ob AktGroup noch Inserted ist.
+    /// Let's see if the current Group (pAktGroup) is still inserted
     void CheckAktGroup();
 
     void AdjHdl();
@@ -131,7 +131,7 @@ public:
     SdrPageView(SdrPage* pPage1, SdrView& rNewView);
     ~SdrPageView();
 
-    // Wird von der PaintView gerufen, wenn Modelaenderungen abgeschlossen sind
+    /// Is called by PaintView, when modal changes have finished
     void ModelHasChanged();
 
     void Show();
@@ -143,32 +143,31 @@ public:
     SdrView& GetView() { return mrView; }
     const SdrView& GetView() const { return mrView; }
 
-    /** looks up the control container belonging to given output device
-
-        @return
-            If the given output device belongs to one of the SdrPageViewWinRecs associated with this
-            SdrPageView instance, the XControlContainer for this output device is returned, <NULL/>
-            otherwise.
-    */
+    /**
+     * Looks up the control container belonging to given output device
+     * @return
+     *      If the given output device belongs to one of the SdrPageViewWinRecs associated with this
+     *      SdrPageView instance, the XControlContainer for this output device is returned, <NULL/>
+     *      otherwise.
+     */
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
         GetControlContainer( const OutputDevice& _rDevice ) const;
 
-    /** sets all elements in the view which support a design and a alive mode into the given mode
-    */
+    /// Sets all elements in the view which support a design and a alive mode into the given mode
     void    SetDesignMode( bool _bDesignMode ) const;
 
     bool IsVisible() const { return mbVisible; }
 
-    // Invalidiert den gesamten Bereich der Page
+    /// Invalidates the Page's whole area
     void InvalidateAllWin();
 
-    // PrePaint call forwarded from app windows
+    /// PrePaint call forwarded from app windows
     void PrePaint();
 
-    // rReg bezieht sich auf's OutDev, nicht auf die Page
+    /// @param rReg refers to the OutDev and not to the Page
     void CompleteRedraw( SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = NULL );
 
-    // write access to mpPreparedPageWindow
+    /// Write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
     void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L,
@@ -178,13 +177,13 @@ public:
     Rectangle GetPageRect() const;
     SdrPage* GetPage() const { return mpPage; }
 
-    // Betretene Liste rausreichen
+    /// Return current List
     SdrObjList* GetObjList() const { return pAktList; }
 
-    // Betretene Gruppe rausreichen
+    /// Return current Group
     SdrObject* GetAktGroup() const { return pAktGroup; }
 
-    // Betretene Gruppe und Liste setzen
+    /// Set current Group and List
     void SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList);
 
     bool HasMarkedObjPageView() const { return mbHasMarked; }
@@ -204,10 +203,10 @@ public:
     void SetLayerPrintable(const OUString& rName, bool bPrn = true) { SetLayer(rName, aLayerPrn, bPrn); }
     bool IsLayerPrintable(const OUString& rName) const { return IsLayer(rName, aLayerPrn); }
 
-    // PV stellt eine RefPage oder eine SubList eines RefObj dar oder Model ist ReadOnly
+    /// PV represents a RefPage or a SubList of a RefObj, or the Model is ReadOnly
     bool IsReadOnly() const;
 
-    // der Origin bezieht sich immer auf die obere linke Ecke der Page
+    /// The Origin always refers to the upper left corner of the Page
     const Point& GetPageOrigin() const { return aPgOrg; }
     void SetPageOrigin(const Point& rOrg);
 
@@ -229,29 +228,30 @@ public:
     void DeleteHelpLine(sal_uInt16 nNum);
     void InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum=0xFFFF);
 
-    // Liefert sal_True, wenn Layer des Obj sichtbar und nicht gesperrt.
-    // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,
-    // gesperrt sein darf keiner.
+    /// At least one member must be visible for the Group object and
+    /// it must not be locked
+    /// @returns
+    //       true, if the object's layer is visible and not locked
     bool IsObjMarkable(SdrObject* pObj) const;
-    // hmm, selectable is surely the same as markable, now that I
-    // see this as I look for a place to put it. TO-DO,
-    // merge these
+
+    /// Hmm, selectable is surely the same as markable, now that I
+    /// see this as I look for a place to put it.
+    /// TODO: merge these
     bool IsObjSelectable(SdrObject *pObj) const;
 
-
-    // Betreten (Editieren) einer Objektgruppe. Anschliessend liegen alle
-    // Memberobjekte der Gruppe im direkten Zugriff. Alle anderen Objekte
-    // koennen waerendessen nicht bearbeitet werden (bis zum naechsten
-    // LeaveGroup()). (wie MsDos chdir bla).
+    /// Entering (editing) an object group
+    /// After that, we have direct access to all member objects of the group.
+    /// All other objects are not editable in the meantime (until the next
+    /// LeaveGroup())
     bool EnterGroup(SdrObject* pObj);
 
-    // Verlassen einer betretenen Objektgruppe. (wie MsDos chdir ..)
+    /// Leave an object group we entered previously
     void LeaveOneGroup();
 
-    // Verlassen aller betretenen Objektgruppen. (wie MsDos chdir \)
+    /// Leave all object groups we entered previously
     void LeaveAllGroup();
 
-    // Feststellen, wie weit hinabgestiegen wurde (0=Root(Page))
+    /// Determine, how deep we descended (0 = Root(Page))
     sal_uInt16 GetEnteredLevel() const;
 
     // #103834# Set background color for svx at SdrPageViews
