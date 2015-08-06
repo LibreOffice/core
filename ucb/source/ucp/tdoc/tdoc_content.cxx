@@ -905,7 +905,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const OUString& rContentId )
 {
     ContentProperties aData;
-    if ( loadData( pProvider, rContentId, aData ) )
+    if ( loadData( pProvider, Uri(rContentId), aData ) )
     {
         return getPropertyValues(
             rxContext, rProperties, aData, pProvider, rContentId );

@@ -397,7 +397,7 @@ SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return m_pFnt->_GetTextSize( aDrawInf );
+    return SwPosSize(m_pFnt->_GetTextSize( aDrawInf ));
 }
 
 SwPosSize SwTextSizeInfo::GetTextSize() const
@@ -418,7 +418,7 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return m_pFnt->_GetTextSize( aDrawInf );
+    return SwPosSize(m_pFnt->_GetTextSize( aDrawInf ));
 }
 
 void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
@@ -432,7 +432,7 @@ void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nInde
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    SwPosSize aSize = m_pFnt->_GetTextSize( aDrawInf );
+    SwPosSize aSize( m_pFnt->_GetTextSize( aDrawInf ) );
     nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }

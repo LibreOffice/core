@@ -45,7 +45,7 @@ class RewinderEventHandler : public EventHandler
 {
 public:
     typedef ::std::function<bool ()> Action;
-    RewinderEventHandler (const Action& rAction) : maAction(rAction) {}
+    explicit RewinderEventHandler (const Action& rAction) : maAction(rAction) {}
     virtual ~RewinderEventHandler() {}
 private:
     const Action maAction;
@@ -58,7 +58,7 @@ class RewinderAnimationEventHandler : public AnimationEventHandler
 {
 public:
     typedef ::std::function<bool (const AnimationNodeSharedPtr& rpNode)> Action;
-    RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
+    explicit RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
     virtual ~RewinderAnimationEventHandler() {}
 private:
     const Action maAction;

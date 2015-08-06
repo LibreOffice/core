@@ -123,7 +123,7 @@ protected:
 class AllAnimationEventHandler : public AnimationEventHandler
 {
 public:
-    AllAnimationEventHandler( EventQueue& rEventQueue ) :
+    explicit AllAnimationEventHandler( EventQueue& rEventQueue ) :
         mrEventQueue( rEventQueue ),
         maAnimationEventMap()
     {}
@@ -182,7 +182,7 @@ class ClickEventHandler : public MouseEventHandler_,
                           public EventContainer
 {
 public:
-    ClickEventHandler( EventQueue& rEventQueue ) :
+    explicit ClickEventHandler( EventQueue& rEventQueue ) :
         EventContainer(),
         mrEventQueue( rEventQueue ),
         mbAdvanceOnClick( true )
@@ -293,7 +293,7 @@ private:
 class MouseHandlerBase : public MouseEventHandler_
 {
 public:
-    MouseHandlerBase( EventQueue& rEventQueue ) :
+    explicit MouseHandlerBase( EventQueue& rEventQueue ) :
         mrEventQueue( rEventQueue ),
         maShapeEventMap()
     {}
@@ -422,7 +422,7 @@ private:
 class MouseEnterHandler : public MouseHandlerBase
 {
 public:
-    MouseEnterHandler( EventQueue& rEventQueue )
+    explicit MouseEnterHandler( EventQueue& rEventQueue )
         : MouseHandlerBase( rEventQueue ),
           mpLastShape() {}
 
@@ -460,7 +460,7 @@ private:
 class MouseLeaveHandler : public MouseHandlerBase
 {
 public:
-    MouseLeaveHandler( EventQueue& rEventQueue )
+    explicit MouseLeaveHandler( EventQueue& rEventQueue )
         : MouseHandlerBase( rEventQueue ),
           maLastIter() {}
 

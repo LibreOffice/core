@@ -50,7 +50,7 @@ public:
     PropertyValue()
     : m_bIsCaseSensitive( true ) {}
 
-    PropertyValue( const ::com::sun::star::uno::Any & rValue,
+    explicit PropertyValue( const ::com::sun::star::uno::Any & rValue,
                    bool bIsCaseSensitive )
     : m_aValue( rValue),
       m_bIsCaseSensitive( bIsCaseSensitive ) {}
@@ -75,20 +75,19 @@ class ContentProperties
 public:
     ContentProperties();
 
-    ContentProperties( const DAVResource& rResource );
+    explicit ContentProperties( const DAVResource& rResource );
 
     // Mini props for transient contents.
     ContentProperties( const OUString & rTitle, bool bFolder );
 
     // Micro props for non-existing contents.
-    ContentProperties( const OUString & rTitle );
+    explicit ContentProperties( const OUString & rTitle );
 
     ContentProperties( const ContentProperties & rOther );
 
     bool contains( const OUString & rName ) const;
 
-    const com::sun::star::uno::Any &
-    getValue( const OUString & rName ) const;
+    const css::uno::Any& getValue( const OUString & rName ) const;
 
     // Maps the UCB property names contained in rProps with their DAV property
     // counterparts, if possible. All unmappable properties will be included
@@ -174,7 +173,7 @@ private:
     CachableContentProperties( const CachableContentProperties & ); // n.i.
 
 public:
-    CachableContentProperties( const ContentProperties & rProps );
+    explicit CachableContentProperties( const ContentProperties & rProps );
 
     void addProperties( const ContentProperties & rProps );
 

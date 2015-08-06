@@ -33,7 +33,7 @@ namespace internal {
 class CheckerBoardWipe : public ParametricPolyPolygon
 {
 public:
-    CheckerBoardWipe( sal_Int32 unitsPerEdge = 10 )
+    explicit CheckerBoardWipe( sal_Int32 unitsPerEdge = 10 )
         : m_unitsPerEdge(unitsPerEdge),
           m_unitRect( createUnitRect() )
         { OSL_ASSERT( (unitsPerEdge % 2) == 0 ); }

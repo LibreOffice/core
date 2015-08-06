@@ -759,7 +759,7 @@ namespace slideshow
             class Expander
             {
             public:
-                Expander( ::basegfx::B2DSize& rBounds ) :
+                explicit Expander( ::basegfx::B2DSize& rBounds ) :
                     mrBounds( rBounds )
                 {
                 }

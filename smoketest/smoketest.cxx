@@ -65,7 +65,7 @@ class Listener:
     public cppu::WeakImplHelper1< css::frame::XDispatchResultListener >
 {
 public:
-    Listener(Result * result): result_(result) { OSL_ASSERT(result != 0); }
+    explicit Listener(Result * result): result_(result) { OSL_ASSERT(result != 0); }
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)

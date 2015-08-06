@@ -33,7 +33,7 @@ namespace internal {
 class BarnDoorWipe : public ParametricPolyPolygon
 {
 public:
-    BarnDoorWipe( bool doubled = false )
+    explicit BarnDoorWipe( bool doubled = false )
         : m_unitRect( createUnitRect() ), m_doubled(doubled) {}
     virtual ::basegfx::B2DPolyPolygon operator()( double x ) SAL_OVERRIDE;
 private:

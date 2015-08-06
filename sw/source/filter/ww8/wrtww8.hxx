@@ -275,7 +275,7 @@ class WW8_WrPct
     boost::ptr_vector<WW8_WrPc > aPcts;
     WW8_FC nOldFc;
 public:
-    WW8_WrPct(WW8_FC nStartFc);
+    explicit WW8_WrPct(WW8_FC nStartFc);
     ~WW8_WrPct();
     void AppendPc(WW8_FC nStartFc);
     void WritePc( WW8Export& rWrt );

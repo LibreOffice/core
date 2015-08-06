@@ -69,10 +69,10 @@ public:
 
 public:
                     Fix() { x=0; }
-                    Fix( int i ) { x=(long(i)<<FIX_POST); }
-                    Fix( short l ) { x=(long(l)<<FIX_POST); }
-                    Fix( sal_uInt16 l ) { x=(long(l)<<FIX_POST); }
-                    Fix( long l ) { x=(l<<FIX_POST); }
+    explicit        Fix( int i ) { x=(long(i)<<FIX_POST); }
+    explicit        Fix( short l ) { x=(long(l)<<FIX_POST); }
+    explicit        Fix( sal_uInt16 l ) { x=(long(l)<<FIX_POST); }
+    explicit        Fix( long l ) { x=(l<<FIX_POST); }
                     Fix( long Z, long N ) { x=(Z<<FIX_POST)/N; }
 
     enum class Bits { Bits };
@@ -111,7 +111,7 @@ public:
 
 public:
                     FixCpx()               : r(), i() {}
-                    FixCpx( Fix a )        : r( a ), i() {}
+           explicit FixCpx( Fix a )        : r( a ), i() {}
                     FixCpx( Fix a, Fix b ) : r( a ), i( b ) {}
 
     void            operator*= ( const FixCpx& ra );

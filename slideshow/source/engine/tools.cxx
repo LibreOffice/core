@@ -61,7 +61,7 @@ namespace slideshow
             class NamedValueComparator
             {
             public:
-                NamedValueComparator( const beans::NamedValue& rKey ) :
+                explicit NamedValueComparator( const beans::NamedValue& rKey ) :
                     mrKey( rKey )
                 {
                 }

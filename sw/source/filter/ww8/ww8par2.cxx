@@ -1160,20 +1160,20 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
                     pAktTC->bFirstMerged = sal_uInt8( ( aBits1 & 0x01 ) != 0 );
                     pAktTC->bMerged = sal_uInt8( ( aBits1 & 0x02 ) != 0 );
                     pAktTC->rgbrc[ WW8_TOP ]
-                        = WW8_BRC( pTc->rgbrcVer6[ WW8_TOP ] );
+                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_TOP ] ));
                     pAktTC->rgbrc[ WW8_LEFT ]
-                        = WW8_BRC( pTc->rgbrcVer6[ WW8_LEFT ] );
+                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_LEFT ] ));
                     pAktTC->rgbrc[ WW8_BOT ]
-                        = WW8_BRC( pTc->rgbrcVer6[ WW8_BOT ] );
+                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_BOT ] ));
                     pAktTC->rgbrc[ WW8_RIGHT ]
-                        = WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] );
+                        = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
                     if(    ( pAktTC->bMerged )
                             && ( i > 0             ) )
                     {
                         // Cell merged -> remember
                         //bWWMergedVer6[i] = true;
                         pTCs[i-1].rgbrc[ WW8_RIGHT ]
-                            = WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] );
+                            = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
                             // apply right border to previous cell
                             // bExist must not be set to false, because WW
                             // does not count this cells in text boxes....
@@ -1198,10 +1198,10 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
                 // note: in aBits1 there are 7 bits unused,
                 //       followed by another 16 unused bits
 
-                pAktTC->rgbrc[ WW8_TOP   ] = pTc->rgbrcVer8[ WW8_TOP   ];
-                pAktTC->rgbrc[ WW8_LEFT  ] = pTc->rgbrcVer8[ WW8_LEFT  ];
-                pAktTC->rgbrc[ WW8_BOT   ] = pTc->rgbrcVer8[ WW8_BOT   ];
-                pAktTC->rgbrc[ WW8_RIGHT ] = pTc->rgbrcVer8[ WW8_RIGHT ];
+                pAktTC->rgbrc[ WW8_TOP   ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_TOP   ]);
+                pAktTC->rgbrc[ WW8_LEFT  ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_LEFT  ]);
+                pAktTC->rgbrc[ WW8_BOT   ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_BOT   ]);
+                pAktTC->rgbrc[ WW8_RIGHT ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_RIGHT ]);
             }
         }
 
@@ -1246,9 +1246,9 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
         WW8_TCell* pAktTC  = pTCs + nitcFirst;
         WW8_BRCVer9 brcVer9;
         if( nBrcVer == 6 )
-            brcVer9 = WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3));
+            brcVer9 = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3)));
         else if( nBrcVer == 8 )
-            brcVer9 = *reinterpret_cast<WW8_BRC const *>(pParamsTSetBRC+3);
+            brcVer9 = WW8_BRCVer9(*reinterpret_cast<WW8_BRC const *>(pParamsTSetBRC+3));
         else
             brcVer9 = *reinterpret_cast<WW8_BRCVer9 const *>(pParamsTSetBRC+3);
 
@@ -1273,13 +1273,13 @@ void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pPar
     {
         WW8_BRCVer6 const *pVer6 = reinterpret_cast<WW8_BRCVer6 const *>(pParams);
         for (int i = 0; i < 6; ++i)
-            aDefBrcs[i] = WW8_BRC(pVer6[i]);
+            aDefBrcs[i] = WW8_BRCVer9(WW8_BRC(pVer6[i]));
     }
     else if ( nBrcVer == 8 )
     {
         static_assert(sizeof (WW8_BRC) == 4, "this has to match the msword size");
         for( int i = 0; i < 6; ++i )
-            aDefBrcs[i] = reinterpret_cast<WW8_BRC const *>(pParams)[i];
+            aDefBrcs[i] = WW8_BRCVer9(reinterpret_cast<WW8_BRC const *>(pParams)[i]);
     }
     else
         memcpy( aDefBrcs, pParams, sizeof( aDefBrcs ) );

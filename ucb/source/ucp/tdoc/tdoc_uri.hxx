@@ -49,7 +49,7 @@ private:
 
 public:
     Uri() : m_eState( UNKNOWN ) {}
-    Uri( const OUString & rUri )
+    explicit Uri( const OUString & rUri )
     : m_aUri( rUri ), m_eState( UNKNOWN ) {}
 
     bool operator== ( const Uri & rOther ) const

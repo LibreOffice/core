@@ -73,7 +73,7 @@ protected:
     std::vector<sal_Int32> m_aPagesCache;
     void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize = NULL);
     bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
-    StgStrm( StgIo& );
+    explicit StgStrm( StgIo& );
 public:
     virtual ~StgStrm();
     StgIo&  GetIo()     { return rIo;    }
@@ -99,7 +99,7 @@ class StgFATStrm : public StgStrm {     // the master FAT stream
     virtual bool Pos2Page( sal_Int32 nBytePos ) SAL_OVERRIDE;
     bool  SetPage( short, sal_Int32 );
 public:
-    StgFATStrm( StgIo& );
+    explicit StgFATStrm( StgIo& );
     virtual ~StgFATStrm() {}
     using StgStrm::GetPage;
     sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = 0);
@@ -151,8 +151,8 @@ class StgTmpStrm : public SvMemoryStream
     virtual void FlushData() SAL_OVERRIDE;
 
 public:
-    StgTmpStrm( sal_uLong=16 );
-   virtual ~StgTmpStrm();
+    explicit StgTmpStrm( sal_uLong=16 );
+    virtual ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
     virtual void SetSize( sal_uInt64 ) SAL_OVERRIDE;
     sal_uLong GetSize() const;

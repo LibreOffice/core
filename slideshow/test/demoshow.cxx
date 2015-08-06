@@ -308,7 +308,7 @@ public:
 class ChildWindow : public vcl::Window
 {
 public:
-    ChildWindow( vcl::Window* pParent );
+    explicit ChildWindow( vcl::Window* pParent );
     virtual ~ChildWindow();
     virtual void Paint( const Rectangle& rRect );
     virtual void Resize();

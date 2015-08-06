@@ -32,7 +32,7 @@ namespace internal {
 class FourBoxWipe : public ParametricPolyPolygon
 {
 public:
-    FourBoxWipe( bool cornersOut ) : m_cornersOut(cornersOut),
+    explicit FourBoxWipe( bool cornersOut ) : m_cornersOut(cornersOut),
                                      m_unitRect( createUnitRect() )
         {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;

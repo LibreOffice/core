@@ -146,7 +146,7 @@ namespace slideshow
             class DoubleConstantFunctor
             {
             public:
-                DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
+                explicit DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
                     mpContext( rContext )
                 {
                     ENSURE_OR_THROW( mpContext,
@@ -169,7 +169,7 @@ namespace slideshow
             class ValueTFunctor
             {
             public:
-                ValueTFunctor( const ParserContextSharedPtr& rContext ) :
+                explicit ValueTFunctor( const ParserContextSharedPtr& rContext ) :
                     mpContext( rContext )
                 {
                     ENSURE_OR_THROW( mpContext,
@@ -413,7 +413,7 @@ namespace slideshow
                     @param rParserContext
                     Contains context info for the parser
                  */
-                ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+                explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
                     mpParserContext( rParserContext )
                 {
                 }
@@ -422,7 +422,7 @@ namespace slideshow
                 {
                 public:
                     // grammar definition
-                    definition( const ExpressionGrammar& self )
+                    explicit definition( const ExpressionGrammar& self )
                     {
                         using ::boost::spirit::str_p;
                         using ::boost::spirit::real_parser;

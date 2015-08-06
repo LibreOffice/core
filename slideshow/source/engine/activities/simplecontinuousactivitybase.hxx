@@ -37,7 +37,7 @@ namespace slideshow
         class SimpleContinuousActivityBase : public ActivityBase
         {
         public:
-            SimpleContinuousActivityBase( const ActivityParameters& rParms );
+            explicit SimpleContinuousActivityBase( const ActivityParameters& rParms );
 
             virtual double calcTimeLag() const SAL_OVERRIDE;
             virtual bool perform() SAL_OVERRIDE;

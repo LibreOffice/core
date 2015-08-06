@@ -58,7 +58,7 @@ public:
         <br>
         @param nCachedElements number of elements to be cached; default param set to 128
     */
-    inline LRU_Cache( sal_Int32 nCachedElements = 128 );
+    explicit inline LRU_Cache( sal_Int32 nCachedElements = 128 );
     /** Destructor: releases all cached elements and keys.
         <br>
     */

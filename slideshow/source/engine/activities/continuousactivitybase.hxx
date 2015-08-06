@@ -36,7 +36,7 @@ namespace slideshow
         class ContinuousActivityBase : public SimpleContinuousActivityBase
         {
         public:
-            ContinuousActivityBase( const ActivityParameters& rParms );
+            explicit ContinuousActivityBase( const ActivityParameters& rParms );
 
             using SimpleContinuousActivityBase::perform;
 

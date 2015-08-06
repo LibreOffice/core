@@ -1226,9 +1226,9 @@ static bool _SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
         if ( nBrcVer == 9 )
             rVar = *reinterpret_cast<const WW8_BRCVer9*>(pS);
         else if( nBrcVer == 8 )
-            rVar = *reinterpret_cast<const WW8_BRC*>(pS);
+            rVar = WW8_BRCVer9(*reinterpret_cast<const WW8_BRC*>(pS));
         else // nBrcVer == 6
-            rVar = WW8_BRC(*reinterpret_cast<const WW8_BRCVer6*>(pS));
+            rVar = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<const WW8_BRCVer6*>(pS)));
     }
 
     return 0 != pS;
@@ -2083,7 +2083,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     */
     WW8_BRCVer9 brcVer9[4];
     for (int i = 0; i < 4; i++)
-        brcVer9[i] = rPic.rgbrc[i];
+        brcVer9[i] = WW8_BRCVer9(rPic.rgbrc[i]);
     if (SwWW8ImplReader::SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
     {
         Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, 0, RES_LR_SPACE ) );

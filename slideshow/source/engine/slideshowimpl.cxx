@@ -127,7 +127,7 @@ public:
             The preferred duration between the display of two frames in
             seconds.
     */
-    FrameSynchronization (const double nFrameDuration);
+    explicit FrameSynchronization (const double nFrameDuration);
 
     /** Set the current time as the time at which the current frame is
         displayed.  From this the target time of the next frame is derived.
@@ -407,7 +407,7 @@ private:
     void releaseWaitSymbol();
 
     class WaitSymbolLock {public:
-        WaitSymbolLock(SlideShowImpl& rSlideShowImpl) : mrSlideShowImpl(rSlideShowImpl)
+        explicit WaitSymbolLock(SlideShowImpl& rSlideShowImpl) : mrSlideShowImpl(rSlideShowImpl)
             { mrSlideShowImpl.requestWaitSymbol(); }
         ~WaitSymbolLock()
             { mrSlideShowImpl.releaseWaitSymbol(); }

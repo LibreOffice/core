@@ -64,7 +64,7 @@ public:
     bool         bInvalid;                  // true: invalid entry
     StgDirEntry(const void* pBuffer, sal_uInt32 nBufferLen,
                 sal_uInt64 nUnderlyingStreamSize, bool * pbOk);
-    StgDirEntry( const StgEntry& );
+    explicit StgDirEntry( const StgEntry& );
     virtual ~StgDirEntry();
 
     void Invalidate( bool=false );          // invalidate all open entries
@@ -95,7 +95,7 @@ class StgDirStrm : public StgDataStrm
     short        nEntries;                      // entries per page
     void         SetupEntry( sal_Int32, StgDirEntry* );
 public:
-    StgDirStrm( StgIo& );
+    explicit StgDirStrm( StgIo& );
     virtual ~StgDirStrm();
     virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;              // change the size
     bool         Store();
@@ -108,7 +108,7 @@ public:
 class StgIterator : public StgAvlIterator
 {
 public:
-    StgIterator( StgDirEntry& rStg ) : StgAvlIterator( rStg.pDown ) {}
+    explicit StgIterator( StgDirEntry& rStg ) : StgAvlIterator( rStg.pDown ) {}
     StgDirEntry* First() { return static_cast<StgDirEntry*>( StgAvlIterator::First() ); }
     StgDirEntry* Next()  { return static_cast<StgDirEntry*>( StgAvlIterator::Next() );  }
 };

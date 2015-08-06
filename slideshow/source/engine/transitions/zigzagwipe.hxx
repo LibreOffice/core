@@ -31,7 +31,7 @@ namespace internal {
 class ZigZagWipe : public ParametricPolyPolygon
 {
 public:
-    ZigZagWipe( sal_Int32 nZigs );
+    explicit ZigZagWipe( sal_Int32 nZigs );
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 protected:
     const double m_zigEdge;
@@ -42,7 +42,7 @@ protected:
 class BarnZigZagWipe : public ZigZagWipe
 {
 public:
-    BarnZigZagWipe( sal_Int32 nZigs ) : ZigZagWipe(nZigs) {}
+    explicit BarnZigZagWipe( sal_Int32 nZigs ) : ZigZagWipe(nZigs) {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 };
 

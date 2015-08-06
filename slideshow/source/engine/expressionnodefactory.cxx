@@ -42,7 +42,7 @@ namespace slideshow
             class ConstantValueExpression : public ExpressionNode
             {
             public:
-                ConstantValueExpression( double rValue ) :
+                explicit ConstantValueExpression( double rValue ) :
                     maValue( rValue )
                 {
                 }

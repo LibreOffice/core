@@ -62,7 +62,7 @@ public:
 
         @param size number of elements to be cached; default param set to 128
     */
-    inline lru_cache( ::std::size_t size );
+    explicit inline lru_cache( ::std::size_t size );
 
     /** Destructor: releases all cached elements and keys.
     */

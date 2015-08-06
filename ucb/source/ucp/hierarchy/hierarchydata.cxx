@@ -494,7 +494,7 @@ bool HierarchyEntry::move(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    OUString aNewPath = createPathFromHierarchyURL( rNewURL );
+    OUString aNewPath = createPathFromHierarchyURL( HierarchyUri(rNewURL) );
 
     if ( aNewPath == m_aPath )
         return true;

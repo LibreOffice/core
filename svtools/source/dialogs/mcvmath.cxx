@@ -101,7 +101,7 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
 FixCpx ImpExPI( sal_uInt16 nPhi )
 {
     short i;
-    FixCpx aIter(1L);                   // e**(0*i)
+    FixCpx aIter(Fix(1L));                   // e**(0*i)
     FixCpx Mul;
     const char Sft=14-FIX_POST;
 

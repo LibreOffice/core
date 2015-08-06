@@ -88,7 +88,7 @@ namespace slideshow
         /// Specialization for HSLColor, to employ color-specific interpolator
         template<> struct Interpolator< HSLColor >
         {
-            Interpolator( bool bCCW ) :
+            explicit Interpolator( bool bCCW ) :
                 mbCCW( bCCW )
             {
             }

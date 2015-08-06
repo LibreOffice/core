@@ -74,7 +74,7 @@ private:
     void _Truncate();
 
 public:
-    inline          SwLinePortion(const SwLinePortion &rPortion);
+    explicit inline SwLinePortion(const SwLinePortion &rPortion);
            virtual ~SwLinePortion();
 
     // Access methods

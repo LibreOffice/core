@@ -37,7 +37,7 @@ namespace internal {
 class ActivityBase : public AnimationActivity
 {
 public:
-    ActivityBase( const ActivityParameters& rParms );
+    explicit ActivityBase( const ActivityParameters& rParms );
 
     /// From Disposable interface
     virtual void dispose() SAL_OVERRIDE;

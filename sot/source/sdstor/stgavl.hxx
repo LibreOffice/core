@@ -56,7 +56,7 @@ class StgAvlIterator {
     short       nCur;                   // current element
     StgAvlNode* Find( short );
 public:
-    StgAvlIterator( StgAvlNode* );
+    explicit StgAvlIterator( StgAvlNode* );
     StgAvlNode* First();
     StgAvlNode* Next();
 };

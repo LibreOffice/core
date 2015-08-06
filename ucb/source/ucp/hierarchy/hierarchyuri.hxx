@@ -45,7 +45,7 @@ private:
 
 public:
     HierarchyUri() : m_bValid( false ) {}
-    HierarchyUri( const OUString & rUri )
+    explicit HierarchyUri( const OUString & rUri )
     : m_aUri( rUri ), m_bValid( false ) {}
 
     bool isValid() const

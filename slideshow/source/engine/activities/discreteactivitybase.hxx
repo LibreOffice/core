@@ -38,7 +38,7 @@ namespace slideshow
         class DiscreteActivityBase : public ActivityBase
         {
         public:
-            DiscreteActivityBase( const ActivityParameters& rParms );
+            explicit DiscreteActivityBase( const ActivityParameters& rParms );
 
             /** Hook for derived classes.
 

@@ -31,7 +31,7 @@ namespace internal {
 class BarWipePolyPolygon : public ParametricPolyPolygon
 {
 public:
-    BarWipePolyPolygon( sal_Int32 nBars = 1 /* nBars > 1: blinds effect */ )
+    explicit BarWipePolyPolygon( sal_Int32 nBars = 1 /* nBars > 1: blinds effect */ )
         : m_nBars(nBars),
           m_unitRect( createUnitRect() )
         {}

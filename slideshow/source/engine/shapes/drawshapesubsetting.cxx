@@ -642,7 +642,7 @@ namespace slideshow
             class CountClassFunctor
             {
             public:
-                CountClassFunctor( DrawShapeSubsetting::IndexClassificator eClass ) :
+                explicit CountClassFunctor( DrawShapeSubsetting::IndexClassificator eClass ) :
                     meClass( eClass ),
                     mnCurrCount(0)
                 {

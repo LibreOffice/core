@@ -30,7 +30,7 @@ class SwPosSize
 public:
     inline SwPosSize( const sal_uInt16 nW = 0, const sal_uInt16 nH = 0 )
         : nWidth(nW), nHeight(nH) { }
-    inline SwPosSize( const Size &rSize )
+    explicit inline SwPosSize( const Size &rSize )
         : nWidth(sal_uInt16(rSize.Width())), nHeight(sal_uInt16(rSize.Height())){ }
     inline sal_uInt16 Height() const { return nHeight; }
     inline void Height( const sal_uInt16 nNew ) { nHeight = nNew; }

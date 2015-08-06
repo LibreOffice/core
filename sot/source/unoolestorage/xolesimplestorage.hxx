@@ -67,7 +67,7 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper3
 
 public:
 
-    OLESimpleStorage( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory );
+    explicit OLESimpleStorage( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory );
 
     virtual ~OLESimpleStorage();
 

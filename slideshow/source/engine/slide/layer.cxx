@@ -226,7 +226,7 @@ namespace slideshow
         class LayerEndUpdate : private boost::noncopyable
         {
         public:
-            LayerEndUpdate( LayerSharedPtr const& rLayer ) :
+            explicit LayerEndUpdate( LayerSharedPtr const& rLayer ) :
                 mpLayer( rLayer )
             {}
 

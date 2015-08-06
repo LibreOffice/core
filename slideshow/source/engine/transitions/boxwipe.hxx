@@ -31,7 +31,7 @@ namespace internal {
 class BoxWipe : public ParametricPolyPolygon
 {
 public:
-    BoxWipe( bool topCentered ) : m_topCentered(topCentered),
+    explicit BoxWipe( bool topCentered ) : m_topCentered(topCentered),
                                   m_unitRect( createUnitRect() )
         {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;

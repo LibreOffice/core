@@ -308,7 +308,7 @@ struct WW8_BRC  // BoRder Code (WW8 version)
             | ((sal_uInt8)_fFrame << 6);
     }
     // Convert BRC from WW6 to WW8 format
-    WW8_BRC(const WW8_BRCVer6& brcVer6);
+    explicit WW8_BRC(const WW8_BRCVer6& brcVer6);
 
     // Returns LO border width in twips=1/20pt, taking into account brcType
     short DetermineBorderProperties(short *pSpace=0) const;
@@ -360,7 +360,7 @@ struct WW8_BRCVer9  // BoRder Code (WW9 version)
         aBits2[3] = 0;
     }
     // Convert BRC from WW8 to WW9 format
-    WW8_BRCVer9(const WW8_BRC& brcVer8);
+    explicit WW8_BRCVer9(const WW8_BRC& brcVer8);
 
     // Returns LO border width in twips=1/20pt, taking into account brcType
     short DetermineBorderProperties(short *pSpace=0) const;

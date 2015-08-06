@@ -41,7 +41,7 @@ private:
         com::sun::star::ucb::XContentProvider > resolveProvider() const;
 
 public:
-    ProviderListEntry_Impl(
+    explicit ProviderListEntry_Impl(
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProvider >& xProvider )
     : m_xProvider( xProvider ) {}

@@ -619,7 +619,7 @@ namespace slideshow
             class Scaler
             {
             public:
-                Scaler( double nScale ) :
+                explicit Scaler( double nScale ) :
                     mnScale( nScale )
                 {
                 }

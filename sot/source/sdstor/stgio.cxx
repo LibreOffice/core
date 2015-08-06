@@ -234,8 +234,7 @@ class Validator
     sal_uLong MarkAll( StgDirEntry *pEntry );
 
 public:
-
-    Validator( StgIo &rIo );
+    explicit Validator( StgIo &rIo );
     bool IsError() { return nError != 0; }
 };
 

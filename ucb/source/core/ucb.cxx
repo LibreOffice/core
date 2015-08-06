@@ -426,7 +426,7 @@ UniversalContentBroker::registerContentProvider(
     if (aIt == m_aProviders.end())
     {
         ProviderList_Impl aList;
-        aList.push_front(Provider);
+        aList.push_front( ProviderListEntry_Impl(Provider) );
         try
         {
             m_aProviders.add(Scheme, aList, false);
@@ -443,7 +443,7 @@ UniversalContentBroker::registerContentProvider(
 
         ProviderList_Impl & rList = aIt->getValue();
         xPrevious = rList.front().getProvider();
-        rList.push_front(Provider);
+        rList.push_front( ProviderListEntry_Impl(Provider) );
     }
 
     return xPrevious;
