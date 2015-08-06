@@ -287,16 +287,14 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
             return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
     }
 
-    // nMax ist der neue Platz
     DataFlavor* pNewFlavor = new DataFlavor;
-
     pNewFlavor->MimeType = rMimeType;
     pNewFlavor->HumanPresentableName = rMimeType;
     pNewFlavor->DataType = cppu::UnoType<OUString>::get();
 
     rL.push_back( pNewFlavor );
 
-    return static_cast<SotClipboardFormatId>(static_cast<int>(nMax) + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
+    return static_cast<SotClipboardFormatId>(static_cast<int>(rL.size()-1) + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
 }
 
 /*************************************************************************
