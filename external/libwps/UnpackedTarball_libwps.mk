@@ -19,6 +19,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	$(if $(SYSTEM_REVENGE),,external/libwps/rpath.patch.0) \
 ))
 
+ifneq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,libwps,\
+	external/libwps/libwps-bundled-soname.patch.0 \
+))
+endif
+endif
+
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
