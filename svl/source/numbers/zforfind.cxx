@@ -110,6 +110,7 @@ void ImpSvNumberInputScan::Reset()
 {
     nMonth       = 0;
     nMonthPos    = 0;
+    nDayOfWeek   = 0;
     nTimePos     = 0;
     nSign        = 0;
     nESign       = 0;
@@ -2100,6 +2101,33 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
     {
         const sal_Int32 nMonthStart = nPos;
         short nTempMonth = GetMonth(rString, nPos);
+        if (nTempMonth < 0)
+        {
+            // Short month and day names may be identical in some locales, e.g.
+            // "mar" for "martes" or "marzo" in Spanish.
+            // Do not let a month name immediately take precedence if a day
+            // name was meant instead. Assume that both could be valid, until
+            // encountered differently or the final evaluation in
+            // IsNumberFormat() checks, but continue with weighing the month
+            // name higher unless we have both day of week and month name here.
+            sal_Int32 nTempPos = nMonthStart;
+            nDayOfWeek = GetDayOfWeek( rString, nTempPos);
+            if (nDayOfWeek < 0)
+            {
+                SkipChar( '.', rString, nTempPos ); // abbreviated
+                SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nTempPos );
+                SkipBlanks( rString, nTempPos);
+                short nTempTempMonth = GetMonth( rString, nTempPos);
+                if (nTempTempMonth)
+                {
+                    // Fall into the else branch below that handles both.
+                    nTempMonth = 0;
+                    nPos = nMonthStart;
+                    nDayOfWeek = 0;
+                    // Do not set nDayOfWeek hereafter, anywhere.
+                }
+            }
+        }
         if ( nTempMonth )    // month (Jan 1)?
         {
             // Jan1 without separator is not a date, unless it is followed by a
@@ -2122,14 +2150,14 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
         }
         else
         {
-            int nDayOfWeek = GetDayOfWeek( rString, nPos );
-            if ( nDayOfWeek )
+            int nTempDayOfWeek = GetDayOfWeek( rString, nPos );
+            if ( nTempDayOfWeek )
             {
                 // day of week is just parsed away
                 eScannedType = css::util::NumberFormat::DATE;       // !!! it IS a date !!!
                 if ( nPos < rString.getLength() )
                 {
-                    if ( nDayOfWeek < 0 )
+                    if ( nTempDayOfWeek < 0 )
                     {
                         // abbreviated
                         if ( rString[ nPos ] == (sal_Unicode)'.' )
@@ -2805,12 +2833,12 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
             nPos = nPos + rSep.getLength();
             SkipBlanks(rString, nPos);
         }
-        int nDayOfWeek = GetDayOfWeek( rString, nPos );
-        if ( nDayOfWeek )
+        int nTempDayOfWeek = GetDayOfWeek( rString, nPos );
+        if ( nTempDayOfWeek )
         {
             if ( nPos < rString.getLength() )
             {
-                if ( nDayOfWeek < 0 )
+                if ( nTempDayOfWeek < 0 )
                 {   // short
                     if ( rString[ nPos ] == (sal_Unicode)'.' )
                     {
@@ -3518,6 +3546,14 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 break;
 
             case css::util::NumberFormat::DATE:
+                if (nMonth < 0 && nDayOfWeek < 0 && nAnzNums == 3)
+                {
+                    // If both, short month name and day of week name were
+                    // detected, and also numbers for full date, assume that we
+                    // have a day of week instead of month name.
+                    nMonth = 0;
+                    nMonthPos = 0;
+                }
                 if (nMonth)
                 {                               // month name and numbers
                     if (nAnzNums > 2)
@@ -3564,6 +3600,15 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 break;
 
             case css::util::NumberFormat::DATETIME:
+                if (nMonth < 0 && nDayOfWeek < 0 && nAnzNums >= 5)
+                {
+                    // If both, abbreviated month name and day of week name
+                    // were detected, and also at least numbers for full date
+                    // plus time including minutes, assume that we have a day
+                    // of week instead of month name.
+                    nMonth = 0;
+                    nMonthPos = 0;
+                }
                 if (nMonth)
                 {                               // month name and numbers
                     if (nDecPos)
