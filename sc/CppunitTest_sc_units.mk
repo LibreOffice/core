@@ -29,11 +29,13 @@ $(eval $(call gb_CppunitTest_use_externals,sc_units,\
     icu_headers \
     icui18n \
     icuuc \
-	udunits2 \
 	libxml2 \
 	mdds_headers \
 	orcus \
 	orcus-parser \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+		udunits2 \
+    ) \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_units, \

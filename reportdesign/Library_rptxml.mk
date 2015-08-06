@@ -15,7 +15,12 @@ $(eval $(call gb_Library_set_include,rptxml,\
     -I$(SRCDIR)/reportdesign/source/inc \
 ))
 
-$(eval $(call gb_Library_use_external,rptxml,boost_headers))
+$(eval $(call gb_Library_use_externals,rptxml,\
+    boost_headers \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+		udunits2 \
+    ) \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,rptxml,$(SRCDIR)/reportdesign/inc/pch/precompiled_rptxml))
 
