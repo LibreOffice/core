@@ -37,7 +37,9 @@ class SdrPageView;
 typedef std::set<sal_uInt16> SdrUShortCont;
 
 
-// Everything a View needs to know about a selected object
+/**
+ * Everything a View needs to know about a selected object
+ */
 class SVX_DLLPUBLIC SdrMark : public sdr::ObjectUser
 {
 protected:
@@ -233,7 +235,7 @@ public:
     bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
     bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
 
-    // Es werden saemtliche Entries kopiert!
+    // All Entries are copied!
     void operator=(const SdrMarkList& rLst);
 };
 
