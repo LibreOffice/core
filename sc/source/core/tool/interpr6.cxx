@@ -25,6 +25,7 @@
 #include "dociter.hxx"
 #include "mtvcellfunc.hxx"
 #include "scmatrix.hxx"
+#include "../units/unitsimpl.hxx"
 
 #include <formula/token.hxx>
 
@@ -823,6 +824,10 @@ void ScInterpreter::ScSum()
         ScAddress aAdr;
         ScRange aRange;
         size_t nRefInList = 0;
+        FormulaUnit* aUnit = NULL;
+        bool bFirstParam = true;
+        ::boost::shared_ptr< sc::units::UnitsImpl > mpUnitsImpl
+            = sc::units::UnitsImpl::GetUnits();
         while (nParamCount-- > 0)
         {
             switch (GetStackType())
@@ -834,11 +839,37 @@ void ScInterpreter::ScSum()
                     SetError( errNoValue );
                 }
                 break;
-                case svDouble    :
+                case svDouble:
+                {
                     fVal = GetDouble();
                     fRes += fVal;
                     nFuncFmtType = css::util::NumberFormat::NUMBER;
-                    break;
+
+                    // double token is dimensionless
+                    if ( bFirstParam || aUnit )
+                    {
+                        bFirstParam = false;
+                        using namespace sc::units;
+                        UtUnit aNewUnit;
+                        if ( UtUnit::createUnit( "", aNewUnit, mpUnitsImpl->GetUnitSystem() ) )
+                        {
+                            if ( !aUnit || aUnit->getUnit() == aNewUnit.getUnit() )
+                            {
+                                aUnit = new FormulaUnit;
+                                *aUnit = aNewUnit;
+                            }
+                            else
+                            {
+                                delete aUnit;
+                                aUnit = NULL;
+                                SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                            }
+                        }
+                    }
+                    else
+                        SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                }
+                break;
                 case svExternalSingleRef:
                 {
                     ScExternalRefCache::TokenRef pToken;
@@ -877,6 +908,35 @@ void ScInterpreter::ScSum()
                             fRes += fVal;
                         }
                     }
+
+                    using namespace sc::units;
+
+                    if (mpUnitsImpl->getUnitsForRange(ScRangeList(ScRange(aAdr)), pDok).units.size() == 1
+                        && ( bFirstParam || aUnit ) )
+                    {
+                        // all refs in range have the same unit
+                        bFirstParam = false;
+                        using namespace sc::units;
+                        mpUnitsImpl = UnitsImpl::GetUnits();
+                        UtUnit aNewUnit = mpUnitsImpl->getUnitForCell( aAdr, pDok );
+                        if ( !aUnit || aUnit->getUnit() == aNewUnit.getUnit() )
+                        {
+                            aUnit = new FormulaUnit;
+                            *aUnit = aNewUnit;
+                        }
+                        else
+                        {
+                            delete aUnit;
+                            aUnit = NULL;
+                            SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                        }
+                    }
+                    else
+                    {
+                        delete aUnit;
+                        aUnit = NULL;
+                        SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                    }
                 }
                 break;
                 case svDoubleRef :
@@ -896,6 +956,27 @@ void ScInterpreter::ScSum()
                         return;
                     }
                     fRes += aAction.getSum();
+
+                    using namespace sc::units;
+
+                    if (mpUnitsImpl->getUnitsForRange(ScRangeList(aRange), pDok).units.size() == 1
+                        && ( bFirstParam || aUnit ) )
+                    {
+                        // all refs in range have the same unit
+                        bFirstParam = false;
+                        using namespace sc::units;
+                        mpUnitsImpl = UnitsImpl::GetUnits();
+                        UtUnit aNewUnit = mpUnitsImpl->getUnitForCell( aRange.aEnd, pDok );
+                        if ( !aUnit || aUnit->getUnit() == aNewUnit.getUnit() )
+                        {
+                            aUnit = new FormulaUnit;
+                            *aUnit = aNewUnit;
+                        }
+                        else
+                            SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                    }
+                    else
+                        SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
 
                     // Get the number format of the last iterated cell.
                     nFuncFmtIndex = aAction.getNumberFormat();
@@ -941,7 +1022,10 @@ void ScInterpreter::ScSum()
         if (nFuncFmtType == css::util::NumberFormat::LOGICAL)
             nFuncFmtType = css::util::NumberFormat::NUMBER;
 
-        PushDouble(fRes);
+        if ( aUnit )
+            PushDouble(fRes, *aUnit);
+        else
+            PushDouble(fRes);
     }
 }
 
