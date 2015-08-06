@@ -136,6 +136,10 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:ShowAnnotations"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
+            <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
+            <menu:menuitem menu:id=".uno:MasterLayouts"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
@@ -434,10 +438,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:InsertMasterPage"/>
             <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
-            <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
-            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:ShowSlide"/>
