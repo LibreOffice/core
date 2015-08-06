@@ -39,6 +39,7 @@ namespace formula
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleUnitToken )
 // Need a lot of FormulaDoubleToken
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 // Need a lot of FormulaByteToken
@@ -196,6 +197,12 @@ double & FormulaToken::GetDoubleAsReference()
     SAL_WARN( "formula.core", "FormulaToken::GetDouble: virtual dummy called" );
     static double fVal = 0.0;
     return fVal;
+}
+
+FormulaUnit FormulaToken::GetUnit() const
+{
+    SAL_WARN( "formula.core", "FormulaToken::GetUnit: virtual dummy called" );
+    return FormulaUnit();
 }
 
 svl::SharedString FormulaToken::GetString() const
@@ -1630,6 +1637,13 @@ bool FormulaTokenIterator::IsEndOfPath() const
 
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
+
+FormulaUnit FormulaDoubleToken::GetUnit() const
+{
+    SAL_WARN( "formula.core", "FormulaDoubleToken::GetUnit: virtual dummy called" );
+    return FormulaUnit();
+}
+
 bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();

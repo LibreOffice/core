@@ -16,7 +16,12 @@ $(eval $(call gb_Library_set_include,scd,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_external,scd,boost_headers))
+$(eval $(call gb_Library_use_externals,scd,\
+    boost_headers \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        udunits2 \
+    ) \
+))
 
 $(eval $(call gb_Library_use_sdk_api,scd))
 
