@@ -1871,7 +1871,7 @@
       </node>
       <node oor:name=".uno:NamesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Name Cells</value>
+          <value xml:lang="en-US">~Named Expressions</value>
         </prop>
       </node>
       <node oor:name=".uno:EditAnnotation" oor:op="replace">

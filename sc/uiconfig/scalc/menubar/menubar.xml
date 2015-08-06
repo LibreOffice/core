@@ -97,9 +97,6 @@
             <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ShareDocument"/>
-            <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:PlugInsActive"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
@@ -128,6 +125,7 @@
             <menu:menuitem menu:id=".uno:Sidebar"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
+            <menu:menuitem menu:id=".uno:FunctionBox"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
             <menu:menuseparator/>
@@ -185,7 +183,16 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog"/>
-            <menu:menuitem menu:id=".uno:FunctionBox"/>
+            <menu:menu menu:id=".uno:NamesMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:AddName"/>
+                    <menu:menuitem menu:id=".uno:DefineName"/>
+                    <menu:menuitem menu:id=".uno:InsertName"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:CreateNames"/>
+                    <menu:menuitem menu:id=".uno:DefineLabelRange"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DrawText"/>
             <menu:menuitem menu:id=".uno:InsertAnnotation"/>
@@ -445,16 +452,6 @@
                     <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:NamesMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:AddName"/>
-                    <menu:menuitem menu:id=".uno:DefineName"/>
-                    <menu:menuitem menu:id=".uno:InsertName"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:CreateNames"/>
-                    <menu:menuitem menu:id=".uno:DefineLabelRange"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menu menu:id=".uno:SheetCommentMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:EditAnnotation"/>
@@ -469,7 +466,6 @@
             <menu:menuitem menu:id=".uno:RenameTable"/>
             <menu:menuitem menu:id=".uno:Hide"/>
             <menu:menuitem menu:id=".uno:Show"/>
-            <menu:menuitem menu:id=".uno:Protect"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SelectTables"/>
             <menu:menuitem menu:id=".uno:SetTabBgColor"/>
@@ -511,8 +507,6 @@
                     <menu:menuitem menu:id=".uno:Calculate"/>
                     <menu:menuitem menu:id=".uno:ConvertFormulaToValue"/>
                     <menu:menuitem menu:id=".uno:AutomaticCalculation"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:AutoComplete"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:Validation"/>
@@ -591,6 +585,12 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ScenarioManager"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShareDocument"/>
+            <menu:menuitem menu:id=".uno:Protect"/>
+            <menu:menuitem menu:id=".uno:ToolProtectionDocument"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:AutoComplete"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>
