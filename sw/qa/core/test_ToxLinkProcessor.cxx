@@ -20,22 +20,27 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <poolfmt.hrc>
 #include <swdll.hxx>
+#include "swtypes.hxx"
+#include "SwStyleNameMapper.hxx"
 
 using namespace sw;
 
 class ToxLinkProcessorTest : public test::BootstrapFixture
 {
-    void ExceptionIsThrownIfTooManyLinksAreClosed();
+    void NoExceptionIsThrownIfTooManyLinksAreClosed();
     void AddingAndClosingTwoLinksResultsInTwoClosedLinks();
     void LinkIsCreatedCorrectly();
     void LinkSequenceIsPreserved();
+    void StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed();
 
     CPPUNIT_TEST_SUITE(ToxLinkProcessorTest);
-    CPPUNIT_TEST(ExceptionIsThrownIfTooManyLinksAreClosed);
+    CPPUNIT_TEST(NoExceptionIsThrownIfTooManyLinksAreClosed);
     CPPUNIT_TEST(AddingAndClosingTwoLinksResultsInTwoClosedLinks);
     CPPUNIT_TEST(LinkIsCreatedCorrectly);
     CPPUNIT_TEST(LinkSequenceIsPreserved);
+    CPPUNIT_TEST(StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed);
     CPPUNIT_TEST_SUITE_END();
 public:
     void setUp() SAL_OVERRIDE {
@@ -59,7 +64,7 @@ const sal_uInt16 ToxLinkProcessorTest::POOL_ID_1 = 42;
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_2 = 43;
 
 void
-ToxLinkProcessorTest::ExceptionIsThrownIfTooManyLinksAreClosed()
+ToxLinkProcessorTest::NoExceptionIsThrownIfTooManyLinksAreClosed()
 {
     ToxLinkProcessor sut;
     sut.StartNewLink(0, STYLE_NAME_1);
@@ -67,6 +72,17 @@ ToxLinkProcessorTest::ExceptionIsThrownIfTooManyLinksAreClosed()
     // fdo#85872 actually it turns out the UI does something like this
     // so an exception must not be thrown!
     sut.CloseLink(1, URL_1);
+}
+
+void
+ToxLinkProcessorTest::StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed()
+{
+    ToxLinkProcessor sut;
+    sut.StartNewLink(0, STYLE_NAME_1);
+    sut.CloseLink(1, URL_1);
+    sut.CloseLink(1, URL_1);
+    CPPUNIT_ASSERT_EQUAL(2u, static_cast<unsigned>(sut.mClosedLinks.size()));
+    CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned>(sut.mClosedLinks.at(1).mEndTextPos));
 }
 
 void
