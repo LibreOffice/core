@@ -19,7 +19,10 @@ $(eval $(call gb_Library_add_defs,forui,\
     -DFORMULA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,forui,boost_headers))
+$(eval $(call gb_Library_use_externals,forui,\
+    boost_headers \
+    udunits2 \
+))
 
 $(eval $(call gb_Library_use_sdk_api,forui))
 

@@ -18,7 +18,10 @@ $(eval $(call gb_Library_add_defs,for,\
     -DFORMULA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,for,boost_headers))
+$(eval $(call gb_Library_use_externals,for,\
+    boost_headers \
+    udunits2 \
+))
 
 $(eval $(call gb_Library_use_sdk_api,for))
 

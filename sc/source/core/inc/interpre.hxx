@@ -273,6 +273,7 @@ formula::FormulaTokenRef PopToken();
 void Pop();
 void PopError();
 double PopDouble();
+double PopDouble( FormulaUnit* aUnit );
 svl::SharedString PopString();
 void ValidateRef( const ScSingleRefData & rRef );
 void ValidateRef( const ScComplexRefData & rRef );
@@ -321,6 +322,7 @@ sc::RangeMatrix PopRangeMatrix();
 void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
 
 void PushDouble(double nVal);
+void PushDouble(double nVal, FormulaUnit& aUnit);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
 void PushString( const OUString& rStr );
@@ -347,6 +349,7 @@ sal_uInt8 GetByte() { return cPar; }
 bool DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
+double GetDouble( FormulaUnit* aUnit );
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
 bool GetBool() { return GetDouble() != 0.0; }
