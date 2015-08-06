@@ -1034,6 +1034,27 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart,
 
     if( !(ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent()))
         rRenderContext.Erase(aRect);
+    else if (SupportsDoubleBuffering() && mbIsSubEdit)
+    {
+        // ImplPaintBorder() is a NOP, we have a native border, and this is a sub-edit of a control.
+        // That means we have to draw the parent native widget to paint the edit area to clear our background.
+        long nLeft = mnXOffset + ImplGetExtraXOffset();
+        long nTop = ImplGetTextYPosition();
+        long nRight = GetOutputWidthPixel();
+        long nHeight = GetTextHeight();
+        Rectangle aEditArea(nLeft, nTop, nRight, nTop + nHeight);
+
+        ControlType aCtrlType = ImplGetNativeControlType();
+        ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
+        Rectangle aCtrlRegion(0, 0, GetParent()->GetOutputWidthPixel(), GetParent()->GetOutputHeightPixel());
+        ControlState nState = ControlState::ENABLED;
+        ImplControlValue aControlValue;
+
+        rRenderContext.Push(PushFlags::CLIPREGION);
+        rRenderContext.SetClipRegion(vcl::Region(aEditArea));
+        rRenderContext.DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, aControlValue, OUString());
+        rRenderContext.Pop();
+    }
 }
 
 void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd)
