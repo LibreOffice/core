@@ -21,6 +21,7 @@
 #define INCLUDED_FORMULA_TOKEN_HXX
 
 #include <sal/config.h>
+#include <boost/shared_ptr.hpp>
 
 #include <vector>
 
@@ -37,6 +38,7 @@ class ScJumpMatrix;
 class ScMatrix;
 struct ScComplexRefData;
 struct ScSingleRefData;
+class FormulaUnit;
 
 namespace formula
 {
@@ -172,6 +174,7 @@ public:
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual const std::vector<ScComplexRefData>* GetRefList() const;
     virtual       std::vector<ScComplexRefData>* GetRefList();
+    virtual FormulaUnit*        GetUnit() const;
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
@@ -271,6 +274,23 @@ public:
     virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
+};
+
+class FORMULA_DLLPUBLIC FormulaDoubleUnitToken : public FormulaDoubleToken
+{
+private:
+            FormulaUnit*        mpUnit;
+public:
+            FormulaUnit*        GetUnit() const      { return mpUnit; }
+
+                                FormulaDoubleUnitToken( double f, FormulaUnit* pUnit ) :
+                                    FormulaDoubleToken( f ), mpUnit( pUnit )
+                                    { }
+                                FormulaDoubleUnitToken( const FormulaDoubleUnitToken& r ) :
+                                    FormulaDoubleToken( r ), mpUnit( r.mpUnit )
+                                    { }
+
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleUnitToken )
 };
 
 
