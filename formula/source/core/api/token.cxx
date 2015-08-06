@@ -322,6 +322,12 @@ std::vector<ScComplexRefData>* FormulaToken::GetRefList()
     return NULL;
 }
 
+FormulaUnit* FormulaToken::GetUnit() const
+{
+    SAL_WARN("formula", "call virtual dummy function: GetUnit()");
+    return NULL;
+}
+
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;

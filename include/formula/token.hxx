@@ -37,6 +37,7 @@ class ScJumpMatrix;
 class ScMatrix;
 struct ScComplexRefData;
 struct ScSingleRefData;
+class FormulaUnit;
 
 namespace formula
 {
@@ -172,6 +173,7 @@ public:
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual const std::vector<ScComplexRefData>* GetRefList() const;
     virtual       std::vector<ScComplexRefData>* GetRefList();
+    virtual FormulaUnit*        GetUnit() const;
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
