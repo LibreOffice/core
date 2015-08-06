@@ -170,6 +170,8 @@ class UnoRemoteConnection:
             finally:
                 self.connection = None
 
+havePonies = False
+
 class UnoInProcess:
     def getContext(self):
         return self.xContext
@@ -177,7 +179,10 @@ class UnoInProcess:
         return self.xDoc
     def setUp(self):
         self.xContext = pyuno.getComponentContext()
-        pyuno.private_initTestEnvironment()
+        global havePonies
+        if not(havePonies):
+            pyuno.private_initTestEnvironment()
+            havePonies = True
     def openEmptyWriterDoc(self):
         assert(self.xContext)
         smgr = self.getContext().ServiceManager
