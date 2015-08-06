@@ -34,7 +34,10 @@ public:
 
     /** Close a link which has been found during processing.
      *
-     * @throw std::runtime_error If there are no open links.
+     * @internal
+     * If you close more links than were opened, then the method will behave
+     * as if a start link was opened at position 0 with the character style
+     * STR_POOLCHR_TOXJUMP.
      */
     void
     CloseLink(sal_Int32 endPosition, const OUString& url);
