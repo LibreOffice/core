@@ -43,10 +43,6 @@ class SwContentOptPage : public SfxTabPage
 {
     VclPtr<CheckBox>   m_pCrossCB;
 
-    VclPtr<CheckBox>   m_pHScrollBox;
-    VclPtr<CheckBox>   m_pVScrollBox;
-    VclPtr<CheckBox>   m_pAnyRulerCB;
-    VclPtr<CheckBox>   m_pHRulerCBox;
     VclPtr<ListBox>    m_pHMetric;
     VclPtr<CheckBox>   m_pVRulerCBox;
     VclPtr<CheckBox>   m_pVRulerRightCBox;
@@ -65,7 +61,6 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<ListBox>    m_pMetricLB;
 
     DECL_LINK(VertRulerHdl, CheckBox*);
-    DECL_LINK(AnyRulerHdl, CheckBox*);
 public:
     SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwContentOptPage();
@@ -142,7 +137,6 @@ class SwStdFontTabPage : public SfxTabPage
     VclPtr<FontSizeBox>     pLabelHeightLB;
     VclPtr<ComboBox>        pIdxBox     ;
     VclPtr<FontSizeBox>     pIndexHeightLB;
-    VclPtr<CheckBox>        pDocOnlyCB  ;
     VclPtr<PushButton>      pStandardPB;
 
     OUString sShellStd;

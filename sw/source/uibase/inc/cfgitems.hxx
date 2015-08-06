@@ -78,10 +78,6 @@ public:
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
-    bool bHorzScrollbar :1;
-    bool bVertScrollbar :1;
-    bool bAnyRuler : 1;
-    bool bHorzRuler     :1;
     bool bVertRuler     :1;
     bool bVertRulerRight:1;
     bool bSmoothScroll  :1;
