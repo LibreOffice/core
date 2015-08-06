@@ -71,7 +71,6 @@ private:
     ScViewData*     mpViewData;
     ScDocument*     mpDoc;
     const ScAddress maCursorPos;
-    Selection       maCurSel;
 
     bool mbNeedUpdate;
     bool mbDataChanged;

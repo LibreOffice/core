@@ -190,7 +190,6 @@ private:
     VclPtr<FixedText>       pFtDbAreaLabel;
     VclPtr<FixedText>       pFtDbArea;
     const OUString aStrUndefined;
-    const OUString aStrNoName;
 
     VclPtr<OKButton>        pBtnOk;
     VclPtr<CancelButton>    pBtnCancel;
