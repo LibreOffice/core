@@ -54,12 +54,12 @@ public:
     SdrPathSmoothKind GetMarkedPointsSmooth() const SAL_OVERRIDE;
     void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) SAL_OVERRIDE;
 
-    // Ein PolySegment kann eine Strecke oder eine Bezierkurve sein.
+    // A PolySegment can either be a segment or a Bézier curve
     bool IsSetMarkedSegmentsKindPossible() const SAL_OVERRIDE;
     SdrPathSegmentKind GetMarkedSegmentsKind() const SAL_OVERRIDE;
     void SetMarkedSegmentsKind(SdrPathSegmentKind eKind) SAL_OVERRIDE;
 
-    // Moeglicherweise ist das Obj hinterher geloescht:
+    // Probably Obj has been deleted afterwards
     void DeleteMarkedPoints() SAL_OVERRIDE;
     bool IsDeleteMarkedPointsPossible() const SAL_OVERRIDE;
 
@@ -67,12 +67,12 @@ public:
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     void RotateMarkedPoints(const Point& rRef, long nAngle);
 
-    // Hierbei entstehen eventuell beliebig viele neue Objekte:
+    // This probably creates an abitrary amount of new objects
     void RipUpAtMarkedPoints() SAL_OVERRIDE;
     bool IsRipUpAtMarkedPointsPossible() const SAL_OVERRIDE;
 
-    // Alle markierten Polylines werden zu Polygonen, alle offenen
-    // Bezierkurven zu geschlossenen.
+    // All marked Polylines are turned into polygons
+    // All open Bézier curves are turned into closed ones
     bool IsOpenCloseMarkedObjectsPossible() const SAL_OVERRIDE;
     SdrObjClosedKind GetMarkedObjectsClosedState() const SAL_OVERRIDE;
 
