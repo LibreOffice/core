@@ -52,7 +52,9 @@ private:
     boost::optional< OUString > msInputString;
 
     static void freeUt(ut_unit* pUnit) {
-        ut_free(pUnit);
+        char sBuf[128];
+        if (ut_format(pUnit, sBuf, sizeof(sBuf), UT_ASCII))
+            ut_free(pUnit);
     }
 
     UtUnit(ut_unit* pUnit,
@@ -63,10 +65,6 @@ private:
 
     void reset(ut_unit* pUnit) {
         mpUnit.reset(pUnit, &freeUt);
-    }
-
-    ut_unit* get() const {
-        return mpUnit.get();
     }
 
 public:
@@ -92,6 +90,14 @@ public:
 
     OUString getString() const;
 
+    ::boost::shared_ptr< ut_unit > getUnit() const {
+        return mpUnit;
+    }
+
+    ut_unit* get() const {
+        return mpUnit.get();
+    }
+
     bool isValid() const {
         // We use a null pointer/empty unit to indicate an invalid unit.
         return mpUnit.get() != 0;
@@ -99,6 +105,12 @@ public:
 
     bool isDimensionless() const {
         return ut_is_dimensionless(this->get());
+    }
+
+    UtUnit& operator=(const UtUnit& rUnit) {
+        this->mpUnit = rUnit.mpUnit;
+        this->msInputString = rUnit.msInputString;
+        return *this;
     }
 
     bool operator==(const UtUnit& rUnit) const {
