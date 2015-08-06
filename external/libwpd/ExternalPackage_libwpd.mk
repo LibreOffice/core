@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.dll,src/lib/.libs/libwpd-0.10.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.so.10,src/lib/.libs/libwpd-0.10.so.10.0.0))
+$(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10-lo.so.10,src/lib/.libs/libwpd-0.10-lo.so.10.0.0))
 endif
 
 # vim: set noet sw=4 ts=4:
