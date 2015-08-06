@@ -108,6 +108,7 @@ private:
                                                 // negative => short format
     short  nMonthPos;                           // 1 = front, 2 = middle
                                                 // 3 = end
+    int    nDayOfWeek;                          // Temporary (!) day of week (1..7,-1..-7) if date
     sal_uInt16 nTimePos;                        // Index of first time separator (+1)
     short  nDecPos;                             // Index of substring containing "," (+1)
     short  nNegCheck;                           // '( )' for negative
