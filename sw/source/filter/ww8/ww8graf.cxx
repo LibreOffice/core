@@ -88,7 +88,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/editobj.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <math.h>
 #include <fmturl.hxx>
 #include <svx/hlnkitem.hxx>

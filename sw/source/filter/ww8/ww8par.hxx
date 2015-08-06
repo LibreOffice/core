@@ -35,6 +35,7 @@
 #include <deque>
 #include <map>
 #include <utility>
+#include <memory>
 
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
@@ -1363,7 +1364,7 @@ private:
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* m_pPosAfterTOC;
 
-    boost::scoped_ptr< SwPosition > m_pLastAnchorPos;
+    std::unique_ptr< SwPosition > m_pLastAnchorPos;
 
     bool m_bCareFirstParaEndInToc;
     bool m_bCareLastParaEndInToc;

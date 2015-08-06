@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
@@ -72,6 +71,7 @@
 #include <frmatr.hxx>
 
 #include <iostream>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -3852,7 +3852,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     short nSkip, cbStd;
     OUString sName;
 
-    boost::scoped_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));// read Style
+    std::unique_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));// read Style
 
     if (xStd)
         rSI.SetOrgWWIdent( sName, xStd->sti );

@@ -129,6 +129,7 @@
 #include "WW8FibData.hxx"
 
 #include <unordered_set>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -290,9 +291,9 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     rStrm.ReadUInt32( nFlags );
 
     sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
-    boost::scoped_ptr< OUString > xLongName;    // link / file name
-    boost::scoped_ptr< OUString > xShortName;   // 8.3-representation of file name
-    boost::scoped_ptr< OUString > xTextMark;    // text mark
+    std::unique_ptr< OUString > xLongName;    // link / file name
+    std::unique_ptr< OUString > xShortName;   // 8.3-representation of file name
+    std::unique_ptr< OUString > xTextMark;    // text mark
 
     // description (ignore)
     if( ::get_flag( nFlags, WW8_HLINK_DESCR ) )
