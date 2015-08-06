@@ -1,0 +1,11 @@
+--- src/lib/Makefile.in.orig	2015-08-06 11:41:55.081239194 +0200
++++ src/lib/Makefile.in	2015-08-06 11:42:16.903238820 +0200
+@@ -369,7 +369,7 @@
+ AM_CXXFLAGS = -I$(top_srcdir)/inc $(REVENGE_CFLAGS) $(DEBUG_CXXFLAGS) -DBUILD_WPS=1
+ libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_LIBADD = $(REVENGE_LIBS) @LIBWPS_WIN32_RESOURCE@
+ libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPS_WIN32_RESOURCE@
+-libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
++libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined -release lo
+ libwps_@WPS_MAJOR_VERSION@_@WPS_MINOR_VERSION@_la_SOURCES = \
+ 	libwps_internal.cpp	\
+ 	libwps_tools_win.h	\

@@ -19,4 +19,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	$(if $(SYSTEM_REVENGE),,external/libwps/rpath.patch.0) \
 ))
 
+ifneq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,libwps,\
+	external/libwps/libwps-bundled-soname.patch.0 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
