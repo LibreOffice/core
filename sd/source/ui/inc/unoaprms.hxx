@@ -59,8 +59,6 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     ::com::sun::star::presentation::AnimationSpeed  eNewSecondSpeed;
     Color           aOldDimColor;
     Color           aNewDimColor;
-    Color           aOldBlueScreen;
-    Color           aNewBlueScreen;
     OUString        aOldSoundFile;
     OUString        aNewSoundFile;
     SdrPathObj*     pOldPathObj;
