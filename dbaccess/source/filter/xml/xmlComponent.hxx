@@ -29,7 +29,6 @@ namespace dbaxml
     {
         OUString m_sName;
         OUString m_sHREF;
-        OUString m_sComponentServiceName;
         bool        m_bAsTemplate;
 
     public:
