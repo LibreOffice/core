@@ -31,6 +31,9 @@ $(eval $(call gb_Library_use_custom_headers,scfilt,\
 $(eval $(call gb_Library_use_externals,scfilt,\
 	boost_headers \
 	mdds_headers \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        udunits2 \
+    ) \
 ))
 
 $(eval $(call gb_Library_use_libraries,scfilt,\
