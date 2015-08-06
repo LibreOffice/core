@@ -192,7 +192,6 @@ struct WW8_STD
 static_assert(sizeof (WW8_STD) == 10, "this has to match the msword size");
 
 /** base for reading AND working on (will have different subclasses */
-*/
 struct WW8_FFN_BASE     // Font Descriptor
 {
     // ab Ver6
