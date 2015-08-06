@@ -60,7 +60,11 @@ with a.stdout as txt:
         if (sidTextValue.find("\"") != -1): continue
         # ignore the multiline macros
         if (sidTextValue.find("\\") != -1): continue
-        sidNameToValue[sidName] = sidTextValue
+        # check for redefinitions
+        if sidName[0:4] == "SID_" and sidNameToValue.has_key(sidName):
+            print "Redefinition:\n\t",  sidNameToOriginalLine[sidName], "\n\t" , originalLine
+        else:
+            sidNameToValue[sidName] = sidTextValue
         sidNameToOriginalLine[sidName] = originalLine
 
     # decode the constants into their numeric values recursively
