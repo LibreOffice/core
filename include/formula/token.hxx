@@ -33,6 +33,8 @@
 #include <svl/sharedstring.hxx>
 #include <osl/interlck.h>
 
+#include "formulaunit.hxx"
+
 class ScJumpMatrix;
 class ScMatrix;
 struct ScComplexRefData;
@@ -94,10 +96,11 @@ class FormulaTokenArray;
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
     OpCode                      eOp;
-            FormulaToken&            operator=( const FormulaToken& ) SAL_DELETED_FUNCTION;
+    FormulaToken   &            operator=( const FormulaToken& ) SAL_DELETED_FUNCTION;
 protected:
 
-            const StackVar      eType;          // type of data
+            FormulaUnit                 maUnit;
+            const StackVar              eType;          // type of data
             mutable oslInterlockedCount mnRefCnt;        // reference count
 
 public:
@@ -125,8 +128,10 @@ public:
             const_cast<FormulaToken*>(this)->Delete();
     }
 
-    inline oslInterlockedCount GetRef() const { return mnRefCnt; }
-    inline OpCode               GetOpCode() const       { return eOp; }
+    inline oslInterlockedCount GetRef() const       { return mnRefCnt; }
+    inline OpCode              GetOpCode() const    { return eOp; }
+           FormulaUnit         GetUnit() const      { return maUnit; }
+           void SetUnit( const FormulaUnit& aUnit ) { maUnit = aUnit; }
 
     /**
         Dummy methods to avoid switches and casts where possible,
@@ -266,6 +271,9 @@ private:
 public:
                                 FormulaDoubleToken( double f ) :
                                     FormulaToken( svDouble ), fDouble( f ) {}
+                                FormulaDoubleToken( double f, FormulaUnit& aUnit ) :
+                                    FormulaToken( svDouble ), fDouble( f )
+                                    { maUnit = aUnit; }
                                 FormulaDoubleToken( const FormulaDoubleToken& r ) :
                                     FormulaToken( r ), fDouble( r.fDouble ) {}
 

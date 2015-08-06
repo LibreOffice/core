@@ -66,8 +66,7 @@
 #include "queryparam.hxx"
 #include "tokenarray.hxx"
 #include "units.hxx"
-#include "scmod.hxx"
-#include "viewfunc.hxx"
+#include "../units/unitsimpl.hxx"
 
 #include <math.h>
 #include <float.h>
@@ -1088,6 +1087,34 @@ double ScInterpreter::PopDouble()
     return 0.0;
 }
 
+double ScInterpreter::PopDouble( FormulaUnit* aUnit )
+{
+    nCurFmtType = css::util::NumberFormat::NUMBER;
+    nCurFmtIndex = 0;
+    if( sp )
+    {
+        --sp;
+        FormulaToken* p = pStack[ sp ];
+        *aUnit = p->GetUnit();
+        switch (p->GetType())
+        {
+            case svError:
+                nGlobalError = p->GetError();
+                break;
+            case svDouble:
+                return p->GetDouble();
+            case svEmptyCell:
+            case svMissing:
+                return 0.0;
+            default:
+                SetError( errIllegalArgument);
+        }
+    }
+    else
+        SetError( errUnknownStackVariable);
+    return 0.0;
+}
+
 svl::SharedString ScInterpreter::PopString()
 {
     nCurFmtType = css::util::NumberFormat::TEXT;
@@ -1899,6 +1926,13 @@ void ScInterpreter::PushDouble(double nVal)
         PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
 }
 
+void ScInterpreter::PushDouble(double nVal, FormulaUnit& aUnit)
+{
+    TreatDoubleError( nVal );
+    if (!IfErrorPushError())
+        PushTempTokenWithoutError( new FormulaDoubleToken( nVal, aUnit ) );
+}
+
 void ScInterpreter::PushInt(int nVal)
 {
     if (!IfErrorPushError())
@@ -2202,6 +2236,104 @@ double ScInterpreter::GetDouble()
             ScRefCellValue aCell;
             aCell.assign(*pDok, aAdr);
             nVal = GetCellValue(aAdr, aCell);
+        }
+        break;
+        case svDoubleRef:
+        {   // generate position dependent SingleRef
+            ScRange aRange;
+            PopDoubleRef( aRange );
+            ScAddress aAdr;
+            if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr ) )
+            {
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                nVal = GetCellValue(aAdr, aCell);
+            }
+            else
+                nVal = 0.0;
+        }
+        break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken)
+                nVal = pToken->GetDouble();
+        }
+        break;
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat;
+            PopExternalDoubleRef(pMat);
+            if (nGlobalError)
+                break;
+
+            nVal = GetDoubleFromMatrix(pMat);
+        }
+        break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            nVal = GetDoubleFromMatrix(pMat);
+        }
+        break;
+        case svError:
+            PopError();
+            nVal = 0.0;
+        break;
+        case svEmptyCell:
+        case svMissing:
+            Pop();
+            nVal = 0.0;
+        break;
+        default:
+            PopError();
+            SetError( errIllegalParameter);
+            nVal = 0.0;
+    }
+    if ( nFuncFmtType == nCurFmtType )
+        nFuncFmtIndex = nCurFmtIndex;
+    return nVal;
+}
+
+double ScInterpreter::GetDouble( FormulaUnit* aUnit )
+{
+    double nVal(0.0);
+    ::boost::shared_ptr< sc::units::UnitsImpl > mpUnitsImpl;
+    mpUnitsImpl = sc::units::UnitsImpl::GetUnits();
+    sc::units::UtUnit aNewUnit;
+    switch( GetRawStackType() )
+    {
+        case svDouble:
+        {
+            nVal = PopDouble( aUnit );
+            if ( !aUnit->isValid() )
+            {
+                // double token is dimensionless
+                using namespace sc::units;
+                if ( UtUnit::createUnit( "", aNewUnit, mpUnitsImpl->GetUnitSystem() ) )
+                    *aUnit = aNewUnit;
+            }
+        }
+        break;
+        case svString:
+            nVal = ConvertStringToValue( PopString().getString());
+        break;
+        case svSingleRef:
+        {
+            ScAddress aAdr;
+            PopSingleRef( aAdr );
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, aAdr);
+            nVal = GetCellValue(aAdr, aCell);
+
+            // get units of referenced cell
+            if ( aAdr.IsValid() )
+            {
+                using namespace sc::units;
+                aNewUnit = mpUnitsImpl->getUnitForCell( aAdr, pDok );
+                *aUnit = aNewUnit;
+            }
         }
         break;
         case svDoubleRef:
@@ -4511,27 +4643,6 @@ StackVar ScInterpreter::Interpret()
     xResult = PopToken();
     if (!xResult)
         xResult = new FormulaErrorToken( errUnknownStackVariable);
-
-    if ( SC_MOD()->GetFormulaOptions().GetUnitValidat() )
-    {
-        using namespace sc::units;
-
-        boost::shared_ptr< Units > pUnits = Units::GetUnits();
-        ScDocument* pDoc = pDok;
-
-        FormulaStatus aStatus = pUnits->verifyFormula( &rArr, aPos, pDoc );
-        OUString aUnit = pUnits->getUnitsForRange(ScRangeList(ScRange(aPos, aPos)), pDoc).units[0];
-        pMyFormulaCell->SetFormulaStatus( aStatus );
-        if ( aStatus == FormulaStatus::VALID || aStatus == FormulaStatus::UNKNOWN )
-        {
-            SAL_INFO( "sc.units", "verification successful" );
-        }
-        else
-        {
-            SAL_INFO( "sc.units", "verification failed" );
-        }
-    }
-
     // release tokens in expression stack
     FormulaToken** p = pStack;
     while( maxsp-- )

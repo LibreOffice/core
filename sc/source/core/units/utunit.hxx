@@ -15,6 +15,7 @@
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include <formula/formulaunit.hxx>
 #include <udunits2/udunits2.h>
 
 namespace sc {
@@ -33,32 +34,18 @@ namespace test {
  * simply use it in the 3 necessary places within our UtUnit
  * wrapper.
  */
-class UtUnit {
+class UtUnit : public FormulaUnit {
     friend class test::UnitsTest;
 
 private:
-    ::boost::shared_ptr< ut_unit > mpUnit;
-
-    /**
-     * The original input string used in createUnit.
-     * We can't necessarily convert a ut_unit back into the
-     * original representation (e.g. cm gets formatted as 0.01m
-     * by default), hence we should store the original string
-     * as may need to display it to the user again.
-     *
-     * There is no input string for units that are created when manipulating
-     * other units (i.e. multiplication/division of other UtUnits).
-     */
-    boost::optional< OUString > msInputString;
-
     static void freeUt(ut_unit* pUnit) {
         ut_free(pUnit);
     }
 
     UtUnit(ut_unit* pUnit,
            const boost::optional< OUString > rInputString = boost::optional< OUString >())
-        : mpUnit(pUnit, &freeUt)
-        , msInputString(rInputString)
+        : FormulaUnit( ::boost::shared_ptr< ut_unit >(pUnit, &freeUt),
+                       boost::optional< OUString >(rInputString) )
     {}
 
     void reset(ut_unit* pUnit) {
@@ -82,20 +69,14 @@ public:
     UtUnit() {};
 
     UtUnit(const UtUnit& rUnit)
-        : mpUnit(rUnit.mpUnit)
-        , msInputString(rUnit.msInputString)
+        : FormulaUnit( rUnit.mpUnit, rUnit.msInputString )
     {}
 
-    boost::optional< OUString > getInputString() const {
-        return msInputString;
-    }
+    UtUnit(const FormulaUnit& rUnit)
+        : FormulaUnit( rUnit.getUnit(), rUnit.getInputString() )
+    {}
 
     OUString getString() const;
-
-    bool isValid() const {
-        // We use a null pointer/empty unit to indicate an invalid unit.
-        return mpUnit.get() != 0;
-    }
 
     bool isDimensionless() const {
         return ut_is_dimensionless(this->get());
