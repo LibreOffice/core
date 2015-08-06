@@ -90,10 +90,6 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
 {
     get (m_pCrossCB, "helplines");
 
-    get (m_pHScrollBox, "hscrollbar");
-    get (m_pVScrollBox, "vscrollbar");
-    get (m_pAnyRulerCB, "ruler");
-    get (m_pHRulerCBox, "hruler");
     get (m_pHMetric, "hrulercombobox");
     get (m_pVRulerCBox, "vruler");
     get (m_pVRulerRightCBox, "vrulerright");
@@ -126,7 +122,6 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
     if(!aCJKOptions.IsVerticalTextEnabled() )
         m_pVRulerRightCBox->Hide();
     m_pVRulerCBox->SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
-    m_pAnyRulerCB->SetClickHdl(LINK(this, SwContentOptPage, AnyRulerHdl));
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( size_t i = 0; i < aMetricArr.Count(); ++i )
@@ -174,10 +169,6 @@ SwContentOptPage::~SwContentOptPage()
 void SwContentOptPage::dispose()
 {
     m_pCrossCB.clear();
-    m_pHScrollBox.clear();
-    m_pVScrollBox.clear();
-    m_pAnyRulerCB.clear();
-    m_pHRulerCBox.clear();
     m_pHMetric.clear();
     m_pVRulerCBox.clear();
     m_pVRulerRightCBox.clear();
@@ -234,10 +225,6 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_pFieldNameCB->Check (pElemAttr->bFieldName);
         m_pPostItCB->Check (pElemAttr->bNotes);
         m_pCrossCB->Check (pElemAttr->bCrosshair);
-        m_pHScrollBox->Check (pElemAttr->bHorzScrollbar);
-        m_pVScrollBox->Check (pElemAttr->bVertScrollbar);
-        m_pAnyRulerCB->Check (pElemAttr->bAnyRuler);
-        m_pHRulerCBox->Check (pElemAttr->bHorzRuler);
         m_pVRulerCBox->Check (pElemAttr->bVertRuler);
         m_pVRulerRightCBox->Check (pElemAttr->bVertRulerRight);
         m_pSmoothCBox->Check (pElemAttr->bSmoothScroll);
@@ -246,7 +233,6 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
     lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, *rSet);
     lcl_SelectMetricLB(m_pHMetric, FN_HSCROLL_METRIC, *rSet);
     lcl_SelectMetricLB(m_pVMetric, FN_VSCROLL_METRIC, *rSet);
-    AnyRulerHdl(m_pAnyRulerCB);
 }
 
 bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
@@ -263,10 +249,6 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.bFieldName            = m_pFieldNameCB->IsChecked();
     aElem.bNotes                = m_pPostItCB->IsChecked();
     aElem.bCrosshair            = m_pCrossCB->IsChecked();
-    aElem.bHorzScrollbar        = m_pHScrollBox->IsChecked();
-    aElem.bVertScrollbar        = m_pVScrollBox->IsChecked();
-    aElem.bAnyRuler             = m_pAnyRulerCB->IsChecked();
-    aElem.bHorzRuler            = m_pHRulerCBox->IsChecked();
     aElem.bVertRuler            = m_pVRulerCBox->IsChecked();
     aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
     aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
@@ -307,17 +289,6 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 IMPL_LINK(SwContentOptPage, VertRulerHdl, CheckBox*, pBox)
 {
     m_pVRulerRightCBox->Enable(pBox->IsEnabled() && pBox->IsChecked());
-    return 0;
-}
-
-IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
-{
-    bool bChecked = pBox->IsChecked();
-    m_pHRulerCBox->Enable(bChecked);
-    m_pHMetric->Enable(bChecked);
-    m_pVRulerCBox->Enable(bChecked);
-    m_pVMetric->Enable(bChecked);
-    VertRulerHdl(m_pVRulerCBox);
     return 0;
 }
 
@@ -612,7 +583,6 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     pIdxBox->SetStyle(pIdxBox->GetStyle() |  WB_SORT);
     get(pIndexHeightLB,"indexheight");
 
-    get(pDocOnlyCB,"doconly");
     get(pStandardPB,"standard");
 
     pStandardPB->SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
@@ -633,8 +603,6 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     pListHeightLB->    SetModifyHdl( aModifyHeightLink );
     pLabelHeightLB->   SetModifyHdl( aModifyHeightLink );
     pIndexHeightLB->   SetModifyHdl( aModifyHeightLink );
-
-    pDocOnlyCB->Check(SW_MOD()->GetModuleConfig()->IsDefaultFontInCurrDocOnly());
 }
 
 SwStdFontTabPage::~SwStdFontTabPage()
@@ -658,7 +626,6 @@ void SwStdFontTabPage::dispose()
     pLabelHeightLB.clear();
     pIdxBox.clear();
     pIndexHeightLB.clear();
-    pDocOnlyCB.clear();
     pStandardPB.clear();
     SfxTabPage::dispose();
 }
@@ -692,9 +659,6 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
 
 bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 {
-    bool bNotDocOnly = !pDocOnlyCB->IsChecked();
-    SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
-
     const OUString sStandard    = pStandardBox->GetText();
     const OUString sTitle       = pTitleBox->GetText();
     const OUString sList        = pListBox->GetText();
@@ -706,39 +670,6 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
     bool bListHeightChanged = pListHeightLB->IsValueChangedFromSaved() && (!bListHeightDefault || !bSetListHeightDefault );
     bool bLabelHeightChanged = pLabelHeightLB->IsValueChangedFromSaved() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
     bool bIndexHeightChanged = pIndexHeightLB->IsValueChangedFromSaved() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
-    if(bNotDocOnly)
-    {
-        pFontConfig->SetFontStandard(sStandard, nFontGroup);
-        pFontConfig->SetFontOutline(sTitle, nFontGroup);
-        pFontConfig->SetFontList(sList, nFontGroup);
-        pFontConfig->SetFontCaption(sLabel, nFontGroup);
-        pFontConfig->SetFontIndex(sIdx, nFontGroup);
-        if(bStandardHeightChanged)
-        {
-            float fSize = (float)pStandardHeightLB->GetValue() / 10;
-            pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_STANDARD, nFontGroup );
-        }
-        if(bTitleHeightChanged)
-        {
-            float fSize = (float)pTitleHeightLB->GetValue() / 10;
-            pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_OUTLINE, nFontGroup );
-        }
-        if(bListHeightChanged)
-        {
-            float fSize = (float)pListHeightLB->GetValue() / 10;
-            pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_LIST, nFontGroup );
-        }
-        if(bLabelHeightChanged)
-        {
-            float fSize = (float)pLabelHeightLB->GetValue() / 10;
-            pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_CAPTION, nFontGroup );
-        }
-        if(bIndexHeightChanged)
-        {
-            float fSize = (float)pIndexHeightLB->GetValue() / 10;
-            pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_INDEX, nFontGroup );
-        }
-    }
     if(pWrtShell)
     {
         pWrtShell->StartAllAction();
@@ -923,8 +854,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
             nLabelHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_CAPTION + nFontGroup * FONT_PER_GROUP, eLanguage);
         if( nIndexHeight <= 0)
             nIndexHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_INDEX + nFontGroup * FONT_PER_GROUP, eLanguage);
-
-       pDocOnlyCB->Enable(false);
     }
     else
     {

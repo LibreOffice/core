@@ -122,10 +122,6 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 SwElemItem::SwElemItem( sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich)
 {
-    bHorzScrollbar =
-    bVertScrollbar =
-    bAnyRuler =
-    bHorzRuler     =
     bVertRuler     =
     bVertRulerRight=
     bCrosshair     =
@@ -146,10 +142,6 @@ SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
 SwElemItem::SwElemItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich) :
             SfxPoolItem( _nWhich )
 {
-    bHorzScrollbar  = rVOpt.IsViewHScrollBar();
-    bVertScrollbar  = rVOpt.IsViewVScrollBar();
-    bAnyRuler       = rVOpt.IsViewAnyRuler();
-    bHorzRuler      = rVOpt.IsViewHRuler(true);
     bVertRuler      = rVOpt.IsViewVRuler(true);
     bVertRulerRight = rVOpt.IsVRulerRight();
     bCrosshair      = rVOpt.IsCrossHair();
@@ -173,11 +165,7 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SwElemItem& rItem = static_cast<const SwElemItem&>(rAttr);
 
-    return (    bHorzScrollbar  == rItem.bHorzScrollbar &&
-                bVertScrollbar  == rItem.bVertScrollbar &&
-                bAnyRuler       == rItem.bAnyRuler &&
-                bHorzRuler      == rItem.bHorzRuler     &&
-                bVertRuler      == rItem.bVertRuler     &&
+    return (    bVertRuler      == rItem.bVertRuler     &&
                 bVertRulerRight == rItem.bVertRulerRight&&
                 bCrosshair      == rItem.bCrosshair     &&
                 bSmoothScroll   == rItem.bSmoothScroll  &&
@@ -190,10 +178,6 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 
 void  SwElemItem::operator=( const SwElemItem& rElemItem)
 {
-    bHorzScrollbar  = rElemItem.  bHorzScrollbar    ;
-    bVertScrollbar  = rElemItem.  bVertScrollbar    ;
-    bAnyRuler       = rElemItem.  bAnyRuler;
-    bHorzRuler      = rElemItem.  bHorzRuler        ;
     bVertRuler      = rElemItem.  bVertRuler        ;
     bVertRulerRight = rElemItem.  bVertRulerRight   ;
     bCrosshair      = rElemItem.  bCrosshair        ;
@@ -207,10 +191,6 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 {
-    rVOpt.SetViewHScrollBar(bHorzScrollbar );
-    rVOpt.SetViewVScrollBar(bVertScrollbar );
-    rVOpt.SetViewAnyRuler(bAnyRuler);
-    rVOpt.SetViewHRuler(bHorzRuler    );
     rVOpt.SetViewVRuler(bVertRuler    );
     rVOpt.SetVRulerRight(bVertRulerRight );
     rVOpt.SetCrossHair(bCrosshair     );
