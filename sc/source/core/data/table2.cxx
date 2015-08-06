@@ -3093,7 +3093,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
 {
     if (ValidRow(nRow) && pRowFlags)
     {
-        //  Always set Filter-Flag, also unchanged when Hidden
+        //  Always set filter flag; unchanged when Hidden
         bool bChanged = SetRowHidden(nRow, nRow, !bShow);
         SetRowFiltered(nRow, nRow, !bShow);
 
