@@ -23,6 +23,7 @@
 #define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX
 
 #include <string.h>
+#include <vector>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -75,45 +76,6 @@ inline void ScaList::Append( void* pNew )
 {
     Grow();
     pData[ nCount++ ] = pNew;
-}
-
-
-class ScaStringList : protected ScaList
-{
-public:
-    inline                      ScaStringList() : ScaList() {};
-    virtual                     ~ScaStringList();
-
-                                using ScaList::Count;
-
-    inline const OUString* Get( sal_uInt32 nIndex ) const;
-
-    inline OUString*     First();
-    inline OUString*     Next();
-
-    using ScaList::Append;
-    inline void                 Append( const OUString& rNew );
-};
-
-
-inline const OUString* ScaStringList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const OUString* >( ScaList::GetObject( nIndex ) );
-}
-
-inline OUString* ScaStringList::First()
-{
-    return static_cast< OUString* >( ScaList::First() );
-}
-
-inline OUString* ScaStringList::Next()
-{
-    return static_cast< OUString* >( ScaList::Next() );
-}
-
-inline void ScaStringList::Append( const OUString& rNew )
-{
-    ScaList::Append( new OUString( rNew ) );
 }
 
 
@@ -214,7 +176,7 @@ private:
     sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // num of parameters
-    ScaStringList               aCompList;          // list of all valid names
+    std::vector<OUString>       aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category
     bool                    bDouble;            // name already exist in Calc
     bool                    bWithOpt;           // first parameter is internal
@@ -232,7 +194,7 @@ public:
     inline bool                 Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
-    inline const ScaStringList& GetCompNameList() const { return aCompList; }
+    inline const std::vector<OUString>& GetCompNameList() const { return aCompList; }
 };
 
 
