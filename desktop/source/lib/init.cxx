@@ -940,6 +940,8 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 
 static void lo_startmain(void*)
 {
+    osl_setThreadName("lo_startmain");
+
     soffice_main();
 }
 
