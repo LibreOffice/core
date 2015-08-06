@@ -12,7 +12,11 @@ $(eval $(call gb_Library_Library,fps_office))
 
 $(eval $(call gb_Library_set_componentfile,fps_office,fpicker/source/office/fps_office))
 
-$(eval $(call gb_Library_use_external,fps_office,boost_headers))
+$(eval $(call gb_Library_use_externals,fps_office,boost_headers \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        udunits2 \
+    ) \
+))
 
 $(eval $(call gb_Library_use_custom_headers,fps_office,\
 	officecfg/registry \

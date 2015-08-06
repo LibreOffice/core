@@ -19,6 +19,9 @@ $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_filters_test, \
 	orcus \
 	orcus-parser \
 	libxml2 \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+		udunits2 \
+    ) \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \
