@@ -594,7 +594,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 ScAddress aHeaderAddress;
 
                 if ( pUnits->isCellConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit ) )
-                    NotifyUnitConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit, pDocSh );
+                    NotifyUnitConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit );
                 else
                 {
                     SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
@@ -2938,21 +2938,18 @@ struct UnitConversionPushButton: public PushButton
     ScDocument* mpDoc;
     const OUString sHeaderUnit;
     const OUString sCellUnit;
-    ScDocShell* mpDocSh;
 
     UnitConversionPushButton( vcl::Window* pParent,
                               const ResId& rResId,
                               const ScAddress& rCellAddress,
                               ScDocument* pDoc,
                               const OUString& rsHeaderUnit,
-                              const OUString& rsCellUnit,
-                              ScDocShell* pDocSh ):
+                              const OUString& rsCellUnit ):
         PushButton( pParent, rResId ),
         aCellAddress( rCellAddress ),
         mpDoc( pDoc ),
         sHeaderUnit( rsHeaderUnit ),
-        sCellUnit( rsCellUnit ),
-        mpDocSh( pDocSh )
+        sCellUnit( rsCellUnit )
         {}
 };
 
@@ -2960,8 +2957,8 @@ void ScViewFunc::NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
                                                   ScDocument* pDoc,
                                                   const OUString& rsHeaderUnit,
                                                   const ScAddress& rHeaderAddress,
-                                                  const OUString& rsCellUnit,
-                                                  ScDocShell* pDocSh ) {
+                                                  const OUString& rsCellUnit )
+{
     SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
 
     // As with NotifyUnitErrorInFormula we use the cell address as the infobar id.
@@ -3003,7 +3000,9 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
 #ifdef ENABLE_CALC_UNITVERIFICATION
     boost::shared_ptr< Units > pUnits = Units::GetUnits();
 
-    ScDocShellModificator aModificator( *pButton->mpDocSh );
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(pButton->mpDoc->GetDocumentShell());
+
+    ScDocShellModificator aModificator( *pDocShell );
 
     OUString sOriginalValue = pButton->mpDoc->GetString( pButton->aCellAddress );
 
