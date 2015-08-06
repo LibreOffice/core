@@ -17,4 +17,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
     external/libwpg/rpath.patch \
 ))
 
+ifneq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
+    external/libwpg/libwpg-bundled-soname.patch.0 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
