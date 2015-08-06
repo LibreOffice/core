@@ -230,16 +230,14 @@ SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
-    SotClipboardFormatId nMax = SotClipboardFormatId::FILE_LIST;
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
         if( rName.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pName ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
-    nMax = SotClipboardFormatId::USER_END;
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
         if( rName.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pName ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
@@ -268,13 +266,11 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
-    SotClipboardFormatId nMax = SotClipboardFormatId::FILE_LIST;
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
-    nMax = SotClipboardFormatId::USER_END;
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
@@ -394,16 +390,14 @@ OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
 SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( const OUString& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    SotClipboardFormatId nMax = SotClipboardFormatId::FILE_LIST;
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
-    nMax = SotClipboardFormatId::USER_END;
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
@@ -433,17 +427,15 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     // teste zuerst die Standard - Name
     const OUString& rMimeType = rFlavor.MimeType;
 
-    SotClipboardFormatId nMax = SotClipboardFormatId::FILE_LIST;
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return static_cast<SotClipboardFormatId>(i);
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
-    nMax = SotClipboardFormatId::USER_END;
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= nMax;  ++i )
+    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? static_cast<SotClipboardFormatId>(SotClipboardFormatId::STARCHART_50)
