@@ -267,7 +267,7 @@ void ScDocument::DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 
 void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 {
-    // angelegt wird die Page schon im ScTable ctor
+    // page is created in ScTable ctor
     pDrawLayer->ScCopyPage( nOldPos, nNewPos );
 }
 
