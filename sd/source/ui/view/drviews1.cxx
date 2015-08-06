@@ -973,6 +973,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
 
             mpDrawView->HideSdrPage();
+            maTabControl->SetCurPageId(nSelectedPage+1);
             mpDrawView->ShowSdrPage(mpActualPage);
             GetViewShellBase().GetDrawController().FireSwitchCurrentPage(mpActualPage);
 
@@ -998,7 +999,6 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 }
             }
 
-            maTabControl->SetCurPageId(nSelectedPage+1);
             OUString aPageName = mpActualPage->GetName();
 
             if (maTabControl->GetPageText(nSelectedPage+1) != aPageName)
@@ -1034,6 +1034,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
 
             mpDrawView->HideSdrPage();
+            maTabControl->SetCurPageId(nSelectedPage+1);
 
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
 
@@ -1071,8 +1072,6 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             sal_Int32 nPos = aLayoutName.indexOf(SD_LT_SEPARATOR);
             if (nPos != -1)
                 aLayoutName = aLayoutName.copy(0, nPos);
-
-            maTabControl->SetCurPageId(nSelectedPage+1);
 
             if (maTabControl->GetPageText(nSelectedPage+1) != aLayoutName)
             {
