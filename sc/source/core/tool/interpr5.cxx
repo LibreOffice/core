@@ -36,6 +36,7 @@
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
 #include "formulagroup.hxx"
+#include "../units/utunit.hxx"
 
 #include <vector>
 
@@ -1203,6 +1204,8 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
+    FormulaUnit *fUnit1 = NULL;
+    FormulaUnit *fUnit2 = NULL;
     short nFmt1, nFmt2;
     nFmt1 = nFmt2 = css::util::NumberFormat::UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
@@ -1212,7 +1215,8 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         pMat2 = GetMatrix();
     else
     {
-        fVal2 = GetDouble();
+        fUnit2 = new FormulaUnit;
+        fVal2 = GetDouble( fUnit2 );
         switch ( nCurFmtType )
         {
             case css::util::NumberFormat::DATE :
@@ -1233,7 +1237,8 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         pMat1 = GetMatrix();
     else
     {
-        fVal1 = GetDouble();
+        fUnit1 = new FormulaUnit;
+        fVal1 = GetDouble( fUnit1 );
         switch ( nCurFmtType )
         {
             case css::util::NumberFormat::DATE :
@@ -1302,9 +1307,35 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             PushIllegalArgument();
     }
     else if ( _bSub )
-        PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+    {
+        if ( fUnit1 && fUnit2 )
+        {
+            if ( fUnit2->getUnit() == fUnit1->getUnit() )
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ), *fUnit1 );
+            else
+            {
+                SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+            }
+        }
+        else
+            PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+    }
     else
-        PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+    {
+        if ( fUnit1 && fUnit2 )
+        {
+            if ( fUnit2->getUnit() == fUnit1->getUnit() )
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ), *fUnit1 );
+            else
+            {
+                SAL_DEBUG("\n### INCOMPATIBLE UNITS ###");
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+            }
+        }
+        else
+            PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+    }
     if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;

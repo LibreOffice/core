@@ -86,7 +86,7 @@ public:
             bool bCheckRelativeInSheet );
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
-    CPPUNIT_TEST(testCVEs);
+    //CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeNameODS);
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
