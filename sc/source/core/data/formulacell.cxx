@@ -2273,7 +2273,7 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
     if ( (nBits & RECALCMODE_EMASK) != ScRecalcMode::NORMAL )
         SetDirtyVar();
     if ( nBits & ScRecalcMode::ONLOAD_ONCE )
-    {   // OnLoadOnce nur zum Dirty setzen nach Filter-Import
+    {   // Only set OnLoadOnce to Dirty after filter import
         nBits = (nBits & ~RECALCMODE_EMASK) | ScRecalcMode::NORMAL;
     }
     pCode->AddRecalcMode( nBits );
