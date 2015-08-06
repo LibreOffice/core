@@ -9261,7 +9261,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns a (1 alpha) confidence interval for a normal distribution." ;
+            Text [ en-US ] = "Returns a (1-alpha) confidence interval for a normal distribution." ;
         };
         ExtraData =
         {
@@ -9301,7 +9301,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns a (1 alpha) confidence interval for a normal distribution." ;
+            Text [ en-US ] = "Returns a (1-alpha) confidence interval for a normal distribution." ;
         };
         ExtraData =
         {
@@ -9341,7 +9341,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns a (1 alpha) confidence interval for a Student's t distribution." ;
+            Text [ en-US ] = "Returns a (1-alpha) confidence interval for a Student's t distribution." ;
         };
         ExtraData =
         {
