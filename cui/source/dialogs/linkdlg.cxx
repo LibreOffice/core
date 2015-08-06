@@ -91,8 +91,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     aStrAutolink( CUI_RES( STR_AUTOLINK ) ),
     aStrManuallink( CUI_RES( STR_MANUALLINK ) ),
     aStrBrokenlink( CUI_RES( STR_BROKENLINK ) ),
-    aStrGraphiclink( CUI_RES( STR_GRAPHICLINK ) ),
-    aStrButtonclose( CUI_RES( STR_BUTTONCLOSE ) ),
     aStrCloselinkmsg( CUI_RES( STR_CLOSELINKMSG ) ),
     aStrCloselinkmsgMulti( CUI_RES( STR_CLOSELINKMSG_MULTI ) ),
     aStrWaitinglink( CUI_RES( STR_WAITINGLINK ) ),

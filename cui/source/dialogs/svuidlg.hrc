@@ -23,8 +23,6 @@
 #define STR_AUTOLINK                            32006
 #define STR_MANUALLINK                          32007
 #define STR_BROKENLINK                          32008
-#define STR_GRAPHICLINK                         32009
-#define STR_BUTTONCLOSE                         32010
 #define STR_CLOSELINKMSG                        32011
 #define STR_CLOSELINKMSG_MULTI                  32024
 #define STR_WAITINGLINK                         32028

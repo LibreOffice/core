@@ -36,16 +36,6 @@ String STR_BROKENLINK
     Text [ en-US ] = "Not available" ;
 };
 
-String STR_GRAPHICLINK
-{
-    Text [ en-US ] = "Graphic" ;
-};
-
-String STR_BUTTONCLOSE
-{
-    Text [ en-US ] = "~Close" ;
-};
-
 String STR_CLOSELINKMSG
 {
     Text [ en-US ] = "Are you sure you want to remove the selected link?" ;

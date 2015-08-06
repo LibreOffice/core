@@ -57,8 +57,6 @@ class SvBaseLinksDlg : public ModalDialog
     OUString aStrAutolink;
     OUString aStrManuallink;
     OUString aStrBrokenlink;
-    OUString aStrGraphiclink;
-    OUString aStrButtonclose;
     OUString aStrCloselinkmsg;
     OUString aStrCloselinkmsgMulti;
     OUString aStrWaitinglink;
