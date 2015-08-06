@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4.4
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4.dll,src/lib/.libs/libwps-0.4.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4.so.4,src/lib/.libs/libwps-0.4.so.4.0.$(WPS_VERSION_MICRO)))
+$(eval $(call gb_ExternalPackage_add_file,libwps,$(LIBO_LIB_FOLDER)/libwps-0.4-lo.so.4,src/lib/.libs/libwps-0.4-lo.so.4.0.$(WPS_VERSION_MICRO)))
 endif
 
 # vim: set noet sw=4 ts=4:
