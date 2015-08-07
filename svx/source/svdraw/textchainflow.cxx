@@ -278,6 +278,7 @@ UFlowChainedText *TextChainFlow::GetUnderflowChainedText() const
 EditingTextChainFlow::EditingTextChainFlow(SdrTextObj *pLinkTarget) :
     TextChainFlow(pLinkTarget)
 {
+    fprintf(stderr, "[TEXTCHAINFLOW] Creating a new EditingTextChainFlow\n");
 }
 
 void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
