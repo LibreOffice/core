@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_c636f6b3",
+        "filename": "include/i18nutil/unicode.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:26:43Z",
+      "side": 1,
+      "message": "Umm.. can we please name this something different? Alt-X is just a shortcut, not a functionality..\n\nE.g., ToggleCharacterUnicode or some such..",
+      "range": {
+        "startLine": 71,
+        "startChar": 25,
+        "endLine": 71,
+        "endChar": 29
+      },
+      "revId": "d951b851a413ed6752cb281094773fe41aa610b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_a63bf29b",
+        "filename": "include/i18nutil/unicode.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:26:43Z",
+      "side": 1,
+      "message": "For member variables please use the \u0027m\u0027 prefix and follow our common naming scheme, even if it isn\u0027t present in these files here yet.. so:\n\nmaInput, maOutput, maUtf16, maCombining, mbAllowMoreCharacters, mbRequiresU, mbIsHexString",
+      "revId": "d951b851a413ed6752cb281094773fe41aa610b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_e645fa17",
+        "filename": "include/i18nutil/unicode.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:26:43Z",
+      "side": 1,
+      "message": "To have descriptive comments for member functions included in the generated doxygen documentation, use /** instead of /*",
+      "revId": "d951b851a413ed6752cb281094773fe41aa610b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_0641fe0b",
+        "filename": "include/i18nutil/unicode.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:26:43Z",
+      "side": 1,
+      "message": "Can we please get rid of exclamation marks, even multiple ones? ;-)",
+      "revId": "d951b851a413ed6752cb281094773fe41aa610b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_464b062c",
+        "filename": "include/i18nutil/unicode.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:26:43Z",
+      "side": 1,
+      "message": "And please indent the text by one level (4 spaces).",
+      "revId": "d951b851a413ed6752cb281094773fe41aa610b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_2648822d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:26:43Z",
+      "side": 1,
+      "message": "X_MOD2 and Alt-X ... makes me think this will not always work, it depends on the operating system respectively the window manager. Fuerthermore, Alt-... is usually reserved for menu shortcuts, in localized translated UIs it may already be used for other things.\n\nCan we assign that to some more sensible key combination?",
+      "revId": "d951b851a413ed6752cb281094773fe41aa610b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
