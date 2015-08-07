@@ -1,0 +1,11 @@
+--- src/Makefile.in.orig	2015-08-07 11:26:16.388774624 +0200
++++ src/Makefile.in	2015-08-07 11:27:01.428773852 +0200
+@@ -372,7 +372,7 @@
+ AM_CXXFLAGS = -I$(top_srcdir)/inc/ $(REVENGE_CFLAGS) $(DEBUG_CXXFLAGS) -DLIBODFGEN_BUILD
+ libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_LIBADD = @LIBODFGEN_WIN32_RESOURCE@ $(REVENGE_LIBS)
+ libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_DEPENDENCIES = @LIBODFGEN_WIN32_RESOURCE@
+-libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
++libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined -release lo
+ libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_SOURCES = \
+ 	DocumentElement.cxx \
+ 	DocumentElement.hxx \

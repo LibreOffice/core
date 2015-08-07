@@ -27,4 +27,13 @@ $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
 ))
 endif
 
+ifneq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
+    external/libodfgen/libodfgen-bundled-soname.patch.0 \
+))
+endif
+endif
+
+
 # vim: set noet sw=4 ts=4:
