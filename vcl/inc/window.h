@@ -378,6 +378,26 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
 
+/// Sets up the buffer to have settings matching the window, and restores the original state in the dtor.
+class PaintBufferGuard
+{
+    ImplFrameData* mpFrameData;
+    VclPtr<vcl::Window> m_pWindow;
+    bool mbBackground;
+    Wallpaper maBackground;
+    AllSettings maSettings;
+    long mnOutOffX;
+    long mnOutOffY;
+    Rectangle m_aPaintRect;
+public:
+    PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
+    ~PaintBufferGuard();
+    /// If this is called, then the dtor will also copy rRectangle to the window from the buffer, before restoring the state.
+    void SetPaintRect(const Rectangle& rRectangle);
+    /// Returns either the frame's buffer or the window, in case of no buffering.
+    vcl::RenderContext* GetRenderContext();
+};
+
 // helper methods
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,

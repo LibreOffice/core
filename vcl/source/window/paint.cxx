@@ -40,87 +40,124 @@
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
-/// Sets up the buffer to have settings matching the window, and restore the original state in the dtor.
-class PaintBufferGuard
+// PaintBufferGuard
+
+PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
+    : mpFrameData(pFrameData),
+    m_pWindow(pWindow),
+    mbBackground(false),
+    mnOutOffX(0),
+    mnOutOffY(0)
 {
-    ImplFrameData* mpFrameData;
-    bool mbBackground;
-    Wallpaper maBackground;
-    AllSettings maSettings;
-    long mnOutOffX;
-    long mnOutOffY;
-public:
-    PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
-        : mpFrameData(pFrameData),
-        mbBackground(false),
-        mnOutOffX(0),
-        mnOutOffY(0)
+    if (!pFrameData->mpBuffer)
+        return;
+
+    // transfer various settings
+    // FIXME: this must disappear as we move to RenderContext only,
+    // the painting must become state-less, so that no actual
+    // vcl::Window setting affects this
+    mbBackground = pFrameData->mpBuffer->IsBackground();
+    if (pWindow->IsBackground())
     {
-        // transfer various settings
-        // FIXME: this must disappear as we move to RenderContext only,
-        // the painting must become state-less, so that no actual
-        // vcl::Window setting affects this
-        mbBackground = pFrameData->mpBuffer->IsBackground();
-        if (pWindow->IsBackground())
+        maBackground = pFrameData->mpBuffer->GetBackground();
+        pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
+    }
+    //else
+        //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
+
+    PushFlags nFlags = PushFlags::NONE;
+    nFlags |= PushFlags::CLIPREGION;
+    nFlags |= PushFlags::FILLCOLOR;
+    nFlags |= PushFlags::FONT;
+    nFlags |= PushFlags::LINECOLOR;
+    nFlags |= PushFlags::MAPMODE;
+    maSettings = pFrameData->mpBuffer->GetSettings();
+    nFlags |= PushFlags::REFPOINT;
+    nFlags |= PushFlags::TEXTCOLOR;
+    nFlags |= PushFlags::TEXTLINECOLOR;
+    nFlags |= PushFlags::OVERLINECOLOR;
+    nFlags |= PushFlags::TEXTFILLCOLOR;
+    nFlags |= PushFlags::TEXTALIGN;
+    nFlags |= PushFlags::RASTEROP;
+    nFlags |= PushFlags::TEXTLAYOUTMODE;
+    nFlags |= PushFlags::TEXTLANGUAGE;
+    pFrameData->mpBuffer->Push(nFlags);
+    pFrameData->mpBuffer->SetClipRegion(pWindow->GetClipRegion());
+    pFrameData->mpBuffer->SetFillColor(pWindow->GetFillColor());
+    pFrameData->mpBuffer->SetFont(pWindow->GetFont());
+    pFrameData->mpBuffer->SetLineColor(pWindow->GetLineColor());
+    pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
+    pFrameData->mpBuffer->SetRefPoint(pWindow->GetRefPoint());
+    pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
+    pFrameData->mpBuffer->SetTextColor(pWindow->GetTextColor());
+    pFrameData->mpBuffer->SetTextLineColor(pWindow->GetTextLineColor());
+    pFrameData->mpBuffer->SetOverlineColor(pWindow->GetOverlineColor());
+    pFrameData->mpBuffer->SetTextFillColor(pWindow->GetTextFillColor());
+    pFrameData->mpBuffer->SetTextAlign(pWindow->GetTextAlign());
+    pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
+    pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
+    pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
+
+    mnOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
+    mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
+    pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
+    pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
+}
+
+PaintBufferGuard::~PaintBufferGuard()
+{
+    if (!mpFrameData->mpBuffer)
+        return;
+
+    if (!m_aPaintRect.IsEmpty())
+    {
+        // copy the buffer content to the actual window
+        // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
+        // painting directly instead of using Invalidate()
+        // [ie. everything you can see was painted directly to the
+        // window either above or in eg. an event handler]
+        if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
         {
-            maBackground = pFrameData->mpBuffer->GetBackground();
-            pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
+            // Make sure that the +1 value GetSize() adds to the size is in pixels.
+            Size aPaintRectSize;
+            if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
+            {
+                aPaintRectSize = m_aPaintRect.GetSize();
+            }
+            else
+            {
+                Rectangle aRectanglePixel = m_pWindow->LogicToPixel(m_aPaintRect);
+                aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
+            }
+
+            m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *mpFrameData->mpBuffer.get());
         }
-        //else
-            //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
-
-        PushFlags nFlags = PushFlags::NONE;
-        nFlags |= PushFlags::CLIPREGION;
-        nFlags |= PushFlags::FILLCOLOR;
-        nFlags |= PushFlags::FONT;
-        nFlags |= PushFlags::LINECOLOR;
-        nFlags |= PushFlags::MAPMODE;
-        maSettings = pFrameData->mpBuffer->GetSettings();
-        nFlags |= PushFlags::REFPOINT;
-        nFlags |= PushFlags::TEXTCOLOR;
-        nFlags |= PushFlags::TEXTLINECOLOR;
-        nFlags |= PushFlags::OVERLINECOLOR;
-        nFlags |= PushFlags::TEXTFILLCOLOR;
-        nFlags |= PushFlags::TEXTALIGN;
-        nFlags |= PushFlags::RASTEROP;
-        nFlags |= PushFlags::TEXTLAYOUTMODE;
-        nFlags |= PushFlags::TEXTLANGUAGE;
-        pFrameData->mpBuffer->Push(nFlags);
-        pFrameData->mpBuffer->SetClipRegion(pWindow->GetClipRegion());
-        pFrameData->mpBuffer->SetFillColor(pWindow->GetFillColor());
-        pFrameData->mpBuffer->SetFont(pWindow->GetFont());
-        pFrameData->mpBuffer->SetLineColor(pWindow->GetLineColor());
-        pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
-        pFrameData->mpBuffer->SetRefPoint(pWindow->GetRefPoint());
-        pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
-        pFrameData->mpBuffer->SetTextColor(pWindow->GetTextColor());
-        pFrameData->mpBuffer->SetTextLineColor(pWindow->GetTextLineColor());
-        pFrameData->mpBuffer->SetOverlineColor(pWindow->GetOverlineColor());
-        pFrameData->mpBuffer->SetTextFillColor(pWindow->GetTextFillColor());
-        pFrameData->mpBuffer->SetTextAlign(pWindow->GetTextAlign());
-        pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
-        pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
-        pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
-
-        mnOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
-        mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
-        pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
-        pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
     }
-    ~PaintBufferGuard()
-    {
-        // Restore buffer state.
-        mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
-        mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
 
-        mpFrameData->mpBuffer->Pop();
-        mpFrameData->mpBuffer->SetSettings(maSettings);
-        if (mbBackground)
-            mpFrameData->mpBuffer->SetBackground(maBackground);
-        else
-            mpFrameData->mpBuffer->SetBackground();
-    }
-};
+    // Restore buffer state.
+    mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
+    mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
+
+    mpFrameData->mpBuffer->Pop();
+    mpFrameData->mpBuffer->SetSettings(maSettings);
+    if (mbBackground)
+        mpFrameData->mpBuffer->SetBackground(maBackground);
+    else
+        mpFrameData->mpBuffer->SetBackground();
+}
+
+void PaintBufferGuard::SetPaintRect(const Rectangle& rRectangle)
+{
+    m_aPaintRect = rRectangle;
+}
+
+vcl::RenderContext* PaintBufferGuard::GetRenderContext()
+{
+    if (mpFrameData->mpBuffer)
+        return mpFrameData->mpBuffer;
+    else
+        return m_pWindow;
+}
 
 class PaintHelper
 {
@@ -200,28 +237,8 @@ void PaintHelper::PaintBuffer()
     assert(pFrameData->mbInBufferedPaint);
     assert(m_bStartedBufferedPaint);
 
-    // copy the buffer content to the actual window
-    // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
-    // painting directly instead of using Invalidate()
-    // [ie. everything you can see was painted directly to the
-    // window either above or in eg. an event handler]
-    if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
-    {
-        // Make sure that the +1 value GetSize() adds to the size is in pixels.
-        Size aPaintRectSize;
-        if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
-        {
-            aPaintRectSize = m_aPaintRect.GetSize();
-        }
-        else
-        {
-            Rectangle aRectanglePixel = m_pWindow->LogicToPixel(m_aPaintRect);
-            aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
-        }
-
-        PaintBufferGuard g(pFrameData, m_pWindow);
-        m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *pFrameData->mpBuffer.get());
-    }
+    PaintBufferGuard aGuard(pFrameData, m_pWindow);
+    aGuard.SetPaintRect(m_aPaintRect);
 }
 
 void PaintHelper::DoPaint(const vcl::Region* pRegion)
