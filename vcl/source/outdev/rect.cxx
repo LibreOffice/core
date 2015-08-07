@@ -131,6 +131,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
 void OutputDevice::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 {
+    assert(!is_double_buffered_window());
     if ( !IsDeviceOutputNecessary() )
         return;
 
@@ -163,6 +164,7 @@ void OutputDevice::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void OutputDevice::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
 {
+    assert(!is_double_buffered_window());
     if ( !IsDeviceOutputNecessary() )
         return;
 
