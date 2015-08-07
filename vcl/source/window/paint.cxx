@@ -40,87 +40,79 @@
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
-/// Sets up the buffer to have settings matching the window, and restore the original state in the dtor.
-class PaintBufferGuard
+// PaintBufferGuard
+
+PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
+    : mpFrameData(pFrameData),
+    mbBackground(false),
+    mnOutOffX(0),
+    mnOutOffY(0)
 {
-    ImplFrameData* mpFrameData;
-    bool mbBackground;
-    Wallpaper maBackground;
-    AllSettings maSettings;
-    long mnOutOffX;
-    long mnOutOffY;
-public:
-    PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
-        : mpFrameData(pFrameData),
-        mbBackground(false),
-        mnOutOffX(0),
-        mnOutOffY(0)
+    // transfer various settings
+    // FIXME: this must disappear as we move to RenderContext only,
+    // the painting must become state-less, so that no actual
+    // vcl::Window setting affects this
+    mbBackground = pFrameData->mpBuffer->IsBackground();
+    if (pWindow->IsBackground())
     {
-        // transfer various settings
-        // FIXME: this must disappear as we move to RenderContext only,
-        // the painting must become state-less, so that no actual
-        // vcl::Window setting affects this
-        mbBackground = pFrameData->mpBuffer->IsBackground();
-        if (pWindow->IsBackground())
-        {
-            maBackground = pFrameData->mpBuffer->GetBackground();
-            pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
-        }
-        //else
-            //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
-
-        PushFlags nFlags = PushFlags::NONE;
-        nFlags |= PushFlags::CLIPREGION;
-        nFlags |= PushFlags::FILLCOLOR;
-        nFlags |= PushFlags::FONT;
-        nFlags |= PushFlags::LINECOLOR;
-        nFlags |= PushFlags::MAPMODE;
-        maSettings = pFrameData->mpBuffer->GetSettings();
-        nFlags |= PushFlags::REFPOINT;
-        nFlags |= PushFlags::TEXTCOLOR;
-        nFlags |= PushFlags::TEXTLINECOLOR;
-        nFlags |= PushFlags::OVERLINECOLOR;
-        nFlags |= PushFlags::TEXTFILLCOLOR;
-        nFlags |= PushFlags::TEXTALIGN;
-        nFlags |= PushFlags::RASTEROP;
-        nFlags |= PushFlags::TEXTLAYOUTMODE;
-        nFlags |= PushFlags::TEXTLANGUAGE;
-        pFrameData->mpBuffer->Push(nFlags);
-        pFrameData->mpBuffer->SetClipRegion(pWindow->GetClipRegion());
-        pFrameData->mpBuffer->SetFillColor(pWindow->GetFillColor());
-        pFrameData->mpBuffer->SetFont(pWindow->GetFont());
-        pFrameData->mpBuffer->SetLineColor(pWindow->GetLineColor());
-        pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
-        pFrameData->mpBuffer->SetRefPoint(pWindow->GetRefPoint());
-        pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
-        pFrameData->mpBuffer->SetTextColor(pWindow->GetTextColor());
-        pFrameData->mpBuffer->SetTextLineColor(pWindow->GetTextLineColor());
-        pFrameData->mpBuffer->SetOverlineColor(pWindow->GetOverlineColor());
-        pFrameData->mpBuffer->SetTextFillColor(pWindow->GetTextFillColor());
-        pFrameData->mpBuffer->SetTextAlign(pWindow->GetTextAlign());
-        pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
-        pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
-        pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
-
-        mnOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
-        mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
-        pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
-        pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
+        maBackground = pFrameData->mpBuffer->GetBackground();
+        pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
     }
-    ~PaintBufferGuard()
-    {
-        // Restore buffer state.
-        mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
-        mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
+    //else
+        //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
 
-        mpFrameData->mpBuffer->Pop();
-        mpFrameData->mpBuffer->SetSettings(maSettings);
-        if (mbBackground)
-            mpFrameData->mpBuffer->SetBackground(maBackground);
-        else
-            mpFrameData->mpBuffer->SetBackground();
-    }
-};
+    PushFlags nFlags = PushFlags::NONE;
+    nFlags |= PushFlags::CLIPREGION;
+    nFlags |= PushFlags::FILLCOLOR;
+    nFlags |= PushFlags::FONT;
+    nFlags |= PushFlags::LINECOLOR;
+    nFlags |= PushFlags::MAPMODE;
+    maSettings = pFrameData->mpBuffer->GetSettings();
+    nFlags |= PushFlags::REFPOINT;
+    nFlags |= PushFlags::TEXTCOLOR;
+    nFlags |= PushFlags::TEXTLINECOLOR;
+    nFlags |= PushFlags::OVERLINECOLOR;
+    nFlags |= PushFlags::TEXTFILLCOLOR;
+    nFlags |= PushFlags::TEXTALIGN;
+    nFlags |= PushFlags::RASTEROP;
+    nFlags |= PushFlags::TEXTLAYOUTMODE;
+    nFlags |= PushFlags::TEXTLANGUAGE;
+    pFrameData->mpBuffer->Push(nFlags);
+    pFrameData->mpBuffer->SetClipRegion(pWindow->GetClipRegion());
+    pFrameData->mpBuffer->SetFillColor(pWindow->GetFillColor());
+    pFrameData->mpBuffer->SetFont(pWindow->GetFont());
+    pFrameData->mpBuffer->SetLineColor(pWindow->GetLineColor());
+    pFrameData->mpBuffer->SetMapMode(pWindow->GetMapMode());
+    pFrameData->mpBuffer->SetRefPoint(pWindow->GetRefPoint());
+    pFrameData->mpBuffer->SetSettings(pWindow->GetSettings());
+    pFrameData->mpBuffer->SetTextColor(pWindow->GetTextColor());
+    pFrameData->mpBuffer->SetTextLineColor(pWindow->GetTextLineColor());
+    pFrameData->mpBuffer->SetOverlineColor(pWindow->GetOverlineColor());
+    pFrameData->mpBuffer->SetTextFillColor(pWindow->GetTextFillColor());
+    pFrameData->mpBuffer->SetTextAlign(pWindow->GetTextAlign());
+    pFrameData->mpBuffer->SetRasterOp(pWindow->GetRasterOp());
+    pFrameData->mpBuffer->SetLayoutMode(pWindow->GetLayoutMode());
+    pFrameData->mpBuffer->SetDigitLanguage(pWindow->GetDigitLanguage());
+
+    mnOutOffX = pFrameData->mpBuffer->GetOutOffXPixel();
+    mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
+    pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
+    pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
+}
+
+PaintBufferGuard::~PaintBufferGuard()
+{
+    // Restore buffer state.
+    mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
+    mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
+
+    mpFrameData->mpBuffer->Pop();
+    mpFrameData->mpBuffer->SetSettings(maSettings);
+    if (mbBackground)
+        mpFrameData->mpBuffer->SetBackground(maBackground);
+    else
+        mpFrameData->mpBuffer->SetBackground();
+}
 
 class PaintHelper
 {

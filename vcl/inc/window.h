@@ -382,6 +382,20 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
 
+/// Sets up the buffer to have settings matching the window, and restores the original state in the dtor.
+class PaintBufferGuard
+{
+    ImplFrameData* mpFrameData;
+    bool mbBackground;
+    Wallpaper maBackground;
+    AllSettings maSettings;
+    long mnOutOffX;
+    long mnOutOffY;
+public:
+    PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
+    ~PaintBufferGuard();
+};
+
 // helper methods
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
