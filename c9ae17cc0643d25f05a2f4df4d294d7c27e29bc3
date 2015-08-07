@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_66b60a3f",
+        "filename": "i18nlangtag/qa/cppunit/test_languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "This check is unnecessary, there\u0027s no default script to be stripped from the tag. This, and all other similar checks following.",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_c681d64f",
+        "filename": "i18nlangtag/qa/cppunit/test_languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "I doubt we need to test all tags of known ll-CC locales ;-)  Two should be enough..",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_06f3be0b",
+        "filename": "i18nlangtag/qa/cppunit/test_languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "Umm.. sure? pt-BR should resolve to pt only? I would had said pt-PT to pt and pt-BR to pt-BR ...",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_a6865263",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "These should be\n\n const OUString$ rBcp47String, const OUString$ rLanguage\n\ninstead, to pass by reference instead of by value.\n\nI\u0027d also not call it rLanguage parameter, because it is not only a language to be passed. Call it rTag instead.",
+      "range": {
+        "startLine": 1530,
+        "startChar": 46,
+        "endLine": 1530,
+        "endChar": 87
+      },
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_269362a5",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "A literal ASCII string doesn\u0027t need to be converted to OUString for comparison, just write\n\n rBcp47String \u003d\u003d \"zh-CN\"",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_c6cf16b2",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "Copying these is unnecessary, even if they are refcounted.",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_46c4a691",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "Instead of passing two strings there, aLanguage just as a default value, I\u0027d do\n\n OUString aRFC3066bis \u003d lcl_convertBcp47ToRFC3066bis( getBcp47());\n if (aRFC3066bis.isEmpty())\n     return getLanguage();\n else\n     return aRFC3066bis;\n\nand let lcl_convertBcp47ToRFC3066bis() return an empty OUString if there\u0027s no conversion.",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_a6edb227",
+        "filename": "include/i18nlangtag/languagetag.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "The return value should be OUString, without reference and not const. Implementation would be different from getBcp47(), for example, if not cached (see below).",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_c6e8b619",
+        "filename": "include/i18nlangtag/languagetag.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-07T14:06:52Z",
+      "side": 1,
+      "message": "Please don\u0027t cache this value. It is rarely used and calculating it doesn\u0027t harm.",
+      "revId": "c9ae17cc0643d25f05a2f4df4d294d7c27e29bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
