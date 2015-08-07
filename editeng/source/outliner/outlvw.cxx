@@ -707,13 +707,13 @@ void OutlinerView::PasteSpecial()
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
         }
 
+        // XXX: Chaining call
+        if (aEndCutPasteLink.IsSet())
+            aEndCutPasteLink.Call(NULL);
+
         pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
         pEditView->ShowCursor( true, true );
-
-        // XXX: Not sure if this should be called right before ShowCursor
-        if (aEndCutPasteLink.IsSet())
-            aEndCutPasteLink.Call(NULL);
     }
 
 }
