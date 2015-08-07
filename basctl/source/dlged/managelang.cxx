@@ -164,7 +164,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
-    ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui");
+    ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelangdialog.ui");
     if ( aQBox->Execute() == RET_OK )
     {
         sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
