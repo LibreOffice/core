@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -118,35 +119,14 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 }
 
 
-ScaFuncDataList::ScaFuncDataList( ResMgr& rResMgr ) :
-    nLast( 0xFFFFFFFF )
+void InitScaFuncDataMap( ScaFuncDataMap& rMap, ResMgr& rResMgr )
 {
     for( sal_uInt16 nIndex = 0; nIndex < SAL_N_ELEMENTS(pFuncDataArr); nIndex++ )
-        Append( new ScaFuncData( pFuncDataArr[ nIndex ], rResMgr ) );
-}
-
-ScaFuncDataList::~ScaFuncDataList()
-{
-    for( ScaFuncData* pFData = First(); pFData; pFData = Next() )
-        delete pFData;
-}
-
-const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) const
-{
-    if( aLastName == rProgrammaticName )
-        return Get( nLast );
-
-    for( sal_uInt32 nIndex = 0; nIndex < Count(); nIndex++ )
     {
-        const ScaFuncData* pCurr = Get( nIndex );
-        if( pCurr->Is( rProgrammaticName ) )
-        {
-            const_cast< ScaFuncDataList* >( this )->aLastName = rProgrammaticName;
-            const_cast< ScaFuncDataList* >( this )->nLast = nIndex;
-            return pCurr;
-        }
+        rMap.insert( std::make_pair(
+                         OUString::createFromAscii(pFuncDataArr[ nIndex ].pIntName),
+                         ScaFuncData( pFuncDataArr[ nIndex ], rResMgr ) ) );
     }
-    return NULL;
 }
 
 ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
@@ -195,13 +175,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 ScaDateAddIn::ScaDateAddIn() :
     pDefLocales( NULL ),
     pResMgr( NULL ),
-    pFuncDataList( NULL )
+    pFuncDataMap( NULL )
 {
 }
 
 ScaDateAddIn::~ScaDateAddIn()
 {
-    delete pFuncDataList;
+    delete pFuncDataMap;
     delete pResMgr;
     delete[] pDefLocales;
 }
@@ -244,9 +224,17 @@ void ScaDateAddIn::InitData()
 {
     delete pResMgr;
     pResMgr = ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc));
-    delete pFuncDataList;
+    delete pFuncDataMap;
 
-    pFuncDataList = pResMgr ? new ScaFuncDataList( *pResMgr ) : NULL;
+    if ( pResMgr )
+    {
+        pFuncDataMap = new ScaFuncDataMap;
+        InitScaFuncDataMap( *pFuncDataMap, *pResMgr );
+    }
+    else
+    {
+        pFuncDataMap = nullptr;
+    }
 
     if( pDefLocales )
     {
@@ -335,11 +323,12 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
 {
     OUString aRet;
 
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData )
+    auto fDataIt = pFuncDataMap->find( aProgrammaticName );
+    if( fDataIt != pFuncDataMap->end() )
     {
-        aRet = GetDisplFuncStr( pFData->GetUINameID() );
-        if( pFData->IsDouble() )
+        ScaFuncData& fData = fDataIt->second;
+        aRet = GetDisplFuncStr( fData.GetUINameID() );
+        if( fData.IsDouble() )
             aRet += STR_FROM_ANSI( "_ADD" );
     }
     else
@@ -355,9 +344,9 @@ OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgram
 {
     OUString aRet;
 
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData )
-        aRet = GetFuncDescrStr( pFData->GetDescrID(), 1 );
+    auto fDataIt = pFuncDataMap->find( aProgrammaticName );
+    if( fDataIt != pFuncDataMap->end() )
+        aRet = GetFuncDescrStr( fDataIt->second.GetDescrID(), 1 );
 
     return aRet;
 }
@@ -367,12 +356,13 @@ OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
 {
     OUString aRet;
 
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData && (nArgument <= 0xFFFF) )
+    auto fDataIt = pFuncDataMap->find( aProgrammaticName );
+    if( fDataIt != pFuncDataMap->end() && (nArgument <= 0xFFFF) )
     {
-        sal_uInt16 nStr = pFData->GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
+        auto fData = fDataIt->second;
+        sal_uInt16 nStr = fData.GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
         if( nStr )
-            aRet = GetFuncDescrStr( pFData->GetDescrID(), nStr );
+            aRet = GetFuncDescrStr( fData.GetDescrID(), nStr );
         else
             aRet = STR_FROM_ANSI( "internal" );
     }
@@ -385,12 +375,13 @@ OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
 {
     OUString aRet;
 
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData && (nArgument <= 0xFFFF) )
+    auto fDataIt = pFuncDataMap->find( aProgrammaticName );
+    if( fDataIt != pFuncDataMap->end() && (nArgument <= 0xFFFF) )
     {
-        sal_uInt16 nStr = pFData->GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
+        auto fData = fDataIt->second;
+        sal_uInt16 nStr = fData.GetStrIndex( static_cast< sal_uInt16 >( nArgument ) );
         if( nStr )
-            aRet = GetFuncDescrStr( pFData->GetDescrID(), nStr + 1 );
+            aRet = GetFuncDescrStr( fData.GetDescrID(), nStr + 1 );
         else
             aRet = STR_FROM_ANSI( "for internal use only" );
     }
@@ -403,10 +394,10 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
 {
     OUString aRet;
 
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( pFData )
+    auto fDataIt = pFuncDataMap->find( aProgrammaticName );
+    if( fDataIt != pFuncDataMap->end() )
     {
-        switch( pFData->GetCategory() )
+        switch( fDataIt->second.GetCategory() )
         {
             case ScaCat_DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
             case ScaCat_Text:       aRet = STR_FROM_ANSI( "Text" );         break;
@@ -435,11 +426,11 @@ OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
-    const ScaFuncData* pFData = pFuncDataList->Get( aProgrammaticName );
-    if( !pFData )
+    auto fDataIt = pFuncDataMap->find( aProgrammaticName );
+    if( fDataIt == pFuncDataMap->end() )
         return uno::Sequence< sheet::LocalizedName >( 0 );
 
-    const std::vector<OUString>& rStrList = pFData->GetCompNameList();
+    const std::vector<OUString>& rStrList = fDataIt->second.GetCompNameList();
     sal_uInt32 nCount = rStrList.size();
 
     uno::Sequence< sheet::LocalizedName > aRet( nCount );

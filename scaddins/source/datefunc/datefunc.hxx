@@ -24,6 +24,7 @@
 
 #include <string.h>
 #include <vector>
+#include <map>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -171,7 +172,7 @@ struct ScaFuncDataBase
 class ScaFuncData
 {
 private:
-    OUString             aIntName;           // internal name (get***)
+    OUString                    aIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
@@ -197,43 +198,9 @@ public:
     inline const std::vector<OUString>& GetCompNameList() const { return aCompList; }
 };
 
+typedef std::map<OUString, ScaFuncData> ScaFuncDataMap;
 
-class ScaFuncDataList : private ScaList
-{
-    OUString             aLastName;
-    sal_uInt32                  nLast;
-
-public:
-                                ScaFuncDataList( ResMgr& rResMgr );
-    virtual                     ~ScaFuncDataList();
-
-                                using ScaList::Count;
-
-    inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
-    const ScaFuncData*          Get( const OUString& rProgrammaticName ) const;
-    inline ScaFuncData*         First();
-    inline ScaFuncData*         Next();
-
-    using ScaList::Append;
-    inline void                 Append( ScaFuncData* pNew ) { ScaList::Append( pNew ); }
-};
-
-
-inline const ScaFuncData* ScaFuncDataList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const ScaFuncData* >( ScaList::GetObject( nIndex ) );
-}
-
-inline ScaFuncData* ScaFuncDataList::First()
-{
-    return static_cast< ScaFuncData* >( ScaList::First() );
-}
-
-inline ScaFuncData* ScaFuncDataList::Next()
-{
-    return static_cast< ScaFuncData* >( ScaList::Next() );
-}
-
+void InitScaFuncDataMap ( ScaFuncDataMap& rMap, ResMgr& rResMgr );
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
@@ -253,8 +220,8 @@ class ScaDateAddIn : public ::cppu::WeakImplHelper6<
 private:
     ::com::sun::star::lang::Locale  aFuncLoc;
     ::com::sun::star::lang::Locale* pDefLocales;
-    ResMgr*                     pResMgr;
-    ScaFuncDataList*            pFuncDataList;
+    ResMgr*                         pResMgr;
+    ScaFuncDataMap*                 pFuncDataMap;
 
 
     void                        InitDefLocales();
