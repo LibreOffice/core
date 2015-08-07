@@ -20,7 +20,8 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <boost/ptr_container/ptr_set.hpp>
+
+#include <set>
 
 using namespace ::xmloff::token;
 
@@ -55,16 +56,18 @@ public:
     }
 };
 
-class SvXMLTokenMap_Impl : public boost::ptr_set<SvXMLTokenMapEntry_Impl> {};
+class SvXMLTokenMap_Impl : public std::set<SvXMLTokenMapEntry_Impl> {};
 
-SvXMLTokenMapEntry_Impl *SvXMLTokenMap::_Find( sal_uInt16 nKeyPrefix,
-                                                const OUString& rLName ) const
+SvXMLTokenMapEntry_Impl const* lcl_Find(
+        SvXMLTokenMap_Impl const* pImpl,
+        sal_uInt16 nKeyPrefix,
+        const OUString& rLName )
 {
-    SvXMLTokenMapEntry_Impl *pRet = 0;
+    SvXMLTokenMapEntry_Impl const* pRet = nullptr;
     SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
 
     SvXMLTokenMap_Impl::iterator it = pImpl->find( aTst );
-    if( it != pImpl->end() )
+    if (it != pImpl->end())
     {
         pRet = &*it;
     }
@@ -72,25 +75,26 @@ SvXMLTokenMapEntry_Impl *SvXMLTokenMap::_Find( sal_uInt16 nKeyPrefix,
     return pRet;
 }
 
-SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap ) :
-    pImpl( new SvXMLTokenMap_Impl )
+SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
+    : m_pImpl( new SvXMLTokenMap_Impl )
 {
     while( pMap->eLocalName != XML_TOKEN_INVALID )
     {
-        pImpl->insert( new SvXMLTokenMapEntry_Impl( *pMap ) );
+        m_pImpl->insert(SvXMLTokenMapEntry_Impl( *pMap ));
         pMap++;
     }
 }
 
 SvXMLTokenMap::~SvXMLTokenMap()
 {
-    delete pImpl;
+    delete m_pImpl;
 }
 
 sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
                                const OUString& rLName ) const
 {
-    SvXMLTokenMapEntry_Impl *pEntry = _Find( nKeyPrefix, rLName );
+    SvXMLTokenMapEntry_Impl const*const pEntry(
+            lcl_Find(m_pImpl, nKeyPrefix, rLName));
     if( pEntry )
         return pEntry->GetToken();
     else

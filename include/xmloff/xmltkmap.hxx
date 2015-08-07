@@ -27,7 +27,6 @@
 
 
 class SvXMLTokenMap_Impl;
-class SvXMLTokenMapEntry_Impl;
 
 #define XML_TOK_UNKNOWN 0xffffU
 #define XML_TOKEN_MAP_END { 0xffffU, ::xmloff::token::XML_TOKEN_INVALID, 0U }
@@ -41,10 +40,7 @@ struct SvXMLTokenMapEntry
 
 class XMLOFF_DLLPUBLIC SvXMLTokenMap
 {
-    SvXMLTokenMap_Impl      *pImpl;
-
-    SAL_DLLPRIVATE SvXMLTokenMapEntry_Impl *_Find(
-        sal_uInt16 nKind, const OUString& rName ) const;
+    SvXMLTokenMap_Impl      *m_pImpl;
 
 public:
 
