@@ -55,4 +55,9 @@ PushButton BT_UNITS_CONV_ALL
     Text [ en-US ] = "Convert (automatically for all cells needing $2)" ;
 };
 
+String STR_UNDO_UNITSCONVERSION
+{
+    Text [ en-US ] = "Units conversion";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
