@@ -25,7 +25,7 @@
 #include <format.hxx>
 #include <svl/poolitem.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 struct SwPosition;
 class IntlWrapper;
@@ -33,7 +33,7 @@ class IntlWrapper;
 /// FlyAnchors
 class SW_DLLPUBLIC SwFormatAnchor: public SfxPoolItem
 {
-    ::boost::scoped_ptr<SwPosition> m_pContentAnchor; /**< 0 for page-bound frames.
+    std::unique_ptr<SwPosition> m_pContentAnchor; /**< 0 for page-bound frames.
                                                      Index for paragraph-bound frames.
                                                      Position for character-bound frames. */
     RndStdIds  nAnchorId;

@@ -28,7 +28,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "hintids.hxx"
 #include <svx/algitem.hxx>
@@ -298,7 +298,7 @@ public:
 class SW_DLLPUBLIC SwTableAutoFormatTable
 {
     struct Impl;
-    ::boost::scoped_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 
     SAL_DLLPRIVATE bool Load( SvStream& rStream );
     SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;

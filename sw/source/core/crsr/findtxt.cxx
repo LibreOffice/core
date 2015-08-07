@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <comphelper/string.hxx>
@@ -661,7 +663,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             const_cast<SwPaM*>(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
-        boost::scoped_ptr<OUString> pRepl( (bRegExp)
+        std::unique_ptr<OUString> pRepl( (bRegExp)
                 ? ReplaceBackReferences( m_rSearchOpt, pCrsr ) : 0 );
         bool const bReplaced =
             m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(

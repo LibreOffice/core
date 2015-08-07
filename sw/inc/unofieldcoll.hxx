@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_UNOFIELDCOLL_HXX
 #define INCLUDED_SW_INC_UNOFIELDCOLL_HXX
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/util/XRefreshable.hpp>
 
@@ -86,7 +86,7 @@ class SwXTextFieldTypes
 {
 private:
     class Impl;
-    ::boost::scoped_ptr<Impl> m_pImpl; // currently does not need UnoImplPtr
+    std::unique_ptr<Impl> m_pImpl; // currently does not need UnoImplPtr
 
 protected:
     virtual ~SwXTextFieldTypes();

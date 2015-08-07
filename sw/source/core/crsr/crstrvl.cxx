@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <svl/itemiter.hxx>
@@ -615,8 +616,8 @@ lcl_FindField(bool & o_rFound, _SetGetExpFields const& rSrtLst,
         SwTextField *const pTextField, SwPosition const& rPos,
         sal_Int32 const nContentOffset)
 {
-    boost::scoped_ptr<_SetGetExpField> pSrch;
-    boost::scoped_ptr<SwIndex> pIndex;
+    std::unique_ptr<_SetGetExpField> pSrch;
+    std::unique_ptr<SwIndex> pIndex;
     if (-1 == nContentOffset)
     {
         pSrch.reset(new _SetGetExpField(rPos.nNode, pTextField, &rPos.nContent));

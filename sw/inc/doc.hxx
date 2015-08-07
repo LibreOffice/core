@@ -55,7 +55,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace editeng { class SvxBorderLine; }
@@ -253,7 +252,7 @@ class SW_DLLPUBLIC SwDoc :
     friend void _FinitCore();
 
     // private Member
-    ::boost::scoped_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
+    std::unique_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
     SwAttrPool* mpAttrPool;             //< the attribute pool
     SwPageDescs maPageDescs;             //< PageDescriptors
     Link<>      maOle2Link;              //< OLE 2.0-notification
@@ -268,26 +267,26 @@ class SW_DLLPUBLIC SwDoc :
         mxXForms;                        //< container with XForms models
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
 
-    const ::boost::scoped_ptr< ::sw::mark::MarkManager> mpMarkManager;
-    const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
-    const ::boost::scoped_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
-    const ::boost::scoped_ptr< ::sw::DocumentRedlineManager > m_pDocumentRedlineManager;
-    const ::boost::scoped_ptr< ::sw::DocumentStateManager > m_pDocumentStateManager;
-    const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
-    const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
-    const ::boost::scoped_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
-    ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
-    const ::boost::scoped_ptr< ::sw::DocumentTimerManager > m_pDocumentTimerManager;
-    const ::boost::scoped_ptr< ::sw::DocumentLinksAdministrationManager > m_pDocumentLinksAdministrationManager;
-    const ::boost::scoped_ptr< ::sw::DocumentListItemsManager > m_pDocumentListItemsManager;
-    const ::boost::scoped_ptr< ::sw::DocumentListsManager > m_pDocumentListsManager;
-    const ::boost::scoped_ptr< ::sw::DocumentOutlineNodesManager > m_pDocumentOutlineNodesManager;
-    const ::boost::scoped_ptr< ::sw::DocumentContentOperationsManager > m_pDocumentContentOperationsManager;
-    const ::boost::scoped_ptr< ::sw::DocumentFieldsManager > m_pDocumentFieldsManager;
-    const ::boost::scoped_ptr< ::sw::DocumentStatisticsManager > m_pDocumentStatisticsManager;
-    const ::boost::scoped_ptr< ::sw::DocumentLayoutManager > m_pDocumentLayoutManager;
-    const ::boost::scoped_ptr< ::sw::DocumentStylePoolManager > m_pDocumentStylePoolManager;
-    const ::boost::scoped_ptr< ::sw::DocumentExternalDataManager > m_pDocumentExternalDataManager;
+    const std::unique_ptr< ::sw::mark::MarkManager> mpMarkManager;
+    const std::unique_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
+    const std::unique_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
+    const std::unique_ptr< ::sw::DocumentRedlineManager > m_pDocumentRedlineManager;
+    const std::unique_ptr< ::sw::DocumentStateManager > m_pDocumentStateManager;
+    const std::unique_ptr< ::sw::UndoManager > m_pUndoManager;
+    const std::unique_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
+    const std::unique_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
+    std::unique_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
+    const std::unique_ptr< ::sw::DocumentTimerManager > m_pDocumentTimerManager;
+    const std::unique_ptr< ::sw::DocumentLinksAdministrationManager > m_pDocumentLinksAdministrationManager;
+    const std::unique_ptr< ::sw::DocumentListItemsManager > m_pDocumentListItemsManager;
+    const std::unique_ptr< ::sw::DocumentListsManager > m_pDocumentListsManager;
+    const std::unique_ptr< ::sw::DocumentOutlineNodesManager > m_pDocumentOutlineNodesManager;
+    const std::unique_ptr< ::sw::DocumentContentOperationsManager > m_pDocumentContentOperationsManager;
+    const std::unique_ptr< ::sw::DocumentFieldsManager > m_pDocumentFieldsManager;
+    const std::unique_ptr< ::sw::DocumentStatisticsManager > m_pDocumentStatisticsManager;
+    const std::unique_ptr< ::sw::DocumentLayoutManager > m_pDocumentLayoutManager;
+    const std::unique_ptr< ::sw::DocumentStylePoolManager > m_pDocumentStylePoolManager;
+    const std::unique_ptr< ::sw::DocumentExternalDataManager > m_pDocumentExternalDataManager;
 
     // Pointer
     SwFrameFormat        *mpDfltFrameFormat;       //< Default formats.

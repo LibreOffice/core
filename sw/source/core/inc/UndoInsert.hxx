@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOINSERT_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOINSERT_HXX
 
+#include <memory>
+
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/mempool.hxx>
@@ -35,7 +37,7 @@ namespace sw { class DocumentContentOperationsManager; }
 class SwUndoInsert: public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
-    ::boost::scoped_ptr<SwNodeIndex> m_pUndoNodeIndex;
+    std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
     OUString *pText, *pUndoText;
     SwRedlineData* pRedlData;
     sal_uLong nNode;

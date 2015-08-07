@@ -19,6 +19,8 @@
 
 #include <DocumentDeviceManager.hxx>
 
+#include <memory>
+
 #include <IDocumentDeviceAccess.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
@@ -43,10 +45,8 @@
 #include <swwait.hxx>
 #include <fntcache.hxx>
 
-
 class SwDocShell;
 class SwWait;
-
 
 namespace sw {
 
@@ -310,7 +310,7 @@ void DocumentDeviceManager::PrtDataChanged()
     OSL_ENSURE( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( false ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
-    boost::scoped_ptr<SwWait> pWait;
+    std::unique_ptr<SwWait> pWait;
     bool bEndAction = false;
 
     if( m_rDoc.GetDocShell() )

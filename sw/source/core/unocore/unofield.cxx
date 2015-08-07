@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <memory>
 
 #include <unofield.hxx>
 #include <unofieldcoll.hxx>
@@ -1147,7 +1148,7 @@ public:
     bool                m_bCallUpdate;
     sal_uInt16          m_nServiceId;
     OUString            m_sTypeName;
-    boost::scoped_ptr<SwFieldProperties_Impl> m_pProps;
+    std::unique_ptr<SwFieldProperties_Impl> m_pProps;
 
     Impl(SwDoc *const pDoc, SwFormatField *const pFormat,
             sal_uInt16 const nServiceId)

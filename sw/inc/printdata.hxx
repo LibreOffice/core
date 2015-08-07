@@ -24,12 +24,11 @@
 #include <vcl/print.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <set>
 #include <map>
 #include <vector>
 #include <utility>
+#include <memory>
 
 class SwDoc;
 class SwDocShell;
@@ -236,17 +235,17 @@ class SwRenderData
     SfxObjectShellLock m_xTempDocShell;
 
     /// the view options to be applied for printing
-    ::boost::scoped_ptr<SwViewOptionAdjust_Impl> m_pViewOptionAdjust;
+    std::unique_ptr<SwViewOptionAdjust_Impl> m_pViewOptionAdjust;
 
-    ::boost::scoped_ptr<SwPrintData>    m_pPrtOptions;
+    std::unique_ptr<SwPrintData>    m_pPrtOptions;
 
 public:
 
     // PostIt relevant data
     /// an array of "_SetGetExpField *" sorted by page and line numbers
-    ::boost::scoped_ptr<_SetGetExpFields> m_pPostItFields;
+    std::unique_ptr<_SetGetExpFields> m_pPostItFields;
     /// this contains a SwDoc with the post-it content
-    ::boost::scoped_ptr<SwViewShell>      m_pPostItShell;
+    std::unique_ptr<SwViewShell>      m_pPostItShell;
 
 public:
     SwRenderData();

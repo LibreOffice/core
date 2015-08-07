@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
+
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -80,9 +82,7 @@
 #include "unochart.hxx"
 #include "app.hrc"
 #include "swabstdlg.hxx"
-
 #include <list.hxx>
-
 #include <paratr.hxx>
 
 extern bool g_bNoInterrupt;       // in swmodule.cxx
@@ -790,7 +790,7 @@ sal_uInt16 SwDocShell::Edit(
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         assert( pFact );
-        boost::scoped_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(
+        std::unique_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(
                                                     0, *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : m_pWrtShell, bNew));
         assert( pDlg );

@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_UNDOBJ_HXX
 
 #include <vector>
+#include <memory>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <svl/undo.hxx>
@@ -229,7 +229,7 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 protected:
     sal_uLong nNdDiff;
     /// start of Content in UndoNodes for Redo
-    ::boost::scoped_ptr<SwNodeIndex> m_pUndoNodeIndex;
+    std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
     sal_uInt16 nSetPos;                 // Start in the history list.
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );

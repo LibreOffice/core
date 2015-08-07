@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
+
 #include <cellatr.hxx>
 #include <charfmt.hxx>
 #include <cmdid.h>
@@ -378,7 +380,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
 
-            boost::scoped_ptr< SfxItemSet > tmpSet;
+            std::unique_ptr< SfxItemSet > tmpSet;
 
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
