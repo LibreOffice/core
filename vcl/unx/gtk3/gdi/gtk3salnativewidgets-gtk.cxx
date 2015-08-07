@@ -136,11 +136,11 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
     buttonRect.Bottom() = buttonRect.Top() + aAreaRect.GetHeight();
     if ( nPart == PART_BUTTON_UP )
     {
-        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2*buttonRect.GetWidth()));
+        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
     }
     else if( nPart == PART_BUTTON_DOWN )
     {
-        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
+        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2*buttonRect.GetWidth()));
     }
     else
     {
