@@ -45,7 +45,6 @@
 #include <xmloff/languagetagodf.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -60,18 +59,7 @@ struct SvXMLNumFmtEntry
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
-struct SvXMLEmbeddedElement
-{
-    sal_Int32    nFormatPos;
-    OUString     aText;
-
-    SvXMLEmbeddedElement( sal_Int32 nFP, const OUString& rT ) :
-        nFormatPos(nFP), aText(rT) {}
-
-    bool operator < ( const SvXMLEmbeddedElement& r ) const { return nFormatPos <  r.nFormatPos; }
-};
-
-typedef boost::ptr_set<SvXMLEmbeddedElement> SvXMLEmbeddedElementArr;
+typedef std::map<sal_Int32, OUString> SvXMLEmbeddedElementArr;
 
 class SvXMLNumImpData
 {
@@ -117,7 +105,7 @@ struct SvXMLNumberInfo
     bool        bDecReplace;
     bool        bExpSign;
     double      fDisplayFactor;
-    SvXMLEmbeddedElementArr aEmbeddedElements;
+    SvXMLEmbeddedElementArr m_EmbeddedElements;
 
     SvXMLNumberInfo()
     {
@@ -1059,25 +1047,18 @@ void SvXMLNumFmtElementContext::Characters( const OUString& rChars )
 
 void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const OUString& rContent )
 {
-    if ( !rContent.isEmpty() )
-    {
-        SvXMLEmbeddedElement* pObj = new SvXMLEmbeddedElement( nFormatPos, rContent );
-        if ( !aNumInfo.aEmbeddedElements.insert( pObj ).second )
-        {
-            //  there's already an element at this position - append text to existing element
+    if (rContent.isEmpty())
+        return;
 
-            delete pObj;
-            for (SvXMLEmbeddedElementArr::iterator it = aNumInfo.aEmbeddedElements.begin();
-                 it != aNumInfo.aEmbeddedElements.end(); ++it)
-            {
-                pObj = &*it;
-                if ( pObj->nFormatPos == nFormatPos )
-                {
-                    pObj->aText += rContent;
-                    break;
-                }
-            }
-        }
+    auto const iter(aNumInfo.m_EmbeddedElements.find(nFormatPos));
+    if (iter == aNumInfo.m_EmbeddedElements.end())
+    {
+        aNumInfo.m_EmbeddedElements.insert(std::make_pair(nFormatPos, rContent));
+    }
+    else
+    {
+        // there's already an element at this position - append text to existing element
+        iter->second += rContent;
     }
 }
 
@@ -1818,7 +1799,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         nGenPrec = 0;               // generate format without decimals...
 
     bool bGrouping = rInfo.bGrouping;
-    sal_uInt16 nEmbeddedCount = rInfo.aEmbeddedElements.size();
+    size_t const nEmbeddedCount = rInfo.m_EmbeddedElements.size();
     if ( nEmbeddedCount )
         bGrouping = false;      // grouping and embedded characters can't be used together
 
@@ -1870,9 +1851,8 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             nZeroPos = aNumStr.getLength();
         }
 
-        //  aEmbeddedElements is sorted - last entry has the largest position (leftmost)
-        const SvXMLEmbeddedElement* pLastObj = &*rInfo.aEmbeddedElements.rbegin();
-        sal_Int32 nLastFormatPos = pLastObj->nFormatPos;
+        // m_EmbeddedElements is sorted - last entry has the largest position (leftmost)
+        sal_Int32 const nLastFormatPos = rInfo.m_EmbeddedElements.rbegin()->first;
         if ( nLastFormatPos >= nZeroPos )
         {
             //  add '#' characters so all embedded texts are really embedded in digits
@@ -1886,12 +1866,10 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             nZeroPos = nZeroPos + nAddCount;
         }
 
-        //  aEmbeddedElements is sorted with ascending positions - loop is from right to left
-        for (SvXMLEmbeddedElementArr::const_iterator it = rInfo.aEmbeddedElements.begin();
-             it != rInfo.aEmbeddedElements.end(); ++it)
+        // m_EmbeddedElements is sorted with ascending positions - loop is from right to left
+        for (auto const& it : rInfo.m_EmbeddedElements)
         {
-            const SvXMLEmbeddedElement* pObj = &*it;
-            sal_Int32 nFormatPos = pObj->nFormatPos;
+            sal_Int32 const nFormatPos = it.first;
             sal_Int32 nInsertPos = nZeroPos - nFormatPos;
             if ( nFormatPos >= 0 && nInsertPos >= 0 )
             {
@@ -1899,7 +1877,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
                 //  be recognized as thousands separator in French.
 
                 aNumStr.insert(nInsertPos, '"');
-                aNumStr.insert(nInsertPos, pObj->aText);
+                aNumStr.insert(nInsertPos, it.second);
                 aNumStr.insert(nInsertPos, '"');
             }
         }
