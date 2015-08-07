@@ -151,6 +151,14 @@ void PaintBufferGuard::SetPaintRect(const Rectangle& rRectangle)
     m_aPaintRect = rRectangle;
 }
 
+vcl::RenderContext* PaintBufferGuard::GetRenderContext()
+{
+    if (mpFrameData->mpBuffer)
+        return mpFrameData->mpBuffer;
+    else
+        return m_pWindow;
+}
+
 class PaintHelper
 {
 private:
