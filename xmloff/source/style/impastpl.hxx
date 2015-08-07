@@ -36,7 +36,7 @@
 
 class SvXMLAutoStylePoolP;
 class XMLAutoStylePoolParent;
-class XMLAutoStyleFamily;
+struct XMLAutoStyleFamily;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
 
