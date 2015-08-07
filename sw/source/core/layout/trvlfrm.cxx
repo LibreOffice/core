@@ -2428,8 +2428,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             {
                 lLeft = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
                     (pStartFrm->Prt().*fnRect->fnGetLeft)();
-                lRight = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
-                    (pStartFrm->Prt().*fnRect->fnGetRight)();
+                lRight = (aEndFrm.*fnRect->fnGetRight)();
             }
             if( lLeft < (aStFrm.*fnRect->fnGetLeft)() )
                 lLeft = (aStFrm.*fnRect->fnGetLeft)();
