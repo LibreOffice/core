@@ -21,6 +21,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 endif
 endif
 
+ifneq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
+    external/libmwaw/libmwaw-bundled-soname.patch.0 \
+))
+endif
+endif
+
 ifeq ($(SYSTEM_REVENGE),)
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/rpath.patch \

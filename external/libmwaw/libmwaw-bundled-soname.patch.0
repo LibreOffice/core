@@ -1,0 +1,14 @@
+--- src/lib/Makefile.in.orig	2015-08-07 14:04:47.646611627 +0200
++++ src/lib/Makefile.in	2015-08-07 14:25:49.888589996 +0200
+@@ -418,8 +418,8 @@
+ 
+ AM_CXXFLAGS = -I$(top_srcdir)/inc $(REVENGE_CFLAGS) $(DEBUG_CXXFLAGS)
+ libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_LIBADD = $(REVENGE_LIBS) @LIBMWAW_WIN32_RESOURCE@
+-libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_DEPENDENCIES = @LIBMWAW_WIN32_RESOURCE@  
+-libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic  -no-undefined
++libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_DEPENDENCIES = @LIBMWAW_WIN32_RESOURCE@
++libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined -release lo
+ libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_SOURCES = \
+ 	libmwaw_internal.cxx		\
+ 	libmwaw_internal.hxx		\
+
