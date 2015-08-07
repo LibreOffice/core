@@ -99,10 +99,8 @@ namespace
         UBiDiLevel level = 0;
         ubidi_getLogicalRun(ubidi, 0, &limit, &level);
         ubidi_close(ubidi);
-        if ((rtl && !(level & 1)) || (!rtl && (level & 1)))
-        {
-            limit = 0;
-        }
+        // if ((rtl && !(level & 1)) || (!rtl && (level & 1)))
+        //     limit = 0;
         return limit;
     }
 
@@ -130,7 +128,7 @@ const int GraphiteLayout::EXTRA_CONTEXT_LENGTH = 10;
 // find first slot of cluster and first slot of subsequent cluster
 static void findFirstClusterSlot(const gr_slot* base, gr_slot const** first, gr_slot const** after, int * firstChar, int * lastChar, bool bRtl)
 {
-    if (gr_slot_attached_to(base) == NULL)
+    if (gr_slot_attached_to(base) == NULL || gr_slot_can_insert_before(base))
     {
         *first = base;
         *after = (bRtl)? gr_slot_prev_in_segment(base) :
@@ -138,9 +136,10 @@ static void findFirstClusterSlot(const gr_slot* base, gr_slot const** first, gr_
         *firstChar = gr_slot_before(base);
         *lastChar = gr_slot_after(base);
     }
-    const gr_slot * attachment = gr_slot_first_attachment(base);
-    while (attachment)
+    for (const gr_slot * attachment = gr_slot_first_attachment(base); attachment; attachment = gr_slot_next_sibling_attachment(attachment))
     {
+        if (gr_slot_can_insert_before(attachment))
+            break;
         if (gr_slot_origin_X(*first) > gr_slot_origin_X(attachment))
             *first = attachment;
         const gr_slot* attachmentNext = (bRtl)?
@@ -160,7 +159,6 @@ static void findFirstClusterSlot(const gr_slot* base, gr_slot const** first, gr_
             *lastChar = gr_slot_after(attachment);
         if (gr_slot_first_attachment(attachment))
             findFirstClusterSlot(attachment, first, after, firstChar, lastChar, bRtl);
-        attachment = gr_slot_next_sibling_attachment(attachment);
     }
 }
 
@@ -187,7 +185,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     {
         const gr_slot* baseSlot = gr_seg_last_slot(pSegment);
         // find first base
-        while (baseSlot && (gr_slot_attached_to(baseSlot) != NULL))
+        while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
             baseSlot = gr_slot_prev_in_segment(baseSlot);
         int iChar = nChar - 1;
         int iNextChar = nChar - 1;
@@ -202,6 +200,8 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             int firstChar = -1;
             int lastChar = -1;
             findFirstClusterSlot(baseSlot, &clusterFirst, &clusterAfter, &firstChar, &lastChar, bRtl);
+//            if (!clusterFirst)
+//                break;
             iNextChar = minimum<int>(firstChar, iNextChar);
             if (bCluster)
             {
@@ -214,7 +214,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             {
                 mvGlyph2Char[mvGlyphs.size()] = firstChar + mnSegCharOffset;
                 nFirstCharInCluster = minimum<int>(firstChar, nFirstCharInCluster);
-                nLastCharInCluster = maximum<int>(firstChar, nLastCharInCluster);
+                nLastCharInCluster = maximum<int>(lastChar, nLastCharInCluster);
             }
             float leftBoundary = gr_slot_origin_X(clusterFirst);
             float rightBoundary = (clusterAfter)?
@@ -256,7 +256,10 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             }
             if (mnSegCharOffset + nLastCharInCluster < mnMinCharPos)
                 break;
-            baseSlot = gr_slot_next_sibling_attachment(baseSlot);
+//            baseSlot = gr_slot_next_sibling_attachment(baseSlot);
+            baseSlot = clusterAfter;
+            while (baseSlot && !gr_slot_can_insert_before(baseSlot) && gr_slot_attached_to(baseSlot))
+                baseSlot = gr_slot_attached_to(baseSlot);
         }
     }
     else
@@ -466,7 +469,8 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     // Recursively append all the attached glyphs.
     float cOrigin = nextOrigin;
     for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL; agi = gr_slot_next_sibling_attachment(agi))
-        cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar);
+        if (!gr_slot_can_insert_before(agi))
+            cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar);
 
     return cOrigin;
 }
