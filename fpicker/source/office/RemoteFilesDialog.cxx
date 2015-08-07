@@ -183,6 +183,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     get( m_pServices_lb, "services_lb" );
     get( m_pFilter_lb, "filter_lb" );
     get( m_pName_ed, "name_ed" );
+    get( m_pNewFolder, "new_folder" );
 
     m_eMode = ( nBits & WB_SAVEAS ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = ( nBits & WB_PATH ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
@@ -196,9 +197,19 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pName_ed->Enable( false );
 
     if( m_eMode == REMOTEDLG_MODE_OPEN )
+    {
         get( m_pOk_btn, "open" );
+
+        m_pNewFolder->Hide();
+    }
     else
+    {
         get( m_pOk_btn, "save" );
+
+        m_aImages = ImageList( fpicker::SvtResId( RID_FILEPICKER_IMAGES ) );
+        m_pNewFolder->SetModeImage( m_aImages.GetImage( IMG_FILEDLG_CREATEFOLDER ) );
+        m_pNewFolder->SetClickHdl( LINK( this, RemoteFilesDialog, NewFolderHdl ) );
+    }
 
     m_pOk_btn->Show();
     m_pOk_btn->Enable( false );
@@ -324,6 +335,7 @@ void RemoteFilesDialog::dispose()
     m_pServices_lb.clear();
     m_pFilter_lb.clear();
     m_pName_ed.clear();
+    m_pNewFolder.clear();
 
     ModalDialog::dispose();
 }
@@ -867,6 +879,34 @@ IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr )
     if( pPtr )
     {
         OpenURL( pPtr->GetHdlURL() );
+    }
+
+    return 1;
+}
+
+IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl )
+{
+    m_pFileView->EndInplaceEditing( false );
+
+    SmartContent aContent( m_pFileView->GetViewURL() );
+    OUString aTitle;
+    aContent.getTitle( aTitle );
+    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg( this, aTitle, fpicker::SVT_RESSTR( STR_SVT_NEW_FOLDER ) );
+    bool bHandled = false;
+
+    while( !bHandled )
+    {
+        if( aDlg->Execute() == RET_OK )
+        {
+            OUString aUrl = aContent.createFolder( aDlg->GetName() );
+            if( !aUrl.isEmpty() )
+            {
+                m_pFileView->CreatedFolder( aUrl, aDlg->GetName() );
+                bHandled = true;
+            }
+        }
+        else
+            bHandled = true;
     }
 
     return 1;

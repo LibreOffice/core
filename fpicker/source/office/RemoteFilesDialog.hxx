@@ -37,6 +37,9 @@
 
 #include "fpdialogbase.hxx"
 #include "fpsofficeResMgr.hxx"
+#include "OfficeFilePicker.hrc"
+#include "QueryFolderName.hxx"
+#include "iodlg.hrc"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -141,6 +144,7 @@ private:
     VclPtr< MenuButton > m_pAddService_btn;
     VclPtr< ListBox > m_pServices_lb;
     VclPtr< Breadcrumb > m_pPath;
+    VclPtr<PushButton> m_pNewFolder;
     VclPtr< Splitter > m_pSplitter;
     VclPtr< FolderTree > m_pTreeView;
     VclPtr< SvtFileView > m_pFileView;
@@ -148,6 +152,8 @@ private:
     VclPtr< ListBox > m_pFilter_lb;
     VclPtr< Edit > m_pName_ed;
     PopupMenu* m_pAddMenu;
+
+    ImageList m_aImages;
 
     std::vector< ServicePtr > m_aServices;
     std::vector< std::pair< OUString, OUString > > m_aFilters;
@@ -183,6 +189,8 @@ private:
     DECL_LINK( TreeSelectHdl, FolderTree * );
 
     DECL_LINK( SelectBreadcrumbHdl, Breadcrumb * );
+
+    DECL_LINK( NewFolderHdl, void * );
 
     DECL_LINK( OkHdl, void * );
     DECL_LINK( CancelHdl, void * );
