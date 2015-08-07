@@ -76,7 +76,9 @@ EXCEPTIONSFILES=\
     $(SLO)$/DDriver.obj
 
 # [kh] ppc linux gcc compiler problem
-.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
+# [Don Lewis] clang 3.4 -O2 on amd64 tries to use R_X86_64_PC32 relocation with
+#             symbol _ZThn192_N12connectivity4file10OFileTable7acquireEvj
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC" || ("$(OS)$(COM)$(CPUNAME)"=="FREEBSDCLANGX86_64" && $(CCNUMVER)>=000300040000 && $(CCNUMVER)<000300050000)
 EXCEPTIONSNOOPTFILES= \
     $(SLO)$/DTable.obj
 .ELSE

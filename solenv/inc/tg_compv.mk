@@ -38,7 +38,11 @@ CFLAGSNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)
 .ELIF "$(COM)"=="CLANG"
 CFLAGSVERSION=--version
 CFLAGSVERSION_CMD=--version | head -n1 | sed -e"s/.*version //" -e"s/ .*//"
+.IF "$(OS)"="FREEBSD"
+CFLAGSNUMVERSION_CMD=${CFLAGSVERSION_CMD} | $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
+.ELSE
 CFLAGSNUMVERSION_CMD=${CFLAGSVERSION_CMD} | sed -e"s/\.//"
+.ENDIF
 .ELIF "$(COM)"=="MSC"
 CFLAGSVERSION=
 CFLAGSVERSION_CMD=  $(PIPEERROR) $(AWK) -f $(SOLARENV)/bin/getcompver.awk
