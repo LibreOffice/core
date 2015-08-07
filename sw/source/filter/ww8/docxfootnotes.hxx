@@ -30,7 +30,7 @@ typedef ::std::vector< const SwFormatFootnote* > FootnotesVector;
 
 /** Remember footnotes/endnotes so that we can dump them in one go.
 
-    Also rememeber the last added footnote Id to be able to write it in the
+    Also remember the last added footnote Id to be able to write it in the
     DocxAttributeOutput::EndRunProperties() method.
 */
 class FootnotesList {
