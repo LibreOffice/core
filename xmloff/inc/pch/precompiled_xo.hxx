@@ -34,7 +34,6 @@
 #include <boost/bind.hpp>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <boost/scoped_ptr.hpp>

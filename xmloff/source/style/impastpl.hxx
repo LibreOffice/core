@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_STYLE_IMPASTPL_HXX
 #define INCLUDED_XMLOFF_SOURCE_STYLE_IMPASTPL_HXX
 
-#include <boost/ptr_container/ptr_set.hpp>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <set>
@@ -37,38 +36,9 @@
 
 class SvXMLAutoStylePoolP;
 class XMLAutoStylePoolParent;
+class XMLAutoStyleFamily;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
-
-// Implementationclass for stylefamily-information
-
-struct XMLAutoStyleFamily : boost::noncopyable
-{
-    typedef boost::ptr_set<XMLAutoStylePoolParent> ParentSetType;
-    typedef std::set<OUString> NameSetType;
-
-    sal_uInt32                   mnFamily;
-    OUString                     maStrFamilyName;
-    rtl::Reference < SvXMLExportPropertyMapper >  mxMapper;
-
-    ParentSetType maParentSet;
-    NameSetType maNameSet;
-    sal_uInt32                          mnCount;
-    sal_uInt32                          mnName;
-    OUString                     maStrPrefix;
-    bool                         mbAsFamily;
-
-    XMLAutoStyleFamily( sal_Int32 nFamily, const OUString& rStrName,
-            const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
-            const OUString& rStrPrefix, bool bAsFamily = true );
-
-    explicit XMLAutoStyleFamily( sal_Int32 nFamily );
-    ~XMLAutoStyleFamily();
-
-    friend bool operator<(const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2);
-
-    void ClearEntries();
-};
 
 // Properties of a pool
 
@@ -126,6 +96,44 @@ public:
     }
 
     bool operator< (const XMLAutoStylePoolParent& rOther) const;
+};
+
+// Implementationclass for stylefamily-information
+
+struct XMLAutoStyleFamily : boost::noncopyable
+{
+    struct XMLAutoStylePoolParent_Less
+    {
+        bool operator()(std::unique_ptr<XMLAutoStylePoolParent> const& lhs,
+                        std::unique_ptr<XMLAutoStylePoolParent> const& rhs) const
+        {
+            return (*lhs) < (*rhs);
+        }
+    };
+    typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>, XMLAutoStylePoolParent_Less> ParentSetType;
+    typedef std::set<OUString> NameSetType;
+
+    sal_uInt32 mnFamily;
+    OUString maStrFamilyName;
+    rtl::Reference<SvXMLExportPropertyMapper> mxMapper;
+
+    ParentSetType m_ParentSet;
+    NameSetType maNameSet;
+    sal_uInt32 mnCount;
+    sal_uInt32 mnName;
+    OUString maStrPrefix;
+    bool mbAsFamily;
+
+    XMLAutoStyleFamily( sal_Int32 nFamily, const OUString& rStrName,
+            const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
+            const OUString& rStrPrefix, bool bAsFamily = true );
+
+    explicit XMLAutoStyleFamily( sal_Int32 nFamily );
+    ~XMLAutoStyleFamily();
+
+    friend bool operator<(const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2);
+
+    void ClearEntries();
 };
 
 // Implementationclass of SvXMLAutoStylePool
