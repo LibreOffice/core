@@ -72,12 +72,6 @@ void ScaList::_Grow()
     pData = pNewData;
 }
 
-ScaStringList::~ScaStringList()
-{
-    for( OUString* pStr = First(); pStr; pStr = Next() )
-        delete pStr;
-}
-
 ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
     ResId( nId, rResMgr )
 {
@@ -114,7 +108,7 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     const ResStringArray& rArr = aArrLoader.GetStringArray();
 
     for( sal_uInt32 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
-        aCompList.Append( rArr.GetString( nIndex ) );
+        aCompList.push_back( rArr.GetString( nIndex ) );
 }
 
 ScaFuncData::~ScaFuncData()
@@ -452,14 +446,14 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
     if( !pFData )
         return uno::Sequence< sheet::LocalizedName >( 0 );
 
-    const ScaStringList& rStrList = pFData->GetCompNameList();
-    sal_uInt32 nCount = rStrList.Count();
+    const std::vector<OUString>& rStrList = pFData->GetCompNameList();
+    sal_uInt32 nCount = rStrList.size();
 
     uno::Sequence< sheet::LocalizedName > aRet( nCount );
     sheet::LocalizedName* pArray = aRet.getArray();
 
     for( sal_uInt32 nIndex = 0; nIndex < nCount; nIndex++ )
-        pArray[ nIndex ] = sheet::LocalizedName( GetLocale( nIndex ), *rStrList.Get( nIndex ) );
+        pArray[ nIndex ] = sheet::LocalizedName( GetLocale( nIndex ), rStrList[nIndex] );
 
     return aRet;
 }
