@@ -937,10 +937,10 @@ public:
     virtual DocxExport& GetExport() SAL_OVERRIDE;
     const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
-    /// For eg. the output of the styles, we need to switch the serializer to an other one.
+    /// For e.g. the output of the styles, we need to switch the serializer to another one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer );
 
-    /// Occasionnaly need to use this serializer from the outside
+    /// Occasionally need to use this serializer from the outside
     ::sax_fastparser::FSHelperPtr GetSerializer( ) { return m_pSerializer; }
 
     /// Do we have any footnotes?
