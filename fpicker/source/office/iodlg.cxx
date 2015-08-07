@@ -100,6 +100,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbc;
+using namespace ::fpicker;
 using namespace ::utl;
 using namespace ::svt;
 

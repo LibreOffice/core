@@ -206,7 +206,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pOk_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
     m_pCancel_btn->SetClickHdl( LINK( this, RemoteFilesDialog, CancelHdl ) );
 
-    m_sRootLabel = ResId( STR_SVT_ROOTLABEL, *ResMgrHolder::getOrCreate() );
+    m_sRootLabel = fpicker::SvtResId( STR_SVT_ROOTLABEL );
     m_pPath = VclPtr<Breadcrumb>::Create( get< vcl::Window >( "breadcrumb_container" ) );
     m_pPath->set_hexpand( true );
     m_pPath->SetClickHdl( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
@@ -710,7 +710,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
         if( nPos >= 0 )
         {
-            OUString sMsg = ResId( STR_SVT_DELETESERVICE, *ResMgrHolder::getOrCreate() );
+            OUString sMsg = fpicker::SvtResId( STR_SVT_DELETESERVICE );
             sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectEntry() );
             ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
 
@@ -921,7 +921,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     {
         if( m_eMode == REMOTEDLG_MODE_SAVE )
         {
-            OUString sMsg = ResId( STR_SVT_ALREADYEXISTOVERWRITE, *ResMgrHolder::getOrCreate() );
+            OUString sMsg = fpicker::SvtResId( STR_SVT_ALREADYEXISTOVERWRITE );
             sMsg = sMsg.replaceFirst( "$filename$", sName );
             ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
             if( aBox->Execute() != RET_YES )

@@ -13,7 +13,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <tools/resmgr.hxx>
 
-namespace
+namespace fpicker
 {
     struct ResMgrHolder
     {
