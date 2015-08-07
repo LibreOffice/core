@@ -742,7 +742,7 @@ storeError OStorePageBIOS::acquirePage (
     else
     {
       // Insert new entry.
-      Ace * entry = AceCache::get().create (rDescr.m_nAddr, 1);
+      Ace * entry = AceCache::get().create (rDescr.m_nAddr);
       if (!entry)
         return store_E_OutOfMemory;
       Ace::insert (ace, entry);

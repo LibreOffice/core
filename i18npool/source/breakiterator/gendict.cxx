@@ -126,7 +126,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
         const sal_Int32 len = Ostr.getLength();
 
         sal_Int32 i=0;
-        Ostr.iterateCodePoints(&i, 1);
+        Ostr.iterateCodePoints(&i);
         if (len == i)
             continue;   // skip one character word
 
