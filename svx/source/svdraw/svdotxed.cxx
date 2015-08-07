@@ -298,7 +298,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     rOutl.ClearOverflowingParaNum();
     // XXX: Experiment
     /* Flush overflow for next textbox */
-    if (
+    if (false &&
         IsChainable() &&
         GetNextLinkInChain() &&
         GetTextChain()->GetPendingOverflowCheck(GetNextLinkInChain()) )
