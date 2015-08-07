@@ -47,27 +47,27 @@ struct WW8SwFlyPara
 {
     SwFlyFrameFormat* pFlyFormat;
 
-                // 1. Teil: daraus abgeleitete Sw-Attribute
+                // part 1: directly derived Sw attributes
     sal_Int16 nXPos, nYPos;         // Position
-    sal_Int16 nLeMgn, nRiMgn;       // Raender
-    sal_Int16 nUpMgn, nLoMgn;       // Raender
-    sal_Int16 nWidth, nHeight;      // Groesse
+    sal_Int16 nLeMgn, nRiMgn;       // borders
+    sal_Int16 nUpMgn, nLoMgn;       // borders
+    sal_Int16 nWidth, nHeight;      // size
     sal_Int16 nNetWidth;
 
-    SwFrmSize eHeightFix;       // Hoehe Fix oder Min
-    RndStdIds eAnchor;          // Bindung
-    short eHRel;     // Seite oder Seitenrand
-    short eVRel;     // Seite oder Seitenrand
-    sal_Int16 eVAlign;       // Oben, unten, mittig
-    sal_Int16 eHAlign;       // links, rechts, mittig
-    SwSurround eSurround;       // Wrap-Mode
+    SwFrmSize eHeightFix;       // height fixed or min
+    RndStdIds eAnchor;          // binding
+    short eHRel;     // page or page border
+    short eVRel;     // page or page border
+    sal_Int16 eVAlign;       // up, down, centered
+    sal_Int16 eHAlign;       // left, right, centered
+    SwSurround eSurround;       // wrap mode
 
-    sal_uInt8 nXBind, nYBind;        // relativ zu was gebunden
+    sal_uInt8 nXBind, nYBind;        // bound relative to what
 
-                // 2.Teil: sich waehrend des Einlesens ergebende AEnderungen
+                // part 2: changes found during reading
     long nNewNetWidth;
-    SwPosition* pMainTextPos;   // um nach Apo in Haupttext zurueckzukehren
-    sal_uInt16 nLineSpace;          // LineSpace in tw fuer Graf-Apos
+    SwPosition* pMainTextPos;   // to return to main text after apo
+    sal_uInt16 nLineSpace;          // line space in tw for graf apos
     bool bAutoWidth;
     bool bToggelPos;
 
@@ -89,15 +89,15 @@ class WW8RStyle: public WW8Style
 {
 friend class SwWW8ImplReader;
     wwSprmParser maSprmParser;
-    SwWW8ImplReader* pIo;   // Parser-Klasse
-    SvStream* pStStrm;      // Input-File
+    SwWW8ImplReader* pIo;   // parser class
+    SvStream* pStStrm;      // input file
 
-    SwNumRule* pStyRule;    // Bullets und Aufzaehlungen in Styles
+    SwNumRule* pStyRule;    // bullets and enumerations in styles
 
-    sal_uInt8* pParaSprms;           // alle ParaSprms des UPX falls UPX.Papx
-    sal_uInt16 nSprmsLen;           // Laenge davon
+    sal_uInt8* pParaSprms;           // all ParaSprms of the UPX if UPX.Papx
+    sal_uInt16 nSprmsLen;           // its length
 
-    sal_uInt8 nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
+    sal_uInt8 nWwNumLevel;           // for bullets and enumerations in styles
 
     bool bTextColChanged;
     bool bFontChanged;      // For Simulating Default-Font
