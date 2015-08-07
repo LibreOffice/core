@@ -697,9 +697,6 @@ void OutlinerView::PasteSpecial()
         pOwner->UndoActionStart( OLUNDO_INSERT );
 
         pOwner->pEditEngine->SetUpdateMode( false );
-        // XXX:Experiment with QuickDelete
-        pOwner->QuickDelete(ESelection(0,0,0,1));
-
         pOwner->bPasting = true;
         pEditView->PasteSpecial();
 

@@ -135,6 +135,12 @@ NonOverflowingText::NonOverflowingText(const EditTextObject *pTObj,  bool bLastP
      // XXX: may have to delete pTObj
 }
 
+NonOverflowingText::NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted)
+    : maContentSel(aSel),
+      mbLastParaInterrupted(bLastParaInterrupted)
+{
+}
+
 bool NonOverflowingText::IsLastParaInterrupted() const
 {
     return mbLastParaInterrupted;
@@ -143,9 +149,13 @@ bool NonOverflowingText::IsLastParaInterrupted() const
 
 OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 {
-    OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
-    pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
-    return pPObj;
+    // XXX: Old code
+    //OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
+    //pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
+    //return pPObj;
+
+    pOutliner->QuickDelete(maContentSel);
+    return pOutliner->CreateParaObject();
 }
 
 ESelection NonOverflowingText::GetOverflowPointSel() const

@@ -68,10 +68,12 @@ public:
 private:
         // Constructor
         NonOverflowingText(const EditTextObject *pTObj, bool bLastParaInterrupted);
+        NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted);
 
         friend class Outliner;
         const EditTextObject *mpContentTextObj;
         const bool mbLastParaInterrupted;
+        const ESelection maContentSel;
 };
 
 

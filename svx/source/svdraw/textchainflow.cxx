@@ -296,7 +296,7 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
-    impSetTextForEditingOutliner(pNewText);
+    //impSetTextForEditingOutliner(pNewText); //XXX: Don't call it since we do everything with NonOverflowingText::ToParaObject
 
     GetLinkTarget()->NbcSetOutlinerParaObject(pNewText);
 }
