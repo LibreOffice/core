@@ -22,6 +22,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/0001-try-to-fix-build-on-Windows.patch.1 \
 ))
 
+ifneq ($(OS),MACOSX)
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
+	external/libetonyek/libetonyek-bundled-soname.patch.0 \
+))
+endif
+endif
+
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek, \
