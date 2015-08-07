@@ -36,49 +36,6 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
-class ScaList
-{
-private:
-    static const sal_uInt32     nStartSize;
-    static const sal_uInt32     nIncrSize;
-
-    void**                      pData;          // pointer array
-    sal_uInt32                  nSize;          // array size
-    sal_uInt32                  nCount;         // next index to be inserted at
-    sal_uInt32                  nCurr;          // current pos for iterations
-
-    void                        _Grow();
-    inline void                 Grow();
-
-public:
-                                ScaList();
-    virtual                     ~ScaList();
-
-    inline sal_uInt32           Count() const       { return nCount; }
-
-    inline const void*          GetObject( sal_uInt32 nIndex ) const
-                                    { return (nIndex < nCount) ? pData[ nIndex ] : NULL; }
-
-    inline void*                First() { return nCount ? pData[ nCurr = 0 ] : NULL; }
-    inline void*                Next()  { return (nCurr + 1 < nCount) ? pData[ ++nCurr ] : NULL; }
-
-    inline void                 Append( void* pNew );
-};
-
-
-inline void ScaList::Grow()
-{
-    if( nCount >= nSize )
-        _Grow();
-}
-
-inline void ScaList::Append( void* pNew )
-{
-    Grow();
-    pData[ nCount++ ] = pNew;
-}
-
-
 class ScaResId : public ResId
 {
 public:
@@ -197,45 +154,6 @@ public:
     inline const std::vector<OUString>& GetCompNameList() const { return aCompList; }
 };
 
-
-class ScaFuncDataList : private ScaList
-{
-    OUString             aLastName;
-    sal_uInt32                  nLast;
-
-public:
-                                ScaFuncDataList( ResMgr& rResMgr );
-    virtual                     ~ScaFuncDataList();
-
-                                using ScaList::Count;
-
-    inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
-    const ScaFuncData*          Get( const OUString& rProgrammaticName ) const;
-    inline ScaFuncData*         First();
-    inline ScaFuncData*         Next();
-
-    using ScaList::Append;
-    inline void                 Append( ScaFuncData* pNew ) { ScaList::Append( pNew ); }
-};
-
-
-inline const ScaFuncData* ScaFuncDataList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const ScaFuncData* >( ScaList::GetObject( nIndex ) );
-}
-
-inline ScaFuncData* ScaFuncDataList::First()
-{
-    return static_cast< ScaFuncData* >( ScaList::First() );
-}
-
-inline ScaFuncData* ScaFuncDataList::Next()
-{
-    return static_cast< ScaFuncData* >( ScaList::Next() );
-}
-
-
-
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
@@ -254,13 +172,14 @@ private:
     ::com::sun::star::lang::Locale  aFuncLoc;
     ::com::sun::star::lang::Locale* pDefLocales;
     ResMgr*                     pResMgr;
-    ScaFuncDataList*            pFuncDataList;
+    std::vector<ScaFuncData>    pFuncDataList;
 
 
     void                        InitDefLocales();
     const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nIndex );
     ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException, std::exception );
     void                        InitData();
+    const ScaFuncData*          GetFuncDataByName(const OUString& rProgrammaticName);
 
     OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
