@@ -517,8 +517,26 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             pTextChain->SetPreChainingSel(pTextObj, pOLV->GetSelection());
             //maPreChainingSel = new ESelection(pOLV->GetSelection());
 
+            // Handling Undo
+            const int nText = 0; // XXX: hardcoded index (SdrTextObj::getText handles only 0)
+
+            SdrUndoObjSetText *pTxtUndo  = dynamic_cast< SdrUndoObjSetText* >
+                ( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nText ) );
+
             // trigger actual chaining
             pTextObj->onChainingEvent();
+
+           if (pTxtUndo!=NULL)
+            {
+                pTxtUndo->AfterSetText();
+                if (!pTxtUndo->IsDifferent())
+                {
+                    delete pTxtUndo;
+                    pTxtUndo=NULL;
+                }
+            }
+
+            AddUndo(pTxtUndo);
 
             //maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
             //SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
