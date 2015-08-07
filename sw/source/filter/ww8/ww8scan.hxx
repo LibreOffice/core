@@ -173,21 +173,21 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 
 struct WW8FieldDesc
 {
-    long nLen;              ///< Gesamtlaenge ( zum Text ueberlesen )
-    WW8_CP nSCode;          ///< Anfang Befehlscode
-    WW8_CP nLCode;          ///< Laenge
-    WW8_CP nSRes;           ///< Anfang Ergebnis
-    WW8_CP nLRes;           ///< Laenge ( == 0, falls kein Ergebnis )
-    sal_uInt16 nId;             ///< WW-Id fuer Felder
-    sal_uInt8 nOpt;              ///< WW-Flags ( z.B.: vom User geaendert )
-    bool bCodeNest:1;       ///< Befehl rekursiv verwendet
-    bool bResNest:1;        ///< Befehl in Resultat eingefuegt
+    long nLen;              ///< total length (to skip over text)
+    WW8_CP nSCode;          ///< start of instructions code
+    WW8_CP nLCode;          ///< length
+    WW8_CP nSRes;           ///< start of result
+    WW8_CP nLRes;           ///< length ( == 0, if no result )
+    sal_uInt16 nId;             ///< WW-id for fields
+    sal_uInt8 nOpt;              ///< WW-Flags ( e.g.: changed by user )
+    bool bCodeNest:1;       ///< instruction used recursively
+    bool bResNest:1;        ///< instruction inserted into result
 };
 
 struct WW8PLCFxSave1
 {
     sal_uLong nPLCFxPos;
-    sal_uLong nPLCFxPos2;       ///< fuer PLCF_Cp_Fkp: PieceIter-Pos
+    sal_uLong nPLCFxPos2;       ///< for PLCF_Cp_Fkp: PieceIter-Pos
     long nPLCFxMemOfs;
     WW8_CP nStartCp;        ///< for cp based iterator like PAP and CHP
     long nCpOfs;
@@ -198,16 +198,16 @@ struct WW8PLCFxSave1
 };
 
 /**
-    u.a. fuer Felder, also genausoviele Attr wie Positionen,
-    falls Ctor-Param bNoEnd = false
+    among others for fields, that is, the same number of attr as positions,
+    if Ctor-Param bNoEnd = false
 */
-class WW8PLCFspecial        // Iterator fuer PLCFs
+class WW8PLCFspecial        // iterator for PLCFs
 {
 private:
-    sal_Int32* pPLCF_PosArray;  ///< Pointer auf Pos-Array und auf ganze Struktur
-    sal_uInt8*  pPLCF_Contents;  ///< Pointer auf Inhalts-Array-Teil des Pos-Array
-    long nIMax;             ///< Anzahl der Elemente
-    long nIdx;              ///< Merker, wo wir gerade sind
+    sal_Int32* pPLCF_PosArray;  ///< pointer to Pos-array and to the whole structure
+    sal_uInt8*  pPLCF_Contents;  ///< pointer to content-array-part of Pos-array
+    long nIMax;             ///< number of elements
+    long nIdx;              ///< marker where we currently are
     sal_uInt32 nStru;
 
 public:
@@ -217,8 +217,8 @@ public:
     long GetIdx() const { return nIdx; }
     void SetIdx( long nI ) { nIdx = nI; }
     long GetIMax() const { return nIMax; }
-    bool SeekPos(long nPos);            // geht ueber FC- bzw. CP-Wert
-                                        // bzw. naechste groesseren Wert
+    bool SeekPos(long nPos);            // walks over FC- or CP-value
+                                        // resp. next biggest value
     bool SeekPosExact(long nPos);
     sal_Int32 Where() const
         { return ( nIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nIdx]; }
@@ -271,21 +271,21 @@ private:
     WW8SprmIter& operator=(const WW8SprmIter&) SAL_DELETED_FUNCTION;
 };
 
-/* u.a. fuer FKPs auf normale Attr., also ein Attr weniger als Positionen */
-class WW8PLCF                       // Iterator fuer PLCFs
+/* among others for FKPs to normal attr., i.e. one less attr than positions */
+class WW8PLCF                       // Iterator for PLCFs
 {
 private:
-    WW8_CP* pPLCF_PosArray; // Pointer auf Pos-Array und auf ganze Struktur
-    sal_uInt8* pPLCF_Contents;   // Pointer auf Inhalts-Array-Teil des Pos-Array
-    sal_Int32 nIMax;            // Anzahl der Elemente
+    WW8_CP* pPLCF_PosArray; // pointer to Pos-array and the whole structure
+    sal_uInt8* pPLCF_Contents;   // pointer to content-array-part of Pos-array
+    sal_Int32 nIMax;            // number of elements
     sal_Int32 nIdx;
     int nStru;
 
     void ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF);
 
     /*
-        Falls im Dok ein PLC fehlt und die FKPs solo dastehen,
-        machen wir uns hiermit einen PLC:
+        If a PLC is missing in the doc and the FKPs stand alone,
+        we create a PLC with this:
     */
     void GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN);
 
@@ -296,7 +296,7 @@ public:
         WW8_CP nStartPos = -1);
 
     /*
-        folgender Ctor generiert ggfs. einen PLC aus nPN und ncpN
+        the following ctor generates a PLC from nPN and ncpN, if necessary
     */
     WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN);
@@ -322,8 +322,8 @@ class WW8PLCFpcd
 {
     friend class WW8PLCFpcd_Iter;
 
-    sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    sal_uInt8*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
+    sal_Int32* pPLCF_PosArray;  // pointer to Pos-array and the whole structure
+    sal_uInt8*  pPLCF_Contents;  // pointer to content-array-part of Pos-array
     long nIMax;
     sal_uInt32 nStru;
 
@@ -333,7 +333,7 @@ public:
     ~WW8PLCFpcd(){ delete[] pPLCF_PosArray; }
 };
 
-/* mehrere WW8PLCFpcd_Iter koennen auf die gleiche WW8PLCFpcd zeigen !!!  */
+/* multiple WW8PLCFpcd_Iter may point to the same WW8PLCFpcd !!!  */
 class WW8PLCFpcd_Iter
 {
 private:
@@ -358,7 +358,7 @@ public:
     }
 };
 
-// PLCF-Typ:
+// PLCF-type:
 enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 
 //Its hardcoded that eFTN be the first one: A very poor hack, needs to be fixed
@@ -367,11 +367,11 @@ enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATN
 /*
     pure virtual:
 */
-class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
+class WW8PLCFx              // virtual iterator for Piece Table Exceptions
 {
 private:
     ww::WordVersion meVer;  // Version number of FIB
-    bool bIsSprm;           // PLCF von Sprms oder von anderem ( Footnote, ... )
+    bool bIsSprm;           // PLCF of Sprms or other stuff ( Footnote, ... )
     WW8_FC nStartFc;
     bool bDirty;
 
@@ -412,10 +412,10 @@ class WW8PLCFx_PCDAttrs : public WW8PLCFx
 private:
     WW8PLCFpcd_Iter* pPcdI;
     WW8PLCFx_PCD* pPcd;
-    sal_uInt8** const pGrpprls;      // Attribute an Piece-Table
+    sal_uInt8** const pGrpprls;      // attribute of Piece-table
     SVBT32 aShortSprm;          // mini storage: can contain ONE sprm with
                                 // 1 byte param
-    sal_uInt16 nGrpprls;            // Attribut Anzahl davon
+    sal_uInt16 nGrpprls;            // attribute count of this
 
     WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&) SAL_DELETED_FUNCTION;
     WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&) SAL_DELETED_FUNCTION;
@@ -433,7 +433,7 @@ public:
     WW8PLCFpcd_Iter* GetIter() const { return pPcdI; }
 };
 
-class WW8PLCFx_PCD : public WW8PLCFx            // Iterator fuer Piece Table
+class WW8PLCFx_PCD : public WW8PLCFx            // iterator for Piece table
 {
 private:
     WW8PLCFpcd_Iter* pPcdI;
@@ -500,13 +500,13 @@ public:
         sal_uInt8 maRawData[512];
         std::vector<Entry> maEntries;
 
-        long nItemSize;     // entweder 1 Byte oder ein komplettes BX
+        long nItemSize;     // either 1 Byte or a complete BX
 
         // Offset in Stream where last read of 52 bytes took place
         long nFilePos;
-        sal_uInt8 mnIdx;         // Pos-Merker
+        sal_uInt8 mnIdx;         // Pos marker
         ePLCFT ePLCF;
-        sal_uInt8 mnIMax;         // Anzahl der Eintraege
+        sal_uInt8 mnIMax;         // number of entries
 
         wwSprmParser maSprmParser;
 
@@ -535,13 +535,13 @@ public:
         sal_uInt16 GetIstd() const { return maEntries[mnIdx].mnIStd; }
 
         /*
-            liefert einen echten Pointer auf das Sprm vom Typ nId,
-            falls ein solches im Fkp drin ist.
+            returns a real pointer to the Sprm of type nId,
+            if such a thing is in the Fkp.
         */
         sal_uInt8* GetLenAndIStdAndSprms(sal_Int32& rLen) const;
 
         /*
-            ruft GetLenAndIStdAndSprms() auf...
+            calls GetLenAndIStdAndSprms()...
         */
         const sal_uInt8* HasSprm( sal_uInt16 nId );
         bool HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
@@ -550,8 +550,8 @@ public:
     };
 
 private:
-    SvStream* pFKPStrm;         // Input-File
-    SvStream* pDataStrm;        // Input-File
+    SvStream* pFKPStrm;         // input file
+    SvStream* pDataStrm;        // input file
     WW8PLCF* pPLCF;
     WW8Fkp* pFkp;
 
@@ -597,7 +597,7 @@ public:
     bool HasFkp() const { return (0 != pFkp); }
 };
 
-/// Iterator fuer Piece Table Exceptions of Fkps arbeitet auf CPs (High-Level)
+/// iterator for Piece Table Exceptions of Fkps works on CPs (high-level)
 class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
 {
 private:
@@ -661,7 +661,7 @@ public:
                     sal_uInt8*& p1,   sal_uInt8*& p2,   sal_uInt8*& p3,   sal_uInt8*& p4 ) const;
 };
 
-/// Iterator fuer Fuss-/Endnoten und Anmerkungen
+/// iterator for footnotes/endnotes and comments
 class WW8PLCFx_SubDoc : public WW8PLCFx
 {
 private:
@@ -680,7 +680,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
     virtual WW8_FC Where() SAL_OVERRIDE;
 
-    // liefert Reference Descriptoren
+    // returns reference descriptors
     const void* GetData( long nIdx = -1 ) const
     {
         return pRef ? pRef->GetData( -1L == nIdx ? pRef->GetIdx() : nIdx ) : 0;
@@ -786,25 +786,25 @@ public:
 };
 
 /*
-    hiermit arbeiten wir draussen:
+    this is what we use outside:
 */
 struct WW8PLCFManResult
 {
-    WW8_CP nCpPos;      // Attribut-Anfangsposition
-    long nMemLen;       // Laenge dazu
-    long nCp2OrIdx;     // footnote-textpos oder Index in PLCF
-    WW8_CP nAktCp;      // wird nur vom Aufrufer benutzt
-    const sal_uInt8* pMemPos;// Mem-Pos fuer Sprms
-    sal_uInt16 nSprmId;     // Sprm-Id ( 0 = ungueltige Id -> ueberspringen! )
-                        // (2..255) oder Pseudo-Sprm-Id (256..260)
-                        // bzw. ab Winword-Ver8 die Sprm-Id (800..)
-    sal_uInt8 nFlags;        // Absatz- oder Section-Anfang
+    WW8_CP nCpPos;      // attribute starting position
+    long nMemLen;       // length for previous
+    long nCp2OrIdx;     // footnote-textpos or index in PLCF
+    WW8_CP nAktCp;      // only used by caller
+    const sal_uInt8* pMemPos;// Mem-Pos for Sprms
+    sal_uInt16 nSprmId;     // Sprm-Id ( 0 = invalid Id -> skip! )
+                        // (2..255) or pseudo-Sprm-Id (256..260)
+                        // from Winword-Ver8 Sprm-Id (800..) resp.
+    sal_uInt8 nFlags;        // start of paragraph or section
 };
 
 enum ManMaskTypes
 {
-    MAN_MASK_NEW_PAP = 1,       // neue Zeile
-    MAN_MASK_NEW_SEP = 2        // neue Section
+    MAN_MASK_NEW_PAP = 1,       // new line
+    MAN_MASK_NEW_SEP = 2        // new section
 };
 
 enum ManTypes // enums for PLCFMan-ctor
@@ -814,13 +814,13 @@ enum ManTypes // enums for PLCFMan-ctor
 };
 
 /*
-    hiermit arbeitet der Manager drinnen:
+    this is what the manager uses inside:
 */
 struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
-    ::std::stack<sal_uInt16>* pIdStk;  // Speicher fuer Attr-Id fuer Attr-Ende(n)
-    const sal_uInt8* pMemPos;// wo liegen die Sprm(s)
+    ::std::stack<sal_uInt16>* pIdStk;  // memory for Attr-Id for Attr-end(s)
+    const sal_uInt8* pMemPos;// where are the Sprm(s)
     long nOrigSprmsLen;
 
     WW8_CP nStartPos;
@@ -838,11 +838,11 @@ struct WW8PLCFxDesc
                           // it can be used as the beginning cp of the next set
                           // of properties
 
-    WW8_CP nCp2OrIdx;     // wo liegen die NoSprm(s)
-    sal_Int32 nSprmsLen;  // wie viele Bytes fuer weitere Sprms / Laenge Fussnote
-    long nCpOfs;          // fuer Offset Header .. Footnote
-    bool bFirstSprm;      // fuer Erkennung erster Sprm einer Gruppe
-    bool bRealLineEnd;    // false bei Pap-Piece-Ende
+    WW8_CP nCp2OrIdx;     // where are the NoSprm(s)
+    sal_Int32 nSprmsLen;  // how many bytes for further Sprms / length of footnote
+    long nCpOfs;          // for Offset Header .. Footnote
+    bool bFirstSprm;      // for recognizing the first Sprm of a group
+    bool bRealLineEnd;    // false for Pap-Piece-end
     void Save( WW8PLCFxSave1& rSave ) const;
     void Restore( const WW8PLCFxSave1& rSave );
     //With nStartPos set to WW8_CP_MAX then in the case of a pap or chp
@@ -879,9 +879,9 @@ private:
     wwSprmParser maSprmParser;
     long nCpO;                      // Origin Cp -- the basis for nNewCp
 
-    WW8_CP nLineEnd;                // zeigt *hinter* das <CR>
+    WW8_CP nLineEnd;                // points *after* the <CR>
     long nLastWhereIdxCp;           // last result of WhereIdx()
-    sal_uInt16 nPLCF;                   // so viele PLCFe werden verwaltet
+    sal_uInt16 nPLCF;                   // this many PLCFs are managed
     ManTypes nManType;
     bool mbDoingDrawTextBox;        //Normally we adjust the end of attributes
                                     //so that the end of a paragraph occurs
@@ -914,8 +914,7 @@ public:
     ~WW8PLCFMan();
 
     /*
-        Where fragt, an welcher naechsten Position sich irgendein
-        Attr aendert...
+        Where asks on which following position any Attr changes...
     */
     WW8_CP Where() const;
 
@@ -930,10 +929,10 @@ public:
     WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(pAtnBkm->pPLCFx); }
     long GetCpOfs() const { return pChp->nCpOfs; }  // for Header/Footer...
 
-    /* fragt, ob *aktueller Absatz* einen Sprm diesen Typs hat */
+    /* asks, if *current paragraph* has an Sprm of this type */
     const sal_uInt8* HasParaSprm( sal_uInt16 nId ) const;
 
-    /* fragt, ob *aktueller Textrun* einen Sprm diesen Typs hat */
+    /* asks, if *current textrun* has an Sprm of this type */
     const sal_uInt8* HasCharSprm( sal_uInt16 nId ) const;
     bool HasCharSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult) const;
 
@@ -984,36 +983,36 @@ friend class SwWW8FltControlStack;
 private:
     WW8Fib* pWw8Fib;
     WW8PLCFx_Cp_FKP*  pChpPLCF;         // Character-Attrs
-    WW8PLCFx_Cp_FKP*  pPapPLCF;         // Para-Attrs
+    WW8PLCFx_Cp_FKP*  pPapPLCF;         // Paragraph-Attrs
     WW8PLCFx_SEPX*    pSepPLCF;         // Section-Attrs
     WW8PLCFx_SubDoc*  pFootnotePLCF;         // Footnotes
     WW8PLCFx_SubDoc*  pEdnPLCF;         // EndNotes
-    WW8PLCFx_SubDoc*  pAndPLCF;         // Anmerkungen
+    WW8PLCFx_SubDoc*  pAndPLCF;         // Comments
     WW8PLCFx_FLD*     pFieldPLCF;         // Fields in Main Text
     WW8PLCFx_FLD*     pFieldHdFtPLCF;     // Fields in Header / Footer
     WW8PLCFx_FLD*     pFieldTxbxPLCF;     // Fields in Textboxes in Main Text
     WW8PLCFx_FLD*     pFieldTxbxHdFtPLCF; // Fields in Textboxes in Header / Footer
     WW8PLCFx_FLD*     pFieldFootnotePLCF;      // Fields in Footnotes
     WW8PLCFx_FLD*     pFieldEdnPLCF;      // Fields in Endnotes
-    WW8PLCFx_FLD*     pFieldAndPLCF;      // Fields in Anmerkungen
+    WW8PLCFx_FLD*     pFieldAndPLCF;      // Fields in Comments
     WW8PLCFspecial*   pMainFdoa;        // Graphic Primitives in Main Text
     WW8PLCFspecial*   pHdFtFdoa;        // Graphic Primitives in Header / Footer
-    WW8PLCFspecial*   pMainTxbx;        // Textboxen in Main Text
-    WW8PLCFspecial*   pMainTxbxBkd;     // Break-Deskriptoren fuer diese
-    WW8PLCFspecial*   pHdFtTxbx;        // TextBoxen in Header / Footer
-    WW8PLCFspecial*   pHdFtTxbxBkd;     // Break-Deskriptoren fuer diese
-    WW8PLCFspecial*   pMagicTables;     // Break-Deskriptoren fuer diese
+    WW8PLCFspecial*   pMainTxbx;        // Textboxes in Main Text
+    WW8PLCFspecial*   pMainTxbxBkd;     // Break-Descriptors for them
+    WW8PLCFspecial*   pHdFtTxbx;        // TextBoxes in Header / Footer
+    WW8PLCFspecial*   pHdFtTxbxBkd;     // Break-Descriptors for previous
+    WW8PLCFspecial*   pMagicTables;     // Break-Descriptors for them
     WW8PLCFspecial*   pSubdocs;         // subdoc references in master document
     sal_uInt8*        pExtendedAtrds;   // Extended ATRDs
     WW8PLCFx_Book*    pBook;            // Bookmarks
     WW8PLCFx_AtnBook* pAtnBook;         // Annotationmarks
 
-    WW8PLCFpcd*         pPiecePLCF; // fuer FastSave ( Basis-PLCF ohne Iterator )
-    WW8PLCFpcd_Iter*    pPieceIter; // fuer FastSave ( Iterator dazu )
-    WW8PLCFx_PCD*       pPLCFx_PCD;     // dito
+    WW8PLCFpcd*         pPiecePLCF; // for FastSave ( Basis-PLCF without iterator )
+    WW8PLCFpcd_Iter*    pPieceIter; // for FastSave ( iterator for previous )
+    WW8PLCFx_PCD*       pPLCFx_PCD;     // ditto
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
-    sal_uInt8**         pPieceGrpprls;  // Attribute an Piece-Table
-    sal_uInt16          nPieceGrpprls;  // Anzahl davon
+    sal_uInt8**         pPieceGrpprls;  // attributes of Piece-Table
+    sal_uInt16          nPieceGrpprls;  // number of such attributes
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
     void DeletePieceTable();
@@ -1064,9 +1063,9 @@ public:
     */
     sal_uLong nFibError;
     /*
-        vom Ctor aus dem FIB gelesene Daten
-        (entspricht nur ungefaehr der tatsaechlichen Struktur
-         des Winword-FIB)
+        data read from FIB by Ctor
+        (corresponds only approximately to the real structure
+        of the Winword-FIB)
     */
     sal_uInt16 wIdent;      // 0x0 int magic number
     /*
@@ -1128,10 +1127,10 @@ public:
     WW8_FC fcMin;           // 0x18 file offset of first character of text
     WW8_FC fcMac;           // 0x1c file offset of last character of text + 1
 
-    // Einschub fuer WW8
+    // start of WW8 section
     sal_uInt16 csw;             // Count of fields in the array of "shorts"
 
-    // Marke: "rgsw" Beginning of the array of shorts
+    // marker: "rgsw" Beginning of the array of shorts
     sal_uInt16 wMagicCreated;   // unique number Identifying the File's creator
                                 // 0x6A62 is the creator ID for Word and is reserved.
                                 // Other creators should choose a different value.
@@ -1143,9 +1142,9 @@ public:
                       // of Word (i.e. FIB.fFarEast is on)
     sal_uInt16 clw; // Number of fields in the array of longs
 
-    // Ende des Einschubs fuer WW8
+    // end of WW8 section
 
-    // Marke: "rglw" Beginning of the array of longs
+    // Marker: "rglw" Beginning of the array of longs
     WW8_FC cbMac;           // 0x20 file offset of last byte written to file + 1.
 
     // WW8_FC u4[4];        // 0x24
@@ -1158,7 +1157,7 @@ public:
     WW8_CP ccpTxbx;         // 0x4c length of textbox subdocument text stream
     WW8_CP ccpHdrTxbx;      // 0x50 length of header textbox subdocument text stream
 
-    // Einschub fuer WW8
+    // start of WW8 section
     sal_Int32  pnFbpChpFirst; // when there was insufficient memory for Word to expand
                               // the PLCFbte at save time, the PLCFbte is written
                               // to the file in a linked list of 512-byte pieces
@@ -1181,9 +1180,9 @@ public:
     sal_Int32  fcIslandLim;     // ?
     sal_uInt16 cfclcb; // Number of fields in the array of FC/LCB pairs.
 
-    // Ende des Einschubs fuer WW8
+    // end of WW8 section
 
-    // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
+    // Marker: "rgfclcb" Beginning of array of FC/LCB pairs.
     WW8_FC fcStshfOrig;     // file offset of original allocation for STSH in table
                                                 // stream. During fast save Word will attempt to reuse
                                                 // this allocation if STSH is small enough to fit.
@@ -1310,29 +1309,29 @@ public:
     WW8_FC fcSttbfAtnbkmk;  // 0x180 file offset of the sttbf that records names of bookmarks in the annotation subdocument
     sal_Int32 lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
 
-    // Ende des Einschubs fuer WW67
+    // end of WW67 section
 
     WW8_FC fcPlcfdoaMom;    // 0x192 file offset of the  FDOA (drawn object) PLCF for main document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.
-                        // ab Ver8 unused
+                        // unused starting from Ver8
     sal_Int32 lcbPlcfdoaMom;    // 0x196 length in bytes of the FDOA PLCF of the main document
-                                                // ab Ver8 unused
+                                                // unused starting from Ver8
     WW8_FC fcPlcfdoaHdr;    // 0x19A file offset of the  FDOA (drawn object) PLCF for the header document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.
-                        // ab Ver8 unused
+                        // unused starting from Ver8
     sal_Int32 lcbPlcfdoaHdr;    // 0x19E length in bytes of the FDOA PLCF of the header document
-                                                // ab Ver8 unused
+                                                // unused starting from Ver8
 
     WW8_FC fcPlcfspaMom;        // offset in table stream of the FSPA PLCF for main document.
                                                 // == 0 if document has no office art objects
-                                                        // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
     sal_Int32 lcbPlcfspaMom;        // length in bytes of the FSPA PLCF of the main document
-                                                        // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
     WW8_FC fcPlcfspaHdr;        // offset in table stream of the FSPA PLCF for header document.
                                                 // == 0 if document has no office art objects
-                                                        // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
     sal_Int32 lcbPlcfspaHdr;        // length in bytes of the FSPA PLCF of the header document
-                                                        // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
 
     WW8_FC fcPlcfAtnbkf;    // 0x1B2 file offset of BKF (bookmark first) PLCF of the annotation subdocument
     sal_Int32 lcbPlcfAtnbkf;    // 0x1B6 length in bytes of BKF (bookmark first) PLCF of the annotation subdocument
@@ -1361,9 +1360,9 @@ public:
 
     WW8_FC fcDggInfo;           // offset in table stream of the office art object table data.
                                                 // The format of office art object table data is found in a separate document.
-                                                        // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
     sal_Int32 lcbDggInfo;           // length in bytes of the office art object table data
-                                                        // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
 
     WW8_FC fcSttbfRMark;        // 0x1fa offset to STTBF that records the author abbreviations...
     sal_Int32 lcbSttbfRMark;        // 0x1fe
@@ -1377,8 +1376,8 @@ public:
     sal_Int32 lcbPlcfwkb;       // 0x216
 
     WW8_FC fcPlcfspl;       // offset in table stream of PLCF (of SPLS structures) that records spell check state
-                                                        // war in Ver67 nur leere Reserve
-    sal_Int32 lcbPlcfspl;                   // war in Ver67 nur leere Reserve
+                                                        // was empty reserve in Ver67
+    sal_Int32 lcbPlcfspl;                   // was empty reserve in Ver67
 
     WW8_FC fcPlcftxbxText;   // 0x222 ...PLCF of beginning CP in the text box subdoc
     sal_Int32 lcbPlcftxbxText;   // 0x226
@@ -1397,18 +1396,18 @@ public:
     sal_Int32 lcbSttbFnm;       // 0x02de length
 
     /*
-        spezielle Listenverwaltung fuer WW8
+        special list handling for WW8
     */
     WW8_FC fcPlcfLst;       // 0x02e2 offset in the table stream of list format information.
     sal_Int32 lcbPlcfLst;       // 0x02e6 length
     WW8_FC fcPlfLfo;        // 0x02ea offset in the table stream of list format override information.
     sal_Int32 lcbPlfLfo;        // 0x02ee length
     /*
-        spezielle Break-Verwaltung fuer Text-Box-Stories in WW8
+        special Break handling for text-box-stories in WW8
     */
-    WW8_FC fcPlcftxbxBkd;   // 0x02f2 PLCF fuer TextBox-Break-Deskriptoren im Maintext
+    WW8_FC fcPlcftxbxBkd;   // 0x02f2 PLCF for TextBox-Break-descriptors in the Maintext
     sal_Int32 lcbPlcftxbxBkd;   // 0x02f6
-    WW8_FC fcPlcfHdrtxbxBkd;// 0x02fa PLCF fuer TextBox-Break-Deskriptoren im Header-/Footer-Bereich
+    WW8_FC fcPlcfHdrtxbxBkd;// 0x02fa PLCF for TextBox-Break-descriptors in the Header-/Footer- area
     sal_Int32 lcbPlcfHdrtxbxBkd;// 0x02fe
 
     // 0x302 - 372 == ignore
@@ -1430,8 +1429,8 @@ public:
     sal_uInt32 lcbHplxsdr;
 
     /*
-        General-Varaiblen, die fuer Ver67 und Ver8 verwendet werden,
-        obwohl sie in der jeweiligen DATEI verschiedene Groesse haben:
+        general variables that were used for Ver67 and Ver8,
+        even though they had different sizes in the corresponding files:
     */
     sal_Int32 pnChpFirst;
     sal_Int32 pnPapFirst;
@@ -1443,11 +1442,11 @@ public:
     */
     sal_uInt16 nFib_actual; // 0x05bc #i56856#
     /*
-        nun wird lediglich noch ein Ctor benoetigt
+        now we only need a Ctor
     */
     WW8Fib( SvStream& rStrm, sal_uInt8 nWantedVersion,sal_uInt32 nOffset=0 );
 
-    /* leider falsch, man braucht auch noch einen fuer den Export */
+    /* unfortunately incorrect, you still need one for the export */
     WW8Fib( sal_uInt8 nVersion = 6, bool bDot = false );
     bool WriteHeader(SvStream& rStrm);
     bool Write(SvStream& rStrm);
@@ -1617,10 +1616,10 @@ public:
     bool        fRotateFontW6 : 1;
     bool        iGutterPos : 1 ;
 
-    // hier sollte bei nFib < 103   Schluss sein, sonst ist Datei fehlerhaft!
+    // this should be the end for nFib < 103, otherwise the file is broken!
 
     /*
-        bei nFib >= 103 gehts weiter:
+        for nFib >= 103 it continues:
     */
     bool       fNoTabForInd : 1;                      // see above in compatibility options
     bool       fNoSpaceRaiseLower : 1;                // see above
@@ -1656,10 +1655,10 @@ public:
     bool       fCompatibilityOptions_Unknown1_31 : 1; // #i78591#
     bool       fUsePrinterMetrics : 1;                //The magic option
 
-    // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
+    // this should be the end for nFib <= 105, otherwise the file is broken!
 
     /*
-        bei nFib > 105 gehts weiter:
+        for nFib > 105 it continues:
     */
     sal_Int16   adt;                  // Autoformat Document Type:
                                       // 0 for normal.
