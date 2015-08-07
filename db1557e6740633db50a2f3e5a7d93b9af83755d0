@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_c67396b3",
+        "filename": "compilerplugins/clang/defaultparams.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-08-07T12:46:17Z",
+      "side": 1,
+      "message": "variadic functions",
+      "revId": "db1557e6740633db50a2f3e5a7d93b9af83755d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
