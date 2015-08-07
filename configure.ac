@@ -3927,6 +3927,10 @@ if test -n "$ENABLE_DEBUG"; then
         ENABLE_DEBUGINFO_FOR=all
         AC_MSG_RESULT([no, for all])
     fi
+else
+    if test -n "$enable_selective_debuginfo"; then
+        AC_MSG_ERROR([--enable-selective-debuginfo must be used together with either --enable-debug or --enable-dbgutil])
+    fi
 fi
 AC_SUBST(ENABLE_DEBUGINFO_FOR)
 
