@@ -53,6 +53,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <unordered_map>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -71,7 +72,6 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/urlfilter.hxx>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -228,88 +228,17 @@ public:
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
 };
 
-// class HashedEntry --------------------------------------------------
-
-class HashedEntry
-{   // just a special String which can be compared on equality much faster
-protected:
-    OUString                maName;
-    sal_Int32               mnHashCode;
-public:
-    inline                  HashedEntry( const OUString& rName );
-    inline                  HashedEntry( const INetURLObject& rURL );
-    virtual                 ~HashedEntry();
-
-    inline bool operator    ==( const HashedEntry& rRef ) const;
-    inline bool operator    !=( const HashedEntry& rRef ) const;
-    inline bool operator    <( const HashedEntry& rRef ) const;
-};
-
-inline HashedEntry::HashedEntry( const OUString& rName ): maName( rName ), mnHashCode( rName.hashCode() )
-{
-}
-
-inline HashedEntry::HashedEntry( const INetURLObject& rURL ):
-    maName( rURL.GetMainURL( INetURLObject::NO_DECODE ) ),
-    mnHashCode( maName.hashCode() )
-{
-}
-
-HashedEntry::~HashedEntry()
-{
-}
-
-inline bool HashedEntry::operator ==( const HashedEntry& rRef ) const
-{
-    return mnHashCode == rRef.mnHashCode && maName == rRef.maName;
-}
-
-inline bool HashedEntry::operator !=( const HashedEntry& rRef ) const
-{
-    return mnHashCode != rRef.mnHashCode || maName != rRef.maName;
-}
-
-inline bool HashedEntry::operator <( const HashedEntry& rRef ) const
-{
-    if( mnHashCode == rRef.mnHashCode )
-        return maName.reverseCompareTo( rRef.maName ) < 0;
-    else
-       return mnHashCode < rRef.mnHashCode;
-}
-
-// class NameTranslationEntry -----------------------------------------
-
-class NameTranslationEntry : public HashedEntry
-{// a fast comparable String and another String, which is used to get a substitution for a given String
-protected:
-    OUString                maTranslatedName;
-public:
-    inline                  NameTranslationEntry( const OString& rOriginalName, const OString& rTranslatedName );
-
-    inline const OUString&  GetTranslation() const;
-};
-
-inline NameTranslationEntry::NameTranslationEntry( const OString& rOrg, const OString& rTrans )
-    : HashedEntry(OStringToOUString(rOrg, RTL_TEXTENCODING_ASCII_US))
-    , maTranslatedName(OStringToOUString(rTrans, RTL_TEXTENCODING_UTF8))
-{
-}
-
-inline const OUString& NameTranslationEntry::GetTranslation() const
-{
-    return maTranslatedName;
-}
-
 // class NameTranslationList -----------------------------------------
 // provides a list of _unique_ Entries
-class NameTranslationList : protected boost::ptr_set<HashedEntry>
+class NameTranslationList
 {   // contains a list of substitutes of strings for a given folder (as URL)
     // explanation of the circumstances see in remarks for Init();
 protected:
     INetURLObject               maTransFile;    // URL of file with translation entries
-    HashedEntry                 maHashedURL;    // for future purposes when dealing with a set of cached
-                                                //  NameTranslationLists
+    /// for future purposes when dealing with a set of cached NameTranslationLists
+    OUString m_HashedURL;
 private:
+    std::unordered_map<OUString, OUString, OUStringHash> m_Translation;
     const OUString              maTransFileName;
     void                        Init();         // reads the translation file and fills the (internal) list
 
@@ -318,14 +247,11 @@ public:
                                             // rBaseURL: path to folder for which the translation of the entries
                                             //  should be done
 
-    using boost::ptr_set<HashedEntry>::operator==;
-    using boost::ptr_set<HashedEntry>::operator!=;
-    inline bool operator        !=( const HashedEntry& rRef ) const;
-
     const OUString*             Translate( const OUString& rName ) const;
                                             // returns NULL, if rName can't be found
 
     inline const OUString&      GetTransTableFileName() const;
+    OUString const& GetHashedURL() { return m_HashedURL; }
                                             // returns the name for the file, which contains the translation strings
 };
 
@@ -356,7 +282,12 @@ void NameTranslationList::Init()
             sal_uInt16          nKeyCnt = aConfig.GetKeyCount();
 
             for( sal_uInt16 nCnt = 0 ; nCnt < nKeyCnt ; ++nCnt )
-                insert( new NameTranslationEntry( aConfig.GetKeyName( nCnt ), aConfig.ReadKey( nCnt ) ) );
+            {
+                m_Translation.insert(std::make_pair(
+                    OStringToOUString(aConfig.GetKeyName(nCnt), RTL_TEXTENCODING_ASCII_US),
+                    OStringToOUString(aConfig.ReadKey(nCnt), RTL_TEXTENCODING_UTF8)
+                    ));
+            }
         }
     }
     catch( Exception const & ) {}
@@ -364,29 +295,17 @@ void NameTranslationList::Init()
 
 NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     maTransFile( rBaseURL ),
-    maHashedURL( rBaseURL ),
+    m_HashedURL(rBaseURL.GetMainURL(INetURLObject::NO_DECODE)),
     maTransFileName( OUString(".nametranslation.table") )
 {
     maTransFile.insertName( maTransFileName );
     Init();
 }
 
-inline bool NameTranslationList::operator !=( const HashedEntry& rRef ) const
-{
-    return maHashedURL != rRef;
-}
-
 const OUString* NameTranslationList::Translate( const OUString& rName ) const
 {
-    HashedEntry  aRef( rName );
-    const NameTranslationEntry* pSearch = NULL;
-    for( const_iterator it = begin(); it != end(); ++it )
-        if( (*it) == aRef )
-        {
-            pSearch = static_cast<const NameTranslationEntry*>(&*it);
-        }
-
-    return pSearch ? &pSearch->GetTranslation() : NULL;
+    auto const iter(m_Translation.find(rName));
+    return (iter != m_Translation.end()) ? &iter->second : nullptr;
 }
 
 // class NameTranslator_Impl ------------------------------------------
@@ -1525,11 +1444,9 @@ NameTranslator_Impl::~NameTranslator_Impl()
 
 void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 {
-    HashedEntry aActFolder( rActualFolder );
-
     if( mpActFolder )
     {
-        if( *mpActFolder != aActFolder )
+        if (mpActFolder->GetHashedURL() != rActualFolder.GetMainURL(INetURLObject::NO_DECODE))
         {
             delete mpActFolder;
             mpActFolder = new NameTranslationList( rActualFolder );
