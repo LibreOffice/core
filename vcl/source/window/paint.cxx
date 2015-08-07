@@ -44,10 +44,14 @@
 
 PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
     : mpFrameData(pFrameData),
+    m_pWindow(pWindow),
     mbBackground(false),
     mnOutOffX(0),
     mnOutOffY(0)
 {
+    if (!pFrameData->mpBuffer)
+        return;
+
     // transfer various settings
     // FIXME: this must disappear as we move to RenderContext only,
     // the painting must become state-less, so that no actual
@@ -102,6 +106,34 @@ PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWind
 
 PaintBufferGuard::~PaintBufferGuard()
 {
+    if (!mpFrameData->mpBuffer)
+        return;
+
+    if (!m_aPaintRect.IsEmpty())
+    {
+        // copy the buffer content to the actual window
+        // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
+        // painting directly instead of using Invalidate()
+        // [ie. everything you can see was painted directly to the
+        // window either above or in eg. an event handler]
+        if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
+        {
+            // Make sure that the +1 value GetSize() adds to the size is in pixels.
+            Size aPaintRectSize;
+            if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
+            {
+                aPaintRectSize = m_aPaintRect.GetSize();
+            }
+            else
+            {
+                Rectangle aRectanglePixel = m_pWindow->LogicToPixel(m_aPaintRect);
+                aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
+            }
+
+            m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *mpFrameData->mpBuffer.get());
+        }
+    }
+
     // Restore buffer state.
     mpFrameData->mpBuffer->SetOutOffXPixel(mnOutOffX);
     mpFrameData->mpBuffer->SetOutOffYPixel(mnOutOffY);
@@ -112,6 +144,11 @@ PaintBufferGuard::~PaintBufferGuard()
         mpFrameData->mpBuffer->SetBackground(maBackground);
     else
         mpFrameData->mpBuffer->SetBackground();
+}
+
+void PaintBufferGuard::SetPaintRect(const Rectangle& rRectangle)
+{
+    m_aPaintRect = rRectangle;
 }
 
 class PaintHelper
@@ -192,28 +229,8 @@ void PaintHelper::PaintBuffer()
     assert(pFrameData->mbInBufferedPaint);
     assert(m_bStartedBufferedPaint);
 
-    // copy the buffer content to the actual window
-    // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
-    // painting directly instead of using Invalidate()
-    // [ie. everything you can see was painted directly to the
-    // window either above or in eg. an event handler]
-    if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
-    {
-        // Make sure that the +1 value GetSize() adds to the size is in pixels.
-        Size aPaintRectSize;
-        if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
-        {
-            aPaintRectSize = m_aPaintRect.GetSize();
-        }
-        else
-        {
-            Rectangle aRectanglePixel = m_pWindow->LogicToPixel(m_aPaintRect);
-            aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
-        }
-
-        PaintBufferGuard g(pFrameData, m_pWindow);
-        m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *pFrameData->mpBuffer.get());
-    }
+    PaintBufferGuard aGuard(pFrameData, m_pWindow);
+    aGuard.SetPaintRect(m_aPaintRect);
 }
 
 void PaintHelper::DoPaint(const vcl::Region* pRegion)

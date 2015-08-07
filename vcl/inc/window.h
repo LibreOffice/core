@@ -386,14 +386,18 @@ public:
 class PaintBufferGuard
 {
     ImplFrameData* mpFrameData;
+    VclPtr<vcl::Window> m_pWindow;
     bool mbBackground;
     Wallpaper maBackground;
     AllSettings maSettings;
     long mnOutOffX;
     long mnOutOffY;
+    Rectangle m_aPaintRect;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
     ~PaintBufferGuard();
+    /// If this is called, then the dtor will also copy rRectangle to the window from the buffer, before restoring the state.
+    void SetPaintRect(const Rectangle& rRectangle);
 };
 
 // helper methods
