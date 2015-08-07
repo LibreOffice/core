@@ -117,7 +117,7 @@ struct TabDlg_Impl
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl  aData;
 
-    TabDlg_Impl( sal_uInt8 nCnt ) :
+    explicit TabDlg_Impl( sal_uInt8 nCnt ) :
 
         bModified       ( false ),
         bModal          ( true ),

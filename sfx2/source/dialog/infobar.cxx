@@ -55,7 +55,7 @@ void lclDetermineLightDarkColor(BColor& rLightColor, BColor& rDarkColor)
 class SfxCloseButton : public PushButton
 {
 public:
-    SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
+    explicit SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
     {}
 
     virtual ~SfxCloseButton() {}

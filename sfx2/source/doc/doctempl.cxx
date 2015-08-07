@@ -246,7 +246,7 @@ class DocTemplLocker_Impl
 {
     SfxDocTemplate_Impl& m_aDocTempl;
 public:
-    DocTemplLocker_Impl( SfxDocTemplate_Impl& aDocTempl )
+    explicit DocTemplLocker_Impl( SfxDocTemplate_Impl& aDocTempl )
     : m_aDocTempl( aDocTempl )
     {
         m_aDocTempl.IncrementLock();

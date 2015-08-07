@@ -34,7 +34,7 @@ class TestZipImpl
     ZipFile zipFile;
     vector<string> expectedContents;
  public:
-    TestZipImpl(StreamInterface *stream);
+    explicit TestZipImpl(StreamInterface *stream);
     ~TestZipImpl();
     bool test_directory();
     bool test_hasContentCaseInSensitive();

@@ -25,7 +25,7 @@ namespace
     {
         GError* m_pError;
         public:
-            GErrorWrapper(GError* pError) : m_pError(pError) {}
+            explicit GErrorWrapper(GError* pError) : m_pError(pError) {}
             ~GErrorWrapper()
             {
                 if(!m_pError)

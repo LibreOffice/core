@@ -261,7 +261,7 @@ class MetadatableUndo : public Metadatable
     /// as determined by the stream of the source in original document
     const bool m_isInContent;
 public:
-    MetadatableUndo(const bool i_isInContent)
+    explicit MetadatableUndo(const bool i_isInContent)
         : m_isInContent(i_isInContent) { }
     virtual ::sfx2::XmlIdRegistry& GetRegistry() SAL_OVERRIDE
     {
@@ -286,7 +286,7 @@ class MetadatableClipboard : public Metadatable
     /// as determined by the stream of the source in original document
     const bool m_isInContent;
 public:
-    MetadatableClipboard(const bool i_isInContent)
+    explicit MetadatableClipboard(const bool i_isInContent)
         : m_isInContent(i_isInContent) { }
     virtual ::sfx2::XmlIdRegistry& GetRegistry() SAL_OVERRIDE
     {

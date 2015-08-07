@@ -154,11 +154,11 @@ class iso_lang_identifier
 public:
     iso_lang_identifier() {};
 
-    iso_lang_identifier(const OString& str) :
+    explicit iso_lang_identifier(const OString& str) :
         maBcp47(str)
     { }
 
-    iso_lang_identifier(const std::string& str) :
+    explicit iso_lang_identifier(const std::string& str) :
         maBcp47(str.c_str())
     { }
 
@@ -477,7 +477,7 @@ void inflate_rc_template_to_file(
         string_container_t::const_iterator rct_iter_end = rctmpl.end();
 
         if (!rctmpl.empty())
-            start_language_section(oi, iter->first);
+            start_language_section(oi, iso_lang_identifier(iter->first));
 
         for ( /**/ ;rct_iter != rct_iter_end; ++rct_iter)
         {

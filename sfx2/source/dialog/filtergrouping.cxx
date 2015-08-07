@@ -413,7 +413,7 @@ namespace sfx2
     {
         OUString& _rToBeExtended;
 
-        CheckAppendSingleWildcard( OUString& _rBase ) : _rToBeExtended( _rBase ) { }
+        explicit CheckAppendSingleWildcard( OUString& _rBase ) : _rToBeExtended( _rBase ) { }
 
         void operator() ( const OUString& _rWC )
         {
@@ -452,7 +452,7 @@ namespace sfx2
         ::std::vector< OUString > aWildCards;
 
     public:
-        AppendWildcardToDescriptor( const OUString& _rWildCard );
+        explicit AppendWildcardToDescriptor( const OUString& _rWildCard );
 
         // operate on a single class entry
         void operator() ( const FilterGroupEntryReferrer::value_type& _rClassReference )
@@ -533,7 +533,7 @@ namespace sfx2
     struct FindGroupEntry : public ::std::unary_function< MapGroupEntry2GroupEntry::value_type, sal_Bool >
     {
         FilterGroupEntryReferrer::mapped_type aLookingFor;
-        FindGroupEntry( FilterGroupEntryReferrer::mapped_type _rLookingFor ) : aLookingFor( _rLookingFor ) { }
+        explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type _rLookingFor ) : aLookingFor( _rLookingFor ) { }
 
         bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
@@ -556,7 +556,7 @@ namespace sfx2
     struct CopyNonEmptyFilter : public ::std::unary_function< FilterDescriptor, void >
     {
         FilterGroup& rTarget;
-        CopyNonEmptyFilter( FilterGroup& _rTarget ) :rTarget( _rTarget ) { }
+        explicit CopyNonEmptyFilter( FilterGroup& _rTarget ) :rTarget( _rTarget ) { }
 
         void operator() ( const FilterDescriptor& _rFilter )
         {

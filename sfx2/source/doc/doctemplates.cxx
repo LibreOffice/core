@@ -162,7 +162,7 @@ class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironm
     uno::Reference< ucb::XProgressHandler >                   m_xProgressHandler;
 
 public:
-    TplTaskEnvironment( const uno::Reference< task::XInteractionHandler>& rxInteractionHandler )
+    explicit TplTaskEnvironment( const uno::Reference< task::XInteractionHandler>& rxInteractionHandler )
                                 : m_xInteractionHandler( rxInteractionHandler )
                             {}
 
@@ -276,31 +276,31 @@ class SfxDocTplService_Impl
     //which implies neither it or its contents can be removed
     bool                        isInternalTemplateDir(const OUString& rURL) const;
 public:
-                                SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext );
+    explicit                    SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext );
                                 ~SfxDocTplService_Impl();
 
-    bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
+    bool                        init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
     Content                     getContent() const { return maRootContent; }
 
     void                        setLocale( const lang::Locale & rLocale );
     lang::Locale                      getLocale();
 
-    bool                    storeTemplate( const OUString& rGroupName,
+    bool                        storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
                                                const uno::Reference< frame::XStorable >& rStorable );
 
-    bool                    addTemplate( const OUString& rGroupName,
+    bool                        addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
                                              const OUString& rSourceURL );
-    bool                    removeTemplate( const OUString& rGroupName,
+    bool                        removeTemplate( const OUString& rGroupName,
                                                 const OUString& rTemplateName );
-    bool                    renameTemplate( const OUString& rGroupName,
+    bool                        renameTemplate( const OUString& rGroupName,
                                                 const OUString& rOldName,
                                                 const OUString& rNewName );
 
-    bool                    addGroup( const OUString& rGroupName );
-    bool                    removeGroup( const OUString& rGroupName );
-    bool                    renameGroup( const OUString& rOldName,
+    bool                        addGroup( const OUString& rGroupName );
+    bool                        removeGroup( const OUString& rGroupName );
+    bool                        renameGroup( const OUString& rOldName,
                                              const OUString& rNewName );
 
     void                        update( bool bUpdateNow );
@@ -316,8 +316,8 @@ private:
     SfxDocTplService_Impl   *mpDocTemplates;
 
 public:
-                             Updater_Impl( SfxDocTplService_Impl* pTemplates );
-                            virtual ~Updater_Impl();
+    explicit                Updater_Impl( SfxDocTplService_Impl* pTemplates );
+    virtual                 ~Updater_Impl();
 
     virtual void SAL_CALL   run() SAL_OVERRIDE;
     virtual void SAL_CALL   onTerminated() SAL_OVERRIDE;
@@ -338,17 +338,17 @@ class DocTemplates_EntryData_Impl
     bool            mbUpdateLink    : 1;
 
 public:
-                        DocTemplates_EntryData_Impl( const OUString& rTitle );
+   explicit             DocTemplates_EntryData_Impl( const OUString& rTitle );
 
     void                setInUse() { mbInUse = true; }
     void                setHierarchy( bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
     void                setUpdateLink( bool bUpdateLink ) { mbUpdateLink = bUpdateLink; }
     void                setUpdateType( bool bUpdateType ) { mbUpdateType = bUpdateType; }
 
-    bool            getInUse() const { return mbInUse; }
-    bool            getInHierarchy() const { return mbInHierarchy; }
-    bool            getUpdateLink() const { return mbUpdateLink; }
-    bool            getUpdateType() const { return mbUpdateType; }
+    bool                getInUse() const { return mbInUse; }
+    bool                getInHierarchy() const { return mbInHierarchy; }
+    bool                getUpdateLink() const { return mbUpdateLink; }
+    bool                getUpdateType() const { return mbUpdateType; }
 
     const OUString&     getHierarchyURL() const { return maHierarchyURL; }
     const OUString&     getTargetURL() const { return maTargetURL; }
@@ -372,7 +372,7 @@ class GroupData_Impl
     bool            mbInHierarchy   : 1;
 
 public:
-                        GroupData_Impl( const OUString& rTitle );
+    explicit            GroupData_Impl( const OUString& rTitle );
                         ~GroupData_Impl();
 
     void                setInUse() { mbInUse = true; }
@@ -2210,7 +2210,7 @@ class SfxDocTplService: public ::cppu::WeakImplHelper3< css::lang::XLocalizable,
     SfxDocTplService_Impl       *pImp;
 
 public:
-    SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
+    explicit SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
     virtual ~SfxDocTplService();
 
     virtual OUString SAL_CALL getImplementationName()

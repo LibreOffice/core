@@ -363,7 +363,8 @@ class CompatWriterDocPropsImpl : public CompatWriterDocPropsImpl_BASE
 protected:
     virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) SAL_OVERRIDE { return new CompatWriterDocPropsImpl( context ); };
 public:
-    CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
+    explicit CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
+
 // XCompatWriterDocPropsImpl
     virtual OUString SAL_CALL getManager() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return msManager; }
     virtual void SAL_CALL setManager( const OUString& _manager ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { msManager = _manager; }

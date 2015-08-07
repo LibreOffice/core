@@ -321,7 +321,7 @@ void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/
 class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper1< frame::XFrameActionListener >
 {
 public:
-    IMPL_SfxBaseController_ListenerHelper(  SfxBaseController*  pController ) ;
+    explicit IMPL_SfxBaseController_ListenerHelper(  SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_ListenerHelper() ;
     virtual void SAL_CALL frameAction( const frame::FrameActionEvent& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE ;
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE ;
@@ -335,7 +335,7 @@ private:
 class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper1< util::XCloseListener >
 {
 public:
-    IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;
+    explicit IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_CloseListenerHelper() ;
     virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
         throw (RuntimeException, util::CloseVetoException, std::exception) SAL_OVERRIDE ;

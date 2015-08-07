@@ -79,7 +79,7 @@ namespace sfx2
         IUndoManager*                       pUndoManager;
         ::framework::UndoManagerHelper      aUndoHelper;
 
-        DocumentUndoManager_Impl( DocumentUndoManager& i_antiImpl )
+        explicit DocumentUndoManager_Impl( DocumentUndoManager& i_antiImpl )
             :rAntiImpl( i_antiImpl )
             ,pUndoManager( impl_retrieveUndoManager( i_antiImpl.getBaseModel() ) )
                 // do this *before* the construction of aUndoHelper (which actually means: put pUndoManager before
@@ -190,7 +190,7 @@ namespace sfx2
                             ,public ::boost::noncopyable
     {
     public:
-        UndoManagerGuard( DocumentUndoManager& i_undoManager )
+        explicit UndoManagerGuard( DocumentUndoManager& i_undoManager )
             :m_guard( i_undoManager )
             ,m_solarMutexFacade()
         {

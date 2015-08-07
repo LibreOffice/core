@@ -97,7 +97,7 @@ friend class SfxSplitWindow;
     sal_uInt16              nState;
 
 public:
-                        SfxEmptySplitWin_Impl( SfxSplitWindow *pParent )
+   explicit             SfxEmptySplitWin_Impl( SfxSplitWindow *pParent )
                             : SplitWindow( pParent->GetParent(), WinBits( WB_BORDER | WB_3DLOOK ) )
                             , pOwner( pParent )
                             , bFadeIn( false )

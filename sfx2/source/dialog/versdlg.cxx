@@ -69,8 +69,8 @@ class SfxVersionTableDtor: private boost::noncopyable
 private:
     std::vector< SfxVersionInfo* >  aTableList;
 public:
-                            SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
-                            SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
+    explicit                SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
+    explicit                SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
                             ~SfxVersionTableDtor()
                             { DelDtor(); }
 

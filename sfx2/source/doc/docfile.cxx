@@ -237,7 +237,7 @@ public:
 
     util::DateTime m_aDateTime;
 
-    SfxMedium_Impl( SfxMedium* pAntiImplP );
+    explicit SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
 
     OUString getFilterMimeType()

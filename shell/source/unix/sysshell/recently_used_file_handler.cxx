@@ -215,7 +215,7 @@ namespace /* private */ {
         public i_xml_parser_event_handler, private boost::noncopyable
     {
     public:
-        recently_used_file_filter(recently_used_item_list_t& item_list) :
+        explicit recently_used_file_filter(recently_used_item_list_t& item_list) :
             item_(NULL),
             item_list_(item_list)
         {
@@ -370,7 +370,7 @@ namespace /* private */ {
     class find_item_predicate
     {
     public:
-        find_item_predicate(const string_t& uri) :
+        explicit find_item_predicate(const string_t& uri) :
             uri_(uri)
         {}
 
@@ -442,7 +442,7 @@ namespace /* private */ {
 
     struct cleanup_guard
     {
-        cleanup_guard(recently_used_item_list_t& item_list) :
+        explicit cleanup_guard(recently_used_item_list_t& item_list) :
             item_list_(item_list)
         {}
         ~cleanup_guard()

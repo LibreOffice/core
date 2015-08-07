@@ -65,7 +65,7 @@ public:
     DECL_LINK( OptionsChanged_Impl, void* );
     DECL_LINK( SettingsChanged_Impl, VclWindowEvent* );
 
-    SfxImageManager_Impl(SfxModule& rModule);
+    explicit SfxImageManager_Impl(SfxModule& rModule);
     ~SfxImageManager_Impl();
 };
 

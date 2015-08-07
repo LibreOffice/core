@@ -31,19 +31,17 @@ namespace sfx2
 
     class TSortedFilterList
     {
-        private:
+    private:
+        ::std::vector< OUString > m_lFilters;
+        sal_Int32 m_nIterator;
 
-            ::std::vector< OUString > m_lFilters;
-            sal_Int32 m_nIterator;
+    public:
+        explicit TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList);
+        const SfxFilter* First();
+        const SfxFilter* Next();
 
-        public:
-
-            TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList);
-            const SfxFilter* First();
-            const SfxFilter* Next();
-
-        private:
-            const SfxFilter* impl_getFilter(sal_Int32 nIndex);
+    private:
+        const SfxFilter* impl_getFilter(sal_Int32 nIndex);
     };
 
 

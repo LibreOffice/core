@@ -77,7 +77,7 @@ namespace sfx2
         bool                    m_bMacroDisabledMessageShown;
         bool                    m_bDocMacroDisabledMessageShown;
 
-        DocumentMacroMode_Data( IMacroDocumentAccess& rDocumentAccess )
+        explicit DocumentMacroMode_Data( IMacroDocumentAccess& rDocumentAccess )
             :m_rDocumentAccess( rDocumentAccess )
             ,m_bMacroDisabledMessageShown( false )
             ,m_bDocMacroDisabledMessageShown( false )

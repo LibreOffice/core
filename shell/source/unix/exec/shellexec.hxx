@@ -39,7 +39,7 @@ class ShellExec : public ::cppu::WeakImplHelper2< com::sun::star::system::XSyste
     m_xContext;
 
 public:
-    ShellExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
+    explicit ShellExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
 
 
     // XSystemShellExecute

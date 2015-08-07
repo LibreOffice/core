@@ -283,7 +283,7 @@ namespace sfx2
         {
         }
 
-        CustomPanelUIElement( const Reference< XUIElement >& i_rUIElement )
+        explicit CustomPanelUIElement( const Reference< XUIElement >& i_rUIElement )
             :m_xUIElement( i_rUIElement )
             ,m_xToolPanel( i_rUIElement->getRealInterface(), UNO_QUERY_THROW )
             ,m_xPanelWindow( m_xToolPanel->getWindow(), UNO_SET_THROW )
@@ -807,7 +807,7 @@ namespace sfx2
         ::svt::PToolPanel   pPanel;
         bool                bHidden;
 
-        PanelDescriptor( const ::svt::PToolPanel& i_rPanel )
+        explicit PanelDescriptor( const ::svt::PToolPanel& i_rPanel )
             :pPanel( i_rPanel )
             ,bHidden( false )
         {
