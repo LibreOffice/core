@@ -97,8 +97,15 @@ class GtkTransferable : public ::cppu::WeakImplHelper1 <
     css::datatransfer::XTransferable >
 {
 private:
+    GdkAtom m_nSelection;
     std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
 public:
+
+    GtkTransferable(GdkAtom nSelection)
+        : m_nSelection(nSelection)
+    {
+    }
+
     /*
      * XTransferable
      */
@@ -109,7 +116,7 @@ public:
               css::uno::RuntimeException, std::exception
               ) SAL_OVERRIDE
     {
-        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+        GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
         if (rFlavor.MimeType == "text/plain;charset=utf-16")
         {
             OUString aStr;
@@ -142,7 +149,7 @@ public:
     {
         std::vector<css::datatransfer::DataFlavor> aVector;
 
-        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+        GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
 
         GdkAtom *targets;
         gint n_targets;
@@ -270,6 +277,7 @@ class VclGtkClipboard :
         datatransfer::clipboard::XSystemClipboard,
         XServiceInfo>
 {
+    GdkAtom                                                  m_nSelection;
     osl::Mutex                                               m_aMutex;
     ClipboardOwner*                                          m_pOwner;
     gulong                                                   m_nOwnerChangedSignalId;
@@ -281,7 +289,7 @@ class VclGtkClipboard :
 
 public:
 
-    VclGtkClipboard();
+    VclGtkClipboard(GdkAtom nSelection);
     virtual ~VclGtkClipboard();
 
     /*
@@ -366,7 +374,7 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() thr
 {
     if (!m_aContents.is())
     {
-        m_aContents = new GtkTransferable();
+        m_aContents = new GtkTransferable(m_nSelection);
     }
     return m_aContents;
 }
@@ -489,11 +497,12 @@ namespace
     }
 }
 
-VclGtkClipboard::VclGtkClipboard()
+VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard, XServiceInfo>
         (m_aMutex)
+    , m_nSelection(nSelection)
 {
-    GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
                                                G_CALLBACK(handle_owner_change), this);
     m_pOwner = CLIPBOARD_OWNER(g_object_new(CLIPBOARD_OWNER_OBJECT, NULL));
@@ -502,7 +511,7 @@ VclGtkClipboard::VclGtkClipboard()
 
 VclGtkClipboard::~VclGtkClipboard()
 {
-    GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
     g_object_unref(m_pOwner);
 }
@@ -562,7 +571,7 @@ void VclGtkClipboard::setContents(
 
         //if there was a previous gtk_clipboard_set_with_data call then
         //ClipboardClearFunc will be called now
-        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+        GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
         //use with_owner with m_pOwner so we can distinguish in handle_owner_change
         //if we have gained or lost ownership of the clipboard
         gtk_clipboard_set_with_owner(clipboard, aGtkTargets.data(), aGtkTargets.size(),
@@ -618,15 +627,9 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
             css::uno::Reference<css::uno::XInterface>(), -1);
     }
 
-    //see window.cxx HAVE_FEATURE_X11 hack, for now just support the
-    //system clipboard and not the primary selection
-    if (sel != "CLIPBOARD")
-    {
-        Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
-        return xContext->getServiceManager()->createInstanceWithContext("com.sun.star.datatransfer.clipboard.GenericClipboard", xContext);
-    }
+    GdkAtom nSelection = (sel == "CLIPBOARD") ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY;
 
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new VclGtkClipboard()) );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nSelection)) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
