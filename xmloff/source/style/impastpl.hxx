@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <set>
+#include <memory>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -131,11 +132,19 @@ public:
 
 class SvXMLAutoStylePoolP_Impl
 {
+    struct XMLAutoStyleFamily_Less
+    {
+        bool operator()(std::unique_ptr<XMLAutoStyleFamily> const& lhs,
+                        std::unique_ptr<XMLAutoStyleFamily> const& rhs) const
+        {
+            return (*lhs) < (*rhs);
+        }
+    };
     // A set that finds and sorts based only on mnFamily
-    typedef boost::ptr_set<XMLAutoStyleFamily> FamilySetType;
+    typedef std::set<std::unique_ptr<XMLAutoStyleFamily>, XMLAutoStyleFamily_Less> FamilySetType;
 
     SvXMLExport& rExport;
-    FamilySetType maFamilySet;
+    FamilySetType m_FamilySet;
 
 public:
 

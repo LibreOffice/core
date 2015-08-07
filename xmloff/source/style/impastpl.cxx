@@ -419,43 +419,43 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    XMLAutoStyleFamily aTemporary( nFamily );
-    FamilySetType::iterator aFind = maFamilySet.find(aTemporary);
-    if( aFind != maFamilySet.end() )
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    if (iter != m_FamilySet.end())
     {
         // FIXME: do we really intend to replace the previous nFamily
         // entry in this case ?
-        SAL_WARN_IF( aFind->mxMapper != rMapper, "xmloff",
+        SAL_WARN_IF( (*iter)->mxMapper != rMapper, "xmloff",
                      "Adding duplicate family " << rStrName <<
                      " with mismatching mapper ! " <<
-                     typeid(*aFind->mxMapper.get()).name() << " " <<
+                     typeid((*iter)->mxMapper.get()).name() << " " <<
                      typeid(*rMapper.get()).name() );
     }
 #endif
 
-    XMLAutoStyleFamily *pFamily = new XMLAutoStyleFamily( nFamily, rStrName, rMapper, aPrefix, bAsFamily );
-    maFamilySet.insert(pFamily);
+    std::unique_ptr<XMLAutoStyleFamily> pFamily(
+        new XMLAutoStyleFamily(nFamily, rStrName, rMapper, aPrefix, bAsFamily));
+    m_FamilySet.insert(std::move(pFamily));
 }
 
 void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
         sal_Int32 nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper )
 {
-
-    XMLAutoStyleFamily aTemporary( nFamily );
-    FamilySetType::iterator aFind = maFamilySet.find(aTemporary);
-    if (aFind != maFamilySet.end())
-        aFind->mxMapper = rMapper;
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    if (iter != m_FamilySet.end())
+        (*iter)->mxMapper = rMapper;
 }
 
 // Adds a name to list
 void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& rName )
 {
-    XMLAutoStyleFamily aTmp( nFamily );
-    FamilySetType::iterator aFind = maFamilySet.find(aTmp);
-    assert(aFind != maFamilySet.end()); // family must be known
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    assert(iter != m_FamilySet.end()); // family must be known
     // SAL_DEBUG("SvXMLAutoStylePoolP_Impl::RegisterName: " << nFamily << ", '" << rName << "'");
-    aFind->maNameSet.insert(rName);
+    (*iter)->maNameSet.insert(rName);
 }
 
 
@@ -471,7 +471,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     vector<OUString> aNames;
 
     // iterate over families
-    for (FamilySetType::iterator aJ = maFamilySet.begin(); aJ != maFamilySet.end(); ++aJ)
+    for (auto const& aJ : m_FamilySet)
     {
         XMLAutoStyleFamily &rFamily = *aJ;
 
@@ -500,11 +500,11 @@ bool SvXMLAutoStylePoolP_Impl::Add(
     OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
     const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
-    XMLAutoStyleFamily aTemporary( nFamily );
-    FamilySetType::iterator aFind = maFamilySet.find(aTemporary);
-    assert(aFind != maFamilySet.end()); // family must be known
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    assert(iter != m_FamilySet.end()); // family must be known
 
-    XMLAutoStyleFamily &rFamily = *aFind;
+    XMLAutoStyleFamily &rFamily = **iter;
 
     XMLAutoStylePoolParent aTmp(rParentName);
     XMLAutoStyleFamily::ParentSetType::iterator it2 = rFamily.maParentSet.find(aTmp);
@@ -533,11 +533,11 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 {
     // get family and parent the same way as in Add()
 
-    XMLAutoStyleFamily aTemporary( nFamily );
-    FamilySetType::iterator aFind = maFamilySet.find(aTemporary);
-    assert(aFind != maFamilySet.end());  // family must be known
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    assert(iter != m_FamilySet.end());  // family must be known
 
-    XMLAutoStyleFamily &rFamily = *aFind;
+    XMLAutoStyleFamily &rFamily = **iter;
 
     XMLAutoStylePoolParent aTmp(rParentName);
     XMLAutoStyleFamily::ParentSetType::iterator it2 = rFamily.maParentSet.find(aTmp);
@@ -570,11 +570,11 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    XMLAutoStyleFamily aTemporary( nFamily );
-    FamilySetType::const_iterator const iter = maFamilySet.find(aTemporary);
-    assert(iter != maFamilySet.end()); // family must be known
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    assert(iter != m_FamilySet.end()); // family must be known
 
-    XMLAutoStyleFamily const& rFamily = *iter;
+    XMLAutoStyleFamily const& rFamily = **iter;
     XMLAutoStylePoolParent aTmp( rParent );
     XMLAutoStyleFamily::ParentSetType::const_iterator it2 = rFamily.maParentSet.find(aTmp);
     if (it2 != rFamily.maParentSet.end())
@@ -614,11 +614,11 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     // Get list of parents for current family (nFamily)
-    XMLAutoStyleFamily aTmp( nFamily );
-    FamilySetType::const_iterator aFind = maFamilySet.find(aTmp);
-    assert(aFind != maFamilySet.end()); // family must be known
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    assert(iter != m_FamilySet.end()); // family must be known
 
-    const XMLAutoStyleFamily &rFamily = *aFind;
+    const XMLAutoStyleFamily &rFamily = **iter;
     sal_uInt32 nCount = rFamily.mnCount;
 
     if (!nCount)
@@ -754,7 +754,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
 void SvXMLAutoStylePoolP_Impl::ClearEntries()
 {
-    for (FamilySetType::iterator aI = maFamilySet.begin(); aI != maFamilySet.end(); ++aI)
+    for (auto & aI : m_FamilySet)
         aI->ClearEntries();
 }
 
