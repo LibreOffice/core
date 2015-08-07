@@ -496,7 +496,16 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     // If the draw format has a TextBox, then copy its fly format as well.
     if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::findTextBox(&rSource))
     {
-        SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox, rNewAnchor, bSetTextFlyAtt, bMakeFrms);
+        SwFormatAnchor boxAnchor(rNewAnchor);
+        if (FLY_AS_CHAR == boxAnchor.GetAnchorId())
+        {
+            // AS_CHAR *must not* be set on textbox fly-frame
+            boxAnchor.SetType(FLY_AT_CHAR);
+        }
+        // presumably these anchors are supported though not sure
+        assert(FLY_AT_CHAR == boxAnchor.GetAnchorId() || FLY_AT_PARA == boxAnchor.GetAnchorId());
+        SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
+                boxAnchor, bSetTextFlyAtt, bMakeFrms);
         SwAttrSet aSet(pDest->GetAttrSet());
         SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
         aSet.Put(aContent);
