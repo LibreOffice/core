@@ -374,7 +374,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
     {
         fprintf(stdout,"XMLFile::InsertL10NElement: No AttributeList found");
         fprintf(stdout,"++++++++++++++++++++++++++++++++++++++++++++++++++");
-        Print( pElement , 0 );
+        Print( pElement );
         fprintf(stdout,"++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 

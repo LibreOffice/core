@@ -355,7 +355,7 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
                 break;
             case osl_Check_Mode_ReadAccess:
                 //rc = pDir->getNextItem( rItem, 0 );
-                rc = aDir.getNextItem( rItem, 0 );
+                rc = aDir.getNextItem( rItem );
                 if ( ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT ) )
                     bCheckResult = true;
                 else
@@ -1255,7 +1255,7 @@ namespace osl_FileStatus
             Directory pDir( aTmpName3 );
             nError1 = pDir.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            nError1 = pDir.getNextItem( rItem, 0 );
+            nError1 = pDir.getNextItem( rItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             pDir.close();
             /*
@@ -4228,7 +4228,7 @@ namespace osl_Directory
             nError2 = testDirectory.reset();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError2 );
             //get reseted Item, if reset does not work, getNextItem() should return the second Item (aTmpName1)
-            nError1 = testDirectory.getNextItem( rItem, 0 );
+            nError1 = testDirectory.getNextItem( rItem );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check the file name again

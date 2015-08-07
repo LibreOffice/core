@@ -301,7 +301,7 @@ void Dependencies::insert(OUString const & name, bool base) {
         for (std::vector< OString >::iterator i(args.begin()); i != args.end();
              ++i)
         {
-            insert(b2u(*i), false);
+            insert(b2u(*i));
         }
         // fall through
     case UnoType::SORT_SEQUENCE_TYPE:

@@ -1048,7 +1048,7 @@ public:
       @since LibreOffice 4.0
     */
     bool startsWith(OUString const & str, OUString * rest = 0) const {
-        bool b = match(str, 0);
+        bool b = match(str);
         if (b && rest != 0) {
             *rest = copy(str.getLength());
         }
@@ -1104,7 +1104,7 @@ public:
     bool startsWithIgnoreAsciiCase(OUString const & str, OUString * rest = 0)
         const
     {
-        bool b = matchIgnoreAsciiCase(str, 0);
+        bool b = matchIgnoreAsciiCase(str);
         if (b && rest != 0) {
             *rest = copy(str.getLength());
         }

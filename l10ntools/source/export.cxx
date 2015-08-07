@@ -1157,7 +1157,7 @@ void Export::MergeRest( ResData *pResData )
                 if( pEntrys )
                 {
                     OString sText;
-                    pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, false );
+                    pEntrys->GetText( sText, STRING_TYP_TEXT, sCur );
                     if( !sText.isEmpty())
                     {
                         ConvertMergeContent( sText );
