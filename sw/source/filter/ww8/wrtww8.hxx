@@ -43,7 +43,7 @@
 #include <vcl/graph.hxx>
 class SvxBrushItem;
 
-// einige Forward Deklarationen
+// some forward declarations
 class SwWW8AttrIter;
 namespace msfilter
 {
@@ -106,7 +106,7 @@ class WW8_WrPlcPn;
 class WW8_WrPlcAnnotations;
 class MSWordSections;
 class WW8_WrPlcTextBoxes;
-class WW8_WrPct;            // Verwaltung
+class WW8_WrPct;            // administration
 class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
 class SvxMSExportOLEObjects;
@@ -122,7 +122,7 @@ class SvxBrushItem;
 
 #include "WW8TableInfo.hxx"
 
-#define GRF_MAGIC_1 0x12    // 3 magic Bytes fuer PicLocFc-Attribute
+#define GRF_MAGIC_1 0x12    // 3 magic bytes for PicLocFc attribute
 #define GRF_MAGIC_2 0x34
 #define GRF_MAGIC_3 0x56
 #define GRF_MAGIC_321 0x563412L
@@ -236,7 +236,7 @@ class WW8_WrPlcSepx : public MSWordSections
     ::std::vector< ::boost::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
     // hack to prevent adding sections in endnotes
     bool m_bHeaderFooterWritten;
-    WW8_WrPlc0* pTextPos;        // Pos der einzelnen Header / Footer
+    WW8_WrPlc0* pTextPos;        // Position of the headers/footers
 
     WW8_WrPlcSepx( const WW8_WrPlcSepx& ) SAL_DELETED_FUNCTION;
     WW8_WrPlcSepx& operator=( const WW8_WrPlcSepx& ) SAL_DELETED_FUNCTION;
@@ -437,8 +437,9 @@ struct MSWordSaveData
     bool bOldFlyFrmAttrs : 1;
     bool bOldStartTOX : 1;
     bool bOldInWriteTOX : 1;
-    // bOutPageDesc muss nicht gesichert werden, da es nur nicht waehrend der
-    // Ausgabe von Spezial-Texten veraendert wird.
+    // bOutPageDesc does not have to be saved, since it is only not modified
+    // when outputting special texts.
+    /// TODO wiz 20150807: "not modified" -> "modified"? (translated literally)
 };
 
 /// Base class for WW8Export and DocxExport
@@ -450,9 +451,9 @@ public:
     typedef std::vector<sal_uLong>::const_iterator mycCFIter;
     OUString m_aMainStg;
     std::vector<const SwTOXType*> m_aTOXArr;
-    const SfxItemSet* m_pISet;    // fuer Doppel-Attribute
+    const SfxItemSet* m_pISet;    // for double attributes
     WW8_WrPct*  m_pPiece;         // Pointer auf Piece-Table
-    SwNumRuleTable* m_pUsedNumTable;  // alle used NumRules
+    SwNumRuleTable* m_pUsedNumTable;  // all used NumRules
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
@@ -466,8 +467,8 @@ public:
 
     sal_uInt16 m_nCharFormatStart;
     sal_uInt16 m_nFormatCollStart;
-    sal_uInt16 m_nStyleBeforeFly;     ///< Style-Nummer des Nodes,
-                                ///<       in/an dem ein Fly verankert ist
+    sal_uInt16 m_nStyleBeforeFly;     ///< style number of the node
+                                ///<       to which the Fly is connected
     sal_uInt16 m_nLastFormatId;          ///< Style of last TextNode in normal range
     sal_uInt16 m_nUniqueList;         ///< current number for creating unique list names
     unsigned int m_nHdFtIndex;
@@ -502,9 +503,8 @@ public:
     const sw::Frame *m_pParentFrame; // If set we are exporting content inside
                                     // a frame, e.g. a graphic node
 
-    Point* m_pFlyOffset;              // zur Justierung eines im Writer als
-    RndStdIds m_eNewAnchorType;       // Zeichen gebundenen Flys, der im WW
-                                    // Absatzgebunden wird.
+    Point* m_pFlyOffset;              // for adjusting of character-bound Fly in the Writer,
+    RndStdIds m_eNewAnchorType;       // that is paragraph-bound in the WW.
 
     WW8_WrPlcField* m_pFieldMain;         // fields in MainText
     WW8_WrPlcField* m_pFieldHdFt;         // fields in Header/Footer
@@ -527,7 +527,7 @@ public:
 
     SwEscherEx* m_pEscher;            // escher export class
     // #i43447# - removed
-//    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
+//    SwTwips nFlyWidth, nFlyHeight;  // for adaptation of graphics
 
     sal_uInt8 m_nTextTyp;
 
@@ -538,7 +538,7 @@ public:
     bool m_bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
     bool m_bOutFirstPage : 1;     // write Attrset of FirstPageDesc
     bool m_bOutTable : 1;         // table is being written
-                                     // ( wird zB bei Flys in Tabelle zurueckgesetzt )
+                                     // ( is reset e.g. for Flys in a table )
     bool m_bOutGrf : 1;           // graphics are being written
     bool m_bInWriteEscher : 1;    // in write textboxes
     bool m_bStartTOX : 1;         // true: a TOX is startet
@@ -1353,7 +1353,7 @@ private:
 
     std::vector<GraphicDetails> maDetails;
     typedef std::vector<GraphicDetails>::iterator myiter;
-    sal_uInt16 mnIdx;       // Index in File-Positionen
+    sal_uInt16 mnIdx;       // index in file positions
 
     static void WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
             sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight,
@@ -1436,12 +1436,11 @@ public:
 
 // class SwWW8AttrIter is a helper for constructing the Fkp.chpx.
 // Only character attributes are considered; paragraph attributes do not need this treatment.
-// Die Absatz- und Textattribute des Writers kommen rein, und es wird
-// mit Where() die naechste Position geliefert, an der sich die Attribute
-// aendern. IsTextAtr() sagt, ob sich an der mit Where() gelieferten Position
-// ein Attribut ohne Ende und mit \xff im Text befindet.
-// Mit OutAttr() werden die Attribute an der angegebenen SwPos
-// ausgegeben.
+// The paragraph and text attributes of the Writer are passed, and
+// Where() returns the next position where the attributes change.
+// IsTextAtr() tells if, at the position returned by Where(), there is
+// an attribute without end and with \xff in the text.
+// Using OutAttr(), the attributes on the passed SwPos are returned.
 class SwWW8AttrIter : public MSWordAttrIter
 {
 private:
