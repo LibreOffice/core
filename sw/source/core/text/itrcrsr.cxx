@@ -45,6 +45,7 @@
 #include "pordrop.hxx"
 #include "crstate.hxx"
 #include <pormulti.hxx>
+#include <porrst.hxx>
 #include <numrule.hxx>
 
 // Not reentrant !!!
@@ -603,6 +604,8 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                     if ( pPor->InSpaceGrp() && nSpaceAdd )
                         nX += pPor->PrtWidth() +
                               pPor->CalcSpacing( nSpaceAdd, aInf );
+                    else if ( pPor->IsHangingPortion())
+                        nX += static_cast<SwHangingPortion*>(pPor)->GetInnerWidth() ;
                     else
                     {
                         if( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() )
@@ -1198,9 +1201,10 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 
     _GetCharRect( pOrig, nFindOfst, pCMS );
 
+    const SwTwips nHangingMargin = GetCurr()->GetHangingMargin();
     // This actually would have to be "-1 LogicToPixel", but that seems too
     // expensive, so it's a value (-12), that should hopefully be OK.
-    const SwTwips nTmpRight = Right() - 12;
+    const SwTwips nTmpRight = nHangingMargin + Right() - 12;
 
     pOrig->Pos().X() += aCharPos.X();
     pOrig->Pos().Y() += aCharPos.Y();
@@ -1238,7 +1242,7 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                 pCMS->aRealHeight.Y() = nMax - nTmp;
         }
     }
-    long nOut = pOrig->Right() - GetTextFrm()->Frm().Right();
+    long nOut = pOrig->Right() - GetTextFrm()->Frm().Right() - nHangingMargin;
     if( nOut > 0 )
     {
         if( GetTextFrm()->Frm().Width() < GetTextFrm()->Prt().Left()
@@ -1265,7 +1269,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // x is the horizontal offset within the line.
     SwTwips x = rPoint.X();
     const SwTwips nLeftMargin  = GetLineStart();
-    SwTwips nRightMargin = GetLineEnd();
+    SwTwips nRightMargin = GetLineEnd() + GetCurr()->GetHangingMargin();
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;
 
