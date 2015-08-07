@@ -113,7 +113,7 @@ namespace com{namespace sun {namespace star{
     namespace lang{class XMultiServiceFactory;}
 }}}
 
-// defines nur fuer die WW8-variable der INI-Datei
+// defines only for the WW8-variable of the INI file
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_GRAF     0x80
 
@@ -121,10 +121,10 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_IMPLPASP        0x4000  // no implicit para space
 #define WW8FL_NO_GRAFLAYER       0x8000
 
-// Zusatz-Filter-Flags, gueltig ab Winword 8
+// Add-on-filter-flags, valid from Winword 8 on
 #define WW8FL_NO_FLY_FOR_TXBX         1
 
-//            Listen-Manager (ab Ver8)
+//            List-Manager (from Ver8 on)
 
 struct WW8LFOInfo;
 
@@ -162,7 +162,7 @@ private:
     const WW8Fib&    rFib;
     SvStream&        rSt;
     std::vector<WW8LSTInfo* > maLSTInfos;
-    boost::ptr_vector<WW8LFOInfo > pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
+    boost::ptr_vector<WW8LFOInfo > pLFOInfos;// D. from PLF LFO, sorted exactly like in the WW8 Stream
     sal_uInt16       nUniqueList; // current number for creating unique list names
     sal_uInt8* GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
     WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;
@@ -172,9 +172,9 @@ private:
         bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
         ww::bytes &rParaSprms);
 
-    // Zeichenattribute aus GrpprlChpx
+    // character attributes from GrpprlChpx
     typedef SfxItemSet* WW8aISet[nMaxLevel];
-    // Zeichen Style Pointer
+    // character style pointer
     typedef SwCharFormat* WW8aCFormat[nMaxLevel];
 
     void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
@@ -187,20 +187,19 @@ private:
 };
 
 struct WW8FlyPara
-{                       // WinWord-Attribute
-                        // Achtung: *Nicht* umsortieren, da Teile mit
-                        // memcmp verglichen werden
+{                       // WinWord-attributes
+                        // Attention: *DO NOT* reorder, since parts will be
+                        // compared using memcmp
     bool bVer67;
-    sal_Int16 nSp26, nSp27;         // rohe Position
-    sal_Int16 nSp45, nSp28;         // Breite / Hoehe
-    sal_Int16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
-    sal_uInt8 nSp29;                 // rohe Bindung + Alignment
+    sal_Int16 nSp26, nSp27;         // raw position
+    sal_Int16 nSp45, nSp28;         // width / height
+    sal_Int16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // borders
+    sal_uInt8 nSp29;                 // raw binding + alignment
     sal_uInt8 nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
-    WW8_BRCVer9_5 brc;          // Umrandung Top, Left, Bottom, Right, Between
-    bool bBorderLines;          // Umrandungslinien
-    bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
-                                // enthaltene Grafik anders als zeichengebunden
-                                // zu positionieren
+    WW8_BRCVer9_5 brc;          // borders Top, Left, Bottom, Right, Between
+    bool bBorderLines;          // border lines
+    bool bGrafApo;              // true: this frame is only used to position
+                                // the contained graphics *not* as a character
     bool mbVertSet;             // true if vertical positioning has been set
 
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
@@ -217,9 +216,9 @@ class SwWW8StyInf
     OUString        sWWStyleName;
     sal_uInt16      nWWStyleId;
 public:
-    rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
-    rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding fuer den Font
-    rtl_TextEncoding eCJKFontSrcCharSet;    // rtl_TextEncoding fuer den Font
+    rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding for the font
+    rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding for the font
+    rtl_TextEncoding eCJKFontSrcCharSet;    // rtl_TextEncoding for the font
     SwFormat*      pFormat;
     WW8FlyPara* pWWFly;
     SwNumRule*  pOutlineNumrule;
@@ -237,14 +236,14 @@ public:
     // 9: body text
     sal_uInt8 mnWW8OutlineLevel;
 
-    sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
-    sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
+    sal_uInt16  n81Flags;           // for bold, italic, ...
+    sal_uInt16  n81BiDiFlags;       // for bold, italic, ...
     SvxLRSpaceItem maWordLR;
-    bool bValid;            // leer oder Valid
-    bool bImported;         // fuers rekursive Importieren
-    bool bColl;             // true-> pFormat ist SwTextFormatColl
-    bool bImportSkipped;    // nur true bei !bNewDoc && vorh. Style
-    bool bHasStyNumRule;    // true-> Benannter NumRule in Style
+    bool bValid;            // empty of valid
+    bool bImported;         // for recursive imports
+    bool bColl;             // true-> pFormat is SwTextFormatColl
+    bool bImportSkipped;    // only true if !bNewDoc && existing style
+    bool bHasStyNumRule;    // true-> named NumRule in style
     bool bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
     bool bListReleventIndentSet; //true if this style's indent has
                                  //been explicitly set, it's set to the value
@@ -583,7 +582,7 @@ class WW8FieldEntry
         ::sw::mark::IFieldmark::parameter_map_t& getParameters() { return maParams;}
 };
 
-//    Mini-Merker fuer einige Flags
+//    mini marker for some flags
 
 class WW8ReaderSave
 {
@@ -1089,12 +1088,12 @@ private:
     SvStream* m_pTableStream;         // Input-(Storage)Stream
     SvStream* m_pDataStream;          // Input-(Storage)Stream
 
-// allgemeines
+// general stuff
     SwDoc& m_rDoc;
     std::shared_ptr<SwUnoCrsr> mpCrsr;
     SwPaM* m_pPaM;
 
-    SwWW8FltControlStack* m_pCtrlStck;    // Stack fuer die Attribute
+    SwWW8FltControlStack* m_pCtrlStck;    // stack for the attributes
 
     /*
     This stack is for redlines, because their sequence of discovery can
@@ -1217,26 +1216,26 @@ private:
     std::set<const SwNode*> m_aTextNodesHavingFirstLineOfstSet; // #i103711#
     std::set<const SwNode*> m_aTextNodesHavingLeftIndentSet; // #i105414#
 
-    WW8RStyle* m_pStyles;     // Pointer auf die Style-Einleseklasse
-    SwFormat* m_pAktColl;        // gerade zu erzeugende Collection
-                            // ( ist ausserhalb einer Style-Def immer 0 )
-    SfxItemSet* m_pAktItemSet;// gerade einzulesende Zeichenattribute
-                            // (ausserhalb des WW8ListManager Ctor's immer 0)
+    WW8RStyle* m_pStyles;     // pointer to the style reading class
+    SwFormat* m_pAktColl;        // collection to be created now
+                            // ( always 0 outside of a Style-Def )
+    SfxItemSet* m_pAktItemSet;// character attributes to be read in now
+                            // (always 0 outside of the WW8ListManager Ctor)
     std::vector<SwWW8StyInf> m_vColl;
     const SwTextFormatColl* m_pDfltTextFormatColl;    // Default
     SwFormat* m_pStandardFormatColl;// "Standard"
 
-    WW8PLCF_HdFt* m_pHdFt;        // Pointer auf Header / Footer - Scannerklasse
+    WW8PLCF_HdFt* m_pHdFt;        // pointer to Header / Footer - scanner class
 
-    WW8FlyPara* m_pWFlyPara;      // WW-Parameter
-    WW8SwFlyPara* m_pSFlyPara;    // daraus erzeugte Sw-Parameter
+    WW8FlyPara* m_pWFlyPara;      // WW-parameter
+    WW8SwFlyPara* m_pSFlyPara;    // Sw parameters created from previous
 
-    WW8TabDesc* m_pTableDesc;     // Beschreibung der Tabelleneigenschaften
+    WW8TabDesc* m_pTableDesc;     // description of table properties
     //Keep track of tables within tables
     std::stack<WW8TabDesc*> m_aTableStack;
 
     ANLDRuleMap m_aANLDRules;
-    WW8_OLST* m_pNumOlst;         // Gliederung im Text
+    WW8_OLST* m_pNumOlst;         // position in text
 
     SwNode* m_pNode_FLY_AT_PARA; // set: WW8SwFlyPara()   read: CreateSwTable()
 
@@ -1245,7 +1244,7 @@ private:
     EditEngine* m_pDrawEditEngine;
     wwZOrderer *m_pWWZOrder;
 
-    SwFieldType* m_pNumFieldType;   // fuer Nummernkreis
+    SwFieldType* m_pNumFieldType;   // for number circle
 
     SwMSDffManager* m_pMSDffManager;
 
@@ -1258,86 +1257,85 @@ private:
     OUString m_sBaseURL;
 
                                 // Ini-Flags:
-    sal_uInt32 m_nIniFlags;            // Flags aus der writer.ini
-    sal_uInt32 m_nIniFlags1;           // dito ( zusaetzliche Flags )
-    sal_uInt32 m_nFieldFlags;          // dito fuer Feldern
-    sal_uInt32 m_nFieldTagAlways[3];   // dito fuers Taggen von Feldern
-    sal_uInt32 m_nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
+    sal_uInt32 m_nIniFlags;            // flags from writer.ini
+    sal_uInt32 m_nIniFlags1;           // dito ( additional flags )
+    sal_uInt32 m_nFieldFlags;          // dito for fields
+    sal_uInt32 m_nFieldTagAlways[3];   // dito for tagging of fields
+    sal_uInt32 m_nFieldTagBad[3];      // dito for tagging of fields that can't be imported
     bool m_bRegardHindiDigits;  // import digits in CTL scripts as Hindi numbers
 
-    WW8_CP m_nDrawCpO;            // Anfang der Txbx-SubDocs
+    WW8_CP m_nDrawCpO;            // start of Txbx-SubDocs
 
     sal_uLong m_nPicLocFc;            // Picture Location in File (FC)
     sal_uLong m_nObjLocFc;            // Object Location in File (FC)
 
-    sal_Int32 m_nIniFlyDx;            // X-Verschiebung von Flys
-    sal_Int32 m_nIniFlyDy;            // Y-Verschiebung von Flys
+    sal_Int32 m_nIniFlyDx;            // X-offset of Flys
+    sal_Int32 m_nIniFlyDy;            // Y-offset of Flys
 
     rtl_TextEncoding m_eTextCharSet;    // Default charset for Text
     rtl_TextEncoding m_eStructCharSet;  // rtl_TextEncoding for structures
     rtl_TextEncoding m_eHardCharSet;    // Hard rtl_TextEncoding-Attribute
-    sal_uInt16 m_nProgress;           // %-Angabe fuer Progressbar
-    sal_uInt16 m_nAktColl;            // gemaess WW-Zaehlung
-    sal_uInt16 m_nFieldNum;             // laufende Nummer dafuer
+    sal_uInt16 m_nProgress;           // percentage for Progressbar
+    sal_uInt16 m_nAktColl;            // per WW-count
+    sal_uInt16 m_nFieldNum;             // serial nummer for that
     sal_uInt16 m_nLFOPosition;
 
-    short m_nCharFormat;             // gemaess WW-Zaehlung, <0 fuer keine
+    short m_nCharFormat;             // per WW-count, <0 for none
 
     short m_nDrawXOfs, m_nDrawYOfs;
     short m_nDrawXOfs2, m_nDrawYOfs2;
 
-    sal_Unicode m_cSymbol;        // aktuell einzulesendes Symbolzeichen
+    sal_Unicode m_cSymbol;        // symbol to be read now
 
-    sal_uInt8 m_nWantedVersion;        // urspruenglich vom Writer
-                                // angeforderte WW-Doc-Version
+    sal_uInt8 m_nWantedVersion;        // originally requested WW-Doc version by Writer
 
-    sal_uInt8 m_nSwNumLevel;           // LevelNummer fuer Outline / Nummerierung
-    sal_uInt8 m_nWwNumType;            // Gliederung / Nummerg / Aufzaehlg
+    sal_uInt8 m_nSwNumLevel;           // level number for outline / enumeration
+    sal_uInt8 m_nWwNumType;            // outline / number / enumeration
     sal_uInt8 m_nListLevel;
 
     sal_uInt8 m_nPgChpDelim;           // ChapterDelim from PageNum
     sal_uInt8 m_nPgChpLevel;           // ChapterLevel of Heading from PageNum
 
-    bool m_bNewDoc;          // Neues Dokument ?
+    bool m_bNewDoc;          // new document?
     bool m_bSkipImages;      // skip images for text extraction/indexing
-    bool m_bReadNoTable;        // Keine Tabellen
-    bool m_bPgSecBreak;       // Page- oder Sectionbreak ist noch einzufuegen
-    bool m_bSpec;             // Special-Char im Text folgt
-    bool m_bObj;              // Obj im Text
-    bool m_bTxbxFlySection;   // FlyFrame, der als Ersatz fuer Winword Textbox eingefuegt wurde
-    bool m_bHasBorder;        // fuer Buendelung der Border
-    bool m_bSymbol;           // z.B. Symbol statt Times
-    bool m_bIgnoreText;       // z.B. fuer FieldVanish
-    int  m_nInTable;          // wird gerade eine Tabelle eingelesen
-    bool m_bWasTabRowEnd;     // Tabelle : Row End Mark
+    bool m_bReadNoTable;        // no tables
+    bool m_bPgSecBreak;       // Page- or Sectionbreak is still to be added
+    bool m_bSpec;             // special char follows in text
+    bool m_bObj;              // Obj in Text
+    bool m_bTxbxFlySection;   // FlyFrame that was inserted as replacement for Winword Textbox
+    bool m_bHasBorder;        // for bundling of the borders
+    bool m_bSymbol;           // e.g. Symbol instead of Times
+    bool m_bIgnoreText;       // e.g. for FieldVanish
+    int  m_nInTable;          // are we currently reading a table?
+    bool m_bWasTabRowEnd;     // table : Row End Mark
     bool m_bWasTabCellEnd;    // table: Cell End Mark
 
-    bool m_bAnl;              // Nummerierung in Bearbeitung
-                                // Anl heisst Autonumber level
+    bool m_bAnl;              // enumeration in work
+                                // Anl stands for "Autonumber level"
 
-    bool m_bHdFtFootnoteEdn;       // Spezialtext: Kopf- Fuss- usw.
-    bool m_bFootnoteEdn;           // Fussnote oder Endnote
-    bool m_bIsHeader;         // Text aus Header wird gelesen ( Zeilenhoehe )
-    bool m_bIsFooter;         // Text aus Footer wird gelesen ( Zeilenhoehe )
+    bool m_bHdFtFootnoteEdn;       // special text: header/footer/and so on
+    bool m_bFootnoteEdn;           // footnote or endnote
+    bool m_bIsHeader;         // text is read from header ( line height )
+    bool m_bIsFooter;         // text is read from footer ( line height )
 
-    bool m_bIsUnicode;            // aktuelles Text-Stueck ist als 2-Bytiger-Unicode kodiert
-                                // bitte NICHT als Bitfeld kodieren!
+    bool m_bIsUnicode;            // current piece of text is encoded as 2-byte Unicode
+                                // please do NOT handle this as bit field!
 
-    bool m_bCpxStyle;         // Style im Complex Part
-    bool m_bStyNormal;        // Style mit Id 0 wird gelesen
-    bool m_bWWBugNormal;      // WW-Version nit Bug Dya in Style Normal
-    bool m_bNoAttrImport;     // Attribute ignorieren zum Ignorieren v. Styles
-    bool m_bInHyperlink;      // Sonderfall zum einlesen eines 0x01
-                                   // siehe: SwWW8ImplReader::Read_F_Hyperlink()
+    bool m_bCpxStyle;         // style in the complex part
+    bool m_bStyNormal;        // style with Id 0 is currently read
+    bool m_bWWBugNormal;      // WW-Version with Bug Dya in Style Normal
+    bool m_bNoAttrImport;     // ignore attributes for ignoring styles
+    bool m_bInHyperlink;      // special case for reading 0x01
+                                   // see also: SwWW8ImplReader::Read_F_Hyperlink()
     bool m_bWasParaEnd;
 
-    // praktische Hilfsvariablen:
+    // useful helper variables
     bool m_bVer67;            // ( (6 == nVersion) || (7 == nVersion) );
     bool m_bVer6;             //   (6 == nVersion);
     bool m_bVer7;             //   (7 == nVersion);
     bool m_bVer8;             //   (8 == nVersion);
 
-    bool m_bEmbeddObj;        // EmbeddField gelesen
+    bool m_bEmbeddObj;        // EmbeddField is being read
 
     bool m_bAktAND_fNumberAcross; // current active Annotated List Deskriptor - ROW flag
 
@@ -1548,14 +1546,14 @@ private:
     void StopTable();
     bool IsInvalidOrToBeMergedTabCell() const;
 
-// Nummerierungen / Aufzaehlungen ( Autonumbered List Data Descriptor )
-// Liste:        ANLD ( Autonumbered List Data Descriptor )
-//   eine Ebene: ANLV ( Autonumber Level Descriptor )
+// Enumerations / lists ( Autonumbered List Data Descriptor )
+// list:        ANLD ( Autonumbered List Data Descriptor )
+//   one level: ANLV ( Autonumber Level Descriptor )
 
 // Chg7-8:
-// Listen sind in WW8 eigene Strukturen, die ueber folgende drei Tabellen
-// verwaltet werden: rglst, hpllfo und hsttbListNames
-// die Strukturen hierfuer sind: LSTF, LVLF, LFO LFOLVL
+// lists are separate structures in WW8 that are handled via the following three tables:
+// rglst, hpllfo and hsttbListNames
+// the corresponding structures are: LSTF, LVLF, LFO LFOLVL
 
     void SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV, const sal_uInt8* pText,
         bool bOutline);
@@ -1568,7 +1566,7 @@ private:
     void StopAllAnl(bool bGoBack = true);
     void StopAnlToRestart(sal_uInt8 nType, bool bGoBack = true);
 
-// GrafikLayer
+// graphics layer
 
     bool ReadGrafStart(void* pData, short nDataSiz, WW8_DPHEAD* pHd,
         SfxAllItemSet &rSet);
@@ -1617,7 +1615,7 @@ private:
     void GrafikCtor();
     void GrafikDtor();
 
-// anderes
+// other stuff
     OUString GetFieldResult( WW8FieldDesc* pF );
     void MakeTagString( OUString& rStr, const OUString& rOrg );
     void UpdateFields();
@@ -1628,7 +1626,7 @@ private:
     void EndExtSprm(sal_uInt16 nSprmId);
     void ReadDocInfo();
 
-// Ver8-Listen
+// Ver8 lists
 
     void RegisterNumFormatOnTextNode(sal_uInt16 nActLFO, sal_uInt8 nActLevel,
                                  const bool bSetAttr = true);
@@ -1638,11 +1636,11 @@ private:
         sal_uInt8 nActLevel);
     void RegisterNumFormat(sal_uInt16 nActLFO, sal_uInt8 nActLevel);
 
-// spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
+// to be replaced by calls in the appropriate extended SvxMSDffManager
 
     const OUString* GetAnnotationAuthor(sal_uInt16 nIdx);
 
-    // Schnittstellen fuer die Toggle-Attribute
+    // interfaces for the toggle attributes
     void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
     void SetToggleBiDiAttr(sal_uInt8 nAttrId, bool bOn);
     void _ChkToggleAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
@@ -1685,7 +1683,7 @@ private:
     bool ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
     SwWW8ImplReader(const SwWW8ImplReader &) SAL_DELETED_FUNCTION;
     SwWW8ImplReader& operator=(const SwWW8ImplReader&) SAL_DELETED_FUNCTION;
-public:     // eigentlich private, geht aber leider nur public
+public:     // really private, but can only be done public
     sal_uInt16 GetToggleAttrFlags() const;
     sal_uInt16 GetToggleBiDiAttrFlags() const;
     void SetToggleAttrFlags(sal_uInt16 nFlags);
@@ -1703,7 +1701,7 @@ public:     // eigentlich private, geht aber leider nur public
     long Read_And(WW8PLCFManResult* pRes);
     long Read_AtnBook(WW8PLCFManResult*);
 
-    // Attribute
+    // attributes
 
     void Read_Special(sal_uInt16, const sal_uInt8*, short nLen);
     void Read_Obj(sal_uInt16, const sal_uInt8*, short nLen);
@@ -1778,7 +1776,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_ANLevelNo(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_ANLevelDesc(      sal_uInt16, const sal_uInt8* pData, short nLen );
 
-    // Gliederungsebene Ver8
+    // outline level Ver8
     void Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLen);
 
     void Read_OLST(             sal_uInt16, const sal_uInt8* pData, short nLen );
@@ -1815,7 +1813,7 @@ public:     // eigentlich private, geht aber leider nur public
         const OUString &rData);
     OUString GetMappedBookmark(const OUString &rOrigName);
 
-    // Felder
+    // fields
     eF_ResT Read_F_Input(WW8FieldDesc*, OUString& rStr);
     eF_ResT Read_F_InputVar(WW8FieldDesc*, OUString& rStr);
     eF_ResT Read_F_ANumber( WW8FieldDesc*, OUString& );
@@ -1884,7 +1882,7 @@ public:     // eigentlich private, geht aber leider nur public
         SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages );
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }
-    // Laden eines kompletten DocFiles
+    // load a complete doc file
     sal_uLong LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     rtl_TextEncoding GetCurrentCharSet();
     rtl_TextEncoding GetCurrentCJKCharSet();
