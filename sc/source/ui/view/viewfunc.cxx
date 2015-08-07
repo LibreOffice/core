@@ -2984,8 +2984,7 @@ void ScViewFunc::NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
                                                                                  rCellAddress,
                                                                                  pDoc,
                                                                                  rsHeaderUnit,
-                                                                                 rsCellUnit,
-                                                                                 pDocSh );
+                                                                                 rsCellUnit );
     pButtonConvertCell->SetClickHdl( LINK( this, ScViewFunc, UnitConversionRecommendedHandler ) );
 
     OUString sConvertText = pButtonConvertCell->GetText();
@@ -3002,32 +3001,108 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
 #ifdef ENABLE_CALC_UNITVERIFICATION
     boost::shared_ptr< Units > pUnits = Units::GetUnits();
 
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(pButton->mpDoc->GetDocumentShell());
+    ScDocument* pDoc = pButton->mpDoc;
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(pDoc->GetDocumentShell());
 
     ScDocShellModificator aModificator( *pDocShell );
+    bool bUndo = pDoc->IsUndoEnabled();
+    ScCellValue aOldVal;
+    ScDocument* pUndoDoc;
+    ScMarkData aMark;
 
-    OUString sOriginalValue = pButton->mpDoc->GetString( pButton->aCellAddress );
+    svl::IUndoManager* pUndoManager;
+    ScDrawLayer* pDrawLayer;
+
+    if ( bUndo )
+    {
+        pUndoManager = pDocShell->GetUndoManager();
+
+        aOldVal.assign( *pDoc, pButton->aCellAddress );
+
+        aMark.SetMarkArea( pButton->aCellAddress );
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc->InitUndo( pDoc, pButton->aCellAddress.Tab(), pButton->aCellAddress.Tab() );
+        pDoc->CopyToDocument( ScRange( pButton->aCellAddress ), IDF_ATTRIB, false, pUndoDoc, &aMark );
+
+        // This commences logging of changes to the drawing layer
+        // (i.e. notes) for storing in an undo. (See more below.)
+        pDrawLayer = pDoc->GetDrawLayer();
+        pDrawLayer->BeginCalcUndo(false);
+    }
+
+    OUString sOriginalValue = pDoc->GetString( pButton->aCellAddress );
 
     pUnits->convertCellToHeaderUnit( pButton->aCellAddress,
-                                     pButton->mpDoc,
+                                     pDoc,
                                      pButton->sHeaderUnit,
                                      pButton->sCellUnit );
 
-    ScPostIt* pNote = pButton->mpDoc->GetOrCreateNote( pButton->aCellAddress );
-    OUString sCurrentNote = pNote->GetText();
+    const OUString sCurrentNoteText = pDoc->GetOrCreateNote( pButton->aCellAddress )->GetText();
+    const OUString sConversionNote("Original input: " + sOriginalValue);
+    OUString sNewNoteText;
 
-    OUString sConversionNote("Original input: " + sOriginalValue);
-
-    if (sCurrentNote.isEmpty())
+    if (sCurrentNoteText.isEmpty())
     {
-        pNote->SetText( pButton->aCellAddress, sConversionNote );
+        sNewNoteText = sConversionNote;
     }
     else
     {
-        pNote->SetText( pButton->aCellAddress, sCurrentNote + "\n\n" + sConversionNote );
+        sNewNoteText = sCurrentNoteText + "\n\n" + sConversionNote;
     }
 
+    // ensure existing caption object before draw undo tracking starts
+    ScPostIt* pOldNote = pDoc->ReleaseNote( pButton->aCellAddress );
+    ScNoteData aOldNoteData = pOldNote->GetNoteData();
+    delete pOldNote;
+
+    ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( *pDoc, pButton->aCellAddress, sNewNoteText, false, true );
+    assert( pNewNote );
+
+    if ( bUndo )
+    {
+        const OUString aUndo( ScResId( STR_UNDO_UNITSCONVERSION ) );
+        pUndoManager->EnterListAction( aUndo, aUndo );
+
+        ScCellValue aNewVal;
+        aNewVal.assign( *pDoc, pButton->aCellAddress );
+        const ScPatternAttr* pNewPat = pDoc->GetPattern( pButton->aCellAddress );
+
+        pUndoManager->AddUndoAction( new ScUndoSetCell( pDocShell, pButton->aCellAddress, aOldVal, aNewVal ) );
+        pUndoManager->AddUndoAction( new ScUndoSelectionAttr( pDocShell,
+                                                              aMark,
+                                                              pButton->aCellAddress.Col(), pButton->aCellAddress.Row(), pButton->aCellAddress.Tab(),
+                                                              pButton->aCellAddress.Col(), pButton->aCellAddress.Row(), pButton->aCellAddress.Tab(),
+                                                              pUndoDoc,
+                                                              false,
+                                                              pNewPat) );
+        ScNoteData aNewNoteData = pNewNote->GetNoteData();
+
+        // We specifically need to differentiate between a completely new
+        // note, or editing an existing note. ScUndoReplaceNote has two
+        // different constructors for each case.
+        if ( sCurrentNoteText.isEmpty() )
+        {
+            pUndoManager->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pButton->aCellAddress,
+                                                                aNewNoteData, true, nullptr ) );
+        }
+        else
+        {
+            // Actual note content changes are stored in the DrawLayer CalcUndo,
+            // as opposed to being the NoteData (which just seems to store note
+            // metadata) - hence we need to make sure that we save that too.
+            pUndoManager->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pButton->aCellAddress,
+                                                                aOldNoteData, aNewNoteData,
+                                                                pDrawLayer->GetCalcUndo() ) );
+        }
+        pUndoManager->LeaveListAction();
+    }
+
+    pDocShell->PostPaint(ScRange( pButton->aCellAddress), PAINT_GRID);
+
     aModificator.SetDocumentModified();
+    SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+
+
 #endif
 
     OUString sAddress;
