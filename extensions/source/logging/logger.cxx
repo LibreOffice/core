@@ -174,7 +174,7 @@ namespace logging
             return;
 
         m_aHandlers.forEach< XLogHandler >(
-            [&] (Reference<XLogHandler> const& rxListener) { rxListener->publish(_rRecord); } );
+            [&_rRecord] (Reference<XLogHandler> const& rxListener) { rxListener->publish(_rRecord); } );
         m_aHandlers.forEach< XLogHandler >(
             [] (Reference<XLogHandler> const& rxListener) { rxListener->flush(); } );
     }

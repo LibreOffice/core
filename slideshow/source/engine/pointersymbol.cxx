@@ -66,7 +66,7 @@ PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitm
 {
     std::for_each( rViewContainer.begin(),
                    rViewContainer.end(),
-                   [&]( const UnoViewSharedPtr& sp )
+                   [this]( const UnoViewSharedPtr& sp )
                    { this->viewAdded(sp); } );
 }
 

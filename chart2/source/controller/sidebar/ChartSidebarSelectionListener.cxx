@@ -57,7 +57,7 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
                 aAny >>= aCID;
                 ObjectType eType = ObjectIdentifier::getObjectType(aCID);
                 bCorrectObjectSelected = std::any_of(maTypes.begin(), maTypes.end(),
-                        [=](const ObjectType& eTypeInVector) { return eType == eTypeInVector; });
+                        [eType](const ObjectType& eTypeInVector) { return eType == eTypeInVector; });
             }
         }
     }

@@ -166,7 +166,7 @@ namespace
             rMarks.begin(),
             pCandidatesEnd,
             back_inserter(vCandidates),
-            [&] (IDocumentMarkAccess::pMark_t const& rpMark) { return !rpMark->EndsBefore(rPos); } );
+            [&rPos] (IDocumentMarkAccess::pMark_t const& rpMark) { return !rpMark->EndsBefore(rPos); } );
         // no candidate left => we are in front of the first mark or there are none
         if(vCandidates.empty()) return NULL;
         // return the highest (last) candidate using mark end ordering
@@ -267,7 +267,7 @@ namespace
         return find_if(
             ppMarksBegin,
             ppMarksEnd,
-            [&] (IDocumentMarkAccess::pMark_t const& rpMark) { return rpMark->GetName() == rName; } );
+            [&rName] (IDocumentMarkAccess::pMark_t const& rpMark) { return rpMark->GetName() == rName; } );
     }
 
 #if 0
@@ -958,7 +958,7 @@ namespace sw { namespace mark
             find_if(
                 pMarkLow,
                 pMarkHigh,
-                [&] (pMark_t const& rpMark) { return rpMark.get() == pMark; } );
+                [pMark] (pMark_t const& rpMark) { return rpMark.get() == pMark; } );
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
@@ -1014,7 +1014,7 @@ namespace sw { namespace mark
         const_iterator_t pFieldmark = find_if(
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
-            [&] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
+            [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
         if(pFieldmark == m_vFieldmarks.end()) return NULL;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
@@ -1080,7 +1080,7 @@ namespace sw { namespace mark
         const_iterator_t pAnnotationMark = find_if(
             m_vAnnotationMarks.begin(),
             m_vAnnotationMarks.end(),
-            [&] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
+            [&rPos] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
         if (pAnnotationMark == m_vAnnotationMarks.end())
             return NULL;
         return pAnnotationMark->get();
