@@ -1092,34 +1092,6 @@ public:
     }
 };
 
-class CountElements : std::unary_function<MatrixImplType::element_block_node_type, void>
-{
-    size_t mnCount;
-    bool mbCountString;
-public:
-    CountElements(bool bCountString) : mnCount(0), mbCountString(bCountString) {}
-
-    size_t getCount() const { return mnCount; }
-
-    void operator() (const MatrixImplType::element_block_node_type& node)
-    {
-        switch (node.type)
-        {
-            case mdds::mtm::element_numeric:
-            case mdds::mtm::element_boolean:
-                mnCount += node.size;
-            break;
-            case mdds::mtm::element_string:
-                if (mbCountString)
-                    mnCount += node.size;
-            break;
-            case mdds::mtm::element_empty:
-            default:
-                ;
-        }
-    }
-};
-
 const size_t ResultNotSet = std::numeric_limits<size_t>::max();
 
 template<typename _Type>
@@ -1718,9 +1690,9 @@ ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 
 size_t ScMatrixImpl::Count(bool bCountStrings) const
 {
-    CountElements aFunc(bCountStrings);
+    WalkElementBlocks<sc::op::Op> aFunc(bCountStrings, {});
     maMat.walk(aFunc);
-    return aFunc.getCount();
+    return aFunc.getResult()[0].mnCount;
 }
 
 size_t ScMatrixImpl::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
