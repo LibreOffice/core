@@ -112,7 +112,6 @@
 #include <framework/documentundoguard.hxx>
 #include <initializer_list>
 #include <map>
-#include <o3tl/compat_functional.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

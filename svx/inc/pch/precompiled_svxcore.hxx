@@ -610,7 +610,6 @@
 #include <map>
 #include <math.h>
 #include <memory>
-#include <o3tl/compat_functional.hxx>
 #include <o3tl/numeric.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>

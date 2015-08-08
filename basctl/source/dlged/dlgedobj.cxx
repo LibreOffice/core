@@ -39,7 +39,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <o3tl/compat_functional.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 
@@ -585,7 +584,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             ::std::transform(
                     aIndexToNameMap.begin(), aIndexToNameMap.end(),
                     aNameList.begin(),
-                    ::o3tl::select2nd< IndexToNameMap::value_type >( )
+                    []( const ::std::pair< sal_Int16, OUString >& cp ) { return cp.second; }
                 );
 
             // check tab index

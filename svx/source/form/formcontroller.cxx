@@ -89,8 +89,6 @@
 
 #include <algorithm>
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::connectivity;
@@ -4059,7 +4057,8 @@ void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException,
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
         aInterceptedFeatures.getArray(),
-        ::o3tl::select1st< DispatcherContainer::value_type >()
+        []( const ::std::pair< DispatcherContainer::key_type, DispatcherContainer::mapped_type >& cp )
+        { return cp.first; }
     );
 
     aGuard.clear();
