@@ -437,9 +437,8 @@ struct MSWordSaveData
     bool bOldFlyFrmAttrs : 1;
     bool bOldStartTOX : 1;
     bool bOldInWriteTOX : 1;
-    // bOutPageDesc does not have to be saved, since it is only not modified
-    // when outputting special texts.
-    /// TODO wiz 20150807: "not modified" -> "modified"? (translated literally)
+    // m_bOutPageDescs does not have to be saved in MSWordExportBase::SaveData
+    // since it is only modified when outputting special texts.
 };
 
 /// Base class for WW8Export and DocxExport
