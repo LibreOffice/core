@@ -41,7 +41,6 @@
 #include <tools/debug.hxx>
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler()
 {
@@ -531,7 +530,8 @@ namespace pcr
 
         Sequence< Property > aReturn( m_aProperties.size() );
         ::std::transform( m_aProperties.begin(), m_aProperties.end(),
-            aReturn.getArray(), ::o3tl::select2nd< PropertyMap::value_type >() );
+            aReturn.getArray(), []( const ::std::pair< PropertyMap::key_type, PropertyMap::mapped_type >& cp )
+            { return cp.second; } );
         return aReturn;
     }
 

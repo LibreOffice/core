@@ -68,7 +68,6 @@
 
 #include <map>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
 {
@@ -776,7 +775,7 @@ namespace pcr
 
         StlSyntaxSequence< Property > aReturn( aOrderedProperties.size() );
         ::std::transform( aOrderedProperties.begin(), aOrderedProperties.end(), aReturn.begin(),
-            ::o3tl::select2nd< ::std::map< EventId, Property >::value_type >() );
+                []( const ::std::pair< EventId, Property >& cp ) { return cp.second; } );
         return aReturn;
     }
 
