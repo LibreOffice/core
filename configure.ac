@@ -2465,7 +2465,7 @@ fi
 AC_SUBST(BASH)
 
 AC_MSG_CHECKING([for GNU or BSD tar])
-for a in $GNUTAR gtar gnutar tar /usr/sfw/bin/gtar; do
+for a in $GNUTAR gtar gnutar bsdtar tar /usr/sfw/bin/gtar; do
     $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null
     if test $? -eq 0;  then
         GNUTAR=$a
