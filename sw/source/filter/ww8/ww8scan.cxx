@@ -1716,7 +1716,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
 
             break;
         default:
-            OSL_ENSURE( false, "Es wurde vergessen, nVersion zu kodieren!" );
+            OSL_ENSURE( false, "nVersion not implemented!" );
             break;
     }
 
@@ -2842,7 +2842,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             break;
         default:
             // program error!
-            OSL_ENSURE( false, "Someone forgot to encode nVersion!" );
+            OSL_ENSURE( false, "nVersion not implemented!" );
             return false;
     }
 
@@ -5341,7 +5341,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 nFibMin = 0;            // programm error!
                 nFibMax = 0;
                 nFib    = 1;
-                OSL_ENSURE( false, "It was forgotten to encode nVersion!" );
+                OSL_ENSURE( false, "nVersion not implemented!" );
                 break;
         }
         if ( (nFib < nFibMin) || (nFib > nFibMax) )
@@ -6402,7 +6402,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
     if( rFib.lcbSttbfffn <= 2 )
     {
-        OSL_ENSURE( false, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
+        OSL_ENSURE( false, "font table is broken! (rFib.lcbSttbfffn < 2)" );
         return;
     }
 
