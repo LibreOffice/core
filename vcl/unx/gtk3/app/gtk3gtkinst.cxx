@@ -592,7 +592,7 @@ void VclGtkClipboard::setContents(
 
 OUString VclGtkClipboard::getName() throw( RuntimeException, std::exception )
 {
-    return OUString( "CLIPBOARD"  );
+    return (m_nSelection == GDK_SELECTION_CLIPBOARD) ? OUString("CLIPBOARD") : OUString("PRIMARY");
 }
 
 sal_Int8 VclGtkClipboard::getRenderingCapabilities() throw( RuntimeException, std::exception )
