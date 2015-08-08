@@ -301,6 +301,9 @@ public:
     template<typename T>
     void ApplyOperation(T aOp, ScMatrixImpl& rMat);
 
+    template<typename T>
+    std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
+
 #if DEBUG_MATRIX
     void Dump() const;
 #endif
@@ -2164,7 +2167,16 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
     maMat.walk(aFunc);
 }
 
+template<typename T>
+std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp)
+{
+    WalkElementBlocksMultipleValues<T> aFunc(bTextAsZero, aOp);
+    maMat.walk(aFunc);
+    return aFunc.getResult();
+}
+
 #if DEBUG_MATRIX
+
 void ScMatrixImpl::Dump() const
 {
     cout << "-- matrix content" << endl;
@@ -2749,6 +2761,11 @@ void ScMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
         matop::MatOp<decltype(pow_)> aOp(pow_, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
+}
+
+std::vector<ScMatrix::IterateResult> ScMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
+{
+    return pImpl->ApplyCollectOperation(bTextAsZero, aOp);
 }
 
 ScMatrix& ScMatrix::operator+= ( const ScMatrix& r )

@@ -29,6 +29,7 @@
 #include <svl/sharedstring.hxx>
 
 #include <functional>
+#include <memory>
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
@@ -397,6 +398,8 @@ public:
     void MulOp(double fVal, ScMatrix& rMat);
     void DivOp(bool bFlag, double fVal, ScMatrix& rMat);
     void PowOp(bool bFlag, double fVal, ScMatrix& rMat);
+
+    std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 
