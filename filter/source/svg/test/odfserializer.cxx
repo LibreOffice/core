@@ -20,7 +20,7 @@
 #include "odfserializer.hxx"
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <boost/noncopyable.hpp>
@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 namespace svgi
 {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
     com::sun::star::xml::sax::XDocumentHandler> ODFSerializerBase;
 
 class ODFSerializer : private cppu::BaseMutex,

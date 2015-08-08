@@ -25,9 +25,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class StorageFilterDetect : public cppu::WeakImplHelper3<
+class StorageFilterDetect : public cppu::WeakImplHelper<
     com::sun::star::document::XExtendedFilterDetection,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo>

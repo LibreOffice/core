@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace filter{ namespace config {
@@ -34,7 +34,7 @@ namespace filter{ namespace config {
 
 /** @short      implements the service <type scope="com.sun.star.document">TypeDetection</type>.
  */
-class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer                 ,
+class TypeDetection : public ::cppu::ImplInheritanceHelper< BaseContainer                 ,
                                                              css::document::XTypeDetection >
 {
 

@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -193,7 +193,7 @@ class SVGFontExport;
 class SVGActionWriter;
 class EditFieldInfo;
 
-class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
+class SVGFilter : public cppu::WeakImplHelper < XFilter,
                                                  XImporter,
                                                  XExporter,
                                                  XExtendedFilterDetection >

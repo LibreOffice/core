@@ -20,7 +20,7 @@
 #define INCLUDED_FILTER_MSFILTER_MSVBAHELPER_HXX
 
 #include <sfx2/objsh.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
@@ -51,7 +51,7 @@ MSFILTER_DLLPUBLIC ::com::sun::star::awt::KeyEvent parseKeyEvent( const OUString
 MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const ::com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxDoc, const ::com::sun::star::awt::KeyEvent& rKeyEvent, const OUString& sMacro ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::vba::XVBAMacroResolver > VBAMacroResolverBase;

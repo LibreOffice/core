@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <salhelper/singletonref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace filter{
@@ -37,7 +37,7 @@ namespace filter{
                 wa changed by other processes.
  */
 class CacheUpdateListener : public BaseLock // must be the first one to guarantee right initialized mutex member!
-                          , public ::cppu::WeakImplHelper1< css::util::XChangesListener >
+                          , public ::cppu::WeakImplHelper< css::util::XChangesListener >
 {
 
     // member

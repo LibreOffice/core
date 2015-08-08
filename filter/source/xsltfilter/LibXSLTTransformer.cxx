@@ -28,7 +28,6 @@
 #include <libexslt/exslt.h>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase4.hxx>
 
 #include <osl/module.h>
 #include <osl/file.hxx>

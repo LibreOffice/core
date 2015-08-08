@@ -28,7 +28,7 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace css;
@@ -38,7 +38,7 @@ using namespace css::beans;
 using namespace css::document;
 
 class GraphicExportFilter :
-    public cppu::WeakImplHelper3 < XFilter, XExporter, XInitialization >
+    public cppu::WeakImplHelper < XFilter, XExporter, XInitialization >
 {
     Reference<XComponent>               mxDocument;
     Reference<XComponentContext>        mxContext;

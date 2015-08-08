@@ -21,7 +21,7 @@
 #define INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/XInteractionHandler2.hpp"
 
@@ -33,7 +33,7 @@ using namespace ::com::sun::star::lang;
 // - PDFFilter -
 
 
-class PDFInteractionHandler : public cppu::WeakImplHelper2 < task::XInteractionHandler2,
+class PDFInteractionHandler : public cppu::WeakImplHelper < task::XInteractionHandler2,
                                                              XServiceInfo >
 {
 protected:

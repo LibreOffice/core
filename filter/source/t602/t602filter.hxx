@@ -30,8 +30,7 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <xmloff/attrlist.hxx>
 #include <tools/resmgr.hxx>
 
@@ -90,7 +89,7 @@ struct inistruct
         };
 };
 
-class T602ImportFilterDialog : public cppu::WeakImplHelper4 <
+class T602ImportFilterDialog : public cppu::WeakImplHelper <
         com::sun::star::ui::dialogs::XExecutableDialog,
         com::sun::star::lang::XLocalizable,
         com::sun::star::lang::XServiceInfo,
@@ -144,7 +143,7 @@ public:
 };
 
 
-class T602ImportFilter : public cppu::WeakImplHelper5 <
+class T602ImportFilter : public cppu::WeakImplHelper <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
     com::sun::star::document::XExtendedFilterDetection,

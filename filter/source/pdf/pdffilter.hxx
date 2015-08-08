@@ -26,10 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <comphelper/property.hxx>
@@ -55,7 +52,7 @@ using namespace ::com::sun::star::io;
 // - PDFFilter -
 
 
-class PDFFilter : public cppu::WeakImplHelper4 < XFilter,
+class PDFFilter : public cppu::WeakImplHelper < XFilter,
                                                  XExporter,
                                                  XInitialization,
                                                  XServiceInfo >

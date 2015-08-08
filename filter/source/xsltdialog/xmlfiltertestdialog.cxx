@@ -68,7 +68,7 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
 
-class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XDocumentEventListener >
+class GlobalEventListenerImpl : public ::cppu::WeakImplHelper< com::sun::star::document::XDocumentEventListener >
 {
 public:
     GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace filter{
@@ -40,7 +40,7 @@ namespace filter{
                 type/filter configuration will be changed at runtime.
  */
 class ConfigFlush : public BaseLock
-                  , public ::cppu::WeakImplHelper2<
+                  , public ::cppu::WeakImplHelper<
                                                     css::util::XRefreshable,
                                                     css::lang::XServiceInfo
                                                   >

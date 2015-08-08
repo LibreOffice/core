@@ -35,8 +35,7 @@
 #include <com/sun/star/frame/XController.hdl>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
@@ -63,7 +62,7 @@ using ::com::sun::star::frame::XModel;
 
 namespace swf {
 
-class OslOutputStreamWrapper : public ::cppu::WeakImplHelper1<com::sun::star::io::XOutputStream>
+class OslOutputStreamWrapper : public ::cppu::WeakImplHelper<com::sun::star::io::XOutputStream>
 {
     osl::File   mrFile;
 
@@ -138,7 +137,7 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
 
 
 
-class FlashExportFilter : public cppu::WeakImplHelper4
+class FlashExportFilter : public cppu::WeakImplHelper
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XExporter,

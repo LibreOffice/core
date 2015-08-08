@@ -25,7 +25,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    class OutputWrap : public cppu::WeakImplHelper1<
+    class OutputWrap : public cppu::WeakImplHelper<
         io::XOutputStream>
     {
         osl::File maFile;

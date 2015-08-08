@@ -21,7 +21,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
@@ -41,7 +41,7 @@ namespace pwp {
 
 
 
-class PlaceWareExportFilter : public cppu::WeakImplHelper4
+class PlaceWareExportFilter : public cppu::WeakImplHelper
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XExporter,

@@ -23,7 +23,7 @@
 #include "pdffilter.hxx"
 #include <svtools/genericunodialog.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 // - PDFDialog -
@@ -31,7 +31,7 @@
 
 namespace vcl { class Window; }
 
-typedef ::cppu::ImplInheritanceHelper2  <
+typedef ::cppu::ImplInheritanceHelper  <
                                              ::svt::OGenericUnoDialog,
                                              XPropertyAccess,
                                              XExporter

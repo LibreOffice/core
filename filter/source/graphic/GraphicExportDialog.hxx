@@ -21,7 +21,7 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTDIALOG_HXX
 
 #include <tools/fldunit.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -34,7 +34,7 @@ using namespace css::uno;
 using namespace css::beans;
 using namespace css::lang;
 
-class GraphicExportDialog : public cppu::WeakImplHelper4
+class GraphicExportDialog : public cppu::WeakImplHelper
 <
     document::XExporter,
     ui::dialogs::XExecutableDialog,

@@ -29,7 +29,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <salhelper/singletonref.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -54,7 +54,7 @@ namespace filter{
                 ctor as first!
  */
 class BaseContainer : public BaseLock
-                    , public ::cppu::WeakImplHelper4< css::lang::XServiceInfo         ,
+                    , public ::cppu::WeakImplHelper< css::lang::XServiceInfo         ,
                                                       css::container::XNameContainer  , // => XNameReplace => XNameAccess => XElementAccess
                                                       css::container::XContainerQuery ,
                                                       css::util::XFlushable           >
@@ -114,7 +114,7 @@ class BaseContainer : public BaseLock
         /** @short  standard ctor.
 
             @descr  Because mostly this class is used as base class for own service
-                    implementations in combination with a ImplInheritanceHelper2 template ...
+                    implementations in combination with a ImplInheritanceHelper template ...
                     there is no way to provide some initializing data through the ctor :-(
                     This base class will be created inside its default ctor and must be
                     initialized with its needed parameters explicitly by calling: "init()".
@@ -134,7 +134,7 @@ class BaseContainer : public BaseLock
         /** @short  initialize this generic intsnace with some specialized values
                     from our derived object.
 
-            @descr  Because an outside class must use ImplInheritanceHelper2 template to
+            @descr  Because an outside class must use ImplInheritanceHelper template to
                     use us a base class ... and there is no way to pass such initializing
                     parameters through a required default ctor ... we must be initialized
                     by this special method. Of course this method must be called first before
