@@ -160,6 +160,7 @@ public:
     void testFuncSUM();
     void testFuncPRODUCT();
     void testFuncSUMPRODUCT();
+    void testFuncSUMXMY2();
     void testFuncMIN();
     void testFuncN();
     void testFuncCOUNTIF();
@@ -491,6 +492,7 @@ public:
     CPPUNIT_TEST(testFuncSUM);
     CPPUNIT_TEST(testFuncPRODUCT);
     CPPUNIT_TEST(testFuncSUMPRODUCT);
+    CPPUNIT_TEST(testFuncSUMXMY2);
     CPPUNIT_TEST(testFuncMIN);
     CPPUNIT_TEST(testFuncN);
     CPPUNIT_TEST(testFuncCOUNTIF);
