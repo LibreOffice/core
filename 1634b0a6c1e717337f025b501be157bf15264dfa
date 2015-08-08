@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_c6ed5690",
+        "filename": "basctl/source/dlged/dlgedobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-08T12:42:07Z",
+      "side": 1,
+      "message": "Any reason not to stick to the indirect value_type here? No biggie, but makes for a bit more genericity?",
+      "revId": "1634b0a6c1e717337f025b501be157bf15264dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
