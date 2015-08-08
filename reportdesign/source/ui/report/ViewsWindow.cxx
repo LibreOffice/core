@@ -49,7 +49,6 @@
 #include <algorithm>
 #include <cstdlib>
 #include <numeric>
-#include <o3tl/compat_functional.hxx>
 
 namespace rptui
 {

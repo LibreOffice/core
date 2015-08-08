@@ -31,8 +31,6 @@
 #include <algorithm>
 #include "resource/ado_res.hrc"
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace connectivity::ado;
 using namespace connectivity;
 using namespace comphelper;

@@ -27,8 +27,6 @@
 #include <comphelper/types.hxx>
 #include "ado/ACatalog.hxx"
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace ::comphelper;
 
 using namespace connectivity::ado;

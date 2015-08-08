@@ -103,7 +103,6 @@
 #include "dlgpage.hxx"
 #include "helpids.hrc"
 #include <toolkit/helper/convert.hxx>
-
 #include <o3tl/compat_functional.hxx>
 
 #define DATA_OR_FORMULA     0
@@ -1639,7 +1638,10 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< OUString >& _o
     if ( m_nDataFieldType == FUNCTION )
         ::std::transform(m_aDefaultFunctions.begin(),m_aDefaultFunctions.end(),::std::back_inserter(_out_rList),::boost::bind( &DefaultFunction::getName, _1 ));
     else if ( m_nDataFieldType == USER_DEF_FUNCTION )
-        ::std::transform(m_aFunctionNames.begin(),m_aFunctionNames.end(),::std::back_inserter(_out_rList),::o3tl::select1st<TFunctions::value_type>());
+        ::std::transform( m_aFunctionNames.begin(),
+                          m_aFunctionNames.end(),
+                          ::std::back_inserter(_out_rList),
+                          ::o3tl::select1st< TFunctions::value_type >() );
 }
 
 OUString GeometryHandler::impl_ConvertUIToMimeType_nothrow(const OUString& _sUIName) const

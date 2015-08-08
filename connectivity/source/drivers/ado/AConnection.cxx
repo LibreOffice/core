@@ -33,8 +33,6 @@
 #include <osl/file.hxx>
 #include "resource/ado_res.hrc"
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace dbtools;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;

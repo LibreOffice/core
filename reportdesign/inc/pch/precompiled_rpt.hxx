@@ -151,7 +151,6 @@
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>

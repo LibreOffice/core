@@ -27,9 +27,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-#include <o3tl/compat_functional.hxx>
-
-
 namespace connectivity
 {
 
