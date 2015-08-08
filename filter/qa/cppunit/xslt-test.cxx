@@ -27,7 +27,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <test/bootstrapfixture.hxx>
 
@@ -51,7 +51,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-struct Listener : public ::cppu::WeakImplHelper1<io::XStreamListener>
+struct Listener : public ::cppu::WeakImplHelper<io::XStreamListener>
 {
     bool m_bDone;
 

@@ -23,7 +23,7 @@
 #include "basecontainer.hxx"
 #include <com/sun/star/frame/XLoaderFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace filter{
@@ -34,7 +34,7 @@ namespace filter{
 
 /** @short      implements the service <type scope="com.sun.star.document">ContentHandlerFactory</type>.
  */
-class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer                   ,
+class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContainer                   ,
                                                                      css::frame::XLoaderFactory >
 {
 

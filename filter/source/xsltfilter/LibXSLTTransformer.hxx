@@ -20,7 +20,7 @@
 #include <libxml/xpathInternals.h>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -63,7 +63,7 @@ namespace XSLT
      *
      * See Reader below.
      */
-    class LibXSLTTransformer : public WeakImplHelper1<com::sun::star::xml::xslt::XXSLTTransformer>
+    class LibXSLTTransformer : public WeakImplHelper<com::sun::star::xml::xslt::XXSLTTransformer>
     {
     private:
         static const char* const PARAM_SOURCE_URL;

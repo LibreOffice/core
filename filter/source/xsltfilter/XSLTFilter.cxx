@@ -19,7 +19,7 @@
 
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
@@ -97,7 +97,7 @@ namespace XSLT
      * supporting service from an extension for a specific filter; the
      * service must support com.sun.star.xml.xslt.XSLT2Transformer.
      */
-    class XSLTFilter : public WeakImplHelper4<XImportFilter, XExportFilter,
+    class XSLTFilter : public WeakImplHelper<XImportFilter, XExportFilter,
             XStreamListener, ExtendedDocumentHandlerAdapter>
     {
     private:

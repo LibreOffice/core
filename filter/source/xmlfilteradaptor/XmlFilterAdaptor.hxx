@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
@@ -42,7 +42,7 @@ enum FilterType
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
 
-class XmlFilterAdaptor : public cppu::WeakImplHelper5
+class XmlFilterAdaptor : public cppu::WeakImplHelper
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XExporter,

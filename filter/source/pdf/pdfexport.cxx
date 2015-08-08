@@ -68,7 +68,7 @@
 
 #include "unotools/configmgr.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/compbase1.hxx"
+#include <cppuhelper/compbase.hxx>
 #include "cppuhelper/basemutex.hxx"
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -943,7 +943,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 namespace
 {
 
-typedef cppu::WeakComponentImplHelper1< task::XInteractionRequest > PDFErrorRequestBase;
+typedef cppu::WeakComponentImplHelper< task::XInteractionRequest > PDFErrorRequestBase;
 
 class PDFErrorRequest : private cppu::BaseMutex,
                         public PDFErrorRequestBase

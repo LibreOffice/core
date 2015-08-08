@@ -23,13 +23,13 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class FilterDetect : public cppu::WeakImplHelper3 <
+class FilterDetect : public cppu::WeakImplHelper <
     css::document::XExtendedFilterDetection,
     css::lang::XInitialization,
     css::lang::XServiceInfo

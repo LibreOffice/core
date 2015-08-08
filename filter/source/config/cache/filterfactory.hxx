@@ -24,7 +24,7 @@
 #include "querytokenizer.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace filter{
@@ -35,7 +35,7 @@ namespace filter{
 
 /** @short      implements the service <type scope="com.sun.star.document">FilterFactory</type>.
  */
-class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer                   ,
+class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer                   ,
                                                              css::lang::XMultiServiceFactory >
 {
 

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include "xmlfilterjar.hxx"
@@ -58,7 +58,7 @@ struct Node
 
 typedef std::vector< Node* > NodeVector;
 
-class TypeDetectionImporter : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
+class TypeDetectionImporter : public cppu::WeakImplHelper < com::sun::star::xml::sax::XDocumentHandler >
 {
 public:
     TypeDetectionImporter();

@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 class TBCHeader;
 

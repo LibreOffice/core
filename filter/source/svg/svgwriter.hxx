@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 #define INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
@@ -373,7 +373,7 @@ public:
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
 };
 
-class SVGWriter : public cppu::WeakImplHelper1< XSVGWriter >
+class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >
 {
 private:
     Reference< XComponentContext >                      mxContext;
