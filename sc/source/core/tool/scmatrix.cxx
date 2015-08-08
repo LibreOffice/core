@@ -24,6 +24,7 @@
 #include "interpre.hxx"
 #include "mtvelements.hxx"
 #include "compare.hxx"
+#include "matrixoperators.hxx"
 #include "math.hxx"
 
 #include <boost/noncopyable.hpp>
@@ -999,47 +1000,10 @@ double ScMatrixImpl::Xor() const
 
 namespace {
 
-struct SumOp
-{
-    static const double InitVal;
-
-    void operator() (double& rAccum, double fVal)
-    {
-        rAccum += fVal;
-    }
-};
-
-const double SumOp::InitVal = 0.0;
-
-struct SumSquareOp
-{
-    static const double InitVal;
-
-    void operator() (double& rAccum, double fVal)
-    {
-        rAccum += fVal*fVal;
-    }
-};
-
-const double SumSquareOp::InitVal = 0.0;
-
-struct ProductOp
-{
-    static const double InitVal;
-
-    void operator() (double& rAccum, double fVal)
-    {
-        rAccum *= fVal;
-    }
-};
-
-const double ProductOp::InitVal = 1.0;
-
 template<typename _Op>
-class WalkElementBlocks : std::unary_function<MatrixImplType::element_block_node_type, void>
+class WalkElementBlocks
 {
     _Op maOp;
-
     ScMatrix::IterateResult maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
@@ -1066,7 +1030,9 @@ public:
                         mbFirst = false;
                     }
                     else
+                    {
                         maOp(maRes.mfRest, *it);
+                    }
                 }
                 maRes.mnCount += node.size;
             }
@@ -1085,7 +1051,9 @@ public:
                         mbFirst = false;
                     }
                     else
+                    {
                         maOp(maRes.mfRest, *it);
+                    }
                 }
                 maRes.mnCount += node.size;
             }
@@ -1093,6 +1061,95 @@ public:
             case mdds::mtm::element_string:
                 if (mbTextAsZero)
                     maRes.mnCount += node.size;
+            break;
+            case mdds::mtm::element_empty:
+            default:
+                ;
+        }
+    }
+};
+
+template<typename _Op>
+class WalkElementBlocksMultipleValues
+{
+    const std::vector<std::unique_ptr<_Op>>& maOp;
+    std::vector<ScMatrix::IterateResult> maRes;
+    bool mbFirst:1;
+    bool mbTextAsZero:1;
+public:
+    WalkElementBlocksMultipleValues(bool bTextAsZero, const std::vector<std::unique_ptr<_Op>>& aOp) :
+        maOp(aOp), mbFirst(true), mbTextAsZero(bTextAsZero)
+    {
+        for (const auto& pOp : maOp)
+        {
+            maRes.emplace_back(pOp->mInitVal, pOp->mInitVal, 0);
+        }
+        maRes.emplace_back(0.0, 0.0, 0); // count
+    }
+
+    const std::vector<ScMatrix::IterateResult>& getResult() const { return maRes; }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    if (mbFirst)
+                    {
+                        for (auto i = 0u; i < maOp.size(); ++i)
+                        {
+                            (*maOp[i])(maRes[i].mfFirst, *it);
+                        }
+                        mbFirst = false;
+                    }
+                    else
+                    {
+                        for (auto i = 0u; i < maOp.size(); ++i)
+                        {
+                            (*maOp[i])(maRes[i].mfRest, *it);
+                        }
+                    }
+                }
+                maRes.back().mnCount += node.size;
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    if (mbFirst)
+                    {
+                        for (auto i = 0u; i < maOp.size(); ++i)
+                        {
+                            (*maOp[i])(maRes[i].mfFirst, *it);
+                        }
+                        mbFirst = false;
+                    }
+                    else
+                    {
+                        for (auto i = 0u; i < maOp.size(); ++i)
+                        {
+                            (*maOp[i])(maRes[i].mfRest, *it);
+                        }
+                    }
+                }
+                maRes.back().mnCount += node.size;
+            }
+            break;
+            case mdds::mtm::element_string:
+                if (mbTextAsZero)
+                    maRes.back().mnCount += node.size;
             break;
             case mdds::mtm::element_empty:
             default:
@@ -1697,26 +1754,31 @@ public:
 
 }
 
-ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
+namespace {
+
+template<typename TOp>
+ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, const MatrixImplType& maMat)
 {
-    WalkElementBlocks<SumOp> aFunc(bTextAsZero);
+    WalkElementBlocks<TOp> aFunc(bTextAsZero);
     maMat.walk(aFunc);
     return aFunc.getResult();
+}
+
+}
+
+ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
+{
+    return GetValueWithCount<sc::op::Sum>(bTextAsZero, maMat);
 }
 
 ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
 {
-    WalkElementBlocks<SumSquareOp> aFunc(bTextAsZero);
-    maMat.walk(aFunc);
-    return aFunc.getResult();
+    return GetValueWithCount<sc::op::SumSquare>(bTextAsZero, maMat);
 }
 
 ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 {
-    WalkElementBlocks<ProductOp> aFunc(bTextAsZero);
-    maMat.walk(aFunc);
-    ScMatrix::IterateResult aRes = aFunc.getResult();
-    return aRes;
+    return GetValueWithCount<sc::op::Product>(bTextAsZero, maMat);
 }
 
 size_t ScMatrixImpl::Count(bool bCountStrings) const
