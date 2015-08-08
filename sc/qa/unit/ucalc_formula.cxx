@@ -3369,6 +3369,36 @@ void Test::testFuncSUMPRODUCT()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncSUMXMY2()
+{
+    m_pDoc->InsertTab(0, "Test SumXMY2");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
+
+    ScAddress aPos(0,0,0);
+    m_pDoc->SetString(aPos, "=SUMXMY2(B1:B3;C1:C3)");
+    CPPUNIT_ASSERT_EQUAL(0.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(1,0,0),  1.0); // B1
+    CPPUNIT_ASSERT_EQUAL(1.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(1,1,0),  2.0); // B2
+    CPPUNIT_ASSERT_EQUAL(5.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(1,2,0),  3.0); // B3
+    CPPUNIT_ASSERT_EQUAL(14.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(2,0,0), -1.0); // C1
+    CPPUNIT_ASSERT_EQUAL(17.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(2,1,0),  3.0); // C2
+    CPPUNIT_ASSERT_EQUAL(14.0,  m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(ScAddress(2,2,0),  1.0); // C3
+    CPPUNIT_ASSERT_EQUAL(9.0,  m_pDoc->GetValue(aPos));
+
+    double result = 0.0;
+    m_pDoc->SetString(0, 4, 0, OUString("=SUMXMY2({2;3;4};{4;3;2})"));
+    m_pDoc->GetValue(0, 4, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of SUMXMY2 with inline arrays failed", result == 8.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncMIN()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
