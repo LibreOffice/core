@@ -147,7 +147,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <iomanip>
 #include <iterator>
-#include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
 #include <rtl/math.hxx>

@@ -202,7 +202,6 @@
 #include <map>
 #include <memory>
 #include <numeric>
-#include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>

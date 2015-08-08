@@ -36,8 +36,6 @@
 #include <iterator>
 #include <vector>
 
-#include <o3tl/compat_functional.hxx>
-
 namespace drivermanager
 {
 

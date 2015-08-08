@@ -37,8 +37,6 @@
 #include <connectivity/dbexception.hxx>
 #include "diagnose_ex.h"
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::odbc;

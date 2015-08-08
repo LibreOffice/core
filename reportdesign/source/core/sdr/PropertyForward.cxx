@@ -24,8 +24,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "corestrings.hrc"
-#include <o3tl/compat_functional.hxx>
-
 
 namespace rptui
 {
