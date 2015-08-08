@@ -27,6 +27,7 @@
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
+#include "matrixoperators.hxx"
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 
@@ -2761,7 +2762,6 @@ void ScInterpreter::ScFTest()
     }
     SCSIZE nC1, nC2;
     SCSIZE nR1, nR2;
-    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     double fCount1  = 0.0;
@@ -2770,29 +2770,21 @@ void ScInterpreter::ScFTest()
     double fSumSqr1 = 0.0;
     double fSum2    = 0.0;
     double fSumSqr2 = 0.0;
-    double fVal;
-    for (i = 0; i < nC1; i++)
-        for (j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsString(i,j))
-            {
-                fVal = pMat1->GetDouble(i,j);
-                fSum1    += fVal;
-                fSumSqr1 += fVal * fVal;
-                fCount1++;
-            }
-        }
-    for (i = 0; i < nC2; i++)
-        for (j = 0; j < nR2; j++)
-        {
-            if (!pMat2->IsString(i,j))
-            {
-                fVal = pMat2->GetDouble(i,j);
-                fSum2    += fVal;
-                fSumSqr2 += fVal * fVal;
-                fCount2++;
-            }
-        }
+
+    std::vector<std::unique_ptr<sc::op::Op>> aOp;
+    aOp.emplace_back(new sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
+    aOp.emplace_back(new sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
+
+    auto aVal1 = pMat1->Collect(false, aOp);
+    fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
+    fSumSqr1 = aVal1[1].mfFirst + aVal1[1].mfRest;
+    fCount1 = aVal1[2].mnCount;
+
+    auto aVal2 = pMat2->Collect(false, aOp);
+    fSum2 = aVal2[0].mfFirst + aVal2[0].mfRest;
+    fSumSqr2 = aVal2[1].mfFirst + aVal2[1].mfRest;
+    fCount2 = aVal2[2].mnCount;
+
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
         PushNoValue();
