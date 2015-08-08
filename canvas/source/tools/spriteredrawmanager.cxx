@@ -27,9 +27,6 @@
 #include <basegfx/vector/b2dsize.hxx>
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
-#include <boost/bind.hpp>
-
 
 namespace canvas
 {
@@ -411,12 +408,8 @@ namespace canvas
         ::basegfx::B2DRange aTrueArea( rUpdateArea.maComponentList.begin()->second.getUpdateArea() );
         ::std::for_each( rUpdateArea.maComponentList.begin(),
                          rUpdateArea.maComponentList.end(),
-                         ::boost::bind( (void (basegfx::B2DRange::*)(const basegfx::B2DRange&))(
-                                            &basegfx::B2DRange::expand),
-                                        aTrueArea,
-                                        ::boost::bind( &SpriteInfo::getUpdateArea,
-                                                       ::boost::bind( ::o3tl::select2nd<AreaComponent>(),
-                                                                      _1 ) ) ) );
+                         [&aTrueArea]( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
+                         { aTrueArea.expand(cp.second.getUpdateArea()); } );
 
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
@@ -425,10 +418,8 @@ namespace canvas
         // update will not be opaque.
         return ::std::none_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
-                                ::boost::bind( &SpriteRedrawManager::isAreaUpdateNotOpaque,
-                                               this,
-                                               ::boost::cref(aTrueArea),
-                                               _1 ) );
+                                [&aTrueArea, this]( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
+                                { return this->isAreaUpdateNotOpaque(aTrueArea, cp); } );
     }
 
     bool SpriteRedrawManager::areSpritesChanged( const UpdateArea& rUpdateArea ) const
@@ -442,10 +433,8 @@ namespace canvas
             rUpdateArea.maComponentList.end() );
         return ::std::any_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
-                                ::boost::bind( &SpriteInfo::needsUpdate,
-                                               ::boost::bind(
-                                                   ::o3tl::select2nd<SpriteConnectedRanges::ComponentType>(),
-                                                   _1 ) ) );
+                                []( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
+                                { return cp.second.needsUpdate(); } );
     }
 
     SpriteRedrawManager::SpriteRedrawManager() :
