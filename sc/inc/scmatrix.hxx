@@ -21,12 +21,16 @@
 #define INCLUDED_SC_INC_SCMATRIX_HXX
 
 #include "global.hxx"
+#include "matrixoperators.hxx"
 #include "types.hxx"
 #include <formula/errorcodes.hxx>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 #include <svl/sharedstring.hxx>
 
+#include <functional>
+#include <utility>
+#include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 

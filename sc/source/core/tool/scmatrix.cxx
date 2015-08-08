@@ -24,6 +24,7 @@
 #include "interpre.hxx"
 #include "mtvelements.hxx"
 #include "compare.hxx"
+#include "matrixoperators.hxx"
 #include "math.hxx"
 
 #include <boost/noncopyable.hpp>
@@ -999,54 +1000,25 @@ double ScMatrixImpl::Xor() const
 
 namespace {
 
-struct SumOp
-{
-    static const double InitVal;
-
-    void operator() (double& rAccum, double fVal)
-    {
-        rAccum += fVal;
-    }
-};
-
-const double SumOp::InitVal = 0.0;
-
-struct SumSquareOp
-{
-    static const double InitVal;
-
-    void operator() (double& rAccum, double fVal)
-    {
-        rAccum += fVal*fVal;
-    }
-};
-
-const double SumSquareOp::InitVal = 0.0;
-
-struct ProductOp
-{
-    static const double InitVal;
-
-    void operator() (double& rAccum, double fVal)
-    {
-        rAccum *= fVal;
-    }
-};
-
-const double ProductOp::InitVal = 1.0;
-
 template<typename _Op>
-class WalkElementBlocks : std::unary_function<MatrixImplType::element_block_node_type, void>
+class WalkElementBlocks
 {
-    _Op maOp;
-
-    ScMatrix::IterateResult maRes;
+    const std::vector<std::unique_ptr<_Op>>& maOp;
+    std::vector<ScMatrix::IterateResult> maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
 public:
-    WalkElementBlocks(bool bTextAsZero) : maRes(_Op::InitVal, _Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
+    WalkElementBlocks(bool bTextAsZero, const std::vector<std::unique_ptr<_Op>>& aOp) :
+        maOp(aOp), mbFirst(true), mbTextAsZero(bTextAsZero)
+    {
+        maRes.emplace_back(0.0, 0.0, 0); // count
+        for (const auto& pOp : maOp)
+        {
+            maRes.emplace_back(pOp->mInitVal, pOp->mInitVal, 0);
+        }
+    }
 
-    const ScMatrix::IterateResult& getResult() const { return maRes; }
+    const std::vector<ScMatrix::IterateResult>& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1062,13 +1034,21 @@ public:
                 {
                     if (mbFirst)
                     {
-                        maOp(maRes.mfFirst, *it);
+                        for (auto i = 1u; i < maOp.size(); ++i)
+                        {
+                            maRes[i].mfFirst = (*maOp[i])(maRes[i].mfFirst, *it);
+                        }
                         mbFirst = false;
                     }
                     else
-                        maOp(maRes.mfRest, *it);
+                    {
+                        for (auto i = 1u; i < maOp.size(); ++i)
+                        {
+                            maRes[i].mfRest = (*maOp[i])(maRes[i].mfRest, *it);
+                        }
+                    }
                 }
-                maRes.mnCount += node.size;
+                maRes.front().mnCount += node.size;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -1081,18 +1061,26 @@ public:
                 {
                     if (mbFirst)
                     {
-                        maOp(maRes.mfFirst, *it);
+                        for (auto i = 1u; i < maOp.size(); ++i)
+                        {
+                            maRes[i].mfFirst = (*maOp[i])(maRes[i].mfFirst, *it);
+                        }
                         mbFirst = false;
                     }
                     else
-                        maOp(maRes.mfRest, *it);
+                    {
+                        for (auto i = 1u; i < maOp.size(); ++i)
+                        {
+                            maRes[i].mfRest = (*maOp[i])(maRes[i].mfRest, *it);
+                        }
+                    }
                 }
-                maRes.mnCount += node.size;
+                maRes.front().mnCount += node.size;
             }
             break;
             case mdds::mtm::element_string:
                 if (mbTextAsZero)
-                    maRes.mnCount += node.size;
+                    maRes.front().mnCount += node.size;
             break;
             case mdds::mtm::element_empty:
             default:
@@ -1699,24 +1687,30 @@ public:
 
 ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
 {
-    WalkElementBlocks<SumOp> aFunc(bTextAsZero);
+    std::vector<std::unique_ptr<sc::op::Op>> aOp;
+    aOp.emplace_back(new sc::op::Sum);
+    WalkElementBlocks<sc::op::Op> aFunc(bTextAsZero, aOp);
     maMat.walk(aFunc);
-    return aFunc.getResult();
+    return aFunc.getResult()[1];
 }
 
 ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
 {
-    WalkElementBlocks<SumSquareOp> aFunc(bTextAsZero);
+    std::vector<std::unique_ptr<sc::op::Op>> aOp;
+    aOp.emplace_back(new sc::op::SumSquare);
+    WalkElementBlocks<sc::op::Op> aFunc(bTextAsZero, aOp);
     maMat.walk(aFunc);
-    return aFunc.getResult();
+    return aFunc.getResult()[1];
 }
 
 ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 {
-    WalkElementBlocks<ProductOp> aFunc(bTextAsZero);
+    std::vector<std::unique_ptr<sc::op::Op>> aOp;
+    aOp.emplace_back(new sc::op::Product);
+    WalkElementBlocks<sc::op::Op> aFunc(bTextAsZero, aOp);
     maMat.walk(aFunc);
-    ScMatrix::IterateResult aRes = aFunc.getResult();
-    return aRes;
+    auto aRes = aFunc.getResult();
+    return aRes[1];
 }
 
 size_t ScMatrixImpl::Count(bool bCountStrings) const
