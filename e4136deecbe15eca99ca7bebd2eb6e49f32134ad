@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_86aa2e18",
+        "filename": "sc/inc/matrixoperators.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-08-08T14:45:34Z",
+      "side": 1,
+      "message": "Wrong license header. This is purely MPL code.",
+      "revId": "e4136deecbe15eca99ca7bebd2eb6e49f32134ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_26ad2232",
+        "filename": "sc/source/core/tool/matrixoperators.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-08-08T14:45:34Z",
+      "side": 1,
+      "message": "Wrong license header. This is purely MPL code.",
+      "revId": "e4136deecbe15eca99ca7bebd2eb6e49f32134ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
