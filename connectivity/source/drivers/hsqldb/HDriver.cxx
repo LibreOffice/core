@@ -55,8 +55,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <o3tl/compat_functional.hxx>
-
 #include <boost/scoped_ptr.hpp>
 
 

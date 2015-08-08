@@ -42,7 +42,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <osl/thread.h>

@@ -37,8 +37,6 @@
 #include <unotools/sharedunocomponent.hxx>
 #include "TConnection.hxx"
 
-#include <o3tl/compat_functional.hxx>
-
 #include <iterator>
 #include <set>
 
@@ -294,8 +292,8 @@ void OTableHelper::refreshColumns()
             aSortedColumns.begin(),
             aSortedColumns.end(),
             ::std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
-            ::o3tl::select2nd< ::std::map< OrdinalPosition, OUString >::value_type >()
-        );
+            []( const ::std::pair< OrdinalPosition, OUString >& cp ) { return cp.second; }
+            );
     }
 
     if(m_pColumns)

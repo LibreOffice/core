@@ -21,8 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace connectivity;
 
 /// binary_function Functor object for class OSortIndex::TIntValuePairVector::value_type returntype is bool
@@ -86,7 +84,8 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
                     ,::std::back_inserter(pKeySet->get())
-                    ,::o3tl::select1st<TIntValuePairVector::value_type>());
+                    ,[]( const ::std::pair< sal_Int32, OKeyValue* >& cp )
+                    { return cp.first; });
     pKeySet->setFrozen();
     return pKeySet;
 }
