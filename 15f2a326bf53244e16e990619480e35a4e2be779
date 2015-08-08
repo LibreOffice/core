@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_a6cbf21d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-08T09:21:08Z",
+      "side": 1,
+      "message": "Should this be better \"Toggle Unicode Notation\"?",
+      "revId": "15f2a326bf53244e16e990619480e35a4e2be779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
