@@ -5558,6 +5558,22 @@
         </prop>
       </node>
     </node>
+    <node oor:name=".uno:StatusSelectionModeExt" oor:op="replace">
+      <prop oor:name="Label" oor:type="xs:string">
+        <value xml:lang="en-US">Extended Selection</value>
+      </prop>
+      <prop oor:name="ContextLabel" oor:type="xs:string">
+        <value xml:lang="en-US">Extended</value>
+      </prop>
+    </node>
+    <node oor:name=".uno:StatusSelectionModeExp" oor:op="replace">
+      <prop oor:name="Label" oor:type="xs:string">
+        <value xml:lang="en-US">Adding Selection</value>
+      </prop>
+      <prop oor:name="ContextLabel" oor:type="xs:string">
+        <value xml:lang="en-US">Adding</value>
+      </prop>
+    </node>
     <node oor:name="Popups">
       <node oor:name=".uno:HelpMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
