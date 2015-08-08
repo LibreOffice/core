@@ -398,6 +398,8 @@ public:
     void DivOp(bool bFlag, double fVal, ScMatrix& rMat);
     void PowOp(bool bFlag, double fVal, ScMatrix& rMat);
 
+    const std::vector<ScMatrix::IterateResult>& Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp);
+
     ScMatrix& operator+= ( const ScMatrix& r );
 
 #if DEBUG_MATRIX
