@@ -11,7 +11,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,glm))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,glm,$(GLM_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchflags,glm,--binary))
+$(eval $(call gb_UnpackedTarball_set_patchflags,glm,$(if $(filter MSC,$(COM)),--binary)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,glm,1))
 
