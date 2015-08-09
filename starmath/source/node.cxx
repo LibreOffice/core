@@ -2367,13 +2367,8 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
                 (pResult->GetNumSubNodes() == 1) )
             {
                 pResult = pResult->GetSubNode(0);
-                if ( (pResult->GetType() == NEXPRESSION) &&
-                    (pResult->GetNumSubNodes() == 1) )
-                {
-                    pResult = pResult->GetSubNode(0);
-                    if (pResult->GetType() == NTEXT)
-                        bQuoted=false;
-                }
+                if (pResult->GetType() == NTEXT)
+                    bQuoted=false;
             }
         }
         delete pTable;
