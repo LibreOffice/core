@@ -386,9 +386,10 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 
 bool SfxMedium::DocNeedsFileDateCheck() const
 {
-    OUString aScheme =  INetURLObject::GetScheme( GetURLObject().GetProtocol() );
-    bool bIsWebDAV = ( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
-                       aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) );
+    INetProtocol aProto =  GetURLObject().GetProtocol();
+    bool bIsWebDAV = ( aProto ==  INetProtocol::Http ||
+                       aProto ==  INetProtocol::Https ||
+                       aProto ==  INetProtocol::VndSunStarWebdav );
     return ( !IsReadOnly() &&
              ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) || bIsWebDAV ) );
 }
@@ -953,9 +954,10 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
     // check if path scheme is http:// or https://
     // may be this is better if used always, in Android and iOS as well?
     // if this code should be always there, remember to move the relevant code in UnlockFile method as well !
-    OUString aScheme =  INetURLObject::GetScheme(GetURLObject().GetProtocol());
-    if( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
-        aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) )
+    INetProtocol aProto =  GetURLObject().GetProtocol();
+    if( aProto ==  INetProtocol::Http ||
+        aProto ==  INetProtocol::Https ||
+        aProto ==  INetProtocol::VndSunStarWebdav )
     {
         try
         {
@@ -2403,9 +2405,10 @@ void SfxMedium::GetMedium_Impl()
                     {
                         // add a check for protocol, if it's http or https then add
                         // the interaction handler to be used by the authentication dialog
-                        OUString aScheme =  INetURLObject::GetScheme(GetURLObject().GetProtocol());
-                        if( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
-                            aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) )
+                        INetProtocol aProto =  GetURLObject().GetProtocol();
+                        if( aProto ==  INetProtocol::Http ||
+                            aProto ==  INetProtocol::Https ||
+                            aProto ==  INetProtocol::VndSunStarWebdav )
                         {
                             aMedium[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= GetInteractionHandler( true );
                         }
@@ -2709,9 +2712,10 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     try
     {
         // check if webdav
-        OUString aScheme =  INetURLObject::GetScheme(GetURLObject().GetProtocol());
-        if( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
-            aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) )
+        INetProtocol aProto =  GetURLObject().GetProtocol();
+        if( aProto ==  INetProtocol::Http ||
+            aProto ==  INetProtocol::Https ||
+            aProto ==  INetProtocol::VndSunStarWebdav )
         {
             if ( pImp->m_bLocked )
             {

@@ -447,7 +447,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // TODO: add an indication to the user? Difficult to implement I think.
             // TODO: change the check age method for WebDAV to etag property value, need some rethinking
             bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            bool bIsHttpOrHttps = (aMedObj.GetProtocol() == INetProtocol::Http || aMedObj.GetProtocol() == INetProtocol::Https);
+            bool bIsHttpOrHttps = (aMedObj.GetProtocol() == INetProtocol::Http || aMedObj.GetProtocol() == INetProtocol::Https || aMedObj.GetProtocol() == INetProtocol::VndSunStarWebdav);
             if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
                                         aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
                                         !bPhysObjIsYounger )
