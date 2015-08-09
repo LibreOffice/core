@@ -215,7 +215,6 @@ static void lcl_addAspect(
         if ( nAspect )
         {
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
-            pStates++;
         }
     }
 }
@@ -246,7 +245,6 @@ static void lcl_addOutplaceProperties(
 
             aAny <<= (sal_Int32)aSize.Height();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
-            pStates++;
         }
     }
 }
@@ -317,7 +315,6 @@ static void lcl_addFrameProperties(
         Any aAny2;
         aAny <<= nHeight;
         *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), aAny2 );
-        pStates++;
     }
 }
 
