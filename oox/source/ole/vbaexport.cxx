@@ -26,13 +26,22 @@ VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
 
 namespace {
 
+//section 2.3.4.2.1.6
+void writePROJECTDOCSTRING(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0005); // id
+    rStrm.WriteUInt32(0x00000000); // sizeOfDocString
+    rStrm.WriteUInt16(0x0040); // Reserved
+    rStrm.WriteUInt32(0x00000000); // sizeOfDocStringUnicode, MUST be even
+}
+
 //section 2.3.4.2.1.5
 void writePROJECTNAME(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0004); // id
     sal_uInt32 sizeOfProjectName = 0x0000000a; // for project name "VBAProject"
     rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
-    //characters of "VBAProject"
+    //characters of "VBAProject" in MBCS character encodings
     rStrm.WriteUChar('V');
     rStrm.WriteUChar('B');
     rStrm.WriteUChar('A');
@@ -85,6 +94,7 @@ void writePROJECTINFORMATION(SvStream& rStrm)
     writePROJECTLCIDINVOKE(rStrm);
     writePROJECTCODEPAGE(rStrm);
     writePROJECTNAME(rStrm);
+    writePROJECTDOCSTRING(rStrm);
 }
 
 // section 2.3.4.2
