@@ -624,7 +624,7 @@
     </node>
     <node oor:name="phi" oor:op="replace">
       <prop oor:name="Char">
-        <value>981</value>
+        <value>966</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
@@ -806,7 +806,7 @@
     </node>
     <node oor:name="varphi" oor:op="replace">
       <prop oor:name="Char">
-        <value>966</value>
+        <value>981</value>
       </prop>
       <prop oor:name="Set">
         <value>Greek</value>
