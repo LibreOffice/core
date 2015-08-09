@@ -3670,7 +3670,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                         PropertyMapPtr pCharContext = GetTopContext();
                                         // dHeight is the font size of the current style.
                                         double dHeight = 0;
-                                        if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
+                                        if ((GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight) && dHeight != 0)
                                             // Character escapement should be given in negative percents for subscripts.
                                             pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
                                         appendTextPortion(aContent, pCharContext);
