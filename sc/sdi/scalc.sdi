@@ -3232,7 +3232,7 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ]
 
 SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
-()
+(SfxBoolItem Visible SID_SEARCH_RESULTS_DIALOG)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3249,9 +3249,9 @@ SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
 
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
 
