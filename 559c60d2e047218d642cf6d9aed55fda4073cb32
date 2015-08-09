@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_a9baa5be",
+        "filename": "vcl/source/gdi/impimagetree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-08-09T22:37:32Z",
+      "side": 1,
+      "message": "huh? This code change does not change behaviour at all, if the added lines are not there, this function would still return \"tango\" as the last resort.",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 14
+      },
+      "revId": "559c60d2e047218d642cf6d9aed55fda4073cb32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
