@@ -46,6 +46,7 @@
 #include "crstate.hxx"
 #include <pormulti.hxx>
 #include <numrule.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 // Not reentrant !!!
 // is set in GetCharRect and is interpreted in UnitUp/Down.
@@ -247,6 +248,10 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrm *pNewFrm, SwTextSizeInfo *pNewI
             rSpace.IsAutoFirst() )
         {
             nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
+            LanguageType aLang = pNode->GetLang( 0, 1, css::i18n::ScriptType::ASIAN);
+            if (aLang != LANGUAGE_KOREAN && aLang != LANGUAGE_JAPANESE)
+                nFirstLineOfs<<=1;
+
             const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
             if( pSpace )
             {
