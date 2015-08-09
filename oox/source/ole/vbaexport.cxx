@@ -27,12 +27,6 @@
 #define CODEPAGE RTL_TEXTENCODING_MS_1252
 #endif
 
-VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
-    mxModel(xModel)
-{
-    maProjectName = "How to get the correct project name?";
-}
-
 namespace {
 
 void exportString(SvStream& rStrm, const OUString& rString)
@@ -43,7 +37,22 @@ void exportString(SvStream& rStrm, const OUString& rString)
 
 }
 
+VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
+    mxModel(xModel)
+{
+    maProjectName = "How to get the correct project name?";
+}
+
 namespace {
+
+//section 2.3.4.2.1.10
+void writePROJECTVERSION(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0009); // id
+    rStrm.WriteUInt32(0x00000004); // Reserved
+    rStrm.WriteUInt32(1467127224); // VersionMajor // TODO: where is this magic number comming from
+    rStrm.WriteUInt16(5); // VersionMinor // TODO: where is this magic number coming from
+}
 
 //section 2.3.4.2.1.9
 void writePROJECTLIBFLAGS(SvStream& rStrm)
@@ -133,6 +142,7 @@ void writePROJECTINFORMATION(SvStream& rStrm)
     writePROJECTHELPFILEPATH(rStrm);
     writePROJECTHELPCONTEXT(rStrm);
     writePROJECTLIBFLAGS(rStrm);
+    writePROJECTVERSION(rStrm);
 }
 
 // section 2.3.4.2
