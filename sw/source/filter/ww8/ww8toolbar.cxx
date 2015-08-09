@@ -214,7 +214,7 @@ void SwCTBWrapper::Print( FILE* fp )
 
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it, ++index )
     {
-        indent_printf(fp,"  Dumping custimization [%d]\n", static_cast< int >( index ));
+        indent_printf(fp,"  Dumping customization [%d]\n", static_cast< int >( index ));
         Indent c;
         it->Print(fp);
     }
@@ -258,7 +258,7 @@ Customization::~Customization()
 
 bool Customization::Read( SvStream &rS)
 {
-    SAL_INFO("sw.ww8","Custimization::Read() stream pos 0x" << std::hex << rS.Tell() );
+    SAL_INFO("sw.ww8","Customization::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS.ReadInt32( tbidForTBD ).ReadUInt16( reserved1 ).ReadUInt16( ctbds );
     if ( tbidForTBD )
@@ -273,7 +273,7 @@ bool Customization::Read( SvStream &rS)
             if (!aTBDelta.Read( rS ) )
                 return false;
             customizationDataTBDelta.push_back( aTBDelta );
-            // Only set the drop down for menu's associated with standard toolbar
+            // Only set the drop down for menus associated with standard toolbar
             if ( aTBDelta.ControlDropsToolBar() && tbidForTBD == 0x25 )
                 pWrapper->InsertDropIndex( aTBDelta.CustomizationIndex() );
         }
