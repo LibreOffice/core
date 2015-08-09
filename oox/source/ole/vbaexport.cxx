@@ -26,6 +26,14 @@ VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
 
 namespace {
 
+// section 2.3.4.2.1.4
+void writePROJECTCODEPAGE(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0003); // id
+    rStrm.WriteUInt32(0x00000002); // size
+    rStrm.WriteUInt16(1252); // CodePage
+}
+
 // section 2.3.4.2.1.3
 void writePROJECTLCIDINVOKE(SvStream& rStrm)
 {
@@ -56,6 +64,7 @@ void writePROJECTINFORMATION(SvStream& rStrm)
     writePROJECTSYSKIND(rStrm);
     writePROJECTLCID(rStrm);
     writePROJECTLCIDINVOKE(rStrm);
+    writePROJECTCODEPAGE(rStrm);
 }
 
 // section 2.3.4.2
