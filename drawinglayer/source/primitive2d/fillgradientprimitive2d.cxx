@@ -287,7 +287,7 @@ namespace drawinglayer
             // default creates overlapping fill which works with AntiAliasing and without.
             // The non-overlapping version does not create single filled polygons, but
             // PolyPolygons where each one describes a 'ring' for the gradient such
-            // that the rings will not overlap. This is useful fir the old XOR-paint
+            // that the rings will not overlap. This is useful for the old XOR-paint
             // 'trick' of VCL which is recorded in Metafiles; so this version may be
             // used from the MetafilePrimitive2D in it's decomposition.
 
