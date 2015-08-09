@@ -266,7 +266,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     }
 
     // export sub streams for package, else full stream into a file
-    bool bWarn = false, bErr = false;
+    bool bWarn = false;
 
     // RDF metadata: export if ODF >= 1.2
     // N.B.: embedded documents have their own manifest.rdf!
@@ -327,24 +327,23 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
         }
     }
 
-    if( !bErr )
+    if( !bBlock )
     {
-        if( !bBlock )
+        if( !WriteThroughComponent(
+            xModelComp, "settings.xml", xContext,
+            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsExporter"
+                    : "com.sun.star.comp.Writer.XMLSettingsExporter"),
+            aEmptyArgs, aProps ) )
         {
-            if( !WriteThroughComponent(
-                xModelComp, "settings.xml", xContext,
-                (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsExporter"
-                        : "com.sun.star.comp.Writer.XMLSettingsExporter"),
-                aEmptyArgs, aProps ) )
+            if( !bWarn )
             {
-                if( !bWarn )
-                {
-                    bWarn = true;
-                    sWarnFile = "settings.xml";
-                }
+                bWarn = true;
+                sWarnFile = "settings.xml";
             }
         }
     }
+
+    bool bErr = false;
 
     OUString sErrFile;
     if( !WriteThroughComponent(
