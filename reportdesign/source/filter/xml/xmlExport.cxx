@@ -905,17 +905,15 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             {
                             }
 
-                            bool bPageSet = false;
                             if ( bExportData )
                             {
-                                bPageSet = exportFormula(XML_FORMULA,xReportElement->getDataField());
+                                const bool bPageSet = exportFormula(XML_FORMULA,xReportElement->getDataField());
                                 if ( bPageSet )
                                     eToken = XML_FIXED_CONTENT;
                                 else if ( eToken == XML_IMAGE )
                                     AddAttribute(XML_NAMESPACE_REPORT, XML_PRESERVE_IRI, xImage->getPreserveIRI() ? XML_TRUE : XML_FALSE );
                             }
 
-                            //if ( !bPageSet )
                             {
                                 // start <report:eToken>
                                 SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, false, false);
