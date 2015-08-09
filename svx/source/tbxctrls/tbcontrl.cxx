@@ -164,6 +164,7 @@ private:
     static void     UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
     void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_uInt16 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
+    void            SetOptimalSize();
     DECL_LINK( MenuSelectHdl, Menu * );
 };
 
@@ -333,6 +334,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
         m_pButtons[i] = NULL;
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
+    SetOptimalSize();
     EnableAutocomplete( true );
     EnableUserDraw( true );
     SetUserItemSize( Size( 0, ITEM_HEIGHT ) );
@@ -541,7 +543,7 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        SetOptimalSize();
     }
 
     ComboBox::DataChanged( rDCEvt );
@@ -580,6 +582,14 @@ bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle&
         return true;
     }
     return false;
+}
+
+void SvxStyleBox_Impl::SetOptimalSize()
+{
+    Size aSize(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    set_width_request(aSize.Width());
+    set_height_request(aSize.Height());
+    SetSizePixel(aSize);
 }
 
 void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName)
