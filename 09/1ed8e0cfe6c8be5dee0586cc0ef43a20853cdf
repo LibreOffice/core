@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Verified+1: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Submitted-by: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Submitted-at: Sun, 09 Aug 2015 08:13:29 +0000
+Reviewed-on: https://gerrit.libreoffice.org/17599
+Project: core
+Branch: refs/heads/feature/vba-export
