@@ -111,6 +111,8 @@ OUString ImplImageTree::fallbackStyle(const OUString &style)
         return OUString("galaxy");
     else if (style == "sifr")
         return OUString("breeze");
+    else if (style == "human")
+        return OUString("tango");
 
     return OUString("tango");
 }
