@@ -23,7 +23,7 @@
 #include <GL/glew.h>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
-
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 
 class ImplOpenGLTexture
@@ -70,6 +70,8 @@ public:
     void            Bind();
     void            Unbind();
     void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );
+
+    void            SaveToFile(const OUString& rFileName);
 
     GLenum          GetFilter() const;
     void            SetFilter( GLenum nFilter );

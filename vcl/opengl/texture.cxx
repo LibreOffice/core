@@ -23,7 +23,8 @@
 
 #include "svdata.hxx"
 
-#include "vcl/salbtype.hxx"
+#include <vcl/salbtype.hxx>
+#include <vcl/pngwrite.hxx>
 
 #include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
@@ -258,6 +259,26 @@ void OpenGLTexture::Unbind()
 {
     if( mpImpl )
         glBindTexture( GL_TEXTURE_2D, 0 );
+
+    CHECK_GL_ERROR();
+}
+
+void OpenGLTexture::SaveToFile(const OUString& rFileName)
+{
+    std::vector<sal_uInt8> pBuffer(GetWidth() * GetHeight() * 4);
+    Read(GL_BGRA, GL_UNSIGNED_BYTE, pBuffer.data());
+    BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(pBuffer.data(), GetWidth(), GetHeight());
+    try
+    {
+        vcl::PNGWriter aWriter(aBitmap);
+        SvFileStream sOutput(rFileName, StreamMode::WRITE);
+        aWriter.Write(sOutput);
+        sOutput.Close();
+    }
+    catch (...)
+    {
+        SAL_WARN("vcl.opengl", "Error writing png to " << rFileName);
+    }
 
     CHECK_GL_ERROR();
 }
