@@ -26,6 +26,15 @@ VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
 
 namespace {
 
+//section 2.3.4.2.1.7
+void writePROJECTHELPFILEPATH(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0006); // id
+    rStrm.WriteUInt32(0x00000000); // sizeOfHelpFile1
+    rStrm.WriteUInt16(0x003D); // Reserved
+    rStrm.WriteUInt32(0x00000000); // sizeOfHelpFile2
+}
+
 //section 2.3.4.2.1.6
 void writePROJECTDOCSTRING(SvStream& rStrm)
 {
@@ -95,6 +104,7 @@ void writePROJECTINFORMATION(SvStream& rStrm)
     writePROJECTCODEPAGE(rStrm);
     writePROJECTNAME(rStrm);
     writePROJECTDOCSTRING(rStrm);
+    writePROJECTHELPFILEPATH(rStrm);
 }
 
 // section 2.3.4.2
