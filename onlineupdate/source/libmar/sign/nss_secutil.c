@@ -158,7 +158,7 @@ SECU_FilePasswd(PK11SlotInfo *slot, PRBool retry, void *arg)
     int phraseLen;
 
     /* handle the Windows EOL case */
-    while (phrases[i] != '\r' && phrases[i] != '\n' && i < nb) i++;
+    while (i < nb && phrases[i] != '\r' && phrases[i] != '\n') i++;
     /* terminate passphrase */
     phrases[i++] = '\0';
     /* clean up any EOL before the start of the next passphrase */
