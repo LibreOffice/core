@@ -693,8 +693,9 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                     css::uno::Reference< css::ucb::XContentIdentifier > xContId(
                         aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
                     if ( xContId.is() )
-                        aScheme = xContId->getContentProviderScheme();
-                    if(!aScheme.equalsIgnoreAsciiCase( "http" ) && !aScheme.equalsIgnoreAsciiCase( "https" ))
+                        aScheme = xContId->getContentProviderScheme().toAsciiLowerCase();
+                    if(aScheme != "http" && aScheme != "https" &&
+                       aScheme != "vnd.sun.star.webdav" )
                         return false;
                 }
                 xStream.clear();
