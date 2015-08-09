@@ -16,6 +16,24 @@
       "revId": "1634b0a6c1e717337f025b501be157bf15264dfa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_49e79912",
+        "filename": "basctl/source/dlged/dlgedobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-09T18:45:30Z",
+      "side": 1,
+      "message": "Purely preference. I typically prefer to avoid the use of typedefs unless there is a specific reason, but that is entirely preference, so if you think its better to use value_type, I can change it.",
+      "parentUuid": "bae84128_c6ed5690",
+      "revId": "1634b0a6c1e717337f025b501be157bf15264dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
