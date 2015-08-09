@@ -85,21 +85,21 @@ void Test::tearDown()
 void Test::testSimple()
 {
     loadURL(getURLFromSrc("starmath/qa/extras/data/simple.mml"));
-    OUString sExpected("left ( {italic \"a\" + italic \"b\"} right )^italic \"2\"");
+    OUString sExpected("left ( {a + b} right )^2");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
     loadURL(getURLFromSrc("starmath/qa/extras/data/ns-prefix-math.mml"));
-    OUString sExpected("left ( {italic \"a\" + italic \"b\"} right )^italic \"2\"");
+    OUString sExpected("left ( {a + b} right )^2");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
 void Test::testMaction()
 {
     loadURL(getURLFromSrc("starmath/qa/extras/data/maction.mml"));
-    OUString sExpected("matrix {italic \"1\" ## italic \"2\" ## italic \"3\"}");
+    OUString sExpected("matrix {1 ## 2 ## 3}");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
