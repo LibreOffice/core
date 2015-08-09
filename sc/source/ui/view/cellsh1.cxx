@@ -1029,7 +1029,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_SEARCH_RESULTS_DIALOG:
         {
             const SfxPoolItem* pItem = NULL;
-            if (pReqArgs->HasItem(SID_SEARCH_RESULTS_DIALOG, &pItem))
+            if (pReqArgs && pReqArgs->HasItem(SID_SEARCH_RESULTS_DIALOG, &pItem))
             {
                 bool bVisible = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
