@@ -26,6 +26,14 @@ VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
 
 namespace {
 
+// section 2.3.4.2.1.2
+void writePROJECTLCID(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0002); // id
+    rStrm.WriteUInt32(0x00000004); // size
+    rStrm.WriteUInt32(0x00000409); // Lcid
+}
+
 // section 2.3.4.2.1.1
 void writePROJECTSYSKIND(SvStream& rStrm)
 {
@@ -38,6 +46,7 @@ void writePROJECTSYSKIND(SvStream& rStrm)
 void writePROJECTINFORMATION(SvStream& rStrm)
 {
     writePROJECTSYSKIND(rStrm);
+    writePROJECTLCID(rStrm);
 }
 
 // section 2.3.4.2
@@ -51,7 +60,7 @@ void exportDirStream(SvStream& rStrm)
 void VbaExport::exportVBA()
 {
     // start here with the VBA export
-    const OUString aDirFileName("/home/moggi/Documents/temp/vba_dir_out.bin");
+    const OUString aDirFileName("/tmp/vba_dir_out.bin");
     SvFileStream aDirStream(aDirFileName, StreamMode::WRITE);
 
     // export
