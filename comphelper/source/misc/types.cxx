@@ -461,9 +461,7 @@ Type getSequenceElementType(const Type& _rSequenceType)
     typelib_IndirectTypeDescription* pSequenceTD =
         reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
 
-    OSL_ASSERT(pSequenceTD);
-    OSL_ASSERT(pSequenceTD->pType);
-
+    OSL_ASSERT(pSequenceTD && pSequenceTD->pType);
     if (pSequenceTD && pSequenceTD->pType)
         return Type(pSequenceTD->pType);
 
