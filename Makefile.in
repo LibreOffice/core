@@ -58,7 +58,7 @@ gb_Side ?= host
 
 include $(BUILDDIR)/config_$(gb_Side).mk
 
-export GMAKE_OPTIONS?=-r$(if $(verbose)$(VERBOSE),,s)$(value $(MAKEFLAGS))
+export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
 
 PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
 

@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		&& $(if $(filter WNTMSC,$(OS)$(COM)),\
 			REAL_CC="$(shell cygpath -w $(lastword $(filter-out -%,$(CC))))" \
 			REAL_CC_FLAGS="$(filter -%,$(CC))") \
-		   $(if $(VERBOSE)$(verbose),V=1) \
+		   $(if $(verbose),V=1) \
 		   $(gb_Helper_set_ld_path) \
 		   $(MAKE) \
 	)

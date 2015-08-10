@@ -43,7 +43,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
 		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(call odk_cygwin_path,$(odk_cpp_DOXY_WORKDIR))!' \
 		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"!' \
 		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
-		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
+		-e 's!^QUIET = %$$!QUIET = $(if $(verbose),NO,YES)!' \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_cpp_PREFIX))!' \
 		$< > $@
 
@@ -81,7 +81,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
 		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(call odk_cygwin_path,$(odk_idl_DOXY_WORKDIR))!' \
 		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = "$(PRODUCTNAME) $(PRODUCTVERSION) SDK API Reference"!' \
 		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
-		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
+		-e 's!^QUIET = %$$!QUIET = $(if $(verbose),NO,YES)!' \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_idl_PREFIX))!' \
 		-e 's!^SHORT_NAMES = %$$!SHORT_NAMES = $(if $(filter WNT,$(OS)),YES,NO)!' \
 		$< > $@

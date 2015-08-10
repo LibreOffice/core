@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
-			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)

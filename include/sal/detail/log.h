@@ -19,8 +19,7 @@
 
 /* This header makes available replacements working in both C and C++ for the
    obsolete osl/diagnose.h functionality that in turn is used from both C and
-   C++ code and the obsolete tools/debug.hxx and
-   canvas/inc/canvas/verbosetrace.hxx functionality that uses printf-style
+   C++ code and the obsolete tools/debug.hxx functionality that uses printf-style
    formatting.  Once that obsolete functionality is removed, this header can be
    removed, too.
 
