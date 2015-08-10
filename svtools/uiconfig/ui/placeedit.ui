@@ -174,6 +174,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Host:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">host</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -213,6 +214,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Share:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">share</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -238,6 +240,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Repository:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">repositories</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -335,6 +338,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Port:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">port-nospin</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -408,9 +412,7 @@
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Password*:</property>
-                <accessibility>
-                  <relation type="description-for" target="password"/>
-                </accessibility>
+                <property name="mnemonic_widget">password</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -423,9 +425,6 @@
                 <property name="can_focus">True</property>
                 <property name="visibility">False</property>
                 <property name="invisible_char">●</property>
-                <accessibility>
-                  <relation type="described-by" target="passwordLabel"/>
-                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">1</property>
