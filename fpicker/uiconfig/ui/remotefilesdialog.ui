@@ -285,5 +285,13 @@
         <property name="use_underline">True</property>
       </object>
     </child>
+    <child>
+      <object class="GtkMenuItem" id="change_password">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Change password</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
   </object>
 </interface>

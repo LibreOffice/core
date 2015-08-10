@@ -10,6 +10,8 @@
 #ifndef INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 #define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 
+#include <comphelper/docpasswordrequest.hxx>
+
 #include <svtools/foldertree.hxx>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
@@ -32,6 +34,8 @@
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 
 #include <vector>
 
@@ -42,6 +46,7 @@
 #include "iodlg.hrc"
 
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 

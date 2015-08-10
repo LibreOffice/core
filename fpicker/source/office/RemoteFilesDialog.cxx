@@ -738,6 +738,58 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
             }
         }
     }
+    else if( sIdent == "change_password" )
+    {
+        try
+        {
+            Reference< XPasswordContainer2 > xMasterPasswd(
+                PasswordContainer::create( comphelper::getProcessComponentContext() ) );
+
+            if( xMasterPasswd->isPersistentStoringAllowed() )
+            {
+                int nPos = GetSelectedServicePos();
+
+                if( nPos >= 0 )
+                {
+                    OUString sUrl( m_aServices[nPos]->GetUrl() );
+
+                    Reference< XInteractionHandler > xInteractionHandler(
+                        InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), 0 ),
+                        UNO_QUERY );
+
+                    UrlRecord aURLEntries = xMasterPasswd->find( sUrl, xInteractionHandler );
+
+                    if( aURLEntries.Url == sUrl )
+                    {
+                        if( aURLEntries.UserList.getLength() )
+                        {
+                            OUString sUserName = aURLEntries.UserList[0].UserName;
+
+                            ::comphelper::SimplePasswordRequest* pPasswordRequest
+                                = new ::comphelper::SimplePasswordRequest( PasswordRequestMode_PASSWORD_CREATE );
+                            Reference< XInteractionRequest > rRequest( pPasswordRequest );
+
+                            xInteractionHandler->handle( rRequest );
+
+                            if ( pPasswordRequest->isPassword() )
+                            {
+                                OUString aNewPass = pPasswordRequest->getPassword();
+                                Sequence< OUString > aPasswd( 1 );
+                                aPasswd[0] = aNewPass;
+
+                                Reference< XPasswordContainer2 > xPasswdContainer(
+                                    PasswordContainer::create(comphelper::getProcessComponentContext()));
+                                xPasswdContainer->addPersistent(
+                                    sUrl, sUserName, aPasswd, xInteractionHandler );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch( const Exception& )
+        {}
+    }
 
     EnableControls();
 }
