@@ -1086,7 +1086,6 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   PhysicalFontFace( rDFS, 0 ),
     mnId( 0 ),
-    mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
 #if ENABLE_GRAPHITE
@@ -1186,15 +1185,6 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
         }
     }
 #endif
-
-    // even if the font works some fonts have problems with the glyph API
-    // => the heuristic below tries to figure out which fonts have the problem
-    TEXTMETRICA aTextMetric;
-    if( ::GetTextMetricsA( hDC, &aTextMetric ) )
-        if( !(aTextMetric.tmPitchAndFamily & TMPF_TRUETYPE)
-        ||   (aTextMetric.tmPitchAndFamily & TMPF_DEVICE) )
-            mbDisableGlyphApi = true;
-
 }
 
 #if ENABLE_GRAPHITE
@@ -1291,7 +1281,6 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
     if( aRawFontData.get() ) {
         CmapResult aResult;
         ParseCMAP( aRawFontData.get(), aRawFontData.size(), aResult );
-        mbDisableGlyphApi |= aResult.mbRecoded;
         aResult.mbSymbolic = bIsSymbolFont;
         if( aResult.mnRangeCount > 0 )
         {
