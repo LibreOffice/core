@@ -578,7 +578,39 @@ void RemoteFilesDialog::AddFileExtension()
 void RemoteFilesDialog::EnableControls()
 {
     if( m_pServices_lb->GetEntryCount() > 0 )
+    {
         m_pServices_lb->Enable( true );
+
+        if( m_pServices_lb->GetSelectEntryCount() )
+        {
+            m_pAddMenu->EnableItem( "change_password", false );
+
+            try
+            {
+                Reference< XPasswordContainer2 > xMasterPasswd(
+                    PasswordContainer::create( comphelper::getProcessComponentContext() ) );
+
+                if( xMasterPasswd->isPersistentStoringAllowed() )
+                {
+                    int nPos = GetSelectedServicePos();
+
+                    if( nPos >= 0 )
+                    {
+                        OUString sUrl( m_aServices[nPos]->GetUrl() );
+
+                        UrlRecord aURLEntries = xMasterPasswd->find( sUrl, Reference< XInteractionHandler>() );
+
+                        if( aURLEntries.UserList.getLength() )
+                        {
+                            m_pAddMenu->EnableItem( "change_password" );
+                        }
+                    }
+                }
+            }
+            catch( const Exception& )
+            {}
+        }
+    }
     else
         m_pServices_lb->Enable( false );
 
@@ -745,7 +777,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
             Reference< XPasswordContainer2 > xMasterPasswd(
                 PasswordContainer::create( comphelper::getProcessComponentContext() ) );
 
-            if( xMasterPasswd->isPersistentStoringAllowed() )
+            if( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
             {
                 int nPos = GetSelectedServicePos();
 
@@ -759,29 +791,26 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
                     UrlRecord aURLEntries = xMasterPasswd->find( sUrl, xInteractionHandler );
 
-                    if( aURLEntries.Url == sUrl )
+                    if( aURLEntries.Url == sUrl && aURLEntries.UserList.getLength() )
                     {
-                        if( aURLEntries.UserList.getLength() )
+                        OUString sUserName = aURLEntries.UserList[0].UserName;
+
+                        ::comphelper::SimplePasswordRequest* pPasswordRequest
+                            = new ::comphelper::SimplePasswordRequest( PasswordRequestMode_PASSWORD_CREATE );
+                        Reference< XInteractionRequest > rRequest( pPasswordRequest );
+
+                        xInteractionHandler->handle( rRequest );
+
+                        if ( pPasswordRequest->isPassword() )
                         {
-                            OUString sUserName = aURLEntries.UserList[0].UserName;
+                            OUString aNewPass = pPasswordRequest->getPassword();
+                            Sequence< OUString > aPasswd( 1 );
+                            aPasswd[0] = aNewPass;
 
-                            ::comphelper::SimplePasswordRequest* pPasswordRequest
-                                = new ::comphelper::SimplePasswordRequest( PasswordRequestMode_PASSWORD_CREATE );
-                            Reference< XInteractionRequest > rRequest( pPasswordRequest );
-
-                            xInteractionHandler->handle( rRequest );
-
-                            if ( pPasswordRequest->isPassword() )
-                            {
-                                OUString aNewPass = pPasswordRequest->getPassword();
-                                Sequence< OUString > aPasswd( 1 );
-                                aPasswd[0] = aNewPass;
-
-                                Reference< XPasswordContainer2 > xPasswdContainer(
-                                    PasswordContainer::create(comphelper::getProcessComponentContext()));
-                                xPasswdContainer->addPersistent(
-                                    sUrl, sUserName, aPasswd, xInteractionHandler );
-                            }
+                            Reference< XPasswordContainer2 > xPasswdContainer(
+                                PasswordContainer::create( comphelper::getProcessComponentContext() ) );
+                            xPasswdContainer->addPersistent(
+                                sUrl, sUserName, aPasswd, xInteractionHandler );
                         }
                     }
                 }
