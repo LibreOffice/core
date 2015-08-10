@@ -32,48 +32,39 @@
 #ifndef INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
 #define INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
 
+#include <utility>
 #include <functional>
 
 namespace o3tl
 {
-
-/// Functor, given two parameters, return the first
-template<class T1,class T2>
-struct project1st : public std::binary_function<T1, T2, T1>
-{
-    T1 operator()(const T1& y, const T2&) const
-    {
-        return y;
-    }
-};
-
-/// Functor, given two parameters, return the second
-template<class T1,class T2>
+// Functor, given two parameters, return the second
+template<class T1, class T2>
 struct project2nd : public std::binary_function<T1, T2, T2>
 {
-    T2 operator()(const T1&, const T2& x) const
-    {
+    T2 operator()(const T1&, const T2& x) const {
         return x;
     }
 };
 
 /// Select first value of a pair
-template<class P>
-struct select1st : public std::unary_function<P, typename P::first_type>
+template<typename P>
+struct select1st
 {
-    const typename P::first_type& operator()(const P& y) const
-    {
-        return y.first;
+    typedef P argument_type;
+    typedef typename P::first_type result_type;
+    const result_type& operator()( const argument_type& cp ) const {
+        return cp.first;
     }
 };
 
 /// Select second value of a pair
-template<class P>
-struct select2nd : public std::unary_function<P, typename P::second_type>
+template<typename P>
+struct select2nd
 {
-    const typename P::second_type& operator()(const P& y) const
-    {
-        return y.second;
+    typedef P argument_type;
+    typedef typename P::second_type result_type;
+    const result_type& operator()( const argument_type& cp ) const {
+        return cp.second;
     }
 };
 
