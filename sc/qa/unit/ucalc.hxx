@@ -183,6 +183,7 @@ public:
     void testFuncRangeOp();
     void testFuncFORMULA();
     void testFuncTableRef();
+    void testFuncFTEST();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -512,6 +513,7 @@ public:
     CPPUNIT_TEST(testFuncRangeOp);
     CPPUNIT_TEST(testFuncFORMULA);
     CPPUNIT_TEST(testFuncTableRef);
+    CPPUNIT_TEST(testFuncFTEST);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);
