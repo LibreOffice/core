@@ -83,7 +83,7 @@ void writePROJECTSYSKIND(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0001); // id
     rStrm.WriteUInt32(0x00000004); // size
-    rStrm.WriteUInt32(0x00000002); // SysKind, hard coded to 32-bin windows for now
+    rStrm.WriteUInt32(0x00000001); // SysKind, hard coded to 32-bin windows for now
 }
 
 // section 2.3.4.2.1
