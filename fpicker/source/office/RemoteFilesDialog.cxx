@@ -914,6 +914,9 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl )
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 {
+    OUString sNameNoExt = m_pName_ed->GetText();
+    OUString sPathNoExt;
+
     // auto extension
     if( m_eMode == REMOTEDLG_MODE_SAVE )
         AddFileExtension();
@@ -933,6 +936,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     if( !bSelected )
     {
         m_sPath = sCurrentPath + INetURLObject::encode( sName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
+        sPathNoExt = sCurrentPath + INetURLObject::encode( sNameNoExt, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
     }
     else
     {
@@ -953,11 +957,11 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     bool bExists = false;
 
     if( bFileDlg )
-        bExists = ContentIsDocument(m_sPath);
+        bExists = ContentIsDocument( m_sPath );
     else
-        bExists = ContentIsFolder(m_sPath);
+        bExists = ContentIsFolder( m_sPath );
 
-    if ( bExists )
+    if( bExists )
     {
         if( m_eMode == REMOTEDLG_MODE_SAVE )
         {
@@ -970,9 +974,15 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     }
     else
     {
-        if( m_eMode == REMOTEDLG_MODE_OPEN )
+        if( ContentIsFolder( sPathNoExt ) )
+        {
+            OpenURL( sPathNoExt );
+            m_pName_ed->SetText( "" );
+
             return 0;
-        if( m_eMode == REMOTEDLG_MODE_SAVE && ContentIsFolder(m_sPath) )
+        }
+
+        if( m_eMode == REMOTEDLG_MODE_OPEN )
             return 0;
     }
 
