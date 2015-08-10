@@ -18,6 +18,7 @@
  */
 
 #include "impanmvw.hxx"
+#include <window.h>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <tools/helpers.hxx>
@@ -154,6 +155,15 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size
 void ImplAnimView::drawToPos( sal_uLong nPos )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpOut;
+
+    std::unique_ptr<PaintBufferGuard> pGuard;
+    if (mpOut->GetOutDevType() == OUTDEV_WINDOW)
+    {
+        vcl::Window* pWindow = static_cast<vcl::Window*>(mpOut.get());
+        pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
+        pRenderContext = pGuard->GetRenderContext();
+    }
+
     ScopedVclPtrInstance<VirtualDevice> aVDev;
     std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : NULL);
 
@@ -167,6 +177,8 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
         pRenderContext->SetClipRegion( maClip );
 
     pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *aVDev.get() );
+    if (pGuard)
+        pGuard->SetPaintRect(Rectangle(maDispPt, maDispSz));
 
     if (xOldClip)
         pRenderContext->SetClipRegion(*xOldClip);
@@ -175,6 +187,15 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
 void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpOut;
+
+    std::unique_ptr<PaintBufferGuard> pGuard;
+    if (!pVDev && mpOut->GetOutDevType() == OUTDEV_WINDOW)
+    {
+        vcl::Window* pWindow = static_cast<vcl::Window*>(mpOut.get());
+        pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
+        pRenderContext = pGuard->GetRenderContext();
+    }
+
     Rectangle aOutRect( pRenderContext->PixelToLogic( Point() ), pRenderContext->GetOutputSize() );
 
     // check, if output lies out of display
@@ -268,6 +289,8 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
                 pRenderContext->SetClipRegion( maClip );
 
             pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *pDev );
+            if (pGuard)
+                pGuard->SetPaintRect(Rectangle(maDispPt, maDispSz));
 
             if( xOldClip)
             {
