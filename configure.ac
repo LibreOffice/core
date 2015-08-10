@@ -1276,12 +1276,6 @@ AC_ARG_ENABLE(build-unowinreg,
     ],
 ,)
 
-AC_ARG_ENABLE(verbose,
-    AS_HELP_STRING([--enable-verbose],
-        [Increase build verbosity.])[
-  --disable-verbose       Decrease build verbosity.],
-,)
-
 AC_ARG_ENABLE(dependency-tracking,
     AS_HELP_STRING([--enable-dependency-tracking],
         [Do not reject slow dependency extractors.])[
@@ -12720,25 +12714,6 @@ fi
 AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_ID, $ONEDRIVE_CLIENT_ID)
 AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_SECRET, $ONEDRIVE_CLIENT_SECRET)
 
-
-# ===================================================================
-# De- or increase default verbosity of build process
-# ===================================================================
-AC_MSG_CHECKING([build verbosity])
-verbose=
-if test -n "$enable_verbose"; then
-    if test "$enable_verbose" = "yes"; then
-        verbose="t"
-        AC_MSG_RESULT([high])
-    fi
-    if test "$enable_verbose" = "no"; then
-        verbose=
-        AC_MSG_RESULT([low])
-    fi
-else
-    AC_MSG_RESULT([not set])
-fi
-AC_SUBST(verbose)
 
 dnl ===================================================================
 dnl Hook up LibreOffice's nodep environmental variable to automake's equivalent
