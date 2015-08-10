@@ -1165,27 +1165,28 @@ bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference
 sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
 {
     sal_Int32 nRet=-1;
-    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
-    if( xNumberFormats.is() )
-    {
-        bool bCreate = true;
-        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
-            rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
-        if( aKeySeq.getLength() )
-        {
-            nRet = aKeySeq[0];
-        }
-    }
 
     //try to get a date format with full year display
+    const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
     SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
     if( pNumFormatter )
     {
-        const SvNumberformat* pFormat = pNumFormatter->GetEntry( nRet );
-        if( pFormat )
-            nRet = pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, pFormat->GetLanguage() );
+        nRet = pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, rLanguageTag.getLanguageType() );
+    }
+    else
+    {
+        Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+        if( xNumberFormats.is() )
+        {
+            bool bCreate = true;
+            Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
+                    rLanguageTag.getLocale(), bCreate );
+            if( aKeySeq.getLength() )
+            {
+                nRet = aKeySeq[0];
+            }
+        }
     }
     return nRet;
 }
