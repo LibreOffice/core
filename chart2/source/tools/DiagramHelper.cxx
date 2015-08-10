@@ -1190,6 +1190,55 @@ sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberForm
     return nRet;
 }
 
+sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber )
+{
+    sal_Int32 nRet = 0;
+
+    // Get the most detailed date/time format according to fNumber.
+    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+    if (!pNumFormatter)
+        SAL_WARN("chart2", "DiagramHelper::getDateTimeInputNumberFormat - no SvNumberFormatter");
+    else
+    {
+        // Categorize the format according to the implementation of
+        // SvNumberFormatter::GetEditFormat(), making assumptions about what
+        // would be time only.
+        /* TODO: implement a method at SvNumberFormatter that does this and
+         * call instead, if Chart isn't able transport the proper format of the
+         * Axis, which of course would be much better.. */
+        short nType;
+        if (0.0 <= fNumber && fNumber < 1.0)
+        {
+            // Clearly a time.
+            nType = util::NumberFormat::TIME;
+            nRet = pNumFormatter->GetFormatIndex( NF_TIME_HHMM, LANGUAGE_SYSTEM);
+        }
+        else if (fabs( fNumber) * 24 < 0x7fff)
+        {
+            // Assuming time within 32k hours or 3.7 years.
+            nType = util::NumberFormat::TIME;
+            nRet = pNumFormatter->GetFormatIndex( NF_TIME_HH_MMSS, LANGUAGE_SYSTEM);
+        }
+        else if (rtl::math::approxFloor( fNumber) != fNumber)
+        {
+            // Date+Time.
+            nType = util::NumberFormat::DATETIME;
+            nRet = pNumFormatter->GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, LANGUAGE_SYSTEM);
+        }
+        else
+        {
+            // Date only.
+            nType = util::NumberFormat::DATE;
+            nRet = pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+        }
+
+        // Obtain the corresponding edit format.
+        nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, LANGUAGE_SYSTEM, NULL);
+    }
+    return nRet;
+}
+
 sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
 {
     sal_Int32 nRet=-1;
