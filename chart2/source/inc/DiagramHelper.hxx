@@ -244,6 +244,7 @@ public:
     static bool isSupportingDateAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
     static bool isDateNumberFormat( sal_Int32 nNumberFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& xNumberFormats );
     static sal_Int32 getDateNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+    static sal_Int32 getDateTimeInputNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
 
     static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
