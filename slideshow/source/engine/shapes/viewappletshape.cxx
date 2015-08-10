@@ -18,10 +18,7 @@
  */
 
 
-// must be first
-#include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/debug.hxx>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>

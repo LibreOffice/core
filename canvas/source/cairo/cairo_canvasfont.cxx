@@ -17,16 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
+#include <sal/config.h>
 
+#include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <rtl/math.hxx>
-#include <basegfx/numeric/ftools.hxx>
-
-#include <vcl/metric.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/math.hxx>
+#include <vcl/metric.hxx>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_textlayout.hxx"

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <canvas/debug.hxx>
-#include <canvas/base/cachedprimitivebase.hxx>
-
-#include <com/sun/star/rendering/RepaintResult.hpp>
-#include <cppuhelper/supportsservice.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <cppuhelper/supportsservice.hxx>
+
+#include <canvas/base/cachedprimitivebase.hxx>
+
 
 using namespace ::com::sun::star;
 

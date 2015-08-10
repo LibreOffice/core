@@ -17,24 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <osl/mutex.hxx>
-
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-
-#include <toolkit/helper/vclunohelper.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/mutex.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
+
+#include <canvas/canvastools.hxx>
 
 #include "cairo_canvas.hxx"
 

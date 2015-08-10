@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/canvastools.hxx>
-
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <comphelper/servicedecl.hxx>
+#include <sal/config.h>
 
 #include <algorithm>
+
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+
+#include <canvas/canvastools.hxx>
 
 #include "cairo_canvas.hxx"
 #include "cairo_spritecanvas.hxx"

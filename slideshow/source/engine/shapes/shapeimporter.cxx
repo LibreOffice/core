@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// must be first
-#include <canvas/debug.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>

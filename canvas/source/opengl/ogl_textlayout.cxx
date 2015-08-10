@@ -7,11 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_textlayout.hxx"
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <tools/diagnose_ex.h>
+
+#include "ogl_textlayout.hxx"
 
 using namespace ::com::sun::star;
 

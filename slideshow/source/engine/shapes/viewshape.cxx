@@ -18,8 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <math.h>
@@ -39,7 +37,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>

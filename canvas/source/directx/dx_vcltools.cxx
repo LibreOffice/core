@@ -17,21 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <basegfx/numeric/ftools.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <tools/diagnose_ex.h>
-
-#include <vcl/canvastools.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/canvastools.hxx>
 
 #include "dx_impltools.hxx"
-
-#include <basegfx/numeric/ftools.hxx>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-
 #include "dx_vcltools.hxx"
 
 using namespace ::com::sun::star;

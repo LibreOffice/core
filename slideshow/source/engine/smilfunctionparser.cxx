@@ -18,8 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
@@ -28,7 +26,6 @@
 #include <expressionnodefactory.hxx>
 
 #include <rtl/ustring.hxx>
-#include <canvas/verbosetrace.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -44,9 +41,7 @@
 #endif
 #include <boost/spirit/include/classic_core.hpp>
 
-#if OSL_DEBUG_LEVEL > 0
 #include <iostream>
-#endif
 #include <functional>
 #include <algorithm>
 #include <stack>

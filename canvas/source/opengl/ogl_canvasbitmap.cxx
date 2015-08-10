@@ -7,11 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_canvasbitmap.hxx"
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-#include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
+
+#include <canvas/canvastools.hxx>
+
+#include "ogl_canvasbitmap.hxx"
 
 
 using namespace ::com::sun::star;

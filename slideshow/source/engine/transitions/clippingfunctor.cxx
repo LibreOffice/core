@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "clippingfunctor.hxx"
 #include "transitiontools.hxx"

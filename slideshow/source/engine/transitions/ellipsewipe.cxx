@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include "ellipsewipe.hxx"

@@ -18,8 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
 
 #include "attributemap.hxx"

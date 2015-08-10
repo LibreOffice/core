@@ -17,35 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <rtl/math.hxx>
-
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-
-#include <comphelper/sequence.hxx>
-#include <canvas/canvastools.hxx>
-
-#include "dx_spritecanvas.hxx"
-#include "dx_impltools.hxx"
-#include "dx_vcltools.hxx"
-#include "dx_canvasfont.hxx"
-#include "dx_textlayout.hxx"
-#include "dx_canvashelper.hxx"
+#include <sal/config.h>
 
 #include <algorithm>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <comphelper/sequence.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <canvas/canvastools.hxx>
+
+#include "dx_canvasfont.hxx"
+#include "dx_canvashelper.hxx"
+#include "dx_impltools.hxx"
+#include "dx_spritecanvas.hxx"
+#include "dx_textlayout.hxx"
+#include "dx_vcltools.hxx"
 
 using namespace ::com::sun::star;
 

@@ -7,22 +7,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_canvascustomsprite.hxx"
-#include "ogl_canvastools.hxx"
-#include "ogl_tools.hxx"
+#include <sal/config.h>
 
-#include <canvas/verifyinput.hxx>
-#include <canvas/canvastools.hxx>
+#include <GL/glew.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
+#include <basegfx/tools/canvastools.hxx>
+#include <canvas/canvastools.hxx>
+#include <canvas/verifyinput.hxx>
 #include <tools/diagnose_ex.h>
-#include <GL/glew.h>
+
+#include "ogl_canvascustomsprite.hxx"
+#include "ogl_canvastools.hxx"
+#include "ogl_tools.hxx"
 
 using namespace ::com::sun::star;
 

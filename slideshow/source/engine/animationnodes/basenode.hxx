@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.hxx>
 
@@ -94,7 +93,7 @@ public:
     void setSelf( const ::boost::shared_ptr< BaseNode >& rSelf );
 
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
     virtual void showState() const;
     virtual const char* getDescription() const;
 #endif

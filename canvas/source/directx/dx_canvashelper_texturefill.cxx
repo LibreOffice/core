@@ -17,33 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <rtl/math.hxx>
-
-#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/tools/tools.hxx>
-#include <basegfx/tools/lerp.hxx>
-#include <basegfx/tools/keystoplerp.hxx>
-#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/keystoplerp.hxx>
+#include <basegfx/tools/lerp.hxx>
+#include <basegfx/tools/tools.hxx>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <canvas/parametricpolypolygon.hxx>
 
-#include "dx_spritecanvas.hxx"
 #include "dx_canvashelper.hxx"
 #include "dx_impltools.hxx"
-
-#include <boost/scoped_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/tuple/tuple.hpp>
+#include "dx_spritecanvas.hxx"
 
 
 using namespace ::com::sun::star;

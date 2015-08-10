@@ -19,8 +19,6 @@
 
 
 // must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 
 #include <simplecontinuousactivitybase.hxx>
 

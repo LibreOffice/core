@@ -20,41 +20,40 @@
 
 // This code strongly inspired by Miguel / Federico's Gnome Canvas demo code.
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <sal/config.h>
+
+#include <stdio.h>
+#include <unistd.h>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/tools/canvastools.hxx>
-
-#include <vcl/window.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/unowrap.hxx>
-#include <vcl/canvastools.hxx>
-
-#include <rtl/bootstrap.hxx>
-#include <sal/macros.h>
-
-#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/servicefactory.hxx>
+#include <rtl/bootstrap.hxx>
+#include <sal/macros.h>
+#include <vcl/canvastools.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/unowrap.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
-#include <stdio.h>
-#include <unistd.h>
 
 // never import whole leaf namespaces, since this will result in
 // absolutely weird effects during (Koenig) name lookup

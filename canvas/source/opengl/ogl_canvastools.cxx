@@ -7,20 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_canvastools.hxx"
-
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/tools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygontriangulator.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-
-#include <com/sun/star/rendering/ARGBColor.hpp>
+#include <sal/config.h>
 
 #include <GL/glew.h>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/tools.hxx>
+#include <com/sun/star/rendering/ARGBColor.hpp>
+#include <tools/diagnose_ex.h>
+
+#include "ogl_canvastools.hxx"
 
 using namespace ::com::sun::star;
 

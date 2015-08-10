@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/rendering/PanoseWeight.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+
 #include "ogl_canvasfont.hxx"
 #include "ogl_textlayout.hxx"
 
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/rendering/PanoseWeight.hpp>
 
 
 using namespace ::com::sun::star;

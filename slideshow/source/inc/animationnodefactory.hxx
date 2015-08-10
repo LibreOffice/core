@@ -50,7 +50,7 @@ namespace slideshow
                                                                const SlideShowContext&                              rContext );
 
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
             void showTree( AnimationNodeSharedPtr& pRootNode );
 # define SHOW_NODE_TREE(a) AnimationNodeFactory::showTree(a)
 #else

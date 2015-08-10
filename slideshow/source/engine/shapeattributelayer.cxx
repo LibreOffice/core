@@ -19,12 +19,8 @@
 
 
 // must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <shapeattributelayer.hxx>
-
-#include <canvas/verbosetrace.hxx>
-
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>

@@ -17,15 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include "dx_config.hxx"
-
+#include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/anytostring.hxx>
-#include <basegfx/vector/b2ivector.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
+
+#include "dx_config.hxx"
 
 using namespace com::sun::star;
 

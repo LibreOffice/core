@@ -18,25 +18,23 @@
  */
 
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <cppuhelper/supportsservice.hxx>
-
-#include <rtl/math.hxx>
-
-#include <vcl/outdev.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/alpha.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/canvastools.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/alpha.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/outdev.hxx>
 
 #include <canvas/canvastools.hxx>
 

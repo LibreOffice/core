@@ -23,8 +23,6 @@
 
 #include <tools/gen.hxx>
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <com/sun/star/rendering/XBitmap.hpp>

@@ -17,15 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <canvas/canvastools.hxx>
+#include <sal/config.h>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+
+#include <canvas/canvastools.hxx>
 
 #include "cairo_canvasbitmap.hxx"
-
-#include <vcl/bmpacc.hxx>
-#include <vcl/bitmapex.hxx>
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

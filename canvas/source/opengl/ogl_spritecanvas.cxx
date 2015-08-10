@@ -7,23 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_spritecanvas.hxx"
+#include <sal/config.h>
 
-#include <osl/mutex.hxx>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-
-#include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/servicedecl.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <comphelper/servicedecl.hxx>
-
+#include <osl/mutex.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "ogl_canvascustomsprite.hxx"
+#include "ogl_spritecanvas.hxx"
 
 #define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.OGL"
 #define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.OGL"

@@ -18,9 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include "animationfactory.hxx"
 #include "setactivity.hxx"
 #include "animationsetnode.hxx"

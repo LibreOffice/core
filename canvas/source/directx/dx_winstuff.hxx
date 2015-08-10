@@ -26,8 +26,14 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#ifdef _WINDOWS_
-#error someone else included <windows.h>
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
+
+#ifndef _WINDOWS_
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #endif
 
 // Enabling Direct3D Debug Information Further more, with registry key
@@ -38,19 +44,11 @@
 # define D3D_DEBUG_INFO
 #endif
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 
-
-#define ULONG win32ULONG
 #define GradientStyle_RECT win32GradientStyle_RECT
 #define Polygon win32Polygon
 #undef WB_LEFT
 #undef WB_RIGHT
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 #include <d3d9.h>
 
@@ -59,19 +57,18 @@ typedef IDirect3DSurface9 surface_type;
 
 #undef DrawText
 
-#ifdef __MINGW32__
-using ::std::max;
-using ::std::min;
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #include <gdiplus.h>
 
-#ifdef min
-#   undef min
-#endif
-#ifdef max
-#   undef max
-#endif
+#undef max
+#undef min
+
 
 namespace dxcanvas
 {

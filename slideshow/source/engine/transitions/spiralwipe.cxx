@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include "spiralwipe.hxx"
 #include "transitiontools.hxx"
 

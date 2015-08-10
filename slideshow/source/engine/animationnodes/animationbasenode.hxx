@@ -44,7 +44,7 @@ public:
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
     virtual void showState() const;
 #endif
 

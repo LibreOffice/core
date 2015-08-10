@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <cppuhelper/basemutex.hxx>
@@ -2113,7 +2112,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             mbSlideShowIdle = false;
         }
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
         // when slideshow is idle, issue an XUpdatable::update() call
         // exactly once after a previous animation sequence finished -
         // this might trigger screen dumps on some canvas

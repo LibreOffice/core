@@ -17,24 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <canvas/canvastools.hxx>
-
-#include <vcl/canvastools.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
-#include <vcl/bitmapex.hxx>
-
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <sal/config.h>
 
 #include <boost/bind.hpp>
 #include <boost/cast.hpp>
 
-#include "spritecanvashelper.hxx"
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/bitmapex.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
+
+#include <canvas/canvastools.hxx>
+
 #include "canvascustomsprite.hxx"
+#include "spritecanvashelper.hxx"
 
 using namespace ::com::sun::star;
 

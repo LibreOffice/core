@@ -38,7 +38,7 @@ public:
         const NodeContext&                              rContext )
         : BaseContainerNode( xNode, rParent, rContext ) {}
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
     virtual const char* getDescription() const
         { return "ParallelTimeContainer"; }
 #endif

@@ -30,7 +30,7 @@
 #include "attributableshape.hxx"
 
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
 # define DEBUG_NODES_SHOWTREE(a) debugNodesShowTree(a);
 #else
 # define DEBUG_NODES_SHOWTREE(a)
@@ -44,7 +44,7 @@ namespace slideshow
         // Tools
 
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
         int& debugGetCurrentOffset();
         void debugNodesShowTree( const BaseNode* );
 #endif

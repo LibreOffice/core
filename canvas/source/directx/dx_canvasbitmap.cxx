@@ -17,18 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <ctype.h>
-#include <canvas/debug.hxx>
-#include <canvas/canvastools.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <vcl/bitmapex.hxx>
+#include <cctype>
+#include <memory>
 
 #include <boost/preprocessor/repetition.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
-#include <memory>
+
+#include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/bitmapex.hxx>
+
+#include <canvas/canvastools.hxx>
 
 #include "dx_canvasbitmap.hxx"
 #include "dx_impltools.hxx"

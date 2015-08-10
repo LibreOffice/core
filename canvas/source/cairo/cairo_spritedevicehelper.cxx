@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/canvastools.hxx>
+#include <sal/config.h>
 
-#include <osl/mutex.hxx>
-#include <com/sun/star/lang/NoSupportException.hpp>
-
-#include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/unopolypolygon.hxx>
-
-#include <vcl/syschild.hxx>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <osl/mutex.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/syschild.hxx>
 
-#include "cairo_spritecanvas.hxx"
+#include <canvas/canvastools.hxx>
+
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
+#include "cairo_spritecanvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
