@@ -147,6 +147,7 @@ static void findFirstClusterSlot(const gr_slot* base, gr_slot const** first, gr_
         if (attachmentNext)
         {
             if (*after && (gr_slot_origin_X(*after) < gr_slot_origin_X(attachmentNext)))
+//            if (!*after || gr_slot_index(*after) > gr_slot_index(attachmentNext))
                 *after = attachmentNext;
         }
         else
@@ -339,6 +340,9 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             if (mnSegCharOffset + bFirstChar >= mnEndCharPos)
                 break;
             baseSlot = gr_slot_next_sibling_attachment(baseSlot);
+//            baseSlot = clusterAfter;
+//            while (baseSlot && !gr_slot_can_insert_before(baseSlot) && gr_slot_attached_to(baseSlot))
+//                baseSlot = gr_slot_attached_to(baseSlot);
         }
     }
     long nXOffset = round_to_long(fMinX * fScaling);
@@ -452,6 +456,8 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     }
     // append this glyph. Set the cluster flag if this glyph is attached to another
     long nGlyphFlags = bIsBase ? 0 : GlyphItem::IS_IN_CLUSTER;
+    if (gr_slot_attached_to(gi))
+        nGlyphFlags |= GlyphItem::IS_DIACRITIC;
     nGlyphFlags |= (bRtl)? GlyphItem::IS_RTL_GLYPH : 0;
     GlyphItem aGlyphItem(mvGlyphs.size(),
         glyphId,
@@ -824,7 +830,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
         int nClusterCount = 0;
         for (size_t j = 0; j < mvGlyphs.size(); j++)
         {
-            if (mvGlyphs[j].IsClusterStart())
+            if (mvGlyphs[j].IsClusterStart() && !mvGlyphs[j].IsDiacritic())
             {
                 ++nClusterCount;
             }
@@ -836,7 +842,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
             int nOffset = 0;
             for (size_t i = 0; i < mvGlyphs.size(); i++)
             {
-                if (mvGlyphs[i].IsClusterStart())
+                if (mvGlyphs[i].IsClusterStart() && !mvGlyphs[i].IsDiacritic())
                 {
                     nOffset = static_cast<int>(fExtraPerCluster * nCluster);
                     int nCharIndex = mvGlyph2Char[i];
@@ -905,7 +911,8 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     {
         nXOffset = args.mpDXArray[nChars - 1] - mvCharDxs[nChars - 1];
     }
-    int nPrevClusterGlyph = (bRtl)? (signed)mvGlyphs.size() : -1;
+    // int nPrevClusterGlyph = (bRtl)? (signed)mvGlyphs.size() : -1;
+    int nPrevClusterGlyph = -1;
     int nPrevClusterLastChar = -1;
     for (size_t i = 0; i < nChars; i++)
     {
@@ -914,7 +921,8 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
         {
             assert((nChar2Base > -1) && (nChar2Base < (signed)mvGlyphs.size()));
             GlyphItem & gi = mvGlyphs[nChar2Base];
-            if (!gi.IsClusterStart())
+            if (!gi.IsClusterStart() || gi.IsDiacritic())
+            //if (!gi.IsClusterStart())
                 continue;
 
             // find last glyph of this cluster
@@ -925,7 +933,8 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             {
                 const int nChar2BaseJ = mvChar2BaseGlyph[j];
                 assert((nChar2BaseJ >= -1) && (nChar2BaseJ < (signed)mvGlyphs.size()));
-                if (nChar2BaseJ != -1 )
+                GlyphItem & ngi = mvGlyphs[nChar2BaseJ];
+                if (gi.IsClusterStart() && !gi.IsDiacritic())
                 {
                     nLastGlyph = nChar2BaseJ + ((bRtl)? +1 : -1);
                     nLastChar = j - 1;
@@ -943,7 +952,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             {
                 nLastGlyph = nChar2Base;
                 while (nLastGlyph + 1 < (signed)mvGlyphs.size() &&
-                       !mvGlyphs[nLastGlyph+1].IsClusterStart())
+                       (!mvGlyphs[nLastGlyph+1].IsClusterStart() || mvGlyphs[nLastGlyph+1].IsDiacritic()))
                 {
                     ++nLastGlyph;
                 }
@@ -957,13 +966,13 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             // count bases within cluster - may be more than 1 with reordering
             for (int k = nChar2Base; k <= nLastGlyph; k++)
             {
-                if (mvGlyphs[k].IsClusterStart()) ++nBaseCount;
+                if (mvGlyphs[k].IsClusterStart() && !mvGlyphs[k].IsDiacritic()) ++nBaseCount;
             }
             assert((nLastChar > -1) && (nLastChar < (signed)nChars));
             long nNewClusterWidth = args.mpDXArray[nLastChar];
             long nOrigClusterWidth = mvCharDxs[nLastChar];
             long nDGlyphOrigin = 0;
-            if (nPrevClusterLastChar > - 1)
+            if (nPrevClusterLastChar > -1)
             {
                 assert(nPrevClusterLastChar < (signed)nChars);
                 nNewClusterWidth -= args.mpDXArray[nPrevClusterLastChar];
@@ -987,7 +996,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             {
                 for (int n = nChar2Base; n <= nLastGlyph; n++)
                 {
-                    if (mvGlyphs[n].IsClusterStart()) ++nBaseCount;
+                    if (mvGlyphs[n].IsClusterStart() && !mvGlyphs[n].IsDiacritic()) ++nBaseCount;
                     assert((n > - 1) && (n < (signed)mvGlyphs.size()));
                     mvGlyphs[n].maLinearPos.X() += -(nDGlyphOrigin + nDOriginPerBase * nBaseCount) + nXOffset;
                 }
@@ -996,7 +1005,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             {
                 for (int n = nChar2Base; n <= nLastGlyph; n++)
                 {
-                    if (mvGlyphs[n].IsClusterStart()) ++nBaseCount;
+                    if (mvGlyphs[n].IsClusterStart() && !mvGlyphs[n].IsDiacritic()) ++nBaseCount;
                     assert((n > - 1) && (n < (signed)mvGlyphs.size()));
                     mvGlyphs[n].maLinearPos.X() += nDGlyphOrigin + (nDOriginPerBase * nBaseCount) + nXOffset;
                 }
