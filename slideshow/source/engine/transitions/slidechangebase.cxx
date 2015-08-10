@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>

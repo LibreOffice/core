@@ -17,27 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <com/sun/star/rendering/XSimpleCanvas.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/PanoseLetterForm.hpp>
-#include <com/sun/star/rendering/PanoseWeight.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-
-#include <o3tl/lazy_update.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-
-#include <comphelper/servicedecl.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <boost/bind.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/PanoseLetterForm.hpp>
+#include <com/sun/star/rendering/PanoseWeight.hpp>
+#include <com/sun/star/rendering/XSimpleCanvas.hpp>
+#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <o3tl/lazy_update.hxx>
 
 #include <canvas/canvastools.hxx>
 
-#include <boost/bind.hpp>
 
 #include <functional>
 

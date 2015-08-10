@@ -35,7 +35,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
-#include <canvas/debug.hxx>
 #include <cstdlib>
 #include <map>
 #include <deque>

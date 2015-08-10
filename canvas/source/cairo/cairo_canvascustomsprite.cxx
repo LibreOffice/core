@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <rtl/math.hxx>
-
-#include <canvas/canvastools.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <canvas/canvastools.hxx>
 
 #include "cairo_canvascustomsprite.hxx"
 #include "cairo_spritecanvas.hxx"

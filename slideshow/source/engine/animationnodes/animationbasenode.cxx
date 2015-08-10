@@ -18,9 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>

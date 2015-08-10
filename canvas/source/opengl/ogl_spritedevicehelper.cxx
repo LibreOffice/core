@@ -7,29 +7,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/rendering/XColorSpace.hpp>
+#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+
 #include "ogl_spritedevicehelper.hxx"
 #include "ogl_spritecanvas.hxx"
 #include "ogl_canvasbitmap.hxx"
 #include "ogl_canvastools.hxx"
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_texturecache.hxx"
-
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/unopolypolygon.hxx>
-
-#include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
-#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
-
-#include <vcl/sysdata.hxx>
-#include <vcl/syschild.hxx>
-#include <vcl/canvastools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 using namespace ::com::sun::star;
 

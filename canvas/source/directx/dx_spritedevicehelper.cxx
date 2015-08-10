@@ -17,22 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>
-#include <vcl/window.hxx>
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
+#include <sal/config.h>
 
-#include <osl/mutex.hxx>
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <ctype.h>
+
 #include <basegfx/tools/canvastools.hxx>
+#include <canvas/canvastools.hxx>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <osl/mutex.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/sysdata.hxx>
+#include <vcl/window.hxx>
+
+#include "dx_canvasbitmap.hxx"
 #include "dx_linepolypolygon.hxx"
 #include "dx_spritecanvas.hxx"
-#include "dx_canvasbitmap.hxx"
 #include "dx_spritedevicehelper.hxx"
 #include "dx_winstuff.hxx"
 
-#include <vcl/sysdata.hxx>
 
 using namespace ::com::sun::star;
 

@@ -18,20 +18,20 @@
  */
 
 
-#include <canvas/debug.hxx>
+#include <sal/config.h>
+
 #include <tools/diagnose_ex.h>
-#include <canvas/canvastools.hxx>
-
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/TextDirection.hpp>
-#include <cppuhelper/supportsservice.hxx>
-
-#include <vcl/metric.hxx>
-#include <vcl/virdev.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/TextDirection.hpp>
+#include <cppuhelper/supportsservice.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
+
+#include <canvas/canvastools.hxx>
 
 #include "impltools.hxx"
 #include "textlayout.hxx"

@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <tools/diagnose_ex.h>
-#include <canvas/spriteredrawmanager.hxx>
+#include <algorithm>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-
-#include <algorithm>
-#include <o3tl/compat_functional.hxx>
 #include <boost/bind.hpp>
+#include <o3tl/compat_functional.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <canvas/spriteredrawmanager.hxx>
 
 
 namespace canvas

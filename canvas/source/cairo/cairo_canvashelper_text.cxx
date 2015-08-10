@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <vcl/virdev.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/canvastools.hxx>
+#include <sal/config.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/canvastools.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
+
+#include <canvas/canvastools.hxx>
 
 #include "cairo_canvasfont.hxx"
-#include "cairo_textlayout.hxx"
 #include "cairo_canvashelper.hxx"
+#include "cairo_textlayout.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

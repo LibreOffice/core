@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/diagnose_ex.h>
-
-#include <rtl/math.hxx>
-
-#include <canvas/canvastools.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
-#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <canvas/canvastools.hxx>
 
 #include "cairo_canvascustomsprite.hxx"
 #include "cairo_spritehelper.hxx"

@@ -19,7 +19,6 @@
 
 
 // must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "viewbackgroundshape.hxx"
@@ -38,7 +37,6 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>

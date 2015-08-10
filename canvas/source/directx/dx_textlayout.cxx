@@ -17,15 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #include <ctype.h>
-#include <cppuhelper/supportsservice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <cppuhelper/supportsservice.hxx>
+
 #include "dx_bitmap.hxx"
-#include "dx_textlayout.hxx"
 #include "dx_spritecanvas.hxx"
+#include "dx_textlayout.hxx"
 #include "dx_textlayout_drawhelper.hxx"
 
 using namespace ::com::sun::star;

@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
@@ -1297,7 +1295,7 @@ namespace cppcanvas
                         {
                             if( !pClipAction->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
                             {
-                                VERBOSE_TRACE( "ImplRenderer::createActions(): non-polygonal clip "
+                                SAL_INFO( "cppcanvas.emf", "ImplRenderer::createActions(): non-polygonal clip "
                                                "region encountered, falling back to bounding box!" );
 
                                 // #121806# explicitly kept integer
@@ -1353,7 +1351,7 @@ namespace cppcanvas
 
                         if( !pClipAction->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
                         {
-                            VERBOSE_TRACE( "ImplRenderer::createActions(): non-polygonal clip "
+                            SAL_INFO( "cppcanvas.emf", "ImplRenderer::createActions(): non-polygonal clip "
                                            "region encountered, falling back to bounding box!" );
 
                             // #121806# explicitly kept integer

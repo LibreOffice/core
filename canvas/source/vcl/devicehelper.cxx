@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <sal/config.h>
+
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/unopolypolygon.hxx>
 #include <vcl/dibtools.hxx>
 
+#include "canvasbitmap.hxx"
 #include "devicehelper.hxx"
 #include "spritecanvas.hxx"
 #include "spritecanvashelper.hxx"
-#include "canvasbitmap.hxx"
 
 using namespace ::com::sun::star;
 

@@ -18,10 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>

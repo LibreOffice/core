@@ -17,18 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <tools/diagnose_ex.h>
 
 #include "cachedbitmap.hxx"
 #include "repainttarget.hxx"
 
-#include <com/sun/star/rendering/RepaintResult.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/canvastools.hxx>
 
 
 using namespace ::com::sun::star;

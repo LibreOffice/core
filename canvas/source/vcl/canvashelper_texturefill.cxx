@@ -17,49 +17,44 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <rtl/math.hxx>
-
-#include <com/sun/star/rendering/TextDirection.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-
-#include <tools/poly.hxx>
-#include <vcl/window.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/canvastools.hxx>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <basegfx/tools/tools.hxx>
-#include <basegfx/tools/lerp.hxx>
-#include <basegfx/tools/keystoplerp.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-
-#include <comphelper/sequence.hxx>
-
-#include <canvas/canvastools.hxx>
-#include <canvas/parametricpolypolygon.hxx>
+#include <sal/config.h>
 
 #include <boost/bind.hpp>
 #include <boost/tuple/tuple.hpp>
 
-#include "spritecanvas.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/keystoplerp.hxx>
+#include <basegfx/tools/lerp.hxx>
+#include <basegfx/tools/tools.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/TextDirection.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <comphelper/sequence.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/poly.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
+
+#include <canvas/canvastools.hxx>
+#include <canvas/parametricpolypolygon.hxx>
+
 #include "canvashelper.hxx"
 #include "impltools.hxx"
+#include "spritecanvas.hxx"
 
 
 using namespace ::com::sun::star;

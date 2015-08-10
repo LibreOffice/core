@@ -18,9 +18,7 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <basegfx/numeric/ftools.hxx>

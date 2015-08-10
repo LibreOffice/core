@@ -17,35 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <ctype.h>
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <osl/mutex.hxx>
-
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-
-#include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <comphelper/servicedecl.hxx>
+#include <cctype>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <osl/mutex.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/sysdata.hxx>
 
+#include <canvas/canvastools.hxx>
+
+#include "dx_canvas.hxx"
 #include "dx_graphicsprovider.hxx"
 #include "dx_winstuff.hxx"
-#include "dx_canvas.hxx"
-
-#include <vcl/sysdata.hxx>
 
 #define CANVAS_TECH "GDI+"
 #define CANVAS_SERVICE_NAME              "com.sun.star.rendering.Canvas."            CANVAS_TECH

@@ -19,10 +19,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_SETACTIVITY_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_SETACTIVITY_HXX
 
-// must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 
 #include "animationactivity.hxx"
 #include "animation.hxx"

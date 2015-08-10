@@ -17,18 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <string.h>
-
-#include "dx_surfacebitmap.hxx"
-#include "dx_impltools.hxx"
-#include "dx_surfacegraphics.hxx"
-#include "dx_graphicsprovider.hxx"
-
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
+#include <tools/diagnose_ex.h>
+
+#include "dx_graphicsprovider.hxx"
+#include "dx_impltools.hxx"
+#include "dx_surfacebitmap.hxx"
+#include "dx_surfacegraphics.hxx"
+
 
 #if defined(DX_DEBUG_IMAGES)
 # if OSL_DEBUG_LEVEL > 0

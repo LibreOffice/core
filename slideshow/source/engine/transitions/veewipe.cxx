@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include "veewipe.hxx"
 

@@ -18,9 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>

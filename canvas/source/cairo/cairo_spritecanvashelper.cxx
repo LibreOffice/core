@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <vcl/canvastools.hxx>
-
-#include <comphelper/scopeguard.hxx>
-
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <sal/config.h>
 
 #include <boost/bind.hpp>
 #include <boost/cast.hpp>
 
-#include "cairo_spritecanvashelper.hxx"
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/canvastools.hxx>
+
+#include <canvas/canvastools.hxx>
+
 #include "cairo_canvascustomsprite.hxx"
+#include "cairo_spritecanvashelper.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

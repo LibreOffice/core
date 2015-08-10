@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.hxx>
 

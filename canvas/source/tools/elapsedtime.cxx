@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #include <osl/time.h>
 #include <osl/diagnose.h>
+
 #include <canvas/elapsedtime.hxx>
 
 #if defined(WNT)

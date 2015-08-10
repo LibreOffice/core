@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <osl/mutex.hxx>
-#include <osl/process.h>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
+#include <algorithm>
+#include <utility>
+#include <vector>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-
-#include <vector>
-#include <utility>
-#include <algorithm>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <osl/mutex.hxx>
+#include <osl/process.h>
 
 
 using namespace ::com::sun::star;

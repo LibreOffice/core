@@ -17,17 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
+#include <sal/config.h>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <tools/diagnose_ex.h>
 
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_repainttarget.hxx"
-
-#include <com/sun/star/rendering/RepaintResult.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/canvastools.hxx>
 
 
 using namespace ::cairo;

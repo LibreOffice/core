@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
+#include <sal/config.h>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/bmpacc.hxx>
+
 #include "canvasbitmap.hxx"
 
-#include <vcl/bmpacc.hxx>
 
 using namespace ::com::sun::star;
 

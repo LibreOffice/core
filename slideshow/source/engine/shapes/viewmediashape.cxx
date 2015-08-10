@@ -19,9 +19,7 @@
 
 #include <config_features.h>
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 
 #include <math.h>
 

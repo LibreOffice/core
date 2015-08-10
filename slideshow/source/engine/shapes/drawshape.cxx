@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 
 #include <osl/diagnose.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>

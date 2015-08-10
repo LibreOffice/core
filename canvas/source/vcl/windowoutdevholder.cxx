@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "windowoutdevholder.hxx"
-#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace ::com::sun::star;
 

@@ -17,26 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <canvas/canvastools.hxx>
 #include <com/sun/star/util/Endianness.hpp>
-
 #include <rtl/math.hxx>
-
+#include <tools/diagnose_ex.h>
 #include <tools/poly.hxx>
-#include <vcl/window.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/canvastools.hxx>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-
-#include <canvas/canvastools.hxx>
+#include <vcl/window.hxx>
 
 #include "canvasbitmap.hxx"
 #include "canvasbitmaphelper.hxx"

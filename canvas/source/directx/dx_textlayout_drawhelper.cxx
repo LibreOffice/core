@@ -17,32 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <tools/poly.hxx>
-
-#include <vcl/metric.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/canvastools.hxx>
-#include <tools/diagnose_ex.h>
+#include <sal/config.h>
 
 #include <memory>
 #include <boost/bind.hpp>
+
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <tools/color.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <canvas/canvastools.hxx>
-#include <canvas/debug.hxx>
-#include "dx_impltools.hxx"
-#include <vcl/sysdata.hxx>
+#include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include "dx_textlayout_drawhelper.hxx"
+#include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/poly.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/virdev.hxx>
+
+#include <canvas/canvastools.hxx>
+
 #include "dx_bitmap.hxx"
 #include "dx_canvasfont.hxx"
+#include "dx_impltools.hxx"
+#include "dx_textlayout_drawhelper.hxx"
 
 class css::rendering::XCanvasFont;
 

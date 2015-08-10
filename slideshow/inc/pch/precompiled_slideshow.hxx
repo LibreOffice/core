@@ -50,9 +50,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/weak_ptr.hpp>
 #include <canvas/canvastools.hxx>
-#include <canvas/debug.hxx>
 #include <canvas/elapsedtime.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <cmath>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>

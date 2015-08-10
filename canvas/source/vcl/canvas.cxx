@@ -17,24 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
+#include <algorithm>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <tools/diagnose_ex.h>
+#include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/bitmapex.hxx>
 
-#include <basegfx/tools/canvastools.hxx>
-
-#include <algorithm>
+#include <canvas/canvastools.hxx>
 
 #include "canvas.hxx"
 #include "windowoutdevholder.hxx"

@@ -38,8 +38,6 @@
 #include <memory>
 #include <boost/noncopyable.hpp>
 #include <canvas/canvastools.hxx>
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
