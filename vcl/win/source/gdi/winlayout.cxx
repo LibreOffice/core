@@ -107,7 +107,7 @@ inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
 
 WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL)
 :   mhDC( hDC ),
-    mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
+    mhFont( (HFONT)GetCurrentObject(hDC,OBJ_FONT) ),
     mnBaseAdv( 0 ),
     mfFontScale( 1.0 ),
     mrWinFontData( rWFD ),
@@ -117,7 +117,7 @@ WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWF
 
 void WinLayout::InitFont() const
 {
-    ::SelectObject( mhDC, mhFont );
+    SelectObject( mhDC, mhFont );
 }
 
 // Using reasonably sized fonts to emulate huge fonts works around
@@ -132,10 +132,10 @@ HFONT WinLayout::DisableFontScaling() const
         return 0;
 
     LOGFONTW aLogFont;
-    ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+    GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
     aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
     aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
-    HFONT hHugeFont = ::CreateFontIndirectW( &aLogFont);
+    HFONT hHugeFont = CreateFontIndirectW( &aLogFont);
     if( !hHugeFont )
         return 0;
 
@@ -282,7 +282,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & SalLayoutFlags::KerningAsian )
     {
         TEXTMETRICA aTextMetricA;
-        if( ::GetTextMetricsA( mhDC, &aTextMetricA )
+        if( GetTextMetricsA( mhDC, &aTextMetricA )
         && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) && !(aTextMetricA.tmCharSet == 0x86) )
             rArgs.mnFlags &= ~SalLayoutFlags::KerningAsian;
     }
@@ -339,7 +339,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 // in the RTL case mirror the character and remember its RTL status
                 if( bIsRTL )
                 {
-                    cChar = ::GetMirroredChar( cChar );
+                    cChar = GetMirroredChar( cChar );
                     mpGlyphRTLFlags[ mnGlyphCount ] = true;
                 }
 
@@ -389,12 +389,12 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         {
             ABC aABC;
             SIZE aExtent;
-            if( ::GetTextExtentPoint32W( mhDC, &pCodes[0], bSurrogate ? 2 : 1, &aExtent) )
+            if( GetTextExtentPoint32W( mhDC, &pCodes[0], bSurrogate ? 2 : 1, &aExtent) )
                 nGlyphWidth = aExtent.cx;
-            else if( ::GetCharABCWidthsW( mhDC, nCharCode, nCharCode, &aABC ) )
+            else if( GetCharABCWidthsW( mhDC, nCharCode, nCharCode, &aABC ) )
                 nGlyphWidth = aABC.abcA + aABC.abcB + aABC.abcC;
-            else if( !::GetCharWidth32W( mhDC, nCharCode, nCharCode, &nGlyphWidth )
-                 &&  !::GetCharWidthW( mhDC, nCharCode, nCharCode, &nGlyphWidth ) )
+            else if( !GetCharWidth32W( mhDC, nCharCode, nCharCode, &nGlyphWidth )
+                 &&  !GetCharWidthW( mhDC, nCharCode, nCharCode, &nGlyphWidth ) )
                     nGlyphWidth = 0;
             mrWinFontEntry.CacheGlyphWidth( nCharCode, nGlyphWidth );
         }
@@ -432,7 +432,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 SIZE aExtent;
                 WCHAR cNotDef = rArgs.mpStr[ nCharPos ];
                 mnNotdefWidth = 0;
-                if( ::GetTextExtentPoint32W( mhDC, &cNotDef, 1, &aExtent) )
+                if( GetTextExtentPoint32W( mhDC, &cNotDef, 1, &aExtent) )
                     mnNotdefWidth = aExtent.cx;
             }
             // use a better NotDef glyph
@@ -612,20 +612,20 @@ void SimpleWinLayout::DrawTextImpl(HDC hDC) const
         // #108267#,#109387# break up string into smaller chunks
         // the output positions will be updated by windows (SetTextAlign)
         POINT oldPos;
-        UINT oldTa = ::GetTextAlign(hDC);
-        ::SetTextAlign(hDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP);
-        ::MoveToEx(hDC, aPos.X(), aPos.Y(), &oldPos);
+        UINT oldTa = GetTextAlign(hDC);
+        SetTextAlign(hDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP);
+        MoveToEx(hDC, aPos.X(), aPos.Y(), &oldPos);
         unsigned int i = 0;
         for( unsigned int n = 0; n < numGlyphPortions; ++n, i+=maxGlyphCount )
         {
-            ::ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i);
+            ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i);
         }
-        ::ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i);
-        ::MoveToEx(hDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
-        ::SetTextAlign(hDC, oldTa);
+        ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i);
+        MoveToEx(hDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
+        SetTextAlign(hDC, oldTa);
     }
     else
-        ::ExtTextOutW(hDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL, mpOutGlyphs, mnGlyphCount, mpGlyphAdvances);
+        ExtTextOutW(hDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL, mpOutGlyphs, mnGlyphCount, mpGlyphAdvances);
 
     if( hOrigFont )
         DeleteFont(SelectFont(hDC, hOrigFont));
@@ -966,8 +966,8 @@ static bool bManualCellAlign = true;
 static bool InitUSP()
 {
     // get the usp10.dll version info
-    HMODULE usp10 = ::GetModuleHandle("usp10.dll");
-    void *pScriptIsComplex = reinterpret_cast< void* >( ::GetProcAddress(usp10, "ScriptIsComplex"));
+    HMODULE usp10 = GetModuleHandle("usp10.dll");
+    void *pScriptIsComplex = reinterpret_cast< void* >( GetProcAddress(usp10, "ScriptIsComplex"));
     int nUspVersion = 0;
     rtl_uString* pModuleURL = NULL;
     osl_getModuleURLFromAddress( pScriptIsComplex, &pModuleURL );
@@ -980,13 +980,13 @@ static bool InitUSP()
     if( pModuleFileCStr )
     {
         DWORD nHandle;
-        DWORD nBufSize = ::GetFileVersionInfoSizeW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), &nHandle );
+        DWORD nBufSize = GetFileVersionInfoSizeW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), &nHandle );
         char* pBuffer = (char*)alloca( nBufSize );
-        BOOL bRC = ::GetFileVersionInfoW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), nHandle, nBufSize, pBuffer );
+        BOOL bRC = GetFileVersionInfoW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), nHandle, nBufSize, pBuffer );
         VS_FIXEDFILEINFO* pFixedFileInfo = NULL;
         UINT nFixedFileSize = 0;
         if( bRC )
-            ::VerQueryValueW( pBuffer, const_cast<LPWSTR>(L"\\"), (void**)&pFixedFileInfo, &nFixedFileSize );
+            VerQueryValueW( pBuffer, const_cast<LPWSTR>(L"\\"), (void**)&pFixedFileInfo, &nFixedFileSize );
         if( pFixedFileInfo && pFixedFileInfo->dwSignature == 0xFEEF04BD )
             nUspVersion = HIWORD(pFixedFileInfo->dwProductVersionMS) * 10000
                         + LOWORD(pFixedFileInfo->dwProductVersionMS);
@@ -2554,7 +2554,7 @@ float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
     HDC hDC = reinterpret_cast<HDC>(const_cast<void*>(appFontHandle));
     GLYPHMETRICS gm;
     const MAT2 mat2 = {{0,1}, {0,0}, {0,0}, {0,1}};
-    if (GDI_ERROR == ::GetGlyphOutlineW(hDC, glyphId, GGO_GLYPH_INDEX | GGO_METRICS,
+    if (GDI_ERROR == GetGlyphOutlineW(hDC, glyphId, GGO_GLYPH_INDEX | GGO_METRICS,
         &gm, 0, NULL, &mat2))
     {
         return .0f;
@@ -2568,7 +2568,7 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplW
 {
     // the log font size may differ from the font entry size if scaling is used for large fonts
     LOGFONTW aLogFont;
-    ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+    GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
     mpFont = gr_make_font_with_advance_fn(static_cast<float>(-aLogFont.lfHeight),
         hDC, gr_fontAdvance, rWFD.GraphiteFace());
     maImpl.SetFont(mpFont);
@@ -2607,11 +2607,11 @@ bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
     {
         // Graphite gets very confused if the font is rotated
         LOGFONTW aLogFont;
-        ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+        GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
         aLogFont.lfEscapement = 0;
         aLogFont.lfOrientation = 0;
-        hUnRotatedFont = ::CreateFontIndirectW( &aLogFont);
-        ::SelectFont(mhDC, hUnRotatedFont);
+        hUnRotatedFont = CreateFontIndirectW( &aLogFont);
+        SelectFont(mhDC, hUnRotatedFont);
     }
     WinLayout::AdjustLayout(args);
     maImpl.SetFontScale(WinLayout::mfFontScale);
@@ -2627,8 +2627,8 @@ bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
     if (args.mnOrientation)
     {
         // restore the rotated font
-        ::SelectFont(mhDC, mhFont);
-        ::DeleteObject(hUnRotatedFont);
+        SelectFont(mhDC, mhFont);
+        DeleteObject(hUnRotatedFont);
     }
     return bSucceeded;
 }
@@ -2660,12 +2660,12 @@ void GraphiteWinLayout::DrawTextImpl(HDC hDC) const
     {
         nGlyphs = maImpl.GetNextGlyphs(1, glyphIntStr, aPos, glyphIndex);
         if (nGlyphs < 1)
-          break;
+            break;
         std::copy(glyphIntStr, glyphIntStr + nGlyphs, glyphWStr);
-        ::ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
+        ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
     } while (nGlyphs);
     if( hOrigFont )
-          DeleteFont(SelectFont(hDC, hOrigFont));
+        DeleteFont(SelectFont(hDC, hOrigFont));
 }
 
 sal_Int32 GraphiteWinLayout::GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const
@@ -2685,7 +2685,7 @@ void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) 
 }
 
 int GraphiteWinLayout::GetNextGlyphs( int length, sal_GlyphId* glyph_out,
-                                      ::Point& pos_out, int& glyph_slot, DeviceCoordinate* glyph_adv, int* char_index,
+                                      Point& pos_out, int& glyph_slot, DeviceCoordinate* glyph_adv, int* char_index,
                                       const PhysicalFontFace** pFallbackFonts ) const
 {
     maImpl.DrawBase() = WinLayout::maDrawBase;
@@ -2799,7 +2799,7 @@ void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData
 {
     mnKerningPairs = nPairCount;
     mpKerningPairs = new KERNINGPAIR[ mnKerningPairs ];
-    ::memcpy( mpKerningPairs, (const void*)pPairData, nPairCount*sizeof(KERNINGPAIR) );
+    memcpy( mpKerningPairs, (const void*)pPairData, nPairCount*sizeof(KERNINGPAIR) );
 }
 
 int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
