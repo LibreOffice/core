@@ -35,6 +35,17 @@ void exportString(SvStream& rStrm, const OUString& rString)
     rStrm.WriteOString(aStringCorrectCodepage);
 }
 
+void exportUTF16String(SvStream& rStrm, const OUString& rString)
+{
+    sal_Int32 n = rString.getLength();
+    const sal_Unicode* pString = rString.getStr();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        sal_Unicode character = pString[i];
+        rStrm.WriteUnicode(character);
+    }
+}
+
 }
 
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
