@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_d4cfbcb1",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-10T23:17:08Z",
+      "side": 1,
+      "message": "That doesn\u0027t match the original meaning, it should be something like\n\nOnLoadOnce is used only to set Dirty after filter import.",
+      "revId": "f67ebe6b20970dc285963a6382607ae44c32e41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
