@@ -206,7 +206,7 @@ bool checkAttribute(
     {
         if (attribute & attributes[i]) {
             if (!attributeValue.isEmpty()) {
-                cast |= true;
+                cast = true;
                 attributeValue.append("|");
             }
             switch (attributes[i])

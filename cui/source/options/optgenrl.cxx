@@ -306,8 +306,6 @@ VclPtr<SfxTabPage> SvxGeneralTabPage::Create( vcl::Window* pParent, const SfxIte
     return VclPtr<SvxGeneralTabPage>::Create( pParent, *rAttrSet );
 }
 
-
-
 bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 {
     // remove leading and trailing whitespaces
@@ -320,12 +318,10 @@ bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
     if ( m_pUseDataCB->IsChecked() != aSaveOpt.IsUseUserData() )
     {
         aSaveOpt.SetUseUserData( m_pUseDataCB->IsChecked() );
-        bModified |= true;
+        bModified = true;
     }
     return bModified;
 }
-
-
 
 void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 {

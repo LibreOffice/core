@@ -797,7 +797,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             if ( *pTableBck_Impl->pCellBrush != *pOldCell )
             {
                 rCoreSet->Put( *pTableBck_Impl->pCellBrush );
-                bModified |= true;
+                bModified = true;
             }
         }
 
@@ -809,7 +809,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             if ( *pTableBck_Impl->pRowBrush != *pOldRow )
             {
                 rCoreSet->Put( *pTableBck_Impl->pRowBrush );
-                bModified |= true;
+                bModified = true;
             }
         }
 
@@ -821,7 +821,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             if ( *pTableBck_Impl->pTableBrush != *pOldTable )
             {
                 rCoreSet->Put( *pTableBck_Impl->pTableBrush );
-                bModified |= true;
+                bModified = true;
             }
         }
 
@@ -829,7 +829,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         {
             rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pTblLBox->GetSelectEntryPos() ) );
-            bModified |= true;
+            bModified = true;
         }
     }
     else if( bHighlighting )
@@ -842,7 +842,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 (*pHighlighting != *pOldChar || *pHighlighting != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
             {
                 rCoreSet->Put( *pHighlighting );
-                bModified |= true;
+                bModified = true;
             }
         }
     }

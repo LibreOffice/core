@@ -977,7 +977,7 @@ namespace svx
                         bDisable |= !aDataHelper.HasFormat( SotClipboardFormatId::STRING );
                     }
                     else
-                        bDisable |= true;
+                        bDisable = true;
 
                     bNeedTextComponent = true;
                     bNeedWriteableControl = true;
@@ -995,7 +995,7 @@ namespace svx
 
                 default:
                     // slot is unknown at all
-                    bDisable |= true;
+                    bDisable = true;
                     break;
                 }
                 SAL_WARN_IF( bNeedSelection && !bNeedTextComponent, "svx.form", "FmTextControlShell::GetTextAttributeState: bNeedSelection should imply bNeedTextComponent!" );

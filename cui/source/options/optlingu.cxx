@@ -1156,8 +1156,6 @@ VclPtr<SfxTabPage> SvxLinguTabPage::Create( vcl::Window* pParent,
     return VclPtr<SvxLinguTabPage>::Create( pParent, *rAttrSet );
 }
 
-
-
 bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bModified = true; // !!!!
@@ -1315,13 +1313,11 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         rCoreSet->Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
                                 bNewAutoCheck ) );
-        bModified |= true;
+        bModified = true;
     }
 
     return bModified;
 }
-
-
 
 sal_uLong SvxLinguTabPage::GetDicUserData( const uno::Reference< XDictionary > &rxDic, sal_uInt16 nIdx )
 {

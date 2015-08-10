@@ -843,7 +843,7 @@ short SfxTabDialog::Ok()
 
                 if ( pTabPage->FillItemSet( &aTmp ) )
                 {
-                    bModified |= true;
+                    bModified = true;
                     if (pExampleSet)
                         pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
@@ -853,10 +853,10 @@ short SfxTabDialog::Ok()
     }
 
     if ( pImpl->bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        bModified |= true;
+        bModified = true;
 
     if (bStandardPushed)
-        bModified |= true;
+        bModified = true;
     return bModified ? RET_OK : RET_CANCEL;
 }
 

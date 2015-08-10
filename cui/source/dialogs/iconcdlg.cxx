@@ -820,7 +820,7 @@ short IconChoiceDialog::Ok()
 
                 if ( pPage->FillItemSet( &aTmp ) )
                 {
-                    _bModified |= true;
+                    _bModified = true;
                     pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
                 }
@@ -829,12 +829,10 @@ short IconChoiceDialog::Ok()
     }
 
     if ( _bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        _bModified |= true;
+        _bModified = true;
 
     return _bModified ? RET_OK : RET_CANCEL;
 }
-
-
 
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {

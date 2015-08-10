@@ -280,55 +280,55 @@ bool SfxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
                                aDocInfoCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
 
     if ( aBackupCB->IsEnabled() && aBackupCB->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
 
     if ( aAutoSaveCB->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
                                aAutoSaveCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
     if ( aWarnAlienFormatCB->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
                                aWarnAlienFormatCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
 
     if ( aAutoSaveEdit->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
                                  (sal_uInt16)aAutoSaveEdit->GetValue() ) );
-        bModified |= true;
+        bModified = true;
     }
 
     if ( aUserAutoSaveCB->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
                                aUserAutoSaveCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
     // save relatively
     if ( aRelativeFsysCB->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
                                aRelativeFsysCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
 
     if ( aRelativeInetCB->IsValueChangedFromSaved() )
     {
         rSet->Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
                                aRelativeInetCB->IsChecked() ) );
-        bModified |= true;
+        bModified = true;
     }
 
     SvtModuleOptions aModuleOpt;
@@ -362,8 +362,6 @@ bool SfxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 
     return bModified;
 }
-
-
 
 bool isODFFormat( const OUString& sFilter )
 {

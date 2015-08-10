@@ -1268,7 +1268,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 xPackage->revokePackage(true, xAbortChannel, xCmdEnv);
                 removePackage(xPackage->getIdentifier().Value, xPackage->getName(),
                               xAbortChannel, xCmdEnv);
-                bModified |= true;
+                bModified = true;
             }
         }
         catch( const uno::Exception & e )
@@ -1404,7 +1404,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     //try to install the extension again.
                     dbData.failedPrerequisites = OUString::number(failedPrereq);
                     insertToActivationLayerDB(id, dbData);
-                    bModified |= true;
+                    bModified = true;
                 }
             }
         }
