@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -52,7 +50,7 @@ namespace cairocanvas
 
     void SpriteCanvas::initialize()
     {
-        VERBOSE_TRACE("CairoSpriteCanvas created %p\n", this);
+        SAL_INFO("canvas.cairo", "CairoSpriteCanvas created " << this);
 
         // #i64742# Only call initialize when not in probe mode
         if( maArguments.getLength() == 0 )

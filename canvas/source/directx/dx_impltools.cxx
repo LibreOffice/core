@@ -21,8 +21,6 @@
 #include <ctype.h>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

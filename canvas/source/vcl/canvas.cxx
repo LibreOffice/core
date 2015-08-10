@@ -19,7 +19,6 @@
 
 
 #include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -88,7 +87,7 @@ namespace vclcanvas
          */
         SolarMutexGuard aGuard;
 
-        VERBOSE_TRACE( "VCLCanvas::initialize called" );
+        SAL_INFO("canvas.vcl", "VCLCanvas::initialize called" );
 
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
@@ -117,7 +116,7 @@ namespace vclcanvas
 
     Canvas::~Canvas()
     {
-        OSL_TRACE( "Canvas destroyed" );
+        SAL_INFO("canvas.vcl", "VCLCanvas destroyed" );
     }
 
     void Canvas::disposeThis()

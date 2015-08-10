@@ -9,10 +9,6 @@
 
 #include "ogl_spritecanvas.hxx"
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-#include <tools/diagnose_ex.h>
-
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -24,6 +20,8 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/servicedecl.hxx>
+
+#include <tools/diagnose_ex.h>
 
 #include "ogl_canvascustomsprite.hxx"
 
@@ -48,7 +46,7 @@ namespace oglcanvas
         if( maArguments.getLength() == 0 )
             return;
 
-        VERBOSE_TRACE( "SpriteCanvas::initialize called" );
+        SAL_INFO("canvas.ogl", "SpriteCanvas::initialize called" );
 
         /* aArguments:
            0: ptr to creating instance (Window or VirtualDevice)

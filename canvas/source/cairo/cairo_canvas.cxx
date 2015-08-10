@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -66,7 +64,7 @@ namespace cairocanvas
            4: XWindow for creating Window (or empty for VirtualDevice)
            5: SystemGraphicsData as a streamed Any
          */
-        VERBOSE_TRACE("Canvas created %p\n", this);
+        SAL_INFO("canvas.cairo","Canvas created " <<  this);
 
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
@@ -108,7 +106,7 @@ namespace cairocanvas
 
     Canvas::~Canvas()
     {
-        OSL_TRACE( "CairoCanvas destroyed" );
+        SAL_INFO("canvas.cairo", "CairoCanvas destroyed" );
     }
 
     void Canvas::disposeThis()

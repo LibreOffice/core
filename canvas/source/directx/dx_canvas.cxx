@@ -19,8 +19,6 @@
 
 
 #include <ctype.h>
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -82,7 +80,7 @@ namespace dxcanvas
         if( maArguments.getLength() == 0 )
             return;
 
-        VERBOSE_TRACE( "Canvas::initialize called" );
+        SAL_INFO("canvas.directx", "Canvas::initialize called" );
 
         // At index 1, we expect a HWND handle here, containing a
         // pointer to a valid window, on which to output
@@ -143,7 +141,7 @@ namespace dxcanvas
         if( maArguments.getLength() == 0 )
             return;
 
-        VERBOSE_TRACE( "BitmapCanvas::initialize called" );
+        SAL_INFO("canvas.directx", "BitmapCanvas::initialize called" );
 
         // At index 1, we expect a HWND handle here, containing a
         // pointer to a valid window, on which to output

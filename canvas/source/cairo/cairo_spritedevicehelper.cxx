@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <osl/mutex.hxx>
@@ -72,13 +70,13 @@ namespace cairocanvas
 
     bool SpriteDeviceHelper::showBuffer( bool, bool )
     {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
+        SAL_WARN("canvas.cairo", "showBuffer Not supposed to be called, handled by SpriteCanvas");
         return false;
     }
 
     bool SpriteDeviceHelper::switchBuffer( bool, bool )
     {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
+        SAL_WARN("canvas.cairo", "showBuffer Not supposed to be called, handled by SpriteCanvas");
         return false;
     }
 

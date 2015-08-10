@@ -35,8 +35,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/window.hxx>
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <canvas/elapsedtime.hxx>
@@ -1159,7 +1157,7 @@ namespace dxcanvas
                 }
 
                 default:
-                    OSL_FAIL("DXRenderModule::pushVertex(): unexpected primitive type");
+                    SAL_WARN("canvas.directx", "DXRenderModule::pushVertex(): unexpected primitive type");
                     break;
             }
         }

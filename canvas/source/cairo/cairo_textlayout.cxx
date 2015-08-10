@@ -19,8 +19,6 @@
 
 #include <math.h>
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -146,7 +144,7 @@ namespace cairocanvas
 
         if( aAdvancements.getLength() != maText.Length )
         {
-            OSL_TRACE( "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
+            SAL_WARN("canvas.cairo", "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
             throw lang::IllegalArgumentException();
         }
 
@@ -300,7 +298,7 @@ namespace cairocanvas
         // vertical glyph rendering is not supported in cairo for now
         if (aSysFontData.bVerticalCharacterType)
         {
-            OSL_TRACE(":cairocanvas::TextLayout::isCairoRenderable(): ***************** VERTICAL CHARACTER STYLE!!! ****************");
+            SAL_WARN("canvas.cairo", ":cairocanvas::TextLayout::isCairoRenderable(): Vertical Character Style not supported");
             return false;
         }
 
@@ -364,13 +362,13 @@ namespace cairocanvas
                 if( !isCairoRenderable(aFontData.back().first) )
                 {
                     bCairoRenderable = false;
-                    OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): VCL FALLBACK %s%s%s%s - %s",
-                              maLogicalAdvancements.getLength() ? "ADV " : "",
-                              aFontData.back().first.bAntialias ? "AA " : "",
-                              aFontData.back().first.bFakeBold ? "FB " : "",
-                              aFontData.back().first.bFakeItalic ? "FI " : "",
-                              OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
-                                                 RTL_TEXTENCODING_UTF8 ).getStr());
+                    SAL_INFO("canvas.cairo", ":cairocanvas::TextLayout::draw(S,O,p,v,r): VCL FALLBACK " <<
+                             (maLogicalAdvancements.getLength() ? "ADV " : "") <<
+                             (aFontData.back().first.bAntialias ? "AA " : "") <<
+                             (aFontData.back().first.bFakeBold ? "FB " : "") <<
+                             (aFontData.back().first.bFakeItalic ? "FI " : "") <<
+                             " - " <<
+                             maText.Text.copy( maText.StartPosition, maText.Length));
                     break;
                 }
             }
@@ -519,7 +517,7 @@ namespace cairocanvas
                     }
                     cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
                 }
-                OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:%d", (int) bold_dx);
+                SAL_INFO("canvas.cairo",":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:" << (int) bold_dx);
             }
 
             cairo_font_face_destroy(font_face);

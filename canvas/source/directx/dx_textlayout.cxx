@@ -19,8 +19,6 @@
 
 
 #include <ctype.h>
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -93,7 +91,7 @@ namespace dxcanvas
 
         if( aAdvancements.getLength() != maText.Length )
         {
-            OSL_TRACE( "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
+            SAL_WARN("canvas.directx", "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
             throw lang::IllegalArgumentException();
         }
 

@@ -11,11 +11,7 @@
 #include "ogl_canvastools.hxx"
 #include "ogl_tools.hxx"
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/verifyinput.hxx>
-#include <tools/diagnose_ex.h>
-
 #include <canvas/canvastools.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -25,6 +21,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
+#include <tools/diagnose_ex.h>
 #include <GL/glew.h>
 
 using namespace ::com::sun::star;

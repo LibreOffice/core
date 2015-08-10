@@ -18,18 +18,16 @@
  */
 
 
-#include <vcl/canvastools.hxx>
+#include <tools/diagnose_ex.h>
 
+#include <vcl/canvastools.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
-#include <tools/diagnose_ex.h>
 
 #include "dx_impltools.hxx"
-#include <basegfx/numeric/ftools.hxx>
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
