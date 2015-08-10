@@ -16,16 +16,8 @@ $(eval $(call gb_Executable_set_include,demoshow,\
     -I$(SRCDIR)/slideshow/source/inc \
 ))
 
-ifeq ($(strip $(VERBOSE)),TRUE)
-$(eval $(call gb_Executable_set_defs,demoshow,\
-    $$(DEFS) \
-    -DVERBOSE \
-))
-endif
-
 ifneq ($(strip $(debug)$(DEBUG)),)
-$(eval $(call gb_Executable_set_defs,demoshow,\
-    $$(DEFS) \
+$(eval $(call gb_Executable_add_defs,demoshow,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \
 ))
 endif

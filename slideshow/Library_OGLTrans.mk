@@ -9,12 +9,6 @@
 
 $(eval $(call gb_Library_Library,OGLTrans))
 
-ifeq ($(strip $(VERBOSE)),TRUE)
-$(eval $(call gb_Library_add_defs,OGLTrans,\
-    -DVERBOSE \
-))
-endif
-
 ifneq ($(strip $(debug)$(DEBUG)),)
 $(eval $(call gb_Library_add_defs,OGLTrans,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \

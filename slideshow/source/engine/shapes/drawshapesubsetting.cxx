@@ -156,15 +156,9 @@ namespace slideshow
                     case MetaActionType::TEXTARRAY:
                     case MetaActionType::STRETCHTEXT:
                         nLastTextActionIndex = nActionIndex;
-#if OSL_DEBUG_LEVEL > 1
-                        {
-                            MetaTextAction* pText = static_cast<MetaTextAction*>(pCurrAct);
-                            VERBOSE_TRACE( "Shape text \"%s\" at action #%d",
-                                           OUStringToOString(pText->GetText(),
-                                                      RTL_TEXTENCODING_ISO_8859_1).getStr(),
-                                           nActionIndex );
-                        }
-#endif
+                        SAL_INFO("slideshow.verbose", "Shape text \"" <<
+                                 (static_cast<MetaTextAction*>(pCurrAct))->GetText() <<
+                                 "\" at action #" << nActionIndex );
                         // fallthrough intended
                     default:
                         // comment action and all actions not

@@ -368,12 +368,12 @@ bool AnimationBaseNode::hasPendingAnimation() const
     return true;
 }
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
 void AnimationBaseNode::showState() const
 {
     BaseNode::showState();
 
-    VERBOSE_TRACE( "AnimationBaseNode info: independent subset=%s",
+    SAL_INFO( "slideshow.verbose", "AnimationBaseNode info: independent subset=" <<
                    mbIsIndependentSubset ? "y" : "n" );
 }
 #endif

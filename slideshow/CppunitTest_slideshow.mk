@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_set_include,slideshow,\
 
 $(eval $(call gb_CppunitTest_set_defs,slideshow,\
     $$(DEFS) \
-    $(if $(filter TRUE,$(VERBOSE)),-DVERBOSE) \
 ))
 
 ifneq ($(strip $(debug)$(DEBUG)),)
