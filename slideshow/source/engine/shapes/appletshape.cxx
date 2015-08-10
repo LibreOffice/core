@@ -18,9 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <boost/shared_ptr.hpp>

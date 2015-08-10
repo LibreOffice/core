@@ -18,10 +18,7 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 
 #include <continuouskeytimeactivitybase.hxx>
 

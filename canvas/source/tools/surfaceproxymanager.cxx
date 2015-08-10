@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/rendering/isurfaceproxymanager.hxx>
 #include <canvas/rendering/isurfaceproxy.hxx>
+#include <canvas/rendering/isurfaceproxymanager.hxx>
+
 #include "surfaceproxy.hxx"
 
 namespace canvas

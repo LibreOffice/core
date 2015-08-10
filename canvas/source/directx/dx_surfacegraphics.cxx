@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include "dx_surfacegraphics.hxx"
 #include "dx_impltools.hxx"
+#include "dx_surfacegraphics.hxx"
 
 using namespace ::com::sun::star;
 

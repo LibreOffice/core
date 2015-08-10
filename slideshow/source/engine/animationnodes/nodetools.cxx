@@ -18,10 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include <com/sun/star/animations/Timing.hpp>
 
 #include <tools.hxx>
@@ -34,7 +30,7 @@ namespace slideshow
 {
     namespace internal
     {
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
         int& debugGetCurrentOffset()
         {
             static int lcl_nOffset = 0; // to make each tree output distinct

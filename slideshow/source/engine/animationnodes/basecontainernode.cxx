@@ -18,10 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include "basecontainernode.hxx"
 #include "eventqueue.hxx"
 #include "tools.hxx"
@@ -176,7 +172,7 @@ bool BaseContainerNode::repeat()
     return bState;
 }
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
 void BaseContainerNode::showState() const
 {
     for( std::size_t i=0; i<maChildren.size(); ++i )
@@ -185,9 +181,9 @@ void BaseContainerNode::showState() const
             boost::dynamic_pointer_cast<BaseNode>(maChildren[i]);
         SAL_INFO("slideshow.verbose",
                  "Node connection: n" <<
-                 (const void*)this+debugGetCurrentOffset() <<
+                 (const char*)this+debugGetCurrentOffset() <<
                  " -> n" <<
-                 (const void*)pNode.get()+debugGetCurrentOffset() );
+                 (const char*)pNode.get()+debugGetCurrentOffset() );
         pNode->showState();
     }
 

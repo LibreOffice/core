@@ -17,50 +17,47 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/geometry/Matrix2D.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/util/Endianness.hpp>
-#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
-#include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/ColorComponentTag.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <limits>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/tools/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-
+#include <basegfx/vector/b2ivector.hxx>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/rendering/ColorComponentTag.hpp>
+#include <com/sun/star/rendering/ColorSpaceType.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/RenderingIntent.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XColorSpace.hpp>
+#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
+#include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>
+#include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
-
-#include <limits>
 
 
 using namespace ::com::sun::star;

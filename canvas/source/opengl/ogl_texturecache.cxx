@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_texturecache.hxx"
+#include <sal/config.h>
+
+#include <GL/glew.h>
 
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 
-#include <GL/glew.h>
+#include "ogl_texturecache.hxx"
+
 
 using namespace ::com::sun::star;
 

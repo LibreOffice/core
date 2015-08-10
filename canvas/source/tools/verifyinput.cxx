@@ -17,36 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/geometry/Matrix2D.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/geometry/RealSize2D.hpp>
-#include <com/sun/star/geometry/IntegerPoint2D.hpp>
-#include <com/sun/star/geometry/IntegerSize2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/util/Endianness.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
-#include <com/sun/star/rendering/FloatingPointBitmapFormat.hpp>
-#include <com/sun/star/rendering/FloatingPointBitmapLayout.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b2irange.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/geometry/IntegerPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/geometry/RealSize2D.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/FloatingPointBitmapFormat.hpp>
+#include <com/sun/star/rendering/FloatingPointBitmapLayout.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/util/Endianness.hpp>
 
 #include <canvas/verifyinput.hxx>
 #include <canvas/canvastools.hxx>

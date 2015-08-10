@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

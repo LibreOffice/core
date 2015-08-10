@@ -18,9 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include "delayevent.hxx"
 #include "eventqueue.hxx"
 #include "usereventqueue.hxx"

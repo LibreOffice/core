@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <ctype.h>
-#include "dx_winstuff.hxx"
-#include "dx_spritecanvas.hxx"
-#include "dx_canvasfont.hxx"
-#include "dx_textlayout.hxx"
+#include <cctype>
 
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/PanoseWeight.hpp>
-
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <cppuhelper/supportsservice.hxx>
+
+#include "dx_canvasfont.hxx"
+#include "dx_spritecanvas.hxx"
+#include "dx_textlayout.hxx"
+#include "dx_winstuff.hxx"
 
 using namespace ::com::sun::star;
 

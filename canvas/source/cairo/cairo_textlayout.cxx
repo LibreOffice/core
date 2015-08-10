@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <math.h>
-
-#include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <vcl/metric.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/sysdata.hxx>
+#include <memory>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/metric.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/virdev.hxx>
 
-#include <memory>
 
-#include "cairo_textlayout.hxx"
 #include "cairo_spritecanvas.hxx"
+#include "cairo_textlayout.hxx"
 
 #if defined CAIRO_HAS_FT_FONT
 # include <cairo-ft.h>

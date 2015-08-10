@@ -17,42 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <numeric>
 
-#include <rtl/math.hxx>
-
-#include <com/sun/star/geometry/RealSize2D.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-
-#include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/canvastools.hxx>
-
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/geometry/RealSize2D.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/salbtype.hxx>
 
 #include <canvas/canvastools.hxx>
 
-#include "impltools.hxx"
 #include "canvasbitmap.hxx"
-
-#include <numeric>
+#include "impltools.hxx"
 
 
 using namespace ::com::sun::star;

@@ -17,21 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <rtl/math.hxx>
+#include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <canvas/base/canvascustomspritehelper.hxx>
+#include <canvas/canvastools.hxx>
 
 using namespace ::com::sun::star;
 

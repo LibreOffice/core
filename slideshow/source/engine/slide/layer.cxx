@@ -18,9 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>

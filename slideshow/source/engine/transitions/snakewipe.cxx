@@ -19,7 +19,6 @@
 
 
 #include <osl/diagnose.h>
-#include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

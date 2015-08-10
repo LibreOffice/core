@@ -17,6 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string.h>
+
+#include <boost/scoped_ptr.hpp>
+
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2ipoint.hxx>
+#include <basegfx/range/b2irectangle.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/vector/b2isize.hxx>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <osl/thread.h>
+#include <osl/time.h>
+#include <tools/diagnose_ex.h>
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/window.hxx>
+
+#include <canvas/elapsedtime.hxx>
+#include <canvas/canvastools.hxx>
+#include <canvas/rendering/icolorbuffer.hxx>
+#include <canvas/rendering/irendermodule.hxx>
+#include <canvas/rendering/isurface.hxx>
+
+#include "dx_config.hxx"
+#include "dx_impltools.hxx"
+#include "dx_rendermodule.hxx"
+
 
 #define MAX_TEXTURE_SIZE (2048)
 #define MIN_TEXTURE_SIZE (32)
@@ -27,37 +56,7 @@
                                    // vertex buffer (must be divisable
                                    // by 3, as each triangle primitive
                                    // has 3 vertices)
-#include <string.h>
 
-#include <osl/thread.h>
-#include <osl/time.h>
-
-#include <vcl/syschild.hxx>
-#include <vcl/window.hxx>
-
-#include <tools/diagnose_ex.h>
-
-#include <canvas/elapsedtime.hxx>
-#include <canvas/canvastools.hxx>
-#include <canvas/rendering/icolorbuffer.hxx>
-#include <canvas/rendering/isurface.hxx>
-#include <canvas/rendering/irendermodule.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/vector/b2isize.hxx>
-#include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/range/b2irectangle.hxx>
-#include <boost/scoped_ptr.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-
-#include "dx_rendermodule.hxx"
-#include "dx_config.hxx"
-
-#undef WB_LEFT
-#undef WB_RIGHT
-
-#include "dx_impltools.hxx"
-#include <vcl/sysdata.hxx>
 
 #if defined(DX_DEBUG_IMAGES)
 # if OSL_DEBUG_LEVEL > 0

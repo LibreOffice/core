@@ -17,37 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <ctype.h>
-#include <basegfx/numeric/ftools.hxx>
+#include <algorithm>
+#include <cctype>
+#include <vector>
 
-#include <tools/diagnose_ex.h>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2irectangle.hxx>
-#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>
 #include <canvas/verifyinput.hxx>
 
-#include "dx_impltools.hxx"
-#include "dx_vcltools.hxx"
-#include "dx_linepolypolygon.hxx"
+#include "dx_canvas.hxx"
 #include "dx_canvasbitmap.hxx"
 #include "dx_canvasfont.hxx"
-#include "dx_canvas.hxx"
+#include "dx_impltools.hxx"
+#include "dx_linepolypolygon.hxx"
 #include "dx_spritecanvas.hxx"
-
-#include <vector>
-#include <algorithm>
+#include "dx_vcltools.hxx"
 
 
 using namespace ::com::sun::star;

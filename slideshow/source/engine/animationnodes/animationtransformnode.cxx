@@ -18,9 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 
 #include "animationtransformnode.hxx"

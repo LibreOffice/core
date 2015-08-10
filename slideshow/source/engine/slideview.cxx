@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
@@ -188,7 +187,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
         pPolyPoly->draw();
     }
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
     ::cppcanvas::CanvasSharedPtr pCliplessCanvas( pCanvas->clone() );
     pCliplessCanvas->setClip();
 
@@ -605,7 +604,7 @@ private:
                 mpSprite->setPriority(
                     maSpriteContainer.getLayerPriority().getMinimum() );
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
                 mpSprite->movePixel(
                     basegfx::B2DPoint(maLayerBoundsPixel.getMinimum()) +
                     basegfx::B2DPoint(10,10) );

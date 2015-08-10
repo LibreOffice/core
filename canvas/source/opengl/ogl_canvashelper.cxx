@@ -7,40 +7,37 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ogl_canvashelper.hxx"
+#include <sal/config.h>
 
-#include <rtl/crc.h>
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <memory>
+#include <boost/bind.hpp>
+#include <GL/glew.h>
+
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
-#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-
-#include <vcl/virdev.hxx>
-#include <vcl/metric.hxx>
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <rtl/crc.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/font.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
 
+#include "ogl_canvasbitmap.hxx"
 #include "ogl_canvasfont.hxx"
 #include "ogl_canvastools.hxx"
-#include "ogl_canvasbitmap.hxx"
 #include "ogl_spritecanvas.hxx"
 #include "ogl_texturecache.hxx"
 #include "ogl_tools.hxx"
 
-#include <GL/glew.h>
+#include "ogl_canvashelper.hxx"
 
-#include <boost/bind.hpp>
-
-#include <memory>
 #include <functional>
-
 
 using namespace ::com::sun::star;
 

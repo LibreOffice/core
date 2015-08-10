@@ -17,16 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <canvas/debug.hxx>
-
-#include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <vcl/metric.hxx>
-
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <rtl/math.hxx>
+#include <vcl/metric.hxx>
 
 #include "canvasfont.hxx"
 #include "textlayout.hxx"

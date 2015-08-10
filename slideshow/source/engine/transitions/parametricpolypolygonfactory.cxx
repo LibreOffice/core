@@ -18,7 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/animations/TransitionType.hpp>

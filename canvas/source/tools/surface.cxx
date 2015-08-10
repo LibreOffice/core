@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <boost/bind.hpp>
+#include <comphelper/scopeguard.hxx>
 
 #include "surface.hxx"
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <boost/bind.hpp>
 
 namespace canvas
 {

@@ -18,11 +18,7 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
 #include <expressionnodefactory.hxx>
-
-#include <canvas/verbosetrace.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>

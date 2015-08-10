@@ -17,51 +17,48 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <sal/config.h>
 
-#include <rtl/math.hxx>
-#include <rtl/instance.hxx>
+#include <algorithm>
 
-#include <com/sun/star/util/Endianness.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
-#include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/ColorComponentTag.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/keystoplerp.hxx>
 #include <basegfx/tools/lerp.hxx>
-
+#include <com/sun/star/rendering/ColorComponentTag.hpp>
+#include <com/sun/star/rendering/ColorSpaceType.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/RenderingIntent.hpp>
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
+#include <com/sun/star/util/Endianness.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/instance.hxx>
+#include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/virdev.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
 
-#include <vcl/canvastools.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/virdev.hxx>
-
-#include "cairo_spritecanvas.hxx"
 #include "cairo_cachedbitmap.hxx"
-#include "cairo_canvashelper.hxx"
 #include "cairo_canvasbitmap.hxx"
-
-#include <boost/tuple/tuple.hpp>
-#include <algorithm>
+#include "cairo_canvashelper.hxx"
+#include "cairo_spritecanvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

@@ -18,10 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include "eventqueue.hxx"
 #include "animationaudionode.hxx"
 #include "delayevent.hxx"

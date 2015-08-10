@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #include <osl/mutex.hxx>
 
-#include "dx_winstuff.hxx"
 #include "dx_gdiplususer.hxx"
+#include "dx_winstuff.hxx"
 
 
 namespace dxcanvas

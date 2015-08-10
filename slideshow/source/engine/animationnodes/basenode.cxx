@@ -18,10 +18,6 @@
  */
 
 
-// must be first
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
@@ -680,7 +676,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 // Debug
 
 
-#if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
 void BaseNode::showState() const
 {
     const AnimationNode::NodeState eNodeState( getState() );
@@ -728,8 +724,8 @@ void BaseNode::showState() const
                      OUString("Name") )
                  >>= aName) )
             {
-                SAL_INFO("slideshow.verbose" "Node info: n" <<
-                         (const char*)this+debugGetCurrentOffset(),
+                SAL_INFO("slideshow.verbose", "Node info: n" <<
+                         (const char*)this+debugGetCurrentOffset() <<
                          ", name \"" <<
                          aName <<
                          "\"");
