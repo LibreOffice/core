@@ -12725,19 +12725,20 @@ AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_SECRET, $ONEDRIVE_CLIENT_SECRET)
 # De- or increase default verbosity of build process
 # ===================================================================
 AC_MSG_CHECKING([build verbosity])
+verbose=
 if test -n "$enable_verbose"; then
     if test "$enable_verbose" = "yes"; then
-        VERBOSE="TRUE"
+        verbose="t"
         AC_MSG_RESULT([high])
     fi
     if test "$enable_verbose" = "no"; then
-        VERBOSE="FALSE"
+        verbose=
         AC_MSG_RESULT([low])
     fi
 else
     AC_MSG_RESULT([not set])
 fi
-AC_SUBST(VERBOSE)
+AC_SUBST(verbose)
 
 dnl ===================================================================
 dnl Hook up LibreOffice's nodep environmental variable to automake's equivalent

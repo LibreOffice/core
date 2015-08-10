@@ -32,7 +32,7 @@ CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # plugin will cause cache misses with ccache.
 CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
 
-QUIET=$(if $(VERBOSE)$(verbose),,@)
+QUIET=$(if $(verbose),,@)
 
 ifneq ($(ENABLE_WERROR),)
 CLANGWERROR := -Werror

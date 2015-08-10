@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 			--without-tools \
 			--disable-tests \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
-			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
 			--disable-weffc \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \

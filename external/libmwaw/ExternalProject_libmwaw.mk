@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			--disable-tools \
 			--disable-zip \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
-			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),\
 				$(if $(COM_GCC_IS_CLANG),-Qunused-arguments) \
