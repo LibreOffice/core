@@ -41,7 +41,7 @@ class WinLayout : public SalLayout
 {
 public:
                         WinLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
-    virtual void        InitFont() const;
+    virtual void        InitFont() const SAL_OVERRIDE;
     void                SetFontScale( float f ) { mfFontScale = f; }
     HFONT               DisableFontScaling() const;
 
@@ -71,22 +71,22 @@ public:
                     SimpleWinLayout(HDC, BYTE nCharSet, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
     virtual         ~SimpleWinLayout();
 
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
+    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
 
     // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
+    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
 protected:
     void            Justify( DeviceCoordinate nNewWidth );
@@ -114,22 +114,22 @@ class UniscribeLayout : public WinLayout
 public:
                     UniscribeLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
 
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
+    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual bool    IsKashidaPosValid ( int nCharPos ) const SAL_OVERRIDE;
 
     // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
+    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
     virtual void    DisableGlyphInjection( bool bDisable ) SAL_OVERRIDE { mbDisableGlyphInjection = bDisable; }
 
 protected:
@@ -184,7 +184,7 @@ public:
         throw()
     : GraphiteLayout(pFace), mrFont(rFont) {};
     virtual ~GraphiteLayoutWinImpl() throw() {};
-    virtual sal_GlyphId getKashidaGlyph(int & rWidth);
+    virtual sal_GlyphId getKashidaGlyph(int & rWidth) SAL_OVERRIDE;
 private:
     ImplWinFontEntry & mrFont;
 };
@@ -201,25 +201,25 @@ public:
     virtual ~GraphiteWinLayout();
 
     // used by upper layers
-    virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
-    virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.
+    virtual bool  LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;    // first step of layout
+    virtual void  AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;  // adjusting after fallback etc.
     virtual void  DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
 
-    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
                                 DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                                const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                                const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
     // used by glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
+    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 };
 
 #endif // ENABLE_GRAPHITE
