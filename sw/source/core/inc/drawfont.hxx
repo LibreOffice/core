@@ -42,47 +42,47 @@ class SwUnderlineFont;
 // encapsulates information for drawing text
 class SW_DLLPUBLIC SwDrawTextInfo
 {
-    const SwTextFrm* pFrm;
-    VclPtr<OutputDevice> pOut;
-    SwViewShell const * pSh;
-    const SwScriptInfo* pScriptInfo;
+    const SwTextFrm* m_pFrm;
+    VclPtr<OutputDevice> m_pOut;
+    SwViewShell const * m_pSh;
+    const SwScriptInfo* m_pScriptInfo;
     Point m_aPos;
     vcl::TextLayoutCache const* m_pCachedVclData;
     OUString m_aText;
-    const SwWrongList* pWrong;
-    const SwWrongList* pGrammarCheck;
-    const SwWrongList* pSmartTags;
+    const SwWrongList* m_pWrong;
+    const SwWrongList* m_pGrammarCheck;
+    const SwWrongList* m_pSmartTags;
     Size m_aSize;
-    SwFont *pFnt;
-    SwUnderlineFont* pUnderFnt;
-    sal_Int32* pHyphPos;
-    long nLeft;
-    long nRight;
-    long nKanaDiff;
-    sal_Int32 nIdx;
-    sal_Int32 nLen;
-    sal_Int32 nOfst;
-    sal_uInt16 nWidth;
-    sal_uInt16 nAscent;
-    sal_uInt16 nCompress;
-    long nSperren;
-    long nSpace;
-    long nKern;
-    sal_Int32 nNumberOfBlanks;
-    sal_uInt8 nCursorBidiLevel;
-    bool bBullet : 1;
-    bool bUpper : 1;        // for small caps: upper case flag
-    bool bDrawSpace : 1;    // for small caps: underline/ line through
-    bool bGreyWave  : 1;    // grey wave line for extended text input
+    SwFont *m_pFnt;
+    SwUnderlineFont* m_pUnderFnt;
+    sal_Int32* m_pHyphPos;
+    long m_nLeft;
+    long m_nRight;
+    long m_nKanaDiff;
+    sal_Int32 m_nIdx;
+    sal_Int32 m_nLen;
+    sal_Int32 m_nOfst;
+    sal_uInt16 m_nWidth;
+    sal_uInt16 m_nAscent;
+    sal_uInt16 m_nCompress;
+    long m_nSperren;
+    long m_nSpace;
+    long m_nKern;
+    sal_Int32 m_nNumberOfBlanks;
+    sal_uInt8 m_nCursorBidiLevel;
+    bool m_bBullet : 1;
+    bool m_bUpper : 1;        // for small caps: upper case flag
+    bool m_bDrawSpace : 1;    // for small caps: underline/ line through
+    bool m_bGreyWave  : 1;    // grey wave line for extended text input
     // For underlining we need to know, if a section is right in front of a
     // whole block or a fix margin section.
-    bool bSpaceStop : 1;
-    bool bSnapToGrid : 1;   // Does paragraph snap to grid?
+    bool m_bSpaceStop : 1;
+    bool m_bSnapToGrid : 1;   // Does paragraph snap to grid?
     // Paint text as if text has LTR direction, used for line numbering
-    bool bIgnoreFrmRTL : 1;
+    bool m_bIgnoreFrmRTL : 1;
     // GetCrsrOfst should not return the next position if screen position is
     // inside second half of bound rect, used for Accessibility
-    bool bPosMatchesBounds :1;
+    bool m_bPosMatchesBounds :1;
 
     SwDrawTextInfo();          // prohibited
 public:
@@ -108,48 +108,48 @@ public:
     bool m_bDrawSp: 1;
 #endif
 
-    SwDrawTextInfo( SwViewShell const *pS, OutputDevice &rO, const SwScriptInfo* pSI,
-                    const OUString &rSt, sal_Int32 nI, sal_Int32 nL,
-                    sal_uInt16 nW = 0, bool bB = false,
+    SwDrawTextInfo( SwViewShell const *pSh, OutputDevice &rOut, const SwScriptInfo* pSI,
+                    const OUString &rText, sal_Int32 nIdx, sal_Int32 nLen,
+                    sal_uInt16 nWidth = 0, bool bBullet = false,
                     vcl::TextLayoutCache const*const pCachedVclData = nullptr)
         : m_pCachedVclData(pCachedVclData)
     {
-        pFrm = NULL;
-        pSh = pS;
-        pOut = &rO;
-        pScriptInfo = pSI;
-        m_aText = rSt;
-        nIdx = nI;
-        nLen = nL;
-        nKern = 0;
-        nCompress = 0;
-        nWidth = nW;
-        nNumberOfBlanks = 0;
-        nCursorBidiLevel = 0;
-        bBullet = bB;
-        pUnderFnt = 0;
-        bGreyWave = false;
-        bSpaceStop = false;
-        bSnapToGrid = false;
-        bIgnoreFrmRTL = false;
-        bPosMatchesBounds = false;
+        m_pFrm = NULL;
+        m_pSh = pSh;
+        m_pOut = &rOut;
+        m_pScriptInfo = pSI;
+        m_aText = rText;
+        m_nIdx = nIdx;
+        m_nLen = nLen;
+        m_nKern = 0;
+        m_nCompress = 0;
+        m_nWidth = nWidth;
+        m_nNumberOfBlanks = 0;
+        m_nCursorBidiLevel = 0;
+        m_bBullet = bBullet;
+        m_pUnderFnt = 0;
+        m_bGreyWave = false;
+        m_bSpaceStop = false;
+        m_bSnapToGrid = false;
+        m_bIgnoreFrmRTL = false;
+        m_bPosMatchesBounds = false;
 
         // These values are initialized but have to be set explicitly via their
         // Set-function before they may be accessed by their Get-function:
-        pWrong = 0;
-        pGrammarCheck = 0;
-        pSmartTags = 0;
-        pFnt = 0;
-        pHyphPos = 0;
-        nLeft = 0;
-        nRight = 0;
-        nKanaDiff = 0;
-        nOfst = 0;
-        nAscent = 0;
-        nSperren = 0;
-        nSpace = 0;
-        bUpper = false;
-        bDrawSpace = false;
+        m_pWrong = 0;
+        m_pGrammarCheck = 0;
+        m_pSmartTags = 0;
+        m_pFnt = 0;
+        m_pHyphPos = 0;
+        m_nLeft = 0;
+        m_nRight = 0;
+        m_nKanaDiff = 0;
+        m_nOfst = 0;
+        m_nAscent = 0;
+        m_nSperren = 0;
+        m_nSpace = 0;
+        m_bUpper = false;
+        m_bDrawSpace = false;
 
 #ifdef DBG_UTIL
         // these flags control whether the matching member variables have been
@@ -164,32 +164,32 @@ public:
 
     const SwTextFrm* GetFrm() const
     {
-        return pFrm;
+        return m_pFrm;
     }
 
     void SetFrm( const SwTextFrm* pNewFrm )
     {
-        pFrm = pNewFrm;
+        m_pFrm = pNewFrm;
     }
 
     SwViewShell const *GetShell() const
     {
-        return pSh;
+        return m_pSh;
     }
 
     vcl::RenderContext& GetOut() const
     {
-        return *pOut;
+        return *m_pOut;
     }
 
     vcl::RenderContext *GetpOut() const
     {
-        return pOut;
+        return m_pOut;
     }
 
     const SwScriptInfo* GetScriptInfo() const
     {
-        return pScriptInfo;
+        return m_pScriptInfo;
     }
 
     const Point &GetPos() const
@@ -205,7 +205,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bHyph, "DrawTextInfo: Undefined Hyph Position" );
 #endif
-        return pHyphPos;
+        return m_pHyphPos;
     }
 
     vcl::TextLayoutCache const* GetVclCache() const
@@ -223,7 +223,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bWrong, "DrawTextInfo: Undefined WrongList" );
 #endif
-        return pWrong;
+        return m_pWrong;
     }
 
     const SwWrongList* GetGrammarCheck() const
@@ -231,12 +231,12 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bGrammarCheck, "DrawTextInfo: Undefined GrammarCheck List" );
 #endif
-        return pGrammarCheck;
+        return m_pGrammarCheck;
     }
 
     const SwWrongList* GetSmartTags() const
     {
-        return pSmartTags;
+        return m_pSmartTags;
     }
 
     const Size &GetSize() const
@@ -252,22 +252,22 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bFnt, "DrawTextInfo: Undefined Font" );
 #endif
-        return pFnt;
+        return m_pFnt;
     }
 
     SwUnderlineFont* GetUnderFnt() const
     {
-        return pUnderFnt;
+        return m_pUnderFnt;
     }
 
     sal_Int32 GetIdx() const
     {
-        return nIdx;
+        return m_nIdx;
     }
 
     sal_Int32 GetLen() const
     {
-        return nLen;
+        return m_nLen;
     }
 
     sal_Int32 GetOfst() const
@@ -275,12 +275,12 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bOfst, "DrawTextInfo: Undefined Offset" );
 #endif
-        return nOfst;
+        return m_nOfst;
     }
 
     sal_Int32 GetEnd() const
     {
-        return nIdx + nLen;
+        return m_nIdx + m_nLen;
     }
 
     long GetKanaDiff() const
@@ -288,12 +288,12 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bKana, "DrawTextInfo: Undefined kana difference" );
 #endif
-        return nKanaDiff;
+        return m_nKanaDiff;
     }
 
     sal_uInt16 GetWidth() const
     {
-        return nWidth;
+        return m_nWidth;
     }
 
     sal_uInt16 GetAscent() const
@@ -301,12 +301,12 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bAscent, "DrawTextInfo: Undefined Ascent" );
 #endif
-        return nAscent;
+        return m_nAscent;
     }
 
     sal_uInt16 GetKanaComp() const
     {
-        return nCompress;
+        return m_nCompress;
     }
 
     long GetSperren() const
@@ -314,12 +314,12 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bSperr, "DrawTextInfo: Undefined >Sperren<" );
 #endif
-        return nSperren;
+        return m_nSperren;
     }
 
     long GetKern() const
     {
-        return nKern;
+        return m_nKern;
     }
 
     long GetSpace() const
@@ -327,7 +327,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bSpace, "DrawTextInfo: Undefined Spacing" );
 #endif
-        return nSpace;
+        return m_nSpace;
     }
 
     sal_Int32 GetNumberOfBlanks() const
@@ -335,17 +335,17 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bNumberOfBlanks, "DrawTextInfo::Undefined NumberOfBlanks" );
 #endif
-        return nNumberOfBlanks;
+        return m_nNumberOfBlanks;
     }
 
     sal_uInt8 GetCursorBidiLevel() const
     {
-        return nCursorBidiLevel;
+        return m_nCursorBidiLevel;
     }
 
     bool GetBullet() const
     {
-        return bBullet;
+        return m_bBullet;
     }
 
     bool GetUpper() const
@@ -353,7 +353,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bUppr, "DrawTextInfo: Undefined Upperflag" );
 #endif
-        return bUpper;
+        return m_bUpper;
     }
 
     bool GetDrawSpace() const
@@ -361,37 +361,37 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
 #endif
-        return bDrawSpace;
+        return m_bDrawSpace;
     }
 
     bool GetGreyWave() const
     {
-        return bGreyWave;
+        return m_bGreyWave;
     }
 
     bool IsSpaceStop() const
     {
-        return bSpaceStop;
+        return m_bSpaceStop;
     }
 
     bool SnapToGrid() const
     {
-        return bSnapToGrid;
+        return m_bSnapToGrid;
     }
 
     bool IsIgnoreFrmRTL() const
     {
-        return bIgnoreFrmRTL;
+        return m_bIgnoreFrmRTL;
     }
 
     bool IsPosMatchesBounds() const
     {
-        return bPosMatchesBounds;
+        return m_bPosMatchesBounds;
     }
 
     void SetOut( OutputDevice &rNew )
     {
-        pOut = &rNew;
+        m_pOut = &rNew;
     }
 
     void SetPos( const Point &rNew )
@@ -404,7 +404,7 @@ public:
 
     void SetHyphPos( sal_Int32 *pNew )
     {
-        pHyphPos = pNew;
+        m_pHyphPos = pNew;
 #ifdef DBG_UTIL
         m_bHyph = true;
 #endif
@@ -418,7 +418,7 @@ public:
 
     void SetWrong( const SwWrongList* pNew )
     {
-        pWrong = pNew;
+        m_pWrong = pNew;
 #ifdef DBG_UTIL
         m_bWrong = true;
 #endif
@@ -426,7 +426,7 @@ public:
 
     void SetGrammarCheck( const SwWrongList* pNew )
     {
-        pGrammarCheck = pNew;
+        m_pGrammarCheck = pNew;
 #ifdef DBG_UTIL
         m_bGrammarCheck = true;
 #endif
@@ -434,7 +434,7 @@ public:
 
     void SetSmartTags( const SwWrongList* pNew )
     {
-        pSmartTags = pNew;
+        m_pSmartTags = pNew;
     }
 
     void SetSize( const Size &rNew )
@@ -447,7 +447,7 @@ public:
 
     void SetFont( SwFont* pNew )
     {
-        pFnt = pNew;
+        m_pFnt = pNew;
 #ifdef DBG_UTIL
         m_bFnt = true;
 #endif
@@ -455,17 +455,17 @@ public:
 
     void SetIdx( sal_Int32 nNew )
     {
-        nIdx = nNew;
+        m_nIdx = nNew;
     }
 
     void SetLen( sal_Int32 nNew )
     {
-        nLen = nNew;
+        m_nLen = nNew;
     }
 
     void SetOfst( sal_Int32 nNew )
     {
-        nOfst = nNew;
+        m_nOfst = nNew;
 #ifdef DBG_UTIL
         m_bOfst = true;
 #endif
@@ -473,7 +473,7 @@ public:
 
     void SetLeft( long nNew )
     {
-        nLeft = nNew;
+        m_nLeft = nNew;
 #ifdef DBG_UTIL
         m_bLeft = true;
 #endif
@@ -481,7 +481,7 @@ public:
 
     void SetRight( long nNew )
     {
-        nRight = nNew;
+        m_nRight = nNew;
 #ifdef DBG_UTIL
         m_bRight = true;
 #endif
@@ -489,7 +489,7 @@ public:
 
     void SetKanaDiff( long nNew )
     {
-        nKanaDiff = nNew;
+        m_nKanaDiff = nNew;
 #ifdef DBG_UTIL
         m_bKana = true;
 #endif
@@ -497,12 +497,12 @@ public:
 
     void SetWidth( sal_uInt16 nNew )
     {
-        nWidth = nNew;
+        m_nWidth = nNew;
     }
 
     void SetAscent( sal_uInt16 nNew )
     {
-        nAscent = nNew;
+        m_nAscent = nNew;
 #ifdef DBG_UTIL
         m_bAscent = true;
 #endif
@@ -510,20 +510,20 @@ public:
 
     void SetKern( long nNew )
     {
-        nKern = nNew;
+        m_nKern = nNew;
     }
 
     void SetSpace( long nNew )
     {
         if( nNew < 0 )
         {
-            nSperren = -nNew;
-            nSpace = 0;
+            m_nSperren = -nNew;
+            m_nSpace = 0;
         }
         else
         {
-            nSpace = nNew;
-            nSperren = 0;
+            m_nSpace = nNew;
+            m_nSperren = 0;
         }
 #ifdef DBG_UTIL
         m_bSpace = true;
@@ -536,32 +536,32 @@ public:
 #ifdef DBG_UTIL
         m_bNumberOfBlanks = true;
 #endif
-        nNumberOfBlanks = nNew;
+        m_nNumberOfBlanks = nNew;
     }
 
     void SetCursorBidiLevel( sal_uInt8 nNew )
     {
-        nCursorBidiLevel = nNew;
+        m_nCursorBidiLevel = nNew;
     }
 
     void SetKanaComp( short nNew )
     {
-        nCompress = nNew;
+        m_nCompress = nNew;
     }
 
     void SetBullet( bool bNew )
     {
-        bBullet = bNew;
+        m_bBullet = bNew;
     }
 
     void SetUnderFnt( SwUnderlineFont* pULFnt )
     {
-        pUnderFnt = pULFnt;
+        m_pUnderFnt = pULFnt;
     }
 
     void SetUpper( bool bNew )
     {
-        bUpper = bNew;
+        m_bUpper = bNew;
 #ifdef DBG_UTIL
         m_bUppr = true;
 #endif
@@ -569,7 +569,7 @@ public:
 
     void SetDrawSpace( bool bNew )
     {
-        bDrawSpace = bNew;
+        m_bDrawSpace = bNew;
 #ifdef DBG_UTIL
         m_bDrawSp = true;
 #endif
@@ -577,27 +577,27 @@ public:
 
     void SetGreyWave( bool bNew )
     {
-        bGreyWave = bNew;
+        m_bGreyWave = bNew;
     }
 
     void SetSpaceStop( bool bNew )
     {
-        bSpaceStop = bNew;
+        m_bSpaceStop = bNew;
     }
 
     void SetSnapToGrid( bool bNew )
     {
-        bSnapToGrid = bNew;
+        m_bSnapToGrid = bNew;
     }
 
     void SetIgnoreFrmRTL( bool bNew )
     {
-        bIgnoreFrmRTL = bNew;
+        m_bIgnoreFrmRTL = bNew;
     }
 
     void SetPosMatchesBounds( bool bNew )
     {
-        bPosMatchesBounds = bNew;
+        m_bPosMatchesBounds = bNew;
     }
 
     void Shift( sal_uInt16 nDir );
