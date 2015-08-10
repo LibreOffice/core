@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--disable-weffc \
 			--without-tools \
 			$(if $(filter WNT,$(OS_FOR_BUILD)),MKDIR_P="$(shell cygpath -m /usr/bin/mkdir) -p") \
-			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \

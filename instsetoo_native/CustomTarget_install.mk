@@ -89,7 +89,7 @@ $(foreach pkgformat,$(5),\
 	) \
 	$(4) \
 	-format $(pkgformat) \
-	$(if $(VERBOSE)$(verbose),-verbose,-quiet) \
+	$(if $(verbose),-verbose,-quiet) \
 ),$@.log)
 endef
 

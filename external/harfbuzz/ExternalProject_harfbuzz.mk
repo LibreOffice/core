@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--with-freetype=no \
 			--with-cairo=no \
 			--with-glib=no \
-			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
 	)

@@ -78,7 +78,7 @@ COMMA :=,
 
 CLOSE_PAREN :=)
 
-gb_VERBOSE := $(verbose)$(VERBOSE)
+gb_VERBOSE := $(verbose)
 
 include $(GBUILDDIR)/Helper.mk
 

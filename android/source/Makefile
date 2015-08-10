@@ -35,7 +35,7 @@ build-ant: android_version_setup copy-stuff prepare-appcompat link-so properties
 	#ownCloud lib dependency
 	$(call COPYJAR,$(WORKDIR)/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar)
 #
-	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) $(if $(ENABLE_RELEASE_BUILD),release,debug)
+	unset JAVA_HOME && $(ANT) $(if $(verbose),,-quiet) $(if $(ENABLE_RELEASE_BUILD),release,debug)
 
 run:
 	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity

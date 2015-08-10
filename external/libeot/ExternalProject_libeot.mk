@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,libeot,build) :
 			--disable-shared \
 			--disable-debug \
 			CFLAGS='$(filter-out -std=gnu89,$(CFLAGS))' \
-		&& $(MAKE) $(if $(VERBOSE)$(verbose),V=1) \
+		&& $(MAKE) $(if $(verbose),V=1) \
 	)
 
 # vim: set noet sw=4 ts=4:

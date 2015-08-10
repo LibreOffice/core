@@ -107,7 +107,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				boost_cv_lib_system=yes \
 			) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(if $(VERBOSE)$(verbose),V=1) \
+		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
