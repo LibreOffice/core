@@ -86,7 +86,7 @@ namespace slideshow
 
         void ActivitiesQueue::process()
         {
-            VERBOSE_TRACE( "ActivitiesQueue: outer loop heartbeat" );
+            SAL_INFO("slideshow.verbose", "ActivitiesQueue: outer loop heartbeat" );
 
             // accumulate time lag for all activities, and lag time
             // base if necessary:
@@ -156,7 +156,7 @@ namespace slideshow
                 else
                     maDequeuedActivities.push_back( pActivity );
 
-                VERBOSE_TRACE( "ActivitiesQueue: inner loop heartbeat" );
+                SAL_INFO("slideshow.verbose", "ActivitiesQueue: inner loop heartbeat" );
             }
 
             if( !maCurrentActivitiesReinsert.empty() )

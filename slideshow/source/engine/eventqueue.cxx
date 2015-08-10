@@ -169,7 +169,7 @@ namespace slideshow
 
         void EventQueue::process_( bool bFireAllEvents )
         {
-            VERBOSE_TRACE( "EventQueue: heartbeat" );
+            SAL_INFO("slideshow.verbose", "EventQueue: heartbeat" );
 
             // add in all that have been added explicitly for this round:
             EventEntryVector::const_iterator const iEnd( maNextEvents.end() );

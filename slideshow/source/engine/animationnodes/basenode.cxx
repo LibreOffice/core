@@ -686,16 +686,19 @@ void BaseNode::showState() const
     const AnimationNode::NodeState eNodeState( getState() );
 
     if( eNodeState == AnimationNode::INVALID )
-        VERBOSE_TRACE( "Node state: n%p [label=\"%s\",style=filled,"
-                       "fillcolor=\"0.5,0.2,0.5\"]",
-                       (const char*)this+debugGetCurrentOffset(),
-                       getDescription() );
+        SAL_INFO("slideshow.verbose", "Node state: n" <<
+                 (const char*)this+debugGetCurrentOffset() <<
+                 " [label=\"" <<
+                 getDescription() <<
+                 "\",style=filled, fillcolor=\"0.5,0.2,0.5\"]");
     else
-        VERBOSE_TRACE( "Node state: n%p [label=\"%s\",style=filled,"
-                       "fillcolor=\"%f,1.0,1.0\"]",
-                       (const char*)this+debugGetCurrentOffset(),
-                       getDescription(),
-                       log(double(getState()))/4.0 );
+        SAL_INFO("slideshow.verbose", "Node state: n" <<
+                 (const char*)this+debugGetCurrentOffset() <<
+                 " [label=\"" <<
+                 getDescription() <<
+                 "fillcolor=\"" <<
+                 log(double(getState()))/4.0 <<
+                 ",1.0,1.0\"]");
 
     // determine additional node information
     uno::Reference<animations::XAnimate> const xAnimate( mxAnimationNode,
@@ -725,13 +728,11 @@ void BaseNode::showState() const
                      OUString("Name") )
                  >>= aName) )
             {
-                const OString& rAsciiName(
-                    OUStringToOString( aName,
-                                              RTL_TEXTENCODING_ASCII_US ) );
-
-                VERBOSE_TRACE( "Node info: n%p, name \"%s\"",
-                               (const char*)this+debugGetCurrentOffset(),
-                               rAsciiName.getStr() );
+                SAL_INFO("slideshow.verbose" "Node info: n" <<
+                         (const char*)this+debugGetCurrentOffset(),
+                         ", name \"" <<
+                         aName <<
+                         "\"");
             }
         }
     }

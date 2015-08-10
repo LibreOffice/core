@@ -56,8 +56,8 @@ namespace slideshow
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
 
             // log time
-            VERBOSE_TRACE( "SimpleContinuousActivityBase::calcTimeLag(): "
-                           "next step is based on time: %f", nCurrElapsedTime );
+            SAL_INFO("slideshow.verbose", "SimpleContinuousActivityBase::calcTimeLag(): "
+                     "next step is based on time: " << nCurrElapsedTime );
 
             // go to great length to ensure a proper animation
             // run. Since we don't know how often we will be called
@@ -90,15 +90,16 @@ namespace slideshow
             // time line.
             if( nFractionElapsedTime < nFractionRequiredCalls )
             {
-                VERBOSE_TRACE( "SimpleContinuousActivityBase::calcTimeLag(): "
-                               "t=%f is based on time", nFractionElapsedTime );
+                SAL_INFO("slidewho.verbose", "SimpleContinuousActivityBase::calcTimeLag(): t=" <<
+                         nFractionElapsedTime <<
+                         " is based on time");
                 return 0.0;
             }
             else
             {
-                VERBOSE_TRACE( "SimpleContinuousActivityBase::perform(): "
-                               "t=%f is based on number of calls",
-                               nFractionRequiredCalls );
+                SAL_INFO("slideshow.verbose", "SimpleContinuousActivityBase::perform(): t=" <<
+                         nFractionRequiredCalls <<
+                         " is based on number of calls");
 
                 // lag global time, so all other animations lag, too:
                 return ((nFractionElapsedTime - nFractionRequiredCalls)

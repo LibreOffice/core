@@ -1,7 +1,6 @@
 Recognized preprocessor switches
 ================================
 
- - VERBOSE=t: enable extra verbose trace output (debug=t builds only)
  - TIMELOG=t: enable time logging (also for product builds)
 
 

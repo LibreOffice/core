@@ -381,7 +381,7 @@ namespace slideshow
 
             ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
 
-            VERBOSE_TRACE( "ViewShape::renderSprite(): Rendering sprite 0x%p",
+            SAL_INFO("slideshow", "ViewShape::renderSprite(): Rendering sprite " <<
                            mpSprite.get() );
 
 
@@ -524,7 +524,7 @@ namespace slideshow
 
             if( !bIsVisible )
             {
-                VERBOSE_TRACE( "ViewShape::render(): skipping shape %p", this );
+                SAL_INFO("slideshow", "ViewShape::render(): skipping shape " << this );
 
                 // shape is invisible, no need to update anything.
                 return true;
@@ -549,10 +549,11 @@ namespace slideshow
             if( !bRedrawRequired )
                 return true;
 
-            VERBOSE_TRACE( "ViewShape::render(): rendering shape %p at position (%f,%f)",
-                           this,
-                           rBounds.getMinX(),
-                           rBounds.getMinY() );
+            SAL_INFO( "slideshow", "ViewShape::render(): rendering shape " <<
+                      this <<
+                      " at position (" <<
+                      rBounds.getMinX() << "," <<
+                      rBounds.getMinY() << ")" );
 
 
             // shape needs repaint - setup all that's needed

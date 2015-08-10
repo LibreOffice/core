@@ -38,7 +38,7 @@
 // But watch out, the parser might have
 // state not visible to this code!
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if defined(DBG_UTIL)
 #include <typeinfo>
 #define BOOST_SPIRIT_DEBUG
 #endif
@@ -180,7 +180,7 @@ namespace slideshow
                 {
                     if( !mpContext->mbParseAnimationFunction )
                     {
-                        OSL_FAIL( "ValueTFunctor::operator(): variable encountered, but we're not parsing a function here" );
+                        SAL_WARN("slideshow", "ValueTFunctor::operator(): variable encountered, but we're not parsing a function here" );
                         throw ParseError();
                     }
 

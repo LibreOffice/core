@@ -16,7 +16,6 @@ $(eval $(call gb_Library_set_include,slideshow,\
 
 $(eval $(call gb_Library_add_defs,slideshow,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-    $(if $(filter TRUE,$(VERBOSE)),-DVERBOSE) \
 ))
 
 ifneq ($(strip $(debug)$(DEBUG)),)
