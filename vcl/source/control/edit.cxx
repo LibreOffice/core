@@ -501,7 +501,7 @@ long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
+void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle, bool bLayout)
 {
     if (!IsReallyVisible())
         return;
@@ -543,7 +543,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
     if (pCursor)
         pCursor->Hide();
 
-    ImplClearBackground(rRenderContext, 0, GetOutputSizePixel().Width());
+    ImplClearBackground(rRenderContext, rRectangle, 0, GetOutputSizePixel().Width());
 
     bool bPaintPlaceholderText = aText.isEmpty() && !maPlaceholderText.isEmpty();
 
@@ -1022,7 +1022,7 @@ int Edit::ImplGetNativeControlType() const
     return nCtrl;
 }
 
-void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd )
+void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle, long nXStart, long nXEnd )
 {
     /*
     * note: at this point the cursor must be switched off already
@@ -1038,22 +1038,8 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart,
     {
         // ImplPaintBorder() is a NOP, we have a native border, and this is a sub-edit of a control.
         // That means we have to draw the parent native widget to paint the edit area to clear our background.
-        long nLeft = mnXOffset + ImplGetExtraXOffset();
-        long nTop = ImplGetTextYPosition();
-        long nRight = GetOutputWidthPixel();
-        long nHeight = GetTextHeight();
-        Rectangle aEditArea(nLeft, nTop, nRight, nTop + nHeight);
-
-        ControlType aCtrlType = ImplGetNativeControlType();
-        ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
-        Rectangle aCtrlRegion(0, 0, GetParent()->GetOutputWidthPixel(), GetParent()->GetOutputHeightPixel());
-        ControlState nState = ControlState::ENABLED;
-        ImplControlValue aControlValue;
-
-        rRenderContext.Push(PushFlags::CLIPREGION);
-        rRenderContext.SetClipRegion(vcl::Region(aEditArea));
-        rRenderContext.DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, aControlValue, OUString());
-        rRenderContext.Pop();
+        PaintBufferGuard g(ImplGetWindowImpl()->mpFrameData, GetParent());
+        GetParent()->Paint(rRenderContext, rRectangle);
     }
 }
 
@@ -1806,10 +1792,10 @@ void Edit::FillLayoutData() const
     const_cast<Edit*>(this)->Invalidate();
 }
 
-void Edit::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void Edit::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle)
 {
     if (!mpSubEdit)
-        ImplRepaint(rRenderContext);
+        ImplRepaint(rRenderContext, rRectangle);
 }
 
 void Edit::Resize()
