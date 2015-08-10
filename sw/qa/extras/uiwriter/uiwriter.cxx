@@ -74,6 +74,8 @@
 #include "com/sun/star/text/TextMarkupType.hpp"
 #include <osl/file.hxx>
 #include <paratr.hxx>
+#include <drawfont.hxx>
+#include <txtfrm.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -151,6 +153,7 @@ public:
     void testTdf89954();
     void testTdf89720();
     void testTdf88986();
+    void testTdf87922();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -218,6 +221,7 @@ public:
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
+    CPPUNIT_TEST(testTdf87922);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2221,6 +2225,32 @@ void SwUiWriterTest::testTdf88986()
 
     // This was missing along with the gradient and other tables.
     CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
+}
+
+void SwUiWriterTest::testTdf87922()
+{
+    // Create an SwDrawTextInfo.
+    SwDoc* pDoc = createDoc("tdf87922.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwScriptInfo* pScriptInfo = 0;
+    // Get access to the single paragraph in the document.
+    SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
+    const OUString& rText = aNodeIndex.GetNode().GetTextNode()->GetText();
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLength = rText.getLength();
+    SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText, nIndex, nLength);
+    // Root -> page -> body -> text.
+    SwTextFrm* pTextFrm = static_cast<SwTextFrm*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
+    aDrawTextInfo.SetFrm(pTextFrm);
+
+    // If no color background color is found, assume white.
+    Color* pColor = sw::GetActiveRetoucheColor();
+    *pColor = Color(COL_WHITE);
+
+    // Make sure that automatic color on black background is white, not black.
+    vcl::Font aFont;
+    aDrawTextInfo.ApplyAutoColor(&aFont);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFont.GetColor().GetColor());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
