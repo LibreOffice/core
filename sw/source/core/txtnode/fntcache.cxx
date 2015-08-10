@@ -47,6 +47,7 @@
 #include <swmodule.hxx>
 #include <accessibilityoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <docsh.hxx>
@@ -2521,6 +2522,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
         {
             // check if current background has a user defined setting
             const Color* pCol = GetFont() ? GetFont()->GetBackColor() : NULL;
+            Color aColor;
             if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
             {
                 const SvxBrushItem* pItem;
@@ -2537,6 +2539,14 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
                 if( GetFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
                 {
+                    if (aFillAttributes.get() && aFillAttributes->isUsed())
+                    {
+                        // First see if fill atttributes provide a color.
+                        aColor = Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
+                        pCol = &aColor;
+                    }
+
+                    // If not, then fall back to the old brush item.
                     if ( !pCol )
                     {
                         pCol = &pItem->GetColor();
