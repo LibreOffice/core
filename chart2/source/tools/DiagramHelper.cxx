@@ -1243,16 +1243,25 @@ sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XN
 sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
 {
     sal_Int32 nRet=-1;
-    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
-    if( xNumberFormats.is() )
+    const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
+    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+    if( pNumFormatter )
     {
-        bool bCreate = true;
-        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::PERCENT,
-            rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
-        if( aKeySeq.getLength() )
+        nRet = pNumFormatter->GetStandardFormat( util::NumberFormat::PERCENT, rLanguageTag.getLanguageType() );
+    }
+    else
+    {
+        Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+        if( xNumberFormats.is() )
         {
-            nRet = aKeySeq[0];
+            bool bCreate = true;
+            Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::PERCENT,
+                    rLanguageTag.getLocale(), bCreate );
+            if( aKeySeq.getLength() )
+            {
+                nRet = aKeySeq[0];
+            }
         }
     }
     return nRet;
