@@ -5522,4 +5522,58 @@ void Test::testFuncTableRef()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncFTEST()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "FTest");
+
+    ScAddress aPos(6,0,0);
+    m_pDoc->SetString(aPos, "=FTEST(A1:C3;D1:F3)");
+    m_pDoc->SetValue(0, 0, 0, 9.0); // A1
+    OUString aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("FTEST should return #VALUE! for less than 2 values",
+            OUString::createFromAscii("#VALUE!") == aVal);
+    m_pDoc->SetValue(0, 1, 0, 8.0); // A2
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("FTEST should return #VALUE! for less than 2 values",
+            OUString::createFromAscii("#VALUE!") == aVal);
+    m_pDoc->SetValue(3, 0, 0, 5.0); // D1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("FTEST should return #VALUE! for less than 2 values",
+            OUString::createFromAscii("#VALUE!") == aVal);
+    m_pDoc->SetValue(3, 1, 0, 6.0); // D2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 1.0000, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 0, 0, 6.0); // B1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.6222, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 1, 0, 8.0); // B2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.7732, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(4, 0, 0, 7.0); // E1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.8194, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(4, 1, 0, 4.0); // E2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.9674, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 0, 0, 3.0); // C1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.3402, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(5, 0, 0, 28.0); // F1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0161, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 1, 0, 9.0); // C2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0063, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(5, 1, 0, 4.0); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0081, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(0, 2, 0, 2.0); // A3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0122, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(3, 2, 0, 8.0); // D3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0178, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 2, 0, 4.0); // B3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0093, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(4, 2, 0, 7.0); // E3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0132, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(5, 2, 0, 5.0); // F3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0168, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 2, 0, 13.0); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0422, m_pDoc->GetValue(aPos), 10e-4);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
