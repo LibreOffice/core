@@ -34,6 +34,8 @@ private:
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
 
     VclPtr<Edit>         m_pEDUsername;
+    VclPtr<Edit>         m_pEDPassword;
+    VclPtr<FixedText>    m_pFTPasswordLabel;
     VclPtr<OKButton>     m_pBTOk;
     VclPtr<CancelButton> m_pBTCancel;
 
@@ -67,6 +69,9 @@ public :
 
      OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();
+     OUString GetPassword() { return m_pEDPassword->GetText(); };
+
+     void ShowPasswordControl( bool bShow = true ) { m_pEDPassword->Show( bShow ); m_pFTPasswordLabel->Show( bShow ); }
 
 private:
 

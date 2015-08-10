@@ -655,6 +655,7 @@ void RemoteFilesDialog::DisableControls()
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
 {
     ScopedVclPtrInstance< PlaceEditDialog > aDlg( this );
+    aDlg->ShowPasswordControl();
     short aRetCode = aDlg->Execute();
 
     switch( aRetCode )

@@ -31,6 +31,11 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
     get( m_pBTRepoRefresh, "repositoriesRefresh" );
+    get( m_pEDPassword, "password" );
+    get( m_pFTPasswordLabel, "passwordLabel" );
+
+    m_pEDPassword->Hide();
+    m_pFTPasswordLabel->Hide();
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTOk->Enable( false );
@@ -59,6 +64,11 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
     get( m_pTypeGrid, "TypeGrid" );
+    get( m_pEDPassword, "password" );
+    get( m_pFTPasswordLabel, "passwordLabel" );
+
+    m_pEDPassword->Hide();
+    m_pFTPasswordLabel->Hide();
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTDelete->SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
@@ -105,6 +115,8 @@ void PlaceEditDialog::dispose()
     m_pBTOk.clear();
     m_pBTCancel.clear();
     m_pBTDelete.clear();
+    m_pEDPassword.clear();
+    m_pFTPasswordLabel.clear();
     ModalDialog::dispose();
 }
 
