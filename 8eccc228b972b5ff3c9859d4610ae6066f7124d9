@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_f4f760f3",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-10T23:01:31Z",
+      "side": 1,
+      "message": "I have my doubts about this. It will slow down things for simple calculations like Sum by having to execute a loop for each double element that results in one operation only anyway. This is generalizing with the penalty of lower performance.",
+      "revId": "8eccc228b972b5ff3c9859d4610ae6066f7124d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
