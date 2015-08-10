@@ -29,14 +29,9 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox>       m_pTextSelectionInReadonly;
     VclPtr<CheckBox>       m_pAnimatedGraphics;
     VclPtr<CheckBox>       m_pAnimatedTexts;
-    VclPtr<CheckBox>       m_pTipHelpCB;
-    VclPtr<NumericField>   m_pTipHelpNF;
     VclPtr<CheckBox>       m_pAutoDetectHC;
     VclPtr<CheckBox>       m_pAutomaticFontColor;
     VclPtr<CheckBox>       m_pPagePreviews;
-
-    DECL_LINK(TipHelpHdl, CheckBox*);
-    void EnableTipHelp(bool bCheck);
 
     SvxAccessibilityOptionsTabPage_Impl* m_pImpl;
 
