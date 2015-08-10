@@ -42,7 +42,7 @@ class TabItem;
 
 /** The tab bar is the container for the individual tabs.
 */
-class TabBar
+class SFX2_DLLPUBLIC TabBar
     : public vcl::Window
 {
 public:
