@@ -2017,32 +2017,40 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                             OUString aShort = aString;
 
-                            double fVisibleRatio = 1.0;
-                            double fTextWidth = aVars.GetTextSize().Width();
-                            sal_Int32 nTextLen = aString.getLength();
-                            if (eOutHorJust == SVX_HOR_JUSTIFY_LEFT && aAreaParam.mnRightClipLength > 0)
+                            // But never fiddle with numeric values.
+                            // (Which was the cause of tdf#86024).
+                            // The General automatic format output takes
+                            // care of this, or fixed width numbers either fit
+                            // or display as ###.
+                            if (!bCellIsValue)
                             {
-                                fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
-                                if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                double fVisibleRatio = 1.0;
+                                double fTextWidth = aVars.GetTextSize().Width();
+                                sal_Int32 nTextLen = aString.getLength();
+                                if (eOutHorJust == SVX_HOR_JUSTIFY_LEFT && aAreaParam.mnRightClipLength > 0)
                                 {
-                                    // Only show the left-end segment.
-                                    sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
-                                    aShort = aShort.copy(0, nShortLen);
+                                    fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
+                                    if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                    {
+                                        // Only show the left-end segment.
+                                        sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
+                                        aShort = aShort.copy(0, nShortLen);
+                                    }
                                 }
-                            }
-                            else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
-                            {
-                                fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
-                                if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
                                 {
-                                    // Only show the right-end segment.
-                                    sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
-                                    aShort = aShort.copy(nTextLen-nShortLen);
+                                    fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
+                                    if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                    {
+                                        // Only show the right-end segment.
+                                        sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
+                                        aShort = aShort.copy(nTextLen-nShortLen);
 
-                                    // Adjust the text position after shortening of the string.
-                                    double fShortWidth = pFmtDevice->GetTextWidth(aShort);
-                                    double fOffset = fTextWidth - fShortWidth;
-                                    aDrawTextPos.Move(fOffset, 0);
+                                        // Adjust the text position after shortening of the string.
+                                        double fShortWidth = pFmtDevice->GetTextWidth(aShort);
+                                        double fOffset = fTextWidth - fShortWidth;
+                                        aDrawTextPos.Move(fOffset, 0);
+                                    }
                                 }
                             }
 
