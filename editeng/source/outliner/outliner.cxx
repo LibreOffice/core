@@ -2089,7 +2089,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
 
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
-    sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum();
+    //sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum(); // XXX: Unused for now
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
     if ( nCount > GetParagraphCount()-1) {

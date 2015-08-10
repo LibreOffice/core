@@ -72,8 +72,9 @@ private:
 
         friend class Outliner;
         const EditTextObject *mpContentTextObj;
-        const bool mbLastParaInterrupted;
         const ESelection maContentSel;
+        const bool mbLastParaInterrupted;
+
 };
 
 
