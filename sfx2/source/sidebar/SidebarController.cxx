@@ -64,7 +64,6 @@ namespace
 {
     const static char gsReadOnlyCommandName[] = ".uno:EditDoc";
     const static char gsHideSidebarCommandName[] = ".uno:Sidebar";
-    const static sal_Int32 gnMaximumSidebarWidth (400);
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
 }

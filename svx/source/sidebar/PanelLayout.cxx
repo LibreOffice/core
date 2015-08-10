@@ -11,8 +11,12 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/TabBar.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
+
+using namespace sfx2::sidebar;
 
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
     : Control(pParent)
@@ -40,7 +44,12 @@ void PanelLayout::dispose()
 Size PanelLayout::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
-        return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
+    {
+        Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
+        aSize.Width() = std::min<long>(aSize.Width(),
+            (SidebarController::gnMaximumSidebarWidth - TabBar::GetDefaultWidth()) * GetDPIScaleFactor());
+        return aSize;
+    }
 
     return Control::GetOptimalSize();
 }

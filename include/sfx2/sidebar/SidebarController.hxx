@@ -122,6 +122,8 @@ public:
     const static sal_Int32 SwitchFlag_ForceNewDeck = 0x02;
     const static sal_Int32 SwitchFlag_ForceNewPanels = 0x02;
 
+    const static sal_Int32 gnMaximumSidebarWidth = 400;
+
     void OpenThenSwitchToDeck (
         const ::rtl::OUString& rsDeckId);
 
