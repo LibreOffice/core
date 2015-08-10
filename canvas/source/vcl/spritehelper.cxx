@@ -20,7 +20,6 @@
 
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 
 #include <rtl/math.hxx>
 
@@ -97,9 +96,8 @@ namespace vclcanvas
         }
 
         // log output pos in device pixel
-        VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)",
-                       rPos.getX(),
-                       rPos.getY() );
+        SAL_INFO("canva.vcl", "SpriteHelper::redraw(): output pos is (" <<
+                 rPos.getX() << "," << rPos.getY() << ")");
 
         const double fAlpha( getAlpha() );
 
@@ -332,9 +330,8 @@ namespace vclcanvas
                                                                         2,'.',NULL,' ') );
 
                     rTargetSurface.DrawText( aOutPos+Point(2,2), text );
-                    SAL_INFO(
-                        "canvas.level2",
-                        "sprite " << this << " has prio " << getPriority());
+                    SAL_INFO( "canvas.vcl",
+                              "sprite " << this << " has prio " << getPriority());
                 }
             }
         }

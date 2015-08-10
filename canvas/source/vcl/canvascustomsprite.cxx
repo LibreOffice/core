@@ -20,7 +20,6 @@
 
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/math.hxx>

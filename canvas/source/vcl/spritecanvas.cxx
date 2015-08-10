@@ -20,7 +20,6 @@
 
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -79,7 +78,7 @@ namespace vclcanvas
                          boost::ref(maCanvasHelper),
                          _1)));
 
-        VERBOSE_TRACE( "VCLSpriteCanvas::initialize called" );
+        SAL_INFO("canvas.vcl", "VCLSpriteCanvas::initialize called" );
 
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 1,
                              "VCLSpriteCanvas::initialize: wrong number of arguments" );

@@ -9,13 +9,9 @@
 
 #include "ogl_textlayout.hxx"
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-#include <tools/diagnose_ex.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
-
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 

@@ -19,8 +19,6 @@
 
 
 #include <ctype.h>
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>
@@ -68,7 +66,7 @@ namespace dxcanvas
         if( maArguments.getLength() == 0 )
             return;
 
-        VERBOSE_TRACE( "SpriteCanvas::initialize called" );
+        SAL_INFO("canvas.directx", "SpriteCanvas::initialize called" );
 
         /* aArguments:
            0: ptr to creating instance (Window or VirtualDevice)

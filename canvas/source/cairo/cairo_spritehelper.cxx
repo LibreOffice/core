@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
