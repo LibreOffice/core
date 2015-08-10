@@ -674,13 +674,18 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                 aResult = aText;
             else if( aAny>>=fDouble )
             {
-                sal_Int32 nLabelColor;
-                sal_Int32 nDateNumberFormat = DiagramHelper::getDateNumberFormat( Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY) );
                 if( ! ::rtl::math::isNan( fDouble ) && m_spNumberFormatterWrapper.get() )
                 {
+                    // If a numberformat was available here we could directly
+                    // obtain the corresponding edit format in
+                    // getDateTimeInputNumberFormat() instead of doing the
+                    // guess work.
+                    sal_Int32 nNumberFormat = DiagramHelper::getDateTimeInputNumberFormat(
+                            Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY), fDouble );
+                    sal_Int32 nLabelColor;
                     bool bColorChanged = false;
                     aResult = m_spNumberFormatterWrapper->getFormattedString(
-                        nDateNumberFormat, fDouble, nLabelColor, bColorChanged );
+                        nNumberFormat, fDouble, nLabelColor, bColorChanged );
                 }
             }
         }
@@ -1096,18 +1101,14 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) co
     return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
 }
 
-bool DataBrowser::isDateString( const OUString& aInputString, double& fOutDateValue )
+bool DataBrowser::isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue )
 {
     sal_uInt32 nNumberFormat=0;
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
-    if( !aInputString.isEmpty() &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateValue ) )
+    if( !aInputString.isEmpty() &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateTimeValue ) )
     {
-        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( m_xChartDoc, uno::UNO_QUERY );
-        Reference< util::XNumberFormats > xNumberFormats;
-        if( xNumberFormatsSupplier.is() )
-             xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
-        if( DiagramHelper::isDateNumberFormat( nNumberFormat, xNumberFormats ) )
-            return true;
+        short nType = pSvNumberFormatter->GetType( nNumberFormat);
+        return (nType & util::NumberFormat::DATE) || (nType & util::NumberFormat::TIME);
     }
     return false;
 }
@@ -1149,10 +1150,10 @@ bool DataBrowser::SaveModified()
         case DataBrowserModel::TEXTORDATE:
         {
             OUString aText( m_aTextEditField->GetText() );
-            double fDateValue = 0.0;
+            double fValue = 0.0;
             bChangeValid = false;
-            if( isDateString( aText, fDateValue ) )
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( fDateValue ) );
+            if( isDateTimeString( aText, fValue ) )
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( fValue ) );
             if(!bChangeValid)
                 bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( aText ) );
         }
