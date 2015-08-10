@@ -213,7 +213,7 @@ namespace drawinglayer { namespace attribute {
  * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
  * instances are used.)
  */
-class SwFrm: public SwClient, public SfxBroadcaster
+class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
 {
     // the hidden Frm
     friend class SwFlowFrm;

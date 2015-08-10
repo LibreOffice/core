@@ -235,6 +235,14 @@ const static double aEdgeScale = 0.5;
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
 
+namespace sw
+{
+Color* GetActiveRetoucheColor()
+{
+    return &aGlobalRetoucheColor;
+}
+}
+
 /**
  * Container for static properties
  */

@@ -123,7 +123,7 @@ public:
 #define SW_CTL 2
 #define SW_SCRIPTS 3
 
-class SwFont
+class SW_DLLPUBLIC SwFont
 {
     // CJK == Chinese, Japanese, Korean
     // CTL == Complex text layout ( Hebrew, Arabic )

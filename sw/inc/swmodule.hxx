@@ -258,6 +258,11 @@ inline ::com::sun::star::uno::Reference<
 SW_DLLPUBLIC SwView*    GetActiveView();
 SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
+namespace sw
+{
+SW_DLLPUBLIC Color* GetActiveRetoucheColor();
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

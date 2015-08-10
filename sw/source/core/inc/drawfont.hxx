@@ -40,7 +40,7 @@ namespace vcl {
 class SwUnderlineFont;
 
 // encapsulates information for drawing text
-class SwDrawTextInfo
+class SW_DLLPUBLIC SwDrawTextInfo
 {
     const SwTextFrm* pFrm;
     VclPtr<OutputDevice> pOut;
