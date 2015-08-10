@@ -40,7 +40,6 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/string.hxx>
@@ -264,7 +263,6 @@ namespace
 OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
 {
-    get(m_pToolTipsCB, "tooltips");
     get(m_pExtHelpCB, "exthelp");
     if (!lcl_HasSystemFilePicker())
         get<VclContainer>("filedlgframe")->Hide();
@@ -302,9 +300,6 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     TwoFigureConfigHdl(m_pYearValueField);
 
     SetExchangeSupport();
-
-    aLink = LINK( this, OfaMiscTabPage, HelpCheckHdl_Impl );
-    m_pToolTipsCB->SetClickHdl( aLink );
 }
 
 OfaMiscTabPage::~OfaMiscTabPage()
@@ -314,7 +309,6 @@ OfaMiscTabPage::~OfaMiscTabPage()
 
 void OfaMiscTabPage::dispose()
 {
-    m_pToolTipsCB.clear();
     m_pExtHelpCB.clear();
     m_pFileDlgROImage.clear();
     m_pFileDlgCB.clear();
@@ -339,11 +333,8 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     SvtHelpOptions aHelpOptions;
-    if ( m_pToolTipsCB->IsValueChangedFromSaved() )
-        aHelpOptions.SetHelpTips( m_pToolTipsCB->IsChecked() );
-    bool bChecked = ( m_pExtHelpCB->IsChecked() && m_pToolTipsCB->IsChecked() );
-    if ( bChecked != (m_pExtHelpCB->GetSavedValue() == TRISTATE_TRUE) )
-        aHelpOptions.SetExtendedHelp( bChecked );
+    if ( m_pExtHelpCB->IsChecked() != (m_pExtHelpCB->GetSavedValue() == TRISTATE_TRUE) )
+        aHelpOptions.SetExtendedHelp( m_pExtHelpCB->IsChecked() );
 
     if ( m_pFileDlgCB->IsValueChangedFromSaved() )
     {
@@ -396,10 +387,7 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 {
     SvtHelpOptions aHelpOptions;
-    m_pToolTipsCB->Check( aHelpOptions.IsHelpTips() );
     m_pExtHelpCB->Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
-
-    m_pToolTipsCB->SaveValue();
     m_pExtHelpCB->SaveValue();
 
     SvtMiscOptions aMiscOpt;
@@ -458,12 +446,6 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
     m_pYearValueField->SetText(aOutput);
     m_pYearValueField->SetSelection( Selection( 0, aOutput.getLength() ) );
     TwoFigureHdl( pEd );
-    return 0;
-}
-
-IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
-{
-    m_pExtHelpCB->Enable( m_pToolTipsCB->IsChecked() );
     return 0;
 }
 
@@ -653,16 +635,12 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pAAPointLimit, "aanf");
     get(m_pMenuIconsLB, "menuicons");
     get(m_pFontShowCB, "showfontpreview");
-    get(m_pFontHistoryCB, "showfonthistory");
     get(m_pUseHardwareAccell, "useaccel");
     get(m_pUseAntiAliase, "useaa");
     get(m_pUseOpenGL, "useopengl");
     get(m_pForceOpenGL, "forceopengl");
     get(m_pMousePosLB, "mousepos");
     get(m_pMouseMiddleLB, "mousemiddle");
-    // #i97672#
-    get(m_pSelectionCB, "trans");
-    get(m_pSelectionMF, "transmf");
 
 #if defined( UNX )
     m_pFontAntiAliasing->SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
@@ -673,9 +651,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pAAPointLimit->Hide();
 
 #endif
-
-    // #i97672#
-    m_pSelectionCB->SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
 
     // Set known icon themes
     OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
@@ -722,15 +697,12 @@ void OfaViewTabPage::dispose()
     m_pAAPointLimit.clear();
     m_pMenuIconsLB.clear();
     m_pFontShowCB.clear();
-    m_pFontHistoryCB.clear();
     m_pUseHardwareAccell.clear();
     m_pUseAntiAliase.clear();
     m_pUseOpenGL.clear();
     m_pForceOpenGL.clear();
     m_pMousePosLB.clear();
     m_pMouseMiddleLB.clear();
-    m_pSelectionCB.clear();
-    m_pSelectionMF.clear();
     SfxTabPage::dispose();
 }
 
@@ -745,14 +717,6 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled )
     return 0L;
 }
 #endif
-
-// #i97672#
-IMPL_LINK_NOARG( OfaViewTabPage, OnSelectionToggled )
-{
-    const bool bSelectionEnabled(m_pSelectionCB->IsChecked());
-    m_pSelectionMF->Enable(bSelectionEnabled);
-    return 0;
-}
 
 VclPtr<SfxTabPage> OfaViewTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
@@ -867,12 +831,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bAppearanceChanged = true;
     }
 
-    if ( m_pFontHistoryCB->IsValueChangedFromSaved() )
-    {
-        aFontOpt.EnableFontHistory( m_pFontHistoryCB->IsChecked() );
-        bModified = true;
-    }
-
     // #i95644#  if disabled, do not use value, see in ::Reset()
     if(m_pUseHardwareAccell->IsEnabled())
     {
@@ -896,31 +854,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     mpOpenGLConfig->setUseOpenGL(m_pUseOpenGL->IsChecked());
     mpOpenGLConfig->setForceOpenGL(m_pForceOpenGL->IsChecked());
-
-    // #i97672#
-    if(m_pSelectionCB->IsEnabled())
-    {
-        const bool bNewSelection(m_pSelectionCB->IsChecked());
-        const sal_uInt16 nNewTransparence((sal_uInt16)m_pSelectionMF->GetValue());
-
-        if(bNewSelection != (bool)mpDrawinglayerOpt->IsTransparentSelection())
-        {
-            mpDrawinglayerOpt->SetTransparentSelection(m_pSelectionCB->IsChecked());
-            bModified = true;
-            bRepaintWindows = true;
-        }
-
-        // #i104150# even read the value when m_pSelectionMF is disabled; it may have been
-        // modified by enabling-modify-disabling by the user
-        if(nNewTransparence != mpDrawinglayerOpt->GetTransparentSelectionPercent())
-        {
-            mpDrawinglayerOpt->SetTransparentSelectionPercent(nNewTransparence);
-            bModified = true;
-            bRepaintWindows = true;
-        }
-    }
-
-    SvtAccessibilityOptions     aAccessibilityOptions;
 
     if( bMenuOptModified )
     {
@@ -996,7 +929,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     SvtMenuOptions aMenuOpt;
     m_pMenuIconsLB->SelectEntryPos(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
     m_pMenuIconsLB->SaveValue();
-    m_pFontHistoryCB->Check( aFontOpt.IsFontHistoryEnabled() );
 
     { // #i95644# HW accel (unified to disable mechanism)
         if(pCanvasSettings->IsHardwareAccelerationAvailable())
@@ -1029,33 +961,11 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pUseOpenGL->Check(mpOpenGLConfig->useOpenGL());
     m_pForceOpenGL->Check(mpOpenGLConfig->forceOpenGL());
 
-    {
-        // #i97672# Selection
-        // check if transparent selection is possible on this system
-        const bool bTransparentSelectionPossible(
-            !GetSettings().GetStyleSettings().GetHighContrastMode()
-            && SupportsOperation(OutDevSupport_TransparentRect));
-
-        // enter values
-        if(bTransparentSelectionPossible)
-        {
-            m_pSelectionCB->Check(mpDrawinglayerOpt->IsTransparentSelection());
-        }
-        else
-        {
-            m_pSelectionCB->Enable(false);
-        }
-
-        m_pSelectionMF->SetValue(mpDrawinglayerOpt->GetTransparentSelectionPercent());
-        m_pSelectionMF->Enable(mpDrawinglayerOpt->IsTransparentSelection() && bTransparentSelectionPossible);
-    }
-
 #if defined( UNX )
     m_pFontAntiAliasing->SaveValue();
     m_pAAPointLimit->SaveValue();
 #endif
     m_pFontShowCB->SaveValue();
-    m_pFontHistoryCB->SaveValue();
 
 #if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );

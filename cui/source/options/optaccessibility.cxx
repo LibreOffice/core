@@ -41,14 +41,10 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pPar
     get(m_pTextSelectionInReadonly, "textselinreadonly");
     get(m_pAnimatedGraphics, "animatedgraphics");
     get(m_pAnimatedTexts, "animatedtext");
-    get(m_pTipHelpCB, "tiphelptimeout");
-    get(m_pTipHelpNF, "tiphelptimeoutnf");
 
     get(m_pAutoDetectHC, "autodetecthc");
     get(m_pAutomaticFontColor, "autofontcolor");
     get(m_pPagePreviews, "systempagepreviewcolor");
-
-    m_pTipHelpCB->SetClickHdl(LINK(this, SvxAccessibilityOptionsTabPage, TipHelpHdl));
 
 #ifdef UNX
     // UNIX: read the gconf2 setting instead to use the checkbox
@@ -69,8 +65,6 @@ void SvxAccessibilityOptionsTabPage::dispose()
     m_pTextSelectionInReadonly.clear();
     m_pAnimatedGraphics.clear();
     m_pAnimatedTexts.clear();
-    m_pTipHelpCB.clear();
-    m_pTipHelpNF.clear();
     m_pAutoDetectHC.clear();
     m_pAutomaticFontColor.clear();
     m_pPagePreviews.clear();
@@ -87,8 +81,6 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
     //aConfig.Set... from controls
 
     m_pImpl->m_aConfig.SetIsForPagePreviews( m_pPagePreviews->IsChecked() );
-    m_pImpl->m_aConfig.SetIsHelpTipsDisappear( m_pTipHelpCB->IsChecked() );
-    m_pImpl->m_aConfig.SetHelpTipSeconds( (short)m_pTipHelpNF->GetValue() );
     m_pImpl->m_aConfig.SetIsAllowAnimatedGraphics( m_pAnimatedGraphics->IsChecked() );
     m_pImpl->m_aConfig.SetIsAllowAnimatedText( m_pAnimatedTexts->IsChecked() );
     m_pImpl->m_aConfig.SetIsAutomaticFontColor( m_pAutomaticFontColor->IsChecked() );
@@ -112,8 +104,6 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
     //set controls from aConfig.Get...
 
     m_pPagePreviews->Check(            m_pImpl->m_aConfig.GetIsForPagePreviews() );
-    EnableTipHelp(                    m_pImpl->m_aConfig.GetIsHelpTipsDisappear() );
-    m_pTipHelpNF->SetValue(            m_pImpl->m_aConfig.GetHelpTipSeconds() );
     m_pAnimatedGraphics->Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
     m_pAnimatedTexts->Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
     m_pAutomaticFontColor->Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
@@ -124,19 +114,6 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
     m_pAccessibilityTool->Check(aMiscSettings.GetEnableATToolSupport());
-}
-
-IMPL_LINK(SvxAccessibilityOptionsTabPage, TipHelpHdl, CheckBox*, pBox)
-{
-    bool bChecked = pBox->IsChecked();
-    m_pTipHelpNF->Enable(bChecked);
-    return 0;
-}
-
-void SvxAccessibilityOptionsTabPage::EnableTipHelp(bool bCheck)
-{
-    m_pTipHelpCB->Check(bCheck);
-    m_pTipHelpNF->Enable(bCheck);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

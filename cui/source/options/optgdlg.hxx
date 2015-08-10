@@ -42,7 +42,6 @@ class OfaMiscTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
-    VclPtr<CheckBox>     m_pToolTipsCB;
     VclPtr<CheckBox>     m_pExtHelpCB;
 
     VclPtr<FixedImage>   m_pFileDlgROImage;
@@ -63,7 +62,6 @@ private:
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
-    DECL_LINK(HelpCheckHdl_Impl, void *);
 #ifdef WNT
     DECL_LINK( OnFileDlgToggled, void* );
 #endif
@@ -97,7 +95,6 @@ private:
     VclPtr<ListBox>        m_pMenuIconsLB;
 
     VclPtr<CheckBox>       m_pFontShowCB;
-    VclPtr<CheckBox>       m_pFontHistoryCB;
 
     VclPtr<CheckBox>       m_pUseHardwareAccell;
     VclPtr<CheckBox>       m_pUseAntiAliase;
@@ -106,10 +103,6 @@ private:
 
     VclPtr<ListBox>        m_pMousePosLB;
     VclPtr<ListBox>        m_pMouseMiddleLB;
-
-    // #i97672#
-    VclPtr<CheckBox>       m_pSelectionCB;
-    VclPtr<MetricField>    m_pSelectionMF;
 
     sal_uInt16      nSizeLB_InitialSelection;
     sal_uInt16      nStyleLB_InitialSelection;
@@ -124,8 +117,6 @@ private:
 #if defined( UNX )
     DECL_LINK( OnAntialiasingToggled, void* );
 #endif
-    // #i97672#
-    DECL_LINK( OnSelectionToggled, void* );
 
 public:
     OfaViewTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

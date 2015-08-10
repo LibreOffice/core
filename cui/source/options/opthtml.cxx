@@ -25,22 +25,6 @@
 #include <dialmgr.hxx>
 #include <sal/macros.h>
 
-// modus conversion to the positions in the listbox
-const sal_uInt16 aPosToExportArr[] =
-{
-    HTML_CFG_MSIE,
-    HTML_CFG_NS40,
-    HTML_CFG_WRITER
-};
-
-const sal_uInt16 aExportToPosArr[] =
-{
-    1,  //HTML 3.2 (removed, map to Netscape Navigator 4.0)
-    0,  //MS Internet Explorer 4.0
-    2,  //StarWriter
-    1   //Netscape Navigator 4.0
-};
-
 
 OfaHtmlTabPage::OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet) :
 SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
@@ -55,7 +39,6 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
     get(aNumbersEnglishUSCB,"numbersenglishus");
     get(aUnknownTagCB,"unknowntag");
     get(aIgnoreFontNamesCB,"ignorefontnames");
-    get(aExportLB,"export");
     get(aStarBasicCB,"starbasic");
     get(aStarBasicWarningCB,"starbasicwarning");
     get(aPrintExtensionCB,"printextension");
@@ -77,7 +60,6 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
         }
     }
 
-    aExportLB->SetSelectHdl(LINK(this, OfaHtmlTabPage, ExportHdl_Impl));
     aStarBasicCB->SetClickHdl(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
 
     // initialize the characterset listbox
@@ -101,7 +83,6 @@ void OfaHtmlTabPage::dispose()
     aNumbersEnglishUSCB.clear();
     aUnknownTagCB.clear();
     aIgnoreFontNamesCB.clear();
-    aExportLB.clear();
     aStarBasicCB.clear();
     aStarBasicWarningCB.clear();
     aPrintExtensionCB.clear();
@@ -143,9 +124,6 @@ bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
     if(aIgnoreFontNamesCB->IsValueChangedFromSaved())
         rHtmlOpt.SetIgnoreFontFamily(aIgnoreFontNamesCB->IsChecked());
 
-    if(aExportLB->IsValueChangedFromSaved())
-        rHtmlOpt.SetExportMode(aPosToExportArr[aExportLB->GetSelectEntryPos()]);
-
     if(aStarBasicCB->IsValueChangedFromSaved())
         rHtmlOpt.SetStarBasic(aStarBasicCB->IsChecked());
 
@@ -177,14 +155,6 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
     aNumbersEnglishUSCB->Check(rHtmlOpt.IsNumbersEnglishUS());
     aUnknownTagCB->Check(rHtmlOpt.IsImportUnknown());
     aIgnoreFontNamesCB->Check(rHtmlOpt.IsIgnoreFontFamily());
-    sal_uInt16 nExport = rHtmlOpt.GetExportMode();
-    if( nExport >= SAL_N_ELEMENTS( aExportToPosArr ) )
-        nExport = 3;    // default for bad config entry is NS 4.0
-    sal_uInt16 nPosArr = aExportToPosArr[ nExport ];
-    aExportLB->SelectEntryPos( nPosArr );
-    aExportLB->SaveValue();
-
-    ExportHdl_Impl(aExportLB);
 
     aStarBasicCB->Check(rHtmlOpt.IsStarBasic());
     aStarBasicWarningCB->Check(rHtmlOpt.IsStarBasicWarning());
@@ -210,22 +180,6 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
     if( !rHtmlOpt.IsDefaultTextEncoding() &&
         aCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
         aCharSetLB->SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
-}
-
-IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
-{
-    sal_uInt16 nExport = aPosToExportArr[ pBox->GetSelectEntryPos() ];
-    switch( nExport )
-    {
-        case HTML_CFG_MSIE:
-        case HTML_CFG_NS40  :
-        case HTML_CFG_WRITER :
-            aPrintExtensionCB->Enable(true);
-        break;
-        default: aPrintExtensionCB->Enable(false);
-    }
-
-    return 0;
 }
 
 IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, CheckBox*, pBox)

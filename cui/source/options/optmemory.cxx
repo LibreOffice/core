@@ -114,7 +114,6 @@ SfxTabPage::sfxpg OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", &rSet)
 {
-    get(m_pUndoEdit, "undo");
     get(m_pNfGraphicCache, "graphiccache");
     m_pNfGraphicCache->SetMax(std::numeric_limits< long >::max() >> 20);
     get(m_pNfGraphicObjectCache, "objectcache");
@@ -148,7 +147,6 @@ OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 
 void OfaMemoryOptionsPage::dispose()
 {
-    m_pUndoEdit.clear();
     m_pNfGraphicCache.clear();
     m_pNfGraphicObjectCache.clear();
     m_pTfGraphicObjectTime.clear();
@@ -169,10 +167,6 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
 
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
-
-    if ( m_pUndoEdit->IsValueChangedFromSaved() )
-        officecfg::Office::Common::Undo::Steps::set(
-            m_pUndoEdit->GetValue(), batch);
 
     // GraphicCache
     sal_Int32 totalCacheSize = GetNfGraphicCacheVal();
@@ -218,9 +212,6 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
 void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem*  pItem;
-
-    m_pUndoEdit->SetValue(officecfg::Office::Common::Undo::Steps::get());
-    m_pUndoEdit->SaveValue();
 
     // GraphicCache
     long n =
