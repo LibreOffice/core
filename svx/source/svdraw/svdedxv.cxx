@@ -1299,7 +1299,7 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 
 TextChainCursorManager *SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(
                                             const KeyEvent& rKEvt,
-                                            vcl::Window* pWin,
+                                            vcl::Window*,
                                             bool *bOutHandled)
 {
     *bOutHandled = false;
