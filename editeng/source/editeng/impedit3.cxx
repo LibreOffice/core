@@ -719,6 +719,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     EditLine aSaveLine( *pLine );
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
+    ImplInitLayoutMode( GetRefDevice(), nPara, nIndex );
+
     bool bCalcCharPositions = true;
     std::unique_ptr<long[]> pBuf(new long[ pNode->Len() ]);
 
@@ -1043,6 +1045,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
+                pPortion->SetRightToLeft( GetRightToLeft( nPara, nTmpPos+1 ) );
+
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                 {
                     pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, pPortion->GetLen(), pBuf.get() );
@@ -1073,8 +1077,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 }
 
                 nTmpWidth += pPortion->GetSize().Width();
-
-                pPortion->SetRightToLeft( GetRightToLeft( nPara, nTmpPos+1 ) );
 
                 sal_Int32 _nPortionEnd = nTmpPos + pPortion->GetLen();
                 if( bScriptSpace && ( _nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, _nPortionEnd ) ) )
