@@ -185,6 +185,7 @@ public:
     void testFuncFORMULA();
     void testFuncTableRef();
     void testFuncFTEST();
+    void testFuncFTESTBug();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -516,6 +517,7 @@ public:
     CPPUNIT_TEST(testFuncFORMULA);
     CPPUNIT_TEST(testFuncTableRef);
     CPPUNIT_TEST(testFuncFTEST);
+    CPPUNIT_TEST_FAIL(testFuncFTESTBug);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);

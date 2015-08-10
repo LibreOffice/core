@@ -5576,4 +5576,24 @@ void Test::testFuncFTEST()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncFTESTBug()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "FTest");
+
+    ScAddress aPos(9,0,0);
+    m_pDoc->SetString(aPos, "=FTEST(H1:H3;I1:I3)");
+
+    m_pDoc->SetValue(7, 0, 0, 9.0); // H1
+    m_pDoc->SetValue(7, 1, 0, 8.0); // H2
+    m_pDoc->SetValue(7, 2, 0, 6.0); // H3
+    m_pDoc->SetValue(8, 0, 0, 5.0); // I1
+    m_pDoc->SetValue(8, 1, 0, 7.0); // I2
+    // FTest returns a wrong value: 1.09544512
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.9046, m_pDoc->GetValue(aPos), 10e-4);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
