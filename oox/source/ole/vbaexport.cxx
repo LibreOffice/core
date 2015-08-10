@@ -18,6 +18,15 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
 
+#define USE_UTF8_CODEPAGE 0
+#if USE_UTF8_CODEPAGE
+#define CODEPAGE_MS 65001
+#define CODEPAGE RTL_TEXTENCODING_UTF8
+#else
+#define CODEPAGE_MS 1252
+#define CODEPAGE RTL_TEXTENCODING_MS_1252
+#endif
+
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
     mxModel(xModel)
 {
@@ -31,7 +40,7 @@ void writePROJECTCODEPAGE(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0003); // id
     rStrm.WriteUInt32(0x00000002); // size
-    rStrm.WriteUInt16(1252); // CodePage
+    rStrm.WriteUInt16(CODEPAGE_MS); // CodePage
 }
 
 // section 2.3.4.2.1.3
