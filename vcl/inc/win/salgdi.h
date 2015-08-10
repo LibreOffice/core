@@ -87,7 +87,6 @@ public:
 
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
-    bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
     bool                    SupportsKorean() const      { return mbHasKoreanRange; }
     bool                    SupportsCJK() const         { return mbHasCJKSupport; }
     bool                    SupportsArabic() const      { return mbHasArabicSupport; }
@@ -111,7 +110,6 @@ private:
     sal_IntPtr              mnId;
 
     // some members that are initalized lazily when the font gets selected into a HDC
-    mutable bool                    mbDisableGlyphApi;
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 #if ENABLE_GRAPHITE
