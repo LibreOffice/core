@@ -18,8 +18,6 @@
  */
 
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
@@ -123,9 +121,8 @@ namespace dxcanvas
             // background buffer.
 
             // log output pos in device pixel
-            VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)",
-                           rPos.getX(),
-                           rPos.getY() );
+            SAL_INFO("canva.directx", "SpriteHelper::redraw(): output pos is (" <<
+                     rPos.getX() << "," << rPos.getY() << ")" );
 
             const double                                       fAlpha( getAlpha() );
             const ::basegfx::B2DVector&                        rSize( getSizePixel() );

@@ -14,7 +14,6 @@
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_texturecache.hxx"
 
-#include <canvas/verbosetrace.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/unopolypolygon.hxx>
 

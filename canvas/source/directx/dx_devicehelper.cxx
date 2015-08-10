@@ -21,8 +21,6 @@
 #include <ctype.h>
 #include <vcl/window.hxx>
 #include <vcl/canvastools.hxx>
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 

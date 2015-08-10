@@ -19,8 +19,6 @@
 
 #include <ctype.h>
 #include <vcl/window.hxx>
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -164,13 +162,13 @@ namespace dxcanvas
 
     sal_Bool SpriteDeviceHelper::showBuffer( bool, sal_Bool )
     {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
+        SAL_WARN("canvas.directx", "Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 
     sal_Bool SpriteDeviceHelper::switchBuffer( bool, sal_Bool )
     {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
+        SAL_WARN("canvas.directx", "Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 

@@ -30,12 +30,6 @@ $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 	-UNOMINMAX \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,gdipluscanvas,\
-	-DVERBOSE \
-))
-endif
-
 $(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	cppu \
 	tk \
