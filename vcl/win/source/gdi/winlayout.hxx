@@ -103,7 +103,6 @@ private:
     int*            mpGlyphs2Chars;     // map abs glyph pos to abs char pos
     bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true=>RTL
     mutable long    mnWidth;
-    bool            mbDisableGlyphs;
 
     int             mnNotdefWidth;
     BYTE            mnCharSet;

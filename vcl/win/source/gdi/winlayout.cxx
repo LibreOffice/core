@@ -241,11 +241,9 @@ SimpleWinLayout::SimpleWinLayout(HDC hDC, BYTE nCharSet, const ImplWinFontData& 
     mpGlyphs2Chars( NULL ),
     mpGlyphRTLFlags( NULL ),
     mnWidth( 0 ),
-    mbDisableGlyphs( false ),
     mnNotdefWidth( -1 ),
     mnCharSet( nCharSet )
 {
-    mbDisableGlyphs = true;
 }
 
 SimpleWinLayout::~SimpleWinLayout()
@@ -264,19 +262,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     // prepare layout
     // TODO: fix case when recyclying old SimpleWinLayout object
-    mbDisableGlyphs |= bool(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing);
     mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-
-    if( !mbDisableGlyphs )
-    {
-        // Win32 glyph APIs have serious problems with vertical layout
-        // => workaround is to use the unicode methods then
-        if( rArgs.mnFlags & SalLayoutFlags::Vertical )
-            mbDisableGlyphs = true;
-        else
-            // use cached value from font face
-            mbDisableGlyphs = mrWinFontData.IsGlyphApiDisabled();
-    }
 
     // TODO: use a cached value for bDisableAsianKern from upper layers
     if( rArgs.mnFlags & SalLayoutFlags::KerningAsian )
@@ -435,9 +421,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 if( GetTextExtentPoint32W( mhDC, &cNotDef, 1, &aExtent) )
                     mnNotdefWidth = aExtent.cx;
             }
-            // use a better NotDef glyph
-            if( !mbDisableGlyphs && !bSurrogate )
-                mpOutGlyphs[i] = 0;
         }
         if( bSurrogate && ((i+1) < mnGlyphCount) )
             mpOutGlyphs[i+1] = DROPPED_OUTGLYPH;
@@ -545,23 +528,21 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPo
     {
         // update return values {aGlyphId,nCharPos,nGlyphAdvance}
         sal_GlyphId aGlyphId = mpOutGlyphs[ nStart ];
-        if( mbDisableGlyphs )
+        if( mnLayoutFlags & SalLayoutFlags::Vertical )
         {
-            if( mnLayoutFlags & SalLayoutFlags::Vertical )
+            const sal_UCS4 cChar = static_cast<sal_UCS4>(aGlyphId & GF_IDXMASK);
+            if( mrWinFontData.HasGSUBstitutions( mhDC )
+            &&  mrWinFontData.IsGSUBstituted( cChar ) )
+                aGlyphId |= GF_GSUB | GF_ROTL;
+            else
             {
-                const sal_UCS4 cChar = static_cast<sal_UCS4>(aGlyphId & GF_IDXMASK);
-                if( mrWinFontData.HasGSUBstitutions( mhDC )
-                &&  mrWinFontData.IsGSUBstituted( cChar ) )
-                    aGlyphId |= GF_GSUB | GF_ROTL;
-                else
-                {
-                    aGlyphId |= GetVerticalFlags( cChar );
-                    if( (aGlyphId & GF_ROTMASK) == 0 )
-                        aGlyphId |= GF_VERT;
-                }
+                aGlyphId |= GetVerticalFlags( cChar );
+                if( (aGlyphId & GF_ROTMASK) == 0 )
+                    aGlyphId |= GF_VERT;
             }
-            aGlyphId |= GF_ISCHAR;
         }
+        aGlyphId |= GF_ISCHAR;
+
         ++nCount;
         *(pGlyphIds++) = aGlyphId;
         if( pGlyphAdvances )
@@ -595,11 +576,6 @@ void SimpleWinLayout::DrawTextImpl(HDC hDC) const
         return;
 
     HFONT hOrigFont = DisableFontScaling();
-
-    UINT mnDrawOptions = ETO_GLYPH_INDEX;
-    if( mbDisableGlyphs )
-        mnDrawOptions = 0;
-
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
     // #108267#, break up into glyph portions of a limited size required by Win32 API
@@ -618,14 +594,14 @@ void SimpleWinLayout::DrawTextImpl(HDC hDC) const
         unsigned int i = 0;
         for( unsigned int n = 0; n < numGlyphPortions; ++n, i+=maxGlyphCount )
         {
-            ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i);
+            ExtTextOutW(hDC, 0, 0, 0, NULL, mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i);
         }
-        ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i);
+        ExtTextOutW(hDC, 0, 0, 0, NULL, mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i);
         MoveToEx(hDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
         SetTextAlign(hDC, oldTa);
     }
     else
-        ExtTextOutW(hDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL, mpOutGlyphs, mnGlyphCount, mpGlyphAdvances);
+        ExtTextOutW(hDC, aPos.X(), aPos.Y(), 0, NULL, mpOutGlyphs, mnGlyphCount, mpGlyphAdvances);
 
     if( hOrigFont )
         DeleteFont(SelectFont(hDC, hOrigFont));
