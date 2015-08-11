@@ -2172,7 +2172,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             failure = true;
             // construct FC entries
             // first FC entry of each Fkp
-            if (checkSeek(rSt, ( nPN + i ) << 9 ))
+            if (checkSeek(rSt, static_cast<sal_uInt32>( nPN + i ) << 9 ))
                 continue;
             WW8_CP nFc(0);
             rSt.ReadInt32( nFc );
@@ -6683,7 +6683,7 @@ bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, long& rLen)
 
     aPLCF.SetIdx( nIdx );               // Lookup suitable CP
     aPLCF.Get( rStart, nEnd, pData );
-    rLen = nEnd - rStart;
+    rLen = static_cast<sal_uInt32>(nEnd) - static_cast<sal_uInt32>(rStart);
     return true;
 }
 
