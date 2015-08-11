@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_bf4c9777",
+        "filename": "download.lst",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-11T06:28:42Z",
+      "side": 1,
+      "message": "Would be nice, if someone could upload Python-3.5.0rc1 from https://www.python.org/ftp/python/3.5.0/Python-3.5.0rc1.tgz, that was relased yesterday.",
+      "range": {
+        "startLine": 136,
+        "startChar": 25,
+        "endLine": 136,
+        "endChar": 43
+      },
+      "revId": "c557e950db50429147476c1a62e32175b2af331d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
