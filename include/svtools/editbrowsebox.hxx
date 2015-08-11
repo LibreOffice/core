@@ -563,7 +563,6 @@ namespace svt
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
         static void ResizeController(CellControllerRef& rController, const Rectangle&);
-        static void ReleaseController(CellControllerRef& pController, long nRow, sal_uInt16 nCol);
         virtual void DoubleClick(const BrowserMouseEvent&) SAL_OVERRIDE;
 
         void ActivateCell() { ActivateCell(GetCurRow(), GetCurColumnId()); }

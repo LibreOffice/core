@@ -1082,7 +1082,6 @@ namespace svt
     IMPL_LINK_NOARG(EditBrowseBox, EndEditHdl)
     {
         nEndEvent = 0;
-        ReleaseController(aOldController, nOldEditRow, nOldEditCol);
 
         aOldController  = CellControllerRef();
         nOldEditRow     = -1;
@@ -1189,11 +1188,6 @@ namespace svt
 
 
     void EditBrowseBox::InitController(CellControllerRef&, long, sal_uInt16)
-    {
-    }
-
-
-    void EditBrowseBox::ReleaseController(CellControllerRef&, long, sal_uInt16)
     {
     }
 

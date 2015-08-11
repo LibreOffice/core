@@ -625,8 +625,6 @@ private:
     VclPtr<Edit>           m_pEdtName;
     VclPtr<OKButton>       m_pBtnOK;
 
-    DECL_STATIC_LINK(SvxNewToolbarDialog, ModifyHdl, void *);
-
 public:
     SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName);
     virtual ~SvxNewToolbarDialog();

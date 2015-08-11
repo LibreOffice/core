@@ -90,8 +90,6 @@ private:
     ::sfx2::sidebar::ControllerItem maFillFloatTransparenceController;
 
     SfxBindings* mpBindings;
-
-    static void Initialize();
 };
 
 
