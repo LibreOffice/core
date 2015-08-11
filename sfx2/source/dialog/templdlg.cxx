@@ -949,7 +949,7 @@ SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
         return NULL;
     const OUString aTemplName( GetSelectedEntry() );
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
-    return pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
+    return pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
 }
 
 /**
@@ -972,7 +972,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
     if ( !pItem )
         return;
     const SfxStyleFamily eFam = pItem->GetFamily();
-    SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam, SFXSTYLEBIT_ALL );
+    SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam );
     if( pStyle )
     {
         bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
@@ -1176,7 +1176,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
         pItem = GetFamilyItem_Impl();
         if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)   // Update view type list (Hierarchical, All, etc.
         {
-            CheckItem(nActFamily, true);    // check Button in Toolbox
+            CheckItem(nActFamily);    // check Button in Toolbox
             aFilterLb->SetUpdateMode(false);
             aFilterLb->Clear();
             //insert hierarchical at the beginning
@@ -1303,12 +1303,12 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
     if(pItem && !bWaterDisabled)
     {
         CheckItem(SID_STYLE_WATERCAN, pItem->GetValue());
-        EnableItem( SID_STYLE_WATERCAN, true );
+        EnableItem( SID_STYLE_WATERCAN );
     }
     else
     {
         if(!bWaterDisabled)
-            EnableItem(SID_STYLE_WATERCAN, true);
+            EnableItem(SID_STYLE_WATERCAN);
         else
             EnableItem(SID_STYLE_WATERCAN, false);
     }
@@ -1411,7 +1411,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      else if( bDocChanged )
      {
          // other DocShell -> all new
-         CheckItem( nActFamily, true );
+         CheckItem( nActFamily );
          nActFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pDocShell ) );
          if ( SFXSTYLEBIT_ALL == nActFilter )
             nActFilter = pDocShell->GetAutoStyleFilterIndex();
@@ -1427,7 +1427,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      else
      {
          // other filters for automatic
-         CheckItem( nActFamily, true );
+         CheckItem( nActFamily );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
          if ( pStyleItem && 0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
             && nAppFilter != pItem->GetValue())
@@ -1508,9 +1508,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
                         if( !pItem ) break;
                         const SfxStyleFamily eFam = pItem->GetFamily();
-                        SfxStyleSheetBase *pStyle =
-                            pStyleSheetPool->Find(
-                                aStr, eFam, SFXSTYLEBIT_ALL );
+                        SfxStyleSheetBase *pStyle = pStyleSheetPool->Find( aStr, eFam );
                         if( pStyle )
                         {
                             bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
@@ -1958,7 +1956,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             // check the style is used or not
             const OUString aTemplName(pTreeBox ? pTreeBox->GetEntryText(pEntry) : aFmtLb->GetEntryText(pEntry));
 
-            SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
+            SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily() );
 
             if ( pStyle->IsUsed() )  // pStyle is in use in the document?
             {
@@ -2066,7 +2064,7 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
         OSL_ENSURE(pStyle, "Style not found");
         if(pStyle && pStyle->IsUserDefined())
         {
-            EnableDel(true);
+            EnableDel();
         }
         else
         {
@@ -2202,7 +2200,7 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu()
 {
     if ( bBindingUpdate )
     {
-        pBindings->Invalidate( SID_STYLE_NEW, true, false );
+        pBindings->Invalidate( SID_STYLE_NEW, true );
         pBindings->Update( SID_STYLE_NEW );
         bBindingUpdate = false;
     }
@@ -2303,15 +2301,15 @@ void SfxTemplateDialog_Impl::ClearFamilyList()
 
 void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 {
-    pBindings->Invalidate(SID_STYLE_NEW_BY_EXAMPLE, true, false);
+    pBindings->Invalidate(SID_STYLE_NEW_BY_EXAMPLE, true);
     pBindings->Update( SID_STYLE_NEW_BY_EXAMPLE );
-    pBindings->Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE, true, false);
+    pBindings->Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE, true);
     pBindings->Update( SID_STYLE_UPDATE_BY_EXAMPLE );
-    pBindings->Invalidate( SID_STYLE_WATERCAN, true, false);
+    pBindings->Invalidate( SID_STYLE_WATERCAN, true);
     pBindings->Update( SID_STYLE_WATERCAN );
-    pBindings->Invalidate( SID_STYLE_NEW, true, false );
+    pBindings->Invalidate( SID_STYLE_NEW, true);
     pBindings->Update( SID_STYLE_NEW );
-    pBindings->Invalidate( SID_STYLE_DRAGHIERARCHIE, true, false );
+    pBindings->Invalidate( SID_STYLE_DRAGHIERARCHIE, true);
     pBindings->Update( SID_STYLE_DRAGHIERARCHIE );
 }
 

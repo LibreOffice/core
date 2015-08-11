@@ -32,7 +32,7 @@ namespace sfx2 { namespace sidebar {
 
 Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTitleBar)
 {
-    rTitleBar.GetComponentInterface(true);
+    rTitleBar.GetComponentInterface();
     VCLXWindow* pWindow = rTitleBar.GetWindowPeer();
     if (pWindow != NULL)
         return new Accessible(new AccessibleTitleBar(pWindow));

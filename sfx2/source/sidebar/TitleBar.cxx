@@ -100,7 +100,7 @@ void TitleBar::setPosSizePixel (long nX, long nY, long nWidth, long nHeight, Pos
 
     // Place the toolbox.
     const sal_Int32 nToolBoxWidth (maToolBox->GetItemPosRect(0).GetWidth());
-    maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight, PosSizeFlags::PosSize);
+    maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight);
     maToolBox->Show();
 }
 

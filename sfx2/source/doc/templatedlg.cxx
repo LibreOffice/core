@@ -1395,7 +1395,7 @@ void SfxTemplateManagerDlg::createDefaultTemplateMenu ()
         {
             INetURLObject aObj(*i);
             OUString aTitle = SvFileInformationManager::GetDescription(aObj);
-            mpTemplateDefaultMenu->InsertItem(nItemId, aTitle, SvFileInformationManager::GetImage(aObj, false));
+            mpTemplateDefaultMenu->InsertItem(nItemId, aTitle, SvFileInformationManager::GetImage(aObj));
             mpTemplateDefaultMenu->SetItemCommand(nItemId++, *i);
         }
 

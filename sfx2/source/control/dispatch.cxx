@@ -502,7 +502,7 @@ IMPL_LINK_NOARG_TYPED( SfxDispatcher, EventHdl_Impl, Idle *, void )
     Update_Impl();
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
-        pBindings->StartUpdate_Impl(false);
+        pBindings->StartUpdate_Impl();
 }
 
 /** With this method it can be tested whether the <SfxShell> rShell is on the
@@ -754,7 +754,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( true );
+            pBind->HidePopupCtrls_Impl();
             pBind = pBind->GetSubBindings_Impl();
         }
 

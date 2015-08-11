@@ -213,7 +213,7 @@ void SfxObjectShell::FlushDocInfo()
     if ( IsLoading() )
         return;
 
-    SetModified(true);
+    SetModified();
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     DoFlushDocInfo(); // call template method
     OUString url(xDocProps->getAutoloadURL());
@@ -555,7 +555,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             if ( pViewFrame )
             {
                 // TODO/LATER: currently the application guards against the reentrance problem
-                SetModified( true ); // the modified flag has to be set to let the document be stored with the shared flag
+                SetModified(); // the modified flag has to be set to let the document be stored with the shared flag
                 const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
                 const SfxBoolItem* pResult = PTR_CAST( SfxBoolItem, pItem );
                 bResult = ( pResult && pResult->GetValue() );
@@ -1215,7 +1215,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
             bSetModifiedTRUE = true;
 
         if ( !IsEnableSetModified() )
-            EnableSetModified( true );
+            EnableSetModified();
 
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( false );
@@ -1252,7 +1252,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         // should do the notification, in result the notification is done when all the FinishedLoading() calls are finished
 
         if ( bSetModifiedTRUE )
-            SetModified( true );
+            SetModified();
         else
             SetModified( false );
 
@@ -1363,7 +1363,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         {
             // some further initializations for templates
             SetTemplate_Impl( aName, aTemplateName, this );
-            pTmpMedium->CreateTempFile( true );
+            pTmpMedium->CreateTempFile();
         }
 
         // templates are never readonly
@@ -1418,7 +1418,7 @@ void SfxObjectShell::CancelTransfers()
     {
         AbortImport();
         if( IsLoading() )
-            FinishedLoading( SfxLoadedFlags::ALL );
+            FinishedLoading();
     }
 }
 

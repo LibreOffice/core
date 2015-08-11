@@ -1227,7 +1227,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                     RemoveEntry( nPos );
                     OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
-                    nPos = InsertEntry( aDlg->GetTitle(), SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
+                    nPos = InsertEntry( aDlg->GetTitle(), SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
                     SetEntryData( nPos, new OUString( *pURL ) );
                     SelectEntryPos( nPos );
                     delete pURL;
@@ -1370,7 +1370,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
 {
     OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
-    sal_uInt16 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
+    sal_uInt16 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
     m_pBookmarksBox->SetEntryData( nPos, new OUString( rURL ) );
 }
 

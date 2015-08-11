@@ -181,7 +181,7 @@ OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
 
 #ifndef DISABLE_DYNLOADING
         osl::Module aMod;
-        aMod.loadRelative(&thisModule, SVLIBRARY("cui"), 0);
+        aMod.loadRelative(&thisModule, SVLIBRARY("cui"));
 
         // get symbol
         OUString aSymbol( "GetSpecialCharsForEdit"  );

@@ -375,7 +375,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
                 }
                 nOpenMode = SFX_STREAM_READONLY;
-                pSh->SetReadOnlyUI(true);
+                pSh->SetReadOnlyUI();
             }
             else
             {
@@ -482,7 +482,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     // Readonly document can not be switched to edit mode?
-                    rReq.Done( false );
+                    rReq.Done();
 
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
@@ -713,7 +713,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pMedium->CloseAndRelease();
                 }
 
-                xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SfxObjectCreateMode::STANDARD );
+                xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
                 if ( xOldObj->IsModifyPasswordEntered() )
                     xNewObj->SetModifyPasswordEntered();
@@ -1653,7 +1653,7 @@ void SfxViewFrame::Enable( bool bEnable )
             if ( !bEnable )
                 pImp->bWindowWasEnabled = pWindow->IsInputEnabled();
             if ( !bEnable || pImp->bWindowWasEnabled )
-                pWindow->EnableInput( bEnable, true );
+                pWindow->EnableInput( bEnable );
         }
 
         // cursor and focus
@@ -1687,7 +1687,7 @@ void SfxViewFrame::Show()
     {
         xObjSh->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
         if ( !pImp->bObjLocked )
-            LockObjectShell_Impl( true );
+            LockObjectShell_Impl();
 
         // Adjust Doc-Shell title number, get unique view-no
         if ( 0 == pImp->nDocViewNo  )
@@ -1766,7 +1766,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                 {
                     GetBindings().SetDispatcher( GetDispatcher() );
                     GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
-                    GetDispatcher()->Update_Impl( false );
+                    GetDispatcher()->Update_Impl();
                 }
             }
         }
@@ -2081,7 +2081,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
         if ( pOldSh )
         {
             // ask whether it can be closed
-            if ( !pOldSh->PrepareClose( true ) )
+            if ( !pOldSh->PrepareClose() )
                 return false;
 
             // remove sub shells from Dispatcher before switching to new ViewShell

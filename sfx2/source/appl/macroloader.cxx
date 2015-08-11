@@ -272,7 +272,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
                 if ( bSetDocMacroMode )
                 {
                     // mark document: it executes an own macro, so it's in a modal mode
-                    pDoc->SetMacroMode_Impl( true );
+                    pDoc->SetMacroMode_Impl();
                 }
 
                 if ( bSetGlobalThisComponent )

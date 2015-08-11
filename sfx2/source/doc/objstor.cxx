@@ -453,7 +453,7 @@ bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage >& 
                     return false;
                 }
 
-                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, false, false );
+                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             }
         }
         catch ( uno::Exception& )
@@ -775,7 +775,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     {}
                 }
                 UpdateLinks();
-                FinishedLoading( SfxLoadedFlags::ALL );
+                FinishedLoading();
             }
             else
             {
@@ -1913,7 +1913,7 @@ bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
     if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
     {
         SAL_WARN( "sfx.doc", "The mediatype must be set already!" );
-        SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, false, false );
+        SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, false );
     }
 
     pImp->bIsSaving = false;
@@ -1982,7 +1982,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             EnableSetModified(false);
             getDocProperties()->setGenerator(
                ::utl::DocInfoHelper::GetGeneratorString() );
-            EnableSetModified(true);
+            EnableSetModified();
         }
 
         uno::Reference< embed::XStorage > xStorage;
@@ -2886,7 +2886,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
     if ( bCopyTo )
         DELETEZ( pNewFile );
     else if( !bOk )
-        SetModified( true );
+        SetModified();
 
     return bOk;
 }
@@ -3114,7 +3114,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
             pImp->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
             OSL_ENSURE( pImp->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
 
-            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false, false );
+            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImp->m_bCreateTempStor = false;
             SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
@@ -3387,7 +3387,7 @@ bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >&
             DoSaveCompleted( new SfxMedium( xStorage, GetMedium()->GetBaseURL() ) );
 
         if ( IsEnableSetModified() )
-            SetModified( true ); // ???
+            SetModified(); // ???
     }
 
     return bResult;
@@ -3561,7 +3561,7 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, bool bIsTemplate, const uno
         }
         else
         {
-            std::shared_ptr<GDIMetaFile> xMetaFile = GetPreviewMetaFile(false);
+            std::shared_ptr<GDIMetaFile> xMetaFile = GetPreviewMetaFile();
             if (xMetaFile)
             {
                 bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(xMetaFile.get(), xStream);

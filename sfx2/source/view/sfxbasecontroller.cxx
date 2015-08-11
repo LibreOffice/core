@@ -1313,7 +1313,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             if ( !rFrame.IsMarkedHidden_Impl() )
             {
                 if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
-                    pViewFrame->GetDispatcher()->HideUI( true );
+                    pViewFrame->GetDispatcher()->HideUI();
                 else
                     pViewFrame->GetDispatcher()->HideUI( false );
 

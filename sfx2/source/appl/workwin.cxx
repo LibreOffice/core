@@ -299,13 +299,13 @@ throw (css::uno::RuntimeException, std::exception)
         {
             m_pWrkWin->MakeVisible_Impl( true );
             m_pWrkWin->ShowChildren_Impl();
-            m_pWrkWin->ArrangeChildren_Impl( true );
+            m_pWrkWin->ArrangeChildren_Impl();
         }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
         {
             m_pWrkWin->MakeVisible_Impl( false );
             m_pWrkWin->HideChildren_Impl();
-            m_pWrkWin->ArrangeChildren_Impl( true );
+            m_pWrkWin->ArrangeChildren_Impl();
         }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::LOCK )
         {

@@ -410,7 +410,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
         if ( nRet == RET_OK )
         {
             SfxStringItem aComment( SID_DOCINFO_COMMENTS, aInfo.aComment );
-            pObjShell->SetModified( true );
+            pObjShell->SetModified();
             const SfxPoolItem* aItems[2];
             aItems[0] = &aComment;
             aItems[1] = NULL;
@@ -424,7 +424,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     if (pButton == m_pDeleteButton && pEntry)
     {
         pObjShell->GetMedium()->RemoveVersion_Impl( static_cast<SfxVersionInfo*>(pEntry->GetUserData())->aName );
-        pObjShell->SetModified( true );
+        pObjShell->SetModified();
         m_pVersionBox->SetUpdateMode( false );
         m_pVersionBox->Clear();
         Init_Impl();
@@ -492,7 +492,7 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVe
     {
         m_pOKButton->Hide();
         m_pCancelButton->Hide();
-        m_pEdit->SetReadOnly(true);
+        m_pEdit->SetReadOnly();
         SetText(SfxResId(STR_VIEWVERSIONCOMMENT));
         m_pCloseButton->GrabFocus();
     }

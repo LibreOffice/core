@@ -443,12 +443,12 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
 
 void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
 {
-    pImp->GetIPClientList_Impl(true)->push_back(pIPClient);
+    pImp->GetIPClientList_Impl()->push_back(pIPClient);
 }
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 {
-    SfxInPlaceClientList* pClientList = pImp->GetIPClientList_Impl(true);
+    SfxInPlaceClientList* pClientList = pImp->GetIPClientList_Impl();
 
     for( SfxInPlaceClientList::iterator it = pClientList->begin(); it != pClientList->end(); ++it )
     {
@@ -691,7 +691,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 // No type and no location => error
                 if ( aFilterName.isEmpty() ||  aTypeName.isEmpty())
                 {
-                    rReq.Done(false);
+                    rReq.Done();
                     return;
                 }
 
@@ -732,7 +732,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
                 catch (const io::IOException&)
                 {
-                    rReq.Done(false);
+                    rReq.Done();
                     return;
                 }
 
@@ -741,7 +741,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
             else
             {
-                rReq.Done(false);
+                rReq.Done();
                 return;
             }
         }
@@ -842,7 +842,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                               && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
-                    SfxPrinter *pPrinter = GetPrinter(false);
+                    SfxPrinter *pPrinter = GetPrinter();
 
                     if ( SID_PRINTDOCDIRECT == nSID )
                     {
@@ -928,7 +928,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
 
-    pFrame->GetBindings().HidePopups(true);
+    pFrame->GetBindings().HidePopups();
     pFrame->GetDispatcher()->Update_Impl( true );
 }
 

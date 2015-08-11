@@ -293,7 +293,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     if ( !pFrame || !pFrame->GetWindow().IsReallyVisible() )
                         continue;
 
-                    if (pObjSh->PrepareClose(true))
+                    if (pObjSh->PrepareClose())
                         pObjSh->SetModified( false );
                     else
                         return;
@@ -853,7 +853,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
     osl::Module aMod;
 
     // load basctl module
-    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
+    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
 
     // get symbol
     basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(aMod.getFunctionSymbol("basicide_choose_macro"));

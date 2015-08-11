@@ -531,7 +531,7 @@ void SfxMedium::CloseInStream_Impl()
 
     if ( pImp->m_pInStream && !GetContent().is() )
     {
-        CreateTempFile( true );
+        CreateTempFile();
         return;
     }
 
@@ -1636,7 +1636,7 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                {
                 if ( pImp->pTempFile )
                 {
-                    pImp->pTempFile->EnableKillingFile( true );
+                    pImp->pTempFile->EnableKillingFile();
                        delete pImp->pTempFile;
                        pImp->pTempFile = NULL;
                 }
@@ -1782,7 +1782,7 @@ void SfxMedium::Transfer_Impl()
                         // remove temporary file
                         if ( pImp->pTempFile )
                         {
-                            pImp->pTempFile->EnableKillingFile( true );
+                            pImp->pTempFile->EnableKillingFile();
                             delete pImp->pTempFile;
                             pImp->pTempFile = NULL;
                         }
@@ -2773,7 +2773,7 @@ void SfxMedium::CompleteReOpen()
     {
         if ( pImp->pTempFile )
         {
-            pImp->pTempFile->EnableKillingFile( true );
+            pImp->pTempFile->EnableKillingFile();
             delete pImp->pTempFile;
         }
         pImp->pTempFile = pTmpFile;
@@ -2782,7 +2782,7 @@ void SfxMedium::CompleteReOpen()
     }
     else if (pTmpFile)
     {
-        pTmpFile->EnableKillingFile( true );
+        pTmpFile->EnableKillingFile();
         delete pTmpFile;
 
     }
@@ -3240,7 +3240,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
     }
 
     pImp->pTempFile = new ::utl::TempFile();
-    pImp->pTempFile->EnableKillingFile( true );
+    pImp->pTempFile->EnableKillingFile();
     pImp->m_aName = pImp->pTempFile->GetFileName();
     OUString aTmpURL = pImp->pTempFile->GetURL();
     if ( pImp->m_aName.isEmpty() || aTmpURL.isEmpty() )
@@ -3339,7 +3339,7 @@ void SfxMedium::CreateTempFileNoCopy()
         delete pImp->pTempFile;
 
     pImp->pTempFile = new ::utl::TempFile();
-    pImp->pTempFile->EnableKillingFile( true );
+    pImp->pTempFile->EnableKillingFile();
     pImp->m_aName = pImp->pTempFile->GetFileName();
     if ( pImp->m_aName.isEmpty() )
     {
@@ -3593,7 +3593,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
 
                 GetMedium_Impl();
                 LockOrigFileOnDemand( false, false );
-                CreateTempFile( true );
+                CreateTempFile();
                 GetMedium_Impl();
 
                 if ( pImp->xStream.is() )
@@ -3649,7 +3649,7 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
         // open the temporary file based document
         GetMedium_Impl();
         LockOrigFileOnDemand( false, false );
-        CreateTempFile( true );
+        CreateTempFile();
         GetMedium_Impl();
 
         if ( pImp->xStream.is() )

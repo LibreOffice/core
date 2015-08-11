@@ -147,7 +147,7 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
     if ( pPage )
         pPage->Reset( GetInputSetImpl() );
-    EndDialog( RET_CANCEL );
+    EndDialog();
     return 0;
 }
 

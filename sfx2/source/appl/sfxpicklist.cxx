@@ -184,7 +184,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
         return;
 
     // ignore hidden documents
-    if ( !SfxViewFrame::GetFirst( pDocSh, true ) )
+    if ( !SfxViewFrame::GetFirst( pDocSh ) )
         return;
 
     OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);

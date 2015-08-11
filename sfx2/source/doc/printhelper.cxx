@@ -462,7 +462,7 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
     // set new printer
     if ( pViewSh && pPrinter )
-        pViewSh->SetPrinter( pPrinter, nChangeFlags, false );
+        pViewSh->SetPrinter( pPrinter, nChangeFlags );
 }
 
 

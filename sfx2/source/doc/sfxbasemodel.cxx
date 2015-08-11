@@ -250,7 +250,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     virtual void storageIsModified() SAL_OVERRIDE
     {
         if ( m_pObjectShell.Is() && !m_pObjectShell->IsModified() )
-            m_pObjectShell->SetModified( true );
+            m_pObjectShell->SetModified();
     }
 
     void impl_setDocumentProperties(
@@ -1294,7 +1294,7 @@ sal_Bool SAL_CALL SfxBaseModel::enableSetModified() throw (RuntimeException, std
         throw RuntimeException();
 
     bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
-    m_pData->m_pObjectShell->EnableSetModified( true );
+    m_pData->m_pObjectShell->EnableSetModified();
 
     return bResult;
 }
@@ -1910,7 +1910,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
         pMedium->SetFilter( pSetFilter );
-        m_pData->m_pObjectShell->SetModified(true);
+        m_pData->m_pObjectShell->SetModified();
     }
 
     // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
@@ -1987,7 +1987,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 try
                 {
                     utl::TempFile aTmp;
-                    aTmp.EnableKillingFile( true );
+                    aTmp.EnableKillingFile();
                     storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
                     SvStream* pStream = aTmp.GetStream( StreamMode::READ );
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
@@ -2350,7 +2350,7 @@ sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell )
-        return m_pData->m_pObjectShell->AdjustMacroMode( OUString(), false );
+        return m_pData->m_pObjectShell->AdjustMacroMode( OUString() );
     return sal_False;
 }
 
@@ -3448,7 +3448,7 @@ bool SfxBaseModel::hasValidSignatures() const
 {
     SolarMutexGuard aGuard;
     if ( m_pData->m_pObjectShell.Is() )
-        return ( m_pData->m_pObjectShell->ImplGetSignatureState( false ) == SignatureState::OK );
+        return ( m_pData->m_pObjectShell->ImplGetSignatureState() == SignatureState::OK );
     return false;
 }
 
@@ -3792,7 +3792,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     {
         // TODO/LATER: if the provided storage has some data inside the storing might fail, probably the storage must be truncated
         // TODO/LATER: is it possible to have a template here?
-        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, false, false );
+        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, false );
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, OUString(), &aSet );
@@ -4136,7 +4136,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewControl
     SfxModelGuard aGuard( *this );
 
     const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const OUString sDefaultViewName = rDocumentFactory.GetViewFactory( 0 ).GetAPIViewName();
+    const OUString sDefaultViewName = rDocumentFactory.GetViewFactory().GetAPIViewName();
 
     aGuard.clear();
 
@@ -4310,7 +4310,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     if ( nPluginMode == 1 )
     {
         pViewFrame->ForceOuterResize_Impl( false );
-        pViewFrame->GetBindings().HidePopups( true );
+        pViewFrame->GetBindings().HidePopups();
 
         SfxFrame& rFrame = pViewFrame->GetFrame();
         // MBA: layoutmanager of inplace frame starts locked and invisible

@@ -200,7 +200,7 @@ sal_uInt32 CheckPasswd_Impl
 
     if( ( !pFile->GetFilter() || pFile->IsStorage() ) )
     {
-        uno::Reference< embed::XStorage > xStorage = pFile->GetStorage( true );
+        uno::Reference< embed::XStorage > xStorage = pFile->GetStorage();
         if( xStorage.is() )
         {
             uno::Reference< beans::XPropertySet > xStorageProps( xStorage, uno::UNO_QUERY );

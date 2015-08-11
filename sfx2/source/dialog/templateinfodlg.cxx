@@ -101,7 +101,7 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
 
         if ( xDisp.is() )
         {
-            mpPreviewView->EnableInput( false, true );
+            mpPreviewView->EnableInput( false );
 
             bool b = true;
             uno::Sequence <beans::PropertyValue> aArgs( 4 );

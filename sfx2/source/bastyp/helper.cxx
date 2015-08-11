@@ -71,7 +71,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
 
         try
         {
-            xDynResultSet = aCnt.createDynamicCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
+            xDynResultSet = aCnt.createDynamicCursor( aProps );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
@@ -143,7 +143,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
         try
         {
             uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
-            xDynResultSet = aCnt.createDynamicCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
+            xDynResultSet = aCnt.createDynamicCursor( aProps );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }

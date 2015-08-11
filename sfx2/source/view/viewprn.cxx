@@ -611,7 +611,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
 
     SfxObjectShell *pObjShell = GetObjectShell();
     xNewController->setValue( OUString( "JobName"  ),
-                        makeAny( OUString( pObjShell->GetTitle(0) ) ) );
+                        makeAny( OUString( pObjShell->GetTitle() ) ) );
     xNewController->setPrinterModified( mbPrinterSettingsModified );
 }
 
@@ -619,7 +619,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
 {
     StartPrint( rProps, bIsAPI, bIsDirect );
     // FIXME: job setup
-    SfxPrinter* pDocPrt = GetPrinter(false);
+    SfxPrinter* pDocPrt = GetPrinter();
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     Printer::PrintJob( GetPrinterController(), aJobSetup );
 }

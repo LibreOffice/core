@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         }
 
         if (bAlreadyDone)
-            m_pRecordChangesCB->Check( true );     // restore original state
+            m_pRecordChangesCB->Check();     // restore original state
         else
         {
             // remember required values to change protection and change recording in

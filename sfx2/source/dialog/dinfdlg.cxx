@@ -181,7 +181,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
      const OUString pDelim ( ", " );
      OUString aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
-     aStr += rWrapper.getTime( aT, true, false );
+     aStr += rWrapper.getTime( aT, true );
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
@@ -716,10 +716,10 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     SFX_ITEMSET_ARG( rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, false );
     if ( pROItem && pROItem->GetValue() )
     {
-        m_pTitleEd->SetReadOnly( true );
-        m_pThemaEd->SetReadOnly( true );
-        m_pKeywordsEd->SetReadOnly( true );
-        m_pCommentEd->SetReadOnly( true );
+        m_pTitleEd->SetReadOnly();
+        m_pThemaEd->SetReadOnly();
+        m_pKeywordsEd->SetReadOnly();
+        m_pCommentEd->SetReadOnly();
     }
 }
 
@@ -879,7 +879,7 @@ IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
 
         OUString aDocName;
         sfx2::RequestPassword(pFilter, aDocName, pMedSet);
-        pShell->SetModified(true);
+        pShell->SetModified();
     }
     while (false);
     return 0;

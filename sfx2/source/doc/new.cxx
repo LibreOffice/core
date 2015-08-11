@@ -407,7 +407,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     // update the template configuration if necessary
     {
         WaitObject aWaitCursor( pAntiImplP->GetParent() );
-        aTemplates.Update( true /* be smart */ );
+        aTemplates.Update();
     }
     // fill the list boxes
     const sal_uInt16 nCount = aTemplates.GetRegionCount();

@@ -1064,7 +1064,7 @@ void SfxVirtualMenu::InitializeHelp()
         SfxMenuControl &rCtrl = pItems[nPos];
         if ( nSlotId && !rCtrl.GetId() )
         {
-            InitPopup( nPos, true );
+            InitPopup( nPos );
         }
 
         SfxVirtualMenu *pSubMenu = rCtrl.GetPopupMenu();

@@ -835,7 +835,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             // Cancelled by the user?
-            if (!PrepareClose(true))
+            if (!PrepareClose())
             {
                 rReq.SetReturnValue( SfxBoolItem(0, false) );
                 rReq.Done();
@@ -1252,7 +1252,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
     {
         case SID_ACTIVATE:
         {
-            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, true );
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
             if ( pFrame )
                 pFrame->GetFrame().Appear();
             rReq.SetReturnValue( SfxObjectItem( 0, pFrame ) );
@@ -1403,7 +1403,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     }
 
     // check whether the document is signed
-    ImplGetSignatureState( false ); // document signature
+    ImplGetSignatureState(); // document signature
     ImplGetSignatureState( true ); // script signature
     bool bHasSign = ( pImp->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImp->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
@@ -1440,7 +1440,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
                     nId = SID_SAVEASDOC;
                 SfxRequest aSaveRequest( nId, SfxCallMode::SLOT, GetPool() );
                 //ToDo: Review. We needed to call SetModified, otherwise the document would not be saved.
-                SetModified(true);
+                SetModified();
                 ExecFile_Impl( aSaveRequest );
 
                 // Check if it is stored in OASIS format...
@@ -1519,17 +1519,17 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     }
 
     if ( bAllowModifiedBack )
-        EnableSetModified( true );
+        EnableSetModified();
 }
 
 SignatureState SfxObjectShell::GetDocumentSignatureState()
 {
-    return ImplGetSignatureState( false );
+    return ImplGetSignatureState();
 }
 
 void SfxObjectShell::SignDocumentContent()
 {
-    ImplSign( false );
+    ImplSign();
 }
 
 SignatureState SfxObjectShell::GetScriptingSignatureState()

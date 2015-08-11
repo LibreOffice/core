@@ -585,7 +585,7 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
     }
 
     if ( nViewId == 0 )
-        nViewId = i_rDocument.GetFactory().GetViewFactory( 0 ).GetOrdinal();
+        nViewId = i_rDocument.GetFactory().GetViewFactory().GetOrdinal();
     return nViewId;
 }
 

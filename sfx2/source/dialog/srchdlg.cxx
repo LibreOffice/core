@@ -104,7 +104,7 @@ void SearchDialog::LoadConfig()
         }
     }
     else
-        m_pWrapAroundBox->Check( true );
+        m_pWrapAroundBox->Check();
 }
 
 void SearchDialog::SaveConfig()

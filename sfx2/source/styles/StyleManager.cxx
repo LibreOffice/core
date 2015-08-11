@@ -18,7 +18,7 @@ SfxStyleSheetBase* StyleManager::Search(const OUString& rStyleName, SfxStyleFami
     if (!pPool)
         return nullptr;
 
-    pPool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL);
+    pPool->SetSearchMask(eFamily);
     SfxStyleSheetBase* pStyle = nullptr;
     pStyle = pPool->First();
 

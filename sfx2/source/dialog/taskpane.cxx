@@ -992,7 +992,7 @@ namespace sfx2
                 break;
 
             case MID_LOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( false );
+                m_rDockingWindow.SetFloatingMode();
                 break;
 
             case MID_LAYOUT_DRAWERS:
@@ -1212,7 +1212,7 @@ namespace sfx2
                 SfxResId( STR_SFX_UNDOCK ).toString()
             );
 
-        pMenu->RemoveDisabledEntries( false, false );
+        pMenu->RemoveDisabledEntries( false );
 
         return pMenu;
     }

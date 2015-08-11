@@ -122,9 +122,9 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
         if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
             if ( IsEnableSetModified() )
-                SetModified( true );
+                SetModified();
 
-               SfxGetpApp()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
+            SfxGetpApp()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
         }
     }
 }

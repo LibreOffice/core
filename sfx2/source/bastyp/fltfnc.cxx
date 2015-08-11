@@ -426,7 +426,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont, true );
+    return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont );
 }
 
 

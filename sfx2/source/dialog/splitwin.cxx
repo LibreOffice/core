@@ -112,7 +112,7 @@ public:
                             SetAlign( pOwner->GetAlign() );
                             Actualize();
                             ShowAutoHideButton( pOwner->IsAutoHideButtonVisible() );
-                            ShowFadeInHideButton( true );
+                            ShowFadeInHideButton();
                         }
 
                         virtual ~SfxEmptySplitWin_Impl()
@@ -211,7 +211,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     if ( bWithButtons )
     {
         ShowAutoHideButton( false );    // no autohide button (pin) anymore
-        ShowFadeOutButton( true );
+        ShowFadeOutButton();
     }
 
     // Set SV-Alignment
@@ -587,7 +587,7 @@ void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
     sal_uInt16 nL, nP;
     GetWindowPos( pDockWin, nL, nP );
 
-    if ( nLine > nL && GetItemCount( GetItemId( nL, 0 ) ) == 1 )
+    if ( nLine > nL && GetItemCount( GetItemId( nL ) ) == 1 )
     {
         // If the last window is removed from its line, then everything slips
         // one line to the front!
@@ -700,13 +700,13 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 
     DeactivateUpdateMode* pDeactivateUpdateMode = new DeactivateUpdateMode( *this );
 
-    if ( bNewLine || nLine == GetItemCount( 0 ) )
+    if ( bNewLine || nLine == GetItemCount() )
     {
         // An existing row should not be inserted, instead a new one
         // will be created
 
         sal_uInt16 nId = 1;
-        for ( sal_uInt16 n=0; n<GetItemCount(0); n++ )
+        for ( sal_uInt16 n=0; n<GetItemCount(); n++ )
         {
             if ( GetItemId(n) >= nId )
                 nId = GetItemId(n)+1;
@@ -730,7 +730,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 
     // SplitWindows are once created in SFX and when inserting the first
     // DockingWindows is made visible.
-    if ( GetItemCount( 0 ) == 1 && GetItemCount( 1 ) == 1 )
+    if ( GetItemCount() == 1 && GetItemCount( 1 ) == 1 )
     {
         // The Rearranging in WorkWindow and a Show() on the SplitWindow is
         // caused by SfxDockingwindow (->SfxWorkWindow::ConfigChild_Impl)
@@ -813,7 +813,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
 
     // SplitWindows are once created in SFX and is made invisible after
     // removing the last DockingWindows.
-    if ( GetItemCount( nSet ) == 1 && GetItemCount( 0 ) == 1 )
+    if ( GetItemCount( nSet ) == 1 && GetItemCount() == 1 )
     {
         // The Rearranging in WorkWindow is caused by SfxDockingwindow
         Hide();
@@ -912,7 +912,7 @@ sal_uInt16 SfxSplitWindow::GetLineCount() const
     Returns the number of rows = number of sub-itemsets in the root set.
 */
 {
-    return GetItemCount( 0 );
+    return GetItemCount();
 }
 
 
@@ -950,7 +950,7 @@ sal_uInt16 SfxSplitWindow::GetWindowCount() const
     Returns the total number of windows
 */
 {
-    return GetItemCount( 0 );
+    return GetItemCount();
 }
 
 
@@ -967,7 +967,7 @@ IMPL_LINK_TYPED( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
     if ( pTimer )
         pTimer->Stop();
 
-    if ( CursorIsOverRect( false ) || !pTimer )
+    if ( CursorIsOverRect() || !pTimer )
     {
         // If the cursor is within the window, display the SplitWindow and set
         // up the timer for close
@@ -1100,7 +1100,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
         return;
 
     bPinned = bOn;
-    if ( GetItemCount( 0 ) == 0 )
+    if ( GetItemCount() == 0 )
         return;
 
     if ( !bOn )
@@ -1130,7 +1130,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
     {
         pEmptyWin->nState &= ~1;
         SetOutputSizePixel( GetFloatingWindow()->GetOutputSizePixel() );
-        SetFloatingMode( false );
+        SetFloatingMode();
 
         if ( pEmptyWin->bFadeIn )
         {
@@ -1154,7 +1154,7 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
     if ( bOn == pEmptyWin->bFadeIn )
         return;
 
-    if ( GetItemCount( 0 ) == 0 )
+    if ( GetItemCount() == 0 )
         return;
 
     pEmptyWin->bFadeIn = bOn;

@@ -334,7 +334,7 @@ void SfxObjectShell::LoadStyles
     DBG_ASSERT(pSourcePool, "Source-DocumentShell ohne StyleSheetPool");
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
     DBG_ASSERT(pMyPool, "Dest-DocumentShell ohne StyleSheetPool");
-    pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL, SFXSTYLEBIT_ALL);
+    pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
     std::unique_ptr<Styles_Impl[]> pFound(new Styles_Impl[pSourcePool->Count()]);
     sal_uInt16 nFound = 0;
 
@@ -480,7 +480,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     {
                         // user refuses, so don't ask again for this document
                         SetQueryLoadTemplate(false);
-                        SetModified( true );
+                        SetModified();
                     }
                 }
             }
@@ -563,14 +563,14 @@ bool SfxObjectShell::IsUseUserData() const
 void SfxObjectShell::SetQueryLoadTemplate( bool bNew )
 {
     if ( pImp->bQueryLoadTemplate != bNew )
-        SetModified( true );
+        SetModified();
     pImp->bQueryLoadTemplate = bNew;
 }
 
 void SfxObjectShell::SetUseUserData( bool bNew )
 {
     if ( pImp->bUseUserData != bNew )
-        SetModified( true );
+        SetModified();
     pImp->bUseUserData = bNew;
 }
 
@@ -587,14 +587,14 @@ bool SfxObjectShell::IsSaveVersionOnClose() const
 void SfxObjectShell::SetLoadReadonly( bool bNew )
 {
     if ( pImp->bLoadReadonly != bNew )
-        SetModified( true );
+        SetModified();
     pImp->bLoadReadonly = bNew;
 }
 
 void SfxObjectShell::SetSaveVersionOnClose( bool bNew )
 {
     if ( pImp->bSaveVersionOnClose != bNew )
-        SetModified( true );
+        SetModified();
     pImp->bSaveVersionOnClose = bNew;
 }
 

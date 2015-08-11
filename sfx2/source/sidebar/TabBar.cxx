@@ -226,7 +226,7 @@ void TabBar::HighlightDeck (const OUString& rsDeckId)
     for (ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
         if (iItem->msDeckId.equals(rsDeckId))
-            iItem->mpButton->Check(true);
+            iItem->mpButton->Check();
         else
             iItem->mpButton->Check(false);
     }

@@ -1326,7 +1326,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 if ( !aExtension.isEmpty() )
                     aObj.SetExtension( aExtension );
 
-                aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8 );
+                aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
             }
         }
     }

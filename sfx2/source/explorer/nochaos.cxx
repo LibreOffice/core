@@ -120,7 +120,7 @@ CntItemPool::CntItemPool()
 CntItemPool::~CntItemPool()
 {
     // Release static pool default items.
-    ReleaseDefaults( false );
+    ReleaseDefaults();
 }
 
 

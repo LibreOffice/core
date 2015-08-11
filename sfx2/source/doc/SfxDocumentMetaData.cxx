@@ -1730,8 +1730,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, 
         stat.Name = OUString::createFromAscii(s_stdStats[i]);
         sal_Int32 val;
         css::uno::Any any;
-        if (!::sax::Converter::convertNumber(val, text, 0,
-                std::numeric_limits<sal_Int32>::max()) || (val < 0)) {
+        if (!::sax::Converter::convertNumber(val, text, 0) || (val < 0)) {
             val = 0;
             SAL_WARN("sfx.doc", "Invalid number: " << text);
         }

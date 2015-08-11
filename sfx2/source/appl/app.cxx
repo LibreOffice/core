@@ -490,7 +490,7 @@ IMPL_LINK_TYPED( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasi
 #ifndef DISABLE_DYNLOADING
     // load basctl module
     osl::Module aMod;
-    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
+    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
 
     // get symbol
     basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(aMod.getFunctionSymbol("basicide_handle_basic_error"));
@@ -588,7 +588,7 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 #ifndef DISABLE_DYNLOADING
     // load basctl module
     osl::Module aMod;
-    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
+    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
 
     // get symbol
     basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(aMod.getFunctionSymbol("basicide_macro_organizer"));

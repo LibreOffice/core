@@ -259,7 +259,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
 {
     if ( nId == 0 )
     {
-        rBindings.InvalidateShell( *this, false );
+        rBindings.InvalidateShell( *this );
     }
     else
     {

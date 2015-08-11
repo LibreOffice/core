@@ -674,7 +674,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
         EndDialog( RET_OK );
     }
     else
-        EndDialog( RET_CANCEL );
+        EndDialog();
     return 0;
 }
 
