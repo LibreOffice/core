@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_9ff2736e",
+        "filename": "sal/Library_uwinapi.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-11T21:56:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_c0dcdf48",
+      "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_e0e1dbff",
         "filename": "sal/Library_uwinapi.mk",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2015-07-02T13:48:43Z",
       "side": 1,
       "message": "In fact, I didn\u0027t. I was afraid that export is still needed, and even had if/else version her first:\n\n  ifneq 140,$(VCVER)\n    export uwinapi_full.def\n  else\n    export uwinapi_short_path_only.def\n\nDoes it make sense?",
+      "parentUuid": "1a54edaf_e0e1dbff",
+      "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_ffe73faa",
+        "filename": "sal/Library_uwinapi.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-11T21:56:07Z",
+      "side": 1,
+      "message": "Still unsure if its needed. Could be added later?",
       "parentUuid": "1a54edaf_e0e1dbff",
       "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
