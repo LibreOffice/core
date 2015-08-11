@@ -41,8 +41,8 @@ public:
     void appendChildNode( AnimationNodeSharedPtr const& pNode );
 
 #if defined(DBG_UTIL)
-    virtual void showState() const;
-    virtual const char* getDescription() const { return "BaseContainerNode"; }
+    virtual void showState() const SAL_OVERRIDE;
+    virtual const char* getDescription() const SAL_OVERRIDE { return "BaseContainerNode"; }
 #endif
 
 protected:

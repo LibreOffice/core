@@ -38,7 +38,7 @@ public:
           mxColorNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const { return "AnimationColorNode"; }
+    virtual const char* getDescription() const SAL_OVERRIDE { return "AnimationColorNode"; }
 #endif
 
 private:

@@ -37,7 +37,7 @@ public:
           mxPathMotionNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const
+    virtual const char* getDescription() const SAL_OVERRIDE
         { return "AnimationPathMotionNode"; }
 #endif
 

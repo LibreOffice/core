@@ -39,7 +39,7 @@ public:
         : BaseContainerNode( xNode, rParent, rContext ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const
+    virtual const char* getDescription() const SAL_OVERRIDE
         { return "ParallelTimeContainer"; }
 #endif
 

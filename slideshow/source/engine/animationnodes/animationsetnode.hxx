@@ -35,7 +35,7 @@ public:
         : AnimationBaseNode( xNode, pParent, rContext ) {}
 
 #if defined(DBG_UTIL)
-    virtual const char* getDescription() const { return "AnimationSetNode"; }
+    virtual const char* getDescription() const SAL_OVERRIDE { return "AnimationSetNode"; }
 #endif
 
 private:

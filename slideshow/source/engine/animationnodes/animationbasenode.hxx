@@ -45,7 +45,7 @@ public:
         NodeContext const& rContext );
 
 #if defined(DBG_UTIL)
-    virtual void showState() const;
+    virtual void showState() const SAL_OVERRIDE;
 #endif
 
 protected:
