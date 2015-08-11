@@ -5532,16 +5532,16 @@ void Test::testFuncFTEST()
     m_pDoc->SetString(aPos, "=FTEST(A1:C3;D1:F3)");
     m_pDoc->SetValue(0, 0, 0, 9.0); // A1
     OUString aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("FTEST should return #VALUE! for less than 2 values",
-            OUString::createFromAscii("#VALUE!") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("FTEST should return #VALUE! for less than 2 values",
+            OUString("#VALUE!"), aVal);
     m_pDoc->SetValue(0, 1, 0, 8.0); // A2
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("FTEST should return #VALUE! for less than 2 values",
-            OUString::createFromAscii("#VALUE!") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("FTEST should return #VALUE! for less than 2 values",
+            OUString("#VALUE!"), aVal);
     m_pDoc->SetValue(3, 0, 0, 5.0); // D1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("FTEST should return #VALUE! for less than 2 values",
-            OUString::createFromAscii("#VALUE!") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("FTEST should return #VALUE! for less than 2 values",
+            OUString("#VALUE!"), aVal);
     m_pDoc->SetValue(3, 1, 0, 6.0); // D2
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 1.0000, m_pDoc->GetValue(aPos), 10e-4);
     m_pDoc->SetValue(1, 0, 0, 6.0); // B1
