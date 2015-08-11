@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_7f4b2f5a",
+        "filename": "include/o3tl/compat_functional.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-11T06:36:57Z",
+      "side": 1,
+      "message": "this now needs the typedefs from unary/binary function",
+      "revId": "826de9bacabad14b509ab539ea2fbfffb24cb114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_5f48eb5b",
+        "filename": "include/o3tl/compat_functional.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-11T06:36:57Z",
+      "side": 1,
+      "message": "this is unnecessarily verbose. why do you reconstruct the type that is already passed in ready-made?",
+      "revId": "826de9bacabad14b509ab539ea2fbfffb24cb114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
