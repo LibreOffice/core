@@ -643,7 +643,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             mpOutliner->SetText( *pOutlinerParaObject );
 
             // #91254# put text to object and set EmptyPresObj to FALSE
-            if( mpText && bOwnParaObj && pOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
+            if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
             {
                 mpObject->SetEmptyPresObj( false );
                 static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( pOutlinerParaObject, mpText );
