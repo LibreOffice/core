@@ -744,35 +744,18 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks(*pContentDev);
 
-    pContentDev->SetMapMode(MAP_PIXEL);
-
-    if ( !bLogicText )
-        aOutputData.DrawStrings(*pContentDev, false);     // in pixel MapMode
+    aOutputData.DrawStrings(*pContentDev, true);
 
     // edit cells and printer-metrics text must be before the buttons
     // (DataPilot buttons contain labels in UI font)
 
-    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
-    if ( bLogicText )
-        aOutputData.DrawStrings(*pContentDev, true);      // in logic MapMode if bLogicText is set
     aOutputData.DrawEdit(true);
 
-    // the buttons are painted in absolute coordinates
-    if (bIsTiledRendering)
-    {
-        // Tiled offset nScrX, nScrY
-        MapMode aMap( MAP_PIXEL );
-        aMap.SetOrigin(Point(nScrX, nScrY));
-        pContentDev->SetMapMode(aMap);
-    }
-    else
-        pContentDev->SetMapMode(MAP_PIXEL);
-
-        // Autofilter- and Pivot-Buttons
-
-    DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
+    // Autofilter- and Pivot-Buttons
 
     pContentDev->SetMapMode(MAP_PIXEL);
+
+    DrawButtons(nX1, nX2, rTableInfo, pContentDev);
 
     aOutputData.DrawClipMarks();
 
