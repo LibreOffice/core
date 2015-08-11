@@ -30,7 +30,6 @@
 
 #include <string.h>
 #include <vector>
-#include <map>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -48,49 +47,6 @@
 
 namespace sca {
 namespace pricing {
-
-class ScaList
-{
-private:
-    static const sal_uInt32     nStartSize;
-    static const sal_uInt32     nIncrSize;
-
-    void**                      pData;          // pointer array
-    sal_uInt32                  nSize;          // array size
-    sal_uInt32                  nCount;         // next index to be inserted at
-    sal_uInt32                  nCurr;          // current pos for iterations
-
-    void                        _Grow();
-    inline void                 Grow();
-
-public:
-                                ScaList();
-    virtual                     ~ScaList();
-
-    inline sal_uInt32           Count() const       { return nCount; }
-
-    inline const void*          GetObject( sal_uInt32 nIndex ) const
-                                    { return (nIndex < nCount) ? pData[ nIndex ] : NULL; }
-
-    inline void*                First() { return nCount ? pData[ nCurr = 0 ] : NULL; }
-    inline void*                Next()  { return (nCurr + 1 < nCount) ? pData[ ++nCurr ] : NULL; }
-
-    inline void                 Append( void* pNew );
-};
-
-
-inline void ScaList::Grow()
-{
-    if( nCount >= nSize )
-        _Grow();
-}
-
-inline void ScaList::Append( void* pNew )
-{
-    Grow();
-    pData[ nCount++ ] = pNew;
-}
-
 
 class ScaResId : public ResId
 {
@@ -211,9 +167,17 @@ public:
 };
 
 
-typedef std::map<OUString, ScaFuncData> ScaFuncDataMap;
+typedef std::vector<ScaFuncData> ScaFuncDataList;
 
-void InitScaFuncDataMap ( ScaFuncDataMap& rMap, ResMgr& rResMgr );
+void InitScaFuncDataList ( ScaFuncDataList& rMap, ResMgr& rResMgr );
+
+// Predicate for use with std::find_if
+struct FindScaFuncData
+{
+    const OUString& m_rId;
+    explicit FindScaFuncData( const OUString& rId ) : m_rId(rId) {}
+    bool operator() ( ScaFuncData& rCandidate ) const { return rCandidate.Is(m_rId); }
+};
 
 } // namespace pricing
 } // namespace sca
@@ -238,7 +202,7 @@ private:
     css::lang::Locale  aFuncLoc;
     css::lang::Locale* pDefLocales;
     ResMgr*                     pResMgr;
-    sca::pricing::ScaFuncDataMap*            pFuncDataMap;
+    sca::pricing::ScaFuncDataList*            pFuncDataList;
 
 
     void                        InitDefLocales();
