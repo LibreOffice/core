@@ -2602,7 +2602,7 @@ sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, OUString& sTitle )
 {
     TabControl *pTabControl = getTabControl();
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >( mTabId++ );
-    pTabControl->InsertPage( id, sTitle, TAB_APPEND );
+    pTabControl->InsertPage( id, sTitle );
     pTabControl->SetTabPage( id, pPage );
     return id;
 }

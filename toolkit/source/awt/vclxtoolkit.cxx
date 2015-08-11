@@ -1275,7 +1275,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if ( !pNewComp )
         {
             // Default-Interface
-            xRef = pNewWindow->GetComponentInterface( true );
+            xRef = pNewWindow->GetComponentInterface();
         }
         else
         {
@@ -1855,7 +1855,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                     break;
                 }
             if (pFocus != 0)
-                xNext = pFocus->GetComponentInterface(true);
+                xNext = pFocus->GetComponentInterface();
             css::awt::FocusEvent aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
                 static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),

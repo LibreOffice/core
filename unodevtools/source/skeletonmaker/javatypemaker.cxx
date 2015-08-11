@@ -89,7 +89,7 @@ void printType(
             if (i != arguments.begin()) {
                 o << ", ";
             }
-            printType(o, options, manager, *i, true, false);
+            printType(o, options, manager, *i, true);
         }
         o << '>';
     }

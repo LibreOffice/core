@@ -103,7 +103,7 @@ void printType(
             if (i != arguments.begin())
                 o << ", ";
 
-            printType(o, options, manager, *i, 1, false);
+            printType(o, options, manager, *i, 1);
         }
         o << " >";
     }

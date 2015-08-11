@@ -1353,7 +1353,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                     // Encapsulated message.
                     INetMIMEMessage* pNewMessage = new INetMIMEMessage;
                     pNewMessage->SetDocumentLB( new SvAsyncLockBytes(new SvMemoryStream(), false));
-                    pMsg->AttachChild( *pNewMessage, true );
+                    pMsg->AttachChild( *pNewMessage );
 
                     // Encapsulated message body. Create message parser stream.
                     pChildStrm = new INetMIMEMessageStream;
@@ -1467,7 +1467,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                                     new SvAsyncLockBytes(
                                         new SvMemoryStream(), false));
 
-                                pMsg->AttachChild( *pNewMessage, true );
+                                pMsg->AttachChild( *pNewMessage );
 
                                 // Encapsulated message body. Create message parser stream.
                                 pChildStrm = new INetMIMEMessageStream;

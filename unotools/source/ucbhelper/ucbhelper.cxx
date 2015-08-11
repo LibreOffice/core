@@ -88,7 +88,7 @@ std::vector<OUString> getContents(OUString const & url) {
         css::uno::Sequence<OUString> args(1);
         args[0] = "Title";
         css::uno::Reference<css::sdbc::XResultSet> res(
-            c.createCursor(args, ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS),
+            c.createCursor(args),
             css::uno::UNO_SET_THROW);
         css::uno::Reference<com::sun::star::ucb::XContentAccess> acc(
             res, css::uno::UNO_QUERY_THROW);

@@ -66,7 +66,7 @@ ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
 
     // The content provider scheme is the part before the first ':'
     // within the content id.
-    sal_Int32 nPos = rURL.indexOf( ':', 0 );
+    sal_Int32 nPos = rURL.indexOf( ':' );
     if ( nPos != -1 )
     {
         OUString aScheme( rURL.copy( 0, nPos ) );

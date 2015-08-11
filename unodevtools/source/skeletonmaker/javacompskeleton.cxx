@@ -765,7 +765,7 @@ void generateClassDefinition(std::ostream& o,
         o << "    // properties\n";
         while (iter != properties.end()) {
             o << "    protected ";
-            printType(o, options, manager, iter->type, false, false);
+            printType(o, options, manager, iter->type, false);
             o << " m_" << iter->name << ";\n";
             ++iter;
         }
@@ -775,7 +775,7 @@ void generateClassDefinition(std::ostream& o,
         o << "    // attributes\n";
         while (iter != attributes.end()) {
             o << "    private ";
-            printType(o, options, manager, iter->type, false, false);
+            printType(o, options, manager, iter->type, false);
             o << " m_" << iter->name << " = ";
             printType(o, options, manager, iter->type, false, true);
             o <<";\n";

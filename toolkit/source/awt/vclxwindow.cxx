@@ -617,7 +617,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                         if ( pNextC )
                             pNext = pNextC;
 
-                        pNext->GetComponentInterface( true );
+                        pNext->GetComponentInterface();
                         aEvent.NextFocus = static_cast<cppu::OWeakObject*>(pNext->GetWindowPeer());
                     }
                     mpImpl->getFocusListeners().focusLost( aEvent );
@@ -1059,7 +1059,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 
     // #100119# Get all resize events, even if height or width 0, or invisible
     if ( GetWindow() )
-        GetWindow()->EnableAllResize( true );
+        GetWindow()->EnableAllResize();
 }
 
 void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -2338,7 +2338,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
                     pWindow->EnableNativeWidget(false);
                 pWindow->PaintToDevice( pDev, aP, aSz );
                 if( bOldNW )
-                    pWindow->EnableNativeWidget(true);
+                    pWindow->EnableNativeWidget();
             }
         }
     }

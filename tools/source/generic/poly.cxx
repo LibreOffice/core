@@ -222,7 +222,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
     {
         // Append at the back
         nPos = mnPoints;
-        ImplSetSize( nNewSize, true );
+        ImplSetSize( nNewSize );
 
         if( pInitPoly )
         {
@@ -1907,7 +1907,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 
             if(nArrayInsert != nMaxTargetCount)
             {
-                mpImplPolygon->ImplSetSize(static_cast< sal_uInt16 >(nArrayInsert), true);
+                mpImplPolygon->ImplSetSize(static_cast< sal_uInt16 >(nArrayInsert));
             }
         }
     }

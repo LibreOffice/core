@@ -607,7 +607,7 @@ void generateMemberDeclaration(std::ostream& o,
          i != members.end(); ++i)
     {
         o << "    ";
-        printType(o, options, manager, i->type, 1, false);
+        printType(o, options, manager, i->type, 1);
         o << " m_" << i->name << ";\n";
     }
 }
@@ -934,7 +934,7 @@ void generateQueryInterface(std::ostream& o,
             o << "::cppu::OPropertySetHelper::queryInterface(type));\n";
         } else {
             o << "::cppu::PropertySetMixin<\n            ";
-            printType(o, options, manager, propertyhelper, 0, false);
+            printType(o, options, manager, propertyhelper, 0);
             o << " >::queryInterface(\n               type));\n";
         }
     }

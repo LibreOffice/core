@@ -4961,7 +4961,7 @@ OUString INetURLObject::GetFull() const
 OUString INetURLObject::GetPath() const
 {
     INetURLObject aTemp(*this);
-    aTemp.removeSegment(LAST_SEGMENT, true);
+    aTemp.removeSegment(LAST_SEGMENT);
     aTemp.removeFinalSlash();
     return aTemp.PathToFileName();
 }
@@ -4981,7 +4981,7 @@ void INetURLObject::SetName(OUString const & rTheName,
                             rtl_TextEncoding eCharset)
 {
     INetURLObject aTemp(*this);
-    if (aTemp.removeSegment(LAST_SEGMENT, true)
+    if (aTemp.removeSegment(LAST_SEGMENT)
         && aTemp.insertName(rTheName, false, LAST_SEGMENT, true, eMechanism,
                             eCharset))
         *this = aTemp;
