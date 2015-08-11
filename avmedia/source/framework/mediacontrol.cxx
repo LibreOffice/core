@@ -320,21 +320,21 @@ void MediaControl::implUpdateToolboxes()
 
         if( MediaState::Play == maItem.getState() )
         {
-            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, true );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY );
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
         else if( maItem.getTime() > 0.0 && ( maItem.getTime() < maItem.getDuration() ) )
         {
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, true );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE );
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
         else
         {
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
             maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
-            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, true );
+            maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP );
         }
 
         maPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_LOOP, maItem.isLoop() );

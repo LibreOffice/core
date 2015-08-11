@@ -93,7 +93,7 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
     VclPtr< RadioButton > pRadioButton = GetAsDynamic< RadioButton >();
     if ( pRadioButton )
     {
-        ::std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup(true));
+        ::std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup());
         if (!aGroup.empty())
         {
             sal_Int32 i = 0;

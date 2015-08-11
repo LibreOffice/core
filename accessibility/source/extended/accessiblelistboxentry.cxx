@@ -873,7 +873,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, true );
+        getListBox()->Select( pEntry );
     }
 
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -925,7 +925,7 @@ namespace accessibility
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, true );
+                getListBox()->Select( pEntry );
         }
     }
 

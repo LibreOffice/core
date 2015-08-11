@@ -333,7 +333,7 @@ Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
 
 Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBoxOnScreen()
 {
-    return mpBrowseBox->calcHeaderRect(isColumnBar(), true);
+    return mpBrowseBox->calcHeaderRect(isColumnBar());
 }
 
 sal_Int32 AccessibleBrowseBoxHeaderBar::implGetRowCount() const
