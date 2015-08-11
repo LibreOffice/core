@@ -122,7 +122,8 @@ public:
     virtual OUString getCurFilter( ) const SAL_OVERRIDE;
 
 private:
-    ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
+    Reference< com::sun::star::uno::XComponentContext > m_context;
+    Reference< XPasswordContainer2 > m_xMasterPasswd;
 
     SvtRemoteDlgMode m_eMode;
     SvtRemoteDlgType m_eType;

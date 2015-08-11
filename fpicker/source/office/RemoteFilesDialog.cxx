@@ -171,6 +171,7 @@ class FileViewContainer : public vcl::Window
 RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "fps/ui/remotefilesdialog.ui" )
     , m_context( comphelper::getProcessComponentContext() )
+    , m_xMasterPasswd( PasswordContainer::create( m_context ) )
     , m_pCurrentAsyncAction( NULL )
     , m_pFileNotifier( NULL )
     , m_pSplitter( NULL )
@@ -587,10 +588,7 @@ void RemoteFilesDialog::EnableControls()
 
             try
             {
-                Reference< XPasswordContainer2 > xMasterPasswd(
-                    PasswordContainer::create( comphelper::getProcessComponentContext() ) );
-
-                if( xMasterPasswd->isPersistentStoringAllowed() )
+                if( m_xMasterPasswd->isPersistentStoringAllowed() )
                 {
                     int nPos = GetSelectedServicePos();
 
@@ -598,7 +596,7 @@ void RemoteFilesDialog::EnableControls()
                     {
                         OUString sUrl( m_aServices[nPos]->GetUrl() );
 
-                        UrlRecord aURLEntries = xMasterPasswd->find( sUrl, Reference< XInteractionHandler>() );
+                        UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, Reference< XInteractionHandler>() );
 
                         if( aURLEntries.UserList.getLength() )
                         {
@@ -775,10 +773,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
     {
         try
         {
-            Reference< XPasswordContainer2 > xMasterPasswd(
-                PasswordContainer::create( comphelper::getProcessComponentContext() ) );
-
-            if( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
+            if( m_xMasterPasswd->isPersistentStoringAllowed() && m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
             {
                 int nPos = GetSelectedServicePos();
 
@@ -790,7 +785,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                         InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), 0 ),
                         UNO_QUERY );
 
-                    UrlRecord aURLEntries = xMasterPasswd->find( sUrl, xInteractionHandler );
+                    UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
 
                     if( aURLEntries.Url == sUrl && aURLEntries.UserList.getLength() )
                     {
