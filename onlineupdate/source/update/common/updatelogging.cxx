@@ -14,7 +14,9 @@
 
 #include "updatelogging.h"
 
-UpdateLog::UpdateLog() : logFP(nullptr)
+UpdateLog::UpdateLog()
+    : logFP(nullptr)
+    , sourcePath(nullptr)
 {
 }
 
