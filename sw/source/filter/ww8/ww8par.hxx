@@ -1403,9 +1403,9 @@ private:
 
     void Read_HdFt(int nSect, const SwPageDesc *pPrev,
         const wwSection &rSection);
-    void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
-    void Read_HdFtTextAsHackedFrame(long nStart, long nLen,
-        SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth);
+    void Read_HdFtText(WW8_CP nStartCp, WW8_CP nLen, SwFrmFmt* pHdFtFormat);
+    void Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
+        SwFrmFmt &rHdFtFormat, sal_uInt16 nPageWidth);
 
     bool isValid_HdFt_CP(WW8_CP nHeaderCP) const;
 
@@ -1442,13 +1442,13 @@ private:
     long ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine);
     void ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLine);
     void CloseAttrEnds();
-    bool ReadText(long nStartCp, long nTextLen, ManTypes nType);
+    bool ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType);
 
     void ReadRevMarkAuthorStrTabl( SvStream& rStrm, sal_Int32 nTblPos,
         sal_Int32 nTblSiz, SwDoc& rDoc );
 
-    void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
-                           long nLen, ManTypes nType );
+    void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, WW8_CP nStartCp,
+                           WW8_CP nLen, ManTypes nType );
 
     void ImportTox( int nFldId, const OUString& aStr );
 
