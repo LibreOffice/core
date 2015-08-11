@@ -82,9 +82,6 @@ namespace dxcanvas
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
             const css::geometry::IntegerPoint2D&       pos );
 
-#ifdef DX_DEBUG_IMAGES
-        void imageDebugger();
-#endif
     private:
         void init();
 

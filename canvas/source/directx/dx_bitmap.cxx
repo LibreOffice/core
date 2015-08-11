@@ -27,14 +27,6 @@
 #include "dx_graphicsprovider.hxx"
 #include "dx_impltools.hxx"
 
-#if defined(DX_DEBUG_IMAGES)
-# if OSL_DEBUG_LEVEL > 0
-#  include <imdebug.h>
-#  undef min
-#  undef max
-# endif
-#endif
-
 using namespace ::com::sun::star;
 
 namespace dxcanvas
