@@ -51,7 +51,7 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <overlayrangesoutline.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <paintfrm.hxx>
@@ -410,7 +410,7 @@ void SwSelPaintRects::HighlightInputField()
         if ( pCurTextInputFieldAtCrsr != NULL )
         {
             SwTextNode* pTextNode = pCurTextInputFieldAtCrsr->GetpTextNode();
-            ::boost::scoped_ptr<SwShellCrsr> pCrsrForInputTextField(
+            std::unique_ptr<SwShellCrsr> pCrsrForInputTextField(
                 new SwShellCrsr( *GetShell(), SwPosition( *pTextNode, pCurTextInputFieldAtCrsr->GetStart() ) ) );
             pCrsrForInputTextField->SetMark();
             pCrsrForInputTextField->GetMark()->nNode = *pTextNode;

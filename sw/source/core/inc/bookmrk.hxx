@@ -23,7 +23,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <vcl/keycod.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <map>
 #include <rtl/ustring.hxx>
@@ -114,8 +114,8 @@ namespace sw {
             virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
             MarkBase(const SwPaM& rPaM, const OUString& rName);
-            ::boost::scoped_ptr<SwPosition> m_pPos1;
-            ::boost::scoped_ptr<SwPosition> m_pPos2;
+            std::unique_ptr<SwPosition> m_pPos1;
+            std::unique_ptr<SwPosition> m_pPos2;
             OUString m_aName;
             static OUString GenerateNewName(const OUString& rPrefix);
 

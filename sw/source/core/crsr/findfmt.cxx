@@ -19,14 +19,14 @@
 
 #include <doc.hxx>
 #include <pamtyp.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 bool SwPaM::Find( const SwFormat& rFormat, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly  )
 {
     bool bFound = false;
     const bool bSrchForward = (fnMove == fnMoveForward);
-    boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     // if at beginning/end then move it out of the node
     if( bSrchForward

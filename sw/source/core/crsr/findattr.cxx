@@ -43,7 +43,7 @@
 #include <swundo.hxx>
 #include <crsskip.hxx>
 #include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -888,7 +888,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
     const sal_uInt16 nWhich = rAttr.Which();
     bool bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
-    boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     bool bFound = false;
     bool bFirst = true;
@@ -966,7 +966,7 @@ typedef bool (*FnSearchAttr)( const SwTextNode&, SwAttrCheckArr&, SwPaM& );
 bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly, bool bMoveFirst )
 {
-    boost::scoped_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     bool bFound = false;
     bool bFirst = true;
@@ -1153,7 +1153,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             const_cast< SwPaM* >(pRegion)->GetRingContainer().merge( rCursor.GetRingContainer() );
         }
 
-        boost::scoped_ptr<OUString> pRepl( (bRegExp) ?
+        std::unique_ptr<OUString> pRepl( (bRegExp) ?
                 ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0 );
         rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCrsr,
             (pRepl.get()) ? *pRepl : pSearchOpt->replaceString,

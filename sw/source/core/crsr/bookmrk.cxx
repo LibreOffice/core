@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -160,13 +161,13 @@ namespace sw { namespace mark
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
-        ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
+        std::unique_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
         m_pPos1->nContent.SetMark(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
-        ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
+        std::unique_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
         m_pPos2->nContent.SetMark(this);
     }
 
