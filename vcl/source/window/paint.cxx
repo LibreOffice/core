@@ -228,6 +228,7 @@ void PaintHelper::StartBufferedPaint()
     assert(!pFrameData->mbInBufferedPaint);
 
     pFrameData->mbInBufferedPaint = true;
+    pFrameData->maBufferedRect = Rectangle();
     m_bStartedBufferedPaint = true;
 }
 
@@ -238,7 +239,7 @@ void PaintHelper::PaintBuffer()
     assert(m_bStartedBufferedPaint);
 
     PaintBufferGuard aGuard(pFrameData, m_pWindow);
-    aGuard.SetPaintRect(m_aPaintRect);
+    aGuard.SetPaintRect(pFrameData->maBufferedRect);
 }
 
 void PaintHelper::DoPaint(const vcl::Region* pRegion)
@@ -290,6 +291,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 
             m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer.get());
             m_pWindow->Paint(*pFrameData->mpBuffer.get(), m_aPaintRect);
+            pFrameData->maBufferedRect.Union(m_aPaintRect);
         }
         else
         {
@@ -551,6 +553,7 @@ PaintHelper::~PaintHelper()
     {
         PaintBuffer();
         pFrameData->mbInBufferedPaint = false;
+        pFrameData->maBufferedRect = Rectangle();
     }
 
     // #98943# draw toolbox selection
