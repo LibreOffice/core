@@ -26,7 +26,9 @@ namespace comphelper
         for(const auto& aEntry : vInit)
         {
             vResult[nCount].Name = aEntry.first;
+            vResult[nCount].Handle = -1;
             vResult[nCount].Value = aEntry.second;
+            // State is default-initialized to DIRECT_VALUE
             ++nCount;
         }
         return vResult;
