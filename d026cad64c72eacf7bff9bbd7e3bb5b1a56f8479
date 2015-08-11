@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_3f6887ba",
+        "filename": "connectivity/source/commontools/TSortIndex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-11T06:48:05Z",
+      "side": 0,
+      "message": "this should stay. original version is self-documenting",
+      "revId": "d026cad64c72eacf7bff9bbd7e3bb5b1a56f8479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_1f65c3e0",
+        "filename": "connectivity/source/commontools/TTableHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-11T06:48:05Z",
+      "side": 0,
+      "message": "this should stay. original version is self-documenting",
+      "revId": "d026cad64c72eacf7bff9bbd7e3bb5b1a56f8479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_7f620fda",
+        "filename": "reportdesign/source/ui/inspection/GeometryHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-11T06:48:05Z",
+      "side": 0,
+      "message": "this should stay. original version is self-documenting",
+      "revId": "d026cad64c72eacf7bff9bbd7e3bb5b1a56f8479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
