@@ -683,13 +683,13 @@ void BaseNode::showState() const
 
     if( eNodeState == AnimationNode::INVALID )
         SAL_INFO("slideshow.verbose", "Node state: n" <<
-                 (const char*)this+debugGetCurrentOffset() <<
+                 reinterpret_cast<const char*>(this)+debugGetCurrentOffset() <<
                  " [label=\"" <<
                  getDescription() <<
                  "\",style=filled, fillcolor=\"0.5,0.2,0.5\"]");
     else
         SAL_INFO("slideshow.verbose", "Node state: n" <<
-                 (const char*)this+debugGetCurrentOffset() <<
+                 reinterpret_cast<const char*>(this)+debugGetCurrentOffset() <<
                  " [label=\"" <<
                  getDescription() <<
                  "fillcolor=\"" <<
@@ -725,7 +725,7 @@ void BaseNode::showState() const
                  >>= aName) )
             {
                 SAL_INFO("slideshow.verbose", "Node info: n" <<
-                         (const char*)this+debugGetCurrentOffset() <<
+                         reinterpret_cast<const char*>(this)+debugGetCurrentOffset() <<
                          ", name \"" <<
                          aName <<
                          "\"");
