@@ -228,7 +228,7 @@ namespace svt
     void EditBrowseBox::LoseFocus()
     {
         BrowseBox::LoseFocus();
-        DetermineFocus( GetFocusFlags::NONE );
+        DetermineFocus();
     }
 
 
@@ -737,7 +737,7 @@ namespace svt
                 break;
 
             case MouseNotifyEvent::LOSEFOCUS:
-                DetermineFocus( GetFocusFlags::NONE );
+                DetermineFocus();
                 break;
 
             default:

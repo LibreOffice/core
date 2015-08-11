@@ -311,7 +311,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
     m_xCurrentDetails = m_aDetailsContainers[nPos];
     m_nCurrentType = nPos;
 
-    m_xCurrentDetails->show(true);
+    m_xCurrentDetails->show();
 
     SetSizePixel(GetOptimalSize());
 

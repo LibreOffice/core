@@ -643,7 +643,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
             bRet = true;
         }
         else
-            bRet = Draw( pOut, rPt, rSz, &aAttr, GraphicManagerDrawFlags::STANDARD );
+            bRet = Draw( pOut, rPt, rSz, &aAttr );
     }
 
     return bRet;

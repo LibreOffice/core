@@ -205,7 +205,7 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
     for ( size_t n = 0; n < nCount; n++ )
     {
         ImplColorListData* pData = (*rBox.pColorList)[ n ];
-        sal_Int32 nPos = InsertEntry( rBox.GetEntry( n ), LISTBOX_APPEND );
+        sal_Int32 nPos = InsertEntry( rBox.GetEntry( n ) );
         if ( nPos != LISTBOX_ERROR )
         {
             if ( static_cast<size_t>(nPos) < pColorList->size() )
@@ -281,13 +281,13 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
                 }
             }
 
-            ListBox::DrawEntry( rUDEvt, false, true, false );
+            ListBox::DrawEntry( rUDEvt, false, true );
         }
         else
             ListBox::DrawEntry( rUDEvt, false, true, true );
     }
     else
-        ListBox::DrawEntry( rUDEvt, true, true, false );
+        ListBox::DrawEntry( rUDEvt, true, true );
 }
 
 BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, double nRate2, double nRateGap ):
@@ -854,7 +854,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
 
     // Add the new entries based on the defined width
     if (!m_sNone.isEmpty())
-        ListBox::InsertEntry( m_sNone, LISTBOX_APPEND );
+        ListBox::InsertEntry( m_sNone );
 
     sal_uInt16 n = 0;
     sal_uInt16 nCount = pLineList->size( );
@@ -871,7 +871,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
                     GetColorLine2( GetEntryCount( ) ),
                     GetColorDist( GetEntryCount( ) ),
                     pData->GetStyle(), aBmp );
-            ListBox::InsertEntry(OUString(" "), Image(aBmp), LISTBOX_APPEND);
+            ListBox::InsertEntry(OUString(" "), Image(aBmp));
             if ( n == nTypePos )
                 SelectEntryPos( GetEntryCount() - 1 );
         }

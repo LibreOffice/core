@@ -288,9 +288,9 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if( !bOwnDataChangedHdl )
         {
-            InitSettings_Impl(this, true, true, true);
+            InitSettings_Impl(this, true, true);
             Invalidate();
-            InitSettings_Impl(GetParent(), true, true, true);
+            InitSettings_Impl(GetParent(), true, true);
             GetParent()->Invalidate();
             GetParent()->Resize();
         }
@@ -545,7 +545,7 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
     GetParent()->ImplStartTracking();
 
     Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
-    ShowTracking( aDragSplitRect, SHOWTRACK_SMALL );
+    ShowTracking( aDragSplitRect );
 
     StartTracking();
 }
@@ -591,7 +591,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
             nDragRowDividerCurrentPos = m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight();
 
         Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
-        ShowTracking( aDragSplitRect, SHOWTRACK_SMALL );
+        ShowTracking( aDragSplitRect );
     }
 }
 

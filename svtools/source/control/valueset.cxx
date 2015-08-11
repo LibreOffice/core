@@ -498,7 +498,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     // Init VirDev
     maVirDev->SetSettings(rRenderContext.GetSettings());
     maVirDev->SetBackground(rRenderContext.GetBackground());
-    maVirDev->SetOutputSizePixel(aWinSize, true);
+    maVirDev->SetOutputSizePixel(aWinSize);
 
     // nothing is changed in case of too small items
     if ((mnItemWidth <= 0) ||

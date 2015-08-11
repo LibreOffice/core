@@ -34,7 +34,7 @@ void Breadcrumb::dispose()
 
 void Breadcrumb::EnableFields( bool bEnable )
 {
-    VclHBox::Enable( bEnable, true );
+    VclHBox::Enable( bEnable );
     if( bEnable )
     {
         INetURLObject aURL( m_aCurrentURL );

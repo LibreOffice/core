@@ -646,7 +646,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
             pViewDataNewCur->SetFocus( true );
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & F_DESEL_ALL) && GetUpdateMode())
         {
-            pView->Select( pCursor, true );
+            pView->Select( pCursor );
             CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
         }
         // multiple selection: select in cursor move if we're not in
@@ -656,7 +656,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
                  !(nFlags & F_DESEL_ALL) && !aSelEng.IsAddMode() &&
                  !bForceNoSelect )
         {
-            pView->Select( pCursor, true );
+            pView->Select( pCursor );
             CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
         }
         else
@@ -714,7 +714,7 @@ void SvImpLBox::UpdateAll(
     FillView();
     ShowVerSBar();
     if( bSimpleTravel && pCursor && pView->HasFocus() )
-        pView->Select( pCursor, true );
+        pView->Select( pCursor );
     ShowCursor( true );
     if( bInvalidateCompleteView )
         pView->Invalidate();
@@ -1567,7 +1567,7 @@ void SvImpLBox::EntryCollapsed( SvTreeListEntry* pEntry )
         ShowVerSBar();
     ShowCursor( true );
     if( GetUpdateMode() && pCursor )
-        pView->Select( pCursor, true );
+        pView->Select( pCursor );
 }
 
 void SvImpLBox::CollapsingEntry( SvTreeListEntry* pEntry )
@@ -1727,7 +1727,7 @@ void SvImpLBox::EntryRemoved()
         SetCursor( pStartEntry, true );
 
     if( pCursor && (bSimpleTravel || !pView->GetSelectionCount() ))
-        pView->Select( pCursor, true );
+        pView->Select( pCursor );
 
     if( GetUpdateMode())
     {
@@ -1755,7 +1755,7 @@ void SvImpLBox::EntryRemoved()
                 MakeVisible( pCursor );
             }
             else
-                pView->Select( pCursor, true );
+                pView->Select( pCursor );
         }
         ShowCursor( true );
     }
@@ -2083,7 +2083,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
                     pView->Expand( pEntry );
                 if( pEntry == pCursor )  // only if Entryitem was clicked
                                           // (Nodebutton is not an Entryitem!)
-                    pView->Select( pCursor, true );
+                    pView->Select( pCursor );
                 return;
             }
         }
@@ -2384,7 +2384,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     else if ( !pView->IsSelected( pCursor ) )
                     {
                         SelAllDestrAnch( false );
-                        pView->Select( pCursor, true );
+                        pView->Select( pCursor );
                     }
                     else
                         bKeyUsed = false;
@@ -2714,11 +2714,11 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             pEntry = pOldCursor;
             while( pEntry && pEntry != pNewCursor )
             {
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
                 pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
             return;
         }
 
@@ -2736,11 +2736,11 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             pEntry = pNewCursor;
             while( pEntry && pEntry != pAnchor )
             {
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
                 pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
             return;
         }
 
@@ -2765,11 +2765,11 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             pEntry = pNewCursor;
             while( pEntry && pEntry != pOldCursor )
             {
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
                 pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
             return;
         }
 
@@ -2786,11 +2786,11 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             pEntry = pAnchor;
             while( pEntry && pEntry != pNewCursor )
             {
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
                 pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
-                pView->Select( pEntry, true );
+                pView->Select( pEntry );
             return;
         }
 
@@ -2816,7 +2816,7 @@ void SvImpLBox::SelAllDestrAnch(
     {
         if( pCursor && !pView->IsSelected( pCursor ))
         {
-            pView->Select( pCursor, true );
+            pView->Select( pCursor );
         }
         return;
     }
@@ -2896,7 +2896,7 @@ void SvImpLBox::SetDragDropMode( DragDropMode eDDMode )
     }
     else
     {
-        aSelEng.ExpandSelectionOnMouseMove( true );
+        aSelEng.ExpandSelectionOnMouseMove();
         aSelEng.EnableDrag( false );
     }
 }
@@ -3122,12 +3122,12 @@ void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )
     if  (  ( aSelEng.GetSelectionMode() != SINGLE_SELECTION )
         && ( aSelEng.GetSelectionMode() != NO_SELECTION )
         )
-        SelAllDestrAnch( false, true, false );
+        SelAllDestrAnch( false, true );
     if ( pEntry )
         MakeVisible( pEntry );
     SetCursor( pEntry );
     if ( pEntry && ( aSelEng.GetSelectionMode() != NO_SELECTION ) )
-        pView->Select( pEntry, true );
+        pView->Select( pEntry );
 }
 
 IMPL_LINK_NOARG_TYPED(SvImpLBox, EditTimerCall, Idle *, void)

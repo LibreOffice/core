@@ -212,7 +212,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
         vcl::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
         if( pWin )
         {
-            pWin->EnableDocking(true);
+            pWin->EnableDocking();
             mxImpl->SetPopupWindow(pWin,pToolBox);
             vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
                                                            FloatWinPopupFlags::GrabFocus |

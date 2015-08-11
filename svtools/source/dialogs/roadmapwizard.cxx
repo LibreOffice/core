@@ -176,7 +176,7 @@ namespace svt
 
         if ( m_pImpl->aPaths.size() == 1 )
             // the very first path -> activate it
-            activatePath( _nPathId, false );
+            activatePath( _nPathId );
         else
             implUpdateRoadmap( );
     }

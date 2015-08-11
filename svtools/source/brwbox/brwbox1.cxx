@@ -1469,7 +1469,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
 
 bool BrowseBox::GoToRow( long nRow)
 {
-    return GoToRow(nRow, false, false);
+    return GoToRow(nRow, false);
 }
 
 
@@ -1563,7 +1563,7 @@ bool BrowseBox::GoToRow( long nRow, bool bRowColMove, bool bKeepSelection )
 
 bool BrowseBox::GoToColumnId( sal_uInt16 nColId)
 {
-    return GoToColumnId(nColId, true, false);
+    return GoToColumnId(nColId, true);
 }
 
 
@@ -1710,7 +1710,7 @@ void BrowseBox::SelectAll()
     // select all rows
     if ( pColSel )
         pColSel->SelectAll(false);
-    uRow.pSel->SelectAll(true);
+    uRow.pSel->SelectAll();
 
     // don't highlight handle column
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];

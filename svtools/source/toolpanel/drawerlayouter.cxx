@@ -137,7 +137,7 @@ namespace svt
         Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( false );
         if ( !xItemAccessible.is() )
         {
-            xItemAccessible = pDrawer->GetAccessible( true );
+            xItemAccessible = pDrawer->GetAccessible();
             ENSURE_OR_RETURN( xItemAccessible.is(), "illegal accessible provided by the drawer implementation!", NULL );
             OSL_VERIFY( ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xItemAccessible->getAccessibleContext(),
                 i_rParentAccessible ) );

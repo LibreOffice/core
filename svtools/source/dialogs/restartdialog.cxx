@@ -73,7 +73,7 @@ IMPL_LINK_NOARG(RestartDialog, hdlYes) {
 }
 
 IMPL_LINK_NOARG(RestartDialog, hdlNo) {
-    EndDialog(RET_CANCEL);
+    EndDialog();
     return 0;
 }
 

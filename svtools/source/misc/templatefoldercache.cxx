@@ -596,7 +596,7 @@ namespace svt
                 Reference< XDynamicResultSet > xDynResultSet;
 
                 ::ucbhelper::Content aTemplateRoot( _rxRoot->getURL(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                xDynResultSet = aTemplateRoot.createDynamicCursor( aContentProperties, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
+                xDynResultSet = aTemplateRoot.createDynamicCursor( aContentProperties );
                 if ( xDynResultSet.is() )
                     xResultSet = xDynResultSet->getStaticResultSet();
             }

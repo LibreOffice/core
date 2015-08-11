@@ -385,7 +385,7 @@ void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     DecorationView aDecoView(&rRenderContext);
     Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
-    aDecoView.DrawHandle(aOutputRect, true);
+    aDecoView.DrawHandle(aOutputRect);
 }
 
 // Is not named Impl. as it may be both instantiated and derived from
@@ -1249,7 +1249,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
             bool bSpecialTab = (pItem->mnBits & TPB_SPECIAL);
             bool bEnabled = pItem->mbEnable;
-            OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth, DrawTextFlags::EndEllipsis) : pItem->maText;
+            OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth) : pItem->maText;
 
             aDrawer.setRect(aRect);
             aDrawer.setSelected(bSelected);

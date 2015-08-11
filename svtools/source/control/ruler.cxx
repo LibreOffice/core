@@ -1204,7 +1204,7 @@ void Ruler::ImplFormat(vcl::RenderContext& rRenderContext)
         aVirDevSize.Width() = mnVirHeight;
     }
     if (aVirDevSize != maVirDev->GetOutputSizePixel())
-        maVirDev->SetOutputSizePixel(aVirDevSize, true);
+        maVirDev->SetOutputSizePixel(aVirDevSize);
     else
         maVirDev->Erase();
 

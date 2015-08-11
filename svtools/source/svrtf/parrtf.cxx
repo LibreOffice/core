@@ -586,7 +586,7 @@ void SvRTFParser::Continue( int nToken )
             // a unknown group ?
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                 else if( RTF_UNKNOWNCONTROL != GetNextToken() )
                     nToken = SkipToken( -2 );
                 else

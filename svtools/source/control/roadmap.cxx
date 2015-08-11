@@ -590,7 +590,7 @@ void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
     // draw it
     rRenderContext.DrawText(Rectangle(aTextPos, aOutputSize), GetText(),
                             DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
-    rRenderContext.DrawTextLine(aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, false);
+    rRenderContext.DrawTextLine(aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetLineColor(rStyleSettings.GetFieldTextColor());
     rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());

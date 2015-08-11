@@ -96,7 +96,7 @@ void FontNameMenu::SetCurName(const OUString& rName)
         OUString aText = GetItemText( nItemId );
         if ( aText == maCurName )
         {
-            CheckItem( nItemId, true );
+            CheckItem( nItemId );
             return;
         }
     }
@@ -219,7 +219,7 @@ void FontSizeMenu::SetCurHeight( long nHeight )
 
         if ( mpHeightAry[i] == nHeight )
         {
-            CheckItem( nItemId, true );
+            CheckItem( nItemId );
             return;
         }
 

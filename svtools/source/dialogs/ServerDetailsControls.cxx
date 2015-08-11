@@ -163,7 +163,7 @@ bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
     else if ( rScheme == "https://" )
     {
         bValid = true;
-        m_pCBDavs->Check( true );
+        m_pCBDavs->Check();
     }
     return bValid;
 }

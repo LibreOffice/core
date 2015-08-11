@@ -1207,7 +1207,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView )
 {
     DBG_ASSERT( pSourceView, "SvTreeListBox::ExecuteDrop(): no source view" );
-    pSourceView->EnableSelectionAsDropTarget( true, true );
+    pSourceView->EnableSelectionAsDropTarget( true );
 
     ImplShowTargetEmphasis( pTargetEntry, false );
     pDDTarget = this;
@@ -1307,7 +1307,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     // Important: If the selection of the SourceListBox is changed in the
     // DropHandler, the entries have to be allowed as drop targets again:
     // (GetSourceListBox()->EnableSelectionAsDropTarget( true, true );)
-    EnableSelectionAsDropTarget( false, true /* with children */ );
+    EnableSelectionAsDropTarget( false );
 
     pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
 }
@@ -1318,7 +1318,7 @@ nAction
 #endif
 )
 {
-    EnableSelectionAsDropTarget( true, true );
+    EnableSelectionAsDropTarget( true );
 
 #ifndef UNX
     if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&

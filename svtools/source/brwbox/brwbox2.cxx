@@ -465,12 +465,12 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
             // down and up
             while ( rEvt.GetRow() < aSelRange.Max() )
             {   // ZTC/Mac bug - don't put these statements together!
-                SelectRow( aSelRange.Max(), bSelectThis, true );
+                SelectRow( aSelRange.Max(), bSelectThis );
                 --aSelRange.Max();
             }
             while ( rEvt.GetRow() > aSelRange.Max() )
             {   // ZTC/Mac bug - don't put these statements together!
-                SelectRow( aSelRange.Max(), bSelectThis, true );
+                SelectRow( aSelRange.Max(), bSelectThis );
                 ++aSelRange.Max();
             }
         }
@@ -484,7 +484,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 --aSelRange.Max();
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
-                    SelectRow( aSelRange.Max(), bSelectThis, true );
+                    SelectRow( aSelRange.Max(), bSelectThis );
                     bSelect = true;
                 }
             }
@@ -493,7 +493,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 ++aSelRange.Max();
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
-                    SelectRow( aSelRange.Max(), bSelectThis, true );
+                    SelectRow( aSelRange.Max(), bSelectThis );
                     bSelect = true;
                 }
             }
@@ -1837,10 +1837,10 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 long nRow = GetCurRow();
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow - 1 ) );
-                SelectRow( nRow, bLocalSelect, true );
+                SelectRow( nRow, bLocalSelect );
                 bDone = GoToRow( GetCurRow() + 1, false );
                 if ( bDone )
-                    SelectRow( GetCurRow(), true, true );
+                    SelectRow( GetCurRow(), true );
             }
             else
                 bDone = ScrollRows( 1 ) != 0;
@@ -1854,10 +1854,10 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 long nRow = GetCurRow();
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
-                SelectRow( nCurRow, bLocalSelect, true );
+                SelectRow( nCurRow, bLocalSelect );
                 bDone = GoToRow( nRow - 1, false );
                 if ( bDone )
-                    SelectRow( GetCurRow(), true, true );
+                    SelectRow( GetCurRow(), true );
             }
             break;
         case BROWSER_CURSORPAGEDOWN:
@@ -1927,7 +1927,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             break;
         case BROWSER_ENHANCESELECTION:
             if ( GetRowCount() )
-                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), true );
+                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ) );
             bDone = true;
             break;
         case BROWSER_SELECT:

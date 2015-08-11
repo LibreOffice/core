@@ -1002,7 +1002,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
         SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
         if ( pNewCursor != pOldCursor )
-            SetCursor_Impl( pOldCursor, pNewCursor, false, false, false );
+            SetCursor_Impl( pOldCursor, pNewCursor, false, false );
         return true;
     }
 
@@ -2038,7 +2038,7 @@ void SvxIconChoiceCtrl_Impl::FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry )
         return;
     }
     Size aSize( CalcBoundingSize( pEntry ) );
-    Point aPos(pGridMap->GetGridRect(pGridMap->GetUnoccupiedGrid(true)).TopLeft());
+    Point aPos(pGridMap->GetGridRect(pGridMap->GetUnoccupiedGrid()).TopLeft());
     SetBoundingRect_Impl( pEntry, aPos, aSize );
 }
 

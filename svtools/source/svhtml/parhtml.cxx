@@ -271,13 +271,13 @@ HTMLInputType HTMLOption::GetInputType() const
 HTMLTableFrame HTMLOption::GetTableFrame() const
 {
     DBG_ASSERT( nToken==HTML_O_FRAME, "GetTableFrame: Option not FRAME" );
-    return (HTMLTableFrame)GetEnum( aTableFrameOptEnums, HTML_TF_VOID );
+    return (HTMLTableFrame)GetEnum( aTableFrameOptEnums );
 }
 
 HTMLTableRules HTMLOption::GetTableRules() const
 {
     DBG_ASSERT( nToken==HTML_O_RULES, "GetTableRules: Option not RULES" );
-    return (HTMLTableRules)GetEnum( aTableRulesOptEnums, HTML_TR_NONE );
+    return (HTMLTableRules)GetEnum( aTableRulesOptEnums );
 }
 
 HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :

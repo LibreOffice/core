@@ -105,7 +105,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                         // TODO/LATER: Propbably the graphic should be copied here as well
                         // currently it is handled by the applications
                         utl::TempFile aTmp;
-                        aTmp.EnableKillingFile( true );
+                        aTmp.EnableKillingFile();
                         uno::Reference < embed::XEmbedPersist > xPers( m_xObj, uno::UNO_QUERY );
                         if ( xPers.is() )
                         {

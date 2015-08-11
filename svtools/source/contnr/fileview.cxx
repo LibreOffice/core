@@ -1937,10 +1937,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
                                             (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
                                             (*aIt)->mbIsCompactDisc );
-            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, false );
+            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
         }
         else
-            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), false );
+            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ) );
     }
 }
 
@@ -2145,7 +2145,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
 
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, false );
+    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo );
 
     OUString aValue;
     OUString aTab( "\t" );

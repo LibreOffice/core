@@ -28,7 +28,7 @@ ExtMultiLineEdit::ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void ExtMultiLineEdit::InsertText( const OUString& rNew, bool )
 {
-    GetTextView()->InsertText( rNew, false );
+    GetTextView()->InsertText( rNew );
 }
 
 void ExtMultiLineEdit::SetAutoScroll( bool bAutoScroll )

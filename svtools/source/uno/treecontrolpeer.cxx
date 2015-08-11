@@ -440,7 +440,7 @@ void TreeControlPeer::addNode( UnoTreeListBoxImpl& rTree, const Reference< XTree
 {
     if( xNode.is() )
     {
-        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry, TREELIST_APPEND );
+        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry );
         const sal_Int32 nChildCount = xNode->getChildCount();
         for( sal_Int32 nChild = 0; nChild < nChildCount; nChild++ )
             addNode( rTree, xNode->getChildAt( nChild ), pEntry );
@@ -896,7 +896,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
     SolarMutexGuard aGuard;
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    UnoTreeListEntry* pEntry = getEntry( i_Node, true );
+    UnoTreeListEntry* pEntry = getEntry( i_Node );
 
     ::Rectangle aEntryRect( rTree.GetFocusRect( pEntry, rTree.GetEntryPosition( pEntry ).Y() ) );
     return VCLUnoHelper::ConvertToAWTRect( aEntryRect );
@@ -921,7 +921,7 @@ sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException, std::e
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     if( rTree.IsEditingActive() )
     {
-        rTree.EndEditing(false);
+        rTree.EndEditing();
         return sal_True;
     }
     else
@@ -937,7 +937,7 @@ void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException, std::e
     SolarMutexGuard aGuard;
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    rTree.EndEditing(false);
+    rTree.EndEditing();
 }
 
 

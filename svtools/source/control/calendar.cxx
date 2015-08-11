@@ -1562,7 +1562,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             if ( mnWinStyle & WB_RANGESELECT )
             {
                 SetNoSelection();
-                SelectDate( aNewDate, true );
+                SelectDate( aNewDate );
             }
             mbDirect = true;
             SetCurDate( aNewDate );
@@ -2220,7 +2220,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
         }
         long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
         mpFixedLine->setPosSizePixel( (aOutSize.Width()-nLineWidth)/2, aOutSize.Height()+((CALFIELD_BORDER_YTOP-2)/2),
-                                      nLineWidth, 2, PosSizeFlags::PosSize );
+                                      nLineWidth, 2 );
         aOutSize.Height() += nBtnHeight + (CALFIELD_BORDER_Y*2) + CALFIELD_BORDER_YTOP;
         SetOutputSizePixel( aOutSize );
     }

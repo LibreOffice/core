@@ -138,7 +138,7 @@ const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible( bool bCr
     {
         if( mpControl )
         {
-            mxAccContext = Reference< XAccessibleContext >( mpControl->GetAccessible( true ), UNO_QUERY );
+            mxAccContext = Reference< XAccessibleContext >( mpControl->GetAccessible(), UNO_QUERY );
         }
         else
         {

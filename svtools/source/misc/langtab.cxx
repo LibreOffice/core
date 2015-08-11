@@ -137,7 +137,7 @@ SvtLanguageTableImpl::~SvtLanguageTableImpl()
 
 bool SvtLanguageTableImpl::HasType( const LanguageType eType ) const
 {
-    LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType, false);
+    LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType );
     sal_uInt32 nPos = FindIndex( eLang );
 
     return RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count();
@@ -174,7 +174,7 @@ const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool b
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
-    return theLanguageTable::get().GetString( eType, false );
+    return theLanguageTable::get().GetString( eType );
 }
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection )
