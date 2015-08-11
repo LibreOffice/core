@@ -129,7 +129,7 @@ private:
                 maViewLayers.begin(),
                 maViewLayers.end(),
                 [&rNewLayer]
-                ( const ::std::pair< ViewVector::key_type, ViewVector::mapped_type >& cp )
+                ( const ViewVector::value_type& cp )
                 { return cp.first == rNewLayer; } ) )
             throw std::exception();
 
@@ -138,7 +138,7 @@ private:
                 maViewLayers.begin(),
                 maViewLayers.end(),
                 [&rNewLayer]
-                ( const ::std::pair< ViewVector::key_type, ViewVector::mapped_type >& cp )
+                ( const ViewVector::value_type& cp )
                 { return cp.first == rNewLayer; } ) );
         return true;
     }

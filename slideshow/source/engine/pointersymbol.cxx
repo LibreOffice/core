@@ -145,7 +145,7 @@ void PointerSymbol::viewRemoved( const UnoViewSharedPtr& rView )
         std::remove_if(
             maViews.begin(), maViews.end(),
             [&rView]
-            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            ( const ViewsVecT::value_type& cp )
             { return rView == cp.first; } ),
         maViews.end() );
 }
@@ -158,7 +158,7 @@ void PointerSymbol::viewChanged( const UnoViewSharedPtr& rView )
             maViews.begin(),
             maViews.end(),
             [&rView]
-            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            ( const ViewsVecT::value_type& cp )
             { return rView == cp.first; } ) );
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );

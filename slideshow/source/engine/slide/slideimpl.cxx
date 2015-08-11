@@ -581,7 +581,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
     if( (aIter=std::find_if( maSlideBitmaps.begin(),
                              aEnd,
                              [&rView]
-                             ( const ::std::pair< UnoViewSharedPtr, VectorOfSlideBitmaps >& cp )
+                             ( const VectorOfVectorOfSlideBitmaps::value_type& cp )
                              { return rView == cp.first; } ) ) == aEnd )
     {
         // corresponding view not found - maybe view was not
@@ -651,7 +651,7 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
         std::remove_if( maSlideBitmaps.begin(),
                         aEnd,
                         [&rView]
-                        ( const ::std::pair< UnoViewSharedPtr, VectorOfSlideBitmaps >& cp )
+                        ( const VectorOfVectorOfSlideBitmaps::value_type& cp )
                         { return rView == cp.first; } ),
                         aEnd );
 }

@@ -149,7 +149,7 @@ namespace slideshow
                 // sprites
                 std::for_each( maAllShapes.begin(),
                                maAllShapes.end(),
-                               []( const ::std::pair< ShapeSharedPtr, LayerWeakPtr >& cp )
+                               []( const LayerShapeMap::value_type& cp )
                                { cp.first->clearAllViewLayers(); } );
 
                 for (LayerShapeMap::iterator
@@ -258,7 +258,7 @@ namespace slideshow
             // render all shapes
             std::for_each( maAllShapes.begin(),
                            maAllShapes.end(),
-                           []( const ::std::pair< ShapeSharedPtr, LayerWeakPtr >& cp )
+                           []( const LayerShapeMap::value_type& cp )
                            { cp.first->render(); } );
         }
 
