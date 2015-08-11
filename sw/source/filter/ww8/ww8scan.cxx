@@ -3805,12 +3805,15 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 
 void WW8PLCFx_FLD::advance()
 {
+    SAL_WARN_IF(!pPLCF, "sw.ww8", "Call without PLCFspecial field");
+    if( !pPLCF )
+        return;
     pPLCF->advance();
 }
 
 bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 {
-    OSL_ENSURE( pPLCF, "Call without PLCFspecial field" );
+    SAL_WARN_IF(!pPLCF, "sw.ww8", "Call without PLCFspecial field");
     if( !pPLCF )
         return false;
 
