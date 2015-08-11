@@ -2295,8 +2295,7 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIh
 {
     if (m_pHdFt)
     {
-        WW8_CP start;
-        long nLen;
+        WW8_CP nStart, nLen;
         sal_uInt8 nNumber = 5;
 
         for( sal_uInt8 nI = 0x20; nI; nI >>= 1, nNumber-- )
@@ -2305,11 +2304,11 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIh
             {
                 bool bOk = true;
                 if( m_bVer67 )
-                    bOk = ( m_pHdFt->GetTextPos(grpfIhdt, nI, start, nLen ) && nLen >= 2 );
+                    bOk = ( m_pHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nLen >= 2 );
                 else
                 {
-                    m_pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
-                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(start);
+                    m_pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
+                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(nStart);
                 }
 
                 if (bOk)
@@ -2328,8 +2327,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
 
     if( m_pHdFt )
     {
-        WW8_CP start;
-        long nLen;
+        WW8_CP nStart, nLen;
         sal_uInt8 nNumber = 5;
 
         // This loops through the 6 flags WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST}
@@ -2341,11 +2339,11 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
             {
                 bool bOk = true;
                 if( m_bVer67 )
-                    bOk = ( m_pHdFt->GetTextPos(grpfIhdt, nI, start, nLen ) && nLen >= 2 );
+                    bOk = ( m_pHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nLen >= 2 );
                 else
                 {
-                    m_pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
-                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(start);
+                    m_pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
+                    bOk = ( 2 <= nLen ) && isValid_HdFt_CP(nStart);
                 }
 
                 bool bUseLeft
@@ -2405,11 +2403,11 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
 
                     if (bHackRequired)
                     {
-                        Read_HdFtTextAsHackedFrame(start, nLen, *pHdFtFormat,
+                        Read_HdFtTextAsHackedFrame(nStart, nLen, *pHdFtFormat,
                             static_cast< sal_uInt16 >(rSection.GetTextAreaWidth()) );
                     }
                     else
-                        Read_HdFtText(start, nLen, pHdFtFormat);
+                        Read_HdFtText(nStart, nLen, pHdFtFormat);
                 }
                 else if (!bOk && pPrev)
                     CopyPageDescHdFt(pPrev, pPD, nI);

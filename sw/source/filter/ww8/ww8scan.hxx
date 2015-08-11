@@ -1768,8 +1768,8 @@ private:
 
 public:
     WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop );
-    bool GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, long& rLen);
-    bool GetTextPosExact(short nIdx, WW8_CP& rStart, long& rLen);
+    bool GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, WW8_CP& rLen);
+    bool GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen);
     void UpdateIndex( sal_uInt8 grpfIhdt );
 };
 

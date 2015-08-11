@@ -6650,7 +6650,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
 }
 
 bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart,
-    long& rLen)
+    WW8_CP& rLen)
 {
     sal_uInt8 nI = 0x01;
     short nIdx = nIdxOffset;
@@ -6676,7 +6676,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
     return true;
 }
 
-bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, long& rLen)
+bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
 {
     WW8_CP nEnd;
     void* pData;

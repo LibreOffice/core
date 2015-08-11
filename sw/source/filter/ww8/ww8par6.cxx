@@ -1143,8 +1143,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         {
             if (aNewSection.maSep.grpfIhdt & nMask)
             {
-                WW8_CP nStart;
-                long nLen;
+                WW8_CP nStart, nLen;
                 mrReader.m_pHdFt->GetTextPosExact( static_cast< short >(nI + ( maSegments.size() + 1) * 6), nStart, nLen);
                 //No header or footer, inherit pervious one, or set to zero
                 //if no previous one
