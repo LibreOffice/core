@@ -26,6 +26,7 @@
 
 class SalGraphics;
 
+/// A non-visible drawable/buffer (e.g. an X11 Pixmap).
 class VCL_PLUGIN_PUBLIC SalVirtualDevice
         : public SalGeometryProvider
 {

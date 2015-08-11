@@ -96,6 +96,7 @@ typedef sal_uInt64 SalExtStyle;
 
 struct SystemParentData;
 
+/// A SalFrame is a system window (e.g. an X11 window).
 class VCL_PLUGIN_PUBLIC SalFrame
     : public vcl::DeletionNotifier
     , public SalGeometryProvider
