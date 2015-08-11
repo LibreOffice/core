@@ -333,7 +333,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         break;
 
     OUString sError;
-    std::unique_ptr< OSQLParseNode > pSubQueryNode( const_cast< OSQLParser& >( m_rParser ).parseTree( sError, sSubQueryCommand, false ) );
+    std::unique_ptr< OSQLParseNode > pSubQueryNode( const_cast< OSQLParser& >( m_rParser ).parseTree( sError, sSubQueryCommand ) );
     if ( !pSubQueryNode.get() )
         break;
 
@@ -988,7 +988,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                          SQL_ISRULE(pColumnRef,num_value_exp)   || SQL_ISRULE(pColumnRef,term))*/
                 {
                     // Function call present
-                    pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false, true );
+                    pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, false );
                     // check if the column is also a parameter
                     traverseSearchCondition(pColumnRef); // num_value_exp
 

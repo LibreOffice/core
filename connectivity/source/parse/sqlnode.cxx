@@ -666,7 +666,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
         if ( bEscapeProcessing && rParam.pParser )
         {
             OUString sError;
-            boost::scoped_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand, false ) );
+            boost::scoped_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand ) );
             if ( pSubQueryNode.get() )
             {
                 // parse the sub-select to SDBC level, too

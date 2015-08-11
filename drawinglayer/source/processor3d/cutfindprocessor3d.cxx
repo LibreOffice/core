@@ -184,7 +184,7 @@ namespace drawinglayer
                                     {
                                         const basegfx::B3DPoint aCutPoint(basegfx::interpolate(maFront, maBack, fCut));
 
-                                        if(basegfx::tools::isInside(rPolyPolygon, aCutPoint, false))
+                                        if(basegfx::tools::isInside(rPolyPolygon, aCutPoint))
                                         {
                                             // #i102956# add result. Do not forget to do this in the coordinate
                                             // system the processor get started with, so use the collected

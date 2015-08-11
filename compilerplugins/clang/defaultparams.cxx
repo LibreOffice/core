@@ -61,8 +61,8 @@ bool DefaultParams::VisitCallExpr(const CallExpr * callExpr) {
             report(
                 DiagnosticsEngine::Warning,
                 "not necessary to pass this argument, it defaults to the same value",
-                callExpr->getSourceRange().getBegin())
-              << callExpr->getSourceRange();
+                arg->getSourceRange().getBegin())
+              << arg->getSourceRange();
             report(
                 DiagnosticsEngine::Warning,
                 "default method parameter declaration here",

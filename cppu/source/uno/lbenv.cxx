@@ -727,7 +727,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
         if (pOEntry->mixedObject)
             buf.append( "mixed " );
         buf.append( "object entry: nRef=" );
-        buf.append( pOEntry->nRef, 10 );
+        buf.append( pOEntry->nRef );
         buf.append( "; oid=\"" );
         buf.append( pOEntry->oid );
         buf.append( '\"' );

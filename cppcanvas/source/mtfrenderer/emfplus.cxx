@@ -2326,7 +2326,7 @@ namespace cppcanvas
 
                             float dx, dy, dw, dh;
 
-                            ReadRectangle (rMF, dx, dy, dw, dh, false);
+                            ReadRectangle (rMF, dx, dy, dw, dh);
 
                             SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
