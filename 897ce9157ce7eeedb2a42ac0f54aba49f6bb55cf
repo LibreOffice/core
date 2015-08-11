@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_5fc58b59",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5560,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-11T14:25:27Z",
+      "side": 1,
+      "message": "If you split this off into a separate test that is called with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST, then once the bug is fixed the test call can be changed to CPPUNIT_TEST to further verify the fix stays in place. The advantage is that a commented out \"this should work but currently doesn\u0027t\" assert can\u0027t be forgotten over time then.",
+      "revId": "897ce9157ce7eeedb2a42ac0f54aba49f6bb55cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
