@@ -170,8 +170,8 @@ class FileViewContainer : public vcl::Window
 
 RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "fps/ui/remotefilesdialog.ui" )
-    , m_context( comphelper::getProcessComponentContext() )
-    , m_xMasterPasswd( PasswordContainer::create( m_context ) )
+    , m_xContext( comphelper::getProcessComponentContext() )
+    , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
     , m_pCurrentAsyncAction( NULL )
     , m_pFileNotifier( NULL )
     , m_pSplitter( NULL )
@@ -301,7 +301,7 @@ void RemoteFilesDialog::dispose()
     }
 
     // save services
-    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_context ) );
+    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_xContext ) );
 
     officecfg::Office::Common::Misc::FilePickerLastService::set( m_sLastServiceUrl, batch );
 
@@ -431,13 +431,13 @@ void RemoteFilesDialog::FillServicesListbox()
     m_aServices.clear();
 
     // Load from user settings
-    Sequence< OUString > placesUrlsList( officecfg::Office::Common::Misc::FilePickerPlacesUrls::get( m_context ) );
-    Sequence< OUString > placesNamesList( officecfg::Office::Common::Misc::FilePickerPlacesNames::get( m_context ) );
+    Sequence< OUString > placesUrlsList( officecfg::Office::Common::Misc::FilePickerPlacesUrls::get( m_xContext ) );
+    Sequence< OUString > placesNamesList( officecfg::Office::Common::Misc::FilePickerPlacesNames::get( m_xContext ) );
 
     unsigned int nPos = 0;
     unsigned int i = 0;
 
-    m_sLastServiceUrl = officecfg::Office::Common::Misc::FilePickerLastService::get( m_context );
+    m_sLastServiceUrl = officecfg::Office::Common::Misc::FilePickerLastService::get( m_xContext );
 
     for( sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace )
     {
@@ -782,7 +782,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                     OUString sUrl( m_aServices[nPos]->GetUrl() );
 
                     Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), 0 ),
+                        InteractionHandler::createWithParent( m_xContext, 0 ),
                         UNO_QUERY );
 
                     UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
@@ -804,7 +804,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                             aPasswd[0] = aNewPass;
 
                             Reference< XPasswordContainer2 > xPasswdContainer(
-                                PasswordContainer::create( comphelper::getProcessComponentContext() ) );
+                                PasswordContainer::create( m_xContext ) );
                             xPasswdContainer->addPersistent(
                                 sUrl, sUserName, aPasswd, xInteractionHandler );
                         }
@@ -1284,11 +1284,10 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
 {
     try
     {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+                        InteractionHandler::createWithParent( m_xContext, 0 ), UNO_QUERY_THROW );
         Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-        ::ucbhelper::Content aContent( rURL, xEnv, xContext );
+        ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
         return aContent.isFolder();
     }
@@ -1304,11 +1303,10 @@ bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
 {
     try
     {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+                        InteractionHandler::createWithParent( m_xContext, 0 ), UNO_QUERY_THROW );
         Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-        ::ucbhelper::Content aContent( rURL, xEnv, xContext );
+        ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
         return aContent.isDocument();
     }
