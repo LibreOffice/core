@@ -5596,4 +5596,110 @@ void Test::testFuncFTESTBug()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncCHITEST()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "ChiTest");
+
+    ScAddress aPos(6,0,0);
+    // 2x2 matrices test
+    m_pDoc->SetString(aPos, "=CHITEST(A1:B2;D1:E2)");
+    OUString aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with empty cells",
+            OUString::createFromAscii("Err:502") == aVal);
+
+    m_pDoc->SetValue(0, 0, 0, 1.0); // A1
+    m_pDoc->SetValue(0, 1, 0, 2.0); // A2
+    m_pDoc->SetValue(1, 0, 0, 2.0); // B1
+    m_pDoc->SetValue(1, 1, 0, 1.0); // B2
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with different size",
+            OUString::createFromAscii("Err:502") == aVal);
+
+    m_pDoc->SetValue(3, 0, 0, 2.0); // D1
+    m_pDoc->SetValue(3, 1, 0, 3.0); // D2
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with different size",
+            OUString::createFromAscii("Err:502") == aVal);
+    m_pDoc->SetValue(4, 0, 0, 2.0); // E1
+    m_pDoc->SetValue(4, 1, 0, 1.0); // E2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.3613, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(4, 0, 0, 3.0); // E1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.2801, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 1, 0, 0.0); // B2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1410, m_pDoc->GetValue(aPos), 10e-4);
+
+    // 3x3 matrices test
+    m_pDoc->SetString(aPos, "=CHITEST(A1:C3;D1:F3)");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with empty",
+            OUString::createFromAscii("Err:502") == aVal);
+
+    m_pDoc->SetValue(2, 0, 0, 3.0); // C1
+    m_pDoc->SetValue(2, 1, 0, 2.0); // C2
+    m_pDoc->SetValue(2, 2, 0, 3.0); // C3
+    m_pDoc->SetValue(0, 2, 0, 4.0); // A3
+    m_pDoc->SetValue(1, 2, 0, 2.0); // B3
+    m_pDoc->SetValue(5, 0, 0, 1.0); // F1
+    m_pDoc->SetValue(5, 1, 0, 2.0); // F2
+    m_pDoc->SetValue(5, 2, 0, 3.0); // F3
+    m_pDoc->SetValue(3, 2, 0, 3.0); // D3
+    m_pDoc->SetValue(4, 2, 0, 1.0); // E3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1117, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(4, 1, 0, 5.0); // E2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0215, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 2, 0, 1.0); // B3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0328, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(5, 0, 0, 3.0); // F1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1648, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(0, 1, 0, 3.0); // A2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1870, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(3, 1, 0, 5.0); // D2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1377, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(3, 2, 0, 4.0); // D3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1566, m_pDoc->GetValue(aPos), 10e-4);
+
+    m_pDoc->SetValue(0, 0, 0, 0.0); // A1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0868, m_pDoc->GetValue(aPos), 10e-4);
+
+    // no convergence error
+    m_pDoc->SetValue(4, 0, 0, 0.0); // E1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT(OUString::createFromAscii("Err:523") == aVal);
+    m_pDoc->SetValue(4, 0, 0, 3.0); // E1
+
+    // zero in all cells
+    m_pDoc->SetValue(0, 1, 0, 0.0); // A2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0150, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(0, 2, 0, 0.0); // A3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0026, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 0, 0, 0.0); // B1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.00079, m_pDoc->GetValue(aPos), 10e-5);
+    m_pDoc->SetValue(1, 2, 0, 0.0); // B3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0005, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 0, 0, 0.0); // C1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0001, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 1, 0, 0.0); // C2
+    m_pDoc->SetValue(2, 2, 0, 0.0); // C3
+    m_pDoc->SetValue(3, 0, 0, 0.0); // D1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("CHITEST should return #VALUE! for matrices with empty",
+            OUString::createFromAscii("#VALUE!") == aVal);
+    m_pDoc->SetValue(3, 1, 0, 0.0); // D2
+    m_pDoc->SetValue(3, 2, 0, 0.0); // D3
+    m_pDoc->SetValue(4, 0, 0, 0.0); // E1
+    m_pDoc->SetValue(4, 1, 0, 0.0); // E2
+    m_pDoc->SetValue(4, 2, 0, 0.0); // E3
+    m_pDoc->SetValue(5, 0, 0, 0.0); // F1
+    m_pDoc->SetValue(5, 1, 0, 0.0); // F2
+    m_pDoc->SetValue(5, 2, 0, 0.0); // F3
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_MESSAGE("CHITEST should return #VALUE! for matrices with empty",
+            OUString::createFromAscii("#VALUE!") == aVal);
+
+    m_pDoc->DeleteTab(0);
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
