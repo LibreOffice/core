@@ -30,6 +30,7 @@
 
 #include <string.h>
 #include <vector>
+#include <map>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -210,41 +211,9 @@ public:
 };
 
 
-class ScaFuncDataList : private ScaList
-{
-    OUString             aLastName;
-    sal_uInt32                  nLast;
+typedef std::map<OUString, ScaFuncData> ScaFuncDataMap;
 
-public:
-                                ScaFuncDataList( ResMgr& rResMgr );
-    virtual                     ~ScaFuncDataList();
-
-                                using ScaList::Count;
-
-    inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
-    const ScaFuncData*          Get( const OUString& rProgrammaticName ) const;
-    inline ScaFuncData*         First();
-    inline ScaFuncData*         Next();
-
-    using ScaList::Append;
-    inline void                 Append( ScaFuncData* pNew ) { ScaList::Append( pNew ); }
-};
-
-
-inline const ScaFuncData* ScaFuncDataList::Get( sal_uInt32 nIndex ) const
-{
-    return static_cast< const ScaFuncData* >( ScaList::GetObject( nIndex ) );
-}
-
-inline ScaFuncData* ScaFuncDataList::First()
-{
-    return static_cast< ScaFuncData* >( ScaList::First() );
-}
-
-inline ScaFuncData* ScaFuncDataList::Next()
-{
-    return static_cast< ScaFuncData* >( ScaList::Next() );
-}
+void InitScaFuncDataMap ( ScaFuncDataMap& rMap, ResMgr& rResMgr );
 
 } // namespace pricing
 } // namespace sca
@@ -269,7 +238,7 @@ private:
     css::lang::Locale  aFuncLoc;
     css::lang::Locale* pDefLocales;
     ResMgr*                     pResMgr;
-    sca::pricing::ScaFuncDataList*            pFuncDataList;
+    sca::pricing::ScaFuncDataMap*            pFuncDataMap;
 
 
     void                        InitDefLocales();
