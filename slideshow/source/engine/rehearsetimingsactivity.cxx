@@ -356,7 +356,7 @@ void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
     maViews.erase(
         std::remove_if( maViews.begin(), maViews.end(),
             [&rView]
-            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            ( const ViewsVecT::value_type& cp )
             { return rView == cp.first; } ),
         maViews.end() );
 }
@@ -369,7 +369,7 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
             maViews.begin(),
             maViews.end(),
             [&rView]
-            ( const ::std::pair< UnoViewSharedPtr, cppcanvas::CustomSpriteSharedPtr >& cp )
+            ( const ViewsVecT::value_type& cp )
             { return rView == cp.first; } )
         );
 
