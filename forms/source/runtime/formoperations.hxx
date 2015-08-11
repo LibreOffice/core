@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 
 
 namespace frm
@@ -44,7 +44,7 @@ namespace frm
 
     //= FormOperations
 
-    typedef ::cppu::WeakComponentImplHelper6    <   ::com::sun::star::form::runtime::XFormOperations
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::form::runtime::XFormOperations
                                                 ,   ::com::sun::star::lang::XInitialization
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::beans::XPropertyChangeListener

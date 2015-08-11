@@ -21,13 +21,13 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
 
 #include <collection.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <algorithm>
 
 template<class T>
-class NamedCollection : public cppu::ImplInheritanceHelper1<
+class NamedCollection : public cppu::ImplInheritanceHelper<
                             Collection<T>,
                             com::sun::star::container::XNameAccess>
 {

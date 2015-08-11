@@ -24,8 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -39,7 +38,7 @@
 
 
 
-class CLibxml2XFormsExtension : public cppu::WeakImplHelper2<
+class CLibxml2XFormsExtension : public cppu::WeakImplHelper<
     com::sun::star::xml::xpath::XXPathExtension, com::sun::star::lang::XInitialization>
 {
 private:

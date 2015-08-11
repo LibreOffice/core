@@ -37,7 +37,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <connectivity/FValue.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/types.hxx>
 
 #include <algorithm>
@@ -161,7 +161,7 @@ typedef std::map<OUString, OGroup> OGroupArr;
 typedef std::vector<OGroupArr::iterator> OActiveGroups;
 
 
-class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
+class OGroupManager : public ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
     OGroup*         m_pCompGroup;           // Sort all Components by TabIndices
     OGroupArr       m_aGroupArr;            // Sort all Components by group

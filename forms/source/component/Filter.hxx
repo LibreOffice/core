@@ -34,7 +34,6 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <svx/ParseContext.hxx>
 

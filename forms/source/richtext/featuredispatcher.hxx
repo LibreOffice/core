@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 class EditView;
@@ -31,7 +31,7 @@ class EditView;
 namespace frm
 {
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XDispatch
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::frame::XDispatch
                                     >   ORichTextFeatureDispatcher_Base;
 
     class ORichTextFeatureDispatcher    :public ::comphelper::OBaseMutex

@@ -20,7 +20,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_XFORMSEVENT_HXX
 
 #include <sal/types.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xforms/XFormsEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
@@ -30,7 +30,7 @@ namespace sun {
 namespace star {
 namespace xforms {
 
-class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
+class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
 
     public:
 

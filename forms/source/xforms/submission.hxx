@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -55,7 +55,7 @@ namespace xforms
  *
  * See http://www.w3.org/TR/xforms/ for more information.
  */
-typedef cppu::ImplInheritanceHelper2<
+typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
     com::sun::star::lang::XUnoTunnel,
     com::sun::star::xforms::XSubmission
