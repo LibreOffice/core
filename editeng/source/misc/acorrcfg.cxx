@@ -220,7 +220,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
             }
         }
         if( nFlags )
-            rParent.pAutoCorrect->SetAutoCorrFlag( nFlags, true );
+            rParent.pAutoCorrect->SetAutoCorrFlag( nFlags );
         rParent.pAutoCorrect->SetAutoCorrFlag( ( 0xffff & ~nFlags ), false );
 
     }

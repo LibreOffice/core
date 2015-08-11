@@ -59,7 +59,7 @@ sal_Int32 SvxEditEngineForwarder::GetTextLen( sal_Int32 nParagraph ) const
 
 OUString SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
 {
-    return convertLineEnd(rEditEngine.GetText(rSel, LINEEND_LF), GetSystemLineEnd());
+    return convertLineEnd(rEditEngine.GetText(rSel), GetSystemLineEnd());
 }
 
 SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
@@ -323,9 +323,9 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nInd
             // #109151# Don't use paragraph height, but line height
             // instead. aLast is already CTL-correct
             if( bIsVertical)
-                aLast.SetSize( Size( rEditEngine.GetLineHeight(nPara,0), 1 ) );
+                aLast.SetSize( Size( rEditEngine.GetLineHeight(nPara), 1 ) );
             else
-                aLast.SetSize( Size( 1, rEditEngine.GetLineHeight(nPara,0) ) );
+                aLast.SetSize( Size( 1, rEditEngine.GetLineHeight(nPara) ) );
         }
 
         return aLast;

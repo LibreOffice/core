@@ -252,9 +252,9 @@ INSINGLECHAR:
     case RTF_SHADOW:
             if( RTF_IGNOREFLAG != GetStackPtr( -1 )->nTokenId )
                 break;
-            nToken = SkipToken( -1 );
+            nToken = SkipToken();
             if( '{' == GetStackPtr( -1 )->nTokenId )
-                nToken = SkipToken( -1 );
+                nToken = SkipToken();
 
             ReadAttr( nToken, &GetAttrSet() );
             break;
@@ -274,10 +274,10 @@ INSINGLECHAR:
             {
                 if( RTF_IGNOREFLAG != GetStackPtr( -1 )->nTokenId )
                     break;
-                nToken = SkipToken( -1 );
+                nToken = SkipToken();
                 if( '{' == GetStackPtr( -1 )->nTokenId )
                 {
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                 }
             }
             ReadAttr( nToken, &GetAttrSet() );
@@ -319,7 +319,7 @@ void SvxRTFParser::ReadStyleTable()
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ) &&
                             RTF_PN != nToken )
                     nToken = SkipToken( -2 );
@@ -375,10 +375,10 @@ void SvxRTFParser::ReadStyleTable()
                 {
                     if( RTF_IGNOREFLAG != GetStackPtr( -1 )->nTokenId )
                         break;
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                     if( '{' == GetStackPtr( -1 )->nTokenId )
                     {
-                        nToken = SkipToken( -1 );
+                        nToken = SkipToken();
                     }
                 }
                 ReadAttr( nToken, &pStyle->aAttrSet );
@@ -388,7 +388,7 @@ void SvxRTFParser::ReadStyleTable()
         }
     }
     pStyle.reset();         // Delete the Last Style
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
 
     // Flag back to old state
     bChkStyleAttr = bSaveChkStyleAttr;
@@ -435,7 +435,7 @@ void SvxRTFParser::ReadColorTable()
             break;
         }
     }
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
 }
 
 void SvxRTFParser::ReadFontTable()
@@ -467,7 +467,7 @@ void SvxRTFParser::ReadFontTable()
                 break;
             case '{':
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                 // immediately skip unknown and all known but non-evaluated
                 // groups
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ) &&
@@ -567,7 +567,7 @@ void SvxRTFParser::ReadFontTable()
     }
     // the last one we have to delete manually
     pFont.reset();
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
 
     // set the default font in the Document
     if( bNewDoc && IsParserWorking() )
@@ -597,7 +597,7 @@ OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                 else if( RTF_UNKNOWNCONTROL != GetNextToken() )
                     nToken = SkipToken( -2 );
                 else
@@ -618,7 +618,7 @@ OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
             break;
         }
     }
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
     return rStr;
 }
 
@@ -641,7 +641,7 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
             bContinue = false;
         }
     }
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
     return aDT;
 }
 
@@ -661,7 +661,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
-                    nToken = SkipToken( -1 );
+                    nToken = SkipToken();
                 else if( RTF_UNKNOWNCONTROL != GetNextToken() )
                     nToken = SkipToken( -2 );
                 else
@@ -745,7 +745,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
         sComment == OUString::createFromAscii( pChkForVerNo ) )
         nVersionNo = nVersNo;
 
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
 }
 
 
@@ -1006,7 +1006,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     if (bCrsrBack && 50 < pAkt->m_pChildList->size())
                     {
                         // at the beginning of a paragraph? Move back one position
-                        MovePos(true);
+                        MovePos();
                         bCrsrBack = false;
 
                         // Open a new Group.
@@ -1032,7 +1032,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
             if( bCrsrBack )
                 // at the beginning of a paragraph? Move back one position
-                MovePos(true);
+                MovePos();
 
         } while( false );
 

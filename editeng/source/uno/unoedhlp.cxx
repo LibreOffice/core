@@ -188,7 +188,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
                 if ( nLen )
                 {
                     sal_Int32 nStartIdx, nEndIdx;
-                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, nLen, false );
+                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, nLen );
                     SfxItemSet aSet = rEE.GetAttribs( nParaIdx, nLen-1, nLen, GetAttribsFlags::CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
@@ -212,7 +212,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
                 if ( nLen )
                 {
                     sal_Int32 nStartIdx, nEndIdx;
-                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, 0, false );
+                    GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, 0 );
                     SfxItemSet aSet = rEE.GetAttribs( nParaIdx, 0, 1, GetAttribsFlags::CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {

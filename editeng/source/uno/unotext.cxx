@@ -426,7 +426,7 @@ void SAL_CALL SvxUnoTextRangeBase::setPropertyValue(const OUString& PropertyName
         return;
     }
 
-    _setPropertyValue( PropertyName, aValue, -1 );
+    _setPropertyValue( PropertyName, aValue );
 }
 
 void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const uno::Any& aValue, sal_Int32 nPara )
@@ -602,7 +602,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& Property
         return uno::makeAny(aSel);
     }
 
-    return _getPropertyValue( PropertyName, -1 );
+    return _getPropertyValue( PropertyName );
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sal_Int32 nPara )
@@ -767,7 +767,7 @@ void SAL_CALL SvxUnoTextRangeBase::removeVetoableChangeListener( const OUString&
 // XMultiPropertySet
 void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    _setPropertyValues( aPropertyNames, aValues, -1 );
+    _setPropertyValues( aPropertyNames, aValues );
 }
 
 void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
@@ -891,7 +891,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
 
 uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames ) throw (uno::RuntimeException, std::exception)
 {
-    return _getPropertyValues( aPropertyNames, -1 );
+    return _getPropertyValues( aPropertyNames );
 }
 
 uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( const uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
@@ -949,7 +949,7 @@ void SAL_CALL SvxUnoTextRangeBase::firePropertiesChangeEvent( const uno::Sequenc
 beans::PropertyState SAL_CALL SvxUnoTextRangeBase::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    return _getPropertyState( PropertyName, -1 );
+    return _getPropertyState( PropertyName );
 }
 
 static const sal_uInt16 aSvxUnoFontDescriptorWhichMap[] = { EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT, EE_CHAR_ITALIC,
@@ -1059,7 +1059,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
 uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextRangeBase::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    return _getPropertyStates( aPropertyName, -1 );
+    return _getPropertyStates( aPropertyName );
 }
 
 uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(const uno::Sequence< OUString >& PropertyName, sal_Int32 nPara /* = -1 */)
@@ -1196,7 +1196,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
 void SAL_CALL SvxUnoTextRangeBase::setPropertyToDefault( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    _setPropertyToDefault( PropertyName, -1 );
+    _setPropertyToDefault( PropertyName );
 }
 
 void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sal_Int32 nPara /* = -1 */)

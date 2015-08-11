@@ -132,7 +132,7 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
 {
     const SfxPoolItem* pItem = NULL;
     {
-        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&rSet.Get( EE_CHAR_FONTINFO, true ));
+        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&rSet.Get( EE_CHAR_FONTINFO ));
         rDesc.Name      = pFontItem->GetFamilyName();
         rDesc.StyleName = pFontItem->GetStyleName();
         rDesc.Family    = sal::static_int_cast< sal_Int16 >(
@@ -142,37 +142,37 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
             pFontItem->GetPitch());
     }
     {
-        pItem = &rSet.Get( EE_CHAR_FONTHEIGHT, true );
+        pItem = &rSet.Get( EE_CHAR_FONTHEIGHT );
         uno::Any aHeight;
         if( pItem->QueryValue( aHeight, MID_FONTHEIGHT ) )
             aHeight >>= rDesc.Height;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_ITALIC, true );
+        pItem = &rSet.Get( EE_CHAR_ITALIC );
         uno::Any aFontSlant;
         if(pItem->QueryValue( aFontSlant, MID_POSTURE ))
             aFontSlant >>= rDesc.Slant;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_UNDERLINE, true );
+        pItem = &rSet.Get( EE_CHAR_UNDERLINE );
         uno::Any aUnderline;
         if(pItem->QueryValue( aUnderline, MID_TL_STYLE ))
             aUnderline >>= rDesc.Underline;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_WEIGHT, true );
+        pItem = &rSet.Get( EE_CHAR_WEIGHT );
         uno::Any aWeight;
         if(pItem->QueryValue( aWeight, MID_WEIGHT ))
             aWeight >>= rDesc.Weight;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_STRIKEOUT, true );
+        pItem = &rSet.Get( EE_CHAR_STRIKEOUT );
         uno::Any aStrikeOut;
         if(pItem->QueryValue( aStrikeOut, MID_CROSS_OUT ))
             aStrikeOut >>= rDesc.Strikeout;
     }
     {
-        const SvxWordLineModeItem* pWLMItem = static_cast<const SvxWordLineModeItem*>(&rSet.Get( EE_CHAR_WLM, true ));
+        const SvxWordLineModeItem* pWLMItem = static_cast<const SvxWordLineModeItem*>(&rSet.Get( EE_CHAR_WLM ));
         rDesc.WordLineMode = pWLMItem->GetValue();
     }
 }

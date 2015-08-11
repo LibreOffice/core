@@ -210,7 +210,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                                     ESelection aTmpSel(nTemp,0,nTemp,0);
                                     pEditView->SetSelection( aTmpSel );
                                 }
-                                pEditView->ShowCursor( true, true );
+                                pEditView->ShowCursor( true );
                                 pOwner->UndoActionEnd( OLUNDO_INSERT );
                                 bKeyProcessed = true;
                             }
@@ -228,7 +228,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                         // Position the cursor
                         ESelection aTmpSel(nTemp,0,nTemp,0);
                         pEditView->SetSelection( aTmpSel );
-                        pEditView->ShowCursor( true, true );
+                        pEditView->ShowCursor( true );
                         pOwner->UndoActionEnd( OLUNDO_INSERT );
                         bKeyProcessed = true;
                     }
@@ -541,7 +541,7 @@ void OutlinerView::Indent( short nDiff )
             pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
             pOwner->pHdlParagraph = pPara;
 
-            pOwner->ImplInitDepth( nPara, nNewDepth, true, false );
+            pOwner->ImplInitDepth( nPara, nNewDepth, true );
             pOwner->ImplCalcBulletText( nPara, false, false );
 
             if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
@@ -668,7 +668,7 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     pOwner->UndoActionEnd( OLUNDO_INSERT );
 
-    pEditView->ShowCursor( true, true );
+    pEditView->ShowCursor( true );
 }
 
 
@@ -704,7 +704,7 @@ void OutlinerView::PasteSpecial()
 
         pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
-        pEditView->ShowCursor( true, true );
+        pEditView->ShowCursor( true );
     }
 }
 
@@ -1181,7 +1181,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich, bo
         for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
             Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-            pOwner->ImplInitDepth( nPara, pPara->GetDepth(), false, false );
+            pOwner->ImplInitDepth( nPara, pPara->GetDepth(), false );
         }
     }
     pOwner->UndoActionEnd( OLUNDO_ATTR );

@@ -282,7 +282,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( bIsInReadStyleTab )
                 {
                     if( !bFirstToken )
-                        SkipToken( -1 );
+                        SkipToken();
                     bContinue = false;
                 }
                 else
@@ -1267,7 +1267,7 @@ ATTR_SETEMPHASIS:
                 {
                     // unknown token, so token "returned in Parser"
                     if( !bFirstToken )
-                        SkipToken( -1 );
+                        SkipToken();
                     bContinue = false;
                 }
             }
@@ -1356,7 +1356,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
 
     // Fill with defaults is still missing!
     rSet.Put( aAttr );
-    SkipToken( -1 );
+    SkipToken();
 }
 
 static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
@@ -1566,7 +1566,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     SetBorderLine( nBorderTyp, aAttr, aBrd );
 
     rSet.Put( aAttr );
-    SkipToken( -1 );
+    SkipToken();
 }
 
 inline sal_uInt32 CalcShading( sal_uInt32 nColor, sal_uInt32 nFillColor, sal_uInt8 nShading )
@@ -1698,7 +1698,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
             (sal_uInt8)CalcShading( aCol.GetBlue(), aFCol.GetBlue(), nFillValue ) );
 
     rSet.Put( SvxBrushItem( aColor, nWh ) );
-    SkipToken( -1 );
+    SkipToken();
 }
 
 

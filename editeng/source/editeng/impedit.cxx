@@ -768,7 +768,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
             }
             else
             {
-                EditPaM aNext = pEditEngine->CursorRight( aPaM, (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
+                EditPaM aNext = pEditEngine->CursorRight( aPaM );
                 Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY );
                 if ( aTmpRect.Top() != aEditCursor.Top() )
                     aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
@@ -922,7 +922,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
         }
         else
             // #i32593# Reset correct orientation in horizontal layout
-            GetCursor()->SetOrientation( 0 );
+            GetCursor()->SetOrientation();
 
         GetCursor()->SetSize( aCursorSz );
 

@@ -1141,7 +1141,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, bool bSttQuote,
                                     bool bIns )
 {
-    LanguageType eLang = rDoc.GetLanguage( nInsPos, false );
+    LanguageType eLang = rDoc.GetLanguage( nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     OUString sChg( cInsChar );
@@ -1182,7 +1182,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                 sal_Unicode cInsChar, bool bSttQuote )
 {
-    LanguageType eLang = rDoc.GetLanguage( nInsPos, false );
+    LanguageType eLang = rDoc.GetLanguage( nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     OUString sRet = OUString(cRet);
@@ -1256,7 +1256,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if ( IsAutoCorrFlag( AddNonBrkSpace ) )
             {
                 if ( NeedsHardspaceAutocorr( cChar ) &&
-                    FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos, false ) ) )
+                    FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos ) ) )
                 {
                     nRet = AddNonBrkSpace;
                 }
@@ -1313,7 +1313,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         if( !nPos && !IsWordDelim( rTxt[ 0 ]))
             --nCapLttrPos;          // Absatz Anfang und kein Blank !
 
-        LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, false );
+        LanguageType eLang = rDoc.GetLanguage( nCapLttrPos );
         if( LANGUAGE_SYSTEM == eLang )
             eLang = MsLangId::getSystemLanguage();
         CharClass& rCC = GetCharClass( eLang );
@@ -1429,7 +1429,7 @@ SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
 {
     LanguageTag aLanguageTag( eLang);
     if (m_pLangTable->find(aLanguageTag) == m_pLangTable->end())
-        (void)CreateLanguageFile(aLanguageTag, true);
+        (void)CreateLanguageFile(aLanguageTag);
     return *(m_pLangTable->find(aLanguageTag)->second);
 }
 
@@ -1474,7 +1474,7 @@ bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
         iter = m_pLangTable->find(aLangTagUndetermined);
         if (iter != m_pLangTable->end())
             pLists = iter->second.get();
-        else if(CreateLanguageFile(aLangTagUndetermined, true))
+        else if(CreateLanguageFile(aLangTagUndetermined))
             pLists = m_pLangTable->find(aLangTagUndetermined)->second.get();
     }
     OSL_ENSURE(pLists, "No auto correction data");
@@ -1496,7 +1496,7 @@ bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
         iter = m_pLangTable->find(aLangTagUndetermined);
         if (iter != m_pLangTable->end())
             pLists = iter->second.get();
-        else if(CreateLanguageFile(aLangTagUndetermined, true))
+        else if(CreateLanguageFile(aLangTagUndetermined))
             pLists = m_pLangTable->find(aLangTagUndetermined)->second.get();
     }
     OSL_ENSURE(pLists, "No auto correction file!");
@@ -1534,7 +1534,7 @@ bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
     if( 3 > nEnde - nCapLttrPos )
         return false;
 
-    LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, false );
+    LanguageType eLang = rDoc.GetLanguage( nCapLttrPos );
     if( LANGUAGE_SYSTEM == eLang )
         eLang = MsLangId::getSystemLanguage();
 
@@ -1552,7 +1552,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
 {
     OSL_ENSURE(m_pLangTable->find(rLanguageTag) == m_pLangTable->end(), "Language already exists ");
 
-    OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, true, false, false ));
+    OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, true, false ));
     OUString sShareDirFile( sUserDirFile );
 
     SvxAutoCorrectLanguageLists* pLists = 0;
@@ -1578,7 +1578,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
     else if(
              ( FStatHelper::IsDocument( sUserDirFile ) ||
                FStatHelper::IsDocument( sShareDirFile =
-                   GetAutoCorrFileName( rLanguageTag, false, false, false ) ) ||
+                   GetAutoCorrFileName( rLanguageTag, false, false ) ) ||
                FStatHelper::IsDocument( sShareDirFile =
                    GetAutoCorrFileName( rLanguageTag, false, false, true) )
              ) ||

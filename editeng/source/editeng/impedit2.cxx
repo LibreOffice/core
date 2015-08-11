@@ -237,7 +237,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
     for ( sal_Int32 n = bKeepParaAttribs ? 1 : 0; n < nParas; n++ )
     {
         if ( aEditDoc[n]->GetStyleSheet() )
-            EndListening( *aEditDoc[n]->GetStyleSheet(), false );
+            EndListening( *aEditDoc[n]->GetStyleSheet() );
     }
 
     if ( bKeepParaAttribs )
@@ -324,7 +324,7 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
             pView->pImpEditView->DrawSelection();
             pView->pImpEditView->SetEditSelection( aNewSelection );
             pView->pImpEditView->DrawSelection();
-            pView->ShowCursor( true, true );
+            pView->ShowCursor( true );
         }
         else if ( rMEvt.GetClicks() == 3 )
         {
@@ -337,7 +337,7 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
             pView->pImpEditView->DrawSelection();
             pView->pImpEditView->SetEditSelection( aNewSelection );
             pView->pImpEditView->DrawSelection();
-            pView->ShowCursor( true, true );
+            pView->ShowCursor();
         }
     }
     return true;
@@ -477,7 +477,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         if ( mpIMEInfos && mpIMEInfos->nLen )
         {
             EditPaM aPaM( pView->pImpEditView->GetEditSelection().Max() );
-            Rectangle aR1 = PaMtoEditCursor( aPaM, 0 );
+            Rectangle aR1 = PaMtoEditCursor( aPaM );
 
             sal_Int32 nInputEnd = mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen;
 
@@ -813,7 +813,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             aPaM = CursorStartOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
-                                aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorLeft( aPaM );
                                 aPaM = CursorStartOfParagraph( aPaM );
                             }
                             bKeyModifySelection = false;
@@ -822,7 +822,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             aPaM = CursorEndOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
-                                aPaM = CursorRight( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorRight( aPaM );
                                 aPaM = CursorEndOfParagraph( aPaM );
                             }
                             bKeyModifySelection = false;
@@ -844,11 +844,11 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             bKeyModifySelection = true;
                             break;
         case com::sun::star::awt::Key::SELECT_BACKWARD:
-                            aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                            aPaM = CursorLeft( aPaM );
                             bKeyModifySelection = true;
                             break;
         case com::sun::star::awt::Key::SELECT_FORWARD:
-                            aPaM = CursorRight( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                            aPaM = CursorRight( aPaM );
                             bKeyModifySelection = true;
                             break;
         case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
@@ -863,7 +863,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             aPaM = CursorStartOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
-                                aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorLeft( aPaM );
                                 aPaM = CursorStartOfParagraph( aPaM );
                             }
                             bKeyModifySelection = true;
@@ -872,7 +872,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             aPaM = CursorEndOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
-                                aPaM = CursorRight( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                                aPaM = CursorRight( aPaM );
                                 aPaM = CursorEndOfParagraph( aPaM );
                             }
                             bKeyModifySelection = true;
@@ -1013,7 +1013,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
     {
         // Check if we are within a portion and don't have overwrite mode, then it's easy...
         sal_Int32 nPortionStart;
-        sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, false );
+        sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart );
         const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
 
         bool bPortionBoundary = ( aPaM.GetIndex() == nPortionStart ) || ( aPaM.GetIndex() == (nPortionStart+rTextPortion.GetLen()) );
@@ -2217,7 +2217,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     if ( bBackward )
     {
-        pLeft->SetStyleSheet( pRight->GetStyleSheet(), true );
+        pLeft->SetStyleSheet( pRight->GetStyleSheet() );
         pLeft->GetContentAttribs().GetItems().Set( pRight->GetContentAttribs().GetItems() );
         pLeft->GetCharAttribs().GetDefFont() = pRight->GetCharAttribs().GetDefFont();
     }
@@ -2465,7 +2465,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
     {
         aEditDoc.RemoveItemsFromPool(*pNode);
         if ( pNode->GetStyleSheet() )
-            EndListening( *pNode->GetStyleSheet(), false );
+            EndListening( *pNode->GetStyleSheet() );
         delete pNode;
     }
 }
@@ -2497,7 +2497,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                 if (aFirstWordSel.Min().GetIndex() == 0 && aFirstWordSel.Max().GetIndex() == 0)
                 {
                     // para does not start with word -> select next/first word
-                    EditPaM aRightWord( WordRight( aFirstWordSel.Max(), 1 ) );
+                    EditPaM aRightWord( WordRight( aFirstWordSel.Max() ) );
                     aFirstWordSel = SelectWord( EditSelection( aRightWord ) );
                 }
 
@@ -2506,7 +2506,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                 // but to some following char like '.'. ':', ...
                 // In those cases we need aSecondWordSel to see if aSel
                 // will actually effect the first word.)
-                EditPaM aRight2Word( WordRight( aFirstWordSel.Max(), 1 ) );
+                EditPaM aRight2Word( WordRight( aFirstWordSel.Max() ) );
                 aSecondWordSel = SelectWord( EditSelection( aRight2Word ) );
             }
             bool bIsFirstWordInFirstPara = aESel.nEndPara == 0 &&
@@ -3654,7 +3654,7 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, bool bSmart
     if ( nCurIndex && ( nCurIndex == pLine->GetEnd() ) &&
          ( pLine != &pPortion->GetLines()[pPortion->GetLines().Count()-1] ) )
     {
-        aPaM = CursorLeft( aPaM, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+        aPaM = CursorLeft( aPaM );
     }
 
     return aPaM;

@@ -69,7 +69,7 @@ OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
     //! GetText (ESelection) should probably also be in the Outliner
     // in the time being use as the hack for the EditEngine:
     EditEngine* pEditEngine = const_cast<EditEngine*>(&rOutliner.GetEditEngine());
-    return pEditEngine->GetText( rSel, LINEEND_LF );
+    return pEditEngine->GetText( rSel );
 }
 
 static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib, EditEngine& rEditEngine )
@@ -324,9 +324,9 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex
             // #109151# Don't use paragraph height, but line height
             // instead. aLast is already CTL-correct
             if( bIsVertical)
-                aLast.SetSize( Size( rOutliner.GetLineHeight(nPara,0), 1 ) );
+                aLast.SetSize( Size( rOutliner.GetLineHeight(nPara), 1 ) );
             else
-                aLast.SetSize( Size( 1, rOutliner.GetLineHeight(nPara,0) ) );
+                aLast.SetSize( Size( 1, rOutliner.GetLineHeight(nPara) ) );
         }
 
         return aLast;

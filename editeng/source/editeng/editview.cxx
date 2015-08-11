@@ -523,7 +523,7 @@ void EditView::Copy()
 void EditView::Paste()
 {
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
-    pImpEditView->Paste( aClipBoard, false );
+    pImpEditView->Paste( aClipBoard );
 }
 
 void EditView::PasteSpecial()
@@ -1344,7 +1344,7 @@ void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool 
     pImpEditView->DrawSelection(aSelection);
     if (pImpEditView->GetEditSelection() != aSelection)
         pImpEditView->SetEditSelection(aSelection);
-    ShowCursor(/*bGotoCursor=*/false, /*bForceCursor=*/true);
+    ShowCursor(/*bGotoCursor=*/false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

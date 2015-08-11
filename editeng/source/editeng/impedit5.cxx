@@ -87,10 +87,10 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
                         pNode->GetContentAttribs().GetItems() ) );
         }
         if ( pCurStyle )
-            EndListening( *pCurStyle, false );
+            EndListening( *pCurStyle );
         pNode->SetStyleSheet( pStyle, aStatus.UseCharAttribs() );
         if ( pStyle )
-            StartListening( *pStyle, false );
+            StartListening( *pStyle );
         ParaAttribsChanged( pNode );
     }
     FormatAndUpdate();
@@ -257,7 +257,7 @@ void ImpEditEngine::InsertUndo( EditUndo* pUndo, bool bTryMerge )
     if ( pUndoMarkSelection )
     {
         EditUndoMarkSelection* pU = new EditUndoMarkSelection(pEditEngine, *pUndoMarkSelection);
-        GetUndoManager().AddUndoAction( pU, false );
+        GetUndoManager().AddUndoAction( pU );
         delete pUndoMarkSelection;
         pUndoMarkSelection = NULL;
     }
@@ -414,7 +414,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
         // StyleSheet / Parattribs...
 
         if ( pNode->GetStyleSheet() && ( nFlags & GetAttribsFlags::STYLESHEET ) )
-            aAttribs.Set(pNode->GetStyleSheet()->GetItemSet(), true);
+            aAttribs.Set(pNode->GetStyleSheet()->GetItemSet());
 
         if ( nFlags & GetAttribsFlags::PARAATTRIBS )
             aAttribs.Put( pNode->GetContentAttribs().GetItems() );

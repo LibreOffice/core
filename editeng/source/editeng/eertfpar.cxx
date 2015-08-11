@@ -571,7 +571,7 @@ void EditRTFParser::ReadField()
         }
     }
 
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
 }
 
 void EditRTFParser::SkipGroup()
@@ -596,7 +596,7 @@ void EditRTFParser::SkipGroup()
         }
     }
 
-    SkipToken( -1 );        // the closing brace is evaluated "above"
+    SkipToken();        // the closing brace is evaluated "above"
 }
 
 EditNodeIdx::EditNodeIdx(EditEngine* pEE, ContentNode* pNd) :
