@@ -70,6 +70,7 @@ public :
      OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();
      OUString GetPassword() { return m_pEDPassword->GetText(); };
+     OUString GetUser() { return m_pEDUsername->GetText(); };
 
      void ShowPasswordControl( bool bShow = true ) { m_pEDPassword->Show( bShow ); m_pFTPasswordLabel->Show( bShow ); }
 

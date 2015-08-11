@@ -650,6 +650,27 @@ void RemoteFilesDialog::DisableControls()
     m_pCancel_btn->Enable( true );
 }
 
+void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUser, const OUString& rPassword )
+{
+    try
+    {
+        if( m_xMasterPasswd->isPersistentStoringAllowed() && m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
+        {
+            Reference< XInteractionHandler > xInteractionHandler(
+                InteractionHandler::createWithParent( m_xContext, 0 ),
+                UNO_QUERY );
+
+            Sequence< OUString > aPasswd( 1 );
+            aPasswd[0] = rPassword;
+
+            m_xMasterPasswd->addPersistent(
+                rURL, rUser, aPasswd, xInteractionHandler );
+        }
+    }
+    catch( const Exception& )
+    {}
+}
+
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
 {
     ScopedVclPtrInstance< PlaceEditDialog > aDlg( this );
@@ -662,6 +683,13 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
         {
             ServicePtr newService = aDlg->GetPlace();
             m_aServices.push_back( newService );
+
+            OUString sPassword = aDlg->GetPassword();
+            OUString sUser = aDlg->GetUser();
+            if( !sUser.isEmpty() && !sPassword.isEmpty() )
+            {
+                SavePassword( newService->GetUrl(), sUser, sPassword );
+            }
 
             OUString sPrefix = lcl_GetServiceType( newService );
 
@@ -803,9 +831,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                             Sequence< OUString > aPasswd( 1 );
                             aPasswd[0] = aNewPass;
 
-                            Reference< XPasswordContainer2 > xPasswdContainer(
-                                PasswordContainer::create( m_xContext ) );
-                            xPasswdContainer->addPersistent(
+                            m_xMasterPasswd->addPersistent(
                                 sUrl, sUserName, aPasswd, xInteractionHandler );
                         }
                     }

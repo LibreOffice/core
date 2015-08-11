@@ -178,6 +178,8 @@ private:
     void EnableControls();
     void DisableControls();
 
+    void SavePassword( const OUString& rURL, const OUString& rUser, const OUString& rPassword );
+
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
