@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_BINDING_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
@@ -73,7 +73,7 @@ namespace xforms
  * See http://www.w3.org/TR/xforms/ for more information.
  */
 
-typedef cppu::ImplInheritanceHelper8<
+typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
     css::form::binding::XValueBinding,
     css::form::binding::XListEntrySource,

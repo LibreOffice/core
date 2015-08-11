@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_NAMECONTAINER_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_NAMECONTAINER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <map>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <osl/diagnose.h>
 
-typedef cppu::WeakImplHelper1<
+typedef cppu::WeakImplHelper<
     com::sun::star::container::XNameContainer
 > NameContainer_t;
 

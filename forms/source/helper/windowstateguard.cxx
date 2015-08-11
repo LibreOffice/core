@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/diagnose_ex.h>
 
 
@@ -41,7 +41,7 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
-    typedef ::cppu::WeakImplHelper1 <   XWindowListener2
+    typedef ::cppu::WeakImplHelper <   XWindowListener2
                                     >   WindowStateGuard_Impl_Base;
     class WindowStateGuard_Impl : public WindowStateGuard_Impl_Base
     {

@@ -63,7 +63,6 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>

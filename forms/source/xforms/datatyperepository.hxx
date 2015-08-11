@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
 
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <map>
@@ -32,7 +32,7 @@ namespace xforms
 
     class OXSDDataType;
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::xforms::XDataTypeRepository
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::xforms::XDataTypeRepository
                                     >   ODataTypeRepository_Base;
     class ODataTypeRepository : public ODataTypeRepository_Base
     {

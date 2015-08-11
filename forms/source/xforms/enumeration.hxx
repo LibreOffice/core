@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_ENUMERATION_HXX
 
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
 
 /** implement XEnumeration based on container::XIndexAccess */
 class Enumeration
-    : public cppu::WeakImplHelper1<com::sun::star::container::XEnumeration>
+    : public cppu::WeakImplHelper<com::sun::star::container::XEnumeration>
 {
     com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> mxContainer;
     sal_Int32 mnIndex;

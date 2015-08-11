@@ -40,9 +40,7 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "serialization.hxx"
 
@@ -52,7 +50,7 @@ class CSubmissionPut;
 class CSubmissionPost;
 class CSubmissionGet;
 
-class CCommandEnvironmentHelper : public cppu::WeakImplHelper1< css::ucb::XCommandEnvironment >
+class CCommandEnvironmentHelper : public cppu::WeakImplHelper< css::ucb::XCommandEnvironment >
 {
     friend class CSubmissionPut;
     friend class CSubmissionPost;
@@ -74,7 +72,7 @@ public:
     }
 };
 
-class CProgressHandlerHelper : public cppu::WeakImplHelper1< css::ucb::XProgressHandler >
+class CProgressHandlerHelper : public cppu::WeakImplHelper< css::ucb::XProgressHandler >
 {
     friend class CSubmissionPut;
     friend class CSubmissionPost;

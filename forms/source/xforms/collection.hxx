@@ -22,7 +22,7 @@
 
 #include "enumeration.hxx"
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -41,7 +41,7 @@
 #include <algorithm>
 
 
-typedef cppu::WeakImplHelper3<
+typedef cppu::WeakImplHelper<
     css::container::XIndexReplace,
     css::container::XSet,
     css::container::XContainer>
