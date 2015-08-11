@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_5f690b8b",
+        "filename": "include/svx/svdograf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000922
+      },
+      "writtenOn": "2015-08-11T12:10:25Z",
+      "side": 1,
+      "message": "Where do you get \"at the end\" from? \n\n\u003e steht hier der Dateiname drin\n\nmaybe it should be: \"the filename can be found in here\"",
+      "range": {
+        "startLine": 93,
+        "startChar": 69,
+        "endLine": 93,
+        "endChar": 79
+      },
+      "revId": "c07119142d0e4a62f2ce2ec785b72e0ace5b9cdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
