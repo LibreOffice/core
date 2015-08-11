@@ -1195,7 +1195,7 @@ void ScrollBar::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::Data )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-            ImplCalc( true );
+            ImplCalc();
     }
     else if ( nType == StateChangedType::UpdateMode )
     {

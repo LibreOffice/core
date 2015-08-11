@@ -834,7 +834,7 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
     if ( IsFloatingMode() )
     {
         GetWindow()->Show( false, ShowFlags::NoFocusChange );
-        SetFloatingMode( false );
+        SetFloatingMode();
     }
 }
 

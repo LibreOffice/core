@@ -112,7 +112,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     // if the tabcontrol is drawn (ie filled) by a native widget, make sure all contols will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
-        EnableChildTransparentMode( true );
+        EnableChildTransparentMode();
 
     if (pParent && pParent->IsDialog())
         pParent->AddChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
@@ -144,7 +144,7 @@ void TabControl::ImplInitSettings( bool bFont,
         {
             // set transparent mode for NWF tabcontrols to have
             // the background always cleared properly
-            EnableChildTransparentMode( true );
+            EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
@@ -153,7 +153,7 @@ void TabControl::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( ParentClipMode::NONE );
+            SetParentClipMode();
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )
@@ -1059,7 +1059,7 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
 void TabControl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (!(GetStyle() & WB_NOBORDER))
-        ImplPaint(rRenderContext, rRect, false);
+        ImplPaint(rRenderContext, rRect);
 }
 
 void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout)
@@ -1231,7 +1231,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
                 if (bLayout || !aClipRgn.IsEmpty())
                 {
                     ImplDrawItem(rRenderContext, pItem, aCurRect, bLayout,
-                                 pItem == pFirstTab, pItem == pLastTab, false);
+                                 pItem == pFirstTab, pItem == pLastTab);
                 }
             }
 

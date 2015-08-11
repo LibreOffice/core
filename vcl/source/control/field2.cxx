@@ -2497,7 +2497,7 @@ TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
     maLast( GetMax() )
 {
     SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
+    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false ) );
     Reformat();
 }
 
@@ -2634,7 +2634,7 @@ TimeBox::TimeBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
+    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false ) );
     Reformat();
 }
 

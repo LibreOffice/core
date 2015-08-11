@@ -98,7 +98,7 @@ void Slider::ImplInitSettings()
     vcl::Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( true );
+        EnableChildTransparentMode();
         SetParentClipMode( ParentClipMode::NoClip );
         SetPaintTransparent( true );
         SetBackground();
@@ -106,7 +106,7 @@ void Slider::ImplInitSettings()
     else
     {
         EnableChildTransparentMode( false );
-        SetParentClipMode( ParentClipMode::NONE );
+        SetParentClipMode();
         SetPaintTransparent( false );
 
         if ( IsControlBackground() )
@@ -901,7 +901,7 @@ void Slider::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::Data )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-            ImplCalc( true );
+            ImplCalc();
     }
     else if ( nType == StateChangedType::UpdateMode )
     {

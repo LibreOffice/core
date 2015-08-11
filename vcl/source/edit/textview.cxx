@@ -880,7 +880,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 }
                 ImpSetSelection( aNewSel );
                 ShowSelection();
-                ShowCursor( true, true );
+                ShowCursor();
             }
         }
         else if ( rMouseEvent.GetClicks() == 3 )
@@ -894,7 +894,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 aNewSel.GetEnd().GetIndex() = mpImpl->mpTextEngine->mpDoc->GetNodes()[ mpImpl->maSelection.GetEnd().GetPara() ]->GetText().getLength();
                 ImpSetSelection( aNewSel );
                 ShowSelection();
-                ShowCursor( true, true );
+                ShowCursor();
             }
         }
     }
@@ -1175,7 +1175,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     bool bWasTruncated = false;
                     if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
                         bWasTruncated = ImplTruncateNewText( aText );
-                    InsertText( aText, false );
+                    InsertText( aText );
                     mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
 
                     if( bWasTruncated )

@@ -108,7 +108,7 @@ bool JobData::setPaper( int i_nWidth, int i_nHeight )
         const PPDKey*   pKey = m_pParser->getKey( OUString( "PageSize" ) );
         const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
 
-        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
+        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue );
     }
     return bSuccess;
 }
@@ -121,7 +121,7 @@ bool JobData::setPaperBin( int i_nPaperBin )
         const PPDKey*   pKey = m_pParser->getKey( OUString( "InputSlot" ) );
         const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : NULL;
 
-        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
+        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue );
     }
     return bSuccess;
 }

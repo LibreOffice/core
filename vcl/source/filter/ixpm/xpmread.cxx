@@ -342,7 +342,7 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
                         pRGBTable[ i ].name[ mnParaSize ] == 0 )
                 {
                     if ( ImplCompare ( reinterpret_cast<unsigned char const *>(pRGBTable[ i ].name),
-                            mpPara, mnParaSize, XPMCASENONSENSITIVE ) )
+                            mpPara, mnParaSize ) )
                     {
                         bColStatus = true;
                         *pDest++ = 0;

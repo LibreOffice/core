@@ -199,7 +199,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
 
     for( sal_Int32 i = 0; i < nNumber; i++ )
     {
-        sal_Int32 nPos = InsertEntry( ReadStringRes(), LISTBOX_APPEND );
+        sal_Int32 nPos = InsertEntry( ReadStringRes() );
 
         sal_IntPtr nId = ReadLongRes();
         if( nId )

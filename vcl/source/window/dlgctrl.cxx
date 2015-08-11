@@ -564,7 +564,7 @@ namespace
 
     bool nextInGroup(RadioButton *pSourceWindow, bool bBackward)
     {
-        std::vector<VclPtr<RadioButton> > aGroup(pSourceWindow->GetRadioButtonGroup(true));
+        std::vector<VclPtr<RadioButton> > aGroup(pSourceWindow->GetRadioButtonGroup());
 
         if (aGroup.size() == 1) //only one button in group
             return false;

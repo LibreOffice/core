@@ -54,7 +54,7 @@ static void ImplGetPinImage( DrawButtonFlags nStyle, bool bPinIn, Image& rImage 
             Color aMaskColor( 0x00, 0x00, 0xFF );
             pSVData->maCtrlData.mpPinImgList->InsertFromHorizontalBitmap
                 ( ResId( SV_RESID_BITMAP_PIN, *pResMgr ), 4,
-                  &aMaskColor, NULL, NULL, 0);
+                  &aMaskColor, NULL, NULL );
         }
     }
 
@@ -1344,7 +1344,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     // no move (only resize) if position did not change
                     if( aOldPos != aNewRect.TopLeft() )
                         pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
-                                                    aNewRect.GetWidth(), aNewRect.GetHeight(), PosSizeFlags::PosSize );
+                                                    aNewRect.GetWidth(), aNewRect.GetHeight() );
                     else
                         pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
                                                     aNewRect.GetWidth(), aNewRect.GetHeight(), PosSizeFlags::Size );

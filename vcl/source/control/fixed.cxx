@@ -210,7 +210,7 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
     vcl::Window* pParent = GetParent();
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
-        EnableChildTransparentMode(true);
+        EnableChildTransparentMode();
         SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
@@ -218,7 +218,7 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(ParentClipMode::NONE);
+        SetParentClipMode();
         SetPaintTransparent(false);
 
         if (IsControlBackground())
@@ -621,7 +621,7 @@ void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
     vcl::Window* pParent = GetParent();
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
-        EnableChildTransparentMode(true);
+        EnableChildTransparentMode();
         SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
@@ -629,7 +629,7 @@ void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(ParentClipMode::NONE);
+        SetParentClipMode();
         SetPaintTransparent(false);
 
         if (IsControlBackground())
@@ -707,7 +707,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
 
 Size FixedLine::GetOptimalSize() const
 {
-    return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
+    return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
 }
 
 void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -753,7 +753,7 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
     vcl::Window* pParent = GetParent();
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
-        EnableChildTransparentMode(true);
+        EnableChildTransparentMode();
         SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
@@ -761,7 +761,7 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(ParentClipMode::NONE);
+        SetParentClipMode();
         SetPaintTransparent(false);
 
         if (IsControlBackground())
@@ -923,7 +923,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
     vcl::Window* pParent = GetParent();
     if (pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
-        EnableChildTransparentMode(true);
+        EnableChildTransparentMode();
         SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();
@@ -931,7 +931,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
     else
     {
         EnableChildTransparentMode(false);
-        SetParentClipMode(ParentClipMode::NONE);
+        SetParentClipMode();
         SetPaintTransparent(false);
 
         if (IsControlBackground())

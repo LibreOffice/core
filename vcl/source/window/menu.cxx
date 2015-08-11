@@ -283,7 +283,7 @@ void Menu::ImplSelect()
         if ( pData->nBits & MenuItemBits::RADIOCHECK )
         {
             if ( !bChecked )
-                CheckItem( nSelectedId, true );
+                CheckItem( nSelectedId );
         }
         else
             CheckItem( nSelectedId, !bChecked );
@@ -608,7 +608,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
             pThis->InsertItem( nId, pData->aImage, pData->nBits, pData->sIdent, nNewPos );
 
         if ( rMenu.IsItemChecked( nId ) )
-            pThis->CheckItem( nId, true );
+            pThis->CheckItem( nId );
         if ( !rMenu.IsItemEnabled( nId ) )
             pThis->EnableItem( nId, false );
         pThis->SetHelpId( nId, pData->aHelpId );
@@ -2288,7 +2288,7 @@ bool Menu::HasValidEntries( bool bCheckPopups )
         if ( pItem->bEnabled && ( pItem->eType != MenuItemType::SEPARATOR ) )
         {
             if ( bCheckPopups && pItem->pSubMenu )
-                bValidEntries = pItem->pSubMenu->HasValidEntries( true );
+                bValidEntries = pItem->pSubMenu->HasValidEntries();
             else
                 bValidEntries = true;
         }
@@ -3082,7 +3082,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
         SalMenu* pMenu = ImplGetSalMenu();
         if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus ) )
         {
-            pWin->StopExecute(0);
+            pWin->StopExecute();
             pWin->doShutdown();
             pWindow->doLazyDelete();
             pWindow = NULL;

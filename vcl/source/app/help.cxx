@@ -278,7 +278,7 @@ void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
     if (rRenderContext.IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
     {
-        EnableChildTransparentMode(true);
+        EnableChildTransparentMode();
         SetParentClipMode(ParentClipMode::NoClip);
         SetPaintTransparent(true);
         rRenderContext.SetBackground();

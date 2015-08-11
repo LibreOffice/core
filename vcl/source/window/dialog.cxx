@@ -443,7 +443,7 @@ void Dialog::ApplySettings(vcl::RenderContext& rRenderContext)
     {
         // NWF background
         mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
-        EnableChildTransparentMode(true);
+        EnableChildTransparentMode();
     }
     else
     {
@@ -461,7 +461,7 @@ void Dialog::ImplInitSettings()
     else if( IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG))
     {
         mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
-        EnableChildTransparentMode( true );
+        EnableChildTransparentMode();
     }
     // fallback to settings color
     else
@@ -763,7 +763,7 @@ bool Dialog::Close()
 
     if ( IsInExecute() )
     {
-        EndDialog( RET_CANCEL );
+        EndDialog();
         mbInClose = false;
         return true;
     }
@@ -830,7 +830,7 @@ bool Dialog::ImplStartExecuteModal()
         pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-    EnableInput( true, true );
+    EnableInput( true );
 
     if ( GetParent() )
     {
@@ -998,7 +998,7 @@ void Dialog::EndAllDialogs( vcl::Window* pParent )
      pTempModDialog = pModDialog->mpPrevExecuteDlg;
      if(!pParent || pParent->IsWindowOrChild(pModDialog,true))
      {
-        pModDialog->EndDialog( RET_CANCEL );
+        pModDialog->EndDialog();
         pModDialog->PostUserEvent( Link<>() );
      }
      pModDialog = pTempModDialog;

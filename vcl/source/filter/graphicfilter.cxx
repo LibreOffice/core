@@ -266,7 +266,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     {
         SvLockBytes* pLockBytes = rStream.GetLockBytes();
         if ( pLockBytes  )
-            pLockBytes->SetSynchronMode( true );
+            pLockBytes->SetSynchronMode();
 
         rStream.Seek( STREAM_SEEK_TO_END );
         nStreamLen = rStream.Tell() - nStreamPos;

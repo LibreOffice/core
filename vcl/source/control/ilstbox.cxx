@@ -1149,7 +1149,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
 
         if( bFocusChanged )
         {
-            long nHeightDiff = mpEntryList->GetAddedHeight( nSelect, mnTop, 0 );
+            long nHeightDiff = mpEntryList->GetAddedHeight( nSelect, mnTop );
             maFocusRect.SetPos( Point( 0, nHeightDiff ) );
             Size aSz( maFocusRect.GetWidth(),
                       mpEntryList->GetEntryHeight( nSelect ) );
@@ -1189,7 +1189,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 mbTrackingSelect = false;
                 if ( mnTrackingSaveSelection != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop, 0 );
+                    long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop );
                     maFocusRect.SetPos( Point( 0, nHeightDiff ) );
                     Size aSz( maFocusRect.GetWidth(),
                               mpEntryList->GetEntryHeight( mnCurrentPos ) );
@@ -1322,7 +1322,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop, 0 );
+                long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop );
                 maFocusRect.SetPos( Point( 0, nHeightDiff ) );
                 Size aSz( maFocusRect.GetWidth(), mpEntryList->GetEntryHeight( mnCurrentPos ) );
                 maFocusRect.SetSize( aSz );
@@ -1365,7 +1365,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                    nSelect = mpEntryList->FindFirstSelectable( 0 );
                 }
                 else if ( mnCurrentPos )
                 {
@@ -1392,12 +1392,12 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                    nSelect = mpEntryList->FindFirstSelectable( 0 );
                 }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
                     // search first selectable below the current position
-                    nSelect = mpEntryList->FindFirstSelectable( mnCurrentPos + 1, true );
+                    nSelect = mpEntryList->FindFirstSelectable( mnCurrentPos + 1 );
                 }
 
                 if( ( nSelect != LISTBOX_ENTRY_NOTFOUND ) && ( nSelect >= GetLastVisibleEntry() ) )
@@ -1421,7 +1421,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                    nSelect = mpEntryList->FindFirstSelectable( 0 );
                 }
                 else if ( mnCurrentPos )
                 {
@@ -1432,7 +1432,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     }
 
                     // find first selectable starting from mnTop looking forward
-                    nSelect = mpEntryList->FindFirstSelectable( mnTop, true );
+                    nSelect = mpEntryList->FindFirstSelectable( mnTop );
                 }
                 bDone = true;
             }
@@ -1450,7 +1450,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                    nSelect = mpEntryList->FindFirstSelectable( 0 );
                 }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
@@ -1484,7 +1484,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if ( mnCurrentPos )
                 {
-                    nSelect = mpEntryList->FindFirstSelectable( mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND, true );
+                    nSelect = mpEntryList->FindFirstSelectable( mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND );
                     if( mnTop != 0 )
                         SetTopEntry( 0 );
 
@@ -1505,7 +1505,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                    nSelect = mpEntryList->FindFirstSelectable( 0 );
                 }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
@@ -1893,7 +1893,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Re
         nY += pEntry->mnHeight;
     }
 
-    long nHeightDiff = mpEntryList->GetAddedHeight(mnCurrentPos, mnTop, 0);
+    long nHeightDiff = mpEntryList->GetAddedHeight(mnCurrentPos, mnTop);
     maFocusRect.SetPos(Point(0, nHeightDiff));
     Size aSz(maFocusRect.GetWidth(), mpEntryList->GetEntryHeight(mnCurrentPos));
     maFocusRect.SetSize(aSz);
@@ -1944,7 +1944,7 @@ void ImplListBoxWindow::GetFocus()
     sal_Int32 nPos = mnCurrentPos;
     if ( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
-    long nHeightDiff = mpEntryList->GetAddedHeight( nPos, mnTop, 0 );
+    long nHeightDiff = mpEntryList->GetAddedHeight( nPos, mnTop );
     maFocusRect.SetPos( Point( 0, nHeightDiff ) );
     Size aSz( maFocusRect.GetWidth(), mpEntryList->GetEntryHeight( nPos ) );
     maFocusRect.SetSize( aSz );
@@ -1975,7 +1975,7 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
     if ( nTop != mnTop )
     {
         ImplClearLayoutData();
-        long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop, 0 );
+        long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop );
         Update();
         ImplHideFocusRect();
         mnTop = nTop;

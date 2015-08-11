@@ -229,7 +229,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
     maPageVDev->SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev->EnableOutput( true );
+    maPageVDev->EnableOutput();
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
@@ -444,7 +444,7 @@ void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
 void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
 {
     mpNupOrderWin->Show();
-    mpPagesBtn->Check( true );
+    mpPagesBtn->Check();
     mpBrochureBtn->Show( false );
 
     // setup field units for metric fields
@@ -548,7 +548,7 @@ void PrintDialog::OutputOptPage::readFromSettings()
                               OUString( "CollateSingleJobs"  ) );
     if ( aValue.equalsIgnoreAsciiCase("true") )
     {
-        mpCollateSingleJobsBox->Check( true );
+        mpCollateSingleJobsBox->Check();
     }
     else
     {
@@ -1530,7 +1530,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
         // update text fields
         updatePrinterText();
-        preparePreview( true, false );
+        preparePreview( true );
     }
     else if( pBox == maNUpPage.mpNupOrientationBox || pBox == maNUpPage.mpNupOrderBox )
     {
@@ -1635,7 +1635,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
             maPController->setupPrinter( this );
 
             // tdf#63905 don't use cache: page size may change
-            preparePreview( true, false );
+            preparePreview( true );
         }
         checkControlDependencies();
     }

@@ -2294,7 +2294,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
-            ImplShowCursor(true);
+            ImplShowCursor();
             Invalidate();
         }
     }
@@ -2333,7 +2333,7 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ( !mpSubEdit )
         {
-            ImplShowCursor( true );
+            ImplShowCursor();
             Invalidate();
         }
     }

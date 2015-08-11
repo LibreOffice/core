@@ -1608,7 +1608,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     if( pOutLength )
         *pOutLength = ((nLength < 0 ) ? -nValue : nValue);
 
-    appendFixedInt( nValue, rBuffer, 1 );
+    appendFixedInt( nValue, rBuffer );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength, sal_Int32 nPrecision ) const
@@ -5994,9 +5994,9 @@ bool PDFWriterImpl::emitSignature()
     appendLiteralStringEncrypt( m_aCreationDateString, m_nSignatureObject, aLine );
 
     aLine.append( " /ByteRange [ 0 ");
-    aLine.append( m_nSignatureContentOffset - 1, 10 );
+    aLine.append( m_nSignatureContentOffset - 1 );
     aLine.append( " " );
-    aLine.append( m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1, 10 );
+    aLine.append( m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1 );
     aLine.append( " " );
 
     m_nSignatureLastByteRangeNoOffset = nOffset + aLine.getLength();
@@ -6806,7 +6806,7 @@ bool PDFWriterImpl::finalizeSignature()
     sal_uInt64 nWritten = 0;
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset) ) );
     OStringBuffer aByteRangeNo( 256 );
-    aByteRangeNo.append( nLastByteRangeNo, 10);
+    aByteRangeNo.append( nLastByteRangeNo );
     aByteRangeNo.append( " ]" );
 
     if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)

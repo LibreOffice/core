@@ -477,7 +477,7 @@ void DockingWindow::dispose()
     if ( IsFloatingMode() )
     {
         Show( false, ShowFlags::NoFocusChange );
-        SetFloatingMode( false );
+        SetFloatingMode();
     }
     delete mpImplData;
     mpImplData = NULL;

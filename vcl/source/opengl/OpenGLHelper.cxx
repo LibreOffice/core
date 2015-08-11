@@ -103,7 +103,7 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
         return;
 
     OString aVersionStr("#version");
-    int nVersionStrStartPos = rShaderSource.indexOf(aVersionStr, 0);
+    int nVersionStrStartPos = rShaderSource.indexOf(aVersionStr);
 
     if (nVersionStrStartPos == -1)
     {

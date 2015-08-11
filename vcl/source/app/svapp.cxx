@@ -1332,7 +1332,7 @@ SystemWindowFlags Application::GetSystemWindowMode()
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( true );
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     if ( pWrapper )
         xT = pWrapper->GetVCLToolkit();
     return xT;
@@ -1357,7 +1357,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
 #ifndef DISABLE_DYNLOADING
         osl::Module aTkLib;
         OUString aLibName(TK_DLL_NAME);
-        aTkLib.loadRelative(&thisModule, aLibName, SAL_LOADMODULE_DEFAULT);
+        aTkLib.loadRelative(&thisModule, aLibName);
         if (aTkLib.is())
         {
             FN_TkCreateUnoWrapper fnCreateWrapper = reinterpret_cast<FN_TkCreateUnoWrapper>(aTkLib.getFunctionSymbol("CreateUnoWrapper"));

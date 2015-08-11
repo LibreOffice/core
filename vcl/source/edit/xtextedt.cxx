@@ -307,7 +307,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, bool
 
         TextSelection aSearchSel( aSel );
 
-        bool bFound = pTextEngine->Search( aSel, rSearchOptions, true );
+        bool bFound = pTextEngine->Search( aSel, rSearchOptions );
         if ( bFound )
             pTextEngine->UndoActionStart();
         while ( bFound )
@@ -317,7 +317,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, bool
             TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchOptions.replaceString );
             aSel = aSearchSel;
             aSel.GetStart() = aNewStart;
-            bFound = pTextEngine->Search( aSel, rSearchOptions, true );
+            bFound = pTextEngine->Search( aSel, rSearchOptions );
         }
         if ( nFound )
         {

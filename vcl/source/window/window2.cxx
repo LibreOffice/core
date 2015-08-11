@@ -1355,8 +1355,7 @@ void Window::SetSizePixel( const Size& rNewSize )
 void Window::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     setPosSizePixel( rNewPos.X(), rNewPos.Y(),
-                     rNewSize.Width(), rNewSize.Height(),
-                     PosSizeFlags::PosSize );
+                     rNewSize.Width(), rNewSize.Height());
 }
 
 void Window::SetOutputSizePixel( const Size& rNewSize )

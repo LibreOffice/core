@@ -697,7 +697,7 @@ void PushButton::ImplInitSettings( bool bFont,
         if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) ||
              (GetStyle() & WB_FLATBUTTON) != 0 )
         {
-            EnableChildTransparentMode( true );
+            EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
 
@@ -709,7 +709,7 @@ void PushButton::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( ParentClipMode::NONE );
+            SetParentClipMode();
             SetPaintTransparent( false );
         }
     }
@@ -1167,7 +1167,7 @@ void PushButton::ImplSetDefButton( bool bSet )
         ImplGetButtonState() &= ~DrawButtonFlags::Default;
     }
     if( bSetPos )
-        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), PosSizeFlags::All );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
 
     Invalidate();
 }
@@ -1243,7 +1243,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
                         ImplGetButtonState() &= ~DrawButtonFlags::Pressed;
                     }
                     else
-                        Check( true );
+                        Check();
                 }
             }
             else
@@ -1328,7 +1328,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
                 ImplGetButtonState() &= ~DrawButtonFlags::Pressed;
             }
             else
-                Check( true );
+                Check();
 
             Toggle();
         }
@@ -1755,7 +1755,7 @@ void CancelButton::Click()
             if ( pParent->IsDialog() )
             {
                 if ( static_cast<Dialog*>(pParent)->IsInExecute() )
-                    static_cast<Dialog*>(pParent)->EndDialog( RET_CANCEL );
+                    static_cast<Dialog*>(pParent)->EndDialog();
                 // prevent recursive calls
                 else if ( !static_cast<Dialog*>(pParent)->IsInClose() )
                 {
@@ -1862,7 +1862,7 @@ void RadioButton::ImplInitSettings( bool bFont,
         if ( !IsControlBackground() &&
             (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) ) )
         {
-            EnableChildTransparentMode( true );
+            EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
@@ -1872,7 +1872,7 @@ void RadioButton::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( ParentClipMode::NONE );
+            SetParentClipMode();
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )
@@ -3000,7 +3000,7 @@ void CheckBox::ImplInitSettings( bool bFont,
         if ( !IsControlBackground() &&
             (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) ) )
         {
-            EnableChildTransparentMode( true );
+            EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
@@ -3010,7 +3010,7 @@ void CheckBox::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( ParentClipMode::NONE );
+            SetParentClipMode();
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )
@@ -3028,7 +3028,7 @@ void CheckBox::ImplLoadRes( const ResId& rResId )
     sal_uInt16 nChecked = ReadShortRes();
     //anderer Wert als Default ?
     if( nChecked )
-        Check( true );
+        Check();
 }
 
 void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
@@ -3470,7 +3470,7 @@ void CheckBox::GetFocus()
         aPos.Move(-1,-1);
         aSize.Height() += 2;
         aSize.Width() += 2;
-        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), PosSizeFlags::All );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         Invalidate();
     }
     else
@@ -3501,7 +3501,7 @@ void CheckBox::LoseFocus()
         aPos.Move(1,1);
         aSize.Height() -= 2;
         aSize.Width() -= 2;
-        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), PosSizeFlags::All );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         Invalidate();
     }
 }
@@ -3859,7 +3859,7 @@ ImageRadioButton::ImageRadioButton( vcl::Window* pParent, WinBits nStyle ) :
 TriStateBox::TriStateBox( vcl::Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
 {
-    EnableTriState( true );
+    EnableTriState();
 }
 
 DisclosureButton::DisclosureButton( vcl::Window* pParent, WinBits nStyle ) :

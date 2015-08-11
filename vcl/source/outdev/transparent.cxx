@@ -198,7 +198,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
             Bitmap aBandBmp(aPaint);
 
             aBandBmp.Crop(*aRectIter);
-            DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, MetaActionType::BMPSCALEPART);
+            DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
         }
 
         mbMap = bOldMap;

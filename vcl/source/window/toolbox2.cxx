@@ -1859,7 +1859,7 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent*, pEvent )
     {
         sal_uInt16 id = GetMenu()->GetItemId( pEvent->GetItemPos() );
         if( id >= TOOLBOX_MENUITEM_START )
-            TriggerItem( id - TOOLBOX_MENUITEM_START, false, false );
+            TriggerItem( id - TOOLBOX_MENUITEM_START, false );
     }
     return 0;
 }

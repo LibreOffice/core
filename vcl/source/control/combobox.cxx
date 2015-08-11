@@ -281,7 +281,7 @@ void ComboBox::ImplLoadRes( const ResId& rResId )
     {
         for( sal_Int32 i = 0; i < nNumber; i++ )
         {
-            InsertEntry( ReadStringRes(), LISTBOX_APPEND );
+            InsertEntry( ReadStringRes() );
         }
     }
 }
@@ -385,12 +385,12 @@ void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )
         if (!m_isMatchCase)
         {
             // Try match case insensitive from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, true );
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward );
             if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                 // Try match case insensitive, but from start
                 nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText,
                     bForward ? 0 : (m_pImplLB->GetEntryList()->GetEntryCount()-1),
-                    bForward, true );
+                    bForward );
         }
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )

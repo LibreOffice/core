@@ -84,7 +84,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        mpWindowImpl->mpBorderWindow->UpdateSettings( rSettings, false );
+        mpWindowImpl->mpBorderWindow->UpdateSettings( rSettings );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->UpdateSettings( rSettings, true );

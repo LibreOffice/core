@@ -656,7 +656,7 @@ bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelec
 
 TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, sal_Unicode c, bool bOverwrite )
 {
-    return ImpInsertText( c, rCurSel, bOverwrite, false );
+    return ImpInsertText( c, rCurSel, bOverwrite  );
 }
 
 TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, bool bOverwrite, bool bIsUserInput )
@@ -3092,7 +3092,7 @@ long TextEngine::ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt1
         nX = ImpGetXPos( nPara, pLine, nIndex, nIndex == nPortionStart );
         if ( nIndex2 != nIndex )
         {
-            long nX2 = ImpGetXPos( nPara, pLine, nIndex2, false );
+            long nX2 = ImpGetXPos( nPara, pLine, nIndex2 );
             if ( ( !IsRightToLeft() && ( nX2 < nX ) ) ||
                  ( IsRightToLeft() && ( nX2 > nX ) ) )
             {

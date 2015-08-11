@@ -1549,7 +1549,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     {
                         pOut->Push();
                         pOut->SelectObject( nIndex );
-                        pOut->DrawPolyPolygon( aPolyPoly, false );
+                        pOut->DrawPolyPolygon( aPolyPoly );
                         pOut->Pop();
                     }
                 }

@@ -137,7 +137,7 @@ namespace
             EndDialog( 1 );
         }
         else
-            EndDialog(0);
+            EndDialog();
         return 0;
     }
 
@@ -639,7 +639,7 @@ bool PspSalInfoPrinter::SetData(
                 pValue = pKey->getValueCaseInsensitive( aPaper );
             }
 
-            if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )
+            if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue ) == pValue ) )
                 return false;
         }
 

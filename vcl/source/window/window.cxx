@@ -2323,7 +2323,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
         else if ( mpWindowImpl->mbFrame )
         {
             mpWindowImpl->mbSuppressAccessibilityEvents = true;
-            mpWindowImpl->mpFrame->Show( false, false );
+            mpWindowImpl->mpFrame->Show( false );
         }
 
         CompatStateChanged( StateChangedType::Visible );
@@ -2588,7 +2588,7 @@ void Window::Enable( bool bEnable, bool bChild )
         mpWindowImpl->mpBorderWindow->Enable( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->Enable( bEnable, true );
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->Enable( bEnable );
     }
 
     // #i56102# restore app focus win in case the
@@ -2650,7 +2650,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
         mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->EnableInput( bEnable, true );
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->EnableInput( bEnable );
     }
 
     if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||

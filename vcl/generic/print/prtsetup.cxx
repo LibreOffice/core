@@ -47,7 +47,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         {
             if( rBox.GetEntryPos( static_cast<void const *>(pValue) ) == LISTBOX_ENTRY_NOTFOUND )
             {
-                nPos = rBox.InsertEntry( aOptionText, LISTBOX_APPEND );
+                nPos = rBox.InsertEntry( aOptionText );
                     rBox.SetEntryData( nPos, const_cast<PPDValue *>(pValue) );
             }
         }
@@ -154,7 +154,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
         EndDialog( 1 );
     }
     else if( pButton == m_pCancelButton )
-        EndDialog( 0 );
+        EndDialog();
 
     return 0;
 }

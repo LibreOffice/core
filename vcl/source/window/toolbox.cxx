@@ -1341,7 +1341,7 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
     if ( pAccel->GetCurItemId() == KEY_ESCAPE )
         EndDragging( false );
     else
-        EndDragging( true );
+        EndDragging();
 
     return (long) true;
 }
@@ -1451,7 +1451,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
         aColor = GetControlBackground();
         SetBackground( aColor );
         SetPaintTransparent(false);
-        SetParentClipMode( ParentClipMode::NONE );
+        SetParentClipMode();
     }
     else
     {
@@ -1474,7 +1474,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
 
             rRenderContext.SetBackground(aColor);
             SetPaintTransparent(false);
-            SetParentClipMode(ParentClipMode::NONE);
+            SetParentClipMode();
         }
     }
 }
@@ -1514,7 +1514,7 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
             aColor = GetControlBackground();
             SetBackground( aColor );
             SetPaintTransparent(false);
-            SetParentClipMode( ParentClipMode::NONE );
+            SetParentClipMode();
         }
         else
         {
@@ -1537,7 +1537,7 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 
                 SetBackground(aColor);
                 SetPaintTransparent(false);
-                SetParentClipMode(ParentClipMode::NONE);
+                SetParentClipMode();
             }
         }
     }
@@ -5355,7 +5355,7 @@ void ToolBox::ChangeHighlight( sal_uInt16 nPos )
 {
     if ( nPos < GetItemCount() ) {
         ImplGrabFocus( GetFocusFlags::NONE );
-        ImplChangeHighlight ( ImplGetItem ( GetItemId ( (sal_uInt16) nPos ) ), false );
+        ImplChangeHighlight ( ImplGetItem ( GetItemId ( (sal_uInt16) nPos ) ) );
     }
 }
 

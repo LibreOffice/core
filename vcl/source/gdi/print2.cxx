@@ -1198,7 +1198,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                         // the current aCCList element
                                         // (aCurr)
                                         if( aCCList_MemberMap[nActionNum] == &(*aCurr) )
-                                            aPaintVDev->EnableOutput(true);
+                                            aPaintVDev->EnableOutput();
 
                                         // but process every action
                                         const MetaActionType nType( pCurrAct->GetType() );

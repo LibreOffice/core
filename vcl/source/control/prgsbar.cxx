@@ -80,7 +80,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
         {
             if( (GetStyle() & WB_BORDER) )
                 SetBorderStyle( WindowBorderStyle::REMOVEBORDER );
-            EnableChildTransparentMode( true );
+            EnableChildTransparentMode();
             SetPaintTransparent( true );
             SetBackground();
             SetParentClipMode( ParentClipMode::NoClip );

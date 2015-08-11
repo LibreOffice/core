@@ -2019,7 +2019,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     if( mpCffLocal->mfBlueScale) {
         pOut += sprintf( pOut, "/BlueScale ");
-        pOut += dbl2str( pOut, mpCffLocal->mfBlueScale, 6);
+        pOut += dbl2str( pOut, mpCffLocal->mfBlueScale);
         pOut += sprintf( pOut, " def\n");
     }
     if( mpCffLocal->mfBlueShift) {  // default BlueShift==7

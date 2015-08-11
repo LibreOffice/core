@@ -97,16 +97,16 @@ basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
 void WinMtfPathObj::AddPoint( const Point& rPoint )
 {
     if ( bClosed )
-        Insert( Polygon(), POLYPOLY_APPEND );
+        Insert( Polygon() );
     Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
-    rPoly.Insert( rPoly.GetSize(), rPoint, POLY_NORMAL );
+    rPoly.Insert( rPoly.GetSize(), rPoint );
     bClosed = false;
 }
 
 void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
 {
     if ( bClosed )
-        Insert( Polygon(), POLYPOLY_APPEND );
+        Insert( Polygon() );
     Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPolyLine );
     bClosed = false;
@@ -114,7 +114,7 @@ void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
 
 void WinMtfPathObj::AddPolygon( const Polygon& rPoly )
 {
-    Insert( rPoly, POLYPOLY_APPEND );
+    Insert( rPoly );
     bClosed = true;
 }
 
@@ -122,7 +122,7 @@ void WinMtfPathObj::AddPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     sal_uInt16 i, nCount = rPolyPoly.Count();
     for ( i = 0; i < nCount; i++ )
-        Insert( rPolyPoly[ i ], POLYPOLY_APPEND );
+        Insert( rPolyPoly[ i ] );
     bClosed = true;
 }
 
@@ -135,7 +135,7 @@ void WinMtfPathObj::ClosePath()
         {
             Point aFirst( rPoly[ 0 ] );
             if ( aFirst != rPoly[ rPoly.GetSize() - 1 ] )
-                rPoly.Insert( rPoly.GetSize(), aFirst, POLY_NORMAL );
+                rPoly.Insert( rPoly.GetSize(), aFirst );
         }
     }
     bClosed = true;
@@ -263,7 +263,7 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigI
 {
     SvLockBytes *pLB = pWMF->GetLockBytes();
     if ( pLB )
-        pLB->SetSynchronMode( true );
+        pLB->SetSynchronMode();
 
     nStartPos = pWMF->Tell();
 
@@ -1022,7 +1022,7 @@ void WinMtfOutput::MoveTo( const Point& rPoint, bool bRecordPath )
         // fdo#57353 create new subpath for subsequent moves
         if ( aPathObj.Count() )
             if ( aPathObj[ aPathObj.Count() - 1 ].GetSize() )
-                aPathObj.Insert( Polygon(), POLYPOLY_APPEND );
+                aPathObj.Insert( Polygon() );
         aPathObj.AddPoint( aDest );
     }
     maActPos = aDest;
@@ -2094,7 +2094,7 @@ void WinMtfOutput::Pop()
 
 void WinMtfOutput::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
 {
-   rGDIMetaFile.Play( *mpGDIMetaFile, 0xFFFFFFFF );
+   rGDIMetaFile.Play( *mpGDIMetaFile );
 }
 
 void WinMtfOutput::PassEMFPlusHeaderInfo()

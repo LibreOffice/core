@@ -459,7 +459,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 xVDev->EnableMapMode( false );
                                 aPaint = xVDev->GetBitmap( aPoint, aDstSizePixel );
-                                xVDev->EnableMapMode( true );
+                                xVDev->EnableMapMode();
 
                                 // create mask bitmap
                                 xVDev->SetLineColor( COL_BLACK );
@@ -472,7 +472,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.WindStart();
                                 xVDev->EnableMapMode( false );
                                 aMask = xVDev->GetBitmap( aPoint, aDstSizePixel );
-                                xVDev->EnableMapMode( true );
+                                xVDev->EnableMapMode();
 
                                 // create alpha mask from gradient
                                 xVDev->SetDrawMode( DrawModeFlags::GrayGradient );

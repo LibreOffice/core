@@ -67,7 +67,7 @@ void GroupBox::ImplInitSettings( bool bFont,
               !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
              !IsControlBackground() )
         {
-            EnableChildTransparentMode( true );
+            EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
@@ -75,7 +75,7 @@ void GroupBox::ImplInitSettings( bool bFont,
         else
         {
             EnableChildTransparentMode( false );
-            SetParentClipMode( ParentClipMode::NONE );
+            SetParentClipMode();
             SetPaintTransparent( false );
 
             if ( IsControlBackground() )

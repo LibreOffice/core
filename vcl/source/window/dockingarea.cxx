@@ -164,7 +164,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 {
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
 
-    EnableNativeWidget(true); // only required because the toolkit currently switches this flag off
+    EnableNativeWidget(); // only required because the toolkit currently switches this flag off
     if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
     {
         ToolbarValue aControlValue;

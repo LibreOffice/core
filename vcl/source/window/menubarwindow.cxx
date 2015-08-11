@@ -1059,7 +1059,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
         rRenderContext.SetBackground(aWallpaper);
         SetPaintTransparent(false);
-        SetParentClipMode(ParentClipMode::NONE);
+        SetParentClipMode();
     }
     else if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
     {
@@ -1071,7 +1071,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
         aWallpaper.SetStyle(WallpaperStyle::ApplicationGradient);
         rRenderContext.SetBackground(aWallpaper);
         SetPaintTransparent(false);
-        SetParentClipMode(ParentClipMode::NONE);
+        SetParentClipMode();
     }
 
     rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());

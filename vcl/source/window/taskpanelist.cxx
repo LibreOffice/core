@@ -186,7 +186,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
                 vcl::Window *pNextWin = NULL;
 
                 if( bSplitterOnly )
-                    pNextWin = FindNextSplitter( *p, true );
+                    pNextWin = FindNextSplitter( *p );
                 else
                     pNextWin = FindNextFloat( *p, bForward );
 
@@ -218,7 +218,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
         {
             vcl::Window *pWin;
             if( bSplitterOnly )
-                pWin = FindNextSplitter( NULL, true );
+                pWin = FindNextSplitter( NULL );
             else
                 pWin = FindNextFloat( NULL, bForward );
             if( pWin )

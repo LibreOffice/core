@@ -1315,7 +1315,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     GDIMetaFile aCleanedFile;
     DrawModeFlags nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
 
-    mpImplData->mxPrinter->EnableOutput( true );
+    mpImplData->mxPrinter->EnableOutput();
 
     // actually print the page
     mpImplData->mxPrinter->ImplStartPage();
@@ -1346,7 +1346,7 @@ void PrinterController::abortJob()
     setLastPage( true );
     mpImplData->mpProgress.disposeAndClear();
     GDIMetaFile aMtf;
-    getPageFile( 0, aMtf, false );
+    getPageFile( 0, aMtf );
 }
 
 void PrinterController::setLastPage( bool i_bLastPage )

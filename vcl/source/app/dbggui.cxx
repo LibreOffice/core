@@ -260,7 +260,7 @@ DbgDialog::DbgDialog() :
     maRes->Show();
     maRes->SetText("~Resourcen");
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
-        maRes->Check( true );
+        maRes->Check();
     maRes->SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
                            aButtonSize );
     }
@@ -269,7 +269,7 @@ DbgDialog::DbgDialog() :
     maDialog->Show();
     maDialog->SetText("~Dialog");
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
-        maDialog->Check( true );
+        maDialog->Check();
     maDialog->SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
                               aButtonSize );
     }
@@ -278,7 +278,7 @@ DbgDialog::DbgDialog() :
     maBoldAppFont->Show();
     maBoldAppFont->SetText("~Bold AppFont");
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
-        maBoldAppFont->Check( true );
+        maBoldAppFont->Check();
     maBoldAppFont->SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
                                    aButtonSize );
     maBoldAppFont->SaveValue();
@@ -587,14 +587,14 @@ void DbgDialogTest( vcl::Window* pWindow )
                     switch( pChild->GetType() )
                     {
                         case WINDOW_RADIOBUTTON:
-                            aWidth = static_cast<RadioButton*>(pChild)->CalcMinimumSize(0).Width();
+                            aWidth = static_cast<RadioButton*>(pChild)->CalcMinimumSize().Width();
                             break;
                         case WINDOW_CHECKBOX:
                         case WINDOW_TRISTATEBOX:
-                            aWidth = static_cast<CheckBox*>(pChild)->CalcMinimumSize(0).Width();
+                            aWidth = static_cast<CheckBox*>(pChild)->CalcMinimumSize().Width();
                             break;
                         case WINDOW_PUSHBUTTON:
-                            aWidth = static_cast<PushButton*>(pChild)->CalcMinimumSize(0).Width();
+                            aWidth = static_cast<PushButton*>(pChild)->CalcMinimumSize().Width();
                             break;
                         default: break;
                     }
