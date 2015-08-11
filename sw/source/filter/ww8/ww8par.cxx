@@ -2141,7 +2141,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
-    long nStartCp, long nLen, ManTypes nType )
+    WW8_CP nStartCp, WW8_CP nLen, ManTypes nType )
 {
     // Saves Flags (amongst other things) and resets them
     WW8ReaderSave aSave( this );
@@ -2228,7 +2228,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     return 0;
 }
 
-void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
+void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth)
 {
     const SwNodeIndex* pSttIdx = rHdFtFmt.GetCntnt().GetCntntIdx();
@@ -2272,7 +2272,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     MoveOutsideFly(pFrame, aTmpPos);
 }
 
-void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
+void SwWW8ImplReader::Read_HdFtText(WW8_CP nStart, WW8_CP nLen, SwFrmFmt* pHdFtFmt)
 {
     const SwNodeIndex* pSttIdx = pHdFtFmt->GetCntnt().GetCntntIdx();
     if (!pSttIdx)
@@ -3877,6 +3877,8 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLin
         {
             maCurrAttrCP = rTxtPos;
             rNext = ReadTextAttr( rTxtPos, rbStartLine );
+            if (rTxtPos == rNext && rTxtPos == WW8_CP_MAX)
+                break;
         }
         while( rTxtPos >= rNext );
 
@@ -3918,7 +3920,7 @@ void SwWW8ImplReader::CloseAttrEnds()
     EndSpecial();
 }
 
-bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
+bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 {
     bool bJoined=false;
 
@@ -3944,6 +3946,12 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     pStrm->Seek( pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &bIsUnicode ) );
 
     WW8_CP l = nStartCp;
+    const WW8_CP nMaxPossible = WW8_CP_MAX-nStartCp;
+    if (nTextLen > nMaxPossible)
+    {
+        SAL_WARN_IF(nTextLen > nMaxPossible, "sw.ww8", "TextLen too long");
+        nTextLen = nMaxPossible;
+    }
     while ( l<nStartCp+nTextLen )
     {
         ReadAttrs( nNext, l, bStartLine );// Takes SectionBreaks into account, too
