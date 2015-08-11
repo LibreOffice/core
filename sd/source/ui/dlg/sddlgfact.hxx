@@ -25,9 +25,10 @@
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
-                    Class( DialogClass* p)          \
-                     : pDlg(p)                      \
-                     {}                             \
+    explicit Class(DialogClass* p)                  \
+        : pDlg(p)                                   \
+    {                                               \
+    }                                               \
     virtual         ~Class();                       \
     virtual short   Execute() SAL_OVERRIDE ;
 
@@ -35,7 +36,7 @@ public:                                             \
 Class::~Class()                                     \
 {                                                   \
 }                                                   \
-short Class::Execute()                             \
+short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
 }
