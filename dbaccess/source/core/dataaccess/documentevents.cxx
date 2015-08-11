@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 namespace dbaccess
 {
@@ -203,8 +204,7 @@ namespace dbaccess
             m_pData->rEventsData.begin(),
             m_pData->rEventsData.end(),
             aNames.getArray(),
-            []( const ::std::pair< DocumentEventsData::key_type, DocumentEventsData::mapped_type >& cp )
-            { return cp.first; }
+            ::o3tl::select1st< DocumentEventsData::value_type >()
         );
         return aNames;
     }

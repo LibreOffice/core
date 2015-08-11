@@ -110,7 +110,7 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
         tTranslationMap::const_iterator aIt(
             ::std::find_if( aTranslationMap.begin(), aTranslationMap.end(),
                 [&rRoleString]
-                ( const ::std::pair< OUString, OUString >& cp )
+                ( const tTranslationMap::value_type& cp )
                 { return rRoleString == cp.second; } )
             );
 

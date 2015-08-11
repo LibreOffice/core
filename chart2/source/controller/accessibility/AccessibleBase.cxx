@@ -48,6 +48,7 @@
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/compat_functional.hxx>
 
 #include <algorithm>
 
@@ -251,8 +252,7 @@ bool AccessibleBase::ImplUpdateChildren()
         aAccChildren.reserve( aModelChildren.size());
         ::std::transform( m_aChildOIDMap.begin(), m_aChildOIDMap.end(),
                           ::std::back_inserter( aAccChildren ),
-                          []( const ::std::pair<ObjectIdentifier, tAccessible>& cp )
-                          { return cp.first; } );
+                          ::o3tl::select1st< ChildOIDMap::value_type >() );
 
         ::std::sort( aModelChildren.begin(), aModelChildren.end());
 

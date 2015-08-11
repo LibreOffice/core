@@ -38,7 +38,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
-
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -52,8 +52,10 @@ class CanvasFactory
                                       lang::XMultiComponentFactory,
                                       lang::XMultiServiceFactory >
 {
-    typedef std::vector<std::pair<OUString, Sequence<OUString> > > AvailVector;
-    typedef std::vector<std::pair<OUString, OUString> >            CacheVector;
+    typedef std::pair< OUString, Sequence< OUString > > AvailPair;
+    typedef std::pair< OUString, OUString >             CachePair;
+    typedef std::vector< AvailPair >                    AvailVector;
+    typedef std::vector< CachePair >                    CacheVector;
 
 
     mutable ::osl::Mutex              m_mutex;
@@ -238,9 +240,7 @@ Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     std::transform(m_aAvailableImplementations.begin(),
                    m_aAvailableImplementations.end(),
                    aServiceNames.getArray(),
-                   [](std::pair<OUString, Sequence<OUString> > const& ap)
-                   { return ap.first; }
-            );
+                   o3tl::select1st< AvailPair >());
     return aServiceNames;
 }
 
@@ -326,7 +326,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( (aMatch=std::find_if(
                     m_aCachedImplementations.begin(),
                     aEnd,
-                    [&serviceName](std::pair<OUString, OUString> const& cp)
+                    [&serviceName](CachePair const& cp)
                     { return serviceName.equals(cp.first); }
                     )) != aEnd) {
         Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
@@ -340,7 +340,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( (aAvailImplsMatch=std::find_if(
                     m_aAvailableImplementations.begin(),
                     aAvailEnd,
-                    [&serviceName](std::pair<OUString, Sequence<OUString> > const& ap)
+                    [&serviceName](AvailPair const& ap)
                     { return serviceName.equals(ap.first); }
                     )) == aAvailEnd ) {
         return Reference<XInterface>();
@@ -351,7 +351,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( (aAAImplsMatch=std::find_if(
                     m_aAAImplementations.begin(),
                     aAAEnd,
-                    [&serviceName](std::pair<OUString, Sequence<OUString> > const& ap)
+                    [&serviceName](AvailPair const& ap)
                     { return serviceName.equals(ap.first); }
                     )) == aAAEnd) {
         return Reference<XInterface>();
@@ -362,7 +362,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( (aAccelImplsMatch=std::find_if(
                     m_aAcceleratedImplementations.begin(),
                     aAccelEnd,
-                    [&serviceName](std::pair<OUString, Sequence<OUString> > const& ap)
+                    [&serviceName](AvailPair const& ap)
                     { return serviceName.equals(ap.first); }
                     )) == aAccelEnd ) {
         return Reference<XInterface>();

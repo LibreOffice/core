@@ -58,6 +58,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <limits>
@@ -1467,8 +1468,7 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     ::std::transform( aCmdHashMap.begin(),
         aCmdHashMap.end(),
         aCommandGroups.getArray(),
-        []( const ::std::pair< CommandHashMap::key_type, CommandHashMap::mapped_type >& cp )
-        { return cp.first; }
+        ::o3tl::select1st< CommandHashMap::value_type >()
     );
 
     return aCommandGroups;

@@ -70,6 +70,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 namespace dbaui
 {
@@ -772,8 +773,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         ::std::transform(m_aIndirectPropTranslator.begin(),
                          m_aIndirectPropTranslator.end(),
                          ::std::insert_iterator<StringSet>(aIndirectProps,aIndirectProps.begin()),
-                         []( const ::std::pair< MapInt2String::key_type, MapInt2String::mapped_type >& cp )
-                         { return cp.second; });
+                         ::o3tl::select2nd< MapInt2String::value_type >());
 
         // now check the to-be-preserved props
         ::std::vector< sal_Int32 > aRemoveIndexes;
