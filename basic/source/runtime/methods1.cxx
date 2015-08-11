@@ -185,7 +185,7 @@ RTLFUNC(CallByName)
                 SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
                 if( pRT != NULL )
                 {
-                    pRT->StepSET_Impl( pValVar, rFindVar, false );
+                    pRT->StepSET_Impl( pValVar, rFindVar );
                 }
             }
         }

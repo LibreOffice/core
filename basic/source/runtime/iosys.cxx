@@ -128,7 +128,7 @@ IMPL_LINK( SbiInputDialog, Cancel, vcl::Window *, pWindow )
 {
     (void)pWindow;
 
-    EndDialog( 0 );
+    EndDialog();
     return 0;
 }
 

@@ -245,7 +245,7 @@ namespace tools
                     // first union all pending ones, subtract en bloc then
                     maPendingPolygons = solveCrossovers(maPendingPolygons);
                     maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
-                    maPendingPolygons = stripDispensablePolygons(maPendingPolygons, false);
+                    maPendingPolygons = stripDispensablePolygons(maPendingPolygons);
 
                     if( bIsCleared )
                     {
@@ -290,7 +290,7 @@ namespace tools
 
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges, false);
+                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
                     if( bIsEmpty )
                         maClipPoly = aCollectedRanges;
                     else
@@ -347,7 +347,7 @@ namespace tools
                     // first union all pending ranges, subtract en bloc then
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
-                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges, false);
+                    aCollectedRanges = stripDispensablePolygons(aCollectedRanges);
 
                     if( bIsCleared )
                     {

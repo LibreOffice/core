@@ -171,7 +171,7 @@ namespace basegfx
             const sal_Int32 aLen( rStr.getLength() );
             if(aLen)
             {
-                if( isOnNumberChar(rStr[aLen - 1], false, true) &&
+                if( isOnNumberChar(rStr[aLen - 1], false) &&
                     fValue >= 0.0 )
                 {
                     rStr.append( ' ' );

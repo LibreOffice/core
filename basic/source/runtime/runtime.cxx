@@ -2040,7 +2040,7 @@ void SbiRuntime::StepVBASET()
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
     // don't handle default property
-    StepSET_Impl( refVal, refVar, false ); // set obj = something
+    StepSET_Impl( refVal, refVar ); // set obj = something
 }
 
 
@@ -3301,7 +3301,7 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
 
 void SbiRuntime::StepVBASETCLASS( sal_uInt32 nOp1 )
 {
-    StepSETCLASS_impl( nOp1, false );
+    StepSETCLASS_impl( nOp1 );
 }
 
 void SbiRuntime::StepSETCLASS( sal_uInt32 nOp1 )
@@ -4510,7 +4510,7 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     {
         sal_uInt16 nCount = static_cast<sal_uInt16>( nOp2 >> 17 );      // len = all bits above 0x10000
         OUStringBuffer aBuf;
-        comphelper::string::padToLength(aBuf, nCount, 0);
+        comphelper::string::padToLength(aBuf, nCount);
         pVar->PutString(aBuf.makeStringAndClear());
     }
 

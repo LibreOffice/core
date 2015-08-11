@@ -649,7 +649,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                 StarBASIC* pLib = rBasLibInfo.GetLib();
                 if( !pLib )
                 {
-                    bool bLoaded = ImpLoadLibrary( &rBasLibInfo, NULL, false );
+                    bool bLoaded = ImpLoadLibrary( &rBasLibInfo, NULL );
                     if( bLoaded )
                         pLib = rBasLibInfo.GetLib();
                 }
@@ -1369,7 +1369,7 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
         }
         else
         {
-            bDone = ImpLoadLibrary( &rLibInfo, NULL, false );
+            bDone = ImpLoadLibrary( &rLibInfo, NULL );
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {

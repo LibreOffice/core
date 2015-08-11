@@ -143,7 +143,7 @@ IMPL_LINK( SvRTLInputBox, CancelHdl, Button *, pButton )
     (void)pButton;
 
     aText.clear();
-    EndDialog( 0 );
+    EndDialog();
     return 0;
 }
 

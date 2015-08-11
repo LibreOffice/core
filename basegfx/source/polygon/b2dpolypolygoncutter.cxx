@@ -522,7 +522,7 @@ namespace basegfx
 
                 if(nOriginalCount)
                 {
-                    B2DPolyPolygon aGeometry(tools::addPointsAtCutsAndTouches(maOriginal, true));
+                    B2DPolyPolygon aGeometry(tools::addPointsAtCutsAndTouches(maOriginal));
                     aGeometry.removeDoublePoints();
                     aGeometry = tools::simplifyCurveSegments(aGeometry);
                     mbIsCurve = aGeometry.areControlPointsUsed();
@@ -946,7 +946,7 @@ namespace basegfx
                 aRetval = solveCrossovers(aRetval);
                 aRetval = stripNeutralPolygons(aRetval);
 
-                return stripDispensablePolygons(aRetval, false);
+                return stripDispensablePolygons(aRetval);
             }
         }
 
@@ -1023,7 +1023,7 @@ namespace basegfx
                 aRetval = basegfx::tools::solveCrossovers(aRetval);
                 aRetval = basegfx::tools::stripNeutralPolygons(aRetval);
 
-                return basegfx::tools::stripDispensablePolygons(aRetval, false);
+                return basegfx::tools::stripDispensablePolygons(aRetval);
             }
         }
 

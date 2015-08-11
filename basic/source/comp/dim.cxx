@@ -1255,7 +1255,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     {
         if ( bVBASupportOn )
         {
-            pProc->SetStatic( true );
+            pProc->SetStatic();
         }
         else
         {

@@ -859,7 +859,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             // #45355 converting if numeric
             if( IsNumericRTL() )
             {
-                ScanNumIntnl( GetOUString(), d, /*bSingle*/false );
+                ScanNumIntnl( GetOUString(), d );
                 goto cvt2;
             }
             else

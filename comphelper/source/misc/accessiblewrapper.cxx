@@ -180,7 +180,7 @@ namespace comphelper
         _rOutValue.clear();
         Reference< XAccessible > xChild;
         if ( _rInValue >>= xChild )
-            _rOutValue <<= getAccessibleWrapperFor( xChild, true );
+            _rOutValue <<= getAccessibleWrapperFor( xChild );
     }
 
 

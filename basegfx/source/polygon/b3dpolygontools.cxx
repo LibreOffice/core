@@ -468,7 +468,7 @@ namespace basegfx
 
         bool isInside(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder)
         {
-            if(bWithBorder && isPointOnPolygon(rCandidate, rPoint, true))
+            if(bWithBorder && isPointOnPolygon(rCandidate, rPoint))
             {
                 return true;
             }

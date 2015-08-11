@@ -1827,7 +1827,7 @@ bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 
             rStrm.WriteUChar( 1 );
                     if ( nVer )
-                        bRet = pImage->Save( rStrm, B_EXT_IMG_VERSION );
+                        bRet = pImage->Save( rStrm );
                     else
                         bRet = pImage->Save( rStrm, B_LEGACYVERSION );
                     if ( bFixup )

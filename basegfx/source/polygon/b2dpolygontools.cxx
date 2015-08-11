@@ -391,7 +391,7 @@ namespace basegfx
         {
             const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
 
-            if(bWithBorder && isPointOnPolygon(aCandidate, rPoint, true))
+            if(bWithBorder && isPointOnPolygon(aCandidate, rPoint))
             {
                 return true;
             }

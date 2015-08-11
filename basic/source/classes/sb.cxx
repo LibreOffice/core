@@ -2101,7 +2101,7 @@ void BasicCollection::Initialize()
     if ( !xAddInfo.Is() )
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  OUString( "Item" ), SbxVARIANT, SbxFlagBits::Read );
+        xAddInfo->AddParam(  OUString( "Item" ), SbxVARIANT );
         xAddInfo->AddParam(  OUString( "Key" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
         xAddInfo->AddParam(  OUString( "Before" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
         xAddInfo->AddParam(  OUString( "After" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
