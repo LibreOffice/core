@@ -2288,7 +2288,7 @@ void SwWW8ImplReader::Read_HdFtText(WW8_CP nStart, WW8_CP nLen, SwFrmFmt* pHdFtF
 bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
 {
     // Each CP of Plcfhdd MUST be less than FibRgLw97.ccpHdd
-    return (nHeaderCP < pWwFib->ccpHdr);
+    return (nHeaderCP < pWwFib->ccpHdr && nHeaderCP >= 0);
 }
 
 bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIhdt,
@@ -2306,7 +2306,7 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIh
             {
                 bool bOk = true;
                 if( bVer67 )
-                    bOk = ( pHdFt->GetTextPos(grpfIhdt, nI, start, nLen ) && nLen >= 2 );
+                    bOk = ( pHdFt->GetTextPos(grpfIhdt, nI, start, nLen ) && start >= 0 && nLen >= 2 );
                 else
                 {
                     pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), start, nLen);
