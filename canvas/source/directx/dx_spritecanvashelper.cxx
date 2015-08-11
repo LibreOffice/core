@@ -32,14 +32,6 @@
 #include "dx_canvascustomsprite.hxx"
 #include "dx_spritecanvashelper.hxx"
 
-#if defined(DX_DEBUG_IMAGES)
-# if OSL_DEBUG_LEVEL > 0
-#  include <imdebug.h>
-#  undef min
-#  undef max
-# endif
-#endif
-
 using namespace ::com::sun::star;
 
 namespace dxcanvas
@@ -180,12 +172,6 @@ namespace dxcanvas
         {
             return false; // disposed, or otherwise dysfunctional
         }
-
-#if defined(DX_DEBUG_IMAGES)
-# if OSL_DEBUG_LEVEL > 0
-        mpBackBuffer->imageDebugger();
-# endif
-#endif
 
         // store current output area (need to tunnel that to the
         // background, scroll, opaque and general sprite repaint

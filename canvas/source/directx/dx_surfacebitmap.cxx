@@ -30,15 +30,6 @@
 #include "dx_surfacebitmap.hxx"
 #include "dx_surfacegraphics.hxx"
 
-
-#if defined(DX_DEBUG_IMAGES)
-# if OSL_DEBUG_LEVEL > 0
-#  include <imdebug.h>
-#  undef min
-#  undef max
-# endif
-#endif
-
 using namespace ::com::sun::star;
 
 namespace dxcanvas
@@ -416,24 +407,6 @@ namespace dxcanvas
                                     aIEEEArea,
                                     aTransform);
     }
-
-
-    // DXSurfaceBitmap::imageDebugger
-
-#if defined(DX_DEBUG_IMAGES)
-# if OSL_DEBUG_LEVEL > 0
-    void DXSurfaceBitmap::imageDebugger()
-    {
-        D3DLOCKED_RECT aLockedRect;
-        if( FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)) )
-            return;
-
-        imdebug("bgra w=%d h=%d %p", maSize.getX(),
-                maSize.getY(), aLockedRect.pBits);
-        mpSurface->UnlockRect();
-    }
-# endif
-#endif
 
 
     // DXSurfaceBitmap::getData
