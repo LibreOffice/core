@@ -778,7 +778,7 @@ OUString IsoLanguageScriptCountryEntry::getTagString() const
 
 bool IsoLanguageScriptCountryEntry::startsInIgnoreAsciiCase( const OUString & rStr ) const
 {
-    return rStr.matchIgnoreAsciiCaseAsciiL( maLanguageScript, strlen( maLanguageScript), 0);
+    return rStr.matchIgnoreAsciiCaseAsciiL( maLanguageScript, strlen( maLanguageScript) );
 }
 
 OUString Bcp47CountryEntry::getTagString() const

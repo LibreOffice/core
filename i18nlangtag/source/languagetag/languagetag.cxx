@@ -1327,7 +1327,7 @@ void LanguageTagImpl::convertLocaleToBcp47()
     }
     else
     {
-        maBcp47 = LanguageTag::convertToBcp47( maLocale, true);
+        maBcp47 = LanguageTag::convertToBcp47( maLocale );
     }
     mbInitializedBcp47 = true;
 }
@@ -2022,7 +2022,7 @@ LanguageTag & LanguageTag::makeFallback()
 {
     if (!mbIsFallback)
     {
-        const lang::Locale& rLocale1 = getLocale( true);
+        const lang::Locale& rLocale1 = getLocale();
         lang::Locale aLocale2( MsLangId::Conversion::lookupFallbackLocale( rLocale1));
         if (    rLocale1.Language != aLocale2.Language ||
                 rLocale1.Country  != aLocale2.Country ||
@@ -2629,7 +2629,7 @@ OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocal
     if (rLocale.Language.isEmpty())
     {
         if (bResolveSystem)
-            aBcp47 = LanguageTag::convertToBcp47( LANGUAGE_SYSTEM, true);
+            aBcp47 = LanguageTag::convertToBcp47( LANGUAGE_SYSTEM );
         // else aBcp47 stays empty
     }
     else
@@ -2680,14 +2680,14 @@ LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bR
 // static
 LanguageType LanguageTag::convertToLanguageTypeWithFallback( const OUString& rBcp47 )
 {
-    return LanguageTag( rBcp47).makeFallback().getLanguageType( true);
+    return LanguageTag( rBcp47).makeFallback().getLanguageType();
 }
 
 
 // static
 com::sun::star::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUString& rBcp47 )
 {
-    return LanguageTag( rBcp47).makeFallback().getLocale( true);
+    return LanguageTag( rBcp47).makeFallback().getLocale();
 }
 
 

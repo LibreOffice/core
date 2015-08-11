@@ -353,8 +353,7 @@ void DicList::SearchForDictionaries(
             // get decoded dictionary file name
             INetURLObject aURLObj( aURL );
             OUString aDicName = aURLObj.getName( INetURLObject::LAST_SEGMENT,
-                        true, INetURLObject::DECODE_WITH_CHARSET,
-                        RTL_TEXTENCODING_UTF8 );
+                        true, INetURLObject::DECODE_WITH_CHARSET );
 
             DictionaryType eType = bNeg ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
             uno::Reference< XDictionary > xDic =
@@ -555,7 +554,7 @@ uno::Reference< XDictionary > SAL_CALL
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
-    bool bIsWriteablePath = rURL.match( GetDictionaryWriteablePath(), 0 );
+    bool bIsWriteablePath = rURL.match( GetDictionaryWriteablePath() );
     return new DictionaryNeo( rName, nLanguage, eDicType, rURL, bIsWriteablePath );
 }
 

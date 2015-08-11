@@ -1236,7 +1236,7 @@ void Converter::convertDate(
 {
     const util::DateTime dt(0, 0, 0, 0,
         i_rDate.Day, i_rDate.Month, i_rDate.Year, false);
-    convertDateTime(i_rBuffer, dt, pTimeZoneOffset, false);
+    convertDateTime(i_rBuffer, dt, pTimeZoneOffset);
 }
 
 static void convertTime(

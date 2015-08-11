@@ -91,7 +91,7 @@ sal_Int16 ScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 
         { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    // 88
     };
 
-    return unicode::getUnicodeScriptType(Text[nPos], typeList, CTLScriptType::CTL_UNKNOWN);
+    return unicode::getUnicodeScriptType(Text[nPos], typeList);
 }
 
 // Begin of Script Type is inclusive.

@@ -521,7 +521,7 @@ bool getJavaProps(const OUString & exePath,
         if (sLine.isEmpty())
             continue;
         //The JREProperties class writes key value pairs, separated by '='
-        sal_Int32 index = sLine.indexOf('=', 0);
+        sal_Int32 index = sLine.indexOf('=');
         OSL_ASSERT(index != -1);
         OUString sKey = sLine.copy(0, index);
         OUString sVal = sLine.copy(index + 1);

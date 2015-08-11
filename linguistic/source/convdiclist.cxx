@@ -329,8 +329,7 @@ void ConvDicNameContainer::AddConvDics(
             // get decoded dictionary file name
             INetURLObject aURLObj( aURL );
             OUString aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
-                        true, INetURLObject::DECODE_WITH_CHARSET,
-                        RTL_TEXTENCODING_UTF8 );
+                        true, INetURLObject::DECODE_WITH_CHARSET );
 
             uno::Reference < XConversionDictionary > xDic;
             if (nLang == LANGUAGE_KOREAN &&

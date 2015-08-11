@@ -101,7 +101,7 @@ void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttribut
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)
 {
-    mpSerializer->write(value, -1, false);
+    mpSerializer->write(value, -1);
     return this;
 }
 
