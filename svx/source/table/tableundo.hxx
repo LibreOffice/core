@@ -186,6 +186,15 @@ private:
         bool    mbIsVisible;
         bool    mbIsStartOfNewPage;
         OUString maName;
+
+        Data()
+            : mnColumn(0)
+            , mnWidth(0)
+            , mbOptimalWidth(false)
+            , mbIsVisible(false)
+            , mbIsStartOfNewPage(false)
+        {
+        }
     };
 
     void setData( const Data& rData );
