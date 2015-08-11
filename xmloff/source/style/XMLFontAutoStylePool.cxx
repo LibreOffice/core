@@ -164,7 +164,7 @@ OUString XMLFontAutoStylePool::Add(
     else
     {
         OUString sName;
-        sal_Int32 nLen = rFamilyName.indexOf( ';', 0 );
+        sal_Int32 nLen = rFamilyName.indexOf( ';' );
         if( -1 == nLen )
         {
             sName = rFamilyName;

@@ -925,7 +925,7 @@ static bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, bool bSystem
     short nLastType = 0;
     while (!bEnd)
     {
-        short nElemType = rFormat.GetNumForType( 0, nPos, false );
+        short nElemType = rFormat.GetNumForType( 0, nPos );
         switch ( nElemType )
         {
             case 0:
@@ -1190,8 +1190,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bool bEnd = false;
         while (!bEnd)
         {
-            short nElemType = rFormat.GetNumForType( nPart, nPos, false );
-            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, false );
+            short nElemType = rFormat.GetNumForType( nPart, nPos );
+            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos );
 
             switch ( nElemType )
             {
@@ -1260,8 +1260,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             bEnd = false;
             while (!bEnd)
             {
-                short nElemType = rFormat.GetNumForType( nPart, nPos, false );
-                const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, false );
+                short nElemType = rFormat.GetNumForType( nPart, nPos );
+                const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos );
 
                 switch ( nElemType )
                 {
@@ -1308,8 +1308,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bEnd = false;
         while (!bEnd)
         {
-            short nElemType = rFormat.GetNumForType( nPart, nPos, false );
-            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, false );
+            short nElemType = rFormat.GetNumForType( nPart, nPos );
+            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos );
 
             switch ( nElemType )
             {

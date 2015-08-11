@@ -1263,15 +1263,13 @@ void XMLTextFieldExport::ExportFieldHelper(
             // no value -> current time
             ProcessTimeOrDateTime(XML_TIME_VALUE,
                             GetDateTimeProperty(sPropertyDateTimeValue,
-                                                rPropSet),
-                            XML_NAMESPACE_TEXT);
+                                                rPropSet));
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
             // no value -> current time
             ProcessTimeOrDateTime(XML_TIME_VALUE,
-                            GetDateTimeProperty(sPropertyDateTime,rPropSet),
-                            XML_NAMESPACE_TEXT);
+                            GetDateTimeProperty(sPropertyDateTime,rPropSet));
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
@@ -1817,13 +1815,12 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString( XML_FORMULA,  XML_NAMESPACE_OOOW,
                        GetStringProperty(sPropertyContent, rPropSet) );
         ProcessDisplay( true,
-                        GetBoolProperty(sPropertyIsShowFormula, rPropSet),
-                        true );
+                        GetBoolProperty(sPropertyIsShowFormula, rPropSet) );
         ProcessValueAndType( false,
                              GetIntProperty(sPropertyNumberFormat, rPropSet),
                              sEmpty, sEmpty, 0.0f,
                              false, false, true,
-                             false, false );
+                             false );
         ExportElement( XML_TABLE_FORMULA, sPresentation );
         break;
 
@@ -2347,7 +2344,7 @@ void XMLTextFieldExport::ExportMetaField(
         ProcessValueAndType(false,
             GetIntProperty(sPropertyNumberFormat, i_xMeta),
             sEmpty, sEmpty, 0.0, false, false, true,
-            false, false /*, sal_False*/ );
+            false  );
 
         // text:meta-field without xml:id is invalid
         xMeta->ensureMetadataReference();

@@ -257,8 +257,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                     const OUString &rTmp =
                         rImp.GetAbsoluteReference(sValue);
                     INetURLObject::translateToInternal( rTmp, msBookmark,
-                        INetURLObject::DECODE_UNAMBIGUOUS,
-                        RTL_TEXTENCODING_UTF8 );
+                        INetURLObject::DECODE_UNAMBIGUOUS );
                 }
             }
             break;

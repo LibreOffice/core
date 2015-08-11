@@ -59,7 +59,7 @@ namespace xmloff
         aDateTime.Year = aDate.Year;
 
         OUStringBuffer aBuffer;
-        ::sax::Converter::convertDateTime( aBuffer, aDateTime, 0, false );
+        ::sax::Converter::convertDateTime( aBuffer, aDateTime, 0 );
         return aBuffer.makeStringAndClear();
     }
 

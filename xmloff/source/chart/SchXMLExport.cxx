@@ -1125,7 +1125,7 @@ static OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Se
         {
             if(bHasPredecessor)
                 aBuf.append( ' ' );
-            aBuf.append( nIndex, 10 );
+            aBuf.append( nIndex );
             bHasPredecessor = true;
         }
     }
@@ -1779,7 +1779,7 @@ void SchXMLExportHelper_Impl::exportTable()
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
                 SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true );
-                exportText( msString, false ); // do not convert tabs and lfs
+                exportText( msString ); // do not convert tabs and lfs
                 if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
                     ( mbRowSourceColumns || (aColIt == aRowIt->begin()) ) )
                 {

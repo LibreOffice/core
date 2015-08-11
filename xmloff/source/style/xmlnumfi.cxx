@@ -1408,7 +1408,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 
             sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
             aFormatCode.append( "[NatNum" );
-            aFormatCode.append( nNatNum, 10 );
+            aFormatCode.append( nNatNum );
 
             LanguageType eLang = aLanguageTag.getLanguageType( false);
             if ( eLang == LANGUAGE_DONTKNOW )
@@ -1591,7 +1591,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     for (size_t i = 0; i < aMyConditions.size(); i++)
     {
         SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, false)));
+            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName)));
         if (pStyle)
         {
             if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag

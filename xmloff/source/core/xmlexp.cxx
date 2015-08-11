@@ -671,7 +671,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                     for( nIndex = 0; nIndex < nCount; ++nIndex, ++pPrefix )
                     {
                         if( xNamespaceMap->getByName( *pPrefix ) >>= aURL )
-                            _GetNamespaceMap().Add( *pPrefix, aURL, XML_NAMESPACE_UNKNOWN );
+                            _GetNamespaceMap().Add( *pPrefix, aURL );
                     }
                 }
             }
@@ -1608,7 +1608,7 @@ void SvXMLExport::_ExportScripts()
 
     // export document events
     Reference< document::XEventsSupplier > xEvents( GetModel(), UNO_QUERY );
-    GetEventExport().Export( xEvents, true );
+    GetEventExport().Export( xEvents );
 }
 
 void SvXMLExport::_ExportFontDecls()
@@ -2232,7 +2232,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         if( xUriRef->getScheme() == mpImpl->msPackageURIScheme )
         {
             sValue = INetURLObject::GetRelURL( msOrigFileName, sValue,
-                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT);
+                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8);
         }
     }
     return sValue;

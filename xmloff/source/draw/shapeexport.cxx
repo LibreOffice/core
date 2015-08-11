@@ -2279,7 +2279,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
                 // trying to preserve the filename for embedded images which already have its stream inside the package
                 bool bIsEmbeddedImageWithExistingStreamInPackage = false;
-                if ( aStreamURL.match( sPackageURL, 0 ) )
+                if ( aStreamURL.match( sPackageURL ) )
                 {
                     bIsEmbeddedImageWithExistingStreamInPackage = true;
 

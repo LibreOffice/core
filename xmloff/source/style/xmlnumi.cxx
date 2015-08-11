@@ -729,11 +729,11 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             sVerticalRel = rValue;
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SAL_MAX_INT32))
+            if (rUnitConv.convertMeasureToCore(nVal, rValue))
                 rListLevel.SetImageWidth( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SAL_MAX_INT32))
+            if (rUnitConv.convertMeasureToCore(nVal, rValue))
                 rListLevel.SetImageHeight( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
