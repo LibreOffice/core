@@ -34,6 +34,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 namespace pcr
 {
@@ -700,7 +701,7 @@ namespace pcr
 
         _rElementNames.resize( rMapUINameToElement.size() );
         ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(),
-                []( const ::std::pair< MapStringToPropertySet::key_type, MapStringToPropertySet::mapped_type>& cp) { return cp.first; } );
+                ::o3tl::select1st< MapStringToPropertySet::value_type >() );
     }
 
 

@@ -185,7 +185,7 @@ template< class MapType >
 {
     return ::std::find_if( rMap.begin(), rMap.end(),
             [&rData]
-            ( const ::std::pair< typename MapType::key_type, typename MapType::mapped_type >& cp )
+            ( const typename MapType::value_type& cp )
             { return rData == cp.second; } );
 }
 
