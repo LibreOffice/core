@@ -1304,7 +1304,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     {
                         m_pToolBar->SetItemText( nId, aString );
                     }
-                    m_pToolBar->EnableItem( nId, true );
+                    m_pToolBar->EnableItem( nId );
                     m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
 
                     // Fill command map. It stores all our commands and from what
@@ -1773,7 +1773,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     {
         sal_uInt16 nId = aQuickCustomizationMenu.GetItemId( i );
         if ( MenuItemAllowed( nId ))
-            pMenu->CopyItem( aQuickCustomizationMenu, i, MENU_APPEND );
+            pMenu->CopyItem( aQuickCustomizationMenu, i );
     }
 
     // set submenu to toolbar menu
@@ -1783,7 +1783,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         ::PopupMenu *pItemMenu = new ::PopupMenu();
 
         for( i=0; i< aQuickCustomizationMenu.GetPopupMenu( 1 )->GetItemCount(); i++)
-            pItemMenu->CopyItem( *aQuickCustomizationMenu.GetPopupMenu( 1 ), i, MENU_APPEND );
+            pItemMenu->CopyItem( *aQuickCustomizationMenu.GetPopupMenu( 1 ), i );
 
         pMenu->SetPopupMenu( 1, pItemMenu );
     }

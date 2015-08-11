@@ -201,7 +201,7 @@ throw ( RuntimeException, std::exception )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = TRISTATE_TRUE;
@@ -247,14 +247,14 @@ throw ( RuntimeException, std::exception )
             }
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = TRISTATE_INDET;
             nItemBits |= ToolBoxItemBits::CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -262,7 +262,7 @@ throw ( RuntimeException, std::exception )
             m_bMadeInvisible = !aItemVisibility.bVisible;
         }
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, true );
+            m_pToolbar->ShowItem( m_nID );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );

@@ -154,7 +154,7 @@ throw ( RuntimeException, std::exception )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = TRISTATE_TRUE;
@@ -167,14 +167,14 @@ throw ( RuntimeException, std::exception )
             m_pToolbar->SetQuickHelpText( m_nID, aText );
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
         }
         else if ( Event.State >>= aItemState )
         {
             eTri = TRISTATE_INDET;
             nItemBits |= ToolBoxItemBits::CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -185,11 +185,11 @@ throw ( RuntimeException, std::exception )
         {
             executeControlCommand( aControlCommand );
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, true );
+                m_pToolbar->ShowItem( m_nID );
         }
 
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, true );
+            m_pToolbar->ShowItem( m_nID );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );

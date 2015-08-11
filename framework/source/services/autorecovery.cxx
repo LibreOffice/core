@@ -1653,7 +1653,7 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
     // document closed => remove temp. files and configuration entries
     else if ( aEvent.EventName == EVENT_ON_UNLOAD )
     {
-        implts_deregisterDocument(xDocument, true); // sal_True => stop listening for disposing() !
+        implts_deregisterDocument(xDocument); // sal_True => stop listening for disposing() !
     }
 }
 

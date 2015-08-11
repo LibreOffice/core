@@ -544,7 +544,7 @@ namespace framework
             // ignore this request if the manager is locked
             return;
 
-        if ( i_hidden && ( rUndoManager.GetUndoActionCount( IUndoManager::CurrentLevel ) == 0 ) )
+        if ( i_hidden && ( rUndoManager.GetUndoActionCount() == 0 ) )
             throw EmptyUndoStackException(
                 "can't enter a hidden context without a previous Undo action",
                 m_rUndoManagerImplementation.getThis()
@@ -611,7 +611,7 @@ namespace framework
         }
         else
         {
-            aContextEvent.UndoActionTitle = rUndoManager.GetUndoActionComment( 0, IUndoManager::CurrentLevel );
+            aContextEvent.UndoActionTitle = rUndoManager.GetUndoActionComment( 0 );
             notificationMethod = &XUndoManagerListener::leftContext;
         }
 
@@ -684,12 +684,12 @@ namespace framework
         const UndoManagerEvent aEventAdd( buildEvent( i_action->getTitle() ) );
         const EventObject aEventClear( getXUndoManager() );
 
-        const bool bHadRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::CurrentLevel ) > 0 );
+        const bool bHadRedoActions = ( rUndoManager.GetRedoActionCount() > 0 );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
             rUndoManager.AddUndoAction( new UndoActionWrapper( i_action ) );
         }
-        const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::CurrentLevel ) > 0 );
+        const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount() > 0 );
 
         aGuard.clear();
         // <--- SYNCHRONIZED

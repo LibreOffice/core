@@ -426,7 +426,7 @@ throw ( RuntimeException, std::exception )
                 if ( Event.State >>= bCheckmark )
                 {
                     // Checkmark or RadioButton
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, true );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
                     m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, bCheckmark );
 
                     MenuItemBits nBits = m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId );
@@ -457,7 +457,7 @@ throw ( RuntimeException, std::exception )
                         aItemText = aTmp;
                     }
 
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, true );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
                     m_pVCLMenu->SetItemText( pMenuItemHandler->nItemId, aItemText );
                 }
                 else if ( Event.State >>= aVisibilityStatus )
@@ -466,7 +466,7 @@ throw ( RuntimeException, std::exception )
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, aVisibilityStatus.bVisible );
                 }
                 else
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, true );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
             }
 
             if ( Event.Requery )

@@ -337,7 +337,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
                     if ( IsCorrectContext( rMenuItem.aContext, rModuleIdentifier ))
                     {
                         if ( rMenuItem.aURL == SEPARATOR_STRING )
-                            pCurrMenu->InsertSeparator(OString(), MENU_APPEND);
+                            pCurrMenu->InsertSeparator(OString());
                         else
                         {
                             pCurrMenu->InsertItem(rItemId, rMenuItem.aTitle);

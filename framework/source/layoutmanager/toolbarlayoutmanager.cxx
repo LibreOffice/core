@@ -468,7 +468,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
         uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
         aReadLock.clear();
 
-        implts_setToolbarCreation( true );
+        implts_setToolbarCreation();
         try
         {
             if ( xUIElementFactory.is() )
@@ -3540,7 +3540,7 @@ throw (uno::RuntimeException, std::exception)
             if( e.bFloating )
             {
                 if ( aUIDockingElement.m_aFloatingData.m_bIsHorizontal )
-                    pToolBox->SetAlign( WindowAlign::Top );
+                    pToolBox->SetAlign();
                 else
                     pToolBox->SetAlign( WindowAlign::Left );
             }
@@ -3647,7 +3647,7 @@ throw (uno::RuntimeException, std::exception)
             aUIDockingElement.m_bFloating   = !aUIDockingElement.m_bFloating;
             aUIDockingElement.m_bUserActive = true;
 
-            implts_setLayoutInProgress( true );
+            implts_setLayoutInProgress();
             if ( aUIDockingElement.m_bFloating )
             {
                 SolarMutexGuard aGuard;
@@ -3655,7 +3655,7 @@ throw (uno::RuntimeException, std::exception)
                 {
                     pToolBox->SetLineCount( aUIDockingElement.m_aFloatingData.m_nLines );
                     if ( aUIDockingElement.m_aFloatingData.m_bIsHorizontal )
-                        pToolBox->SetAlign( WindowAlign::Top );
+                        pToolBox->SetAlign();
                     else
                         pToolBox->SetAlign( WindowAlign::Left );
                 }
@@ -3734,7 +3734,7 @@ throw (uno::RuntimeException, std::exception)
             if ( aUIDockingElement.m_bFloating )
             {
                 if ( aUIDockingElement.m_aFloatingData.m_bIsHorizontal )
-                    pToolBox->SetAlign( WindowAlign::Top );
+                    pToolBox->SetAlign();
                 else
                     pToolBox->SetAlign( WindowAlign::Left );
             }

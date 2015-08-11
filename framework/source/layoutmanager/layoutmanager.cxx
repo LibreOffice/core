@@ -939,7 +939,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
     {
         ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(m_xProgressBarBackup.get());
         if ( pWrapper )
-            pWrapper->setStatusBar( Reference< awt::XWindow >(), false );
+            pWrapper->setStatusBar( Reference< awt::XWindow >() );
     }
 
     // prevent us from dispose() the m_aProgressBarElement.m_xUIElement inside implts_reset()

@@ -228,7 +228,7 @@ bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
                                /*OUT*/       OUString& rPartArguments  )
 {
     // first search for the given identifier
-    bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength,0));
+    bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength));
 
     // If it exist - we can split the part and return sal_True.
     // Otherwhise we do nothing and return sal_False.
@@ -242,7 +242,7 @@ bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
         OUString sValue             = sValueAndArguments;
         OUString sArguments;
 
-        sal_Int32 nArgStart = sValueAndArguments.indexOf('?',0);
+        sal_Int32 nArgStart = sValueAndArguments.indexOf('?');
         if (nArgStart!=-1)
         {
             sValue     = sValueAndArguments.copy(0,nArgStart);

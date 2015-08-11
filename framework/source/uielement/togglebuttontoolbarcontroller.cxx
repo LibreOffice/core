@@ -109,7 +109,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
             OUString aLabel( m_aDropdownMenuList[i] );
             aPopup.InsertItem( sal_uInt16( i+1 ), aLabel );
             if ( aLabel == m_aCurrentSelection )
-                aPopup.CheckItem( sal_uInt16( i+1 ), true );
+                aPopup.CheckItem( sal_uInt16( i+1 ) );
             else
                 aPopup.CheckItem( sal_uInt16( i+1 ), false );
         }

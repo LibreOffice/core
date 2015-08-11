@@ -216,7 +216,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 if ( aURL.GetProtocol() == INetProtocol::File )
                 {
                     // Do handle file URL differently: don't show the protocol, just the file name
-                    aMenuTitle = aURL.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
+                    aMenuTitle = aURL.GetLastName(INetURLObject::DECODE_WITH_CHARSET);
                 }
                 else
                 {
