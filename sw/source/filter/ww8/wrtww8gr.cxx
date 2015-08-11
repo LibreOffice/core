@@ -544,14 +544,16 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                     (pSI->GetWidth() != 0);
             }
 
-            for( SvxBoxItemLine i : o3tl::enumrange<SvxBoxItemLine>() )
+            static const SvxBoxItemLine aLnArr[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
+            for( sal_uInt8 i = 0; i < 4; ++i )
             {
-                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( i );
+                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( aLnArr[i] );
                 WW8_BRC aBrc;
                 if (pLn)
                 {
                     WW8_BRCVer9 aBrc90 = WW8Export::TranslateBorderLine( *pLn,
-                        pBox->GetDistance( i ), bShadow );
+                        pBox->GetDistance( aLnArr[i] ), bShadow );
                     sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
                         aBrc90.cv()));
                     aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
@@ -562,7 +564,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                 // border will really be in word and adjust accordingly
                 short nSpacing;
                 short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-                switch (i)
+                switch (aLnArr[i])
                 {
                     case SvxBoxItemLine::TOP:
                     case SvxBoxItemLine::BOTTOM:
@@ -696,13 +698,15 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 
     sal_uInt8* pArr = aArr + 0x2E;  //Do borders first
 
-    for( SvxBoxItemLine i : o3tl::enumrange<SvxBoxItemLine>() )
+    static const SvxBoxItemLine aLnArr[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+        SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
+    for( sal_uInt8 i = 0; i < 4; ++i )
     {
         WW8_BRC aBrc;
 
         short nSpacing;
         short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-        switch (i)
+        switch (aLnArr[i])
         {
             case SvxBoxItemLine::TOP:
             case SvxBoxItemLine::BOTTOM:

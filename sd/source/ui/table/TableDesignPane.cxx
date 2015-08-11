@@ -710,7 +710,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                             boost::shared_ptr< CellInfo > xBorderInfo( aMatrix[nBorderCol][nBorderRow] );
                             if( xBorderInfo.get() )
                             {
-                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1^1));
+                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                     continue; // other border line wins
                             }

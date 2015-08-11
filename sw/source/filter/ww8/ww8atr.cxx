@@ -4064,13 +4064,17 @@ void WW8Export::Out_SwFormatBox(const SvxBoxItem& rBox, bool bShadow)
 void WW8Export::Out_SwFormatTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
 {
     // moeglich und vielleicht besser waere 0xffff
+    static const SvxBoxItemLine aBorders[] =
+    {
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
+    };
     static const SvxBorderLine aBorderLine;
 
-    for( SvxBoxItemLine i : o3tl::enumrange<SvxBoxItemLine>() )
+    for( int i = 0; i < 4; ++i )
     {
         const SvxBorderLine* pLn;
         if (pBox != NULL)
-            pLn = pBox->GetLine( i );
+            pLn = pBox->GetLine( aBorders[i] );
         else
             pLn = & aBorderLine;
 
