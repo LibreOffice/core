@@ -1244,7 +1244,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                         using namespace comphelper::string;
                         // Trailing blanks in input.
                         OUStringBuffer aBuf(sStrArray[nNext]);
-                        aBuf.stripEnd((sal_Unicode)' ');
+                        aBuf.stripEnd();
                         // Expand again in case of pattern "M. D. " and
                         // input "M. D.  ", maybe fetched far, but..
                         padToLength(aBuf, rPat.getLength() - nPat, ' ');
@@ -1356,7 +1356,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
                     // IsAcceptedDatePattern().
                     using namespace comphelper::string;
                     OUStringBuffer aBuf(sStrArray[nNext]);
-                    aBuf.stripEnd((sal_Unicode)' ');
+                    aBuf.stripEnd();
                     padToLength(aBuf, rPat.getLength() - nPat, ' ');
                     bOk = (rPat.indexOf( aBuf.makeStringAndClear(), nPat) == nPat);
                 }

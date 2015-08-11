@@ -296,7 +296,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
                         if ( nWhich <= SFX_WHICH_MAX )
                         {
                             const SfxPoolItem& rNew = m_pParent
-                                    ? m_pParent->Get( nWhich, true )
+                                    ? m_pParent->Get( nWhich )
                                     : m_pPool->GetDefaultItem( nWhich );
 
                             Changed( *pItemToClear, rNew );
@@ -334,7 +334,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
                         if ( nWhich <= SFX_WHICH_MAX )
                         {
                             const SfxPoolItem& rNew = m_pParent
-                                    ? m_pParent->Get( nWhich, true )
+                                    ? m_pParent->Get( nWhich )
                                     : m_pPool->GetDefaultItem( nWhich );
 
                             Changed( *pItemToClear, rNew );
@@ -524,7 +524,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     if (nWhich <= SFX_WHICH_MAX )
                     {
                         const SfxPoolItem& rOld = m_pParent
-                            ? m_pParent->Get( nWhich, true )
+                            ? m_pParent->Get( nWhich )
                             : m_pPool->GetDefaultItem( nWhich );
                         Changed( rOld, rNew );
                     }
@@ -974,7 +974,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = m_pParent
-                            ? m_pParent->Get( nWhich, true )
+                            ? m_pParent->Get( nWhich )
                             : m_pPool->GetDefaultItem( nWhich );
 
                         Changed( **ppFnd1, rNew );
@@ -1042,7 +1042,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = m_pParent
-                            ? m_pParent->Get( nWhich, true )
+                            ? m_pParent->Get( nWhich )
                             : m_pPool->GetDefaultItem( nWhich );
 
                         Changed( **ppFnd1, rNew );
@@ -1824,7 +1824,7 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     {
         bIncrementCount = true;
         pOld = (m_pParent)
-            ? &m_pParent->Get( nWhich, true )
+            ? &m_pParent->Get( nWhich )
             : ((nWhich <= SFX_WHICH_MAX)
                     ? &m_pPool->GetDefaultItem(nWhich)
                     : nullptr);

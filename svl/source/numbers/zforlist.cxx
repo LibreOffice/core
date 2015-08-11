@@ -3767,8 +3767,8 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
     if ( bBank )
     {
         // Only bank symbols.
-        OUString aPositiveBank = rCurr.BuildPositiveFormatString(true, *xLocaleData, 1);
-        OUString aNegativeBank = rCurr.BuildNegativeFormatString(true, *xLocaleData, 1 );
+        OUString aPositiveBank = rCurr.BuildPositiveFormatString(true, *xLocaleData);
+        OUString aNegativeBank = rCurr.BuildNegativeFormatString(true, *xLocaleData );
 
         OUStringBuffer format1(aPositiveBank);
         format1.append(';');
@@ -3789,8 +3789,8 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
     {
         // Mixed formats like in SvNumberFormatter::ImpGenerateFormats() but no
         // duplicates if no decimals in currency.
-        OUString aPositive = rCurr.BuildPositiveFormatString(false, *xLocaleData, 1);
-        OUString aNegative = rCurr.BuildNegativeFormatString(false, *xLocaleData, 1 );
+        OUString aPositive = rCurr.BuildPositiveFormatString(false, *xLocaleData );
+        OUString aNegative = rCurr.BuildNegativeFormatString(false, *xLocaleData );
         OUStringBuffer format1;
         OUStringBuffer format2;
         OUStringBuffer format3;

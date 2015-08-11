@@ -837,7 +837,7 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                                          bool bVirtual)
 {
     const sal_uInt16 nTmpMask = GetSearchMask();
-    SetSearchMask(GetSearchFamily(), SFXSTYLEBIT_ALL);
+    SetSearchMask(GetSearchFamily());
     for( SfxStyleSheetBase* p = First(); p; p = Next() )
     {
         if( p->GetParent() == rOld )
@@ -891,14 +891,14 @@ bool SfxStyleSheet::SetParent( const OUString& rName )
         // Remove from notification chain of the old parent if applicable
         if(!aOldParent.isEmpty())
         {
-            SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(pPool->Find(aOldParent, nFamily, SFXSTYLEBIT_ALL));
+            SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(pPool->Find(aOldParent, nFamily));
             if(pParent)
                 EndListening(*pParent);
         }
         // Add to the notification chain of the new parent
         if(!aParent.isEmpty())
         {
-            SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(pPool->Find(aParent, nFamily, SFXSTYLEBIT_ALL));
+            SfxStyleSheet *pParent = static_cast<SfxStyleSheet *>(pPool->Find(aParent, nFamily));
             if(pParent)
                 StartListening(*pParent);
         }

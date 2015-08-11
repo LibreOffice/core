@@ -271,7 +271,7 @@ bool StgFAT::InitNew( sal_Int32 nPage1 )
             // use the Pos2Page() method of the stream
             rStrm.Pos2Page( nPage1 << 2 );
             // Initialize the page
-            pPg = rStrm.GetIo().Copy( rStrm.GetPage(), STG_FREE );
+            pPg = rStrm.GetIo().Copy( rStrm.GetPage() );
             if ( !pPg.is() )
                 return false;
             for( short i = 0; i < nEntries; i++ )
@@ -589,7 +589,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
 
                 // create a new master page
                 nFAT = nMaxPage++;
-                pMaster = rIo.Copy( nFAT, STG_FREE );
+                pMaster = rIo.Copy( nFAT );
                 if ( pMaster.is() )
                 {
                     for( short k = 0; k < (short)( nPageSize >> 2 ); k++ )
@@ -741,7 +741,7 @@ bool StgFATStrm::SetSize( sal_Int32 nBytes )
                         return false;
             }
             // Set up the page with empty entries
-            rtl::Reference< StgPage > pPg = rIo.Copy( nNewPage, STG_FREE );
+            rtl::Reference< StgPage > pPg = rIo.Copy( nNewPage );
             if ( !pPg.is() )
                 return false;
             for( short j = 0; j < (short)( nPageSize >> 2 ); j++ )
@@ -847,7 +847,7 @@ bool StgDataStrm::SetSize( sal_Int32 nBytes )
         {
             Pos2Page( nBytes );
             if( nPage >= 0 )
-                rIo.Copy( nPage, STG_FREE );
+                rIo.Copy( nPage );
         }
     }
     return true;

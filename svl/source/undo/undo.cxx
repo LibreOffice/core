@@ -655,7 +655,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
     }
 
     // clear redo stack, if requested
-    if ( bClearRedo && ( ImplGetRedoActionCount_Lock( CurrentLevel ) > 0 ) )
+    if ( bClearRedo && ( ImplGetRedoActionCount_Lock() > 0 ) )
         ImplClearRedo( i_guard, IUndoManager::CurrentLevel );
 
     // respect max number

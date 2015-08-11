@@ -324,7 +324,7 @@ void SfxItemPool::LoadCompleted()
                 {
                     if (*ppHtArr)
                     {
-                        if ( !ReleaseRef( **ppHtArr, 1 ) )
+                        if ( !ReleaseRef( **ppHtArr ) )
                             DELETEZ( *ppHtArr );
                     }
                 }
@@ -389,7 +389,7 @@ void SfxItemPool_Impl::readTheItems (
 
         if ( !mbPersistentRefCounts )
             // Hold onto it until SfxItemPool::LoadCompleted()
-            SfxItemPool::AddRef(*pItem, 1);
+            SfxItemPool::AddRef(*pItem);
         else
         {
             if ( nRef > SFX_ITEMS_OLD_MAXREF )
@@ -482,7 +482,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                     {
                         DBG_WARNING( "loading non-empty ItemPool" );
 
-                        AddRef( **ppHtArr, 1 );
+                        AddRef( **ppHtArr );
                     }
             }
         }
@@ -798,7 +798,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     {
         // If the pool in the stream has a different structure, the SlotId
         // from the stream must be mapable to a WhichId
-        sal_uInt16 nMappedWhich = nSlotId ? GetWhich(nSlotId, true) : 0;
+        sal_uInt16 nMappedWhich = nSlotId ? GetWhich(nSlotId) : 0;
         if ( IsWhich(nMappedWhich) )
         {
             // Mapped SlotId can be taken over
@@ -839,7 +839,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
 
                 // References have NOT been loaded together with the pool?
                 if ( !pTarget->HasPersistentRefCounts() )
-                    AddRef( *pItem, 1 );
+                    AddRef( *pItem );
                 else
                     return pItem;
 
@@ -1165,7 +1165,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     DBG_ASSERT( !pImp->bInSetItem || !rItem.ISA(SfxSetItem),
                 "SetItem contains ItemSet with SetItem" );
 
-    sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which(), true );
+    sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which() );
     sal_uInt16 nItemVersion = rItem.GetVersion(pImp->mnFileFormatVersion);
     if ( USHRT_MAX == nItemVersion )
         return false;

@@ -1535,7 +1535,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile = new ::utl::TempFile;
-        m_pTempFile->EnableKillingFile( true );
+        m_pTempFile->EnableKillingFile();
         m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
 
@@ -1568,7 +1568,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile = new ::utl::TempFile;
-        m_pTempFile->EnableKillingFile( true );
+        m_pTempFile->EnableKillingFile();
         m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
 
@@ -1614,7 +1614,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
 {
     // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,
     // which will be called in the storages' dtor
-    m_pTempFile->EnableKillingFile( true );
+    m_pTempFile->EnableKillingFile();
     DBG_ASSERT( !bDirect, "Storage on a stream must not be opened in direct mode!" );
 
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
