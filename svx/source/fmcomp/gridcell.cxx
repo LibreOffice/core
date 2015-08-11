@@ -2438,7 +2438,7 @@ void DbComboBox::SetList(const Any& rItems)
         const OUString* pStrings = aTest.getConstArray();
         sal_Int32 nItems = aTest.getLength();
         for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-             pField->InsertEntry(*pStrings, LISTBOX_APPEND);
+             pField->InsertEntry(*pStrings);
 
         // tell the grid control that this controller is invalid and has to be re-initialized
         invalidatedController();
@@ -2561,7 +2561,7 @@ void DbListBox::SetList(const Any& rItems)
         if (nItems)
         {
             for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-                 pField->InsertEntry(*pStrings, LISTBOX_APPEND);
+                 pField->InsertEntry(*pStrings);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
             m_bBound = m_aValueList.getLength() > 0;
@@ -2726,13 +2726,13 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
         {
             ComboBox* pField = static_cast<ComboBox*>(m_pWindow.get());
             for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-                pField->InsertEntry(*pStrings, LISTBOX_APPEND);
+                pField->InsertEntry(*pStrings);
         }
         else
         {
             ListBox* pField = static_cast<ListBox*>(m_pWindow.get());
             for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
-                pField->InsertEntry(*pStrings, LISTBOX_APPEND);
+                pField->InsertEntry(*pStrings);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
             m_bBound = m_aValueList.getLength() > 0;
@@ -2971,7 +2971,7 @@ void DbFilterField::SetText(const OUString& rText)
         {
             Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, true);
             if (aPosSeq.getLength())
-                static_cast<ListBox*>(m_pWindow.get())->SelectEntryPos(aPosSeq.getConstArray()[0], true);
+                static_cast<ListBox*>(m_pWindow.get())->SelectEntryPos(aPosSeq.getConstArray()[0]);
             else
                 static_cast<ListBox*>(m_pWindow.get())->SetNoSelection();
         }   break;
@@ -3096,7 +3096,7 @@ void DbFilterField::Update()
             // filling the entries for the combobox
             for (::std::vector< OUString >::const_iterator iter = aStringList.begin();
                  iter != aStringList.end(); ++iter)
-                static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(*iter, LISTBOX_APPEND);
+                static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(*iter);
         }
     }
 }

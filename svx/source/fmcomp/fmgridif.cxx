@@ -2007,7 +2007,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     vcl::Window* pGrid = GetWindow();
     if ( pGrid )
     {
-        Reference< XAccessible > xAcc( pGrid->GetAccessible( true ) );
+        Reference< XAccessible > xAcc( pGrid->GetAccessible() );
         if ( xAcc.is() )
             xContext = xAcc->getAccessibleContext();
         // TODO: this has a slight conceptual problem:
@@ -2279,7 +2279,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
                 // if this does not ?hold?catch?, the selectionChanged is cleared by the Control itself
                 if ( i < nColCount )
                 {
-                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1, true);
+                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1);
                     // SelectColumnPos has led to an implicit ActivateCell again
                     if (pGrid->IsEditing())
                         pGrid->DeactivateCell();

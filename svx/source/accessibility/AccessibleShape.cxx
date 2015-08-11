@@ -267,7 +267,7 @@ bool AccessibleShape::SetState (sal_Int16 aState)
         // Offer FOCUSED state to edit engine and detect whether the state
         // changes.
         bool bIsFocused = mpText->HaveFocus ();
-        mpText->SetFocus (true);
+        mpText->SetFocus();
         bStateHasChanged = (bIsFocused != mpText->HaveFocus ());
     }
     else

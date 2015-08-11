@@ -150,9 +150,9 @@ void GraphCtrl::InitSdrModel()
     pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( true );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
-    pView->SetFrameDragSingles( true );
+    pView->SetFrameDragSingles();
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
-    pView->SetEditMode( true );
+    pView->SetEditMode();
 
     // #i72889# set neeeded flags
     pView->SetPagePaintingAllowed(false);
@@ -379,7 +379,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 // mark last object
                 pView->UnmarkAllObj();
-                pView->MarkNextObj(false);
+                pView->MarkNextObj();
 
                 bProc = true;
             }
@@ -511,7 +511,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                             // switch snapping off
                             if(!bWasNoSnap)
-                                ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                                ((SdrDragStat&)rDragStat).SetNoSnap();
                             if(bWasSnapEnabled)
                                 pView->SetSnapEnabled(false);
 

@@ -1747,10 +1747,10 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
     if (nPointCount!=0) {
         if (nHdlNum==0) {
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[0],HDL_POLY);
-            if (aCon1.pObj!=NULL && aCon1.bBestVertex) pHdl->Set1PixMore(true);
+            if (aCon1.pObj!=NULL && aCon1.bBestVertex) pHdl->Set1PixMore();
         } else if (nHdlNum==1) {
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPointCount-1)],HDL_POLY);
-            if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(true);
+            if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore();
         } else {
             SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
             if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
@@ -1832,7 +1832,7 @@ bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
     if(rDrag.GetHdl()->GetPointNum() < 2)
     {
-        rDrag.SetNoSnap(true);
+        rDrag.SetNoSnap();
     }
 
     return true;
@@ -2022,7 +2022,7 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMeth
 
 bool SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
 {
-    rDragStat.SetNoSnap(true);
+    rDragStat.SetNoSnap();
     pEdgeTrack->SetPointCount(2);
     (*pEdgeTrack)[0]=rDragStat.GetStart();
     (*pEdgeTrack)[1]=rDragStat.GetNow();

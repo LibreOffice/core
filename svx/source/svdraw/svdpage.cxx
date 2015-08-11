@@ -230,7 +230,7 @@ void SdrObjList::Clear()
 
         // flushViewObjectContacts() is done since SdrObject::Free is not guaranteed
         // to delete the object and thus refresh visualisations
-        pObj->GetViewContact().flushViewObjectContacts(true);
+        pObj->GetViewContact().flushViewObjectContacts();
 
         bObjectsRemoved = true;
 
@@ -413,7 +413,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
     DBG_ASSERT(pObj!=NULL,"Could not find object to remove.");
     if (pObj!=NULL) {
         // flushViewObjectContacts() clears the VOC's and those invalidate
-        pObj->GetViewContact().flushViewObjectContacts(true);
+        pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
         pObj->SetInserted(false); // Ruft u.a. den UserCall
@@ -445,7 +445,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
     if(pObj)
     {
         // flushViewObjectContacts() clears the VOC's and those invalidate
-        pObj->GetViewContact().flushViewObjectContacts(true);
+        pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
         if (pModel!=NULL) {
@@ -496,7 +496,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // flushViewObjectContacts() clears the VOC's and those invalidate
-        pObj->GetViewContact().flushViewObjectContacts(true);
+        pObj->GetViewContact().flushViewObjectContacts();
 
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
@@ -543,7 +543,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // flushViewObjectContacts() clears the VOC's and those invalidate
-        pObj->GetViewContact().flushViewObjectContacts(true);
+        pObj->GetViewContact().flushViewObjectContacts();
 
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
@@ -1102,7 +1102,7 @@ void ImpPageChange(SdrPage& rSdrPage)
 
     if(rSdrPage.GetModel())
     {
-        rSdrPage.GetModel()->SetChanged(true);
+        rSdrPage.GetModel()->SetChanged();
         SdrHint aHint(HINT_PAGEORDERCHG);
         aHint.SetPage(&rSdrPage);
         rSdrPage.GetModel()->Broadcast(aHint);
@@ -1615,7 +1615,7 @@ void SdrPage::TRG_ClearMasterPage()
         SetChanged();
 
         // the flushViewObjectContacts() will do needed invalidates by deleting the involved VOCs
-        mpMasterPageDescriptor->GetUsedPage().GetViewContact().flushViewObjectContacts(true);
+        mpMasterPageDescriptor->GetUsedPage().GetViewContact().flushViewObjectContacts();
 
         delete mpMasterPageDescriptor;
         mpMasterPageDescriptor = 0L;
@@ -1754,7 +1754,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
 Color SdrPage::GetPageBackgroundColor() const
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor
 {
-    return GetPageBackgroundColor( NULL, true );
+    return GetPageBackgroundColor( NULL );
 }
 
 /** this method returns true if the object from the ViewObjectContact should

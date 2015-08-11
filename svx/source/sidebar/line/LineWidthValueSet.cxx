@@ -31,7 +31,7 @@ LineWidthValueSet::LineWidthValueSet (
       bCusEnable(false)
 {
     strUnit = new OUString[9];
-    SetColCount( 1 );
+    SetColCount();
     SetLineCount( 9);
 }
 

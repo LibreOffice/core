@@ -448,13 +448,13 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         const sal_uInt16 nIdIncrIndent  = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
         const sal_uInt16 nIdDecrIndent  = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
 
-        mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, true);
+        mpTbxIndent_IncDec->EnableItem(nIdHangingIndent);
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table) )
         {
-            mpTbxIndent_IncDec->EnableItem(nIdIncrIndent, true);
-            mpTbxIndent_IncDec->EnableItem(nIdDecrIndent, true);
+            mpTbxIndent_IncDec->EnableItem(nIdIncrIndent);
+            mpTbxIndent_IncDec->EnableItem(nIdDecrIndent);
         }
     }
     else if( eState == SfxItemState::DISABLED )

@@ -244,9 +244,9 @@ void FmFormView::ChangeDesignMode(bool bDesign)
 
     // --- 2. simulate a deactivation (the shell will handle some things there ...?)
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated( *this, true );
+        pFormShell->GetImpl()->viewDeactivated( *this );
     else
-        pImpl->Deactivate( true );
+        pImpl->Deactivate();
 
     // --- 3. activate all controls, if we're switching to alive mode
     if ( !bDesign )
@@ -338,7 +338,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             pFormShellImpl->UpdateForms( true );
 
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
-            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true, false);
+            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
 
             pFormShellImpl->SetSelection(GetMarkedObjectList());
         }
@@ -362,9 +362,9 @@ void FmFormView::HideSdrPage()
 
     // --- 2. tell the shell the view is (going to be) deactivated
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated( *this, true );
+        pFormShell->GetImpl()->viewDeactivated( *this );
     else
-        pImpl->Deactivate( true );
+        pImpl->Deactivate();
 
     // --- 3. base class behavior
     E3dView::HideSdrPage();

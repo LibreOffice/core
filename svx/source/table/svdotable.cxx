@@ -2275,7 +2275,7 @@ bool SdrTableObj::beginSpecialDrag(SdrDragStat& rDrag) const
         case HDL_USER:
         {
             rDrag.SetEndDragChangesAttributes(false);
-            rDrag.SetNoSnap(true);
+            rDrag.SetNoSnap();
             break;
         }
 
@@ -2324,7 +2324,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
         case HDL_USER:
         {
             rDrag.SetEndDragChangesAttributes(false);
-            rDrag.SetNoSnap(true);
+            rDrag.SetNoSnap();
             const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
 
             if( pEdgeHdl )

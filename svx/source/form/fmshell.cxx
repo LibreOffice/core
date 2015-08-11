@@ -1458,7 +1458,7 @@ void FmFormShell::SetDesignMode( bool _bDesignMode )
         pModel->GetUndoEnv().Lock();
 
     // dann die eigentliche Umschaltung
-    if ( m_bDesignMode || PrepareClose( true ) )
+    if ( m_bDesignMode || PrepareClose() )
         impl_setDesignMode(!m_bDesignMode );
 
     // und mein Undo-Environment wieder an

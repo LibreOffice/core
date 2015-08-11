@@ -262,7 +262,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             ScopedVclPtrInstance< VirtualDevice > pVirDev( 1 );
             pVirDev->SetMapMode( MAP_100TH_MM );
             pVirDev->SetFont( aFont );
-            pVirDev->EnableRTL( true );
+            pVirDev->EnableRTL();
             if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
                 pVirDev->SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
 

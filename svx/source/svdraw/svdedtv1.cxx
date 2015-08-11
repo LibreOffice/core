@@ -590,7 +590,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     Rectangle aMarkRect(GetMarkedObjRect());
     const bool bUndo = IsUndoEnabled();
 
-    bool bRotate=bNoContortion && eMode==SDRCROOK_ROTATE && IsRotateAllowed(false);
+    bool bRotate=bNoContortion && eMode==SDRCROOK_ROTATE && IsRotateAllowed();
 
     if( bUndo )
     {
@@ -1045,7 +1045,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         // uses its second parameter (bInvalidAsDefault) to
         // remove all such items to set them to default.
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr, true);
+        aAttr.Put(rAttr);
 
         // #i38135#
         bool bResetAnimationTimer(false);

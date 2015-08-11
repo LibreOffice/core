@@ -151,9 +151,9 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
     {
     case SDRREPFUNC_OBJ_NONE            :  return false;
     case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
-    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(false);
+    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible();
     case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(true);
-    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible(false);
+    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible();
     case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(true);
     case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible(false);
     case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible(false);
@@ -177,8 +177,8 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
     case SDRREPFUNC_OBJ_NONE            :  break;
     case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
     case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(false);   break;
-    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(true);    break;
-    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects(false); break;
+    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects();        break;
+    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects();      break;
     case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(true);  break;
     case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(false); break;
     case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(false); break;
@@ -1519,14 +1519,14 @@ void SdrUndoDelPage::Redo()
 OUString SdrUndoDelPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0);
     return aStr;
 }
 
 OUString SdrUndoDelPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0);
     return aStr;
 }
 
@@ -1558,7 +1558,7 @@ void SdrUndoNewPage::Redo()
 OUString SdrUndoNewPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoNewPage,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoNewPage,aStr,0);
     return aStr;
 }
 
@@ -1567,14 +1567,14 @@ OUString SdrUndoNewPage::GetComment() const
 OUString SdrUndoCopyPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0);
     return aStr;
 }
 
 OUString SdrUndoCopyPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0);
     return aStr;
 }
 
@@ -1603,7 +1603,7 @@ void SdrUndoSetPageNum::Redo()
 OUString SdrUndoSetPageNum::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoMovPage,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoMovPage,aStr,0);
     return aStr;
 }
 
@@ -1646,7 +1646,7 @@ void SdrUndoPageRemoveMasterPage::Redo()
 OUString SdrUndoPageRemoveMasterPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr,0);
     return aStr;
 }
 
@@ -1690,7 +1690,7 @@ void SdrUndoPageChangeMasterPage::Redo()
 OUString SdrUndoPageChangeMasterPage::GetComment() const
 {
     OUString aStr;
-    ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr,0,false);
+    ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr,0);
     return aStr;
 }
 

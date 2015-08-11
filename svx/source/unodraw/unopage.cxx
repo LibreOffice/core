@@ -75,7 +75,7 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 
     // create (hidden) view
     mpView = new SdrView( mpModel );
-    mpView->SetDesignMode(true);
+    mpView->SetDesignMode();
 }
 
 SvxDrawPage::~SvxDrawPage() throw()
@@ -892,7 +892,7 @@ void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
         {
             delete mpView;
             mpView = new SdrView( mpModel );
-            mpView->SetDesignMode(true);
+            mpView->SetDesignMode();
         }
     }
 }

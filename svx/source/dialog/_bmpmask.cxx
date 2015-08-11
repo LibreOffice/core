@@ -226,7 +226,7 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
         pSet->SelectItem( 1 );
         pSet->Select();
 
-        pMask->m_pTbxPipette->CheckItem( pMask->m_pTbxPipette->GetItemId(0), true );
+        pMask->m_pTbxPipette->CheckItem( pMask->m_pTbxPipette->GetItemId(0) );
         PipetteHdl(pMask->m_pTbxPipette);
     }
 
@@ -433,7 +433,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pLbColorTrans->Disable();
 
     m_pQSet1->SetStyle( m_pQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet1->SetColCount( 1 );
+    m_pQSet1->SetColCount();
     m_pQSet1->SetLineCount( 1 );
     OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
     OUString sColorPaletteN;
@@ -443,7 +443,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet1->SelectItem( 1 );
 
     m_pQSet2->SetStyle( m_pQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet2->SetColCount( 1 );
+    m_pQSet2->SetColCount();
     m_pQSet2->SetLineCount( 1 );
     sColorPaletteN = sColorPalette;
     sColorPaletteN += " 2";
@@ -451,7 +451,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet2->SelectItem( 0 );
 
     m_pQSet3->SetStyle( m_pQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet3->SetColCount( 1 );
+    m_pQSet3->SetColCount();
     m_pQSet3->SetLineCount( 1 );
     sColorPaletteN = sColorPalette;
     sColorPaletteN += " 3";
@@ -459,7 +459,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pQSet3->SelectItem( 0 );
 
     m_pQSet4->SetStyle( m_pQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet4->SetColCount( 1 );
+    m_pQSet4->SetColCount();
     m_pQSet4->SetLineCount( 1 );
     sColorPaletteN = sColorPalette;
     sColorPaletteN += " 4";
@@ -575,25 +575,25 @@ void SvxBmpMask::PipetteClicked()
 {
     if( m_pQSet1->GetSelectItemId() == 1 )
     {
-        m_pCbx1->Check( true );
+        m_pCbx1->Check();
         pData->CbxHdl(m_pCbx1);
         m_pQSet1->SetItemColor( 1, aPipetteColor );
     }
     else if( m_pQSet2->GetSelectItemId() == 1 )
     {
-        m_pCbx2->Check( true );
+        m_pCbx2->Check();
         pData->CbxHdl(m_pCbx2);
         m_pQSet2->SetItemColor( 1, aPipetteColor );
     }
     else if( m_pQSet3->GetSelectItemId() == 1 )
     {
-        m_pCbx3->Check( true );
+        m_pCbx3->Check();
         pData->CbxHdl(m_pCbx3);
         m_pQSet3->SetItemColor( 1, aPipetteColor );
     }
     else if( m_pQSet4->GetSelectItemId() == 1 )
     {
-        m_pCbx4->Check( true );
+        m_pCbx4->Check();
         pData->CbxHdl(m_pCbx4);
         m_pQSet4->SetItemColor( 1, aPipetteColor );
     }

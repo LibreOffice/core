@@ -189,7 +189,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         SdrOutliner& rOutliner = mrObj.ImpGetDrawOutliner();
         rOutliner.SetText(*pParaObj);
 
-        aContent = rOutliner.GetEditEngine().GetText( LINEEND_LF );
+        aContent = rOutliner.GetEditEngine().GetText();
 
         rOutliner.Clear();
 

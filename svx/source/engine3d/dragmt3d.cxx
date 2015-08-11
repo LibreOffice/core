@@ -355,7 +355,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             }
             long nSnap = 0;
 
-            if(!getSdrDragView().IsRotateAllowed(false))
+            if(!getSdrDragView().IsRotateAllowed())
                 nSnap = 90;
 
             if(nSnap != 0)

@@ -1815,7 +1815,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     {
                         sal_uInt16 nPointCount=aPoly.GetSize();
                         for (sal_uInt16 i=0; i<nPointCount; i++)
-                            ShearPoint(aPoly[i],maRect.Center(), fTan, false );
+                            ShearPoint(aPoly[i],maRect.Center(), fTan );
                     }
                     if ( aGeo.nRotationAngle )
                         aPoly.Rotate( maRect.Center(), aGeo.nRotationAngle / 10 );
@@ -1948,7 +1948,7 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
     if(pHdl && HDL_CUSTOMSHAPE1 == pHdl->GetKind())
     {
         rDrag.SetEndDragChangesAttributes(true);
-        rDrag.SetNoSnap(true);
+        rDrag.SetNoSnap();
     }
     else
     {

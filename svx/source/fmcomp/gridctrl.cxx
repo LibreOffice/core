@@ -1305,7 +1305,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
             m_xEmptyRow = NULL;
             if ((GetCurRow() == GetRowCount() - 1) && (GetCurRow() > 0))
                 GoToRowColumnId(GetCurRow() - 1, GetCurColumnId());
-            RowRemoved(GetRowCount(), 1, true);
+            RowRemoved(GetRowCount(), 1);
         }
     }
 
@@ -1852,9 +1852,9 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
     // the cache was updated and no rowcount yet
     if (nDelta < nLimit && (nDelta > 0
         || (bCacheAligned && m_nTotalCount < 0)) )
-        SeekCursor(nNewTopRow + nLinesOnScreen - 1, false);
+        SeekCursor(nNewTopRow + nLinesOnScreen - 1);
     else if (nDelta < 0 && std::abs(nDelta) < nLimit)
-        SeekCursor(nNewTopRow, false);
+        SeekCursor(nNewTopRow);
     else if (nDelta != 0 || bUpdateCursor)
         SeekCursor(nNewTopRow, true);
 
@@ -2125,7 +2125,7 @@ void DbGridControl::CursorMoved()
     // cursor movement due to deletion or insertion of rows
     if (m_pDataCursor && m_nCurrentPos != GetCurRow())
     {
-        DeactivateCell(true);
+        DeactivateCell();
         SetCurrent(GetCurRow());
     }
 
@@ -2164,7 +2164,7 @@ void DbGridControl::setDisplaySynchron(bool bSync)
     {
         m_bSynchDisplay = bSync;
         if (m_bSynchDisplay)
-            AdjustDataSource(false);
+            AdjustDataSource();
     }
 }
 
@@ -2730,7 +2730,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 // one is about to be cleaned, too, the second one is obsolete now.
                 if (m_xCurrentRow->IsNew() && nRecordCount == (GetRowCount() - 2))
                 {
-                    RowRemoved(GetRowCount() - 1, 1, true);
+                    RowRemoved(GetRowCount() - 1, 1);
                     InvalidateStatusCell(m_nCurrentPos);
                     m_aBar->InvalidateAll(m_nCurrentPos);
                 }
@@ -2812,7 +2812,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 {
                     long nRow = FirstSelectedRow( );
 
-                    ::Rectangle aRowRect( GetRowRectPixel( nRow, true ) );
+                    ::Rectangle aRowRect( GetRowRectPixel( nRow ) );
                     executeRowContextMenu( nRow, aRowRect.LeftCenter() );
 
                     // handled
@@ -3023,7 +3023,7 @@ void DbGridControl::Undo()
             if (m_nCurrentPos == GetRowCount() - 2)
             {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
                 // caused our data source form to be reset - which should be the usual case ....)
-                RowRemoved(GetRowCount() - 1, 1, true);
+                RowRemoved(GetRowCount() - 1, 1);
                 m_aBar->InvalidateAll(m_nCurrentPos);
             }
 
@@ -3050,7 +3050,7 @@ void DbGridControl::resetCurrentRow()
             {
                 if (m_nCurrentPos == GetRowCount() - 2)
                 {
-                    RowRemoved(GetRowCount() - 1, 1, true);
+                    RowRemoved(GetRowCount() - 1, 1);
                     m_aBar->InvalidateAll(m_nCurrentPos);
                 }
             }

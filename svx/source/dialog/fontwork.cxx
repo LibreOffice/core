@@ -375,7 +375,7 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
             m_pTbxStyle->CheckItem(nStyleSlantXId, false);
             m_pTbxStyle->CheckItem(nStyleSlantYId, false);
 
-            m_pTbxStyle->CheckItem(nStyleOffId, true);
+            m_pTbxStyle->CheckItem(nStyleOffId);
         }
         else
         {

@@ -706,7 +706,7 @@ public:
         mpObjectLink(NULL),
         mpModifyListener(NULL)
     {
-        mxObjRef.Lock(true);
+        mxObjRef.Lock();
     }
 
     SdrOle2ObjImpl( bool bFrame, const svt::EmbeddedObjectRef& rObjRef ) :
@@ -724,7 +724,7 @@ public:
         mpObjectLink(NULL),
         mpModifyListener(NULL)
     {
-        mxObjRef.Lock(true);
+        mxObjRef.Lock();
     }
 
     ~SdrOle2ObjImpl()
@@ -1103,7 +1103,7 @@ void SdrOle2Obj::Connect_Impl()
                 {
                     mpImpl->mxObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
                     mpImpl->mbConnected = true;
-                    mpImpl->mxObjRef.Lock( true );
+                    mpImpl->mxObjRef.Lock();
                 }
             }
 

@@ -189,7 +189,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         return;
     }
 
-    Reference< css::form::XForms >      xNewPageForms = pNewFormPage->GetForms( true );
+    Reference< css::form::XForms >      xNewPageForms = pNewFormPage->GetForms();
     Reference< XIndexContainer >        xNewParent;
     Sequence< ScriptEventDescriptor>    aNewEvents;
 
@@ -372,7 +372,7 @@ FmFormObj* FmFormObj::Clone() const
 
 void FmFormObj::NbcReformatText()
 {
-    impl_checkRefDevice_nothrow( false );
+    impl_checkRefDevice_nothrow();
     SdrUnoObj::NbcReformatText();
 }
 

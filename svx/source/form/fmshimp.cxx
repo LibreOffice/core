@@ -799,7 +799,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         comphelper::SolarMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL, true, false);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL, true);
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(SID_FM_RECORD_TOTAL);
             rSolarSafety.release();
         }
@@ -2789,7 +2789,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
         m_aMarkTimer.Stop();
 
         SuspendPropertyTracking aSuspend( *this );
-        pFormView->GetImpl()->saveMarkList( true );
+        pFormView->GetImpl()->saveMarkList();
     }
 
     if (bDesign && m_xExternalViewController.is())

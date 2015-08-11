@@ -1445,7 +1445,7 @@ namespace
 
             if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
             {
-                rBitmapEx.Scale(rSize, BmpScaleFlag::Default);
+                rBitmapEx.Scale(rSize);
                 pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
             }
             else

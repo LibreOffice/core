@@ -1130,7 +1130,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
         {
             if ( aHandle.nFlags & HandleFlags::POLAR )
             {
-                Point aReferencePoint( GetPoint( aHandle.aPolar, true, false ) );
+                Point aReferencePoint( GetPoint( aHandle.aPolar, true ) );
 
                 double      fAngle;
                 double      fRadius;
@@ -1159,7 +1159,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                         aHandle.aPosition.Second = aFirst;
                     }
                 }
-                rReturnPosition = GetPoint( aHandle.aPosition, true, false );
+                rReturnPosition = GetPoint( aHandle.aPosition, true );
             }
             const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
             if ( aGeoStat.nShearAngle )

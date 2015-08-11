@@ -140,7 +140,7 @@ bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
         pIMapObj->SetURL( rNewInfo.aMarkURL );
         pIMapObj->SetAltText( rNewInfo.aMarkAltText );
         pIMapObj->SetTarget( rNewInfo.aMarkTarget );
-        pModel->SetChanged( true );
+        pModel->SetChanged();
         UpdateInfo( false );
 
         bRet = true;
@@ -295,7 +295,7 @@ void IMapWindow::InitSdrModel()
     aSet.Put( XFillColorItem( "", TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( true );
+    pView->SetFrameDragSingles();
 }
 
 void IMapWindow::SdrObjCreated( const SdrObject& rObj )
@@ -500,18 +500,18 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
             {
                 SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-                aMenu.EnableItem( MN_URL, true );
-                aMenu.EnableItem( MN_ACTIVATE, true );
-                aMenu.EnableItem( MN_MACRO, true );
+                aMenu.EnableItem( MN_URL );
+                aMenu.EnableItem( MN_ACTIVATE );
+                aMenu.EnableItem( MN_MACRO );
                 aMenu.CheckItem( MN_ACTIVATE, GetIMapObj( pSdrObj )->IsActive() );
             }
 
-            aMenu.EnableItem( MN_POSITION, true );
-            aMenu.EnableItem( MN_FRAME_TO_TOP, true );
-            aMenu.EnableItem( MN_MOREFRONT, true );
-            aMenu.EnableItem( MN_MOREBACK, true );
-            aMenu.EnableItem( MN_FRAME_TO_BOTTOM, true );
-            aMenu.EnableItem( MN_DELETE1, true );
+            aMenu.EnableItem( MN_POSITION );
+            aMenu.EnableItem( MN_FRAME_TO_TOP );
+            aMenu.EnableItem( MN_MOREFRONT );
+            aMenu.EnableItem( MN_MOREBACK );
+            aMenu.EnableItem( MN_FRAME_TO_BOTTOM );
+            aMenu.EnableItem( MN_DELETE1 );
         }
 
         aMenu.SetSelectHdl( LINK( this, IMapWindow, MenuSelectHdl ) );
@@ -542,7 +542,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             pIMapObj->SetURL( aBookMark.GetURL() );
             pIMapObj->SetAltText( aBookMark.GetDescription() );
-            pModel->SetChanged( true );
+            pModel->SetChanged();
             pView->UnmarkAll();
             pView->MarkObj( pSdrObj, pView->GetSdrPageView() );
             UpdateInfo( true );
@@ -606,7 +606,7 @@ void IMapWindow::SetCurrentObjState( bool bActive )
             aSet.Put( XLineColorItem( "", Color( COL_BLACK ) ) );
         }
 
-        pView->SetAttributes( aSet, false );
+        pView->SetAttributes( aSet );
     }
 }
 
@@ -666,7 +666,7 @@ void IMapWindow::DoMacroAssign()
         {
             const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
             pIMapObj->SetMacroTable( static_cast<const SvxMacroItem& >(pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
-            pModel->SetChanged( true );
+            pModel->SetChanged();
             UpdateInfo( false );
         }
     }
@@ -702,7 +702,7 @@ void IMapWindow::DoPropertyDialog()
                 pIMapObj->SetDesc( aDlg->GetDesc() );
                 pIMapObj->SetTarget( aDlg->GetTarget() );
                 pIMapObj->SetName( aDlg->GetName() );
-                pModel->SetChanged( true );
+                pModel->SetChanged();
                 UpdateInfo( true );
             }
         }

@@ -197,7 +197,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 SvTreeListBox::MouseButtonDown( rMEvt );
-                Select( pEntry, true );
+                Select( pEntry );
                 return;
             }
             else

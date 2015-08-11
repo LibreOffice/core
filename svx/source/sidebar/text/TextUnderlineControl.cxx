@@ -125,7 +125,7 @@ void TextUnderlineControl::initial()
     maVSUnderline->InsertItem(10, maIMGWave, SVX_RESSTR(STR_WAVE));
     maVSUnderline->SetItemData(10, reinterpret_cast<void*>(UNDERLINE_WAVE));
 
-    maVSUnderline->SetColCount( 1 );
+    maVSUnderline->SetColCount();
     aLink =  LINK( this, TextUnderlineControl, VSSelectHdl ) ;
     maVSUnderline->SetSelectHdl(aLink);
 

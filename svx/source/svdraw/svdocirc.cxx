@@ -486,7 +486,7 @@ bool SdrCircObj::beginSpecialDrag(SdrDragStat& rDrag) const
     {
         if(1 == rDrag.GetHdl()->GetPointNum() || 2 == rDrag.GetHdl()->GetPointNum())
         {
-            rDrag.SetNoSnap(true);
+            rDrag.SetNoSnap();
         }
 
         return true;
@@ -587,7 +587,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nAngle = pU->nEnd;
             }
 
-            aBuf.append(GetAngleStr(nAngle,false));
+            aBuf.append(GetAngleStr(nAngle));
             aBuf.append(')');
         }
 
@@ -605,7 +605,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
-            aBuf.append(GetAngleStr(nAngle,false));
+            aBuf.append(GetAngleStr(nAngle));
             aBuf.append(')');
 
             return aBuf.makeStringAndClear();

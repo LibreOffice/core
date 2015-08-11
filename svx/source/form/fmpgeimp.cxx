@@ -672,7 +672,7 @@ void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
 
     try
     {
-        lcl_removeFormObject_throw( _object,  xControlShapeMap, false );
+        lcl_removeFormObject_throw( _object,  xControlShapeMap );
         lcl_insertFormObject_throw( _object,  xControlShapeMap );
     }
     catch( const Exception& )

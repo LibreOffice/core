@@ -453,7 +453,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     if (sURL.isEmpty())
         sURL = aNew.TemplateURL;
     INetURLObject aURL(sURL);
-    aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL, false);
+    aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL);
 
     /* set the right UI state for this item to NOT_RECOVERED_YET ... because nDocState shows the state of
        the last emergency save operation before and is interessting for the used recovery core service only ...
@@ -1209,7 +1209,7 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
 
     if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_HANDLED)
     {
-        EndDialog(DLG_RET_CANCEL);
+        EndDialog();
         return DLG_RET_CANCEL;
     }
 
@@ -1349,7 +1349,7 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 
 IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl)
 {
-    EndDialog(DLG_RET_CANCEL);
+    EndDialog();
     return 0;
 }
 

@@ -270,7 +270,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
         {
             if(SAL_MAX_SIZE != pView->TryToFindMarkedObject(pSdrShape))
             {
-                pView->MarkObj(pSdrShape, pView->GetSdrPageView(), true, false);
+                pView->MarkObj(pSdrShape, pView->GetSdrPageView(), true);
             }
         }
 

@@ -96,7 +96,7 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
     assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
-    return pTabPage->GetAccessible( true );
+    return pTabPage->GetAccessible();
 }
 
 sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )

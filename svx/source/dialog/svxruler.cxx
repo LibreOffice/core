@@ -327,7 +327,7 @@ SvxRuler::SvxRuler(
     mxRulerImpl->nControlerItems=i;
 
     if( (nFlags & SvxRulerSupportFlags::SET_NULLOFFSET) == SvxRulerSupportFlags::SET_NULLOFFSET )
-        SetExtraType(RULER_EXTRA_NULLOFFSET, 0);
+        SetExtraType(RULER_EXTRA_NULLOFFSET);
 
     rBindings.LeaveRegistrations();
 
@@ -1420,7 +1420,7 @@ void ModifyTabs_Impl( sal_uInt16 nCount, // Number of Tabs
 void SvxRuler::DragMargin1()
 {
     /* Dragging the left edge of frame */
-    long aDragPosition = GetCorrectedDragPos( !TAB_FLAG || !NEG_FLAG, true );
+    long aDragPosition = GetCorrectedDragPos( !TAB_FLAG || !NEG_FLAG );
 
     aDragPosition = MakePositionSticky(aDragPosition, GetRightFrameMargin(), false);
 

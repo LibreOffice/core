@@ -325,7 +325,7 @@ void SvxColorDockingWindow::SetSize()
         aColorSet->SetLineCount( nLines );
     else
     {
-        aColorSet->SetLineCount( 0 ); // sonst wird LineHeight ignoriert
+        aColorSet->SetLineCount(); // sonst wird LineHeight ignoriert
         aColorSet->SetItemHeight( aItemSize.Height() );
     }
 

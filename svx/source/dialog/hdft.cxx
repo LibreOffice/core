@@ -452,9 +452,9 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     if ( !pSetItem )
     {
         m_pTurnOnBox->Check( false );
-        m_pHeightDynBtn->Check( true );
-        m_pCntSharedBox->Check( true );
-        m_pCntSharedFirstBox->Check( true );
+        m_pHeightDynBtn->Check();
+        m_pCntSharedBox->Check();
+        m_pCntSharedFirstBox->Check();
     }
 
     TurnOnHdl(0);

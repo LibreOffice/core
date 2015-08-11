@@ -325,8 +325,8 @@ namespace drawinglayer
                         fExtendIE * fTwipsToMM,
                         fExtendOS * fTwipsToMM,
                         fExtendOE * fTwipsToMM,
-                        getLeftLine().GetColorOut(true).getBColor(),
-                        getLeftLine().GetColorIn(true).getBColor(),
+                        getLeftLine().GetColorOut().getBColor(),
+                        getLeftLine().GetColorIn().getBColor(),
                         getLeftLine().GetColorGap().getBColor(),
                         getLeftLine().HasGapColor(),
                         getLeftLine().GetBorderLineStyle()));
@@ -387,8 +387,8 @@ namespace drawinglayer
                         fExtendOE * fTwipsToMM,
                         fExtendIS * fTwipsToMM,
                         fExtendIE * fTwipsToMM,
-                        getRightLine().GetColorOut(true).getBColor(),
-                        getRightLine().GetColorIn(true).getBColor(),
+                        getRightLine().GetColorOut().getBColor(),
+                        getRightLine().GetColorIn().getBColor(),
                         getRightLine().GetColorGap().getBColor(),
                         getRightLine().HasGapColor(),
                         getRightLine().GetBorderLineStyle()));

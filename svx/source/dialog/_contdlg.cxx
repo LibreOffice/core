@@ -196,7 +196,7 @@ bool SvxContourDlg::IsGraphicChanged() const
 
 tools::PolyPolygon SvxContourDlg::GetPolyPolygon()
 {
-    return pSuperClass->GetPolyPolygon( true );
+    return pSuperClass->GetPolyPolygon(true);
 }
 
 const void* SvxContourDlg::GetEditingObject() const
@@ -372,7 +372,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     }
 
     m_pContourWnd->SetPolyPolygon( aPolyPoly );
-    m_pContourWnd->GetSdrModel()->SetChanged( true );
+    m_pContourWnd->GetSdrModel()->SetChanged();
 }
 
 tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
@@ -459,22 +459,22 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     }
     else if (nId == mnSelectId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         m_pContourWnd->SetEditMode( true );
     }
     else if (nId == mnRectId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         m_pContourWnd->SetObjKind( OBJ_RECT );
     }
     else if (nId == mnCircleId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         m_pContourWnd->SetObjKind( OBJ_CIRC );
     }
     else if (nId == mnPolyId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         m_pContourWnd->SetObjKind( OBJ_POLY );
     }
     else if (nId == mnPolyEditId)
@@ -650,12 +650,12 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
             break;
         }
 
-        m_pTbx1->CheckItem( nId, true );
+        m_pTbx1->CheckItem( nId );
     }
     else
     {
         m_pTbx1->CheckItem(mnPolyEditId, false);
-        m_pTbx1->CheckItem(mnPolyMoveId, true);
+        m_pTbx1->CheckItem(mnPolyMoveId);
         m_pTbx1->CheckItem(mnPolyInsertId, false);
         pWnd->SetPolyEditMode( 0 );
     }
@@ -737,7 +737,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
 {
     m_pTbx1->CheckItem(mnWorkSpaceId, false);
-    m_pTbx1->CheckItem(mnSelectId, true);
+    m_pTbx1->CheckItem(mnSelectId);
     pWnd->SetWorkplaceMode( false );
 
     return 0L;

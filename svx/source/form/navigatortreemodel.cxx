@@ -141,7 +141,7 @@ namespace svxform
         // delete EntryData
         Reference< XFormComponent >  xReplaced;
         evt.ReplacedElement >>= xReplaced;
-        FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList(), true);
+        FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList());
         if (pEntryData)
         {
             if (pEntryData->ISA(FmControlData))
@@ -171,7 +171,7 @@ namespace svxform
 
 
         // delete EntryData
-        FmEntryData* pEntryData = m_pNavModel->FindData( _rxElement, m_pNavModel->GetRootList(), true );
+        FmEntryData* pEntryData = m_pNavModel->FindData( _rxElement, m_pNavModel->GetRootList() );
         if (pEntryData)
             m_pNavModel->Remove(pEntryData);
 
@@ -623,7 +623,7 @@ namespace svxform
         const Reference< XFormComponent > & xNew
     )
     {
-        FmEntryData* pData = FindData(xOld, GetRootList(), true);
+        FmEntryData* pData = FindData(xOld, GetRootList());
         assert(pData && pData->ISA(FmControlData)); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
         if (!pData || !pData->ISA(FmControlData))
             return;
@@ -752,7 +752,7 @@ namespace svxform
             try
             {
                 Reference< XFormComponent > xFormComponent( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
-                FmEntryData* pEntryData = FindData( xFormComponent, GetRootList(), true );
+                FmEntryData* pEntryData = FindData( xFormComponent, GetRootList() );
                 if ( pEntryData )
                     Remove( pEntryData );
             }

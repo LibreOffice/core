@@ -433,7 +433,7 @@ void SvxStyleBox_Impl::Select()
 
         if ( pPool )
         {
-            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
+            pPool->SetSearchMask( eStyleFamily );
 
             pStyle = pPool->First();
             while ( pStyle && OUString( pStyle->GetName() ) != aSearchEntry )
@@ -629,7 +629,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
 
         if ( pPool )
         {
-            pPool->SetSearchMask( eStyleFamily, SFXSTYLEBIT_ALL );
+            pPool->SetSearchMask( eStyleFamily );
 
             pStyle = pPool->First();
             while (pStyle && pStyle->GetName() != rStyleName)
@@ -1294,7 +1294,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     {
         mpPaletteListBox->InsertEntry( *it );
     }
-    mpPaletteListBox->SelectEntryPos(mrPaletteManager.GetPalette(), true);
+    mpPaletteListBox->SelectEntryPos(mrPaletteManager.GetPalette());
 
     mpButtonAutoColor->SetClickHdl( LINK( this, SvxColorWindow_Impl, AutoColorClickHdl ) );
     mpButtonPicker->SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
@@ -1749,7 +1749,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE,  true );
+    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
 
     if ( IsInPopupMode() )

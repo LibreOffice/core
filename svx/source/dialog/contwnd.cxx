@@ -115,7 +115,7 @@ void ContourWindow::InitSdrModel()
     aSet.Put( XFillColorItem( "", TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( true );
+    pView->SetFrameDragSingles();
 }
 
 void ContourWindow::SdrObjCreated( const SdrObject&  )

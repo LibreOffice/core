@@ -1095,7 +1095,7 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     bNewSelected = true;
                     //mxImpl->SelectBorder( **aIt, true );
-                    SelectBorder((**aIt).GetType(), true);
+                    SelectBorder((**aIt).GetType());
                 }
             }
             else

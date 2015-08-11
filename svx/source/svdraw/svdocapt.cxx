@@ -322,14 +322,14 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
     }
     else
     {
-        rDrag.SetOrtho8Possible(true);
+        rDrag.SetOrtho8Possible();
 
         if(!pHdl)
         {
             if (bMovProt)
                 return false;
 
-            rDrag.SetNoSnap(true);
+            rDrag.SetNoSnap();
             rDrag.SetActionRect(maRect);
 
             Point aHit(rDrag.GetStart());

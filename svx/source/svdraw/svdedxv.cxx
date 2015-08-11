@@ -1200,7 +1200,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             if( pMod )
             {
                 if( pTextEditOutliner && pTextEditOutliner->IsModified() )
-                    pMod->SetChanged( true );
+                    pMod->SetChanged();
             }
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
@@ -1593,7 +1593,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                     ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
                     BegUndo(aStr);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,false));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false));
                     EndUndo();
                 }
 
@@ -2059,7 +2059,7 @@ void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTex
             for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
             {
                 if( !bNoCharacterFormats )
-                    rOutliner.RemoveCharAttribs( nPara, /* remove all */0 );
+                    rOutliner.RemoveCharAttribs( nPara );
 
                 SfxItemSet aSet(rOutliner.GetParaAttribs(nPara));
                 aSet.Put(CreatePaintSet( GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );

@@ -323,7 +323,7 @@ namespace svxform
                     if ( !IsSelected(ptClickedOn) )
                     {
                         SelectAll(false);
-                        Select(ptClickedOn, true);
+                        Select(ptClickedOn);
                         SetCurEntry(ptClickedOn);
                     }
                 }
@@ -641,7 +641,7 @@ namespace svxform
         for( size_t i = 0; i < nChildCount; i++ )
         {
             FmEntryData* pChildData = pChildList->at( i );
-            Insert( pChildData, TREELIST_APPEND );
+            Insert( pChildData );
         }
 
         return pNewEntry;
@@ -1006,7 +1006,7 @@ namespace svxform
                 }
 
                 SvTreeListEntry* pToSelect = FindEntry(pNewControlData);
-                Select(pToSelect, true);
+                Select(pToSelect);
                 if (i == 0)
                     SetCurEntry(pToSelect);
             }
@@ -1422,7 +1422,7 @@ namespace svxform
 
             // switch to EditMode
             SvTreeListEntry* pNewEntry = FindEntry( pNewFormControlData );
-            Select( pNewEntry, true );
+            Select( pNewEntry );
             EditEntry( pNewEntry );
         }
 
@@ -1934,7 +1934,7 @@ namespace svxform
                 FmEntryDataArray::iterator it = arredToSelect.find(pCurEntryData);
                 if ( it != arredToSelect.end() )
                 {
-                    Select(pLoop, true);
+                    Select(pLoop);
                     MakeVisible(pLoop);
                     SetCursor(pLoop, true);
                 }
@@ -1978,7 +1978,7 @@ namespace svxform
             SvTreeListEntry* pSelectionLoop = *it;
             // When form selection, mark all controls of form
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
-                MarkViewObj(static_cast<FmFormData*>(pSelectionLoop->GetUserData()), true, false);
+                MarkViewObj(static_cast<FmFormData*>(pSelectionLoop->GetUserData()), true);
 
             // When control selection, mark Control-SdrObjects
             else if (IsFormComponentEntry(pSelectionLoop))
@@ -2005,7 +2005,7 @@ namespace svxform
         // if PropertyBrowser is open, i have to adopt it according to my selection
         // (Not as MarkList of view : if a form is selected, all belonging controls are selected in the view
         // but of course i want to see the form-properties
-        ShowSelectionProperties(false);
+        ShowSelectionProperties();
 
         // reset flag at view
         pFormShell->GetImpl()->EnableTrackProperties(true);
@@ -2088,7 +2088,7 @@ namespace svxform
             if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && bMark != pFormView->IsObjMarked( pSdrObject ) )
             {
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark, false );
+                pFormView->MarkObj( pSdrObject, pPageView, !bMark );
             }
         } // while ( aIter.IsMore() )
         if ( bMark )
@@ -2155,7 +2155,7 @@ namespace svxform
             // mark the object
             if ( bMark != pFormView->IsObjMarked( pSdrObject ) )
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark, false );
+                pFormView->MarkObj( pSdrObject, pPageView, !bMark );
 
             if ( !bMarkHandles || !bMark )
                 continue;

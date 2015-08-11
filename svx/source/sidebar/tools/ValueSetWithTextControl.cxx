@@ -38,7 +38,7 @@ ValueSetWithTextControl::ValueSetWithTextControl(
     , meControlType( eControlType )
     , maItems()
 {
-    SetColCount( 1 );
+    SetColCount();
 }
 
 void ValueSetWithTextControl::AddItem(
@@ -147,7 +147,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
-    pDev->Push( PushFlags::ALL );
+    pDev->Push();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 
     const long nRectHeight = aRect.GetHeight();

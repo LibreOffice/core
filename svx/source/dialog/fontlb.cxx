@@ -119,7 +119,7 @@ void SvxFontListBox::SelectEntryPos( sal_uLong nPos, bool bSelect )
 
 void SvxFontListBox::SetNoSelection()
 {
-    SelectAll( false, true );
+    SelectAll( false );
 }
 
 sal_uLong SvxFontListBox::GetSelectEntryPos() const

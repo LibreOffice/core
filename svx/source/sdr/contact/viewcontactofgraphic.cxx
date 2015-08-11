@@ -131,7 +131,7 @@ namespace sdr
                 aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aSmallerMatrix;
 
-                const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+                const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
                 const GraphicAttr aLocalGrafInfo;
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                     aSmallerMatrix,
@@ -367,7 +367,7 @@ namespace sdr
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // get the current, unchanged graphic object from SdrGrafObj
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
 
             if(visualisationUsesPresObj())
             {
@@ -420,7 +420,7 @@ namespace sdr
                 return false;
 
             // draft when swapped out
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
             static bool bAllowReplacements(true);
 
             if(rGraphicObject.IsSwappedOut() && bAllowReplacements)

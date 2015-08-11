@@ -499,9 +499,9 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
         if (!m_pFindTextFieldControl->GetText().isEmpty())
         {
             if ( !pToolBox->IsItemEnabled(m_nDownSearchId) )
-                pToolBox->EnableItem(m_nDownSearchId, true);
+                pToolBox->EnableItem(m_nDownSearchId);
             if ( !pToolBox->IsItemEnabled(m_nUpSearchId) )
-                pToolBox->EnableItem(m_nUpSearchId, true);
+                pToolBox->EnableItem(m_nUpSearchId);
         }
         else
         {

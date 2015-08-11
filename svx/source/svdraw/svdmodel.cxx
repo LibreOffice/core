@@ -1418,7 +1418,7 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (nPos>nCount) nPos=nCount;
     maPages.insert(maPages.begin()+nPos,pPage);
     PageListChanged();
-    pPage->SetInserted(true);
+    pPage->SetInserted();
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
     if (nPos<nCount) bPagNumsDirty=true;
@@ -1469,7 +1469,7 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     if (nPos>nCount) nPos=nCount;
     maMaPag.insert(maMaPag.begin()+nPos,pPage);
     MasterPageListChanged();
-    pPage->SetInserted(true);
+    pPage->SetInserted();
     pPage->SetPageNum(nPos);
     pPage->SetModel(this);
     if (nPos<nCount) {
@@ -1694,7 +1694,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     // inconsistent until all are in.
                     maMaPag.insert(maMaPag.begin()+nDstMasterPageAnz, pPg);
                     MasterPageListChanged();
-                    pPg->SetInserted(true);
+                    pPg->SetInserted();
                     pPg->SetModel(this);
                     bMPgNumsDirty=true;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));

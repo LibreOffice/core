@@ -210,7 +210,7 @@ SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
 
 OUString SvxDoubleItem::GetValueText() const
 {
-    return rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4, '.', false );
+    return rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4, '.' );
 }
 
 

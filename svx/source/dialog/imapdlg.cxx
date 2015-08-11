@@ -188,7 +188,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     aMiscOptions.AddListenerLink( LINK( this, SvxIMapDlg, MiscHdl ) );
 
     m_pTbxIMapDlg1->SetSelectHdl( LINK( this, SvxIMapDlg, TbxClickHdl ) );
-    m_pTbxIMapDlg1->CheckItem( mnSelectId, true );
+    m_pTbxIMapDlg1->CheckItem( mnSelectId );
     TbxClickHdl( m_pTbxIMapDlg1 );
 
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
@@ -356,7 +356,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
             DoSave();
     else if(nNewItemId == mnSelectId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         pIMapWnd->SetEditMode( true );
         if( pTbx->IsKeyEvent() )
         {
@@ -368,7 +368,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnRectId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_RECT );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -378,7 +378,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnCircleId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_CIRC );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -388,7 +388,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnPolyId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_POLY );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -398,7 +398,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnFreePolyId)
     {
-        pTbx->CheckItem( nNewItemId, true );
+        pTbx->CheckItem( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_FREEFILL );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -593,10 +593,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
     }
     else
     {
-        m_pTbxIMapDlg1->EnableItem( mnActiveId, true );
+        m_pTbxIMapDlg1->EnableItem( mnActiveId );
         m_pTbxIMapDlg1->CheckItem( mnActiveId, !rInfo.bActivated );
-        m_pTbxIMapDlg1->EnableItem( mnMacroId, true );
-        m_pTbxIMapDlg1->EnableItem( mnPropertyId, true );
+        m_pTbxIMapDlg1->EnableItem( mnMacroId );
+        m_pTbxIMapDlg1->EnableItem( mnPropertyId );
 
         m_pFtURL->Enable();
         m_pURLBox->Enable();
@@ -712,7 +712,7 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
         SetEditingObject( pOwnData->pUpdateEditingObject );
 
         // After changes => default selection
-        m_pTbxIMapDlg1->CheckItem( mnSelectId, true );
+        m_pTbxIMapDlg1->CheckItem( mnSelectId );
         pIMapWnd->SetEditMode( true );
     }
 
@@ -761,12 +761,12 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
             break;
         }
 
-        m_pTbxIMapDlg1->CheckItem( nId, true );
+        m_pTbxIMapDlg1->CheckItem( nId );
     }
     else
     {
         m_pTbxIMapDlg1->CheckItem( mnPolyEditId, false );
-        m_pTbxIMapDlg1->CheckItem( mnPolyMoveId, true );
+        m_pTbxIMapDlg1->CheckItem( mnPolyMoveId );
         m_pTbxIMapDlg1->CheckItem( mnPolyInsertId, false );
         pWnd->SetPolyEditMode( 0 );
     }

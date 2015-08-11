@@ -261,9 +261,9 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     else
     {
         maPopupMenu.EnableItem( MN_DELETE, !mbPreview );
-        maPopupMenu.EnableItem( MN_TITLE, true );
-        maPopupMenu.EnableItem( MN_COPYCLIPBOARD, true );
-        maPopupMenu.EnableItem( MN_PASTECLIPBOARD, true );
+        maPopupMenu.EnableItem( MN_TITLE );
+        maPopupMenu.EnableItem( MN_COPYCLIPBOARD );
+        maPopupMenu.EnableItem( MN_PASTECLIPBOARD );
     }
 
 #ifdef GALLERY_USE_CLIPBOARD
@@ -329,7 +329,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         maPopupMenu.EnableItem( MN_BACKGROUND, false );
     else
     {
-        maPopupMenu.EnableItem( MN_BACKGROUND, true );
+        maPopupMenu.EnableItem( MN_BACKGROUND );
         maPopupMenu.SetPopupMenu( MN_BACKGROUND, &maBackgroundPopup );
         maBackgroundPopup.SetSelectHdl( LINK( this, GalleryThemePopup, BackgroundMenuSelectHdl ) );
     }
@@ -768,9 +768,9 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
     Resize();
     ImplUpdateViews( 1 );
 
-    maViewBox->EnableItem( TBX_ID_ICON, true );
-    maViewBox->EnableItem( TBX_ID_LIST, true );
-    maViewBox->CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, true );
+    maViewBox->EnableItem( TBX_ID_ICON );
+    maViewBox->EnableItem( TBX_ID_LIST );
+    maViewBox->CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST );
 
     if(maInfoBar->GetText().isEmpty())
         mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
@@ -797,10 +797,10 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpIconView->Show();
 
-                maViewBox->EnableItem( TBX_ID_ICON, true );
-                maViewBox->EnableItem( TBX_ID_LIST, true );
+                maViewBox->EnableItem( TBX_ID_ICON );
+                maViewBox->EnableItem( TBX_ID_LIST );
 
-                maViewBox->CheckItem( TBX_ID_ICON, true );
+                maViewBox->CheckItem( TBX_ID_ICON );
                 maViewBox->CheckItem( TBX_ID_LIST, false );
             }
             break;
@@ -815,11 +815,11 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpListView->Show();
 
-                maViewBox->EnableItem( TBX_ID_ICON, true );
-                maViewBox->EnableItem( TBX_ID_LIST, true );
+                maViewBox->EnableItem( TBX_ID_ICON );
+                maViewBox->EnableItem( TBX_ID_LIST );
 
                 maViewBox->CheckItem( TBX_ID_ICON, false );
-                maViewBox->CheckItem( TBX_ID_LIST, true );
+                maViewBox->CheckItem( TBX_ID_LIST );
             }
             break;
 

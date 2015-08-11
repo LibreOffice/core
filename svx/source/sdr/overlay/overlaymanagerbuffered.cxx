@@ -303,7 +303,7 @@ namespace sdr
 
                     // paint overlay content for remembered region, use
                     // method from base class directly
-                    mpOutputBufferDevice->EnableMapMode(true);
+                    mpOutputBufferDevice->EnableMapMode();
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, *mpOutputBufferDevice.get());
                     mpOutputBufferDevice->EnableMapMode(false);
 

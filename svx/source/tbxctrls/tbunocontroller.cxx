@@ -352,7 +352,7 @@ throw ( uno::RuntimeException, std::exception )
                 m_pBox->Enable();
                 frame::status::FontHeight aFontHeight;
                 if ( rEvent.State >>= aFontHeight )
-                    m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), false );
+                    m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ) );
                 else
                     m_pBox->statusChanged_Impl( long( -1 ), true );
             }

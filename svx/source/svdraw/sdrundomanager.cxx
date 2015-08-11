@@ -40,7 +40,7 @@ bool SdrUndoManager::Undo()
         bool bRetval(false);
 
         // we are in text edit mode
-        if(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction(0))
+        if(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction())
         {
             // there is an undo action for text edit, trigger it
             bRetval = EditUndoManager::Undo();
@@ -85,7 +85,7 @@ void SdrUndoManager::Clear()
 {
     if(isTextEditActive())
     {
-        while(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction(0))
+        while(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction())
         {
             RemoveLastUndoAction();
         }
@@ -107,14 +107,14 @@ void SdrUndoManager::SetEndTextEditHdl(const Link<>& rLink)
     if(isTextEditActive())
     {
         // text edit start, remember last non-textedit action for later cleanup
-        mpLastUndoActionBeforeTextEdit = GetUndoActionCount() ? GetUndoAction(0) : 0;
+        mpLastUndoActionBeforeTextEdit = GetUndoActionCount() ? GetUndoAction() : 0;
     }
     else
     {
         // text edit ends, pop all textedit actions up to the remembered non-textedit action from the start
         // to set back the UndoManager to the state before text edit started. If that action is already gone
         // (due to being removed from the undo stack in the meantime), all need to be removed anyways
-        while(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction(0))
+        while(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction())
         {
             RemoveLastUndoAction();
         }

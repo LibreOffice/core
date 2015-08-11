@@ -1216,10 +1216,10 @@ void PosSizePropertyPanel::UpdateUIScale()
 
         // The content of the position and size boxes is only updated when item changes are notified.
         // Request such notifications without changing the actual item values.
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_X, true, false);
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_Y, true, false);
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_WIDTH, true, false);
-        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_HEIGHT, true, false);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_X, true);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_Y, true);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_WIDTH, true);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_HEIGHT, true);
     }
 }
 

@@ -670,7 +670,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 
                 // add undo now
                 if( GetModel()->IsUndoEnabled() )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, false));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false));
             }
 
             pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_GRAY), EE_CHAR_COLOR));
@@ -693,7 +693,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
             && eFillStyle != drawing::FillStyle_NONE)
         {
             if(pObj->GetPage() && GetModel()->IsUndoEnabled() )
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, false));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false));
             pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
             pObj->SetMergedItem(XLineWidthItem(0L));
         }

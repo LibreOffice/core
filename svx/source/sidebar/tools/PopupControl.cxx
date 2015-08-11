@@ -29,7 +29,7 @@ PopupControl::PopupControl (
     const ResId& rResId)
     : Control( pParent,rResId)
 {
-    EnableChildTransparentMode(true);
+    EnableChildTransparentMode();
     SetControlBackground();
 
     SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));

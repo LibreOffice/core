@@ -490,7 +490,7 @@ namespace svxform
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
                         SvTreeListEntry* pEntry = AddEntry( xNewPropSet );
-                        m_pItemList->Select( pEntry, true );
+                        m_pItemList->Select( pEntry );
                         bIsDocModified = true;
                     }
                     catch ( Exception& )
@@ -617,7 +617,7 @@ namespace svxform
                     {
                         SvTreeListEntry* pNewEntry = AddEntry( pNode, bIsElement );
                         m_pItemList->MakeVisible( pNewEntry );
-                        m_pItemList->Select( pNewEntry, true );
+                        m_pItemList->Select( pNewEntry );
                         bIsDocModified = true;
                     }
                     else
@@ -643,7 +643,7 @@ namespace svxform
                     if ( RET_OK == nReturn )
                     {
                         SvTreeListEntry* pNewEntry = AddEntry( xNewBinding );
-                        m_pItemList->Select( pNewEntry, true );
+                        m_pItemList->Select( pNewEntry );
                         bIsDocModified = true;
                     }
                     else
@@ -2663,19 +2663,19 @@ namespace svxform
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pRequiredCB->Check( true );
+                        m_pRequiredCB->Check();
                     if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pRelevantCB->Check( true );
+                        m_pRelevantCB->Check();
                     if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pConstraintCB->Check( true );
+                        m_pConstraintCB->Check();
                     if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pReadonlyCB->Check( true );
+                        m_pReadonlyCB->Check();
                     if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pCalculateCB->Check( true );
+                        m_pCalculateCB->Check();
                 }
                 catch (const Exception&)
                 {

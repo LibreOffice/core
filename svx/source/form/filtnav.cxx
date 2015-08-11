@@ -1181,7 +1181,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
         {
             if (!IsExpanded(pEntry))
                 Expand(pEntry);
-            Select(pEntry, true);
+            Select(pEntry);
         }
     }
 }
@@ -1395,7 +1395,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
     SelectAll(false);
     SvTreeListEntry* pEntry = FindEntry(pTargetItems);
-    Select(pEntry, true);
+    Select(pEntry);
     SetCurEntry(pEntry);
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
@@ -1630,7 +1630,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 if (!IsSelected(pClicked))
                 {
                     SelectAll(false);
-                    Select(pClicked, true);
+                    Select(pClicked);
                     SetCurEntry(pClicked);
                 }
             }

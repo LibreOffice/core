@@ -1068,8 +1068,8 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
             if (getSdrDragView().IsMirrorAllowed(true,true))
             { // limited
-                if (!getSdrDragView().IsMirrorAllowed(false,false)) nSA=4500;
-                if (!getSdrDragView().IsMirrorAllowed(true,false)) nSA=9000;
+                if (!getSdrDragView().IsMirrorAllowed(false)) nSA=4500;
+                if (!getSdrDragView().IsMirrorAllowed(true)) nSA=9000;
             }
 
             if (getSdrDragView().IsOrtho() && nSA!=9000)
@@ -1970,7 +1970,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
     bool bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
     bool bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
-    bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed(false);
+    bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed();
 
     if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
     {
@@ -2176,7 +2176,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
         if (getSdrDragView().IsAngleSnapEnabled())
             nSA=getSdrDragView().GetSnapAngle();
 
-        if (!getSdrDragView().IsRotateAllowed(false))
+        if (!getSdrDragView().IsRotateAllowed())
             nSA=9000;
 
         if (nSA!=0)
@@ -2581,10 +2581,10 @@ bool SdrDragMirror::BeginSdrDrag()
         bool b45=b90 || (std::abs(aDif.X()) == std::abs(aDif.Y()));
         nAngle=NormAngle360(GetAngle(aDif));
 
-        if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
+        if (!getSdrDragView().IsMirrorAllowed(false) && !b45)
             return false; // free choice of axis angle not allowed
 
-        if (!getSdrDragView().IsMirrorAllowed(true,false) && !b90)
+        if (!getSdrDragView().IsMirrorAllowed() && !b90)
             return false;  // 45 degrees not allowed either
 
         bSide0=ImpCheckSide(DragStat().GetStart());
@@ -2960,10 +2960,10 @@ void SdrDragCrook::createSdrDragEntries()
 
 bool SdrDragCrook::BeginSdrDrag()
 {
-    bContortionAllowed=getSdrDragView().IsCrookAllowed(false);
+    bContortionAllowed=getSdrDragView().IsCrookAllowed();
     bNoContortionAllowed=getSdrDragView().IsCrookAllowed(true);
-    bResizeAllowed=getSdrDragView().IsResizeAllowed(false);
-    bRotateAllowed=getSdrDragView().IsRotateAllowed(false);
+    bResizeAllowed=getSdrDragView().IsResizeAllowed();
+    bRotateAllowed=getSdrDragView().IsRotateAllowed();
 
     if (bContortionAllowed || bNoContortionAllowed)
     {
@@ -3353,7 +3353,7 @@ void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         if (bDoCrook)
         {
             const Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
-            const bool bLocalRotate(!bContortion && eMode == SDRCROOK_ROTATE && getSdrDragView().IsRotateAllowed(false));
+            const bool bLocalRotate(!bContortion && eMode == SDRCROOK_ROTATE && getSdrDragView().IsRotateAllowed());
 
             SdrEditView::ImpCrookObj(&rTarget,aCenter,aRad,eMode,bVertical,!bContortion,bLocalRotate,aLocalMarkRect);
         }
@@ -3498,7 +3498,7 @@ void SdrDragDistort::createSdrDragEntries()
 
 bool SdrDragDistort::BeginSdrDrag()
 {
-    bContortionAllowed=getSdrDragView().IsDistortAllowed(false);
+    bContortionAllowed=getSdrDragView().IsDistortAllowed();
     bNoContortionAllowed=getSdrDragView().IsDistortAllowed(true);
 
     if (bContortionAllowed || bNoContortionAllowed)
@@ -3728,7 +3728,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         // Take ortho into account.
         bool bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
         bool bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
-        bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed(false);
+        bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed();
 
         if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
         {

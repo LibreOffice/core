@@ -176,7 +176,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     if(1 != nFactor)
     {
-        aRetval.Scale(Size((rSize.Width() * 5) / 2, rSize.Height()), BmpScaleFlag::Default);
+        aRetval.Scale(Size((rSize.Width() * 5) / 2, rSize.Height()));
     }
 
     return aRetval;

@@ -78,7 +78,7 @@ void SvxShowCharSet::init()
 
     SetStyle(GetStyle() | WB_CLIPCHILDREN);
     aVscrollSB->SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
-    aVscrollSB->EnableDrag( true );
+    aVscrollSB->EnableDrag();
     // other settings like aVscroll depend on selected font => see RecalculateFont
 
     bDrag = false;
@@ -104,7 +104,7 @@ void SvxShowCharSet::GetFocus()
 void SvxShowCharSet::LoseFocus()
 {
     Control::LoseFocus();
-    SelectIndex( nSelectedIndex, false );
+    SelectIndex( nSelectedIndex );
 }
 
 

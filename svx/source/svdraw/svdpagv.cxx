@@ -209,7 +209,7 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
     const SdrPageWindow* pCandidate = FindPatchedPageWindow( _rDevice );
 
     if ( pCandidate )
-        xReturn = pCandidate->GetControlContainer( true );
+        xReturn = pCandidate->GetControlContainer();
 
     return xReturn;
 }

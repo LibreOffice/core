@@ -111,7 +111,7 @@ void SdrDragView::EndAction()
 {
     if (mpCurrentSdrDragMethod)
     {
-        EndDragObj(false);
+        EndDragObj();
     }
     SdrExchangeView::EndAction();
 }
@@ -294,7 +294,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         {
                             if (meDragMode==SDRDRAG_SHEAR || meDragMode==SDRDRAG_DISTORT)
                             {
-                                if (!IsDistortAllowed(true) && !IsDistortAllowed(false)) return false;
+                                if (!IsDistortAllowed(true) && !IsDistortAllowed()) return false;
                                 mpCurrentSdrDragMethod = new SdrDragDistort(*this);
                             }
                             else
@@ -393,7 +393,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     }
                     else
                     {
-                        if (!IsCrookAllowed(true) && !IsCrookAllowed(false)) return false;
+                        if (!IsCrookAllowed(true) && !IsCrookAllowed()) return false;
                         mpCurrentSdrDragMethod = new SdrDragCrook(*this);
                     }
                 } break;
@@ -705,7 +705,7 @@ bool SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
     {
         sal_uInt32 nNextPnt(mnInsPointNum);
         Point aPnt(aDragStat.GetNow());
-        bool bOk=EndDragObj(false);
+        bool bOk=EndDragObj();
         if (bOk && eCmd!=SDRCREATE_FORCEEND)
         {
             // Ret=True means: Action is over.

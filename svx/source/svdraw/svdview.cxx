@@ -1092,7 +1092,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             } break;
             case SDRDRAG_SHEAR: case SDRDRAG_DISTORT: {
                 if (bCorner) {
-                    if (!IsDistortAllowed(true) && !IsDistortAllowed(false)) return Pointer(PointerStyle::NotAllowed);
+                    if (!IsDistortAllowed(true) && !IsDistortAllowed()) return Pointer(PointerStyle::NotAllowed);
                     else return Pointer(PointerStyle::RefHand);
                 }
                 if (bVertex && !IsShearAllowed()) return Pointer(PointerStyle::NotAllowed);
@@ -1115,8 +1115,8 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                     }
                     bool bNo=false;
                     if (!IsMirrorAllowed(true,true)) bNo=true; // any mirroring is forbidden
-                    if (!IsMirrorAllowed(false,false) && !b45) bNo=true; // mirroring freely is forbidden
-                    if (!IsMirrorAllowed(true,false) && !b90) bNo=true;  // mirroring horizontally/vertically is allowed
+                    if (!IsMirrorAllowed(false) && !b45) bNo=true; // mirroring freely is forbidden
+                    if (!IsMirrorAllowed(true) && !b90) bNo=true;  // mirroring horizontally/vertically is allowed
                     if (bNo) return Pointer(PointerStyle::NotAllowed);
                     if (b90) {
                         return Pointer(PointerStyle::Mirror);
@@ -1143,7 +1143,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
 
             case SDRDRAG_CROOK: {
                 if (bCorner || bVertex || bMov) {
-                    if (!IsCrookAllowed(true) && !IsCrookAllowed(false)) return Pointer(PointerStyle::NotAllowed);
+                    if (!IsCrookAllowed(true) && !IsCrookAllowed()) return Pointer(PointerStyle::NotAllowed);
                     return Pointer(PointerStyle::Crook);
                 }
             }

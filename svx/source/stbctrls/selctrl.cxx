@@ -67,7 +67,7 @@ static sal_uInt16 state_to_id( sal_uInt16 nState )
 SelectionTypePopup::SelectionTypePopup( sal_uInt16 nCurrent )
     : PopupMenu( ResId( RID_SVXMENU_SELECTION, DIALOG_MGR() ) )
 {
-    CheckItem( state_to_id( nCurrent ), true );
+    CheckItem( state_to_id( nCurrent ) );
 }
 
 SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,

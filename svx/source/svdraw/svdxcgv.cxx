@@ -515,8 +515,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
                     // common tooling
                     aBmp = convertPrimitive2DSequenceToBitmapEx(
                         xPrimitives,
-                        aRange,
-                        500000);
+                        aRange);
                 }
             }
         }
@@ -598,7 +597,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
         if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic( pMod, GetMarkedObjectByIndex( 0 ) );
         else
-            aRet = GetMarkedObjMetaFile(false);
+            aRet = GetMarkedObjMetaFile();
     }
 
     return aRet;

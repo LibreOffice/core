@@ -220,7 +220,7 @@ bool GalleryExplorer::GetSdrObj( const OUString& rThemeName, sal_uIntPtr nSdrMod
                     if( nActPos++ == nSdrModelPos )
                     {
                         if( pModel )
-                            bRet = bRet || pTheme->GetModel( i, *pModel, false );
+                            bRet = bRet || pTheme->GetModel( i, *pModel );
 
                         if( pThumb )
                             bRet = bRet || pTheme->GetThumb( i, *pThumb );

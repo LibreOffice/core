@@ -292,7 +292,7 @@ static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool* pPool, 
 
         if( pItem && pItem->GetName() == rSearchName )
         {
-            pItem->QueryValue( rAny, 0 );
+            pItem->QueryValue( rAny );
             return true;
         }
     }

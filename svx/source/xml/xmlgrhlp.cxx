@@ -299,7 +299,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             {
                 SvLockBytes* pLockBytes = mpOStm->GetLockBytes();
                 if ( pLockBytes  )
-                    pLockBytes->SetSynchronMode( true );
+                    pLockBytes->SetSynchronMode();
 
                 mpOStm->Seek( STREAM_SEEK_TO_END );
                 nStreamLen = mpOStm->Tell();
@@ -788,7 +788,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
     OUString aUserData;
     OUString aRequestedFileName;
 
-    sal_Int32 nUser = rURL.indexOf( '?', 0 );
+    sal_Int32 nUser = rURL.indexOf( '?' );
     if ( nUser >= 0 )
     {
         aURL = rURL.copy( 0, nUser );

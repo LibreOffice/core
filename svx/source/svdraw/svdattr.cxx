@@ -315,7 +315,7 @@ SdrItemPool::SdrItemPool(
 
     pBoxInfoItem->SetTable( true );
     pBoxInfoItem->SetDist( true);        // always show margin field
-    pBoxInfoItem->SetValid( SvxBoxInfoItemValidFlags::DISABLE, true ); // some lines may have DontCare state only in tables
+    pBoxInfoItem->SetValid( SvxBoxInfoItemValidFlags::DISABLE ); // some lines may have DontCare state only in tables
 
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
