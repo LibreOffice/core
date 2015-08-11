@@ -133,6 +133,7 @@ public:
     void testTdf78742();
     void testUnoParagraph();
     void testSearchWithTransliterate();
+    void testTdf74363();
     void testTdf80663();
     void testTdf57197();
     void testTdf90808();
@@ -202,6 +203,7 @@ public:
     CPPUNIT_TEST(testTdf78742);
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf74363);
     CPPUNIT_TEST(testTdf80663);
     CPPUNIT_TEST(testTdf57197);
     CPPUNIT_TEST(testTdf90808);
@@ -1574,6 +1576,21 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf74363()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    //testing autocorrect of initial capitals on start of first paragraph
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    //Inserting one all-lowercase word into the first paragraph
+    pWrtShell->Insert("testing");
+    const sal_Unicode cChar = ' ';
+    pWrtShell->AutoCorrect(corr, cChar);
+    //The word should be capitalized due to autocorrect
+    sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(OUString("Testing "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest::testTdf80663()
