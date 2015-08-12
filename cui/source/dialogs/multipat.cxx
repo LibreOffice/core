@@ -121,7 +121,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl)
         }
         else
         {
-            sal_uInt16 nPos = m_pPathLB->InsertEntry( sInsPath, LISTBOX_APPEND );
+            sal_uInt16 nPos = m_pPathLB->InsertEntry( sInsPath );
             m_pPathLB->SetEntryData( nPos, new OUString( aURL ) );
         }
 
@@ -349,9 +349,9 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
             ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
 
         if ( bIsSystemPath )
-            nPos = m_pPathLB->InsertEntry( sSystemPath, LISTBOX_APPEND );
+            nPos = m_pPathLB->InsertEntry( sSystemPath );
         else
-            nPos = m_pPathLB->InsertEntry( sPath, LISTBOX_APPEND );
+            nPos = m_pPathLB->InsertEntry( sPath );
         m_pPathLB->SetEntryData( nPos, new OUString( sPath ) );
     }
 

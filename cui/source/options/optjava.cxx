@@ -555,7 +555,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 
 void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
-    m_pJavaList->Select( _pEntry, true );
+    m_pJavaList->Select( _pEntry );
     SvButtonState eState = m_pJavaList->GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )
@@ -1001,7 +1001,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
         OUString sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
-            sal_Int32 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
+            sal_Int32 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
             m_pPathList->SelectEntryPos( nPos );
         }
         else
@@ -1038,7 +1038,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
         OUString sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            sal_Int32 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
+            sal_Int32 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL ) );
             m_pPathList->SelectEntryPos( nPos );
         }
         else
@@ -1134,7 +1134,7 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
         OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );
         OUString sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_pPathList->InsertEntry( sPath, SvFileInformationManager::GetImage( aURL, false ) );
+        m_pPathList->InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
     }
     // select first entry
     m_pPathList->SelectEntryPos(0);

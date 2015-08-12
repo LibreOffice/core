@@ -405,7 +405,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl)
     {
         m_bBusy = true;
         m_pHyphWrapper->SpellEnd();
-        EndDialog( RET_CANCEL );
+        EndDialog();
         m_bBusy = false;
     }
     return 0;

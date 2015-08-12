@@ -590,7 +590,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
             OUString aTitle(pImp->m_sDlgMacros);
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildrenOnDemand( true );
+            pNewEntry->EnableChildrenOnDemand();
             aArr.push_back( pInfo );
         }
         else
@@ -676,7 +676,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                                 {
                                     if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                     {
-                                        pNewEntry->EnableChildrenOnDemand( true );
+                                        pNewEntry->EnableChildrenOnDemand();
                                         m = grandchildren.getLength();
                                     }
                                 }
@@ -699,7 +699,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SfxCfgKind::GROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
-        pEntry->EnableChildrenOnDemand( true );
+        pEntry->EnableChildrenOnDemand();
     }
 
     MakeVisible( GetEntry( 0,0 ) );
@@ -752,7 +752,7 @@ Image SfxConfigGroupListBox::GetImage(
             }
             if( !factoryURL.isEmpty() )
             {
-                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
+                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL) );
             }
             else
             {
@@ -1073,7 +1073,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
-                                            pNewEntry->EnableChildrenOnDemand( true );
+                                            pNewEntry->EnableChildrenOnDemand();
                                             m = grandchildren.getLength();
                                         }
                                     }

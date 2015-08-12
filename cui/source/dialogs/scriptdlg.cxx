@@ -350,7 +350,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     SvTreeListEntry * p;
     if( nBitmap == RID_CUIIMG_DOC && !factoryURL.isEmpty() )
     {
-        Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
+        Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL) );
         p = InsertEntry(
             rText, aImage, aImage, pParent, bChildrenOnDemand, TREELIST_APPEND,
             aUserData.release()); // XXX possible leak
@@ -655,7 +655,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
     if ( pButton == m_pCloseButton )
     {
         StoreCurrentSelection();
-        EndDialog( 0 );
+        EndDialog();
     }
     if ( pButton == m_pEditButton ||
             pButton == m_pCreateButton ||
@@ -757,7 +757,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         }
                     }
                     StoreCurrentSelection();
-                    EndDialog( 0 );
+                    EndDialog();
                 }
                 else if ( pButton == m_pEditButton )
                 {
@@ -765,7 +765,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     if ( xInv.is() )
                     {
                         StoreCurrentSelection();
-                        EndDialog( 0 );
+                        EndDialog();
                         Sequence< Any > args(0);
                         Sequence< Any > outArgs( 0 );
                         Sequence< sal_Int16 > outIndex;

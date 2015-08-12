@@ -618,7 +618,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
     // We now have always a link to the background
     bLinkOnly = true;
-    m_pBtnLink->Check( true );
+    m_pBtnLink->Check();
     m_pBtnLink->Show( false );
 }
 
@@ -1255,7 +1255,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
         // activate preview, so that the user sees which
         // graphic he has chosen
         if ( !m_pBtnLink->IsChecked() && !m_pBtnPreview->IsChecked() )
-            m_pBtnPreview->Check( true );
+            m_pBtnPreview->Check();
         // timer-delayed loading of the graphic
         pPageImpl->pLoadIdle->Start();
     }
@@ -1470,7 +1470,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             DBG_ASSERT( aObj.GetProtocol() != INetProtocol::NotValid, "Invalid URL!" );
 #endif
             aBgdGraphicPath = aStrLink;
-            m_pBtnLink->Check( true );
+            m_pBtnLink->Check();
             m_pBtnLink->Enable();
         }
         else

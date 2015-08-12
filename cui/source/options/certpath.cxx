@@ -174,7 +174,7 @@ IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvSimpleTable *, pList )
 
 void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
-    m_pCertPathList->Select( _pEntry, true );
+    m_pCertPathList->Select( _pEntry );
     SvButtonState eState = m_pCertPathList->GetCheckButtonState( _pEntry );
 
     if (SV_BUTTON_CHECKED == eState)

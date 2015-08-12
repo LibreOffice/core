@@ -463,7 +463,7 @@ IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton)
     }
     else
     {
-        EndDialog( RET_CANCEL );
+        EndDialog();
     }
     return 0;
 }

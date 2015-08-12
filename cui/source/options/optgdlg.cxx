@@ -1104,7 +1104,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pComplexLanguageLB->SetLanguageList( SvxLanguageListFlags::CTL     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
     m_pComplexLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::COMPLEX );
 
-    m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false, false, false);
+    m_pLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false, false);
     m_pLocaleSettingLB->InsertSystemLanguage( );
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
@@ -1603,7 +1603,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     {
         m_pWesternLanguageLB->GrabFocus();
         m_pCurrentDocCB->Enable(true);
-        m_pCurrentDocCB->Check(true);
+        m_pCurrentDocCB->Check();
     }
 }
 
@@ -1639,7 +1639,7 @@ namespace
     void lcl_checkLanguageCheckBox(CheckBox* _rCB,bool _bNewValue,bool _bOldValue)
     {
         if ( _bNewValue )
-            _rCB->Check(true);
+            _rCB->Check();
         else
             _rCB->Check( _bOldValue );
 // #i15082# do not call SaveValue() in running dialog...

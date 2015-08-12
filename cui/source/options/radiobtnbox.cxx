@@ -62,7 +62,7 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
 
 void SvxRadioButtonListBox::HandleEntryChecked( SvTreeListEntry* _pEntry )
 {
-    Select( _pEntry, true );
+    Select( _pEntry );
     SvButtonState eState = GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )

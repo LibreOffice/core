@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
 
-        EndDialog( RET_CANCEL );
+        EndDialog();
     }
 
     if (xDicList.is() && xNewDic.is())

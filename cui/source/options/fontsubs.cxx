@@ -180,7 +180,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
         SubstitutionStruct aAdd;
         aAdd.sFont = SvTabListBox::GetEntryText(pEntry, 0);
         aAdd.sReplaceBy = SvTabListBox::GetEntryText(pEntry, 1);
-        aAdd.bReplaceAlways = SvxFontSubstCheckListBox::IsChecked(pEntry, 0);
+        aAdd.bReplaceAlways = SvxFontSubstCheckListBox::IsChecked(pEntry);
         aAdd.bReplaceOnScreenOnly = SvxFontSubstCheckListBox::IsChecked(pEntry, 1);
         pConfig->AddSubstitution(aAdd);
         pEntry = m_pCheckLB->Next(pEntry);
@@ -459,7 +459,7 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
         else
         {
             sal_uInt16 nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
-            if(IsChecked(nSelPos, 0))
+            if(IsChecked(nSelPos))
                 nCheck += 2;
             nCheck--;
             nCheck &= 3;

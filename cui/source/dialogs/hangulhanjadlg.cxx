@@ -860,7 +860,7 @@ namespace svx
         {
             CheckBox *pBox = _ePrimaryConversionDirection == HHC::eHangulToHanja?
                                     m_pHangulOnly : m_pHanjaOnly;
-            pBox->Check( true );
+            pBox->Check();
             OnConversionDirectionClicked( pBox );
         }
     }

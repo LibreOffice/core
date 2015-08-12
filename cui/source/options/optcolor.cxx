@@ -569,7 +569,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         aCheckBox->SetText(sSampleText);
         aFixedText->SetText(sSampleText);
         Size aCheckSize(aCheckBox->CalcMinimumSize(0x7fffffff));
-        Size aFixedSize(aFixedText->CalcMinimumSize(0x7fffffff));
+        Size aFixedSize(aFixedText->CalcMinimumSize());
         nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 

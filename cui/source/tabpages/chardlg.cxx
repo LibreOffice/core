@@ -1262,7 +1262,7 @@ namespace
 {
     void enableRelativeMode( SvxCharNamePage* _pPage, FontSizeBox* _pFontSizeLB, sal_uInt16 _nHeightWhich )
     {
-        _pFontSizeLB->EnableRelativeMode( 5, 995, 5 ); // min 5%, max 995%, step 5
+        _pFontSizeLB->EnableRelativeMode( 5, 995 ); // min 5%, max 995%, step 5
 
         const SvxFontHeightItem& rHeightItem =
             static_cast<const SvxFontHeightItem&>(_pPage->GetItemSet().GetParent()->Get( _nHeightWhich ));
@@ -1273,7 +1273,7 @@ namespace
         // based on the current height:
         //      - negative until minimum of 2 pt
         //      - positive until maximum of 999 pt
-        _pFontSizeLB->EnablePtRelativeMode( sal::static_int_cast< short >(-(nCurHeight - 20)), (9999 - nCurHeight), 10 );
+        _pFontSizeLB->EnablePtRelativeMode( sal::static_int_cast< short >(-(nCurHeight - 20)), (9999 - nCurHeight) );
     }
 }
 
@@ -3035,7 +3035,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             if ( nEsc > 0 )
             {
                 nFac = 1;
-                m_pHighPosBtn->Check( true );
+                m_pHighPosBtn->Check();
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
                     nEsc = DFLT_ESC_SUPER;
@@ -3045,7 +3045,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             else
             {
                 nFac = -1;
-                m_pLowPosBtn->Check( true );
+                m_pLowPosBtn->Check();
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
                     nEsc = DFLT_ESC_SUB;
@@ -3067,8 +3067,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         }
         else
         {
-            m_pNormalPosBtn->Check( true );
-            m_pHighLowRB->Check( true );
+            m_pNormalPosBtn->Check();
+            m_pHighLowRB->Check();
             PositionHdl_Impl( NULL );
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
@@ -3175,13 +3175,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
             const SvxCharRotateItem& rItem =
                     static_cast<const SvxCharRotateItem&>( rSet->Get( nWhich ));
             if (rItem.IsBottomToTop())
-                m_p90degRB->Check( true );
+                m_p90degRB->Check();
             else if (rItem.IsTopToBotton())
-                m_p270degRB->Check( true );
+                m_p270degRB->Check();
             else
             {
                 DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
-                m_p0degRB->Check( true );
+                m_p0degRB->Check();
             }
             m_pFitToLineCB->Check( rItem.IsFitToLine() );
         }
@@ -3194,7 +3194,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                 m_p270degRB->Check( false );
             }
             else
-                m_p0degRB->Check( true );
+                m_p0degRB->Check();
 
             m_pFitToLineCB->Check( false );
         }

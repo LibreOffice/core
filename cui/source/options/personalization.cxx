@@ -203,7 +203,7 @@ IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
     if( m_rSearchThread.is() )
         m_rSearchThread->StopExecution();
 
-    EndDialog( RET_CANCEL );
+    EndDialog();
     return 0;
 }
 
@@ -417,7 +417,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         aStream.ReadLine( aLine );
         OUString aPersonaSetting( OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) );
         OUString aPreviewFile;
-        sal_Int32 nNewIndex = aPersonaSetting.indexOf( ';', 0 );
+        sal_Int32 nNewIndex = aPersonaSetting.indexOf( ';' );
         if( nNewIndex < 0 )
             break;
         aPreviewFile = aPersonaSetting.copy( 0, nNewIndex );
@@ -518,7 +518,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox*, )
     m_pExtensionPersonaPreview->Show();
     sal_Int32 nSelectedPos = m_pPersonaList->GetSelectEntryPos();
     OUString aSettings = m_vExtensionPersonaSettings[nSelectedPos];
-    sal_Int32 nIndex = aSettings.indexOf( ';', 0 );
+    sal_Int32 nIndex = aSettings.indexOf( ';' );
     OUString aPreviewFile = aSettings.copy( 0, nIndex );
     m_aPersonaSettings = aSettings.copy( nIndex + 1 );
 

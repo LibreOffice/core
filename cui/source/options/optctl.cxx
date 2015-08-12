@@ -32,8 +32,8 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
     // #i48117#: by default restricted and type&replace have to be switched on
     if(bIsSequenceChecking)
     {
-        m_pTypeReplaceCB->Check( true );
-        m_pRestrictedCB->Check( true );
+        m_pTypeReplaceCB->Check();
+        m_pRestrictedCB->Check();
     }
     return 0;
 }

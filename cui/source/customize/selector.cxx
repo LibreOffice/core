@@ -386,7 +386,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                     * way to determine if a basic lib had children
                     * without having to ask for them (which forces
                     * the library to be loaded */
-                    pNewEntry->EnableChildrenOnDemand( true );
+                    pNewEntry->EnableChildrenOnDemand();
                 }
                 else
                 {
@@ -399,7 +399,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                     {
                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                         {
-                            pNewEntry->EnableChildrenOnDemand( true );
+                            pNewEntry->EnableChildrenOnDemand();
                             break;
                         }
                     }
@@ -532,7 +532,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildrenOnDemand( true );
+            pNewEntry->EnableChildrenOnDemand();
             aArr.push_back( pInfo );
         }
         else
@@ -587,7 +587,7 @@ Image SvxConfigGroupListBox::GetImage(
             }
             if( !factoryURL.isEmpty() )
             {
-                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
+                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL) );
             }
             else
             {
@@ -987,7 +987,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
         // run from Tools/Configure and we should not close it, just hide it
         if ( !m_bShowSlots )
         {
-            EndDialog( RET_CANCEL );
+            EndDialog();
         }
         else
         {

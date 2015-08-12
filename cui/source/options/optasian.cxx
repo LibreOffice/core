@@ -284,9 +284,9 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
         m_pHintFT->Enable(false);
     }
     if(bKernWesternText)
-        m_pCharKerningRB->Check(true);
+        m_pCharKerningRB->Check();
     else
-        m_pCharPunctKerningRB->Check(true);
+        m_pCharPunctKerningRB->Check();
     switch(nCompress)
     {
         case 0 : m_pNoCompressionRB->Check();        break;

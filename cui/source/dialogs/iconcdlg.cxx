@@ -97,7 +97,7 @@ void IconChoicePage::ImplInitSettings()
     vcl::Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( true );
+        EnableChildTransparentMode();
         SetParentClipMode( ParentClipMode::NoClip );
         SetPaintTransparent( true );
         SetBackground();
@@ -186,7 +186,7 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     SetCtrlStyle();
     m_pIconCtrl->SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     m_pIconCtrl->Show();
-    m_pIconCtrl->SetChoiceWithCursor ( true );
+    m_pIconCtrl->SetChoiceWithCursor();
     m_pIconCtrl->SetSelectionMode( SINGLE_SELECTION );
     m_pIconCtrl->SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 

@@ -1289,8 +1289,8 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
     switch ( eDir )
     {
         // check the default alignment for this text direction
-        case FRMDIR_HORI_LEFT_TOP :     m_pLeft->Check( true ); break;
-        case FRMDIR_HORI_RIGHT_TOP :    m_pRight->Check( true ); break;
+        case FRMDIR_HORI_LEFT_TOP :     m_pLeft->Check(); break;
+        case FRMDIR_HORI_RIGHT_TOP :    m_pRight->Check(); break;
         case FRMDIR_ENVIRONMENT :       /* do nothing */ break;
         default:
         {
@@ -1636,7 +1636,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         }
         else if ( SfxItemState::DONTCARE == eItemState )
         {
-            m_pApplyCollBtn->EnableTriState( true );
+            m_pApplyCollBtn->EnableTriState();
             m_pApplyCollBtn->SetState( TRISTATE_INDET );
             m_pApplyCollBox->SetNoSelection();
         }

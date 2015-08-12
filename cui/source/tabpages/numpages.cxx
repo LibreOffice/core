@@ -313,7 +313,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
 
         if( eState != SfxItemState::SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId, true ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId ) );
             eState = SfxItemState::SET;
         }
     }
@@ -480,7 +480,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
 
         if( eState != SfxItemState::SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId, true ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId ) );
             eState = SfxItemState::SET;
         }
 
@@ -686,7 +686,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 
         if( eState != SfxItemState::SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId, true ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId ) );
             eState = SfxItemState::SET;
         }
 
@@ -948,7 +948,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
 
         if( eState != SfxItemState::SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId, true ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId ) );
             eState = SfxItemState::SET;
         }
 
@@ -1363,14 +1363,14 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
         if(bModified)
-            m_pLevelLB->SelectEntryPos( 0, true);
+            m_pLevelLB->SelectEntryPos( 0 );
         else
             m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
         if(nActNumLvl != SAL_MAX_UINT16)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i, true);
+                    m_pLevelLB->SelectEntryPos( i );
                 nMask <<= 1 ;
             }
         m_pLevelLB->SetUpdateMode(true);
@@ -1411,7 +1411,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
 
         if( eState != SfxItemState::SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId, true ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId ) );
             eState = SfxItemState::SET;
         }
 
@@ -1443,17 +1443,17 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_pLevelLB->SetNoSelection();
     if(nActNumLvl == SAL_MAX_UINT16  && !bModified)
     {
-        m_pLevelLB->SelectEntryPos( 0, true);
+        m_pLevelLB->SelectEntryPos( 0 );
     }
     else if (nActNumLvl == SAL_MAX_UINT16)
     {
-        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), true);
+        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount() );
     }
     else
         for(sal_uInt16 i = 0; i < pSaveNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i, true);
+                m_pLevelLB->SelectEntryPos( i );
             nMask <<= 1 ;
         }
     m_pLevelLB->SetUpdateMode(true);
@@ -3136,14 +3136,14 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
         if(bModified)
-            m_pLevelLB->SelectEntryPos( 0, true);
+            m_pLevelLB->SelectEntryPos( 0 );
         else
             m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
         if(nActNumLvl != SAL_MAX_UINT16)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i, true);
+                    m_pLevelLB->SelectEntryPos( i );
                 nMask <<= 1 ;
             }
         m_pRelativeCB->Enable(nActNumLvl != 1);
@@ -3195,7 +3195,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
 
         if( eState != SfxItemState::SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId, true ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet->Get( nNumItemId ) );
             eState = SfxItemState::SET;
         }
 
@@ -3226,18 +3226,18 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     m_pLevelLB->SetNoSelection();
     if(nActNumLvl == SAL_MAX_UINT16  && !bModified)
     {
-        m_pLevelLB->SelectEntryPos( 0, true);
+        m_pLevelLB->SelectEntryPos( 0 );
     }
     else if (nActNumLvl == SAL_MAX_UINT16)
     {
-        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), true);
+        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount() );
     }
     else
     {
         for(sal_uInt16 i = 0; i < pSaveNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i, true);
+                m_pLevelLB->SelectEntryPos( i );
             nMask <<= 1;
         }
     }

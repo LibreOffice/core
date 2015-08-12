@@ -395,8 +395,8 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
         nTabPos = 0;
 
     // Switch off all RadioButtons for a start
-    m_pLeftTab->Check( true );
-    m_pNoFillChar->Check( true );
+    m_pLeftTab->Check();
+    m_pNoFillChar->Check();
 
     if( m_pTabBox->GetEntryCount() > 0 )
     {

@@ -700,7 +700,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::TOP  ), SvxBoxItemLine::TOP);
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(SvxBoxItemLine::BOTTOM), SvxBoxItemLine::BOTTOM);
                     }
-                    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+                    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
                 }
                 else
                     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );

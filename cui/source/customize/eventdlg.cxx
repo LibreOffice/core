@@ -88,7 +88,7 @@ SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& r
     nPos = m_pSaveInListBox->InsertEntry(
         utl::ConfigManager::getProductName() );
     m_pSaveInListBox->SetEntryData( nPos, new bool(true) );
-    m_pSaveInListBox->SelectEntryPos( nPos, true );
+    m_pSaveInListBox->SelectEntryPos( nPos );
 }
 
 void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFrame  )
@@ -157,7 +157,7 @@ void SvxEventConfigPage::ImplInitDocument()
             sal_uInt16 nPos = m_pSaveInListBox->InsertEntry( aTitle );
 
             m_pSaveInListBox->SetEntryData( nPos, new bool(false) );
-            m_pSaveInListBox->SelectEntryPos( nPos, true );
+            m_pSaveInListBox->SelectEntryPos( nPos );
 
             bAppConfig = false;
         }

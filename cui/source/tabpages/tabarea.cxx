@@ -227,7 +227,7 @@ IMPL_LINK_NOARG(SvxAreaTabDialog, CancelHdlImpl)
 {
     SavePalettes();
 
-    EndDialog( RET_CANCEL );
+    EndDialog();
     return 0;
 }
 

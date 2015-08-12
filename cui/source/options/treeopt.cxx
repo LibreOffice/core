@@ -793,7 +793,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
                            WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
     pTreeLB->SetSpaceBetweenEntries( 0 );
     pTreeLB->SetSelectionMode( SINGLE_SELECTION );
-    pTreeLB->SetSublistOpenWithLeftRight( true );
+    pTreeLB->SetSublistOpenWithLeftRight();
     pTreeLB->SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
     pTreeLB->SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     pBackPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );

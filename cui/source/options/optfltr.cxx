@@ -319,9 +319,9 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     m_pCheckLB->SetUpdateMode( true );
 
     if (rOpt.IsCharBackground2Highlighting())
-        aHighlightingRB->Check(true);
+        aHighlightingRB->Check();
     else
-        aShadingRB->Check(true);
+        aShadingRB->Check();
 
     aHighlightingRB->SaveValue();
 }

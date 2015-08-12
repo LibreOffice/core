@@ -212,7 +212,7 @@ SvxLineTabPage::SvxLineTabPage
     m_pSymbolHeightMF->SetModifyHdl(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     m_pSymbolRatioCB->SetClickHdl(LINK(this, SvxLineTabPage, RatioHdl_Impl));
 
-    m_pSymbolRatioCB->Check(true);
+    m_pSymbolRatioCB->Check();
     ShowSymbolControls(false);
 
     nActLineWidth = -1;

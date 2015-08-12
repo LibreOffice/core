@@ -164,7 +164,7 @@ static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
     {
         if( 0 == rCmpClass.compareString(rEntry, rLB.GetEntry(i) ))
         {
-            rLB.SelectEntryPos(i, true);
+            rLB.SelectEntryPos(i);
             return true;
         }
     }
@@ -525,25 +525,25 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     long nFlags = pAutoCorrect->GetFlags();
 
-    bool bCheck = m_pCheckLB->IsChecked(USE_REPLACE_TABLE, CBCOL_FIRST);
+    bool bCheck = m_pCheckLB->IsChecked(USE_REPLACE_TABLE);
     bModified |= pOpt->bAutoCorrect != bCheck;
     pOpt->bAutoCorrect = bCheck;
     pAutoCorrect->SetAutoCorrFlag(Autocorrect,
                         m_pCheckLB->IsChecked(USE_REPLACE_TABLE, CBCOL_SECOND));
 
-    bCheck = m_pCheckLB->IsChecked(CORR_UPPER, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(CORR_UPPER);
     bModified |= pOpt->bCapitalStartWord != bCheck;
     pOpt->bCapitalStartWord = bCheck;
     pAutoCorrect->SetAutoCorrFlag(CapitalStartWord,
                         m_pCheckLB->IsChecked(CORR_UPPER, CBCOL_SECOND));
 
-    bCheck = m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(BEGIN_UPPER);
     bModified |= pOpt->bCapitalStartSentence != bCheck;
     pOpt->bCapitalStartSentence = bCheck;
     pAutoCorrect->SetAutoCorrFlag(CapitalStartSentence,
                         m_pCheckLB->IsChecked(BEGIN_UPPER, CBCOL_SECOND));
 
-    bCheck = m_pCheckLB->IsChecked(BOLD_UNDERLINE, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(BOLD_UNDERLINE);
     bModified |= pOpt->bChgWeightUnderl != bCheck;
     pOpt->bChgWeightUnderl = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,
@@ -555,21 +555,21 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,
                         m_pCheckLB->IsChecked(CORRECT_CAPS_LOCK, CBCOL_SECOND));
 
-    bCheck = m_pCheckLB->IsChecked(DETECT_URL, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(DETECT_URL);
     bModified |= pOpt->bSetINetAttr != bCheck;
     pOpt->bSetINetAttr = bCheck;
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,
                         m_pCheckLB->IsChecked(DETECT_URL, CBCOL_SECOND));
 
-    bCheck = m_pCheckLB->IsChecked(DEL_EMPTY_NODE, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(DEL_EMPTY_NODE);
     bModified |= pOpt->bDelEmptyNode != bCheck;
     pOpt->bDelEmptyNode = bCheck;
 
-    bCheck = m_pCheckLB->IsChecked(REPLACE_USER_COLL, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(REPLACE_USER_COLL);
     bModified |= pOpt->bChgUserColl != bCheck;
     pOpt->bChgUserColl = bCheck;
 
-    bCheck = m_pCheckLB->IsChecked(REPLACE_BULLETS, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(REPLACE_BULLETS);
     bModified |= pOpt->bChgEnumNum != bCheck;
     pOpt->bChgEnumNum = bCheck;
     bModified |= aBulletFont != pOpt->aBulletFont;
@@ -582,7 +582,7 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pOpt->aByInputBulletFont = aByInputBulletFont;
     pOpt->cByInputBullet = sByInputBulletChar[0];
 
-    bCheck = m_pCheckLB->IsChecked(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(MERGE_SINGLE_LINE_PARA);
     bModified |= pOpt->bRightMargin != bCheck;
     pOpt->bRightMargin = bCheck;
     bModified |= nPercent != pOpt->nRightMargin;
@@ -604,20 +604,20 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= pOpt->bReplaceStyles != bCheck;
     pOpt->bReplaceStyles = bCheck;
 
-    bCheck = m_pCheckLB->IsChecked(REPLACE_DASHES, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(REPLACE_DASHES);
     bModified |= pOpt->bChgToEnEmDash != bCheck;
     pOpt->bChgToEnEmDash = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,
                         m_pCheckLB->IsChecked(REPLACE_DASHES, CBCOL_SECOND));
 
-    bCheck = m_pCheckLB->IsChecked(DEL_SPACES_AT_STT_END, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(DEL_SPACES_AT_STT_END);
     bModified |= pOpt->bAFormatDelSpacesAtSttEnd != bCheck;
     pOpt->bAFormatDelSpacesAtSttEnd = bCheck;
     bCheck = m_pCheckLB->IsChecked(DEL_SPACES_AT_STT_END, CBCOL_SECOND);
     bModified |= pOpt->bAFormatByInpDelSpacesAtSttEnd != bCheck;
     pOpt->bAFormatByInpDelSpacesAtSttEnd = bCheck;
 
-    bCheck = m_pCheckLB->IsChecked(DEL_SPACES_BETWEEN_LINES, CBCOL_FIRST);
+    bCheck = m_pCheckLB->IsChecked(DEL_SPACES_BETWEEN_LINES);
     bModified |= pOpt->bAFormatDelSpacesBetweenLines != bCheck;
     pOpt->bAFormatDelSpacesBetweenLines = bCheck;
     bCheck = m_pCheckLB->IsChecked(DEL_SPACES_BETWEEN_LINES, CBCOL_SECOND);
@@ -852,7 +852,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         else
         {
             sal_uInt16 nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
-            if(IsChecked(nSelPos, 0))
+            if(IsChecked(nSelPos))
                 nCheck += 2;
             nCheck--;
             nCheck &= 3;
@@ -1108,7 +1108,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if( pViewShell && pViewShell->HasSelection( true ) )
+    if( pViewShell && pViewShell->HasSelection() )
     {
         bHasSelectionText = true;
         const OUString sSelection( pViewShell->GetSelectionText() );
@@ -1928,13 +1928,13 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     {
         SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        bool bCheck = m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
+        bool bCheck = m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE);
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
         pOpt->bAddNonBrkSpace = bCheck;
         pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,
                             m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_SECOND));
 
-        bCheck = m_pSwCheckLB->IsChecked(REPLACE_1ST, CBCOL_FIRST);
+        bCheck = m_pSwCheckLB->IsChecked(REPLACE_1ST);
         bModified |= pOpt->bChgOrdinalNumber != bCheck;
         pOpt->bChgOrdinalNumber = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,

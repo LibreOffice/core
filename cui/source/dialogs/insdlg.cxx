@@ -183,7 +183,7 @@ SvInsertOleDlg::SvInsertOleDlg
     Link<> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     m_pRbNewObject->SetClickHdl( aLink );
     m_pRbObjectFromfile->SetClickHdl( aLink );
-    m_pRbNewObject->Check( true );
+    m_pRbNewObject->Check();
     RadioHdl( NULL );
 }
 
@@ -590,7 +590,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                m_pCBMarginWidthDefault->Check( true );
+                m_pCBMarginWidthDefault->Check();
                 m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
                 m_pFTMarginWidth->Enable( false );
                 m_pNMMarginWidth->Enable( false );
@@ -603,7 +603,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                m_pCBMarginHeightDefault->Check( true );
+                m_pCBMarginHeightDefault->Check();
                 m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
                 m_pFTMarginHeight->Enable( false );
                 m_pNMMarginHeight->Enable( false );

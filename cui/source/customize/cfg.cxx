@@ -1138,7 +1138,7 @@ bool MenuSaveInData::LoadSubMenus(
                     }
                     else
                     {
-                        pEntry->SetMain( true );
+                        pEntry->SetMain();
                     }
 
                     subMenuTitle += stripHotKey( aLabel );
@@ -1682,13 +1682,13 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         {
             if ( pDocData && pDocData->HasURL( m_aURLToSelect ) )
             {
-                m_pSaveInListBox->SelectEntryPos( nPos, true );
+                m_pSaveInListBox->SelectEntryPos( nPos );
                 pCurrentSaveInData = pDocData;
                 bURLToSelectFound = true;
             }
             else if ( pModuleData && pModuleData->HasURL( m_aURLToSelect ) )
             {
-                m_pSaveInListBox->SelectEntryPos( 0, true );
+                m_pSaveInListBox->SelectEntryPos( 0 );
                 pCurrentSaveInData = pModuleData;
                 bURLToSelectFound = true;
             }
@@ -1700,12 +1700,12 @@ void SvxConfigPage::Reset( const SfxItemSet* )
             // it the SaveIn listbox, otherwise select the module data
             if ( pDocData != NULL && pDocData->HasSettings() )
             {
-                m_pSaveInListBox->SelectEntryPos( nPos, true );
+                m_pSaveInListBox->SelectEntryPos( nPos );
                 pCurrentSaveInData = pDocData;
             }
             else
             {
-                m_pSaveInListBox->SelectEntryPos( 0, true );
+                m_pSaveInListBox->SelectEntryPos( 0 );
                 pCurrentSaveInData = pModuleData;
             }
         }
@@ -1916,7 +1916,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
     nSelectionPos = nSelectionPos < m_pTopLevelListBox->GetEntryCount() ?
         nSelectionPos : m_pTopLevelListBox->GetEntryCount() - 1;
 
-    m_pTopLevelListBox->SelectEntryPos( nSelectionPos, true );
+    m_pTopLevelListBox->SelectEntryPos( nSelectionPos );
     m_pTopLevelListBox->GetSelectHdl().Call( this );
 }
 
@@ -1985,7 +1985,7 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
 
     SvxConfigEntry* pNewEntryData =
         new SvxConfigEntry( aDisplayName, aURL, false );
-    pNewEntryData->SetUserDefined( true );
+    pNewEntryData->SetUserDefined();
 
     // check that this function is not already in the menu
     SvxConfigEntry* pParent = GetTopLevelSelection();
@@ -2065,7 +2065,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
         m_pContentsListBox->Select( pNewEntry );
         m_pContentsListBox->MakeVisible( pNewEntry );
 
-        GetSaveInData()->SetModified( true );
+        GetSaveInData()->SetModified();
     }
 
     return pNewEntry;
@@ -2197,7 +2197,7 @@ bool SvxConfigPage::MoveEntryData(
         // insert the source entry at the position after the target
         pEntries->insert( ++iter, pSourceData );
 
-        GetSaveInData()->SetModified( true );
+        GetSaveInData()->SetModified();
 
         return true;
     }
@@ -2259,7 +2259,7 @@ void SvxMenuConfigPage::Init()
 
     ReloadTopLevelListBox();
 
-    m_pTopLevelListBox->SelectEntryPos(0, true);
+    m_pTopLevelListBox->SelectEntryPos(0);
     m_pTopLevelListBox->GetSelectHdl().Call(this);
 }
 
@@ -2298,7 +2298,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
 
-        pPopup->EnableItem( ID_BEGIN_GROUP, true );
+        pPopup->EnableItem( ID_BEGIN_GROUP );
         pPopup->EnableItem( ID_RENAME, false );
         pPopup->EnableItem( ID_DELETE, false );
 
@@ -2318,7 +2318,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     if ( pEntryData->IsSeparator() )
     {
-        pPopup->EnableItem( ID_DELETE, true );
+        pPopup->EnableItem( ID_DELETE );
         pPopup->EnableItem( ID_BEGIN_GROUP, false );
         pPopup->EnableItem( ID_RENAME, false );
 
@@ -2326,9 +2326,9 @@ void SvxMenuConfigPage::UpdateButtonStates()
     }
     else
     {
-        pPopup->EnableItem( ID_BEGIN_GROUP, true );
-        pPopup->EnableItem( ID_DELETE, true );
-        pPopup->EnableItem( ID_RENAME, true );
+        pPopup->EnableItem( ID_BEGIN_GROUP );
+        pPopup->EnableItem( ID_DELETE );
+        pPopup->EnableItem( ID_RENAME );
 
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
@@ -2346,7 +2346,7 @@ void SvxMenuConfigPage::DeleteSelectedTopLevel()
 
     ReloadTopLevelListBox();
 
-    GetSaveInData()->SetModified( true );
+    GetSaveInData()->SetModified( );
 }
 
 bool SvxMenuConfigPage::DeleteSelectedContent()
@@ -2377,7 +2377,7 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
         // delete data for menu entry
         delete pMenuEntry;
 
-        GetSaveInData()->SetModified( true );
+        GetSaveInData()->SetModified();
 
         return true;
     }
@@ -2453,7 +2453,7 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
 
             ReloadTopLevelListBox();
 
-            GetSaveInData()->SetModified( true );
+            GetSaveInData()->SetModified();
         }
     }
     else if (sIdent == "move")
@@ -2470,7 +2470,7 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
 
             ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
 
-            GetSaveInData()->SetModified( true );
+            GetSaveInData()->SetModified();
         }
     }
 }
@@ -2492,19 +2492,19 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void 
 
             SvxConfigEntry* pNewEntryData =
                 new SvxConfigEntry( aNewName, aNewName, true );
-            pNewEntryData->SetUserDefined( true );
+            pNewEntryData->SetUserDefined();
 
             InsertEntry( pNewEntryData );
 
             ReloadTopLevelListBox();
 
-            GetSaveInData()->SetModified( true );
+            GetSaveInData()->SetModified();
         }
     }
     else if (sIdent == "addseparator")
     {
         SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
-        pNewEntryData->SetUserDefined( true );
+        pNewEntryData->SetUserDefined();
         InsertEntry( pNewEntryData );
     }
     else if (sIdent == "moddelete")
@@ -2530,7 +2530,7 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void 
             pEntry->SetName( aNewName );
             m_pContentsListBox->SetEntryText( pActEntry, aNewName );
 
-            GetSaveInData()->SetModified( true );
+            GetSaveInData()->SetModified();
         }
     }
     else
@@ -2565,7 +2565,7 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
     {
         GetSaveInData()->SetEntries( pDialog->GetEntries() );
         ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
-        GetSaveInData()->SetModified( true );
+        GetSaveInData()->SetModified();
     }
 
     return 0;
@@ -2652,8 +2652,8 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( newname, newurl, true );
-        pNewEntryData->SetUserDefined( true );
-        pNewEntryData->SetMain( true );
+        pNewEntryData->SetUserDefined();
+        pNewEntryData->SetMain();
 
         pNewMenuEntry =
             m_pMenuListBox->InsertEntry( stripHotKey( pNewEntryData->GetName() ) );
@@ -2989,11 +2989,11 @@ void SvxToolbarConfigPage::DeleteSelectedTopLevel()
         // subtract one from the entry count
         if ( nSelectionPos != m_pTopLevelListBox->GetEntryCount() - 1 )
         {
-            m_pTopLevelListBox->SelectEntryPos( nSelectionPos + 1, true );
+            m_pTopLevelListBox->SelectEntryPos( nSelectionPos + 1 );
         }
         else
         {
-            m_pTopLevelListBox->SelectEntryPos( nSelectionPos - 1, true );
+            m_pTopLevelListBox->SelectEntryPos( nSelectionPos - 1 );
         }
         m_pTopLevelListBox->GetSelectHdl().Call( this );
 
@@ -3263,7 +3263,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
         case ID_BEGIN_GROUP:
         {
             SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
-            pNewEntryData->SetUserDefined( true );
+            pNewEntryData->SetUserDefined();
 
             SvTreeListEntry* pNewLBEntry = InsertEntry( pNewEntryData );
 
@@ -3465,7 +3465,7 @@ void SvxToolbarConfigPage::Init()
         m_aURLToSelect += "standardbar";
     }
 
-    m_pTopLevelListBox->SelectEntryPos(nPos, true);
+    m_pTopLevelListBox->SelectEntryPos(nPos);
     m_pTopLevelListBox->GetSelectHdl().Call(this);
 }
 
@@ -3754,7 +3754,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 SvxConfigEntry* pEntry = new SvxConfigEntry(
                     uiname, url, true );
 
-                pEntry->SetMain( true );
+                pEntry->SetMain();
                 pEntry->SetStyle( GetSystemStyle( url ) );
 
 
@@ -3764,7 +3764,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 OUString custom(CUSTOM_TOOLBAR_STR);
                 if ( systemname.startsWith( custom ) )
                 {
-                    pEntry->SetUserDefined( true );
+                    pEntry->SetUserDefined();
                 }
                 else
                 {
@@ -3842,12 +3842,12 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                         SvxConfigEntry* pEntry = new SvxConfigEntry(
                             uiname, url, true, true );
 
-                        pEntry->SetMain( true );
+                        pEntry->SetMain();
                         pEntry->SetStyle( GetSystemStyle( url ) );
 
                         if ( systemname.startsWith( custom ) )
                         {
-                            pEntry->SetUserDefined( true );
+                            pEntry->SetUserDefined();
                         }
                         else
                         {
@@ -4162,7 +4162,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
         if ( IsDocConfig() )
         {
             xToolbarSettings = GetParentConfigManager()->getSettings( url, sal_False );
-            pToolbar->SetParentData( true );
+            pToolbar->SetParentData();
         }
         else
             xToolbarSettings = GetConfigManager()->getSettings( url, sal_False );
@@ -4313,22 +4313,22 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     SvxConfigEntry* pEntryData = static_cast<SvxConfigEntry*>(selection->GetUserData());
     if ( pEntryData->IsSeparator() )
-        pPopup->EnableItem( ID_DELETE, true );
+        pPopup->EnableItem( ID_DELETE );
     else
     {
-        pPopup->EnableItem( ID_BEGIN_GROUP, true );
-        pPopup->EnableItem( ID_DELETE, true );
-        pPopup->EnableItem( ID_RENAME, true );
-        pPopup->EnableItem( ID_ICON_ONLY, true );
-        pPopup->EnableItem( ID_ICON_AND_TEXT, true );
-        pPopup->EnableItem( ID_TEXT_ONLY, true );
-        pPopup->EnableItem( ID_CHANGE_SYMBOL, true );
+        pPopup->EnableItem( ID_BEGIN_GROUP );
+        pPopup->EnableItem( ID_DELETE );
+        pPopup->EnableItem( ID_RENAME );
+        pPopup->EnableItem( ID_ICON_ONLY );
+        pPopup->EnableItem( ID_ICON_AND_TEXT );
+        pPopup->EnableItem( ID_TEXT_ONLY );
+        pPopup->EnableItem( ID_CHANGE_SYMBOL );
 
         if ( !pEntryData->IsUserDefined() )
-            pPopup->EnableItem( ID_DEFAULT_COMMAND, true );
+            pPopup->EnableItem( ID_DEFAULT_COMMAND );
 
         if ( pEntryData->IsIconModified() )
-            pPopup->EnableItem( ID_RESET_SYMBOL, true );
+            pPopup->EnableItem( ID_RESET_SYMBOL );
 
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
@@ -4449,7 +4449,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     }
 
     pNameDialog->m_pSaveInListBox->SelectEntryPos(
-        m_pSaveInListBox->GetSelectEntryPos(), true );
+        m_pSaveInListBox->GetSelectEntryPos() );
 
     if ( pNameDialog->Execute() == RET_OK )
     {
@@ -4462,24 +4462,24 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 
         if ( GetSaveInData() != pData )
         {
-            m_pSaveInListBox->SelectEntryPos( nInsertPos, true );
+            m_pSaveInListBox->SelectEntryPos( nInsertPos );
             m_pSaveInListBox->GetSelectHdl().Call(this);
         }
 
         SvxConfigEntry* pToolbar =
             new SvxConfigEntry( aNewName, aNewURL, true );
 
-        pToolbar->SetUserDefined( true );
-        pToolbar->SetMain( true );
+        pToolbar->SetUserDefined();
+        pToolbar->SetMain();
 
         pData->CreateToolbar( pToolbar );
 
         nInsertPos = m_pTopLevelListBox->InsertEntry( pToolbar->GetName() );
         m_pTopLevelListBox->SetEntryData( nInsertPos, pToolbar );
-        m_pTopLevelListBox->SelectEntryPos( nInsertPos, true );
+        m_pTopLevelListBox->SelectEntryPos( nInsertPos );
         m_pTopLevelListBox->GetSelectHdl().Call(this);
 
-        pData->SetModified( true );
+        pData->SetModified();
     }
 
     return 0;

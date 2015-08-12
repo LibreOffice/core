@@ -792,14 +792,14 @@ void FmSearchDialog::LoadParams()
     if (aParams.bAllFields)
     {
         m_prbSingleField->Check(false);
-        m_prbAllFields->Check(true);
+        m_prbAllFields->Check();
         LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(m_prbAllFields);
         // OnClickedFieldRadios also calls to RebuildUsedFields
     }
     else
     {
         m_prbAllFields->Check(false);
-        m_prbSingleField->Check(true);
+        m_prbSingleField->Check();
         LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(m_prbSingleField);
     }
 
@@ -837,7 +837,7 @@ void FmSearchDialog::LoadParams()
         pToCheck = m_pSoundsLikeCJK;
     if (pToCheck)
     {
-        pToCheck->Check(true);
+        pToCheck->Check();
         LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(pToCheck);
     }
 
@@ -854,9 +854,9 @@ void FmSearchDialog::LoadParams()
     m_prbSearchForNotNull->Check(false);
     switch (aParams.nSearchForType)
     {
-        case 1: m_prbSearchForNull->Check(true); break;
-        case 2: m_prbSearchForNotNull->Check(true); break;
-        default: m_prbSearchForText->Check(true); break;
+        case 1: m_prbSearchForNull->Check(); break;
+        case 2: m_prbSearchForNotNull->Check(); break;
+        default: m_prbSearchForText->Check(); break;
     }
     LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(m_prbSearchForText);
 }
