@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_c20424c8",
+        "filename": "scaddins/source/pricing/pricing.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-12T11:09:14Z",
+      "side": 1,
+      "message": "Nitpick: why haven\u0027t you used a reference?",
+      "revId": "d834f396a63b96fb63597c5280ee909288a07939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a20920e0",
+        "filename": "scaddins/source/pricing/pricing.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-12T11:09:14Z",
+      "side": 1,
+      "message": "Nitpick 2: the operator should be const.\nNitpick 3: the \u0027inline\u0027 keyword is useless.",
+      "revId": "d834f396a63b96fb63597c5280ee909288a07939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
