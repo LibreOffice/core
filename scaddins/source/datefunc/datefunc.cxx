@@ -143,17 +143,10 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 
 //  "normal" service implementation
 ScaDateAddIn::ScaDateAddIn() :
-    pDefLocales( NULL ),
-    pResMgr( NULL ),
-    pFuncDataList( NULL )
+    pDefLocales( nullptr ),
+    pResMgr( nullptr ),
+    pFuncDataList( nullptr )
 {
-}
-
-ScaDateAddIn::~ScaDateAddIn()
-{
-    delete pFuncDataList;
-    delete pResMgr;
-    delete[] pDefLocales;
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -162,7 +155,7 @@ static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaDateAddIn::InitDefLocales()
 {
-    pDefLocales = new lang::Locale[ nNumOfLoc ];
+    pDefLocales.reset(new lang::Locale[ nNumOfLoc ]);
 
     for( sal_uInt32 nIndex = 0; nIndex < nNumOfLoc; nIndex++ )
     {
@@ -192,24 +185,18 @@ ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 
 void ScaDateAddIn::InitData()
 {
-    delete pResMgr;
-    pResMgr = ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc));
-    delete pFuncDataList;
+    pResMgr.reset(ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc)));
+    pFuncDataList.reset();
 
     if ( pResMgr )
     {
-        pFuncDataList = new ScaFuncDataList;
+        pFuncDataList.reset(new ScaFuncDataList);
         InitScaFuncDataList( *pFuncDataList, *pResMgr );
-    }
-    else
-    {
-        pFuncDataList = nullptr;
     }
 
     if( pDefLocales )
     {
-        delete pDefLocales;
-        pDefLocales = NULL;
+        pDefLocales.reset();
     }
 }
 
