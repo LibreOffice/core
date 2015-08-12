@@ -60,6 +60,7 @@
 #include <editeng/unolingu.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/unoimap.hxx>
+#include <svtools/miscopt.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
@@ -2382,6 +2383,8 @@ void SdXImpressDocument::initializeForTiledRendering()
             pWindow->EnableMapMode(false);
         }
     }
+    SvtMiscOptions aMiscOpt;
+    aMiscOpt.SetSaveAlwaysAllowed(true);
 }
 
 void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)

@@ -44,6 +44,7 @@
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <ctype.h>
 #include <float.h>
@@ -839,6 +840,8 @@ void ScModelObj::initializeForTiledRendering()
     aInputOptions.SetTextWysiwyg(true);
     SC_MOD()->SetInputOptions(aInputOptions);
     pDocShell->CalcOutputFactor();
+    SvtMiscOptions aMiscOpt;
+    aMiscOpt.SetSaveAlwaysAllowed(true);
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
