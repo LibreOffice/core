@@ -2158,7 +2158,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
     bool failure = false;
     nIMax = ncpN;
 
-    if ((nIMax < 1) || (nIMax > (WW8_CP_MAX - 4)/6) || ((nPN + ncpN) > USHRT_MAX))
+    if ((nIMax < 1) || (nIMax > (WW8_CP_MAX - 4)/6) || ((nPN + ncpN) > USHRT_MAX) || nPN < 0)
         failure = true;
 
     if (!failure)
@@ -2172,7 +2172,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             failure = true;
             // construct FC entries
             // first FC entry of each Fkp
-            if (checkSeek(rSt, static_cast<sal_uInt32>( nPN + i ) << 9 ))
+            if (checkSeek(rSt, ( nPN + i ) << 9 ))
                 continue;
             WW8_CP nFc(0);
             rSt.ReadInt32( nFc );
@@ -2220,7 +2220,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
         }
     }
 
-    OSL_ENSURE( !failure, "Document has corrupt PLCF, ignoring it" );
+    SAL_WARN_IF(failure, "sw.ww8", "Document has corrupt PLCF, ignoring it");
 
     if (failure)
         MakeFailedPLCF();
@@ -4400,8 +4400,8 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 
 void WW8PLCFxDesc::ReduceByOffset()
 {
-   OSL_ENSURE((WW8_CP_MAX == nStartPos) || (nStartPos <= nEndPos),
-            "Attr-Anfang und -Ende ueber Kreuz" );
+    SAL_WARN_IF(WW8_CP_MAX != nStartPos && nStartPos > nEndPos, "sw.ww8",
+                "End " << nEndPos << " before Start " << nStartPos);
 
     if( nStartPos != WW8_CP_MAX )
     {
@@ -4439,8 +4439,8 @@ void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
     rDesc.nCp2OrIdx = rDesc.pPLCFx->GetNoSprms(rDesc.nStartPos, rDesc.nEndPos,
         rDesc.nSprmsLen);
 
-   OSL_ENSURE((WW8_CP_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
-            "Attr-Anfang und -Ende ueber Kreuz" );
+    SAL_WARN_IF(WW8_CP_MAX != rDesc.nStartPos && rDesc.nStartPos > rDesc.nEndPos, "sw.ww8",
+                "End " << rDesc.nEndPos << " before Start " << rDesc.nStartPos);
 
     rDesc.ReduceByOffset();
 
@@ -4950,7 +4950,8 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nSprmsLen = 0;
                 GetNewSprms( *p );
             }
-            OSL_ENSURE( p->nStartPos <= p->nEndPos, "Attribut ueber Kreuz" );
+            SAL_WARN_IF(p->nStartPos > p->nEndPos, "sw.ww8",
+                        "End " << p->nEndPos << " before Start " << p->nStartPos);
         }
     }
 }
