@@ -500,6 +500,9 @@ void AssignmentPersistentData::ImplCommit()
             delete pConfigData;
         }
 
+        // Copy assignment is forbidden and not implemented.
+        AddressBookSourceDialogData (const AddressBookSourceDialogData &) SAL_DELETED_FUNCTION;
+        AddressBookSourceDialogData & operator= (const AddressBookSourceDialogData &) SAL_DELETED_FUNCTION;
     };
 
 

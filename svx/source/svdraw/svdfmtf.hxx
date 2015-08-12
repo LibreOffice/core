@@ -39,8 +39,6 @@ class SvdProgressInfo;
 
 
 // Helper Class ImpSdrGDIMetaFileImport
-
-
 class ImpSdrGDIMetaFileImport
 {
 protected:
@@ -153,6 +151,11 @@ protected:
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     void DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
+
+private:
+    // Copy assignment is forbidden and not implemented.
+    ImpSdrGDIMetaFileImport (const ImpSdrGDIMetaFileImport &) SAL_DELETED_FUNCTION;
+    ImpSdrGDIMetaFileImport & operator= (const ImpSdrGDIMetaFileImport &) SAL_DELETED_FUNCTION;
 
 public:
     ImpSdrGDIMetaFileImport(

@@ -92,6 +92,10 @@ class Impl3DMirrorConstructOverlay
     // the overlay geometry from selected objects
     drawinglayer::primitive2d::Primitive2DSequence  maFullOverlay;
 
+    // Copy assignment is forbidden and not implemented.
+    Impl3DMirrorConstructOverlay (const Impl3DMirrorConstructOverlay &) SAL_DELETED_FUNCTION;
+    Impl3DMirrorConstructOverlay & operator= (const Impl3DMirrorConstructOverlay &) SAL_DELETED_FUNCTION;
+
 public:
     explicit Impl3DMirrorConstructOverlay(const E3dView& rView);
     ~Impl3DMirrorConstructOverlay();

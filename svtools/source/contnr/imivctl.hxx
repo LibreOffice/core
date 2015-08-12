@@ -316,6 +316,10 @@ class SvxIconChoiceCtrl_Impl
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
 
+    // Copy assignment is forbidden and not implemented.
+    SvxIconChoiceCtrl_Impl (const SvxIconChoiceCtrl_Impl &) SAL_DELETED_FUNCTION;
+    SvxIconChoiceCtrl_Impl & operator= (const SvxIconChoiceCtrl_Impl &) SAL_DELETED_FUNCTION;
+
 public:
 
     long                nGridDX;
@@ -512,13 +516,11 @@ public:
 
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 
-    inline ::svt::IAccessibleFactory& GetAccessibleFactory()
-                        {
-                            return aAccFactory.getFactory();
-                        }
+    ::svt::IAccessibleFactory& GetAccessibleFactory()
+    {
+        return aAccFactory.getFactory();
+    }
 };
-
-
 
 typedef std::map<sal_uInt16, SvxIconChoiceCtrlEntryPtrVec> IconChoiceMap;
 

@@ -392,6 +392,10 @@ private:
 
     static bool IsCacheableAsBitmap( const GDIMetaFile& rMtf, OutputDevice* pOut, const Size& rSz );
 
+    // Copy assignment is forbidden and not implemented.
+    GraphicDisplayCacheEntry (const GraphicDisplayCacheEntry &) SAL_DELETED_FUNCTION;
+    GraphicDisplayCacheEntry & operator= (const GraphicDisplayCacheEntry &) SAL_DELETED_FUNCTION;
+
 public:
 
     static sal_uLong                GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
