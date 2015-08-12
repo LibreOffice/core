@@ -512,10 +512,8 @@ XMLHexPropHdl::~XMLHexPropHdl()
 
 bool XMLHexPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bRet = false;
     sal_uInt32 nRsid;
-
-    bRet = SvXMLUnitConverter::convertHex( nRsid, rStrImpValue );
+    bool bRet = SvXMLUnitConverter::convertHex( nRsid, rStrImpValue );
     rValue <<= nRsid;
 
     return bRet;
