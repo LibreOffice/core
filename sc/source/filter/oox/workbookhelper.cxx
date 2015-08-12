@@ -574,7 +574,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     Reference< XDocumentPropertiesSupplier > xPropSupplier( mxDoc, UNO_QUERY);
     Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
     ScCalcConfig aCalcConfig = mpDoc->GetCalcConfig();
-    aCalcConfig.meStringRefAddressSyntax = getConvention(xDocProps);
+    aCalcConfig.SetStringRefSyntax( getConvention(xDocProps) );
     mpDoc->SetCalcConfig(aCalcConfig);
 
     mxDocImport.reset(new ScDocumentImport(*mpDoc));
