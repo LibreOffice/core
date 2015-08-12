@@ -88,7 +88,7 @@ public:
     osl::Module*    GetInstance() const { return pInstance; }
 };
 
-FuncData::FuncData(const ModuleData*pModule,
+LegacyFuncData::LegacyFuncData(const ModuleData*pModule,
                    const OUString& rIName,
                    const OUString& rFName,
                          sal_uInt16 nNo,
@@ -106,7 +106,7 @@ FuncData::FuncData(const ModuleData*pModule,
         eParamType[i] = peType[i];
 }
 
-FuncData::FuncData(const FuncData& rData) :
+LegacyFuncData::LegacyFuncData(const LegacyFuncData& rData) :
     pModuleData     (rData.pModuleData),
     aInternalName   (rData.aInternalName),
     aFuncName       (rData.aFuncName),
@@ -194,7 +194,7 @@ bool InitExternalFunc(const OUString& rModuleName)
 
             // Schnittstelle initialisieren
             AdvData pfCallBack = &ScAddInAsyncCallBack;
-            FuncCollection* pFuncCol = ScGlobal::GetFuncCollection();
+            LegacyFuncCollection* pLegacyFuncCol = ScGlobal::GetLegacyFuncCollection();
             sal_uInt16 nCount;
             (*reinterpret_cast<GetFuncCountPtr>(fpGetCount))(nCount);
             for (sal_uInt16 i=0; i < nCount; i++)
@@ -222,14 +222,14 @@ bool InitExternalFunc(const OUString& rModuleName)
                 }
                 OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );
                 OUString aFuncName( cFuncName, strlen(cFuncName), osl_getThreadTextEncoding() );
-                FuncData* pFuncData = new FuncData( pModuleData,
+                LegacyFuncData* pLegacyFuncData = new LegacyFuncData( pModuleData,
                                           aInternalName,
                                           aFuncName,
                                           i,
                                           nParamCount,
                                           eParamType,
                                           eAsyncType );
-                pFuncCol->insert(pFuncData);
+                pLegacyFuncCol->insert(pLegacyFuncData);
             }
             bRet = true;
         }
@@ -247,7 +247,7 @@ void ExitExternalFunc()
     aModuleCollection.clear();
 }
 
-bool FuncData::Call(void** ppParam) const
+bool LegacyFuncData::Call(void** ppParam) const
 {
 #ifdef DISABLE_DYNLOADING
     (void) ppParam;
@@ -345,7 +345,7 @@ bool FuncData::Call(void** ppParam) const
 #endif
 }
 
-bool FuncData::Unadvice( double nHandle )
+bool LegacyFuncData::Unadvice( double nHandle )
 {
 #ifdef DISABLE_DYNLOADING
     (void) nHandle;
@@ -363,12 +363,12 @@ bool FuncData::Unadvice( double nHandle )
 #endif
 }
 
-const OUString& FuncData::GetModuleName() const
+const OUString& LegacyFuncData::GetModuleName() const
 {
     return pModuleData->GetName();
 }
 
-bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const
+bool LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const
 {
 #ifdef DISABLE_DYNLOADING
     (void) aName;
@@ -402,33 +402,33 @@ bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam
 #endif
 }
 
-FuncCollection::FuncCollection() {}
-FuncCollection::FuncCollection(const FuncCollection& r) : maData(r.maData) {}
+LegacyFuncCollection::LegacyFuncCollection() {}
+LegacyFuncCollection::LegacyFuncCollection(const LegacyFuncCollection& r) : maData(r.maData) {}
 
-const FuncData* FuncCollection::findByName(const OUString& rName) const
+const LegacyFuncData* LegacyFuncCollection::findByName(const OUString& rName) const
 {
     MapType::const_iterator it = maData.find(rName);
     return it == maData.end() ? NULL : it->second;
 }
 
-FuncData* FuncCollection::findByName(const OUString& rName)
+LegacyFuncData* LegacyFuncCollection::findByName(const OUString& rName)
 {
     MapType::iterator it = maData.find(rName);
     return it == maData.end() ? NULL : it->second;
 }
 
-void FuncCollection::insert(FuncData* pNew)
+void LegacyFuncCollection::insert(LegacyFuncData* pNew)
 {
     OUString aName = pNew->GetInternalName();
     maData.insert(aName, pNew);
 }
 
-FuncCollection::const_iterator FuncCollection::begin() const
+LegacyFuncCollection::const_iterator LegacyFuncCollection::begin() const
 {
     return maData.begin();
 }
 
-FuncCollection::const_iterator FuncCollection::end() const
+LegacyFuncCollection::const_iterator LegacyFuncCollection::end() const
 {
     return maData.end();
 }

@@ -47,7 +47,7 @@ ScAddInAsync::ScAddInAsync() :
 {   // nur fuer aSeekObj !
 }
 
-ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* pDoc) :
+ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocument* pDoc) :
     SvtBroadcaster(),
     pStr( NULL ),
     mpFuncData(pFuncData),

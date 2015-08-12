@@ -41,7 +41,7 @@ private:
         OUString*   pStr;
     };
     ScAddInDocs*    pDocs;              // List of using documents
-    FuncData*       mpFuncData;         // Pointer to data in collection
+    LegacyFuncData* mpFuncData;         // Pointer to data in collection
     sal_uLong       nHandle;            // is casted from double to sal_uLong
     ParamType       meType;             // result of type PTR_DOUBLE or PTR_STRING
     bool            bValid;             // is value valid?
@@ -49,7 +49,7 @@ private:
 public:
     // cTor only if ScAddInAsync::Get fails.
     // nIndex: Index from FunctionCollection
-    ScAddInAsync(sal_uLong nHandle, FuncData* pFuncData, ScDocument* pDoc);
+    ScAddInAsync(sal_uLong nHandle, LegacyFuncData* pFuncData, ScDocument* pDoc);
                     // default-cTor only for that single, global aSeekObj!
                     ScAddInAsync();
     virtual         ~ScAddInAsync();

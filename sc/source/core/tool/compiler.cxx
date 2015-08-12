@@ -178,7 +178,7 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
         return true;
     }
     // 2. old add in functions
-    if (ScGlobal::GetFuncCollection()->findByName(aUpper))
+    if (ScGlobal::GetLegacyFuncCollection()->findByName(aUpper))
     {
         return true;
     }
@@ -2673,7 +2673,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         if (aIntName.isEmpty())
         {
             // Old (deprecated) addins first for legacy.
-            if (ScGlobal::GetFuncCollection()->findByName(cSymbol))
+            if (ScGlobal::GetLegacyFuncCollection()->findByName(cSymbol))
             {
                 maRawToken.SetExternal( cSymbol );
             }
