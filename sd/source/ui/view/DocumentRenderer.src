@@ -56,7 +56,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
-            < "Default" ; > ;
+            < "According to layout" ; > ;
             < "1" ; > ;
             < "2" ; > ;
             < "3" ; > ;
