@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFOLDERPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFOLDERPICKER_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -31,7 +31,7 @@
 class Dialog;
 
 typedef
-    cppu::ImplInheritanceHelper3<
+    cppu::ImplInheritanceHelper<
         svt::OCommonPicker, com::sun::star::ui::dialogs::XFolderPicker2,
         com::sun::star::ui::dialogs::XAsynchronousExecutableDialog,
         com::sun::star::lang::XServiceInfo >

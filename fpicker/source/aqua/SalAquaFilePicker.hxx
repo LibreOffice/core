@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -35,7 +35,7 @@
 
 // Implementation class for the XFilePicker Interface
 
-typedef ::cppu::WeakComponentImplHelper4 <
+typedef ::cppu::WeakComponentImplHelper <
             ::com::sun::star::ui::dialogs::XFilePicker3,
             ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
             ::com::sun::star::lang::XInitialization,

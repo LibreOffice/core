@@ -30,7 +30,6 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>

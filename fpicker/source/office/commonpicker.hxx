@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -43,7 +43,7 @@ namespace svt
 {
 
 
-    typedef ::cppu::WeakComponentImplHelper5    <   ::com::sun::star::ui::dialogs::XControlAccess
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::ui::dialogs::XControlAccess
                                                 ,   ::com::sun::star::ui::dialogs::XControlInformation
                                                 ,   ::com::sun::star::lang::XEventListener
                                                 ,   ::com::sun::star::util::XCancellable

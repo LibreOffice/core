@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FILEPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FILEPICKER_HXX
 
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,7 +45,7 @@ protected:
     osl::Mutex  m_rbHelperMtx;
 };
 
-typedef ::cppu::WeakComponentImplHelper6 <
+typedef ::cppu::WeakComponentImplHelper <
             ::com::sun::star::ui::dialogs::XFilePicker2,
             ::com::sun::star::ui::dialogs::XFilePicker3,
             ::com::sun::star::ui::dialogs::XFilePickerControlAccess,

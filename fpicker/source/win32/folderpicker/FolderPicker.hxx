@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_FOLDERPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_FOLDERPICKER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -36,7 +36,7 @@
 
 
 class CFolderPicker :
-    public  cppu::WeakImplHelper2<
+    public  cppu::WeakImplHelper<
                 com::sun::star::ui::dialogs::XFolderPicker2,
                 com::sun::star::lang::XServiceInfo >
 {
