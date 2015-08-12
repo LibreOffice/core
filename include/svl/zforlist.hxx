@@ -572,6 +572,15 @@ public:
     /// Whether nFIndex is a special builtin format
     bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
 
+    /** Return a time format that best matches fNumber. */
+    sal_uInt32 GetTimeFormat( double fNumber, LanguageType eLnge );
+
+    /** Return a format and type that best matches the value of fNumber if
+        fNumber is assumed to be a date, time or datetime value, but unknown
+        which. Originally introduced for Chart databrowser editor, probably
+        should not be used otherwise. */
+    sal_uInt32 GuessDateTimeFormat( short& rType, double fNumber, LanguageType eLnge );
+
     /** Return the corresponding edit format of a format. */
     sal_uInt32 GetEditFormat( double fNumber, sal_uInt32 nFIndex, short eType,
                               LanguageType eLnge, SvNumberformat* pFormat );

@@ -1208,6 +1208,33 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, short eType
         return GetStandardFormat( eType, eLnge );
 }
 
+sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge )
+{
+    bool bSign;
+    if ( fNumber < 0.0 )
+    {
+        bSign = true;
+        fNumber = -fNumber;
+    }
+    else
+        bSign = false;
+    double fSeconds = fNumber * 86400;
+    if ( floor( fSeconds + 0.5 ) * 100 != floor( fSeconds * 100 + 0.5 ) )
+    {   // with 100th seconds
+        if ( bSign || fSeconds >= 3600 )
+            return GetFormatIndex( NF_TIME_HH_MMSS00, eLnge );
+        else
+            return GetFormatIndex( NF_TIME_MMSS00, eLnge );
+    }
+    else
+    {
+        if ( bSign || fNumber >= 1.0 )
+            return GetFormatIndex( NF_TIME_HH_MMSS, eLnge );
+        else
+            return GetStandardFormat( css::util::NumberFormat::TIME, eLnge );
+    }
+}
+
 sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIndex,
                                                  short eType, LanguageType eLnge )
 {
@@ -1217,34 +1244,43 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
     switch( eType )
     {
         case css::util::NumberFormat::TIME :
-        {
-            bool bSign;
-            if ( fNumber < 0.0 )
-            {
-                bSign = true;
-                fNumber = -fNumber;
-            }
-            else
-                bSign = false;
-            double fSeconds = fNumber * 86400;
-            if ( floor( fSeconds + 0.5 ) * 100 != floor( fSeconds * 100 + 0.5 ) )
-            {   // with 100th seconds
-                if ( bSign || fSeconds >= 3600 )
-                    return GetFormatIndex( NF_TIME_HH_MMSS00, eLnge );
-                else
-                    return GetFormatIndex( NF_TIME_MMSS00, eLnge );
-            }
-            else
-            {
-                if ( bSign || fNumber >= 1.0 )
-                    return GetFormatIndex( NF_TIME_HH_MMSS, eLnge );
-                else
-                    return GetStandardFormat( eType, eLnge );
-            }
-        }
+            return GetTimeFormat( fNumber, eLnge);
         default:
             return GetStandardFormat( eType, eLnge );
     }
+}
+
+sal_uInt32 SvNumberFormatter::GuessDateTimeFormat( short& rType, double fNumber, LanguageType eLnge )
+{
+    // Categorize the format according to the implementation of
+    // SvNumberFormatter::GetEditFormat(), making assumptions about what
+    // would be time only.
+    sal_uInt32 nRet;
+    if (0.0 <= fNumber && fNumber < 1.0)
+    {
+        // Clearly a time.
+        rType = util::NumberFormat::TIME;
+        nRet = GetTimeFormat( fNumber, eLnge);
+    }
+    else if (fabs( fNumber) * 24 < 0x7fff)
+    {
+        // Assuming time within 32k hours or 3.7 years.
+        rType = util::NumberFormat::TIME;
+        nRet = GetTimeFormat( fNumber, eLnge);
+    }
+    else if (rtl::math::approxFloor( fNumber) != fNumber)
+    {
+        // Date+Time.
+        rType = util::NumberFormat::DATETIME;
+        nRet = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLnge);
+    }
+    else
+    {
+        // Date only.
+        rType = util::NumberFormat::DATE;
+        nRet = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLnge);
+    }
+    return nRet;
 }
 
 sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
