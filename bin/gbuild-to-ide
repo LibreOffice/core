@@ -1361,8 +1361,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 os.remove(os.path.join(loc, afile))
                 self._log("removed %s\n" % afile)
             except OSError:
-                shutil.rmtree(os.path.join(loc, afile))
-                self._log("removed2 %s\n" % afile)
+                self._log("unable to remove %s\n" % afile)
 
         do_remove_file(self.base_folder, "lo.pro")
         do_remove_file(self.base_folder, "lo.pro.user")
