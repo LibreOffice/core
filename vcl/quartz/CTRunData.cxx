@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
 #include <sal/types.h>
+
 #include <cassert>
-#include "quartz/utils.h"
 
 #include "CTRunData.hxx"
+#include "quartz/utils.h"
+
 
 CTRunData::CTRunData( CTRunRef pRun, int start)
     : ownership_flags(0)

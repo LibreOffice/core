@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <iostream>
 #include <iomanip>
 
@@ -28,16 +30,26 @@
 OUString GetOUString( CFStringRef rStr )
 {
     if( rStr == 0 )
+    {
         return OUString();
+    }
+
     CFIndex nLength = CFStringGetLength( rStr );
     if( nLength == 0 )
+    {
         return OUString();
+    }
+
     const UniChar* pConstStr = CFStringGetCharactersPtr( rStr );
     if( pConstStr )
+    {
         return OUString( pConstStr, nLength );
+    }
+
     UniChar* pStr = static_cast<UniChar*>( rtl_allocateMemory( sizeof(UniChar)*nLength ) );
     CFRange aRange = { 0, nLength };
     CFStringGetCharacters( rStr, aRange, pStr );
+
     OUString aRet( pStr, nLength );
     rtl_freeMemory( pStr );
     return aRet;
@@ -46,14 +58,20 @@ OUString GetOUString( CFStringRef rStr )
 OUString GetOUString( NSString* pStr )
 {
     if( ! pStr )
+    {
         return OUString();
+    }
+
     int nLen = [pStr length];
     if( nLen == 0 )
+    {
         return OUString();
+    }
 
     OUStringBuffer aBuf( nLen+1 );
     aBuf.setLength( nLen );
     [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
+
     return aBuf.makeStringAndClear();
 }
 
@@ -73,9 +91,13 @@ std::ostream &operator <<(std::ostream& s, const CGRect &rRect)
     (void) rRect;
 #else
     if (CGRectIsNull(rRect))
+    {
         s << "NULL";
+    }
     else
+    {
         s << rRect.size << "@" << rRect.origin;
+    }
 #endif
     return s;
 }
@@ -106,10 +128,13 @@ std::ostream &operator <<(std::ostream& s, CGColorRef pColor)
     (void) pColor;
 #else
     CFStringRef colorString = CFCopyDescription(pColor);
-    if (colorString) {
+    if (colorString)
+    {
         s << GetOUString(colorString);
         CFRelease(colorString);
-    } else {
+    }
+    else
+    {
         s << "NULL";
     }
 #endif
@@ -122,9 +147,13 @@ std::ostream &operator <<(std::ostream& s, const CGAffineTransform &aXform)
     (void) aXform;
 #else
     if (CGAffineTransformIsIdentity(aXform))
+    {
         s << "IDENT";
+    }
     else
+    {
         s << "[" << aXform.a << "," << aXform.b << "," << aXform.c << "," << aXform.d << "," << aXform.tx << "," << aXform.ty << "]";
+    }
 #endif
     return s;
 }

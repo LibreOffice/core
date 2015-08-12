@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include "vcl/svapp.hxx"
 #include "vcl/sysdata.hxx"
 
-#include "quartz/salvd.h"
 #ifdef MACOSX
 #include "osx/salinst.h"
 #include "osx/saldata.hxx"
@@ -32,17 +33,23 @@
 #include "headless/svpvd.hxx"
 #endif
 #include "quartz/salgdi.h"
+#include "quartz/salvd.h"
 #include "quartz/utils.h"
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-    long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+                                                        long &nDX, long &nDY,
+                                                        sal_uInt16 nBitCount,
+                                                        const SystemGraphicsData *pData )
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
     if( pData )
-        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    {
+        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+                                         nDX, nDY, nBitCount, pData );
+    }
     else
     {
         AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
@@ -50,27 +57,37 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
         return pNew;
     }
 #else
-    return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+                                     nDX, nDY, nBitCount, pData );
 #endif
 }
 
-AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
-:   mbGraphicsUsed( false )
-,   mxBitmapContext( NULL )
-,   mnBitmapDepth( 0 )
-,   mxLayer( NULL )
+AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY,
+                                            sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+  : mbGraphicsUsed( false )
+  , mxBitmapContext( NULL )
+  , mnBitmapDepth( 0 )
+  , mxLayer( NULL )
 {
-    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this << " size=(" << nDX << "x" << nDY << ") bitcount=" << nBitCount << " pData=" << pData << " context=" << (pData ? pData->rCGContext : 0) );
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
+              << " size=(" << nDX << "x" << nDY << ") bitcount=" << nBitCount <<
+              " pData=" << pData << " context=" << (pData ? pData->rCGContext : 0) );
+
     if( pGraphic && pData && pData->rCGContext )
     {
         // Create virtual device based on existing SystemGraphicsData
         // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
-        mbForeignContext = true;        // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
+        // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
+        mbForeignContext = true;
         mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
         if (nDX == 0)
+        {
             nDX = 1;
+        }
         if (nDY == 0)
+        {
             nDY = 1;
+        }
         mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), NULL );
         // Interrogate the context as to its real size
         if (mxLayer)
@@ -84,7 +101,8 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
             nDX = 0;
             nDY = 0;
         }
-        CG_TRACE( "CGLayerCreateWithContext(" << pData->rCGContext << "," << CGSizeMake( nDX, nDY) << ",NULL) = " << mxLayer );
+        SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << pData->rCGContext <<
+                  "," << CGSizeMake( nDX, nDY) << ",NULL) = " << mxLayer );
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
     else
@@ -106,8 +124,9 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         }
 #endif
         if( nDX && nDY )
+        {
             SetSize( nDX, nDY );
-
+        }
         // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
     }
 }
@@ -115,6 +134,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
 AquaSalVirtualDevice::~AquaSalVirtualDevice()
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::~AquaSalVirtualDevice() this=" << this );
+
     if( mpGraphics )
     {
         mpGraphics->SetVirDevGraphics( NULL, NULL );
@@ -128,7 +148,8 @@ void AquaSalVirtualDevice::Destroy()
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::Destroy() this=" << this << " mbForeignContext=" << mbForeignContext );
 
-    if( mbForeignContext ) {
+    if( mbForeignContext )
+    {
         // Do not delete mxContext that we have received from outside VCL
         mxLayer = NULL;
         return;
@@ -137,8 +158,10 @@ void AquaSalVirtualDevice::Destroy()
     if( mxLayer )
     {
         if( mpGraphics )
+        {
             mpGraphics->SetVirDevGraphics( NULL, NULL );
-        CG_TRACE( "CGLayerRelease(" << mxLayer << ")" );
+        }
+        SAL_INFO( "vcl.cg",  "CGLayerRelease(" << mxLayer << ")" );
         CGLayerRelease( mxLayer );
         mxLayer = NULL;
     }
@@ -147,7 +170,7 @@ void AquaSalVirtualDevice::Destroy()
     {
         void* pRawData = CGBitmapContextGetData( mxBitmapContext );
         rtl_freeMemory( pRawData );
-        CG_TRACE( "CGContextRelease(" << mxBitmapContext << ")" );
+        SAL_INFO( "vcl.cg",  "CGContextRelease(" << mxBitmapContext << ")" );
         CGContextRelease( mxBitmapContext );
         mxBitmapContext = NULL;
     }
@@ -156,8 +179,9 @@ void AquaSalVirtualDevice::Destroy()
 SalGraphics* AquaSalVirtualDevice::AcquireGraphics()
 {
     if( mbGraphicsUsed || !mpGraphics )
+    {
         return 0;
-
+    }
     mbGraphicsUsed = true;
     return mpGraphics;
 }
@@ -169,7 +193,8 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
-    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this << " (" << nDX << "x" << nDY << ") mbForeignContext=" << mbForeignContext );
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
+              " (" << nDX << "x" << nDY << ") mbForeignContext=" << mbForeignContext );
 
     if( mbForeignContext )
     {
@@ -180,7 +205,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     if( mxLayer )
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
-        CG_TRACE( "CGlayerGetSize(" << mxLayer << ") = " << aSize );
+        SAL_INFO( "vcl.cg",  "CGlayerGetSize(" << mxLayer << ") = " << aSize );
         if( (nDX == aSize.width) && (nDY == aSize.height) )
         {
             // Yay, we do not have to do anything :)
@@ -200,11 +225,14 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
 #ifdef DBG_UTIL
         for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
+        {
             static_cast<sal_uInt8*>(pRawData)[i] = (i & 0xFF);
+        }
 #endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                 mnBitmapDepth, nBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
+                                                 mnBitmapDepth, nBytesPerRow,
+                                                 GetSalData()->mxGraySpace, kCGImageAlphaNone );
+        SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
     }
     else
@@ -236,37 +264,43 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             {
                 NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pNSWindow];
                 if( pNSContext )
+                {
                     xCGContext = static_cast<CGContextRef>([pNSContext graphicsPort]);
+                }
             }
             else
             {
                 // fall back to a bitmap context
                 mnBitmapDepth = 32;
-                const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
+                const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
                 void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
 #ifdef DBG_UTIL
                 for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
+                {
                     static_cast<sal_uInt8*>(pRawData)[i] = (i & 0xFF);
+                }
 #endif
                 mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                          8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
-                CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
+                SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
                 xCGContext = mxBitmapContext;
             }
         }
 #else
         mnBitmapDepth = 32;
-        const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
+        const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
 #ifdef DBG_UTIL
         for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
+        {
             ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
+        }
 #endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
-        CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
+        SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
 #endif
     }
@@ -275,13 +309,13 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
-    CG_TRACE( "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << mxLayer );
+    SAL_INFO( "vcl.cg",  "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << mxLayer );
 
     if( mxLayer && mpGraphics )
     {
         // get the matching Quartz context
         CGContextRef xDrawContext = CGLayerGetContext( mxLayer );
-        CG_TRACE( "CGLayerGetContext(" << mxLayer << ") = " << xDrawContext );
+        SAL_INFO( "vcl.cg",  "CGLayerGetContext(" << mxLayer << ") = " << xDrawContext );
         mpGraphics->SetVirDevGraphics( mxLayer, xDrawContext, mnBitmapDepth );
     }
 

@@ -45,8 +45,6 @@ std::ostream &operator <<(std::ostream& s, const CGSize &rSize);
 std::ostream &operator <<(std::ostream& s, CGColorRef pSize);
 std::ostream &operator <<(std::ostream& s, const CGAffineTransform &aXform);
 
-#define CG_TRACE( e ) SAL_INFO( "vcl.cg", e )
-
 #endif // INCLUDED_VCL_INC_QUARTZ_UTILS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
