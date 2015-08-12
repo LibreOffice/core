@@ -28,47 +28,44 @@ class SwPosSize
     sal_uInt16 nWidth;
     sal_uInt16 nHeight;
 public:
-    inline SwPosSize( const sal_uInt16 nW = 0, const sal_uInt16 nH = 0 )
-        : nWidth(nW), nHeight(nH) { }
-    explicit inline SwPosSize( const Size &rSize )
-        : nWidth(sal_uInt16(rSize.Width())), nHeight(sal_uInt16(rSize.Height())){ }
-    inline sal_uInt16 Height() const { return nHeight; }
-    inline void Height( const sal_uInt16 nNew ) { nHeight = nNew; }
-    inline sal_uInt16 Width() const { return nWidth; }
-    inline void Width( const sal_uInt16 nNew ) { nWidth = nNew; }
-
-    inline Size SvLSize() const { return Size( nWidth, nHeight ); }
-    inline void SvLSize( const Size &rSize );
-    inline void SvXSize( const Size &rSize );
-    inline SwPosSize &operator=( const SwPosSize &rSize );
-    inline SwPosSize &operator=( const Size &rSize );
+    SwPosSize( const sal_uInt16 nW = 0, const sal_uInt16 nH = 0 )
+        : nWidth(nW)
+        , nHeight(nH)
+    {
+    }
+    explicit SwPosSize( const Size &rSize )
+        : nWidth(sal_uInt16(rSize.Width()))
+        ,nHeight(sal_uInt16(rSize.Height()))
+    {
+    }
+    sal_uInt16 Height() const { return nHeight; }
+    void Height( const sal_uInt16 nNew ) { nHeight = nNew; }
+    sal_uInt16 Width() const { return nWidth; }
+    void Width( const sal_uInt16 nNew ) { nWidth = nNew; }
+    Size SvLSize() const { return Size( nWidth, nHeight ); }
+    void SvLSize( const Size &rSize )
+    {
+        nWidth  = sal_uInt16(rSize.Width());
+        nHeight = sal_uInt16(rSize.Height());
+    }
+    void SvXSize( const Size &rSize )
+    {
+        nHeight = sal_uInt16(rSize.Width());
+        nWidth = sal_uInt16(rSize.Height());
+    }
+    SwPosSize& operator=(const SwPosSize &rSize )
+    {
+        nWidth  = rSize.Width();
+        nHeight = rSize.Height();
+        return *this;
+    }
+    SwPosSize& operator=( const Size &rSize )
+    {
+        nWidth  = sal_uInt16(rSize.Width());
+        nHeight = sal_uInt16(rSize.Height());
+        return *this;
+    }
 };
-
-inline SwPosSize &SwPosSize::operator=(const SwPosSize &rSize )
-{
-    nWidth  = rSize.Width();
-    nHeight = rSize.Height();
-    return *this;
-}
-
-inline void SwPosSize::SvLSize( const Size &rSize )
-{
-    nWidth  = sal_uInt16(rSize.Width());
-    nHeight = sal_uInt16(rSize.Height());
-}
-
-inline void SwPosSize::SvXSize( const Size &rSize )
-{
-    nHeight = sal_uInt16(rSize.Width());
-    nWidth = sal_uInt16(rSize.Height());
-}
-
-inline SwPosSize &SwPosSize::operator=( const Size &rSize )
-{
-    nWidth  = sal_uInt16(rSize.Width());
-    nHeight = sal_uInt16(rSize.Height());
-    return *this;
-}
 
 #endif
 
