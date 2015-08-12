@@ -250,7 +250,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << pTmpDVR2->GetArrayLength();
         ss << " ||";
         ss << "isNan(";
-        ss << vSubArguments[i]->GenSlidingWindowDeclRef(false);
+        ss << vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << "))\n";
         ss << "        tmp";
         ss << i;
@@ -258,7 +258,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << "        tmp";
         ss << i;
         ss << "=";
-        ss << vSubArguments[i]->GenSlidingWindowDeclRef(false);
+        ss << vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
     if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble ||

@@ -1248,7 +1248,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
-            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
+            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             if (nGlobalError)
                 break;
             return new ScDBInternalRange(pDok,
@@ -4033,9 +4033,9 @@ StackVar ScInterpreter::Interpret()
                 case ocGetDiffDate      : ScGetDiffDate();              break;
                 case ocGetDiffDate360   : ScGetDiffDate360();           break;
                 case ocGetDateDif       : ScGetDateDif();               break;
-                case ocMin              : ScMin( false );               break;
+                case ocMin              : ScMin()       ;               break;
                 case ocMinA             : ScMin( true );                break;
-                case ocMax              : ScMax( false );               break;
+                case ocMax              : ScMax();                      break;
                 case ocMaxA             : ScMax( true );                break;
                 case ocSum              : ScSum();                      break;
                 case ocProduct          : ScProduct();                  break;
@@ -4043,21 +4043,21 @@ StackVar ScInterpreter::Interpret()
                 case ocIRR              : ScIRR();                      break;
                 case ocMIRR             : ScMIRR();                     break;
                 case ocISPMT            : ScISPMT();                    break;
-                case ocAverage          : ScAverage( false );           break;
+                case ocAverage          : ScAverage()       ;           break;
                 case ocAverageA         : ScAverage( true );            break;
                 case ocCount            : ScCount();                    break;
                 case ocCount2           : ScCount2();                   break;
                 case ocVar              :
-                case ocVarS             : ScVar( false );               break;
+                case ocVarS             : ScVar();                      break;
                 case ocVarA             : ScVar( true );                break;
                 case ocVarP             :
-                case ocVarP_MS          : ScVarP( false );              break;
+                case ocVarP_MS          : ScVarP();                     break;
                 case ocVarPA            : ScVarP( true );               break;
                 case ocStDev            :
-                case ocStDevS           : ScStDev( false );             break;
+                case ocStDevS           : ScStDev();                    break;
                 case ocStDevA           : ScStDev( true );              break;
                 case ocStDevP           :
-                case ocStDevP_MS        : ScStDevP( false );            break;
+                case ocStDevP_MS        : ScStDevP();                   break;
                 case ocStDevPA          : ScStDevP( true );             break;
                 case ocPV               : ScPV();                       break;
                 case ocSYD              : ScSYD();                      break;

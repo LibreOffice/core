@@ -37,8 +37,6 @@ void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
     const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar, bool bOnly3DRef)
 {
-    const sal_Unicode cQuote = '\'';
-
     // #i107275# ignore parentheses
     OUString aRangeStr = rRangeStr;
     while( (aRangeStr.getLength() >= 2) && (aRangeStr[ 0 ] == '(') && (aRangeStr[ aRangeStr.getLength() - 1 ] == ')') )
@@ -49,7 +47,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
     while (nOffset >= 0 && !bFailure)
     {
         OUString aToken;
-        ScRangeStringConverter::GetTokenByOffset(aToken, aRangeStr, nOffset, cSep, cQuote);
+        ScRangeStringConverter::GetTokenByOffset(aToken, aRangeStr, nOffset, cSep);
         if (nOffset < 0)
             break;
 

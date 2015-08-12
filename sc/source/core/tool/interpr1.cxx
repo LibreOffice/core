@@ -5475,7 +5475,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
 
                 // result matrix is filled with boolean values.
                 std::vector<double> aResValues;
-                pResultMatrix->GetDoubleArray(aResValues, true);
+                pResultMatrix->GetDoubleArray(aResValues);
                 if (aResArray.size() != aResValues.size())
                 {
                     SetError( errIllegalParameter);
@@ -7773,8 +7773,7 @@ void ScInterpreter::ScCurrency()
                                                    ScGlobal::eLnge,
                                                    true,        // mit Tausenderpunkt
                                                    false,       // nicht rot
-                                                  (sal_uInt16) fDec,// Nachkommastellen
-                                                   1);          // 1 Vorkommanull
+                                                  (sal_uInt16) fDec);// Nachkommastellen
             if (!pFormatter->GetPreviewString(sFormatString,
                                               fVal,
                                               aStr,
@@ -7861,8 +7860,7 @@ void ScInterpreter::ScFixed()
                                                ScGlobal::eLnge,
                                                bThousand,   // mit Tausenderpunkt
                                                false,       // nicht rot
-                                               (sal_uInt16) fDec,// Nachkommastellen
-                                               1);          // 1 Vorkommanull
+                                               (sal_uInt16) fDec);// Nachkommastellen
         if (!pFormatter->GetPreviewString(sFormatString,
                                                   fVal,
                                                   aStr,

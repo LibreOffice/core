@@ -250,7 +250,7 @@ public:
     }
     virtual void GenDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
     {
-        ss << GenSlidingWindowDeclRef(false);
+        ss << GenSlidingWindowDeclRef();
     }
     virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
@@ -1801,8 +1801,8 @@ public:
         ss << ") {\n\t";
         ss << "int gid0 = get_global_id(0), i = 0;\n\t";
         ss << "double tmp = ";
-        ss << Gen2(vSubArguments[0]->GenSlidingWindowDeclRef(false),
-            vSubArguments[1]->GenSlidingWindowDeclRef(false)) << ";\n\t";
+        ss << Gen2(vSubArguments[0]->GenSlidingWindowDeclRef(),
+            vSubArguments[1]->GenSlidingWindowDeclRef()) << ";\n\t";
         ss << "return tmp;\n}";
     }
     virtual bool takeString() const SAL_OVERRIDE { return true; }
@@ -3770,7 +3770,7 @@ void DynamicKernel::CodeGen()
     decl << "(__global double *result, ";
     DK->GenSlidingWindowDecl(decl);
     decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
-        DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
+        DK->GenSlidingWindowDeclRef() << ";\n}\n";
     mFullProgramSrc = decl.str();
 #ifdef SAL_DETAIL_ENABLE_LOG_INFO
     std::stringstream area;

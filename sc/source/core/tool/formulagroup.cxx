@@ -478,7 +478,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 #if HAVE_FEATURE_OPENCL
         const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
         if (officecfg::Office::Common::Misc::UseOpenCL::get())
-            switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect, false);
+            switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect);
 #endif
         static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != NULL);
 

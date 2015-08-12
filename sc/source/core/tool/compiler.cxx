@@ -2521,7 +2521,7 @@ Label_MaskStateMachine:
             {   // ?!?
                 SetError( nErr = errIllegalChar );
                 nSrcPos = aFormula.getLength();
-                aSymbol.truncate(0);
+                aSymbol.truncate();
             }
             else
             {

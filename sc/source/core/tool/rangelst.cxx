@@ -1003,7 +1003,7 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             continue;
     }
     for(vector<ScRange>::iterator itr = aNewRanges.begin(); itr != aNewRanges.end(); ++itr)
-        Join( *itr, false);
+        Join( *itr);
 }
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const

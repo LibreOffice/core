@@ -812,7 +812,6 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode cSep = ' ';
     const sal_Unicode cSepNew = ScCompiler::GetNativeSymbolChar(ocSep);
-    const sal_Unicode cQuote = '\'';
 
     OUStringBuffer aRetStr;
     sal_Int32 nOffset = 0;
@@ -821,11 +820,11 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
     while (nOffset >= 0)
     {
         OUString aToken;
-        GetTokenByOffset(aToken, rXMLRange, nOffset, cSep, cQuote);
+        GetTokenByOffset(aToken, rXMLRange, nOffset, cSep);
         if (nOffset < 0)
             break;
 
-        sal_Int32 nSepPos = IndexOf(aToken, ':', 0, cQuote);
+        sal_Int32 nSepPos = IndexOf(aToken, ':', 0);
         if (nSepPos >= 0)
         {
             // Cell range
@@ -840,7 +839,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             if (nEndCellDotPos <= 0)
             {
                 // initialize buffer with table name...
-                sal_Int32 nDotPos = IndexOf(aBeginCell, '.', 0, cQuote);
+                sal_Int32 nDotPos = IndexOf(aBeginCell, '.', 0);
                 OUStringBuffer aBuf = aBeginCell.copy(0, nDotPos);
 
                 if (nEndCellDotPos == 0)

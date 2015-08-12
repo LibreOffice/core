@@ -3494,7 +3494,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), 1 );
-                                    p->GetBigRange().aStart.IncCol( 1 );
+                                    p->GetBigRange().aStart.IncCol();
                                 }
                                 else if ( aDelRange.In( p->GetBigRange().aEnd ) )
                                 {
@@ -3511,7 +3511,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), 1 );
-                                    p->GetBigRange().aStart.IncRow( 1 );
+                                    p->GetBigRange().aStart.IncRow();
                                 }
                                 else if ( aDelRange.In( p->GetBigRange().aEnd ) )
                                 {
@@ -3528,7 +3528,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                                 {
                                     pActDel->SetCutOffInsert(
                                         static_cast<ScChangeActionIns*>(p), 1 );
-                                    p->GetBigRange().aStart.IncTab( 1 );
+                                    p->GetBigRange().aStart.IncTab();
                                 }
                                 else if ( aDelRange.In( p->GetBigRange().aEnd ) )
                                 {
