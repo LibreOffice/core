@@ -602,7 +602,6 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
         aVscrollSB->SetThumbPos( nNewPos );
         nSelectedIndex = bFocus ? nMapIndex+1 : -1;
         Invalidate();
-        Update();
     }
     else if( nNewIndex < FirstInView() )
     {
@@ -612,8 +611,6 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
         aVscrollSB->SetThumbPos( nOldPos - nDelta );
         nSelectedIndex = nNewIndex;
         Invalidate();
-        if( nDelta )
-            Update();
     }
     else if( nNewIndex > LastInView() )
     {
@@ -626,10 +623,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
             nSelectedIndex = nNewIndex;
             Invalidate();
         }
-        if( nOldPos != aVscrollSB->GetThumbPos() )
+        else if (nOldPos != aVscrollSB->GetThumbPos())
         {
             Invalidate();
-            Update();
         }
     }
     else
