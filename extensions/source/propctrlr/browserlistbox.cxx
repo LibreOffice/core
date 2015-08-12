@@ -1187,7 +1187,7 @@ namespace pcr
                     vcl::Window *pWindow = rLine.pLine->getControlWindow();
                     Edit* pControlWindowAsEdit = dynamic_cast<Edit*>(pWindow);
                     if (pControlWindowAsEdit)
-                        pControlWindowAsEdit->SetReadOnly(true);
+                        pControlWindowAsEdit->SetReadOnly();
                     else
                         pWindow->Enable(false);
                 }

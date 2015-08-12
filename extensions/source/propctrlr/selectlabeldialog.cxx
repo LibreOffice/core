@@ -123,19 +123,19 @@ namespace pcr
         if (m_pInitialSelection)
         {
             m_pControlTree->MakeVisible(m_pInitialSelection, true);
-            m_pControlTree->Select(m_pInitialSelection, true);
+            m_pControlTree->Select(m_pInitialSelection);
         }
         else
         {
             m_pControlTree->MakeVisible(m_pControlTree->First(), true);
             if (m_pControlTree->FirstSelected())
                 m_pControlTree->Select(m_pControlTree->FirstSelected(), false);
-            m_pNoAssignment->Check(true);
+            m_pNoAssignment->Check();
         }
 
         if (!m_bHaveAssignableControl)
         {   // no controls which can be assigned
-            m_pNoAssignment->Check(true);
+            m_pNoAssignment->Check();
             m_pNoAssignment->Enable(false);
         }
 

@@ -746,7 +746,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 #endif
                                 }
 
-                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream, false );
+                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream );
                             }
                         }
                     }

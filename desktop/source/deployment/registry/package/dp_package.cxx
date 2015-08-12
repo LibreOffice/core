@@ -1087,9 +1087,7 @@ void BackendImpl::PackageImpl::exportTo(
     {
         // transfer every item of folder into zip:
         Reference<sdbc::XResultSet> xResultSet(
-            sourceContent.createCursor(
-                Sequence<OUString>(),
-                ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+            sourceContent.createCursor( Sequence<OUString>() ) );
         ProgressLevel progress( xCmdEnv, OUString() );
         while (xResultSet->next())
         {
@@ -1590,8 +1588,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     OUString ar [] = { OUString("Title"), OUString("IsFolder") };
     Reference<sdbc::XResultSet> xResultSet(
         ucbContent.createCursor(
-            Sequence<OUString>( ar, ARLEN(ar) ),
-            ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+            Sequence<OUString>( ar, ARLEN(ar) ) ) );
     while (xResultSet->next())
     {
         checkAborted( abortChannel );

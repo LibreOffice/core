@@ -203,7 +203,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
         _bProgressEnd = false;
         SolarMutexGuard aSolarGuard;
         if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->ShowFullScreenMode( true );
+            pWindow->ShowFullScreenMode();
         pWindow->Show();
         pWindow->Redraw();
     }
@@ -229,7 +229,7 @@ void SAL_CALL SplashScreen::reset()
     if (_bVisible && !_bProgressEnd )
     {
         if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->ShowFullScreenMode( true );
+            pWindow->ShowFullScreenMode();
         pWindow->Show();
         updateStatus();
     }
@@ -246,7 +246,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
         if (_bVisible && !_bProgressEnd)
         {
             if ( _eBitmapMode == BM_FULLSCREEN )
-                pWindow->ShowFullScreenMode( true );
+                pWindow->ShowFullScreenMode();
             pWindow->Show();
             updateStatus();
         }
@@ -261,7 +261,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {
         if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->ShowFullScreenMode( true );
+            pWindow->ShowFullScreenMode();
         pWindow->Show();
         if (nValue >= _iMax)
             _iProgress = _iMax;

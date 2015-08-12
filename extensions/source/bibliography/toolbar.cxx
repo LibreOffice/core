@@ -107,7 +107,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
                 aEntry = pStringArray[i];
                 pToolBar->InsertSourceEntry(aEntry);
             }
-            pToolBar->UpdateSourceList(true);
+            pToolBar->UpdateSourceList();
         }
 
         pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);

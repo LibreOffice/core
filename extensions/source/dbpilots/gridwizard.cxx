@@ -65,7 +65,7 @@ namespace dbp
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
         {   // ... skip it!
-            skip(1);
+            skip();
             m_bHadDataSelection = false;
         }
     }

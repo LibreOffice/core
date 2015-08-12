@@ -109,7 +109,7 @@ namespace pcr
 
         /** checks whether the control model can be bound to any XSD data type
         */
-        bool    canBindToAnyDataType() const { return canBindToDataType( -1 ); }
+        bool    canBindToAnyDataType() const { return canBindToDataType(); }
 
         /** checks whether the control model is a source for list entries, as supplied by XML data bindings
         */

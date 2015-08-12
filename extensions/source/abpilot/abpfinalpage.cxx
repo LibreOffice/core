@@ -60,9 +60,9 @@ namespace abp
         m_pName->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_pLocation->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_pRegisterName->SetClickHdl( LINK( this, FinalPage, OnRegister ) );
-        m_pRegisterName->Check(true);
+        m_pRegisterName->Check();
         m_pEmbed->SetClickHdl( LINK( this, FinalPage, OnEmbed ) );
-        m_pEmbed->Check(true);
+        m_pEmbed->Check();
         OnEmbed(m_pEmbed);
     }
 

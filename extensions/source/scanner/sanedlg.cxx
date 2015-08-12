@@ -471,7 +471,7 @@ void SaneDlg::InitFields()
         bSuccess = false;
         if( nOption != -1 )
         {
-            bSuccess = mrSane.GetOptionValue( nOption, fValue, 0 );
+            bSuccess = mrSane.GetOptionValue( nOption, fValue );
             if( bSuccess )
             {
                 if( mrSane.GetOptionUnit( nOption ) == SANE_UNIT_MM )
@@ -677,7 +677,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     else if( pButton == mpCancelButton )
     {
         mrSane.Close();
-        EndDialog( 0 );
+        EndDialog();
     }
     return 0;
 }

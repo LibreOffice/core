@@ -103,7 +103,7 @@ UnxPluginComm::UnxPluginComm(
 
     m_nCommPID = pid;
     // wait for pluginapp.bin to start up
-    if( ! WaitForMessage( 5000 ) )
+    if( ! WaitForMessage() )
     {
         SAL_WARN(
             "extensions.plugin",

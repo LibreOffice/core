@@ -693,7 +693,7 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( true );
+            getTypedControlWindow()->SetReadOnly();
             getTypedControlWindow()->Enable( true );
         }
     }
@@ -802,7 +802,7 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( true );
+            getTypedControlWindow()->SetReadOnly();
             getTypedControlWindow()->Enable( true );
         }
     }

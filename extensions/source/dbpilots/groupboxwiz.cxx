@@ -267,7 +267,7 @@ namespace dbp
         if (bMoveLeft)
         {
             while (m_pExistingRadios->GetSelectEntryCount())
-                m_pExistingRadios->RemoveEntry(m_pExistingRadios->GetSelectEntryPos(0));
+                m_pExistingRadios->RemoveEntry(m_pExistingRadios->GetSelectEntryPos());
         }
         else
         {

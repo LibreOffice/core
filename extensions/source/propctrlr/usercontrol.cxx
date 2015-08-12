@@ -72,13 +72,13 @@ namespace pcr
             TreatAsNumber( true );
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
-            SetFormatter( pFormatter, true );
+            SetFormatter( pFormatter );
             SetValue( 1234.56789 );
         }
         else
         {
             TreatAsNumber( false );
-            SetFormatter( NULL, true );
+            SetFormatter( NULL );
             SetText( "" );
         }
     }
@@ -218,7 +218,7 @@ namespace pcr
 
             SvNumberFormatter* pFormatter = rDesc.pSupplier->GetNumberFormatter();
             if (pFormatter != getTypedControlWindow()->GetFormatter())
-                getTypedControlWindow()->SetFormatter(pFormatter, true);
+                getTypedControlWindow()->SetFormatter(pFormatter);
             getTypedControlWindow()->SetFormatKey(rDesc.nKey);
 
             const SvNumberformat* pEntry = getTypedControlWindow()->GetFormatter()->GetEntry(getTypedControlWindow()->GetFormatKey());
@@ -251,7 +251,7 @@ namespace pcr
         if ( bFallback )
         {
             getTypedControlWindow()->TreatAsNumber(false);
-            getTypedControlWindow()->SetFormatter(NULL, true);
+            getTypedControlWindow()->SetFormatter(NULL);
             getTypedControlWindow()->SetText("");
             m_nLastDecimalDigits = 0;
         }
