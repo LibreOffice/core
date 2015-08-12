@@ -201,22 +201,16 @@ public:
     inline FDCategory       GetCategory() const;
 };
 
+typedef std::vector< FuncData > FuncDataList;
 
-class FuncDataList
+void InitFuncDataList ( FuncDataList& rList, ResMgr& rResMgr );
+
+// Predicate for use with std::find_if
+struct FindFuncData
 {
-    OUString                aLastName;
-    sal_uInt32              nLast;
-    std::vector<FuncData*>  maVector;
-public:
-                            FuncDataList( ResMgr& );
-    virtual                 ~FuncDataList();
-
-    inline void             Append( FuncData* pNew );
-    inline const FuncData*  Get( sal_uInt32 nIndex ) const;
-    inline sal_uInt32       Count() const
-                                { return maVector.size(); }
-
-    const FuncData*         Get( const OUString& aProgrammaticName ) const;
+    const OUString& m_rId;
+    explicit FindFuncData( const OUString& rId ) : m_rId(rId) {}
+    bool operator() ( FuncData& rCandidate ) const { return rCandidate.Is(m_rId); }
 };
 
 class AnalysisResId : public ResId
@@ -586,18 +580,6 @@ inline const std::vector<OUString> & FuncData::GetCompNameList() const
 inline FDCategory FuncData::GetCategory() const
 {
     return eCat;
-}
-
-
-inline void FuncDataList::Append( FuncData* p )
-{
-    maVector.push_back( p );
-}
-
-
-inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
-{
-    return maVector[n];
 }
 
 

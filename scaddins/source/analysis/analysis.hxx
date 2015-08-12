@@ -36,7 +36,6 @@
 #include "analysishelper.hxx"
 
 namespace sca { namespace analysis {
-    class FuncDataList;
     class ConvertDataList;
 } }
 class ResMgr;
