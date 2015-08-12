@@ -106,7 +106,7 @@ namespace dbaui
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
                 if ( rItem.ISA( OptionalBoolItem ) )
-                    (*setting->ppControl)->EnableTriState( true );
+                    (*setting->ppControl)->EnableTriState();
             }
         }
 

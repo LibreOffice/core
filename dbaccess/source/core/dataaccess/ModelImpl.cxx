@@ -563,7 +563,7 @@ namespace
 
         try
         {
-            Reference< XStorage > xContainerStorage( _rModel.getStorage( _eType, ElementModes::READWRITE ) );
+            Reference< XStorage > xContainerStorage( _rModel.getStorage( _eType ) );
             // note the READWRITE here: If the storage already existed before, then the OpenMode will
             // be ignored, anyway.
             // If the storage did not yet exist, then it will be created. If the database document

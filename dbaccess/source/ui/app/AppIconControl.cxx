@@ -56,7 +56,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
             pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
     }
 
-    SetChoiceWithCursor( true );
+    SetChoiceWithCursor();
     SetSelectionMode(SINGLE_SELECTION);
 }
 

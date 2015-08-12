@@ -926,7 +926,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             pFormatText = CreateText(STR_FORMAT);
 
             pFormatSample = VclPtr<OPropEditCtrl>::Create( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
-            pFormatSample->SetReadOnly(true);
+            pFormatSample->SetReadOnly();
             pFormatSample->Enable(false);
             InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 

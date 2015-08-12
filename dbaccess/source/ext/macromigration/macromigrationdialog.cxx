@@ -197,7 +197,7 @@ namespace dbmm
             break;
 
         case STATE_BACKUP_DBDOC:
-            enableState( STATE_MIGRATE, true );
+            enableState( STATE_MIGRATE );
             // Note that the state is automatically disabled if the current page
             // (SaveDBDocPage) returns false in its canAdvance, not caring that
             // we enabled it here.
@@ -294,7 +294,7 @@ namespace dbmm
 
         // re-enable the UI
         enableButtons( WizardButtonFlags::FINISH | WizardButtonFlags::NEXT, true );
-        enableState( STATE_SUMMARY, true );
+        enableState( STATE_SUMMARY );
         updateTravelUI();
 
         m_pData->bMigrationIsRunning = false;

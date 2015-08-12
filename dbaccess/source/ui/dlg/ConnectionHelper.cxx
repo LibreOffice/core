@@ -205,7 +205,7 @@ namespace dbaui
                     INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
 
                     // for UI purpose, we don't want to have the path encoded
-                    sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8  );
+                    sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
                     setURLNoPrefix( sSelectedDirectory );
                     SetRoadmapStateValue(true);

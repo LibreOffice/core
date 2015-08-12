@@ -63,7 +63,7 @@ namespace dbaui
         ,m_pItemSetHelper(NULL)
     {
 
-        SetExchangeSupport(true);
+        SetExchangeSupport();
     }
 
     SfxTabPage::sfxpg OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)

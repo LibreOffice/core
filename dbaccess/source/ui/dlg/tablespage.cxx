@@ -212,7 +212,7 @@ namespace dbaui
         {
             if ((1 == _rTableFilter.getLength()) && _rTableFilter[0] == "%")
             {   // all tables visible
-                CheckAll(true);
+                CheckAll();
             }
             else
                 implCheckTables( _rTableFilter );

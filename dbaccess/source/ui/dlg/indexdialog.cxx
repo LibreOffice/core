@@ -564,7 +564,7 @@ namespace dbaui
             OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
                 // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
                 // and before the event arrived the user clicked onto "close". VERY fast, this user ....
-            m_pIndexList->EndEditing(false);
+            m_pIndexList->EndEditing();
             if (m_bEditAgain)
                 // could not commit the new name (started a new - asynchronous - edit trial)
                 return 1L;
@@ -778,7 +778,7 @@ namespace dbaui
         m_pIndexList->EndSelection();
 
         if (m_pIndexList->IsEditingActive())
-            m_pIndexList->EndEditing(false);
+            m_pIndexList->EndEditing();
 
         // commit the old data
         if (m_pIndexList->FirstSelected() != m_pPreviousSelection)

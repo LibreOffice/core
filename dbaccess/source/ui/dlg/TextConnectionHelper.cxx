@@ -109,7 +109,7 @@ namespace dbaui
         m_pAccessTextFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_pAccessCSVFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_pAccessOtherFiles->SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
-        m_pAccessCSVFiles->Check(true);
+        m_pAccessCSVFiles->Check();
 
         struct SectionDescriptor
         {
@@ -393,12 +393,12 @@ namespace dbaui
     void OTextConnectionHelper::SetExtension(const OUString& _rVal)
     {
         if (_rVal == "txt")
-            m_pAccessTextFiles->Check(true);
+            m_pAccessTextFiles->Check();
         else if (_rVal == "csv")
-            m_pAccessCSVFiles->Check(true);
+            m_pAccessCSVFiles->Check();
         else
         {
-            m_pAccessOtherFiles->Check(true);
+            m_pAccessOtherFiles->Check();
             m_pExtensionExample->SetText(_rVal);
         }
     }

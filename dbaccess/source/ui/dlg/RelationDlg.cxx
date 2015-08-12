@@ -116,18 +116,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        m_pRB_NoCascUpd->Check( true );
+        m_pRB_NoCascUpd->Check();
         break;
 
     case KeyRule::CASCADE:
-        m_pRB_CascUpd->Check( true );
+        m_pRB_CascUpd->Check();
         break;
 
     case KeyRule::SET_NULL:
-        m_pRB_CascUpdNull->Check( true );
+        m_pRB_CascUpdNull->Check();
         break;
     case KeyRule::SET_DEFAULT:
-        m_pRB_CascUpdDefault->Check( true );
+        m_pRB_CascUpdDefault->Check();
         break;
     }
 
@@ -136,18 +136,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        m_pRB_NoCascDel->Check( true );
+        m_pRB_NoCascDel->Check();
         break;
 
     case KeyRule::CASCADE:
-        m_pRB_CascDel->Check( true );
+        m_pRB_CascDel->Check();
         break;
 
     case KeyRule::SET_NULL:
-        m_pRB_CascDelNull->Check( true );
+        m_pRB_CascDelNull->Check();
         break;
     case KeyRule::SET_DEFAULT:
-        m_pRB_CascDelDefault->Check( true );
+        m_pRB_CascDelDefault->Check();
         break;
     }
 }

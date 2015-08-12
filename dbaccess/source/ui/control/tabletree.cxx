@@ -394,7 +394,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
     {
         // remove the mark for all ancestors of the entry
         if (GetModel()->HasParent(_pEntry))
-            implEmphasize(GetParent(_pEntry), false, false, true);
+            implEmphasize(GetParent(_pEntry), false, false);
     }
 }
 

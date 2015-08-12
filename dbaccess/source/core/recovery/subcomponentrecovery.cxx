@@ -382,7 +382,7 @@ namespace dbaccess
 
         // find a free sub storage name, and create Yet Another Sub Storage
         const OUString& rBaseName( lcl_getComponentStorageBaseName( m_eType ) );
-        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage.get(), rBaseName, true );
+        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage.get(), rBaseName );
         const Reference< XStorage > xObjectStor( xComponentsStorage->openStorageElement(
             sStorName, ElementModes::READWRITE ), UNO_QUERY_THROW );
 

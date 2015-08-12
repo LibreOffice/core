@@ -517,7 +517,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             if(!pEntry->IsVisible() && pEntry->GetOrderDir() != ORDER_NONE && !m_bOrderByUnRelated)
             {
                // a column has to visible in order to show up in ORDER BY
-                pEntry->SetVisible(true);
+                pEntry->SetVisible();
                 m_pVisibleCell->GetBox().Check(pEntry->IsVisible());
                 m_pVisibleCell->GetBox().SaveValue();
                 m_pVisibleCell->GetBox().Disable();
@@ -574,7 +574,7 @@ void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OT
             // append undo action for the function field
             _pEntry->SetFunctionType(FKT_NONE);
             _pEntry->SetFunction(OUString());
-            _pEntry->SetGroupBy(false);
+            _pEntry->SetGroupBy();
             notifyFunctionFieldChanged(sOldLocalizedFunctionName,_pEntry->GetFunction(),_bListAction,_nColumnId);
         }
     }
@@ -667,7 +667,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
         OUString devnull;
         pParseNode = rParser.parseTree( devnull, _sFieldName, true );
         if (pParseNode == NULL)
-            pParseNode = rParser.parseTree( devnull, _sFieldName, false );
+            pParseNode = rParser.parseTree( devnull, _sFieldName );
         if (pParseNode != NULL && SQL_ISRULE(pParseNode, select_statement))
             _sFieldName = "(" + _sFieldName + ")";
     }
@@ -748,7 +748,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
                 aSelEntry = FindFirstFreeCol(nColumnPostion);
                 if ( !aSelEntry.is() )
                 {
-                    AppendNewCol(1);
+                    AppendNewCol();
                     aSelEntry = FindFirstFreeCol(nColumnPostion);
                 }
                 ++nColumnPostion;
@@ -821,7 +821,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
                     if ( aSelEntry->IsGroupBy() )
                     {
                         sOldLocalizedFunctionName = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
-                        aSelEntry->SetGroupBy(false);
+                        aSelEntry->SetGroupBy();
                     }
 
                     // append undo action
@@ -839,7 +839,6 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
                 pColumnRef->parseNodeToStr( sFunction,
                                             xConnection,
                                             &rController.getParser().getContext(),
-                                            true,
                                             true); // quote is to true because we need quoted elements inside the function
 
                 getDesignView()->fillFunctionInfo(pColumnRef,sFunction,aSelEntry);
@@ -852,7 +851,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
                     sal_uInt32 nFunCount = pColumnRef->count();
                     OUString sParameters;
                     for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), true, true );
+                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), true );
 
                     sOldAlias = aSelEntry->GetAlias();
                     sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
@@ -919,7 +918,7 @@ bool OSelectionBrowseBox::SaveModified()
                 }
                 else
                 {
-                    pEntry->SetVisible(true);
+                    pEntry->SetVisible();
                     m_pVisibleCell->GetBox().Check();
                 }
                 break;
@@ -1020,7 +1019,7 @@ bool OSelectionBrowseBox::SaveModified()
                 pEntry->SetOrderDir(EOrderDir(nIdx));
                 if(!m_bOrderByUnRelated)
                 {
-                    pEntry->SetVisible(true);
+                    pEntry->SetVisible();
                     m_pVisibleCell->GetBox().Check();
                     RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                 }
@@ -1047,7 +1046,7 @@ bool OSelectionBrowseBox::SaveModified()
                         if ( !m_bGroupByUnRelated && !pEntry->IsVisible() )
                         {
                             // we have to change the visblie flag, so we must append also an undo action
-                            pEntry->SetVisible(true);
+                            pEntry->SetVisible();
                             m_pVisibleCell->GetBox().Check();
                             appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
                             RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
@@ -1189,7 +1188,7 @@ bool OSelectionBrowseBox::SaveModified()
     if ( pEntry.is() && bWasEmpty && !pEntry->IsEmpty() && !bError )
     {
         // Default to visible
-        pEntry->SetVisible(true);
+        pEntry->SetVisible();
         appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
         RowModified(BROW_VIS_ROW, GetCurColumnId());
 
@@ -1263,7 +1262,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
     getFields().push_back(pEntry);
 
     EditBrowseBox::RemoveColumn( _nColumnId );
-    InsertDataColumn( _nColumnId , OUString(), DEFAULT_SIZE, HeaderBarItemBits::STDSTYLE, HEADERBAR_APPEND);
+    InsertDataColumn( _nColumnId , OUString(), DEFAULT_SIZE, HeaderBarItemBits::STDSTYLE);
 
     // Neuzeichnen
     Rectangle aInvalidRect = GetInvalidRect( _nColumnId );
@@ -1410,7 +1409,7 @@ OTableFieldDescRef OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt)
         sal_uInt16 nColumnId = sal::static_int_cast< sal_uInt16 >(getFields().size());
         pEmptyEntry->SetColumnId( nColumnId );
 
-        InsertDataColumn( nColumnId , OUString(), DEFAULT_SIZE, HeaderBarItemBits::STDSTYLE, HEADERBAR_APPEND);
+        InsertDataColumn( nColumnId , OUString(), DEFAULT_SIZE, HeaderBarItemBits::STDSTYLE);
     }
 
     return getFields()[nCount];
@@ -1492,7 +1491,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
     {
         if (FindFirstFreeCol(_nColumnPosition) == NULL)  // no more free columns
         {
-            AppendNewCol(1);
+            AppendNewCol();
             _nColumnPosition = sal::static_int_cast< sal_uInt16 >(
                 getFields().size());
         }
@@ -1660,7 +1659,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
             {
-                pEntry->SetGroupBy(false);
+                pEntry->SetGroupBy();
                 aIter = rFields.end();
                 break;
             }
@@ -1670,7 +1669,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
                 {
                     pEntry->SetGroupBy(rInfo->IsGroupBy());
                     if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
-                        pEntry->SetVisible(true);
+                        pEntry->SetVisible();
                     break;
                 }
             }
@@ -1682,7 +1681,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, false, false );
         if ( (pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy()) ) // the GroupBy is inherited from rInfo
-            pTmp->SetGroupBy(false);
+            pTmp->SetGroupBy();
     }
 }
 
@@ -1738,11 +1737,11 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
             pEntry->IsGroupBy() == rInfo->IsGroupBy() )
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
-                pEntry->SetGroupBy(false);
+                pEntry->SetGroupBy();
             else
             {
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
-                    pEntry->SetVisible(true);
+                    pEntry->SetVisible();
             }
             if (pEntry->GetCriteria(nLevel).isEmpty() )
             {
@@ -1787,7 +1786,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, false, false );
         if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // the GroupBy was inherited from rInfo
-            pTmp->SetGroupBy(false);
+            pTmp->SetGroupBy();
         if ( pTmp.is() )
         {
             pTmp->SetCriteria( nLevel, rValue);
@@ -1834,7 +1833,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
             else
             {
                 if ( !m_bOrderByUnRelated )
-                    pEntry->SetVisible(true);
+                    pEntry->SetVisible();
                 pEntry->SetOrderDir( eDir );
                 m_nLastSortColumn = nPos;
             }
@@ -1849,7 +1848,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
         {
             m_nLastSortColumn = pTmp->GetColumnId() - 1;
             if ( !m_bOrderByUnRelated && !bAppend )
-                pTmp->SetVisible(true);
+                pTmp->SetVisible();
             pTmp->SetOrderDir( eDir );
         }
     }
@@ -1884,7 +1883,7 @@ void OSelectionBrowseBox::CellModified()
                     pEntry->GetOrderDir() != ORDER_NONE)
                 {
                     m_pVisibleCell->GetBox().Check();
-                    pEntry->SetVisible(true);
+                    pEntry->SetVisible();
                 }
                 else
                     pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
@@ -2290,7 +2289,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             nFunctionType &= ~FKT_AGGREGATE;
             pEntry->SetFunctionType(nFunctionType);
             if ( pEntry->IsGroupBy() && !sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
-                pEntry->SetGroupBy(false);
+                pEntry->SetGroupBy();
 
             if ( sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
                 pEntry->SetGroupBy(true);

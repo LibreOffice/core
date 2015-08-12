@@ -1482,7 +1482,7 @@ namespace
             aDragLeft->SetField(aCondition);
             aDragLeft->SetFunctionType(FKT_CONDITION);
 
-            eErrorCode = _pSelectionBrw->InsertField(aDragLeft,BROWSER_INVALIDID,false,true).is() ? eOk : eTooManyColumns;
+            eErrorCode = _pSelectionBrw->InsertField(aDragLeft,BROWSER_INVALIDID,false).is() ? eOk : eTooManyColumns;
         }
         else //! TODO not supported yet
             eErrorCode = eStatementTooComplex;
@@ -1523,7 +1523,6 @@ namespace
             pFunction->parseNodeToStr(  aColumnName,
                                         xConnection,
                                         &rController.getParser().getContext(),
-                                        true,
                                         true); // quote is to true because we need quoted elements inside the function
             // don't display the column name
             aCondition = aCondition.copy(aColumnName.getLength());
@@ -2015,7 +2014,7 @@ namespace
                     OQueryTableWindow* pExistentWin = pTableView->FindTable( sAlias );
                     if ( !pExistentWin )
                     {
-                        pTableView->AddTabWin( sComposedName, sAlias, false );  // don't create data here
+                        pTableView->AddTabWin( sComposedName, sAlias );  // don't create data here
                     }
                     else
                     {
@@ -2223,7 +2222,6 @@ namespace
                                     pParamRef->parseNodeToStr(  sFieldName,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
-                                                        true,
                                                         true); // quote is to true because we need quoted elements inside the function
                                 }
                                 aInfo->SetDataType(DataType::DOUBLE);
@@ -2257,7 +2255,6 @@ namespace
                         pColumnRef->parseNodeToStr( aColumns,
                                                     xConnection,
                                                     &rController.getParser().getContext(),
-                                                    true,
                                                     true); // quote is to true because we need quoted elements inside the function
 
                         aInfo->SetTabWindow( NULL );
@@ -2419,7 +2416,6 @@ namespace
                         pArgument->parseNodeToStr(  sGroupByExpression,
                                                     xConnection,
                                                     &rController.getParser().getContext(),
-                                                    true,
                                                     true); // quote is to true because we need quoted elements inside the function
                         _pView->fillFunctionInfo(pArgument,sGroupByExpression,aDragInfo);
                         aDragInfo->SetFunctionType(FKT_OTHER);

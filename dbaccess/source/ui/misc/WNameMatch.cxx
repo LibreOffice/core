@@ -275,7 +275,7 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl )
                 if ( nNewPos - nPos == 1 )
                     --nNewPos;
                 m_pCTRL_RIGHT->MakeVisible(m_pCTRL_RIGHT->GetEntry(nNewPos), true);
-                m_pCTRL_RIGHT->Select(pOldEntry,true);
+                m_pCTRL_RIGHT->Select(pOldEntry);
             }
         }
         else if(!pOldEntry)
@@ -283,7 +283,7 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl )
             pOldEntry = m_pCTRL_RIGHT->GetEntry(nPos);
             if(pOldEntry)
             {
-                m_pCTRL_RIGHT->Select(pOldEntry,true);
+                m_pCTRL_RIGHT->Select(pOldEntry);
             }
         }
     }
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl )
                 if ( nNewPos - nPos == 1 )
                     nNewPos--;
                 m_pCTRL_LEFT->MakeVisible(m_pCTRL_LEFT->GetEntry(nNewPos), true);
-                m_pCTRL_LEFT->Select(pOldEntry,true);
+                m_pCTRL_LEFT->Select(pOldEntry);
             }
         }
         else if(!pOldEntry)
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl )
             pOldEntry = m_pCTRL_LEFT->GetEntry(nPos);
             if(pOldEntry)
             {
-                m_pCTRL_LEFT->Select(pOldEntry,true);
+                m_pCTRL_LEFT->Select(pOldEntry);
             }
         }
     }

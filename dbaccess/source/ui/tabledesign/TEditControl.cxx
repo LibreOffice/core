@@ -840,7 +840,7 @@ void OTableEditorCtrl::DeleteRows()
     {
         // Remove rows
         m_pRowList->erase( m_pRowList->begin()+nIndex );
-        RowRemoved( nIndex, 1, true );
+        RowRemoved( nIndex, 1 );
 
         // Insert the empty row at the end
         m_pRowList->push_back( ::boost::shared_ptr<OTableRow>(new OTableRow()));
@@ -1366,7 +1366,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 }
                 else if ( GetSelectRowCount() > 0 )
                 {
-                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID, true ) );
+                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }

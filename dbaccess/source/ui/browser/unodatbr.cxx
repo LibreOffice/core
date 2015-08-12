@@ -2587,7 +2587,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
             // not really loaded
             m_pCurrentlyDisplayed = _pEntry;
             // tell the new entry it has been selected
-            selectPath(m_pCurrentlyDisplayed, true);
+            selectPath(m_pCurrentlyDisplayed);
 
             // get the name of the data source currently selected
             ensureConnection( m_pCurrentlyDisplayed, pConData->xConnection );
@@ -3757,7 +3757,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSo
     {   // a table or query belonging to the deleted data source is currently being displayed.
         OSL_ENSURE( m_pTreeView->getListBox().GetRootLevelParent( m_pCurrentlyDisplayed ) == pDataSourceEntry,
             "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: inconsistence (1)!" );
-        unloadAndCleanup( true );
+        unloadAndCleanup();
     }
     else
         OSL_ENSURE(

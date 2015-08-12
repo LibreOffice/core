@@ -329,7 +329,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), true );
 
-        enableState(PAGE_DBSETUPWIZARD_FINAL, true );
+        enableState(PAGE_DBSETUPWIZARD_FINAL );
         enableButtons( WizardButtonFlags::FINISH, true);
     }
     break;
@@ -994,7 +994,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             // wants us to load could be a non-database document. Instead, we asynchronously
             // open the selected document. Thus, the wizard's return value is RET_CANCEL,
             // which means to not continue loading the database document
-            if ( !OWizardMachine::Finish( RET_CANCEL ) )
+            if ( !OWizardMachine::Finish() )
                 return false;
 
             try

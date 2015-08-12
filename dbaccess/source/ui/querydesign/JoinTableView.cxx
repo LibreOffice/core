@@ -917,14 +917,14 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                     SvTreeListEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
                     if (pSourceEntry)
                     {
-                        pSourceBox->Select(pSourceEntry, true);
+                        pSourceBox->Select(pSourceEntry);
                         pSourceBox->MakeVisible(pSourceEntry);
                     }
 
                     SvTreeListEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
                     if (pDestEntry)
                     {
-                        pDestBox->Select(pDestEntry, true);
+                        pDestBox->Select(pDestEntry);
                         pDestBox->MakeVisible(pDestEntry);
                     }
 

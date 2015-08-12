@@ -765,7 +765,7 @@ void ODocumentDefinition::impl_showOrHideComponent_throw( const bool i_bShow )
 
     case EmbedStates::ACTIVE:
     {
-        Reference< XModel > xEmbeddedDoc( impl_getComponent_throw( true ), UNO_QUERY_THROW );
+        Reference< XModel > xEmbeddedDoc( impl_getComponent_throw(), UNO_QUERY_THROW );
         Reference< XController > xEmbeddedController( xEmbeddedDoc->getCurrentController(), UNO_SET_THROW );
         Reference< XFrame > xEmbeddedFrame( xEmbeddedController->getFrame(), UNO_SET_THROW );
         Reference< XWindow > xEmbeddedWindow( xEmbeddedFrame->getContainerWindow(), UNO_SET_THROW );
@@ -1802,7 +1802,7 @@ Reference< util::XCloseable > ODocumentDefinition::impl_getComponent_throw( cons
 Reference< util::XCloseable > ODocumentDefinition::getComponent() throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return impl_getComponent_throw( true );
+    return impl_getComponent_throw();
 }
 
 namespace

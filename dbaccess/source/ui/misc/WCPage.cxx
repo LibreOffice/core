@@ -70,14 +70,14 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
     get(m_pFT_KeyName, "keynamelabel");
     get(m_pEdKeyName, "keyname");
 
-    m_pEdTableName->SetMaxTextLen(EDIT_NOLIMIT);
+    m_pEdTableName->SetMaxTextLen();
 
     if ( m_pParent->m_xDestConnection.is() )
     {
         if ( !m_pParent->supportsViews() )
             m_pRB_View->Disable();
 
-        m_pCB_UseHeaderLine->Check(true);
+        m_pCB_UseHeaderLine->Check();
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_pCB_PrimaryColumn->Enable(m_bPKeyAllowed);
@@ -341,26 +341,26 @@ void OCopyTable::setCreateStyleAction()
     switch(m_pParent->getOperation())
     {
         case CopyTableOperation::CopyDefinitionAndData:
-            m_pRB_DefData->Check(true);
+            m_pRB_DefData->Check();
             RadioChangeHdl(m_pRB_DefData);
             break;
         case CopyTableOperation::CopyDefinitionOnly:
-            m_pRB_Def->Check(true);
+            m_pRB_Def->Check();
             RadioChangeHdl(m_pRB_Def);
             break;
         case CopyTableOperation::AppendData:
-            m_pRB_AppendData->Check(true);
+            m_pRB_AppendData->Check();
             SetAppendDataRadio();
             break;
         case CopyTableOperation::CreateAsView:
             if ( m_pRB_View->IsEnabled() )
             {
-                m_pRB_View->Check(true);
+                m_pRB_View->Check();
                 RadioChangeHdl(m_pRB_View);
             }
             else
             {
-                m_pRB_DefData->Check(true);
+                m_pRB_DefData->Check();
                 RadioChangeHdl(m_pRB_DefData);
             }
     }

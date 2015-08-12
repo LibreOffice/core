@@ -1493,16 +1493,16 @@ void OApplicationController::describeSupportedFeatures()
 
     // this one should not appear under Tools->Customize->Keyboard
     implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
-                                                             SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::INTERNAL );
-    implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
+                                                             SID_APP_NEW_REPORT_PRE_SEL );
+    implDescribeSupportedFeature( ".uno:DBDSImport",         SID_DB_APP_DSIMPORT);
+    implDescribeSupportedFeature( ".uno:DBDSExport",         SID_DB_APP_DSEXPORT);
+    implDescribeSupportedFeature( ".uno:DBDBAdmin",          SID_DB_APP_DBADMIN);
 
     // status info
-    implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusType",       SID_DB_APP_STATUS_TYPE);
+    implDescribeSupportedFeature( ".uno:DBStatusDBName",     SID_DB_APP_STATUS_DBNAME);
+    implDescribeSupportedFeature( ".uno:DBStatusUserName",   SID_DB_APP_STATUS_USERNAME);
+    implDescribeSupportedFeature( ".uno:DBStatusHostName",   SID_DB_APP_STATUS_HOSTNAME);
 }
 
 OApplicationView*   OApplicationController::getContainer() const

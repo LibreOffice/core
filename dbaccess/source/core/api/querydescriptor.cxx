@@ -201,7 +201,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
         }
         catch ( const Exception& )
         {
-            setColumnsOutOfDate( true );
+            setColumnsOutOfDate();
             throw;
         }
     }

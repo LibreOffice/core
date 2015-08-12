@@ -84,7 +84,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MAP_APPFONT));
     defaultButton(WizardButtonFlags::NEXT);
     enableButtons(WizardButtonFlags::FINISH, false);
-    enableAutomaticNextButtonState( true );
+    enableAutomaticNextButtonState();
 
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
     m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);

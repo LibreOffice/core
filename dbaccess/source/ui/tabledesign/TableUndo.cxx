@@ -254,7 +254,7 @@ void OTableEditorInsUndoAct::Undo()
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size(), true );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size() );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();
@@ -303,7 +303,7 @@ void OTableEditorInsNewUndoAct::Undo()
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_nInsRows, true );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_nInsRows );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();

@@ -485,7 +485,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
                 aNewName = aName;
             else
             {
-                if(sTableName.indexOf('.',0) != -1)
+                if(sTableName.indexOf('.') != -1)
                 {
                     OUString aCatlog,aSchema,aTable;
                     ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
@@ -789,7 +789,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         OUString sSQL( aSQL.makeStringAndClear() );
         // normalize the statement so that it doesn't contain any application-level features anymore
         OUString sError;
-        const boost::scoped_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL, false ) );
+        const boost::scoped_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL ) );
         OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
             if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
@@ -1588,7 +1588,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             OUString sRealName,sTableName;
             xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
             xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-            if(sTableName.indexOf('.',0) != -1)
+            if(sTableName.indexOf('.') != -1)
             {
                 OUString aCatlog,aSchema,aTable;
                 ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
