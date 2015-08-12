@@ -158,7 +158,7 @@ void PlaceEditDialog::ShowPasswordControl( bool bShow )
 
 IMPL_LINK( PlaceEditDialog, ToggledPassHdl, CheckBox*, pCheckBox )
 {
-    bool bChecked = pCheckBox->IsChecked();
+    bool bChecked = pCheckBox->IsEnabled() && pCheckBox->IsChecked();
 
     m_pEDPassword->Enable( bChecked );
     m_pFTPasswordLabel->Enable( bChecked );
