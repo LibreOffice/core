@@ -197,7 +197,7 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
 
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
+    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
 
     fprintf(stderr, "[TEXTCHAINFLOW - OF] SOURCE box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
 
@@ -229,11 +229,6 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
     GetTextChain()->SetIsPartOfLastParaInNextLink(
                           mpTargetLink,
                           mpOverflChText->IsLastParaInterrupted());
-}
-
-OutlinerParaObject *TextChainFlow::impGetNonOverflowingParaObject(SdrOutliner *pOutliner)
-{
-        return mpOverflChText->CreateNonOverflowingParaObject(pOutliner);
 }
 
 SdrTextObj *TextChainFlow::GetLinkTarget() const
@@ -295,7 +290,7 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 
 void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
+    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
     //impSetTextForEditingOutliner(pNewText); //XXX: Don't call it since we do everything with NonOverflowingText::ToParaObject
 
     GetLinkTarget()->NbcSetOutlinerParaObject(pNewText);

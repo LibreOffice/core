@@ -147,13 +147,8 @@ bool NonOverflowingText::IsLastParaInterrupted() const
 }
 
 
-OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
+OutlinerParaObject *NonOverflowingText::RemoveOverflowingText(Outliner *pOutliner) const
 {
-    // XXX: Old code
-    //OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
-    //pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
-    //return pPObj;
-
     pOutliner->QuickDelete(maContentSel);
     return pOutliner->CreateParaObject();
 }
@@ -242,12 +237,12 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
 }
 
 
-OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *pOutliner)
+OutlinerParaObject *OFlowChainedText::RemoveOverflowingText(Outliner *pOutliner)
 {
     if (mpNonOverflowingTxt == NULL)
         return NULL;
 
-    return mpNonOverflowingTxt->ToParaObject(pOutliner);
+    return mpNonOverflowingTxt->RemoveOverflowingText(pOutliner);
 }
 
 bool OFlowChainedText::IsLastParaInterrupted() const

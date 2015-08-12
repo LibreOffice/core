@@ -61,7 +61,7 @@ private:
 
 class NonOverflowingText {
 public:
-    OutlinerParaObject *ToParaObject(Outliner *) const;
+    OutlinerParaObject *RemoveOverflowingText(Outliner *) const;
     ESelection GetOverflowPointSel() const;
     bool IsLastParaInterrupted() const;
 
@@ -90,7 +90,7 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
         OFlowChainedText(Outliner *, bool );
 
         OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
-        OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
+        OutlinerParaObject *RemoveOverflowingText(Outliner *);
 
         ESelection GetInsertionPointSel() const;
         ESelection GetOverflowPointSel() const;

@@ -69,6 +69,10 @@ class TextChainFlow {
     ESelection maOverflowPosSel;
     ESelection maPostChainingSel;
 
+    OFlowChainedText *mpOverflChText;
+    UFlowChainedText *mpUnderflChText;
+
+
 
     void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
 
@@ -79,7 +83,6 @@ class TextChainFlow {
 
     virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *);
 
-    OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner);
     OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
     // impGetMergedUnderflowingParaObject merges underflowing text with the one in the next box
     OutlinerParaObject *impGetMergedUnderflowParaObject(SdrOutliner *pOutliner);
@@ -100,9 +103,6 @@ class TextChainFlow {
 
     bool bUnderflow;
     bool bOverflow;
-
-    OFlowChainedText *mpOverflChText;
-    UFlowChainedText *mpUnderflChText;
 
 };
 
