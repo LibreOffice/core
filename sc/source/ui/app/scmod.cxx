@@ -571,7 +571,7 @@ void ScModule::Execute( SfxRequest& rReq )
 void ScModule::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-    bool bTabView = pDocSh && (pDocSh->GetBestViewShell(true) != NULL);
+    bool bTabView = pDocSh && (pDocSh->GetBestViewShell() != NULL);
 
     SfxWhichIter aIter(rSet);
     for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())

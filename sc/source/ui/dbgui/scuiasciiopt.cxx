@@ -412,7 +412,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pLbCustomLang->SetLanguageList(
         SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false, false);
     pLbCustomLang->InsertLanguage(LANGUAGE_SYSTEM);
-    pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage), true);
+    pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage));
 
     // *** column type ListBox ***
     sal_Int32 nCount = comphelper::string::getTokenCount(aColumnUser, ';');

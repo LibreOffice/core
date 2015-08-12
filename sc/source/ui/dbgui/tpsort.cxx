@@ -647,7 +647,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 {
     if ( aSortData.bUserDef )
     {
-        m_pBtnSortUser->Check( true );
+        m_pBtnSortUser->Check();
         m_pLbSortUser->Enable();
         m_pLbSortUser->SelectEntryPos( aSortData.nUserIndex );
     }
@@ -956,7 +956,7 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
         {
             OUString sAlg = pArray[i];
             OUString sUser = pColRes->GetTranslation( sAlg );
-            m_pLbAlgorithm->InsertEntry( sUser, LISTBOX_APPEND );
+            m_pLbAlgorithm->InsertEntry( sUser );
         }
         m_pLbAlgorithm->SelectEntryPos( 0 );       // first entry is default
         m_pFtAlgorithm->Enable( nCount > 1 );      // enable only if there is a choice

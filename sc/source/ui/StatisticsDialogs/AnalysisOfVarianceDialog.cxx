@@ -110,7 +110,7 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
     mpSingleFactorRadio->SetToggleHdl( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
     mpTwoFactorRadio->SetToggleHdl( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
 
-    mpSingleFactorRadio->Check(true);
+    mpSingleFactorRadio->Check();
     mpTwoFactorRadio->Check(false);
 
     FactorChanged(NULL);
@@ -525,7 +525,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
         // Degree of freedom
         aTemplate.setTemplate("=%TOTAL_DF% - %ROW_DF% - %COLUMN_DF%");
-        aTemplate.applyAddress("%TOTAL_DF%", output.current(0,1,0));
+        aTemplate.applyAddress("%TOTAL_DF%", output.current(0,1));
         aTemplate.autoReplaceAddress("%ERROR_DF%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();

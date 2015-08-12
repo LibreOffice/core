@@ -276,13 +276,13 @@ void ScPivotLayoutDialog::SetupSource()
 
     if (bIsNamedRange)
     {
-        mpSourceListBox->SelectEntry(sSourceNamedRangeName, true);
-        mpSourceRadioNamedRange->Check(true);
+        mpSourceListBox->SelectEntry(sSourceNamedRangeName);
+        mpSourceRadioNamedRange->Check();
     }
     else
     {
-        mpSourceListBox->SelectEntryPos(0, true);
-        mpSourceRadioSelection->Check(true);
+        mpSourceListBox->SelectEntryPos(0);
+        mpSourceRadioSelection->Check();
     }
 
     // If entries - select first entry, otherwise disable the radio button.
@@ -311,14 +311,14 @@ void ScPivotLayoutDialog::SetupDestination()
 
     // If entries - select first entry, otherwise disable the radio button.
     if (mpDestinationListBox->GetEntryCount() > 0)
-        mpDestinationListBox->SelectEntryPos(0, true);
+        mpDestinationListBox->SelectEntryPos(0);
     else
         mpDestinationRadioNamedRange->Disable();
 
     //
     if (mbNewPivotTable)
     {
-        mpDestinationRadioNewSheet->Check(true);
+        mpDestinationRadioNewSheet->Check();
     }
     else
     {
@@ -327,7 +327,7 @@ void ScPivotLayoutDialog::SetupDestination()
             ScAddress aAddress(maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
             OUString aAddressString = aAddress.Format(SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE, mpDocument, maAddressDetails);
             mpDestinationEdit->SetText(aAddressString);
-            mpDestinationRadioSelection->Check(true);
+            mpDestinationRadioSelection->Check();
         }
     }
 

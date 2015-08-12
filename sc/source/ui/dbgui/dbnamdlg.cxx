@@ -192,10 +192,10 @@ void ScDbNameDlg::dispose()
 
 void ScDbNameDlg::Init()
 {
-    m_pBtnHeader->Check( true );       // Default: with column headers
-    m_pBtnTotals->Check( false );      // Default: without totals row
-    m_pBtnDoSize->Check( true );
-    m_pBtnKeepFmt->Check( true );
+    m_pBtnHeader->Check();          // Default: with column headers
+    m_pBtnTotals->Check( false );   // Default: without totals row
+    m_pBtnDoSize->Check();
+    m_pBtnKeepFmt->Check();
 
     m_pBtnOk->SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
     m_pBtnCancel->SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
@@ -474,7 +474,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 m_pBtnAdd->Disable();
                 m_pBtnRemove->Disable();
                 m_pEdAssign->SetText( EMPTY_OUSTRING );
-                m_pBtnHeader->Check( true );       // Default: with column headers
+                m_pBtnHeader->Check();             // Default: with column headers
                 m_pBtnTotals->Check( false );      // Default: without totals row
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
@@ -555,7 +555,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
             m_pBtnRemove->Disable();
             m_pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
-            m_pBtnHeader->Check( true );       // Default: with column headers
+            m_pBtnHeader->Check();             // Default: with column headers
             m_pBtnTotals->Check( false );      // Default: without totals row
             m_pBtnDoSize->Check( false );
             m_pBtnKeepFmt->Check( false );

@@ -1243,7 +1243,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 
         if ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 )
         {
-            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, true );
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true );
             ++nSelCount;
         }
         else

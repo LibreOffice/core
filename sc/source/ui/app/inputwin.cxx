@@ -448,7 +448,7 @@ void ScInputWindow::Select()
                                 const bool bContinue = ( i != 0 );
                                 if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
                                 {
-                                    pViewSh->MarkRange( aRange, false, false );
+                                    pViewSh->MarkRange( aRange, false );
                                     pViewSh->SetCursor( aRange.aEnd.Col(), aRange.aEnd.Row() );
                                     const ScRangeList aRangeList;
                                     ScAddress aAddr = aRange.aEnd;

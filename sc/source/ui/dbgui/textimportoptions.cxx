@@ -78,7 +78,7 @@ void ScTextImportOptionsDlg::init()
     m_pRbAutomatic->SetClickHdl(aLink);
     m_pRbCustom->SetClickHdl(aLink);
 
-    m_pRbAutomatic->Check(true);
+    m_pRbAutomatic->Check();
 
     m_pLbCustomLang->SetLanguageList(
         SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false, false);

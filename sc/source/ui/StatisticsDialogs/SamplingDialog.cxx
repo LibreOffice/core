@@ -108,7 +108,7 @@ void ScSamplingDialog::Init()
     mpSampleSize->SetMax( SAL_MAX_INT64 );
 
     mpOutputRangeEdit->GrabFocus();
-    mpPeriodicMethodRadio->Check(true);
+    mpPeriodicMethodRadio->Check();
 
     ToggleSamplingMethod(NULL);
 }

@@ -207,7 +207,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrUndefined );
 
     //  Spezialfilter braucht immer Spaltenkoepfe
-    pBtnHeader->Check(true);
+    pBtnHeader->Check();
     pBtnHeader->Disable();
 
     // Modal-Modus einschalten

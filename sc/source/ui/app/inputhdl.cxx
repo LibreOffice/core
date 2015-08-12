@@ -320,7 +320,7 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
 
         // Dummy InsertText for Update and Paint
         // To do that we need to cancel the selection from above (before QuickInsertText)
-        pView->InsertText( EMPTY_OUSTRING, false );
+        pView->InsertText( EMPTY_OUSTRING );
 
         sal_Int32 nLen = pEngine->GetTextLen(0);
         ESelection aSel( 0, nLen, 0, nLen );
@@ -372,7 +372,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         }
 
         EditView* pActiveView = pTopView ? pTopView : pTableView;
-        pActiveView->ShowCursor( false, true );
+        pActiveView->ShowCursor( false );
     }
     else
     {
@@ -1195,7 +1195,7 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
             }
         }
 
-        pView->InsertText( aInsStr, false );
+        pView->InsertText( aInsStr );
 
         if ( bDoParen ) // Put cursor between parentheses
         {
@@ -1503,12 +1503,12 @@ void ScInputHandler::UseColData() // When typing
                         // When editing in input line, apply to both edit views
                         if ( pTableView )
                         {
-                            pTableView->InsertText( aIns, false );
+                            pTableView->InsertText( aIns );
                             pTableView->SetSelection( aSelection );
                         }
                         if ( pTopView )
                         {
-                            pTopView->InsertText( aIns, false );
+                            pTopView->InsertText( aIns );
                             pTopView->SetSelection( aSelection );
                         }
 
@@ -1566,7 +1566,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                         if ( pTableView )
                         {
                             pTableView->DeleteSelected();
-                            pTableView->InsertText( aIns, false );
+                            pTableView->InsertText( aIns );
                             pTableView->SetSelection( ESelection(
                                                         aSel.nEndPara, aSel.nStartPos + aIns.getLength(),
                                                         aSel.nEndPara, aSel.nStartPos ) );
@@ -1574,7 +1574,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                         if ( pTopView )
                         {
                             pTopView->DeleteSelected();
-                            pTopView->InsertText( aIns, false );
+                            pTopView->InsertText( aIns );
                             pTopView->SetSelection( ESelection(
                                                         aSel.nEndPara, aSel.nStartPos + aIns.getLength(),
                                                         aSel.nEndPara, aSel.nStartPos ) );
@@ -1632,7 +1632,7 @@ void ScInputHandler::UpdateParenthesis()
                         pEngine->QuickSetAttribs( aSet, aSelOther );
 
                         // Dummy InsertText for Update and Paint (selection is empty)
-                        pTableView->InsertText( EMPTY_OUSTRING, false );
+                        pTableView->InsertText( EMPTY_OUSTRING );
 
                         bFound = true;
                     }
@@ -1706,7 +1706,7 @@ void ScInputHandler::UpdateActiveView()
     sal_uInt16 nCount = pEngine->GetViewCount();
     if (nCount > 0)
     {
-        pTableView = pEngine->GetView(0);
+        pTableView = pEngine->GetView();
         for (sal_uInt16 i=1; i<nCount; i++)
         {
             EditView* pThis = pEngine->GetView(i);
@@ -1840,7 +1840,7 @@ void ScInputHandler::RemoveRangeFinder()
     pEngine->SetUpdateMode(true);
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
-    pActiveView->ShowCursor( false, true );
+    pActiveView->ShowCursor( false );
 
     DeleteRangeFinder(); // Deletes the list and the labels on the table
 }
@@ -2822,9 +2822,9 @@ void ScInputHandler::AddRefEntry()
 
     RemoveSelection();
     if (pTableView)
-        pTableView->InsertText( OUString(cSep), false );
+        pTableView->InsertText( OUString(cSep) );
     if (pTopView)
-        pTopView->InsertText( OUString(cSep), false );
+        pTopView->InsertText( OUString(cSep) );
 
     DataChanged();
 }
@@ -2950,7 +2950,7 @@ void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
 
     if (pTableView)
     {
-        pTableView->InsertText( aText, false );
+        pTableView->InsertText( aText );
         if (bAddPar)
         {
             ESelection aSel = pTableView->GetSelection();
@@ -2961,7 +2961,7 @@ void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
     }
     if (pTopView)
     {
-        pTopView->InsertText( aText, false );
+        pTopView->InsertText( aText );
         if (bAddPar)
         {
             ESelection aSel = pTopView->GetSelection();

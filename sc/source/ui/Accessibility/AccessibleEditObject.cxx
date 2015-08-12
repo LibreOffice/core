@@ -122,7 +122,7 @@ void ScAccessibleEditObject::GotFocus()
     mbHasFocus = true;
     CommitFocusGained();
     if (mpTextHelper)
-        mpTextHelper->SetFocus(true);
+        mpTextHelper->SetFocus();
 }
 
 //=====  XInterface  ==========================================================
@@ -376,7 +376,7 @@ void ScAccessibleEditObject::CreateTextHelper()
         const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
         if ( pInputHdl && pInputHdl->IsEditMode() )
         {
-            mpTextHelper->SetFocus(true);
+            mpTextHelper->SetFocus();
         }
         else
         {

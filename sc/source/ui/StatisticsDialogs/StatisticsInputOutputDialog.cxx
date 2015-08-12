@@ -128,7 +128,7 @@ void ScStatisticsInputOutputDialog::Init()
     mpGroupByColumnsRadio->SetToggleHdl( LINK( this, ScStatisticsInputOutputDialog, GroupByChanged ) );
     mpGroupByRowsRadio->SetToggleHdl( LINK( this, ScStatisticsInputOutputDialog, GroupByChanged ) );
 
-    mpGroupByColumnsRadio->Check(true);
+    mpGroupByColumnsRadio->Check();
     mpGroupByRowsRadio->Check(false);
 }
 

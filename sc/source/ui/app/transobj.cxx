@@ -368,7 +368,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             aMtf.SetPrefMapMode( aMapMode );
             aMtf.Record( pVDev );
 
-            pEmbObj->DoDraw( pVDev, Point(), aVisArea.GetSize(), JobSetup(), ASPECT_CONTENT );
+            pEmbObj->DoDraw( pVDev, Point(), aVisArea.GetSize(), JobSetup() );
 
             aMtf.Stop();
             aMtf.WindStart();
@@ -445,7 +445,7 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                 // write document storage
-                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false, false );
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
 
                 // mba: no relative URLs for clipboard!
                 SfxMedium aMedium( xWorkStore, OUString() );
@@ -649,7 +649,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         rDestDoc.CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
-        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc, 0,0 );
+        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc, 0 );
 
         ScRange aMergeRange = aDestRange;
         rDestDoc.ExtendMerge( aMergeRange, true );

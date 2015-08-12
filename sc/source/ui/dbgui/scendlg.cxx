@@ -94,10 +94,10 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
     m_pCbShowFrame->SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
     m_pLbColor->SelectEntry( Color( COL_LIGHTGRAY ) );
-    m_pCbShowFrame->Check(true);
-    m_pCbTwoWay->Check(true);
+    m_pCbShowFrame->Check();
+    m_pCbTwoWay->Check();
     m_pCbCopyAll->Check(false);
-    m_pCbProtect->Check(true);
+    m_pCbProtect->Check();
 
     if (bIsEdit)
         m_pCbCopyAll->Enable(false);

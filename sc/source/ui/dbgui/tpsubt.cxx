@@ -362,7 +362,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
         else if ( pLb == mpLbFunctions )
         {
             *pFunction = nFunction;
-            mpLbColumns->CheckEntryPos( nColumn, true );
+            mpLbColumns->CheckEntryPos( nColumn );
         }
     }
     return 0;
@@ -507,7 +507,7 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )
 
     if ( rSubTotalData.bUserDef )
     {
-        pBtnUserDef->Check( true );
+        pBtnUserDef->Check();
         pLbUserDef->Enable();
         pLbUserDef->SelectEntryPos( rSubTotalData.nUserIndex );
     }

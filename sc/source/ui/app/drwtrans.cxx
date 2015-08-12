@@ -556,7 +556,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                         ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                     // write document storage
-                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false, false );
+                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
 
                     // mba: no relative URLs for clipboard!
                     SfxMedium aMedium( xWorkStore, OUString() );

@@ -730,7 +730,7 @@ void ScAccessibleSpreadsheet::RemoveSelection(ScMarkData &refScMarkData)
     for(;  miRemove != m_mapSelectionSend.end() ;)
     {
         if (refScMarkData.IsCellMarked(miRemove->first.Col(),miRemove->first.Row(),true) ||
-            refScMarkData.IsCellMarked(miRemove->first.Col(),miRemove->first.Row(),false) )
+            refScMarkData.IsCellMarked(miRemove->first.Col(),miRemove->first.Row()) )
         {
             ++miRemove;
             continue;

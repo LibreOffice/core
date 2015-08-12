@@ -113,7 +113,7 @@ void ScStatisticsTwoVariableDialog::Init()
     mpGroupByColumnsRadio->SetToggleHdl( LINK( this, ScStatisticsTwoVariableDialog, GroupByChanged ) );
     mpGroupByRowsRadio->SetToggleHdl( LINK( this, ScStatisticsTwoVariableDialog, GroupByChanged ) );
 
-    mpGroupByColumnsRadio->Check(true);
+    mpGroupByColumnsRadio->Check();
     mpGroupByRowsRadio->Check(false);
 }
 
