@@ -88,7 +88,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     QuotedTokenizedString aFirstLine;
     if(bRead)
     {
-        bRead = readLine(&rowPos.second, &rowPos.first, false);
+        bRead = readLine(&rowPos.second, &rowPos.first);
         if(bRead)
             setRowPos(rowNum++, rowPos);
     }
@@ -98,7 +98,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         // use first non-empty row as headerline because we need the number of columns
         while(bRead && m_aCurrentLine.Len() == 0)
         {
-            bRead = readLine(&rowPos.second, &rowPos.first, false);
+            bRead = readLine(&rowPos.second, &rowPos.first);
             if(bRead)
                 setRowPos(rowNum++, rowPos);
         }
@@ -161,7 +161,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             }
         }
         ++nRowCount;
-        bRead = readLine(&rowPos.second, &rowPos.first, false);
+        bRead = readLine(&rowPos.second, &rowPos.first);
         if(bRead)
             setRowPos(rowNum++, rowPos);
     }
@@ -208,7 +208,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
         if ( bNumeric )
         {
             // first without fielddelimiter
-            OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter);
             if (aField.isEmpty() ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
             {
@@ -299,7 +299,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
         }
         else if ( io_nType == DataType::DATE || io_nType == DataType::TIMESTAMP || io_nType == DataType::TIME)
         {
-            OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter);
             if (aField.isEmpty() ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
             {
@@ -375,7 +375,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
     }
     else
     {
-        OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
+        OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter);
         if (aField.isEmpty() ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
         {
@@ -776,7 +776,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                     m_pFileStream->Seek(m_nFilePos);
 
                     TRowPositionInFile newRowPos;
-                    if(!readLine(&newRowPos.second, &newRowPos.first, false))
+                    if(!readLine(&newRowPos.second, &newRowPos.first))
                     {
                         m_nMaxRowCount = m_nRowPos - 1;
                         return false;

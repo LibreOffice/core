@@ -168,7 +168,7 @@ void ResultSetMetaData::checkForTypes()
                 buf.appendAscii( " OR " );
             int oid = m_colDesc[i].typeOid;
             buf.appendAscii( "oid=" );
-            buf.append( (sal_Int32) oid, 10 );
+            buf.append( (sal_Int32) oid );
         }
         Reference< XResultSet > rs = stmt->executeQuery( buf.makeStringAndClear() );
         Reference< XRow > xRow( rs, UNO_QUERY );

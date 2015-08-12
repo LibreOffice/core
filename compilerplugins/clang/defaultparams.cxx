@@ -25,10 +25,10 @@ public:
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitCallExpr(const CallExpr * callExpr);
+    bool VisitCallExpr(CallExpr * callExpr);
 };
 
-bool DefaultParams::VisitCallExpr(const CallExpr * callExpr) {
+bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
     if (ignoreLocation(callExpr)) {
         return true;
     }
@@ -40,18 +40,22 @@ bool DefaultParams::VisitCallExpr(const CallExpr * callExpr) {
     }
     const FunctionDecl* functionDecl = callExpr->getDirectCallee()->getCanonicalDecl();
     unsigned i = callExpr->getNumArgs() - 1;
-    const Expr* arg = callExpr->getArg(i);
+    Expr* arg = callExpr->getArg(i);
     // variadic functions
     if (i >= functionDecl->getNumParams()) {
         return true;
     }
+    if (arg->isDefaultArgument()) {
+        return true;
+    }
+    // ignore this, it seems to trigger an infinite recursion
+    if (isa<UnaryExprOrTypeTraitExpr>(arg))
+        return true;
     const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
     const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
-    if (!arg->isDefaultArgument() &&
-        arg->isIntegerConstantExpr(compiler.getASTContext()) &&
-        parmVarDecl->hasDefaultArg() &&
-        !parmVarDecl->hasUninstantiatedDefaultArg() &&
-        defaultArgExpr->isIntegerConstantExpr(compiler.getASTContext()))
+    if (parmVarDecl->hasDefaultArg() &&
+        defaultArgExpr &&
+        defaultArgExpr->getType()->isIntegralType(compiler.getASTContext()))
     {
         APSInt x1, x2;
         if (arg->EvaluateAsInt(x1, compiler.getASTContext()) &&
@@ -63,17 +67,17 @@ bool DefaultParams::VisitCallExpr(const CallExpr * callExpr) {
                 "not necessary to pass this argument, it defaults to the same value",
                 arg->getSourceRange().getBegin())
               << arg->getSourceRange();
-            report(
+            /*report(
                 DiagnosticsEngine::Warning,
                 "default method parameter declaration here",
                 parmVarDecl->getSourceRange().getBegin())
-              << parmVarDecl->getSourceRange();
+              << parmVarDecl->getSourceRange();*/
         }
     }
     return true;
 }
 
-loplugin::Plugin::Registration< DefaultParams > X("defaultparams", false);
+loplugin::Plugin::Registration< DefaultParams > X("defaultparams");
 
 }
 

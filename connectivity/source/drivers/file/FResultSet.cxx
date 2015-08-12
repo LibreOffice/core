@@ -1164,7 +1164,7 @@ void OResultSet::sortRows()
 
     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
 
-    while ( ExecuteRow( IResultSetHelper::NEXT, 1, false, true ) )
+    while ( ExecuteRow( IResultSetHelper::NEXT, 1, false ) )
     {
         m_aSelectRow->get()[0]->setValue( m_aRow->get()[0]->getValue() );
         if ( m_pSQLAnalyzer->hasFunctions() )

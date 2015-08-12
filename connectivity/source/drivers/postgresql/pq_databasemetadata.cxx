@@ -1427,7 +1427,7 @@ static void columnMetaData2DatabaseTypeDescription(
             if( domains )
                 queryBuf.appendAscii( " OR " );
             queryBuf.appendAscii( "oid = " );
-            queryBuf.append( row->getInt(12 ), 10 );
+            queryBuf.append( row->getInt(12 ) );
             domains ++;
         }
     }

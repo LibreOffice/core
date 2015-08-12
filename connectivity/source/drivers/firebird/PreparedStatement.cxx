@@ -317,7 +317,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
-    setParameterNull(nIndex, true);
+    setParameterNull(nIndex);
 }
 
 void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 /*nIndex*/, sal_Bool /*bValue*/)

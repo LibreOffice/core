@@ -480,7 +480,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
             if( *(data->pLastOidInserted) )
             {
                 buf.append( ", usedOid=" );
-                buf.append( *(data->pLastOidInserted) , 10 );
+                buf.append( *(data->pLastOidInserted) );
                 buf.append( ", diagnosedTable=" );
                 buf.append(
                     OUStringToOString( *data->pLastTableInserted, pSettings->encoding ) );
@@ -723,7 +723,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         else
             bufferQuoteIdentifier( buf, lastTableInserted, pConnectionSettings );
         buf.append( " WHERE oid = " );
-        buf.append( nLastOid , 10 );
+        buf.append( nLastOid );
         query = buf.makeStringAndClear();
     }
     else if ( lastTableInserted.getLength() && lastQuery.getLength() )
