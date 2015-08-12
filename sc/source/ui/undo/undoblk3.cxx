@@ -211,7 +211,7 @@ void ScUndoDeleteContents::Redo()
 void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteContents( nFlags, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteContents( nFlags );
 }
 
 bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -481,7 +481,7 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         if (pLineOuter)
-            rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner, true );
+            rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner );
         else
             rViewShell.ApplySelectionPattern( *pApplyPattern, true );
     }
@@ -628,10 +628,10 @@ void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         if (eFillCmd==FILL_SIMPLE)
-            rViewShell.FillSimple( eFillDir, true );
+            rViewShell.FillSimple( eFillDir );
         else
             rViewShell.FillSeries( eFillDir, eFillCmd, eFillDateCmd,
-                                   fStartValue, fStepValue, fMaxValue, true );
+                                   fStartValue, fStepValue, fMaxValue );
     }
 }
 
@@ -906,7 +906,7 @@ void ScUndoAutoFormat::Redo()
 void ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoFormat( nFormatNo, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoFormat( nFormatNo );
 }
 
 bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1267,7 +1267,7 @@ void ScUndoConversion::Redo()
 void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
     if( rTarget.ISA( ScTabViewTarget ) )
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoSheetConversion( maConvParam, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoSheetConversion( maConvParam );
 }
 
 bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const

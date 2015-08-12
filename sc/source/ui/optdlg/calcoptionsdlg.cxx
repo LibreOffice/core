@@ -91,7 +91,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpFtMemory, "memory");
 
     get(mpConversion,"comboConversion");
-    mpConversion->SelectEntryPos(static_cast<sal_Int32>(rConfig.meStringConversion), true);
+    mpConversion->SelectEntryPos(static_cast<sal_Int32>(rConfig.meStringConversion));
     mpConversion->SetSelectHdl(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
 
     get(mpEmptyAsZero,"checkEmptyAsZero");
@@ -211,7 +211,7 @@ IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
          break;
          case ScCalcConfig::StringConversion::ZERO:
                     maConfig.mbEmptyStringAsZero = true;
-                    mpEmptyAsZero->Check(true);
+                    mpEmptyAsZero->Check();
                     mpEmptyAsZero->Enable(false);
          break;
          case ScCalcConfig::StringConversion::UNAMBIGUOUS:

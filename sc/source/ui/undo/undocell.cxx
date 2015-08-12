@@ -718,7 +718,7 @@ void ScUndoThesaurus::Redo()
 void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoThesaurus( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoThesaurus();
 }
 
 bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const

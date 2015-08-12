@@ -421,7 +421,7 @@ void CommandToolBox::UpdateButtons()
     }
     else
     {
-        EnableItem( IID_CHANGEROOT, true );
+        EnableItem( IID_CHANGEROOT );
         bool bRootSet = rDlg.aLbEntries->GetRootType() != SC_CONTENT_ROOT;
         CheckItem( IID_CHANGEROOT, bRootSet );
     }

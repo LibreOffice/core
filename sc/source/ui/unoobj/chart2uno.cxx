@@ -2269,7 +2269,6 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
     throw ( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     const sal_Unicode cSep = ' ';
-    const sal_Unicode cQuote = '\'';
 
     if (!m_pDocument)
     {
@@ -2281,14 +2280,14 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
         while( nOffset >= 0 )
         {
             OUString sToken;
-            ScRangeStringConverter::GetTokenByOffset( sToken, sXMLRange, nOffset, cSep, cQuote );
+            ScRangeStringConverter::GetTokenByOffset( sToken, sXMLRange, nOffset, cSep );
             if( nOffset >= 0 )
             {
                 // convert one address (remove dots)
 
                 OUString aUIString(sToken);
 
-                sal_Int32 nIndex = ScRangeStringConverter::IndexOf( sToken, ':', 0, cQuote );
+                sal_Int32 nIndex = ScRangeStringConverter::IndexOf( sToken, ':', 0 );
                 if ( nIndex >= 0 && nIndex < aUIString.getLength() - 1 &&
                         aUIString[nIndex + 1] == '.' )
                     aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );

@@ -194,7 +194,7 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
     mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
@@ -262,7 +262,7 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);
@@ -333,7 +333,7 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
     mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SfxCallMode::RECORD, &aBorderOuter, &aBorderInner, 0L);

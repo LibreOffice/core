@@ -234,7 +234,7 @@ void ScEditWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& r
     pEdView->Paint(rRect);
 
     if( HasFocus() )
-        pEdView->ShowCursor(true,true);
+        pEdView->ShowCursor(true);
 }
 
 void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
@@ -283,7 +283,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 
 void ScEditWindow::GetFocus()
 {
-    pEdView->ShowCursor(true,true);
+    pEdView->ShowCursor(true);
     pActiveEdWnd = this;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;

@@ -556,7 +556,7 @@ void ScUndoDeleteCells::Redo()
 void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( eCmd, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( eCmd );
 }
 
 bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -735,7 +735,7 @@ void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
     // if single selection
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DEL_DELROWS, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DEL_DELROWS );
 }
 
 bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1766,7 +1766,7 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
         }
 
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
-        rViewShell.SetStyleSheetToMarked( pStyleSheet, true );
+        rViewShell.SetStyleSheetToMarked( pStyleSheet );
     }
 }
 

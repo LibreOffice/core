@@ -761,7 +761,7 @@ void ScContentTree::ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry )
             if( pOldEntry )
             {
                 Expand(pParent);
-                Select( pOldEntry, true);
+                Select( pOldEntry );
             }
         }
         }

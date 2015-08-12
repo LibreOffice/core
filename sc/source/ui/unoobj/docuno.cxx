@@ -551,8 +551,8 @@ Size ScModelObj::getDocumentSize()
         return aSize;
 
     // convert to twips
-    aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab, true));
-    aSize.setHeight(rDoc.GetRowHeight(0, nEndRow, nTab, true));
+    aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab));
+    aSize.setHeight(rDoc.GetRowHeight(0, nEndRow, nTab));
 
     return aSize;
 }
@@ -1544,7 +1544,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         pDrawView = new FmFormView( pModel, pDev );
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview( true );
+        pDrawView->SetPrintPreview();
     }
 
     ScRange aRange;
@@ -1940,7 +1940,7 @@ void SAL_CALL ScModelObj::consolidate(
     if (pDocShell)
     {
         const ScConsolidateParam& rParam = xImpl->GetParam();
-        pDocShell->DoConsolidate( rParam, true );
+        pDocShell->DoConsolidate( rParam );
         pDocShell->GetDocument().SetConsolidateDlgData( &rParam );
     }
 }

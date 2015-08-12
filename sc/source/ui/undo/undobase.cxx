@@ -408,7 +408,7 @@ void ScMultiBlockUndo::ShowBlock()
     SCTAB nTab = pViewShell->GetViewData().GetTabNo();
     aRange.aStart.SetTab(nTab);
     aRange.aEnd.SetTab(nTab);
-    pViewShell->MarkRange(aRange, false, false);
+    pViewShell->MarkRange(aRange, false);
 
     for (size_t i = 1, n = maBlockRanges.size(); i < n; ++i)
     {

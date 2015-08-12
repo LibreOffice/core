@@ -222,7 +222,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl)
         GetBindings()->GetDispatcher()->Execute(FID_MERGE_ON, SfxCallMode::RECORD);
     else
         GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SfxCallMode::RECORD);
-    GetBindings()->Invalidate(FID_MERGE_TOGGLE,true,false);
+    GetBindings()->Invalidate(FID_MERGE_TOGGLE,true);
     //modified end
 
     return 0;
@@ -349,7 +349,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             }
             else if(eState == SfxItemState::DONTCARE)
             {
-                mpCBXWrapText->EnableTriState(true);
+                mpCBXWrapText->EnableTriState();
                 mpCBXWrapText->SetState(TRISTATE_INDET);
             }
         }
@@ -367,7 +367,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         {
             mbMultiDisable = true;
             mpTextOrientBox->Disable();
-            mpCBStacked->EnableTriState(true);
+            mpCBStacked->EnableTriState();
             mpCBStacked->SetState(TRISTATE_INDET);
         }
         break;

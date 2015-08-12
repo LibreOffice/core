@@ -28,7 +28,7 @@ CellLineStyleValueSet::CellLineStyleValueSet( vcl::Window* pParent, const ResId&
     pVDev(NULL),
     nSelItem(0)
 {
-    SetColCount( 1 );
+    SetColCount();
     SetLineCount( 9);
 }
 

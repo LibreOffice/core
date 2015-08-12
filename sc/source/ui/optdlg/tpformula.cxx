@@ -125,14 +125,14 @@ void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 {
     if (bDefault)
     {
-        mpBtnCustomCalcDefault->Check(true);
+        mpBtnCustomCalcDefault->Check();
         mpBtnCustomCalcCustom->Check(false);
         mpBtnCustomCalcDetails->Disable();
     }
     else
     {
         mpBtnCustomCalcDefault->Check(false);
-        mpBtnCustomCalcCustom->Check(true);
+        mpBtnCustomCalcCustom->Check();
         mpBtnCustomCalcDetails->Enable();
     }
 }

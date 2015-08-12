@@ -1483,7 +1483,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
             aBoxInfoItem.SetTable( false );
             aBoxInfoItem.SetDist( true );
-            aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+            aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
             rSet.Put( aBoxInfoItem );
 
             pDocShell->PageStyleModified( aStyleName, true );

@@ -1517,7 +1517,7 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
     if ( !pCurrentDeep && pDocShell )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
-        pCurrentDeep = rDoc.CreateSelectionPattern( *GetMarkData(), true );
+        pCurrentDeep = rDoc.CreateSelectionPattern( *GetMarkData() );
     }
     return pCurrentDeep;
 }
@@ -3605,7 +3605,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                 }
 
                 if (bAdd)
-                    aMarkData.SetMultiMarkArea(aIter.GetPos(), true);
+                    aMarkData.SetMultiMarkArea(aIter.GetPos());
             }
 
         }
@@ -3660,7 +3660,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
                     }
 
                     if (bAdd)
-                        aMarkData.SetMultiMarkArea(aIter.GetPos(), true);
+                        aMarkData.SetMultiMarkArea(aIter.GetPos());
                 }
             }
         }
@@ -3832,7 +3832,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
                     {
                         if ( bRecursive && !bFound && !aMarkData.IsAllMarked( aRefRange ) )
                             bFound = true;
-                        aMarkData.SetMultiMarkArea(aRefRange, true);
+                        aMarkData.SetMultiMarkArea(aRefRange);
                     }
                 }
             }
@@ -3892,7 +3892,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
                     ScRange aCellRange(aCellIter.GetPos());
                     if ( bRecursive && !bFound && !aMarkData.IsAllMarked( aCellRange ) )
                         bFound = true;
-                    aMarkData.SetMultiMarkArea(aCellRange, true);
+                    aMarkData.SetMultiMarkArea(aCellRange);
                 }
             }
 

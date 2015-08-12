@@ -87,7 +87,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
                 aEntry.mbProtected = !(*iter).isEmpty() && (*iter)[0] != '0';
 
                 maEntries.push_back( aEntry );
-                InsertEntry( aEntry.maName, LISTBOX_APPEND );
+                InsertEntry( aEntry.maName );
             }
             SetUpdateMode( true );
             SetNoSelection();

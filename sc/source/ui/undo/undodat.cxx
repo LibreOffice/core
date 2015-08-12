@@ -226,9 +226,9 @@ void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         if (bMake)
-            rViewShell.MakeOutline( bColumns, true );
+            rViewShell.MakeOutline( bColumns );
         else
-            rViewShell.RemoveOutline( bColumns, true );
+            rViewShell.RemoveOutline( bColumns );
     }
 }
 
@@ -415,9 +415,9 @@ void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         if (bShow)
-            rViewShell.ShowMarkedOutlines( true );
+            rViewShell.ShowMarkedOutlines();
         else
-            rViewShell.HideMarkedOutlines( true );
+            rViewShell.HideMarkedOutlines();
     }
 }
 
@@ -503,7 +503,7 @@ void ScUndoRemoveAllOutlines::Redo()
 void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveAllOutlines( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveAllOutlines();
 }
 
 bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -606,7 +606,7 @@ void ScUndoAutoOutline::Redo()
 void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoOutline( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoOutline();
 }
 
 bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1417,7 +1417,7 @@ void ScUndoRepeatDB::Redo()
 void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RepeatDB( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RepeatDB();
 }
 
 bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
