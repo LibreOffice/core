@@ -2060,8 +2060,8 @@ void SdrTextObj::onChainingEvent()
     if (aTxtChainFlow.IsOverflow()) {
         fprintf(stderr, "[CHAINING] Overflow going on\n");
         // One outliner is for non-overflowing text, the other for overflowing text
-        // In this case they can both be the drawing outliner
-        aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
+        // We remove text directly from the editing outliner
+        aTxtChainFlow.ExecuteOverflow(pEdtOutl, &aDrawOutliner);
     } else if (aTxtChainFlow.IsUnderflow()) {
         fprintf(stderr, "[CHAINING] Underflow going on\n");
         // underflow-induced overflow
