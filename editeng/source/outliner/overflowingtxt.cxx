@@ -161,8 +161,9 @@ OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 ESelection NonOverflowingText::GetOverflowPointSel() const
 {
     //return getLastPositionSel(mpContentTextObj);
-    // XXX: Not sure this can work properly
-    return maContentSel;
+
+    // return the starting point of the selection we are removing
+    return ESelection(maContentSel.nStartPara, maContentSel.nStartPos); //XXX
 }
 
 // The equivalent of ToParaObject for OverflowingText. Here we are prepending the overflowing text to the old dest box's text
