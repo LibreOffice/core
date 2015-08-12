@@ -142,28 +142,19 @@ namespace slideshow
             // for all shapes, though.
 
             const bool bMoreThanOneLayer(maLayers.size() > 1);
-            if( mnActiveSprites || bMoreThanOneLayer )
+            if (mnActiveSprites || bMoreThanOneLayer)
             {
                 // clear all viewlayers, dump everything but the
                 // background layer - this will also remove all shape
                 // sprites
-                std::for_each( maAllShapes.begin(),
-                               maAllShapes.end(),
-                               []( const LayerShapeMap::value_type& cp )
-                               { cp.first->clearAllViewLayers(); } );
+                for (auto& rShape : maAllShapes)
+                    rShape.first->clearAllViewLayers();
 
-                for (LayerShapeMap::iterator
-                         iShape (maAllShapes.begin()),
-                         iEnd (maAllShapes.end());
-                     iShape!=iEnd;
-                     ++iShape)
-                {
-                    iShape->second.reset();
-                }
+                for (auto& rShape : maAllShapes)
+                    rShape.second.reset();
 
-                if( bMoreThanOneLayer )
-                    maLayers.erase(maLayers.begin()+1,
-                                   maLayers.end());
+                if (bMoreThanOneLayer)
+                    maLayers.erase(maLayers.begin() + 1, maLayers.end());
 
                 mbLayerAssociationDirty = true;
             }
