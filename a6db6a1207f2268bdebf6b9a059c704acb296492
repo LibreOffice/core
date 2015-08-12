@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_3f7c0720",
+        "filename": "sc/inc/formulacell.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:39Z",
+      "side": 1,
+      "message": "Adding an enum to every formula cell and wasting space for all where it isn\u0027t needed is not a good solution. We talked about the unit and its validity should be transported in the result token.",
+      "revId": "a6db6a1207f2268bdebf6b9a059c704acb296492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_ffe61fe7",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4534,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:39Z",
+      "side": 1,
+      "message": "I saw that you removed the entire block in the other change again, so any comments I had above probably are moot.",
+      "revId": "a6db6a1207f2268bdebf6b9a059c704acb296492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
