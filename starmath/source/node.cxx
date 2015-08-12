@@ -498,11 +498,13 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
 
     //Dump subnodes
     int myid = id;
-    const SmNode *pNode;
     sal_uInt16 nSize = GetNumSubNodes();
     for (sal_uInt16 i = 0; i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
+    {
+        const SmNode *pNode = GetSubNode(i);
+        if (pNode)
             pNode->DumpAsDot(out, NULL, i, ++id, myid);
+    }
 
     //If this is the root end the file
     if( number == -1 )
@@ -641,25 +643,20 @@ SmNode * SmVisibleNode::GetSubNode(sal_uInt16 /*nIndex*/)
     return NULL;
 }
 
-
-
-
 void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
     rText.append(GetToken().aText);
 }
 
-
-
-
 void SmExpressionNode::CreateTextFromNode(OUString &rText)
 {
-    SmNode *pNode;
     sal_uInt16  nSize = GetNumSubNodes();
     if (nSize > 1)
         rText += "{";
     for (sal_uInt16 i = 0;  i < nSize;  i++)
-        if (NULL != (pNode = GetSubNode(i)))
+    {
+        SmNode *pNode = GetSubNode(i);
+        if (pNode)
         {
             pNode->CreateTextFromNode(rText);
             //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
@@ -668,6 +665,7 @@ void SmExpressionNode::CreateTextFromNode(OUString &rText)
                     ( !rText.endsWith("+") && !rText.endsWith("-") ))
                     rText += " ";
         }
+    }
 
     if (nSize > 1)
     {
@@ -675,9 +673,6 @@ void SmExpressionNode::CreateTextFromNode(OUString &rText)
         rText += "} ";
     }
 }
-
-
-
 
 void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one column
@@ -735,7 +730,6 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
     }
 }
-
 
 SmNode * SmTableNode::GetLeftMost()
 {
