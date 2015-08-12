@@ -27,6 +27,7 @@
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 #include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -143,17 +144,10 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 
 //  "normal" service implementation
 ScaDateAddIn::ScaDateAddIn() :
-    pDefLocales( NULL ),
-    pResMgr( NULL ),
-    pFuncDataList( NULL )
+    pDefLocales( std::unique_ptr< ::com::sun::star::lang::Locale[] >( nullptr ) ),
+    pResMgr( std::unique_ptr< ResMgr >( nullptr ) ),
+    pFuncDataList( std::unique_ptr< ScaFuncDataList >( nullptr ) )
 {
-}
-
-ScaDateAddIn::~ScaDateAddIn()
-{
-    delete pFuncDataList;
-    delete pResMgr;
-    delete[] pDefLocales;
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -162,7 +156,7 @@ static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaDateAddIn::InitDefLocales()
 {
-    pDefLocales = new lang::Locale[ nNumOfLoc ];
+    pDefLocales.reset(new lang::Locale[ nNumOfLoc ]);
 
     for( sal_uInt32 nIndex = 0; nIndex < nNumOfLoc; nIndex++ )
     {
@@ -173,7 +167,7 @@ void ScaDateAddIn::InitDefLocales()
 
 const lang::Locale& ScaDateAddIn::GetLocale( sal_uInt32 nIndex )
 {
-    if( !pDefLocales )
+    if( pDefLocales == nullptr )
         InitDefLocales();
 
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
@@ -181,10 +175,10 @@ const lang::Locale& ScaDateAddIn::GetLocale( sal_uInt32 nIndex )
 
 ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
-    if( !pResMgr )
+    if( pResMgr == nullptr )
     {
         InitData();     // try to get resource manager
-        if( !pResMgr )
+        if( pResMgr == nullptr )
             throw uno::RuntimeException();
     }
     return *pResMgr;
@@ -192,24 +186,18 @@ ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 
 void ScaDateAddIn::InitData()
 {
-    delete pResMgr;
-    pResMgr = ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc));
-    delete pFuncDataList;
+    pResMgr.reset(ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc)));
+    pFuncDataList = nullptr;
 
-    if ( pResMgr )
+    if ( pResMgr != nullptr )
     {
-        pFuncDataList = new ScaFuncDataList;
+        pFuncDataList.reset(new ScaFuncDataList);
         InitScaFuncDataList( *pFuncDataList, *pResMgr );
     }
-    else
-    {
-        pFuncDataList = nullptr;
-    }
 
-    if( pDefLocales )
+    if( pDefLocales != nullptr )
     {
-        delete pDefLocales;
-        pDefLocales = NULL;
+        pDefLocales = nullptr;
     }
 }
 
