@@ -4188,7 +4188,6 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
     bool bHandles = false;
     uno::Sequence< beans::PropertyValues > aHandles;
 
-    bool bCoordinates = false;
     uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
     uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
 
@@ -4209,6 +4208,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
+            bool bCoordinates = false;
             const OUString sCustomShapeType( "non-primitive" );
             OUString aCustomShapeType( sCustomShapeType );
 
