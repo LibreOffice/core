@@ -1102,7 +1102,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, CancelHdl )
     }
     else
     {
-        EndDialog( RET_CANCEL );
+        EndDialog();
     }
     return 1;
 }

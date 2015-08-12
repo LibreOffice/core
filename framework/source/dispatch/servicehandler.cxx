@@ -186,7 +186,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     OUString sServiceName;
     OUString sArguments;
 
-    sal_Int32 nArgStart = sServiceAndArguments.indexOf('?',0);
+    sal_Int32 nArgStart = sServiceAndArguments.indexOf('?');
     if (nArgStart!=-1)
     {
         sServiceName = sServiceAndArguments.copy(0,nArgStart);

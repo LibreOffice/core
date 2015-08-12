@@ -399,7 +399,7 @@ namespace svt
     {
         Any aRet;
 
-        Control* pControl = m_pFilePickerController->getControl( _nControlId, false );
+        Control* pControl = m_pFilePickerController->getControl( _nControlId );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
         {

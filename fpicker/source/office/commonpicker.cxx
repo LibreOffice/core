@@ -120,7 +120,7 @@ namespace svt
         {
             ::osl::MutexGuard aOwnGuard( m_aMutex );
             if ( m_bExecuting && m_pDlg )
-                m_pDlg->EndDialog( RET_CANCEL );
+                m_pDlg->EndDialog();
         }
 
         m_pDlg.disposeAndClear();
@@ -404,7 +404,7 @@ namespace svt
 
         OSL_ENSURE( getDialog(), "OCommonPicker::OnCancelPicker: executing, but no dialog!" );
         if ( getDialog() )
-            getDialog()->EndDialog( RET_CANCEL );
+            getDialog()->EndDialog();
 
         return 0L;
     }

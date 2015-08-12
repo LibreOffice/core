@@ -823,7 +823,7 @@ IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
     }
     else
     {
-        EndDialog( RET_CANCEL );
+        EndDialog();
     }
     return 1L;
 }
@@ -2502,7 +2502,7 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl )
 
 void SvtFileDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
 {
-    Control* pControl = getControl( _nControlId, false );
+    Control* pControl = getControl( _nControlId );
     if ( pControl )
         EnableControl( pControl, _bEnable );
     Control* pLabel = getControl( _nControlId, true );
@@ -2550,7 +2550,7 @@ void SvtFileDialog::AddControls_Impl( )
     if ( _nExtraBits & SFX_EXTRA_AUTOEXTENSION )
     {
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
-        _pImp->_pCbAutoExtension->Check( true );
+        _pImp->_pCbAutoExtension->Check();
         _pImp->_pCbAutoExtension->SetClickHdl( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
         _pImp->_pCbAutoExtension->Show();
     }

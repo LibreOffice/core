@@ -144,7 +144,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                             pVCLPopupMenu->SetItemCommand( nId, aCommand );
 
                             if ( bHeaderIsOn )
-                                pVCLPopupMenu->CheckItem( nId, true );
+                                pVCLPopupMenu->CheckItem( nId );
                             ++nId;
 
                             // Check if all entries have the same state
