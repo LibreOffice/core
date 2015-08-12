@@ -45,7 +45,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <boost/scoped_ptr.hpp>
 
 //UUUU
 #include <swunohelper.hxx>
