@@ -23,6 +23,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     , m_xCurrentDetails()
     , m_nCurrentType( 0 )
     , bLabelChanged( false )
+    , m_bShowPassword( false )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -59,6 +60,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
     , m_xCurrentDetails( )
     , bLabelChanged( true )
+    , m_bShowPassword( false )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -145,15 +147,6 @@ OUString PlaceEditDialog::GetServerUrl()
 std::shared_ptr<Place> PlaceEditDialog::GetPlace()
 {
     return std::make_shared<Place>(m_pEDServerName->GetText(), GetServerUrl(), true);
-}
-
-void PlaceEditDialog::ShowPasswordControl( bool bShow )
-{
-    m_pCBPassword->Show( bShow );
-    m_pEDPassword->Show( bShow );
-    m_pFTPasswordLabel->Show( bShow );
-
-    ToggledPassHdl( m_pCBPassword );
 }
 
 IMPL_LINK( PlaceEditDialog, ToggledPassHdl, CheckBox*, pCheckBox )
@@ -354,6 +347,12 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
     m_nCurrentType = nPos;
 
     m_xCurrentDetails->show();
+
+    bool bShowPass = m_xCurrentDetails->hasPassEntry();
+    m_pCBPassword->Show( bShowPass );
+    m_pEDPassword->Show( bShowPass );
+    m_pFTPasswordLabel->Show( bShowPass );
+
     ToggledPassHdl( m_pCBPassword );
 
     SetSizePixel(GetOptimalSize());

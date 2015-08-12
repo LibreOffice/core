@@ -56,6 +56,8 @@ class DetailsContainer
 
         virtual void setActive( bool bActive = true );
 
+        virtual bool hasPassEntry() { return true; }
+
     protected:
         void notifyChange( );
         DECL_LINK ( ValueChangeHdl, void * );
@@ -140,6 +142,7 @@ class CmisDetailsContainer : public DetailsContainer
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
         virtual void setUsername( const OUString& rUsername ) SAL_OVERRIDE;
+        virtual bool hasPassEntry() SAL_OVERRIDE { return false; }
 
     private:
         void selectRepository( );

@@ -57,6 +57,7 @@ private:
     unsigned int m_nCurrentType;
 
     bool bLabelChanged;
+    bool m_bShowPassword;
 
 public :
 
@@ -73,7 +74,7 @@ public :
      OUString GetPassword() { return m_pEDPassword->GetText(); };
      OUString GetUser() { return m_pEDUsername->GetText(); };
 
-     void ShowPasswordControl( bool bShow = true );
+     void ShowPasswordControl( bool bShow = true ) { m_bShowPassword = bShow; }
 
 private:
 
