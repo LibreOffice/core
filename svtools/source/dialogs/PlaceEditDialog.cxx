@@ -31,11 +31,14 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
     get( m_pBTRepoRefresh, "repositoriesRefresh" );
+    get( m_pCBPassword, "rememberPassword" );
     get( m_pEDPassword, "password" );
     get( m_pFTPasswordLabel, "passwordLabel" );
 
     m_pEDPassword->Hide();
     m_pFTPasswordLabel->Hide();
+    m_pCBPassword->Hide();
+    m_pCBPassword->SetToggleHdl( LINK( this, PlaceEditDialog, ToggledPassHdl ) );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTOk->Enable( false );
@@ -64,11 +67,14 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
     get( m_pTypeGrid, "TypeGrid" );
+    get( m_pCBPassword, "rememberPassword" );
     get( m_pEDPassword, "password" );
     get( m_pFTPasswordLabel, "passwordLabel" );
 
     m_pEDPassword->Hide();
     m_pFTPasswordLabel->Hide();
+    m_pCBPassword->Hide();
+    m_pCBPassword->SetToggleHdl( LINK( this, PlaceEditDialog, ToggledPassHdl ) );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTDelete->SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
@@ -139,6 +145,28 @@ OUString PlaceEditDialog::GetServerUrl()
 std::shared_ptr<Place> PlaceEditDialog::GetPlace()
 {
     return std::make_shared<Place>(m_pEDServerName->GetText(), GetServerUrl(), true);
+}
+
+void PlaceEditDialog::ShowPasswordControl( bool bShow )
+{
+    m_pCBPassword->Show( bShow );
+    m_pEDPassword->Show( bShow );
+    m_pFTPasswordLabel->Show( bShow );
+
+    ToggledPassHdl( m_pCBPassword );
+}
+
+IMPL_LINK( PlaceEditDialog, ToggledPassHdl, CheckBox*, pCheckBox )
+{
+    bool bChecked = pCheckBox->IsChecked();
+
+    m_pEDPassword->Enable( bChecked );
+    m_pFTPasswordLabel->Enable( bChecked );
+
+    if ( !bChecked )
+        m_pEDPassword->SetText( "" );
+
+    return 0;
 }
 
 void PlaceEditDialog::InitDetails( )
@@ -326,6 +354,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
     m_nCurrentType = nPos;
 
     m_xCurrentDetails->show();
+    ToggledPassHdl( m_pCBPassword );
 
     SetSizePixel(GetOptimalSize());
 

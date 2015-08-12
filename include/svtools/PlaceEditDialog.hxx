@@ -34,6 +34,7 @@ private:
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
 
     VclPtr<Edit>         m_pEDUsername;
+    VclPtr<CheckBox>     m_pCBPassword;
     VclPtr<Edit>         m_pEDPassword;
     VclPtr<FixedText>    m_pFTPasswordLabel;
     VclPtr<OKButton>     m_pBTOk;
@@ -72,7 +73,7 @@ public :
      OUString GetPassword() { return m_pEDPassword->GetText(); };
      OUString GetUser() { return m_pEDUsername->GetText(); };
 
-     void ShowPasswordControl( bool bShow = true ) { m_pEDPassword->Show( bShow ); m_pFTPasswordLabel->Show( bShow ); }
+     void ShowPasswordControl( bool bShow = true );
 
 private:
 
@@ -85,6 +86,7 @@ private:
     DECL_LINK ( SelectTypeHdl, void * );
     DECL_LINK ( EditLabelHdl, void * );
     DECL_LINK ( EditUsernameHdl, void * );
+    DECL_LINK ( ToggledPassHdl, CheckBox * pCheckBox );
 
 };
 
