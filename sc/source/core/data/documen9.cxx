@@ -504,8 +504,7 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         // might create and assign a printer.
         ScDocument* pThis = const_cast<ScDocument*>(this);
 
-        pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            false );      // no Refresh, incl. Attrs
+        pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab );      // no Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
         pDev->SetMapMode( MAP_PIXEL );              // Important for GetNeededSize

@@ -4125,7 +4125,7 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
             maTabs[nTab]->SetOptimalHeightOnly(rCxt, 0, MAXROW, &aProgress, nProgressStart);
-            maTabs[nTab]->SetDrawPageSize(true, true);
+            maTabs[nTab]->SetDrawPageSize(true);
             nProgressStart += maTabs[nTab]->GetWeightedCount();
         }
 }
@@ -5415,7 +5415,7 @@ bool ScDocument::ExtendTotalMerge( ScRange& rRange ) const
     bool bRet = false;
     ScRange aExt = rRange;
     // ExtendMerge() is non-const, but called withouth refresh.
-    if (const_cast<ScDocument*>(this)->ExtendMerge( aExt, false))
+    if (const_cast<ScDocument*>(this)->ExtendMerge( aExt ))
     {
         if ( aExt.aEnd.Row() > rRange.aEnd.Row() )
         {

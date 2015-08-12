@@ -267,7 +267,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     }
     SetPropertyList( static_cast<XPropertyList *> (pXCol.get()) );
 
-    SetSwapGraphics(true);
+    SetSwapGraphics();
 
     SetScaleUnit(MAP_100TH_MM);
     SfxItemPool& rPool = GetItemPool();
@@ -556,7 +556,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                     pData->maStart.PutInOrder( pData->maEnd );
 
                 // Update also an untransformed anchor thats what we stored ( and still do ) to xml
-                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj, false );
+                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj );
                 if ( pNoRotatedAnchor )
                 {
                     pNoRotatedAnchor->maStart = pData->maStart;

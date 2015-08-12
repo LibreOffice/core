@@ -602,7 +602,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 
     ScMarkData aMark(rMark);
     aMark.MarkToMulti();
-    if (!aMark.IsMultiMarked() && !aMark.IsCellMarked(rCursor.Col(), rCursor.Row(), false))
+    if (!aMark.IsMultiMarked() && !aMark.IsCellMarked(rCursor.Col(), rCursor.Row()))
         aMark.SetMarkArea(rCursor);
 
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());

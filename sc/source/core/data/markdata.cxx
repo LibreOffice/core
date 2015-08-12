@@ -131,7 +131,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
         if ( bMarked && !bMarkIsNeg )
         {
             bMarked = false;
-            SetMultiMarkArea( aMarkRange, true );
+            SetMultiMarkArea( aMarkRange );
         }
     }
 
@@ -363,7 +363,7 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
         for (size_t i=0; i < nCount; i++)
         {
             const ScRange& rRange = *rList[ i ];
-            SetMultiMarkArea( rRange, true );
+            SetMultiMarkArea( rRange );
             SelectTable( rRange.aStart.Tab(), true );
         }
     }

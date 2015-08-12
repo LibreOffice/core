@@ -452,7 +452,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
 
         bool bProgress = !bOnlyForced && nFormulaCodeInTree && bProgressBar;
         if ( bProgress )
-            ScProgress::CreateInterpretProgress( this, true );
+            ScProgress::CreateInterpretProgress( this );
 
         pCell = pFormulaTree;
         ScFormulaCell* pLastNoGood = 0;

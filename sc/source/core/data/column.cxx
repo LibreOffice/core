@@ -1819,7 +1819,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
         {
             aRange.aStart.SetRow( nStart );
             aRange.aEnd.SetRow( nEnd );
-            rDestMark.SetMultiMarkArea( aRange, true );
+            rDestMark.SetMultiMarkArea( aRange );
         }
 
         pPattern = aAttrIter.Next( nStart, nEnd );
@@ -2872,7 +2872,7 @@ public:
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
         pCell->GetCode()->SetCodeError(0);
         OUString aFormula = pCell->GetFormula(mrCxt);
-        pCell->Compile(mrCxt, aFormula, false);
+        pCell->Compile(mrCxt, aFormula);
         ScColumn::JoinNewFormulaCell(aPos, *pCell);
 
         mbCompiled = true;

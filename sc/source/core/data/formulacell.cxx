@@ -3172,7 +3172,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
 
     if (bCompile)
     {
-        CompileTokenArray(false); // no Listening
+        CompileTokenArray(); // no Listening
         bNeedDirty = true;
     }
 

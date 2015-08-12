@@ -1051,7 +1051,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
     if ( bInitChild )
     {
         pChildDimension = new ScDPResultDimension( pResultData );
-        pChildDimension->InitFrom(ppDim, ppLev, nPos, rInitState, true);
+        pChildDimension->InitFrom(ppDim, ppLev, nPos, rInitState);
     }
 }
 

@@ -309,7 +309,7 @@ void ScDocumentImport::setMatrixCells(
 
     // Matrix formulas currently need re-calculation on import.
     pCell->SetMatColsRows(
-        rRange.aEnd.Col()-rRange.aStart.Col()+1, rRange.aEnd.Row()-rRange.aStart.Row()+1, true);
+        rRange.aEnd.Col()-rRange.aStart.Col()+1, rRange.aEnd.Row()-rRange.aStart.Row()+1);
 
     // Set the reference cells.
     ScSingleRefData aRefData;

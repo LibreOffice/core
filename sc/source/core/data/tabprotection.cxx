@@ -135,7 +135,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const OUString& aPassText
     switch (eHash)
     {
         case PASSHASH_XL:
-            aHash = ::comphelper::DocPasswordHelper::GetXLHashAsSequence( aPassText, RTL_TEXTENCODING_UTF8 );
+            aHash = ::comphelper::DocPasswordHelper::GetXLHashAsSequence( aPassText );
         break;
         case PASSHASH_SHA1:
             SvPasswordHelper::GetHashPassword(aHash, aPassText);

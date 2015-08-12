@@ -484,7 +484,7 @@ public:
         // the calls.
 
         mrDoc.EnableIdle(false);
-        mpStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
+        mpStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE);
     }
 
     ~IdleCalcTextWidthScope()
@@ -857,7 +857,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         // #i101960# set document modified, as in TrackTimeHdl for DDE links
         if (!pShell->IsModified())
         {
-            pShell->SetModified( true );
+            pShell->SetModified();
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {
@@ -1249,7 +1249,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         SfxItemSet* pFontSet = GetPreviewFont( nCol, nRow, nTab );
                         pPattern->FillEditItemSet( pDefaults, pFontSet );
                     }
-                    pEngine->SetDefaults( pDefaults,  true );
+                    pEngine->SetDefaults( pDefaults );
                     if (aCell.meType == CELLTYPE_STRING)
                         pEngine->SetText(aCell.mpString->getString());
                     else if (aCell.mpEditText)
@@ -1272,7 +1272,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         {
                             // remove defaults (paragraph attributes) before creating text object
                             SfxItemSet* pEmpty = new SfxItemSet( pEngine->GetEmptyItemSet() );
-                            pEngine->SetDefaults( pEmpty, true );
+                            pEngine->SetDefaults( pEmpty );
 
                             // The cell will take ownership of the text object instance.
                             SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());

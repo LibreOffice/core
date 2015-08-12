@@ -1251,7 +1251,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
 
                 if (pFlags)
                     *pFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                OUString(SC_UNO_DP_FLAGS), 0 );
+                                OUString(SC_UNO_DP_FLAGS) );
             }
         }
     }
@@ -2353,7 +2353,7 @@ bool ScDPObject::FillLabelDataForDimension(
         GetMembers(nDim, GetUsedHierarchy(nDim), rLabelData.maMembers);
         lcl_FillLabelData(rLabelData, xDimProp);
         rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
-            xDimProp, OUString(SC_UNO_DP_FLAGS), 0);
+            xDimProp, OUString(SC_UNO_DP_FLAGS) );
     }
     return true;
 }

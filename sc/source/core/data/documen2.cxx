@@ -256,7 +256,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
 
 sfx2::LinkManager* ScDocument::GetLinkManager()
 {
-    return GetDocLinkManager().getLinkManager(true);
+    return GetDocLinkManager().getLinkManager();
 }
 
 const sfx2::LinkManager* ScDocument::GetLinkManager() const
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG_TYPED(ScDocument, TrackTimeHdl, Idle *, void)
 
         if (!pShell->IsModified())
         {
-            pShell->SetModified( true );
+            pShell->SetModified();
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {

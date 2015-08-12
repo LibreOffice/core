@@ -932,7 +932,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                     if (bDeep)
                         lcl_MergeDeep( *rState.pItemSet, rThisSet );
                     else
-                        rState.pItemSet->MergeValues( rThisSet, false );
+                        rState.pItemSet->MergeValues( rThisSet );
                 }
                 else
                 {

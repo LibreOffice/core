@@ -263,7 +263,7 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false );
     if ( bHori )
     {
-        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,true);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI);
         aBoxInfo.SetLine( &aLine, SvxBoxInfoItemLine::HORI );
     }
     else
@@ -491,7 +491,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
         if (aCaption.isEmpty())
             aCaption = rName;
 
-        bool bVisible = ScUnoHelpFunctions::GetBoolProperty(xMemPS, SC_UNO_DP_ISVISIBLE, false);
+        bool bVisible = ScUnoHelpFunctions::GetBoolProperty(xMemPS, SC_UNO_DP_ISVISIBLE);
 
         if (bVisible)
             aRes.push_back(sheet::MemberResult(rName, aCaption, 0));
@@ -563,7 +563,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
                     xDimProp, OUString(SC_UNO_DP_HAS_HIDDEN_MEMBER));
                 sal_Int32 nNumFmt = ScUnoHelpFunctions::GetLongProperty(
-                    xDimProp, SC_UNO_DP_NUMBERFO, 0);
+                    xDimProp, SC_UNO_DP_NUMBERFO);
 
                 if ( eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN )
                 {

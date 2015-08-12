@@ -53,7 +53,7 @@ void ScSimpleFormulaCalculator::Calculate()
         ScCompiler aComp(mpDoc, maAddr);
         aComp.SetGrammar(maGram);
         OUStringBuffer aStr;
-        aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get(), false);
+        aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get());
 
         bIsMatrix = true;
 

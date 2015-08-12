@@ -690,7 +690,7 @@ ScFunctionMgr::~ScFunctionMgr()
 const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 {
     const ScFuncDesc* pDesc;
-    for (pDesc = First(0); pDesc; pDesc = Next())
+    for (pDesc = First(); pDesc; pDesc = Next())
         if (pDesc->nFIndex == nFIndex)
             break;
     return pDesc;

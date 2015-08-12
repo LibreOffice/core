@@ -108,7 +108,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
         else
         {
             if (!pData)
-                Reset(false);   // create pData for further processing - could use special case handling!
+                Reset();   // create pData for further processing - could use special case handling!
 
             SCSIZE nNeeded = nCount + 2;
             if ( nLimit < nNeeded )
@@ -309,7 +309,7 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
 SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, bool bUp ) const
 {
     if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
+        const_cast<ScMarkArray*>(this)->Reset();   // create pData for further processing
 
     SCsROW nRet = nRow;
     if (ValidRow(nRow))
@@ -335,7 +335,7 @@ SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, bool bUp ) const
 SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 {
     if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
+        const_cast<ScMarkArray*>(this)->Reset();   // create pData for further processing
 
     SCROW nRet;
     SCSIZE nIndex;
