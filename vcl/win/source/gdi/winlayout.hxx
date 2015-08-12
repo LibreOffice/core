@@ -65,49 +65,6 @@ protected:
     ImplWinFontEntry&   mrWinFontEntry;
 };
 
-class SimpleWinLayout : public WinLayout
-{
-public:
-                    SimpleWinLayout(HDC, BYTE nCharSet, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
-    virtual         ~SimpleWinLayout();
-
-    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
-    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
-    virtual void    DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
-
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
-
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
-
-    // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
-    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
-    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
-
-protected:
-    void            Justify( DeviceCoordinate nNewWidth );
-    void            ApplyDXArray( const ImplLayoutArgs& );
-
-private:
-    int             mnGlyphCount;
-    int             mnCharCount;
-    WCHAR*          mpOutGlyphs;
-    int*            mpGlyphAdvances;    // if possible this is shared with mpGlyphAdvances[]
-    int*            mpGlyphOrigAdvs;
-    int*            mpCharWidths;       // map rel char pos to char width
-    int*            mpChars2Glyphs;     // map rel char pos to abs glyph pos
-    int*            mpGlyphs2Chars;     // map abs glyph pos to abs char pos
-    bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true=>RTL
-    mutable long    mnWidth;
-
-    int             mnNotdefWidth;
-    BYTE            mnCharSet;
-};
-
 class UniscribeLayout : public WinLayout
 {
 public:
