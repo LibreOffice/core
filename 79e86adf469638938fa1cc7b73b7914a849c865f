@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_3f2527c2",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "Tab control (no \"-\")",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_df3fdbd4",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "bigger than 8192",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_1f22e3b9",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "Numbering must not get mixed up under any circumstances",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_7f2fafa1",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2273,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "empty string on \"reload\"",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_5f2c6bab",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "When reloading, in the page preview, the preview UserData may have been left intact.\nWe don\u0027t want the zoom from the page preview here.",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_bf177753",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "if we can deal",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_9f1c3379",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "SplitMode (no space)",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_ff11ff5e",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "then back to default again",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_df16bb54",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T06:50:09Z",
+      "side": 1,
+      "message": "SplitPos had to be corrected",
+      "revId": "79e86adf469638938fa1cc7b73b7914a849c865f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
