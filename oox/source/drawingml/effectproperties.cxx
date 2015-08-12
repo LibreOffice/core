@@ -56,7 +56,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_Shadow, true );
             rPropMap.setProperty( PROP_ShadowXDistance, nXDist);
             rPropMap.setProperty( PROP_ShadowYDistance, nYDist);
-            rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper, -1 ) );
+            rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper ) );
             rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
         }
 }

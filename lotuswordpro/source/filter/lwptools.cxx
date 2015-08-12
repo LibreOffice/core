@@ -325,9 +325,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
                     }
                 }
                 if (j==1)
-                    pDateStyle->AddMonth(false,false);
+                    pDateStyle->AddMonth(false);
                 else if (j==2)
-                    pDateStyle->AddMonth(true,false);
+                    pDateStyle->AddMonth(true);
                 else if (j==3)
                     pDateStyle->AddMonth(false,true);
                 else

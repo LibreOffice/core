@@ -222,7 +222,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
                     nFirst++;
                 if(nFirst <= nLast)
                 {
-                    m_pLayout->XFConvertFrame(pCont, nFirst, nLast, false);
+                    m_pLayout->XFConvertFrame(pCont, nFirst, nLast);
                 }
             }
         }

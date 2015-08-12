@@ -716,7 +716,7 @@ XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
         }
         pRect->LineTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
                 (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
-        pRect->ClosePath(true);
+        pRect->ClosePath();
         this->SetPosition(pRect);
 
         pRect->SetStyleName(rStyleName);
@@ -760,7 +760,7 @@ XFFrame* LwpDrawRectangle::CreateRoundedRect(const OUString& rStyleName)
 
     pRoundedRect->LineTo(XFPoint((double)m_aVector[0].x/TWIPS_PER_CM * m_pTransData->fScaleX,
                 (double)m_aVector[0].y/TWIPS_PER_CM * m_pTransData->fScaleY));
-    pRoundedRect->ClosePath(true);
+    pRoundedRect->ClosePath();
     this->SetPosition(pRoundedRect);
 
     pRoundedRect->SetStyleName(rStyleName);
@@ -877,7 +877,7 @@ XFFrame* LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
 
         pEllipse->CurveTo(aDest, aCtrl1, aCtrl2);
     }
-    pEllipse->ClosePath(true);
+    pEllipse->ClosePath();
     this->SetPosition(pEllipse);
 
     pEllipse->SetStyleName(rStyleName);

@@ -487,9 +487,9 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     // moon is flipped in MSO, and mso-spt89 (right up arrow) is mapped to leftUpArrow
     if ( sShapeType == "moon" || sShapeType == "mso-spt89" )
-        WriteShapeTransformation( xShape, XML_a, !bFlipH, bFlipV, false);
+        WriteShapeTransformation( xShape, XML_a, !bFlipH, bFlipV );
     else
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false);
+        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
 
     // we export non-primitive shapes to custom geometry
     // we also export non-ooxml shapes which have handles/equations to custom geometry, because
@@ -576,7 +576,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, false, false, false);
+    WriteShapeTransformation( xShape, XML_a, false, false);
     WritePresetShape( "ellipse" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -684,7 +684,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, false, false, false);
+    WriteShapeTransformation( xShape, XML_a, false, false);
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
@@ -897,7 +897,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, false, false, false);
+    WriteShapeTransformation( xShape, XML_a, false, false);
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -1338,7 +1338,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, false, false, false);
+    WriteShapeTransformation( xShape, XML_a, false, false);
     WritePresetShape( "rect" );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
     WriteBlipOrNormalFill(xPropertySet, "GraphicURL");

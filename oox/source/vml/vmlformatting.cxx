@@ -219,7 +219,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     sal_Int32 nColorToken = AttributeConversion::decodeToken( aColorName );
     sal_Int32 nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
-        nRgbValue = rGraphicHelper.getSystemColor( nColorToken, API_RGB_TRANSPARENT );
+        nRgbValue = rGraphicHelper.getSystemColor( nColorToken );
     if( nRgbValue != API_RGB_TRANSPARENT )
     {
         aDmlColor.setSrgbClr( nRgbValue );

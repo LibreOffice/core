@@ -70,21 +70,21 @@ sal_Int32 SAL_CALL UnoBinaryInputStream::readBytes( Sequence< sal_Int8 >& rData,
         throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
-    return mpInStrm->readData( rData, nBytesToRead, 1 );
+    return mpInStrm->readData( rData, nBytesToRead );
 }
 
 sal_Int32 SAL_CALL UnoBinaryInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
         throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
-    return mpInStrm->readData( rData, nMaxBytesToRead, 1 );
+    return mpInStrm->readData( rData, nMaxBytesToRead );
 }
 
 void SAL_CALL UnoBinaryInputStream::skipBytes( sal_Int32 nBytesToSkip )
         throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     ensureConnected();
-    mpInStrm->skip( nBytesToSkip, 1 );
+    mpInStrm->skip( nBytesToSkip );
 }
 
 sal_Int32 SAL_CALL UnoBinaryInputStream::available() throw (NotConnectedException, IOException, RuntimeException, std::exception)

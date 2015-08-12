@@ -378,7 +378,7 @@ void LwpFribField::RegisterTimeField(LwpFieldMark* pFieldMark)
         sal_Int32 index;
         sal_Unicode ch1(0x0020);//space
         OUString tag;
-        index = sFormula.indexOf(ch1,0);
+        index = sFormula.indexOf(ch1);
         if (index < 0)
             return;
 

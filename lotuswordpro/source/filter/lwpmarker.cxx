@@ -380,7 +380,7 @@ void LwpFieldMark::ParseIndex(OUString& sKey1,OUString& sKey2)
     OUString sFormula = m_Formula.str();
     sal_Int32 index[4];
     sal_Unicode ch(0x0022);//"
-    index[0] = sFormula.indexOf(ch,0);
+    index[0] = sFormula.indexOf(ch);
     index[1] = sFormula.indexOf(ch,index[0]+1);
 
     index[2] = sFormula.indexOf(ch,index[1]+1);
@@ -402,7 +402,7 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
     sal_Unicode ch1(0x0020);//space
     sal_Unicode ch2(0x0022);//"
 
-    index[0] = sFormula.indexOf(ch1,0);
+    index[0] = sFormula.indexOf(ch1);
     index[1] = sFormula.indexOf(ch1,index[0]+1);
 
     index[2] = sFormula.indexOf(ch2,index[1]+1);
@@ -431,7 +431,7 @@ bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
     sal_Unicode ch1(0x0020);//space
     OUString tag;
 
-    index = sFormula.indexOf(ch1,0);
+    index = sFormula.indexOf(ch1);
     if (index < 0)
     {
         if (sFormula == "TotalEditingTime")
@@ -478,7 +478,7 @@ bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
     sal_Unicode ch1(0x0020);//space
     OUString tag;
 
-    index = sFormula.indexOf(ch1,0);
+    index = sFormula.indexOf(ch1);
     if (index < 0)
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();

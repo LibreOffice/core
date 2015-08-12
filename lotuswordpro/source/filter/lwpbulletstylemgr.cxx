@@ -297,7 +297,7 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
 
         if ((nC == nLevel-1) && bIsBulletSkiped)
         {
-            theItem->SetIsHeader(true);
+            theItem->SetIsHeader();
 
             theList->SetContinueNumber(true);
         }

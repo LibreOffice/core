@@ -58,8 +58,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
             implementation of relations handling.
          */
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext,
-            false );    // DEV300_m80: Was sal_True, but DOCX and others did not load
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext );
     }
     catch (Exception const& e)
     {

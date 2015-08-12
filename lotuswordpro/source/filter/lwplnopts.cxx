@@ -84,11 +84,11 @@ void LwpLineNumberOptions::RegisterStyle()
     pLineNumber->SetNumberOffset(LwpTools::ConvertFromUnitsToMetric(m_nDistance));
     pLineNumber->SetNumberIncrement(m_nSeparator);
     if (m_nFlags & LN_RESETEACHPAGE)
-        pLineNumber->SetRestartOnPage(true);
+        pLineNumber->SetRestartOnPage();
     else
         pLineNumber->SetRestartOnPage(false);
     if (m_nFlags & LN_COUNTBLANKLINES)
-        pLineNumber->SetCountEmptyLines(true);
+        pLineNumber->SetCountEmptyLines();
     else
         pLineNumber->SetCountEmptyLines(false);
 

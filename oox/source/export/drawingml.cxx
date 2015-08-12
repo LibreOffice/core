@@ -3271,7 +3271,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
 
     sId = mpFB->addRelation( mpFS->getOutputStream(),
                              "http://schemas.microsoft.com/office/2007/relationships/hdphoto",
-                             sFileName, false );
+                             sFileName );
 
     maWdpCache[rFileId] = sId;
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );

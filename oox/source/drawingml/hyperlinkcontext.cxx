@@ -80,10 +80,10 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
         // ppaction://program
 
         const OUString sPPAction( "ppaction://" );
-        if ( aAction.matchIgnoreAsciiCase( sPPAction, 0 ) )
+        if ( aAction.matchIgnoreAsciiCase( sPPAction ) )
         {
             OUString aPPAct( aAction.copy( sPPAction.getLength() ) );
-            sal_Int32 nIndex = aPPAct.indexOf( '?', 0 );
+            sal_Int32 nIndex = aPPAct.indexOf( '?' );
             OUString aPPAction( nIndex > 0 ? aPPAct.copy( 0, nIndex ) : aPPAct );
 
             const OUString sHlinkshowjump( "hlinkshowjump" );

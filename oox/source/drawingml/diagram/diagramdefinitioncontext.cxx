@@ -50,7 +50,7 @@ DiagramDefinitionContext::~DiagramDefinitionContext()
 {
     LayoutNodePtr node = mpLayout->getNode();
     if (node)
-        node->dump(0);
+        node->dump();
 }
 
 ContextHandlerRef
