@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basebmp/scanlineformats.hxx"
-#include "basebmp/color.hxx"
+#include <sal/config.h>
 
-#include "basegfx/range/b2drectangle.hxx"
-#include "basegfx/range/b2irange.hxx"
-#include "basegfx/vector/b2ivector.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
-
-#include "vcl/svapp.hxx"
+#include <basebmp/color.hxx>
+#include <basebmp/scanlineformats.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b2irange.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+#include <vcl/svapp.hxx>
 
 #include "quartz/salgdi.h"
 #include "quartz/utils.h"
@@ -35,22 +35,21 @@
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
-    mpFrame     = pFrame;
-
-    mbWindow    = true;
-    mbPrinter   = false;
-    mbVirDev    = false;
+    mpFrame = pFrame;
+    mbWindow = true;
+    mbPrinter = false;
+    mbVirDev = false;
 }
 
 void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY )
 {
-    mbWindow    = false;
-    mbPrinter   = true;
-    mbVirDev    = false;
+    mbWindow = false;
+    mbPrinter = true;
+    mbVirDev = false;
 
-    mrContext   = xContext;
-    mnRealDPIX  = nDPIX;
-    mnRealDPIY  = nDPIY;
+    mrContext = xContext;
+    mnRealDPIX = nDPIX;
+    mnRealDPIY = nDPIY;
 
     // a previously set clip path is now invalid
     if( mxClipPath )
@@ -78,13 +77,13 @@ void AquaSalGraphics::UnsetState()
 {
     if( mrContext )
     {
-        CG_TRACE( "CGContextRestoreGState(" << mrContext << ")" );
+        SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mrContext << ")" );
         CGContextRestoreGState( mrContext );
         mrContext = 0;
     }
     if( mxClipPath )
     {
-        CG_TRACE( "CGPathRelease(" << mxClipPath << ")" );
+        SAL_INFO( "vcl.cg", "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
         mxClipPath = NULL;
     }
@@ -118,11 +117,11 @@ bool AquaSalGraphics::CheckContext()
             NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
             CGContextRef xCGContext = static_cast<CGContextRef>([pNSGContext graphicsPort]);
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
-            CG_TRACE( "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
+            SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
             if( mxLayer )
             {
                 mrContext = CGLayerGetContext( mxLayer );
-                CG_TRACE( "CGLayerGetContext(" << mxLayer << ") = " << mrContext );
+                SAL_INFO( "vcl.cg", "CGLayerGetContext(" << mxLayer << ") = " << mrContext );
             }
 
             if( mrContext )
@@ -130,7 +129,7 @@ bool AquaSalGraphics::CheckContext()
                 // copy original layer to resized layer
                 if( rReleaseLayer )
                 {
-                    CG_TRACE( "CGContextDrawLayerAtPoint(" << mrContext << "," << CGPointZero << "," << rReleaseLayer << ")" );
+                    SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << mrContext << "," << CGPointZero << "," << rReleaseLayer << ")" );
                     CGContextDrawLayerAtPoint( mrContext, CGPointZero, rReleaseLayer );
                 }
 
@@ -138,24 +137,26 @@ bool AquaSalGraphics::CheckContext()
                 CGContextScaleCTM( mrContext, 1.0, -1.0 );
                 CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
                 CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
-                CG_TRACE( "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
+                SAL_INFO( "vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
                 CGContextSaveGState( mrContext );
                 SetState();
 
                 // re-enable XOR emulation for the new context
                 if( mpXorEmulation )
+                {
                     mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
+                }
             }
         }
 
         if( rReleaseLayer )
         {
-            CG_TRACE( "CGLayerRelease(" << rReleaseLayer << ")" );
+            SAL_INFO( "vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")" );
             CGLayerRelease( rReleaseLayer );
         }
         else if( rReleaseContext )
         {
-            CG_TRACE( "CGContextRelease(" << rReleaseContext << ")" );
+            SAL_INFO( "vcl.cg", "CGContextRelease(" << rReleaseContext << ")" );
             CGContextRelease( rReleaseContext );
         }
     }
@@ -176,33 +177,40 @@ CGContextRef AquaSalGraphics::GetContext()
 void AquaSalGraphics::UpdateWindow( NSRect& )
 {
     if( !mpFrame )
+    {
         return;
+    }
+
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
     if( (mxLayer != NULL) && (pContext != NULL) )
     {
         CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
-        CG_TRACE( "[[NSGraphicsContext currentContext] graphicsPort] = " << rCGContext );
+        SAL_INFO( "vcl.cg", "[[NSGraphicsContext currentContext] graphicsPort] = " << rCGContext );
 
         CGMutablePathRef rClip = mpFrame->getClipPath();
         if( rClip )
         {
             CGContextSaveGState( rCGContext );
-            CG_TRACE( "CGContextBeginPath(" << rCGContext << ")" );
+            SAL_INFO( "vcl.cg", "CGContextBeginPath(" << rCGContext << ")" );
             CGContextBeginPath( rCGContext );
-            CG_TRACE( "CGContextAddPath(" << rCGContext << "," << rClip << ")" );
+            SAL_INFO( "vcl.cg", "CGContextAddPath(" << rCGContext << "," << rClip << ")" );
             CGContextAddPath( rCGContext, rClip );
-            CG_TRACE( "CGContextClip(" << rCGContext << ")" );
+            SAL_INFO( "vcl.cg", "CGContextClip(" << rCGContext << ")" );
             CGContextClip( rCGContext );
         }
 
         ApplyXorContext();
-        CG_TRACE( "CGContextDrawLayerAtPoint(" << rCGContext << "," << CGPointZero << "," << mxLayer << ")" );
+        SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << rCGContext << "," << CGPointZero << "," << mxLayer << ")" );
         CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
         if( rClip ) // cleanup clipping
+        {
             CGContextRestoreGState( rCGContext );
+        }
     }
     else
+    {
         DBG_ASSERT( mpFrame->mbInitShow, "UpdateWindow called on uneligible graphics" );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

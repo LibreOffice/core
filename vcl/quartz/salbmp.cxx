@@ -22,16 +22,14 @@
 #include <cstddef>
 #include <limits>
 
-#include "basebmp/scanlineformats.hxx"
-#include "basebmp/color.hxx"
+#include <basebmp/scanlineformats.hxx>
+#include <basebmp/color.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+#include <tools/color.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/salbtype.hxx>
 
-#include "basegfx/vector/b2ivector.hxx"
-
-#include "tools/color.hxx"
-
-#include "vcl/bitmap.hxx"
-#include "vcl/salbtype.hxx"
-
+#include "bmpfast.hxx"
 #include "quartz/salbmp.h"
 #include "quartz/utils.h"
 
@@ -40,8 +38,6 @@
 #else
 #include "saldatabasic.hxx"
 #endif
-
-#include "bmpfast.hxx"
 
 static const unsigned long k16BitRedColorMask   = 0x00007c00;
 static const unsigned long k16BitGreenColorMask = 0x000003e0;
@@ -61,6 +57,7 @@ static void writeImageToFile(CGImageRef image, const char *baseName)
     static bool bDoIt = getenv("DBG_WRITE_CGIMAGES");
     if (!bDoIt)
         return;
+
     static int counter = 0;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -69,9 +66,12 @@ static void writeImageToFile(CGImageRef image, const char *baseName)
     CGImageDestinationRef destination = CGImageDestinationCreateWithURL(url, kUTTypePNG, 1, NULL);
     CGImageDestinationAddImage(destination, image, nil);
 
-    if (!CGImageDestinationFinalize(destination)) {
+    if (!CGImageDestinationFinalize(destination))
+    {
         NSLog(@"Failed to write image to %@", path);
-    } else {
+    }
+    else
+    {
         SAL_DEBUG("--- saved image " << baseName << " to " << [path UTF8String]);
     }
 
@@ -88,16 +88,17 @@ static void writeImageToFile(CGImageRef image, const char *baseName)
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
-    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) ||
+        (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
 
 QuartzSalBitmap::QuartzSalBitmap()
-: mxGraphicContext( NULL )
-, mxCachedImage( NULL )
-, mnBits(0)
-, mnWidth(0)
-, mnHeight(0)
-, mnBytesPerRow(0)
+  : mxGraphicContext( NULL )
+  , mxCachedImage( NULL )
+  , mnBits(0)
+  , mnWidth(0)
+  , mnHeight(0)
+  , mnBytesPerRow(0)
 {
 }
 
@@ -114,14 +115,18 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     // sanitize input parameters
     if( nX < 0 )
         nWidth += nX, nX = 0;
+
     if( nY < 0 )
         nHeight += nY, nY = 0;
+
     const CGSize aLayerSize = CGLayerGetSize( xLayer );
-    CG_TRACE( "CGLayerGetSize(" << xLayer << ") = " << aLayerSize );
+    SAL_INFO("vcl.cg", "CGLayerGetSize(" << xLayer << ") = " << aLayerSize );
     if( nWidth >= (int)aLayerSize.width - nX )
         nWidth = (int)aLayerSize.width - nX;
+
     if( nHeight >= (int)aLayerSize.height - nY )
         nHeight = (int)aLayerSize.height - nY;
+
     if( (nWidth < 0) || (nHeight < 0) )
         nWidth = nHeight = 0;
 
@@ -137,7 +142,7 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
     if(mxGraphicContext) // remove warning
     {
-        CG_TRACE( "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << xLayer << ")" );
+        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << xLayer << ")" );
         CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     }
     return true;
@@ -147,6 +152,7 @@ bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
 {
     if( !isValidBitCount( nBits ) )
         return false;
+
     maPalette = rBitmapPalette;
     mnBits = nBits;
     mnWidth = rSize.Width();
@@ -177,14 +183,18 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 
         if( AllocateUserData() )
         {
-            ConvertBitmapData( mnWidth, mnHeight, mnBits, mnBytesPerRow, maPalette, maUserBuffer.get(), rSourceBitmap.mnBits, rSourceBitmap.mnBytesPerRow, rSourceBitmap.maPalette, rSourceBitmap.maUserBuffer.get() );
+            ConvertBitmapData( mnWidth, mnHeight, mnBits, mnBytesPerRow, maPalette,
+                               maUserBuffer.get(), rSourceBitmap.mnBits,
+                               rSourceBitmap.mnBytesPerRow, rSourceBitmap.maPalette,
+                               rSourceBitmap.maUserBuffer.get() );
             return true;
         }
     }
     return false;
 }
 
-bool QuartzSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/,
+                              Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }
@@ -199,14 +209,14 @@ void QuartzSalBitmap::DestroyContext()
 {
     if( mxCachedImage )
     {
-        CG_TRACE( "CGImageRelease(" << mxCachedImage << ")" );
+        SAL_INFO("vcl.cg", "CGImageRelease(" << mxCachedImage << ")" );
         CGImageRelease( mxCachedImage );
         mxCachedImage = NULL;
     }
 
     if( mxGraphicContext )
     {
-        CG_TRACE( "CGContextRelease(" << mxGraphicContext << ")" );
+        SAL_INFO("vcl.cg", "CGContextRelease(" << mxGraphicContext << ")" );
         CGContextRelease( mxGraphicContext );
         mxGraphicContext = NULL;
         maContextBuffer.reset();
@@ -257,9 +267,11 @@ bool QuartzSalBitmap::CreateContext()
 #endif
 
             if( !bSkipConversion )
+            {
                 ConvertBitmapData( mnWidth, mnHeight,
-                               32, nContextBytesPerRow, maPalette, maContextBuffer.get(),
-                               mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
+                                   32, nContextBytesPerRow, maPalette, maContextBuffer.get(),
+                                   mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
+            }
         }
         catch( const std::bad_alloc& )
         {
@@ -270,8 +282,9 @@ bool QuartzSalBitmap::CreateContext()
     if( maContextBuffer.get() )
     {
         mxGraphicContext = CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
-            bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );
-        CG_TRACE( "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight << "x" << bitsPerComponent << ") = " << mxGraphicContext );
+                                                  bitsPerComponent, nContextBytesPerRow,
+                                                  aCGColorSpace, aCGBmpInfo );
+        SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight << "x" << bitsPerComponent << ") = " << mxGraphicContext );
     }
 
     if( !mxGraphicContext )
@@ -302,8 +315,8 @@ bool QuartzSalBitmap::AllocateUserData()
     }
 
     bool alloc = false;
-    if (mnBytesPerRow != 0
-        && mnBytesPerRow <= std::numeric_limits<sal_uInt32>::max() / mnHeight)
+    if (mnBytesPerRow != 0 &&
+        mnBytesPerRow <= std::numeric_limits<sal_uInt32>::max() / mnHeight)
     {
         try
         {
@@ -314,8 +327,7 @@ bool QuartzSalBitmap::AllocateUserData()
     }
     if (!alloc)
     {
-        SAL_WARN(
-            "vcl.quartz", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
+        SAL_WARN( "vcl.quartz", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
         maUserBuffer.reset( static_cast<sal_uInt8*>(NULL) );
         mnBytesPerRow = 0;
     }
@@ -323,7 +335,9 @@ bool QuartzSalBitmap::AllocateUserData()
     else
     {
         for (size_t i = 0; i < mnBytesPerRow * mnHeight; i++)
+        {
             maUserBuffer.get()[i] = (i & 0xFF);
+        }
     }
 #endif
 
@@ -429,23 +443,25 @@ private:
 
 public:
     explicit ImplPixelFormat8( const BitmapPalette& rPalette )
-    : mrPalette( rPalette )
-    {
-    }
+        : mrPalette( rPalette )
+        {
+        }
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE { pData = pLine; }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
-    {
-        pData += nPixel;
-    }
+        {
+            pData += nPixel;
+        }
     virtual ColorData ReadPixel() SAL_OVERRIDE
-    {
-        return mrPalette[ *pData++ ].operator Color().GetColor();
-    }
+        {
+            return mrPalette[ *pData++ ].operator Color().GetColor();
+        }
     virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
-    {
-        const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
-        *pData++ = static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) );
-    }
+        {
+            const BitmapColor aColor( COLORDATA_RED( nColor ),
+                                      COLORDATA_GREEN( nColor ),
+                                      COLORDATA_BLUE( nColor ) );
+            *pData++ = static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) );
+        }
 };
 
 class ImplPixelFormat4 : public ImplPixelFormat
@@ -458,36 +474,40 @@ private:
 
 public:
     explicit ImplPixelFormat4( const BitmapPalette& rPalette )
-    : mrPalette( rPalette )
-    {
-    }
+        : mrPalette( rPalette )
+        {
+        }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
-    {
-        mnX += nPixel;
-        if( (nPixel & 1) )
-            mnShift ^= 4;
-    }
+        {
+            mnX += nPixel;
+            if( (nPixel & 1) )
+            {
+                mnShift ^= 4;
+            }
+        }
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
-    {
-        pData = pLine;
-        mnX = 0;
-        mnShift = 4;
-    }
+        {
+            pData = pLine;
+            mnX = 0;
+            mnShift = 4;
+        }
     virtual ColorData ReadPixel() SAL_OVERRIDE
-    {
-        const BitmapColor& rColor = mrPalette[( pData[mnX >> 1] >> mnShift) & 0x0f];
-        mnX++;
-        mnShift ^= 4;
-        return rColor.operator Color().GetColor();
-    }
+        {
+            const BitmapColor& rColor = mrPalette[( pData[mnX >> 1] >> mnShift) & 0x0f];
+            mnX++;
+            mnShift ^= 4;
+            return rColor.operator Color().GetColor();
+        }
     virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
-    {
-        const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
-        pData[mnX>>1] &= (0xf0 >> mnShift);
-        pData[mnX>>1] |= (static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) ) & 0x0f);
-        mnX++;
-        mnShift ^= 4;
-    }
+        {
+            const BitmapColor aColor( COLORDATA_RED( nColor ),
+                                      COLORDATA_GREEN( nColor ),
+                                      COLORDATA_BLUE( nColor ) );
+            pData[mnX>>1] &= (0xf0 >> mnShift);
+            pData[mnX>>1] |= (static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) ) & 0x0f);
+            mnX++;
+            mnShift ^= 4;
+        }
 };
 
 class ImplPixelFormat1 : public ImplPixelFormat
@@ -499,33 +519,39 @@ private:
 
 public:
     explicit ImplPixelFormat1( const BitmapPalette& rPalette )
-    : mrPalette( rPalette )
-    {
-    }
+        : mrPalette( rPalette )
+        {
+        }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
-    {
-        mnX += nPixel;
-    }
+        {
+            mnX += nPixel;
+        }
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
-    {
-        pData = pLine;
-        mnX = 0;
-    }
+        {
+            pData = pLine;
+            mnX = 0;
+        }
     virtual ColorData ReadPixel() SAL_OVERRIDE
-    {
-        const BitmapColor& rColor = mrPalette[ (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
-        mnX++;
-        return rColor.operator Color().GetColor();
-    }
+        {
+            const BitmapColor& rColor = mrPalette[ (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
+            mnX++;
+            return rColor.operator Color().GetColor();
+        }
     virtual void WritePixel( ColorData nColor ) SAL_OVERRIDE
-    {
-        const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
-        if( mrPalette.GetBestIndex( aColor ) & 1 )
-            pData[ mnX >> 3 ] |= 1 << ( 7 - ( mnX & 7 ) );
-        else
-            pData[ mnX >> 3 ] &= ~( 1 << ( 7 - ( mnX & 7 ) ) );
-        mnX++;
-    }
+        {
+            const BitmapColor aColor( COLORDATA_RED( nColor ),
+                                      COLORDATA_GREEN( nColor ),
+                                      COLORDATA_BLUE( nColor ) );
+            if( mrPalette.GetBestIndex( aColor ) & 1 )
+            {
+                pData[ mnX >> 3 ] |= 1 << ( 7 - ( mnX & 7 ) );
+            }
+            else
+            {
+                pData[ mnX >> 3 ] &= ~( 1 << ( 7 - ( mnX & 7 ) ) );
+            }
+            mnX++;
+        }
 };
 
 ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette )
@@ -538,19 +564,25 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     case 16: return new ImplPixelFormat16;
     case 24: return new ImplPixelFormat24;
     case 32: return new ImplPixelFormat32;
+    default:
+        assert(false);
+        return nullptr;
     }
 
     return 0;
 }
 
-}
+} // namespace
 
 void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
-                                       sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow, const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
-                                       sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData )
+                                         sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow,
+                                         const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
+                                         sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow,
+                                         const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData )
 
 {
-    if( (nDestBytesPerRow == nSrcBytesPerRow) && (nDestBits == nSrcBits) && ((nSrcBits != 8) || (rDestPalette.operator==( rSrcPalette ))) )
+    if( (nDestBytesPerRow == nSrcBytesPerRow) &&
+        (nDestBits == nSrcBits) && ((nSrcBits != 8) || (rDestPalette.operator==( rSrcPalette ))) )
     {
         // simple case, same format, so just copy
         memcpy( pDestData, pSrcData, nHeight * nDestBytesPerRow );
@@ -598,8 +630,9 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
 
                 sal_uInt32 nX = nWidth;
                 while( nX-- )
+                {
                     pD->WritePixel( pS->ReadPixel() );
-
+                }
                 pSrcData += nSrcBytesPerRow;
                 pDestData += nDestBytesPerRow;
             }
@@ -671,7 +704,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
             aDefPalette256[i] = BitmapColor( aImplSalSysPalEntryAry[i].mnRed,
                                              aImplSalSysPalEntryAry[i].mnGreen,
                                              aImplSalSysPalEntryAry[i].mnBlue );
-            }
+        }
 
         aDefPalette2[0] = BitmapColor( 0, 0, 0 );
         aDefPalette2[1] = BitmapColor( 0xff, 0xff, 0xff );
@@ -753,7 +786,9 @@ void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMo
     {
         maPalette = pBuffer->maPalette;
         if( mxGraphicContext )
+        {
             DestroyContext();
+        }
     }
 
     delete pBuffer;
@@ -764,11 +799,14 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     if( !mxCachedImage )
     {
         if( !mxGraphicContext )
+        {
             if( !const_cast<QuartzSalBitmap*>(this)->CreateContext() )
+            {
                 return NULL;
-
+            }
+        }
         mxCachedImage = CGBitmapContextCreateImage( mxGraphicContext );
-        CG_TRACE( "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << mxCachedImage );
+        SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << mxCachedImage );
     }
 
     CGImageRef xCroppedImage = NULL;
@@ -776,7 +814,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     if( !nX && !nY && (mnWidth == nNewWidth) && (mnHeight == nNewHeight) )
     {
           xCroppedImage = mxCachedImage;
-          CG_TRACE( "CFRetain(" << xCroppedImage << ")" );
+          SAL_INFO("vcl.cg", "CFRetain(" << xCroppedImage << ")" );
           CFRetain( xCroppedImage );
     }
     else
@@ -784,7 +822,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
         nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
         const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
-        CG_TRACE( "CGImageCreateWithImageInRect(" << mxCachedImage << "," << aCropRect << ") = " << xCroppedImage );
+        SAL_INFO("vcl.cg", "CGImageCreateWithImageInRect(" << mxCachedImage << "," << aCropRect << ") = " << xCroppedImage );
     }
 
     return xCroppedImage;
@@ -819,18 +857,19 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         void* pMaskMem = rtl_allocateMemory( nMaskBytesPerRow * nHeight );
         CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
             nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        CG_TRACE( "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8," << nMaskBytesPerRow << ") = " << xMaskContext );
-        CG_TRACE( "CGContextDrawImage(" << xMaskContext << "," << xImageRect << "," << xMask << ")" );
+        SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8," << nMaskBytesPerRow << ") = " << xMaskContext );
+        SAL_INFO("vcl.cg", "CGContextDrawImage(" << xMaskContext << "," << xImageRect << "," << xMask << ")" );
         CGContextDrawImage( xMaskContext, xImageRect, xMask );
-        CG_TRACE( "CFRelease(" << xMask << ")" );
+        SAL_INFO("vcl.cg", "CFRelease(" << xMask << ")" );
         CFRelease( xMask );
         CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( NULL,
         pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
+
         static const CGFloat* pDecode = NULL;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
-        CG_TRACE( "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
+        SAL_INFO("vcl.cg", "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
         CFRelease( xDataProvider );
-        CG_TRACE( "CFRelease(" << xMaskContext << ")" );
+        SAL_INFO("vcl.cg", "CFRelease(" << xMaskContext << ")" );
         CFRelease( xMaskContext );
     }
 
@@ -839,18 +878,20 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 
     // combine image and alpha mask
     CGImageRef xMaskedImage = CGImageCreateWithMask( xImage, xMask );
-    CG_TRACE( "CGImageCreateWithMask(" << xImage << "," << xMask << ") = " << xMaskedImage );
+    SAL_INFO("vcl.cg", "CGImageCreateWithMask(" << xImage << "," << xMask << ") = " << xMaskedImage );
     DBG_WRITE_IMAGE(xImage, "xImage");
     DBG_WRITE_IMAGE(xMaskedImage, "xMaskedImage");
-    CG_TRACE( "CFRelease(" << xMask << ")" );
+    SAL_INFO("vcl.cg", "CFRelease(" << xMask << ")" );
     CFRelease( xMask );
-    CG_TRACE( "CFRelease(" << xImage << ")" );
+    SAL_INFO("vcl.cg", "CFRelease(" << xImage << ")" );
     CFRelease( xImage );
     return xMaskedImage;
 }
 
-/** creates an image from the given rectangle, replacing all black pixels with nMaskColor and make all other full transparent */
-CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
+/** creates an image from the given rectangle, replacing all black pixels
+    with nMaskColor and make all other full transparent */
+CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
+                                             int nHeight, SalColor nMaskColor ) const
 {
     CGImageRef xMask = 0;
     if( maUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight) )
@@ -888,7 +929,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHe
 
             CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskBuffer, nHeight * nDestBytesPerRow, &CFRTLFree) );
             xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, NULL, true, kCGRenderingIntentDefault);
-            CG_TRACE( "CGImageCreate(" << nWidth << "x" << nHeight << "x8) = " << xMask );
+            SAL_INFO("vcl.cg", "CGImageCreate(" << nWidth << "x" << nHeight << "x8) = " << xMask );
             CFRelease(xDataProvider);
         }
         else
@@ -918,14 +959,15 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
         bRet = true;
 
         if ((CGBitmapContextGetBitsPerPixel(mxGraphicContext) == 32) &&
-            (CGBitmapContextGetBitmapInfo(mxGraphicContext) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host) {
+            (CGBitmapContextGetBitmapInfo(mxGraphicContext) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host)
+        {
             /**
              * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
              */
             OSL_TRACE("QuartzSalBitmap::%s(): kCGBitmapByteOrder32Host not found => inserting it.",__func__);
 
             CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
-            CG_TRACE( "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << xImage );
+            SAL_INFO("vcl.cg", "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << xImage );
 
             // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
             CGContextRef mxGraphicContextNew = CGBitmapContextCreate( CGBitmapContextGetData(mxGraphicContext),
@@ -935,27 +977,27 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
                                                                       CGBitmapContextGetBytesPerRow(mxGraphicContext),
                                                                       CGBitmapContextGetColorSpace(mxGraphicContext),
                                                                       CGBitmapContextGetBitmapInfo(mxGraphicContext) | kCGBitmapByteOrder32Host);
-            CG_TRACE( "CGBitmapContextCreate(" << CGBitmapContextGetWidth(mxGraphicContext) << "x" << CGBitmapContextGetHeight(mxGraphicContext) << "x" << CGBitmapContextGetBitsPerComponent(mxGraphicContext) << ") = " << mxGraphicContextNew );
+            SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << CGBitmapContextGetWidth(mxGraphicContext) << "x" << CGBitmapContextGetHeight(mxGraphicContext) << "x" << CGBitmapContextGetBitsPerComponent(mxGraphicContext) << ") = " << mxGraphicContextNew );
 
-            CG_TRACE( "CFRelease(" << mxGraphicContext << ")" );
+            SAL_INFO("vcl.cg", "CFRelease(" << mxGraphicContext << ")" );
             CFRelease(mxGraphicContext);
 
             // Needs to be flipped
-            CG_TRACE( "CGContextSaveGState(" << mxGraphicContextNew << ")" );
+            SAL_INFO("vcl.cg", "CGContextSaveGState(" << mxGraphicContextNew << ")" );
             CGContextSaveGState( mxGraphicContextNew );
-            CG_TRACE( "CGContextTranslateCTM(" << mxGraphicContextNew << ",0," << CGBitmapContextGetHeight(mxGraphicContextNew) << ")" );
+            SAL_INFO("vcl.cg", "CGContextTranslateCTM(" << mxGraphicContextNew << ",0," << CGBitmapContextGetHeight(mxGraphicContextNew) << ")" );
             CGContextTranslateCTM (mxGraphicContextNew, 0, CGBitmapContextGetHeight(mxGraphicContextNew));
-            CG_TRACE( "CGContextScaleCTM(" << mxGraphicContextNew << ",1,-1)" );
+            SAL_INFO("vcl.cg", "CGContextScaleCTM(" << mxGraphicContextNew << ",1,-1)" );
             CGContextScaleCTM (mxGraphicContextNew, 1.0, -1.0);
 
-            CG_TRACE( "CGContextDrawImage(" << mxGraphicContextNew << "," << CGRectMake(0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)) << "," << xImage << ")" );
+            SAL_INFO("vcl.cg", "CGContextDrawImage(" << mxGraphicContextNew << "," << CGRectMake(0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)) << "," << xImage << ")" );
             CGContextDrawImage(mxGraphicContextNew, CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
 
             // Flip back
-            CG_TRACE( "CGContextRestoreGState(" << mxGraphicContextNew << ")" );
+            SAL_INFO("vcl.cg", "CGContextRestoreGState(" << mxGraphicContextNew << ")" );
             CGContextRestoreGState( mxGraphicContextNew );
 
-            CG_TRACE( "CGImageRelease(" << xImage << ")" );
+            SAL_INFO("vcl.cg", "CGImageRelease(" << xImage << ")" );
             CGImageRelease( xImage );
             mxGraphicContext = mxGraphicContextNew;
         }

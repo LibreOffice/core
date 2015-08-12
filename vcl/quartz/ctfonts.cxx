@@ -17,27 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "impfont.hxx"
-#include "outfont.hxx"
-#include "PhysicalFontCollection.hxx"
-#include "sallayout.hxx"
+#include <sal/config.h>
 
-#ifdef MACOSX
-#include "osx/salinst.h"
-#include "osx/saldata.hxx"
-// kCTForegroundColorFromContextAttributeName is available on 10.5, but it is "hidden"
-#ifndef kCTForegroundColorFromContextAttributeName
-extern const CFStringRef kCTForegroundColorFromContextAttributeName;
-#endif
-#endif
-#include "quartz/salgdi.h"
-#include "quartz/utils.h"
-#include "ctfonts.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/settings.hxx>
 
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
+
+#include "ctfonts.hxx"
+#include "impfont.hxx"
+#ifdef MACOSX
+#include "osx/saldata.hxx"
+#include "osx/salinst.h"
+#endif
+#include "outfont.hxx"
+#include "PhysicalFontCollection.hxx"
+#include "quartz/salgdi.h"
+#include "quartz/utils.h"
+#include "sallayout.hxx"
+
 
 inline double toRadian(int nDegree)
 {
@@ -45,10 +44,10 @@ inline double toRadian(int nDegree)
 }
 
 CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
-:   mpFontData( static_cast<CoreTextFontData const *>(rFSD.mpFontData) )
-,   mfFontStretch( 1.0 )
-,   mfFontRotation( 0.0 )
-,   mpStyleDict( NULL )
+    : mpFontData( static_cast<CoreTextFontData const *>(rFSD.mpFontData) )
+    , mfFontStretch( 1.0 )
+    , mfFontRotation( 0.0 )
+    , mpStyleDict( NULL )
 {
     const FontSelectPattern* const pReqFont = &rFSD;
 
@@ -70,7 +69,8 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     // create the style object for CoreText font attributes
     static const CFIndex nMaxDictSize = 16; // TODO: does this really suffice?
     mpStyleDict = CFDictionaryCreateMutable( NULL, nMaxDictSize,
-        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
+                                             &kCFTypeDictionaryKeyCallBacks,
+                                             &kCFTypeDictionaryValueCallBacks );
 
     CFBooleanRef pCFVertBool = pReqFont->mbVertical ? kCFBooleanTrue : kCFBooleanFalse;
     CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
@@ -86,8 +86,9 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     }
 
     // fake italic
-    if (((pReqFont->GetSlant() == ITALIC_NORMAL) || (pReqFont->GetSlant() == ITALIC_OBLIQUE))
-    && (mpFontData->GetSlant() == ITALIC_NONE))
+    if (((pReqFont->GetSlant() == ITALIC_NORMAL) ||
+         (pReqFont->GetSlant() == ITALIC_OBLIQUE)) &&
+        (mpFontData->GetSlant() == ITALIC_NONE))
     {
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
     }
@@ -166,31 +167,42 @@ static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
     {
     case kCGPathElementCloseSubpath:
     case kCGPathElementMoveToPoint:
-        if( nPointCount > 0 ) {
+        if( nPointCount > 0 )
+        {
             static_cast<GgoData*>(pData)->mpPolyPoly->append( rPolygon );
             rPolygon.clear();
         }
         // fall through for kCGPathElementMoveToPoint:
         if( pElement->type != kCGPathElementMoveToPoint )
+        {
             break;
+        }
     case kCGPathElementAddLineToPoint:
         rPolygon.append( basegfx::B2DPoint( +pElement->points[0].x, -pElement->points[0].y ) );
         break;
+
     case kCGPathElementAddCurveToPoint:
         rPolygon.append( basegfx::B2DPoint( +pElement->points[2].x, -pElement->points[2].y ) );
-        rPolygon.setNextControlPoint( nPointCount-1, basegfx::B2DPoint( pElement->points[0].x, -pElement->points[0].y ) );
-        rPolygon.setPrevControlPoint( nPointCount+0, basegfx::B2DPoint( pElement->points[1].x, -pElement->points[1].y ) );
+        rPolygon.setNextControlPoint( nPointCount - 1,
+                                      basegfx::B2DPoint( pElement->points[0].x,
+                                                         -pElement->points[0].y ) );
+        rPolygon.setPrevControlPoint( nPointCount + 0,
+                                      basegfx::B2DPoint( pElement->points[1].x,
+                                                         -pElement->points[1].y ) );
         break;
-    case kCGPathElementAddQuadCurveToPoint: {
-        const basegfx::B2DPoint aStartPt = rPolygon.getB2DPoint( nPointCount-1 );
-        const basegfx::B2DPoint aCtrPt1( (aStartPt.getX() + 2* pElement->points[0].x) / 3.0,
-                    (aStartPt.getY() - 2 * pElement->points[0].y) / 3.0 );
-        const basegfx::B2DPoint aCtrPt2( (+2 * +pElement->points[0].x + pElement->points[1].x) / 3.0,
-                (-2 * pElement->points[0].y - pElement->points[1].y) / 3.0 );
-        rPolygon.append( basegfx::B2DPoint( +pElement->points[1].x, -pElement->points[1].y ) );
-        rPolygon.setNextControlPoint( nPointCount-1, aCtrPt1 );
-        rPolygon.setPrevControlPoint( nPointCount+0, aCtrPt2 );
-        } break;
+
+    case kCGPathElementAddQuadCurveToPoint:
+        {
+            const basegfx::B2DPoint aStartPt = rPolygon.getB2DPoint( nPointCount-1 );
+            const basegfx::B2DPoint aCtrPt1( (aStartPt.getX() + 2 * pElement->points[0].x) / 3.0,
+                                             (aStartPt.getY() - 2 * pElement->points[0].y) / 3.0 );
+            const basegfx::B2DPoint aCtrPt2( (+2 * pElement->points[0].x + pElement->points[1].x) / 3.0,
+                                             (-2 * pElement->points[0].y - pElement->points[1].y) / 3.0 );
+            rPolygon.append( basegfx::B2DPoint( +pElement->points[1].x, -pElement->points[1].y ) );
+            rPolygon.setNextControlPoint( nPointCount-1, aCtrPt1 );
+            rPolygon.setPrevControlPoint( nPointCount+0, aCtrPt2 );
+        }
+        break;
     }
 }
 
@@ -202,7 +214,8 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     // XXX: this is broken if the glyph came from fallback font
     CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );
-    if (!xPath) {
+    if (!xPath)
+    {
         return false;
     }
 
@@ -262,8 +275,8 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     // all CoreText fonts are device fonts that can rotate just fine
     ImplDevFontAttributes rDFA;
     rDFA.mbOrientation = true;
-    rDFA.mbDevice      = true;
-    rDFA.mnQuality     = 0;
+    rDFA.mbDevice = true;
+    rDFA.mnQuality = 0;
 
     // reset the font attributes
     rDFA.SetFamilyType( FAMILY_DONTKNOW );
@@ -280,9 +293,12 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     // get font name
 #ifdef MACOSX
     const OUString aUILang = Application::GetSettings().GetUILanguageTag().getLanguage();
-    CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault, aUILang.getStr(), aUILang.getLength() );
+    CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault,
+                                                        aUILang.getStr(), aUILang.getLength() );
     CFStringRef pLang = NULL;
-    CFStringRef pFamilyName = static_cast<CFStringRef>(CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
+    CFStringRef pFamilyName = static_cast<CFStringRef>(
+            CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
+
     if ( !pLang || ( CFStringCompare( pUILang, pLang, 0 ) != kCFCompareEqualTo ))
     {
         if(pFamilyName)
@@ -305,7 +321,8 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     rDFA.SetStyleName( GetOUString( pStyleName ) );
 
     // get font-enabled status
-    if( bFontEnabled ) {
+    if( bFontEnabled )
+    {
         int bEnabled = TRUE; // by default (and when we're on OS X < 10.6) it's "enabled"
         CFNumberRef pEnabled = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute ));
         CFNumberGetValue( pEnabled, kCFNumberIntType, &bEnabled );
@@ -319,7 +336,8 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     // TODO: use other traits such as MonoSpace/Condensed/Expanded or Vertical too
     SInt64 nSymbolTrait = 0;
     CFNumberRef pSymbolNum = NULL;
-    if( CFDictionaryGetValueIfPresent( pAttrDict, kCTFontSymbolicTrait, reinterpret_cast<const void**>(&pSymbolNum) ) ) {
+    if( CFDictionaryGetValueIfPresent( pAttrDict, kCTFontSymbolicTrait, reinterpret_cast<const void**>(&pSymbolNum) ) )
+    {
         CFNumberGetValue( pSymbolNum, kCFNumberSInt64Type, &nSymbolTrait );
         rDFA.SetSymbolFlag( ((nSymbolTrait & kCTFontClassMaskTrait) == kCTFontSymbolicClass) );
     }
@@ -329,14 +347,21 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     CFNumberRef pWeightNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontWeightTrait ));
     CFNumberGetValue( pWeightNum, kCFNumberDoubleType, &fWeight );
     int nInt = WEIGHT_NORMAL;
-    if( fWeight > 0 ) {
+    if( fWeight > 0 )
+    {
         nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_BLACK - WEIGHT_NORMAL)/0.68));
         if( nInt > WEIGHT_BLACK )
+        {
             nInt = WEIGHT_BLACK;
-    } else if( fWeight < 0 ) {
+        }
+    }
+    else if( fWeight < 0 )
+    {
         nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_NORMAL - WEIGHT_THIN)/0.9));
         if( nInt < WEIGHT_THIN )
+        {
             nInt = WEIGHT_THIN;
+        }
     }
     rDFA.SetWeight( (FontWeight)nInt );
 
@@ -345,21 +370,30 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     CFNumberRef pSlantNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontSlantTrait ));
     CFNumberGetValue( pSlantNum, kCFNumberDoubleType, &fSlant );
     if( fSlant >= 0.035 )
+    {
         rDFA.SetItalic( ITALIC_NORMAL );
-
+    }
     // get width trait
     double fWidth = 0;
     CFNumberRef pWidthNum = static_cast<CFNumberRef>(CFDictionaryGetValue( pAttrDict, kCTFontWidthTrait ));
     CFNumberGetValue( pWidthNum, kCFNumberDoubleType, &fWidth );
     nInt = WIDTH_NORMAL;
-    if( fWidth > 0 ) {
+
+    if( fWidth > 0 )
+    {
         nInt = rint( WIDTH_NORMAL + fWidth * ((WIDTH_ULTRA_EXPANDED - WIDTH_NORMAL)/0.4));
         if( nInt > WIDTH_ULTRA_EXPANDED )
+        {
             nInt = WIDTH_ULTRA_EXPANDED;
-    } else if( fWidth < 0 ) {
+        }
+    }
+    else if( fWidth < 0 )
+    {
         nInt = rint( WIDTH_NORMAL + fWidth * ((WIDTH_NORMAL - WIDTH_ULTRA_CONDENSED)/0.5));
         if( nInt < WIDTH_ULTRA_CONDENSED )
+        {
             nInt = WIDTH_ULTRA_CONDENSED;
+        }
     }
     rDFA.SetWidthType( (FontWidth)nInt );
 
@@ -389,21 +423,27 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
 }
 
 SystemFontList::SystemFontList()
-:   mpCTFontCollection( NULL )
-,   mpCTFontArray( NULL )
+  : mpCTFontCollection( NULL )
+  , mpCTFontArray( NULL )
 {}
 
 SystemFontList::~SystemFontList()
 {
     CTFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
+    {
         delete (*it).second;
+    }
     maFontContainer.clear();
 
     if( mpCTFontArray )
+    {
         CFRelease( mpCTFontArray );
+    }
     if( mpCTFontCollection )
+    {
         CFRelease( mpCTFontCollection );
+    }
 }
 
 void SystemFontList::AddFont( CoreTextFontData* pFontData )
@@ -416,14 +456,18 @@ void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) co
 {
     CTFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
+    {
         rFontCollection.Add( (*it).second->Clone() );
+    }
 }
 
 CoreTextFontData* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 {
     CTFontContainer::const_iterator it = maFontContainer.find( nFontId );
     if( it == maFontContainer.end() )
+    {
         return NULL;
+    }
     return (*it).second;
 }
 
@@ -432,12 +476,15 @@ bool SystemFontList::Init()
     // enumerate available system fonts
     static const int nMaxDictEntries = 8;
     CFMutableDictionaryRef pCFDict = CFDictionaryCreateMutable( NULL,
-        nMaxDictEntries, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
+                                                                nMaxDictEntries,
+                                                                &kCFTypeDictionaryKeyCallBacks,
+                                                                &kCFTypeDictionaryValueCallBacks );
+
     CFDictionaryAddValue( pCFDict, kCTFontCollectionRemoveDuplicatesOption, kCFBooleanTrue );
     mpCTFontCollection = CTFontCollectionCreateFromAvailableFonts( pCFDict );
     CFRelease( pCFDict );
-
     mpCTFontArray = CTFontCollectionCreateMatchingFontDescriptors( mpCTFontCollection );
+
     const int nFontCount = CFArrayGetCount( mpCTFontArray );
     const CFRange aFullRange = CFRangeMake( 0, nFontCount );
     CFArrayApplyFunction( mpCTFontArray, aFullRange, CTFontEnumCallBack, this );
@@ -448,7 +495,8 @@ bool SystemFontList::Init()
 SystemFontList* GetCoretextFontList()
 {
     SystemFontList* pList = new SystemFontList();
-    if( !pList->Init() ) {
+    if( !pList->Init() )
+    {
         delete pList;
         return NULL;
     }

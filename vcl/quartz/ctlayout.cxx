@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include "tools/debug.hxx"
+#include <sal/config.h>
 
-#include "quartz/utils.h"
+#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <sal/types.h>
+#include <tools/debug.hxx>
 
 #include "ctfonts.hxx"
 #include "CTRunData.hxx"
+#include "quartz/utils.h"
 
 
 class CTLayout : public SalLayout
@@ -625,7 +627,9 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
         for( int i = 0; i != nGlyphCount; ++i )
         {
             const int nRelIndex = aIndexVector[i];
-            SAL_INFO( "vcl.ct", "aWidthVector[ g:" << i << "-> c:" << nRelIndex << " ] = " << aWidthVector[nRelIndex] << " + " << aSizeVector[i].width << " = " << aWidthVector[nRelIndex] + aSizeVector[i].width);
+            SAL_INFO( "vcl.ct", "aWidthVector[ g:" << i << "-> c:" << nRelIndex << " ] = " <<
+                      aWidthVector[nRelIndex] << " + " << aSizeVector[i].width << " = " <<
+                      aWidthVector[nRelIndex] + aSizeVector[i].width);
             aWidthVector[nRelIndex] += aSizeVector[i].width;
         }
     }
@@ -666,19 +670,25 @@ sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate n
         // check if the original extra-width guess was good
         if( !nCharExtra )
             nBestGuess = nNewIndex;
+
         if( nBestGuess == nNewIndex )
             break;
+
         // prepare another round for a different number of characters
         CFIndex nNewGuess = (nNewIndex + nBestGuess + 1) / 2;
         if( nNewGuess == nBestGuess )
+        {
             nNewGuess += (nNewIndex > nBestGuess) ? +1 : -1;
+        }
         nBestGuess = nNewGuess;
     }
 
     // suggest the best fitting cluster break as breaking position
     CFRelease( aCTTypeSetter );
+
     const int nIndex = nBestGuess + mnMinCharPos;
     SAL_INFO("vcl.ct", "GetTextBreak nIndex:" << nIndex);
+
     return nIndex;
 }
 

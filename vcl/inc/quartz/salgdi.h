@@ -141,11 +141,11 @@ class AquaSalGraphics : public SalGraphics
 {
     friend class CTLayout;
 protected:
+    CGLayerRef                              mxLayer;    // Quartz graphics layer
+    CGContextRef                            mrContext;  // Quartz drawing context
 #ifdef MACOSX
     AquaSalFrame*                           mpFrame;
 #endif
-    CGLayerRef                              mxLayer;    // Quartz graphics layer
-    CGContextRef                            mrContext;  // Quartz drawing context
     int                                     mnContextStackDepth;
     XorEmulation*                           mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
