@@ -164,6 +164,10 @@ struct AdapterImpl
         void * key, Reference< script::XInvocation > const & xReceiver,
         const Sequence< Type > & rTypes,
         FactoryImpl * pFactory );
+
+    // Copy assignment is forbidden and not implemented.
+    AdapterImpl (const AdapterImpl &) SAL_DELETED_FUNCTION;
+    AdapterImpl & operator= (const AdapterImpl &) SAL_DELETED_FUNCTION;
 };
 
 inline AdapterImpl::~AdapterImpl()

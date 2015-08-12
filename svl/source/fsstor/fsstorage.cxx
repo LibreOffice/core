@@ -83,8 +83,6 @@ bool isLocalFile_Impl( const OUString& aURL )
     return ( !aSystemPath.isEmpty() );
 }
 
-
-
 struct FSStorage_Impl
 {
     OUString m_aURL;
@@ -110,8 +108,11 @@ struct FSStorage_Impl
     }
 
     ~FSStorage_Impl();
-};
 
+    // Copy assignment is forbidden and not implemented.
+    FSStorage_Impl (const FSStorage_Impl &) SAL_DELETED_FUNCTION;
+    FSStorage_Impl & operator= (const FSStorage_Impl &) SAL_DELETED_FUNCTION;
+};
 
 FSStorage_Impl::~FSStorage_Impl()
 {

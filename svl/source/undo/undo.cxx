@@ -257,8 +257,11 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
     {
         delete pUndoArray;
     }
-};
 
+    // Copy assignment is forbidden and not implemented.
+    SfxUndoManager_Data (const SfxUndoManager_Data &) SAL_DELETED_FUNCTION;
+    SfxUndoManager_Data & operator= (const SfxUndoManager_Data &) SAL_DELETED_FUNCTION;
+};
 
 namespace svl { namespace undo { namespace impl
 {

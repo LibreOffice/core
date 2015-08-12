@@ -184,6 +184,10 @@ private:
      */
     sal_uInt16  nDatePatternNumbers;
 
+    // Copy assignment is forbidden and not implemented.
+    ImpSvNumberInputScan (const ImpSvNumberInputScan &) SAL_DELETED_FUNCTION;
+    ImpSvNumberInputScan & operator= (const ImpSvNumberInputScan &) SAL_DELETED_FUNCTION;
+
     void Reset();                               // Reset all variables before start of analysis
 
     void InitText();                            // Init of months and days of week
