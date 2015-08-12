@@ -1995,7 +1995,7 @@ void GraphiteWinLayout::Simplify( bool is_base )
 }
 #endif // ENABLE_GRAPHITE
 
-SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int nFallbackLevel )
 {
     if (!mpWinFontEntry[nFallbackLevel]) return nullptr;
 
