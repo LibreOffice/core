@@ -338,7 +338,7 @@ void OReportController::disposing()
     if ( m_pGroupsFloater )
     {
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pGroupsFloater.disposeAndClear();
     }
 
@@ -2505,7 +2505,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                     if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_SIZE,true,&pItem))
                     {
                         uno::Any aValue;
-                        static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue,MID_SIZE_SIZE);
+                        static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue);
                         xProp->setPropertyValue(PROPERTY_PAPERSIZE,aValue);
                         resetZoomType();
                     }

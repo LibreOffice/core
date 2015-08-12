@@ -229,7 +229,7 @@ void OReportSection::fill()
 // LLA: TODO
 //  m_pPage->SetUppBorder(-10000);
 
-    m_pView->SetDesignMode( true );
+    m_pView->SetDesignMode();
 
     m_pView->StartListening( *m_pModel  );
     m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );

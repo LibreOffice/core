@@ -141,14 +141,14 @@ void ODesignView::dispose()
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
-        aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pAddField.disposeAndClear();
     }
     if ( m_pReportExplorer )
     {
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pReportExplorer.disposeAndClear();
     }

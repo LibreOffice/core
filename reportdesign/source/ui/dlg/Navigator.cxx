@@ -291,7 +291,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                 if ( !IsSelected(ptClickedOn) )
                 {
                     SelectAll(false);
-                    Select(ptClickedOn, true);
+                    Select(ptClickedOn);
                     SetCurEntry(ptClickedOn);
                 }
             }
@@ -484,7 +484,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
         SvTreeListEntry* pEntry = find(xSelection);
         if ( pEntry && !IsSelected(pEntry) )
         {
-            Select(pEntry, true);
+            Select(pEntry);
             SetCurEntry(pEntry);
         }
         else if ( !pEntry )
@@ -499,7 +499,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
             SvTreeListEntry* pEntry = find(*pIter);
             if ( pEntry && !IsSelected(pEntry) )
             {
-                Select(pEntry, true);
+                Select(pEntry);
                 SetCurEntry(pEntry);
             }
         }

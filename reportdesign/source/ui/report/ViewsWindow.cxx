@@ -284,7 +284,7 @@ void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
 
 void OViewsWindow::ImplInitSettings()
 {
-    EnableChildTransparentMode(true);
+    EnableChildTransparentMode();
 }
 
 void OViewsWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -410,7 +410,7 @@ void OViewsWindow::Paste()
     if ( aCopies.getLength() > 1 )
         ::std::for_each(m_aSections.begin(),m_aSections.end(),
             [&aCopies] (const TSectionsMap::value_type& sectionPtr) {
-                sectionPtr->getReportSection().Paste(aCopies, false);
+                sectionPtr->getReportSection().Paste(aCopies);
             });
     else
     {
@@ -1286,7 +1286,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                 rReportSection.Copy(aAllreadyCopiedObjects,true);
             }
             else
-                pInSection->EndDragObj(false);
+                pInSection->EndDragObj();
         }
 
         if ( aAllreadyCopiedObjects.getLength() )
@@ -1630,7 +1630,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 
                         // switch snapping off
                         if ( !bWasNoSnap )
-                            ((SdrDragStat&)rDragStat).SetNoSnap( true );
+                            ((SdrDragStat&)rDragStat).SetNoSnap();
                         if ( bWasSnapEnabled )
                             rView.SetSnapEnabled( false );
 

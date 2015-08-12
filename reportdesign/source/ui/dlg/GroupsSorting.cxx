@@ -1334,7 +1334,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 
     if (bEnabled && _nRow > 0 )
     {
-        m_pToolBox->EnableItem(m_nMoveUpId, true);
+        m_pToolBox->EnableItem(m_nMoveUpId);
     }
     else
     {
@@ -1342,7 +1342,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     }
     if (bEnabled && _nRow < (nRowCount - 1) )
     {
-        m_pToolBox->EnableItem(m_nMoveDownId, true);
+        m_pToolBox->EnableItem(m_nMoveDownId);
     }
     else
     {

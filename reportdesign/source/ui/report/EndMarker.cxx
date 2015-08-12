@@ -79,7 +79,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rR
 
 void OEndMarker::ImplInitSettings()
 {
-    EnableChildTransparentMode( true );
+    EnableChildTransparentMode();
     SetParentClipMode( ParentClipMode::NoClip );
     SetPaintTransparent( true );
 

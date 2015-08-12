@@ -649,14 +649,14 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
 DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
 {
-    m_rView.SetCreateMode( true );
+    m_rView.SetCreateMode();
 }
 
 
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    m_rView.SetEditMode( true );
+    m_rView.SetEditMode();
 }
 
 
@@ -708,7 +708,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         {
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
             // BrkAction disables the create mode
-            m_rView.SetCreateMode( true );
+            m_rView.SetCreateMode();
             return true;
         }
 

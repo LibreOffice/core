@@ -73,7 +73,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
     m_aVRuler->SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler->SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-    EnableChildTransparentMode( true );
+    EnableChildTransparentMode();
     SetParentClipMode( ParentClipMode::NoClip );
     SetPaintTransparent( true );
 }
