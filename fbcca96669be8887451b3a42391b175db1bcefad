@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_42265417",
+        "filename": "include/svx/svdpoev.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-08-12T19:02:00Z",
+      "side": 1,
+      "message": "It\u0027s \"Bézier\", not \"beziér\", but if this comment is too pedantic you can probably just leave out the French diacritic :-)",
+      "revId": "fbcca96669be8887451b3a42391b175db1bcefad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_22235007",
+        "filename": "include/svx/svdpoev.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-08-12T19:02:00Z",
+      "side": 1,
+      "message": "\"aftwards\" \u003e \"afterwards\"",
+      "revId": "fbcca96669be8887451b3a42391b175db1bcefad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_82205cf9",
+        "filename": "include/svx/svdpoev.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-08-12T19:02:00Z",
+      "side": 1,
+      "message": "\"polugons\" \u003e \"polygons\"",
+      "revId": "fbcca96669be8887451b3a42391b175db1bcefad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
