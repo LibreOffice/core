@@ -629,7 +629,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::_Filter(
         // getPropertySetInfo returns a new object; such property set infos must
         // not be cached:
         WeakReference < XPropertySetInfo > xWeakInfo( xInfo );
-        xInfo = 0;
+        xInfo.clear();
         xInfo = xWeakInfo;
         if( xInfo.is() )
         {
