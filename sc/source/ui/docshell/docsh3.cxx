@@ -630,7 +630,7 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, vcl::Windo
     DateTime aDT = pAction->GetDateTime();
     OUString aDate = ScGlobal::pLocaleData->getDate( aDT );
     aDate += " ";
-    aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
+    aDate += ScGlobal::pLocaleData->getTime( aDT, false );
 
     SfxItemSet aSet( GetPool(),
                       SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_AUTHOR,
@@ -1267,7 +1267,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             // only show changes from shared document
             aChangeViewSet.SetShowChanges( true );
             aChangeViewSet.SetShowAccepted( true );
-            aChangeViewSet.SetHasActionRange( true );
+            aChangeViewSet.SetHasActionRange();
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
             aDocument.SetChangeViewSettings( aChangeViewSet );
 
@@ -1311,7 +1311,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             // only show changes from shared document
             aChangeViewSet.SetShowChanges( true );
             aChangeViewSet.SetShowAccepted( true );
-            aChangeViewSet.SetHasActionRange( true );
+            aChangeViewSet.SetHasActionRange();
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
             aDocument.SetChangeViewSettings( aChangeViewSet );
         }

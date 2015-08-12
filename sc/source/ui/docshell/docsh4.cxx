@@ -764,7 +764,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                             if ( pViewFrm )
                             {
-                                pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId(), true ); //@51669
+                                pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId() ); //@51669
                             }
                             if ( pBindings )
                             {
@@ -795,7 +795,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ScChangeViewSettings aChangeViewSet;
                                 aChangeViewSet.SetShowChanges( true );
                                 aChangeViewSet.SetShowAccepted( true );
-                                aChangeViewSet.SetHasActionRange( true );
+                                aChangeViewSet.SetHasActionRange();
                                 aChangeViewSet.SetTheActionRange( nStart, nEnd );
                                 aDocument.SetChangeViewSettings( aChangeViewSet );
 
@@ -1772,7 +1772,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
 
 void ScDocShell::GetState( SfxItemSet &rSet )
 {
-    bool bTabView = GetBestViewShell(true) != NULL;
+    bool bTabView = GetBestViewShell() != NULL;
 
     SfxWhichIter aIter(rSet);
     for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())

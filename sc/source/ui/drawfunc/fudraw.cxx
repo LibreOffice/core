@@ -370,7 +370,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     // mark last object
                     pView->UnmarkAllObj();
-                    pView->MarkNextObj(false);
+                    pView->MarkNextObj();
 
                     // II
                     if(pView->AreObjectsMarked())
@@ -553,7 +553,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                                     // switch snapping off
                                     if(!bWasNoSnap)
-                                        ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                                        ((SdrDragStat&)rDragStat).SetNoSnap();
                                     if(bWasSnapEnabled)
                                         pView->SetSnapEnabled(false);
 

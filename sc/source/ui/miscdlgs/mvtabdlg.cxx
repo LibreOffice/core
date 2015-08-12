@@ -87,7 +87,7 @@ void ScMoveTableDlg::GetTabNameString( OUString& rString ) const
 
 void ScMoveTableDlg::SetForceCopyTable()
 {
-    pBtnCopy->Check(true);
+    pBtnCopy->Check();
     pBtnMove->Disable();
     pBtnCopy->Disable();
 }
@@ -206,7 +206,7 @@ void ScMoveTableDlg::Init()
     pLbDoc->SetSelectHdl  ( LINK( this, ScMoveTableDlg, SelHdl ) );
     pBtnCopy->SetToggleHdl( LINK( this, ScMoveTableDlg, CheckBtnHdl ) );
     pEdTabName->SetModifyHdl( LINK( this, ScMoveTableDlg, CheckNameHdl ) );
-    pBtnMove->Check( true );
+    pBtnMove->Check();
     pBtnCopy->Check( false );
     pEdTabName->Enable(false);
     pFtWarn->Hide();

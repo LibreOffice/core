@@ -343,7 +343,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, false );
+            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                     static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false,
                     pUndoDoc );
@@ -626,7 +626,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, false );
+            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                     static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false,
                     pUndoDoc );
@@ -710,7 +710,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, false );
+            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                     static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false,
                     pUndoDoc );

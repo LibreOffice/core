@@ -1444,7 +1444,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
     rDoc.ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, rMark );
 
     if (!AdjustRowHeight( aMultiRange ))
-        rDocShell.PostPaint( aMultiRange, PAINT_GRID, 0 );
+        rDocShell.PostPaint( aMultiRange, PAINT_GRID );
 
     aModificator.SetDocumentModified();
 
@@ -1768,7 +1768,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     if ( bRecord )
     {
         pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false, false );
+        pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false );
 
         // pRefUndoDoc is filled in InsertCol / InsertRow
 
@@ -2357,7 +2357,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
 
         pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false, false );
+        pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1, false );
 
         pUndoData = new ScRefUndoData( &rDoc );
 
@@ -2410,7 +2410,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             pRefUndoDoc->DeleteAreaTab(nUndoStartCol,nUndoStartRow,nUndoEndCol,nUndoEndRow, *itr, IDF_ALL);
 
             //  alle Tabellen anlegen, damit Formeln kopiert werden koennen:
-        pUndoDoc->AddUndoTab( 0, nTabCount-1, false, false );
+        pUndoDoc->AddUndoTab( 0, nTabCount-1, false );
 
             //  kopieren mit bColRowFlags=false (#54194#)
         pRefUndoDoc->CopyToDocument(0,0,0,MAXCOL,MAXROW,MAXTAB,IDF_FORMULA,false,pUndoDoc,NULL,false);
@@ -3413,7 +3413,7 @@ bool ScDocFunc::SetWidthOrHeight(
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bWidth)
         {
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, false );
+            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
             rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab, static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false, pUndoDoc );
         }
         else

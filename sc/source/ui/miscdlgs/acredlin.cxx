@@ -822,7 +822,7 @@ void ScAcceptChgDlg::UpdateView()
         if(pParent!=NULL && pScChangeAction->IsDialogParent())
         {
             if(!bFilterFlag)
-                pParent->EnableChildrenOnDemand(true);
+                pParent->EnableChildrenOnDemand();
             else
             {
                 bool bTestFlag = bHasFilterEntry;
@@ -848,14 +848,14 @@ void ScAcceptChgDlg::UpdateView()
         pParent=pTheView->InsertEntry(
             aStrAllAccepted, static_cast< RedlinData * >(NULL),
             static_cast< SvTreeListEntry * >(NULL));
-        pParent->EnableChildrenOnDemand(true);
+        pParent->EnableChildrenOnDemand();
     }
     if(nRejectCount>0)
     {
         pParent=pTheView->InsertEntry(
             aStrAllRejected, static_cast< RedlinData * >(NULL),
             static_cast< SvTreeListEntry * >(NULL));
-        pParent->EnableChildrenOnDemand(true);
+        pParent->EnableChildrenOnDemand();
     }
     pTheView->SetUpdateMode(true);
     SetPointer(Pointer(PointerStyle::Arrow));
@@ -868,7 +868,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
 {
     sal_uInt16 nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    ScSimpleRefDlgWrapper::SetDefaultPosSize(GetPosPixel(),GetSizePixel(),true);
+    ScSimpleRefDlgWrapper::SetDefaultPosSize(GetPosPixel(),GetSizePixel());
 
     SC_MOD()->SetRefDialog( nId, true );
 
@@ -915,7 +915,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
             Invalidate();
         }
         nId = ScAcceptChgDlgWrapper::GetChildWindowId();
-        pViewFrm->ShowChildWindow( nId, true );
+        pViewFrm->ShowChildWindow( nId );
     }
     else
     {
@@ -1467,7 +1467,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
             if(pParent!=NULL && pScChangeAction->IsDialogParent())
             {
                 if(!bFilterFlag)
-                    pParent->EnableChildrenOnDemand(true);
+                    pParent->EnableChildrenOnDemand();
                 else
                 {
                     bool bTestFlag = bHasFilterEntry;

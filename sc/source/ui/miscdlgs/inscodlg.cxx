@@ -98,18 +98,18 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
     {
-        case PASTE_NOFUNC: mpRbNoOp->Check(true); break;
-        case PASTE_ADD:    mpRbAdd->Check(true); break;
-        case PASTE_SUB:    mpRbSub->Check(true); break;
-        case PASTE_MUL:    mpRbMul->Check(true); break;
-        case PASTE_DIV:    mpRbDiv->Check(true); break;
+        case PASTE_NOFUNC: mpRbNoOp->Check(); break;
+        case PASTE_ADD:    mpRbAdd->Check(); break;
+        case PASTE_SUB:    mpRbSub->Check(); break;
+        case PASTE_MUL:    mpRbMul->Check(); break;
+        case PASTE_DIV:    mpRbDiv->Check(); break;
     }
 
     switch( ScInsertContentsDlg::nPreviousMoveMode )
     {
-        case INS_NONE:       mpRbMoveNone->Check(true); break;
-        case INS_CELLSDOWN:  mpRbMoveDown->Check(true); break;
-        case INS_CELLSRIGHT: mpRbMoveRight->Check(true); break;
+        case INS_NONE:       mpRbMoveNone->Check(); break;
+        case INS_CELLSDOWN:  mpRbMoveDown->Check(); break;
+        case INS_CELLSRIGHT: mpRbMoveRight->Check(); break;
     }
 
     mpBtnSkipEmptyCells->Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_NOEMPTY ) != 0);
@@ -236,7 +236,7 @@ void ScInsertContentsDlg::TestModes()
         mpRbMoveRight->Disable();
 
         mpBtnInsAll->Disable();
-        DisableChecks(true);
+        DisableChecks();
     }
     else
     {
@@ -264,7 +264,7 @@ void ScInsertContentsDlg::SetOtherDoc( bool bSet )
         bOtherDoc = bSet;
         TestModes();
         if ( bSet )
-            mpRbMoveNone->Check(true);
+            mpRbMoveNone->Check();
     }
 }
 
@@ -275,7 +275,7 @@ void ScInsertContentsDlg::SetFillMode( bool bSet )
         bFillMode = bSet;
         TestModes();
         if ( bSet )
-            mpRbMoveNone->Check(true);
+            mpRbMoveNone->Check();
     }
 }
 
@@ -286,7 +286,7 @@ void ScInsertContentsDlg::SetChangeTrack( bool bSet )
         bChangeTrack = bSet;
         TestModes();
         if ( bSet )
-            mpRbMoveNone->Check(true);
+            mpRbMoveNone->Check();
     }
 }
 
@@ -300,9 +300,9 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
         bMoveRightDisabled = bRight;
         TestModes();
         if ( bMoveDownDisabled && mpRbMoveDown->IsChecked() )
-            mpRbMoveNone->Check(true);
+            mpRbMoveNone->Check();
         if ( bMoveRightDisabled && mpRbMoveRight->IsChecked() )
-            mpRbMoveNone->Check(true);
+            mpRbMoveNone->Check();
     }
 }
 

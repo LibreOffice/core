@@ -125,7 +125,7 @@ IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
     if (pBtn == m_pBtnOk)
         EndDialog(RET_OK);
     else
-        EndDialog(RET_CANCEL);
+        EndDialog();
     return 0;
 }
 

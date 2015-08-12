@@ -218,10 +218,10 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
     }
     else if ( nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
     {
-        aStrCurSelTable = m_pLbTables->GetSelectEntry( 0 );
+        aStrCurSelTable = m_pLbTables->GetSelectEntry();
         pStr = &aStrCurSelTable;
         if ( pN )
-            *pN = m_pLbTables->GetSelectEntryPos( 0 );
+            *pN = m_pLbTables->GetSelectEntryPos();
         nSelTabIndex = 1;
     }
 
@@ -369,7 +369,7 @@ IMPL_LINK_TYPED( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pF
     }
     else if ( bMustClose )
         // execute slot FID_INS_TABLE_EXT and cancel file dialog
-        EndDialog( RET_CANCEL );
+        EndDialog();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

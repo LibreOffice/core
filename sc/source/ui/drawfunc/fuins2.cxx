@@ -102,7 +102,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
         ScMarkData& rMark = pViewData->GetMarkData();
         if ( !rMark.IsMarked() )
-            pViewData->GetView()->MarkDataArea( true );
+            pViewData->GetView()->MarkDataArea();
 
         if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) == SC_MARK_SIMPLE )
         {
@@ -457,7 +457,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         bool bAutomaticMark = false;
         if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
         {
-            pViewSh->GetViewData().GetView()->MarkDataArea( true );
+            pViewSh->GetViewData().GetView()->MarkDataArea();
             bAutomaticMark = true;
         }
 

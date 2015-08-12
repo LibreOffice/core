@@ -105,13 +105,13 @@ void ScTableProtectionDlg::Init()
     m_pOptionsListBox->InsertEntry(m_aSelectLockedCells);
     m_pOptionsListBox->InsertEntry(m_aSelectUnlockedCells);
 
-    m_pOptionsListBox->CheckEntryPos(0, true);
-    m_pOptionsListBox->CheckEntryPos(1, true);
+    m_pOptionsListBox->CheckEntryPos(0);
+    m_pOptionsListBox->CheckEntryPos(1);
 
     m_pOptionsListBox->SetUpdateMode(true);
 
     // Set the default state of the dialog.
-    m_pBtnProtect->Check(true);
+    m_pBtnProtect->Check();
     m_pPassword1Edit->GrabFocus();
 }
 

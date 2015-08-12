@@ -112,7 +112,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
                         vcl::Window *pParent=pWin->GetParent();
                         if(pParent)
                         {
-                            pParent->EnableInput(bEnable,true);
+                            pParent->EnableInput(bEnable);
                             if(true)
                                 pViewSh->EnableRefInput(bEnable);
                         }
@@ -139,7 +139,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
 
             ScRangeList aRangeList;
 
-            pTabViewShell->DoneRefMode( false );
+            pTabViewShell->DoneRefMode();
             pTabViewShell->ClearHighlightRanges();
 
             if( ParseWithNames( aRangeList, rStr, pDoc ) )
@@ -204,7 +204,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 
             if (pTabViewShell && pScTokA)
             {
-                pTabViewShell->DoneRefMode( false );
+                pTabViewShell->DoneRefMode();
                 pTabViewShell->ClearHighlightRanges();
 
                 pScTokA->Reset();
@@ -255,7 +255,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
             //  In that case, RefMode was just started and must not be ended now.
 
             if ( bDoneRefMode )
-                pTabViewShell->DoneRefMode( false );
+                pTabViewShell->DoneRefMode();
             pTabViewShell->ClearHighlightRanges();
         }
         bHighlightRef=false;

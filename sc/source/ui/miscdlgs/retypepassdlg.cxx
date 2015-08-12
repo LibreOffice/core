@@ -375,8 +375,8 @@ void ScRetypePassInputDlg::Init()
     m_pPassword2Edit->SetModifyHdl(aLink);
 
     m_pBtnOk->Disable();
-    m_pBtnRetypePassword->Check(true);
-    m_pBtnMatchOldPass->Check(true);
+    m_pBtnRetypePassword->Check();
+    m_pBtnMatchOldPass->Check();
     m_pPassword1Edit->GrabFocus();
 }
 

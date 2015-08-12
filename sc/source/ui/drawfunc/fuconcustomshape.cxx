@@ -153,7 +153,7 @@ bool FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstCustomShape::Activate()
 {
-    pView->SetCurrentObj( OBJ_CUSTOMSHAPE, SdrInventor );
+    pView->SetCurrentObj( OBJ_CUSTOMSHAPE );
 
     aNewPointer = Pointer( PointerStyle::DrawRect );
     aOldPointer = pWindow->GetPointer();

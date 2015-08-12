@@ -891,7 +891,7 @@ void ScFunctionDockWin::DoEnter()
                 else
                 {
                     aString += "()";
-                    pEdView->InsertText(aString,false);
+                    pEdView->InsertText(aString);
                     pHdl->DataChanged();
                 }
             }
