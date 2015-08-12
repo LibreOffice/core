@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_a28c8036",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-08-12T13:01:34Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be initialized to something in init ?",
+      "revId": "c46000b9ffdc2c1871dae80562d3534a2ea177d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
