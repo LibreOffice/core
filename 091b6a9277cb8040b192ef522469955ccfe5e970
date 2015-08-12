@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_42c49491",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4534,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 0,
+      "message": "Please also remove\n\n #include \"scmod.hxx\"\n #include \"viewfunc.hxx\"\n\nthat were added in the other change.",
+      "revId": "091b6a9277cb8040b192ef522469955ccfe5e970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

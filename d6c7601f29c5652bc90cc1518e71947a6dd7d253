@@ -1,0 +1,283 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_3fa367a0",
+        "filename": "include/formula/token.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "This is not a good solution. Why add FormulaUnit to FormulaToken, which is the base class for all tokens, when it is only needed for numeric values (AFAIK no other type than double could have a unit associated, could it?)? This wastes space for all tokens, which are massively used.\n\nInstead, derive a new FormulaDoubleUnitToken from FormulaDoubleToken and only there add the new member, and implement a virtual dummy SetUnit()/GetUnit() for FormulaToken, which should be implemented as a silent one at FormulaDoubleToken for the case that unit evaluation is not activated.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_1fa02390",
+        "filename": "sc/qa/unit/filters-test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "??? I guess this should not be part of the commit.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_7fadef87",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "Please use \u0027p\u0027 prefix for pointers, so pUnit.",
+      "range": {
+        "startLine": 276,
+        "startChar": 31,
+        "endLine": 276,
+        "endChar": 36
+      },
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_bfb5b7d1",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "Please use \u0027r\u0027 prefix for references, so rUnit.",
+      "range": {
+        "startLine": 325,
+        "startChar": 42,
+        "endLine": 325,
+        "endChar": 47
+      },
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_9fba73bf",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "ditto, pUnit",
+      "range": {
+        "startLine": 352,
+        "startChar": 31,
+        "endLine": 352,
+        "endChar": 36
+      },
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_dfb4fbd2",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "Why pass a pointer if it is always dereferenced? Then it can be passed as reference.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_9fe1d3d3",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "This then would create a FormulaDoubleUnitToken instead.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_1fce635a",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2299,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "I\u0027m not convinced that duplicating the code here is really necessary. Why not simply make \"unit evaluation is on\" an interpreter member, and only if on do what is necessary?",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_7fdb2f1c",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2331,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "Additionally check nGlobalError, obtaining the cell value may have inherited the error in which case unit evaluation is unnecessary.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_9f08b393",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "new/delete heap memory allocations have quite some performance overhead and should be avoided, these could live on the stack as automatic variables instead.\n\nBtw, fUnit1 and fUnit2 are not deleted below ... and please use p... for pointers ;-)",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_fffd7f6f",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "If unit evaluation is enabled, that then should push an \"invalid unit\" along, shouldn\u0027t it?",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_22c19081",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_3ff8877c",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "Not a member variable, so no mp... prefix please, just p.",
+      "range": {
+        "startLine": 829,
+        "startChar": 52,
+        "endLine": 829,
+        "endChar": 63
+      },
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_df023b6f",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "This should only be obtained if unit evaluation is activated. Everything that slows down the normal execution path if not enabled should be avoided.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_1ff5c382",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-12T10:04:50Z",
+      "side": 1,
+      "message": "Again, this should only be executed if unit evaluation is on.",
+      "revId": "d6c7601f29c5652bc90cc1518e71947a6dd7d253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
