@@ -428,13 +428,17 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
             {}
             pOle2Obj->SetLogicRect( aRect );
         }
-        else if (!aRect.IsEmpty()) //HACK: can aRect legally be empty?
+        else
         {
             awt::Size aSz;
             Size aSize = aRect.GetSize();
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
+            if (aSz.Width != 0 || aSz.Height != 0)
+            {
+                //HACK: can aSz legally be empty?
+                xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
+            }
         }
 
         // connect the object after the visual area is set
