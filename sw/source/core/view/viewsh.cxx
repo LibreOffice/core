@@ -1677,8 +1677,8 @@ public:
             rtl::Reference<sdr::overlay::OverlayManager> xOldManager = pOldPaintWindow->GetOverlayManager();
             if (xOldManager.is())
             {
-                SdrPaintWindow* pNewPaintWindow = m_pShell->Imp()->GetDrawView()->FindPaintWindow(*m_pRef);
-                xOldManager->completeRedraw(pNewPaintWindow->GetRedrawRegion(), m_pRef);
+                if (SdrPaintWindow* pNewPaintWindow = m_pShell->Imp()->GetDrawView()->FindPaintWindow(*m_pRef))
+                    xOldManager->completeRedraw(pNewPaintWindow->GetRedrawRegion(), m_pRef);
             }
 
             m_pShell->Imp()->GetDrawView()->DeleteWindowFromPaintView(m_pRef);
