@@ -1155,12 +1155,22 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
     for (; it != itEnd; ++it)
     {
         ScBroadcastArea* pArea = it->first;
-        const sc::ColumnSpanSet* pSpans = it->second;
         assert(pArea);
-        assert(pSpans);
-        aHint.setSpans(pSpans);
-        pArea->GetBroadcaster().Broadcast(aHint);
-        bBroadcasted = true;
+        SvtBroadcaster& rBC = pArea->GetBroadcaster();
+        if (!rBC.HasListeners())
+        {
+            /* FIXME: find the cause where the last listener is removed and
+             * this area is still listed here. */
+            SAL_WARN("sc.core","ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas - pArea has no listeners and should had been removed already");
+        }
+        else
+        {
+            const sc::ColumnSpanSet* pSpans = it->second;
+            assert(pSpans);
+            aHint.setSpans(pSpans);
+            rBC.Broadcast(aHint);
+            bBroadcasted = true;
+        }
     }
 
     maBulkGroupAreas.clear();
