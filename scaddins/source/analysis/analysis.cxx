@@ -31,6 +31,7 @@
 #include <string.h>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
+#include <algorithm>
 #include <cmath>
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
@@ -127,9 +128,14 @@ void AnalysisAddIn::InitData()
     delete pFD;
 
     if( pResMgr )
-        pFD = new FuncDataList( *pResMgr );
+    {
+        pFD = new FuncDataList;
+        InitFuncDataList( *pFD, *pResMgr );
+    }
     else
+    {
         pFD = NULL;
+    }
 
     if( pDefLocales )
     {
@@ -278,11 +284,11 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
 {
     OUString          aRet;
 
-    const FuncData* p = pFD->Get( aProgrammaticName );
-    if( p )
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
+    if( it != pFD->end() )
     {
-        aRet = GetDisplFuncStr( p->GetUINameID() );
-        if( p->IsDouble() )
+        aRet = GetDisplFuncStr( it->GetUINameID() );
+        if( it->IsDouble() )
             aRet += "_ADD";
     }
     else
@@ -297,9 +303,9 @@ OUString SAL_CALL AnalysisAddIn::getFunctionDescription( const OUString& aProgra
 {
     OUString          aRet;
 
-    const FuncData* p = pFD->Get( aProgrammaticName );
-    if( p )
-        aRet = GetFuncDescrStr( p->GetDescrID(), 1 );
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
+    if( it != pFD->end() )
+        aRet = GetFuncDescrStr( it->GetDescrID(), 1 );
 
     return aRet;
 }
@@ -308,12 +314,12 @@ OUString SAL_CALL AnalysisAddIn::getDisplayArgumentName( const OUString& aName, 
 {
     OUString          aRet;
 
-    const FuncData* p = pFD->Get( aName );
-    if( p && nArg <= 0xFFFF )
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aName ) );
+    if( it != pFD->end() && nArg <= 0xFFFF )
     {
-        sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
+        sal_uInt16  nStr = it->GetStrIndex( sal_uInt16( nArg ) );
         if( nStr )
-            aRet = GetFuncDescrStr( p->GetDescrID(), nStr );
+            aRet = GetFuncDescrStr( it->GetDescrID(), nStr );
         else
             aRet = "internal";
     }
@@ -325,12 +331,12 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
 {
     OUString          aRet;
 
-    const FuncData* p = pFD->Get( aName );
-    if( p && nArg <= 0xFFFF )
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aName ) );
+    if( it != pFD->end() && nArg <= 0xFFFF )
     {
-        sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
+        sal_uInt16  nStr = it->GetStrIndex( sal_uInt16( nArg ) );
         if( nStr )
-            aRet = GetFuncDescrStr( p->GetDescrID(), nStr + 1 );
+            aRet = GetFuncDescrStr( it->GetDescrID(), nStr + 1 );
         else
             aRet = "for internal use only";
     }
@@ -344,11 +350,11 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aN
 {
     //  return non-translated strings
     //  return OUString( "Add-In" );
-    const FuncData*     p = pFD->Get( aName );
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aName ) );
     OUString              aRet;
-    if( p )
+    if( it != pFD->end() )
     {
-        switch( p->GetCategory() )
+        switch( it->GetCategory() )
         {
             case FDCat_DateTime:    aRet = "Date&Time";         break;
             case FDCat_Finance:     aRet = "Financial";         break;
@@ -369,11 +375,11 @@ OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgra
 {
     //  return translated strings, not used for predefined categories
     //  return OUString( "Add-In" );
-    const FuncData*     p = pFD->Get( aProgrammaticFunctionName );
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticFunctionName ) );
     OUString              aRet;
-    if( p )
+    if( it != pFD->end() )
     {
-        switch( p->GetCategory() )
+        switch( it->GetCategory() )
         {
             case FDCat_DateTime:    aRet = "Date&Time";         break;
             case FDCat_Finance:     aRet = "Financial";         break;
@@ -418,12 +424,11 @@ inline const lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
 
 uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNames( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
 {
-    const FuncData*             p = pFD->Get( aProgrammaticName );
-
-    if( !p )
+    auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
+    if( it == pFD->end() )
         return uno::Sequence< sheet::LocalizedName >( 0 );
 
-    const std::vector<OUString>& r = p->GetCompNameList();
+    const std::vector<OUString>& r = it->GetCompNameList();
     sal_uInt32                   nCount = r.size();
 
     uno::Sequence< sheet::LocalizedName >                aRet( nCount );

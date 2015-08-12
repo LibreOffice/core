@@ -1430,41 +1430,10 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 }
 
 
-FuncDataList::FuncDataList( ResMgr& rResMgr )
-    : nLast(0)
+void InitFuncDataList( FuncDataList& rList, ResMgr& rResMgr )
 {
     for( sal_uInt16 n = 0 ; n < SAL_N_ELEMENTS(pFuncDatas) ; n++ )
-        Append( new FuncData( pFuncDatas[ n ], rResMgr ) );
-}
-
-
-FuncDataList::~FuncDataList()
-{
-    for( std::vector<FuncData*>::iterator it = maVector.begin(); it != maVector.end(); ++it )
-        delete *it;
-}
-
-
-const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
-{
-    if( aLastName == aProgrammaticName )
-        return Get( nLast );
-
-    const_cast<FuncDataList*>(this)->aLastName = aProgrammaticName;
-
-    sal_uInt32  nE = Count();
-    for( sal_uInt32 n = 0 ; n < nE ; n++ )
-    {
-        const FuncData* p = Get( n );
-        if( p->Is( aProgrammaticName ) )
-        {
-            const_cast<FuncDataList*>(this)->nLast = n;
-            return p;
-        }
-    }
-
-    const_cast<FuncDataList*>(this)->nLast = 0xFFFFFFFF;
-    return NULL;
+        rList.push_back( FuncData( pFuncDatas[ n ], rResMgr ) );
 }
 
 
