@@ -637,13 +637,14 @@ bool EnhWMFReader::ReadEnhWMF()
             break;
         }
 
-        nNextPos = pWMF->Tell() + ( nRecSize - 8 );
-
-        if ( !pWMF->good() || nNextPos > nEndPos )
+        const sal_uInt32 nMaxPossibleRecSize = nEndPos - pWMF->Tell() + 8;
+        if (nRecSize > nMaxPossibleRecSize)
         {
             bStatus = false;
             break;
         }
+
+        nNextPos = pWMF->Tell() + ( nRecSize - 8 );
 
         if(  !aBmpSaveList.empty()
           && ( nRecType != EMR_STRETCHBLT )
