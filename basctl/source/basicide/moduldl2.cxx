@@ -1403,7 +1403,7 @@ void LibPage::FillListBox()
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OUString aEntryText( rDocument.getTitle( eLocation ) );
-    sal_uInt16 nPos = m_pBasicsBox->InsertEntry( aEntryText, LISTBOX_APPEND );
+    sal_uInt16 nPos = m_pBasicsBox->InsertEntry( aEntryText );
     m_pBasicsBox->SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
 }
 

@@ -237,7 +237,7 @@ DlgEditor::DlgEditor (
     pDlgEdView->SetGridVisible( bGridVisible );
     pDlgEdView->SetDragStripes(false);
 
-    pDlgEdView->SetDesignMode(true);
+    pDlgEdView->SetDesignMode();
 
     ::comphelper::disposeComponent( m_xControlContainer );
 
@@ -523,7 +523,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
                 pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
                 pDlgEdForm->EndListening(false);
                 pDlgEdForm->SetPropsFromRect();
-                pDlgEdForm->GetDlgEditor().SetDialogModelChanged(true);
+                pDlgEdForm->GetDlgEditor().SetDialogModelChanged();
                 pDlgEdForm->StartListening();
 
                 // set position and size of controls
@@ -991,7 +991,7 @@ void DlgEditor::Paste()
                     pDlgEdView->MarkListHasChanged();
 
                     // dialog model changed
-                    SetDialogModelChanged(true);
+                    SetDialogModelChanged();
                 }
             }
         }

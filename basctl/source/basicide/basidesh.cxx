@@ -110,7 +110,7 @@ public:
     {
         OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )
-            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, true, false );
+            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, true );
     }
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE { }
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
@@ -120,7 +120,7 @@ public:
         {
             VclPtr<ModulWindow> pWin = mpShell->FindBasWin(mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, false, true);
             if( pWin )
-                mpShell->RemoveWindow( pWin, true, true );
+                mpShell->RemoveWindow( pWin, true );
         }
     }
 
@@ -345,7 +345,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
 void Shell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
 {
     if (SfxBindings* pBindings = GetBindingsPtr())
-        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, true, false );
+        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, true );
     SetMDITitle();
 }
 

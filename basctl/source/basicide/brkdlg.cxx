@@ -81,7 +81,7 @@ BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPn
     {
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
         OUString aEntryStr( "# " + OUString::number(pBrk->nLine) );
-        m_pComboBox->InsertEntry( aEntryStr, COMBOBOX_APPEND );
+        m_pComboBox->InsertEntry( aEntryStr );
     }
     m_pComboBox->SetUpdateMode(true);
 
@@ -210,7 +210,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             pBrk->nStopAfter = (size_t) m_pNumericField->GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
             OUString aEntryStr( "# " + OUString::number(pBrk->nLine) );
-            m_pComboBox->InsertEntry( aEntryStr, COMBOBOX_APPEND );
+            m_pComboBox->InsertEntry( aEntryStr );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
         }

@@ -278,7 +278,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                             // switch snapping off
                             if ( !bWasNoSnap )
-                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap(true);
+                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
                             if ( bWasSnapEnabled )
                                 rView.SetSnapEnabled(false);
 
@@ -334,12 +334,12 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 DlgEdFuncInsert::DlgEdFuncInsert (DlgEditor& rParent_) :
     DlgEdFunc(rParent_)
 {
-    rParent.GetView().SetCreateMode(true);
+    rParent.GetView().SetCreateMode();
 }
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    rParent.GetView().SetEditMode( true );
+    rParent.GetView().SetEditMode();
 }
 
 bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )

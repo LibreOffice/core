@@ -461,7 +461,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     // adjust old value...
                     if (SfxBindings* pBindings = GetBindingsPtr())
-                        pBindings->Invalidate(SID_BASICIDE_LIBSELECTOR, true, false);
+                        pBindings->Invalidate(SID_BASICIDE_LIBSELECTOR, true);
                 }
             }
             else if ( nSlot == SID_BASICIDE_LIBREMOVED )
@@ -639,7 +639,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                         long nNewY = nLine * pTextEngine->GetCharHeight() - nVisHeight / 2;
                                         nNewY = ::std::min( nNewY, nMaxY );
                                         pTextView->Scroll( 0, -( nNewY - nOldY ) );
-                                        pTextView->ShowCursor( false, true );
+                                        pTextView->ShowCursor( false );
                                         pModWin->GetEditVScrollBar().SetThumbPos( pTextView->GetStartDocPos().Y() );
                                     }
                                     sal_uInt16 nCol1 = 0, nCol2 = 0;

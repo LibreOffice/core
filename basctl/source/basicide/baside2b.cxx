@@ -1004,7 +1004,7 @@ void EditorWindow::CreateEditEngine()
     pEditEngine->SetUpdateMode(true);
     rModulWindow.Update();   // has only been invalidated at UpdateMode = true
 
-    pEditView->ShowCursor(true, true);
+    pEditView->ShowCursor(true);
 
     StartListening(*pEditEngine);
 
@@ -1205,7 +1205,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
     {
         OUString aLine( pEditEngine->GetText( nLine ) );
         bool const bWasModified = pEditEngine->IsModified();
-        pEditEngine->RemoveAttribs( nLine, true );
+        pEditEngine->RemoveAttribs( nLine );
         std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( aLine, aPortions );
 
@@ -1213,7 +1213,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
              i != aPortions.end(); ++i)
         {
             Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(i->tokenType);
-            pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd, true);
+            pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd);
         }
 
         pEditEngine->SetModified(bWasModified);
@@ -1303,7 +1303,7 @@ IMPL_LINK_NOARG_TYPED(EditorWindow, SyntaxTimerHdl, Idle *, void)
 
     // #i45572#
     if ( pEditView )
-        pEditView->ShowCursor( false, true );
+        pEditView->ShowCursor( false );
 
     pEditEngine->SetModified( bWasModified );
 
@@ -1754,7 +1754,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
     SvTreeListEntry* pNewEntry = aTreeListBox->InsertEntry( aWatchStr_, 0, true, TREELIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
-    aTreeListBox->Select(pNewEntry, true);
+    aTreeListBox->Select(pNewEntry);
     aTreeListBox->MakeVisible(pNewEntry);
     aRemoveWatchButton->Enable();
 
@@ -2065,7 +2065,7 @@ IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
         aEdtWindow->GetEditView()->Scroll( 0, nDiff );
         aBrkWindow->DoScroll( 0, nDiff );
         aLineNumberWindow->DoScroll(0, nDiff);
-        aEdtWindow->GetEditView()->ShowCursor(false, true);
+        aEdtWindow->GetEditView()->ShowCursor(false);
         pCurScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
     }
 
@@ -2675,14 +2675,14 @@ void CodeCompleteListBox::InsertSelectedEntry()
 
         if( !GetSelectEntry().isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( GetSelectEntry(), false );
+            GetParentEditView()->InsertText( GetSelectEntry() );
         }
     }
     else
     {
         if( !GetSelectEntry().isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( GetSelectEntry(), false );
+            GetParentEditView()->InsertText( GetSelectEntry() );
         }
     }
     HideAndRestoreFocus();
@@ -2763,7 +2763,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 
                         GetParentEditView()->SetSelection( aTextSelection );
                         GetParentEditView()->DeleteSelected();
-                        GetParentEditView()->InsertText( GetSelectEntry(), false );
+                        GetParentEditView()->InsertText( GetSelectEntry() );
                     }
                 }
                 break;
@@ -2860,7 +2860,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
     if( pListBox->GetEntryCount() >= 1 )
     {// if there is at least one element inside
         // calculate basic position: under the current line
-        Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() , false );
+        Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
         aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;

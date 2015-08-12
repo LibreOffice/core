@@ -940,7 +940,7 @@ void DlgEdObj::NbcMove( const Size& rSize )
     StartListening();
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
+    GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged();
 }
 
 void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
@@ -957,7 +957,7 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     StartListening();
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
+    GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged();
 }
 
 bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -1049,7 +1049,7 @@ void DlgEdObj::SetDefaults()
         }
 
         // dialog model changed
-        pDlgEdForm->GetDlgEditor().SetDialogModelChanged(true);
+        pDlgEdForm->GetDlgEditor().SetDialogModelChanged();
     }
 }
 
@@ -1138,7 +1138,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent&
             return;
 
         // dialog model changed
-        rDlgEditor.SetDialogModelChanged(true);
+        rDlgEditor.SetDialogModelChanged();
 
         // update position and size
         if ( evt.PropertyName == DLGED_PROP_POSITIONX || evt.PropertyName == DLGED_PROP_POSITIONY ||
@@ -1185,7 +1185,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& )
     if (isListening())
     {
         // dialog model changed
-        GetDialogEditor().SetDialogModelChanged(true);
+        GetDialogEditor().SetDialogModelChanged();
     }
 }
 
@@ -1194,7 +1194,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& )
     if (isListening())
     {
         // dialog model changed
-        GetDialogEditor().SetDialogModelChanged(true);
+        GetDialogEditor().SetDialogModelChanged();
     }
 }
 
@@ -1203,7 +1203,7 @@ void SAL_CALL DlgEdObj::_elementRemoved(const css::container::ContainerEvent& ) 
     if (isListening())
     {
         // dialog model changed
-        GetDialogEditor().SetDialogModelChanged(true);
+        GetDialogEditor().SetDialogModelChanged();
     }
 }
 
@@ -1600,7 +1600,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     }
 
     // dialog model changed
-    GetDlgEditor().SetDialogModelChanged(true);
+    GetDlgEditor().SetDialogModelChanged();
 }
 
 void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
@@ -1622,7 +1622,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     }
 
     // dialog model changed
-    GetDlgEditor().SetDialogModelChanged(true);
+    GetDlgEditor().SetDialogModelChanged();
 }
 
 bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -1636,7 +1636,7 @@ bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     SetPropsFromRect();
 
     // dialog model changed
-    GetDlgEditor().SetDialogModelChanged(true);
+    GetDlgEditor().SetDialogModelChanged();
 
     // start listening
     StartListening();

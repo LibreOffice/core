@@ -363,7 +363,7 @@ void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
         ::DockingWindow::EndDocking( rRect, bFloatMode );
     else
     {
-        SetFloatingMode(false);
+        SetFloatingMode();
         DockThis();
     }
 }
@@ -466,7 +466,7 @@ IMPL_LINK( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 TabBar::TabBar( vcl::Window* pParent ) :
     ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
-    EnableEditMode(true);
+    EnableEditMode();
 
     SetHelpId( HID_BASICIDE_TABBAR );
 }

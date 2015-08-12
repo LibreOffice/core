@@ -807,7 +807,7 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
 
         if ( !sFactoryURL.isEmpty() )
         {
-            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), false );
+            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ) );
         }
         else
         {

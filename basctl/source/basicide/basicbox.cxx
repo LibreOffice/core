@@ -202,7 +202,7 @@ void LibBox::FillBox()
     ClearBox();
 
     // create list box entries
-    sal_Int32 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
+    sal_Int32 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ) );
     SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, OUString() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
@@ -241,7 +241,7 @@ void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLo
         {
             OUString aName( rDocument.getTitle( eLocation ) );
             OUString aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
-            sal_Int32 nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
+            sal_Int32 nPos = InsertEntry( aEntryText );
             SetEntryData( nPos, new LibEntry( rDocument, eLocation, aLibName ) );
         }
     }

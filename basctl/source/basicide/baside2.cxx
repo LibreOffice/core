@@ -750,7 +750,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
                     long nNewStartY = (long)nStart * (long)pView->GetTextEngine()->GetCharHeight();
                     nNewStartY = std::min( nNewStartY, nMaxY );
                     pView->Scroll( 0, -(nNewStartY-nOldStartY) );
-                    pView->ShowCursor( false, true );
+                    pView->ShowCursor( false );
                     GetEditVScrollBar().SetThumbPos( pView->GetStartDocPos().Y() );
                 }
                 pView->SetSelection( aSel );
@@ -802,7 +802,7 @@ void ModulWindow::UpdateData()
 
 sal_Int32 ModulWindow::countPages( Printer* pPrinter )
 {
-    return FormatAndPrint( pPrinter, -1 );
+    return FormatAndPrint( pPrinter );
 }
 
 void ModulWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
@@ -1168,7 +1168,7 @@ void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
         // don't scroll with the value but rather use the Thumb-Pos for the VisArea:
         long nDiff = GetEditView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
         GetEditView()->Scroll( nDiff, 0 );
-        GetEditView()->ShowCursor( false, true );
+        GetEditView()->ShowCursor( false );
         pCurScrollBar->SetThumbPos( GetEditView()->GetStartDocPos().X() );
 
     }
