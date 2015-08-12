@@ -2089,7 +2089,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
 
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
-    //sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum(); // XXX: Unused for now
+    sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum(); // XXX: Unused for now
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
     if ( nCount > GetParagraphCount()-1) {
@@ -2107,8 +2107,11 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         return NULL;
      }
 
-     // Same code as GetOverflowingText (we just have to get that selection after all)
+    // NOTE: We want the selection of the overflowing text from here
+    //       At the same time we may want to consider the beginning of such text
+    //       in a more fine grained way (i.e. as GetNonOverflowingText did)
 
+/*
     sal_Int32 nHeadPara = pEditEngine->GetOverflowingParaNum();
     sal_uInt32 nParaCount = GetParagraphCount();
 
@@ -2129,17 +2132,17 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
             pEditEngine->GetOverflowingLineNum() > 0;
 
     return new NonOverflowingText(aOverflowingTextSel, bLastParaInterrupted);
+    **/
 
-    /* Old code
 
     // Only overflowing text, i.e. 1st line of 1st paragraph overflowing
     bool bItAllOverflew = nCount == 0 && nOverflowLine == 0;
     if ( bItAllOverflew )
     {
         ESelection aEmptySel(0,0,0,0);
-        EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
+        //EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
         bool bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
-        return new NonOverflowingText(pTObj, bLastParaInterrupted);
+        return new NonOverflowingText(aEmptySel, bLastParaInterrupted);
     } else { // Get the lines that of the overflowing para fit in the box
 
         sal_Int32 nOverflowingPara = nCount;
@@ -2152,29 +2155,32 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
             nLen += GetLineLen(nOverflowingPara, nLine);
         }
 
-        sal_Int32 nStartPara = 0;
-        sal_Int32 nStartPos = 0;
-        ESelection aNonOverflowingTextSelection;
+        //sal_Int32 nStartPara = 0;
+        //sal_Int32 nStartPos = 0;
+        ESelection aOverflowingTextSelection;
+
+        const sal_Int32 nEndPara = 1000000;
+        const sal_Int32 nEndPos = 1000000;
+
         if (nLen == 0) {
             // XXX: What happens inside this case might be dependent on the joining paragraps or not-thingy
             // Overflowing paragraph is empty or first line overflowing: it's not "Non-Overflowing" text then
             sal_Int32 nParaLen = GetText(GetParagraph(nOverflowingPara-1)).getLength();
-            aNonOverflowingTextSelection =
-                ESelection(nStartPara, nStartPos, nOverflowingPara-1, nParaLen);
+            aOverflowingTextSelection =
+                ESelection(nOverflowingPara-1, nParaLen, nEndPara, nEndPos);
         } else {
             // We take until we have to from the overflowing paragraph
-            aNonOverflowingTextSelection =
-                ESelection(nStartPara, nStartPos, nOverflowingPara, nLen);
+            aOverflowingTextSelection =
+                ESelection(nOverflowingPara, nLen, nEndPara, nEndPos);
         }
-        EditTextObject *pTObj = pEditEngine->CreateTextObject(aNonOverflowingTextSelection);
+        //EditTextObject *pTObj = pEditEngine->CreateTextObject(aNonOverflowingTextSelection);
 
         //sal_Int32 nLastLine = GetLineCount(nOverflowingPara)-1;
         bool bLastParaInterrupted =
             pEditEngine->GetOverflowingLineNum() > 0;
 
-       return new NonOverflowingText(pTObj, bLastParaInterrupted);
+       return new NonOverflowingText(aOverflowingTextSelection, bLastParaInterrupted);
     }
-    * */
 }
 
 OutlinerParaObject *Outliner::GetEmptyParaObject() const
