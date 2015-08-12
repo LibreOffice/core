@@ -3256,8 +3256,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
     const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( false );
 
     const SwPageFrm *pPage = pSh->Imp()->GetFirstVisPage(&rRenderContext);
-    if ( pPage->GetPrev() )
-        pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
+
     const bool bBookMode = gProp.pSGlobalShell->GetViewOptions()->IsViewLayoutBookMode();
     if ( bBookMode && pPage->GetPrev() && static_cast<const SwPageFrm*>(pPage->GetPrev())->IsEmptyPage() )
         pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
