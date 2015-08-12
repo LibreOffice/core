@@ -37,15 +37,6 @@
 
 namespace o3tl
 {
-// Functor, given two parameters, return the second
-template<class T1, class T2>
-struct project2nd : public std::binary_function<T1, T2, T2>
-{
-    T2 operator()(const T1&, const T2& x) const {
-        return x;
-    }
-};
-
 /// Select first value of a pair
 template<typename P>
 struct select1st
