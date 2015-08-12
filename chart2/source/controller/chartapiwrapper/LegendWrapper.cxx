@@ -302,8 +302,8 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
 
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
-        aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
-        aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
+        aRelativePosition.Primary = aPageSize.Width == 0 ? 0 : double(aPosition.X)/double(aPageSize.Width);
+        aRelativePosition.Secondary = aPageSize.Height == 0 ? 0 : double(aPosition.Y)/double(aPageSize.Height);
         xProp->setPropertyValue( "RelativePosition", uno::makeAny(aRelativePosition) );
     }
 }
