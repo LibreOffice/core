@@ -2407,8 +2407,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                             {
                                 // convert to window coordinates ....
                                 aClipRect.SetPos( pView->pImpEditView->GetWindowPos( aClipRect.TopLeft() ) );
-                                // If selected, then VDev ...
-                                Paint( pView->pImpEditView, aClipRect, 0, pView->HasSelection() );
+                                pView->pImpEditView->GetWindow()->Invalidate(aClipRect);
                             }
                         }
                     }
