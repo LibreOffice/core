@@ -1739,7 +1739,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 if (pViewFrm)
                 {
-                    pViewFrm->ShowChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId(), true);
+                    pViewFrm->ShowChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
                     if (pWnd)
                     {

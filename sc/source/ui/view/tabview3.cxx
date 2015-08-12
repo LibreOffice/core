@@ -105,7 +105,7 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
 
     if ( bRefMode )
     {
-        DoneRefMode( false );
+        DoneRefMode();
 
         if (bControl)
             SC_MOD()->AddRefEntry();
@@ -1535,7 +1535,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
-            bool bAllowed = pFormSh->PrepareClose(true);
+            bool bAllowed = pFormSh->PrepareClose();
             if (!bAllowed)
             {
                 //! Fehlermeldung? oder macht das die FormShell selber?
@@ -2381,7 +2381,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
 
     aViewData.Activate(bActivate);
 
-    PaintBlock(false);                  // Repaint, Markierung je nach Active-Status
+    PaintBlock();                  // Repaint, Markierung je nach Active-Status
 
     if (!bActivate)
         HideAllCursors();               // Cursor

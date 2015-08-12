@@ -371,7 +371,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         OUString                aStyleName;
         sal_uInt16              nRetMask = 0xffff;
 
-        pStylePool->SetSearchMask( eFamily, SFXSTYLEBIT_ALL );
+        pStylePool->SetSearchMask( eFamily );
 
         switch ( nSlotId )
         {
@@ -1174,7 +1174,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     SfxItemPool* pDocPool = GetViewData()->GetDocument()->GetPool();
                     SfxItemSet aNewSet( *pDocPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
                     aNewSet.Put( *pItem );
-                    pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet, true );
+                    pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet );
                 }
             }
             break;

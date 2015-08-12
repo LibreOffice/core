@@ -1048,7 +1048,7 @@ static inline void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDo
 {
     if ( !bProgress && pFCell->GetDirty() )
     {
-        ScProgress::CreateInterpretProgress( pDoc, true );
+        ScProgress::CreateInterpretProgress( pDoc );
         bProgress = true;
     }
 }
@@ -3138,7 +3138,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     }
     else
     {
-        rParam.mpEngine->Draw(mpDev, aLogicStart, 0);
+        rParam.mpEngine->Draw(mpDev, aLogicStart);
     }
 
     if (bClip)
@@ -4110,7 +4110,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     }
     else
     {
-        rParam.mpEngine->Draw( mpDev, aLogicStart, 0 );
+        rParam.mpEngine->Draw( mpDev, aLogicStart );
     }
 
     if (bClip)
@@ -4435,7 +4435,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     //  the whole output area, not the text itself
     aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
 
-    rParam.mpEngine->Draw(mpDev, aLogicStart, 0);
+    rParam.mpEngine->Draw(mpDev, aLogicStart);
 
     if (bClip)
     {

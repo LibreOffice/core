@@ -199,7 +199,7 @@ void ScViewFunc::DetectiveMarkPred()
     else
     {
         ScRange aRange;
-        ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, false);
+        ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos);
         if (aRange.aStart.Tab() != aCurPos.Tab())
         {
             // The first precedent range is on a different sheet.  Jump to it
@@ -325,7 +325,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         EditView* pTableView = pInputHdl->GetTableView();
         if (pTableView)
             pTableView->InsertText( aString);
-        pInputHdl->DataChanged( false, true);
+        pInputHdl->DataChanged( false );
     }
     else
     {

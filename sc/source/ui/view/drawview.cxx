@@ -66,7 +66,7 @@ void ScDrawView::Construct()
     EnableExtendedMouseEventDispatcher(false);
     EnableExtendedCommandEventDispatcher(false);
 
-    SetFrameDragSingles(true);
+    SetFrameDragSingles();
 
     SetMinMoveDistancePixel( 2 );
     SetHitTolerancePixel( 2 );
@@ -87,7 +87,7 @@ void ScDrawView::Construct()
             SetLayerLocked( pLayer->GetName(), bProt || !bEx );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
         if (pLayer)
-            SetLayerLocked( pLayer->GetName(), true );
+            SetLayerLocked( pLayer->GetName() );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
         if (pLayer)
         {
@@ -104,7 +104,7 @@ void ScDrawView::Construct()
             SetLayerVisible( pLayer->GetName(), false);
         }
 
-        SetSwapAsynchron(true);
+        SetSwapAsynchron();
     }
     else
     {

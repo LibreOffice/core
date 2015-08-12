@@ -720,7 +720,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {
-                        pDlg->SetEdStartValEnabled(false);
+                        pDlg->SetEdStartValEnabled();
                     }
 
                     if ( pDlg->Execute() == RET_OK )
@@ -1434,13 +1434,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         //check if horizontal shift will fit
                                         if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
                                                     MAXCOL - nRangeSizeX, nStartY,
-                                                    MAXCOL, nStartY + nRangeSizeY, false ) )
+                                                    MAXCOL, nStartY + nRangeSizeY ) )
                                             nDisableShiftX = SC_CELL_SHIFT_DISABLE_RIGHT;
 
                                         //check if vertical shift will fit
                                         if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
                                                     nStartX, MAXROW - nRangeSizeY,
-                                                    nStartX + nRangeSizeX, MAXROW, false ) )
+                                                    nStartX + nRangeSizeX, MAXROW ) )
                                             nDisableShiftY = SC_CELL_SHIFT_DISABLE_DOWN;
 
                                         if ( nDisableShiftX || nDisableShiftY )

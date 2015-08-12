@@ -523,7 +523,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     {
         pDrawView.reset(new FmFormView( pModel, pDev ));
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview( true );
+        pDrawView->SetPrintPreview();
         aOutputData.SetDrawView( pDrawView.get() );
     }
 
@@ -693,8 +693,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
             bChangeRow = true;
     }
 
-    pDoc->ExtendMerge( nStartCol,nStartRow, nEndCol,nEndRow, nPrintTab,
-                        false );      // no Refresh, incl. Attrs
+    pDoc->ExtendMerge( nStartCol,nStartRow, nEndCol,nEndRow, nPrintTab );  // no Refresh, incl. Attrs
 
     if ( bChangeCol )
     {
@@ -1798,7 +1797,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
             if (nDif > 0)
                 aDraw.Y() += nDif / 2;
-            pEditEngine->Draw( pDev, aDraw, 0 );
+            pEditEngine->Draw( pDev, aDraw );
         }
 
         //  center
@@ -1812,7 +1811,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
             if (nDif > 0)
                 aDraw.Y() += nDif / 2;
-            pEditEngine->Draw( pDev, aDraw, 0 );
+            pEditEngine->Draw( pDev, aDraw );
         }
 
         //  right
@@ -1826,7 +1825,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
             if (nDif > 0)
                 aDraw.Y() += nDif / 2;
-            pEditEngine->Draw( pDev, aDraw, 0 );
+            pEditEngine->Draw( pDev, aDraw );
         }
 
         pDev->SetClipRegion();
@@ -1883,14 +1882,14 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
                 {
                     if (bDoPrint)
                     {
-                        pEditEngine->Draw( pDev, Point( nPosX, nPosY ), 0 );
+                        pEditEngine->Draw( pDev, Point( nPosX, nPosY ) );
 
                         OUString aMarkStr(rPos.Format(SCA_VALID, pDoc, pDoc->GetAddressConvention()));
                         aMarkStr += ":";
 
                         //  cell position also via EditEngine, for correct positioning
                         pEditEngine->SetText(aMarkStr);
-                        pEditEngine->Draw( pDev, Point( aPageRect.Left(), nPosY ), 0 );
+                        pEditEngine->Draw( pDev, Point( aPageRect.Left(), nPosY ) );
                     }
 
                     if ( pLocationData )

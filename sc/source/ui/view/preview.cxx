@@ -175,8 +175,8 @@ void ScPreview::UpdateDrawView()        // nTab must be right
 
             // The DrawView takes over the Design-Mode from the Model
             // (Settings "In opening Draftmode"), therefore to restore here
-            pDrawView->SetDesignMode( true );
-            pDrawView->SetPrintPreview( true );
+            pDrawView->SetDesignMode();
+            pDrawView->SetPrintPreview();
             pDrawView->ShowSdrPage(pPage);
         }
     }
@@ -513,7 +513,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             pEditEng->SetRefMapMode(aMMMode);
             SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
             rDefPattern.FillEditItemSet(pEditDefaults);
-            pEditEng->SetDefaults(pEditDefaults, true);
+            pEditEng->SetDefaults(pEditDefaults);
 
             Color aTextColor(COL_LIGHTGRAY);
             pEditDefaults->Put(SvxColorItem(aTextColor, EE_CHAR_COLOR));
@@ -1105,13 +1105,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     {
                        aLRItem.SetLeft( (long)( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ));
                        rStyleSet.Put( aLRItem );
-                       pDocShell->SetModified(true);
+                       pDocShell->SetModified();
                     }
                     else if( bRightRulerChange && bRightRulerMove )
                     {
                         aLRItem.SetRight( (long)( nWidth - aButtonUpPt.X() / HMM_PER_TWIPS - aOffset.X() / HMM_PER_TWIPS ));
                         rStyleSet.Put( aLRItem );
-                        pDocShell->SetModified(true);
+                        pDocShell->SetModified();
                     }
 
                     ScStyleSaveData aNewData;
@@ -1177,13 +1177,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     {
                         aULItem.SetUpperValue( (sal_uInt16)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS ) );
                         rStyleSet.Put( aULItem );
-                        pDocShell->SetModified(true);
+                        pDocShell->SetModified();
                     }
                     else if( bBottomRulerMove && bBottomRulerChange )
                     {
                         aULItem.SetLowerValue( (sal_uInt16)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS ) );
                         rStyleSet.Put( aULItem );
-                        pDocShell->SetModified(true);
+                        pDocShell->SetModified();
                     }
                     else if( bHeaderRulerMove && bHeaderRulerChange )
                     {
@@ -1197,7 +1197,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                             SvxSetItem  aNewHeader( static_cast<const SvxSetItem&>(rStyleSet.Get(ATTR_PAGE_HEADERSET)) );
                             aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
                             rStyleSet.Put( aNewHeader );
-                            pDocShell->SetModified(true);
+                            pDocShell->SetModified();
                         }
                     }
                     else if( bFooterRulerMove && bFooterRulerChange )
@@ -1212,7 +1212,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                             SvxSetItem  aNewFooter( static_cast<const SvxSetItem&>(rStyleSet.Get(ATTR_PAGE_FOOTERSET)) );
                             aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
                             rStyleSet.Put( aNewFooter );
-                            pDocShell->SetModified(true);
+                            pDocShell->SetModified();
                         }
                     }
 
@@ -1281,7 +1281,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 {
                     pDocShell->GetDocFunc().SetWidthOrHeight(
                         true, aCols, nTab, SC_SIZE_DIRECT, (sal_uInt16)nNewColWidth, true, true);
-                    pDocShell->SetModified(true);
+                    pDocShell->SetModified();
                 }
                 if ( ValidTab( nTab ) )
                 {

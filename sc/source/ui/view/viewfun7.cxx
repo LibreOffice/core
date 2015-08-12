@@ -133,7 +133,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 pDragEditView->GetSdrPageView()->GetPage() )
         {
             if ( nDiffX != 0 || nDiffY != 0 )
-                pDragEditView->MoveAllMarked(Size(nDiffX,nDiffY), false);
+                pDragEditView->MoveAllMarked(Size(nDiffX,nDiffY));
         }
         else
         {

@@ -1696,22 +1696,22 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_
 
 SCCOL ScViewData::VisibleCellsX( ScHSplitPos eWhichX ) const
 {
-    return CellsAtX( GetPosX( eWhichX ), 1, eWhichX, SC_SIZE_NONE );
+    return CellsAtX( GetPosX( eWhichX ), 1, eWhichX );
 }
 
 SCROW ScViewData::VisibleCellsY( ScVSplitPos eWhichY ) const
 {
-    return CellsAtY( GetPosY( eWhichY ), 1, eWhichY, SC_SIZE_NONE );
+    return CellsAtY( GetPosY( eWhichY ), 1, eWhichY );
 }
 
 SCCOL ScViewData::PrevCellsX( ScHSplitPos eWhichX ) const
 {
-    return CellsAtX( GetPosX( eWhichX ), -1, eWhichX, SC_SIZE_NONE );
+    return CellsAtX( GetPosX( eWhichX ), -1, eWhichX );
 }
 
 SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 {
-    return CellsAtY( GetPosY( eWhichY ), -1, eWhichY, SC_SIZE_NONE );
+    return CellsAtY( GetPosY( eWhichY ), -1, eWhichY );
 }
 
 bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const

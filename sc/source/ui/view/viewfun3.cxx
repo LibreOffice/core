@@ -683,7 +683,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
 
             PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
                 GetViewData().GetCurX(), GetViewData().GetCurY(),
-                NULL, false, false );
+                NULL, false );
         }
     }
 }
@@ -1145,7 +1145,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     // content outside the clip area.
     for (SCTAB nClipTab=0; nClipTab < pClipDoc->GetTableCount(); nClipTab++)
         if ( pClipDoc->HasTable(nClipTab) )
-            if ( pClipDoc->ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nClipTab, false ) )
+            if ( pClipDoc->ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nClipTab ) )
                 bClipOver = true;
     nUndoEndCol -= nClipStartX + nClipSizeX;
     nUndoEndRow -= nClipStartY + nClipSizeY;        // now contains only the difference added by ExtendMerge
@@ -1158,7 +1158,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         return false;
     }
 
-    pDoc->ExtendMergeSel( nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, false );
+    pDoc->ExtendMergeSel( nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark );
 
         //  check cell-protection
 
@@ -1228,7 +1228,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bCutMode )
         {
             pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pRefUndoDoc->InitUndo( pDoc, 0, nTabCount-1, false, false );
+            pRefUndoDoc->InitUndo( pDoc, 0, nTabCount-1, false );
 
             pUndoData = new ScRefUndoData( pDoc );
         }
@@ -1515,8 +1515,8 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (pDoc->IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndoSelected(pDoc, aMark, false, false);
-        pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, pUndoDoc.get(), &aMark, true);
+        pUndoDoc->InitUndoSelected(pDoc, aMark, false);
+        pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, pUndoDoc.get(), &aMark);
     }
 
     ::std::unique_ptr<ScDocument> pMixDoc;
@@ -1525,8 +1525,8 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         if ( nFlags & IDF_CONTENTS )
         {
             pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-            pMixDoc->InitUndoSelected(pDoc, aMark, false, false);
-            pDoc->CopyToDocument(aMarkedRange, IDF_CONTENTS, false, pMixDoc.get(), &aMark, true);
+            pMixDoc->InitUndoSelected(pDoc, aMark, false);
+            pDoc->CopyToDocument(aMarkedRange, IDF_CONTENTS, false, pMixDoc.get(), &aMark);
         }
     }
 
@@ -1580,7 +1580,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         if (bInsertCells)
             pUndoMgr->AddUndoAction(new ScUndoWrapper(pUndo), true);
         else
-            pUndoMgr->AddUndoAction(pUndo, false);
+            pUndoMgr->AddUndoAction(pUndo);
 
         pUndoMgr->LeaveListAction();
     }
@@ -1661,11 +1661,11 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     if (pDoc->IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndoSelected(pDoc, aMark, false, false);
+        pUndoDoc->InitUndoSelected(pDoc, aMark, false);
         for (size_t i = 0, n = aRanges.size(); i < n; ++i)
         {
             pDoc->CopyToDocument(
-                *aRanges[i], nUndoFlags, false, pUndoDoc.get(), &aMark, true);
+                *aRanges[i], nUndoFlags, false, pUndoDoc.get(), &aMark);
         }
     }
 
@@ -1675,11 +1675,11 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         if (nFlags & IDF_CONTENTS)
         {
             pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-            pMixDoc->InitUndoSelected(pDoc, aMark, false, false);
+            pMixDoc->InitUndoSelected(pDoc, aMark, false);
             for (size_t i = 0, n = aRanges.size(); i < n; ++i)
             {
                 pDoc->CopyToDocument(
-                    *aRanges[i], IDF_CONTENTS, false, pMixDoc.get(), &aMark, true);
+                    *aRanges[i], IDF_CONTENTS, false, pMixDoc.get(), &aMark);
             }
         }
     }
@@ -1737,7 +1737,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         ScUndoPaste* pUndo = new ScUndoPaste(
             pDocSh, aRanges, aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, false, &aOptions);
 
-        pUndoMgr->AddUndoAction(pUndo, false);
+        pUndoMgr->AddUndoAction(pUndo);
         pUndoMgr->LeaveListAction();
     }
 

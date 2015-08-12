@@ -1661,7 +1661,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
         //  all Formulas because of references
         SCTAB nTabCount = rDoc.GetTableCount();
-        pUndoDoc->AddUndoTab( 0, nTabCount-1, false, false );
+        pUndoDoc->AddUndoTab( 0, nTabCount-1, false );
         rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA,false,pUndoDoc );
 
         pUndoData = new ScRefUndoData( &rDoc );
@@ -1892,9 +1892,9 @@ void ScViewFunc::SetWidthOrHeight(
             if (bWidth)
             {
                 if ( *itr == nFirstTab )
-                    pUndoDoc->InitUndo( &rDoc, *itr, *itr, true, false );
+                    pUndoDoc->InitUndo( &rDoc, *itr, *itr, true );
                 else
-                    pUndoDoc->AddUndoTab( *itr, *itr, true, false );
+                    pUndoDoc->AddUndoTab( *itr, *itr, true );
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
                         static_cast<SCCOL>(nEnd), MAXROW, *itr, IDF_NONE,
                         false, pUndoDoc );
@@ -2121,7 +2121,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
         SCTAB nTab = GetViewData().GetTabNo();
         DoneBlockMode();
         InitOwnBlockMode();
-        rMark.SetMultiMarkArea( ScRange( nCol,nRow,nTab ), true );
+        rMark.SetMultiMarkArea( ScRange( nCol,nRow,nTab ) );
         MarkDataChanged();
     }
 

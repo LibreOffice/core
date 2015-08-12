@@ -1389,7 +1389,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
             nEndPos = *pPosY;
         else
             nEndPos = aViewData.GetPosY( SC_SPLIT_BOTTOM );
-        nEndPos += aViewData.CellsAtY( nEndPos, 1, SC_SPLIT_BOTTOM, SC_SIZE_NONE ); // VisibleCellsY
+        nEndPos += aViewData.CellsAtY( nEndPos, 1, SC_SPLIT_BOTTOM ); // VisibleCellsY
         if (nEndPos > MAXROW)
             nEndPos = lcl_LastVisible( aViewData );
 
@@ -1400,7 +1400,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
                 nTopEnd = *pPosY;
             else
                 nTopEnd = aViewData.GetPosY( SC_SPLIT_TOP );
-            nTopEnd += aViewData.CellsAtY( nTopEnd, 1, SC_SPLIT_TOP, SC_SIZE_NONE );// VisibleCellsY
+            nTopEnd += aViewData.CellsAtY( nTopEnd, 1, SC_SPLIT_TOP );// VisibleCellsY
             if (nTopEnd > MAXROW)
                 nTopEnd = lcl_LastVisible( aViewData );
 
@@ -2226,7 +2226,7 @@ void ScTabView::EnableRefInput(bool bFlag)
 
     // ab hier dynamisch angelegte
 
-    if(pTabControl!=nullptr) pTabControl->EnableInput(bFlag,true);
+    if(pTabControl!=nullptr) pTabControl->EnableInput(bFlag);
 
     if(pGridWin[SC_SPLIT_BOTTOMLEFT]!=nullptr)
         pGridWin[SC_SPLIT_BOTTOMLEFT]->EnableInput(bFlag,false);

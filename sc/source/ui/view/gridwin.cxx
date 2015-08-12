@@ -4324,7 +4324,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
                 if ( bDone )
                 {
-                    pView->MarkRange( aDest, false, false );
+                    pView->MarkRange( aDest, false );
 
                     SCCOL nDCol = pViewData->GetCurX() - aSource.aStart.Col() + nCorrectCursorPosCol;
                     SCROW nDRow = pViewData->GetCurY() - aSource.aStart.Row() + nCorrectCursorPosRow;
@@ -4432,7 +4432,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
                     pView->EnterMatrix( aFormula.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE );
 
-                    pView->MarkRange( aDest, false, false );
+                    pView->MarkRange( aDest, false );
                     pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );
                 }
 
@@ -4466,7 +4466,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 bDone = pView->PasteFromClip( IDF_ALL, pTransObj->GetDocument() );  // clip-doc
                 if ( bDone )
                 {
-                    pView->MarkRange( aDest, false, false );
+                    pView->MarkRange( aDest, false );
                     pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );
                 }
             }

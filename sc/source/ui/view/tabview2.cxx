@@ -483,7 +483,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         bool bOldShift = bMoveIsShift;
         bMoveIsShift = false;               //  wirklich umsetzen
-        DoneBlockMode(false);               //! direkt Variablen setzen? (-> kein Geflacker)
+        DoneBlockMode();               //! direkt Variablen setzen? (-> kein Geflacker)
         bMoveIsShift = bOldShift;
 
         InitBlockMode( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),

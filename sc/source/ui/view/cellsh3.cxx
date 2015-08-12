@@ -785,7 +785,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                 const ScMarkData& rMark = GetViewData()->GetMarkData();
                 if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                    pTabViewShell->MarkDataArea( true );
+                    pTabViewShell->MarkDataArea();
 
                 GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );

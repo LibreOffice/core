@@ -335,7 +335,7 @@ void ScTabView::UpdateLayerLocks()
             pDrawView->SetLayerLocked( pLayer->GetName(), bProt || !bEx || bShared );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
         if (pLayer)
-            pDrawView->SetLayerLocked( pLayer->GetName(), true );
+            pDrawView->SetLayerLocked( pLayer->GetName() );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
         if (pLayer)
             pDrawView->SetLayerLocked( pLayer->GetName(), bProt || bShared );
@@ -478,7 +478,7 @@ void ScTabView::DrawEnableAnim(bool bSet)
         {
             if ( !pDrawView->IsAnimationEnabled() )
             {
-                pDrawView->SetAnimationEnabled(true);
+                pDrawView->SetAnimationEnabled();
 
                 //  Animierte GIFs muessen wieder gestartet werden:
                 ScDocument* pDoc = aViewData.GetDocument();

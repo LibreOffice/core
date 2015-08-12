@@ -2281,7 +2281,7 @@ void setCursor(  const SCCOL& nCol, const SCROW& nRow, const uno::Reference< fra
         if ( bInSel )
             pShell->SetCursor( nCol, nRow );
         else
-            pShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_NONE, false, false, true, false );
+            pShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_NONE, false, false, true );
     }
 }
 

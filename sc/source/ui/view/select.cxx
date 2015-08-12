@@ -238,7 +238,7 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
 
     if (bRefMode)
     {
-        pView->DoneRefMode( false );
+        pView->DoneRefMode();
         aAnchorPos.Set( nPosX, nPosY, nTab );
         pView->InitRefMode( aAnchorPos.Col(), aAnchorPos.Row(), aAnchorPos.Tab(),
                             SC_REFTYPE_REF );
@@ -721,11 +721,11 @@ void ScViewFunctionSet::DeselectAll()
     bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
     {
-        pViewData->GetView()->DoneRefMode( false );
+        pViewData->GetView()->DoneRefMode();
     }
     else
     {
-        pViewData->GetView()->DoneBlockMode( false );
+        pViewData->GetView()->DoneBlockMode();
         pViewData->GetViewShell()->UpdateInputHandler();
     }
 
@@ -912,7 +912,7 @@ void ScHeaderFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 
 void ScHeaderFunctionSet::DeselectAll()
 {
-    pViewData->GetView()->DoneBlockMode( false );
+    pViewData->GetView()->DoneBlockMode();
     bAnchor = false;
 }
 

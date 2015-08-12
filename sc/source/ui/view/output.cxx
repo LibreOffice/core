@@ -1985,7 +1985,7 @@ void ScOutputData::FindChanged()
             ScFormulaCell* pFCell = rCell.mpFormula;
             if ( !bProgress && pFCell->GetDirty() )
             {
-                ScProgress::CreateInterpretProgress(mpDoc, true);
+                ScProgress::CreateInterpretProgress(mpDoc);
                 bProgress = true;
             }
             if (pFCell->IsRunning())

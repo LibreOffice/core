@@ -139,7 +139,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
 OUString
 ScVbaName::getValue() throw (css::uno::RuntimeException, std::exception)
 {
-    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
+    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 
     return sResult;
 }
@@ -147,7 +147,7 @@ ScVbaName::getValue() throw (css::uno::RuntimeException, std::exception)
 void
 ScVbaName::setValue( const OUString & rValue ) throw (css::uno::RuntimeException, std::exception)
 {
-    setContent( rValue, formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
+    setContent( rValue, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 OUString
@@ -177,14 +177,14 @@ ScVbaName::setRefersToLocal( const OUString & rRefersTo ) throw (css::uno::Runti
 OUString
 ScVbaName::getRefersToR1C1() throw (css::uno::RuntimeException, std::exception)
 {
-    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
+    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
     return  sResult;
 }
 
 void
 ScVbaName::setRefersToR1C1( const OUString & rRefersTo ) throw (css::uno::RuntimeException, std::exception)
 {
-    setContent( rRefersTo, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
+    setContent( rRefersTo, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 OUString

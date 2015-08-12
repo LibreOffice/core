@@ -745,7 +745,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aOutputData.DrawNoteMarks(*pContentDev);
 
     if ( !bLogicText )
-        aOutputData.DrawStrings(false);     // in pixel MapMode
+        aOutputData.DrawStrings();     // in pixel MapMode
 
     // edit cells and printer-metrics text must be before the buttons
     // (DataPilot buttons contain labels in UI font)
@@ -1450,7 +1450,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
             pContentDev->SetClipRegion(vcl::Region(aRect));
-            aComboButton.Draw( false, false );
+            aComboButton.Draw( false );
             pContentDev->SetClipRegion();           // always called from Draw() without clip region
             aComboButton.SetPosPixel( aOldPos );    // restore old state
             aComboButton.SetSizePixel( aOldSize );  // for MouseUp/Down (AutoFilter)
