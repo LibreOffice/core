@@ -124,6 +124,9 @@ int main(int argc, char **argv) {
   const char *certNames[MAX_SIGNATURES];
   char *MARChannelID = MAR_CHANNEL_ID;
   char *productVersion = MOZ_APP_VERSION;
+#ifndef NO_SIGN_VERIFY
+  uint32_t k;
+#endif
   int rv = -1;
   uint32_t certCount = 0;
   int32_t sigIndex = -1;
