@@ -337,10 +337,10 @@ DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
     border = getProperty<table::BorderLine2>(cell, "LeftBorder");
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
-    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
 #if 0
     // #if'd out because the "fine dashed" border line style for table borders
     // does not seem to save or load correctly in odt format at present
+    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 #endif
 
