@@ -355,14 +355,14 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
     // similar to ScInterpreter::ScExternal()
     OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
     {
-        const FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
-        if (pFuncData)
+        const LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
+        if (pLegacyFuncData)
         {
-            if ( nParameter >= pFuncData->GetParamCount() )
+            if ( nParameter >= pLegacyFuncData->GetParamCount() )
                 eRet = Bounds;
             else
             {
-                switch ( pFuncData->GetParamType( nParameter) )
+                switch ( pLegacyFuncData->GetParamType( nParameter) )
                 {
                     case ParamType::PTR_DOUBLE:
                     case ParamType::PTR_STRING:

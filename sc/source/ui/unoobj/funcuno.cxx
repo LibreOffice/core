@@ -308,7 +308,7 @@ static bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rName,co
 
     // 2. old add in functions
 
-    if (ScGlobal::GetFuncCollection()->findByName(aUpper))
+    if (ScGlobal::GetLegacyFuncCollection()->findByName(aUpper))
     {
         rArray.AddExternal(aUpper.getStr());
         return true;

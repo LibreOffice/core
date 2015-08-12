@@ -85,7 +85,7 @@
 tools::SvRef<ScDocShell>*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
 ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
-FuncCollection* ScGlobal::pFuncCollection = NULL;
+LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = NULL;
 ScUnoAddInCollection* ScGlobal::pAddInCollection = NULL;
 ScUserList*     ScGlobal::pUserList = NULL;
 OUString**      ScGlobal::ppRscString = NULL;
@@ -274,11 +274,11 @@ ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
     return pAutoFormat;
 }
 
-FuncCollection* ScGlobal::GetFuncCollection()
+LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 {
-    if (!pFuncCollection)
-        pFuncCollection = new FuncCollection();
-    return pFuncCollection;
+    if (!pLegacyFuncCollection)
+        pLegacyFuncCollection = new LegacyFuncCollection();
+    return pLegacyFuncCollection;
 }
 
 ScUnoAddInCollection* ScGlobal::GetAddInCollection()
@@ -608,7 +608,7 @@ void ScGlobal::Clear()
     ExitExternalFunc();
     DELETEZ(pAutoFormat);
     DELETEZ(pSearchItem);
-    DELETEZ(pFuncCollection);
+    DELETEZ(pLegacyFuncCollection);
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
 

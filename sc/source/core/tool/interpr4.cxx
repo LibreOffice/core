@@ -2498,13 +2498,13 @@ void ScInterpreter::ScExternal()
     sal_uInt8 nParamCount = GetByte();
     OUString aUnoName;
     OUString aFuncName( ScGlobal::pCharClass->uppercase( pCur->GetExternal() ) );
-    FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
-    if (pFuncData)
+    LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
+    if (pLegacyFuncData)
     {
         // Old binary non-UNO add-in function.
         // NOTE: parameter count is 1-based with the 0th "parameter" being the
-        // return value, included in pFuncDatat->GetParamCount()
-        if (nParamCount < MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
+        // return value, included in pLegacyFuncDatat->GetParamCount()
+        if (nParamCount < MAXFUNCPARAM && nParamCount == pLegacyFuncData->GetParamCount() - 1)
         {
             ParamType   eParamType[MAXFUNCPARAM];
             void*       ppParam[MAXFUNCPARAM];
@@ -2515,7 +2515,7 @@ void ScInterpreter::ScExternal()
 
             for (i = 0; i < MAXFUNCPARAM; i++)
             {
-                eParamType[i] = pFuncData->GetParamType(i);
+                eParamType[i] = pLegacyFuncData->GetParamType(i);
                 ppParam[i] = NULL;
                 nVal[i] = 0.0;
                 pStr[i] = NULL;
@@ -2605,7 +2605,7 @@ void ScInterpreter::ScExternal()
 
             if (nGlobalError == 0)
             {
-                if ( pFuncData->GetAsyncType() == ParamType::NONE )
+                if ( pLegacyFuncData->GetAsyncType() == ParamType::NONE )
                 {
                     switch ( eParamType[0] )
                     {
@@ -2613,7 +2613,7 @@ void ScInterpreter::ScExternal()
                         {
                             double nErg = 0.0;
                             ppParam[0] = &nErg;
-                            pFuncData->Call(ppParam);
+                            pLegacyFuncData->Call(ppParam);
                             PushDouble(nErg);
                         }
                         break;
@@ -2621,7 +2621,7 @@ void ScInterpreter::ScExternal()
                         {
                             std::unique_ptr<sal_Char[]> pcErg(new sal_Char[ADDIN_MAXSTRLEN]);
                             ppParam[0] = pcErg.get();
-                            pFuncData->Call(ppParam);
+                            pLegacyFuncData->Call(ppParam);
                             OUString aUni( pcErg.get(), strlen(pcErg.get()), osl_getThreadTextEncoding() );
                             PushString( aUni );
                         }
@@ -2638,14 +2638,14 @@ void ScInterpreter::ScExternal()
                     // assure identical handler with identical call?
                     double nErg = 0.0;
                     ppParam[0] = &nErg;
-                    pFuncData->Call(ppParam);
+                    pLegacyFuncData->Call(ppParam);
                     sal_uLong nHandle = sal_uLong( nErg );
                     if ( nHandle >= 65536 )
                     {
                         ScAddInAsync* pAs = ScAddInAsync::Get( nHandle );
                         if ( !pAs )
                         {
-                            pAs = new ScAddInAsync(nHandle, pFuncData, pDok);
+                            pAs = new ScAddInAsync(nHandle, pLegacyFuncData, pDok);
                             pMyFormulaCell->StartListening( *pAs );
                         }
                         else

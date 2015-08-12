@@ -428,6 +428,8 @@ ScFunctionList::ScFunctionList() :
         }
     }
 
+    // legacy binary AddIn functions
+
     sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; // FuncID for AddIn functions
 
     // Interpretation of AddIn list
@@ -445,22 +447,22 @@ ScFunctionList::ScFunctionList() :
     OUString aDefArgDescNone    = "none";
 
     OUString aArgName, aArgDesc;
-    const FuncCollection& rFuncColl = *ScGlobal::GetFuncCollection();
-    FuncCollection::const_iterator it = rFuncColl.begin(), itEnd = rFuncColl.end();
+    const LegacyFuncCollection& rLegacyFuncColl = *ScGlobal::GetLegacyFuncCollection();
+    LegacyFuncCollection::const_iterator it = rLegacyFuncColl.begin(), itEnd = rLegacyFuncColl.end();
     for (; it != itEnd; ++it)
     {
-        const FuncData* pAddInFuncData = it->second;
+        const LegacyFuncData* pLegacyFuncData = it->second;
         pDesc = new ScFuncDesc;
-        sal_uInt16 nArgs = pAddInFuncData->GetParamCount() - 1;
-        pAddInFuncData->getParamDesc( aArgName, aArgDesc, 0 );
+        sal_uInt16 nArgs = pLegacyFuncData->GetParamCount() - 1;
+        pLegacyFuncData->getParamDesc( aArgName, aArgDesc, 0 );
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
-        pDesc->pFuncName   = new OUString(pAddInFuncData->GetInternalName().toAsciiUpperCase());
+        pDesc->pFuncName   = new OUString(pLegacyFuncData->GetInternalName().toAsciiUpperCase());
 
         OUStringBuffer aBuf(aArgDesc);
         aBuf.append('\n');
         aBuf.appendAscii("( AddIn: ");
-        aBuf.append(pAddInFuncData->GetModuleName());
+        aBuf.append(pLegacyFuncData->GetModuleName());
         aBuf.appendAscii(" )");
         pDesc->pFuncDesc = new OUString(aBuf.makeStringAndClear());
 
@@ -476,12 +478,12 @@ ScFunctionList::ScFunctionList() :
             {
                 pDesc->pDefArgFlags[j].bOptional = false;
                 pDesc->pDefArgFlags[j].bSuppress = false;
-                pAddInFuncData->getParamDesc( aArgName, aArgDesc, j+1 );
+                pLegacyFuncData->getParamDesc( aArgName, aArgDesc, j+1 );
                 if ( !aArgName.isEmpty() )
                     pDesc->maDefArgNames[j] = aArgName;
                 else
                 {
-                    switch (pAddInFuncData->GetParamType(j+1))
+                    switch (pLegacyFuncData->GetParamType(j+1))
                     {
                         case ParamType::PTR_DOUBLE:
                             pDesc->maDefArgNames[j] = aDefArgNameValue;
@@ -507,7 +509,7 @@ ScFunctionList::ScFunctionList() :
                     pDesc->maDefArgDescs[j] = aArgDesc;
                 else
                 {
-                    switch (pAddInFuncData->GetParamType(j+1))
+                    switch (pLegacyFuncData->GetParamType(j+1))
                     {
                         case ParamType::PTR_DOUBLE:
                             pDesc->maDefArgDescs[j] = aDefArgDescValue;
