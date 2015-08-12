@@ -1,0 +1,429 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_1f094332",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "Merge Autofilter width with column.cxx",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_7f068f21",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "Connection",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_5f03cb0f",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "Created from attributes",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_0209ec2c",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "if there is the leading 0 on a printer devive, we have problems",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_e20de838",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "number format",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_2210704e",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "margins (plural)",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_4213f45c",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "margins (plural)",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_821dfc68",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "next time return here again",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_621a7870",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "the same text may fit in the next cell",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c22544af",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1932,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "no vertical clipping when printing cells with optimal height, ...",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a22ac07c",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "attributes",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_0220cc9a",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3120,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "no hard clip, only draw the affected rows",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_e224c8b0",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4090,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "no hard clip, only draw the affected rows",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_423ad4ce",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4655,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "for",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_2237d0e4",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4802,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "margins (plural)",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_8234dcde",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4804,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "Change position and paper size to EditUtil",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_6231d8ec",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4813,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "without substracting the margin",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c24c2479",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4826,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "rotate here already, ...",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_02572c03",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "... as long as the rows can not be outputted individually offsetted -\u003e ...",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a2512011",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4862,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "With offsetted rows ...",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_e25b282d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4875,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "cell (singular)",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_42413439",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4981,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "omit which doesn\u0027t stick out",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_223eb0b8",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4988,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "go on writing",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_824b3c59",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5057,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "of the window",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a2780091",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5155,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 1,
+      "message": "rotated text is centered by default",
+      "revId": "7b5faf46d1614aaa05a6ff2309c519ce314f7245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

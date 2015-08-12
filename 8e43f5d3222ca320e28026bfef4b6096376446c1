@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_6248b85c",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4960,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 0,
+      "message": "Please do not remove commented out code in a a translation commit. You might commit that seperately.",
+      "revId": "8e43f5d3222ca320e28026bfef4b6096376446c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c27384b3",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5094,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-08-12T07:16:04Z",
+      "side": 0,
+      "message": "Same here, please do not remove commented out code",
+      "revId": "8e43f5d3222ca320e28026bfef4b6096376446c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
