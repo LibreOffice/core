@@ -30,7 +30,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <cppuhelper/implbase1.hxx>
 
 #include <stdio.h>
 

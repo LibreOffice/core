@@ -29,7 +29,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
@@ -81,7 +81,7 @@ const OUString BMP_EXTENSION( "bmp" );
 // a test client
 
 
-class FilePickerListener : public WeakImplHelper1< XFilePickerListener >
+class FilePickerListener : public WeakImplHelper< XFilePickerListener >
 {
 public:
 

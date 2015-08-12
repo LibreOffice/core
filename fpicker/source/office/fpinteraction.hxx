@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_FPINTERACTION_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_FPINTERACTION_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 
@@ -31,7 +31,7 @@ namespace svt
 
     //= OFilePickerInteractionHandler
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionHandler
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::task::XInteractionHandler
                                     >   OFilePickerInteractionHandler_Base;
 
     /** a InteractionHandler implementation which extends another handler with some customizability
