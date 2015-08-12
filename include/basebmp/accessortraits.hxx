@@ -24,8 +24,6 @@
 #include <basebmp/accessoradapters.hxx>
 #include <basebmp/metafunctions.hxx>
 
-#include <o3tl/compat_functional.hxx>
-
 #include <functional>
 
 namespace basebmp
@@ -71,7 +69,15 @@ template< class Accessor,
         type;
 };
 
-
+/// given an Accessor and its value type return its value_type
+template< typename Accessor > struct ColorPassThrough
+{
+    typename Accessor::value_type operator()( const Accessor&,
+            const typename Accessor::value_type& x ) const
+    {
+        return x;
+    }
+};
 
 /** Traits template for Accessor
 
@@ -84,7 +90,7 @@ template< class Accessor > struct AccessorTraits
     typedef typename Accessor::value_type           value_type;
 
     /// Retrieve stand-alone color lookup function for given Accessor type
-    typedef o3tl::project2nd< Accessor, value_type > color_lookup;
+    typedef ColorPassThrough< Accessor > color_lookup;
 
     /// Retrieve raw pixel data accessor for given Accessor type
     typedef Accessor                                raw_accessor;
