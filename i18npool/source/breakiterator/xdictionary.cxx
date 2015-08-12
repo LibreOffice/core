@@ -283,7 +283,7 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
             segBoundary.startPos = segmentCachedBoundary.startPos;
             segBoundary.endPos = segmentCachedBoundary.endPos;
             indexUtf16 = segmentCachedBoundary.startPos;
-            rText.iterateCodePoints(&indexUtf16, 1);
+            rText.iterateCodePoints(&indexUtf16);
             return segmentCachedBoundary.endPos > indexUtf16;
         }
     }
@@ -303,7 +303,7 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
     indexUtf16 = pos;
     while (indexUtf16 < rText.getLength())
     {
-        sal_uInt32 ch = rText.iterateCodePoints(&indexUtf16, 1);
+        sal_uInt32 ch = rText.iterateCodePoints(&indexUtf16);
         if (u_isWhitespace(ch) || exists(ch))
             segBoundary.endPos = indexUtf16;
         else
@@ -315,7 +315,7 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
     segmentCachedBoundary.endPos = segBoundary.endPos;
 
     indexUtf16 = segBoundary.startPos;
-    rText.iterateCodePoints(&indexUtf16, 1);
+    rText.iterateCodePoints(&indexUtf16);
     return segBoundary.endPos > indexUtf16;
 }
 
@@ -419,8 +419,8 @@ Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int1
         const sal_Int32 nLen = rText.getLength();
         if (anyPos < nLen) {
             // looknig for the first non-whitespace character from anyPos
-            sal_uInt32 ch = rText.iterateCodePoints(&anyPos, 1);
-            while (u_isWhitespace(ch) && (anyPos < nLen)) ch=rText.iterateCodePoints(&anyPos, 1);
+            sal_uInt32 ch = rText.iterateCodePoints(&anyPos);
+            while (u_isWhitespace(ch) && (anyPos < nLen)) ch=rText.iterateCodePoints(&anyPos);
             if (anyPos > 0)
                 rText.iterateCodePoints(&anyPos, -1);
         }
@@ -445,7 +445,7 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
             if (!bDirection && startPos > 0 && startPos == (anyPos - boundary.startPos))
             {
                 sal_Int32 indexUtf16 = anyPos-1;
-                sal_uInt32 ch = rText.iterateCodePoints(&indexUtf16, 1);
+                sal_uInt32 ch = rText.iterateCodePoints(&indexUtf16);
                 if (u_isWhitespace(ch))
                     i--;
             }
@@ -456,7 +456,7 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
 
         } else {
             boundary.startPos = anyPos;
-            if (anyPos < len) rText.iterateCodePoints(&anyPos, 1);
+            if (anyPos < len) rText.iterateCodePoints(&anyPos);
             boundary.endPos = anyPos < len ? anyPos : len;
         }
         if (wordType == WordType::WORD_COUNT) {
@@ -464,7 +464,7 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
             while (boundary.endPos < len)
             {
                 sal_Int32 indexUtf16 = boundary.endPos;
-                if (u_ispunct(rText.iterateCodePoints(&indexUtf16, 1)))
+                if (u_ispunct(rText.iterateCodePoints(&indexUtf16)))
                     boundary.endPos = indexUtf16;
                 else
                     break;

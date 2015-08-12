@@ -217,7 +217,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
         }
     } else { // for CHARACTER mode
         for (nDone = 0; nDone < nCount && nStartPos < Text.getLength(); nDone++)
-            Text.iterateCodePoints(&nStartPos, 1);
+            Text.iterateCodePoints(&nStartPos);
     }
     return nStartPos;
 }
@@ -331,8 +331,8 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
         nStartPos = sentence.aBreakIterator->preceding(nStartPos);
 
     // skip preceding space.
-    sal_uInt32 ch = Text.iterateCodePoints(&nStartPos, 1);
-    while (nStartPos < len && u_isWhitespace(ch)) ch = Text.iterateCodePoints(&nStartPos, 1);
+    sal_uInt32 ch = Text.iterateCodePoints(&nStartPos);
+    while (nStartPos < len && u_isWhitespace(ch)) ch = Text.iterateCodePoints(&nStartPos);
     Text.iterateCodePoints(&nStartPos, -1);
 
     return nStartPos;

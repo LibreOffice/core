@@ -87,8 +87,7 @@ namespace stoc_connector {
         m_sDescription += ",uniqueValue=";
         m_sDescription += OUString::number(
             sal::static_int_cast< sal_Int64 >(
-                reinterpret_cast< sal_IntPtr >(&m_socket)),
-            10 );
+                reinterpret_cast< sal_IntPtr >(&m_socket)) );
     }
 
     SocketConnection::~SocketConnection()

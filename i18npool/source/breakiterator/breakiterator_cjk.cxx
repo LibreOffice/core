@@ -96,7 +96,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 
     if (bOptions.allowPunctuationOutsideMargin &&
             hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
-            (Text.iterateCodePoints( &nStartPos, 1), nStartPos == Text.getLength())) {
+            (Text.iterateCodePoints( &nStartPos ), nStartPos == Text.getLength())) {
         ; // do nothing
     } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
         while (nStartPos > 0 &&
