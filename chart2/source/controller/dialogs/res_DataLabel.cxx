@@ -77,7 +77,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
         rCheckbox.Check( static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() );
     else
     {
-        rCheckbox.EnableTriState( true );
+        rCheckbox.EnableTriState();
         rCheckbox.SetState( TRISTATE_INDET );
     }
 }

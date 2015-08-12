@@ -188,16 +188,16 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
         switch( nLegendPosition )
         {
             case chart2::LegendPosition_LINE_START:
-                m_pRbtLeft->Check(true);
+                m_pRbtLeft->Check();
                 break;
             case chart2::LegendPosition_PAGE_START:
-                m_pRbtTop->Check(true);
+                m_pRbtTop->Check();
                 break;
             case chart2::LegendPosition_LINE_END:
-                m_pRbtRight->Check(true);
+                m_pRbtRight->Check();
                 break;
             case chart2::LegendPosition_PAGE_END:
-                m_pRbtBottom->Check(true);
+                m_pRbtBottom->Check();
                 break;
             default:
                 break;

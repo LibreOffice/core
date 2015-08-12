@@ -258,7 +258,7 @@ void ControllerState::update(
                     bMayFormatXErrorBars = bMayDeleteXErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries, false );
                     bMayAddXErrorBars = ! bMayDeleteXErrorBars;
 
-                    bMayFormatYErrorBars = bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries, true );
+                    bMayFormatYErrorBars = bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries );
                     bMayAddYErrorBars = ! bMayDeleteYErrorBars;
                 }
             }

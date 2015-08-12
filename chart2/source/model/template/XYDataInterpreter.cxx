@@ -161,9 +161,9 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
 
             // values-y
             Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
             Reference< data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x", false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
             // re-use values-... as values-x/values-y
             if( ! xValuesX.is() ||
                 ! xValuesY.is())

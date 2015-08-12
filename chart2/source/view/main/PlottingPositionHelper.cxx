@@ -625,7 +625,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformLogicToScene( double f
         this->clipLogicValues( &fX,&fY,&fZ );
     double fLogicValueOnAngleAxis  = m_bSwapXAndY ? fY : fX;
     double fLogicValueOnRadiusAxis = m_bSwapXAndY ? fX : fY;
-    return this->transformAngleRadiusToScene( fLogicValueOnAngleAxis, fLogicValueOnRadiusAxis, fZ, true );
+    return this->transformAngleRadiusToScene( fLogicValueOnAngleAxis, fLogicValueOnRadiusAxis, fZ );
 }
 
 drawing::Position3D PolarPlottingPositionHelper::transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const

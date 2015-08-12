@@ -487,7 +487,6 @@ void VDiagram::createShapes_3d()
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
     const bool bDoubleSided = false;
-    const bool bFlatNormals = true;
 
     //add walls
     {
@@ -523,7 +522,7 @@ void VDiagram::createShapes_3d()
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe( xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -551,7 +550,7 @@ void VDiagram::createShapes_3d()
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -625,7 +624,7 @@ void VDiagram::createShapes_3d()
 
         uno::Reference< drawing::XShape > xShape =
             m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
-                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0, bFlatNormals );
+                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0 );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )

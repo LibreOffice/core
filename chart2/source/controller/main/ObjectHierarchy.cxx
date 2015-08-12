@@ -313,7 +313,7 @@ void ImplObjectHierarchy::createAxesTree(
                           lcl_ObjectToOID( xChartDoc ));
 
         // get all axes, also invisible ones
-        aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ false );
+        aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
         // Grids
         Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
         for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )

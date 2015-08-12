@@ -342,12 +342,12 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
         m_pLB_AxisType->SelectEntryPos( nPos );
     }
 
-    m_pCbxAutoMin->Check( true );
-    m_pCbxAutoMax->Check( true );
-    m_pCbxAutoStepMain->Check( true );
-    m_pCbxAutoStepHelp->Check( true );
-    m_pCbxAutoOrigin->Check( true );
-    m_pCbx_AutoTimeResolution->Check( true );
+    m_pCbxAutoMin->Check();
+    m_pCbxAutoMax->Check();
+    m_pCbxAutoStepMain->Check();
+    m_pCbxAutoStepHelp->Check();
+    m_pCbxAutoOrigin->Check();
+    m_pCbx_AutoTimeResolution->Check();
 
     if (rInAttrs->GetItemState(SCHATTR_AXIS_AUTO_MIN,true,&pPoolItem) == SfxItemState::SET)
         m_pCbxAutoMin->Check(static_cast<const SfxBoolItem*>(pPoolItem)->GetValue());

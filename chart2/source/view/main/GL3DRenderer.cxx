@@ -439,7 +439,7 @@ void OpenGL3DRenderer::init()
     m_TextInfoBatch.batchNum = 512;
     CHECK_GL_ERROR();
     glViewport(0, 0, m_iWidth, m_iHeight);
-    Set3DSenceInfo(0xFFFFFF, true);
+    Set3DSenceInfo(0xFFFFFF);
     m_GlobalScaleMatrix = glm::scale(glm::vec3(0.01f, 0.01f, 0.01f));
 }
 

@@ -617,7 +617,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         {
             Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(rObjectCID , xChartModel));
             Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-            aRet += getName(eObjectType, false);
+            aRet += getName(eObjectType);
 
             if( xCurveCnt.is())
             {
@@ -685,12 +685,12 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         else
         {
             // non-verbose
-            aRet = ObjectNameProvider::getName( eObjectType, false );
+            aRet = ObjectNameProvider::getName( eObjectType );
         }
     }
     else
     {
-        aRet = ObjectNameProvider::getName( eObjectType, false );
+        aRet = ObjectNameProvider::getName( eObjectType );
     }
     return aRet;
 }
@@ -833,7 +833,7 @@ OUString ObjectNameProvider::getName_ObjectForSeries(
     if( xSeries.is() )
     {
         OUString aRet = SCH_RESSTR(STR_OBJECT_FOR_SERIES);
-        replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType, false /*bPlural*/ ) );
+        replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType ) );
         replaceParamterInString( aRet, "%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartModel ) );
         return aRet;
     }

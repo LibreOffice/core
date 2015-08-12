@@ -113,9 +113,9 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
     m_pCB_Shading->SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectShading ) );
     m_pCB_ObjectLines->SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines ) );
 
-    m_pCB_RoundedEdge->EnableTriState( true );
-    m_pCB_Shading->EnableTriState( true );
-    m_pCB_ObjectLines->EnableTriState( true );
+    m_pCB_RoundedEdge->EnableTriState();
+    m_pCB_Shading->EnableTriState();
+    m_pCB_ObjectLines->EnableTriState();
 
     initControlsFromModel();
 }
@@ -217,11 +217,11 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     else if(aProps.m_aShadeMode == drawing::ShadeMode_SMOOTH)
     {
         m_pCB_Shading->EnableTriState( false );
-        m_pCB_Shading->Check(true);
+        m_pCB_Shading->Check();
     }
     else
     {
-        m_pCB_Shading->EnableTriState( true );
+        m_pCB_Shading->EnableTriState();
         m_pCB_Shading->SetState( TRISTATE_INDET );
     }
 
@@ -233,18 +233,18 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     else if(aProps.m_nObjectLines==1)
     {
         m_pCB_ObjectLines->EnableTriState( false );
-        m_pCB_ObjectLines->Check(true);
+        m_pCB_ObjectLines->Check();
     }
     else
     {
-        m_pCB_ObjectLines->EnableTriState( true );
+        m_pCB_ObjectLines->EnableTriState();
         m_pCB_ObjectLines->SetState( TRISTATE_INDET );
     }
 
     if(aProps.m_nRoundedEdges >= 5)
     {
         m_pCB_RoundedEdge->EnableTriState( false );
-        m_pCB_RoundedEdge->Check(true);
+        m_pCB_RoundedEdge->Check();
     }
     else if(aProps.m_nRoundedEdges<0)
     {
@@ -253,7 +253,7 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     }
     else
     {
-        m_pCB_RoundedEdge->EnableTriState( true );
+        m_pCB_RoundedEdge->EnableTriState();
         m_pCB_RoundedEdge->Check(false);
     }
     m_pCB_RoundedEdge->Enable( !m_pCB_ObjectLines->IsChecked() );

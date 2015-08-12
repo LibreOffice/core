@@ -915,7 +915,7 @@ void DataBrowserModel::updateFromModel()
                         }
 
                         // add ranges for error bars if present for a series
-                        if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ true ))
+                        if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx] ))
                             addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, true );
 
                         if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ false ))

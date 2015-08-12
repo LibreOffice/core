@@ -316,7 +316,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
 
     //create point sequences for each tick depth
     sal_Int32 nDepthCount = this->getTickDepth();
-    sal_Int32 nMaxMajorTickCount = this->getMaxTickCount( 0 );
+    sal_Int32 nMaxMajorTickCount = this->getMaxTickCount();
 
     if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
         return;

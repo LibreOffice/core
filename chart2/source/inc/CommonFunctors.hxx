@@ -85,8 +85,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
                 * pDouble,
                 rtl_math_StringFormat_Automatic,
                 -1, // use maximum decimal places available
-                sal_Char( '.' ), // decimal separator
-                false // do not erase trailing zeros
+                sal_Char( '.' ) // decimal separator
                 );
         }
         else if( eClass == ::com::sun::star::uno::TypeClass_STRING )
@@ -128,8 +127,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function<
             fNumber,
             rtl_math_StringFormat_Automatic,
             -1, // use maximum number of decimal places
-            static_cast< sal_Char >( '.' ),
-            false // do not erase trailing zeros
+            static_cast< sal_Char >( '.' )
             );
     }
 };

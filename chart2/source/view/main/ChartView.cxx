@@ -1212,7 +1212,7 @@ void ChartView::init()
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
-        StartListening( m_pDrawModelWrapper->getSdrModel(), false /*bPreventDups*/ );
+        StartListening( m_pDrawModelWrapper->getSdrModel() );
     }
 }
 
@@ -1234,7 +1234,7 @@ ChartView::~ChartView()
     if( m_pDrawModelWrapper.get() )
     {
         SolarMutexGuard aSolarGuard;
-        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
+        EndListening( m_pDrawModelWrapper->getSdrModel() );
         m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
@@ -2081,7 +2081,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
             OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
 
             Reference< data::XLabeledDataSequence > xLabeledSequence(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole, false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole ));
             if( xLabeledSequence.is() )
             {
                 Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
@@ -2905,7 +2905,7 @@ void SAL_CALL ChartView::removeModeChangeApproveListener( const uno::Reference< 
 // ____ XUpdatable ____
 void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
 {
-    impl_updateView(true);
+    impl_updateView();
 
     //#i100778# migrate all imported or old documents to a plot area sizing exclusive axes (in case the save settings allow for this):
     //Although in general it is a bad idea to change the model from within the view this is exceptionally the best place to do this special conversion.

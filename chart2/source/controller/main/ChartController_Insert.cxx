@@ -105,8 +105,8 @@ void ChartController::executeDispatch_InsertAxes()
     {
         InsertAxisOrGridDialogData aDialogInput;
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(getModel());
-        AxisHelper::getAxisOrGridExcistence( aDialogInput.aExistenceList, xDiagram, true );
-        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, true );
+        AxisHelper::getAxisOrGridExcistence( aDialogInput.aExistenceList, xDiagram );
+        AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram );
 
         SolarMutexGuard aGuard;
         ScopedVclPtrInstance<SchAxisDlg> aDlg( m_pChartWindow, aDialogInput );

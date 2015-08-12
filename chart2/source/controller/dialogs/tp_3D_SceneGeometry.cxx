@@ -283,7 +283,7 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
         m_pMFZRotation->SetValue(m_nZRotation);
     }
 
-    ThreeDHelper::switchRightAngledAxes( m_xSceneProperties, m_pCbxRightAngledAxes->IsChecked(), true /*bRotateLights*/ );
+    ThreeDHelper::switchRightAngledAxes( m_xSceneProperties, m_pCbxRightAngledAxes->IsChecked() );
 
     return 0;
 }

@@ -715,7 +715,7 @@ OUString WrappedErrorBarRangePositiveProperty::getValueFromSeries( const Referen
     {
         uno::Reference< chart2::data::XDataSequence > xSeq(
             StatisticsHelper::getErrorDataSequenceFromDataSource(
-                xErrorBarDataSource, true /* positive */, true /* y-error */ ));
+                xErrorBarDataSource, true /* positive */ ));
         if( xSeq.is())
             aRet = xSeq->getSourceRangeRepresentation();
         else
@@ -782,7 +782,7 @@ OUString WrappedErrorBarRangeNegativeProperty::getValueFromSeries( const Referen
     {
         uno::Reference< chart2::data::XDataSequence > xSeq(
             StatisticsHelper::getErrorDataSequenceFromDataSource(
-                xErrorBarDataSource, false /* positive */, true /* y-error */ ));
+                xErrorBarDataSource, false /* positive */ ));
         if( xSeq.is())
             aRet = xSeq->getSourceRangeRepresentation();
         else

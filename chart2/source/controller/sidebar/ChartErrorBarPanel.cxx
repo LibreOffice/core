@@ -313,11 +313,11 @@ void ChartErrorBarPanel::updateData()
     SolarMutexGuard aGuard;
 
     if (bPos && bNeg)
-        mpRBPosAndNeg->Check(true);
+        mpRBPosAndNeg->Check();
     else if (bPos)
-        mpRBPos->Check(true);
+        mpRBPos->Check();
     else if (bNeg)
-        mpRBNeg->Check(true);
+        mpRBNeg->Check();
 
     sal_Int32 nTypePos = getTypePos(mxModel, aCID);
     mpLBType->SelectEntryPos(nTypePos);

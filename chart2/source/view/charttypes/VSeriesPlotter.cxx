@@ -403,7 +403,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
     {
         sal_Unicode cDecSeparator = '.';//@todo get this locale dependent
         aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
-            , 3/*DecPlaces*/ , cDecSeparator, false /*bEraseTrailingDecZeros*/ );
+            , 3/*DecPlaces*/ , cDecSeparator );
     }
     return aNumber;
 }

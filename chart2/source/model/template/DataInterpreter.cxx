@@ -154,7 +154,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
 
             // values-y
             Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
             // re-use values-... as values-y
             if( ! xValuesY.is())
             {

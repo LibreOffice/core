@@ -100,8 +100,7 @@ bool lcl_GrowAndShiftLogic(
 
     return ::chart::RelativePositionHelper::centerGrow(
         rInOutRelPos, rInOutRelSize,
-        fRelativeGrowX, fRelativeGrowY,
-        /* bCheck = */ true );
+        fRelativeGrowX, fRelativeGrowY );
 }
 
 bool lcl_MoveObjectLogic(
@@ -120,8 +119,7 @@ bool lcl_MoveObjectLogic(
 
     return ::chart::RelativePositionHelper::moveObject(
         rInOutRelPos, rObjectSize,
-        fRelativeShiftX, fRelativeShiftY,
-        /* bCheck = */ true );
+        fRelativeShiftX, fRelativeShiftY );
 }
 
 void lcl_insertMenuCommand(
@@ -795,14 +793,14 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
                         m_xUndoManager );
 
-                if( pDrawViewWrapper->EndDragObj(false) )
+                if( pDrawViewWrapper->EndDragObj() )
                 {
                     bDraggingDone = true;
                     aUndoGuard.commit();
                 }
             }
 
-            if( !bDraggingDone && pDrawViewWrapper->EndDragObj(false) )
+            if( !bDraggingDone && pDrawViewWrapper->EndDragObj() )
             {
                 try
                 {
@@ -1020,7 +1018,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
                     bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
                     Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
-                    bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries, true );
+                    bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );
                     bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );
                     bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
                     bool bHasDataLabelsAtPoints = DataSeriesHelper::hasDataLabelsAtPoints( xSeries );

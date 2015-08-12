@@ -176,11 +176,11 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
             Reference< data::XLabeledDataSequence > xValuesSize(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-size", false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-size" ));
             Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
             Reference< data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x", false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
 
             if( ! xValuesX.is() ||
                 ! xValuesY.is() ||

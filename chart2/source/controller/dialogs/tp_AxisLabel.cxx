@@ -61,7 +61,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet
     get(m_pFtABCD,"labelABCD");
     m_pCtrlDial->SetText(m_pFtABCD->GetText());
     m_pOrientHlp = new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
-    m_pOrientHlp->Enable( true );
+    m_pOrientHlp->Enable();
 
     m_pCbStacked->EnableTriState( false );
     m_pOrientHlp->AddDependentWindow( *m_pFlOrient );
@@ -162,7 +162,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     SfxItemState aState = rInAttrs->GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCbShowDescription->EnableTriState( true );
+        m_pCbShowDescription->EnableTriState();
         m_pCbShowDescription->SetState( TRISTATE_INDET );
     }
     else
@@ -210,7 +210,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCbTextOverlap->EnableTriState( true );
+        m_pCbTextOverlap->EnableTriState();
         m_pCbTextOverlap->SetState( TRISTATE_INDET );
     }
     else
@@ -229,7 +229,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCbTextBreak->EnableTriState( true );
+        m_pCbTextBreak->EnableTriState();
         m_pCbTextBreak->SetState( TRISTATE_INDET );
     }
     else

@@ -179,7 +179,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SET_INTERCEPT, true, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCB_SetIntercept->EnableTriState( true );
+        m_pCB_SetIntercept->EnableTriState();
         m_pCB_SetIntercept->SetState( TRISTATE_INDET );
     }
     else
@@ -192,7 +192,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, true, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCB_ShowEquation->EnableTriState( true );
+        m_pCB_ShowEquation->EnableTriState();
         m_pCB_ShowEquation->SetState( TRISTATE_INDET );
     }
     else
@@ -205,7 +205,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, true, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCB_ShowCorrelationCoeff->EnableTriState( true );
+        m_pCB_ShowCorrelationCoeff->EnableTriState();
         m_pCB_ShowCorrelationCoeff->SetState( TRISTATE_INDET );
     }
     else
