@@ -5606,22 +5606,22 @@ void Test::testFuncCHITEST()
     // 2x2 matrices test
     m_pDoc->SetString(aPos, "=CHITEST(A1:B2;D1:E2)");
     OUString aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with empty cells",
-            OUString::createFromAscii("Err:502") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with empty cells",
+            OUString("Err:502"), aVal);
 
     m_pDoc->SetValue(0, 0, 0, 1.0); // A1
     m_pDoc->SetValue(0, 1, 0, 2.0); // A2
     m_pDoc->SetValue(1, 0, 0, 2.0); // B1
     m_pDoc->SetValue(1, 1, 0, 1.0); // B2
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with different size",
-            OUString::createFromAscii("Err:502") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with different size",
+            OUString("Err:502"), aVal);
 
     m_pDoc->SetValue(3, 0, 0, 2.0); // D1
     m_pDoc->SetValue(3, 1, 0, 3.0); // D2
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with different size",
-            OUString::createFromAscii("Err:502") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with different size",
+            OUString("Err:502"), aVal);
     m_pDoc->SetValue(4, 0, 0, 2.0); // E1
     m_pDoc->SetValue(4, 1, 0, 1.0); // E2
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.3613, m_pDoc->GetValue(aPos), 10e-4);
@@ -5633,8 +5633,8 @@ void Test::testFuncCHITEST()
     // 3x3 matrices test
     m_pDoc->SetString(aPos, "=CHITEST(A1:C3;D1:F3)");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("CHITEST should return Err:502 for matrices with empty",
-            OUString::createFromAscii("Err:502") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with empty",
+            OUString("Err:502"), aVal);
 
     m_pDoc->SetValue(2, 0, 0, 3.0); // C1
     m_pDoc->SetValue(2, 1, 0, 2.0); // C2
@@ -5666,7 +5666,7 @@ void Test::testFuncCHITEST()
     // no convergence error
     m_pDoc->SetValue(4, 0, 0, 0.0); // E1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT(OUString::createFromAscii("Err:523") == aVal);
+    CPPUNIT_ASSERT_EQUAL(OUString("Err:523"), aVal);
     m_pDoc->SetValue(4, 0, 0, 3.0); // E1
 
     // zero in all cells
@@ -5684,8 +5684,8 @@ void Test::testFuncCHITEST()
     m_pDoc->SetValue(2, 2, 0, 0.0); // C3
     m_pDoc->SetValue(3, 0, 0, 0.0); // D1
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("CHITEST should return #VALUE! for matrices with empty",
-            OUString::createFromAscii("#VALUE!") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return #VALUE! for matrices with empty",
+            OUString("#VALUE!"), aVal);
     m_pDoc->SetValue(3, 1, 0, 0.0); // D2
     m_pDoc->SetValue(3, 2, 0, 0.0); // D3
     m_pDoc->SetValue(4, 0, 0, 0.0); // E1
@@ -5695,8 +5695,8 @@ void Test::testFuncCHITEST()
     m_pDoc->SetValue(5, 1, 0, 0.0); // F2
     m_pDoc->SetValue(5, 2, 0, 0.0); // F3
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_MESSAGE("CHITEST should return #VALUE! for matrices with empty",
-            OUString::createFromAscii("#VALUE!") == aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return #VALUE! for matrices with empty",
+            OUString("#VALUE!"), aVal);
 
     m_pDoc->DeleteTab(0);
 }
