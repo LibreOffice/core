@@ -6670,6 +6670,11 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
 
     aPLCF.SetIdx( nIdx );               // Lookup suitable CP
     aPLCF.Get( rStart, nEnd, pData );
+    if (nEnd < rStart)
+    {
+        SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
+        return false;
+    }
     rLen = nEnd - rStart;
     aPLCF.advance();
 
@@ -6683,7 +6688,13 @@ bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
 
     aPLCF.SetIdx( nIdx );               // Lookup suitable CP
     aPLCF.Get( rStart, nEnd, pData );
-    rLen = static_cast<sal_uInt32>(nEnd) - static_cast<sal_uInt32>(rStart);
+    if (nEnd < rStart)
+    {
+        SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
+        return false;
+    }
+    rLen = nEnd - rStart;
+
     return true;
 }
 
