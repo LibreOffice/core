@@ -24,6 +24,7 @@
 
 #include <string.h>
 #include <vector>
+#include <memory>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -183,10 +184,10 @@ class ScaDateAddIn : public ::cppu::WeakImplHelper6<
                                 ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    ::com::sun::star::lang::Locale  aFuncLoc;
-    ::com::sun::star::lang::Locale* pDefLocales;
-    ResMgr*                         pResMgr;
-    ScaFuncDataList*                pFuncDataList;
+    ::com::sun::star::lang::Locale                          aFuncLoc;
+    std::unique_ptr< ::com::sun::star::lang::Locale[] >     pDefLocales;
+    std::unique_ptr< ResMgr >                               pResMgr;
+    std::unique_ptr< ScaFuncDataList >                      pFuncDataList;
 
 
     void                        InitDefLocales();
@@ -199,7 +200,7 @@ private:
 
 public:
                                 ScaDateAddIn();
-    virtual                     ~ScaDateAddIn();
+    virtual                     ~ScaDateAddIn() =default;
 
     static OUString      getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
