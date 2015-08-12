@@ -464,7 +464,7 @@ class ScDocument;
 class ScDocShell;
 class SvxSearchItem;
 class ScAutoFormat;
-class FuncCollection;
+class LegacyFuncCollection;
 class ScUnoAddInCollection;
 class ScUserList;
 class SvxBrushItem;
@@ -502,7 +502,7 @@ class ScGlobal
 {
     static SvxSearchItem*   pSearchItem;
     static ScAutoFormat*    pAutoFormat;
-    static FuncCollection*  pFuncCollection;
+    static LegacyFuncCollection* pLegacyFuncCollection;
     static ScUnoAddInCollection* pAddInCollection;
     static ScUserList*      pUserList;
     static OUString**       ppRscString;
@@ -561,7 +561,7 @@ public:
     SC_DLLPUBLIC static ScAutoFormat*       GetAutoFormat();
     SC_DLLPUBLIC static ScAutoFormat*       GetOrCreateAutoFormat();
     static void                 ClearAutoFormat(); //BugId 54209
-    static FuncCollection*      GetFuncCollection();
+    static LegacyFuncCollection*      GetLegacyFuncCollection();
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
     SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );

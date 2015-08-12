@@ -49,9 +49,9 @@ enum class ParamType
 
 class ModuleData;
 
-class FuncData
+class LegacyFuncData
 {
-    friend class FuncCollection;
+    friend class LegacyFuncCollection;
 
     const ModuleData* pModuleData;
     OUString aInternalName;
@@ -61,14 +61,14 @@ class FuncData
     ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
 public:
-    FuncData(const ModuleData*pModule,
+    LegacyFuncData(const ModuleData*pModule,
              const OUString& rIName,
              const OUString& rFName,
                    sal_uInt16     nNo,
                    sal_uInt16     nCount,
              const ParamType* peType,
                    ParamType  eType);
-    FuncData(const FuncData& rData);
+    LegacyFuncData(const LegacyFuncData& rData);
 
     const OUString& GetModuleName() const;
     const OUString& GetInternalName() const { return aInternalName; }
@@ -84,19 +84,19 @@ public:
     bool getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
-class FuncCollection
+class LegacyFuncCollection
 {
-    typedef boost::ptr_map<OUString, FuncData> MapType;
+    typedef boost::ptr_map<OUString, LegacyFuncData> MapType;
     MapType maData;
 public:
     typedef MapType::const_iterator const_iterator;
 
-    FuncCollection();
-    FuncCollection(const FuncCollection& r);
+    LegacyFuncCollection();
+    LegacyFuncCollection(const LegacyFuncCollection& r);
 
-    const FuncData* findByName(const OUString& rName) const;
-    FuncData* findByName(const OUString& rName);
-    void insert(FuncData* pNew);
+    const LegacyFuncData* findByName(const OUString& rName) const;
+    LegacyFuncData* findByName(const OUString& rName);
+    void insert(LegacyFuncData* pNew);
 
     const_iterator begin() const;
     const_iterator end() const;
