@@ -710,6 +710,7 @@ public:
 void fillSortedColumnArray(
     boost::ptr_vector<SortedColumn>& rSortedCols,
     SortedRowFlags& rRowFlags,
+    std::vector<SvtListener*>& rCellListeners,
     ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress )
 {
     SCROW nRow1 = pArray->GetStart();
@@ -765,6 +766,16 @@ void fillSortedColumnArray(
                     else
                     {
                         pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
+                    }
+
+                    if (!rCellListeners.empty())
+                    {
+                        // Original source cells will be deleted during
+                        // sc::CellStoreType::transfer(), SvtListener is a base
+                        // class, so we need to replace it.
+                        auto it( ::std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.mpFormula));
+                        if (it != rCellListeners.end())
+                            *it = pNew;
                     }
 
                     rCellStore.push_back(pNew);
@@ -1082,7 +1093,7 @@ void ScTable::SortReorderByRow(
     // a copy before updating the document.
     boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
-    fillSortedColumnArray(aSortedCols, aRowFlags, pArray, nTab, nCol1, nCol2, pProgress);
+    fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2, pProgress);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
@@ -1267,7 +1278,8 @@ void ScTable::SortReorderByRowRefUpdate(
     // a copy before updating the document.
     boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
-    fillSortedColumnArray(aSortedCols, aRowFlags, pArray, nTab, nCol1, nCol2, pProgress);
+    std::vector<SvtListener*> aListenersDummy;
+    fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
