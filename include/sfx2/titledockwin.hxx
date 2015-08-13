@@ -60,7 +60,7 @@ namespace sfx2
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
 
-        void        SetEndDockingHdl( const Link<>& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
+        void        SetEndDockingHdl( const Link<TitledDockingWindow*,void>& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
 
         /** resets the toolbox. Upon return, the only item in the toolbox is the closer.
         */
@@ -122,7 +122,7 @@ namespace sfx2
         VclPtr<ToolBox>     m_aToolbox;
         VclPtr<Window>      m_aContentWindow;
 
-        Link<>              m_aEndDockingHdl;
+        Link<TitledDockingWindow*,void>  m_aEndDockingHdl;
 
         /** The border that is painted around the inner window.  The bevel
             shadow lines are part of the border, so where the border is 0 no

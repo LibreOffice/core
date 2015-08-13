@@ -841,7 +841,7 @@ namespace sfx2
     private:
         DECL_LINK_TYPED( OnToolboxClicked, ToolBox*, void );
         DECL_LINK( OnMenuItemSelected, Menu* );
-        DECL_LINK( DockingChanged, TitledDockingWindow* );
+        DECL_LINK_TYPED( DockingChanged, TitledDockingWindow*, void );
         ::std::unique_ptr< PopupMenu > impl_createPopupMenu() const;
 
         /// sets the given layout for the panel selector
@@ -951,15 +951,14 @@ namespace sfx2
     }
 
 
-    IMPL_LINK( TaskPaneController_Impl, DockingChanged, TitledDockingWindow*, i_pDockingWindow )
+    IMPL_LINK_TYPED( TaskPaneController_Impl, DockingChanged, TitledDockingWindow*, i_pDockingWindow, void )
     {
-        ENSURE_OR_RETURN( i_pDockingWindow, "TaskPaneController_Impl::DockingChanged: where does this come from?", 0L );
+        ENSURE_OR_RETURN_VOID( i_pDockingWindow, "TaskPaneController_Impl::DockingChanged: where does this come from?" );
 
         if ( impl_getLayout() == LAYOUT_DRAWERS )
-            return 0L;
+            return;
 
         impl_setLayout( lcl_getTabLayoutFromAlignment( i_pDockingWindow->GetAlignment() ) );
-        return 1L;
     }
 
 
