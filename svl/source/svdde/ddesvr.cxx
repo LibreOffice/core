@@ -678,16 +678,6 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::Connect( sal_IntPtr nId )
-{
-    aConnectLink.Call( (void*)nId );
-}
-
-void DdeTopic::Disconnect( sal_IntPtr nId )
-{
-    aDisconnectLink.Call( (void*)nId );
-}
-
 void DdeTopic::_Disconnect( sal_IntPtr nId )
 {
     std::vector<DdeItem*>::iterator iter;
@@ -699,26 +689,17 @@ void DdeTopic::_Disconnect( sal_IntPtr nId )
 
 DdeData* DdeTopic::Get(SotClipboardFormatId nFmt)
 {
-    if ( aGetLink.IsSet() )
-        return (DdeData*)aGetLink.Call( (void*)nFmt );
-    else
-        return NULL;
+    return NULL;
 }
 
 bool DdeTopic::Put( const DdeData* r )
 {
-    if ( aPutLink.IsSet() )
-        return aPutLink.Call( (void*) r );
-    else
-        return false;
+    return false;
 }
 
 bool DdeTopic::Execute( const OUString* r )
 {
-    if ( aExecLink.IsSet() )
-        return aExecLink.Call( (void*)r );
-    else
-        return false;
+    return false;
 }
 
 long DdeTopic::GetConvId()

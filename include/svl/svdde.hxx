@@ -98,8 +98,8 @@ protected:
     short           nType;
     sal_IntPtr      nId;
     sal_IntPtr      nTime;
-    Link<>          aData;
-    Link<>          aDone;
+    Link<const DdeData*,void> aData;
+    Link<bool,void>           aDone;
     bool            bBusy;
 
                     DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER long = 0 );
@@ -112,11 +112,11 @@ public:
 
     void            Execute();
 
-    void            SetDataHdl( const Link<>& rLink ) { aData = rLink; }
-    const Link<>&   GetDataHdl() const { return aData; }
+    void            SetDataHdl( const Link<const DdeData*,void>& rLink ) { aData = rLink; }
+    const Link<const DdeData*,void>& GetDataHdl() const { return aData; }
 
-    void            SetDoneHdl( const Link<>& rLink ) { aDone = rLink; }
-    const Link<>&   GetDoneHdl() const { return aDone; }
+    void            SetDoneHdl( const Link<bool,void>& rLink ) { aDone = rLink; }
+    const Link<bool,void>& GetDoneHdl() const { return aDone; }
 
     void                 SetFormat( SotClipboardFormatId nFmt ) { aDdeData.SetFormat( nFmt );  }
     SotClipboardFormatId GetFormat() const       { return aDdeData.GetFormat(); }
@@ -138,14 +138,14 @@ private:
 
 class SVL_DLLPUBLIC DdeLink : public DdeTransaction
 {
-    Link<>          aNotify;
+    Link<void*,void> aNotify;
 
 public:
                     DdeLink( DdeConnection&, const OUString&, long = 0 );
     virtual        ~DdeLink();
 
-    void            SetNotifyHdl( const Link<>& rLink ) { aNotify = rLink; }
-    const Link<>&   GetNotifyHdl() const { return aNotify; }
+    void            SetNotifyHdl( const Link<void*,void>& rLink ) { aNotify = rLink; }
+    const Link<void*,void>&   GetNotifyHdl() const { return aNotify; }
     void    Notify();
 };
 
@@ -288,8 +288,6 @@ class SVL_DLLPUBLIC DdeTopic
     SVL_DLLPRIVATE void _Disconnect( sal_IntPtr );
 
 public:
-    void    Connect( sal_IntPtr );
-    void    Disconnect( sal_IntPtr );
     virtual DdeData* Get(SotClipboardFormatId);
     virtual bool Put( const DdeData* );
     virtual bool Execute( const OUString* );
@@ -306,32 +304,16 @@ private:
     friend class    DdeItem;
 
 private:
-    DdeString*      pName;
-    OUString   aItem;
+    DdeString*            pName;
+    OUString              aItem;
     std::vector<DdeItem*> aItems;
-    Link<>          aConnectLink;
-    Link<>          aDisconnectLink;
-    Link<>          aGetLink;
-    Link<>          aPutLink;
-    Link<>          aExecLink;
 
 public:
                     DdeTopic( SAL_UNUSED_PARAMETER const OUString& );
     virtual        ~DdeTopic();
 
-    const OUString GetName() const;
+    const OUString  GetName() const;
     long            GetConvId();
-
-    void            SetConnectHdl( const Link<>& rLink ) { aConnectLink = rLink; }
-    const Link<>&   GetConnectHdl() const { return aConnectLink;  }
-    void            SetDisconnectHdl( const Link<>& rLink ) { aDisconnectLink = rLink; }
-    const Link<>&   GetDisconnectHdl() const { return aDisconnectLink;  }
-    void            SetGetHdl( const Link<>& rLink ) { aGetLink = rLink; }
-    const Link<>&   GetGetHdl() const { return aGetLink;  }
-    void            SetPutHdl( const Link<>& rLink ) { aPutLink = rLink; }
-    const Link<>&   GetPutHdl() const { return aPutLink;  }
-    void            SetExecuteHdl( const Link<>& rLink ) { aExecLink = rLink; }
-    const Link<>&   GetExecuteHdl() const { return aExecLink; }
 
     void            NotifyClient( const OUString& );
     bool            IsSystemTopic();
@@ -339,7 +321,7 @@ public:
     void            InsertItem( DdeItem* );     // For own superclasses
     DdeItem*        AddItem( const DdeItem& );  // Will be cloned
     void            RemoveItem( const DdeItem& );
-    const OUString&   GetCurItem() { return aItem;  }
+    const OUString& GetCurItem() { return aItem;  }
     const std::vector<DdeItem*>& GetItems() const  { return aItems; }
 
 private:
