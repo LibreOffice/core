@@ -2266,7 +2266,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
                     pPortion->GetWidth() = (long)CalcTextWidth( nPara, nTmpPos, pPortion->GetLen() );
                 nTmpWidth += pPortion->GetWidth();
 
-                pPortion->GetRightToLeft() = ImpGetRightToLeft( nPara, nTmpPos+1 );
+                pPortion->SetRightToLeft( ImpGetRightToLeft( nPara, nTmpPos+1 ) );
                 pPortion->GetKind() = PORTIONKIND_TEXT;
             }
 
@@ -2977,14 +2977,14 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
     TETextPortion* pDestPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
     if ( pDestPortion->GetKind() != PORTIONKIND_TAB )
     {
-        if ( !IsRightToLeft() && pDestPortion->GetRightToLeft() )
+        if ( !IsRightToLeft() && pDestPortion->IsRightToLeft() )
         {
             // Portions behind must be added, visual before this portion
             sal_uInt16 nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
                 TETextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[ nTmpPortion ];
-                if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                if ( pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
                     nX += pNextTextPortion->GetWidth();
                 else
                     break;
@@ -2996,7 +2996,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
             {
                 --nTmpPortion;
                 TETextPortion* pPrevTextPortion = pParaPortion->GetTextPortions()[ nTmpPortion ];
-                if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                if ( pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
                     nX -= pPrevTextPortion->GetWidth();
                 else
                     break;

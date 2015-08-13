@@ -50,13 +50,13 @@ private:
     sal_uInt16      nLen;
     long            nWidth;
     sal_uInt8       nKind;
-    sal_uInt8       nRightToLeft;
+    bool            bRightToLeft;
 
                 TETextPortion()
                     : nLen {0}
                     , nWidth {-1}
                     , nKind {PORTIONKIND_TEXT}
-                    , nRightToLeft {0}
+                    , bRightToLeft {false}
                 {}
 
 public:
@@ -64,14 +64,14 @@ public:
                     : nLen {nL}
                     , nWidth {-1}
                     , nKind {PORTIONKIND_TEXT}
-                    , nRightToLeft {0}
+                    , bRightToLeft {false}
                 {}
 
     sal_uInt16&     GetLen()                    { return nLen; }
     long&           GetWidth()                  { return nWidth; }
     sal_uInt8&      GetKind()                   { return nKind; }
-    sal_uInt8&      GetRightToLeft()            { return nRightToLeft; }
-    bool            IsRightToLeft() const       { return (nRightToLeft&1); }
+    void            SetRightToLeft(bool b)      { bRightToLeft = b; }
+    bool            IsRightToLeft() const       { return bRightToLeft; }
     bool            HasValidSize() const        { return nWidth != (-1); }
 };
 
