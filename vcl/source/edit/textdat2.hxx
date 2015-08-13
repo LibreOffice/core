@@ -47,7 +47,7 @@ class TextView;
 class TETextPortion
 {
 private:
-    sal_uInt16      nLen;
+    sal_Int32       nLen;
     long            nWidth;
     sal_uInt8       nKind;
     bool            bRightToLeft;
@@ -60,14 +60,14 @@ private:
                 {}
 
 public:
-                TETextPortion( sal_uInt16 nL )
+                TETextPortion( sal_Int32 nL )
                     : nLen {nL}
                     , nWidth {-1}
                     , nKind {PORTIONKIND_TEXT}
                     , bRightToLeft {false}
                 {}
 
-    sal_uInt16&     GetLen()                    { return nLen; }
+    sal_Int32&  GetLen()                        { return nLen; }
     long&           GetWidth()                  { return nWidth; }
     sal_uInt8&      GetKind()                   { return nKind; }
     void            SetRightToLeft(bool b)      { bRightToLeft = b; }
@@ -82,7 +82,7 @@ public:
     ~TETextPortionList();
 
     void    Reset();
-    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, bool bPreferStartingPortion = false );
+    sal_uInt16  FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );
     void    DeleteFromPortion( sal_uInt16 nDelFrom );
 };
 

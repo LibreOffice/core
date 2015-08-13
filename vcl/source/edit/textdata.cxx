@@ -70,14 +70,14 @@ void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
     erase( begin() + nDelFrom, end() );
 }
 
-sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, bool bPreferStartingPortion )
+sal_uInt16 TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPortionStart, bool bPreferStartingPortion )
 {
     // find left portion at nCharPos at portion border
-    sal_uInt16 nTmpPos = 0;
+    sal_Int32 nTmpPos = 0;
     for ( size_t nPortion = 0; nPortion < size(); nPortion++ )
     {
         TETextPortion* pPortion = operator[]( nPortion );
-        nTmpPos = nTmpPos + pPortion->GetLen();
+        nTmpPos += pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
             // take this one if we don't prefer the starting portion, or if it's the last one

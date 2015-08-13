@@ -183,7 +183,7 @@ protected:
     void                ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion* pPortion, sal_Int32 nPortionStart, long nRemainingWidth );
     sal_uInt16          SplitTextPortion( sal_uLong nPara, sal_Int32 nPos );
     void                CreateTextPortions( sal_uLong nPara, sal_Int32 nStartPos );
-    void                RecalcTextPortion( sal_uLong nPara, sal_Int32 nStartPos, short nNewChars );
+    void                RecalcTextPortion( sal_uLong nPara, sal_Int32 nStartPos, sal_Int32 nNewChars );
     void                SeekCursor( sal_uLong nNode, sal_Int32 nPos, vcl::Font& rFont, OutputDevice* pOutDev );
 
     void                FormatDoc();

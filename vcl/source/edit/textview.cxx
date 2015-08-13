@@ -1702,7 +1702,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
 
             TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
 
-            sal_uInt16 nTextPortionStart = 0;
+            sal_Int32 nTextPortionStart = 0;
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
