@@ -3911,7 +3911,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 }
 
 WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
-    : WW8PLCFx(rFib.GetFIBVersion(), false), pStatus(0), nIsEnd(0), nBookmarkId(1)
+    : WW8PLCFx(rFib.GetFIBVersion(), false), nIsEnd(0), nBookmarkId(1)
 {
     if( !rFib.fcPlcfbkf || !rFib.lcbPlcfbkf || !rFib.fcPlcfbkl ||
         !rFib.lcbPlcfbkl || !rFib.fcSttbfbkmk || !rFib.lcbSttbfbkmk )
@@ -3936,14 +3936,12 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
             nIMax = pBook[0]->GetIMax();
         if( pBook[1]->GetIMax() < nIMax )
             nIMax = pBook[1]->GetIMax();
-        pStatus = new eBookStatus[ nIMax ];
-        memset( pStatus, 0, nIMax * sizeof( eBookStatus ) );
+        aStatus.resize(nIMax);
     }
 }
 
 WW8PLCFx_Book::~WW8PLCFx_Book()
 {
-    delete[] pStatus;
     delete pBook[1];
     delete pBook[0];
 }
@@ -4054,18 +4052,20 @@ long WW8PLCFx_Book::GetLen() const
     return nNum;
 }
 
-void WW8PLCFx_Book::SetStatus(sal_uInt16 nIndex, eBookStatus eStat )
+void WW8PLCFx_Book::SetStatus(sal_uInt16 nIndex, eBookStatus eStat)
 {
-    OSL_ENSURE(nIndex < nIMax, "set status of non existing bookmark!");
-    pStatus[nIndex] = (eBookStatus)( pStatus[nIndex] | eStat );
+    SAL_WARN_IF(nIndex >= nIMax, "sw.ww8",
+                "bookmark index " << nIndex << " invalid");
+    eBookStatus eStatus = aStatus.at(nIndex);
+    aStatus[nIndex] = static_cast<eBookStatus>(eStatus | eStat);
 }
 
 eBookStatus WW8PLCFx_Book::GetStatus() const
 {
-    if( !pStatus )
+    if (aStatus.empty())
         return BOOK_NORMAL;
     long nEndIdx = GetHandle();
-    return ( nEndIdx < nIMax ) ? pStatus[nEndIdx] : BOOK_NORMAL;
+    return ( nEndIdx < nIMax ) ? aStatus[nEndIdx] : BOOK_NORMAL;
 }
 
 long WW8PLCFx_Book::GetHandle() const
