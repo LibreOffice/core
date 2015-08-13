@@ -5573,6 +5573,17 @@ void Test::testFuncFTEST()
     m_pDoc->SetValue(2, 2, 0, 13.0); // C3
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0422, m_pDoc->GetValue(aPos), 10e-4);
 
+    m_pDoc->SetString(0, 2, 0, "a"); // A3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0334, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetString(2, 0, 0, "b"); // C1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0261, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetString(5, 1, 0, "c"); // F2
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0219, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetString(4, 2, 0, "d"); // E3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0161, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetString(3, 2, 0, "e"); // D3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0110, m_pDoc->GetValue(aPos), 10e-4);
+
     m_pDoc->DeleteTab(0);
 }
 
