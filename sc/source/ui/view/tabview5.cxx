@@ -307,8 +307,8 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         ScDocShell* pDocSh;
         ScModelObj* pModelObj;
 
-        if ( ( pDocSh = GetViewData().GetDocShell() ) &&
-             ( pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() )) )
+        if ( ( pDocSh = GetViewData().GetDocShell() ) != nullptr &&
+             ( pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() )) != nullptr )
         {
             Size aDocSize = pModelObj->getDocumentSize();
             std::stringstream ss;
