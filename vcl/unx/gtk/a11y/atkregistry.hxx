@@ -27,7 +27,8 @@ AtkObject * ooo_wrapper_registry_get(const ::com::sun::star::uno::Reference< ::c
 
 void ooo_wrapper_registry_add(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible, AtkObject *obj);
 
-void ooo_wrapper_registry_remove(::com::sun::star::accessibility::XAccessible *pAccessible);
+void ooo_wrapper_registry_remove(
+    css::uno::Reference<css::accessibility::XAccessible> const & pAccessible);
 
 #endif // __ATK_REGISTRY_HXX_
 

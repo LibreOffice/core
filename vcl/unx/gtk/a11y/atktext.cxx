@@ -63,7 +63,7 @@ text_type_from_boundary(AtkTextBoundary boundary_type)
 /*****************************************************************************/
 
 static gchar *
-adjust_boundaries( accessibility::XAccessibleText* pText,
+adjust_boundaries( css::uno::Reference<css::accessibility::XAccessibleText> const & pText,
                    accessibility::TextSegment& rTextSegment,
                    AtkTextBoundary  boundary_type,
                    gint * start_offset, gint * end_offset )
@@ -145,108 +145,78 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
 
 /*****************************************************************************/
 
-static accessibility::XAccessibleText*
+static css::uno::Reference<css::accessibility::XAccessibleText>
     getText( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
     if( pWrap )
     {
-        if( !pWrap->mpText && pWrap->mpContext )
+        if( !pWrap->mpText.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleText>::get() );
-            pWrap->mpText = reinterpret_cast< accessibility::XAccessibleText * > (any.pReserved);
-            pWrap->mpText->acquire();
+            pWrap->mpText.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpText;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleText>();
 }
 
 /*****************************************************************************/
 
-static accessibility::XAccessibleTextMarkup*
+static css::uno::Reference<css::accessibility::XAccessibleTextMarkup>
     getTextMarkup( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
     if( pWrap )
     {
-        if( !pWrap->mpTextMarkup && pWrap->mpContext )
+        if( !pWrap->mpTextMarkup.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleTextMarkup>::get() );
-            /* Since this not a dedicated interface in Atk and thus has not
-             * been queried during wrapper initialization, we need to check
-             * the return value here.
-             */
-            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
-            {
-                pWrap->mpTextMarkup = reinterpret_cast< accessibility::XAccessibleTextMarkup * > (any.pReserved);
-                if( pWrap->mpTextMarkup )
-                    pWrap->mpTextMarkup->acquire();
-            }
+            pWrap->mpTextMarkup.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpTextMarkup;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleTextMarkup>();
 }
 
 /*****************************************************************************/
 
-static accessibility::XAccessibleTextAttributes*
+static css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
     getTextAttributes( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
     if( pWrap )
     {
-        if( !pWrap->mpTextAttributes && pWrap->mpContext )
+        if( !pWrap->mpTextAttributes.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleTextAttributes>::get() );
-            /* Since this not a dedicated interface in Atk and thus has not
-             * been queried during wrapper initialization, we need to check
-             * the return value here.
-             */
-            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
-            {
-                pWrap->mpTextAttributes = reinterpret_cast< accessibility::XAccessibleTextAttributes * > (any.pReserved);
-                pWrap->mpTextAttributes->acquire();
-            }
+            pWrap->mpTextAttributes.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpTextAttributes;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleTextAttributes>();
 }
 
 /*****************************************************************************/
 
-static accessibility::XAccessibleMultiLineText*
+static css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
     getMultiLineText( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
     if( pWrap )
     {
-        if( !pWrap->mpMultiLineText && pWrap->mpContext )
+        if( !pWrap->mpMultiLineText.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleMultiLineText>::get() );
-            /* Since this not a dedicated interface in Atk and thus has not
-             * been queried during wrapper initialization, we need to check
-             * the return value here.
-             */
-            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
-            {
-                pWrap->mpMultiLineText = reinterpret_cast< accessibility::XAccessibleMultiLineText * > (any.pReserved);
-                pWrap->mpMultiLineText->acquire();
-            }
+            pWrap->mpMultiLineText.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpMultiLineText;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleMultiLineText>();
 }
 
 /*****************************************************************************/
@@ -281,8 +251,9 @@ text_wrapper_get_text (AtkText *text,
     }
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             OUString aText;
             sal_Int32 n = pText->getCharacterCount();
@@ -313,8 +284,9 @@ text_wrapper_get_text_after_offset (AtkText          *text,
                                     gint             *end_offset)
 {
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             accessibility::TextSegment aTextSegment = pText->getTextBehindIndex(offset, text_type_from_boundary(boundary_type));
             return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
@@ -335,8 +307,9 @@ text_wrapper_get_text_at_offset (AtkText          *text,
                                  gint             *end_offset)
 {
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             /* If the user presses the 'End' key, the caret will be placed behind the last character,
              * which is the same index as the first character of the next line. In atk the magic offset
@@ -348,8 +321,10 @@ text_wrapper_get_text_at_offset (AtkText          *text,
                       ATK_TEXT_BOUNDARY_LINE_END == boundary_type)
                )
             {
-                accessibility::XAccessibleMultiLineText* pMultiLineText = getMultiLineText( text );
-                if( pMultiLineText )
+                css::uno::Reference<
+                    css::accessibility::XAccessibleMultiLineText> pMultiLineText
+                        = getMultiLineText( text );
+                if( pMultiLineText.is() )
                 {
                     accessibility::TextSegment aTextSegment = pMultiLineText->getTextAtLineWithCaret();
                     return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
@@ -394,8 +369,9 @@ text_wrapper_get_text_before_offset (AtkText          *text,
                                      gint             *end_offset)
 {
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             accessibility::TextSegment aTextSegment = pText->getTextBeforeIndex(offset, text_type_from_boundary(boundary_type));
             return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
@@ -414,8 +390,9 @@ text_wrapper_get_caret_offset (AtkText          *text)
     gint offset = -1;
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             offset = pText->getCaretPosition();
     }
     catch(const uno::Exception&) {
@@ -434,8 +411,9 @@ text_wrapper_set_caret_offset (AtkText *text,
                                gint     offset)
 {
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             return pText->setCaretPosition( offset );
     }
     catch(const uno::Exception&) {
@@ -447,7 +425,7 @@ text_wrapper_set_caret_offset (AtkText *text,
 
 // #i92232#
 AtkAttributeSet*
-handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pTextMarkup,
+handle_text_markup_as_run_attribute( css::uno::Reference<css::accessibility::XAccessibleTextMarkup> const & pTextMarkup,
                                      const gint nTextMarkupType,
                                      const gint offset,
                                      AtkAttributeSet* pSet,
@@ -533,9 +511,11 @@ text_wrapper_get_run_attributes( AtkText        *text,
     try {
         bool bOffsetsAreValid = false;
 
-        accessibility::XAccessibleText* pText = getText( text );
-        accessibility::XAccessibleTextAttributes* pTextAttributes = getTextAttributes( text );
-        if( pText && pTextAttributes )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+            pTextAttributes = getTextAttributes( text );
+        if( pText.is() && pTextAttributes.is() )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList =
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< OUString > () );
@@ -559,11 +539,12 @@ text_wrapper_get_run_attributes( AtkText        *text,
         // #i92232#
         // - add special handling for tracked changes and refactor the
         //   corresponding code for handling misspelled text.
-        accessibility::XAccessibleTextMarkup* pTextMarkup = getTextMarkup( text );
-        if( pTextMarkup )
+        css::uno::Reference<css::accessibility::XAccessibleTextMarkup>
+            pTextMarkup = getTextMarkup( text );
+        if( pTextMarkup.is() )
         {
             // Get attribute run here if it hasn't been done before
-            if (!bOffsetsAreValid && pText)
+            if (!bOffsetsAreValid && pText.is())
             {
                 accessibility::TextSegment aAttributeTextSegment =
                     pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
@@ -612,8 +593,9 @@ text_wrapper_get_default_attributes( AtkText *text )
     AtkAttributeSet *pSet = NULL;
 
     try {
-        accessibility::XAccessibleTextAttributes* pTextAttributes = getTextAttributes( text );
-        if( pTextAttributes )
+        css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+            pTextAttributes = getTextAttributes( text );
+        if( pTextAttributes.is() )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList =
                 pTextAttributes->getDefaultAttributes( uno::Sequence< OUString > () );
@@ -647,8 +629,9 @@ text_wrapper_get_character_extents( AtkText          *text,
                                     AtkCoordType      coords )
 {
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             *x = *y = *width = *height = 0;
             awt::Rectangle aRect = pText->getCharacterBounds( offset );
@@ -686,8 +669,9 @@ text_wrapper_get_character_count (AtkText *text)
     gint rv = 0;
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             rv = pText->getCharacterCount();
     }
     catch(const uno::Exception&) {
@@ -708,8 +692,9 @@ text_wrapper_get_offset_at_point (AtkText     *text,
                                   AtkCoordType coords)
 {
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             gint origin_x = 0;
             gint origin_y = 0;
@@ -740,8 +725,9 @@ text_wrapper_get_n_selections (AtkText *text)
     gint rv = 0;
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             rv = ( pText->getSelectionEnd() > pText->getSelectionStart() ) ? 1 : 0;
     }
     catch(const uno::Exception&) {
@@ -764,8 +750,9 @@ text_wrapper_get_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
         {
             *start_offset = pText->getSelectionStart();
             *end_offset   = pText->getSelectionEnd();
@@ -789,8 +776,9 @@ text_wrapper_add_selection (AtkText *text,
     //        existing adjacent selection ?
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             return pText->setSelection( start_offset, end_offset ); // ?
     }
     catch(const uno::Exception&) {
@@ -807,8 +795,9 @@ text_wrapper_remove_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             return pText->setSelection( 0, 0 ); // ?
     }
     catch(const uno::Exception&) {
@@ -827,8 +816,9 @@ text_wrapper_set_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        accessibility::XAccessibleText* pText = getText( text );
-        if( pText )
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+        if( pText.is() )
             return pText->setSelection( start_offset, end_offset );
     }
     catch(const uno::Exception&) {

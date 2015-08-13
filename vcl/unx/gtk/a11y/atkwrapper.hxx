@@ -47,20 +47,23 @@ struct _AtkObjectWrapper
 {
     AtkObject aParent;
 
-    ::com::sun::star::accessibility::XAccessible               *mpAccessible;
-    ::com::sun::star::accessibility::XAccessibleContext        *mpContext;
-    ::com::sun::star::accessibility::XAccessibleAction         *mpAction;
-    ::com::sun::star::accessibility::XAccessibleComponent      *mpComponent;
-    ::com::sun::star::accessibility::XAccessibleEditableText   *mpEditableText;
-    ::com::sun::star::accessibility::XAccessibleHypertext      *mpHypertext;
-    ::com::sun::star::accessibility::XAccessibleImage          *mpImage;
-    ::com::sun::star::accessibility::XAccessibleMultiLineText  *mpMultiLineText;
-    ::com::sun::star::accessibility::XAccessibleSelection      *mpSelection;
-    ::com::sun::star::accessibility::XAccessibleTable          *mpTable;
-    ::com::sun::star::accessibility::XAccessibleText           *mpText;
-    ::com::sun::star::accessibility::XAccessibleTextMarkup     *mpTextMarkup;
-    ::com::sun::star::accessibility::XAccessibleTextAttributes *mpTextAttributes;
-    ::com::sun::star::accessibility::XAccessibleValue          *mpValue;
+    css::uno::Reference<css::accessibility::XAccessible> mpAccessible;
+    css::uno::Reference<css::accessibility::XAccessibleContext> mpContext;
+    css::uno::Reference<css::accessibility::XAccessibleAction> mpAction;
+    css::uno::Reference<css::accessibility::XAccessibleComponent> mpComponent;
+    css::uno::Reference<css::accessibility::XAccessibleEditableText>
+        mpEditableText;
+    css::uno::Reference<css::accessibility::XAccessibleHypertext> mpHypertext;
+    css::uno::Reference<css::accessibility::XAccessibleImage> mpImage;
+    css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
+        mpMultiLineText;
+    css::uno::Reference<css::accessibility::XAccessibleSelection> mpSelection;
+    css::uno::Reference<css::accessibility::XAccessibleTable> mpTable;
+    css::uno::Reference<css::accessibility::XAccessibleText> mpText;
+    css::uno::Reference<css::accessibility::XAccessibleTextMarkup> mpTextMarkup;
+    css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+        mpTextAttributes;
+    css::uno::Reference<css::accessibility::XAccessibleValue> mpValue;
 
     AtkObject *child_about_to_be_removed;
     gint       index_of_child_about_to_be_removed;
