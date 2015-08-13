@@ -60,7 +60,7 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     // bridge to UNO
     virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
     // not implemented
     virtual SfxPoolItem* Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual SvStream&    Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;

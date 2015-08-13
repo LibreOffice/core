@@ -66,7 +66,7 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+                                        sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     inline SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
         {
@@ -113,7 +113,7 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                            sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+                                            sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     const Size& GetUnrotatedSize() const            { return aUnrotatedSize; }
 };
@@ -221,7 +221,7 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                            sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+                                            sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     const double& GetValue() const              { return nValue; }
     void SetValue( const double& rVal )         { nValue = rVal; }
@@ -260,7 +260,7 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+                                        sal_uInt8 nMemberId ) SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem
@@ -284,7 +284,7 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+                                        sal_uInt8 nMemberId ) SAL_OVERRIDE;
 };
 
 // Implementation of graphics attributes methods of SwAttr

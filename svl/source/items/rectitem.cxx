@@ -129,7 +129,7 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 
 bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                 sal_uInt8 nMemberId  )
+                                 sal_uInt8 nMemberId )
 {
     bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;

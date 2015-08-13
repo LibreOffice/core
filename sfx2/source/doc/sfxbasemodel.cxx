@@ -3467,7 +3467,7 @@ void SfxBaseModel::setGrabBagItem(const com::sun::star::uno::Any& rVal)
     if (!m_pData->m_xGrabBagItem.get())
         m_pData->m_xGrabBagItem.reset(new SfxGrabBagItem);
 
-    m_pData->m_xGrabBagItem->PutValue(rVal);
+    m_pData->m_xGrabBagItem->PutValue(rVal, 0);
 }
 
 static void GetCommandFromSequence( OUString& rCommand, sal_Int32& nIndex, const Sequence< beans::PropertyValue >& rSeqPropValue )

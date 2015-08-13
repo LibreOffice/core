@@ -127,7 +127,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
                 if ( pItem )
                 {
                     pItem->SetWhich( nId );
-                    pItem->PutValue( aAny );
+                    pItem->PutValue( aAny, 0 );
                 }
                 else
                     pItem = new SfxVoidItem( nId );

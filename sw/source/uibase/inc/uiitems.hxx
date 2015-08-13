@@ -48,7 +48,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     SwPageFootnoteInfo& GetPageFootnoteInfo()             { return aFootnoteInfo; }
     const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return aFootnoteInfo; }
@@ -81,7 +81,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     const SwNumRule* GetNumRule() const         { return pRule; }
           SwNumRule* GetNumRule()               { return pRule; }

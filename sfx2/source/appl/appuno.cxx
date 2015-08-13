@@ -339,7 +339,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                     ++nFoundArgs;
 #endif
-                    if( pItem->PutValue( rProp.Value ) )
+                    if( pItem->PutValue( rProp.Value, 0 ) )
                         // only use successfully converted items
                         rSet.Put( *pItem );
 #ifdef DBG_UTIL
@@ -368,7 +368,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                     ++nFoundArgs;
 #endif
-                    if( pItem->PutValue( rProp.Value ) )
+                    if( pItem->PutValue( rProp.Value, 0 ) )
                         // only use successfully converted items
                         rSet.Put( *pItem );
 #ifdef DBG_UTIL

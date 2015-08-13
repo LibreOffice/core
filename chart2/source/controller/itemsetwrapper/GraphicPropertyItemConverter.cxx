@@ -417,7 +417,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                       : OUString( "LineTransparence" );
 
                 XLineTransparenceItem aItem;
-                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), 0 );
 
                 rOutItemSet.Put( aItem );
             }
@@ -434,7 +434,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                       : OUString( "FillTransparence" );
 
                 XFillTransparenceItem aItem;
-                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ) );
+                aItem.PutValue( GetPropertySet()->getPropertyValue( aPropName ), 0 );
 
                 rOutItemSet.Put( aItem );
             }

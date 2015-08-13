@@ -817,7 +817,7 @@ void SdrObject::SetGrabBagItem(const com::sun::star::uno::Any& rVal)
     if (pGrabBagItem == NULL)
         pGrabBagItem = new SfxGrabBagItem;
 
-    pGrabBagItem->PutValue(rVal);
+    pGrabBagItem->PutValue(rVal, 0);
 
     SetChanged();
     BroadcastObjectChange();

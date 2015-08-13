@@ -52,7 +52,7 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                         sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+                                         sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     void                    SetBitmapURL( const OUString& rURL ) { _aURL = rURL; }
     void                    SetColor( Color nColor ) { _nColor = nColor; }

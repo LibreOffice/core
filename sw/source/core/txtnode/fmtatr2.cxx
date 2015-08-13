@@ -320,7 +320,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
     return true;
 }
-bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
+bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
@@ -470,7 +470,7 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
     return bRet;
 }
 bool SwFormatRuby::PutValue( const uno::Any& rVal,
-                            sal_uInt8 nMemberId  )
+                            sal_uInt8 nMemberId )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;

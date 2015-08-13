@@ -52,7 +52,7 @@ public:
                             sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+                          sal_uInt8 nMemberId) SAL_OVERRIDE;
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
@@ -102,7 +102,7 @@ public:
                             sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+                          sal_uInt8 nMemberId) SAL_OVERRIDE;
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
@@ -152,7 +152,7 @@ public:
                             sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+                          sal_uInt8 nMemberId) SAL_OVERRIDE;
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
@@ -202,7 +202,7 @@ public:
                             sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+                          sal_uInt8 nMemberId) SAL_OVERRIDE;
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 

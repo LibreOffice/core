@@ -300,7 +300,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     if ( pItem )
                     {
                         pItem->SetWhich( nSlotID );
-                        pItem->PutValue( rEvent.State );
+                        pItem->PutValue( rEvent.State, 0 );
                     }
                     else
                         pItem = new SfxVoidItem( nSlotID );

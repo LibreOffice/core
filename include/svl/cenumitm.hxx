@@ -44,7 +44,7 @@ public:
 
     virtual bool QueryValue(com::sun::star::uno::Any & rVal, sal_uInt8 = 0) const SAL_OVERRIDE;
 
-    virtual bool PutValue(const com::sun::star::uno::Any & rVal, sal_uInt8 = 0) SAL_OVERRIDE;
+    virtual bool PutValue(const com::sun::star::uno::Any & rVal, sal_uInt8 ) SAL_OVERRIDE;
 
     virtual sal_uInt16 GetValueCount() const = 0;
 

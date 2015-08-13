@@ -206,7 +206,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                 case SID_ATTR_CHAR_FONT:
                     {
                         SvxFontItem aItem(ITEMID_FONT);
-                        aItem.PutValue(Event.State);
+                        aItem.PutValue(Event.State, 0);
                         static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SfxItemState::DEFAULT : SfxItemState::DISABLED,&aItem);
                     }
                     break;

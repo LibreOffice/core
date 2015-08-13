@@ -153,13 +153,13 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
 
     XLineEndItem aEndMarker;
     aEndMarker.SetName( aName );
-    aEndMarker.PutValue( aElement );
+    aEndMarker.PutValue( aElement, 0 );
 
     mpInSet->Put( aEndMarker, XATTR_LINEEND );
 
     XLineStartItem aStartMarker;
     aStartMarker.SetName( aName );
-    aStartMarker.PutValue( aElement );
+    aStartMarker.PutValue( aElement, 0 );
 
     mpInSet->Put( aStartMarker, XATTR_LINESTART );
 }
@@ -234,14 +234,14 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         {
             XLineEndItem aEndMarker;
             aEndMarker.SetName( aSearchName );
-            if( !aEndMarker.PutValue( aElement ) )
+            if( !aEndMarker.PutValue( aElement, 0 ) )
                 throw lang::IllegalArgumentException();
 
             (*aIter)->Put( aEndMarker, XATTR_LINEEND );
 
             XLineStartItem aStartMarker;
             aStartMarker.SetName( aSearchName );
-            aStartMarker.PutValue( aElement );
+            aStartMarker.PutValue( aElement, 0 );
 
             (*aIter)->Put( aStartMarker, XATTR_LINESTART );
             return;
@@ -259,7 +259,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate)));
         if( pItem && pItem->GetName() == aSearchName )
         {
-            pItem->PutValue( aElement );
+            pItem->PutValue( aElement, 0 );
             bFound = true;
             break;
         }
@@ -271,7 +271,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate)));
         if( pItem && pItem->GetName() == aSearchName )
         {
-            pItem->PutValue( aElement );
+            pItem->PutValue( aElement, 0 );
             bFound = true;
             break;
         }

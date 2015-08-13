@@ -97,7 +97,7 @@ public:
     virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 = 0)
         const SAL_OVERRIDE;
 
-    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 = 0)
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         SAL_OVERRIDE;
 
 

@@ -805,7 +805,7 @@ void SwFormat::SetGrabBagItem(const uno::Any& rVal)
     if (!m_pGrabBagItem.get())
         m_pGrabBagItem.reset(new SfxGrabBagItem);
 
-    m_pGrabBagItem->PutValue(rVal);
+    m_pGrabBagItem->PutValue(rVal, 0);
 }
 
 //UUUU

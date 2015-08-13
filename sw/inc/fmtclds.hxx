@@ -109,7 +109,7 @@ public:
                                     const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     const SwColumns &GetColumns() const { return m_aColumns; }
           SwColumns &GetColumns()       { return m_aColumns; }

@@ -1054,7 +1054,7 @@ void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
     if (!mpGrabBagItem.get())
         mpGrabBagItem.reset(new SfxGrabBagItem);
 
-    mpGrabBagItem->PutValue(rVal);
+    mpGrabBagItem->PutValue(rVal, 0);
 }
 
 namespace numfunc

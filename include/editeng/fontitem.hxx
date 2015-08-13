@@ -54,7 +54,7 @@ public:
     virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16) const SAL_OVERRIDE;
     virtual SvStream& Store(SvStream& rStream, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
-    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) SAL_OVERRIDE;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,

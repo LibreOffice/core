@@ -370,7 +370,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
+bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )

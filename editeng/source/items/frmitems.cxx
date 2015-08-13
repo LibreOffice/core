@@ -1711,7 +1711,7 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
     return aLine;
 }
 
-bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
+bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine2 aRetLine;
@@ -2711,7 +2711,7 @@ void SvxBoxInfoItem::ResetFlags()
     nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x7F); // all valid except Disable
 }
 
-bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
+bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     table::BorderLine2 aRetLine;

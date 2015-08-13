@@ -348,7 +348,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
         if(pXFillStyleItem)
         {
-            aXFillStyleItem.PutValue(*pXFillStyleItem);
+            aXFillStyleItem.PutValue(*pXFillStyleItem, 0);
             rToSet.Put(aXFillStyleItem);
         }
 
@@ -357,7 +357,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             const Color aNullCol(COL_DEFAULT_SHAPE_FILLING);
             XFillColorItem aXFillColorItem(OUString(), aNullCol);
 
-            aXFillColorItem.PutValue(*pXFillColorItem);
+            aXFillColorItem.PutValue(*pXFillColorItem, 0);
             rToSet.Put(aXFillColorItem);
             //set old-school brush color if we later encounter the
             //MID_BACK_COLOR_TRANSPARENCY case below
@@ -469,7 +469,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         if (pXFillTransparenceItem)
         {
             XFillTransparenceItem aXFillTransparenceItem;
-            aXFillTransparenceItem.PutValue(*pXFillTransparenceItem);
+            aXFillTransparenceItem.PutValue(*pXFillTransparenceItem, 0);
             rToSet.Put(aXFillTransparenceItem);
         }
         else if (pColTrans &&
@@ -497,7 +497,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XGradientStepCountItem aXGradientStepCountItem;
 
-            aXGradientStepCountItem.PutValue(*pXGradientStepCountItem);
+            aXGradientStepCountItem.PutValue(*pXGradientStepCountItem, 0);
             rToSet.Put(aXGradientStepCountItem);
         }
 
@@ -505,7 +505,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpPosItem aXFillBmpPosItem;
 
-            aXFillBmpPosItem.PutValue(*pXFillBmpPosItem);
+            aXFillBmpPosItem.PutValue(*pXFillBmpPosItem, 0);
             rToSet.Put(aXFillBmpPosItem);
         }
 
@@ -513,7 +513,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpSizeXItem aXFillBmpSizeXItem;
 
-            aXFillBmpSizeXItem.PutValue(*pXFillBmpSizeXItem);
+            aXFillBmpSizeXItem.PutValue(*pXFillBmpSizeXItem, 0);
             rToSet.Put(aXFillBmpSizeXItem);
         }
 
@@ -521,7 +521,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpSizeYItem aXFillBmpSizeYItem;
 
-            aXFillBmpSizeYItem.PutValue(*pXFillBmpSizeYItem);
+            aXFillBmpSizeYItem.PutValue(*pXFillBmpSizeYItem, 0);
             rToSet.Put(aXFillBmpSizeYItem);
         }
 
@@ -554,7 +554,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             const Color aNullCol(COL_DEFAULT_SHAPE_FILLING);
             XSecondaryFillColorItem aXSecondaryFillColorItem(OUString(), aNullCol);
 
-            aXSecondaryFillColorItem.PutValue(*pXSecondaryFillColorItem);
+            aXSecondaryFillColorItem.PutValue(*pXSecondaryFillColorItem, 0);
             rToSet.Put(aXSecondaryFillColorItem);
         }
 
@@ -562,7 +562,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpSizeLogItem aXFillBmpSizeLogItem;
 
-            aXFillBmpSizeLogItem.PutValue(*pXFillBmpSizeLogItem);
+            aXFillBmpSizeLogItem.PutValue(*pXFillBmpSizeLogItem, 0);
             rToSet.Put(aXFillBmpSizeLogItem);
         }
 
@@ -570,7 +570,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpTileOffsetXItem aXFillBmpTileOffsetXItem;
 
-            aXFillBmpTileOffsetXItem.PutValue(*pXFillBmpTileOffsetXItem);
+            aXFillBmpTileOffsetXItem.PutValue(*pXFillBmpTileOffsetXItem, 0);
             rToSet.Put(aXFillBmpTileOffsetXItem);
         }
 
@@ -578,7 +578,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpTileOffsetYItem aXFillBmpTileOffsetYItem;
 
-            aXFillBmpTileOffsetYItem.PutValue(*pXFillBmpTileOffsetYItem);
+            aXFillBmpTileOffsetYItem.PutValue(*pXFillBmpTileOffsetYItem, 0);
             rToSet.Put(aXFillBmpTileOffsetYItem);
         }
 
@@ -586,7 +586,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpPosOffsetXItem aXFillBmpPosOffsetXItem;
 
-            aXFillBmpPosOffsetXItem.PutValue(*pXFillBmpPosOffsetXItem);
+            aXFillBmpPosOffsetXItem.PutValue(*pXFillBmpPosOffsetXItem, 0);
             rToSet.Put(aXFillBmpPosOffsetXItem);
         }
 
@@ -594,7 +594,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBmpPosOffsetYItem aXFillBmpPosOffsetYItem;
 
-            aXFillBmpPosOffsetYItem.PutValue(*pXFillBmpPosOffsetYItem);
+            aXFillBmpPosOffsetYItem.PutValue(*pXFillBmpPosOffsetYItem, 0);
             rToSet.Put(aXFillBmpPosOffsetYItem);
         }
 
@@ -602,7 +602,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             XFillBackgroundItem aXFillBackgroundItem;
 
-            aXFillBackgroundItem.PutValue(*pXFillBackgroundItem);
+            aXFillBackgroundItem.PutValue(*pXFillBackgroundItem, 0);
             rToSet.Put(aXFillBackgroundItem);
         }
 
@@ -941,7 +941,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         if ( pTextVertAdjust )
         {
             SdrTextVertAdjustItem aTextVertAdjust(static_cast <const :: SdrTextVertAdjustItem & > ( rFromSet.Get ( RES_TEXT_VERT_ADJUST ) ));
-            bRet &= ((SfxPoolItem&)aTextVertAdjust).PutValue(*pTextVertAdjust);
+            bRet &= ((SfxPoolItem&)aTextVertAdjust).PutValue(*pTextVertAdjust, 0);
             rToSet.Put(aTextVertAdjust);
         }
     }

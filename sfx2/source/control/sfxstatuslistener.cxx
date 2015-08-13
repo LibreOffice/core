@@ -219,7 +219,7 @@ throw( RuntimeException, std::exception )
             if ( pItem )
             {
                 pItem->SetWhich( m_nSlotID );
-                pItem->PutValue( rEvent.State );
+                pItem->PutValue( rEvent.State, 0 );
             }
             else
                 pItem = new SfxVoidItem( m_nSlotID );

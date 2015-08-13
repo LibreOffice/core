@@ -236,7 +236,7 @@ namespace
         const vcl::Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont,_nWhich ) );
 
         SvxFontItem aFontItem(_nFont);
-        aFontItem.PutValue( uno::makeAny( aControlFont ) );
+        aFontItem.PutValue( uno::makeAny( aControlFont ), 0 );
         _rItemSet.Put(aFontItem);
 
         _rItemSet.Put(SvxFontHeightItem(OutputDevice::LogicToLogic(Size(0, (sal_Int32)aFont.GetHeight()), MAP_POINT, MAP_TWIP).Height(),100,_nFontHeight));

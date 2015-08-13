@@ -493,7 +493,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
     if ( Event.FeatureURL.Complete == ".uno:ImageOrientation" )
     {
         SfxImageItem aItem( 1, 0 );
-        aItem.PutValue( Event.State );
+        aItem.PutValue( Event.State, 0 );
 
         m_lImageRotation = aItem.GetRotation();
         m_bImageMirrored = aItem.IsMirrored();

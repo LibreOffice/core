@@ -138,7 +138,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
             {
                 SvxZoomSliderItem aZoomSlider(100,20,400);
-                aZoomSlider.PutValue(_aEvent.State);
+                aZoomSlider.PutValue(_aEvent.State, 0);
                 static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider);
             }
         }
@@ -148,7 +148,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
             {
                 SvxZoomItem aZoom;
-                aZoom.PutValue(_aEvent.State);
+                aZoom.PutValue(_aEvent.State, 0 );
                 static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoom);
             }
         }

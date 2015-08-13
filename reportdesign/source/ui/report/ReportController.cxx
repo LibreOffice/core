@@ -1622,7 +1622,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             else if ( aArgs.getLength() == 1 && aArgs[0].Name == "Zoom" )
             {
                 SvxZoomItem aZoomItem;
-                aZoomItem.PutValue(aArgs[0].Value);
+                aZoomItem.PutValue(aArgs[0].Value, 0);
                 m_nZoomValue = aZoomItem.GetValue();
                 m_eZoomType = aZoomItem.GetType();
                 impl_zoom_nothrow();
@@ -1632,7 +1632,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             if ( aArgs.getLength() == 1 && aArgs[0].Name == "ZoomSlider" )
             {
                 SvxZoomSliderItem aZoomSlider;
-                aZoomSlider.PutValue(aArgs[0].Value);
+                aZoomSlider.PutValue(aArgs[0].Value, 0);
                 m_nZoomValue = aZoomSlider.GetValue();
                 m_eZoomType = SvxZoomType::PERCENT;
                 impl_zoom_nothrow();

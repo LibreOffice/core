@@ -950,7 +950,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 bOk = pWritingModeHandler->importXML( rValue, aAny,
                                                       rUnitConverter );
                 if( bOk )
-                    bOk = rItem.PutValue( aAny );
+                    bOk = rItem.PutValue( aAny, 0 );
 
                 delete pWritingModeHandler;
             }
