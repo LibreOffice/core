@@ -46,12 +46,6 @@
 
 #include <set>
 
-// #define ENABLE_TRACING
-
-#ifdef ENABLE_TRACING
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star;
 
 namespace
@@ -82,9 +76,6 @@ atk_wrapper_focus_idle_handler (gpointer data)
         // Gail does not notify focus changes to NULL, so do we ..
         if( atk_obj )
         {
-#ifdef ENABLE_TRACING
-            fprintf(stderr, "notifying focus event for %p\n", atk_obj);
-#endif
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             atk_focus_tracker_notify(atk_obj);
             SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -559,10 +550,6 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
                 g_warning( "Exception caught processing focus events" );
             }
         }
-#ifdef ENABLE_TRACING
-        else
-            fprintf(stderr, "Window %p already in the list\n", pWindow );
-#endif
     }
 }
 

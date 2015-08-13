@@ -21,10 +21,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 
-#ifdef ENABLE_TRACING
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star;
 
 static accessibility::XAccessibleComponent*
@@ -55,12 +51,6 @@ translatePoint( accessibility::XAccessibleComponent *pComponent,
     awt::Point aOrigin( 0, 0 );
     if( t == ATK_XY_SCREEN )
         aOrigin = pComponent->getLocationOnScreen();
-
-#ifdef ENABLE_TRACING
-    fprintf(stderr, "coordinates ( %u, %u ) translated to: ( %u, %u )\n",
-        x, y, x - aOrigin.X, y - aOrigin.Y);
-#endif
-
     return awt::Point( x - aOrigin.X, y - aOrigin.Y );
 }
 
@@ -127,22 +117,6 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
             uno::Reference< accessibility::XAccessible > xAccessible;
             xAccessible = pComponent->getAccessibleAtPoint(
                 translatePoint( pComponent, x, y, coord_type ) );
-
-#ifdef ENABLE_TRACING
-            fprintf(stderr, "getAccessibleAtPoint( %u, %u ) returned %p\n",
-              x, y, xAccessible.get());
-
-            uno::Reference< accessibility::XAccessibleComponent > xComponent(
-                xAccessible->getAccessibleContext(), uno::UNO_QUERY );
-
-            if( xComponent.is() )
-            {
-                awt::Rectangle rect = xComponent->getBounds();
-                fprintf(stderr, "%p->getBounds() returned: ( %u, %u, %u, %u )\n",
-                    xAccessible.get(), rect.X, rect.Y, rect.Width, rect.Height );
-            }
-#endif
-
             return atk_object_wrapper_ref( xAccessible );
         }
     }
@@ -176,10 +150,6 @@ component_wrapper_get_position (AtkComponent   *component,
 
             *x = aPos.X;
             *y = aPos.Y;
-
-#ifdef ENABLE_TRACING
-            fprintf(stderr, "getLocation[OnScreen]() returned: ( %u, %u )\n", *x, *y );
-#endif
         }
     }
     catch( const uno::Exception & )
@@ -203,10 +173,6 @@ component_wrapper_get_size (AtkComponent   *component,
             awt::Size aSize = pComponent->getSize();
             *width = aSize.Width;
             *height = aSize.Height;
-
-#ifdef ENABLE_TRACING
-            fprintf(stderr, "getSize() returned: ( %u, %u )\n", *width, *height );
-#endif
         }
     }
     catch( const uno::Exception & )

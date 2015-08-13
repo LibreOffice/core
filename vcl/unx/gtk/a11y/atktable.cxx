@@ -26,10 +26,6 @@ using namespace ::com::sun::star;
 static inline AtkObject *
 atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccessible >& rxAccessible )
 {
-#ifdef ENABLE_TRACING
-    SAL_INFO( "vcl.a11y", ": " << rxAccessible.get() << "\n");
-#endif
-
     if( rxAccessible.is() )
         return atk_object_wrapper_ref( rxAccessible );
 
@@ -82,15 +78,6 @@ table_wrapper_ref_at (AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleCellAt( " << row << ", " << column << " ) returns\n");
-
-        if( column >= 255 )
-            SAL_INFO( "vcl.a11y", "getAccessibleCellAt( " << row << ", " << column << " ) returns\n");
-#endif
-
         if( pTable )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCellAt( row, column ) );
     }
@@ -111,12 +98,6 @@ table_wrapper_get_index_at (AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleIndex( " << row << ", " << column << " ) returns " << pTable->getAccessibleIndex( row, column ) << "\n");
-#endif
-
         if( pTable )
             return pTable->getAccessibleIndex( row, column );
     }
@@ -135,12 +116,6 @@ table_wrapper_get_column_at_index (AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleColumn( " << nIndex << " ) returns " << pTable->getAccessibleColumn( nIndex ) << "\n");
-#endif
-
         if( pTable )
             return pTable->getAccessibleColumn( nIndex );
     }
@@ -159,12 +134,6 @@ table_wrapper_get_row_at_index( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleRow( " << nIndex << " ) returns " << pTable->getAccessibleRow( nIndex ) << "\n");
-#endif
-
         if( pTable )
             return pTable->getAccessibleRow( nIndex );
     }
@@ -182,12 +151,6 @@ table_wrapper_get_n_columns( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "XAccessibleTable::getAccessibleColumnCount returns " << pTable->getAccessibleColumnCount() << "\n");
-#endif
-
         if( pTable )
             return pTable->getAccessibleColumnCount();
     }
@@ -205,12 +168,6 @@ table_wrapper_get_n_rows( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleRowCount returns " << pTable->getAccessibleRowCount() << "\n");
-#endif
-
         if( pTable )
             return pTable->getAccessibleRowCount();
     }
@@ -230,13 +187,6 @@ table_wrapper_get_column_extent_at( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleColumnExtentAt ( " << row << ", " << column << " ) returns "
-                << pTable->getAccessibleColumnExtentAt( row, column ) << "\n");;
-#endif
-
         if( pTable )
             return pTable->getAccessibleColumnExtentAt( row, column );
     }
@@ -256,13 +206,6 @@ table_wrapper_get_row_extent_at( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleRowExtentAt ( " << row << ", " << column << " ) returns "
-                << pTable->getAccessibleRowExtentAt( row, column ) << "\n");;
-#endif
-
         if( pTable )
             return pTable->getAccessibleRowExtentAt( row, column );
     }
@@ -280,12 +223,6 @@ table_wrapper_get_caption( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleCaption() returns\n");
-#endif
-
         if( pTable )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCaption() );
     }
@@ -305,12 +242,6 @@ table_wrapper_get_row_description( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleRowDescription( " << row << " ) returns " << getAsConst(pTable->getAccessibleRowDescription(row)) << "\n");
-#endif
-
         if( pTable )
             return getAsConst( pTable->getAccessibleRowDescription( row ) );
     }
@@ -329,12 +260,6 @@ table_wrapper_get_column_description( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleColumnDescription( " << column << " ) returns " << getAsConst(pTable->getAccessibleColumnDescription(column)) << "\n");
-#endif
-
         if( pTable )
             return getAsConst( pTable->getAccessibleColumnDescription( column ) );
     }
@@ -356,14 +281,6 @@ table_wrapper_get_row_header( AtkTable *table,
         if( pTable )
         {
             uno::Reference< accessibility::XAccessibleTable > xRowHeaders( pTable->getAccessibleRowHeaders() );
-
-#ifdef ENABLE_TRACING
-            if( xRowHeaders.is() )
-                SAL_INFO( "vcl.a11y", "getAccessibleRowHeader( " << row << ")->getAccessibleCellAt( 0, " << row << " ) returns\n");
-            else
-                SAL_INFO( "vcl.a11y", "getAccessibleRowHeader( " << row << ") returns " << xRowHeaders.get() << "\n");
-#endif
-
             if( xRowHeaders.is() )
                 return atk_object_wrapper_conditional_ref( xRowHeaders->getAccessibleCellAt( row, 0 ) );
         }
@@ -387,14 +304,6 @@ table_wrapper_get_column_header( AtkTable *table,
         if( pTable )
         {
             uno::Reference< accessibility::XAccessibleTable > xColumnHeaders( pTable->getAccessibleColumnHeaders() );
-
-#ifdef ENABLE_TRACING
-            if( xColumnHeaders.is() )
-                SAL_INFO( "vcl.a11y", "getAccessibleColumnHeader( " << column << " )->getAccessibleCellAt( 0, " << column << " ) returns\n");
-            else
-                SAL_INFO( "vcl.a11y", "getAccessibleColumnHeader( " << column << " ) returns " << xColumnHeaders.get() << "\n");
-#endif
-
             if( xColumnHeaders.is() )
                 return atk_object_wrapper_conditional_ref( xColumnHeaders->getAccessibleCellAt( 0, column ) );
         }
@@ -413,12 +322,6 @@ table_wrapper_get_summary( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getAccessibleSummary() returns\n");
-#endif
-
         if( pTable )
         {
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleSummary() );
@@ -456,12 +359,6 @@ table_wrapper_get_selected_columns( AtkTable      *table,
     *pSelected = NULL;
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getSelectedAccessibleColumns()\n");
-#endif
-
         if( pTable )
             return convertToGIntArray( pTable->getSelectedAccessibleColumns(), pSelected );
     }
@@ -481,12 +378,6 @@ table_wrapper_get_selected_rows( AtkTable      *table,
     *pSelected = NULL;
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "getSelectedAccessibleRows()\n");
-#endif
-
         if( pTable )
             return convertToGIntArray( pTable->getSelectedAccessibleRows(), pSelected );
     }
@@ -505,12 +396,6 @@ table_wrapper_is_column_selected( AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "isAccessibleColumnSelected( " << column << " ) returns " << pTable->isAccessibleColumnSelected( column ) ? "true" : "false" << "\n");
-#endif
-
         if( pTable )
             return pTable->isAccessibleColumnSelected( column );
     }
@@ -529,12 +414,6 @@ table_wrapper_is_row_selected( AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "isAccessibleRowSelected( " << row << " ) returns " << pTable->isAccessibleRowSelected( row ) ? "true" : "false" << "\n");
-#endif
-
         if( pTable )
             return pTable->isAccessibleRowSelected( row );
     }
@@ -554,13 +433,6 @@ table_wrapper_is_selected( AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-
-#ifdef ENABLE_TRACING
-        if( pTable )
-            SAL_INFO( "vcl.a11y", "isAccessibleSelected( " << row << ", " << column
-                << " ) returns " << pTable->isAccessibleSelected( row , column ) ? "true" : "false" << "\n");
-#endif
-
         if( pTable )
             return pTable->isAccessibleSelected( row, column );
     }

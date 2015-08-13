@@ -31,12 +31,6 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 
-// #define ENABLE_TRACING
-
-#ifdef ENABLE_TRACING
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star;
 
 static sal_Int16
@@ -133,12 +127,6 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
 
     *start_offset = start;
     *end_offset   = end;
-
-#ifdef ENABLE_TRACING
-    fprintf(stderr, "adjust_boundaries( %d, %d, %d ) returns %d, %d\n",
-        rTextSegment.SegmentStart, rTextSegment.SegmentEnd, boundary_type,
-        start, end);
-#endif
 
     return OUStringToGChar(aString);
 }
@@ -299,9 +287,6 @@ text_wrapper_get_text (AtkText *text,
         g_warning( "Exception in getText()" );
     }
 
-#ifdef ENABLE_TRACING
-    fprintf(stderr, "text_wrapper_get_text( %d,%d ) returns %s\n", start_offset, end_offset, ret ? ret : "null" );
-#endif
     return ret;
 }
 
@@ -421,10 +406,6 @@ text_wrapper_get_caret_offset (AtkText          *text)
     catch(const uno::Exception&) {
         g_warning( "Exception in getCaretPosition()" );
     }
-
-#ifdef ENABLE_TRACING
-    fprintf(stderr, "get_caret_offset(%p) returns %d\n", text, offset);
-#endif
 
     return offset;
 }
@@ -668,11 +649,6 @@ text_wrapper_get_character_extents( AtkText          *text,
             *y = aRect.Y + origin_y;
             *width = aRect.Width;
             *height = aRect.Height;
-
-#ifdef ENABLE_TRACING
-            fprintf(stderr, "get_character_extents(%d, %d) returns: %d,%d,%d,%d ",
-                offset, coords, *x, *y, *width, *height);
-#endif
         }
     }
     catch(const uno::Exception&) {
@@ -693,10 +669,6 @@ text_wrapper_get_character_count (AtkText *text)
     catch(const uno::Exception&) {
         g_warning( "Exception in getCharacterCount" );
     }
-
-#ifdef ENABLE_TRACING
-    fprintf(stderr, "get_character_count(%p) returns: %d\n", text, rv);
-#endif
 
     return rv;
 }
@@ -747,10 +719,6 @@ text_wrapper_get_n_selections (AtkText *text)
     catch(const uno::Exception&) {
         g_warning( "Exception in getSelectionEnd() or getSelectionStart()" );
     }
-
-#ifdef ENABLE_TRACING
-    fprintf(stderr, "get_n_selections(%p) returns %d\n", text, rv);
-#endif
 
     return rv;
 }

@@ -65,10 +65,6 @@
 #include "atklistener.hxx"
 #include "atktextattributes.hxx"
 
-#ifdef ENABLE_TRACING
-#include <stdio.h>
-#endif
-
 #include <string.h>
 
 using namespace ::com::sun::star;
@@ -490,11 +486,6 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
         uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             i = xContext->getAccessibleIndexInParent();
-
-#ifdef ENABLE_TRACING
-            fprintf(stderr, "%p->getAccessibleIndexInParent() returned: %u\n",
-                obj->mpAccessible, i);
-#endif
         }
         catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleIndexInParent()" );

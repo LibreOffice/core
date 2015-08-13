@@ -254,10 +254,6 @@ void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
             m_aDocumentWindowList.insert(pWindow);
             m_xDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
         }
-#ifdef ENABLE_TRACING
-        else
-            fprintf(stderr, "Window %p already in the list\n", pWindow );
-#endif
     }
 }
 
