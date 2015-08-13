@@ -92,6 +92,7 @@
 #include <prewin.h>
 #include <wincrypt.h>
 #include <postwin.h>
+#include <comphelper/windowserrorstring.hxx>
 #endif
 
 #include <config_eot.h>
@@ -6761,33 +6762,6 @@ typedef BOOL (WINAPI *PointerTo_CryptRetrieveTimeStamp)(LPCWSTR wszUrl,
                                                         PCCERT_CONTEXT *ppTsSigner,
                                                         HCERTSTORE phStore);
 
-namespace {
-
-OUString WindowsError(DWORD nErrorCode)
-{
-    LPWSTR pMsgBuf;
-
-    if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                       NULL,
-                       nErrorCode,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                       (LPWSTR)&pMsgBuf,
-                       0,
-                       NULL) == 0)
-        return OUString::number(nErrorCode, 16);
-
-    if (pMsgBuf[wcslen(pMsgBuf)-1] == '\n')
-        pMsgBuf[wcslen(pMsgBuf)-1] = '\0';
-
-    OUString result(pMsgBuf);
-
-    LocalFree(pMsgBuf);
-
-    return result;
-}
-
-}
-
 #endif
 
 bool PDFWriterImpl::finalizeSignature()
@@ -7286,7 +7260,7 @@ bool PDFWriterImpl::finalizeSignature()
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
     if (pCertContext == NULL)
     {
-        SAL_WARN("vcl.pdfwriter", "CertCreateCertificateContext failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CertCreateCertificateContext failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
 
@@ -7312,7 +7286,7 @@ bool PDFWriterImpl::finalizeSignature()
                                            &nKeySpec,
                                            &bFreeNeeded))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptAcquireCertificatePrivateKey failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptAcquireCertificatePrivateKey failed: " << WindowsErrorString(GetLastError()));
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -7350,7 +7324,7 @@ bool PDFWriterImpl::finalizeSignature()
                                       NULL,
                                       NULL)))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToEncode failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToEncode failed: " << WindowsErrorString(GetLastError()));
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -7358,7 +7332,7 @@ bool PDFWriterImpl::finalizeSignature()
     if (!CryptMsgUpdate(hMsg, (const BYTE *)buffer1.get(), bytesRead1, FALSE) ||
         !CryptMsgUpdate(hMsg, (const BYTE *)buffer2.get(), bytesRead2, TRUE))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
         CryptMsgClose(hMsg);
         CertFreeCertificateContext(pCertContext);
         return false;
@@ -7371,7 +7345,7 @@ bool PDFWriterImpl::finalizeSignature()
         PointerTo_CryptRetrieveTimeStamp crts = (PointerTo_CryptRetrieveTimeStamp) GetProcAddress(LoadLibrary("crypt32.dll"), "CryptRetrieveTimeStamp");
         if (!crts)
         {
-            SAL_WARN("vcl.pdfwriter", "Could not find the CryptRetrieveTimeStamp function in crypt32.dll: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "Could not find the CryptRetrieveTimeStamp function in crypt32.dll: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
             return false;
@@ -7385,7 +7359,7 @@ bool PDFWriterImpl::finalizeSignature()
                                                  NULL,
                                                  NULL)))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToDecode failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToDecode failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
             return false;
@@ -7395,7 +7369,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, NULL, &nTsSigLen))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -7408,7 +7382,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, pTsSig.get(), &nTsSigLen))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -7417,7 +7391,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (!CryptMsgUpdate(hDecodedMsg, pTsSig.get(), nTsSigLen, TRUE))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -7427,7 +7401,7 @@ bool PDFWriterImpl::finalizeSignature()
         DWORD nDecodedSignerInfoLen = 0;
         if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, NULL, &nDecodedSignerInfoLen))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -7438,7 +7412,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, pDecodedSignerInfoBuf.get(), &nDecodedSignerInfoLen))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -7468,7 +7442,7 @@ bool PDFWriterImpl::finalizeSignature()
                      NULL,
                      NULL))
         {
-            SAL_WARN("vcl.pdfwriter", "CryptRetrieveTimeStamp failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "CryptRetrieveTimeStamp failed: " << WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -7514,7 +7488,7 @@ bool PDFWriterImpl::finalizeSignature()
             !CryptMsgUpdate(hMsg, (const BYTE *)buffer1.get(), bytesRead1, FALSE) ||
             !CryptMsgUpdate(hMsg, (const BYTE *)buffer2.get(), bytesRead2, TRUE))
         {
-            SAL_WARN("vcl.pdfwriter", "Re-creating the message failed: " << WindowsError(GetLastError()));
+            SAL_WARN("vcl.pdfwriter", "Re-creating the message failed: " << WindowsErrorString(GetLastError()));
             CryptMemFree(pTsContext);
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
@@ -7529,7 +7503,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, NULL, &nSigLen))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
@@ -7552,7 +7526,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, pSig.get(), &nSigLen))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
