@@ -335,15 +335,14 @@ void DdeTransaction::Data( const DdeData* p )
 {
     if ( ::tools::SolarMutex::Acquire() )
     {
-        aData.Call( (void*)p );
+        aData.Call( p );
         ::tools::SolarMutex::Release();
     }
 }
 
 void DdeTransaction::Done( bool bDataValid )
 {
-    const sal_uIntPtr nDataValid(bDataValid);
-    aDone.Call( reinterpret_cast<void*>(nDataValid) );
+    aDone.Call( bDataValid );
 }
 
 DdeLink::DdeLink( DdeConnection& d, const OUString& aItemName, long n )

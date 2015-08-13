@@ -326,7 +326,7 @@ bool SvDDEObject::IsDataComplete() const
     return bWaitForData;
 }
 
-IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
+IMPL_LINK_TYPED( SvDDEObject, ImplGetDDEData, const DdeData*, pData, void )
 {
     SotClipboardFormatId nFmt = pData->GetFormat();
     switch( nFmt )
@@ -358,13 +358,10 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
             }
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
+IMPL_LINK_TYPED( SvDDEObject, ImplDoneDDEData, bool, bValid, void )
 {
-    bool bValid = (bool)reinterpret_cast<sal_uIntPtr>(pData);
     if( !bValid && ( pRequest || pLink ))
     {
         DdeTransaction* pReq = 0;
@@ -388,8 +385,6 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
     else
         // End waiting
         bWaitForData = sal_False;
-
-    return 0;
 }
 
 }
