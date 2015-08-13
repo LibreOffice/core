@@ -1520,8 +1520,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
     sal_uInt16 nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), false );
     if ( nLine )    // same paragraph
     {
-        sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine-1, nX );
-        aPaM.GetIndex() = nCharPos;
+        aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine-1, nX );
         // If we need to go to the end of a line that was wrapped automatically,
         // the cursor ends up at the beginning of the 2nd line
         // Problem: Last character of an automatically wrapped line = Cursor
@@ -1534,8 +1533,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
         aPaM.GetPara()--;
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
         sal_uInt16 nL = pPPortion->GetLines().size() - 1;
-        sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), nL, nX+1 );
-        aPaM.GetIndex() = nCharPos;
+        aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), nL, nX+1 );
     }
 
     return aPaM;
@@ -1558,8 +1556,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
     sal_uInt16 nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), false );
     if ( nLine < ( pPPortion->GetLines().size() - 1 ) )
     {
-        sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine+1, nX );
-        aPaM.GetIndex() = nCharPos;
+        aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine+1, nX );
 
         // special case CursorUp
         TextLine& pLine = pPPortion->GetLines()[ nLine + 1 ];
@@ -1570,8 +1567,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
     {
         aPaM.GetPara()++;
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
-        sal_uInt16 nCharPos = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), 0, nX+1 );
-        aPaM.GetIndex() = nCharPos;
+        aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), 0, nX+1 );
         TextLine& pLine = pPPortion->GetLines().front();
         if ( ( aPaM.GetIndex() == pLine.GetEnd() ) && ( aPaM.GetIndex() > pLine.GetStart() ) && ( pPPortion->GetLines().size() > 1 ) )
             --aPaM.GetIndex();

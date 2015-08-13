@@ -123,7 +123,7 @@ bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
     return false;
 }
 
-bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
+bool TextCharAttribList::HasBoundingAttrib( sal_Int32 nBound )
 {
     for (TextCharAttribs::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {

@@ -180,11 +180,11 @@ protected:
 
     bool                CreateLines( sal_uLong nPara );
     void                CreateAndInsertEmptyLine( sal_uLong nPara );
-    void                ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth );
-    sal_uInt16              SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos );
-    void                CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos );
-    void                RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars );
-    void                SeekCursor( sal_uLong nNode, sal_uInt16 nPos, vcl::Font& rFont, OutputDevice* pOutDev );
+    void                ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion* pPortion, sal_Int32 nPortionStart, long nRemainingWidth );
+    sal_uInt16          SplitTextPortion( sal_uLong nPara, sal_Int32 nPos );
+    void                CreateTextPortions( sal_uLong nPara, sal_Int32 nStartPos );
+    void                RecalcTextPortion( sal_uLong nPara, sal_Int32 nStartPos, short nNewChars );
+    void                SeekCursor( sal_uLong nNode, sal_Int32 nPos, vcl::Font& rFont, OutputDevice* pOutDev );
 
     void                FormatDoc();
     void                FormatFullDoc();
@@ -196,20 +196,20 @@ protected:
 
     bool                IsFormatted() const { return mbFormatted; }
 
-    sal_uInt16          GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
+    sal_Int32           GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
     Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
     sal_uInt16          ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart );
     long                ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nTextPortion );
-    long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false );
-    long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_uInt16 nIndex2 );
-    sal_uInt8           ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
+    long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
+    long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
+    sal_uInt8           ImpGetRightToLeft( sal_uLong nPara, sal_Int32 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
     static void         ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 
     sal_uLong           CalcTextHeight();
     sal_uLong           CalcParaHeight( sal_uLong nParagraph ) const;
     sal_uLong           CalcTextWidth( sal_uLong nPara );
-    sal_uLong           CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const vcl::Font* pFont = 0 );
+    sal_uLong           CalcTextWidth( sal_uLong nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen, const vcl::Font* pFont = 0 );
     Range               GetInvalidYOffsets( sal_uLong nPortion );
 
     // for Undo/Redo

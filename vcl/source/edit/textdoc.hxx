@@ -57,7 +57,7 @@ public:
     const TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos, sal_Int32 nMaxPos = SAL_MAX_INT32 ) const;
     TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
     bool            HasAttrib( sal_uInt16 nWhich ) const;
-    bool            HasBoundingAttrib( sal_uInt16 nBound );
+    bool            HasBoundingAttrib( sal_Int32 nBound );
 };
 
 class TextNode
