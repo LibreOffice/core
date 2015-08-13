@@ -28,6 +28,7 @@
 #include <exception>
 #include <cstddef>
 #include <cxxabi.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
