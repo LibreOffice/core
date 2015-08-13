@@ -544,15 +544,20 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
     if (!m_pWakeUp.is())
     {
         m_pWakeUp = new WakeUpThread(this);
+        m_pWakeUp->launch();
     }
 }
 
 void StatusIndicatorFactory::impl_stopWakeUpThread()
 {
-    osl::MutexGuard g(m_mutex);
-    if (m_pWakeUp.is())
+    rtl::Reference<WakeUpThread> wakeUp;
     {
-        m_pWakeUp->stop();
+        osl::MutexGuard g(m_mutex);
+        wakeUp = m_pWakeUp;
+    }
+    if (wakeUp.is())
+    {
+        wakeUp->stop();
     }
 }
 
