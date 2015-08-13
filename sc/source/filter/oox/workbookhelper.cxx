@@ -532,18 +532,6 @@ void WorkbookGlobals::useInternalChartDataTable( bool bInternal )
 
 // private --------------------------------------------------------------------
 
-namespace {
-
-formula::FormulaGrammar::AddressConvention getConvention(css::uno::Reference<XDocumentProperties> xDocProps)
-{
-    if (xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
-        return formula::FormulaGrammar::CONV_XL_A1;
-
-    return formula::FormulaGrammar::CONV_OOO;
-}
-
-}
-
 void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
     maCellStyles = "CellStyles";
@@ -573,9 +561,13 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
 
     Reference< XDocumentPropertiesSupplier > xPropSupplier( mxDoc, UNO_QUERY);
     Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
-    ScCalcConfig aCalcConfig = mpDoc->GetCalcConfig();
-    aCalcConfig.SetStringRefSyntax( getConvention(xDocProps) );
-    mpDoc->SetCalcConfig(aCalcConfig);
+
+    if (xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
+    {
+        ScCalcConfig aCalcConfig = mpDoc->GetCalcConfig();
+        aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_A1 ) ;
+        mpDoc->SetCalcConfig(aCalcConfig);
+    }
 
     mxDocImport.reset(new ScDocumentImport(*mpDoc));
 
