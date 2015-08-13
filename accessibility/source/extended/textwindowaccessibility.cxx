@@ -1373,10 +1373,8 @@ Document::retrieveParagraphLineBoundary( Paragraph const * pParagraph,
         ::sal_uInt16 nLineCount = m_rEngine.GetLineCount( nNumber );
         for ( ::sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
         {
-            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
-                m_rEngine.GetLineLen( nNumber, nLine ) );
             nLineStart = nLineEnd;
-            nLineEnd += nLineLength;
+            nLineEnd += m_rEngine.GetLineLen( nNumber, nLine );
             if ( nIndex >= nLineStart && ( ( nLine == nLineCount - 1 ) ? nIndex <= nLineEnd : nIndex < nLineEnd ) )
             {
                 aBoundary.startPos = nLineStart;
@@ -1412,10 +1410,8 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
         ::sal_Int32 nLineEnd = 0;
         for ( ::sal_Int32 nLine = 0; nLine <= nLineNo; ++nLine )
         {
-            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
-                m_rEngine.GetLineLen( nNumber, nLine ) );
             nLineStart = nLineEnd;
-            nLineEnd += nLineLength;
+            nLineEnd += m_rEngine.GetLineLen( nNumber, nLine );
         }
 
         aBoundary.startPos = nLineStart;

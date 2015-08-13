@@ -1067,7 +1067,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
     return TextPaM( nLastNode, pLast->GetText().getLength() );
 }
 
-sal_uInt16 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart )
+sal_Int32 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart )
 {
     DBG_ASSERT( IsFormatted(), "GetPaM: Not formatted" );
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
@@ -1252,7 +1252,7 @@ sal_uInt16 TextEngine::GetLineCount( sal_uLong nParagraph ) const
     return 0;
 }
 
-sal_uInt16 TextEngine::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const
+sal_Int32 TextEngine::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const
 {
     DBG_ASSERT( nParagraph < mpTEParaPortions->Count(), "GetLineCount: Out of range" );
 
@@ -1364,7 +1364,7 @@ void TextEngine::InsertContent( TextNode* pNode, sal_uLong nPara )
     ImpParagraphInserted( nPara );
 }
 
-TextPaM TextEngine::SplitContent( sal_uLong nNode, sal_uInt16 nSepPos )
+TextPaM TextEngine::SplitContent( sal_uLong nNode, sal_Int32 nSepPos )
 {
     #ifdef DBG_UTIL
     TextNode* pNode = mpDoc->GetNodes()[ nNode ];

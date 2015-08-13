@@ -198,7 +198,7 @@ protected:
 
     sal_Int32           GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
     Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
-    sal_uInt16          ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart );
+    sal_Int32           ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart );
     long                ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nTextPortion );
     long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
@@ -214,7 +214,7 @@ protected:
 
     // for Undo/Redo
     void                InsertContent( TextNode* pNode, sal_uLong nPara );
-    TextPaM             SplitContent( sal_uLong nNode, sal_uInt16 nSepPos );
+    TextPaM             SplitContent( sal_uLong nNode, sal_Int32 nSepPos );
     TextPaM             ConnectContents( sal_uLong nLeftNode );
 
     // adjust PaM's and selections that were transferred to the API to a valid range
@@ -265,7 +265,7 @@ public:
     sal_uLong           GetTextHeight( sal_uLong nParagraph ) const;
 
     sal_uInt16          GetLineCount( sal_uLong nParagraph ) const;
-    sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
+    sal_Int32           GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
 
     void                SetRightToLeft( bool bR2L );
     bool                IsRightToLeft() const { return mbRightToLeft; }

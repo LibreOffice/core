@@ -334,7 +334,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     sal_uInt16 nLineStart = 0;
     for (sal_uInt16 i=0; i < aTextEngine.GetLineCount(0); ++i)
     {
-        sal_uInt16 nLineLength = aTextEngine.GetLineLen(0, i);
+        sal_Int32 nLineLength = aTextEngine.GetLineLen(0, i);
         double nLineWidth = aTextDev.getTextWidth (aText, nLineStart, nLineLength);
 
         bool bTooLong = (aPos.getY() + aTextEngine.GetCharHeight()) > maDrawArea.Bottom();
@@ -343,7 +343,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
             // Add the '...' to the last line to show, even though it may require to shorten the line
             double nDotsWidth = aTextDev.getTextWidth(OUString("..."),0,3);
 
-            sal_uInt16 nLength = nLineLength - 1;
+            sal_Int32 nLength = nLineLength - 1;
             while ( nDotsWidth + aTextDev.getTextWidth(aText, nLineStart, nLength) > maDrawArea.getWidth() && nLength > 0)
             {
                 --nLength;
