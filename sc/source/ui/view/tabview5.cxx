@@ -51,7 +51,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <comphelper/lok.hxx>
 #include <officecfg/Office/Calc.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 
 using namespace com::sun::star;
 
@@ -296,6 +299,22 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
             ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
             if (pImp)
                 pImp->SheetChanged( bSameTabButMoved );
+        }
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScDocShell* pDocSh;
+        ScModelObj* pModelObj;
+
+        if ( ( pDocSh = GetViewData().GetDocShell() ) &&
+             ( pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() )) )
+        {
+            Size aDocSize = pModelObj->getDocumentSize();
+            std::stringstream ss;
+            ss << aDocSize.Width() << ", " << aDocSize.Height();
+            OString sRect = ss.str().c_str();
+            pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
         }
     }
 }
