@@ -764,7 +764,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
                 MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
-                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                    DFF_Prop_txflTextFlow, 0) & 0xFFFF);
                 switch( eTextFlow )
                 {
                     case mso_txflBtoT:
@@ -853,7 +853,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if( bIsSimpleDrawingTextBox )
                 ApplyAttributes( rSt, aSet, rObjData );
 
-            if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
+            if (GetPropertyValue(DFF_Prop_FitTextToShape, 0) & 2)
             {
                 aSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
                 aSet.Put( makeSdrTextMinFrameHeightItem(
@@ -980,7 +980,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     if (pCustomShape)
                     {
                         double fExtraTextRotation = 0.0;
-                        if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
+                        if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 4 ) )
                         {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
                             fExtraTextRotation = -mnFix16Angle;
                         }
@@ -1031,11 +1031,11 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         }
 
         // Means that fBehindDocument is set
-        if (GetPropertyValue(DFF_Prop_fPrint) & 0x20)
+        if (GetPropertyValue(DFF_Prop_fPrint, 0) & 0x20)
             pImpRec->bDrawHell = true;
         else
             pImpRec->bDrawHell = false;
-        if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
+        if (GetPropertyValue(DFF_Prop_fPrint, 0) & 0x02)
             pImpRec->bHidden = true;
         pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
 
@@ -1099,7 +1099,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->nCropFromRight = GetPropertyValue(
                                     DFF_Prop_cropFromRight, 0 );
 
-        sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+        sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 );
 
         if ( !IsHardAttribute( DFF_Prop_fLine ) &&
              pImpRec->eShapeType == mso_sptPictureFrame )
@@ -1138,7 +1138,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             delete pImpRec;
     }
 
-    sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape );
+    sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape, 0 );
      if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rSt ) )
     {
         SvMemoryStream aMemStream;

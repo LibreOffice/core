@@ -2008,7 +2008,7 @@ void lclExtractColor( sal_uInt8& rnColorIdx, const DffPropSet& rDffPropSet, sal_
 {
     if( rDffPropSet.IsProperty( nPropId ) )
     {
-        sal_uInt32 nColor = rDffPropSet.GetPropertyValue( nPropId );
+        sal_uInt32 nColor = rDffPropSet.GetPropertyValue( nPropId, 0 );
         if( (nColor & 0xFF000000) == 0x08000000 )
             rnColorIdx = ::extract_value< sal_uInt8 >( nColor, 0, 8 );
     }
@@ -3451,7 +3451,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
                 // first try to resolve graphic from DFF storage
                 Graphic aGraphic;
                 Rectangle aVisArea;
-                if( !GetBLIP( GetPropertyValue( DFF_Prop_pib ), aGraphic, &aVisArea ) )
+                if( !GetBLIP( GetPropertyValue( DFF_Prop_pib, 0 ), aGraphic, &aVisArea ) )
                 {
                     // if not found, use graphic from object (imported from IMGDATA record)
                     aGraphic = rPicObj.GetGraphic();
@@ -3663,7 +3663,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
         instance of the XclImpStream class to be able to reuse the
         functionality of XclImpHyperlink. */
     OUString aString;
-    sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape );
+    sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape, 0 );
     if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rDffStrm ) )
     {
         // create a faked BIFF record that can be read by XclImpStream class

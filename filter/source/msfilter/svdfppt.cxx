@@ -798,7 +798,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 sal_Int32 nTextRotationAngle = 0;
                 if ( IsProperty( DFF_Prop_txflTextFlow ) )
                 {
-                    MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+                    MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
                     switch( eTextFlow )
                     {
                         case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
@@ -1026,7 +1026,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 SdrObject* pTObj = NULL;
                 bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
-                bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0;
+                bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
 
                 if ( pRet && pRet->ISA( SdrObjCustomShape ) && ( eTextKind == OBJ_RECT ) )
                 {
@@ -1272,7 +1272,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     maFidcls[ nSec ].dgid = rPersistEntry.nDrawingDgId; // insert the correct drawing id;
             }
         }
-        if ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )
+        if ( GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
         {
             if ( (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) == mso_fillBackground )
             {
@@ -5506,7 +5506,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
     {
         Color aDefColor( COL_BLACK );
         MSO_FillType eFillType = mso_fillSolid;
-        if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )
+        if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
             eFillType = (MSO_FillType)rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
         else
             eFillType = mso_fillBackground;
@@ -5518,15 +5518,15 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
             case mso_fillShadeScale :
             case mso_fillShadeTitle :
             case mso_fillSolid :
-                aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillColor ) );
+                aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillColor, 0 ) );
             break;
             case mso_fillPattern :
-                aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillBackColor ) );
+                aDefColor = rManager.MSO_CLR_ToColor( rManager.GetPropertyValue( DFF_Prop_fillBackColor, 0 ) );
             break;
             case mso_fillTexture :
             {
                 Graphic aGraf;
-                if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL ) )
+                if ( rManager.GetBLIP( rManager.GetPropertyValue( DFF_Prop_fillBlip, 0 ), aGraf, NULL ) )
                 {
                     Bitmap aBmp( aGraf.GetBitmap() );
                     Size aSize( aBmp.GetSizePixel() );
@@ -7584,7 +7584,7 @@ bool SdrPowerPointImport::IsVerticalText() const
     bool bVerticalText = false;
     if ( IsProperty( DFF_Prop_txflTextFlow ) )
     {
-        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
         switch( eTextFlow )
         {
         case mso_txflTtoBA :                    // Top to Bottom @-font, above -> below

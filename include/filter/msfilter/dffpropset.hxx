@@ -53,7 +53,7 @@ class MSFILTER_DLLPUBLIC DffPropSet
 
         inline bool IsProperty( sal_uInt32 nRecType ) const { return ( mpPropSetEntries[ nRecType & 0x3ff ].aFlags.bSet ); };
         bool        IsHardAttribute( sal_uInt32 nId ) const;
-        sal_uInt32  GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
+        sal_uInt32  GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault ) const;
         /** Returns a boolean property by its real identifier. */
         bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
         /** Returns a string property. */

@@ -249,7 +249,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     if ( IsProperty( DFF_Prop_hspMaster ) )
     {
-        if ( rManager.SeekToShape( rIn, pClientData, GetPropertyValue( DFF_Prop_hspMaster ) ) )
+        if ( rManager.SeekToShape( rIn, pClientData, GetPropertyValue( DFF_Prop_hspMaster, 0 ) ) )
         {
             DffRecordHeader aRecHd;
             ReadDffRecordHeader( rIn, aRecHd );
@@ -896,7 +896,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const M
 
 void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const // #i28269#
 {
-    sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
+    sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 ));
 
     if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( eShapeType ))
     {
@@ -995,7 +995,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             rSet.Put( XLineDashItem( OUString(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
             rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
         }
-        rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor ), DFF_Prop_lineColor ) ) );
+        rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor, 0 ), DFF_Prop_lineColor ) ) );
         if ( IsProperty( DFF_Prop_lineOpacity ) )
         {
             double nTrans = GetPropertyValue(DFF_Prop_lineOpacity, 0x10000);
@@ -1027,7 +1027,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
             if ( IsProperty( DFF_Prop_lineStartArrowhead ) )
             {
-                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineStartArrowhead );
+                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineStartArrowhead, 0 );
                 MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow );
                 MSO_LineEndLength   eLength = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow );
 
@@ -1045,7 +1045,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
             if ( IsProperty( DFF_Prop_lineEndArrowhead ) )
             {
-                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineEndArrowhead );
+                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineEndArrowhead, 0 );
                 MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow );
                 MSO_LineEndLength   eLength = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow );
 
@@ -1253,7 +1253,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
 
 void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
 {
-    sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
+    sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ));
 
     std::vector< ShadeColor > aShadeColors;
     GetShadeColors( rManager, *this, rIn, aShadeColors );
@@ -1303,7 +1303,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         double dBackTrans = 1.0;
         if (IsProperty(DFF_Prop_fillOpacity))
         {
-            dTrans = GetPropertyValue(DFF_Prop_fillOpacity) / 65536.0;
+            dTrans = GetPropertyValue(DFF_Prop_fillOpacity, 0) / 65536.0;
             if ( eXFill != drawing::FillStyle_GRADIENT )
             {
                 dTrans = dTrans * 100;
@@ -1313,7 +1313,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         }
 
         if ( IsProperty(DFF_Prop_fillBackOpacity) )
-            dBackTrans = GetPropertyValue(DFF_Prop_fillBackOpacity) / 65536.0;
+            dBackTrans = GetPropertyValue(DFF_Prop_fillBackOpacity, 0) / 65536.0;
 
         if ( ( eMSO_FillType == mso_fillShadeCenter ) && ( eXFill == drawing::FillStyle_BITMAP ) )
         {
@@ -1329,7 +1329,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             {
                 Graphic aGraf;
                 // first try to get BLIP from cache
-                bool bOK = const_cast<SvxMSDffManager&>(rManager).GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL );
+                bool bOK = const_cast<SvxMSDffManager&>(rManager).GetBLIP( GetPropertyValue( DFF_Prop_fillBlip, 0 ), aGraf, NULL );
                 // then try directly from stream (i.e. Excel chart hatches/bitmaps)
                 if ( !bOK )
                     bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && SvxMSDffManager::GetBLIPDirect( rIn, aGraf, NULL );
@@ -1343,10 +1343,10 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             Color aCol1( COL_WHITE ), aCol2( COL_WHITE );
 
                             if ( IsProperty( DFF_Prop_fillColor ) )
-                                aCol1 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor );
+                                aCol1 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, 0 ), DFF_Prop_fillColor );
 
                             if ( IsProperty( DFF_Prop_fillBackColor ) )
-                                aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor ), DFF_Prop_fillBackColor );
+                                aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, 0 ), DFF_Prop_fillBackColor );
 
                             XOBitmap aXOBitmap( aBmp );
                             aXOBitmap.Bitmap2Array();
@@ -1404,7 +1404,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
 
     if ( IsProperty( DFF_Prop_txflTextFlow ) )
     {
-        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
         switch( eTextFlow )
         {
             case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
@@ -1520,7 +1520,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
     rSet.Put( makeSdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) );
-    rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+    rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0 ) );
 }
 
 void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
@@ -1574,7 +1574,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     if ( IsProperty( DFF_Prop_txflTextFlow ) || IsProperty( DFF_Prop_cdirFont ) )
     {
         sal_Int32 nTextRotateAngle = 0;
-        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
 
         if ( eTextFlow == mso_txflBtoT )    // Bottom to Top non-@
             nTextRotateAngle += 90;
@@ -1607,7 +1607,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
     // "Extrusion" PropertySequence element
 
-    bool bExtrusionOn = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) != 0;
+    bool bExtrusionOn = ( GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 8 ) != 0;
     if ( bExtrusionOn )
     {
         PropVec aExtrusionPropVec;
@@ -1622,7 +1622,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DAmbientIntensity ) )
         {
             const OUString sExtrusionBrightness( "Brightness" );
-            double fBrightness = (sal_Int32)GetPropertyValue( DFF_Prop_c3DAmbientIntensity );
+            double fBrightness = (sal_Int32)GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 0 );
             fBrightness /= 655.36;
             aProp.Name = sExtrusionBrightness;
             aProp.Value <<= fBrightness;
@@ -1649,7 +1649,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DDiffuseAmt ) )
         {
             const OUString sExtrusionDiffusion( "Diffusion" );
-            double fDiffusion = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt );
+            double fDiffusion = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 );
             fDiffusion /= 655.36;
             aProp.Name = sExtrusionDiffusion;
             aProp.Value <<= fDiffusion;
@@ -1660,24 +1660,24 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             const OUString sExtrusionNumberOfLineSegments( "NumberOfLineSegments" );
             aProp.Name = sExtrusionNumberOfLineSegments;
-            aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DTolerance );
+            aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DTolerance, 0 );
             aExtrusionPropVec.push_back( aProp );
         }
         // "LightFace"
         const OUString sExtrusionLightFace( "LightFace" );
-        bool bExtrusionLightFace = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 1 ) != 0;
+        bool bExtrusionLightFace = ( GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 1 ) != 0;
         aProp.Name = sExtrusionLightFace;
         aProp.Value <<= bExtrusionLightFace;
         aExtrusionPropVec.push_back( aProp );
         // "FirstLightHarsh"
         const OUString sExtrusionFirstLightHarsh( "FirstLightHarsh" );
-        bool bExtrusionFirstLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 2 ) != 0;
+        bool bExtrusionFirstLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 2 ) != 0;
         aProp.Name = sExtrusionFirstLightHarsh;
         aProp.Value <<= bExtrusionFirstLightHarsh;
         aExtrusionPropVec.push_back( aProp );
         // "SecondLightHarsh"
         const OUString sExtrusionSecondLightHarsh( "SecondLightHarsh" );
-        bool bExtrusionSecondLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 1 ) != 0;
+        bool bExtrusionSecondLightHarsh = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 1 ) != 0;
         aProp.Name = sExtrusionSecondLightHarsh;
         aProp.Value <<= bExtrusionSecondLightHarsh;
         aExtrusionPropVec.push_back( aProp );
@@ -1685,7 +1685,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DKeyIntensity ) )
         {
             const OUString sExtrusionFirstLightLevel( "FirstLightLevel" );
-            double fFirstLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity );
+            double fFirstLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity, 0 );
             fFirstLightLevel /= 655.36;
             aProp.Name = sExtrusionFirstLightLevel;
             aProp.Value <<= fFirstLightLevel;
@@ -1695,7 +1695,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DFillIntensity ) )
         {
             const OUString sExtrusionSecondLightLevel( "SecondLightLevel" );
-            double fSecondLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity );
+            double fSecondLightLevel = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity, 0 );
             fSecondLightLevel /= 655.36;
             aProp.Name = sExtrusionSecondLightLevel;
             aProp.Value <<= fSecondLightLevel;
@@ -1728,7 +1728,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
         // "Metal"
         const OUString sExtrusionMetal( "Metal" );
-        bool bExtrusionMetal = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 4 ) != 0;
+        bool bExtrusionMetal = ( GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 4 ) != 0;
         aProp.Name = sExtrusionMetal;
         aProp.Value <<= bExtrusionMetal;
         aExtrusionPropVec.push_back( aProp );
@@ -1736,7 +1736,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DRenderMode ) )
         {
             const OUString sExtrusionShadeMode( "ShadeMode" );
-            sal_uInt32 nExtrusionRenderMode = GetPropertyValue( DFF_Prop_c3DRenderMode );
+            sal_uInt32 nExtrusionRenderMode = GetPropertyValue( DFF_Prop_c3DRenderMode, 0 );
             com::sun::star::drawing::ShadeMode eExtrusionShadeMode( com::sun::star::drawing::ShadeMode_FLAT );
             if ( nExtrusionRenderMode == mso_Wireframe )
                 eExtrusionShadeMode = com::sun::star::drawing::ShadeMode_DRAFT;
@@ -1762,7 +1762,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         }
 
         // "AutoRotationCenter"
-        if ( ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 8 ) == 0 )
+        if ( ( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 8 ) == 0 )
         {
             // "RotationCenter"
             if ( IsProperty( DFF_Prop_c3DRotationCenterX ) || IsProperty( DFF_Prop_c3DRotationCenterY ) || IsProperty( DFF_Prop_c3DRotationCenterZ ) )
@@ -1782,7 +1782,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DShininess ) )
         {
             const OUString sExtrusionShininess( "Shininess" );
-            double fShininess = (sal_Int32)GetPropertyValue( DFF_Prop_c3DShininess );
+            double fShininess = (sal_Int32)GetPropertyValue( DFF_Prop_c3DShininess, 0 );
             fShininess /= 655.36;
             aProp.Name = sExtrusionShininess;
             aProp.Value <<= fShininess;
@@ -1808,7 +1808,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DSpecularAmt ) )
         {
             const OUString sExtrusionSpecularity( "Specularity" );
-            double fSpecularity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSpecularAmt );
+            double fSpecularity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 );
             fSpecularity /= 1333;
             aProp.Name = sExtrusionSpecularity;
             aProp.Value <<= fSpecularity;
@@ -1816,7 +1816,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         }
         // "ProjectionMode"
         const OUString sExtrusionProjectionMode( "ProjectionMode" );
-        ProjectionMode eProjectionMode = GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 4 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
+        ProjectionMode eProjectionMode = GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
         aProp.Name = sExtrusionProjectionMode;
         aProp.Value <<= eProjectionMode;
         aExtrusionPropVec.push_back( aProp );
@@ -1858,7 +1858,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aExtrusionPropVec.push_back( aProp );
         if ( IsProperty( DFF_Prop_c3DExtrusionColor ) )
             rSet.Put( XSecondaryFillColorItem( OUString(), rManager.MSO_CLR_ToColor(
-                GetPropertyValue( DFF_Prop_c3DExtrusionColor ), DFF_Prop_c3DExtrusionColor ) ) );
+                GetPropertyValue( DFF_Prop_c3DExtrusionColor, 0 ), DFF_Prop_c3DExtrusionColor ) ) );
         // pushing the whole Extrusion element
         const OUString sExtrusion( "Extrusion" );
         PropSeq aExtrusionPropSeq( aExtrusionPropVec.size() );
@@ -2130,7 +2130,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsHardAttribute( DFF_Prop_f3DOK ) )
         {
             const OUString sExtrusionAllowed( "ExtrusionAllowed" );
-            bool bExtrusionAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 16 ) != 0;
+            bool bExtrusionAllowed = ( GetPropertyValue( DFF_Prop_fFillOK, 0 ) & 16 ) != 0;
             aProp.Name = sExtrusionAllowed;
             aProp.Value <<= bExtrusionAllowed;
             aPathPropVec.push_back( aProp );
@@ -2139,7 +2139,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsHardAttribute( DFF_Prop_fFillShadeShapeOK ) )
         {
             const OUString sConcentricGradientFillAllowed( "ConcentricGradientFillAllowed" );
-            bool bConcentricGradientFillAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 2 ) != 0;
+            bool bConcentricGradientFillAllowed = ( GetPropertyValue( DFF_Prop_fFillOK, 0 ) & 2 ) != 0;
             aProp.Name = sConcentricGradientFillAllowed;
             aProp.Value <<= bConcentricGradientFillAllowed;
             aPathPropVec.push_back( aProp );
@@ -2148,7 +2148,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsHardAttribute( DFF_Prop_fGtextOK ) || ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) )
         {
             const OUString sTextPathAllowed( "TextPathAllowed" );
-            bool bTextPathAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 4 ) != 0;
+            bool bTextPathAllowed = ( GetPropertyValue( DFF_Prop_fFillOK, 0 ) & 4 ) != 0;
             aProp.Name = sTextPathAllowed;
             aProp.Value <<= bTextPathAllowed;
             aPathPropVec.push_back( aProp );
@@ -2425,7 +2425,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         }
         if ( IsProperty( DFF_Prop_connectorType ) )
         {
-            sal_Int16 nGluePointType = (sal_uInt16)GetPropertyValue( DFF_Prop_connectorType );
+            sal_Int16 nGluePointType = (sal_uInt16)GetPropertyValue( DFF_Prop_connectorType, 0 );
             const OUString sGluePointType( "GluePointType" );
             aProp.Name = sGluePointType;
             aProp.Value <<= nGluePointType;
@@ -2449,7 +2449,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
     // "TextPath" PropertySequence element
 
-    bool bTextPathOn = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x4000 ) != 0;
+    bool bTextPathOn = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) != 0;
     if ( bTextPathOn )
     {
         PropVec aTextPathPropVec;
@@ -2462,11 +2462,11 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
         // TextPathMode
         const OUString sTextPathMode( "TextPathMode" );
-        bool bTextPathFitPath = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x100 ) != 0;
+        bool bTextPathFitPath = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x100 ) != 0;
 
         bool bTextPathFitShape;
         if ( IsHardAttribute( DFF_Prop_gtextFStretch ) )
-            bTextPathFitShape = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x400 ) != 0;
+            bTextPathFitShape = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x400 ) != 0;
         else
         {
             bTextPathFitShape = true;
@@ -2491,13 +2491,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
         // ScaleX
         const OUString sTextPathScaleX( "ScaleX" );
-        bool bTextPathScaleX = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x40 ) != 0;
+        bool bTextPathScaleX = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x40 ) != 0;
         aProp.Name = sTextPathScaleX;
         aProp.Value <<= bTextPathScaleX;
         aTextPathPropVec.push_back( aProp );
         // SameLetterHeights
         const OUString sSameLetterHeight( "SameLetterHeights" );
-        bool bSameLetterHeight = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x80 ) != 0;
+        bool bSameLetterHeight = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x80 ) != 0;
         aProp.Name = sSameLetterHeight;
         aProp.Value <<= bSameLetterHeight;
         aTextPathPropVec.push_back( aProp );
@@ -2532,7 +2532,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             beans::PropertyState ePropertyState = beans::PropertyState_DEFAULT_VALUE;
             if ( IsProperty( i ) )
             {
-                nValue = GetPropertyValue( i );
+                nValue = GetPropertyValue( i, 0 );
                 ePropertyState = beans::PropertyState_DIRECT_VALUE;
             }
             if ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << ( i - DFF_Prop_adjustValue ) ) )
@@ -2576,8 +2576,8 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     bool bNonZeroShadowOffset = false;
 
     if ( IsProperty( DFF_Prop_gtextSize ) )
-        rSet.Put( SvxFontHeightItem( rManager.ScalePt( GetPropertyValue( DFF_Prop_gtextSize ) ), 100, EE_CHAR_FONTHEIGHT ) );
-    sal_uInt32 nFontAttributes = GetPropertyValue( DFF_Prop_gtextFStrikethrough );
+        rSet.Put( SvxFontHeightItem( rManager.ScalePt( GetPropertyValue( DFF_Prop_gtextSize, 0 ) ), 100, EE_CHAR_FONTHEIGHT ) );
+    sal_uInt32 nFontAttributes = GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 );
     if ( nFontAttributes & 0x20 )
         rSet.Put( SvxWeightItem( nFontAttributes & 0x20 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
     if ( nFontAttributes & 0x10 )
@@ -2591,33 +2591,33 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     if ( nFontAttributes & 0x01 )
         rSet.Put( SvxCrossedOutItem( nFontAttributes & 0x01 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
     if ( IsProperty( DFF_Prop_fillColor ) )
-        rSet.Put( XFillColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor ) ) );
+        rSet.Put( XFillColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, 0 ), DFF_Prop_fillColor ) ) );
     if ( IsProperty( DFF_Prop_shadowColor ) )
-        rSet.Put( makeSdrShadowColorItem( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
+        rSet.Put( makeSdrShadowColorItem( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor, 0 ), DFF_Prop_shadowColor ) ) );
     else
     {
         //The default value for this property is 0x00808080
         rSet.Put( makeSdrShadowColorItem( rManager.MSO_CLR_ToColor( 0x00808080, DFF_Prop_shadowColor ) ) );
     }
     if ( IsProperty( DFF_Prop_shadowOpacity ) )
-        rSet.Put( makeSdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
+        rSet.Put( makeSdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity, 0 ) ) / 655 ) ) );
     if ( IsProperty( DFF_Prop_shadowOffsetX ) )
     {
-        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
+        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX, 0 ) );
         rManager.ScaleEmu( nVal );
         rSet.Put( makeSdrShadowXDistItem( nVal ) );
         bNonZeroShadowOffset = ( nVal > 0 );
     }
     if ( IsProperty( DFF_Prop_shadowOffsetY ) )
     {
-        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
+        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY, 0 ) );
         rManager.ScaleEmu( nVal );
         rSet.Put( makeSdrShadowYDistItem( nVal ) );
         bNonZeroShadowOffset = ( nVal > 0 );
     }
     if ( IsProperty( DFF_Prop_fshadowObscured ) )
     {
-        bHasShadow = ( GetPropertyValue( DFF_Prop_fshadowObscured ) & 2 ) != 0;
+        bHasShadow = ( GetPropertyValue( DFF_Prop_fshadowObscured, 0 ) & 2 ) != 0;
         if ( bHasShadow )
         {
             if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
@@ -2628,7 +2628,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
     if ( IsProperty( DFF_Prop_shadowType ) )
     {
-        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
+        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType, 0 ) );
         if( eShadowType != mso_shadowOffset && !bNonZeroShadowOffset )
         {
             //0.12" == 173 twip == 302 100mm
@@ -2651,10 +2651,10 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
             // #160376# sj: activating shadow only if fill and or linestyle is used
             // this is required because of the latest drawing layer core changes.
             // #i104085# is related to this.
-            sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
+            sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 ));
             if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( rObjData.eShapeType ))
                 nLineFlags &= ~0x08;
-            sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
+            sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ));
             if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( rObjData.eShapeType ))
                 nFillFlags &= ~0x10;
             if ( nFillFlags & 0x10 )
@@ -2706,7 +2706,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                                 // (upright property of the textbox)
         if ( rManager.pSecPropSet->SeekToContent( DFF_Prop_metroBlob, rIn ) )
         {
-            sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob );
+            sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob, 0 );
             if ( nLen )
             {
                 ::com::sun::star::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
@@ -3422,7 +3422,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                 break;
                 case mso_colorLineOrFillColor :     // ( use the line color only if there is a line )
                 {
-                    if ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
+                    if ( GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 ) & 8 )
                     {
                         nPropColor = GetPropertyValue( DFF_Prop_lineColor, 0 );
                         nCProp = DFF_Prop_lineColor;
@@ -3766,7 +3766,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     {
         Graphic aGraf;  // be sure this graphic is deleted before swapping out
         if( SeekToContent( DFF_Prop_pibName, rSt ) )
-            aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName ), true );
+            aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName, 0 ), true );
 
         //   AND, OR the following:
         if( !( eFlags & mso_blipflagDoNotSave ) ) // Graphic embedded
@@ -3852,7 +3852,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
             sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
             GraphicDrawMode eDrawMode   = GRAPHICDRAWMODE_STANDARD;
-            switch ( GetPropertyValue( DFF_Prop_pictureActive ) & 6 )
+            switch ( GetPropertyValue( DFF_Prop_pictureActive, 0 ) & 6 )
             {
                 case 4 : eDrawMode = GRAPHICDRAWMODE_GREYS; break;
                 case 6 : eDrawMode = GRAPHICDRAWMODE_MONO; break;
@@ -3937,7 +3937,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             // TODO/LATER: in future probably the correct aspect should be provided here
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
             // #i32596# - pass <nCalledByGroup> to method
-            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup, nAspect );
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId, 0 ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup, nAspect );
         }
         if( !pRet )
         {
@@ -4294,7 +4294,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     pRet->SetMergedItemSet(aSet);
                 }
             }
-            else if ( aObjData.eShapeType == mso_sptLine && !( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) )
+            else if ( aObjData.eShapeType == mso_sptLine && !( GetPropertyValue( DFF_Prop_fc3DLightFace, 0 ) & 8 ) )
             {
                 basegfx::B2DPolygon aPoly;
                 aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
@@ -4328,7 +4328,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             SvxFontItem aLatin(EE_CHAR_FONTINFO), aAsian(EE_CHAR_FONTINFO_CJK), aComplex(EE_CHAR_FONTINFO_CTL);
                             GetDefaultFonts( aLatin, aAsian, aComplex );
 
-                            aFontName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextFont ), true );
+                            aFontName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextFont, 0 ), true );
                             aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
                                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
                             aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
@@ -4352,7 +4352,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                         {
-                            aObjectText = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextUNICODE ), true );
+                            aObjectText = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextUNICODE, 0 ), true );
                             ReadObjText( aObjectText, pRet );
                         }
 
@@ -4791,7 +4791,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     if ( pRet )
     {
-        sal_Int32 nGroupProperties( GetPropertyValue( DFF_Prop_fPrint ) );
+        sal_Int32 nGroupProperties( GetPropertyValue( DFF_Prop_fPrint, 0 ) );
         pRet->SetVisible( ( nGroupProperties & 2 ) == 0 );
         pRet->SetPrintable( ( nGroupProperties & 1 ) != 0 );
     }
@@ -4799,7 +4799,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     //Import alt text as description
     if ( pRet && SeekToContent( DFF_Prop_wzDescription, rSt ) )
     {
-        OUString aAltText = MSDFFReadZString(rSt, GetPropertyValue(DFF_Prop_wzDescription), true);
+        OUString aAltText = MSDFFReadZString(rSt, GetPropertyValue(DFF_Prop_wzDescription, 0), true);
         pRet->SetDescription( aAltText );
     }
 
@@ -5082,7 +5082,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
                 MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
-                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                    DFF_Prop_txflTextFlow, 0) & 0xFFFF);
                 switch( eTextFlow )
                 {
                     case mso_txflBtoT:
@@ -5175,7 +5175,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 ApplyAttributes( rSt, aSet, rObjData );
 
             bool bFitText = false;
-            if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
+            if (GetPropertyValue(DFF_Prop_FitTextToShape, 0) & 2)
             {
                 aSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
                 aSet.Put( makeSdrTextMinFrameHeightItem(
@@ -5221,7 +5221,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if ( IsProperty( DFF_Prop_anchorText ) )
             {
                 MSO_Anchor eTextAnchor =
-                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
+                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, 0 );
 
                 SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
                 bool bTVASet(false);
@@ -5341,11 +5341,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         }
 
         //Means that fBehindDocument is set
-        if (GetPropertyValue(DFF_Prop_fPrint) & 0x20)
+        if (GetPropertyValue(DFF_Prop_fPrint, 0) & 0x20)
             pImpRec->bDrawHell = true;
         else
             pImpRec->bDrawHell = false;
-        if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
+        if (GetPropertyValue(DFF_Prop_fPrint, 0) & 0x02)
             pImpRec->bHidden = true;
         pTextImpRec->bDrawHell  = pImpRec->bDrawHell;
         pTextImpRec->bHidden = pImpRec->bHidden;
@@ -5412,7 +5412,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->bVFlip = (rObjData.nSpFlags & SP_FFLIPV) != 0;
         pImpRec->bHFlip = (rObjData.nSpFlags & SP_FFLIPH) != 0;
 
-        sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+        sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 );
         pImpRec->eLineStyle = (nLineFlags & 8)
                             ? (MSO_LineStyle)GetPropertyValue(
                                                 DFF_Prop_lineStyle,

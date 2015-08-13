@@ -2650,7 +2650,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( bInhabitanceChecked || bAnimationInfoFound )
                     break;
                 bInhabitanceChecked = true;
-                if ( ! ( IsProperty( DFF_Prop_hspMaster ) && SeekToShape( rSt, pData, GetPropertyValue( DFF_Prop_hspMaster ) ) ) )
+                if ( ! ( IsProperty( DFF_Prop_hspMaster ) && SeekToShape( rSt, pData, GetPropertyValue( DFF_Prop_hspMaster, 0 ) ) ) )
                     break;
                 ReadDffRecordHeader( rSt, aMasterShapeHd );
                 if ( !SeekToRec( rSt, DFF_msofbtClientData, aMasterShapeHd.GetRecEndFilePos(), &aMasterShapeHd ) )

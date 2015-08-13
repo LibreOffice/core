@@ -1296,7 +1296,7 @@ OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
 {
     sal_Size nOldPos = rStrm.Tell();
     OUStringBuffer aBuffer;
-    sal_uInt32 nBufferSize = GetPropertyValue( nId );
+    sal_uInt32 nBufferSize = GetPropertyValue( nId, 0 );
     if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
     {
         sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufferSize / 2 );
