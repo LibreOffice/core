@@ -462,8 +462,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         {
             ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
 
-            // if it hasn't been read or explicitly changed, don't write it
-            if ( aCalcConfig.mbHasStringRefSyntax )
+            // write if it has been read|imported or explicitly changed
+            // or if ref syntax isn't what would be native for our file format
+            // i.e. CalcA1 in this case
+            if ( aCalcConfig.mbHasStringRefSyntax ||
+                 (aCalcConfig.meStringRefAddressSyntax != formula::FormulaGrammar::CONV_OOO) )
             {
                 formula::FormulaGrammar::AddressConvention aConv = aCalcConfig.meStringRefAddressSyntax;
 
