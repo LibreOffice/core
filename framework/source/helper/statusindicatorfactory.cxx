@@ -544,6 +544,7 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
     if (!m_pWakeUp.is())
     {
         m_pWakeUp = new WakeUpThread(this);
+        m_pWakeUp->launch();
     }
 }
 
