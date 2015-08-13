@@ -89,9 +89,9 @@ public:
 struct TEWritingDirectionInfo
 {
     sal_uInt8    nType;
-    sal_uInt16  nStartPos;
-    sal_uInt16  nEndPos;
-    TEWritingDirectionInfo( sal_uInt8 _Type, sal_uInt16 _Start, sal_uInt16 _End )
+    sal_Int32    nStartPos;
+    sal_Int32    nEndPos;
+    TEWritingDirectionInfo( sal_uInt8 _Type, sal_Int32 _Start, sal_Int32 _End )
         : nType {_Type}
         , nStartPos {_Start}
         , nEndPos {_End}

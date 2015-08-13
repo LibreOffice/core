@@ -202,7 +202,7 @@ protected:
     long                ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nTextPortion );
     long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
-    sal_uInt8           ImpGetRightToLeft( sal_uLong nPara, sal_Int32 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
+    sal_uInt8           ImpGetRightToLeft( sal_uLong nPara, sal_Int32 nPos, sal_Int32* pStart = NULL, sal_Int32* pEnd = NULL );
     static void         ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 

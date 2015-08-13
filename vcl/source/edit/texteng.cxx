@@ -2920,7 +2920,7 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         for ( long nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.push_back( TEWritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ) );
+            rInfos.push_back( TEWritingDirectionInfo( nCurrDir, nStart, nEnd ) );
             nStart = nEnd;
         }
 
@@ -2929,11 +2929,11 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
 
     // No infos mean no CTL and default dir is L2R...
     if ( rInfos.empty() )
-        rInfos.push_back( TEWritingDirectionInfo( 0, 0, (sal_uInt16)pParaPortion->GetNode()->GetText().getLength() ) );
+        rInfos.push_back( TEWritingDirectionInfo( 0, 0, pParaPortion->GetNode()->GetText().getLength() ) );
 
 }
 
-sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uLong nPara, sal_Int32 nPos, sal_uInt16* pStart, sal_uInt16* pEnd )
+sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uLong nPara, sal_Int32 nPos, sal_Int32* pStart, sal_Int32* pEnd )
 {
     sal_uInt8 nRightToLeft = 0;
 
