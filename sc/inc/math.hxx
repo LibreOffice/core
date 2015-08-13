@@ -51,9 +51,9 @@ inline double divide( const double& fNumerator, const double& fDenominator )
 {
     if (fDenominator == 0.0) {
         if (std::isfinite(fNumerator) && fNumerator != 0.0) {
-            return std::copysign(INFINITY, fNumerator);
+            return std::copysign( std::numeric_limits<double>::infinity(), fNumerator);
         } else {
-            return NAN;
+            return std::numeric_limits<double>::quiet_NaN();
         }
     }
     return fNumerator / fDenominator;
