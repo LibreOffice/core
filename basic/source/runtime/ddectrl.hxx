@@ -29,7 +29,7 @@ class DdeData;
 class SbiDdeControl
 {
 private:
-    DECL_LINK( Data, DdeData* );
+    DECL_LINK_TYPED( Data, const DdeData*, void );
     static SbError GetLastErr( DdeConnection* );
     size_t GetFreeChannel();
     std::vector<DdeConnection*> aConvList;
