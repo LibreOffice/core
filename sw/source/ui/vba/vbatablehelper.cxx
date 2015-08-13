@@ -140,12 +140,12 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw 
 {
     SwTableLines& rLines = pTable->GetTabLines();
     sal_Int32 nRowCount = rLines.size();
-    if (nRow >= nRowCount)
+    if (nRow < 0 || nRow >= nRowCount)
         throw uno::RuntimeException();
 
     SwTableLine* pLine = rLines[ nRow ];
     sal_Int32 nColCount = pLine->GetTabBoxes().size();
-    if (nCol >= nColCount)
+    if (nCol < 0 || nCol >= nColCount)
         throw uno::RuntimeException();
 
     SwTableBox* pStart = pLine->GetTabBoxes()[ nCol ];
