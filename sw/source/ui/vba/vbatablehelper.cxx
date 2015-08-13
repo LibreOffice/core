@@ -61,7 +61,6 @@ sal_Int32 SwVbaTableHelper::getTabColumnsCount( sal_Int32 nRowIndex ) throw (uno
 sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
-    //sal_Int32 nRowCount = mxTextTable->getRows()->getCount();
     sal_Int32 nRowCount = pTable->GetTabLines().size();
     for( sal_Int32 index = 0; index < nRowCount; index++ )
     {
@@ -141,15 +140,15 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw 
 {
     SwTableLines& rLines = pTable->GetTabLines();
     sal_Int32 nRowCount = rLines.size();
-    if( nRowCount < nRow )
+    if (nRow >= nRowCount)
         throw uno::RuntimeException();
 
-    SwTableBox* pStart = NULL;
     SwTableLine* pLine = rLines[ nRow ];
-    if( (sal_Int32)pLine->GetTabBoxes().size() < nCol )
+    sal_Int32 nColCount = pLine->GetTabBoxes().size();
+    if (nCol >= nColCount)
         throw uno::RuntimeException();
 
-    pStart = pLine->GetTabBoxes()[ nCol ];
+    SwTableBox* pStart = pLine->GetTabBoxes()[ nCol ];
 
     if( !pStart )
         throw uno::RuntimeException();
