@@ -96,14 +96,10 @@ void CellLineStyleControl::Initialize()
 
 void CellLineStyleControl::GetFocus()
 {
-    if(!mbVSfocus)
-    {
+    if (!mbVSfocus && maPushButtonMoreOptions)
         maPushButtonMoreOptions->GrabFocus();
-    }
-    else
-    {
+    else if (maCellLineStyleValueSet)
         maCellLineStyleValueSet->GrabFocus();
-    }
 }
 
 void CellLineStyleControl::SetAllNoSel()
