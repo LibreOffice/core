@@ -149,7 +149,7 @@ namespace svx { namespace sidebar {
 LinePropertyPanelBase::LinePropertyPanelBase(
     vcl::Window* pParent,
     const uno::Reference<frame::XFrame>& rxFrame)
-:   PanelLayout(pParent, "LinePropertyPanelBase", "svx/ui/sidebarline.ui", rxFrame),
+:   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame),
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),
