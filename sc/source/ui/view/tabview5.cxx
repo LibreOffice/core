@@ -304,11 +304,10 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        ScDocShell* pDocSh;
-        ScModelObj* pModelObj;
+        ScDocShell* pDocSh = GetViewData().GetDocShell();
+        ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel()) : nullptr;
 
-        if ( ( pDocSh = GetViewData().GetDocShell() ) != nullptr &&
-             ( pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() )) != nullptr )
+        if (pModelObj)
         {
             Size aDocSize = pModelObj->getDocumentSize();
             std::stringstream ss;
