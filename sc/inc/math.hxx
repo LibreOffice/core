@@ -24,10 +24,39 @@
 
 namespace sc {
 
+/** Return fNumerator/fDenominator if fDenominator!=0 else #DIV/0! error coded
+    into double.
+ */
 inline double div( const double& fNumerator, const double& fDenominator )
 {
     return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
         CreateDoubleError( errDivisionByZero);
+}
+
+/** Return fNumerator/fDenominator if fDenominator!=0 else +-Infinity if
+    fNumerator!=0 or NaN if fNumerator==0.
+
+    This allows to build/run with -fsanitize=float-divide-by-zero and have a
+    defined behavior for the otherwise undefined division by zero case ("If the
+    second operand of / or % is zero the behavior is undefined."
+    ([expr.mul]/4)).
+
+    The Calc interpreter gracefully handles Infinity or NaN double values
+    encountered as interim or final results, using this function we can ensure
+    defined behavior where desired.
+
+    Use where the double coded error creating div() is not wanted.
+ */
+inline double divide( const double& fNumerator, const double& fDenominator )
+{
+    if (fDenominator == 0.0) {
+        if (std::isfinite(fNumerator) && fNumerator != 0.0) {
+            return std::copysign(INFINITY, fNumerator);
+        } else {
+            return NAN;
+        }
+    }
+    return fNumerator / fDenominator;
 }
 
 }
