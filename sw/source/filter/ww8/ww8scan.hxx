@@ -734,8 +734,8 @@ class WW8PLCFx_Book : public WW8PLCFx
 {
 private:
     WW8PLCFspecial* pBook[2];           // Start and End Position
-    ::std::vector<OUString> aBookNames;   // Name
-    eBookStatus* pStatus;
+    std::vector<OUString> aBookNames;   // Name
+    std::vector<eBookStatus> aStatus;
     long nIMax;                         // Number of Booknotes
     sal_uInt16 nIsEnd;
     sal_Int32 nBookmarkId; // counter incremented by GetUniqueBookmarkName.
