@@ -25,23 +25,21 @@
 
 using namespace ::com::sun::star;
 
-static accessibility::XAccessibleValue*
+static css::uno::Reference<css::accessibility::XAccessibleValue>
     getValue( AtkValue *pValue ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pValue );
     if( pWrap )
     {
-        if( !pWrap->mpValue && pWrap->mpContext )
+        if( !pWrap->mpValue.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleValue>::get() );
-            pWrap->mpValue = static_cast< accessibility::XAccessibleValue * > (any.pReserved);
-            pWrap->mpValue->acquire();
+            pWrap->mpValue.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpValue;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleValue>();
 }
 
 static void anyToGValue( uno::Any aAny, GValue *pValue )
@@ -62,8 +60,9 @@ value_wrapper_get_current_value( AtkValue *value,
                                  GValue   *gval )
 {
     try {
-        accessibility::XAccessibleValue* pValue = getValue( value );
-        if( pValue )
+        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+            = getValue( value );
+        if( pValue.is() )
             anyToGValue( pValue->getCurrentValue(), gval );
     }
     catch(const uno::Exception&) {
@@ -76,8 +75,9 @@ value_wrapper_get_maximum_value( AtkValue *value,
                                  GValue   *gval )
 {
     try {
-        accessibility::XAccessibleValue* pValue = getValue( value );
-        if( pValue )
+        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+            = getValue( value );
+        if( pValue.is() )
             anyToGValue( pValue->getMaximumValue(), gval );
     }
     catch(const uno::Exception&) {
@@ -90,8 +90,9 @@ value_wrapper_get_minimum_value( AtkValue *value,
                                  GValue   *gval )
 {
     try {
-        accessibility::XAccessibleValue* pValue = getValue( value );
-        if( pValue )
+        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+            = getValue( value );
+        if( pValue.is() )
             anyToGValue( pValue->getMinimumValue(), gval );
     }
     catch(const uno::Exception&) {
@@ -104,8 +105,9 @@ value_wrapper_set_current_value( AtkValue     *value,
                                  const GValue *gval )
 {
     try {
-        accessibility::XAccessibleValue* pValue = getValue( value );
-        if( pValue )
+        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+            = getValue( value );
+        if( pValue.is() )
         {
             // FIXME - this needs expanding
             double aDouble = g_value_get_double( gval );

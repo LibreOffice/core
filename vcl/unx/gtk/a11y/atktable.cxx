@@ -48,23 +48,21 @@ getAsConst( const OUString& rString )
 
 /*****************************************************************************/
 
-static accessibility::XAccessibleTable*
+static css::uno::Reference<css::accessibility::XAccessibleTable>
     getTable( AtkTable *pTable ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pTable );
     if( pWrap )
     {
-        if( !pWrap->mpTable && pWrap->mpContext )
+        if( !pWrap->mpTable.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleTable>::get() );
-            pWrap->mpTable = static_cast< accessibility::XAccessibleTable * > (any.pReserved);
-            pWrap->mpTable->acquire();
+            pWrap->mpTable.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpTable;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleTable>();
 }
 
 /*****************************************************************************/
@@ -77,8 +75,8 @@ table_wrapper_ref_at (AtkTable *table,
                       gint      column)
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable = getTable( table );
+        if( pTable.is() )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCellAt( row, column ) );
     }
 
@@ -97,8 +95,9 @@ table_wrapper_get_index_at (AtkTable      *table,
                             gint          column)
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleIndex( row, column );
     }
     catch(const uno::Exception&) {
@@ -115,8 +114,9 @@ table_wrapper_get_column_at_index (AtkTable      *table,
                                    gint          nIndex)
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleColumn( nIndex );
     }
     catch(const uno::Exception&) {
@@ -133,8 +133,9 @@ table_wrapper_get_row_at_index( AtkTable *table,
                                 gint      nIndex )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleRow( nIndex );
     }
     catch(const uno::Exception&) {
@@ -150,8 +151,9 @@ static gint
 table_wrapper_get_n_columns( AtkTable *table )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleColumnCount();
     }
     catch(const uno::Exception&) {
@@ -167,8 +169,9 @@ static gint
 table_wrapper_get_n_rows( AtkTable *table )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleRowCount();
     }
     catch(const uno::Exception&) {
@@ -186,8 +189,9 @@ table_wrapper_get_column_extent_at( AtkTable *table,
                                     gint      column )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleColumnExtentAt( row, column );
     }
     catch(const uno::Exception&) {
@@ -205,8 +209,9 @@ table_wrapper_get_row_extent_at( AtkTable *table,
                                  gint      column )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->getAccessibleRowExtentAt( row, column );
     }
     catch(const uno::Exception&) {
@@ -222,8 +227,9 @@ static AtkObject *
 table_wrapper_get_caption( AtkTable *table )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCaption() );
     }
 
@@ -241,8 +247,9 @@ table_wrapper_get_row_description( AtkTable *table,
                                    gint      row )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return getAsConst( pTable->getAccessibleRowDescription( row ) );
     }
     catch(const uno::Exception&) {
@@ -259,8 +266,9 @@ table_wrapper_get_column_description( AtkTable *table,
                                       gint      column )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return getAsConst( pTable->getAccessibleColumnDescription( column ) );
     }
     catch(const uno::Exception&) {
@@ -277,8 +285,9 @@ table_wrapper_get_row_header( AtkTable *table,
                               gint      row )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
         {
             uno::Reference< accessibility::XAccessibleTable > xRowHeaders( pTable->getAccessibleRowHeaders() );
             if( xRowHeaders.is() )
@@ -299,9 +308,9 @@ table_wrapper_get_column_header( AtkTable *table,
                                  gint      column )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
         {
             uno::Reference< accessibility::XAccessibleTable > xColumnHeaders( pTable->getAccessibleColumnHeaders() );
             if( xColumnHeaders.is() )
@@ -321,8 +330,9 @@ static AtkObject *
 table_wrapper_get_summary( AtkTable *table )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
         {
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleSummary() );
         }
@@ -358,8 +368,9 @@ table_wrapper_get_selected_columns( AtkTable      *table,
 {
     *pSelected = NULL;
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return convertToGIntArray( pTable->getSelectedAccessibleColumns(), pSelected );
     }
     catch(const uno::Exception&) {
@@ -377,8 +388,9 @@ table_wrapper_get_selected_rows( AtkTable      *table,
 {
     *pSelected = NULL;
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return convertToGIntArray( pTable->getSelectedAccessibleRows(), pSelected );
     }
     catch(const uno::Exception&) {
@@ -395,8 +407,9 @@ table_wrapper_is_column_selected( AtkTable      *table,
                                   gint          column )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->isAccessibleColumnSelected( column );
     }
     catch(const uno::Exception&) {
@@ -413,8 +426,9 @@ table_wrapper_is_row_selected( AtkTable      *table,
                                gint          row )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->isAccessibleRowSelected( row );
     }
     catch(const uno::Exception&) {
@@ -432,8 +446,9 @@ table_wrapper_is_selected( AtkTable      *table,
                            gint          column )
 {
     try {
-        accessibility::XAccessibleTable* pTable = getTable( table );
-        if( pTable )
+        css::uno::Reference<css::accessibility::XAccessibleTable> pTable
+            = getTable( table );
+        if( pTable.is() )
             return pTable->isAccessibleSelected( row, column );
     }
     catch(const uno::Exception&) {

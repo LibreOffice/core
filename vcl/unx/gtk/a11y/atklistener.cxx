@@ -117,7 +117,9 @@ static AtkObject *getObjFromAny( const uno::Any &rAny )
 /*****************************************************************************/
 
 // Updates the child list held to provide the old IndexInParent on children_changed::remove
-void AtkListener::updateChildList(accessibility::XAccessibleContext* pContext)
+void AtkListener::updateChildList(
+    css::uno::Reference<css::accessibility::XAccessibleContext> const &
+        pContext)
 {
      m_aChildList.clear();
 
@@ -156,7 +158,7 @@ void AtkListener::handleChildAdded(
 
     if( pChild )
     {
-        updateChildList(rxParent.get());
+        updateChildList(rxParent);
 
         atk_object_wrapper_add_child( mpWrapper, pChild,
             atk_object_get_index_in_parent( pChild ));
@@ -195,7 +197,7 @@ void AtkListener::handleChildRemoved(
     // for now.
     if( nIndex >= 0 )
     {
-        updateChildList(rxParent.get());
+        updateChildList(rxParent);
 
         AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
         if( pChild )
@@ -226,7 +228,7 @@ void AtkListener::handleInvalidateChildren(
         }
     }
 
-    updateChildList(rxParent.get());
+    updateChildList(rxParent);
 
     // Send notifications for all new children
     size_t nmax = m_aChildList.size();

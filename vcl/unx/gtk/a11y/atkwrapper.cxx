@@ -338,13 +338,12 @@ wrapper_get_name( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             OString aName =
                 OUStringToOString(
-                    xContext->getAccessibleName(),
+                    obj->mpContext->getAccessibleName(),
                     RTL_TEXTENCODING_UTF8);
 
             int nCmp = atk_obj->name ? rtl_str_compare( atk_obj->name, aName.getStr() ) : -1;
@@ -370,13 +369,12 @@ wrapper_get_description( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             OString aDescription =
                 OUStringToOString(
-                    xContext->getAccessibleDescription(),
+                    obj->mpContext->getAccessibleDescription(),
                     RTL_TEXTENCODING_UTF8);
 
             g_free(atk_obj->description);
@@ -399,20 +397,16 @@ wrapper_get_attributes( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER( atk_obj );
     AtkAttributeSet *pSet = NULL;
 
-    if( obj->mpContext )
+    try
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext( obj->mpContext );
-        try
-        {
-            uno::Reference< accessibility::XAccessibleExtendedAttributes > xExtendedAttrs( xContext,
-                                                                                           uno::UNO_QUERY );
-            if( xExtendedAttrs.is() )
-                pSet = attribute_set_new_from_extended_attributes( xExtendedAttrs );
-        }
-        catch(const uno::Exception&)
-        {
-            g_warning( "Exception in getAccessibleAttributes()" );
-        }
+        uno::Reference< accessibility::XAccessibleExtendedAttributes >
+            xExtendedAttrs( obj->mpContext, uno::UNO_QUERY );
+        if( xExtendedAttrs.is() )
+            pSet = attribute_set_new_from_extended_attributes( xExtendedAttrs );
+    }
+    catch(const uno::Exception&)
+    {
+        g_warning( "Exception in getAccessibleAttributes()" );
     }
 
     return pSet;
@@ -426,11 +420,10 @@ wrapper_get_n_children( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     gint n = 0;
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
-            n = xContext->getAccessibleChildCount();
+            n = obj->mpContext->getAccessibleChildCount();
         }
         catch(const uno::Exception&) {
             OSL_FAIL("Exception in getAccessibleChildCount()" );
@@ -456,12 +449,11 @@ wrapper_ref_child( AtkObject *atk_obj,
         return obj->child_about_to_be_removed;
     }
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             uno::Reference< accessibility::XAccessible > xAccessible =
-                xContext->getAccessibleChild( i );
+                obj->mpContext->getAccessibleChild( i );
 
             child = atk_object_wrapper_ref( xAccessible );
         }
@@ -481,11 +473,10 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     gint i = -1;
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
-            i = xContext->getAccessibleIndexInParent();
+            i = obj->mpContext->getAccessibleIndexInParent();
         }
         catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleIndexInParent()" );
@@ -502,12 +493,11 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     AtkRelationSet *pSet = atk_relation_set_new();
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             uno::Reference< accessibility::XAccessibleRelationSet > xRelationSet(
-                    xContext->getAccessibleRelationSet()
+                    obj->mpContext->getAccessibleRelationSet()
             );
 
             sal_Int32 nRelations = xRelationSet.is() ? xRelationSet->getRelationCount() : 0;
@@ -548,12 +538,11 @@ wrapper_ref_state_set( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     AtkStateSet *pSet = atk_state_set_new();
 
-    if( obj->mpContext )
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
             uno::Reference< accessibility::XAccessibleStateSet > xStateSet(
-                xContext->getAccessibleStateSet());
+                obj->mpContext->getAccessibleStateSet());
 
             if( xStateSet.is() )
             {
@@ -595,11 +584,10 @@ atk_object_wrapper_finalize (GObject *obj)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER (obj);
 
-    if( pWrap->mpAccessible )
+    if( pWrap->mpAccessible.is() )
     {
         ooo_wrapper_registry_remove( pWrap->mpAccessible );
-        pWrap->mpAccessible->release();
-        pWrap->mpAccessible = NULL;
+        pWrap->mpAccessible.clear();
     }
 
     atk_object_wrapper_dispose( pWrap );
@@ -826,14 +814,12 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         gpointer obj = g_object_new( nType, NULL);
 
         pWrap = ATK_OBJECT_WRAPPER( obj );
-        pWrap->mpAccessible = rxAccessible.get();
-        rxAccessible->acquire();
+        pWrap->mpAccessible = rxAccessible;
 
         pWrap->index_of_child_about_to_be_removed = -1;
         pWrap->child_about_to_be_removed = NULL;
 
-        xContext->acquire();
-        pWrap->mpContext = xContext.get();
+        pWrap->mpContext = xContext;
 
         AtkObject* atk_obj = ATK_OBJECT(pWrap);
         atk_obj->role = mapToAtkRole( xContext->getAccessibleRole() );
@@ -915,23 +901,21 @@ void atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sal_Int16 role)
 
 /*****************************************************************************/
 
-#define RELEASE(i) if( i ) { i->release(); i = NULL; }
-
 void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
 {
-    RELEASE( wrapper->mpContext )
-    RELEASE( wrapper->mpAction )
-    RELEASE( wrapper->mpComponent )
-    RELEASE( wrapper->mpEditableText )
-    RELEASE( wrapper->mpHypertext )
-    RELEASE( wrapper->mpImage )
-    RELEASE( wrapper->mpSelection )
-    RELEASE( wrapper->mpMultiLineText )
-    RELEASE( wrapper->mpTable )
-    RELEASE( wrapper->mpText )
-    RELEASE( wrapper->mpTextMarkup )
-    RELEASE( wrapper->mpTextAttributes )
-    RELEASE( wrapper->mpValue )
+    wrapper->mpContext.clear();
+    wrapper->mpAction.clear();
+    wrapper->mpComponent.clear();
+    wrapper->mpEditableText.clear();
+    wrapper->mpHypertext.clear();
+    wrapper->mpImage.clear();
+    wrapper->mpSelection.clear();
+    wrapper->mpMultiLineText.clear();
+    wrapper->mpTable.clear();
+    wrapper->mpText.clear();
+    wrapper->mpTextMarkup.clear();
+    wrapper->mpTextAttributes.clear();
+    wrapper->mpValue.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

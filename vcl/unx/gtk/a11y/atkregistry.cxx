@@ -55,10 +55,12 @@ ooo_wrapper_registry_add(const Reference< XAccessible >& rxAccessible, AtkObject
 /*****************************************************************************/
 
 void
-ooo_wrapper_registry_remove(XAccessible *pAccessible)
+ooo_wrapper_registry_remove(
+    css::uno::Reference<css::accessibility::XAccessible> const & pAccessible)
 {
     if( uno_to_gobject )
-        g_hash_table_remove( uno_to_gobject, static_cast<gpointer>(pAccessible) );
+        g_hash_table_remove(
+            uno_to_gobject, static_cast<gpointer>(pAccessible.get()) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

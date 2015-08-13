@@ -23,23 +23,21 @@
 
 using namespace ::com::sun::star;
 
-static accessibility::XAccessibleSelection*
+static css::uno::Reference<css::accessibility::XAccessibleSelection>
     getSelection( AtkSelection *pSelection ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pSelection );
     if( pWrap )
     {
-        if( !pWrap->mpSelection && pWrap->mpContext )
+        if( !pWrap->mpSelection.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleSelection>::get() );
-            pWrap->mpSelection = static_cast< accessibility::XAccessibleSelection * > (any.pReserved);
-            pWrap->mpSelection->acquire();
+            pWrap->mpSelection.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpSelection;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleSelection>();
 }
 
 extern "C" {
@@ -49,8 +47,9 @@ selection_add_selection( AtkSelection *selection,
                          gint          i )
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
         {
             pSelection->selectAccessibleChild( i );
             return TRUE;
@@ -67,8 +66,9 @@ static gboolean
 selection_clear_selection( AtkSelection *selection )
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
         {
             pSelection->clearAccessibleSelection();
             return TRUE;
@@ -86,8 +86,9 @@ selection_ref_selection( AtkSelection *selection,
                          gint          i )
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
             return atk_object_wrapper_ref( pSelection->getSelectedAccessibleChild( i ) );
     }
     catch(const uno::Exception&) {
@@ -101,8 +102,9 @@ static gint
 selection_get_selection_count( AtkSelection   *selection)
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
             return pSelection->getSelectedAccessibleChildCount();
     }
     catch(const uno::Exception&) {
@@ -117,8 +119,9 @@ selection_is_child_selected( AtkSelection   *selection,
                               gint           i)
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
             return pSelection->isAccessibleChildSelected( i );
     }
     catch(const uno::Exception&) {
@@ -133,8 +136,9 @@ selection_remove_selection( AtkSelection *selection,
                             gint           i )
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
         {
             pSelection->deselectAccessibleChild( i );
             return TRUE;
@@ -151,8 +155,9 @@ static gboolean
 selection_select_all_selection( AtkSelection   *selection)
 {
     try {
-        accessibility::XAccessibleSelection* pSelection = getSelection( selection );
-        if( pSelection )
+        css::uno::Reference<css::accessibility::XAccessibleSelection> pSelection
+            = getSelection( selection );
+        if( pSelection.is() )
         {
             pSelection->selectAllAccessibleChildren();
             return TRUE;

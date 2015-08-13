@@ -49,7 +49,9 @@ private:
     virtual ~AtkListener();
 
     // Updates the child list held to provide the old IndexInParent on children_changed::remove
-    void updateChildList(::com::sun::star::accessibility::XAccessibleContext* pContext);
+    void updateChildList(
+        css::uno::Reference<css::accessibility::XAccessibleContext> const &
+            pContext);
 
     // Process CHILD_EVENT notifications with a new child added
     void handleChildAdded(

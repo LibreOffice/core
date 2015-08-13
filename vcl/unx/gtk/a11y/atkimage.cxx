@@ -35,23 +35,21 @@ getAsConst( const OUString& rString )
     return aUgly[ nIdx ].getStr();
 }
 
-static accessibility::XAccessibleImage*
+static css::uno::Reference<css::accessibility::XAccessibleImage>
     getImage( AtkImage *pImage ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pImage );
     if( pWrap )
     {
-        if( !pWrap->mpImage && pWrap->mpContext )
+        if( !pWrap->mpImage.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleImage>::get() );
-            pWrap->mpImage = static_cast< accessibility::XAccessibleImage * > (any.pReserved);
-            pWrap->mpImage->acquire();
+            pWrap->mpImage.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpImage;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleImage>();
 }
 
 extern "C" {
@@ -60,8 +58,9 @@ static G_CONST_RETURN gchar *
 image_get_image_description( AtkImage *image )
 {
     try {
-        accessibility::XAccessibleImage* pImage = getImage( image );
-        if( pImage )
+        css::uno::Reference<css::accessibility::XAccessibleImage> pImage
+            = getImage( image );
+        if( pImage.is() )
             return getAsConst( pImage->getAccessibleImageDescription() );
     }
     catch(const uno::Exception&) {
@@ -96,8 +95,9 @@ image_get_image_size( AtkImage *image,
     *width = 0;
     *height = 0;
     try {
-        accessibility::XAccessibleImage* pImage = getImage( image );
-        if( pImage )
+        css::uno::Reference<css::accessibility::XAccessibleImage> pImage
+            = getImage( image );
+        if( pImage.is() )
         {
             *width = pImage->getAccessibleImageWidth();
             *height = pImage->getAccessibleImageHeight();

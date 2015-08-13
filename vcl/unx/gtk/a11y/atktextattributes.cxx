@@ -207,23 +207,21 @@ String2Float( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-static accessibility::XAccessibleComponent*
+static css::uno::Reference<css::accessibility::XAccessibleComponent>
     getComponent( AtkText *pText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
     if( pWrap )
     {
-        if( !pWrap->mpComponent && pWrap->mpContext )
+        if( !pWrap->mpComponent.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleComponent>::get() );
-            pWrap->mpComponent = static_cast< accessibility::XAccessibleComponent * > (any.pReserved);
-            pWrap->mpComponent->acquire();
+            pWrap->mpComponent.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpComponent;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleComponent>();
 }
 
 static gchar*
@@ -248,8 +246,9 @@ get_color_value(const uno::Sequence< beans::PropertyValue >& rAttributeList,
     {
         try
         {
-            accessibility::XAccessibleComponent *pComponent = getComponent( text );
-            if( pComponent )
+            css::uno::Reference<css::accessibility::XAccessibleComponent>
+                pComponent = getComponent( text );
+            if( pComponent.is() )
             {
                 switch( attr )
                 {

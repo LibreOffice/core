@@ -23,29 +23,27 @@
 
 using namespace ::com::sun::star;
 
-static accessibility::XAccessibleComponent*
+static css::uno::Reference<css::accessibility::XAccessibleComponent>
     getComponent( AtkComponent *pComponent ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pComponent );
     if( pWrap )
     {
-        if( !pWrap->mpComponent && pWrap->mpContext )
+        if( !pWrap->mpComponent.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleComponent>::get() );
-            pWrap->mpComponent = static_cast< accessibility::XAccessibleComponent * > (any.pReserved);
-            pWrap->mpComponent->acquire();
+            pWrap->mpComponent.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpComponent;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleComponent>();
 }
 
 /*****************************************************************************/
 
 static awt::Point
-translatePoint( accessibility::XAccessibleComponent *pComponent,
+translatePoint( css::uno::Reference<accessibility::XAccessibleComponent> const & pComponent,
                 gint x, gint y, AtkCoordType t)
 {
     awt::Point aOrigin( 0, 0 );
@@ -63,8 +61,9 @@ component_wrapper_grab_focus (AtkComponent *component)
 {
     try
     {
-        accessibility::XAccessibleComponent* pComponent = getComponent( component );
-        if( pComponent )
+        css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
+            = getComponent( component );
+        if( pComponent.is() )
         {
             pComponent->grabFocus();
             return TRUE;
@@ -88,8 +87,9 @@ component_wrapper_contains (AtkComponent *component,
 {
     try
     {
-        accessibility::XAccessibleComponent* pComponent = getComponent( component );
-        if( pComponent )
+        css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
+            = getComponent( component );
+        if( pComponent.is() )
             return pComponent->containsPoint( translatePoint( pComponent, x, y, coord_type ) );
     }
     catch( const uno::Exception & )
@@ -110,9 +110,10 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
 {
     try
     {
-        accessibility::XAccessibleComponent* pComponent = getComponent( component );
+        css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
+            = getComponent( component );
 
-        if( pComponent )
+        if( pComponent.is() )
         {
             uno::Reference< accessibility::XAccessible > xAccessible;
             xAccessible = pComponent->getAccessibleAtPoint(
@@ -138,8 +139,9 @@ component_wrapper_get_position (AtkComponent   *component,
 {
     try
     {
-        accessibility::XAccessibleComponent* pComponent = getComponent( component );
-        if( pComponent )
+        css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
+            = getComponent( component );
+        if( pComponent.is() )
         {
             awt::Point aPos;
 
@@ -167,8 +169,9 @@ component_wrapper_get_size (AtkComponent   *component,
 {
     try
     {
-        accessibility::XAccessibleComponent* pComponent = getComponent( component );
-        if( pComponent )
+        css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
+            = getComponent( component );
+        if( pComponent.is() )
         {
             awt::Size aSize = pComponent->getSize();
             *width = aSize.Width;

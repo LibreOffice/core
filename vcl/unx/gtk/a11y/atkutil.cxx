@@ -85,23 +85,17 @@ atk_wrapper_focus_idle_handler (gpointer data)
             // also emit state-changed:focused event under the same condition.
             {
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
-                if( wrapper_obj && !wrapper_obj->mpText && wrapper_obj->mpContext )
+                if( wrapper_obj && !wrapper_obj->mpText.is() )
                 {
-                    uno::Any any = wrapper_obj->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleText>::get() );
-                    if ( typelib_TypeClass_INTERFACE == any.pType->eTypeClass &&
-                         any.pReserved != 0 )
+                    wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
+                    if ( wrapper_obj->mpText.is() )
                     {
-                        wrapper_obj->mpText = static_cast< accessibility::XAccessibleText * > (any.pReserved);
-                        if ( wrapper_obj->mpText != 0 )
-                        {
-                            wrapper_obj->mpText->acquire();
-                            gint caretPos = wrapper_obj->mpText->getCaretPosition();
+                        gint caretPos = wrapper_obj->mpText->getCaretPosition();
 
-                            if ( caretPos != -1 )
-                            {
-                                atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, TRUE );
-                                g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
-                            }
+                        if ( caretPos != -1 )
+                        {
+                            atk_object_notify_state_change( atk_obj, ATK_STATE_FOCUSED, TRUE );
+                            g_signal_emit_by_name( atk_obj, "text_caret_moved", caretPos );
                         }
                     }
                 }
