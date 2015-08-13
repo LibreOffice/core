@@ -179,9 +179,9 @@ void LineWidthControl::Initialize()
 
 void LineWidthControl::GetFocus()
 {
-    if(!mbVSFocus)
+    if (!mbVSFocus && maMFWidth)
         maMFWidth->GrabFocus();
-    else
+    else if (maVSWidth)
         maVSWidth->GrabFocus();
 }
 
