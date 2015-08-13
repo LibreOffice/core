@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_82fcdc3f",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-13T06:47:02Z",
+      "side": 1,
+      "message": "NItpick: You already included \u003cmemory\u003e in the header -\u003e it is not necessary to do it here again.",
+      "revId": "e26913f7ae0ad69c7c68127eddd34d3bca73d593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_62f9d84d",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-13T06:47:02Z",
+      "side": 1,
+      "message": "You construct temporary objects and then use copy ctor to initialize the members. This is both inefficient and hard to read. Please use nullptr directly.",
+      "revId": "e26913f7ae0ad69c7c68127eddd34d3bca73d593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c29424ea",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-13T06:47:02Z",
+      "side": 1,
+      "message": "Why this? std::unique_ptr has got operator! with the same semantic.",
+      "revId": "e26913f7ae0ad69c7c68127eddd34d3bca73d593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a2992022",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-13T06:47:02Z",
+      "side": 1,
+      "message": "Implicit conversion to bool is available too.",
+      "revId": "e26913f7ae0ad69c7c68127eddd34d3bca73d593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_029f2c04",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-13T06:47:02Z",
+      "side": 1,
+      "message": "The canonical way to reset a smart pointer is pDefLocales.reset().",
+      "revId": "e26913f7ae0ad69c7c68127eddd34d3bca73d593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
