@@ -70,7 +70,7 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
     {
-        Text [ en-US ] = "This is not a WinWord6 file." ;
+        Text [ en-US ] = "This is not a valid WinWord6 file." ;
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
     {
@@ -86,7 +86,7 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
     {
-        Text [ en-US ] = "This is not a WinWord97 file.";
+        Text [ en-US ] = "This is not a valid WinWord97 file.";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
     {
