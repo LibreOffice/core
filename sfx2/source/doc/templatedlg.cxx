@@ -311,15 +311,15 @@ void SfxTemplateManagerDlg::dispose()
         delete maRepositories[i];
 
     // Ignore view events since we are cleaning the object
-    mpLocalView->setItemStateHdl(Link<>());
+    mpLocalView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mpLocalView->setOpenRegionHdl(Link<void*,void>());
     mpLocalView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
 
-    mpRemoteView->setItemStateHdl(Link<>());
+    mpRemoteView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mpRemoteView->setOpenRegionHdl(Link<void*,void>());
     mpRemoteView->setOpenTemplateHdl(Link<ThumbnailViewItem*,void>());
 
-    mpSearchView->setItemStateHdl(Link<>());
+    mpSearchView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mpSearchView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
 
     mpTabControl.clear();
@@ -553,7 +553,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
     }
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem)
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem, void)
 {
     const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
 
@@ -561,8 +561,6 @@ IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem
         OnRegionState(pItem);
     else
         OnTemplateState(pItem);
-
-    return 0;
 }
 
 IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)

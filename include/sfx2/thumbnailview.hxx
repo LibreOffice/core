@@ -231,7 +231,7 @@ public:
     void sortItems (const std::function<bool (const ThumbnailViewItem*,
                                                 const ThumbnailViewItem*) > &func);
 
-    void setItemStateHdl (const Link<> &aLink) { maItemStateHdl = aLink; }
+    void setItemStateHdl (const Link<const ThumbnailViewItem*,void> &aLink) { maItemStateHdl = aLink; }
 
     virtual void Resize() SAL_OVERRIDE;
 
@@ -323,7 +323,7 @@ protected:
     Color maHighlightTextColor;     ///< Color of the text for the higlighted item.
     double mfHighlightTransparence; ///< Transparence of the highlight.
 
-    Link<> maItemStateHdl;
+    Link<const ThumbnailViewItem*, void> maItemStateHdl;
     ThumbnailItemAttributes* mpItemAttrs;
 
     std::function<bool (const ThumbnailViewItem*)> maFilterFunc;

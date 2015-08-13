@@ -70,7 +70,7 @@ private:
     DECL_LINK_TYPED(TBXTemplateHdl, ToolBox*, void);
     DECL_LINK_TYPED(TBXDropdownHdl, ToolBox*, void);
 
-    DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*);
+    DECL_LINK_TYPED(TVItemStateHdl, const ThumbnailViewItem*, void);
 
     DECL_LINK(MenuSelectHdl, Menu*);
     DECL_LINK(MoveMenuSelectHdl, Menu*);
