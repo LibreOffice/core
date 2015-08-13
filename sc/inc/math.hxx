@@ -49,12 +49,18 @@ inline double div( const double& fNumerator, const double& fDenominator )
  */
 inline double divide( const double& fNumerator, const double& fDenominator )
 {
-    if (fDenominator == 0.0) {
-        if (std::isfinite(fNumerator) && fNumerator != 0.0) {
-            return std::copysign( std::numeric_limits<double>::infinity(), fNumerator);
-        } else {
-            return std::numeric_limits<double>::quiet_NaN();
+    if (fDenominator == 0.0)
+    {
+        double fVal;
+        if (rtl::math::isFinite( fNumerator) && fNumerator != 0.0)
+        {
+            rtl::math::setInf( &fVal, rtl::math::isSignBitSet( fNumerator));
         }
+        else
+        {
+            rtl::math::setNan( &fVal);
+        }
+        return fVal;
     }
     return fNumerator / fDenominator;
 }
