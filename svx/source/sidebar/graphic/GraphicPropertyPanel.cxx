@@ -58,6 +58,7 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     get(mpMtrBrightness, "setbrightness");
     get(mpMtrContrast, "setcontrast");
     get(mpLBColorMode, "setcolormode");
+    mpLBColorMode->set_width_request(mpLBColorMode->get_preferred_size().Width());
     get(mpMtrTrans, "settransparency");
     get(mpMtrRed, "setred");
     get(mpMtrGreen, "setgreen");
