@@ -206,7 +206,6 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
 {
     get(m_pPaperText, "paperft");
     get(m_pPaperBox, "paperlb");
-    get(m_pOrientText, "label4");
     get(m_pOrientBox, "orientlb");
     get(m_pDuplexText, "duplexft");
     get(m_pDuplexBox, "duplexlb");
@@ -248,8 +247,6 @@ void RTSPaperPage::update()
     // orientation
     m_pOrientBox->SelectEntryPos(
         m_pParent->m_aJobData.m_eOrientation == orientation::Portrait ? 0 : 1);
-    m_pOrientBox->Enable( sal_False );
-    m_pOrientText->Enable( sal_False );
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
@@ -268,8 +265,6 @@ void RTSPaperPage::update()
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "PageSize" ) )) )
     {
         m_pParent->insertAllPPDValues( *m_pPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
-        m_pPaperBox->Enable( sal_False );
-        m_pPaperText->Enable( sal_False );
     }
     else
     {
@@ -295,26 +290,25 @@ void RTSPaperPage::update()
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
 {
     const PPDKey* pKey = NULL;
-    /*if( pBox == m_pPaperBox )
+    if( pBox == m_pPaperBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "PageSize" ) );
     }
-    else */
-    if( pBox == m_pDuplexBox )
+    else if( pBox == m_pDuplexBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "Duplex" ) );
-    } else
-    if( pBox == m_pSlotBox )
+    }
+    else if( pBox == m_pSlotBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "InputSlot" ) );
     }
-    /*else if( pBox == m_pOrientBox )
+    else if( pBox == m_pOrientBox )
     {
         m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
-    }*/
+    }
     if( pKey )
     {
         PPDValue* pValue =

@@ -88,7 +88,6 @@ class RTSPaperPage : public TabPage
     FixedText*          m_pPaperText;
     ListBox*            m_pPaperBox;
 
-    FixedText*          m_pOrientText;
     ListBox*            m_pOrientBox;
 
     FixedText*          m_pDuplexText;
