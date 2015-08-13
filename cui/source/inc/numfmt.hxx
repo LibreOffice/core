@@ -86,7 +86,7 @@ public:
     void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )
                                 { SetInfoItem( rItem ); }
 
-    void                    SetOkHdl( const Link<>& rOkHandler );
+    void                    SetOkHdl( const Link<SfxPoolItem*,void>& rOkHandler );
     void                    HideLanguage(bool nFlag=true);
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
@@ -124,7 +124,7 @@ private:
     SvxNumberInfoItem*      pNumItem;
     SvxNumberFormatShell*   pNumFmtShell;
     sal_uLong               nInitFormat;
-    Link<>                  fnOkHdl;
+    Link<SfxPoolItem*,void> fnOkHdl;
 
     bool                bNumItemFlag; ///< for handling with DocShell
     bool                bOneAreaFlag;

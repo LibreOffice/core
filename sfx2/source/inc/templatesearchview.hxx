@@ -18,7 +18,7 @@ public:
 
     TemplateSearchView ( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_VSCROLL);
 
-    void setOpenTemplateHdl (const Link<> &rLink);
+    void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
     void AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
                     const OUString &rTitle, const OUString &rSubtitle,
@@ -28,7 +28,7 @@ protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
 
 protected:
-    Link<> maOpenTemplateHdl;
+    Link<ThumbnailViewItem*, void> maOpenTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX

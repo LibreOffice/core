@@ -224,7 +224,7 @@ void TemplateAbstractView::setOpenRegionHdl(const Link<void*,void> &rLink)
     maOpenRegionHdl = rLink;
 }
 
-void TemplateAbstractView::setOpenTemplateHdl(const Link<> &rLink)
+void TemplateAbstractView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
 {
     maOpenTemplateHdl = rLink;
 }

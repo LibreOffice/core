@@ -313,14 +313,14 @@ void SfxTemplateManagerDlg::dispose()
     // Ignore view events since we are cleaning the object
     mpLocalView->setItemStateHdl(Link<>());
     mpLocalView->setOpenRegionHdl(Link<void*,void>());
-    mpLocalView->setOpenTemplateHdl(Link<>());
+    mpLocalView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
 
     mpRemoteView->setItemStateHdl(Link<>());
     mpRemoteView->setOpenRegionHdl(Link<void*,void>());
-    mpRemoteView->setOpenTemplateHdl(Link<>());
+    mpRemoteView->setOpenTemplateHdl(Link<ThumbnailViewItem*,void>());
 
     mpSearchView->setItemStateHdl(Link<>());
-    mpSearchView->setOpenTemplateHdl(Link<>());
+    mpSearchView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
 
     mpTabControl.clear();
     mpSearchEdit.clear();
@@ -684,7 +684,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
     mpActionBar->Show();
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
+IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     if (!mbIsSaveMode)
     {
@@ -710,8 +710,6 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 
         Close();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)

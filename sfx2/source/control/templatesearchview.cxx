@@ -19,7 +19,7 @@ TemplateSearchView::TemplateSearchView (vcl::Window *pParent, WinBits nWinStyle)
 
 VCL_BUILDER_FACTORY(TemplateSearchView)
 
-void TemplateSearchView::setOpenTemplateHdl(const Link<> &rLink)
+void TemplateSearchView::setOpenTemplateHdl(const Link<ThumbnailViewItem*, void> &rLink)
 {
     maOpenTemplateHdl = rLink;
 }

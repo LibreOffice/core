@@ -38,7 +38,7 @@ protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
 
 private:
-    DECL_LINK( OkHandler, void* ); // for closing by double clicking in TabPages
+    DECL_LINK_TYPED( OkHandler, SfxPoolItem*, void ); // for closing by double clicking in TabPages
     sal_uInt16 m_nNumberPageId;
     sal_uInt16 m_nFontPageId;
 };

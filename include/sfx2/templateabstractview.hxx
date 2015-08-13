@@ -117,7 +117,7 @@ public:
 
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 
-    void setOpenTemplateHdl (const Link<> &rLink);
+    void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
@@ -141,8 +141,8 @@ protected:
     VclPtr<PushButton> maAllButton;
     VclPtr<FixedText>  maFTName;
 
-    Link<void*,void> maOpenRegionHdl;
-    Link<> maOpenTemplateHdl;
+    Link<void*,void>              maOpenRegionHdl;
+    Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX

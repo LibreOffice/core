@@ -78,7 +78,7 @@ private:
     DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*);
 
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
-    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
+    DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
 
     DECL_LINK(SearchUpdateHdl, void*);
 

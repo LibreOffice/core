@@ -1076,7 +1076,7 @@ void SwNavigationPI::UpdateListBox()
     aDocListBox->SetUpdateMode(true);
 }
 
-IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
+IMPL_LINK_TYPED(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
 {
     const SfxViewFrameItem* pFrameItem = PTR_CAST(SfxViewFrameItem, pItem );
     if( pFrameItem )
@@ -1096,7 +1096,6 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
             aContentTree->Update();
         }
     }
-    return 0;
 }
 
 OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )

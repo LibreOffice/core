@@ -88,11 +88,9 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     }
 }
 
-IMPL_LINK_NOARG(ScAttrDlg, OkHandler)
+IMPL_LINK_NOARG_TYPED(ScAttrDlg, OkHandler, SfxPoolItem*, void)
 {
-    ((Link<>&)GetOKButton().GetClickHdl()).Call( NULL );
-
-    return 0;
+    GetOKButton().GetClickHdl().Call( NULL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -655,7 +655,7 @@ IMPL_LINK_NOARG_TYPED( BackingWindow, OpenRegionHdl, void*, void)
     maSelTemplates.clear();
 }
 
-IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
+IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     if (!mbIsSaveMode)
     {
@@ -681,8 +681,6 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
         {
         }
     }
-
-    return 0;
 }
 
 struct ImplDelayedDispatch

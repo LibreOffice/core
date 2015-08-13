@@ -106,7 +106,7 @@ class SwNavigationPI : public vcl::Window,
     DECL_LINK_TYPED( ToolBoxDropdownClickHdl, ToolBox*, void );
     DECL_LINK( EditAction, NumEditAction * );
     DECL_LINK( EditGetFocus, NumEditAction * );
-    DECL_LINK( DoneLink, SfxPoolItem * );
+    DECL_LINK_TYPED( DoneLink, SfxPoolItem *, void );
     DECL_LINK( MenuSelectHdl, Menu * );
     DECL_LINK_TYPED( ChangePageHdl, Idle*, void );
     DECL_LINK( PageEditModifyHdl, void* );

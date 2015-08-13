@@ -1724,7 +1724,7 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::SetOkHdl( const Link<>& rOkHandler )
+void SvxNumberFormatTabPage::SetOkHdl( const Link<SfxPoolItem*,void>& rOkHandler )
 {
     fnOkHdl = rOkHandler;
 }
