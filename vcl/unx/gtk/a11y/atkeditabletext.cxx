@@ -28,23 +28,21 @@
 
 using namespace ::com::sun::star;
 
-static accessibility::XAccessibleEditableText*
+static css::uno::Reference<css::accessibility::XAccessibleEditableText>
     getEditableText( AtkEditableText *pEditableText ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pEditableText );
     if( pWrap )
     {
-        if( !pWrap->mpEditableText && pWrap->mpContext )
+        if( !pWrap->mpEditableText.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleEditableText>::get() );
-            pWrap->mpEditableText = reinterpret_cast< accessibility::XAccessibleEditableText * > (any.pReserved);
-            pWrap->mpEditableText->acquire();
+            pWrap->mpEditableText.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpEditableText;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleEditableText>();
 }
 
 /*****************************************************************************/
@@ -58,8 +56,9 @@ editable_text_wrapper_set_run_attributes( AtkEditableText  *text,
                                           gint              nEndOffset)
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList;
 
@@ -79,8 +78,9 @@ editable_text_wrapper_set_text_contents( AtkEditableText  *text,
                                          const gchar      *string )
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
         {
             OUString aString ( string, strlen(string), RTL_TEXTENCODING_UTF8 );
             pEditableText->setText( aString );
@@ -98,8 +98,9 @@ editable_text_wrapper_insert_text( AtkEditableText  *text,
                                    gint             *pos )
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
         {
             OUString aString ( string, length, RTL_TEXTENCODING_UTF8 );
             if( pEditableText->insertText( aString, *pos ) )
@@ -117,8 +118,9 @@ editable_text_wrapper_cut_text( AtkEditableText  *text,
                                 gint             end )
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
             pEditableText->cutText( start, end );
     }
     catch(const uno::Exception&) {
@@ -132,8 +134,9 @@ editable_text_wrapper_delete_text( AtkEditableText  *text,
                                    gint             end )
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
             pEditableText->deleteText( start, end );
     }
     catch(const uno::Exception&) {
@@ -146,8 +149,9 @@ editable_text_wrapper_paste_text( AtkEditableText  *text,
                                   gint             pos )
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
             pEditableText->pasteText( pos );
     }
     catch(const uno::Exception&) {
@@ -161,8 +165,9 @@ editable_text_wrapper_copy_text( AtkEditableText  *text,
                                  gint             end )
 {
     try {
-        accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
-        if( pEditableText )
+        css::uno::Reference<css::accessibility::XAccessibleEditableText>
+            pEditableText = getEditableText( text );
+        if( pEditableText.is() )
             pEditableText->copyText( start, end );
     }
     catch(const uno::Exception&) {

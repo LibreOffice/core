@@ -191,23 +191,21 @@ hyper_link_get_type (void)
 
 // ---------------------- AtkHyperText ----------------------
 
-static accessibility::XAccessibleHypertext*
+static css::uno::Reference<css::accessibility::XAccessibleHypertext>
     getHypertext( AtkHypertext *pHypertext ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pHypertext );
     if( pWrap )
     {
-        if( !pWrap->mpHypertext && pWrap->mpContext )
+        if( !pWrap->mpHypertext.is() )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleHypertext>::get() );
-            pWrap->mpHypertext = reinterpret_cast< accessibility::XAccessibleHypertext * > (any.pReserved);
-            pWrap->mpHypertext->acquire();
+            pWrap->mpHypertext.set(pWrap->mpContext, css::uno::UNO_QUERY);
         }
 
         return pWrap->mpHypertext;
     }
 
-    return NULL;
+    return css::uno::Reference<css::accessibility::XAccessibleHypertext>();
 }
 
 static AtkHyperlink *
@@ -215,8 +213,9 @@ hypertext_get_link( AtkHypertext *hypertext,
                     gint          link_index)
 {
     try {
-        accessibility::XAccessibleHypertext* pHypertext = getHypertext( hypertext );
-        if( pHypertext )
+        css::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
+            = getHypertext( hypertext );
+        if( pHypertext.is() )
         {
             HyperLink *pLink = (HyperLink *)g_object_new( hyper_link_get_type(), NULL );
             pLink->xLink = pHypertext->getHyperLink( link_index );
@@ -238,8 +237,9 @@ static gint
 hypertext_get_n_links( AtkHypertext *hypertext )
 {
     try {
-        accessibility::XAccessibleHypertext* pHypertext = getHypertext( hypertext );
-        if( pHypertext )
+        css::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
+            = getHypertext( hypertext );
+        if( pHypertext.is() )
             return pHypertext->getHyperLinkCount();
     }
     catch(const uno::Exception&) {
@@ -254,8 +254,9 @@ hypertext_get_link_index( AtkHypertext *hypertext,
                           gint          index)
 {
     try {
-        accessibility::XAccessibleHypertext* pHypertext = getHypertext( hypertext );
-        if( pHypertext )
+        css::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
+            = getHypertext( hypertext );
+        if( pHypertext.is() )
             return pHypertext->getHyperLinkIndex( index );
     }
     catch(const uno::Exception&) {
