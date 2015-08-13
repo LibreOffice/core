@@ -119,8 +119,6 @@ public:
                                          const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs);
 
-    void setSelectClickHdl (const Link<> &link);
-
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
     void addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DSequence& rSeq);
@@ -135,7 +133,6 @@ protected:
     Point maTextPos;
     Point maPrev1Pos;
     Rectangle maDrawArea;
-    Link<> maClickHdl;
     bool mbEditTitle;
     VclPtr<VclMultiLineEdit> mpTitleED;
     Rectangle maTextEditMaxArea;

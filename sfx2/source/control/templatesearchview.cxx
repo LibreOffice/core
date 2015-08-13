@@ -42,7 +42,6 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->maTitle = rTitle;
     pItem->setSubTitle(rSubtitle);
     pItem->setPath(rPath);
-    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
     ThumbnailView::AppendItem(pItem);
 

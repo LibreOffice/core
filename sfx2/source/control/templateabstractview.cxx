@@ -179,8 +179,6 @@ void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
         pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
     }
 
-    pChild->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
-
     AppendItem(pChild);
 
     CalculateItemPositions();
@@ -207,8 +205,6 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
             // Use the default thumbnail if we have nothing else
             pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
         }
-
-        pChild->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
         aItems[i] = pChild;
     }

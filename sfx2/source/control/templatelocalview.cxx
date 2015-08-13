@@ -71,7 +71,6 @@ void TemplateLocalView::Populate ()
         TemplateContainerItem* pItem = new TemplateContainerItem( *this, i+1 );
         pItem->mnRegionId = i;
         pItem->maTitle = aRegionName;
-        pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
         sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
 
@@ -139,7 +138,6 @@ void TemplateLocalView::showRootRegion()
         pItem->mnRegionId = pCur->mnRegionId;
         pItem->maTitle = pCur->maTitle;
         pItem->maTemplates = pCur->maTemplates;
-        pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
         items[i] = pItem;
     }
@@ -270,14 +268,12 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     TemplateContainerItem* pItem = new TemplateContainerItem( *this, nItemId );
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = aRegionName;
-    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
     maRegions.push_back(pItem);
 
     pItem = new TemplateContainerItem(*this, nItemId);
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = aRegionName;
-    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
     AppendItem(pItem);
 
