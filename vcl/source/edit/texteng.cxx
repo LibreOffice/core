@@ -1759,8 +1759,8 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_Int32 nStartPos )
     aPositions.insert( pNode->GetText().getLength() );
 
     const std::vector<TEWritingDirectionInfo>& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
-    for ( std::vector<TEWritingDirectionInfo>::const_iterator it = rWritingDirections.begin(); it != rWritingDirections.end(); ++it )
-        aPositions.insert( (*it).nStartPos );
+    for ( const auto& rWritingDirection : rWritingDirections )
+        aPositions.insert( rWritingDirection.nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
@@ -2945,15 +2945,15 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uLong nPara, sal_Int32 nPos, sal_uI
             ImpInitWritingDirections( nPara );
 
         std::vector<TEWritingDirectionInfo>& rDirInfos = pParaPortion->GetWritingDirectionInfos();
-        for ( std::vector<TEWritingDirectionInfo>::const_iterator rDirInfosIt = rDirInfos.begin(); rDirInfosIt != rDirInfos.end(); ++rDirInfosIt )
+        for ( const auto& rWritingDirectionInfo : rDirInfos )
         {
-            if ( ( (*rDirInfosIt).nStartPos <= nPos ) && ( (*rDirInfosIt).nEndPos >= nPos ) )
-               {
-                nRightToLeft = (*rDirInfosIt).nType;
+            if ( rWritingDirectionInfo.nStartPos <= nPos && rWritingDirectionInfo.nEndPos >= nPos )
+            {
+                nRightToLeft = rWritingDirectionInfo.nType;
                 if ( pStart )
-                    *pStart = (*rDirInfosIt).nStartPos;
+                    *pStart = rWritingDirectionInfo.nStartPos;
                 if ( pEnd )
-                    *pEnd = (*rDirInfosIt).nEndPos;
+                    *pEnd = rWritingDirectionInfo.nEndPos;
                 break;
             }
         }
