@@ -378,47 +378,45 @@ VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
 
 namespace {
 
-//section 2.3.4.2.1.11
-void writePROJECTCONSTANTS(SvStream& rStrm)
+// section 2.3.4.2.1.1
+void writePROJECTSYSKIND(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x000C); // id
-    rStrm.WriteUInt32(0x00000000); // sizeOfConstants
-    rStrm.WriteUInt16(0x003C); // Reserved
-    rStrm.WriteUInt32(0x00000000); // sizeOfConstantsUnicode
-}
-
-//section 2.3.4.2.1.10
-void writePROJECTVERSION(SvStream& rStrm)
-{
-    rStrm.WriteUInt16(0x0009); // id
-    rStrm.WriteUInt32(0x00000004); // Reserved
-    rStrm.WriteUInt32(1467127224); // VersionMajor // TODO: where is this magic number comming from
-    rStrm.WriteUInt16(5); // VersionMinor // TODO: where is this magic number coming from
-}
-
-//section 2.3.4.2.1.9
-void writePROJECTLIBFLAGS(SvStream& rStrm)
-{
-    rStrm.WriteUInt16(0x0008); // id
+    rStrm.WriteUInt16(0x0001); // id
     rStrm.WriteUInt32(0x00000004); // size
-    rStrm.WriteUInt32(0x00000000); // ProjectLibFlags
+    rStrm.WriteUInt32(0x00000001); // SysKind, hard coded to 32-bin windows for now
 }
 
-//section 2.3.4.2.1.8
-void writePROJECTHELPCONTEXT(SvStream& rStrm)
+// section 2.3.4.2.1.2
+void writePROJECTLCID(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x0007); // id
+    rStrm.WriteUInt16(0x0002); // id
     rStrm.WriteUInt32(0x00000004); // size
-    rStrm.WriteUInt32(0x00000000); // HelpContext
+    rStrm.WriteUInt32(0x00000409); // Lcid
 }
 
-//section 2.3.4.2.1.7
-void writePROJECTHELPFILEPATH(SvStream& rStrm)
+// section 2.3.4.2.1.3
+void writePROJECTLCIDINVOKE(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x0006); // id
-    rStrm.WriteUInt32(0x00000000); // sizeOfHelpFile1
-    rStrm.WriteUInt16(0x003D); // Reserved
-    rStrm.WriteUInt32(0x00000000); // sizeOfHelpFile2
+    rStrm.WriteUInt16(0x0014); // id
+    rStrm.WriteUInt32(0x00000004); // size
+    rStrm.WriteUInt32(0x00000409); // LcidInvoke
+}
+
+// section 2.3.4.2.1.4
+void writePROJECTCODEPAGE(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0003); // id
+    rStrm.WriteUInt32(0x00000002); // size
+    rStrm.WriteUInt16(CODEPAGE_MS); // CodePage
+}
+
+//section 2.3.4.2.1.5
+void writePROJECTNAME(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0004); // id
+    sal_uInt32 sizeOfProjectName = 0x0000000a; // for project name "VBAProject"
+    rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
+    exportString(rStrm, "VBAProject"); // ProjectName
 }
 
 //section 2.3.4.2.1.6
@@ -430,46 +428,47 @@ void writePROJECTDOCSTRING(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000000); // sizeOfDocStringUnicode, MUST be even
 }
 
-//section 2.3.4.2.1.5
-void writePROJECTNAME(SvStream& rStrm)
+//section 2.3.4.2.1.7
+void writePROJECTHELPFILEPATH(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x0004); // id
-    sal_uInt32 sizeOfProjectName = 0x0000000a; // for project name "VBAProject"
-    rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
-    //characters of "VBAProject" in MBCS character encodings
-    exportString(rStrm, "VBAProject");
+    rStrm.WriteUInt16(0x0006); // id
+    rStrm.WriteUInt32(0x00000000); // sizeOfHelpFile1
+    rStrm.WriteUInt16(0x003D); // Reserved
+    rStrm.WriteUInt32(0x00000000); // sizeOfHelpFile2
 }
 
-// section 2.3.4.2.1.4
-void writePROJECTCODEPAGE(SvStream& rStrm)
+//section 2.3.4.2.1.8
+void writePROJECTHELPCONTEXT(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x0003); // id
-    rStrm.WriteUInt32(0x00000002); // size
-    rStrm.WriteUInt16(CODEPAGE_MS); // CodePage
-}
-
-// section 2.3.4.2.1.3
-void writePROJECTLCIDINVOKE(SvStream& rStrm)
-{
-    rStrm.WriteUInt16(0x0014); // id
+    rStrm.WriteUInt16(0x0007); // id
     rStrm.WriteUInt32(0x00000004); // size
-    rStrm.WriteUInt32(0x00000409); // LcidInvoke
+    rStrm.WriteUInt32(0x00000000); // HelpContext
 }
 
-// section 2.3.4.2.1.2
-void writePROJECTLCID(SvStream& rStrm)
+//section 2.3.4.2.1.9
+void writePROJECTLIBFLAGS(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x0002); // id
+    rStrm.WriteUInt16(0x0008); // id
     rStrm.WriteUInt32(0x00000004); // size
-    rStrm.WriteUInt32(0x00000409); // Lcid
+    rStrm.WriteUInt32(0x00000000); // ProjectLibFlags
 }
 
-// section 2.3.4.2.1.1
-void writePROJECTSYSKIND(SvStream& rStrm)
+//section 2.3.4.2.1.10
+void writePROJECTVERSION(SvStream& rStrm)
 {
-    rStrm.WriteUInt16(0x0001); // id
-    rStrm.WriteUInt32(0x00000004); // size
-    rStrm.WriteUInt32(0x00000001); // SysKind, hard coded to 32-bin windows for now
+    rStrm.WriteUInt16(0x0009); // id
+    rStrm.WriteUInt32(0x00000004); // Reserved
+    rStrm.WriteUInt32(1467127224); // VersionMajor // TODO: where is this magic number comming from
+    rStrm.WriteUInt16(5); // VersionMinor // TODO: where is this magic number coming from
+}
+
+//section 2.3.4.2.1.11
+void writePROJECTCONSTANTS(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x000C); // id
+    rStrm.WriteUInt32(0x00000000); // sizeOfConstants
+    rStrm.WriteUInt16(0x003C); // Reserved
+    rStrm.WriteUInt32(0x00000000); // sizeOfConstantsUnicode
 }
 
 // section 2.3.4.2.1
@@ -488,10 +487,34 @@ void writePROJECTINFORMATION(SvStream& rStrm)
     writePROJECTCONSTANTS(rStrm);
 }
 
+// section 2.3.4.2.2.2
+void writeREFERENCENAME(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0016); // id
+    rStrm.WriteUInt32(6); // sizeOfName
+    exportString(rStrm, "stdole"); // name
+    rStrm.WriteUInt16(0x003E); // reserved
+    rStrm.WriteUInt32(12); // sizeOfNameUnicode
+    exportUTF16String(rStrm, "stdole"); // nameUnicode
+}
+
+// section 2.3.4.2.2.1
+void writeREFERENCE(SvStream& rStrm)
+{
+    writeREFERENCENAME(rStrm);
+}
+
+// section 2.3.4.2.2
+void writePROJECTREFERENCES(SvStream& rStrm)
+{
+    writeREFERENCE(rStrm);
+}
+
 // section 2.3.4.2
 void exportDirStream(SvStream& rStrm)
 {
     writePROJECTINFORMATION(rStrm);
+    writePROJECTREFERENCES(rStrm);
 }
 
 }
