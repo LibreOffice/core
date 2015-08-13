@@ -2850,7 +2850,7 @@ void ScInterpreter::ScChiTest()
             {
                 double fValX = pMat1->GetDouble(i,j);
                 double fValE = pMat2->GetDouble(i,j);
-                fChi += (fValX - fValE) * (fValX - fValE) / fValE;
+                fChi += sc::divide( (fValX - fValE) * (fValX - fValE), fValE);
             }
             else
             {
