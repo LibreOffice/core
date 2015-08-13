@@ -5658,6 +5658,23 @@ void Test::testFuncCHITEST()
     m_pDoc->SetValue(3, 2, 0, 3.0); // D3
     m_pDoc->SetValue(4, 2, 0, 1.0); // E3
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1117, m_pDoc->GetValue(aPos), 10e-4);
+
+    // test with strings
+    m_pDoc->SetString(4, 2, 0, "a"); // E3
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with strings",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetString(1, 2, 0, "a"); // B3
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with strings",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetValue(4, 2, 0, 1.0); // E3
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("CHITEST should return Err:502 for matrices with strings",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetValue(1, 2, 0, 2.0); // B3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.1117, m_pDoc->GetValue(aPos), 10e-4);
+
     m_pDoc->SetValue(4, 1, 0, 5.0); // E2
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of CHITEST failed", 0.0215, m_pDoc->GetValue(aPos), 10e-4);
     m_pDoc->SetValue(1, 2, 0, 1.0); // B3
