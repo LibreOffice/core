@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <txtfrm.hxx>
 #include <flyfrm.hxx>
 #include <ndtxt.hxx>
@@ -83,7 +84,6 @@
 #include <unoprnms.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <viewimp.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <textmarkuphelper.hxx>
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
@@ -1741,7 +1741,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 {
     // retrieve default attributes
     const SwTextNode* pTextNode( GetTextNode() );
-    ::boost::scoped_ptr<SfxItemSet> pSet;
+    std::unique_ptr<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
     {
         pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
@@ -2102,7 +2102,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
         tAccParaPropValMap& rSupplementalAttrSeq )
 {
     const SwTextNode* pTextNode( GetTextNode() );
-    ::boost::scoped_ptr<SfxItemSet> pSet;
+    std::unique_ptr<SfxItemSet> pSet;
     pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,
         RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
@@ -3284,7 +3284,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
                                         throw (lang::IllegalArgumentException,
                                                uno::RuntimeException, std::exception)
 {
-    boost::scoped_ptr<SwTextMarkupHelper> pTextMarkupHelper;
+    std::unique_ptr<SwTextMarkupHelper> pTextMarkupHelper;
     switch ( nTextMarkupType )
     {
         case text::TextMarkupType::TRACK_CHANGE_INSERTION:
@@ -3509,7 +3509,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
                                                lang::IllegalArgumentException,
                                                uno::RuntimeException, std::exception)
 {
-    boost::scoped_ptr<SwTextMarkupHelper> pTextMarkupHelper;
+    std::unique_ptr<SwTextMarkupHelper> pTextMarkupHelper;
     switch ( nTextMarkupType )
     {
         case text::TextMarkupType::TRACK_CHANGE_INSERTION:
@@ -3544,7 +3544,7 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
         throw lang::IndexOutOfBoundsException();
     }
 
-    boost::scoped_ptr<SwTextMarkupHelper> pTextMarkupHelper;
+    std::unique_ptr<SwTextMarkupHelper> pTextMarkupHelper;
     switch ( nTextMarkupType )
     {
         case text::TextMarkupType::TRACK_CHANGE_INSERTION:
