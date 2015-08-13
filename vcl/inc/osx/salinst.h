@@ -20,17 +20,16 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALINST_H
 #define INCLUDED_VCL_INC_OSX_SALINST_H
 
-#include "comphelper/solarmutex.hxx"
-#include "osl/thread.hxx"
-#include "osl/conditn.h"
+#include <list>
+
+#include <comphelper/solarmutex.hxx>
+#include <osl/conditn.h>
+#include <osl/thread.hxx>
 
 #ifdef MACOSX
 #include "osx/osxvcltypes.h"
 #endif
-
 #include "salinst.hxx"
-
-#include <list>
 
 class AquaSalFrame;
 class ApplicationEvent;
@@ -39,7 +38,7 @@ class Image;
 class SalYieldMutex : public comphelper::SolarMutex
 {
     osl::Mutex m_mutex;
-    sal_uLong                                       mnCount;
+    sal_uLong                                   mnCount;
     oslThreadIdentifier                         mnThreadId;
 
 public:
@@ -50,8 +49,6 @@ public:
     sal_uLong                                   GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
-
-#define YIELD_GUARD osl::Guard< comphelper::SolarMutex > aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
 
 class AquaSalInstance : public SalInstance
 {
@@ -68,7 +65,7 @@ class AquaSalInstance : public SalInstance
 
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
-    OUString                           maDefaultPrinter;
+    OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
@@ -86,12 +83,13 @@ public:
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
     virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
     virtual void            DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData,
+                                          bool bShow = true ) SAL_OVERRIDE;
     virtual void            DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
-    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
-                                                     long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount,
-                                                     const SystemGraphicsData *pData ) SAL_OVERRIDE;
+    virtual SalVirtualDevice* CreateVirtualDevice( SalGraphics* pGraphics,
+                                                   long &nDX, long &nDY,
+                                                   sal_uInt16 nBitCount,
+                                                   const SystemGraphicsData *pData ) SAL_OVERRIDE;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) SAL_OVERRIDE;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) SAL_OVERRIDE;
@@ -102,28 +100,31 @@ public:
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
     virtual OUString        GetDefaultPrinter() SAL_OVERRIDE;
     virtual SalTimer*       CreateSalTimer() SAL_OVERRIDE;
-    virtual SalI18NImeStatus*   CreateI18NImeStatus() SAL_OVERRIDE;
+    virtual SalI18NImeStatus* CreateI18NImeStatus() SAL_OVERRIDE;
     virtual SalSystem*      CreateSalSystem() SAL_OVERRIDE;
     virtual SalBitmap*      CreateSalBitmap() SAL_OVERRIDE;
     virtual comphelper::SolarMutex* GetYieldMutex() SAL_OVERRIDE;
     virtual sal_uLong       ReleaseYieldMutex() SAL_OVERRIDE;
     virtual void            AcquireYieldMutex( sal_uLong nCount ) SAL_OVERRIDE;
     virtual bool            CheckYieldMutex() SAL_OVERRIDE;
-    virtual void            DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
+    virtual void            DoYield(bool bWait, bool bHandleAllCurrentEvents,
+                                    sal_uLong nReleased) SAL_OVERRIDE;
     virtual bool            AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
     virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pVCLMenu ) SAL_OVERRIDE;
     virtual void            DestroyMenu( SalMenu* ) SAL_OVERRIDE;
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData ) SAL_OVERRIDE;
     virtual void            DestroyMenuItem( SalMenuItem* ) SAL_OVERRIDE;
     virtual SalSession*     CreateSalSession() SAL_OVERRIDE;
-    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
+    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType,
+                                                     int& rReturnedBytes ) SAL_OVERRIDE;
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType,
+                                                    const OUString& rDocumentService) SAL_OVERRIDE;
 
     // dtrans implementation
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource() SAL_OVERRIDE;
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > CreateClipboard(
+            const css::uno::Sequence< css::uno::Any >& i_rArguments ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() SAL_OVERRIDE;
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
 

@@ -17,24 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 #include <config_features.h>
 
-#include "sal/config.h"
-#include "sal/main.h"
 #include <vector>
 
-#include "vcl/window.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/cmdevt.hxx"
+#include <sal/main.h>
+#include <vcl/cmdevt.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
-#include "osx/vclnsapp.h"
-#include "osx/salinst.h"
+#include "impimagetree.hxx"
 #include "osx/saldata.hxx"
 #include "osx/salframe.h"
 #include "osx/salframeview.h"
+#include "osx/salinst.h"
+#include "osx/vclnsapp.h"
 #include "quartz/utils.h"
-
-#include "impimagetree.hxx"
 
 #include "premac.h"
 #include <objc/objc-runtime.h>
@@ -79,7 +78,9 @@
 {
     NSEventType eType = [pEvent type];
     if( eType == NSApplicationDefined )
+    {
         AquaSalInstance::handleAppDefinedEvent( pEvent );
+    }
     else if( eType == NSKeyDown && ([pEvent modifierFlags] & NSCommandKeyMask) != 0 )
     {
         NSWindow* pKeyWin = [NSApp keyWindow];
@@ -166,9 +167,11 @@
                 bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
             }
             else
+            {
                 bHandled = true;  // event handled already or main menu just handled it
-
+            }
             GetSalData()->maKeyEventAnswer.erase( pEvent );
+
             if( bHandled )
                 return;
         }
@@ -395,7 +398,7 @@
     (void)app;
     NSApplicationTerminateReply aReply = NSTerminateNow;
     {
-        YIELD_GUARD;
+        SolarMutexGuard aGuard;
 
         SalData* pSalData = GetSalData();
         if( ! pSalData->maFrames.empty() )
@@ -421,7 +424,7 @@
 -(void)systemColorsChanged: (NSNotification*) pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     const SalData* pSalData = GetSalData();
 	if( !pSalData->maFrames.empty() )
@@ -431,7 +434,7 @@
 -(void)screenParametersChanged: (NSNotification*) pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     SalData* pSalData = GetSalData();
     std::list< AquaSalFrame* >::iterator it;

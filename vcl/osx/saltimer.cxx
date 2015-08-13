@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include "osx/saltimer.h"
 #include "osx/salnstimer.h"
 #include "osx/saldata.hxx"
@@ -36,8 +38,10 @@ void ImplSalStartTimer( sal_uLong nMS )
         if( AquaSalTimer::pRunningTimer != nil )
         {
             if( [AquaSalTimer::pRunningTimer timeInterval] == aTI )
+            {
                 // set new fire date
                 [AquaSalTimer::pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
+            }
             else
             {
                 [AquaSalTimer::pRunningTimer invalidate];
@@ -89,7 +93,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
         NSTimeInterval current = [NSDate timeIntervalSinceReferenceDate];
         if( (posted - current) <= 0.0 )
         {
-            YIELD_GUARD;
+            SolarMutexGuard aGuard;
             if( pSVData->mpSalTimer )
             {
                 // timer already elapsed since event posted

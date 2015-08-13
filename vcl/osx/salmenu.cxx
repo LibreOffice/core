@@ -17,14 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <objc/objc-runtime.h>
+
 #include <comphelper/string.hxx>
+#include <rtl/ustrbuf.hxx>
 
-#include "rtl/ustrbuf.hxx"
-
-#include "vcl/cmdevt.hxx"
-#include "vcl/floatwin.hxx"
-#include "vcl/window.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/cmdevt.hxx>
+#include <vcl/floatwin.hxx>
+#include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
 
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"
@@ -33,11 +36,8 @@
 #include "osx/salframe.h"
 #include "osx/a11ywrapper.h"
 #include "quartz/utils.h"
-
 #include "svids.hrc"
 #include "window.h"
-
-#include <objc/objc-runtime.h>
 
 namespace {
 
@@ -94,14 +94,14 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 -(void)showPreferences: (id) sender
 {
     (void)sender;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     [self showDialog: ShowDialogId::Preferences];
 }
 -(void)showAbout: (id) sender
 {
     (void)sender;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     [self showDialog: ShowDialogId::About];
 }

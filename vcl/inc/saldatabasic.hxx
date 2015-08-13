@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_INC_SALDATABASIC_HXX
 #define INCLUDED_VCL_INC_SALDATABASIC_HXX
 
-#include <svdata.hxx>
-#include <salinst.hxx>
 #include <osl/module.h>
+#include <vcl/dllapi.h>
 
-#include "vcl/dllapi.h"
+#include "svdata.hxx"
+#include "salinst.hxx"
 
 #ifdef IOS
 #include "quartz/salgdi.h"
