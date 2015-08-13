@@ -17,19 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/alloca.h>
 #include <sal/macros.h>
+#include <tools/helpers.hxx>
 
-#include "tools/helpers.hxx"
-#include "vcl/window.hxx"
-#include "vcl/svapp.hxx"
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
-#include "osx/salinst.h"
-#include "quartz/salgdi.h"
+#include "osx/a11yfactory.h"
 #include "osx/salframe.h"
 #include "osx/salframeview.h"
-#include "osx/a11yfactory.h"
+#include "osx/salinst.h"
+#include "quartz/salgdi.h"
 #include "quartz/utils.h"
 
 #define WHEEL_EVENT_FACTOR 1.5
@@ -249,7 +251,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidBecomeKey: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -280,7 +282,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidResignKey: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -292,7 +294,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidChangeScreen: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
         mpFrame->screenParametersChanged();
@@ -301,7 +303,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidMove: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -313,7 +315,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidResize: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -326,7 +328,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidMiniaturize: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -339,7 +341,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -352,7 +354,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(BOOL)windowShouldClose: (NSNotification*)pNotification
 {
     (void)pNotification;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     BOOL bRet = YES;
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -371,7 +373,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidEnterFullScreen: (NSNotification*)pNotification
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
         return;
@@ -381,7 +383,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)windowDidExitFullScreen: (NSNotification*)pNotification
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
         return;
@@ -392,7 +394,7 @@ static AquaSalFrame* getMouseContainerFrame()
 -(void)dockMenuItemTriggered: (id)sender
 {
     (void)sender;
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
         mpFrame->ToTop( SAL_FRAME_TOTOP_RESTOREWHENMIN | SAL_FRAME_TOTOP_GRABFOCUS );
@@ -552,7 +554,7 @@ private:
 
 -(void)sendMouseEventToFrame: (NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(sal_uInt16)nEvent
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     AquaSalFrame* pDispatchFrame = AquaSalFrame::GetCaptureFrame();
     bool bIsCaptured = false;
@@ -740,7 +742,7 @@ private:
 
 - (void)magnifyWithEvent: (NSEvent*)pEvent
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     // TODO: ??  -(float)magnification;
     if( AquaSalFrame::isAlive( mpFrame ) )
@@ -814,7 +816,7 @@ private:
 
 - (void)swipeWithEvent: (NSEvent*)pEvent
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -874,7 +876,7 @@ private:
 
 -(void)scrollWheel: (NSEvent*)pEvent
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -941,7 +943,7 @@ private:
 
 -(void)keyDown: (NSEvent*)pEvent
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -1003,7 +1005,7 @@ private:
 
 -(void)flagsChanged: (NSEvent*)pEvent
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -1016,7 +1018,7 @@ private:
 {
     (void) replacementRange; // FIXME: surely it must be used
 
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -1484,7 +1486,7 @@ private:
 
 -(BOOL)sendKeyToFrameDirect: (sal_uInt16)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     long nRet = 0;
     if( AquaSalFrame::isAlive( mpFrame ) )
@@ -1588,7 +1590,7 @@ private:
 {
     (void) replacementRange; // FIXME - use it!
 
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
@@ -1709,7 +1711,7 @@ private:
     (void) aRange;
     (void) actualRange;
 
-    YIELD_GUARD;
+    SolarMutexGuard aGuard;
 
     SalExtTextInputPosEvent aPosEvent;
     mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, static_cast<void *>(&aPosEvent) );
@@ -1730,7 +1732,7 @@ private:
         //TODO: odd cast really needed for fdo#74121?
 }
 
--(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext
+-(css::accessibility::XAccessibleContext *)accessibleContext
 {
     if ( !mpReferenceWrapper ) {
         // some frames never become visible ..

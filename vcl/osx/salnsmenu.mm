@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vcl/window.hxx>
 
 #include "osx/salinst.h"
 #include "osx/saldata.hxx"
@@ -24,8 +27,6 @@
 #include "osx/salmenu.h"
 #include "osx/salnsmenu.h"
 
-#include "vcl/window.hxx"
- 
 @implementation SalNSMenu
 -(id)initWithMenu: (AquaSalMenu*)pMenu
 {
@@ -36,8 +37,8 @@
 -(void)menuNeedsUpdate: (NSMenu*)pMenu
 {
     (void)pMenu;
-    YIELD_GUARD;
-    
+    SolarMutexGuard aGuard;
+
     if( mpMenu )
     {
         const AquaSalFrame* pFrame = mpMenu->getFrame();
@@ -76,8 +77,8 @@
 -(void)menuItemTriggered: (id)aSender
 {
     (void)aSender;
-    YIELD_GUARD;
-    
+    SolarMutexGuard aGuard;
+
     const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : NULL;
     if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
     {
@@ -93,13 +94,13 @@
         if( pPopupMenu )
         {
             // FIXME: revise this ugly code
-            
+
             // select handlers in vcl are dispatch on the original menu
             // if not consumed by the select handler of the current menu
             // however since only the starting menu ever came into Execute
             // the hierarchy is not build up. Workaround this by getting
             // the menu it should have been
-            
+
             // get started from hierarchy in vcl menus
             AquaSalMenu* pParentMenu = mpMenuItem->mpParentMenu;
             Menu* pCurMenu = mpMenuItem->mpVCLMenu;
@@ -108,7 +109,7 @@
                 pCurMenu = pParentMenu->mpVCLMenu;
                 pParentMenu = pParentMenu->mpParentSalMenu;
             }
-            
+
             pPopupMenu->SetSelectedEntry( mpMenuItem->mnId );
             pPopupMenu->ImplSelectWithStart( pCurMenu );
         }
@@ -168,7 +169,7 @@
                 }
                 return;
             }
-            
+
             aImgRect.origin.x += aFromRect.size.width + 2;
         }
     }
