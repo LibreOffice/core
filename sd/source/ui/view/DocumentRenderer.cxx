@@ -243,7 +243,7 @@ namespace {
             const sal_Char* pName,
             const sal_Int32 nTriggerValue) const
         {
-            sal_Int32 nValue = static_cast<sal_Int32>(mrProperties.getIntValue( pName ));
+            sal_Int32 nValue = static_cast<sal_Int32>(mrProperties.getIntValue( pName, 0 ));
             return nValue == nTriggerValue;
         }
     };
