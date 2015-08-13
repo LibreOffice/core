@@ -52,15 +52,21 @@ private:
     sal_uInt8       nKind;
     sal_uInt8       nRightToLeft;
 
-                TETextPortion()             { nLen = 0; nKind = PORTIONKIND_TEXT; nWidth = -1; nRightToLeft = 0;}
+                TETextPortion()
+                    : nLen {0}
+                    , nWidth {-1}
+                    , nKind {PORTIONKIND_TEXT}
+                    , nRightToLeft {0}
+                {}
 
 public:
-                TETextPortion( sal_uInt16 nL )  {
-                                                nLen = nL;
-                                                nKind = PORTIONKIND_TEXT;
-                                                nWidth= -1;
-                                                nRightToLeft = 0;
-                                            }
+                TETextPortion( sal_uInt16 nL )
+                    : nLen {nL}
+                    , nWidth {-1}
+                    , nKind {PORTIONKIND_TEXT}
+                    , nRightToLeft {0}
+                {}
+
     sal_uInt16&     GetLen()                    { return nLen; }
     long&           GetWidth()                  { return nWidth; }
     sal_uInt8&      GetKind()                   { return nKind; }
@@ -86,11 +92,10 @@ struct TEWritingDirectionInfo
     sal_uInt16  nStartPos;
     sal_uInt16  nEndPos;
     TEWritingDirectionInfo( sal_uInt8 _Type, sal_uInt16 _Start, sal_uInt16 _End )
-    {
-        nType = _Type;
-        nStartPos = _Start;
-        nEndPos = _End;
-    }
+        : nType {_Type}
+        , nStartPos {_Start}
+        , nEndPos {_End}
+    {}
 };
 
 class TextLine
@@ -106,15 +111,17 @@ private:
     bool            mbInvalid;  // fuer geschickte Formatierung/Ausgabe
 
 public:
-                    TextLine()  {
-                                    mnStart = mnEnd = 0;
-                                    mnStartPortion = mnEndPortion = 0;
-                                    mnStartX = 0;
-                                    mbInvalid = true;
-                                }
+                    TextLine()
+                        : mnStart {0}
+                        , mnEnd {0}
+                        , mnStartPortion {0}
+                        , mnEndPortion {0}
+                        , mnStartX {0}
+                        , mbInvalid {true}
+                    {}
 
     bool            IsIn( sal_Int32 nIndex, bool bInclEnd ) const
-                        { return ( ( nIndex >= mnStart ) && ( bInclEnd ? ( nIndex <= mnEnd ) : ( nIndex < mnEnd ) ) ); }
+                        { return nIndex >= mnStart && ( bInclEnd ? nIndex <= mnEnd : nIndex < mnEnd ); }
 
     void            SetStart( sal_Int32 n )         { mnStart = n; }
     sal_Int32       GetStart() const                { return mnStart; }
@@ -148,10 +155,10 @@ public:
 
 inline bool TextLine::operator == ( const TextLine& rLine ) const
 {
-    return (    ( mnStart == rLine.mnStart ) &&
-                ( mnEnd == rLine.mnEnd ) &&
-                ( mnStartPortion == rLine.mnStartPortion ) &&
-                ( mnEndPortion == rLine.mnEndPortion ) );
+    return mnStart == rLine.mnStart &&
+           mnEnd == rLine.mnEnd &&
+           mnStartPortion == rLine.mnStartPortion &&
+           mnEndPortion == rLine.mnEndPortion;
 }
 
 inline bool TextLine::operator != ( const TextLine& rLine ) const
@@ -260,10 +267,12 @@ struct TextDDInfo
     bool            mbVisCursor;
 
     TextDDInfo()
+        : maCursor()
+        , maDropPos()
+        , mbStarterOfDD {false}
+        , mbVisCursor {false}
     {
         maCursor.SetStyle( CURSOR_SHADOW );
-        mbStarterOfDD = false;
-        mbVisCursor = false;
     }
 };
 
