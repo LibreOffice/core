@@ -244,7 +244,7 @@ void SdDLL::RegisterControllers()
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
 
-    SfxSaveAsToolBoxControl::RegisterControl(SID_SAVEASDOC, pMod );
+    SfxSaveAsToolBoxControl::RegisterControl(SID_SAVEDOC, pMod );
 }
 
 void SdDLL::Init()
