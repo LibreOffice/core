@@ -27,7 +27,6 @@
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 #include <algorithm>
-#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -144,9 +143,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 
 //  "normal" service implementation
 ScaDateAddIn::ScaDateAddIn() :
-    pDefLocales( std::unique_ptr< ::com::sun::star::lang::Locale[] >( nullptr ) ),
-    pResMgr( std::unique_ptr< ResMgr >( nullptr ) ),
-    pFuncDataList( std::unique_ptr< ScaFuncDataList >( nullptr ) )
+    pDefLocales( nullptr ),
+    pResMgr( nullptr ),
+    pFuncDataList( nullptr )
 {
 }
 
@@ -167,7 +166,7 @@ void ScaDateAddIn::InitDefLocales()
 
 const lang::Locale& ScaDateAddIn::GetLocale( sal_uInt32 nIndex )
 {
-    if( pDefLocales == nullptr )
+    if( !pDefLocales )
         InitDefLocales();
 
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
@@ -175,10 +174,10 @@ const lang::Locale& ScaDateAddIn::GetLocale( sal_uInt32 nIndex )
 
 ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
-    if( pResMgr == nullptr )
+    if( !pResMgr )
     {
         InitData();     // try to get resource manager
-        if( pResMgr == nullptr )
+        if( !pResMgr )
             throw uno::RuntimeException();
     }
     return *pResMgr;
@@ -195,9 +194,9 @@ void ScaDateAddIn::InitData()
         InitScaFuncDataList( *pFuncDataList, *pResMgr );
     }
 
-    if( pDefLocales != nullptr )
+    if( pDefLocales )
     {
-        pDefLocales = nullptr;
+        pDefLocales.reset();
     }
 }
 
