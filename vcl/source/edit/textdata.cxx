@@ -187,14 +187,14 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         const TextLine& pLastFormatted = maLines[ nLastFormattedLine ];
         const TextLine& pUnformatted = maLines[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted.GetStartPortion() - pLastFormatted.GetEndPortion();
-        short nTextDiff = pUnformatted.GetStart() - pLastFormatted.GetEnd();
+        sal_Int32 nTextDiff = pUnformatted.GetStart() - pLastFormatted.GetEnd();
         nTextDiff++;    // LastFormatted.GetEnd() was inclusive => subtracted one too much!
 
         // The first unformatted one has to start exactly one portion past the last
         // formatted one.
         // If a portion got split in the changed row, nLastEnd could be > nNextStart!
         short nPDiff = sal::static_int_cast< short >(-( nPortionDiff-1 ));
-        short nTDiff = sal::static_int_cast< short >(-( nTextDiff-1 ));
+        const sal_Int32 nTDiff = -( nTextDiff-1 );
         if ( nPDiff || nTDiff )
         {
             for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )

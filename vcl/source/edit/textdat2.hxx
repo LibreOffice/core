@@ -96,8 +96,8 @@ struct TEWritingDirectionInfo
 class TextLine
 {
 private:
-    sal_uInt16          mnStart;
-    sal_uInt16          mnEnd;
+    sal_Int32           mnStart;
+    sal_Int32           mnEnd;
     sal_uInt16          mnStartPortion;
     sal_uInt16          mnEndPortion;
 
@@ -113,16 +113,16 @@ public:
                                     mbInvalid = true;
                                 }
 
-    bool            IsIn( sal_uInt16 nIndex, bool bInclEnd ) const
+    bool            IsIn( sal_Int32 nIndex, bool bInclEnd ) const
                         { return ( ( nIndex >= mnStart ) && ( bInclEnd ? ( nIndex <= mnEnd ) : ( nIndex < mnEnd ) ) ); }
 
-    void            SetStart( sal_uInt16 n )            { mnStart = n; }
-    sal_uInt16          GetStart() const                { return mnStart; }
-    sal_uInt16&         GetStart()                      { return mnStart; }
+    void            SetStart( sal_Int32 n )         { mnStart = n; }
+    sal_Int32       GetStart() const                { return mnStart; }
+    sal_Int32&      GetStart()                      { return mnStart; }
 
-    void            SetEnd( sal_uInt16 n )              { mnEnd = n; }
-    sal_uInt16          GetEnd() const                  { return mnEnd; }
-    sal_uInt16&         GetEnd()                        { return mnEnd; }
+    void            SetEnd( sal_Int32 n )           { mnEnd = n; }
+    sal_Int32       GetEnd() const                  { return mnEnd; }
+    sal_Int32&      GetEnd()                        { return mnEnd; }
 
     void            SetStartPortion( sal_uInt16 n )     { mnStartPortion = n; }
     sal_uInt16          GetStartPortion() const         { return mnStartPortion; }
@@ -132,7 +132,7 @@ public:
     sal_uInt16          GetEndPortion() const           { return mnEndPortion; }
     sal_uInt16&         GetEndPortion()                 { return mnEndPortion; }
 
-    sal_uInt16          GetLen() const                  { return mnEnd - mnStart; }
+    sal_Int32       GetLen() const                  { return mnEnd - mnStart; }
 
     bool            IsInvalid() const               { return mbInvalid; }
     bool            IsValid() const                 { return !mbInvalid; }

@@ -1014,7 +1014,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             TextPaM aPaM( GetSelection().GetEnd() );
             Rectangle aR1 = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM );
 
-            sal_uInt16 nInputEnd = mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex() + mpImpl->mpTextEngine->mpIMEInfos->nLen;
+            sal_Int32 nInputEnd = mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex() + mpImpl->mpTextEngine->mpIMEInfos->nLen;
 
             if ( !mpImpl->mpTextEngine->IsFormatted() )
                 mpImpl->mpTextEngine->FormatDoc();

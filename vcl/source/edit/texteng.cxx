@@ -2212,7 +2212,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
     size_t nDelFromLine = std::numeric_limits<size_t>::max();
     bool bLineBreak = false;
 
-    sal_uInt16 nIndex = pLine->GetStart();
+    sal_Int32 nIndex = pLine->GetStart();
     TextLine aSaveLine( *pLine );
 
     vcl::Font aFont;
@@ -2222,10 +2222,10 @@ bool TextEngine::CreateLines( sal_uLong nPara )
     while ( nIndex < pNode->GetText().getLength() )
     {
         bool bEOL = false;
-        sal_uInt16 nPortionStart = 0;
-        sal_uInt16 nPortionEnd = 0;
+        sal_Int32 nPortionStart = 0;
+        sal_Int32 nPortionEnd = 0;
 
-        sal_uInt16 nTmpPos = nIndex;
+        sal_Int32 nTmpPos = nIndex;
         sal_uInt16 nTmpPortion = pLine->GetStartPortion();
         long nTmpWidth = mpDoc->GetLeftMargin();
         // do not subtract margin; it is included in TmpWidth
@@ -2270,7 +2270,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
                 pPortion->GetKind() = PORTIONKIND_TEXT;
             }
 
-            nTmpPos = nTmpPos + pPortion->GetLen();
+            nTmpPos += pPortion->GetLen();
             nPortionEnd = nTmpPos;
             nTmpPortion++;
         }
@@ -2280,7 +2280,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         if ( nTmpWidth > nXWidth )
         {
             nPortionEnd = nTmpPos;
-            nTmpPos = nTmpPos - pPortion->GetLen();
+            nTmpPos -= pPortion->GetLen();
             nPortionStart = nTmpPos;
             nTmpPortion--;
             bEOL = false;
@@ -2359,8 +2359,8 @@ bool TextEngine::CreateLines( sal_uLong nPara )
             }
             else
             {
-                sal_uInt16 nStart = pLine->GetStart();
-                sal_uInt16 nEnd = pLine->GetEnd();
+                const sal_Int32 nStart = pLine->GetStart();
+                const sal_Int32 nEnd = pLine->GetEnd();
 
                 if ( nStart > nInvalidEnd )
                 {
