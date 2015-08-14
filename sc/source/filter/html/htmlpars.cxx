@@ -1966,6 +1966,17 @@ ScHTMLTable::ScHTMLTable(
 
 ScHTMLTable::~ScHTMLTable()
 {
+    // iterate through every table cell
+    ScHTMLEntryMap::iterator aMapIterEnd = maEntryMap.end();
+    for( ScHTMLEntryMap::iterator aMapIter = maEntryMap.begin(); aMapIter != aMapIterEnd; ++aMapIter )
+    {
+        ScHTMLEntryList& rEntryList = aMapIter->second;
+        while (!rEntryList.empty())
+        {
+            delete rEntryList.back();
+            rEntryList.pop_back();
+        }
+    }
 }
 
 const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
