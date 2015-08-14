@@ -66,9 +66,6 @@ private:
     // DecompressedEnd according to the spec
     sal_uInt64 mnDecompressedEnd;
 
-    // Start of the current decompressed chunk
-    sal_uInt64 mnChunkStart;
-
     void PackCompressedChunkSize(size_t nSize, sal_uInt16& rHeader);
 
     void PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader);
@@ -89,6 +86,8 @@ private:
             sal_uInt16& rBitCount, sal_uInt16& rMaximumLength);
 
     void writeRawChunk();
+
+    sal_uInt16 handleHeader(bool bCompressed);
 };
 
 class VBACompression
