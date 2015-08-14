@@ -678,6 +678,16 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
+void DdeTopic::Connect( sal_IntPtr nId )
+{
+    aConnectLink.Call( (void*)nId );
+}
+
+void DdeTopic::Disconnect( sal_IntPtr nId )
+{
+    aDisconnectLink.Call( (void*)nId );
+}
+
 void DdeTopic::_Disconnect( sal_IntPtr nId )
 {
     std::vector<DdeItem*>::iterator iter;

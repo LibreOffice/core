@@ -288,6 +288,8 @@ class SVL_DLLPUBLIC DdeTopic
     SVL_DLLPRIVATE void _Disconnect( sal_IntPtr );
 
 public:
+    void    Connect( sal_IntPtr );
+    void    Disconnect( sal_IntPtr );
     virtual DdeData* Get(SotClipboardFormatId);
     virtual bool Put( const DdeData* );
     virtual bool Execute( const OUString* );
@@ -307,6 +309,8 @@ private:
     DdeString*            pName;
     OUString              aItem;
     std::vector<DdeItem*> aItems;
+    Link<>                aConnectLink;
+    Link<>                aDisconnectLink;
 
 public:
                     DdeTopic( SAL_UNUSED_PARAMETER const OUString& );
