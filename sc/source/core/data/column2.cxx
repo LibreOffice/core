@@ -824,7 +824,18 @@ void ScColumn::GetOptimalHeight(
             }
 
             if (bStdOnly)
-                if (HasEditCells(nStart,nEnd,nEditPos))     // includes mixed script types
+            {
+                bool bHasEditCells = HasEditCells(nStart,nEnd,nEditPos);
+                // Call to HasEditCells() may change pattern due to
+                // calculation, => sync always.
+                // We don't know which row changed first, but as pPattern
+                // covered nStart to nEnd we can pick nStart. Worst case we
+                // have to repeat that for every row in range if every row
+                // changed.
+                pPattern = aIter.Resync( nStart, nStart, nEnd);
+                if (bHasEditCells && nEnd < nEditPos)
+                    bHasEditCells = false;              // run into that again
+                if (bHasEditCells)                      // includes mixed script types
                 {
                     if (nEditPos == nStart)
                     {
@@ -840,6 +851,7 @@ void ScColumn::GetOptimalHeight(
                         nEnd = nEditPos - 1;            // standard - part
                     }
                 }
+            }
 
             sc::SingleColumnSpanSet aSpanSet;
             aSpanSet.scan(*this, nStart, nEnd);
