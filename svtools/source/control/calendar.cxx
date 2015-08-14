@@ -1154,8 +1154,6 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     {
         if ( bNewSel )
         {
-            mbInSelChange = true;
-            SelectionChanging();
             mbInSelChange = false;
         }
         HideFocus();
@@ -1512,7 +1510,6 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
                     bool bDateSel = IsDateSelected( maCurDate );
                     SelectDate( maCurDate, !bDateSel );
                     mbSelLeft = false;
-                    SelectionChanging();
                     mbTravelSelect = true;
                     Select();
                     mbTravelSelect = false;
@@ -1552,8 +1549,6 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             SetCurDate( aNewDate );
             mbDirect = false;
             maAnchorDate = aOldAnchorDate;
-            mbInSelChange = true;
-            SelectionChanging();
             mbInSelChange = false;
             ImplUpdateSelection( pOldSel.get() );
         }
@@ -1709,11 +1704,6 @@ void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings();
         Invalidate();
     }
-}
-
-void Calendar::SelectionChanging()
-{
-    maSelectionChangingHdl.Call( this );
 }
 
 void Calendar::DateRangeChanged()

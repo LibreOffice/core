@@ -216,7 +216,6 @@ private:
                     mbSelLeft:1,
                     mbAllSel:1,
                     mbDropPos:1;
-    Link<>          maSelectionChangingHdl;
     Link<>          maDateRangeChangedHdl;
     Link<>          maRequestDateInfoHdl;
     Link<>          maDoubleClickHdl;
@@ -277,7 +276,6 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void            SelectionChanging();
     void            DateRangeChanged();
     void            RequestDateInfo();
     void            DoubleClick();
