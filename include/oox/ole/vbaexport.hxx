@@ -90,7 +90,7 @@ private:
     sal_uInt16 handleHeader(bool bCompressed);
 };
 
-class VBACompression
+class OOX_DLLPUBLIC VBACompression
 {
 public:
     VBACompression(SvStream& rCompressedStream,
