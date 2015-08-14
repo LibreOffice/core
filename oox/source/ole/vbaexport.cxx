@@ -297,6 +297,7 @@ void VBACompression::write()
     {
         sal_Size nChunkSize = nRemainingSize > 4096 ? 4096 : nRemainingSize;
         VBACompressionChunk aChunk(mrCompressedStream, &pData[nSize - nRemainingSize], nChunkSize);
+        aChunk.write();
 
         // update the uncompressed chunk start marker
         nRemainingSize -= nChunkSize;
