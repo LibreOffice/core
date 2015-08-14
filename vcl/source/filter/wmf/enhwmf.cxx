@@ -1425,7 +1425,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
                     sal_uInt32  nCurPos, nOffString, nOptions, offDx;
                     sal_Int32   nLen;
-                    long* pDX = NULL;
+                    std::vector<long> aDX;
 
                     nCurPos = pWMF->Tell() - 8;
 
@@ -1451,13 +1451,12 @@ bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nCurPos + offDx );
                             if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
                             {
-                                pDX = new long[ nLen ];
-                                sal_Int32 i;
-                                sal_Int32 val;
-                                for ( i = 0; i < nLen; i++ )
+                                aDX.resize(nLen);
+                                for (sal_Int32 i = 0; i < nLen; ++i)
                                 {
-                                    pWMF->ReadInt32( val );
-                                    pDX[ i ] = val;
+                                    sal_Int32 val(0);
+                                    pWMF->ReadInt32(val);
+                                    aDX[i] = val;
                                 }
                             }
                         }
@@ -1469,23 +1468,22 @@ bool EnhWMFReader::ReadEnhWMF()
                             {
                                 std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nLen ]);
                                 pWMF->Read( pBuf.get(), nLen );
-                                aText = OUString( pBuf.get(), (sal_uInt16)nLen, pOut->GetCharSet() );
+                                aText = OUString(pBuf.get(), nLen, pOut->GetCharSet());
                                 pBuf.reset();
 
                                 if ( aText.getLength() != nLen )
                                 {
-                                    sal_uInt16 i, j;
-                                    long* pOldDx = pDX;
-                                    pDX = new long[ aText.getLength() ];
-                                    for ( i = 0, j = 0; i < aText.getLength(); i++ )
+                                    std::vector<long> aOldDX(aText.getLength());
+                                    aOldDX.swap(aDX);
+                                    sal_Int32 nDXLen = std::min<sal_Int32>(nLen, aOldDX.size());
+                                    for (sal_Int32 i = 0, j = 0; i < aText.getLength(); ++i)
                                     {
                                         sal_Unicode cUniChar = aText[i];
                                         OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
-                                        pDX[ i ] = 0;
-                                        for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.getLength() ); ++k)
-                                            pDX[ i ] += pOldDx[ j++ ];
+                                        aDX[i] = 0;
+                                        for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nDXLen ) && ( i < aText.getLength() ); ++k)
+                                            aDX[ i ] += aOldDX[j++];
                                     }
-                                    delete[] pOldDx;
                                 }
                             }
                         }
@@ -1507,9 +1505,8 @@ bool EnhWMFReader::ReadEnhWMF()
                                 aText = OUString(pBuf.get(), nLen);
                             }
                         }
-                        pOut->DrawText( aPos, aText, pDX, bRecordPath, nGfxMode );
+                        pOut->DrawText(aPos, aText, aDX.data(), bRecordPath, nGfxMode);
                     }
-                    delete[] pDX;
                 }
                 break;
 
