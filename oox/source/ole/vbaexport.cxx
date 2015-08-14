@@ -614,6 +614,8 @@ void writePROJECTMODULE(SvStream& rStrm)
     writeMODULEHELPCONTEXT(rStrm);
     writeMODULECOOKIE(rStrm);
     writeMODULETYPE(rStrm);
+    rStrm.WriteUInt16(0x002B); // terminator
+    rStrm.WriteUInt32(0x00000000); // reserved
 }
 
 // section 2.3.4.2.3
