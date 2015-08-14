@@ -536,13 +536,29 @@ void writePROJECTCOOKIE(SvStream& rStrm)
     rStrm.WriteUInt16(0xFFFF); // cookie
 }
 
+// section 2.3.4.2.3.2.1
+void writeMODULENAME(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0019); // id
+    rStrm.WriteUInt32(7); // sizeOfModuleName
+    exportString(rStrm, "Module1"); // ModuleName
+}
+
+// section 2.3.4.2.3.2
+void writePROJECTMODULE(SvStream& rStrm)
+{
+    writeMODULENAME(rStrm);
+}
+
 // section 2.3.4.2.3
 void writePROJECTMODULES(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x000F); // id
     rStrm.WriteUInt32(0x00000002); // size of Count
-    rStrm.WriteUInt16(5); // Count // TODO: this is dependent on the document
+    sal_Int16 count = 5; // Number of modules // TODO: this is dependent on the document
+    rStrm.WriteUInt16(count); // Count
     writePROJECTCOOKIE(rStrm);
+    writePROJECTMODULE(rStrm);
 }
 
 // section 2.3.4.2
