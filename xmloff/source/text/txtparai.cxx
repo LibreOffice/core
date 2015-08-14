@@ -1835,6 +1835,11 @@ public:
         const OUString& rLocalName,
         enum XMLTextPElemTokens nTok,
         XMLHints_Impl& rHnts);
+    XMLTOCMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts );
 
 protected:
 
@@ -1843,6 +1848,10 @@ protected:
                                   const OUString& sLocalName,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet) SAL_OVERRIDE;
+    virtual void ProcessAttribute(
+        sal_Int32 Elmenet,
+        const OUString& sValue,
+        Reference<beans::XPropertySet>& rPropSet ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTOCMarkImportContext_Impl, XMLIndexMarkImportContext_Impl );
@@ -1853,6 +1862,16 @@ XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
         XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
                                        nTok, rHnts),
         sLevel("Level")
+{
+}
+
+XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    enum XMLTextPElemTokens nTok,
+    XMLHints_Impl& rHnts )
+:   XMLIndexMarkImportContext_Impl( rImport, Element, nTok, rHnts ),
+    sLevel("Level")
 {
 }
 
@@ -1883,6 +1902,33 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
         // else: delegate to superclass
         XMLIndexMarkImportContext_Impl::ProcessAttribute(
             nNamespace, sLocalName, sValue, rPropSet);
+    }
+}
+
+void XMLTOCMarkImportContext_Impl::ProcessAttribute(
+    sal_Int32 Element,
+    const OUString& sValue,
+    Reference<beans::XPropertySet>& rPropSet )
+{
+    SAL_WARN_IF(!rPropSet.is(), "xmloff.text", "need PropertySet");
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_outline_level) )
+    {
+        // outline level: set level property
+        sal_Int32 nTmp;
+        if( sax::Converter::convertNumber( nTmp, sValue )
+            && nTmp >= 1
+            && nTmp < GetImport().GetTextImport()->
+                            GetChapterNumbering()->getCount() )
+        {
+            rPropSet->setPropertyValue( sLevel, uno::makeAny(static_cast<sal_Int16>(nTmp-1)) );
+        }
+        // else: value out of range -> ignore
+    }
+    else
+    {
+        // else: delegate to superclass
+        XMLIndexMarkImportContext_Impl::ProcessAttribute( Element, sValue, rPropSet );
     }
 }
 
