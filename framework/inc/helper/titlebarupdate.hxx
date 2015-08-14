@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <unotools/moduleoptions.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace framework{
@@ -42,7 +42,7 @@ namespace framework{
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
+class TitleBarUpdate : public  ::cppu::WeakImplHelper<
                                    css::lang::XInitialization
                                  , css::frame::XTitleChangeListener // => XEventListener
                                  , css::frame::XFrameActionListener > // => XEventListener

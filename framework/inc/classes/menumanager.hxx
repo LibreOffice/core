@@ -31,7 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/accel.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -43,7 +43,7 @@ namespace framework
 class BmkMenu;
 class AddonMenu;
 class AddonPopupMenu;
-class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class MenuManager : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
     public:
         MenuManager(

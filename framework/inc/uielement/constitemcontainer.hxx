@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
@@ -44,7 +44,7 @@ namespace framework
 
 class RootItemContainer;
 class ItemContainer;
-class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper4<
+class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,
                                                     css::lang::XUnoTunnel       ,
                                                     css::beans::XFastPropertySet,

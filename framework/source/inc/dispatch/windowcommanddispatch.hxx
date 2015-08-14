@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <tools/link.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {

@@ -19,7 +19,7 @@
 
 #include <services.h>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ref.hxx>
@@ -32,7 +32,7 @@
 
 namespace {
 
-class URLTransformer : public ::cppu::WeakImplHelper2< css::util::XURLTransformer, css::lang::XServiceInfo>
+class URLTransformer : public ::cppu::WeakImplHelper< css::util::XURLTransformer, css::lang::XServiceInfo>
 {
 public:
     URLTransformer() {}

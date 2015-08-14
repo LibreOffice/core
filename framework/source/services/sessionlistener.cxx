@@ -40,7 +40,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/pathoptions.hxx>
 
@@ -75,7 +75,7 @@ namespace {
                         if flush failed</li>
                 </ul>
  */
-typedef cppu::WeakImplHelper4<
+typedef cppu::WeakImplHelper<
     css::lang::XInitialization,
     css::frame::XSessionManagerListener2,
     css::frame::XStatusListener,

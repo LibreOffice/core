@@ -26,7 +26,7 @@
 
 #include <xml/imagesconfiguration.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
 #include <stdtypes.h>
@@ -35,7 +35,7 @@ namespace framework{
 
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
+class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         enum Image_XML_Entry

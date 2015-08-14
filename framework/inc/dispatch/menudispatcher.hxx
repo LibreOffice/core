@@ -41,7 +41,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
@@ -64,7 +64,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
+class MenuDispatcher   :        public  ::cppu::WeakImplHelper<
                                             css::frame::XDispatch           ,
                                             css::frame::XFrameActionListener >
 {

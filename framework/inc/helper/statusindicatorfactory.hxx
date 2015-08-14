@@ -49,7 +49,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/status.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/thread.hxx>
 
 namespace framework{
@@ -139,7 +139,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
     @devstatus      ready to use
     @threadsafe     yes
  */
-class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
+class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
                                              css::lang::XServiceInfo
                                            , css::lang::XInitialization
                                            , css::task::XStatusIndicatorFactory

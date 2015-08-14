@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -40,7 +40,7 @@ using namespace framework;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     com::sun::star::lang::XServiceInfo,
     com::sun::star::lang::XSingleComponentFactory > WindowContentFactoryManager_BASE;
 

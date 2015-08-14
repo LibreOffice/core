@@ -34,13 +34,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/XToolkit2.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
 
-class TabWinFactory :  public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
+class TabWinFactory :  public ::cppu::WeakImplHelper< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
 {
     public:
         TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );

@@ -36,7 +36,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/colorcfg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -47,7 +47,7 @@ using namespace framework;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::lang::XSingleServiceFactory> TaskCreatorService_BASE;
 

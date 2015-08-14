@@ -38,7 +38,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -79,7 +79,7 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
    disable it in case only the new schema must be used.
  */
 
-typedef ::cppu::WeakComponentImplHelper3<
+typedef ::cppu::WeakComponentImplHelper<
             css::lang::XServiceInfo,
             css::util::XChangesListener,    // => XEventListener
             css::util::XPathSettings>       // => XPropertySet

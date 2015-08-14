@@ -28,12 +28,12 @@
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace framework{
 
-class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XDockingAreaAcceptor >
+class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper< ::com::sun::star::ui::XDockingAreaAcceptor >
 {
     public:
 

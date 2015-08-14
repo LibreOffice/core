@@ -44,7 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
@@ -67,7 +67,7 @@ using namespace framework;
 
 namespace {
 
-class ModuleUIConfigurationManager : public cppu::WeakImplHelper3<
+class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
                                        css::lang::XServiceInfo,
                                        css::lang::XComponent,
                                        css::ui::XModuleUIConfigurationManager2 >

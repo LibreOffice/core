@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/image.hxx>
 #include <framework/fwedllapi.h>
 
@@ -31,7 +31,7 @@ namespace framework
 {
 
 class FWE_DLLPUBLIC ImageWrapper :
-                     public ::cppu::WeakImplHelper2< ::com::sun::star::awt::XBitmap,
+                     public ::cppu::WeakImplHelper< ::com::sun::star::awt::XBitmap,
                                                     ::com::sun::star::lang::XUnoTunnel >
 {
     public:

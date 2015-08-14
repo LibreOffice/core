@@ -22,7 +22,7 @@
 #include <helper/networkdomain.hxx>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -218,7 +218,7 @@ struct ReSubstUserVarOrder
 
 typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
 typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     css::util::XStringSubstitution,
     css::lang::XServiceInfo > SubstitutePathVariables_BASE;
 

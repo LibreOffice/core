@@ -37,8 +37,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 
@@ -101,7 +101,7 @@ static const char* CONFIGURATION_PROPERTIES[]           =
 
 //  Configuration access class for WindowState supplier implementation
 
-class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameContainer, XContainerListener >
+class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameContainer, XContainerListener >
 {
     public:
                                   ConfigurationAccess_WindowState( const OUString& aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
@@ -1274,7 +1274,7 @@ bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     return false;
 }
 
-typedef ::cppu::WeakComponentImplHelper2< css::container::XNameAccess,
+typedef ::cppu::WeakComponentImplHelper< css::container::XNameAccess,
         css::lang::XServiceInfo> WindowStateConfiguration_BASE;
 
 class WindowStateConfiguration : private cppu::BaseMutex,

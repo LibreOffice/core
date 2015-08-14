@@ -20,7 +20,6 @@
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>

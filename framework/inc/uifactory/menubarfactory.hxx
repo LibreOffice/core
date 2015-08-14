@@ -26,13 +26,13 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-typedef ::cppu::WeakImplHelper2<
+typedef ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
     css::ui::XUIElementFactory> MenuBarFactory_BASE;
 

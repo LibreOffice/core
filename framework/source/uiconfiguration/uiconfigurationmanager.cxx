@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
@@ -59,7 +59,7 @@ using namespace framework;
 
 namespace {
 
-class UIConfigurationManager :   public ::cppu::WeakImplHelper2<
+class UIConfigurationManager :   public ::cppu::WeakImplHelper<
                                         css::lang::XServiceInfo  ,
                                         css::ui::XUIConfigurationManager2 >
 {

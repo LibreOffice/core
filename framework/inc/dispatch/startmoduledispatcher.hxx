@@ -37,7 +37,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/evntpost.hxx>
 
 namespace framework{
@@ -45,7 +45,7 @@ namespace framework{
 /**
     @short          helper to handle all URLs related to the StartModule
  */
-class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
+class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
                                          css::frame::XNotifyingDispatch,             // => XDispatch
                                          css::frame::XDispatchInformationProvider >
 {

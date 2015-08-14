@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <boost/scoped_ptr.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/evntpost.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -55,7 +55,7 @@ namespace framework{
                     or some other menu entries. Or we terminate the whole application in case this backing mode should not
                     be used.
  */
-class CloseDispatcher : public  ::cppu::WeakImplHelper2<
+class CloseDispatcher : public  ::cppu::WeakImplHelper<
                                     css::frame::XNotifyingDispatch,             // => XDispatch
                                     css::frame::XDispatchInformationProvider >
 {

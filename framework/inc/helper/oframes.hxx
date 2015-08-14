@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace framework{
@@ -54,7 +54,7 @@ namespace framework{
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
-class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrames >
+class OFrames   :   public ::cppu::WeakImplHelper< ::com::sun::star::frame::XFrames >
 {
     public:
 

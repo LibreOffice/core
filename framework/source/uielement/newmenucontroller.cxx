@@ -38,7 +38,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>

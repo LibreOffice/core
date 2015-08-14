@@ -30,12 +30,12 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
 #include <salhelper/singletonref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
 
-class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
+class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
 
     // const, types

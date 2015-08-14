@@ -33,7 +33,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -44,7 +44,7 @@ namespace framework{
 
     @threadsafe     yes
  */
-class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
+class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper<
                                                 css::lang::XServiceInfo             ,
                                                 css::frame::XDispatchRecorderSupplier >
 {

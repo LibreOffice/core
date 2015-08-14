@@ -34,7 +34,7 @@
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 using namespace framework;
@@ -45,7 +45,7 @@ namespace {
     implements a read/write access to a module
     dependent accelerator configuration.
  */
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
             XCUBasedAcceleratorConfiguration,
             css::lang::XServiceInfo > ModuleAcceleratorConfiguration_BASE;
 

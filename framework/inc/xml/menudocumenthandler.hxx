@@ -28,14 +28,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <framework/fwedllapi.h>
 
 namespace framework{
 
 class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
-                                    public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
+                                    public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         ReadMenuDocumentHandlerBase();

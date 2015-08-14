@@ -36,7 +36,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
@@ -347,7 +347,7 @@ bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aEleme
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::ui::XUIElementFactoryManager> UIElementFactoryManager_BASE;
 

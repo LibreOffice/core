@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
 
 namespace framework{
@@ -45,7 +45,7 @@ namespace framework{
                 All these steps are done inside one method call here.
 */
 
-class DispatchHelper : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
+class DispatchHelper : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
 {
 
     // member

@@ -31,7 +31,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 // include all others
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace framework{
@@ -52,7 +52,7 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     yes
 */
-class StatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
+class StatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndicator >
 {
 
     // member

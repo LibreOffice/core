@@ -29,7 +29,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
@@ -51,7 +51,7 @@ using namespace framework;
 
 namespace {
 
-class AddonsToolBarFactory :  public ::cppu::WeakImplHelper2< css::lang::XServiceInfo ,
+class AddonsToolBarFactory :  public ::cppu::WeakImplHelper< css::lang::XServiceInfo ,
                                                               css::ui::XUIElementFactory >
 {
 public:
