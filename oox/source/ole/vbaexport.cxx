@@ -537,30 +537,33 @@ void writePROJECTCOOKIE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.1
-void writeMODULENAME(SvStream& rStrm)
+void writeMODULENAME(SvStream& rStrm, const OUString name)
 {
     rStrm.WriteUInt16(0x0019); // id
-    rStrm.WriteUInt32(7); // sizeOfModuleName
-    exportString(rStrm, "Module1"); // ModuleName // TODO: dependent on the document
+    sal_Int32 n = name.getLength(); // sizeOfModuleName
+    rStrm.WriteUInt32(n);
+    exportString(rStrm, name); // ModuleName
 }
 
 // section 2.3.4.2.3.2.2
-void writeMODULENAMEUNICODE(SvStream& rStrm)
+void writeMODULENAMEUNICODE(SvStream& rStrm, const OUString name)
 {
     rStrm.WriteUInt16(0x0047); // id
-    rStrm.WriteUInt32(14); // sizeOfModuleName
-    exportUTF16String(rStrm, "Module1"); // ModuleName // TODO: dependent on the document
+    sal_Int32 n = name.getLength() * 2; // sizeOfModuleNameUnicode // TODO: better calculation for unicode string length
+    rStrm.WriteUInt32(n);
+    exportUTF16String(rStrm, name); // ModuleNameUnicode
 }
 
 // section 2.3.4.2.3.2.3
-void writeMODULESTREAMNAME(SvStream& rStrm)
+void writeMODULESTREAMNAME(SvStream& rStrm, const OUString streamName)
 {
     rStrm.WriteUInt16(0x001A); // id
-    rStrm.WriteUInt32(7); // sizeOfStreamName
-    exportString(rStrm, "Module1"); // StreamName // TODO: dependent on the document
+    sal_Int32 n = streamName.getLength(); // sizeOfStreamName
+    rStrm.WriteUInt32(n);
+    exportString(rStrm, streamName); // StreamName
     rStrm.WriteUInt16(0x0032); // reserved
-    rStrm.WriteUInt32(14); // sizeOfModuleStreamName
-    exportUTF16String(rStrm, "Module1"); // ModuleStreamName // TODO: dependent on the document
+    rStrm.WriteUInt32(n * 2); // sizeOfStreamNameUnicode // TODO: better calculation for unicode string length
+    exportUTF16String(rStrm, streamName); // StreamNameUnicode
 }
 
 // section 2.3.4.2.3.2.4
@@ -573,11 +576,11 @@ void writeMODULEDOCSTRING(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.5
-void writeMODULEOFFSET(SvStream& rStrm)
+void writeMODULEOFFSET(SvStream& rStrm, sal_uInt32 offset)
 {
     rStrm.WriteUInt16(0x0031); // id
     rStrm.WriteUInt32(0x00000004); // sizeOfTextOffset
-    rStrm.WriteUInt32(0x00000379); // TextOffset // TODO: dependent on the document
+    rStrm.WriteUInt32(offset); // TextOffset
 }
 
 // section 2.3.4.2.3.2.6
@@ -597,23 +600,26 @@ void writeMODULECOOKIE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.8
-void writeMODULETYPE(SvStream& rStrm)
+void writeMODULETYPE(SvStream& rStrm, const OUString type)
 {
-    rStrm.WriteUInt16(0x0021); // id for procedural module
+    if(type == "procedure")
+        rStrm.WriteUInt16(0x0021); // id for a procedural module
+    else
+        rStrm.WriteUInt16(0x0022); // id for document, class or design module
     rStrm.WriteUInt32(0x00000000); // reserved
 }
 
 // section 2.3.4.2.3.2
-void writePROJECTMODULE(SvStream& rStrm)
+void writePROJECTMODULE(SvStream& rStrm, const OUString name, const OUString streamName, sal_uInt32 offset, const OUString type)
 {
-    writeMODULENAME(rStrm);
-    writeMODULENAMEUNICODE(rStrm);
-    writeMODULESTREAMNAME(rStrm);
+    writeMODULENAME(rStrm, name);
+    writeMODULENAMEUNICODE(rStrm, name);
+    writeMODULESTREAMNAME(rStrm, streamName);
     writeMODULEDOCSTRING(rStrm);
-    writeMODULEOFFSET(rStrm);
+    writeMODULEOFFSET(rStrm, offset);
     writeMODULEHELPCONTEXT(rStrm);
     writeMODULECOOKIE(rStrm);
-    writeMODULETYPE(rStrm);
+    writeMODULETYPE(rStrm, type);
     rStrm.WriteUInt16(0x002B); // terminator
     rStrm.WriteUInt32(0x00000000); // reserved
 }
@@ -621,12 +627,13 @@ void writePROJECTMODULE(SvStream& rStrm)
 // section 2.3.4.2.3
 void writePROJECTMODULES(SvStream& rStrm)
 {
+    // TODO: this whole part is document specific
     rStrm.WriteUInt16(0x000F); // id
     rStrm.WriteUInt32(0x00000002); // size of Count
     sal_Int16 count = 5; // Number of modules // TODO: this is dependent on the document
     rStrm.WriteUInt16(count); // Count
     writePROJECTCOOKIE(rStrm);
-    writePROJECTMODULE(rStrm);
+    writePROJECTMODULE(rStrm, "Module1", "Module1", 0x00000379, "procedure");
 }
 
 // section 2.3.4.2
