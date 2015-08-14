@@ -689,7 +689,7 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
     sal_Int32 nColorToken = AttributeConversion::decodeToken( rTextColor );
     sal_Int32 nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
-        nRgbValue = rGraphicHelper.getSystemColor( nColorToken, API_RGB_TRANSPARENT );
+        nRgbValue = rGraphicHelper.getSystemColor( nColorToken );
     if( nRgbValue != API_RGB_TRANSPARENT )
         return OleHelper::encodeOleColor( nRgbValue );
 

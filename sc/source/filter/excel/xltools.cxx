@@ -690,7 +690,7 @@ const OUString XclTools::maSbMacroSuffix( "?language=Basic&location=document" );
 OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell )
 {
     OSL_ENSURE( !rMacroName.isEmpty(), "XclTools::GetSbMacroUrl - macro name is empty" );
-    ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
+    ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName );
     if( aMacroInfo.mbFound )
         return ::ooo::vba::makeMacroURL( aMacroInfo.msResolvedMacro );
     return OUString();

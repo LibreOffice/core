@@ -369,7 +369,7 @@ void ScXMLTableContext::EndElement()
         // Sheet has "print entire sheet" option by default.  Remove it.
         pDoc->ClearPrintRanges(nCurTab);
 
-    ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab, false));
+    ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab));
     if (pOutlineTable)
     {
         ScOutlineArray& rColArray(pOutlineTable->GetColArray());

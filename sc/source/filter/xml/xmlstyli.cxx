@@ -505,7 +505,7 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
     {
         table::CellRangeAddress aAddress = xCellRanges[i];
         ScRange aRange( aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet, aAddress.EndColumn, aAddress.EndRow, aAddress.Sheet );
-        aRangeList.Join( aRange, false );
+        aRangeList.Join( aRange );
     }
 
     ScDocument* pDoc = GetScImport().GetDocument();

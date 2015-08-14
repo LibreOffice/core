@@ -1644,7 +1644,7 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
                 // Do not write the OOXML <definedName> element for new _xlfn.
                 // prefixed functions.
                 if (GetOutput() == EXC_OUTPUT_XML_2007)
-                    AppendNameToken( 0, 0);     // dummy to keep parameter count valid
+                    AppendNameToken( 0 );     // dummy to keep parameter count valid
                 else
                     AppendMacroCallToken( rFuncData.GetExtFuncData() );
             }

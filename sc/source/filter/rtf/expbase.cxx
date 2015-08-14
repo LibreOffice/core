@@ -41,7 +41,7 @@ bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
     pDoc->GetDataStart( nTab, nStartCol, nStartRow );
-    pDoc->GetPrintArea( nTab, nEndCol, nEndRow, true );
+    pDoc->GetPrintArea( nTab, nEndCol, nEndRow );
     return TrimDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 

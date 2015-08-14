@@ -158,7 +158,7 @@ void applySharedFormulas(
             if (it->maCellValue.isEmpty())
             {
                 // No cached cell value. Mark it for re-calculation.
-                pCell->SetDirty(true);
+                pCell->SetDirty();
                 continue;
             }
 
@@ -172,7 +172,7 @@ void applySharedFormulas(
                 break;
                 default:
                     // Mark it for re-calculation.
-                    pCell->SetDirty(true);
+                    pCell->SetDirty();
             }
         }
     }

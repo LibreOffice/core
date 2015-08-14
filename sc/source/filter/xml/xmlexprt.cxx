@@ -931,7 +931,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         if (GetAutoStylePool()->Add(aName, XML_STYLE_FAMILY_TABLE_CELL, aDefaultStyle, aProps))
         {
             OUString* pTemp(new OUString(aName));
-            if (!pCellStyles->AddStyleName(pTemp, nIndex, true))
+            if (!pCellStyles->AddStyleName(pTemp, nIndex))
                 delete pTemp;
         }
         else
@@ -1247,7 +1247,7 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
             std::vector<XMLPropertyState> aPropStates;
             toXMLPropertyStates(aPropStates, rSecAttrs, xMapper, rAttrMap);
             if (!aPropStates.empty())
-                xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates, false);
+                xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
         }
     }
 
@@ -1619,7 +1619,7 @@ void ScXMLExport::FillColumnRowGroups()
 {
     if (pDoc)
     {
-        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable( static_cast<SCTAB>(nCurrentTable), false );
+        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable( static_cast<SCTAB>(nCurrentTable) );
         if(pOutlineTable)
         {
             ScOutlineArray& rCols(pOutlineTable->GetColArray());
@@ -4378,7 +4378,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             }
                             else
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpLowerLimit->GetValue()));
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit, true));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
                             SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
 
@@ -4866,8 +4866,7 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
                         // there aren't existing ones for the prefix used by the
                         // attibutes
                         _GetNamespaceMap().Add( rPrefix,
-                                                pUnknown->GetNamespace( nIdx ),
-                                                XML_NAMESPACE_UNKNOWN );
+                                                pUnknown->GetNamespace( nIdx ) );
                     }
                     nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
                 }

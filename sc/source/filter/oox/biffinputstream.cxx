@@ -386,7 +386,7 @@ void BiffInputStream::setupRecord()
     mbHasComplRec = !mbCont;
     mbEof = !isInRecord();
     // enable decoder in new record
-    enableDecoder( true );
+    enableDecoder();
 }
 
 void BiffInputStream::restartRecord( bool bInvalidateRecSize )

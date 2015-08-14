@@ -190,49 +190,49 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
+                eLanguage, false, false, nL);
             break;
         case 0x01:  // scientific notation
             //fExponent;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::SCIENTIFIC, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
+                eLanguage, false, false, nL);
             break;
         case 0x02:  // currency
             //fMoney;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::CURRENCY, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
+                eLanguage, false, false, nL);
             break;
         case 0x03:  // percentage
             //fPercent;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::PERCENT, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
+                eLanguage, false, false, nL);
             break;
         case 0x04:  // Decimal
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, true, false, nL, 1);
+                eLanguage, true, false, nL);
             break;
         case 0x05:  // unspecified
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
+                eLanguage, false, false, nL);
             break;
         case 0x06:  // unspecified
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
+                eLanguage, false, false, nL);
             nIndex1 = 0;
             break;
         case 0x07:  // Special format
@@ -243,14 +243,14 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                     nIndex1 = pFormTable->GetStandardFormat(
                         css::util::NumberFormat::NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
-                        eLanguage, false, true, nSt, 1);
+                        eLanguage, false, true, nSt);
                     break;
                 case 0x01:  // general Format
                     //fStandard;nSt;
                     nIndex1 = pFormTable->GetStandardFormat(
                         css::util::NumberFormat::NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
-                        eLanguage, false, false, nSt, 1);
+                        eLanguage, false, false, nSt);
                     break;
                 case 0x02:  // Date: Day, Month, Year
                     //fDate;dfDayMonthYearLong;

@@ -1987,7 +1987,7 @@ ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 
 ScHTMLTable* ScHTMLTable::FindNestedTable( ScHTMLTableId nTableId ) const
 {
-    return mxNestedTables.get() ? mxNestedTables->FindTable( nTableId, true ) : 0;
+    return mxNestedTables.get() ? mxNestedTables->FindTable( nTableId ) : 0;
 }
 
 void ScHTMLTable::PutItem( const SfxPoolItem& rItem )

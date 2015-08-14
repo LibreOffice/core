@@ -165,7 +165,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                         OUString aName;
                         aName += OUString( sal_Unicode( 'A' + nTab ) );
                         if (!nTab)
-                            pDoc->RenameTab( nTab, aName, false, false);
+                            pDoc->RenameTab( nTab, aName, false );
                         else
                             pDoc->InsertTab( nTab, aName );
                     }

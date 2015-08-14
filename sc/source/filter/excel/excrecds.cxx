@@ -1011,7 +1011,7 @@ void ExcAutoFilterRecs::AddObjRecs()
         {
             XclObj* pObjRec = new XclObjDropDown( GetObjectManager(), aAddr, IsFiltered( nObj ) );
             GetObjectManager().AddObj( pObjRec );
-            aAddr.IncCol( 1 );
+            aAddr.IncCol();
         }
     }
 }

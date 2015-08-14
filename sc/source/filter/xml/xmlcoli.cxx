@@ -287,7 +287,7 @@ void ScXMLTableColsContext::EndElement()
                 {
                     ScOutlineArray& rColArray = pOutlineTable->GetColArray();
                     bool bResized;
-                    rColArray.Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, true);
+                    rColArray.Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay);
                 }
             }
         }
