@@ -977,14 +977,9 @@ IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, FolderTree *, pBox )
     return 1;
 }
 
-IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr )
+IMPL_LINK_TYPED ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr, void )
 {
-    if( pPtr )
-    {
-        OpenURL( pPtr->GetHdlURL() );
-    }
-
-    return 1;
+    OpenURL( pPtr->GetHdlURL() );
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl )

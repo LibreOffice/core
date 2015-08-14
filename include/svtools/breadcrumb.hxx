@@ -39,7 +39,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
 
         SvtBreadcrumbMode m_eMode;
 
-        Link<> m_aClickHdl;
+        Link<Breadcrumb*,void> m_aClickHdl;
 
         void appendField();
         bool showField( unsigned int nIndex, unsigned int nWidthMax );
@@ -53,7 +53,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
         void dispose() SAL_OVERRIDE;
         void EnableFields( bool bEnable );
 
-        void SetClickHdl( const Link<>& rLink );
+        void SetClickHdl( const Link<Breadcrumb*,void>& rLink );
         OUString GetHdlURL();
 
         void SetRootName( const OUString& rURL );

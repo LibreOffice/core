@@ -196,7 +196,7 @@ private:
 
     DECL_LINK( TreeSelectHdl, FolderTree * );
 
-    DECL_LINK( SelectBreadcrumbHdl, Breadcrumb * );
+    DECL_LINK_TYPED( SelectBreadcrumbHdl, Breadcrumb *, void );
 
     DECL_LINK( NewFolderHdl, void * );
 

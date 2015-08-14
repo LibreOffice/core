@@ -43,7 +43,7 @@ void Breadcrumb::EnableFields( bool bEnable )
     }
 }
 
-void Breadcrumb::SetClickHdl( const Link<>& rLink )
+void Breadcrumb::SetClickHdl( const Link<Breadcrumb*,void>& rLink )
 {
     m_aClickHdl = rLink;
 }
