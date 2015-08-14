@@ -77,7 +77,7 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
     return true;
 }
 
-loplugin::Plugin::Registration< DefaultParams > X("defaultparams");
+loplugin::Plugin::Registration< DefaultParams > X("defaultparams", false);
 
 }
 
