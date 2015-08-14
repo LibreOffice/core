@@ -1416,8 +1416,8 @@ private:
 
     void ProcessAktCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
         bool bCallProcessSpecial);
-    long ReadTextAttr(WW8_CP& rTextPos, bool& rbStartLine);
-    void ReadAttrs(WW8_CP& rNext, WW8_CP& rTextPos, bool& rbStartLine);
+    long ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine);
+    void ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, bool& rbStartLine);
     void CloseAttrEnds();
     bool ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType);
 

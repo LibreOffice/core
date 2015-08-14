@@ -3728,7 +3728,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     }
 }
 
-long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, bool& rbStartLine)
+long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine)
 {
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
@@ -3793,7 +3793,9 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, bool& rbStartLine)
         }
     }
 
-    m_pStrm->Seek(m_pSBase->WW8Cp2Fc( m_pPlcxMan->GetCpOfs() + rTextPos, &m_bIsUnicode));
+    sal_Int32 nRequestedPos = m_pSBase->WW8Cp2Fc(m_pPlcxMan->GetCpOfs() + rTextPos, &m_bIsUnicode);
+    bool bValidPos = checkSeek(*m_pStrm, nRequestedPos);
+    SAL_WARN_IF(!bValidPos, "sw.ww8", "Document claimed to have text at an invalid position, skip attributes for region");
 
     // Find next Attr position (and Skip attributes of field contents if needed)
     if (nSkipChars && !m_bIgnoreText)
@@ -3807,7 +3809,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, bool& rbStartLine)
     {
         if( bDoPlcxManPlusPLus )
             m_pPlcxMan->advance();
-        nNext = m_pPlcxMan->Where();
+        nNext = bValidPos ? m_pPlcxMan->Where() : nTextEnd;
 
         if (m_pPostProcessAttrsInfo &&
             m_pPostProcessAttrsInfo->mnCpStart == nNext)
@@ -3817,7 +3819,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, bool& rbStartLine)
 
         if( (0 <= nNext) && (nSkipPos >= nNext) )
         {
-            nNext = ReadTextAttr( rTextPos, rbStartLine );
+            nNext = ReadTextAttr(rTextPos, nTextEnd, rbStartLine);
             bDoPlcxManPlusPLus = false;
             m_bIgnoreText = true;
         }
@@ -3868,7 +3870,7 @@ void SwWW8ImplReader::ClearParaEndPosition()
         m_aEndParaPos.clear();
 }
 
-void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTextPos, bool& rbStartLine)
+void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, bool& rbStartLine)
 {
     // Dow we have attributes?
     if( rTextPos >= rNext )
@@ -3876,7 +3878,7 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTextPos, bool& rbStartLi
         do
         {
             m_aCurrAttrCP = rTextPos;
-            rNext = ReadTextAttr( rTextPos, rbStartLine );
+            rNext = ReadTextAttr(rTextPos, nTextEnd, rbStartLine);
             if (rTextPos == rNext && rTextPos == WW8_CP_MAX)
                 break;
         }
@@ -3952,18 +3954,19 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
         SAL_WARN_IF(nTextLen > nMaxPossible, "sw.ww8", "TextLen too long");
         nTextLen = nMaxPossible;
     }
-    while ( l<nStartCp+nTextLen )
+    WW8_CP nTextEnd = nStartCp+nTextLen;
+    while (l < nTextEnd)
     {
-        ReadAttrs( nNext, l, bStartLine );// Takes SectionBreaks into account, too
+        ReadAttrs( l, nNext, nTextEnd, bStartLine );// Takes SectionBreaks into account, too
         OSL_ENSURE(m_pPaM->GetNode().GetTextNode(), "Missing txtnode");
 
         if (m_pPostProcessAttrsInfo != NULL)
             PostProcessAttrs();
 
-        if( l>= nStartCp + nTextLen )
+        if (l >= nTextEnd)
             break;
 
-        bStartLine = ReadChars(l, nNext, nStartCp+nTextLen, nCpOfs);
+        bStartLine = ReadChars(l, nNext, nTextEnd, nCpOfs);
 
         // If the previous paragraph was a dropcap then do not
         // create a new txtnode and join the two paragraphs together
