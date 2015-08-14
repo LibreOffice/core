@@ -541,7 +541,7 @@ void writeMODULENAME(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0019); // id
     rStrm.WriteUInt32(7); // sizeOfModuleName
-    exportString(rStrm, "Module1"); // ModuleName
+    exportString(rStrm, "Module1"); // ModuleName // TODO: dependent on the document
 }
 
 // section 2.3.4.2.3.2.2
@@ -549,7 +549,7 @@ void writeMODULENAMEUNICODE(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0047); // id
     rStrm.WriteUInt32(14); // sizeOfModuleName
-    exportUTF16String(rStrm, "Module1"); // ModuleName
+    exportUTF16String(rStrm, "Module1"); // ModuleName // TODO: dependent on the document
 }
 
 // section 2.3.4.2.3.2
