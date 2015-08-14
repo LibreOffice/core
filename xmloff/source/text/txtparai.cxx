@@ -2023,6 +2023,11 @@ public:
         const OUString& rLocalName,
         enum XMLTextPElemTokens nTok,
         XMLHints_Impl& rHnts);
+    XMLAlphaIndexMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts );
 
 protected:
 
@@ -2031,6 +2036,9 @@ protected:
                                   const OUString& sLocalName,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet) SAL_OVERRIDE;
+    virtual void ProcessAttribute( sal_Int32 Element,
+                                   const OUString& sValue,
+                                   Reference<beans::XPropertySet>& rPropSet ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLAlphaIndexMarkImportContext_Impl,
@@ -2047,6 +2055,21 @@ XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
         sPrimaryKeyReading("PrimaryKeyReading"),
         sSecondaryKeyReading("SecondaryKeyReading"),
         sMainEntry("IsMainEntry")
+{
+}
+
+XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    enum XMLTextPElemTokens nTok,
+    XMLHints_Impl& rHnts )
+:   XMLIndexMarkImportContext_Impl( rImport, Element, nTok, rHnts ),
+    sPrimaryKey("PrimaryKey"),
+    sSecondaryKey("SecondaryKey"),
+    sTextReading("TextReading"),
+    sPrimaryKeyReading("PrimaryKeyReading"),
+    sSecondaryKeyReading("SecondaryKeyReading"),
+    sMainEntry("IsMainEntry")
 {
 }
 
@@ -2096,6 +2119,43 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     {
         XMLIndexMarkImportContext_Impl::ProcessAttribute(
             nNamespace, sLocalName, sValue, rPropSet);
+    }
+}
+
+void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
+    sal_Int32 Element,
+    const OUString& sValue,
+    Reference<beans::XPropertySet>& rPropSet )
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_key1) )
+    {
+        rPropSet->setPropertyValue(sPrimaryKey, uno::makeAny(sValue));
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_key2) )
+    {
+        rPropSet->setPropertyValue(sSecondaryKey, uno::makeAny(sValue));
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_key1_phonetic) )
+    {
+        rPropSet->setPropertyValue(sPrimaryKeyReading, uno::makeAny(sValue));
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_key2_phonetic) )
+    {
+        rPropSet->setPropertyValue(sSecondaryKeyReading, uno::makeAny(sValue));
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_main_entry) )
+    {
+        bool bMainEntry = false;
+        bool bTmp(false);
+
+        if( sax::Converter::convertBool(bTmp, sValue))
+            bMainEntry = bTmp;
+
+        rPropSet->setPropertyValue(sMainEntry, uno::makeAny(bMainEntry));
+    }
+    else
+    {
+        XMLIndexMarkImportContext_Impl::ProcessAttribute( Element, sValue, rPropSet );
     }
 }
 
