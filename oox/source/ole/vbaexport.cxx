@@ -46,58 +46,7 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
-class VBACompressionChunk
-{
-public:
-
-    VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize);
-
-    void write();
-
-private:
-    SvStream& mrCompressedStream;
-    const sal_uInt8* mpUncompressedData;
-    sal_uInt8* mpCompressedChunkStream;
-
-    // same as DecompressedChunkEnd in the spec
-    sal_Size mnChunkSize;
-
-    // CompressedCurrent according to the spec
-    sal_uInt64 mnCompressedCurrent;
-
-    // CompressedEnd according to the spec
-    sal_uInt64 mnCompressedEnd;
-
-    // DecompressedCurrent according to the spec
-    sal_uInt64 mnDecompressedCurrent;
-
-    // DecompressedEnd according to the spec
-    sal_uInt64 mnDecompressedEnd;
-
-    // Start of the current decompressed chunk
-    sal_uInt64 mnChunkStart;
-
-    void PackCompressedChunkSize(size_t nSize, sal_uInt16& rHeader);
-
-    void PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader);
-
-    void PackCompressedChunkSignature(sal_uInt16& rHeader);
-
-    void compressTokenSequence();
-
-    void compressToken(size_t index, sal_uInt8& nFlagByte);
-
-    void SetFlagBit(size_t index, bool bVal, sal_uInt8& rFlag);
-
-    sal_uInt16 CopyToken(size_t nLength, size_t nOffset);
-
-    void match(size_t& rLength, size_t& rOffset);
-
-    void CopyTokenHelp(sal_uInt16& rLengthMask, sal_uInt16& rOffsetMask,
-            sal_uInt16& rBitCount, sal_uInt16& rMaximumLength);
-
-    void writeRawChunk();
-};
+}
 
 VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize):
     mrCompressedStream(rCompressedStream),
@@ -328,19 +277,6 @@ void VBACompressionChunk::writeRawChunk()
     }
 }
 
-class VBACompression
-{
-public:
-    VBACompression(SvStream& rCompressedStream,
-            SvMemoryStream& rUncompressedStream);
-
-    void write();
-
-private:
-    SvStream& mrCompressedStream;
-    SvMemoryStream& mrUncompressedStream;
-};
-
 VBACompression::VBACompression(SvStream& rCompressedStream,
         SvMemoryStream& rUncompressedStream):
     mrCompressedStream(rCompressedStream),
@@ -366,8 +302,6 @@ void VBACompression::write()
         nRemainingSize -= nChunkSize;
         bStreamNotEnded = nRemainingSize != 0;
     }
-}
-
 }
 
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
