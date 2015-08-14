@@ -452,7 +452,6 @@ void Calendar::ImplFormat()
     {
         maOldFormatFirstDate = maFirstDate;
         maOldFormatLastDate  = aLastDate;
-        DateRangeChanged();
     }
 
     // get DateInfo
@@ -1704,11 +1703,6 @@ void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings();
         Invalidate();
     }
-}
-
-void Calendar::DateRangeChanged()
-{
-    maDateRangeChangedHdl.Call( this );
 }
 
 void Calendar::RequestDateInfo()
