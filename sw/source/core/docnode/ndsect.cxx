@@ -56,7 +56,7 @@
 #include <comcore.hrc>
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <ndsect.hxx>
 #include <tools/datetimeutils.hxx>
 
@@ -1229,7 +1229,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat( 0 );
     pSectFormat->CopyAttrs( *GetSection().GetFormat() );
 
-    boost::scoped_ptr<SwTOXBase> pTOXBase;
+    std::unique_ptr<SwTOXBase> pTOXBase;
     if (TOX_CONTENT_SECTION == GetSection().GetType())
     {
         OSL_ENSURE( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
