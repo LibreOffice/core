@@ -356,7 +356,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
             DoSave();
     else if(nNewItemId == mnSelectId)
     {
-        pTbx->CheckItem( nNewItemId );
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetEditMode( true );
         if( pTbx->IsKeyEvent() )
         {
@@ -368,7 +368,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnRectId)
     {
-        pTbx->CheckItem( nNewItemId );
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_RECT );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -378,7 +378,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnCircleId)
     {
-        pTbx->CheckItem( nNewItemId );
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_CIRC );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -388,7 +388,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnPolyId)
     {
-        pTbx->CheckItem( nNewItemId );
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_POLY );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -398,7 +398,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnFreePolyId)
     {
-        pTbx->CheckItem( nNewItemId );
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetObjKind( OBJ_FREEFILL );
         if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
         {
@@ -419,16 +419,26 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
         pIMapWnd->DoPropertyDialog();
     else if(nNewItemId == mnPolyEditId)
     {
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetPolyEditMode( pTbx->IsItemChecked( TBI_POLYEDIT ) ? SID_BEZIER_MOVE : 0 );
         if( pTbx->IsKeyEvent() && pTbx->IsItemChecked( TBI_POLYEDIT ) )
             pIMapWnd->StartPolyEdit();
     }
     else if(nNewItemId == mnPolyMoveId)
+    {
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetPolyEditMode( SID_BEZIER_MOVE );
+    }
     else if(nNewItemId == mnPolyInsertId)
+    {
+        SetActiveTool( nNewItemId );
         pIMapWnd->SetPolyEditMode( SID_BEZIER_INSERT );
+    }
     else if(nNewItemId == mnPolyDeleteId)
+    {
+        SetActiveTool( nNewItemId );
         pIMapWnd->GetSdrView()->DeleteMarkedPoints();
+    }
     else if(nNewItemId == mnUndoId)
     {
         URLLoseFocusHdl( NULL );
@@ -552,6 +562,32 @@ bool SvxIMapDlg::DoSave()
     }
 
     return bRet;
+}
+
+void SvxIMapDlg::SetActiveTool( sal_uInt16 nId )
+{
+    m_pTbxIMapDlg1->CheckItem( mnSelectId, mnSelectId == nId );
+    m_pTbxIMapDlg1->CheckItem( mnRectId, mnRectId == nId );
+    m_pTbxIMapDlg1->CheckItem( mnCircleId, mnCircleId == nId );
+    m_pTbxIMapDlg1->CheckItem( mnPolyId, mnPolyId == nId );
+    m_pTbxIMapDlg1->CheckItem( mnFreePolyId, mnFreePolyId == nId );
+
+    m_pTbxIMapDlg1->CheckItem( mnPolyInsertId, mnPolyInsertId == nId );
+    m_pTbxIMapDlg1->CheckItem( mnPolyDeleteId, false );
+
+    bool bMove = mnPolyMoveId == nId
+                || ( mnPolyEditId == nId
+                && !m_pTbxIMapDlg1->IsItemChecked( TBI_POLYINSERT )
+                && !m_pTbxIMapDlg1->IsItemChecked( TBI_POLYDELETE ) );
+
+    m_pTbxIMapDlg1->CheckItem( mnPolyMoveId, bMove );
+
+    bool bEditMode = ( mnPolyEditId == nId )
+                    || ( mnPolyMoveId == nId )
+                    || ( mnPolyInsertId == nId )
+                    || ( mnPolyDeleteId == nId );
+
+    m_pTbxIMapDlg1->CheckItem( mnPolyEditId, bEditMode );
 }
 
 IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )

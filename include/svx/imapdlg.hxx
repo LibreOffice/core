@@ -129,6 +129,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 
     void                DoOpen();
     bool                DoSave();
+    void                SetActiveTool( sal_uInt16 nId );
 
 public:
 
