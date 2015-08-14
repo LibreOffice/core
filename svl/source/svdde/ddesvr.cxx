@@ -697,17 +697,17 @@ void DdeTopic::_Disconnect( sal_IntPtr nId )
     Disconnect( nId );
 }
 
-DdeData* DdeTopic::Get(SotClipboardFormatId nFmt)
+DdeData* DdeTopic::Get(SotClipboardFormatId /*nFmt*/)
 {
     return NULL;
 }
 
-bool DdeTopic::Put( const DdeData* r )
+bool DdeTopic::Put( const DdeData* )
 {
     return false;
 }
 
-bool DdeTopic::Execute( const OUString* r )
+bool DdeTopic::Execute( const OUString* )
 {
     return false;
 }
