@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aed3d3a_28e4cf0b",
+        "filename": "canvas/source/cairo/cairo_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-14T15:16:28Z",
+      "side": 1,
+      "message": "nice - probably then do away with the stub, too?",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_88f19bd0",
+        "filename": "canvas/source/cairo/cairo_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-14T15:16:28Z",
+      "side": 1,
+      "message": "same here - stub can be inline?",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_68eed7ed",
+        "filename": "canvas/source/cairo/cairo_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-14T15:16:28Z",
+      "side": 1,
+      "message": "and here :)",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_c8d28334",
         "filename": "canvas/source/tools/page.cxx",
         "patchSetId": 1
@@ -13,6 +64,24 @@
       "writtenOn": "2015-08-14T14:39:03Z",
       "side": 1,
       "message": "Change made to be consistent with spriteredrawmanager.cxx:459",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c8b9e3ee",
+        "filename": "canvas/source/tools/page.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-14T15:16:28Z",
+      "side": 1,
+      "message": "why not a range-based for?",
+      "parentUuid": "9aed3d3a_c8d28334",
       "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -47,6 +116,24 @@
       "writtenOn": "2015-08-14T14:39:03Z",
       "side": 1,
       "message": "Not a huge fan of the for_each + lambda here, but the TODO stated that a for_each was the end goal.",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a8be1fd2",
+        "filename": "canvas/source/tools/spriteredrawmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-14T15:16:28Z",
+      "side": 1,
+      "message": "nah, ignore the todo, that is some 10 years old or so ;)\n\nDo what makes the most sense ...",
+      "parentUuid": "9aed3d3a_a8d73f22",
       "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
