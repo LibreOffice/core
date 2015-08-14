@@ -140,7 +140,8 @@ friend class SfxPrinterController;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
     Window*                     pWindow;
-    sal_Bool                        bNoNewWindow;
+    sal_Bool                    bNoNewWindow;
+    sal_Bool                    mbPrinterSettingsModified;
 
 protected:
     virtual void                Activate(sal_Bool IsMDIActivate);

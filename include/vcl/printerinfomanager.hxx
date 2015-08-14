@@ -64,6 +64,7 @@ struct PrinterInfo : JobData
     m_aFontSubstitutes;
     boost::unordered_map< fontID, fontID >
     m_aFontSubstitutions;
+    bool                        m_bPapersizeFromSetup;
 
     PrinterInfo() :
             JobData(),

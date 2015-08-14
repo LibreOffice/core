@@ -56,6 +56,7 @@ struct ImplJobSetup
     sal_uIntPtr         mnDriverDataLen;    // length of system specific data
     sal_uInt8*          mpDriverData;       // system specific data (will be streamed a byte block)
     ::boost::unordered_map< OUString, OUString, OUStringHash >         maValueMap;
+    bool            mbPapersizeFromSetup;
 
                     ImplJobSetup();
                     ImplJobSetup( const ImplJobSetup& rJobSetup );

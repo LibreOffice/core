@@ -283,6 +283,14 @@ void RTSPaperPage::update()
         m_pSlotText->Enable( sal_False );
         m_pSlotBox->Enable( sal_False );
     }
+
+    // disable those, unless user wants to use papersize from printer prefs
+    // as they have no influence on what's going to be printed anyway
+    if (!m_pParent->m_aJobData.m_bPapersizeFromSetup)
+    {
+        m_pPaperBox->Enable( sal_False );
+        m_pOrientBox->Enable( sal_False );
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -316,6 +324,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
+    m_pParent->SetDataModified( true );
     return 0;
 }
 
@@ -480,6 +489,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
             FillValueBox( pKey );
         }
     }
+    m_pParent->SetDataModified( true );
     return 0;
 }
 
@@ -815,10 +825,12 @@ extern "C" {
         int nRet = 0;
         RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
 
+        // return 0 if cancel was pressed or if the data
+        // weren't modified, 1 otherwise
         if( aDialog.Execute() )
         {
             rJobData = aDialog.getSetup();
-            nRet = 1;
+            nRet = aDialog.GetDataModified() ? 1 : 0;
         }
 
         return nRet;

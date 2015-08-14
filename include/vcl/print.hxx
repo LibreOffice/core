@@ -288,11 +288,12 @@ public:
 
     virtual void                Error();
 
-    const OUString&            GetName() const             { return maPrinterName; }
-    const OUString&            GetDriverName() const       { return maDriver; }
-    sal_Bool                        IsDefPrinter() const        { return mbDefPrinter; }
-    sal_Bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
-    sal_Bool                        IsValid() const             { return !IsDisplayPrinter(); }
+    const OUString&             GetName() const             { return maPrinterName; }
+    const OUString&             GetDriverName() const       { return maDriver; }
+    bool                        IsDefPrinter() const        { return mbDefPrinter; }
+    void                        SetDefPrinter(bool bDef)    {  mbDefPrinter = bDef; }
+    bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
+    bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
     sal_uLong                       GetCapabilities( sal_uInt16 nType ) const;
     sal_Bool                        HasSupport( PrinterSupport eFeature ) const;
@@ -301,7 +302,7 @@ public:
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
     void                        SetJobValue( const OUString& rKey, const OUString& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
-    sal_Bool                        Setup( Window* pWindow = NULL );
+    sal_Bool                        Setup( Window* pWindow = NULL, bool bPapersizeFromSetup = false );
     sal_Bool                        SetPrinterProps( const Printer* pPrinter );
 
     // SetPrinterOptions is used internally only now
@@ -530,6 +531,8 @@ public:
     SAL_DLLPRIVATE bool getReversePrint() const;
     SAL_DLLPRIVATE void setPapersizeFromSetup( sal_Bool i_bPapersizeFromSetup );
     SAL_DLLPRIVATE bool getPapersizeFromSetup() const;
+    VCL_PLUGIN_PUBLIC void setPrinterModified( bool i_bPapersizeFromSetup );
+    VCL_PLUGIN_PUBLIC bool getPrinterModified() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void resetPaperToLastConfigured();
     VCL_PLUGIN_PUBLIC void setJobState( com::sun::star::view::PrintableState );
