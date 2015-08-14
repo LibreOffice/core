@@ -21,7 +21,7 @@ if uname | grep -i CYGWIN >/dev/null; then
         dir=$(realpath "${dir}/..")
     done
 
-    exedir="${dir}"/workdir/LinkTarget/Executable
+    exedir=$(cygpath -m "${dir}"/workdir/LinkTarget/Executable)
     export URE_BOOTSTRAP=file:///$(cygpath -m "${dir}")/instdir/program/fundamental.ini
     export PATH=${PATH:+$PATH:}"${dir}"/instdir/program
 
