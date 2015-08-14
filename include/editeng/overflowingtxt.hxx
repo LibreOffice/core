@@ -24,6 +24,13 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
 
+#include <com/sun/star/uno/Reference.h>
+
+namespace com { namespace sun { namespace star {
+  namespace datatransfer {
+    class XTransferable;
+} } } }
+
 class OUString;
 
 
@@ -41,8 +48,8 @@ class OverflowingText
 {
 
 public:
-        OutlinerParaObject *GetJuxtaposedParaObject(Outliner *, OutlinerParaObject *);
-        OutlinerParaObject *GetDeeplyMergedParaObject(Outliner *, OutlinerParaObject *);
+        OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
+        OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
         ESelection GetInsertionPointSel() const;
 
         //OUString GetHeadingLines() const;
@@ -52,11 +59,15 @@ public:
 private:
     friend class Outliner;
     // Constructor
-    OverflowingText(EditTextObject *pTObj);
+    //OverflowingText(EditTextObject *pTObj);
+    OverflowingText(com::sun::star::uno::Reference<
+        com::sun::star::datatransfer::XTransferable> xOverflowingContent);
 
     OutlinerParaObject *impMakeOverflowingParaObject(Outliner *pOutliner);
 
-    const EditTextObject *mpContentTextObj;
+    //const EditTextObject *mpContentTextObj;
+    com::sun::star::uno::Reference<
+        com::sun::star::datatransfer::XTransferable> mxOverflowingContent;
 };
 
 class NonOverflowingText {
@@ -89,7 +100,7 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
     public:
         OFlowChainedText(Outliner *, bool );
 
-        OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
+        OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject *);
         OutlinerParaObject *RemoveOverflowingText(Outliner *);
 
         ESelection GetInsertionPointSel() const;

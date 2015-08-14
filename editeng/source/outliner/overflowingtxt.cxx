@@ -24,6 +24,9 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/editdata.hxx>
+
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 
 /* Helper functions for *OverflowingText classes  */
@@ -115,15 +118,18 @@ OutlinerParaObject *impGetDeeplyMergedParaObject(Outliner *pOutl,
 
 // class OverflowingText
 
-OverflowingText::OverflowingText(EditTextObject *pTObj)
-    : mpContentTextObj(pTObj->Clone())
+OverflowingText::OverflowingText(com::sun::star::uno::Reference<
+        com::sun::star::datatransfer::XTransferable> xOverflowingContent) :
+        mxOverflowingContent(xOverflowingContent)
 {
-    // XXX: may have to delete pTObj
+
 }
+
 
 ESelection OverflowingText::GetInsertionPointSel() const
 {
-    return getLastPositionSel(mpContentTextObj);
+    assert(0);
+    return getLastPositionSel(NULL);
 }
 
 // class NonOverflowingText
@@ -163,19 +169,26 @@ ESelection NonOverflowingText::GetOverflowPointSel() const
 
 // The equivalent of ToParaObject for OverflowingText. Here we are prepending the overflowing text to the old dest box's text
 // XXX: In a sense a better name for OverflowingText and NonOverflowingText are respectively DestLinkText and SourceLinkText
-OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
 {
-    if (mpContentTextObj == NULL) {
-        fprintf(stderr, "[Chaining] OverflowingText's mpContentTextObj is NULL!\n");
-        return NULL;
+    if (!pNextPObj) {
+        pOutl->SetToEmptyText();
+    } else {
+        pOutl->SetText(*pNextPObj);
     }
 
-    OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
-    // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
-    pOverflowingPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
+    // XXX: this code should be moved in Outliner directly
+    //          creating Outliner::InsertText(...transferable...)
+    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
+    EditPaM aPaM = pOutl->pEditEngine->InsertText(mxOverflowingContent,
+                                                  OUString(),
+                                                  aStartSel.Min(),
+                                                  true);
 
-    // Simply Juxtaposing; no within-para merging
-    return impGetJuxtaposedParaObject(pOutl, pOverflowingPObj, pNextPObj);
+    // Separate Paragraphs
+    pOutl->pEditEngine->InsertParaBreak(EditSelection(aPaM, aPaM));
+
+    return pOutl->CreateParaObject();
 }
 
 OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *pOutliner)
@@ -194,11 +207,24 @@ OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *pOut
 }
 
 
-OutlinerParaObject *OverflowingText::GetDeeplyMergedParaObject(Outliner *pOutliner, OutlinerParaObject *pNextPObj)
+OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
 {
-    OutlinerParaObject *pOverflowingPObj = impMakeOverflowingParaObject(pOutliner);
 
-    return impGetDeeplyMergedParaObject(pOutliner, pOverflowingPObj, pNextPObj);
+    if (!pNextPObj) {
+        pOutl->SetToEmptyText();
+    } else {
+        pOutl->SetText(*pNextPObj);
+    }
+
+    // XXX: this code should be moved in Outliner directly
+    //          creating Outliner::InsertText(...transferable...)
+    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
+    EditPaM aPaM = pOutl->pEditEngine->InsertText(mxOverflowingContent,
+                                                  OUString(),
+                                                  aStartSel.Min(),
+                                                  true);
+
+    return pOutl->CreateParaObject();
 }
 
 // class OFlowChainedText
@@ -221,18 +247,18 @@ ESelection OFlowChainedText::GetOverflowPointSel() const
     return mpNonOverflowingTxt->GetOverflowPointSel();
 }
 
-OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
+OutlinerParaObject *OFlowChainedText::InsertOverflowingText(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
 {
     // Just return the roughly merged paras for now
-    if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
+    if (mpOverflowingTxt == NULL)
         return NULL;
 
     if (mbIsDeepMerge) {
         fprintf(stderr, "[TEXTCHAINFLOW - OF] Deep merging paras\n" );
-        return mpOverflowingTxt->GetDeeplyMergedParaObject(pOutliner, pTextToBeMerged );
+        return mpOverflowingTxt->DeeplyMergeParaObject(pOutliner, pTextToBeMerged );
     } else {
         fprintf(stderr, "[TEXTCHAINFLOW - OF] Juxtaposing paras\n" );
-        return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
+        return mpOverflowingTxt->JuxtaposeParaObject(pOutliner, pTextToBeMerged );
     }
 }
 

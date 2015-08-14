@@ -2226,9 +2226,8 @@ OverflowingText *Outliner::GetOverflowingText() const
     sal_Int32 nLastParaLen = GetText(GetParagraph(nLastPara)).getLength();
     aOverflowingTextSel = ESelection(nOverflowingPara, nLen,
                                      nLastPara, nLastParaLen);
+    return new OverflowingText(pEditEngine->CreateTransferable(aOverflowingTextSel));
 
-    EditTextObject *pTObj = pEditEngine->CreateTextObject(aOverflowingTextSel);
-    return new OverflowingText(pTObj);
 }
 
 void Outliner::ClearOverflowingParaNum()

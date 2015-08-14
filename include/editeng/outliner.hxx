@@ -585,6 +585,8 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     friend class OutlinerUndoCheckPara;
     friend class OutlinerUndoChangeParaFlags;
 
+    friend class NonOverflowingText;
+
     OutlinerEditEng*    pEditEngine;
 
     ParagraphList*      pParaList;

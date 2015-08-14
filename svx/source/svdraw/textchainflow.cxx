@@ -219,8 +219,11 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
         return;
     }
 
-    OutlinerParaObject *pNewText = impGetOverflowingParaObject(pOverflOutl);
+    OutlinerParaObject *pNewText =
+        mpOverflChText->InsertOverflowingText(pOverflOutl,
+                                              mpNextLink->GetOutlinerParaObject());
     fprintf(stderr, "[TEXTCHAINFLOW - OF] DEST box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
+
     if (pNewText)
         mpNextLink->NbcSetOutlinerParaObject(pNewText);
 
