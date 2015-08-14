@@ -541,7 +541,7 @@ void writePROJECTMODULES(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x000F); // id
     rStrm.WriteUInt32(0x00000002); // size of Count
-    rStrm.WriteUInt16(5); // Count
+    rStrm.WriteUInt16(5); // Count // TODO: this is dependent on the document
     writePROJECTCOOKIE(rStrm);
 }
 
