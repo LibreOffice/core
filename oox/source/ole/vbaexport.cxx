@@ -634,7 +634,7 @@ void writePROJECTMODULES(SvStream& rStrm)
     rStrm.WriteUInt16(count); // Count
     writePROJECTCOOKIE(rStrm);
     writePROJECTMODULE(rStrm, "Module1", "Module1", 0x00000379, "procedure");
-    writePROJECTMODULE(rStrm, "ThisWorkbook", "ThisWorkbook", 0x000004BD, "other");
+    writePROJECTMODULE(rStrm, "ThisWorkbook", "ThisWorkbook", 0x00000325, "other");
     writePROJECTMODULE(rStrm, "Sheet1", "Sheet1", 0x00000325, "other");
     writePROJECTMODULE(rStrm, "Sheet2", "Sheet2", 0x00000325, "other");
     writePROJECTMODULE(rStrm, "Sheet3", "Sheet3", 0x00000325, "other");
