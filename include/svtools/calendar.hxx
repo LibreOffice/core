@@ -216,7 +216,6 @@ private:
                     mbSelLeft:1,
                     mbAllSel:1,
                     mbDropPos:1;
-    Link<>          maDoubleClickHdl;
     Link<>          maSelectHdl;
     Timer           maDragScrollTimer;
     sal_uInt16          mnDragScrollHitTest;
@@ -274,7 +273,6 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void            DoubleClick();
     void            Select();
 
     void            SelectDate( const Date& rDate, bool bSelect = true );

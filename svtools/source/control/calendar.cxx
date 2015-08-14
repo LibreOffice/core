@@ -1393,9 +1393,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                 }
                 else
                 {
-                    if ( (rMEvt.GetClicks() == 2) && (nHitTest & CALENDAR_HITTEST_DAY) )
-                        DoubleClick();
-                    else
+                    if ( (rMEvt.GetClicks() != 2) || !(nHitTest & CALENDAR_HITTEST_DAY) )
                     {
                         delete mpOldSelectTable;
                         maOldCurDate = maCurDate;
@@ -1697,11 +1695,6 @@ void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings();
         Invalidate();
     }
-}
-
-void Calendar::DoubleClick()
-{
-    maDoubleClickHdl.Call( this );
 }
 
 void Calendar::Select()
