@@ -344,6 +344,11 @@ public:
         const OUString& rLocalName,
         XMLHints_Impl& rHnts,
         const Reference<xml::sax::XAttributeList> & xAttrList);
+    XMLEndReferenceContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        XMLHints_Impl& rHnts,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList );
 };
 
 TYPEINIT1( XMLEndReferenceContext_Impl, SvXMLImportContext );
@@ -372,6 +377,35 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
                 // set end and stop searching
                 pHint->SetEnd(GetImport().GetTextImport()->
                                      GetCursor()->getStart() );
+                break;
+            }
+        }
+        // else: no start (in this paragraph) -> ignore
+    }
+}
+
+XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
+    SvXMLImport& rImport,
+    sal_Int32 /*Element*/,
+    XMLHints_Impl& rHints,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLImportContext( rImport )
+{
+    OUString sName;
+
+    // borrow from XMLStartRefernceContext_Impl
+    if( XMLStartReferenceContext_Impl::FindName( xAttrList, sName ) )
+    {
+        // search for reference start
+        sal_uInt16 nCount = rHints.size();
+        for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
+        {
+            XMLHint_Impl *pHint = &rHints[nPos];
+            if( pHint->IsReference() &&
+                sName.equals( static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName()) )
+            {
+                // set end and stop searching
+                pHint->SetEnd(GetImport().GetTextImport()->GetCursor()->getStart() );
                 break;
             }
         }
