@@ -412,7 +412,7 @@ class WW8PLCFx_PCDAttrs : public WW8PLCFx
 private:
     WW8PLCFpcd_Iter* pPcdI;
     WW8PLCFx_PCD* pPcd;
-    sal_uInt8** const pGrpprls;      // attribute of Piece-table
+    sal_uInt8* const* pGrpprls; // attribute of Piece-table
     SVBT32 aShortSprm;          // mini storage: can contain ONE sprm with
                                 // 1 byte param
     sal_uInt16 nGrpprls;            // attribute count of this
@@ -1011,8 +1011,7 @@ private:
     WW8PLCFpcd_Iter*    pPieceIter; // for FastSave ( iterator for previous )
     WW8PLCFx_PCD*       pPLCFx_PCD;     // ditto
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
-    sal_uInt8**         pPieceGrpprls;  // attributes of Piece-Table
-    sal_uInt16          nPieceGrpprls;  // number of such attributes
+    std::vector<sal_uInt8*> aPieceGrpprls;  // attributes of Piece-Table
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
     void DeletePieceTable();
