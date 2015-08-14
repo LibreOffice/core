@@ -557,10 +557,10 @@ void writeMODULESTREAMNAME(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x001A); // id
     rStrm.WriteUInt32(7); // sizeOfStreamName
-    exportString(rStrm, "Module1"); // StreamName
+    exportString(rStrm, "Module1"); // StreamName // TODO: dependent on the document
     rStrm.WriteUInt16(0x0032); // reserved
     rStrm.WriteUInt32(14); // sizeOfModuleStreamName
-    exportUTF16String(rStrm, "Module1"); // ModuleStreamName
+    exportUTF16String(rStrm, "Module1"); // ModuleStreamName // TODO: dependent on the document
 }
 
 // section 2.3.4.2.3.2
