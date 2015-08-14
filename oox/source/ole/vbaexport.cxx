@@ -46,6 +46,328 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
+class VBACompressionChunk
+{
+public:
+
+    VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize);
+
+    void write();
+
+private:
+    SvStream& mrCompressedStream;
+    const sal_uInt8* mpUncompressedData;
+    sal_uInt8* mpCompressedChunkStream;
+
+    // same as DecompressedChunkEnd in the spec
+    sal_Size mnChunkSize;
+
+    // CompressedCurrent according to the spec
+    sal_uInt64 mnCompressedCurrent;
+
+    // CompressedEnd according to the spec
+    sal_uInt64 mnCompressedEnd;
+
+    // DecompressedCurrent according to the spec
+    sal_uInt64 mnDecompressedCurrent;
+
+    // DecompressedEnd according to the spec
+    sal_uInt64 mnDecompressedEnd;
+
+    // Start of the current decompressed chunk
+    sal_uInt64 mnChunkStart;
+
+    void PackCompressedChunkSize(size_t nSize, sal_uInt16& rHeader);
+
+    void PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader);
+
+    void PackCompressedChunkSignature(sal_uInt16& rHeader);
+
+    void compressTokenSequence();
+
+    void compressToken(size_t index, sal_uInt8& nFlagByte);
+
+    void SetFlagBit(size_t index, bool bVal, sal_uInt8& rFlag);
+
+    sal_uInt16 CopyToken(size_t nLength, size_t nOffset);
+
+    void match(size_t& rLength, size_t& rOffset);
+
+    void CopyTokenHelp(sal_uInt16& rLengthMask, sal_uInt16& rOffsetMask,
+            sal_uInt16& rBitCount, sal_uInt16& rMaximumLength);
+
+    void writeRawChunk();
+};
+
+VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize):
+    mrCompressedStream(rCompressedStream),
+    mpUncompressedData(pData),
+    mnChunkSize(nChunkSize)
+{
+}
+
+// section 2.4.1.3.7
+void VBACompressionChunk::write()
+{
+    mnChunkStart = mrCompressedStream.Tell();
+
+    // we need to fill these two bytes later
+    mrCompressedStream.WriteUInt16(0x0);
+
+    mnDecompressedCurrent = 0;
+    mnCompressedCurrent = 2;
+    mnCompressedEnd = 4098;
+    mnDecompressedEnd = std::min<sal_uInt64>(4096, mnChunkSize);
+
+    // if that stream becomes larger than 4096 bytes then
+    // we use the uncompressed stream
+    sal_uInt8 pCompressedChunkStream[4098];
+    mpCompressedChunkStream = pCompressedChunkStream;
+
+    while (mnDecompressedCurrent < mnDecompressedEnd
+            && mnCompressedCurrent < mnCompressedEnd)
+    {
+        // compress token sequence
+        compressTokenSequence();
+    }
+
+    bool bCompressedFlag = true;
+    if (mnDecompressedCurrent < mnDecompressedEnd)
+    {
+        writeRawChunk();
+        bCompressedFlag = false;
+    }
+    else
+    {
+        // copy the compressed stream to our output stream
+        mrCompressedStream.Write(pCompressedChunkStream, mnCompressedCurrent);
+    }
+
+    // handle header bytes
+    size_t nSize = mnCompressedCurrent;
+    sal_uInt16 nHeader = 0;
+    PackCompressedChunkSize(nSize, nHeader);
+    PackCompressedChunkFlag(bCompressedFlag, nHeader);
+    PackCompressedChunkSignature(nHeader);
+
+    // overwrite the two bytes
+    sal_uInt64 nEnd = mrCompressedStream.Tell();
+    mrCompressedStream.Seek(mnChunkStart);
+    mrCompressedStream.WriteUInt16(nHeader);
+    mrCompressedStream.Seek(nEnd);
+}
+
+// section 2.4.1.3.13
+void VBACompressionChunk::PackCompressedChunkSize(size_t nSize, sal_uInt16& rHeader)
+{
+    sal_uInt16 nTemp1 = rHeader & 0xF000;
+    sal_uInt16 nTemp2 = nSize - 3;
+    rHeader = nTemp1 | nTemp2;
+}
+
+// section 2.4.1.3.16
+void VBACompressionChunk::PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader)
+{
+    sal_uInt16 nTemp1 = rHeader & 0x7FFF;
+    sal_uInt16 nTemp2 = ((sal_uInt16)bCompressed) << 15;
+    rHeader = nTemp1 | nTemp2;
+}
+
+// section 2.4.1.3.14
+void VBACompressionChunk::PackCompressedChunkSignature(sal_uInt16& rHeader)
+{
+    sal_Int32 nTemp = rHeader & 0x8FFFF;
+    rHeader = nTemp | 0x3000;
+}
+
+// section 2.4.1.3.8
+void VBACompressionChunk::compressTokenSequence()
+{
+    sal_uInt64 nFlagByteIndex = mnCompressedCurrent;
+    sal_uInt8 nFlagByte = 0;
+    ++mnCompressedCurrent;
+    for (size_t index = 0; index <= 7; ++index)
+    {
+        if (mnDecompressedCurrent < mnDecompressedEnd
+                && mnCompressedCurrent < mnCompressedEnd)
+        {
+            compressToken(index, nFlagByte);
+        }
+    }
+    mpCompressedChunkStream[nFlagByteIndex] = nFlagByte;
+}
+
+void setUInt16(sal_uInt8* pBuffer, size_t nPos, sal_uInt16 nVal)
+{
+    pBuffer[nPos] = nVal & 0xFFFF;
+    pBuffer[nPos+1] = (nVal & 0xFFFF0000) >> 8;
+}
+
+// section 2.4.1.3.9
+void VBACompressionChunk::compressToken(size_t index, sal_uInt8& nFlagByte)
+{
+    size_t nLength = 0;
+    size_t nOffset = 0;
+    match(nLength, nOffset);
+    if (nOffset != 0)
+    {
+        if (mnCompressedCurrent + 1 < mnCompressedEnd)
+        {
+            sal_uInt16 nToken = CopyToken(nLength, nOffset);
+            setUInt16(mpCompressedChunkStream, mnCompressedCurrent, nToken);
+            SetFlagBit(index, 1, nFlagByte);
+            mnCompressedCurrent += 2;
+            mnDecompressedCurrent += nLength;
+        }
+        else
+        {
+            mnCompressedCurrent = mnCompressedEnd;
+        }
+    }
+    else
+    {
+        if (mnCompressedCurrent + 1 < mnCompressedEnd)
+        {
+            mpCompressedChunkStream[mnCompressedCurrent] = mpUncompressedData[mnDecompressedCurrent];
+            ++mnCompressedCurrent;
+            ++mnDecompressedCurrent;
+        }
+        else
+        {
+            mnCompressedCurrent = mnCompressedEnd;
+        }
+    }
+}
+
+// section 2.4.1.3.18
+void VBACompressionChunk::SetFlagBit(size_t index, bool bVal, sal_uInt8& rFlag)
+{
+    size_t nTemp1 = ((int)bVal) << index;
+    sal_uInt8 nTemp2 = rFlag & (~nTemp1);
+    rFlag = nTemp2 | nTemp1;
+}
+
+// section 2.4.1.3.19.3
+sal_uInt16 VBACompressionChunk::CopyToken(size_t nLength, size_t nOffset)
+{
+    sal_uInt16 nLengthMask = 0;
+    sal_uInt16 nOffsetMask = 0;
+    sal_uInt16 nBitCount = 0;
+    sal_uInt16 nMaxLength;
+    CopyTokenHelp(nLengthMask, nOffsetMask, nBitCount, nMaxLength);
+    sal_uInt16 nTemp1 = nOffset -1;
+    sal_uInt16 nTemp2 = 16 - nBitCount;
+    sal_uInt16 nTemp3 = nLength - 3;
+    sal_uInt16 nToken = (nTemp1 << nTemp2) | nTemp3;
+    return nToken;
+}
+
+// section 2.4.1.3.19.4
+void VBACompressionChunk::match(size_t& rLength, size_t& rOffset)
+{
+    size_t nBestLen = 0;
+    sal_Int32 nCandidate = mnDecompressedCurrent - 1;
+    sal_Int32 nBestCandidate = nCandidate;
+    while (nCandidate >= 0)
+    {
+        sal_Int32 nC = nCandidate;
+        sal_Int32 nD = mnDecompressedCurrent;
+        size_t nLen = 0;
+        while (nD < static_cast<sal_Int32>(mnChunkSize) // TODO: check if this needs to be including a minus -1
+                && mpUncompressedData[nC] == mpUncompressedData[nD])
+        {
+            ++nLen;
+            ++nC;
+            ++nD;
+        }
+        if (nLen > nBestLen)
+        {
+            nBestLen = nLen;
+            nBestCandidate = nCandidate;
+        }
+        --nCandidate;
+    }
+
+    if (nBestLen >= 3)
+    {
+        sal_uInt16 nMaximumLength = 0;
+        sal_uInt16 nLengthMask, nOffsetMask, nBitCount;
+        CopyTokenHelp(nLengthMask, nOffsetMask, nBitCount, nMaximumLength);
+        rLength = std::min<sal_uInt16>(nMaximumLength, nBestLen);
+        rOffset = mnDecompressedCurrent - nBestCandidate;
+    }
+    else
+    {
+        rLength = 0;
+        rOffset = 0;
+    }
+}
+
+// section 2.4.1.3.19.1
+void VBACompressionChunk::CopyTokenHelp(sal_uInt16& rLengthMask, sal_uInt16& rOffsetMask,
+        sal_uInt16& rBitCount, sal_uInt16& rMaximumLength)
+{
+    sal_uInt16 nDifference = mnDecompressedCurrent;
+    sal_uInt16 nBitCount = std::ceil(std::log2(nDifference));
+    rBitCount = std::max<sal_uInt16>(nBitCount, 4);
+    rLengthMask = 0xffff >> rBitCount;
+    rOffsetMask = ~rLengthMask;
+    rMaximumLength = rLengthMask + 3;
+}
+
+// section 2.4.1.3.10
+void VBACompressionChunk::writeRawChunk()
+{
+    // we need to use up to 4096 bytes of the original stream
+    // and fill the rest with padding
+    mrCompressedStream.Write(mpUncompressedData, mnChunkSize);
+    sal_Size nPadding = 4096 - mnChunkSize;
+    for (size_t i = 0; i < nPadding; ++i)
+    {
+        mrCompressedStream.WriteUInt8(0);
+    }
+}
+
+class VBACompression
+{
+public:
+    VBACompression(SvStream& rCompressedStream,
+            SvMemoryStream& rUncompressedStream);
+
+    void write();
+
+private:
+    SvStream& mrCompressedStream;
+    SvMemoryStream& mrUncompressedStream;
+};
+
+VBACompression::VBACompression(SvStream& rCompressedStream,
+        SvMemoryStream& rUncompressedStream):
+    mrCompressedStream(rCompressedStream),
+    mrUncompressedStream(rUncompressedStream)
+{
+}
+
+// section 2.4.1.3.6
+void VBACompression::write()
+{
+    // section 2.4.1.1.1
+    mrCompressedStream.WriteUInt8(0x01); // signature byte of a compressed container
+    bool bStreamNotEnded = true;
+    const sal_uInt8* pData = (const sal_uInt8*)mrUncompressedStream.GetData();
+    sal_Size nSize = mrUncompressedStream.GetEndOfData();
+    sal_Size nRemainingSize = nSize;
+    while(bStreamNotEnded)
+    {
+        sal_Size nChunkSize = nRemainingSize > 4096 ? 4096 : nRemainingSize;
+        VBACompressionChunk aChunk(mrCompressedStream, &pData[nSize - nRemainingSize], nChunkSize);
+
+        // update the uncompressed chunk start marker
+        nRemainingSize -= nChunkSize;
+        bStreamNotEnded = nRemainingSize != 0;
+    }
+}
+
 }
 
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
