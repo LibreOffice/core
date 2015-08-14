@@ -498,10 +498,22 @@ void writeREFERENCENAME(SvStream& rStrm)
     exportUTF16String(rStrm, "stdole"); // nameUnicode // TODO find out where these values are coming from
 }
 
+// section 2.3.4.2.2.5
+void writeREFERENCEREGISTERED(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x000D); // id
+    rStrm.WriteUInt32(104); // size of sizeOfLibid, Libid, reserved 1 and reserved 2
+    rStrm.WriteUInt32(94); // sizeOfLibid
+    exportString(rStrm, "*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation");
+    rStrm.WriteUInt32(0x00000000); // reserved 1
+    rStrm.WriteUInt16(0x0000); // reserved 2
+}
+
 // section 2.3.4.2.2.1
 void writeREFERENCE(SvStream& rStrm)
 {
     writeREFERENCENAME(rStrm);
+    writeREFERENCEREGISTERED(rStrm);
 }
 
 // section 2.3.4.2.2
