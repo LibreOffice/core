@@ -528,11 +528,29 @@ void writePROJECTREFERENCES(SvStream& rStrm)
     writeREFERENCE(rStrm, "Office", "*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library");
 }
 
+// section 2.3.4.2.3.1
+void writePROJECTCOOKIE(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0013); // id
+    rStrm.WriteUInt32(0x00000002); // size
+    rStrm.WriteUInt16(0xFFFF); // cookie
+}
+
+// section 2.3.4.2.3
+void writePROJECTMODULES(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x000F); // id
+    rStrm.WriteUInt32(0x00000002); // size of Count
+    rStrm.WriteUInt16(5); // Count
+    writePROJECTCOOKIE(rStrm);
+}
+
 // section 2.3.4.2
 void exportDirStream(SvStream& rStrm)
 {
     writePROJECTINFORMATION(rStrm);
     writePROJECTREFERENCES(rStrm);
+    writePROJECTMODULES(rStrm);
 }
 
 }
