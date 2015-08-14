@@ -220,6 +220,8 @@ SvxIMapDlg::~SvxIMapDlg()
 
 void SvxIMapDlg::dispose()
 {
+    pIMapWnd->SetUpdateLink( Link<>() );
+
     // Delete URL-List
     pIMapWnd.disposeAndClear();
     DELETEZ( pOwnData );
