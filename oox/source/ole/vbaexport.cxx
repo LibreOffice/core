@@ -552,11 +552,23 @@ void writeMODULENAMEUNICODE(SvStream& rStrm)
     exportUTF16String(rStrm, "Module1"); // ModuleName // TODO: dependent on the document
 }
 
+// section 2.3.4.2.3.2.3
+void writeMODULESTREAMNAME(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x001A); // id
+    rStrm.WriteUInt32(7); // sizeOfStreamName
+    exportString(rStrm, "Module1"); // StreamName
+    rStrm.WriteUInt16(0x0032); // reserved
+    rStrm.WriteUInt32(14); // sizeOfModuleStreamName
+    exportUTF16String(rStrm, "Module1"); // ModuleStreamName
+}
+
 // section 2.3.4.2.3.2
 void writePROJECTMODULE(SvStream& rStrm)
 {
     writeMODULENAME(rStrm);
     writeMODULENAMEUNICODE(rStrm);
+    writeMODULESTREAMNAME(rStrm);
 }
 
 // section 2.3.4.2.3
