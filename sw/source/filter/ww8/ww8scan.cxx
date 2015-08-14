@@ -939,8 +939,8 @@ const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
 WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase)
     : WW8PLCFx(eVersion, true), pPcdI(pPLCFx_PCD->GetPLCFIter()),
-    pPcd(pPLCFx_PCD), pGrpprls(pBase->pPieceGrpprls),
-    nGrpprls(pBase->nPieceGrpprls)
+    pPcd(pPLCFx_PCD), pGrpprls(pBase->aPieceGrpprls.data()),
+    nGrpprls(pBase->aPieceGrpprls.size())
 {
 }
 
@@ -1525,43 +1525,14 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
         return NULL;
 
     WW8_FC nClxPos = pWwF->fcClx;
+
+    if (!checkSeek(*pStr, nClxPos))
+        return NULL;
+
     sal_Int32 nClxLen = pWwF->lcbClx;
     sal_Int32 nLeft = nClxLen;
-    sal_Int16 nGrpprl = 0;
 
-    if (!checkSeek(*pStr, nClxPos))
-        return NULL;
-
-    while( true ) // Zaehle Zahl der Grpprls
-    {
-        sal_uInt8 clxt(2);
-        pStr->ReadUChar( clxt );
-        nLeft--;
-        if( 2 == clxt )                         // PLCFfpcd ?
-            break;                              // PLCFfpcd gefunden
-        if( 1 == clxt )                         // clxtGrpprl ?
-        {
-            if (nGrpprl == SHRT_MAX)
-                return NULL;
-            nGrpprl++;
-        }
-        sal_uInt16 nLen(0);
-        pStr->ReadUInt16( nLen );
-        nLeft -= 2 + nLen;
-        if( nLeft < 0 )
-            return NULL;                        // gone wrong
-        pStr->SeekRel( nLen );                  // ueberlies grpprl
-    }
-
-    if (!checkSeek(*pStr, nClxPos))
-        return NULL;
-
-    nLeft = nClxLen;
-    pPieceGrpprls = new sal_uInt8*[nGrpprl + 1];
-    memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * sizeof(sal_uInt8 *) );
-    nPieceGrpprls = nGrpprl;
-    sal_Int16 nAktGrpprl = 0;                       // read Grpprls
-    while( true )
+    while (true)
     {
         sal_uInt8 clxt(2);
         pStr->ReadUChar( clxt );
@@ -1575,6 +1546,8 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             return NULL;                        // gone wrong
         if( 1 == clxt )                         // clxtGrpprl ?
         {
+            if (aPieceGrpprls.size() == SHRT_MAX)
+                return NULL;
             if (nLen > pStr->remainingSize())
                 return NULL;
             sal_uInt8* p = new sal_uInt8[nLen+2];         // allocate
@@ -1584,12 +1557,13 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
                 delete[] p;
                 return NULL;
             }
-            pPieceGrpprls[nAktGrpprl++] = p;    // trage in Array ein
+            aPieceGrpprls.push_back(p);    // add to array
         }
         else
-            pStr->SeekRel( nLen );              // ueberlies nicht-Grpprl
+            pStr->SeekRel( nLen );         // non-Grpprl left
     }
-    // lies Piece Table PLCF ein
+
+    // read Piece Table PLCF
     sal_Int32 nPLCFfLen(0);
     if (pWwF->GetFIBVersion() <= ww::eWW2)
     {
@@ -1605,20 +1579,15 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
 
 void WW8ScannerBase::DeletePieceTable()
 {
-    if( pPieceGrpprls )
-    {
-        for( sal_uInt8** p = pPieceGrpprls; *p; p++ )
-            delete[] (*p);
-        delete[] pPieceGrpprls;
-        pPieceGrpprls = 0;
-    }
+    for (auto pGrppl : aPieceGrpprls)
+        delete[] pGrppl;
 }
 
 WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     SvStream* pDataSt, WW8Fib* pWwFib )
     : pWw8Fib(pWwFib), pMainFdoa(0), pHdFtFdoa(0), pMainTxbx(0),
     pMainTxbxBkd(0), pHdFtTxbx(0), pHdFtTxbxBkd(0), pMagicTables(0),
-    pSubdocs(0), pExtendedAtrds(0), pPieceGrpprls(0)
+    pSubdocs(0), pExtendedAtrds(0)
 {
     pPiecePLCF = OpenPieceTable( pTblSt, pWw8Fib );             // Complex
     if( pPiecePLCF )
