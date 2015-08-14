@@ -596,6 +596,13 @@ void writeMODULECOOKIE(SvStream& rStrm)
     rStrm.WriteUInt16(0xFFFF); // HelpContext
 }
 
+// section 2.3.4.2.3.2.8
+void writeMODULETYPE(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0021); // id for procedural module
+    rStrm.WriteUInt32(0x00000000); // reserved
+}
+
 // section 2.3.4.2.3.2
 void writePROJECTMODULE(SvStream& rStrm)
 {
@@ -606,6 +613,7 @@ void writePROJECTMODULE(SvStream& rStrm)
     writeMODULEOFFSET(rStrm);
     writeMODULEHELPCONTEXT(rStrm);
     writeMODULECOOKIE(rStrm);
+    writeMODULETYPE(rStrm);
 }
 
 // section 2.3.4.2.3
