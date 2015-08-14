@@ -1460,7 +1460,7 @@ class DemoWidgets : public WorkWindow
 
 public:
     DemoWidgets() :
-        WorkWindow(NULL, WB_STDWORK),
+        WorkWindow(NULL, WB_APP | WB_STDWORK),
         mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
         mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
         mpButton(VclPtrInstance<PushButton>(mpBox.get()))
@@ -1489,9 +1489,9 @@ public:
     virtual ~DemoWidgets() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
-        mpBox.disposeAndClear();
         mpToolbox.disposeAndClear();
         mpButton.disposeAndClear();
+        mpBox.disposeAndClear();
         WorkWindow::dispose();
     }
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE
