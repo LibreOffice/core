@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_a8a57fb6",
+        "filename": "canvas/source/cairo/cairo_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-14T15:47:34Z",
+      "side": 1,
+      "message": "Good call. I\u0027ll remove the stubs in the next patch.",
+      "parentUuid": "9aed3d3a_28e4cf0b",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_88f19bd0",
         "filename": "canvas/source/cairo/cairo_spritecanvashelper.cxx",
         "patchSetId": 1
@@ -134,6 +152,24 @@
       "side": 1,
       "message": "nah, ignore the todo, that is some 10 years old or so ;)\n\nDo what makes the most sense ...",
       "parentUuid": "9aed3d3a_a8d73f22",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c8a0c3a8",
+        "filename": "canvas/source/tools/spriteredrawmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-14T15:47:34Z",
+      "side": 1,
+      "message": "Awesome! That\u0027s what I was hoping for, but I wanted to check first. I\u0027ll remove the TODO as well, since it\u0027s only causing more confusion.",
+      "parentUuid": "9aed3d3a_a8be1fd2",
       "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
