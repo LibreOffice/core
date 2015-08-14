@@ -646,6 +646,8 @@ void exportDirStream(SvStream& rStrm)
     writePROJECTINFORMATION(rStrm);
     writePROJECTREFERENCES(rStrm);
     writePROJECTMODULES(rStrm);
+    rStrm.WriteUInt16(0x0010); // terminator
+    rStrm.WriteUInt32(0x00000000); // reserved
 }
 
 }
