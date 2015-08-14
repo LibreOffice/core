@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_086e2bc9",
+        "filename": "sc/source/filter/html/htmlpars.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1979,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-14T11:20:17Z",
+      "side": 1,
+      "message": "This looks wrong, maEntryMap does not own the entries, if taking these comments seriously ;) from ScHTMLTable::ImplPushEntryToList()\n\n    // HTML entry list does not own the entries\n    rEntryList.push_back( rxEntry.get() );\n    // mrEEParseList (reference to member of ScEEParser) owns the entries\n    mrEEParseList.push_back( rxEntry.release() );\n\nand also in the header declaration of ScHTMLTable::mrEEParseList.\n\nDeleting the entries should probably happen in ScEEParser::~ScEEParser() that currently does only maList.clear()",
+      "revId": "6392928bc84251d99888c22eee71464211f5af2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
