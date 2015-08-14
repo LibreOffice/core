@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/configpaths.hxx>
@@ -55,7 +55,7 @@ namespace {
             real job. We do it, control the life cycle of this internal
             wrapped job and inform any interested listener if it finish.
  */
-class JobDispatch : public  ::cppu::WeakImplHelper4<
+class JobDispatch : public  ::cppu::WeakImplHelper<
                             css::lang::XServiceInfo
                           , css::lang::XInitialization
                           , css::frame::XDispatchProvider

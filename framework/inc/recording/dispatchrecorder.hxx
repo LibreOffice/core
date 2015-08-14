@@ -41,12 +41,12 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
 class DispatchRecorder
-    : public  ::cppu::WeakImplHelper3<
+    : public  ::cppu::WeakImplHelper<
                 css::lang::XServiceInfo
               , css::frame::XDispatchRecorder
               , css::container::XIndexReplace >

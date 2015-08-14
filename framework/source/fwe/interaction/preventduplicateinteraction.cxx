@@ -72,7 +72,7 @@ css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::u
         if ( !xHandler.is() )
             return css::uno::Any();
     }
-    return ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >::queryInterface( aType );
+    return ::cppu::WeakImplHelper< css::task::XInteractionHandler2 >::queryInterface( aType );
 }
 
 void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)

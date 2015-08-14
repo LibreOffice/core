@@ -81,6 +81,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <config_orcus.h>
 
@@ -91,7 +92,7 @@ namespace framework {
 
 using namespace com::sun::star;
 
-class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventListener      ,
+class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventListener      ,
                                                         css::frame::XDispatchResultListener >
 {
     private:

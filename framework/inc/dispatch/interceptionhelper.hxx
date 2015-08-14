@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 
 #include <tools/wldcrd.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <deque>
@@ -47,7 +47,7 @@ namespace framework{
     @attention  Don't use this class as direct member - use it dynamicly. Do not derive from this class.
                 We hold a weakreference to our owner not to our superclass.
  */
-class InterceptionHelper : public  ::cppu::WeakImplHelper3<
+class InterceptionHelper : public  ::cppu::WeakImplHelper<
                                      css::frame::XDispatchProvider,
                                      css::frame::XDispatchProviderInterception,
                                      css::lang::XEventListener >

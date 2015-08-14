@@ -43,7 +43,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
@@ -66,7 +66,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper5<
+class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper<
                                            css::lang::XServiceInfo,
                                            css::frame::XDispatchProvider,
                                            css::frame::XDispatch,

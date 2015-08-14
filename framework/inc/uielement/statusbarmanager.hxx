@@ -34,7 +34,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
@@ -44,7 +44,7 @@ namespace framework
 {
 
 class FrameworkStatusBar;
-class StatusBarManager : public ::cppu::WeakImplHelper3<
+class StatusBarManager : public ::cppu::WeakImplHelper<
                                    css::frame::XFrameActionListener,
                                    css::lang::XComponent,
                                    css::ui::XUIConfigurationListener >

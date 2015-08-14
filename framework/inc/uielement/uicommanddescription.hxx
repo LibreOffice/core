@@ -28,13 +28,13 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-typedef ::cppu::WeakComponentImplHelper2< com::sun::star::lang::XServiceInfo,
+typedef ::cppu::WeakComponentImplHelper< com::sun::star::lang::XServiceInfo,
         com::sun::star::container::XNameAccess > UICommandDescription_BASE;
 
 class UICommandDescription : private cppu::BaseMutex,

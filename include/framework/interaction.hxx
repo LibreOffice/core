@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <framework/fwedllapi.h>
@@ -54,8 +53,6 @@ namespace framework{
                     }
 
     @implements     XInteractionRequest
-
-    @base           WeakImplHelper1
 
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
@@ -80,8 +77,6 @@ class FWE_DLLPUBLIC RequestFilterSelect
                     access on interaction results for user of these class.
 
     @implements     XInteractionRequest
-
-    @base           WeakImplHelper1
 
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)

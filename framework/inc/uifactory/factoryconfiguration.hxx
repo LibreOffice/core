@@ -31,7 +31,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 
@@ -43,7 +43,7 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 
 class ConfigurationAccess_ControllerFactory : // interfaces
-                                                    public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
+                                                    public  ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener>
 {
 public:
                     ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const OUString& _sRoot );

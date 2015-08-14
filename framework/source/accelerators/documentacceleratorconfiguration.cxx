@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -48,7 +48,7 @@ namespace {
     based accelerator configuration.
  */
 
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
              XMLBasedAcceleratorConfiguration,
              css::lang::XServiceInfo> DocumentAcceleratorConfiguration_BASE;
 

@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <unotools/moduleoptions.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -52,7 +52,7 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
+class PersistentWindowState :   public  ::cppu::WeakImplHelper<
                                            css::lang::XInitialization,
                                            css::frame::XFrameActionListener > // => XEventListener
 {

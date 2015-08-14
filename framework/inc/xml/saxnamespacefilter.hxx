@@ -24,7 +24,7 @@
 #include <xml/xmlnamespaces.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <stack>
 #include <framework/fwedllapi.h>
@@ -33,7 +33,7 @@ namespace framework
 {
 
 class FWE_DLLPUBLIC SaxNamespaceFilter :
-                           public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
+                           public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         SaxNamespaceFilter( ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rSax1DocumentHandler );

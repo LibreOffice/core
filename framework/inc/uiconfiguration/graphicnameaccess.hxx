@@ -24,11 +24,11 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework
 {
-    class GraphicNameAccess : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameAccess >
+    class GraphicNameAccess : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameAccess >
     {
         public:
             GraphicNameAccess();

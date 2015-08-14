@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
@@ -39,7 +40,7 @@ namespace {
     implements a read/write access to the global
     accelerator configuration.
  */
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
              XCUBasedAcceleratorConfiguration,
              css::lang::XServiceInfo > GlobalAcceleratorConfiguration_BASE;
 class GlobalAcceleratorConfiguration : public GlobalAcceleratorConfiguration_BASE

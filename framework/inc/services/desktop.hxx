@@ -49,7 +49,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/numberedcollection.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <unotools/cmdoptions.hxx>
 
@@ -88,7 +88,7 @@ enum ELoadState
     @devstatus  ready to use
     @threadsafe yes
 *//*-*************************************************************************************************************/
-typedef cppu::WeakComponentImplHelper6<
+typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
            css::frame::XDesktop2                ,
            css::frame::XTasksSupplier           ,

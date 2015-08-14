@@ -71,7 +71,7 @@
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/miscopt.hxx>
@@ -696,7 +696,7 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 namespace {
 
 class QuietInteractionContext:
-    public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >,
+    public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >,
     private boost::noncopyable
 {
 public:

@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -41,7 +41,7 @@
 namespace {
 
 class ModuleManager:
-    public cppu::WeakImplHelper3<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::frame::XModuleManager2,
         css::container::XContainerQuery >,

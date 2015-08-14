@@ -53,12 +53,12 @@
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework
 {
 
-class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::awt::XDockableWindowListener,
+class ToolbarLayoutManager : public ::cppu::WeakImplHelper< ::com::sun::star::awt::XDockableWindowListener,
                                                              ::com::sun::star::ui::XUIConfigurationListener,
                                                              ::com::sun::star::awt::XWindowListener >
 {

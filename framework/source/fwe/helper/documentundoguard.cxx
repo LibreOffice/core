@@ -21,7 +21,7 @@
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -46,7 +46,7 @@ namespace framework
 
     //= UndoManagerContextListener
 
-    typedef ::cppu::WeakImplHelper1 <   XUndoManagerListener
+    typedef ::cppu::WeakImplHelper <   XUndoManagerListener
                                     >   UndoManagerContextListener_Base;
     class UndoManagerContextListener : public UndoManagerContextListener_Base
     {

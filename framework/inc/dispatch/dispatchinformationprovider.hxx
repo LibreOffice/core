@@ -30,7 +30,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -38,7 +38,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
-class DispatchInformationProvider : public  ::cppu::WeakImplHelper1< css::frame::XDispatchInformationProvider >
+class DispatchInformationProvider : public  ::cppu::WeakImplHelper< css::frame::XDispatchInformationProvider >
 {
 
     // member

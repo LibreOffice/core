@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 #include <fwidllapi.h>
@@ -38,7 +38,7 @@
 namespace framework
 {
 class ConstItemContainer;
-class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun::star::container::XIndexContainer>
+class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XIndexContainer>
 {
     friend class ConstItemContainer;
 

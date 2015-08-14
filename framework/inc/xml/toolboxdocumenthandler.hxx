@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <stdtypes.h>
 #include <framework/fwedllapi.h>
 
@@ -35,7 +35,7 @@ namespace framework{
 // Hash code function for using in all hash maps of follow implementation.
 
 class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
-                                    public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
+                                    public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         enum ToolBox_XML_Entry

@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
 #include <stdtypes.h>
@@ -36,7 +36,7 @@ namespace framework{
 // Hash code function for using in all hash maps of follow implementation.
 
 class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
-                                        public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
+                                        public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         enum StatusBar_XML_Entry

@@ -46,8 +46,7 @@
 #include <com/sun/star/form/XReset.hpp>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <salhelper/singletonref.hxx>
 
 // definition
@@ -63,7 +62,7 @@ const char CFG_ENTRY_MODULES[] = "Modules";
     implements a read/write access to the accelerator configuration.
  */
 class XMLBasedAcceleratorConfiguration : public    IStorageListener,
-                                         public    ::cppu::WeakImplHelper2<
+                                         public    ::cppu::WeakImplHelper<
                                                        css::form::XReset,                    // TODO use XPresetHandler instead if available
                                                        css::ui::XAcceleratorConfiguration >  // => css::ui::XUIConfigurationPersistence
                                                                                              //    css::ui::XUIConfigurationStorage
@@ -234,7 +233,7 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
 
 };
 
-class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
+class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
                                                      css::util::XChangesListener,
                                                      css::lang::XComponent,
                                                      css::form::XReset,                    // TODO use XPresetHandler instead if available

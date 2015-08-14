@@ -28,14 +28,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/status.hxx>
 
 namespace framework {
 
 // declaration
 
-class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
+class VCLStatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndicator >
 {
 
     // member

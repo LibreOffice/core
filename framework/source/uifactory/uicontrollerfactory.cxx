@@ -26,7 +26,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css::uno;
@@ -38,7 +38,7 @@ using namespace framework;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::frame::XUIControllerFactory > UIControllerFactory_BASE;
 

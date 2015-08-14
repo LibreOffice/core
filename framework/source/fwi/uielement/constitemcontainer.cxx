@@ -25,7 +25,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using namespace cppu;
@@ -53,7 +53,7 @@ static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void
 }
 
 class OPropertySetHelperInfo_Impl
-    : public WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
+    : public WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo >
 {
     Sequence < Property > aInfos;
 

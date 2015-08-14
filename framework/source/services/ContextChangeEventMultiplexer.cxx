@@ -25,7 +25,7 @@
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -42,7 +42,7 @@ using namespace css::uno;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper3 <
+typedef ::cppu::WeakComponentImplHelper <
     css::ui::XContextChangeEventMultiplexer,
     css::lang::XServiceInfo,
     css::lang::XEventListener

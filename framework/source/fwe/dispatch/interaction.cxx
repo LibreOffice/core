@@ -39,7 +39,7 @@ namespace framework{
 
     @implements     XInteractionFilterSelect
 
-    @base           ImplInheritanceHelper1
+    @base           ImplInheritanceHelper
                     ContinuationBase
 
     @devstatus      ready to use
@@ -83,7 +83,7 @@ OUString SAL_CALL ContinuationFilterSelect::getFilter() throw( css::uno::Runtime
     return m_sFilter;
 }
 
-class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::task::XInteractionRequest >
 {
 public:
     RequestFilterSelect_Impl( const OUString& sURL );
@@ -187,7 +187,7 @@ uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
     return uno::Reference < task::XInteractionRequest > (pImp);
 }
 
-class InteractionRequest_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class InteractionRequest_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::task::XInteractionRequest >
 {
     uno::Any m_aRequest;
     uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;

@@ -37,12 +37,12 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework
 {
 
-typedef ::cppu::WeakImplHelper6<
+typedef ::cppu::WeakImplHelper<
            ::com::sun::star::ui::XUIElement,
            ::com::sun::star::ui::XUIElementSettings,
            ::com::sun::star::lang::XInitialization,

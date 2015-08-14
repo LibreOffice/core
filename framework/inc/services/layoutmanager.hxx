@@ -49,7 +49,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -67,7 +67,7 @@ namespace framework
     {
         class InfoHelperBuilder;
     }
-    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::lang::XServiceInfo
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::frame::XLayoutManager2
                                     ,   ::com::sun::star::awt::XWindowListener
                                     >   LayoutManager_Base;
