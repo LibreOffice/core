@@ -544,10 +544,19 @@ void writeMODULENAME(SvStream& rStrm)
     exportString(rStrm, "Module1"); // ModuleName
 }
 
+// section 2.3.4.2.3.2.2
+void writeMODULENAMEUNICODE(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0047); // id
+    rStrm.WriteUInt32(14); // sizeOfModuleName
+    exportUTF16String(rStrm, "Module1"); // ModuleName
+}
+
 // section 2.3.4.2.3.2
 void writePROJECTMODULE(SvStream& rStrm)
 {
     writeMODULENAME(rStrm);
+    writeMODULENAMEUNICODE(rStrm);
 }
 
 // section 2.3.4.2.3
