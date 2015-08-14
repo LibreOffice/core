@@ -406,10 +406,8 @@ namespace canvas
         // now, calc the _true_ update area, by merging all sprite's
         // true update areas into one rectangle
         ::basegfx::B2DRange aTrueArea( rUpdateArea.maComponentList.begin()->second.getUpdateArea() );
-        ::std::for_each( rUpdateArea.maComponentList.begin(),
-                         rUpdateArea.maComponentList.end(),
-                         [&aTrueArea]( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
-                         { aTrueArea.expand(cp.second.getUpdateArea()); } );
+        for( auto& rArea : rUpdateArea.maComponentList )
+            aTrueArea.expand(rArea.second.getUpdateArea());
 
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
@@ -453,13 +451,8 @@ namespace canvas
         // sprite without a canvas to render into makes not terribly
         // much sense.
 
-        // TODO(Q3): Once boost 1.33 is in, change back to for_each
-        // with ::boost::mem_fn. For the time being, explicit loop due
-        // to cdecl declaration of all UNO methods.
-        ListOfSprites::reverse_iterator aCurr( maSprites.rbegin() );
-        ListOfSprites::reverse_iterator aEnd( maSprites.rend() );
-        while( aCurr != aEnd )
-            (*aCurr++)->dispose();
+        for( auto& rCurr : maSprites )
+            rCurr->dispose();
 
         maSprites.clear();
     }
