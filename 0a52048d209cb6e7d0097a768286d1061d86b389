@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_c8d28334",
+        "filename": "canvas/source/tools/page.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-14T14:39:03Z",
+      "side": 1,
+      "message": "Change made to be consistent with spriteredrawmanager.cxx:459",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_6817f7ed",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-14T14:39:03Z",
+      "side": 1,
+      "message": "Change made to be consistent with spriteredrawmanager.cxx:459",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_a8d73f22",
+        "filename": "canvas/source/tools/spriteredrawmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-14T14:39:03Z",
+      "side": 1,
+      "message": "Not a huge fan of the for_each + lambda here, but the TODO stated that a for_each was the end goal.",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_881a3b16",
+        "filename": "canvas/source/tools/surfaceproxy.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-14T14:39:03Z",
+      "side": 1,
+      "message": "Change made to be consistent with spriteredrawmanager.cxx:459",
+      "revId": "0a52048d209cb6e7d0097a768286d1061d86b389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
