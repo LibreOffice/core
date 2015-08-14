@@ -22,7 +22,6 @@
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <boost/bind.hpp>
 
 #include "surfaceproxy.hxx"
 
@@ -92,7 +91,8 @@ namespace canvas
     {
         ::std::for_each( maSurfaceList.begin(),
                          maSurfaceList.end(),
-                         ::boost::mem_fn(&Surface::setColorBufferDirty));
+                         []( const SurfaceSharedPtr& rSurfacePtr )
+                         { rSurfacePtr->setColorBufferDirty(); } );
     }
 
 
@@ -103,13 +103,8 @@ namespace canvas
                              const ::basegfx::B2DPoint&     rPos,
                              const ::basegfx::B2DHomMatrix& rTransform )
     {
-        ::std::for_each( maSurfaceList.begin(),
-                         maSurfaceList.end(),
-                         ::boost::bind( &Surface::draw,
-                                        _1,
-                                        fAlpha,
-                                        ::boost::cref(rPos),
-                                        ::boost::cref(rTransform)));
+        for( auto& rSurfacePtr : maSurfaceList )
+            rSurfacePtr->draw( fAlpha, rPos, rTransform );
 
         return true;
     }
@@ -123,14 +118,8 @@ namespace canvas
                              const ::basegfx::B2DRange&     rArea,
                              const ::basegfx::B2DHomMatrix& rTransform )
     {
-        ::std::for_each( maSurfaceList.begin(),
-                         maSurfaceList.end(),
-                         ::boost::bind(&Surface::drawRectangularArea,
-                                       _1,
-                                       fAlpha,
-                                       ::boost::cref(rPos),
-                                       ::boost::cref(rArea),
-                                       ::boost::cref(rTransform)));
+        for( auto& rSurfacePtr : maSurfaceList )
+            rSurfacePtr->drawRectangularArea( fAlpha, rPos, rArea, rTransform );
 
         return true;
     }
@@ -160,14 +149,9 @@ namespace canvas
                        RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
 
-        ::std::for_each( maSurfaceList.begin(),
-                         maSurfaceList.end(),
-                         ::boost::bind(&Surface::drawWithClip,
-                                       _1,
-                                       fAlpha,
-                                       ::boost::cref(rPos),
-                                       ::boost::cref(rTriangulatedPolygon),
-                                       ::boost::cref(rTransform)));
+        for( auto& rSurfacePtr : maSurfaceList )
+            rSurfacePtr->drawWithClip( fAlpha, rPos,
+                    rTriangulatedPolygon, rTransform );
 
         return true;
     }

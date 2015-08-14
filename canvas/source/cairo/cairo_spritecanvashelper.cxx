@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/bind.hpp>
 #include <boost/cast.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
@@ -242,10 +241,9 @@ namespace cairocanvas
             // repaint all active sprites on top of background into
             // VDev.
             mpRedrawManager->forEachSprite(
-                ::boost::bind(
-                    &spriteRedraw,
-                    boost::cref(pCompositingCairo),
-                    _1 ) );
+                    [&pCompositingCairo]( const Sprite::Reference rSprite )
+                    { spriteRedraw( pCompositingCairo, rSprite ); }
+                    );
 
             // flush to screen
             cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getX(), rSize.getY() );
@@ -328,12 +326,8 @@ namespace cairocanvas
             // opaque sprite content)
 
             // repaint all affected sprites directly to output device
-            ::std::for_each( rUpdateArea.maComponentList.begin(),
-                             rUpdateArea.maComponentList.end(),
-                             ::boost::bind(
-                                 &spriteRedrawStub3,
-                                 boost::cref(pCompositingCairo),
-                                 _1 ) );
+            for( auto& rComponent : rUpdateArea.maComponentList )
+                spriteRedrawStub3(pCompositingCairo, rComponent);
         }
         else
         {
@@ -386,12 +380,9 @@ namespace cairocanvas
             // repaint uncovered areas from sprite. Need to actually
             // clip here, since we're only repainting _parts_ of the
             // sprite
-            ::std::for_each( aUnscrollableAreas.begin(),
-                             aUnscrollableAreas.end(),
-                             ::boost::bind( &opaqueUpdateSpriteArea,
-                                            ::boost::cref(aFirst->second.getSprite()),
-                                            boost::cref(pCompositingCairo),
-                                            _1 ) );
+            for( auto& rArea : aUnscrollableAreas )
+                opaqueUpdateSpriteArea( aFirst->second.getSprite(),
+                        pCompositingCairo, rArea );
         }
 
         // repaint uncovered areas from backbuffer - take the
@@ -401,12 +392,9 @@ namespace cairocanvas
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
                                          ::basegfx::B2DRange( rDestRect ) );
-        ::std::for_each( aUncoveredAreas.begin(),
-                         aUncoveredAreas.end(),
-                         ::boost::bind( &repaintBackground,
-                                        boost::cref(pCompositingCairo),
-                                        mpOwningSpriteCanvas->getBufferSurface(),
-                                        _1 ) );
+        for( auto& rArea : aUncoveredAreas )
+            repaintBackground( pCompositingCairo,
+                    mpOwningSpriteCanvas->getBufferSurface(), rArea );
 
         cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getX(), rSize.getY() );
         cairo_clip( pWindowCairo.get() );
@@ -443,12 +431,8 @@ namespace cairocanvas
         cairo_clip( pCompositingCairo.get() );
 
         // repaint all affected sprites directly to output device
-        ::std::for_each( rSortedUpdateSprites.begin(),
-                         rSortedUpdateSprites.end(),
-                         ::boost::bind(
-                             &spriteRedrawStub,
-                             boost::cref(pCompositingCairo),
-                             _1 ) );
+        for( auto& rSprite : rSortedUpdateSprites )
+            spriteRedrawStub( pCompositingCairo, rSprite );
 
         // flush to screen
         cairo_rectangle( pWindowCairo.get(), 0, 0, rDeviceSize.getX(), rDeviceSize.getY() );
@@ -512,11 +496,8 @@ namespace cairocanvas
 
         // repaint all affected sprites on top of background into
         // VDev.
-        ::std::for_each( rSortedUpdateSprites.begin(),
-                         rSortedUpdateSprites.end(),
-                         ::boost::bind( &spriteRedrawStub2,
-                                        boost::cref(pCompositingCairo),
-                                        _1 ) );
+        for( auto& rSprite : rSortedUpdateSprites )
+            spriteRedrawStub2( pCompositingCairo, rSprite );
 
         // flush to screen
         cairo_rectangle( pWindowCairo.get(), aOutputPosition.X(), aOutputPosition.Y(), aOutputSize.Width(), aOutputSize.Height() );
