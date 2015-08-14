@@ -616,7 +616,11 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
 ScEEParser::~ScEEParser()
 {
     delete pActEntry;
-    if ( !maList.empty() ) maList.clear();
+    while ( !maList.empty() )
+    {
+        delete maList.back();
+        maList.pop_back();
+    }
 
     // Don't delete Pool until the lists have been deleted
     pPool->SetSecondaryPool( NULL );
