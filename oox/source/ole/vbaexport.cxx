@@ -257,6 +257,14 @@ void writeMODULEOFFSET(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000379); // TextOffset
 }
 
+// section 2.3.4.2.3.2.6
+void writeMODULEHELPCONTEXT(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x001E); // id
+    rStrm.WriteUInt32(0x00000004); // sizeOfHelpContext
+    rStrm.WriteUInt32(0x00000000); // HelpContext
+}
+
 // section 2.3.4.2.3.2
 void writePROJECTMODULE(SvStream& rStrm)
 {
@@ -265,6 +273,7 @@ void writePROJECTMODULE(SvStream& rStrm)
     writeMODULESTREAMNAME(rStrm);
     writeMODULEDOCSTRING(rStrm);
     writeMODULEOFFSET(rStrm);
+    writeMODULEHELPCONTEXT(rStrm);
 }
 
 // section 2.3.4.2.3
