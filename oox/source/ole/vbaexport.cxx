@@ -492,10 +492,10 @@ void writeREFERENCENAME(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0016); // id
     rStrm.WriteUInt32(6); // sizeOfName
-    exportString(rStrm, "stdole"); // name
+    exportString(rStrm, "stdole"); // name // TODO: find out where these values are coming from
     rStrm.WriteUInt16(0x003E); // reserved
     rStrm.WriteUInt32(12); // sizeOfNameUnicode
-    exportUTF16String(rStrm, "stdole"); // nameUnicode
+    exportUTF16String(rStrm, "stdole"); // nameUnicode // TODO find out where these values are coming from
 }
 
 // section 2.3.4.2.2.1
