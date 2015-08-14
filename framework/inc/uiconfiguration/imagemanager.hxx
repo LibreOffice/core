@@ -37,7 +37,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
@@ -48,7 +48,7 @@
 namespace framework
 {
     class ImageManagerImpl;
-    class ImageManager :    public ::cppu::WeakImplHelper2< ::com::sun::star::ui::XImageManager, css::lang::XServiceInfo>
+    class ImageManager :    public ::cppu::WeakImplHelper< ::com::sun::star::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
             ImageManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );

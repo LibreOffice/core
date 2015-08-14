@@ -35,7 +35,7 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
@@ -53,7 +53,7 @@ using namespace framework;
 
 namespace {
 
-typedef cppu::WeakComponentImplHelper2<
+typedef cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::ui::XModuleUIConfigurationManagerSupplier >
         ModuleUIConfigurationManagerSupplier_BASE;

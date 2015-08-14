@@ -36,7 +36,7 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ustring.hxx>
 
@@ -49,7 +49,7 @@ namespace framework{
             synchronously or asynchronous, control its lifetime
             and differe between jobs with and without configuration.
  */
-class Job : public  ::cppu::WeakImplHelper3<
+class Job : public  ::cppu::WeakImplHelper<
                         css::task::XJobListener
                       , css::frame::XTerminateListener
                       , css::util::XCloseListener >

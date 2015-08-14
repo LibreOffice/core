@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -62,7 +62,7 @@ static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.O
 static const char CONFIGURATION_CATEGORY_ELEMENT_ACCESS[]   = "/Commands/Categories";
 static const char CONFIGURATION_PROPERTY_NAME[]             = "Name";
 
-class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
+class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess,XContainerListener>
 {
     osl::Mutex aMutex;
     public:

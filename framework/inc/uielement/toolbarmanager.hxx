@@ -45,7 +45,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <tools/link.hxx>
@@ -60,7 +60,7 @@ class ToolBox;
 namespace framework
 {
 
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper<
            ::com::sun::star::frame::XFrameActionListener,
            ::com::sun::star::frame::XStatusListener,
            ::com::sun::star::lang::XComponent,

@@ -20,7 +20,7 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARITEM_HXX
 
 #include <com/sun/star/ui/XStatusbarItem.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -31,7 +31,7 @@ namespace framework
 
 struct AddonStatusbarItemData;
 
-typedef cppu::WeakComponentImplHelper1< com::sun::star::ui::XStatusbarItem > StatusbarItem_Base;
+typedef cppu::WeakComponentImplHelper< com::sun::star::ui::XStatusbarItem > StatusbarItem_Base;
 
 class StatusbarItem : protected cppu::BaseMutex,
                       public StatusbarItem_Base

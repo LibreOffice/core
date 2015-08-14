@@ -35,7 +35,6 @@
 #include <rtl/ref.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 namespace framework {
 

@@ -54,7 +54,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -64,7 +64,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
+class StringLength : public ::cppu::WeakImplHelper< XStringWidth >
 {
     public:
         StringLength() {}

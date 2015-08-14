@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -50,7 +50,7 @@ namespace framework{
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
+class OComponentEnumeration :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
 {
 
     //  public methods

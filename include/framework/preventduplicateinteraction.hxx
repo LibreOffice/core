@@ -27,7 +27,7 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -52,7 +52,7 @@ struct ThreadHelpBase2
 };
 
 class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
-                                    ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >
+                                    ,public ::cppu::WeakImplHelper< css::task::XInteractionHandler2 >
 {
 
     // structs, types etc.

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/menuconfiguration.hxx>
@@ -48,7 +48,7 @@ using namespace framework;
 
 namespace {
 
-typedef cppu::ImplInheritanceHelper1< svt::ToolboxController,
+typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
                                     css::lang::XServiceInfo >
                 ToolBarBase;
 

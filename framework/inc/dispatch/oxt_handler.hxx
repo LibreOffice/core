@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -51,7 +51,7 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class Oxt_Handler  :    public  ::cppu::WeakImplHelper3<
+class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
                                     css::lang::XServiceInfo,
                                     css::frame::XNotifyingDispatch, // => XDispatch
                                     css::document::XExtendedFilterDetection >

@@ -29,12 +29,12 @@
 #include <com/sun/star/util/XStringAbbreviation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework
 {
 
-class UriAbbreviation:    public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringAbbreviation, css::lang::XServiceInfo>
+class UriAbbreviation:    public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringAbbreviation, css::lang::XServiceInfo>
 {
 public:
     explicit UriAbbreviation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);

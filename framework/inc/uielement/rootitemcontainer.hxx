@@ -34,7 +34,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
@@ -44,7 +44,7 @@ namespace framework
 {
 class ConstItemContainer;
 
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
             css::container::XIndexContainer,
             css::lang::XSingleComponentFactory,
             css::lang::XUnoTunnel > RootItemContainer_BASE;

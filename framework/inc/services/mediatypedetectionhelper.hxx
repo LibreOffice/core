@@ -28,7 +28,7 @@
 
 #include <com/sun/star/util/XStringMapping.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 //  namespaces
 
@@ -44,7 +44,7 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringMapping, css::lang::XServiceInfo>
+class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringMapping, css::lang::XServiceInfo>
 {
 
     //  public methods

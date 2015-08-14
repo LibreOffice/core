@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace framework{
@@ -54,7 +54,7 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
+class OComponentAccess  :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XEnumerationAccess >
 {
 
     //  public methods

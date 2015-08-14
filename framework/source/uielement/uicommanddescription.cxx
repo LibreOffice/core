@@ -32,7 +32,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <vcl/mnemonic.hxx>
@@ -79,7 +79,7 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 
 class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
-                                        public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
+                                        public  ::cppu::WeakImplHelper<XNameAccess,XContainerListener>
 {
     osl::Mutex m_aMutex;
     public:

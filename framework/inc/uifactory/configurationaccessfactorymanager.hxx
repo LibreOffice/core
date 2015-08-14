@@ -28,14 +28,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
 #include <unordered_map>
 
 namespace framework {
 
-    class ConfigurationAccess_FactoryManager : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
+    class ConfigurationAccess_FactoryManager : public ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener>
 {
     public:
                       ConfigurationAccess_FactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, const OUString& _sRoot );

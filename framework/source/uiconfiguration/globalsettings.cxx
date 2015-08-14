@@ -31,7 +31,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 //  Defines
 
@@ -51,7 +51,7 @@ namespace framework
 
 //  Configuration access class for WindowState supplier implementation
 
-class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
+class GlobalSettings_Access : public ::cppu::WeakImplHelper<
                                   ::com::sun::star::lang::XComponent,
                                   ::com::sun::star::lang::XEventListener>
 {

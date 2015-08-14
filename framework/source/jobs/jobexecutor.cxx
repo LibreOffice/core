@@ -38,7 +38,7 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
@@ -49,7 +49,7 @@ using namespace framework;
 
 namespace {
 
-typedef cppu::WeakComponentImplHelper4<
+typedef cppu::WeakComponentImplHelper<
           css::lang::XServiceInfo
         , css::task::XJobExecutor
         , css::container::XContainerListener // => lang.XEventListener

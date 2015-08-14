@@ -27,7 +27,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -42,7 +42,7 @@ namespace framework{
                     - InteractiveAugmentedIOException
                 All other requests will be aborted.
  */
-class QuietInteraction : public  ::cppu::WeakImplHelper1<
+class QuietInteraction : public  ::cppu::WeakImplHelper<
                                     css::task::XInteractionHandler >
 {
     // member

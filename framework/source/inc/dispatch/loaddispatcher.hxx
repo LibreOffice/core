@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -35,7 +35,7 @@ namespace framework{
 
     @author     as96863
  */
-class LoadDispatcher : public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
+class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
                                                         css::frame::XSynchronousDispatch >
 {
 

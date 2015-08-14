@@ -38,7 +38,7 @@
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
@@ -53,7 +53,7 @@ namespace framework
 {
     class ImageManagerImpl;
 
-    class ModuleImageManager :    public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
+    class ModuleImageManager :    public ::cppu::WeakImplHelper< ::com::sun::star::ui::XImageManager>
     {
         public:
             ModuleImageManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );

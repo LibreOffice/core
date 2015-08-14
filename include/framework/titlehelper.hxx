@@ -35,7 +35,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -51,7 +51,7 @@ namespace framework{
     @threadsafe
  */
 class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
-                  , public  ::cppu::WeakImplHelper5< css::frame::XTitle                 ,
+                  , public  ::cppu::WeakImplHelper< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,
                                                      css::frame::XFrameActionListener   ,

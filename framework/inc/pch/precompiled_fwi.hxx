@@ -31,7 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>

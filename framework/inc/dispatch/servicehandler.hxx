@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace framework{
 
@@ -53,7 +53,7 @@ namespace framework{
 
     @devstatus      ready to use
 */
-class ServiceHandler : public  ::cppu::WeakImplHelper3<
+class ServiceHandler : public  ::cppu::WeakImplHelper<
                                    css::lang::XServiceInfo       ,
                                    css::frame::XDispatchProvider ,
                                    css::frame::XNotifyingDispatch > // => XDispatch

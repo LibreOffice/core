@@ -24,7 +24,7 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -41,7 +41,7 @@ namespace framework{
 
     @author as96863
  */
-class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XEventListener,::com::sun::star::task::XJob >
+class HelpOnStartup : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XEventListener,::com::sun::star::task::XJob >
 {
 
     // member

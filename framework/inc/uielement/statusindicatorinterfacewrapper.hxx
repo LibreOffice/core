@@ -29,14 +29,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
 namespace framework
 {
 
-class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper1< ::com::sun::star::task::XStatusIndicator>
+class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper< ::com::sun::star::task::XStatusIndicator>
 {
     public:
         StatusIndicatorInterfaceWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rStatusIndicatorImpl );

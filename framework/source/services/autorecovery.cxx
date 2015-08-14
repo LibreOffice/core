@@ -71,7 +71,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -159,7 +159,7 @@ public:
     of documents - including features of an EmergencySave in
     case a GPF occurs.
  */
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper<
             css::lang::XServiceInfo,
             css::frame::XDispatch,
             css::document::XDocumentEventListener, // => css.lang.XEventListener

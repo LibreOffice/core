@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <i18nlangtag/lang.h>
 #include <svl/languageoptions.hxx>
@@ -150,7 +150,7 @@ FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
 //OriginalListener owns the Broadcaster which "owns" the WeakContainerListener
 //which forwards the events to the OriginalListener without taking ownership of
 //it.
-class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::container::XContainerListener>
+class WeakContainerListener : public ::cppu::WeakImplHelper<com::sun::star::container::XContainerListener>
 {
     private:
         com::sun::star::uno::WeakReference<com::sun::star::container::XContainerListener> mxOwner;
@@ -205,7 +205,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::con
         }
 };
 
-class WeakChangesListener : public ::cppu::WeakImplHelper1<com::sun::star::util::XChangesListener>
+class WeakChangesListener : public ::cppu::WeakImplHelper<com::sun::star::util::XChangesListener>
 {
     private:
         com::sun::star::uno::WeakReference<com::sun::star::util::XChangesListener> mxOwner;
@@ -242,7 +242,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper1<com::sun::star::util:
         }
 };
 
-class WeakEventListener : public ::cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
+class WeakEventListener : public ::cppu::WeakImplHelper<com::sun::star::lang::XEventListener>
 {
     private:
         com::sun::star::uno::WeakReference<com::sun::star::lang::XEventListener> mxOwner;
@@ -269,7 +269,7 @@ class WeakEventListener : public ::cppu::WeakImplHelper1<com::sun::star::lang::X
         }
 };
 
-class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star::document::XDocumentEventListener>
+class WeakDocumentEventListener : public ::cppu::WeakImplHelper<com::sun::star::document::XDocumentEventListener>
 {
     private:
         com::sun::star::uno::WeakReference<com::sun::star::document::XDocumentEventListener> mxOwner;
