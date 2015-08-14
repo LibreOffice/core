@@ -591,10 +591,21 @@ void VbaExport::exportVBA()
 {
     // start here with the VBA export
     const OUString aDirFileName("/tmp/vba_dir_out.bin");
-    SvFileStream aDirStream(aDirFileName, StreamMode::WRITE);
+    SvFileStream aDirStream(aDirFileName, STREAM_READWRITE);
 
     // export
     exportDirStream(aDirStream);
+
+    aDirStream.Seek(0);
+
+    SvMemoryStream aMemoryStream(4096, 4096);
+    OUString aCompressedFileName("/tmp/vba_dir_out_compressed.bin");
+    SvFileStream aCompressedStream(aCompressedFileName, STREAM_READWRITE);
+
+    aMemoryStream.WriteStream(aDirStream);
+
+    VBACompression aCompression(aCompressedStream, aMemoryStream);
+    aCompression.write();
 }
 
 css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
