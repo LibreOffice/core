@@ -79,7 +79,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
         {
             // this dir was updated recently
             // next time read this remote folder
-            m_sLastUpdatedDir = "";
+            m_sLastUpdatedDir.clear();
         }
     }
 }
