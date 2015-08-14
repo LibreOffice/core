@@ -637,6 +637,7 @@ void writePROJECTMODULES(SvStream& rStrm)
     writePROJECTMODULE(rStrm, "ThisWorkbook", "ThisWorkbook", 0x000004BD, "other");
     writePROJECTMODULE(rStrm, "Sheet1", "Sheet1", 0x00000325, "other");
     writePROJECTMODULE(rStrm, "Sheet2", "Sheet2", 0x00000325, "other");
+    writePROJECTMODULE(rStrm, "Sheet3", "Sheet3", 0x00000325, "other");
 }
 
 // section 2.3.4.2
