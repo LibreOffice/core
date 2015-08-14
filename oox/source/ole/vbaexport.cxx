@@ -572,6 +572,14 @@ void writeMODULEDOCSTRING(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000000); // sizeOfDocStringUnicode
 }
 
+// section 2.3.4.2.3.2.5
+void writeMODULEOFFSET(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x0031); // id
+    rStrm.WriteUInt32(0x00000004); // sizeOfTextOffset
+    rStrm.WriteUInt32(0x00000379); // TextOffset
+}
+
 // section 2.3.4.2.3.2
 void writePROJECTMODULE(SvStream& rStrm)
 {
@@ -579,6 +587,7 @@ void writePROJECTMODULE(SvStream& rStrm)
     writeMODULENAMEUNICODE(rStrm);
     writeMODULESTREAMNAME(rStrm);
     writeMODULEDOCSTRING(rStrm);
+    writeMODULEOFFSET(rStrm);
 }
 
 // section 2.3.4.2.3
