@@ -461,21 +461,15 @@ void Calendar::ImplFormat()
     {
         if ( nNewFirstYear < mnFirstYear )
         {
-            for ( mnRequestYear = nNewFirstYear; mnRequestYear < mnFirstYear; mnRequestYear++ )
-                RequestDateInfo();
             mnFirstYear = nNewFirstYear;
         }
         if ( nNewLastYear > mnLastYear )
         {
-            for ( mnRequestYear = mnLastYear; mnRequestYear < nNewLastYear; mnRequestYear++ )
-                RequestDateInfo();
             mnLastYear = nNewLastYear;
         }
     }
     else
     {
-        for ( mnRequestYear = nNewFirstYear; mnRequestYear < nNewLastYear; mnRequestYear++ )
-            RequestDateInfo();
         mnFirstYear = nNewFirstYear;
         mnLastYear = nNewLastYear;
     }
@@ -1703,11 +1697,6 @@ void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings();
         Invalidate();
     }
-}
-
-void Calendar::RequestDateInfo()
-{
-    maRequestDateInfoHdl.Call( this );
 }
 
 void Calendar::DoubleClick()
