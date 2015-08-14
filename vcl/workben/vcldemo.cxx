@@ -1494,7 +1494,7 @@ public:
         mpButton.disposeAndClear();
         WorkWindow::dispose();
     }
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&) SAL_OVERRIDE
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE
     {
         Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
         vcl::Region aClip(aWholeSize);
@@ -1503,10 +1503,10 @@ public:
 
         Wallpaper aWallpaper(COL_GREEN);
 
-        Push(PushFlags::CLIPREGION);
-        IntersectClipRegion(aClip);
-        DrawWallpaper(aWholeSize, aWallpaper);
-        Pop();
+        rRenderContext.Push(PushFlags::CLIPREGION);
+        rRenderContext.IntersectClipRegion(aClip);
+        rRenderContext.DrawWallpaper(aWholeSize, aWallpaper);
+        rRenderContext.Pop();
 
         ScopedVclPtrInstance< VirtualDevice > pDev(*this);
         pDev->EnableRTL(IsRTLEnabled());
@@ -1516,7 +1516,7 @@ public:
         aSubRect.Move(-aExclude.Left(), -aExclude.Top());
         pDev->DrawWallpaper(aSubRect, aWallpaper );
 
-        DrawOutDev(aExclude.TopLeft(), aExclude.GetSize(),
+        rRenderContext.DrawOutDev(aExclude.TopLeft(), aExclude.GetSize(),
                    Point( 0, 0 ), aExclude.GetSize(), *pDev.get() );
     }
 };
