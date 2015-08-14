@@ -288,7 +288,7 @@ void CGM::ImplDoClass4()
                         {
                             aPolygon.SetPoint( pPoints[ i ], i );
                         }
-                        aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                        aPolyPolygon.Insert( aPolygon );
                         nPoints = 0;
                     }
                 }

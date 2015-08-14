@@ -1391,7 +1391,7 @@ namespace frm
             {
                 // the indexes where the current string appears in our string items
                 Sequence< sal_Int16 > aThisEntryIndexes;
-                aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++, false );
+                aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++ );
 
                 // insert all the indexes of this entry into our set
                 ::std::copy(
@@ -1416,7 +1416,7 @@ namespace frm
             OUString sStringToSelect;
             OSL_VERIFY( _rExternalValue >>= sStringToSelect );
 
-            aSelectIndexes = findValue( getStringItemList(), sStringToSelect, false );
+            aSelectIndexes = findValue( getStringItemList(), sStringToSelect );
         }
         break;
         }

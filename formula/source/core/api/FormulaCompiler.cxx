@@ -1068,11 +1068,11 @@ bool FormulaCompiler::GetToken()
             if ( nWasColRowName )
                 nWasColRowName++;
             if ( bAutoCorrect && !pStack )
-                CreateStringFromToken( aCorrectedFormula, mpToken.get(), false );
+                CreateStringFromToken( aCorrectedFormula, mpToken.get() );
             mpToken = pArr->Next();
         }
         if ( bAutoCorrect && !pStack && mpToken )
-            CreateStringFromToken( aCorrectedSymbol, mpToken.get(), false );
+            CreateStringFromToken( aCorrectedSymbol, mpToken.get() );
         if( !mpToken )
         {
             if( pStack )

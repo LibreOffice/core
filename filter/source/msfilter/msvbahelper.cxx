@@ -597,7 +597,7 @@ OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& 
         aMacroName = aMacroName.copy( nDotPos + 1 );
 
     // try to find the macro
-    MacroResolvedInfo aInfo = resolveVBAMacro( mpObjShell, aMacroName, false );
+    MacroResolvedInfo aInfo = resolveVBAMacro( mpObjShell, aMacroName );
     if( !aInfo.mbFound )
         throw lang::IllegalArgumentException();
 

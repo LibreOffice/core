@@ -170,7 +170,7 @@ css::uno::Reference<css::xml::dom::XNodeList> Binding::getXNodeList()
 {
     // first make sure we are bound
     if( ! maBindingExpression.hasValue() )
-        bind( false );
+        bind();
 
     return maBindingExpression.getXNodeList();
 }
@@ -309,7 +309,7 @@ EvaluationContext Binding::getEvaluationContext() const
     OSL_ENSURE( getModelImpl() != NULL, "need model impl" );
 
     // bind (in case we were not bound before)
-    bind( false );
+    bind();
     return _getMIPEvaluationContexts();
 }
 
@@ -779,11 +779,11 @@ MIP Binding::getLocalMIP() const
     MIP aMIP;
 
     if( maReadonly.hasValue() )
-        aMIP.setReadonly( maReadonly.getBool( false ) );
+        aMIP.setReadonly( maReadonly.getBool() );
     if( maRelevant.hasValue() )
         aMIP.setRelevant( maRelevant.getBool( true ) );
     if( maRequired.hasValue() )
-        aMIP.setRequired( maRequired.getBool( false ) );
+        aMIP.setRequired( maRequired.getBool() );
     if( maConstraint.hasValue() )
     {
         aMIP.setConstraint( maConstraint.getBool( true ) );
@@ -1252,7 +1252,7 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
     }
 
     // if we're a dynamic binding, we better re-bind, too!
-    bind( false );
+    bind();
 
     // our value was maybe modified
     valueModified();

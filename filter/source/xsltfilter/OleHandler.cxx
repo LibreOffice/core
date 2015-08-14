@@ -76,7 +76,7 @@ namespace XSLT
     {
         Sequence<sal_Int8> oleData;
         ::sax::Converter::decodeBase64(oleData, OStringToOUString(
-            content, RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS));
+            content, RTL_TEXTENCODING_UTF8));
         m_rootStream = createTempFile();
         Reference<XOutputStream> xOutput = m_rootStream->getOutputStream();
         xOutput->writeBytes(oleData);

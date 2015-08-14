@@ -1939,7 +1939,7 @@ void SAL_CALL ODatabaseForm::reset() throw( RuntimeException, std::exception )
             m_pThread->create();
         }
         EventObject aEvt;
-        m_pThread->addEvent(&aEvt, false);
+        m_pThread->addEvent(&aEvt);
     }
     else
     {

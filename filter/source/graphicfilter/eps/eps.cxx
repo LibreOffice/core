@@ -1649,7 +1649,7 @@ void PSWriter::ImplPolyPoly( const tools::PolyPolygon & rPolyPoly, bool bTextOut
             ImplWriteLineColor( PS_SPACE );
             for ( i = 0; i < nPolyCount; i++ )
                 ImplAddPath( rPolyPoly.GetObject( i ) );
-            ImplClosePathDraw( PS_RET );
+            ImplClosePathDraw();
         }
     }
 }
@@ -1685,7 +1685,7 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
 
             // #104645# explicitly close path if polygon is closed
             if( rPoly[ 0 ] == rPoly[ nPointCount-1 ] )
-                ImplClosePathDraw( PS_RET );
+                ImplClosePathDraw();
             else
                 ImplPathDraw();
         }
@@ -2438,13 +2438,13 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
     if ( eLineCap != eLCap )
     {
         eLineCap = eLCap;
-        ImplWriteLong( (sal_Int32)eLineCap, PS_SPACE );
+        ImplWriteLong( (sal_Int32)eLineCap );
         ImplWriteLine( "lc", PS_SPACE );
     }
     if ( eJoinType != eJoin )
     {
         eJoinType = eJoin;
-        ImplWriteLong( (sal_Int32)eJoinType, PS_SPACE );
+        ImplWriteLong( (sal_Int32)eJoinType );
         ImplWriteLine( "lj", PS_SPACE );
     }
     if ( eJoinType == SvtGraphicStroke::joinMiter )

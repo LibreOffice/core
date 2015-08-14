@@ -614,7 +614,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                 Polygon aPoly( nSize );
                 for ( i = 0; i < nSize; i++ )
                     aPoly[ i ] = aPtAry[ i ];
-                aPolyPoly.Insert( aPoly, POLYPOLY_APPEND );
+                aPolyPoly.Insert( aPoly );
             }
         }
         if ( aPolyPoly.Count() )

@@ -305,7 +305,7 @@ ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
 
 IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
 {
-    EndDialog( RET_CANCEL );
+    EndDialog();
     return 0;
 }
 
@@ -1121,12 +1121,12 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     m_pCbTransitionEffects->Enable( mbIsPresentation );
     if( paParent->mnOpenBookmarkLevels < 0 )
     {
-        m_pRbAllBookmarkLevels->Check( true );
+        m_pRbAllBookmarkLevels->Check();
         m_pNumBookmarkLevels->Enable( false );
     }
     else
     {
-        m_pRbVisibleBookmarkLevels->Check( true );
+        m_pRbVisibleBookmarkLevels->Check();
         m_pNumBookmarkLevels->Enable( true );
         m_pNumBookmarkLevels->SetValue( paParent->mnOpenBookmarkLevels );
     }

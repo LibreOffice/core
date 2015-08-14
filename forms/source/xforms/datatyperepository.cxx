@@ -157,7 +157,7 @@ namespace xforms
     Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName ) throw (NoSuchElementException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        return implLocate( typeName, false )->second.get();
+        return implLocate( typeName )->second.get();
     }
 
 
