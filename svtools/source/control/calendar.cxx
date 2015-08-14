@@ -2249,7 +2249,6 @@ IMPL_LINK_TYPED( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
             SetModifyFlag();
             Modify();
         }
-        Select();
     }
 }
 
@@ -2278,7 +2277,6 @@ IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
             Modify();
         }
     }
-    Select();
 
     return 0;
 }
@@ -2289,11 +2287,6 @@ IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)
     GrabFocus();
     mpCalendar->EndSelection();
     return 0;
-}
-
-void CalendarField::Select()
-{
-    maSelectHdl.Call( this );
 }
 
 bool CalendarField::ShowDropDown( bool bShow )

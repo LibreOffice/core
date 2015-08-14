@@ -356,7 +356,6 @@ private:
     Date                maDefaultDate;
     bool                mbToday;
     bool                mbNone;
-    Link<>              maSelectHdl;
 
                         DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, Calendar*, void );
                         DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
@@ -366,8 +365,6 @@ public:
                         CalendarField( vcl::Window* pParent, WinBits nWinStyle );
     virtual             ~CalendarField();
     virtual void        dispose() SAL_OVERRIDE;
-
-    void        Select();
 
     virtual bool        ShowDropDown( bool bShow ) SAL_OVERRIDE;
     VclPtr<Calendar>    CreateCalendar( vcl::Window* pParent );
