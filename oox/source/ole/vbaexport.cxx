@@ -55,13 +55,27 @@ VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_
 {
 }
 
+void setUInt16(sal_uInt8* pBuffer, size_t nPos, sal_uInt16 nVal)
+{
+    pBuffer[nPos] = nVal & 0xFF;
+    pBuffer[nPos+1] = (nVal & 0xFF00) >> 8;
+}
+
+sal_uInt16 VBACompressionChunk::handleHeader(bool bCompressed)
+{
+    // handle header bytes
+    size_t nSize = mnCompressedCurrent;
+    sal_uInt16 nHeader = 0;
+    PackCompressedChunkSize(nSize, nHeader);
+    PackCompressedChunkFlag(bCompressed, nHeader);
+    PackCompressedChunkSignature(nHeader);
+
+    return nHeader;
+}
+
 // section 2.4.1.3.7
 void VBACompressionChunk::write()
 {
-    mnChunkStart = mrCompressedStream.Tell();
-
-    // we need to fill these two bytes later
-    mrCompressedStream.WriteUInt16(0x0);
 
     mnDecompressedCurrent = 0;
     mnCompressedCurrent = 2;
@@ -80,30 +94,22 @@ void VBACompressionChunk::write()
         compressTokenSequence();
     }
 
-    bool bCompressedFlag = true;
     if (mnDecompressedCurrent < mnDecompressedEnd)
     {
+        sal_uInt64 nChunkStart = mrCompressedStream.Tell();
+        mrCompressedStream.WriteUInt16(0);
         writeRawChunk();
-        bCompressedFlag = false;
+        mrCompressedStream.Seek(nChunkStart);
+        sal_uInt16 nHeader = handleHeader(false);
+        mrCompressedStream.WriteUInt16(nHeader);
     }
     else
     {
+        sal_uInt16 nHeader = handleHeader(true);
+        setUInt16(pCompressedChunkStream, 0, nHeader);
         // copy the compressed stream to our output stream
         mrCompressedStream.Write(pCompressedChunkStream, mnCompressedCurrent);
     }
-
-    // handle header bytes
-    size_t nSize = mnCompressedCurrent;
-    sal_uInt16 nHeader = 0;
-    PackCompressedChunkSize(nSize, nHeader);
-    PackCompressedChunkFlag(bCompressedFlag, nHeader);
-    PackCompressedChunkSignature(nHeader);
-
-    // overwrite the two bytes
-    sal_uInt64 nEnd = mrCompressedStream.Tell();
-    mrCompressedStream.Seek(mnChunkStart);
-    mrCompressedStream.WriteUInt16(nHeader);
-    mrCompressedStream.Seek(nEnd);
 }
 
 // section 2.4.1.3.13
@@ -144,12 +150,6 @@ void VBACompressionChunk::compressTokenSequence()
         }
     }
     mpCompressedChunkStream[nFlagByteIndex] = nFlagByte;
-}
-
-void setUInt16(sal_uInt8* pBuffer, size_t nPos, sal_uInt16 nVal)
-{
-    pBuffer[nPos] = nVal & 0xFFFF;
-    pBuffer[nPos+1] = (nVal & 0xFFFF0000) >> 8;
 }
 
 // section 2.4.1.3.9
