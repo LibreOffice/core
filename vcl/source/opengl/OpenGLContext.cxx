@@ -869,7 +869,9 @@ bool OpenGLContext::ImplInit()
         }
     }
 
-    return InitGLEW();
+    bool bRet = InitGLEW();
+    InitGLEWDebugging();
+    return bRet;
 }
 
 #elif defined( _WIN32 )
@@ -978,7 +980,14 @@ bool OpenGLContext::ImplInit()
 
     // now setup the shared context; this needs a temporary context already
     // set up in order to work
-    m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, NULL);
+    int attribs [] =
+    {
+#ifdef DBG_UTIL
+        WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
+#endif
+        0
+    };
+    m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, attribs);
     if (m_aGLWin.hRC == 0)
     {
         ImplWriteLastError(GetLastError(), "wglCreateContextAttribsARB in OpenGLContext::ImplInit");
@@ -987,6 +996,7 @@ bool OpenGLContext::ImplInit()
     }
 
     wglMakeCurrent(NULL, NULL);
+    InitGLEWDebugging();
     wglDeleteContext(hTempRC);
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
@@ -1016,7 +1026,9 @@ bool OpenGLContext::ImplInit()
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::makeCurrent(pView);
 
-    return InitGLEW();
+    bool bRet = InitGLEW();
+    InitGLEWDebugging();
+    return bRet;
 }
 
 #else
@@ -1047,6 +1059,13 @@ bool OpenGLContext::InitGLEW()
             bGlewInit = true;
     }
 
+    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
+    mbInitialized = true;
+    return true;
+}
+
+void OpenGLContext::InitGLEWDebugging()
+{
 #ifdef DBG_UTIL
     // only enable debug output in dbgutil build
     if( GLEW_ARB_debug_output)
@@ -1068,10 +1087,6 @@ bool OpenGLContext::InitGLEW()
     // Test hooks for inserting tracing messages into the stream
     VCL_GL_INFO("vcl.opengl", "LibreOffice GLContext initialized: " << this);
 #endif
-
-    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
-    mbInitialized = true;
-    return true;
 }
 
 void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
