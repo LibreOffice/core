@@ -2235,7 +2235,7 @@ void CalendarField::dispose()
     DateField::dispose();
 }
 
-IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar )
+IMPL_LINK_TYPED( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
 {
     if ( !pCalendar->IsTravelSelect() )
     {
@@ -2251,7 +2251,6 @@ IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar )
         }
         Select();
     }
-    return 0;
 }
 
 IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )

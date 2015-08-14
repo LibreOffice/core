@@ -216,9 +216,9 @@ private:
                     mbSelLeft:1,
                     mbAllSel:1,
                     mbDropPos:1;
-    Link<>          maSelectHdl;
-    Timer           maDragScrollTimer;
-    sal_uInt16          mnDragScrollHitTest;
+    Link<Calendar*,void>   maSelectHdl;
+    Timer                  maDragScrollTimer;
+    sal_uInt16             mnDragScrollHitTest;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -299,7 +299,7 @@ public:
     Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1,
                                          long nCalcLines = 1 ) const;
 
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
 };
 
 
@@ -358,7 +358,7 @@ private:
     bool                mbNone;
     Link<>              maSelectHdl;
 
-                        DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar* );
+                        DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, Calendar*, void );
                         DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
                         DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
 
