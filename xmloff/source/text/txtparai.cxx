@@ -1946,6 +1946,11 @@ public:
         const OUString& rLocalName,
         enum XMLTextPElemTokens nTok,
         XMLHints_Impl& rHnts);
+    XMLUserIndexMarkImportContext_Impl(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& rHnts );
 
 protected:
 
@@ -1954,6 +1959,9 @@ protected:
                                   const OUString& sLocalName,
                                   const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet) SAL_OVERRIDE;
+    virtual void ProcessAttribute( sal_Int32 Element,
+                                   const OUString& sValue,
+                                   Reference<beans::XPropertySet>& rPropSet ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLUserIndexMarkImportContext_Impl, XMLIndexMarkImportContext_Impl);
@@ -1965,6 +1973,17 @@ XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
                                        nTok, rHnts),
         sUserIndexName("UserIndexName"),
         sLevel("Level")
+{
+}
+
+XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    enum XMLTextPElemTokens nTok,
+    XMLHints_Impl& rHnts )
+:   XMLIndexMarkImportContext_Impl( rImport, Element, nTok, rHnts ),
+    sUserIndexName("UserIndexName"),
+    sLevel("Level")
 {
 }
 
@@ -2002,6 +2021,33 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
         // else: unknown namespace: delegate to super class
         XMLIndexMarkImportContext_Impl::ProcessAttribute(
             nNamespace, sLocalName, sValue, rPropSet);
+    }
+}
+
+void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
+    sal_Int32 Element,
+    const OUString& sValue,
+    Reference<beans::XPropertySet>& rPropSet )
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_index_name) )
+    {
+        rPropSet->setPropertyValue(sUserIndexName, uno::makeAny(sValue));
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_outline_level) )
+    {
+        // outline level: set level property
+        sal_Int32 nTmp;
+        if( sax::Converter::convertNumber( nTmp, sValue, 0,
+            GetImport().GetTextImport()->GetChapterNumbering()->getCount() ) )
+        {
+            rPropSet->setPropertyValue(sLevel, uno::makeAny(static_cast<sal_Int16>(nTmp-1)));
+        }
+        // else: value out of range -> ignore
+    }
+    else
+    {
+        // else: unknown text property: delegate to super class
+        XMLIndexMarkImportContext_Impl::ProcessAttribute( Element, sValue, rPropSet );
     }
 }
 
