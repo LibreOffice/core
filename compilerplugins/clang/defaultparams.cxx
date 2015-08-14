@@ -52,9 +52,13 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
     if (isa<UnaryExprOrTypeTraitExpr>(arg))
         return true;
     const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
+    if (!parmVarDecl->hasDefaultArg()
+        || parmVarDecl->hasUninstantiatedDefaultArg())
+    {
+        return true;
+    }
     const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
-    if (parmVarDecl->hasDefaultArg() &&
-        defaultArgExpr &&
+    if (defaultArgExpr &&
         defaultArgExpr->getType()->isIntegralType(compiler.getASTContext()))
     {
         APSInt x1, x2;
