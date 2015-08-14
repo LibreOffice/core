@@ -488,38 +488,44 @@ void writePROJECTINFORMATION(SvStream& rStrm)
 }
 
 // section 2.3.4.2.2.2
-void writeREFERENCENAME(SvStream& rStrm)
+void writeREFERENCENAME(SvStream& rStrm, const OUString name)
 {
     rStrm.WriteUInt16(0x0016); // id
-    rStrm.WriteUInt32(6); // sizeOfName
-    exportString(rStrm, "stdole"); // name // TODO: find out where these values are coming from
+    sal_Int32 size = name.getLength();
+    rStrm.WriteUInt32(size); // sizeOfName
+    exportString(rStrm, name); // name
     rStrm.WriteUInt16(0x003E); // reserved
-    rStrm.WriteUInt32(12); // sizeOfNameUnicode
-    exportUTF16String(rStrm, "stdole"); // nameUnicode // TODO find out where these values are coming from
+    sal_Int32 unicodesize = size * 2;
+    rStrm.WriteUInt32(unicodesize); // sizeOfNameUnicode
+    exportUTF16String(rStrm, name); // nameUnicode
 }
 
 // section 2.3.4.2.2.5
-void writeREFERENCEREGISTERED(SvStream& rStrm)
+void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString libid)
 {
     rStrm.WriteUInt16(0x000D); // id
-    rStrm.WriteUInt32(104); // size of sizeOfLibid, Libid, reserved 1 and reserved 2
-    rStrm.WriteUInt32(94); // sizeOfLibid
-    exportString(rStrm, "*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation");
+    sal_Int32 sizeOfLibid = libid.getLength();
+    sal_Int32 size = sizeOfLibid + 10; // size of Libid, sizeOfLibid(4 bytes), reserved 1(4 bytes) and reserved 2(2 bytes)
+    rStrm.WriteUInt32(size); // size
+    rStrm.WriteUInt32(sizeOfLibid); // sizeOfLibid
+    exportString(rStrm, libid); // Libid
     rStrm.WriteUInt32(0x00000000); // reserved 1
     rStrm.WriteUInt16(0x0000); // reserved 2
 }
 
 // section 2.3.4.2.2.1
-void writeREFERENCE(SvStream& rStrm)
+void writeREFERENCE(SvStream& rStrm, const OUString name, const OUString libid)
 {
-    writeREFERENCENAME(rStrm);
-    writeREFERENCEREGISTERED(rStrm);
+    writeREFERENCENAME(rStrm, name);
+    writeREFERENCEREGISTERED(rStrm, libid);
 }
 
 // section 2.3.4.2.2
 void writePROJECTREFERENCES(SvStream& rStrm)
 {
-    writeREFERENCE(rStrm);
+    // TODO: find out where these references are coming from
+    writeREFERENCE(rStrm, "stdole", "*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation");
+    writeREFERENCE(rStrm, "Office", "*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library");
 }
 
 // section 2.3.4.2
