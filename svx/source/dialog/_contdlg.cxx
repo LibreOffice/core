@@ -299,6 +299,9 @@ SvxSuperContourDlg::~SvxSuperContourDlg()
 
 void SvxSuperContourDlg::dispose()
 {
+    // Avoid crash
+    m_pContourWnd->SetUpdateLink( Link<>() );
+
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
     m_pContourWnd.disposeAndClear();
