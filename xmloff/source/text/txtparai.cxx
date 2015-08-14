@@ -227,11 +227,19 @@ public:
         const OUString& rLocalName,
         XMLHints_Impl& rHnts,
         const Reference<xml::sax::XAttributeList> & xAttrList);
+    XMLStartReferenceContext_Impl (
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        XMLHints_Impl& rHnts,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList );
 
     static bool FindName(
         SvXMLImport& rImport,
         const Reference<xml::sax::XAttributeList> & xAttrList,
         OUString& rName);
+    static bool FindName(
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        OUString& rName );
 };
 
 TYPEINIT1( XMLStartReferenceContext_Impl, SvXMLImportContext );
@@ -253,6 +261,27 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
 
         // degenerates to point reference, if no end is found!
         pHint->SetEnd(rImport.GetTextImport()->GetCursor()->getStart() );
+
+        rHints.push_back(pHint);
+    }
+}
+
+XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
+    SvXMLImport& rImport,
+    sal_Int32 /*Element*/,
+    XMLHints_Impl& rHints,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLImportContext( rImport )
+{
+    OUString sName;
+
+    if( FindName( xAttrList, sName ) )
+    {
+        XMLHint_Impl* pHint = new XMLReferenceHint_Impl(
+            sName, rImport.GetTextImport()->GetCursor()->getStart() );
+
+        // degenerates to point reference, if no end is found!
+        pHint->SetEnd( rImport.GetTextImport()->GetCursor()->getStart() );
 
         rHints.push_back(pHint);
     }
@@ -280,6 +309,23 @@ bool XMLStartReferenceContext_Impl::FindName(
             rName = xAttrList->getValueByIndex(nAttr);
             bNameOK = true;
         }
+    }
+
+    return bNameOK;
+}
+
+bool XMLStartReferenceContext_Impl::FindName(
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    OUString& rName )
+{
+    bool bNameOK( false );
+
+    // find name attribute first
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_name ) )
+    {
+        rName = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_name );
+        bNameOK = true;
     }
 
     return bNameOK;
