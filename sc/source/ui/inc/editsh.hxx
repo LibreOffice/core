@@ -46,7 +46,7 @@ private:
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();
 
-    DECL_LINK( ClipboardChanged, TransferableDataHelper* );
+    DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
 
 public:
     TYPEINFO_OVERRIDE();

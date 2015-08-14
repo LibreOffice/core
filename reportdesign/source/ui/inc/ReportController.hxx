@@ -315,7 +315,7 @@ namespace rptui
             ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
 
         void OnInvalidateClipboard();
-        DECL_LINK( OnClipboardChanged, void* );
+        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
         DECL_LINK( OnExecuteReport, void* );
         DECL_LINK( OnOpenHelpAgent, void* );
         // all the features which should be handled by this class

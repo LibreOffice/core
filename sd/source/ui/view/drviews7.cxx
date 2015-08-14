@@ -180,32 +180,28 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace sd {
 
-IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+IMPL_LINK_TYPED( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    if ( pDataHelper )
-    {
-        mbPastePossible = ( pDataHelper->GetFormatCount() != 0 );
+    mbPastePossible = ( pDataHelper->GetFormatCount() != 0 );
 
-        // Update the list of supported clipboard formats according to the
-        // new clipboard content.
-        // There are some stack traces that indicate the possibility of the
-        // DrawViewShell destructor called during the call to
-        // GetSupportedClipboardFormats().  If that really has happened then
-        // exit immediately.
-        TransferableDataHelper aDataHelper (
-            TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
-        ::std::unique_ptr<SvxClipboardFormatItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
-        if (mpDrawView == NULL)
-            return 0;
-        mpCurrentClipboardFormats = std::move(pFormats);
+    // Update the list of supported clipboard formats according to the
+    // new clipboard content.
+    // There are some stack traces that indicate the possibility of the
+    // DrawViewShell destructor called during the call to
+    // GetSupportedClipboardFormats().  If that really has happened then
+    // exit immediately.
+    TransferableDataHelper aDataHelper (
+        TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
+    ::std::unique_ptr<SvxClipboardFormatItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
+    if (mpDrawView == NULL)
+        return;
+    mpCurrentClipboardFormats = std::move(pFormats);
 
-        SfxBindings& rBindings = GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE_SPECIAL );
-        rBindings.Invalidate( SID_PASTE_UNFORMATTED );
-        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
-    }
-    return 0;
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_PASTE );
+    rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
+    rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
 void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)

@@ -476,18 +476,14 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
-IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+IMPL_LINK_TYPED( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    if ( pDataHelper )
-    {
-        bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF ) );
+    bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF ) );
 
-        SfxBindings& rBindings = pViewData->GetBindings();
-        rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE_SPECIAL );
-        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
-    }
-    return 0;
+    SfxBindings& rBindings = pViewData->GetBindings();
+    rBindings.Invalidate( SID_PASTE );
+    rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
 void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )

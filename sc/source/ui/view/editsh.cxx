@@ -758,18 +758,14 @@ const SvxURLField* ScEditShell::GetURLField()
     return NULL;
 }
 
-IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+IMPL_LINK_TYPED( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    if ( pDataHelper )
-    {
-        bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF ) );
+    bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF ) );
 
-        SfxBindings& rBindings = pViewData->GetBindings();
-        rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE_SPECIAL );
-        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
-    }
-    return 0;
+    SfxBindings& rBindings = pViewData->GetBindings();
+    rBindings.Invalidate( SID_PASTE );
+    rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
 void ScEditShell::GetClipState( SfxItemSet& rSet )

@@ -2246,10 +2246,9 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const OUStr
     }
 }
 
-IMPL_LINK_NOARG(OApplicationController, OnClipboardChanged)
+IMPL_LINK_NOARG_TYPED(OApplicationController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     OnInvalidateClipboard();
-    return 0L;
 }
 
 void OApplicationController::OnInvalidateClipboard()

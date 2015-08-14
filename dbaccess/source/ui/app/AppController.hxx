@@ -524,7 +524,7 @@ namespace dbaui
                                 getCurrentSelection( Control& _rControl ) const SAL_OVERRIDE;
 
         void OnInvalidateClipboard();
-        DECL_LINK( OnClipboardChanged, void* );
+        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
         DECL_LINK( OnAsyncDrop, void* );
         DECL_LINK( OnCreateWithPilot, void* );
         DECL_LINK( OnSelectContainer, void* );

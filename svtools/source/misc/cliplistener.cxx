@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 
 
-TransferableClipboardListener::TransferableClipboardListener( const Link<>& rCallback ) :
+TransferableClipboardListener::TransferableClipboardListener( const Link<TransferableDataHelper*,void>& rCallback ) :
     aLink( rCallback )
 {
 }
@@ -83,7 +83,7 @@ void TransferableClipboardListener::AddRemoveListener( vcl::Window* pWin, bool b
 
 void TransferableClipboardListener::ClearCallbackLink()
 {
-    aLink = Link<>();
+    aLink = Link<TransferableDataHelper*,void>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

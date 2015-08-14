@@ -2278,11 +2278,10 @@ void SbaXDataBrowserController::CellDeactivated()
     OnInvalidateClipboard( NULL );
 }
 
-IMPL_LINK_NOARG(SbaXDataBrowserController, OnClipboardChanged)
+IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     SolarMutexGuard aGuard;
     OnInvalidateClipboard( NULL );
-    return 0;
 }
 
 IMPL_LINK_TYPED(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, void)

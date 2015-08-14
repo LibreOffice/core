@@ -328,7 +328,7 @@ namespace dbaui
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK_TYPED( OnInvalidateClipboard, Timer*, void );
-        DECL_LINK( OnClipboardChanged, void* );
+        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
 
         // search callbacks
         DECL_LINK(OnSearchContextRequest, FmSearchContext*);

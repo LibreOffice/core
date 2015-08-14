@@ -27,15 +27,16 @@
 
 namespace vcl { class Window; }
 
+class TransferableDataHelper;
 
 class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelper1<
                             ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {
-    Link<>  aLink;
+    Link<TransferableDataHelper*,void>  aLink;
 
 public:
             // Link is called with a TransferableDataHelper pointer
-            TransferableClipboardListener( const Link<>& rCallback );
+            TransferableClipboardListener( const Link<TransferableDataHelper*,void>& rCallback );
             virtual ~TransferableClipboardListener();
 
     void    AddRemoveListener( vcl::Window* pWin, bool bAdd );

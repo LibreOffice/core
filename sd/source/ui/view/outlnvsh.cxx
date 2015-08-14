@@ -706,22 +706,18 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
     }
 }
 
-IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+IMPL_LINK_TYPED( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    if ( pDataHelper )
-    {
-        bPastePossible = ( pDataHelper->GetFormatCount() != 0 &&
-                            ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) ||
-                              pDataHelper->HasFormat( SotClipboardFormatId::RTF ) ||
-                              pDataHelper->HasFormat( SotClipboardFormatId::HTML ) ) );
+    bPastePossible = pDataHelper->GetFormatCount() != 0 &&
+                     ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) ||
+                       pDataHelper->HasFormat( SotClipboardFormatId::RTF ) ||
+                       pDataHelper->HasFormat( SotClipboardFormatId::HTML ) );
 
-        SfxBindings& rBindings = GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE_SPECIAL );
-        rBindings.Invalidate( SID_PASTE_UNFORMATTED );
-        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
-    }
-    return 0;
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_PASTE );
+    rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
+    rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
 /**

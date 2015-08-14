@@ -63,7 +63,7 @@ private:
 
     void ExecuteFillSingleEdit();
 
-    DECL_LINK( ClipboardChanged, TransferableDataHelper* );
+    DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
     DECL_LINK( DialogClosed, void* );
 
     RotateTransliteration m_aRotateCase;

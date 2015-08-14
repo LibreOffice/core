@@ -403,7 +403,7 @@ protected:
     bool            mbReadOnly;
     static bool     mbPipette;
 
-                    DECL_LINK( ClipboardChanged, TransferableDataHelper* );
+                    DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_LINK( TabSplitHdl, TabBar * );
                     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
                     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );

@@ -466,21 +466,17 @@ static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
     return bPossible;
 }
 
-IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+IMPL_LINK_TYPED( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    if ( pDataHelper )
-    {
-        bPastePossible = lcl_IsCellPastePossible( *pDataHelper );
+    bPastePossible = lcl_IsCellPastePossible( *pDataHelper );
 
-        SfxBindings& rBindings = GetViewData()->GetBindings();
-        rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE_SPECIAL );
-        rBindings.Invalidate( SID_PASTE_ONLY_VALUE );
-        rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
-        rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
-        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
-    }
-    return 0;
+    SfxBindings& rBindings = GetViewData()->GetBindings();
+    rBindings.Invalidate( SID_PASTE );
+    rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_ONLY_VALUE );
+    rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
+    rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
+    rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
 namespace {

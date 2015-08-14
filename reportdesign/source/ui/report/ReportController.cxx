@@ -2342,10 +2342,9 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     }
 }
 
-IMPL_LINK_NOARG(OReportController, OnClipboardChanged)
+IMPL_LINK_NOARG_TYPED(OReportController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     OnInvalidateClipboard();
-    return 0;
 }
 
 void OReportController::OnInvalidateClipboard()
