@@ -565,6 +565,7 @@ void ORowSet::freeResources( bool _bComplete )
         // the columns must be disposed before the querycomposer is disposed because
         // their owner can be the composer
         TDataColumns().swap(m_aDataColumns);// clear and resize capacity
+        m_aReadOnlyDataColumns.clear();
         m_xColumns      = NULL;
         if ( m_pColumns )
             m_pColumns->disposing();
