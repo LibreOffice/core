@@ -635,6 +635,7 @@ void writePROJECTMODULES(SvStream& rStrm)
     writePROJECTCOOKIE(rStrm);
     writePROJECTMODULE(rStrm, "Module1", "Module1", 0x00000379, "procedure");
     writePROJECTMODULE(rStrm, "ThisWorkbook", "ThisWorkbook", 0x000004BD, "other");
+    writePROJECTMODULE(rStrm, "Sheet1", "Sheet1", 0x00000325, "other");
 }
 
 // section 2.3.4.2
