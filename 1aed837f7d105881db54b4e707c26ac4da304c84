@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_689c176a",
+        "filename": "vcl/unx/gtk/a11y/atktext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-14T16:12:08Z",
+      "side": 0,
+      "message": "Is this (and three other places) check really not needed?",
+      "revId": "1aed837f7d105881db54b4e707c26ac4da304c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
