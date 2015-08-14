@@ -588,6 +588,14 @@ void writeMODULEHELPCONTEXT(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000000); // HelpContext
 }
 
+// section 2.3.4.2.3.2.7
+void writeMODULECOOKIE(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x002C); // id
+    rStrm.WriteUInt32(0x00000002); // sizeOfHelpContext
+    rStrm.WriteUInt16(0xFFFF); // HelpContext
+}
+
 // section 2.3.4.2.3.2
 void writePROJECTMODULE(SvStream& rStrm)
 {
@@ -597,6 +605,7 @@ void writePROJECTMODULE(SvStream& rStrm)
     writeMODULEDOCSTRING(rStrm);
     writeMODULEOFFSET(rStrm);
     writeMODULEHELPCONTEXT(rStrm);
+    writeMODULECOOKIE(rStrm);
 }
 
 // section 2.3.4.2.3
