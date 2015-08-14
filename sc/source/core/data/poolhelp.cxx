@@ -115,7 +115,7 @@ void ScPoolHelper::SourceDocumentGone()
     //  reset all pointers to the source document
     mxStylePool->SetDocument( NULL );
     if ( pFormTable )
-        pFormTable->SetColorLink( Link<>() );
+        pFormTable->SetColorLink( Link<sal_uInt16,Color*>() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

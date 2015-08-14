@@ -317,7 +317,7 @@ SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
     return *pFormatterRegistry;
 }
 
-void SvNumberFormatter::SetColorLink( const Link<>& rColorTableCallBack )
+void SvNumberFormatter::SetColorLink( const Link<sal_uInt16,Color*>& rColorTableCallBack )
 {
     aColorLink = rColorTableCallBack;
 }
@@ -326,7 +326,7 @@ Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
 {
     if( aColorLink.IsSet() )
     {
-        return reinterpret_cast<Color*>( aColorLink.Call( static_cast<void*>(&nIndex) )) ;
+        return aColorLink.Call(nIndex);
     }
     else
     {
