@@ -26,6 +26,10 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editdata.hxx>
 
+// XXX
+#include <outleeng.hxx>
+#include "../editeng/editdoc.hxx"
+
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 
@@ -193,11 +197,6 @@ OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, Outlin
 
 OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *pOutliner)
 {
-    if (mpContentTextObj == NULL) {
-        fprintf(stderr, "[Chaining] OverflowingText's mpContentTextObj is NULL!\n");
-        return NULL;
-    }
-
     // Simply Juxtaposing; no within-para merging
     OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
     // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
