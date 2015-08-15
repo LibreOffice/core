@@ -130,41 +130,53 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalcul
 
 OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    ::sal_Int32 nNumberFormatKey, ::sal_Int32 nFormulaLength /* = 0 */ ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    bool bHasSlope = !rtl::math::approxEqual( fabs( m_fSlope ), 1.0 );
+    if ( nFormulaLength > 0 )
+    {
+        nFormulaLength -= m_aStartEquation.getLength();
+        if( m_fSlope != 0.0 )
+        {
+            if( m_fSlope < 0.0 )
+                nFormulaLength -= 2;  // "- "
+            nFormulaLength -= 4 + m_aEquationVariable.getLength(); // "ln(x)"
+            if ( m_fIntercept != 0.0)
+            {
+                nFormulaLength -= 3; // " + "
+                if ( bHasSlope )
+                    nFormulaLength = (nFormulaLength - 1)/ 2;
+            }
+        }
+        if ( nFormulaLength <= 0 )
+            return m_aHash;
+    }
+    OUStringBuffer aBuf( m_aStartEquation );
 
     if( m_fSlope != 0.0 )
     {
-        if( ::rtl::math::approxEqual( fabs( m_fSlope ), 1.0 ))
+        if( m_fSlope < 0.0 )
+            aBuf.append( "- " );
+        if( bHasSlope )
         {
-            if( m_fSlope < 0.0 )
-            {
-                aBuf.append( "-" );
-            }
+            OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fSlope), nFormulaLength );
+            if ( aValueString != "1" )
+                aBuf.append( aValueString+" " );
         }
-        else
-        {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
-            aBuf.append( " " );
-        }
-        aBuf.append( "ln(x)" );
+        aBuf.append( "ln("+m_aEquationVariable+")" );
 
-        if( m_fIntercept < 0.0 )
+        if ( m_fIntercept != 0.0 )
         {
-            aBuf.append( " - " );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs( m_fIntercept )));
-        }
-        else if( m_fIntercept > 0.0 )
-        {
-            aBuf.append( " + " );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+            OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fIntercept), nFormulaLength );
+            if ( aValueString != "0" )
+            {
+                aBuf.append( m_fIntercept < 0.0 ? OUStringLiteral(" - ") : OUStringLiteral(" + ") );
+                aBuf.append( aValueString );
+            }
         }
     }
     else
-    {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
-    }
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept, nFormulaLength ));
 
     return aBuf.makeStringAndClear();
 }

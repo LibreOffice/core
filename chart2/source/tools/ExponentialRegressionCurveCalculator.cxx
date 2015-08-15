@@ -154,40 +154,59 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalcul
 
 OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    ::sal_Int32 nNumberFormatKey, ::sal_Int32 nFormulaLength /* = 0 */ ) const
 {
-    double fIntercept = m_fSign * exp(m_fLogIntercept);
+    double fIntercept = exp(m_fLogIntercept);
     bool bHasSlope = !rtl::math::approxEqual( exp(m_fLogSlope), 1.0 );
     bool bHasLogSlope = !rtl::math::approxEqual( fabs(m_fLogSlope), 1.0 );
-    bool bHasIntercept = !rtl::math::approxEqual( m_fSign*fIntercept, 1.0 ) && fIntercept != 0.0;
+    bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 ) && fIntercept != 0.0;
 
-    OUStringBuffer aBuf( "f(x) = " );
+    if ( nFormulaLength > 0 )
+    {
+        nFormulaLength -= m_aStartEquation.getLength() + 8 + m_aEquationVariable.getLength();  // "exp( ", " x )"
+        if ( m_fSign < 0.0 )
+            nFormulaLength -= 2;
+        if ( fIntercept == 0.0 || ( !bHasSlope && m_fLogIntercept != 0.0 ) )
+            nFormulaLength -= 3; // " + "
+        if ( ( bHasIntercept || fIntercept == 0.0 || ( !bHasSlope && m_fLogIntercept != 0.0 ) ) &&
+               bHasLogSlope )
+            nFormulaLength = (nFormulaLength - 1)/2;
+        if ( nFormulaLength <= 0 )
+            return m_aHash;
+    }
+    OUStringBuffer aBuf( m_aStartEquation );
 
+    if ( m_fSign < 0.0 )
+        aBuf.append( "- " );
     if ( bHasIntercept )
     {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept) );
-        aBuf.append( " exp( " );
+        OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept, nFormulaLength );
+        if ( aValueString != "1" )
+            aBuf.append( aValueString+" " );
     }
-    else
+    aBuf.append( "exp( " );
+    if ( !bHasIntercept )
     {
-       if ( m_fSign < 0.0 )
-            aBuf.append( "- " );
-       aBuf.append( "exp( " );
-       if ( fIntercept == 0.0 ||  // underflow, a true zero is impossible
-          ( !bHasSlope && m_fLogIntercept != 0.0 ) )    // show logarithmic output, if intercept and slope both are near one
+        if ( fIntercept == 0.0 ||  // underflow, a true zero is impossible
+           ( !bHasSlope && m_fLogIntercept != 0.0 ) )   // show logarithmic output, if intercept and slope both are near one
         {                                               // otherwise drop output of intercept, which is 1 here
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-            aBuf.append( (m_fLogSlope < 0.0) ? OUStringLiteral(" ") : OUStringLiteral(" + "));
+            OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept, nFormulaLength );
+            if ( aValueString != "0" )
+            {
+                aBuf.append( aValueString );
+                aBuf.append( (m_fLogSlope < 0.0) ? OUStringLiteral(" ") : OUStringLiteral(" + "));
+            }
         }
     }
     if ( m_fLogSlope < 0.0 )
         aBuf.append( "- ");
     if ( bHasLogSlope )
     {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
-        aBuf.append( ' ' );
+        OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), nFormulaLength );
+        if ( aValueString != "1" )
+            aBuf.append( aValueString+" " );
     }
-    aBuf.append( "x )");
+    aBuf.append( m_aEquationVariable+" )");
 
     return aBuf.makeStringAndClear();
 }
