@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_e8bae76d",
+        "filename": "canvas/source/tools/spriteredrawmanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-15T13:40:07Z",
+      "side": 0,
+      "message": "little subtlety here - that loop went over the sprites in _reversed_ order",
+      "revId": "b0a890e5bda70afa77feb3e89c3d446b00e580a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
