@@ -406,6 +406,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     // allocate temporary arrays, note: round to even
     int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) | 15) + 1;
+    int32_t nVirtAdv = int32_t(aFtFace->size->metrics.height*rFont.GetStretch())>>6;
 
     rLayout.Reserve(nGlyphCapacity);
 
@@ -561,6 +562,8 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 int32_t nYOffset =  pHbPositions[i].y_offset >> 6;
                 int32_t nXAdvance = pHbPositions[i].x_advance >> 6;
                 int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
+                if ( nGlyphIndex & GF_ROTMASK )
+                    nXAdvance = nVirtAdv;
 
                 Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
                 const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset, nYOffset);

@@ -187,6 +187,7 @@ public:
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
     const FT_Size_Metrics&  GetMetricsFT() const { return maSizeFT->metrics; }
+    double                  GetStretch() { return mfStretch; }
     const FontCharMapPtr    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
