@@ -25,10 +25,6 @@
 
 namespace canvas
 {
-
-    // SurfaceRect
-
-
     struct SurfaceRect
     {
         ::basegfx::B2IPoint maPos;
@@ -67,7 +63,7 @@ namespace canvas
             return true;
         }
 
-        // returns true if the horizontal line intersects the rect.
+        /// returns true if the horizontal line intersects the rect.
         bool hLineIntersect( sal_Int32 lx1, sal_Int32 lx2, sal_Int32 ly ) const
         {
             const sal_Int32 x1(maPos.getX());
@@ -81,7 +77,7 @@ namespace canvas
             return true;
         }
 
-        //! Returns true if the vertical line intersects the rect.
+        /// returns true if the vertical line intersects the rect.
         bool vLineIntersect( sal_Int32 lx, sal_Int32 ly1, sal_Int32 ly2 ) const
         {
             const sal_Int32 x1(maPos.getX());
@@ -95,7 +91,7 @@ namespace canvas
             return true;
         }
 
-        // returns true if the passed rect intersects this one.
+        /// returns true if the passed rect intersects this one.
         bool intersection( const SurfaceRect& r ) const
         {
             const sal_Int32 x1(maPos.getX());

@@ -28,11 +28,6 @@
 
 namespace canvas
 {
-
-
-    // SurfaceProxy
-
-
     /** Definition of the surface proxy class.
 
         Surface proxies are the connection between *one* source image

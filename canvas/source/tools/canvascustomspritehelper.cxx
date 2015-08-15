@@ -404,7 +404,6 @@ namespace canvas
         }
     }
 
-    // Sprite interface
     bool CanvasCustomSpriteHelper::isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const
     {
         if( !mbIsCurrClipRectangle ||
@@ -426,8 +425,6 @@ namespace canvas
             return getUpdateArea().isInside( rUpdateArea );
         }
     }
-
-
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getUpdateArea( const ::basegfx::B2DRange& rBounds ) const
     {
@@ -459,7 +456,6 @@ namespace canvas
                 maPosition + maCurrClipBounds.getMinimum(),
                 maPosition + maCurrClipBounds.getMaximum() );
     }
-
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getFullSpriteRect() const
     {

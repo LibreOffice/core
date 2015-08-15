@@ -35,10 +35,6 @@
 
 namespace canvas
 {
-
-    // Surface
-
-
     /** surfaces denote occupied areas within pages.
 
         pages encapsulate the hardware buffers that
@@ -114,7 +110,6 @@ namespace canvas
                            const ::basegfx::B2DPolygon&     rClipPoly,
                            const ::basegfx::B2DHomMatrix&   rTransform );
 
-        // private attributes
     private:
         IColorBufferSharedPtr mpColorBuffer;
 
@@ -138,7 +133,6 @@ namespace canvas
 
         bool                  mbIsDirty;
 
-        // private methods
     private:
         bool refresh( canvas::IColorBuffer& rBuffer ) const;
         void prepareRendering();

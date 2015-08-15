@@ -28,11 +28,6 @@
 
 namespace canvas
 {
-
-
-    // Surface::Surface
-
-
     Surface::Surface( const PageManagerSharedPtr&  rPageManager,
                       const IColorBufferSharedPtr& rColorBuffer,
                       const ::basegfx::B2IPoint&   rPos,
@@ -46,28 +41,16 @@ namespace canvas
     {
     }
 
-
-    // Surface::~Surface
-
-
     Surface::~Surface()
     {
         if(mpFragment)
             mpPageManager->free(mpFragment);
     }
 
-
-    // Surface::getUVCoords
-
-
     void Surface::setColorBufferDirty()
     {
         mbIsDirty=true;
     }
-
-
-    // Surface::getUVCoords
-
 
     basegfx::B2DRectangle Surface::getUVCoords() const
     {
@@ -89,10 +72,6 @@ namespace canvas
                                         (oy+sy)/ph );
     }
 
-
-    // Surface::getUVCoords
-
-
     basegfx::B2DRectangle Surface::getUVCoords( const ::basegfx::B2IPoint& rPos,
                                                 const ::basegfx::B2ISize&  rSize ) const
     {
@@ -110,10 +89,6 @@ namespace canvas
                                         (ox+sx)/pw,
                                         (oy+sy)/ph );
     }
-
-
-    // Surface::draw
-
 
     bool Surface::draw( double                          fAlpha,
                         const ::basegfx::B2DPoint&      rPos,
@@ -210,10 +185,6 @@ namespace canvas
 
         return !(pRenderModule->isError());
     }
-
-
-    // Surface::drawRectangularArea
-
 
     bool Surface::drawRectangularArea(
                         double                         fAlpha,
@@ -337,10 +308,6 @@ namespace canvas
         return !(pRenderModule->isError());
     }
 
-
-    // Surface::drawWithClip
-
-
     bool Surface::drawWithClip( double                          fAlpha,
                                 const ::basegfx::B2DPoint&      rPos,
                                 const ::basegfx::B2DPolygon&    rClipPoly,
@@ -444,10 +411,6 @@ namespace canvas
 
         return !(pRenderModule->isError());
     }
-
-
-    // Surface::prepareRendering
-
 
     void Surface::prepareRendering()
     {

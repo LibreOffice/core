@@ -23,15 +23,6 @@
 
 namespace canvas
 {
-
-
-    // PageManager
-
-
-
-    // PageManager::allocateSpace
-
-
     FragmentSharedPtr PageManager::allocateSpace( const ::basegfx::B2ISize& rSize )
     {
         // we are asked to find a location for the requested size.
@@ -74,10 +65,6 @@ namespace canvas
         return pFragment;
     }
 
-
-    // PageManager::free
-
-
     void PageManager::free( const FragmentSharedPtr& pFragment )
     {
         // erase the reference to the given fragment from our
@@ -93,10 +80,6 @@ namespace canvas
         // shared_ptr from itself...
         pFragment->free(pFragment);
     }
-
-
-    // PageManager::nakedFragment
-
 
     void PageManager::nakedFragment( const FragmentSharedPtr& pFragment )
     {
@@ -151,10 +134,6 @@ namespace canvas
         }
     }
 
-
-    // PageManager::relocate
-
-
     bool PageManager::relocate( const FragmentSharedPtr& pFragment )
     {
         // the fragment passed as argument is assumed to
@@ -181,29 +160,16 @@ namespace canvas
         return false;
     }
 
-
-    // PageManager::validatePages
-
-
     void PageManager::validatePages()
     {
         for( const auto& rPagePtr : maPages )
             rPagePtr->validate();
     }
 
-
-    // PageManager::getPageSize
-
-
     ::basegfx::B2ISize PageManager::getPageSize() const
     {
         return mpRenderModule->getPageSize();
     }
-
-
-    // PageManager::getRenderModule
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

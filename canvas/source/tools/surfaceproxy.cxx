@@ -27,10 +27,6 @@
 
 namespace canvas
 {
-
-    // SurfaceProxy::SurfaceProxy
-
-
     SurfaceProxy::SurfaceProxy( const canvas::IColorBufferSharedPtr& pBuffer,
                                 const PageManagerSharedPtr&          pPageManager ) :
         mpPageManager( pPageManager ),
@@ -83,19 +79,11 @@ namespace canvas
         }
     }
 
-
-    // SurfaceProxy::setColorBufferDirty
-
-
     void SurfaceProxy::setColorBufferDirty()
     {
         for( const auto& rSurfacePtr : maSurfaceList )
             rSurfacePtr->setColorBufferDirty();
     }
-
-
-    // SurfaceProxy::draw
-
 
     bool SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
@@ -107,10 +95,6 @@ namespace canvas
         return true;
     }
 
-
-    // SurfaceProxy::draw
-
-
     bool SurfaceProxy::draw( double                         fAlpha,
                              const ::basegfx::B2DPoint&     rPos,
                              const ::basegfx::B2DRange&     rArea,
@@ -121,10 +105,6 @@ namespace canvas
 
         return true;
     }
-
-
-    // SurfaceProxy::draw
-
 
     bool SurfaceProxy::draw( double                           fAlpha,
                              const ::basegfx::B2DPoint&       rPos,

@@ -26,11 +26,6 @@
 
 namespace canvas
 {
-
-
-    // SurfaceProxyManager
-
-
     class SurfaceProxyManager : public ISurfaceProxyManager
     {
     public:
@@ -64,10 +59,6 @@ namespace canvas
     private:
         PageManagerSharedPtr mpPageManager;
     };
-
-
-    // createSurfaceProxyManager
-
 
     ISurfaceProxyManagerSharedPtr createSurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule )
     {
