@@ -101,9 +101,11 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalc
 
 OUString MovingAverageRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& /*xNumFormatter*/,
-    ::sal_Int32 /*nNumberFormatKey*/ ) const
+    ::sal_Int32 /*nNumberFormatKey*/, ::sal_Int32 nFormulaLength /* = 0 */ ) const
 {
     OUStringBuffer aBuf( "f(x) = N/A");
+    if ( nFormulaLength > 0 && nFormulaLength < 10 )
+        aBuf = "###";
 
     aBuf = SCH_RESSTR( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
 
