@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/mem_fn.hpp>
-
 #include "page.hxx"
 
 namespace canvas
@@ -35,9 +33,8 @@ namespace canvas
     {
         if(!(isValid()))
         {
-            ::std::for_each( mpFragments.begin(),
-                             mpFragments.end(),
-                             ::boost::mem_fn(&PageFragment::refresh));
+            for( const auto& rFragmentPtr : mpFragments )
+                rFragmentPtr->refresh();
         }
     }
 
