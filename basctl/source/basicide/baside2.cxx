@@ -901,7 +901,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         }
         case SID_SELECTALL:
         {
-            TextSelection aSel( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, 0xFFFF ) );
+            TextSelection aSel( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) );
             TextView * pView = GetEditView();
             pView->SetSelection( aSel );
             pView->GetWindow()->GrabFocus();
@@ -1245,7 +1245,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
         if ( !rSearchItem.GetBackward() )
             pView->SetSelection( TextSelection() );
         else
-            pView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+            pView->SetSelection( TextSelection( TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
     }
 
     bool const bForward = !rSearchItem.GetBackward();

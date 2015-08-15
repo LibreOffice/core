@@ -2707,7 +2707,7 @@ void TextEngine::ValidatePaM( TextPaM& rPaM ) const
     if ( rPaM.GetPara() >= nParas )
     {
         rPaM.GetPara() = nParas ? nParas-1 : 0;
-        rPaM.GetIndex() = 0xFFFF;
+        rPaM.GetIndex() = TEXT_INDEX_ALL;
     }
 
     const sal_Int32 nMaxIndex = GetTextLen( rPaM.GetPara() );

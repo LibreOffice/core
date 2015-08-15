@@ -773,7 +773,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
          ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
        )
     {
-        mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
+        mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
         bDone = true;
     }
     else if ( (nCode == KEY_S) && rKEvent.GetKeyCode().IsShift() && rKEvent.GetKeyCode().IsMod1() )
@@ -879,7 +879,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                                         mpExtTextEngine->SetModified( true );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
-            case SV_MENU_EDIT_SELECTALL:    mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+            case SV_MENU_EDIT_SELECTALL:    mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
                                             break;
             case SV_MENU_EDIT_INSERTSYMBOL:
                 {
@@ -915,7 +915,7 @@ void TextWindow::GetFocus()
             // select everything, but do not scroll
             bool bAutoScroll = mpExtTextView->IsAutoScroll();
             mpExtTextView->SetAutoScroll( false );
-            mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
+            mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
             mpExtTextView->SetAutoScroll( bAutoScroll );
             bGotoCursor = false;
         }
@@ -1516,7 +1516,7 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
                     {
                         if ( rKEvent.GetKeyCode().IsMod1() )
                             pImpVclMEdit->GetTextWindow()->GetTextView()->
-                                SetSelection( TextSelection( TextPaM( 0xFFFF, 0xFFFF ) ) );
+                                SetSelection( TextSelection( TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
                     }
                     break;
                     default:

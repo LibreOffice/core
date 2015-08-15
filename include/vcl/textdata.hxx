@@ -25,7 +25,8 @@
 #include <vcl/dllapi.h>
 
 // for Notify, if all paragraphs were deleted
-#define TEXT_PARA_ALL               0xFFFFFFFF
+#define TEXT_PARA_ALL               SAL_MAX_UINT32
+#define TEXT_INDEX_ALL              SAL_MAX_INT32
 
 class TextPaM
 {

@@ -414,7 +414,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             pTextView->Paste();
         break;
         case SID_SELECTALL:
-            pTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+            pTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
         break;
     }
     aEditWin->Invalidate();
@@ -580,7 +580,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     bool bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
 
     if( !bForward )
-        aPaM = TextPaM( TEXT_PARA_ALL, USHRT_MAX );
+        aPaM = TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL );
 
     if( bFromStart )
     {
