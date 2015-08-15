@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/bind.hpp>
 #include <boost/cast.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
@@ -58,28 +57,6 @@ namespace dxcanvas
             // provides the actual redraw methods.
             ::boost::polymorphic_downcast< Sprite* >(
                 rSprite.get() )->redraw();
-        }
-
-        void spriteRedrawStub( const ::canvas::Sprite::Reference& rSprite )
-        {
-            if( rSprite.is() )
-            {
-                // downcast to derived dxcanvas::Sprite interface, which
-                // provides the actual redraw methods.
-                ::boost::polymorphic_downcast< Sprite* >(
-                    rSprite.get() )->redraw();
-            }
-        }
-
-        void spriteRedrawStub2( const ::canvas::SpriteRedrawManager::AreaComponent& rComponent )
-        {
-            if( rComponent.second.getSprite().is() )
-            {
-                // downcast to derived dxcanvas::Sprite interface, which
-                // provides the actual redraw methods.
-                ::boost::polymorphic_downcast< Sprite* >(
-                    rComponent.second.getSprite().get() )->redraw();
-            }
         }
     }
 
@@ -273,9 +250,17 @@ namespace dxcanvas
         // the full sprite area, anyway. But at least optimized in the
         // sense that unnecessary background paints behind the sprites
         // are avoided.
-        ::std::for_each( rUpdateArea.maComponentList.begin(),
-                         rUpdateArea.maComponentList.end(),
-                         &spriteRedrawStub2 );
+        for( const auto& rComponent : rUpdateArea.maComponentList )
+        {
+            const ::canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
+
+            if( rSprite.is() )
+            {
+                // downcast to derived dxcanvas::Sprite interface, which
+                // provides the actual redraw methods.
+                ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw();
+            }
+        }
 
         // repaint uncovered areas from backbuffer - take the
         // _rounded_ rectangles from above, to have the update
@@ -284,12 +269,8 @@ namespace dxcanvas
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
                                          ::basegfx::B2DRange( rDestRect ) );
-        ::std::for_each( aUncoveredAreas.begin(),
-                         aUncoveredAreas.end(),
-                         ::boost::bind( &repaintBackground,
-                                        _1,
-                                        ::boost::cref(maScrapRect),
-                                        ::boost::cref(mpBackBuffer) ) );
+        for( const auto& rUpdateArea : aUncoveredAreas )
+            repaintBackground( rUpdateArea, maScrapRect, mpBackBuffer );
 
         // TODO(E1): Use numeric_cast to catch overflow here
         ::basegfx::B2IRange aActualArea( 0, 0,
@@ -311,9 +292,15 @@ namespace dxcanvas
         // TODO(P2): optimize this by truly rendering to the front
         // buffer. Currently, we've the 3D device only for the back
         // buffer.
-        ::std::for_each( rSortedUpdateSprites.begin(),
-                         rSortedUpdateSprites.end(),
-                         &spriteRedrawStub );
+        for( const auto& rSprite : rSortedUpdateSprites )
+        {
+            if( rSprite.is() )
+            {
+                // downcast to derived dxcanvas::Sprite interface, which
+                // provides the actual redraw methods.
+                ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw();
+            }
+        }
 
         // TODO(E1): Use numeric_cast to catch overflow here
         ::basegfx::B2IRange aActualArea( 0, 0,
@@ -347,9 +334,15 @@ namespace dxcanvas
         // paint sprite
         // ============
 
-        ::std::for_each( rSortedUpdateSprites.begin(),
-                         rSortedUpdateSprites.end(),
-                         &spriteRedrawStub );
+        for( const auto& rSprite : rSortedUpdateSprites )
+        {
+            if( rSprite.is() )
+            {
+                // downcast to derived dxcanvas::Sprite interface, which
+                // provides the actual redraw methods.
+                ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw();
+            }
+        }
 
         // add given update area to the 'blit to foreground' rect
         maUpdateRect.expand( aActualArea );

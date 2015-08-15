@@ -293,9 +293,8 @@ namespace oglcanvas
         std::sort(aSprites.begin(),
                   aSprites.end(),
                   SpriteComparator());
-        std::for_each(aSprites.begin(),
-                      aSprites.end(),
-                      std::mem_fn(&CanvasCustomSprite::renderSprite));
+        for( const auto& rSprite : aSprites )
+            rSprite->renderSprite();
 
 
         // frame counter, other info

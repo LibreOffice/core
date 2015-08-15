@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/bind.hpp>
 #include <boost/cast.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
@@ -97,63 +96,6 @@ namespace vclcanvas
                                          false ); // rendering
                                                   // directly to
                                                   // frontbuffer
-        }
-
-        /** Repaint sprite at original position
-
-            Used for opaque updates, which render directly to the
-            front buffer.
-         */
-        void spriteRedrawStub( OutputDevice&                      rOutDev,
-                               const ::canvas::Sprite::Reference& rSprite )
-        {
-            if( rSprite.is() )
-            {
-                ::boost::polymorphic_downcast< Sprite* >(
-                    rSprite.get() )->redraw( rOutDev,
-                                             false );
-            }
-        }
-
-        /** Repaint sprite at given position
-
-            Used for generic update, which renders into vdev of
-            adapted size.
-         */
-        void spriteRedrawStub2( OutputDevice&                       rOutDev,
-                                const ::basegfx::B2DPoint&          rOutPos,
-                                const ::canvas::Sprite::Reference&  rSprite )
-        {
-            if( rSprite.is() )
-            {
-                Sprite* pSprite = ::boost::polymorphic_downcast< Sprite* >(
-                    rSprite.get() );
-
-                // calc relative sprite position in rUpdateArea (which
-                // need not be the whole screen!)
-                const ::basegfx::B2DPoint& rSpriteScreenPos( pSprite->getPosPixel() );
-                const ::basegfx::B2DPoint& rSpriteRenderPos( rSpriteScreenPos - rOutPos );
-
-                pSprite->redraw( rOutDev, rSpriteRenderPos, true );
-            }
-        }
-
-        /** Repaint sprite at original position
-
-            Used for opaque updates from scrollUpdate(), which render
-            directly to the front buffer.
-         */
-        void spriteRedrawStub3( OutputDevice&                                       rOutDev,
-                                const ::canvas::SpriteRedrawManager::AreaComponent& rComponent )
-        {
-            const ::canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
-
-            if( rSprite.is() )
-            {
-                ::boost::polymorphic_downcast< Sprite* >(
-                    rSprite.get() )->redraw( rOutDev,
-                                             false );
-            }
         }
 
         void renderInfoText( OutputDevice&          rOutDev,
@@ -320,11 +262,11 @@ namespace vclcanvas
 
             // repaint all active sprites on top of background into
             // VDev.
+            OutputDevice& rTmpOutDev( *maVDev.get() );
             mpRedrawManager->forEachSprite(
-                ::boost::bind(
-                    &spriteRedraw,
-                    ::boost::ref( *maVDev.get() ),
-                    _1 ) );
+                    [&rTmpOutDev]( const ::canvas::Sprite::Reference& rSprite )
+                    { spriteRedraw( rTmpOutDev, rSprite ); }
+                    );
 
             // flush to screen
             rOutDev.EnableMapMode( false );
@@ -433,12 +375,15 @@ namespace vclcanvas
             // opaque sprite content)
 
             // repaint all affected sprites directly to output device
-            ::std::for_each( rUpdateArea.maComponentList.begin(),
-                             rUpdateArea.maComponentList.end(),
-                             ::boost::bind(
-                                 &spriteRedrawStub3,
-                                 ::boost::ref( rOutDev ),
-                                 _1 ) );
+            for( const auto rComponent : rUpdateArea.maComponentList )
+            {
+                const ::canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
+
+                if( rSprite.is() )
+                    ::boost::polymorphic_downcast< Sprite* >(
+                        rSprite.get() )->redraw( rOutDev,
+                                                 false );
+            }
         }
         else
         {
@@ -459,12 +404,11 @@ namespace vclcanvas
             // clip here, since we're only repainting _parts_ of the
             // sprite
             rOutDev.Push( PushFlags::CLIPREGION );
-            ::std::for_each( aUnscrollableAreas.begin(),
-                             aUnscrollableAreas.end(),
-                             ::boost::bind( &opaqueUpdateSpriteArea,
-                                            ::boost::cref(aFirst->second.getSprite()),
-                                            ::boost::ref(rOutDev),
-                                            _1 ) );
+
+            for( const auto& rArea : aUnscrollableAreas )
+                opaqueUpdateSpriteArea( aFirst->second.getSprite(),
+                                        rOutDev, rArea );
+
             rOutDev.Pop();
         }
 
@@ -475,12 +419,9 @@ namespace vclcanvas
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
                                          ::basegfx::B2DRange( rDestRect ) );
-        ::std::for_each( aUncoveredAreas.begin(),
-                         aUncoveredAreas.end(),
-                         ::boost::bind( &repaintBackground,
-                                        ::boost::ref(rOutDev),
-                                        ::boost::ref(rBackOutDev),
-                                        _1 ) );
+
+        for( const auto& rArea : aUncoveredAreas )
+            repaintBackground( rOutDev, rBackOutDev, rArea );
     }
 
     void SpriteCanvasHelper::opaqueUpdate( SAL_UNUSED_PARAMETER const ::basegfx::B2DRange&,
@@ -501,12 +442,13 @@ namespace vclcanvas
         // and the update will be constrained to that rect.
 
         // repaint all affected sprites directly to output device
-        ::std::for_each( rSortedUpdateSprites.begin(),
-                         rSortedUpdateSprites.end(),
-                         ::boost::bind(
-                             &spriteRedrawStub,
-                             ::boost::ref( rOutDev ),
-                             _1 ) );
+        for( const auto& rSprite : rSortedUpdateSprites )
+        {
+            if( rSprite.is() )
+                ::boost::polymorphic_downcast< Sprite* >(
+                    rSprite.get() )->redraw( rOutDev,
+                                             false );
+        }
     }
 
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rRequestedArea,
@@ -578,13 +520,22 @@ namespace vclcanvas
 
         // repaint all affected sprites on top of background into
         // VDev.
-        ::std::for_each( rSortedUpdateSprites.begin(),
-                         rSortedUpdateSprites.end(),
-                         ::boost::bind( &spriteRedrawStub2,
-                                        ::boost::ref( *maVDev.get() ),
-                                        vcl::unotools::b2DPointFromPoint(
-                                            aOutputPosition),
-                                        _1 ) );
+        for( const auto& rSprite : rSortedUpdateSprites )
+        {
+            if( rSprite.is() )
+            {
+                Sprite* pSprite = ::boost::polymorphic_downcast< Sprite* >( rSprite.get() );
+
+                // calc relative sprite position in rUpdateArea (which
+                // need not be the whole screen!)
+                const ::basegfx::B2DPoint& rSpriteScreenPos( pSprite->getPosPixel() );
+                const ::basegfx::B2DPoint& rSpriteRenderPos(
+                        rSpriteScreenPos - vcl::unotools::b2DPointFromPoint(aOutputPosition)
+                        );
+
+                pSprite->redraw( *maVDev.get(), rSpriteRenderPos, true );
+            }
+        }
 
         // flush to screen
         rOutDev.EnableMapMode( false );
@@ -673,11 +624,10 @@ namespace vclcanvas
             double nPixel(0.0);
 
             // accumulate pixel count for each sprite into fCount
-            mpRedrawManager->forEachSprite( ::boost::bind(
-                                                makeAdder(nPixel,1.0),
-                                                ::boost::bind(
-                                                    &calcNumPixel,
-                                                    _1 ) ) );
+            mpRedrawManager->forEachSprite(
+                    [&nPixel]( const ::canvas::Sprite::Reference& rSprite )
+                    { makeAdder( nPixel, 1.0 )( calcNumPixel(rSprite) ); }
+                    );
 
             static const int NUM_VIRDEV(2);
             static const int BYTES_PER_PIXEL(3);
