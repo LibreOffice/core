@@ -37,9 +37,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -73,7 +71,7 @@ struct HwpReaderPrivate;
 /**
  * This class implements the external Parser interface
  */
-class HwpReader : public WeakImplHelper1<XFilter>
+class HwpReader : public WeakImplHelper<XFilter>
 {
 
 public:
@@ -151,7 +149,7 @@ private:
     static char* getPStyleName(int, char *);
 };
 
-class HwpImportFilter : public WeakImplHelper4< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
+class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
 public:
     HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);

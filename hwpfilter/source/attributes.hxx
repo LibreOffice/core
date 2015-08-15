@@ -22,7 +22,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 /*----------------------------------------
 *
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
 struct AttributeListImpl_impl;
-class AttributeListImpl : public WeakImplHelper1< XAttributeList >
+class AttributeListImpl : public WeakImplHelper< XAttributeList >
 {
 protected:
     virtual ~AttributeListImpl();
