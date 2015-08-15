@@ -1113,19 +1113,18 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 TextView* pView = GetEditView();
                 if ( pView )
                 {
-
                     OUString sProcName;
-                    bool bFound = false;
 
                     TextSelection aSel = pView->GetSelection();
-                    long nLine = aSel.GetStart().GetPara();
 
-                    for (long i = nLine; i >= 0 && !bFound; --i)
+                    sal_uInt32 i = aSel.GetStart().GetPara();
+                    do
                     {
                         OUString aCurrLine = GetEditEngine()->GetText( i );
                         OUString sProcType;
-                        bFound = GetEditorWindow().GetProcedureName(aCurrLine, sProcType, sProcName);
-                    }
+                        if (GetEditorWindow().GetProcedureName(aCurrLine, sProcType, sProcName))
+                            break;
+                    } while (i--);
 
                     OUString aTitle = CreateQualifiedName();
                     if (!sProcName.isEmpty())
