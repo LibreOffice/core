@@ -21,7 +21,7 @@
 
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/types.h>
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define RETURN_DEBUG_NUMBER
 #endif
 
-class TransliterationImpl : public cppu::WeakImplHelper2
+class TransliterationImpl : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XExtendedTransliteration,
     com::sun::star::lang::XServiceInfo

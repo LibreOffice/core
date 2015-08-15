@@ -22,12 +22,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 //  class UnoScriptTypeDetector
 
-class UnoScriptTypeDetector : public cppu::WeakImplHelper2
+class UnoScriptTypeDetector : public cppu::WeakImplHelper
 <
     ::com::sun::star::i18n::XScriptTypeDetector,
     ::com::sun::star::lang::XServiceInfo

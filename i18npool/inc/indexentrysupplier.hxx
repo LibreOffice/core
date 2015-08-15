@@ -20,7 +20,7 @@
 #define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_HXX
 
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 //  class IndexEntrySupplier
 
-class IndexEntrySupplier : public cppu::WeakImplHelper2
+class IndexEntrySupplier : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XExtendedIndexEntrySupplier,
     com::sun::star::lang::XServiceInfo

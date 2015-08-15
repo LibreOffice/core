@@ -28,9 +28,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
-
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

@@ -21,7 +21,7 @@
 #define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_COMMON_HXX
 
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <collatorImpl.hxx>
 
@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  class IndexEntrySupplier_Common
 
 
-class IndexEntrySupplier_Common : public cppu::WeakImplHelper2
+class IndexEntrySupplier_Common : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XExtendedIndexEntrySupplier,
     com::sun::star::lang::XServiceInfo

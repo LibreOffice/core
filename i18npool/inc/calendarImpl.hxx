@@ -23,7 +23,7 @@
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vector>
@@ -34,7 +34,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class CalendarImpl : public cppu::WeakImplHelper2
+class CalendarImpl : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XCalendar4,
     com::sun::star::lang::XServiceInfo

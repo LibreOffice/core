@@ -25,7 +25,7 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/module.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 //  class TextConversionService
 
-class TextConversionService: public cppu::WeakImplHelper2
+class TextConversionService: public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XExtendedTextConversion,
     com::sun::star::lang::XServiceInfo

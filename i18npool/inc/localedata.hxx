@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppu/macros.hxx>
 #include <com/sun/star/uno/Reference.h>
 
@@ -62,7 +62,7 @@ inline bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::
     return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
 };
 
-class LocaleDataImpl : public cppu::WeakImplHelper2
+class LocaleDataImpl : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XLocaleData4,
     com::sun::star::lang::XServiceInfo

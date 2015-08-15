@@ -37,8 +37,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/diagnose.h>
 
@@ -59,7 +58,7 @@ using namespace ::com::sun::star::io;
 /************
  * Sequence of bytes -> InputStream
  ************/
-class OInputStream : public WeakImplHelper1 < XInputStream >
+class OInputStream : public WeakImplHelper < XInputStream >
 {
 public:
     explicit OInputStream( const Sequence< sal_Int8 >&seq )
@@ -153,7 +152,7 @@ Reference< XInputStream > createStreamFromFile(
 
 
 class TestDocumentHandler :
-    public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
+    public WeakImplHelper< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
     TestDocumentHandler(const char* locale, const char* outFile )

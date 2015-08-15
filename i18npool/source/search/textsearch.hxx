@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NPOOL_SOURCE_SEARCH_TEXTSEARCH_HXX
 #define INCLUDED_I18NPOOL_SOURCE_SEARCH_TEXTSEARCH_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XTextSearch.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
@@ -37,7 +37,7 @@ typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
 class WLevDistance;
 typedef ::std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
 
-class TextSearch: public cppu::WeakImplHelper2
+class TextSearch: public cppu::WeakImplHelper
 <
     ::com::sun::star::util::XTextSearch,
     ::com::sun::star::lang::XServiceInfo

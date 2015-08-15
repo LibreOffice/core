@@ -20,7 +20,7 @@
 #define INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_HXX
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 //  class InputSequenceCheckerImpl
 
-class InputSequenceCheckerImpl : public cppu::WeakImplHelper2
+class InputSequenceCheckerImpl : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XExtendedInputSequenceChecker,
     com::sun::star::lang::XServiceInfo

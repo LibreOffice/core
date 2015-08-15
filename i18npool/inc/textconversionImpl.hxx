@@ -23,14 +23,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
 //  class TextConversion
 
-class TextConversionImpl : public cppu::WeakImplHelper2
+class TextConversionImpl : public cppu::WeakImplHelper
 <
     com::sun::star::i18n::XExtendedTextConversion,
     com::sun::star::lang::XServiceInfo
