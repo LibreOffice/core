@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/mem_fn.hpp>
-
 #include "pagemanager.hxx"
 
 namespace canvas
@@ -189,9 +187,8 @@ namespace canvas
 
     void PageManager::validatePages()
     {
-        ::std::for_each( maPages.begin(),
-                         maPages.end(),
-                         ::boost::mem_fn(&Page::validate));
+        for( const auto& rPagePtr : maPages )
+            rPagePtr->validate();
     }
 
 

@@ -27,6 +27,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <canvas/spriteredrawmanager.hxx>
+#include <boost/range/adaptor/reversed.hpp>
 
 namespace canvas
 {
@@ -406,10 +407,8 @@ namespace canvas
         // now, calc the _true_ update area, by merging all sprite's
         // true update areas into one rectangle
         ::basegfx::B2DRange aTrueArea( rUpdateArea.maComponentList.begin()->second.getUpdateArea() );
-        ::std::for_each( rUpdateArea.maComponentList.begin(),
-                         rUpdateArea.maComponentList.end(),
-                         [&aTrueArea]( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
-                         { aTrueArea.expand(cp.second.getUpdateArea()); } );
+        for( const auto& rArea : rUpdateArea.maComponentList )
+            aTrueArea.expand(rArea.second.getUpdateArea());
 
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
@@ -452,14 +451,8 @@ namespace canvas
         // this object, is the owner of the sprites. After all, a
         // sprite without a canvas to render into makes not terribly
         // much sense.
-
-        // TODO(Q3): Once boost 1.33 is in, change back to for_each
-        // with ::boost::mem_fn. For the time being, explicit loop due
-        // to cdecl declaration of all UNO methods.
-        ListOfSprites::reverse_iterator aCurr( maSprites.rbegin() );
-        ListOfSprites::reverse_iterator aEnd( maSprites.rend() );
-        while( aCurr != aEnd )
-            (*aCurr++)->dispose();
+        for( const auto& rCurr : boost::adaptors::reverse(maSprites) )
+            rCurr->dispose();
 
         maSprites.clear();
     }
