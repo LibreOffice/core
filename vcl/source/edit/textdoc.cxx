@@ -436,8 +436,7 @@ OUString TextDoc::GetText( const sal_Unicode* pSep ) const
     for ( sal_uInt32 nNode = 0; nNode < nNodes; ++nNode )
     {
         TextNode* pNode = maTextNodes[ nNode ];
-        OUString aTmp( pNode->GetText() );
-        aASCIIText += aTmp;
+        aASCIIText += pNode->GetText();
         if ( pSep && ( nNode != nLastNode ) )
             aASCIIText += pSep;
     }
@@ -447,13 +446,11 @@ OUString TextDoc::GetText( const sal_Unicode* pSep ) const
 
 OUString TextDoc::GetText( sal_uInt32 nPara ) const
 {
-    OUString aText;
-
     TextNode* pNode = ( nPara < maTextNodes.size() ) ? maTextNodes[ nPara ] : 0;
     if ( pNode )
-        aText = pNode->GetText();
+        return pNode->GetText();
 
-    return aText;
+    return OUString();
 }
 
 sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const

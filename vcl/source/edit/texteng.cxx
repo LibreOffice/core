@@ -699,9 +699,9 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
             // the text that needs to be checked is only the one
             // before the current cursor position
             OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).copy(0, nTmpPos) );
-            OUString aNewText( aOldText );
             if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
             {
+                OUString aNewText( aOldText );
                 xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
 
                 // find position of first character that has changed
@@ -2530,7 +2530,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
         OUStringBuffer aText;
         if ( !bHTML )
         {
-            aText = OUString( pNode->GetText().copy( nStartPos, nEndPos-nStartPos ) );
+            aText = pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
         }
         else
         {
@@ -2551,7 +2551,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
                     nTmpEnd = pAttr ? pAttr->GetStart() : nEndPos;
 
                     // Text before Attribute
-                    aText.append( OUString( pNode->GetText().copy( nTmpStart, nTmpEnd-nTmpStart ) ) );
+                    aText.append( pNode->GetText().copy( nTmpStart, nTmpEnd-nTmpStart ) );
 
                     if ( pAttr )
                     {
