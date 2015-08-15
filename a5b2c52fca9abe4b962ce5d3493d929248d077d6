@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_28096f32",
+        "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-15T20:27:57Z",
+      "side": 1,
+      "message": "Ha. Still getting used to that... It\u0027s surprisingly hard to change",
+      "parentUuid": "9aed3d3a_4825d3c0",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_28220fba",
         "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2015-08-15T19:07:08Z",
       "side": 1,
       "message": "Slowly getting into nitpicking land, but - in this case, the function call fits the line, even with a 80 chars limit? ;)",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_8806bb1e",
+        "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-15T20:27:57Z",
+      "side": 1,
+      "message": "No problem. There are a few more places in this patch that are the same. I\u0027ll fix those as well.",
+      "parentUuid": "9aed3d3a_882fdba0",
       "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
