@@ -800,9 +800,8 @@ namespace oglcanvas
                 }
 
                 // own copy, for thread safety
-                std::for_each(rAct.maPolyPolys.begin(),
-                              rAct.maPolyPolys.end(),
-                              ::boost::mem_fn(&::basegfx::B2DPolyPolygon::makeUnique));
+                for( auto& rPoly : rAct.maPolyPolys )
+                    rPoly.makeUnique();
 
                 rAct.maFunction = &lcl_fillPolyPolygon;
             }
