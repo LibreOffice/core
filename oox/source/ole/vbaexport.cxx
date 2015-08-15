@@ -308,7 +308,8 @@ void VBACompression::write()
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
     mxModel(xModel)
 {
-    maProjectName = "How to get the correct project name?";
+    // TODO: how do we get the correct project name
+    maProjectName = "VBAProject";
 }
 
 namespace {
@@ -606,6 +607,14 @@ void VbaExport::exportVBA()
 
     VBACompression aCompression(aCompressedStream, aMemoryStream);
     aCompression.write();
+
+    css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
+    css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    sal_Int32 n = aElementNames.getLength();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        SAL_DEBUG(aElementNames[i]);
+    }
 }
 
 css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
@@ -615,6 +624,12 @@ css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
     {
         oox::PropertySet aDocProp(mxModel);
         css::uno::Reference<css::script::XLibraryContainer> xLibContainer(aDocProp.getAnyProperty(oox::PROP_BasicLibraries), css::uno::UNO_QUERY_THROW);
+        css::uno::Sequence<OUString> aElementNames = xLibContainer->getElementNames();
+        sal_Int32 n = aElementNames.getLength();
+        for (sal_Int32 i = 0; i < n; ++i)
+        {
+            SAL_DEBUG(aElementNames[i]);
+        }
         xLibrary.set( xLibContainer->getByName(maProjectName), css::uno::UNO_QUERY_THROW );
     }
     catch(...)
