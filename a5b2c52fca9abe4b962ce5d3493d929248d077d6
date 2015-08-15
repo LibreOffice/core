@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_4825d3c0",
+        "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-15T19:07:08Z",
+      "side": 1,
+      "message": "Please match brace/indentation etc style of the surrounding code",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_28220fba",
+        "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-15T19:07:08Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_882fdba0",
+        "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-15T19:07:08Z",
+      "side": 1,
+      "message": "Slowly getting into nitpicking land, but - in this case, the function call fits the line, even with a 80 chars limit? ;)",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_682c17ac",
+        "filename": "canvas/source/directx/dx_spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-15T19:07:08Z",
+      "side": 1,
+      "message": "Same comment here \u0026 at a few more places :)",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_c8172353",
+        "filename": "canvas/source/vcl/spritecanvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-15T19:07:08Z",
+      "side": 1,
+      "message": "in theory, instead of this, one could bind *maVDev.get() (saving a few cycles in the loop perhaps)?",
+      "revId": "a5b2c52fca9abe4b962ce5d3493d929248d077d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
