@@ -537,9 +537,13 @@ void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
     {
         double aValue;
 
-        fMax = fMin = aValuesX[0];
+        sal_Int32 i = 0;
+        while ( i < aValuesX.getLength() && ::rtl::math::isNan( aValuesX[i] ) )
+            i++;
+        if ( i < aValuesX.getLength() )
+            fMax = fMin = aValuesX[i++];
 
-        for (sal_Int32 i = 1; i < aValuesX.getLength(); i++)
+        for ( ; i < aValuesX.getLength(); i++)
         {
             aValue = aValuesX[i];
             if ( aValue > fMax)
