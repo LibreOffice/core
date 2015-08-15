@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_53410439",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-15T21:51:15Z",
+      "side": 1,
+      "message": "we have a shortcut css:: for this\nso just use css::i18n::ScriptType::ASIAN\nbelow rather that put a source wise namespace.",
+      "revId": "ce2480a428d15207fccf7ad9dc78ea0c3500369d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
