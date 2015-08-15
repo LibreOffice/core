@@ -87,3 +87,16 @@ for i in base calc draw impress writer; do
     cp "${APPDATA_SOURCE_DIR}/libreoffice-${i}.appdata.xml" "${DESTDIR}/${PREFIXDIR}/share/appdata/${PREFIX}-${i}.appdata.xml"
 done
 
+# Generate gobject-introspection files
+mkdir -p "${DESTDIR}/${PREFIXDIR}/share/gir-1.0"
+g-ir-scanner "${SRCDIR}/include/LibreOfficeKit/LibreOfficeKitGtk.h" "${SRCDIR}/libreofficekit/source/gtk/lokdocview.cxx" \
+             `${PKG_CONFIG} --cflags gobject-introspection-1.0 gtk+-3.0` -I"${SRCDIR}/include/" \
+             --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
+             --library=libreofficekitgtk --library-path="${DESTDIR}/${INSTALLDIR}/program" \
+             --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
+             --namespace=LOKDocView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
+             --output="${DESTDIR}/${PREFIXDIR}/share/gir-1.0/LOKDocView-0.1.gir" --warn-all --no-libtool
+
+mkdir -p "${DESTDIR}/${LIBDIR}/girepository-1.0"
+g-ir-compiler "${DESTDIR}/${PREFIXDIR}/share/gir-1.0/LOKDocView-0.1.gir" \
+              --output="${DESTDIR}/${LIBDIR}/girepository-1.0/LOKDocView-0.1.typelib"
