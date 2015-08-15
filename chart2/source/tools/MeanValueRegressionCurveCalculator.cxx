@@ -118,12 +118,15 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculat
 
 OUString MeanValueRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    ::sal_Int32 nNumberFormatKey, ::sal_Int32 nFormulaLength /* = 0 */ ) const
 {
-    OUString aBuf = "f(x) = " +
-                    getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue );
-
-    return aBuf;
+    if ( nFormulaLength > 0 )
+    {
+        nFormulaLength -= m_aStartEquation.getLength();
+        if ( nFormulaLength <= 0 )
+            return m_aHash;
+    }
+    return ( m_aStartEquation + getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue, nFormulaLength ) );
 }
 
 } //  namespace chart

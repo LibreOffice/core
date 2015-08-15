@@ -34,7 +34,7 @@ public:
 protected:
     virtual OUString ImplGetRepresentation(
         const css::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
-        sal_Int32 nNumberFormatKey ) const override;
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength = 0 ) const override;
 
 private:
     // ____ XRegressionCurveCalculator ____

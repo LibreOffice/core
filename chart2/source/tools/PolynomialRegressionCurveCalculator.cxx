@@ -233,11 +233,43 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL PolynomialRegressionCurveCalcula
 
 OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength /* = 0 */ ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    OUStringBuffer aBuf( m_aStartEquation );
 
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
+    if ( nFormulaLength > 0 )
+    {
+        nFormulaLength -= m_aStartEquation.getLength();
+        sal_Int32 nCharMin = 0;
+        double nCoefficients = aLastIndex + 1.0;
+        for (sal_Int32 i = aLastIndex; i >= 0; i--)
+        {
+            double aValue = mCoefficients[i];
+            if ( aValue == 0.0 )
+            {
+                nCoefficients --;
+                continue;
+            }
+            if ( rtl::math::approxEqual( fabs( aValue ) , 1.0 ) && i > 0 )
+            {
+                nCoefficients --;
+            }
+            if ( i != aLastIndex )
+                nCharMin += 3; // " + "
+            if ( i > 0 )
+            {
+                nCharMin += m_aEquationVariable.getLength(); // "x"
+                if ( i > 1 )
+                    nCharMin +=2; // "^i"
+                if ( i >= 10 )
+                    nCharMin ++; // 2 digits for i
+            }
+        }
+        nFormulaLength = ( nFormulaLength - nCharMin ) / nCoefficients;
+        if ( nFormulaLength <= 0 )
+            return m_aHash;
+    }
     bool bFindValue = false;
     for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
@@ -259,21 +291,24 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         bFindValue = true;
 
         if ( i == 0 || !rtl::math::approxEqual( aValue , 1.0 ) )
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, aValue ) );
+        {
+            OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, aValue, nFormulaLength );
+            if ( i == 0 || aValueString != "1" )
+                aBuf.append( aValueString );
+        }
 
         if(i > 0)
         {
-            if (i == 1)
+            aBuf.append( m_aEquationVariable );
+            if (i > 1)
             {
-                aBuf.append( "x" );
-            }
-            else
-            {
-                aBuf.append( "x^" );
+                aBuf.append( "^" );
                 aBuf.append(i);
             }
         }
     }
+    if ( aBuf.toString() == m_aStartEquation )
+        aBuf.append('0');
 
     return aBuf.makeStringAndClear();
 }

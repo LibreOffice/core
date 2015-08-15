@@ -43,12 +43,12 @@ public:
 protected:
     virtual OUString ImplGetRepresentation(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
-        sal_Int32 nNumberFormatKey ) const = 0;
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength = 0 ) const = 0;
 
     static OUString getFormattedString(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
-        double fNumber );
+        double fNumber, sal_Int32 nStringLength = 0 );
 
     double m_fCorrelationCoeffitient;
 
@@ -56,6 +56,11 @@ protected:
     bool  mForceIntercept;
     double    mInterceptValue;
     sal_Int32 mPeriod;
+
+    const OUString m_aStartEquation;
+    const OUString m_aEquationVariable;
+    const OUString m_aHash;
+
 
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
@@ -93,6 +98,11 @@ protected:
     virtual OUString SAL_CALL getFormattedRepresentation(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         sal_Int32 nNumberFormatKey )
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+
+    virtual OUString SAL_CALL getFormattedRepresentationMaxLength(
+        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
 };
 
