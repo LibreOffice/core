@@ -20,7 +20,7 @@
 #define INCLUDED_I18NPOOL_INC_CHARACTERCLASSIFICATIONIMPL_HXX
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -28,7 +28,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class CharacterClassificationImpl : public cppu::WeakImplHelper2
+class CharacterClassificationImpl : public cppu::WeakImplHelper
 <
     XCharacterClassification,
     com::sun::star::lang::XServiceInfo

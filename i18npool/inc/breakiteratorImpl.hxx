@@ -30,7 +30,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 //  class BreakIterator
 
-class BreakIteratorImpl : public cppu::WeakImplHelper2
+class BreakIteratorImpl : public cppu::WeakImplHelper
 <
     XBreakIterator,
     com::sun::star::lang::XServiceInfo

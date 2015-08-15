@@ -1327,7 +1327,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) thro
 // OutlineNumbering helper class
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace com{ namespace sun{ namespace star{ namespace lang {
     struct  Locale;
@@ -1348,7 +1348,7 @@ struct OutlineNumberingLevel_Impl
     sal_Int32       nNatNum;
 };
 
-class OutlineNumbering : public cppu::WeakImplHelper1 < container::XIndexAccess >
+class OutlineNumbering : public cppu::WeakImplHelper < container::XIndexAccess >
 {
     // OutlineNumbering helper class
 

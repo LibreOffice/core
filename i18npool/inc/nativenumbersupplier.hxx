@@ -22,7 +22,7 @@
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------
 //      class NativeNumberSupplierService
 //      ----------------------------------------------------
-class NativeNumberSupplierService : public cppu::WeakImplHelper2
+class NativeNumberSupplierService : public cppu::WeakImplHelper
 <
         com::sun::star::i18n::XNativeNumberSupplier,
         com::sun::star::lang::XServiceInfo

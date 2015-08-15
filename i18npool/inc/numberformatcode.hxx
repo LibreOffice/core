@@ -22,14 +22,14 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-class NumberFormatCodeMapper : public cppu::WeakImplHelper2
+class NumberFormatCodeMapper : public cppu::WeakImplHelper
 <
     ::com::sun::star::i18n::XNumberFormatCode,
     ::com::sun::star::lang::XServiceInfo

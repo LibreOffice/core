@@ -21,14 +21,14 @@
 #define INCLUDED_I18NPOOL_INC_ORDINALSUFFIX_HXX
 
 #include <com/sun/star/i18n/XOrdinalSuffix.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class OrdinalSuffixService : public cppu::WeakImplHelper2
+class OrdinalSuffixService : public cppu::WeakImplHelper
 <
     XOrdinalSuffix,
     com::sun::star::lang::XServiceInfo

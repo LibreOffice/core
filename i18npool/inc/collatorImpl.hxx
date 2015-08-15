@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/alloca.h>
 #include <vector>
@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------
 //      class CollatorImpl
 //      ----------------------------------------------------
-class CollatorImpl : public cppu::WeakImplHelper2
+class CollatorImpl : public cppu::WeakImplHelper
 <
     XCollator,
     com::sun::star::lang::XServiceInfo

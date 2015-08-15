@@ -23,7 +23,7 @@
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
@@ -31,7 +31,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class DefaultNumberingProvider : public cppu::WeakImplHelper4
+class DefaultNumberingProvider : public cppu::WeakImplHelper
 <
     com::sun::star::text::XDefaultNumberingProvider,
     com::sun::star::text::XNumberingFormatter,
