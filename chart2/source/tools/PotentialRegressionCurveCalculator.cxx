@@ -142,9 +142,13 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL PotentialRegressionCurveCalculat
 
 OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    ::sal_Int32 nNumberFormatKey, ::sal_Int32 nFormulaLength /* = 0 */ ) const
 {
+    if ( nFormulaLength > 0 && nFormulaLength <= 7 )
+        return OUString("###");
     OUStringBuffer aBuf( "f(x) = ");
+    if ( nFormulaLength > 0 )
+        nFormulaLength -= aBuf.getLength();
 
     if( m_fIntercept == 0.0 )
     {
@@ -152,20 +156,26 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
     }
     else if( m_fSlope == 0.0 )
     {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept, nFormulaLength ));
     }
     else
     {
-        if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
+        if( ! rtl::math::approxEqual( std::abs( m_fIntercept ), 1.0 ) )
         {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+            if (nFormulaLength > 0 )
+                nFormulaLength = ( nFormulaLength - 3 ) /2;
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept, nFormulaLength ));
             aBuf.append( ' ');
         }
-        if( m_fSlope != 0.0 )
+        else
         {
-            aBuf.append( "x^" );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
+            if ( m_fIntercept < 0.0 )
+                aBuf.append( "- " );
+            if ( nFormulaLength > 0 )
+                nFormulaLength -= 2 + (m_fIntercept < 0.0 ? 2 : 0);
         }
+        aBuf.append( "x^" );
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope, nFormulaLength ));
     }
 
     return aBuf.makeStringAndClear();
