@@ -26,12 +26,12 @@ class TextUndoDelPara : public TextUndo
 {
 private:
     bool            mbDelObject;
-    sal_uLong       mnPara;
+    sal_uInt32      mnPara;
     TextNode*       mpNode; // points at the valid not-destroyed object
 
 public:
                     TYPEINFO_OVERRIDE();
-                    TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
+                    TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uInt32 nPara );
                     virtual ~TextUndoDelPara();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -43,12 +43,12 @@ public:
 class TextUndoConnectParas : public TextUndo
 {
 private:
-    sal_uLong           mnPara;
+    sal_uInt32          mnPara;
     sal_Int32           mnSepPos;
 
 public:
                     TYPEINFO_OVERRIDE();
-                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nSepPos );
+                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nSepPos );
                     virtual ~TextUndoConnectParas();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -60,12 +60,12 @@ public:
 class TextUndoSplitPara : public TextUndo
 {
 private:
-    sal_uLong           mnPara;
+    sal_uInt32          mnPara;
     sal_Int32           mnSepPos;
 
 public:
                     TYPEINFO_OVERRIDE();
-                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nSepPos );
+                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nSepPos );
                     virtual ~TextUndoSplitPara();
 
     virtual void    Undo() SAL_OVERRIDE;

@@ -115,7 +115,7 @@ public:
 
     sal_uLong           GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
     OUString            GetText( const sal_Unicode* pSep ) const;
-    OUString            GetText( sal_uLong nPara ) const;
+    OUString            GetText( sal_uInt32 nPara ) const;
 
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
     sal_uInt16          GetLeftMargin() const       { return mnLeftMargin; }

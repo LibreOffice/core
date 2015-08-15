@@ -142,7 +142,7 @@ void TextUndo::SetSelection( const TextSelection& rSel )
         GetView()->ImpSetSelection( rSel );
 }
 
-TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara )
+TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uInt32 nPara )
                     : TextUndo( pTextEngine )
 {
     mpNode = pNode;
@@ -182,8 +182,8 @@ void TextUndoDelPara::Redo()
 
     mbDelObject = true; // belongs again to the Undo
 
-    sal_uLong nParas = GetDoc()->GetNodes().size();
-    sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
+    const sal_uInt32 nParas = static_cast<sal_uInt32>(GetDoc()->GetNodes().size());
+    const sal_uInt32 n = mnPara < nParas ? mnPara : nParas-1;
     TextNode* pN = GetDoc()->GetNodes()[ n ];
     TextPaM aPaM( n, pN->GetText().getLength() );
     SetSelection( aPaM );
@@ -194,7 +194,7 @@ OUString TextUndoDelPara::GetComment () const
     return ResId(STR_TEXTUNDO_DELPARA, *ImplGetResMgr());
 }
 
-TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nPos )
+TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
                     :   TextUndo( pTextEngine )
 {
     mnPara = nPara;
@@ -222,7 +222,7 @@ OUString TextUndoConnectParas::GetComment () const
     return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr()).toString();
 }
 
-TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_Int32 nPos )
+TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
                     : TextUndo( pTextEngine )
 {
     mnPara = nPara;

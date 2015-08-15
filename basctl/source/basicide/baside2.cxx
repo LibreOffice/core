@@ -319,10 +319,10 @@ bool ModulWindow::BasicExecute()
         {
             DBG_ASSERT( xModule.Is(), "Kein Modul!" );
             AddStatus( BASWIN_RUNNINGBASIC );
-            sal_uInt16 nStart, nEnd, nCurMethodStart = 0;
+            sal_uInt16 nStart, nEnd;
             TextSelection aSel = GetEditView()->GetSelection();
             // Init cursor to top
-            nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
+            const sal_uInt32 nCurMethodStart = aSel.GetStart().GetPara() + 1;
             SbMethod* pMethod = 0;
             // first Macro, else blind "Main" (ExtSearch?)
             for ( sal_uInt16 nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -568,7 +568,7 @@ bool ModulWindow::BasicToggleBreakPoint()
 
     bool bNewBreakPoint = false;
 
-    for ( sal_uLong nLine = aSel.GetStart().GetPara(); nLine <= aSel.GetEnd().GetPara(); nLine++ )
+    for ( sal_uInt32 nLine = aSel.GetStart().GetPara(); nLine <= aSel.GetEnd().GetPara(); ++nLine )
     {
         if ( ToggleBreakPoint( nLine ) )
             bNewBreakPoint = true;
@@ -589,7 +589,7 @@ void ModulWindow::BasicToggleBreakPointEnabled()
         TextSelection aSel = pView->GetSelection();
         BreakPointList& rList = GetBreakPoints();
 
-        for ( sal_uLong nLine = ++aSel.GetStart().GetPara(), nEnd = ++aSel.GetEnd().GetPara(); nLine <= nEnd; ++nLine )
+        for ( sal_uInt32 nLine = ++aSel.GetStart().GetPara(), nEnd = ++aSel.GetEnd().GetPara(); nLine <= nEnd; ++nLine )
         {
             BreakPoint* pBrk = rList.FindBreakPoint( nLine );
             if ( pBrk )

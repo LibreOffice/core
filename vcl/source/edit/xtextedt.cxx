@@ -38,8 +38,8 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
 {
     TextSelection aSel( rCursor );
     const sal_Int32 nPos = rCursor.GetIndex();
-    sal_uLong nPara = rCursor.GetPara();
-    sal_uLong nParas = GetParagraphCount();
+    sal_uInt32 nPara = rCursor.GetPara();
+    const sal_uInt32 nParas = GetParagraphCount();
     if ( ( nPara < nParas ) && ( nPos < GetTextLen( nPara ) ) )
     {
         sal_Int32 nMatchIndex = maGroupChars.indexOf( GetText( rCursor.GetPara() )[ nPos ] );
@@ -147,21 +147,21 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
     }
 
     bool bFound = false;
-    sal_uLong nStartNode, nEndNode;
+    sal_uInt32 nEndNode;
 
     if ( bSearchInSelection )
         nEndNode = bForward ? aSel.GetEnd().GetPara() : aSel.GetStart().GetPara();
     else
         nEndNode = bForward ? (GetParagraphCount()-1) : 0;
 
-    nStartNode = aStartPaM.GetPara();
+    const sal_uInt32 nStartNode = aStartPaM.GetPara();
 
     util::SearchOptions aOptions( rSearchOptions );
     aOptions.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     utl::TextSearch aSearcher( rSearchOptions );
 
     // iterate over the paragraphs
-    for ( sal_uLong nNode = nStartNode;
+    for ( sal_uInt32 nNode = nStartNode;
             bForward ?  ( nNode <= nEndNode) : ( nNode >= nEndNode );
             bForward ? nNode++ : nNode-- )
     {
@@ -339,14 +339,14 @@ bool ExtTextView::ImpIndentBlock( bool bRight )
     HideSelection();
     GetTextEngine()->UndoActionStart();
 
-    sal_uLong nStartPara = aSel.GetStart().GetPara();
-    sal_uLong nEndPara = aSel.GetEnd().GetPara();
+    const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
+    sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
         nEndPara--; // do not indent
     }
 
-    for ( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    for ( sal_uInt32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
     {
         if ( bRight )
         {

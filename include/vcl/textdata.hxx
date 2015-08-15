@@ -30,15 +30,15 @@
 class TextPaM
 {
 private:
-    sal_uLong           mnPara;
+    sal_uInt32          mnPara;
     sal_Int32           mnIndex;
 
 public:
                     TextPaM() : mnPara(0), mnIndex(0) {}
-                    TextPaM( sal_uLong nPara, sal_Int32 nIndex ) : mnPara(nPara), mnIndex(nIndex) {}
+                    TextPaM( sal_uInt32 nPara, sal_Int32 nIndex ) : mnPara(nPara), mnIndex(nIndex) {}
 
-    sal_uLong           GetPara() const     { return mnPara; }
-    sal_uLong&          GetPara()           { return mnPara; }
+    sal_uInt32          GetPara() const     { return mnPara; }
+    sal_uInt32&         GetPara()           { return mnPara; }
 
     sal_Int32           GetIndex() const    { return mnIndex; }
     sal_Int32&          GetIndex()          { return mnIndex; }
@@ -128,8 +128,8 @@ private:
     sal_uLong   mnValue;
 
 public:
-            TextHint( sal_uLong nId );
-            TextHint( sal_uLong nId, sal_uLong nValue );
+    TextHint( sal_uInt32 nId );
+    TextHint( sal_uInt32 nId, sal_uLong nValue );
 
     sal_uLong   GetValue() const        { return mnValue; }
 };

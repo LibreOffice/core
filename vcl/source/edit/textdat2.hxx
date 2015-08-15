@@ -216,10 +216,10 @@ public:
                     TEParaPortions() : mvData() {}
                     ~TEParaPortions();
 
-    size_t          Count() const { return mvData.size(); }
-    TEParaPortion*  GetObject( size_t nIndex ) { return mvData[nIndex]; }
-    void            Insert( TEParaPortion* pObject, size_t nPos ) { mvData.insert( mvData.begin()+nPos, pObject ); }
-    void            Remove( size_t nPos ) { mvData.erase( mvData.begin()+nPos ); }
+    sal_uInt32      Count() const { return static_cast<sal_uInt32>(mvData.size()); }
+    TEParaPortion*  GetObject( sal_uInt32 nIndex ) { return mvData[nIndex]; }
+    void            Insert( TEParaPortion* pObject, sal_uInt32 nPos ) { mvData.insert( mvData.begin()+nPos, pObject ); }
+    void            Remove( sal_uInt32 nPos ) { mvData.erase( mvData.begin()+nPos ); }
 };
 
 class TextSelFunctionSet: public FunctionSet

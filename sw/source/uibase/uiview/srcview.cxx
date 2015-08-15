@@ -580,7 +580,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     bool bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
 
     if( !bForward )
-        aPaM = TextPaM( (sal_uLong)-1, USHRT_MAX );
+        aPaM = TextPaM( TEXT_PARA_ALL, USHRT_MAX );
 
     if( bFromStart )
     {

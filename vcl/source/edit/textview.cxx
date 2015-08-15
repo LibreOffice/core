@@ -401,9 +401,9 @@ void TextView::ImpHighlight( const TextSelection& rSel )
 
         Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
         long nY = 0;
-        sal_uLong nStartPara = aSel.GetStart().GetPara();
-        sal_uLong nEndPara = aSel.GetEnd().GetPara();
-        for ( sal_uLong nPara = 0; nPara <= nEndPara; nPara++ )
+        const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
+        const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
+        for ( sal_uInt32 nPara = 0; nPara <= nEndPara; ++nPara )
         {
             long nParaHeight = (long)mpImpl->mpTextEngine->CalcParaHeight( nPara );
             if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
@@ -685,11 +685,11 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                         //expand selection to include all protected content - if there is any
                         const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib(
                                     TextPaM(mpImpl->maSelection.GetStart().GetPara(),
-                                    mpImpl->maSelection.GetStart().GetIndex()),
+                                            mpImpl->maSelection.GetStart().GetIndex()),
                                     TEXTATTR_PROTECTED );
                         const TextCharAttrib* pEndAttr = mpImpl->mpTextEngine->FindCharAttrib(
                                     TextPaM(mpImpl->maSelection.GetEnd().GetPara(),
-                                    mpImpl->maSelection.GetEnd().GetIndex()),
+                                            mpImpl->maSelection.GetEnd().GetIndex()),
                                     TEXTATTR_PROTECTED );
                         if(pStartAttr && pStartAttr->GetStart() < mpImpl->maSelection.GetStart().GetIndex())
                         {
@@ -1634,7 +1634,7 @@ TextPaM TextView::CursorStartOfDoc()
 
 TextPaM TextView::CursorEndOfDoc()
 {
-    sal_uLong nNode = mpImpl->mpTextEngine->mpDoc->GetNodes().size() - 1;
+    const sal_uInt32 nNode = static_cast<sal_uInt32>(mpImpl->mpTextEngine->mpDoc->GetNodes().size() - 1);
     TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[ nNode ];
     TextPaM aPaM( nNode, pNode->GetText().getLength() );
     return aPaM;
@@ -1854,9 +1854,9 @@ bool TextView::IsInSelection( const TextPaM& rPaM )
     TextSelection aSel = mpImpl->maSelection;
     aSel.Justify();
 
-    sal_uLong nStartNode = aSel.GetStart().GetPara();
-    sal_uLong nEndNode = aSel.GetEnd().GetPara();
-    sal_uLong nCurNode = rPaM.GetPara();
+    const sal_uInt32 nStartNode = aSel.GetStart().GetPara();
+    const sal_uInt32 nEndNode = aSel.GetEnd().GetPara();
+    const sal_uInt32 nCurNode = rPaM.GetPara();
 
     if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
         return true;

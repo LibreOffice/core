@@ -1443,7 +1443,7 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
     // insert new entry after current selected one.
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
-    sal_uLong nPara = rSelection.GetStart().GetPara();
+    const sal_uInt32 nPara = rSelection.GetStart().GetPara();
     sal_Int32 nIndex = rSelection.GetEnd().GetIndex();
     ExtTextEngine *pTextEngine = GetTextEngine();
     const TextCharAttrib *pAttrib;
@@ -1486,7 +1486,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
-        sal_uLong nPara = rSelection.GetStart().GetPara();
+        const sal_uInt32 nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         pTextEngine->ReplaceText(aEntrySel, OUString());
         //restore the attributes
@@ -1506,7 +1506,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
         //current item has been found
-        sal_uLong nPara = rSelection.GetStart().GetPara();
+        sal_uInt32 nPara = rSelection.GetStart().GetPara();
         sal_Int32 nIndex = pBeginAttrib->GetStart();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         const OUString sCurrentItem = pTextEngine->GetText(aEntrySel);
@@ -1610,7 +1610,7 @@ OUString AddressMultiLineEdit::GetCurrentItem()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
-        sal_uLong nPara = rSelection.GetStart().GetPara();
+        const sal_uInt32 nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         return pTextEngine->GetText( aEntrySel );
     }
@@ -1627,7 +1627,7 @@ void AddressMultiLineEdit::SelectCurrentItem()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
-        sal_uLong nPara = rSelection.GetStart().GetPara();
+        const sal_uInt32 nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         pTextView->SetSelection(aEntrySel);
         Invalidate();

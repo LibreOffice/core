@@ -597,7 +597,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 void EditorWindow::HandleAutoCorrect()
 {
     TextSelection aSel = GetEditView()->GetSelection();
-    sal_uLong nLine =  aSel.GetStart().GetPara();
+    const sal_uInt32 nLine =  aSel.GetStart().GetPara();
     const sal_Int32 nIndex =  aSel.GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
@@ -674,7 +674,7 @@ void EditorWindow::HandleAutoCorrect()
 
 TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
 {//creates a text selection from the highlight portion on the cursor
-    sal_uLong nLine = GetEditView()->GetSelection().GetStart().GetPara();
+    const sal_uInt32 nLine = GetEditView()->GetSelection().GetStart().GetPara();
     const sal_Int32 nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     std::vector<HighlightPortion> aPortions;
@@ -707,7 +707,7 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
 void EditorWindow::HandleAutoCloseParen()
 {
     TextSelection aSel = GetEditView()->GetSelection();
-    sal_uLong nLine =  aSel.GetStart().GetPara();
+    const sal_uInt32 nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
 
     if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
@@ -722,7 +722,7 @@ void EditorWindow::HandleAutoCloseParen()
 void EditorWindow::HandleAutoCloseDoubleQuotes()
 {
     TextSelection aSel = GetEditView()->GetSelection();
-    sal_uLong nLine =  aSel.GetStart().GetPara();
+    const sal_uInt32 nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
 
     std::vector<HighlightPortion> aPortions;
@@ -744,7 +744,7 @@ void EditorWindow::HandleProcedureCompletion()
 {
 
     TextSelection aSel = GetEditView()->GetSelection();
-    sal_uLong nLine = aSel.GetStart().GetPara();
+    const sal_uInt32 nLine = aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) );
 
     OUString sProcType;
@@ -836,7 +836,7 @@ void EditorWindow::HandleCodeCompletion()
     rModulWindow.UpdateModule();
     rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
     TextSelection aSel = GetEditView()->GetSelection();
-    sal_uLong nLine =  aSel.GetStart().GetPara();
+    const sal_uInt32 nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     std::vector< OUString > aVect; //vector to hold the base variable+methods for the nested reflection
 

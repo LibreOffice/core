@@ -580,8 +580,8 @@ void ImpVclMEdit::SetSelection( const Selection& rSelection )
 
     long nEnd = std::max( aNewSelection.Min(), aNewSelection.Max() );
     TextSelection aTextSel;
-    sal_uLong nPara = 0;
-    sal_uInt16 nChar = 0;
+    sal_uInt32 nPara = 0;
+    sal_Int32 nChar = 0;
     sal_uInt16 x = 0;
     while ( x <= nEnd )
     {
@@ -611,8 +611,7 @@ const Selection& ImpVclMEdit::GetSelection() const
 
     ExtTextEngine* pExtTextEngine = mpTextWindow->GetTextEngine();
     // paragraphs before
-    sal_uLong n;
-    for ( n = 0; n < aTextSel.GetStart().GetPara(); n++ )
+    for ( sal_uInt32 n = 0; n < aTextSel.GetStart().GetPara(); ++n )
     {
         maSelection.Min() += pExtTextEngine->GetTextLen( n );
         maSelection.Min()++;
@@ -622,7 +621,7 @@ const Selection& ImpVclMEdit::GetSelection() const
     maSelection.Max() = maSelection.Min();
     maSelection.Min() += aTextSel.GetStart().GetIndex();
 
-    for ( n = aTextSel.GetStart().GetPara(); n < aTextSel.GetEnd().GetPara(); n++ )
+    for ( sal_uInt32 n = aTextSel.GetStart().GetPara(); n < aTextSel.GetEnd().GetPara(); ++n )
     {
         maSelection.Max() += pExtTextEngine->GetTextLen( n );
         maSelection.Max()++;

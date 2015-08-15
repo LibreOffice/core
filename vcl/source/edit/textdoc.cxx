@@ -422,18 +422,18 @@ void TextDoc::Clear()
 
 void TextDoc::DestroyTextNodes()
 {
-    for ( sal_uLong nNode = 0; nNode < maTextNodes.size(); nNode++ )
-        delete maTextNodes[ nNode ];
+    for ( auto pNode : maTextNodes )
+        delete pNode;
     maTextNodes.clear();
 }
 
 OUString TextDoc::GetText( const sal_Unicode* pSep ) const
 {
-    sal_uLong nNodes = maTextNodes.size();
+    sal_uInt32 nNodes = static_cast<sal_uInt32>(maTextNodes.size());
 
     OUString aASCIIText;
-    sal_uLong nLastNode = nNodes-1;
-    for ( sal_uLong nNode = 0; nNode < nNodes; nNode++ )
+    const sal_uInt32 nLastNode = nNodes-1;
+    for ( sal_uInt32 nNode = 0; nNode < nNodes; ++nNode )
     {
         TextNode* pNode = maTextNodes[ nNode ];
         OUString aTmp( pNode->GetText() );
@@ -445,7 +445,7 @@ OUString TextDoc::GetText( const sal_Unicode* pSep ) const
     return aASCIIText;
 }
 
-OUString TextDoc::GetText( sal_uLong nPara ) const
+OUString TextDoc::GetText( sal_uInt32 nPara ) const
 {
     OUString aText;
 
@@ -459,18 +459,18 @@ OUString TextDoc::GetText( sal_uLong nPara ) const
 sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const
 {
     sal_uLong nLen = 0;
-    sal_uLong nNodes = maTextNodes.size();
+    sal_uInt32 nNodes = static_cast<sal_uInt32>(maTextNodes.size());
     if ( nNodes )
     {
-        sal_uLong nStartNode = 0;
-        sal_uLong nEndNode = nNodes-1;
+        sal_uInt32 nStartNode = 0;
+        sal_uInt32 nEndNode = nNodes-1;
         if ( pSel )
         {
             nStartNode = pSel->GetStart().GetPara();
             nEndNode = pSel->GetEnd().GetPara();
         }
 
-        for ( sal_uLong nNode = nStartNode; nNode <= nEndNode; nNode++ )
+        for ( sal_uInt32 nNode = nStartNode; nNode <= nEndNode; ++nNode )
         {
             TextNode* pNode = maTextNodes[ nNode ];
 
@@ -520,6 +520,7 @@ TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs )
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     TextNode* pNew = pNode->Split( rPaM.GetIndex(), bKeepEndingAttribs );
 
+    DBG_ASSERT( maTextNodes.size()<SAL_MAX_UINT32, "InsertParaBreak: more than 4Gi paragraphs!" );
     maTextNodes.insert( maTextNodes.begin() + rPaM.GetPara() + 1, pNew );
 
     TextPaM aPaM( rPaM.GetPara()+1, 0 );

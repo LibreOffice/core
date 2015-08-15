@@ -928,19 +928,15 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
     if ( nIndex == nLength )
     {
         aBounds = AWTRectangle(
-            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber,
-                                                static_cast< ::sal_uInt16 >(nIndex))));
+            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex)));
     }
     else
     {
         ::Rectangle aLeft(
-            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber,
-                                                static_cast< ::sal_uInt16 >(nIndex))));
+            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex)));
             // XXX  numeric overflow
         ::Rectangle aRight(
-            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber,
-                                                static_cast< ::sal_uInt16 >(nIndex)
-                                                + 1)));
+            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex + 1)));
             // XXX  numeric overflow (2x)
         // FIXME  If the vertical extends of the two cursors do not match, assume
         // nIndex is the last character on the line; the bounding box will then
@@ -1173,7 +1169,7 @@ void Document::retrieveRunAttributesImpl(
     tPropValMap& rRunAttrSeq)
 {
     ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
-    ::TextPaM aPaM( nNumber, static_cast< ::sal_uInt16 >( Index ) );
+    ::TextPaM aPaM( nNumber, Index );
         // XXX  numeric overflow
     // FIXME  TEXTATTR_HYPERLINK ignored:
     ::TextAttribFontColor const * pColor
@@ -1290,8 +1286,8 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
                 " Document::copyParagraphText",
                 static_cast< css::uno::XWeak * >(this));
         m_rView.SetSelection(
-            ::TextSelection(::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nBegin)),
-                            ::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nEnd))));
+            ::TextSelection(::TextPaM(nNumber, nBegin),
+                            ::TextPaM(nNumber, nEnd)));
             // XXX  numeric overflow (2x)
         m_rView.Copy();
     }
@@ -1345,8 +1341,8 @@ void Document::changeParagraphSelection(Paragraph * pParagraph,
                 " Document::changeParagraphSelection",
                 static_cast< css::uno::XWeak * >(this));
         m_rView.SetSelection(
-            ::TextSelection(::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nBegin)),
-                            ::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nEnd))));
+            ::TextSelection(::TextPaM(nNumber, nBegin),
+                            ::TextPaM(nNumber, nEnd)));
             // XXX  numeric overflow (2x)
     }
 }
@@ -2111,10 +2107,10 @@ void Document::handleParagraphNotifications()
         return -1;
     ::sal_Int32 Osp = m_nSelectionFirstPara, Osl = m_nSelectionFirstPos, Oep = m_nSelectionLastPara, Oel = m_nSelectionLastPos;
     ::sal_Int32 Nsp = nNewFirstPara, Nsl = nNewFirstPos, Nep = nNewLastPara, Nel = nNewLastPos;
-    TextPaM Ns(Nsp, sal_uInt16(Nsl));
-    TextPaM Ne(Nep, sal_uInt16(Nel));
-    TextPaM Os(Osp, sal_uInt16(Osl));
-    TextPaM Oe(Oep, sal_uInt16(Oel));
+    TextPaM Ns(Nsp, Nsl);
+    TextPaM Ne(Nep, Nel);
+    TextPaM Os(Osp, Osl);
+    TextPaM Oe(Oep, Oel);
 
     if (Os == Oe && Ns == Ne)
     {

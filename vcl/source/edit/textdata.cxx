@@ -260,14 +260,12 @@ void IdleFormatter::ForceTimeout()
     }
 }
 
-TextHint::TextHint( sal_uLong Id ) : SfxSimpleHint( Id )
+TextHint::TextHint( sal_uInt32 Id ) : SfxSimpleHint( Id ), mnValue(0)
 {
-    mnValue = 0;
 }
 
-TextHint::TextHint( sal_uLong Id, sal_uLong nValue ) : SfxSimpleHint( Id )
+TextHint::TextHint( sal_uInt32 Id, sal_uLong nValue ) : SfxSimpleHint( Id ), mnValue(nValue)
 {
-    mnValue = nValue;
 }
 
 TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartPos )
