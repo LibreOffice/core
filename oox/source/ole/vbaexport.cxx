@@ -12,6 +12,7 @@
 #include <tools/stream.hxx>
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/helper/binaryoutputstream.hxx>
@@ -611,10 +612,15 @@ void VbaExport::exportVBA()
     css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
+    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    assert(xModuleInfo.is());
     for (sal_Int32 i = 0; i < n; ++i)
     {
         SAL_DEBUG(aElementNames[i]);
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        SAL_DEBUG(aModuleInfo.ModuleType);
     }
+
 }
 
 css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
