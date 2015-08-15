@@ -233,11 +233,39 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL PolynomialRegressionCurveCalcula
 
 OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength /* = 0 */ ) const
 {
     OUStringBuffer aBuf( "f(x) = ");
 
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
+    if ( nFormulaLength > 0 )
+    {
+        sal_Int32 nCharMin = 7; // "f(x) = "
+        double nCoefficients = aLastIndex + 1.0;
+        for (sal_Int32 i = aLastIndex; i >= 0; i--)
+        {
+            double aValue = mCoefficients[i];
+            if (aValue == 0.0)
+            {
+                nCoefficients --;
+                continue;
+            }
+            if ( i != aLastIndex )
+                nCharMin += 3; // " + "
+            if ( i > 0 )
+            {
+                if ( i == 1 )
+                    nCharMin ++; // "x"
+                else
+                    nCharMin +=3; // "x^i"
+                if ( i >= 10 )
+                    nCharMin ++; // 2 digits for i
+            }
+        }
+        if ( nFormulaLength <= nCharMin + nCoefficients )
+            return OUString("###");
+        nFormulaLength = ( nFormulaLength - nCharMin ) / nCoefficients;
+    }
     for (sal_Int32 i = aLastIndex; i >= 0; i--)
     {
         double aValue = mCoefficients[i];
@@ -255,7 +283,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
                 aBuf.append( " + " );
         }
 
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, std::abs( aValue ) ) );
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, std::abs( aValue ), nFormulaLength ) );
 
         if(i > 0)
         {
