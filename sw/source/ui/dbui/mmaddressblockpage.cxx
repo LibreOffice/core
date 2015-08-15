@@ -1401,8 +1401,8 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
 
     ExtTextEngine* pTextEngine = GetTextEngine();
     TextAttribProtect aProtectAttr;
-    sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
-    for(sal_uLong nPara = 0; nPara < nParaCount; ++nPara)
+    const sal_uInt32 nParaCount = pTextEngine->GetParagraphCount();
+    for(sal_uInt32 nPara = 0; nPara < nParaCount; ++nPara)
     {
         sal_Int32 nIndex = 0;
         const OUString sPara = pTextEngine->GetText( nPara );
@@ -1638,8 +1638,8 @@ OUString AddressMultiLineEdit::GetAddress()
 {
     OUString sRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
-    sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
-    for(sal_uLong nPara = nParaCount; nPara; --nPara)
+    const sal_uInt32 nParaCount = pTextEngine->GetParagraphCount();
+    for(sal_uInt32 nPara = nParaCount; nPara; --nPara)
     {
         const OUString sPara = comphelper::string::stripEnd(pTextEngine->GetText(nPara - 1), ' ');
         //don't add empty trailing paragraphs

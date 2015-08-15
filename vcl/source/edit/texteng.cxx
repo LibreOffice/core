@@ -1304,9 +1304,9 @@ Range TextEngine::GetInvalidYOffsets( sal_uInt32 nPortion )
     return Range( nFirstInvalid*mnCharHeight, ((nLastInvalid+1)*mnCharHeight)-1 );
 }
 
-sal_uLong TextEngine::GetParagraphCount() const
+sal_uInt32 TextEngine::GetParagraphCount() const
 {
-    return mpDoc->GetNodes().size();
+    return static_cast<sal_uInt32>(mpDoc->GetNodes().size());
 }
 
 void TextEngine::EnableUndo( bool bEnable )

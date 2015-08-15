@@ -725,7 +725,7 @@ sal_Int32 SwSrcView::PrintSource(
     const long nLinespPage = nLineHeight ? aPaperSz.Height() / nLineHeight : 1;
     const long nCharWidth = pOutDev->GetTextWidth("X");
     const sal_Int32 nCharspLine = nCharWidth ? static_cast<sal_Int32>(aPaperSz.Width() / nCharWidth) : 1;
-    const sal_uLong nParas = pTextEngine->GetParagraphCount();
+    const sal_uInt32 nParas = pTextEngine->GetParagraphCount();
 
     const sal_Int32 nPages = static_cast<sal_Int32>(nParas / nLinespPage + 1 );
     sal_Int32 nCurPage = 1;
@@ -735,7 +735,7 @@ sal_Int32 SwSrcView::PrintSource(
         lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
     const Point aStartPos( LMARGPRN, TMARGPRN );
     Point aPos( aStartPos );
-    for ( sal_uLong nPara = 0; nPara < nParas; ++nPara )
+    for ( sal_uInt32 nPara = 0; nPara < nParas; ++nPara )
     {
         const OUString aLine( lcl_ConvertTabsToSpaces(pTextEngine->GetText( nPara )) );
         const sal_Int32 nLineLen = aLine.getLength();

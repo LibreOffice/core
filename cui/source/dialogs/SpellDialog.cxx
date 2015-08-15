@@ -1897,11 +1897,11 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
         // quick partly fix of #i71318. Correct fix needs to patch the TextEngine itself...
         // this one will only prevent text from disappearing. It may to not have the
         // correct language and will probably not spell checked...
-        sal_uLong nPara = pTextEngine->GetParagraphCount();
+        const sal_uInt32 nPara = pTextEngine->GetParagraphCount();
         if (nPara > 1)
         {
             OUString aLeftOverText;
-            for (sal_uLong i = 1;  i < nPara;  ++i)
+            for (sal_uInt32 i = 1; i < nPara; ++i)
             {
                 aLeftOverText += "\x0a";    // the manual line break...
                 aLeftOverText += pTextEngine->GetText(i);

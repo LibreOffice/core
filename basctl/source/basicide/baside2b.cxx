@@ -767,7 +767,7 @@ void EditorWindow::HandleProcedureCompletion()
     }
     else
     {
-        for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
+        for( sal_uInt32 i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
         {//searching forward for end token, or another sub/function definition
             OUString aCurrLine = pEditEngine->GetText( i );
             std::vector<HighlightPortion> aCurrPortions;
@@ -1222,8 +1222,8 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 
 void EditorWindow::UpdateSyntaxHighlighting ()
 {
-    unsigned nCount = pEditEngine->GetParagraphCount();
-    for (unsigned i = 0; i < nCount; ++i)
+    const sal_uInt32 nCount = pEditEngine->GetParagraphCount();
+    for (sal_uInt32 i = 0; i < nCount; ++i)
         DoDelayedSyntaxHighlight(i);
 }
 

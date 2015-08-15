@@ -848,14 +848,14 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     long nXTextWidth = pPrinter->approximate_char_width();
 
     sal_Int32 nCharspLine = aPaperSz.Width() / (nXTextWidth > 1 ? nXTextWidth : 1);
-    sal_uLong nParas = GetEditEngine()->GetParagraphCount();
+    const sal_uInt32 nParas = GetEditEngine()->GetParagraphCount();
 
     sal_Int32 nPages = nParas/nLinespPage+1;
     sal_Int32 nCurPage = 1;
 
     lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nPrintPage == 0 );
     Point aPos( Print::nLeftMargin, Print::nTopMargin );
-    for ( sal_uLong nPara = 0; nPara < nParas; nPara++ )
+    for ( sal_uInt32 nPara = 0; nPara < nParas; ++nPara )
     {
         OUString aLine( GetEditEngine()->GetText( nPara ) );
         lcl_ConvertTabsToSpaces( aLine );

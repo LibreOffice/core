@@ -1757,11 +1757,11 @@ void Document::init()
 {
     if (m_xParagraphs.get() == 0)
     {
-        ::sal_uLong nCount = m_rEngine.GetParagraphCount();
+        const sal_uInt32 nCount = m_rEngine.GetParagraphCount();
         m_xParagraphs.reset(new Paragraphs);
         m_xParagraphs->reserve(static_cast< Paragraphs::size_type >(nCount));
             // numeric overflow is harmless here
-        for (::sal_uLong i = 0; i < nCount; ++i)
+        for (sal_uInt32 i = 0; i < nCount; ++i)
             m_xParagraphs->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
                                            m_rEngine.GetTextHeight(i))));
                 // XXX  numeric overflow

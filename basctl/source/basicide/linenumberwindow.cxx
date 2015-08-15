@@ -59,10 +59,10 @@ void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangl
     }
 
     int startY = txtView->GetStartDocPos().Y();
-    int nStartLine = startY / nLineHeight + 1;
-    int nEndLine = (startY + windowHeight) / nLineHeight + 1;
+    const sal_uInt32 nStartLine = startY / nLineHeight + 1;
+    sal_uInt32 nEndLine = (startY + windowHeight) / nLineHeight + 1;
 
-    if (txtEngine->GetParagraphCount() + 1 < (unsigned int)nEndLine)
+    if (txtEngine->GetParagraphCount() + 1 < nEndLine)
         nEndLine = txtEngine->GetParagraphCount() + 1;
 
     // FIXME: it would be best if we could get notified of a font change
@@ -71,7 +71,7 @@ void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangl
 
     // reserve enough for 3 digit minimum, with a bit to spare for confort
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
-    int i = (nEndLine + 1) / 1000;
+    sal_uInt32 i = (nEndLine + 1) / 1000;
     while (i)
     {
         i /= 10;
@@ -79,7 +79,7 @@ void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangl
     }
 
     sal_Int64 y = (nStartLine - 1) * (sal_Int64)nLineHeight;
-    for (sal_Int32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
+    for (sal_uInt32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
         rRenderContext.DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
 }
 

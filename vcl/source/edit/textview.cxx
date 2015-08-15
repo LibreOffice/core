@@ -2026,7 +2026,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         // Data for deleting after DROP_MOVE:
         TextSelection aPrevSel( mpImpl->maSelection );
         aPrevSel.Justify();
-        sal_uLong nPrevParaCount = mpImpl->mpTextEngine->GetParagraphCount();
+        const sal_uInt32 nPrevParaCount = mpImpl->mpTextEngine->GetParagraphCount();
         const sal_Int32 nPrevStartParaLen = mpImpl->mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() );
 
         bool bStarterOfDD = false;
@@ -2076,8 +2076,8 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
                  ( ( mpImpl->mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
                         && ( mpImpl->mpDDInfo->maDropPos.GetIndex() < aPrevSel.GetStart().GetIndex() ) ) )
             {
-                sal_uLong nNewParasBeforeSelection =
-                    mpImpl->mpTextEngine->GetParagraphCount() -    nPrevParaCount;
+                const sal_uInt32 nNewParasBeforeSelection =
+                    mpImpl->mpTextEngine->GetParagraphCount() - nPrevParaCount;
 
                 aPrevSel.GetStart().GetPara() += nNewParasBeforeSelection;
                 aPrevSel.GetEnd().GetPara() += nNewParasBeforeSelection;

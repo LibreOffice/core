@@ -173,7 +173,7 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
         sal_uLong nOverallTextHeight(0);
-        for ( sal_uLong i=0; i<rEngine.GetParagraphCount(); ++i )
+        for ( sal_uInt32 i=0; i<rEngine.GetParagraphCount(); ++i )
             nOverallTextHeight += rEngine.GetTextHeight( i );
         if ( nOverallTextHeight > (sal_uLong)mpTextWindow->GetOutputSizePixel().Height() )
             bNeedVScroll = true;

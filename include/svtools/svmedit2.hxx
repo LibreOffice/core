@@ -36,7 +36,7 @@ public:
                     // methods of TextEngine
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetLeftMargin( sal_uInt16 nLeftMargin );
-    sal_uLong       GetParagraphCount() const;
+    sal_uInt32      GetParagraphCount() const;
 };
 
 #endif

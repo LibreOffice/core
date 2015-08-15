@@ -46,7 +46,7 @@ void ExtMultiLineEdit::SetLeftMargin( sal_uInt16 nLeftMargin )
     GetTextEngine()->SetLeftMargin( nLeftMargin );
 }
 
-sal_uLong ExtMultiLineEdit::GetParagraphCount() const
+sal_uInt32 ExtMultiLineEdit::GetParagraphCount() const
 {
     return GetTextEngine()->GetParagraphCount();
 }

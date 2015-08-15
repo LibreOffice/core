@@ -259,7 +259,7 @@ public:
     sal_uLong           CalcTextWidth();
     long                GetCharHeight() const { return mnCharHeight; }
 
-    sal_uLong           GetParagraphCount() const;
+    sal_uInt32          GetParagraphCount() const;
     OUString            GetText( sal_uInt32 nParagraph ) const;
     sal_Int32           GetTextLen( sal_uInt32 nParagraph ) const;
     sal_uLong           GetTextHeight( sal_uInt32 nParagraph ) const;
