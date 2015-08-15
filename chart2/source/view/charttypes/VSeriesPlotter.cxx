@@ -20,6 +20,7 @@
 #include "VSeriesPlotter.hxx"
 #include "AbstractShapeFactory.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
+#include <svl/zformat.hxx>
 
 #include "CommonConverters.hxx"
 #include "macros.hxx"
@@ -1222,6 +1223,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
     bool bShowEquation = false;
     bool bShowCorrCoeff = false;
+    sal_Int32 nFormulaLength = 0;
     OUString aSep( "\n" );
     if(( xEquationProperties->getPropertyValue( "ShowEquation") >>= bShowEquation ) &&
        ( xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowCorrCoeff ))
@@ -1232,89 +1234,111 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         OUStringBuffer aFormula;
         sal_Int32 nNumberFormatKey = 0;
         xEquationProperties->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
+        bool bResizeEquation = true;
+        sal_Int32 nResizeEquation = 0;
 
-        if( bShowEquation )
+        while ( bResizeEquation )
         {
-            if( m_apNumberFormatterWrapper.get())
+            bResizeEquation = false;
+            nResizeEquation++;
+            if( bShowEquation )
             {
-                aFormula = xRegressionCurveCalculator->getFormattedRepresentation(
-                    m_apNumberFormatterWrapper->getNumberFormatsSupplier(),
-                    nNumberFormatKey );
-            }
-            else
-            {
-                aFormula = xRegressionCurveCalculator->getRepresentation();
-            }
+                if( m_apNumberFormatterWrapper.get())
+                {
+                    aFormula = xRegressionCurveCalculator->getFormattedRepresentationMaxLength(
+                        m_apNumberFormatterWrapper->getNumberFormatsSupplier(),
+                        nNumberFormatKey, nFormulaLength );
+                    SvNumberFormatter *apNumFormatter = m_apNumberFormatterWrapper->getSvNumberFormatter();
+                    const SvNumberformat *apNumFormat = apNumFormatter->GetEntry(nNumberFormatKey);
+                    if ( apNumFormat->IsStandard() )
+                    {
+                        nFormulaLength = aFormula.getLength();
+                    }
+                }
+                else
+                {
+                    aFormula = xRegressionCurveCalculator->getRepresentation();
+                }
 
+                if( bShowCorrCoeff )
+                {
+                    aFormula.append( aSep );
+                }
+            }
             if( bShowCorrCoeff )
             {
-                aFormula.append( aSep );
+                aFormula.append( "R" );
+                aFormula.append( sal_Unicode( 0x00b2 ));
+                aFormula.append( " = ");
+                double fR( xRegressionCurveCalculator->getCorrelationCoefficient());
+                if( m_apNumberFormatterWrapper.get())
+                {
+                    sal_Int32 nLabelCol = 0;
+                    bool bColChanged;
+                    aFormula.append(
+                        m_apNumberFormatterWrapper->getFormattedString(
+                            nNumberFormatKey, fR*fR, nLabelCol, bColChanged ));
+                    //@todo: change color of label if bColChanged is true
+                }
+                else
+                {
+                    sal_Unicode aDecimalSep( '.' );//@todo get this locale dependent
+                    aFormula.append( ::rtl::math::doubleToUString(
+                                        fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                }
             }
-        }
-        if( bShowCorrCoeff )
-        {
-            aFormula.append( "R" );
-            aFormula.append( sal_Unicode( 0x00b2 ));
-            aFormula.append( " = ");
-            double fR( xRegressionCurveCalculator->getCorrelationCoefficient());
-            if( m_apNumberFormatterWrapper.get())
+
+            awt::Point aScreenPosition2D;
+            chart2::RelativePosition aRelativePosition;
+            if( xEquationProperties->getPropertyValue( "RelativePosition") >>= aRelativePosition )
             {
-                sal_Int32 nLabelCol = 0;
-                bool bColChanged;
-                aFormula.append(
-                    m_apNumberFormatterWrapper->getFormattedString(
-                        nNumberFormatKey, fR*fR, nLabelCol, bColChanged ));
-                //@todo: change color of label if bColChanged is true
+                //@todo decide whether x is primary or secondary
+                double fX = aRelativePosition.Primary*m_aPageReferenceSize.Width;
+                double fY = aRelativePosition.Secondary*m_aPageReferenceSize.Height;
+                aScreenPosition2D.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
+                aScreenPosition2D.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
             }
             else
+                aScreenPosition2D = aDefaultPos;
+
+            if( !aFormula.isEmpty())
             {
-                sal_Unicode aDecimalSep( '.' );//@todo get this locale dependent
-                aFormula.append( ::rtl::math::doubleToUString(
-                                     fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
-            }
-        }
+                // set fill and line properties on creation
+                tNameSequence aNames;
+                tAnySequence  aValues;
+                PropertyMapper::getPreparedTextShapePropertyLists( xEquationProperties, aNames, aValues );
 
-        awt::Point aScreenPosition2D;
-        chart2::RelativePosition aRelativePosition;
-        if( xEquationProperties->getPropertyValue( "RelativePosition") >>= aRelativePosition )
-        {
-            //@todo decide whether x is primary or secondary
-            double fX = aRelativePosition.Primary*m_aPageReferenceSize.Width;
-            double fY = aRelativePosition.Secondary*m_aPageReferenceSize.Height;
-            aScreenPosition2D.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
-            aScreenPosition2D.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
-        }
-        else
-            aScreenPosition2D = aDefaultPos;
+                uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
+                    xEquationTarget, aFormula.makeStringAndClear(),
+                    aNames, aValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ));
 
-        if( !aFormula.isEmpty())
-        {
-            // set fill and line properties on creation
-            tNameSequence aNames;
-            tAnySequence  aValues;
-            PropertyMapper::getPreparedTextShapePropertyLists( xEquationProperties, aNames, aValues );
-
-            uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
-                xEquationTarget, aFormula.makeStringAndClear(),
-                aNames, aValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ));
-
-            OSL_ASSERT( xTextShape.is());
-            if( xTextShape.is())
-            {
-                AbstractShapeFactory::setShapeName( xTextShape, rEquationCID );
-                awt::Size aSize( xTextShape->getSize() );
-                awt::Point aPos( RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
-                    aScreenPosition2D, aSize, aRelativePosition.Anchor ) );
-                //ensure that the equation is fully placed within the page (if possible)
-                if( (aPos.X + aSize.Width) > m_aPageReferenceSize.Width )
-                    aPos.X = m_aPageReferenceSize.Width - aSize.Width;
-                if( aPos.X < 0 )
-                    aPos.X = 0;
-                if( (aPos.Y + aSize.Height) > m_aPageReferenceSize.Height )
-                    aPos.Y = m_aPageReferenceSize.Height - aSize.Height;
-                if( aPos.Y < 0 )
-                    aPos.Y = 0;
-                xTextShape->setPosition(aPos);
+                OSL_ASSERT( xTextShape.is());
+                if( xTextShape.is())
+                {
+                    AbstractShapeFactory::setShapeName( xTextShape, rEquationCID );
+                    awt::Size aSize( xTextShape->getSize() );
+                    awt::Point aPos( RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
+                        aScreenPosition2D, aSize, aRelativePosition.Anchor ) );
+                    //ensure that the equation is fully placed within the page (if possible)
+                    if( (aPos.X + aSize.Width) > m_aPageReferenceSize.Width )
+                        aPos.X = m_aPageReferenceSize.Width - aSize.Width;
+                    if( aPos.X < 0 )
+                    {
+                        aPos.X = 0;
+                        if ( nFormulaLength > 0 )
+                        {
+                            bResizeEquation = true;
+                            AbstractShapeFactory::removeSubShapes( xEquationTarget );
+                            nFormulaLength *= m_aPageReferenceSize.Width / static_cast< double >(aSize.Width);
+                            nFormulaLength -= nResizeEquation;
+                        }
+                    }
+                    if( (aPos.Y + aSize.Height) > m_aPageReferenceSize.Height )
+                        aPos.Y = m_aPageReferenceSize.Height - aSize.Height;
+                    if( aPos.Y < 0 )
+                        aPos.Y = 0;
+                    xTextShape->setPosition(aPos);
+                }
             }
         }
     }

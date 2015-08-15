@@ -82,12 +82,23 @@ void RegressionCurveCalculator::setRegressionProperties(
 OUString RegressionCurveCalculator::getFormattedString(
     const Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey,
-    double fNumber )
+    double fNumber, sal_Int32 nStringLength /* = 0 */ )
 {
+    if ( nStringLength < 0 )
+        return OUString("###");
     OUString aResult;
 
     if( xNumFormatter.is())
+    {
+        if( nStringLength > 0 )
+        {
+            aResult = OStringToOUString(
+                        ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, nStringLength, '.', true ),
+                                        RTL_TEXTENCODING_ASCII_US );
+            fNumber = ::rtl::math::stringToDouble( aResult, '.', ',' );
+        }
         aResult = xNumFormatter->convertNumberToString( nNumberFormatKey, fNumber );
+    }
     else
         aResult = OStringToOUString(
                       ::rtl::math::doubleToString( fNumber, rtl_math_StringFormat_G1, 4, '.', true ),
@@ -153,6 +164,15 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     sal_Int32 nNumberFormatKey )
     throw (uno::RuntimeException, std::exception)
 {
+    return getFormattedRepresentationMaxLength( xNumFmtSupplier, nNumberFormatKey, 0 );
+}
+
+
+OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentationMaxLength(
+    const Reference< util::XNumberFormatsSupplier > & xNumFmtSupplier,
+    sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
+    throw (uno::RuntimeException, std::exception)
+{
     // create and prepare a number formatter
     if( !xNumFmtSupplier.is())
         return getRepresentation();
@@ -160,7 +180,7 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     Reference< util::XNumberFormatter > xNumFormatter( util::NumberFormatter::create(xContext), uno::UNO_QUERY_THROW );
     xNumFormatter->attachNumberFormatsSupplier( xNumFmtSupplier );
 
-    return ImplGetRepresentation( xNumFormatter, nNumberFormatKey );
+    return ImplGetRepresentation( xNumFormatter, nNumberFormatKey, nFormulaLength );
 }
 
 } //  namespace chart

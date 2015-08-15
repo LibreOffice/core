@@ -154,47 +154,104 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalcul
 
 OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    ::sal_Int32 nNumberFormatKey, ::sal_Int32 nFormulaLength /* = 0 */ ) const
 {
+    OUString aHash("###");
+    if ( nFormulaLength > 0 && nFormulaLength <= 7 )
+        return aHash;
     double fIntercept = m_fSign * exp(m_fLogIntercept);
-    double fSlope = exp(m_fLogSlope);
-    bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
-    bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );
+    bool bHasSlope = !rtl::math::approxEqual( exp(m_fLogSlope), 1.0 );
+    bool bIsLogSlop1 = rtl::math::approxEqual( fabs(m_fLogSlope), 1.0 );
+    bool bHasIntercept = !rtl::math::approxEqual( m_fSign*fIntercept, 1.0 );
 
     OUStringBuffer aBuf( "f(x) = ");
+    if ( nFormulaLength > 0 )
+        nFormulaLength -= aBuf.getLength();
 
     if ( fIntercept == 0.0)
     {
+        if ( nFormulaLength > 0 )
+        {
+            if ( m_fSign < 0.0 )
+                nFormulaLength -= 2;
+            nFormulaLength = (nFormulaLength - 12)/2; // "exp( ", " + ", " x )"
+            if ( nFormulaLength <= 0 )
+                return aHash;
+        }
+        if ( m_fSign < 0.0 )
+            aBuf.append( "- " );
         // underflow, a true zero is impossible
         aBuf.append( "exp( ");
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept, nFormulaLength) );
         aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), nFormulaLength ) );
         aBuf.append( " x )");
     }
     else
     {
         if (bHasIntercept)
         {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept) );
+            if ( nFormulaLength > 0 )
+            {
+                nFormulaLength -= 9; // "exp( ", " x )"
+                if ( !bIsLogSlop1 )
+                    nFormulaLength /= 2;
+                if ( m_fLogSlope < 0.0 )
+                    nFormulaLength --;
+                if ( nFormulaLength <= 0 )
+                    return aHash;
+            }
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept, nFormulaLength ) );
             aBuf.append( " exp( ");
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+            if ( m_fLogSlope < 0.0 )
+                aBuf.append( "-");
+            if ( !bIsLogSlop1 )
+                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), nFormulaLength ) );
             aBuf.append( " x )");
         }
         else
         {
             // show logarithmic output, if intercept and slope both are near one
             // otherwise drop output of intercept, which is 1 here
+            if ( m_fSign < 0.0 )
+                aBuf.append( "- " );
             aBuf.append( " exp( ");
             if (!bHasSlope)
             {
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
-                aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
+                if ( nFormulaLength > 0 )
+                {
+                    if ( m_fSign < 0.0 )
+                        nFormulaLength -= 2;
+                    nFormulaLength -= 12; // "exp( ", " + ", " x )"
+                    if ( !bIsLogSlop1 && m_fLogIntercept != 0.0 )
+                        nFormulaLength /= 2;
+                    if ( nFormulaLength <= 0 )
+                        return aHash;
+                }
+                if ( m_fLogIntercept != 0.0 )
+                {
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept, nFormulaLength ) );
+                    aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
+                }
+                else if ( m_fLogSlope < 0.0 )
+                        aBuf.append( " - " );
+                if ( !bIsLogSlop1 )
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), nFormulaLength ) );
             }
             else
             {
-                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+                if ( nFormulaLength > 0 )
+                {
+                    if ( m_fSign < 0.0 )
+                        nFormulaLength -= 2;
+                    nFormulaLength -= 9; // "exp( ", " x )"
+                    if ( nFormulaLength <= 0 )
+                        return aHash;
+                }
+                if ( m_fLogSlope < 0.0 )
+                    aBuf.append( "-");
+                if ( !bIsLogSlop1 )
+                    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope), nFormulaLength ) );
             }
             aBuf.append( " x )");
         }

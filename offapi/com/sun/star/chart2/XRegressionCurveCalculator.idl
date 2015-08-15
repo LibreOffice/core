@@ -155,6 +155,16 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
      */
     string getFormattedRepresentation( [in] com::sun::star::util::XNumberFormatsSupplier xNumFmtSupplier,
                                        [in] long nNumberFormatKey );
+
+    /** Returns a representation using the given number format for formatting all numbers
+        contained in the formula. For General format, string length should not exeed nFormulaLength
+        to fit in chart
+
+        @see getRepresentation
+     */
+    string getFormattedRepresentationMaxLength( [in] com::sun::star::util::XNumberFormatsSupplier xNumFmtSupplier,
+                                                [in] long nNumberFormatKey,
+                                                [in] long nFormulaLength );
 };
 
 } ; // chart2
