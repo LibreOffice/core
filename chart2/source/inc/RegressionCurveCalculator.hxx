@@ -43,12 +43,12 @@ public:
 protected:
     virtual OUString ImplGetRepresentation(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
-        sal_Int32 nNumberFormatKey ) const = 0;
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength = 0 ) const = 0;
 
     static OUString getFormattedString(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
-        double fNumber );
+        double fNumber, sal_Int32 nStringLength = 0 );
 
     double m_fCorrelationCoeffitient;
 
@@ -92,7 +92,7 @@ protected:
 
     virtual OUString SAL_CALL getFormattedRepresentation(
         const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
-        sal_Int32 nNumberFormatKey )
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength = 0 )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

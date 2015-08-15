@@ -34,7 +34,7 @@ public:
 protected:
     virtual OUString ImplGetRepresentation(
         const css::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
-        sal_Int32 nNumberFormatKey ) const SAL_OVERRIDE;
+        sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength = 0 ) const SAL_OVERRIDE;
 
     virtual double SAL_CALL getCurveValue( double x )
         throw (css::lang::IllegalArgumentException,
