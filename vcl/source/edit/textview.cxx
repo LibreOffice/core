@@ -405,7 +405,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
         const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
         for ( sal_uInt32 nPara = 0; nPara <= nEndPara; ++nPara )
         {
-            long nParaHeight = (long)mpImpl->mpTextEngine->CalcParaHeight( nPara );
+            const long nParaHeight = mpImpl->mpTextEngine->CalcParaHeight( nPara );
             if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
             {
                 TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
@@ -1920,20 +1920,20 @@ bool TextView::ImplTruncateNewText( OUString& rNewText ) const
 {
     bool bTruncated = false;
 
-    sal_uLong nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
+    const sal_Int32 nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
     // 0 means unlimited
     if( nMaxLen != 0 )
     {
-        sal_uLong nCurLen = mpImpl->mpTextEngine->GetTextLen();
+        const sal_Int32 nCurLen = mpImpl->mpTextEngine->GetTextLen();
 
-        sal_uInt32 nNewLen = rNewText.getLength();
+        const sal_Int32 nNewLen = rNewText.getLength();
         if ( nCurLen + nNewLen > nMaxLen )
         {
             // see how much text will be replaced
-            sal_uLong nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
+            const sal_Int32 nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
             if ( nCurLen + nNewLen - nSelLen > nMaxLen )
             {
-                sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
+                const sal_Int32 nTruncatedLen = nMaxLen - (nCurLen - nSelLen);
                 rNewText = rNewText.copy( 0, nTruncatedLen );
                 bTruncated = true;
             }
@@ -1947,8 +1947,7 @@ bool TextView::ImplCheckTextLen( const OUString& rNewText )
     bool bOK = true;
     if ( mpImpl->mpTextEngine->GetMaxTextLen() )
     {
-        sal_uLong n = mpImpl->mpTextEngine->GetTextLen();
-        n += rNewText.getLength();
+        sal_Int32 n = mpImpl->mpTextEngine->GetTextLen() + rNewText.getLength();
         if ( n > mpImpl->mpTextEngine->GetMaxTextLen() )
         {
             // calculate how much text is being deleted

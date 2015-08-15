@@ -1107,11 +1107,11 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             if ( rModulWindow.GetHScrollBar() )
             {
-                sal_uLong nWidth = pEditEngine->CalcTextWidth();
-                if ( (long)nWidth != nCurTextWidth )
+                const long nWidth = pEditEngine->CalcTextWidth();
+                if ( nWidth != nCurTextWidth )
                 {
                     nCurTextWidth = nWidth;
-                    rModulWindow.GetHScrollBar()->SetRange( Range( 0, (long)nCurTextWidth-1) );
+                    rModulWindow.GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1) );
                     rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
                 }
             }

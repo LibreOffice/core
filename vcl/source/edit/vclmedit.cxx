@@ -84,7 +84,7 @@ private:
     VclPtr<ScrollBarBox>       mpScrollBox;
 
     Point               maTextWindowOffset;
-    sal_Int32           mnTextWidth;
+    long                mnTextWidth;
     mutable Selection   maSelection;
 
 protected:
@@ -172,10 +172,10 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
     if ( !bNeedVScroll && bAutoVScroll )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
-        sal_uLong nOverallTextHeight(0);
+        long nOverallTextHeight(0);
         for ( sal_uInt32 i=0; i<rEngine.GetParagraphCount(); ++i )
             nOverallTextHeight += rEngine.GetTextHeight( i );
-        if ( nOverallTextHeight > (sal_uLong)mpTextWindow->GetOutputSizePixel().Height() )
+        if ( nOverallTextHeight > mpTextWindow->GetOutputSizePixel().Height() )
             bNeedVScroll = true;
     }
 
@@ -269,8 +269,8 @@ void ImpVclMEdit::ImpSetScrollBarRanges()
 {
     if ( mpVScrollBar )
     {
-        sal_uLong nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
-        mpVScrollBar->SetRange( Range( 0, (long)nTextHeight-1 ) );
+        const long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
+        mpVScrollBar->SetRange( Range( 0, nTextHeight-1 ) );
     }
     if ( mpHScrollBar )
     {
@@ -539,7 +539,7 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if ( mpHScrollBar )
             {
-                sal_Int32 nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+                const long nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
                 if ( nWidth != mnTextWidth )
                 {
                     mnTextWidth = nWidth;

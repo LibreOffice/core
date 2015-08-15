@@ -453,9 +453,9 @@ OUString TextDoc::GetText( sal_uInt32 nPara ) const
     return OUString();
 }
 
-sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const
+sal_Int32 TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const
 {
-    sal_uLong nLen = 0;
+    sal_Int32 nLen = 0;
     sal_uInt32 nNodes = static_cast<sal_uInt32>(maTextNodes.size());
     if ( nNodes )
     {

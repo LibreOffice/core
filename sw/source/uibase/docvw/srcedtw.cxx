@@ -755,7 +755,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
-            if ( (long)pTextEngine->GetTextHeight() < pOutWin->GetOutputSizePixel().Height() )
+            if ( pTextEngine->GetTextHeight() < pOutWin->GetOutputSizePixel().Height() )
                 pTextView->Scroll( 0, pTextView->GetStartDocPos().Y() );
             pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();

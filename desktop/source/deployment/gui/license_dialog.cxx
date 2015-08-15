@@ -161,11 +161,11 @@ bool LicenseView::IsEndReached() const
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    sal_uLong           nHeight = pEdit->GetTextHeight();
+    const long      nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+    if ( pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
         bEndReached = true;
     else
         bEndReached = false;

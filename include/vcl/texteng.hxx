@@ -118,11 +118,11 @@ private:
     long                mnCharHeight;
     sal_uInt16          mnFixCharWidth100;
 
-    sal_uLong           mnMaxTextLen;
-    sal_uLong           mnMaxTextWidth;
-    sal_uLong           mnCurTextWidth;
-    sal_uLong           mnCurTextHeight;
-    sal_uLong           mnDefTab;
+    sal_Int32           mnMaxTextLen;
+    long                mnMaxTextWidth;
+    long                mnCurTextWidth;
+    long                mnCurTextHeight;
+    long                mnDefTab;
 
     TxtAlign            meAlign;
 
@@ -206,10 +206,10 @@ protected:
     static void         ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 
-    sal_uLong           CalcTextHeight();
-    sal_uLong           CalcParaHeight( sal_uInt32 nParagraph ) const;
-    sal_uLong           CalcTextWidth( sal_uInt32 nPara );
-    sal_uLong           CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen, const vcl::Font* pFont = 0 );
+    long                CalcTextHeight();
+    long                CalcParaHeight( sal_uInt32 nParagraph ) const;
+    long                CalcTextWidth( sal_uInt32 nPara );
+    long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen, const vcl::Font* pFont = 0 );
     Range               GetInvalidYOffsets( sal_uInt32 nPortion );
 
     // for Undo/Redo
@@ -231,8 +231,8 @@ public:
     OUString            GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
     void                ReplaceText(const TextSelection& rSel, const OUString& rText);
 
-    sal_uLong           GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
-    sal_uLong           GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    sal_Int32           GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
+    sal_Int32           GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
 
     void                SetFont( const vcl::Font& rFont );
     const vcl::Font&    GetFont() const { return maFont; }
@@ -249,20 +249,20 @@ public:
     TextView*           GetActiveView() const { return mpActiveView;}
     void                SetActiveView( TextView* pView );
 
-    void                SetMaxTextLen( sal_uLong nLen );
-    sal_uLong           GetMaxTextLen() const { return mnMaxTextLen; }
+    void                SetMaxTextLen( sal_Int32 nLen );
+    sal_Int32           GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMaxTextWidth( sal_uLong nWidth );
-    sal_uLong           GetMaxTextWidth() const { return mnMaxTextWidth; }
+    void                SetMaxTextWidth( long nWidth );
+    long                GetMaxTextWidth() const { return mnMaxTextWidth; }
 
-    sal_uLong           GetTextHeight() const;
-    sal_uLong           CalcTextWidth();
+    long                GetTextHeight() const;
+    long                CalcTextWidth();
     long                GetCharHeight() const { return mnCharHeight; }
 
     sal_uInt32          GetParagraphCount() const;
     OUString            GetText( sal_uInt32 nParagraph ) const;
     sal_Int32           GetTextLen( sal_uInt32 nParagraph ) const;
-    sal_uLong           GetTextHeight( sal_uInt32 nParagraph ) const;
+    long                GetTextHeight( sal_uInt32 nParagraph ) const;
 
     sal_uInt16          GetLineCount( sal_uInt32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_uInt32 nParagraph, sal_uInt16 nLine ) const;

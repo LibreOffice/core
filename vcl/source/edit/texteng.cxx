@@ -84,7 +84,7 @@ TextEngine::TextEngine()
 
     mnMaxTextWidth  = 0;
     mnMaxTextLen    = 0;
-    mnCurTextWidth  = 0xFFFFFFFF;
+    mnCurTextWidth  = -1;
     mnCurTextHeight = 0;
 
     mpUndoManager   = NULL;
@@ -199,7 +199,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
         if ( !aTextSize.Width() )
             aTextSize.Width() = mpRefDev->GetTextWidth(OUString("XXXX"));
 
-        mnDefTab = (sal_uInt16)aTextSize.Width();
+        mnDefTab = aTextSize.Width();
         if ( !mnDefTab )
             mnDefTab = 1;
         mnCharHeight = aTextSize.Height();
@@ -216,16 +216,16 @@ void TextEngine::SetFont( const vcl::Font& rFont )
     }
 }
 
-void TextEngine::SetMaxTextLen( sal_uLong nLen )
+void TextEngine::SetMaxTextLen( sal_Int32 nLen )
 {
     mnMaxTextLen = nLen;
 }
 
-void TextEngine::SetMaxTextWidth( sal_uLong nMaxWidth )
+void TextEngine::SetMaxTextWidth( long nMaxWidth )
 {
     if ( nMaxWidth != mnMaxTextWidth )
     {
-        mnMaxTextWidth = std::min( nMaxWidth, (sal_uLong)0x7FFFFFFF );
+        mnMaxTextWidth = nMaxWidth;
         FormatFullDoc();
         UpdateViews();
     }
@@ -284,12 +284,12 @@ OUString TextEngine::GetText( sal_uInt32 nPara ) const
     return mpDoc->GetText( nPara );
 }
 
-sal_uLong TextEngine::GetTextLen( LineEnd aSeparator ) const
+sal_Int32 TextEngine::GetTextLen( LineEnd aSeparator ) const
 {
     return mpDoc->GetTextLen( static_getLineEndText( aSeparator ) );
 }
 
-sal_uLong TextEngine::GetTextLen( const TextSelection& rSel, LineEnd aSeparator ) const
+sal_Int32 TextEngine::GetTextLen( const TextSelection& rSel, LineEnd aSeparator ) const
 {
     TextSelection aSel( rSel );
     aSel.Justify();
@@ -982,7 +982,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
         {
             DBG_ASSERT( nIndex != pLine->GetStart(), "ImpGetXPos: Strange behavior" );
 
-            long nPosInPortion = (long)CalcTextWidth( nPara, nTextPortionStart, nIndex-nTextPortionStart );
+            long nPosInPortion = CalcTextWidth( nPara, nTextPortionStart, nIndex-nTextPortionStart );
 
             if ( ( !IsRightToLeft() && !pPortion->IsRightToLeft() ) ||
                  ( IsRightToLeft() && pPortion->IsRightToLeft() ) )
@@ -1139,7 +1139,7 @@ sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, sal_uInt16 nLine, long nX
     return nCurIndex;
 }
 
-sal_uLong TextEngine::GetTextHeight() const
+long TextEngine::GetTextHeight() const
 {
     DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
@@ -1149,7 +1149,7 @@ sal_uLong TextEngine::GetTextHeight() const
     return mnCurTextHeight;
 }
 
-sal_uLong TextEngine::GetTextHeight( sal_uInt32 nParagraph ) const
+long TextEngine::GetTextHeight( sal_uInt32 nParagraph ) const
 {
     DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
@@ -1159,13 +1159,13 @@ sal_uLong TextEngine::GetTextHeight( sal_uInt32 nParagraph ) const
     return CalcParaHeight( nParagraph );
 }
 
-sal_uLong TextEngine::CalcTextWidth( sal_uInt32 nPara )
+long TextEngine::CalcTextWidth( sal_uInt32 nPara )
 {
-    sal_uLong nParaWidth = 0;
+    long nParaWidth = 0;
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
     for ( auto nLine = pPortion->GetLines().size(); nLine; )
     {
-        sal_uLong nLineWidth = 0;
+        long nLineWidth = 0;
         TextLine& pLine = pPortion->GetLines()[ --nLine ];
         for ( sal_uInt16 nTP = pLine.GetStartPortion(); nTP <= pLine.GetEndPortion(); nTP++ )
         {
@@ -1178,17 +1178,17 @@ sal_uLong TextEngine::CalcTextWidth( sal_uInt32 nPara )
     return nParaWidth;
 }
 
-sal_uLong TextEngine::CalcTextWidth()
+long TextEngine::CalcTextWidth()
 {
     if ( !IsFormatted() && !IsFormatting() )
         FormatAndUpdate();
 
-    if ( mnCurTextWidth == 0xFFFFFFFF )
+    if ( mnCurTextWidth < 0 )
     {
         mnCurTextWidth = 0;
         for ( sal_uInt32 nPara = mpTEParaPortions->Count(); nPara; )
         {
-            sal_uLong nParaWidth = CalcTextWidth( --nPara );
+            const long nParaWidth = CalcTextWidth( --nPara );
             if ( nParaWidth > mnCurTextWidth )
                 mnCurTextWidth = nParaWidth;
         }
@@ -1196,17 +1196,17 @@ sal_uLong TextEngine::CalcTextWidth()
     return mnCurTextWidth+1;// wider by 1, as CreateLines breaks at >=
 }
 
-sal_uLong TextEngine::CalcTextHeight()
+long TextEngine::CalcTextHeight()
 {
     DBG_ASSERT( GetUpdateMode(), "CalcTextHeight: GetUpdateMode()" );
 
-    sal_uLong nY = 0;
+    long nY = 0;
     for ( auto nPortion = mpTEParaPortions->Count(); nPortion; )
         nY += CalcParaHeight( --nPortion );
     return nY;
 }
 
-sal_uLong TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nLen, const vcl::Font* pFont )
+long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nLen, const vcl::Font* pFont )
 {
 #ifdef DBG_UTIL
     // within the text there must not be a Portion change (attribute/tab)!
@@ -1214,10 +1214,10 @@ sal_uLong TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, 
     DBG_ASSERT( nTabPos == -1 || nTabPos >= (nPortionStart+nLen), "CalcTextWidth: Tab!" );
 #endif
 
-    sal_uLong nWidth;
+    long nWidth;
     if ( mnFixCharWidth100 )
     {
-        nWidth = (sal_uLong)nLen*mnFixCharWidth100/100;
+        nWidth = static_cast<long>(nLen)*mnFixCharWidth100/100;
     }
     else
     {
@@ -1233,7 +1233,7 @@ sal_uLong TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, 
             mpRefDev->SetFont( aFont );
         }
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
-        nWidth = (sal_uLong)mpRefDev->GetTextWidth( pNode->GetText(), nPortionStart, nLen );
+        nWidth = mpRefDev->GetTextWidth( pNode->GetText(), nPortionStart, nLen );
 
     }
     return nWidth;
@@ -1263,9 +1263,9 @@ sal_Int32 TextEngine::GetLineLen( sal_uInt32 nParagraph, sal_uInt16 nLine ) cons
     return 0;
 }
 
-sal_uLong TextEngine::CalcParaHeight( sal_uInt32 nParagraph ) const
+long TextEngine::CalcParaHeight( sal_uInt32 nParagraph ) const
 {
-    sal_uLong nHeight = 0;
+    long nHeight = 0;
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
     DBG_ASSERT( pPPortion, "GetParaHeight: paragraph not found" );
@@ -1545,9 +1545,7 @@ void TextEngine::FormatDoc()
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
         if ( pTEParaPortion->IsInvalid() )
         {
-            sal_uLong nOldParaWidth = 0xFFFFFFFF;
-            if ( mnCurTextWidth != 0xFFFFFFFF )
-                nOldParaWidth = CalcTextWidth( nPara );
+            const long nOldParaWidth = mnCurTextWidth >= 0 ? CalcTextWidth( nPara ) : -1;
 
             ImpFormattingParagraph( nPara );
 
@@ -1558,9 +1556,9 @@ void TextEngine::FormatDoc()
             if ( maInvalidRect.IsEmpty() )
             {
                 // otherwise remains Empty() for Paperwidth 0 (AutoPageSize)
-                long nWidth = (long)mnMaxTextWidth;
-                if ( !nWidth )
-                    nWidth = 0x7FFFFFFF;
+                const long nWidth = mnMaxTextWidth
+                    ? mnMaxTextWidth
+                    : std::numeric_limits<long>::max();
                 Range aInvRange( GetInvalidYOffsets( nPara ) );
                 maInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
@@ -1570,13 +1568,13 @@ void TextEngine::FormatDoc()
                 maInvalidRect.Bottom() = nY + CalcParaHeight( nPara );
             }
 
-            if ( mnCurTextWidth != 0xFFFFFFFF )
+            if ( mnCurTextWidth >= 0 )
             {
-                sal_uLong nNewParaWidth = CalcTextWidth( nPara );
+                const long nNewParaWidth = CalcTextWidth( nPara );
                 if ( nNewParaWidth >= mnCurTextWidth )
                     mnCurTextWidth = nNewParaWidth;
-                else if ( ( nOldParaWidth != 0xFFFFFFFF ) && ( nOldParaWidth >= mnCurTextWidth ) )
-                    mnCurTextWidth = 0xFFFFFFFF;
+                else if ( nOldParaWidth >= mnCurTextWidth )
+                    mnCurTextWidth = -1;
             }
         }
         else if ( bGrow )
@@ -1590,11 +1588,11 @@ void TextEngine::FormatDoc()
 
     if ( !maInvalidRect.IsEmpty() )
     {
-        sal_uLong nNewHeight = CalcTextHeight();
+        const long nNewHeight = CalcTextHeight();
         long nDiff = nNewHeight - mnCurTextHeight;
         if ( nNewHeight < mnCurTextHeight )
         {
-            maInvalidRect.Bottom() = (long)std::max( nNewHeight, mnCurTextHeight );
+            maInvalidRect.Bottom() = std::max( nNewHeight, mnCurTextHeight );
             if ( maInvalidRect.IsEmpty() )
             {
                 maInvalidRect.Top() = 0;
@@ -1695,7 +1693,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
         TETextPortion* pTP = pTEParaPortion->GetTextPortions()[ nEndPortion ];
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLine: SplitTextPortion at beginning of line?" );
-        pTP->GetWidth() = (long)CalcTextWidth( nPara, nBreakPos-pTP->GetLen(), pTP->GetLen()-1 );
+        pTP->GetWidth() = CalcTextWidth( nPara, nBreakPos-pTP->GetLen(), pTP->GetLen()-1 );
     }
     pLine->SetEndPortion( nEndPortion );
 }
@@ -1731,7 +1729,7 @@ sal_uInt16 TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
     pTextPortion->GetLen() -= nOverlapp;
     TETextPortion* pNewPortion = new TETextPortion( nOverlapp );
     pTEParaPortion->GetTextPortions().insert( pTEParaPortion->GetTextPortions().begin() + nSplitPortion + 1, pNewPortion );
-    pTextPortion->GetWidth() = (long)CalcTextWidth( nPara, nPos-pTextPortion->GetLen(), pTextPortion->GetLen() );
+    pTextPortion->GetWidth() = CalcTextWidth( nPara, nPos-pTextPortion->GetLen(), pTextPortion->GetLen() );
 
     return nSplitPortion;
 }
@@ -1947,8 +1945,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         if ( pPortion->IsInvalid() )
             return;
 
-        sal_uLong nParaHeight = CalcParaHeight( nPara );
-        if ( ( !pPaintArea || ( ( nY + (long)nParaHeight ) > pPaintArea->Top() ) )
+        const long nParaHeight = CalcParaHeight( nPara );
+        if ( ( !pPaintArea || ( ( nY + nParaHeight ) > pPaintArea->Top() ) )
                 && ( !pPaintRange || ( ( nPara >= pPaintRange->GetStart().GetPara() ) && ( nPara <= pPaintRange->GetEnd().GetPara() ) ) ) )
         {
             // for all lines of the paragraph
@@ -2224,7 +2222,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         sal_uInt16 nTmpPortion = pLine->GetStartPortion();
         long nTmpWidth = mpDoc->GetLeftMargin();
         // do not subtract margin; it is included in TmpWidth
-        long nXWidth = mnMaxTextWidth ? mnMaxTextWidth : 0x7FFFFFFF;
+        long nXWidth = mnMaxTextWidth ? mnMaxTextWidth : std::numeric_limits<long>::max();
         if ( nXWidth < nTmpWidth )
             nXWidth = nTmpWidth;
 
@@ -2258,7 +2256,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             {
 
                 if ( bCalcPortion || !pPortion->HasValidSize() )
-                    pPortion->GetWidth() = (long)CalcTextWidth( nPara, nTmpPos, pPortion->GetLen() );
+                    pPortion->GetWidth() = CalcTextWidth( nPara, nTmpPos, pPortion->GetLen() );
                 nTmpWidth += pPortion->GetWidth();
 
                 pPortion->SetRightToLeft( ImpGetRightToLeft( nPara, nTmpPos+1 ) );

@@ -743,11 +743,11 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
                 TextView * pView = GetEditView();
                 // scroll if applicable so that first line is at the top
                 long nVisHeight = GetOutputSizePixel().Height();
-                if ( (long)pView->GetTextEngine()->GetTextHeight() > nVisHeight )
+                if ( pView->GetTextEngine()->GetTextHeight() > nVisHeight )
                 {
-                    long nMaxY = (long)pView->GetTextEngine()->GetTextHeight() - nVisHeight;
+                    long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
                     long nOldStartY = pView->GetStartDocPos().Y();
-                    long nNewStartY = (long)nStart * (long)pView->GetTextEngine()->GetCharHeight();
+                    long nNewStartY = (long)nStart * pView->GetTextEngine()->GetCharHeight();
                     nNewStartY = std::min( nNewStartY, nMaxY );
                     pView->Scroll( 0, -(nNewStartY-nOldStartY) );
                     pView->ShowCursor( false );
