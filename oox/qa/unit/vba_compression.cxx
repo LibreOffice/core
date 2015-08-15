@@ -25,6 +25,8 @@ public:
     // a sequence containing one subsequence that can be compressed
     void testSimple2();
 
+    void testSimple3();
+
     // avoid the BootstrapFixtureBase::setUp and tearDown
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
@@ -32,6 +34,7 @@ public:
     CPPUNIT_TEST_SUITE(TestVbaCompression);
     CPPUNIT_TEST(testSimple1);
     CPPUNIT_TEST(testSimple2);
+    CPPUNIT_TEST(testSimple3);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -70,7 +73,7 @@ void TestVbaCompression::testSimple1()
     ReadFiles(aTestFile, aReference, aOutputMemoryStream,
             aReferenceMemoryStream, "/tmp/vba_debug.bin");
 
-    // CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
+    CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
     const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
     const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
@@ -91,8 +94,30 @@ void TestVbaCompression::testSimple2()
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
     ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug2.bin");
-    //
-    // CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
+
+    CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
+
+    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
+    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+
+    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+            aOutputMemoryStream.GetSize());
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+    }
+}
+
+void TestVbaCompression::testSimple3()
+{
+    OUString aTestFile = getPathFromSrc("/oox/qa/unit/data/vba/simple3.bin");
+    OUString aReference = getPathFromSrc("/oox/qa/unit/data/vba/reference/simple3.bin");
+
+    SvMemoryStream aOutputMemoryStream(4096, 4096);
+    SvMemoryStream aReferenceMemoryStream(4096, 4096);
+    ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug3.bin");
+
+    CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
     const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
     const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
