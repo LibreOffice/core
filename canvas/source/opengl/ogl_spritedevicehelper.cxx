@@ -297,7 +297,6 @@ namespace oglcanvas
                       aSprites.end(),
                       std::mem_fn(&CanvasCustomSprite::renderSprite));
 
-
         // frame counter, other info
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
