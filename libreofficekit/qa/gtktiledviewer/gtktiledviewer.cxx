@@ -57,6 +57,25 @@ static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 
+
+/// Get the visible area of the scrolled window
+static void getVisibleAreaTwips(GdkRectangle* pArea)
+{
+#if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+
+    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_value(pHAdjustment));
+    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_value(pVAdjustment));
+    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_page_size(pHAdjustment));
+    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
+                                               gtk_adjustment_get_page_size(pVAdjustment));
+#endif
+}
+
 static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
     const char *sName = gtk_tool_button_get_icon_name( GTK_TOOL_BUTTON(pButton) );
@@ -175,23 +194,6 @@ static void doCopy(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     free(pUsedFormat);
 }
 
-/// Get the visible area of the scrolled window
-static void getVisibleAreaTwips(GdkRectangle* pArea)
-{
-#if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
-    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
-    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
-
-    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
-                                               gtk_adjustment_get_value(pHAdjustment));
-    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
-                                               gtk_adjustment_get_value(pVAdjustment));
-    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
-                                               gtk_adjustment_get_page_size(pHAdjustment));
-    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
-                                               gtk_adjustment_get_page_size(pVAdjustment));
-#endif
-}
 
 /// Searches for the next or previous text of pFindbarEntry.
 static void doSearch(bool bBackwards)
@@ -317,6 +319,54 @@ static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointe
         g_warning("Unable to show URI %s : %s", pPayload, pError->message);
         g_error_free(pError);
     }
+}
+
+/// Cursor position changed
+static void cursorChanged(LOKDocView* /*pDocView*/, gint nX, gint nY,
+                          gint /*nWidth*/, gint /*nHeight*/, gpointer /*pData*/)
+{
+    GtkAdjustment* vadj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+    GtkAdjustment* hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+    GdkRectangle visArea;
+    gdouble upper;
+    gint x = -1, y = -1;
+
+    getVisibleAreaTwips(&visArea);
+
+    // check vertically
+    if (nY < visArea.y)
+    {
+        y = nY - visArea.height/2;
+        if (y < 0)
+            y = gtk_adjustment_get_lower(vadj);
+    }
+    else if (nY > visArea.y + visArea.height)
+    {
+        y = nY - visArea.height/2;
+        upper = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), gtk_adjustment_get_upper(vadj));
+        if (y > upper)
+            y = upper;
+
+    }
+
+    if (nX < visArea.x)
+    {
+        x = nX - visArea.width/2;
+        if (x < 0)
+            x = gtk_adjustment_get_lower(hadj);
+    }
+    else if (nX > visArea.x + visArea.width)
+    {
+        x = nX - visArea.width/2;
+        upper = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), gtk_adjustment_get_upper(hadj));
+        if (x > upper)
+            x = upper;
+    }
+
+    if (y!=-1)
+        gtk_adjustment_set_value(vadj, lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), y));
+    if (x!=-1)
+        gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), x));
 }
 
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
@@ -576,6 +626,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
     g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
+    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), NULL);
 
 
     // Scrolled window for DocView

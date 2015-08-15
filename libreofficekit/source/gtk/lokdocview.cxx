@@ -117,6 +117,7 @@ enum
     PART_CHANGED,
     SIZE_CHANGED,
     HYPERLINK_CLICKED,
+    CURSOR_CHANGED,
 
     LAST_SIGNAL
 };
@@ -518,6 +519,11 @@ callback (gpointer pData)
     {
         priv->m_aVisibleCursor = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
         priv->m_bCursorOverlayVisible = true;
+        g_signal_emit(pDocView, doc_view_signals[CURSOR_CHANGED], 0,
+                      priv->m_aVisibleCursor.x,
+                      priv->m_aVisibleCursor.y,
+                      priv->m_aVisibleCursor.width,
+                      priv->m_aVisibleCursor.height);
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
@@ -1743,6 +1749,25 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
+
+    /**
+     * LOKDocView::cursor-changed:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @nX: The new cursor position (X coordinate) in pixels
+     * @nY: The new cursor position (Y coordinate) in pixels
+     * @nWidth: The width of new cursor
+     * @nHeight: The height of new cursor
+     */
+    doc_view_signals[CURSOR_CHANGED] =
+        g_signal_new("cursor-changed",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 4,
+                     G_TYPE_INT, G_TYPE_INT,
+                     G_TYPE_INT, G_TYPE_INT);
 }
 
 /**
