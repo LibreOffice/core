@@ -76,7 +76,7 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 nKey)
     {
         for (sal_Int32 nPara = nStartPara; nPara >= 0; --nPara)
         {
-            if (nStartPos == 0)
+            if (nPara == nStartPara && nStartPos == 0)
                 continue;
 
             OUString aLine( GetTextEngine()->GetText( nPara ) );
