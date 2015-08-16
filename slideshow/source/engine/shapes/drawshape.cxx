@@ -62,7 +62,6 @@
 #include "gdimtftools.hxx"
 #include "drawinglayeranimation.hxx"
 
-#include <boost/bind.hpp>
 #include <math.h>
 
 using namespace ::com::sun::star;
@@ -168,17 +167,12 @@ namespace slideshow
             ViewShape::RenderArgs renderArgs( getViewRenderArgs() );
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewShape::update ), // though _theoretically_,
-                                                                             // bind should eat this even
-                                                                             // with _1 being a shared_ptr,
-                                                                             // it does _not_ for MSVC without
-                                                                             // the extra mem_fn. WTF.
-                                     _1,
-                                     ::boost::cref( mpCurrMtf ),
-                                     ::boost::cref( renderArgs ),
-                                     nUpdateFlags,
-                                     isVisible() ) )
+                                 [this, &renderArgs, &nUpdateFlags]
+                                 ( const ::boost::shared_ptr< ::slideshow::internal::ViewShape >& pShape )
+                                 { return pShape->update( this->mpCurrMtf,
+                                                          renderArgs,
+                                                          nUpdateFlags,
+                                                          this->isVisible() ); } )
                 != static_cast<ViewShapeVector::difference_type>(maViewShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
@@ -319,8 +313,8 @@ namespace slideshow
 
                         // restore old transformation when leaving the scope
                         const ::comphelper::ScopeGuard aGuard(
-                            boost::bind( &::cppcanvas::Canvas::setTransformation,
-                                         pDestinationCanvas, aOldTransform ) );
+                            [&pDestinationCanvas, &aOldTransform]()
+                            { return pDestinationCanvas->setTransformation( aOldTransform ); } );
 
 
                         // retrieve bounds for subset of whole metafile
@@ -330,15 +324,10 @@ namespace slideshow
 
                         // cannot use ::boost::bind, ::basegfx::B2DRange::expand()
                         // is overloaded.
-                        VectorOfDocTreeNodes::const_iterator        aCurr( rSubsets.begin() );
-                        const VectorOfDocTreeNodes::const_iterator  aEnd( rSubsets.end() );
-                        while( aCurr != aEnd )
-                        {
+                        for( const auto& rDocTreeNode : rSubsets )
                             aTotalBounds.expand( pRenderer->getSubsetArea(
-                                                     aCurr->getStartIndex(),
-                                                     aCurr->getEndIndex() )  );
-                            ++aCurr;
-                        }
+                                                     rDocTreeNode.getStartIndex(),
+                                                     rDocTreeNode.getEndIndex() ) );
 
                         OSL_ENSURE( aTotalBounds.getMinX() >= -0.1 &&
                                     aTotalBounds.getMinY() >= -0.1 &&
@@ -632,11 +621,9 @@ namespace slideshow
             // already added?
             if( ::std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
-                               ::boost::bind<bool>(
-                                    ::std::equal_to< ViewLayerSharedPtr >(),
-                                    ::boost::bind( &ViewShape::getViewLayer,
-                                                   _1 ),
-                                    ::boost::cref( rNewLayer ) ) ))
+                               [&rNewLayer]
+                               ( const ::boost::shared_ptr< ::slideshow::internal::ViewShape >& pShape )
+                               { return rNewLayer == pShape->getViewLayer(); } ) )
             {
                 // yes, nothing to do
                 return;
@@ -669,22 +656,18 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
-                                            ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewShape::getViewLayer,
-                                                           _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                        [&rLayer]
+                                        ( const ::boost::shared_ptr< ::slideshow::internal::ViewShape >& pShape )
+                                        { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "DrawShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
-                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewShape::getViewLayer,
-                                                            _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                         [&rLayer]
+                                         ( const ::boost::shared_ptr< ::slideshow::internal::ViewShape >& pShape )
+                                         { return rLayer == pShape->getViewLayer(); } ) )  == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -821,11 +804,12 @@ namespace slideshow
                         // determine border needed for antialiasing the shape
                         ::basegfx::B2DSize aAABorder(0.0,0.0);
 
+                        Expander aAAExpander( aAABorder );
+
                         // for every view, get AA border and 'expand' aAABorder
                         // appropriately.
-                        ::std::for_each( maViewShapes.begin(),
-                                         maViewShapes.end(),
-                                         Expander( aAABorder ) );
+                        for( const auto& rViewShape : maViewShapes )
+                            aAAExpander( rViewShape );
 
                         // add calculated AA border to aBounds
                         aBounds = ::basegfx::B2DRectangle( aBounds.getMinX() - aAABorder.getX(),
@@ -996,10 +980,11 @@ namespace slideshow
                     basegfx::B2DHomMatrix aTransform;
                     pCanvas->setTransformation( aTransform /* empty */ );
 
+
+                    ::cppcanvas::Canvas* pTmpCanvas = pCanvas.get();
                     comphelper::ScopeGuard const resetOldTransformation(
-                        boost::bind( &cppcanvas::Canvas::setTransformation,
-                                     pCanvas.get(),
-                                     boost::cref(aOldTransform) ));
+                        [&aOldTransform, &pTmpCanvas]()
+                        { return pTmpCanvas->setTransformation( aOldTransform ); } );
 
                     aTransform.scale( maBounds.getWidth(),
                                       maBounds.getHeight() );
@@ -1021,20 +1006,19 @@ namespace slideshow
             // shift shape-relative hyperlink regions to
             // slide-absolute position
 
-            HyperlinkRegions aTranslatedRegions;
+            // initialize to the same size as the container for
+            // shape-relative hyperlink regions to avoid reallocation
+            HyperlinkRegions aTranslatedRegions( maHyperlinkRegions.size() );
             const basegfx::B2DPoint& rOffset(getBounds().getMinimum());
-            HyperlinkRegions::const_iterator       aIter( maHyperlinkRegions.begin() );
-            HyperlinkRegions::const_iterator const aEnd ( maHyperlinkRegions.end() );
-            while( aIter != aEnd )
+            for( const auto& cp : maHyperlinkRegions )
             {
-                basegfx::B2DRange const& relRegion( aIter->first );
+                basegfx::B2DRange const& relRegion( cp.first );
                 aTranslatedRegions.push_back(
                     std::make_pair(
                         basegfx::B2DRange(
                             relRegion.getMinimum() + rOffset,
                             relRegion.getMaximum() + rOffset),
-                        aIter->second) );
-                ++aIter;
+                        cp.second) );
             }
 
             return aTranslatedRegions;
@@ -1058,9 +1042,8 @@ namespace slideshow
             {
                 // notify all ViewShapes, by calling their enterAnimationMode method.
                 // We're now entering animation mode
-                ::std::for_each( maViewShapes.begin(),
-                                 maViewShapes.end(),
-                                 ::boost::mem_fn( &ViewShape::enterAnimationMode ) );
+                for( const auto& rViewShape : maViewShapes )
+                    rViewShape->enterAnimationMode();
             }
 
             ++mnIsAnimatedCount;
@@ -1077,9 +1060,8 @@ namespace slideshow
             {
                 // notify all ViewShapes, by calling their leaveAnimationMode method.
                 // we're now leaving animation mode
-                ::std::for_each( maViewShapes.begin(),
-                                 maViewShapes.end(),
-                                 ::boost::mem_fn( &ViewShape::leaveAnimationMode ) );
+                for( const auto& rViewShape : maViewShapes )
+                    rViewShape->leaveAnimationMode();
             }
         }
 
