@@ -79,6 +79,11 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
 
     if ( nVCLState & ControlState::FOCUSED )
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_FOCUSED);
+
+    if (AllSettings::GetLayoutRTL())
+    {
+        *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_DIR_RTL);
+    }
 }
 
 enum {
@@ -663,9 +668,11 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == PART_BUTTON_DOWN )
     {
+        Point aPos = Point(aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth, aAreaRect.Top());
+        if (AllSettings::GetLayoutRTL())
+            aPos.X() = aAreaRect.Left();
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
-        aButtonRect.SetPos( Point( aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth,
-                                   aAreaRect.Top() ) );
+        aButtonRect.SetPos(aPos);
     }
     else if( nPart == PART_SUB_EDIT )
     {
@@ -677,7 +684,10 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
         aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - (adjust_left + adjust_right),
                                    aAreaRect.GetHeight() - (adjust_top + adjust_bottom)) );
         Point aEditPos = aAreaRect.TopLeft();
-        aEditPos.X() += adjust_left;
+        if (AllSettings::GetLayoutRTL())
+            aEditPos.X() += nButtonWidth;
+        else
+            aEditPos.X() += adjust_left;
         aEditPos.Y() += adjust_top;
         aButtonRect.SetPos( aEditPos );
     }
@@ -705,6 +715,8 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
 
     Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
+    if (AllSettings::GetLayoutRTL())
+        aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
 
     arrowRect.SetSize( Size( (gint)(ARROW_SIZE),
                              (gint)(ARROW_SIZE) ) );
@@ -721,7 +733,10 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         {
             gtk_style_context_save(mpEntryStyle);
             gtk_style_context_set_state(mpEntryStyle, flags);
-            gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_RIGHT);
+            if (AllSettings::GetLayoutRTL())
+                gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_LEFT);
+            else
+                gtk_style_context_set_junction_sides(mpEntryStyle, GTK_JUNCTION_RIGHT);
 
             gtk_render_background(mpComboboxStyle, cr,
                                   0, 0,
@@ -729,12 +744,13 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
             gtk_render_frame(mpComboboxStyle, cr,
                              0, 0,
                              areaRect.GetWidth(), areaRect.GetHeight());
-
             gtk_render_background(mpEntryStyle, cr,
-                                  0, 0,
+                                  (aEditBoxRect.Left() - areaRect.Left()),
+                                  (aEditBoxRect.Top() - areaRect.Top()),
                                   aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
             gtk_render_frame(mpEntryStyle, cr,
-                             0, 0,
+                             (aEditBoxRect.Left() - areaRect.Left()),
+                             (aEditBoxRect.Top() - areaRect.Top()),
                              aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
 
             gtk_style_context_restore(mpEntryStyle);
