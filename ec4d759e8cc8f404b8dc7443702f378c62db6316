@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aed3d3a_d3bb5474",
+        "filename": "slideshow/source/engine/animationnodes/basenode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "that one looks like the wrong way round (swapped args)?",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_b3c050e2",
+        "filename": "slideshow/source/engine/pointersymbol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "\u0027this\u0027 looks redundant? ;)",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_13b65c8a",
+        "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "same here - skip \u0027this\u0027",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_5302a43f",
         "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
         "patchSetId": 2
@@ -13,6 +64,24 @@
       "writtenOn": "2015-08-16T21:12:35Z",
       "side": 1,
       "message": "I\u0027m not sold on this change or any of the changes I made that are similar to it, so I wont be heartbroken if you disagree or think I need to remove it.",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3bad86d",
+        "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "I\u0027m pretty pragmatic here - so I find your change more verbose and less readable, therefore would keep the original version (unless there\u0027s a more concise lambda). ;)",
+      "parentUuid": "9aed3d3a_5302a43f",
       "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -36,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_53b0e48b",
+        "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "Same answer then :)",
+      "parentUuid": "9aed3d3a_33ff2036",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_93fc2c40",
         "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
         "patchSetId": 2
@@ -53,6 +140,57 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_73a7e84f",
+        "filename": "slideshow/source/engine/shapes/appletshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "little nuance - the original code called getBounds() just once, and stuck a by-value copy into the bind object.",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_d3623416",
+        "filename": "slideshow/source/engine/shapes/appletshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "same here wrt getBounds. maybe step through that, IIRC that function was not totally trivial, so calling it just once might pay ...",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_b367b024",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "same observation - isVisible in the old code was called just once",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_73e248a1",
         "filename": "slideshow/source/engine/shapes/drawshape.cxx",
         "patchSetId": 2
@@ -64,6 +202,41 @@
       "writtenOn": "2015-08-16T21:12:35Z",
       "side": 1,
       "message": "I\u0027m not sold on this change, but I thought I\u0027d include it in here as part of my efforts to reduce the use of boost::bind",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_136dbc04",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "no strong opinion on this one, your call.",
+      "parentUuid": "9aed3d3a_73e248a1",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_537744d4",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "While using range-based for - why not do away with the Expander contraption then entirely? ;)",
       "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -98,6 +271,57 @@
       "writtenOn": "2015-08-16T21:12:35Z",
       "side": 1,
       "message": "Since aTranslatedRegions will end up as the same size as maHyperlinkRegions, I thought it would improve the performance of the loop to reserve the necessary capacity before the loop.",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_737ec8af",
+        "filename": "slideshow/source/engine/shapes/drawshapesubsetting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "\u0027this\u0027 looks redundant ;)",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_d3499490",
+        "filename": "slideshow/source/engine/shapes/mediashape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "see earlier comment on getBounds()",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_b34e9094",
+        "filename": "slideshow/source/engine/shapes/mediashape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-16T22:06:03Z",
+      "side": 1,
+      "message": "there should be a typedef for that shared_ptr",
       "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
