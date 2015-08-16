@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_d3e87419",
+        "filename": "svx/source/dialog/imapdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T03:10:21Z",
+      "side": 1,
+      "message": "nah that is not a useful comment :-)\nWe already know that the change was motivated by a crash.. that is what commit message are for.\nbut \u0027avoid crash\u0027 is really not that useful in the source itself..\none could write that all over the place as many many line, if they are not there would cause a crash.",
+      "revId": "694eef78dea7c88f68c7c70f77cb6222900ebf4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
