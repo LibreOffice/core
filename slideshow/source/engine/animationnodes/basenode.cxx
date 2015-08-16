@@ -34,7 +34,6 @@
 #include "nodetools.hxx"
 #include "generateevent.hxx"
 
-#include <boost/bind.hpp>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -624,10 +623,8 @@ void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
 void BaseNode::notifyEndListeners() const
 {
     // notify all listeners
-    std::for_each( maDeactivatingListeners.begin(),
-                   maDeactivatingListeners.end(),
-                   boost::bind( &AnimationNode::notifyDeactivating, _1,
-                                boost::cref(mpSelf) ) );
+    for( const auto& rListner : maDeactivatingListeners )
+        rListner->notifyDeactivating( mpSelf );
 
     // notify state change
     maContext.mrEventMultiplexer.notifyAnimationEnd( mpSelf );
