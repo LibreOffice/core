@@ -26,7 +26,6 @@
 #include "activity.hxx"
 #include "activitiesqueue.hxx"
 
-#include <boost/mem_fn.hpp>
 #include <boost/shared_ptr.hpp>
 #include <algorithm>
 
@@ -51,12 +50,10 @@ namespace slideshow
             // dispose all queue entries
             try
             {
-                std::for_each( maCurrentActivitiesWaiting.begin(),
-                               maCurrentActivitiesWaiting.end(),
-                               boost::mem_fn( &Disposable::dispose ) );
-                std::for_each( maCurrentActivitiesReinsert.begin(),
-                               maCurrentActivitiesReinsert.end(),
-                               boost::mem_fn( &Disposable::dispose ) );
+                for( const auto& pActivity : maCurrentActivitiesWaiting )
+                    pActivity->dispose();
+                for( const auto& pActivity : maCurrentActivitiesReinsert )
+                    pActivity->dispose();
             }
             catch (uno::Exception &)
             {
@@ -169,9 +166,8 @@ namespace slideshow
         void ActivitiesQueue::processDequeued()
         {
             // notify all dequeued activities from last round
-            ::std::for_each( maDequeuedActivities.begin(),
-                             maDequeuedActivities.end(),
-                             ::boost::mem_fn( &Activity::dequeued ) );
+            for( const auto& pActivity : maDequeuedActivities )
+                pActivity->dequeued();
             maDequeuedActivities.clear();
         }
 
@@ -183,14 +179,12 @@ namespace slideshow
         void ActivitiesQueue::clear()
         {
             // dequeue all entries:
-            std::for_each( maCurrentActivitiesWaiting.begin(),
-                           maCurrentActivitiesWaiting.end(),
-                           boost::mem_fn( &Activity::dequeued ) );
+            for( const auto& pActivity : maCurrentActivitiesWaiting )
+                pActivity->dequeued();
             ActivityQueue().swap( maCurrentActivitiesWaiting );
 
-            std::for_each( maCurrentActivitiesReinsert.begin(),
-                           maCurrentActivitiesReinsert.end(),
-                           boost::mem_fn( &Activity::dequeued ) );
+            for( const auto& pActivity : maCurrentActivitiesReinsert )
+                pActivity->dequeued();
             ActivityQueue().swap( maCurrentActivitiesReinsert );
         }
     }

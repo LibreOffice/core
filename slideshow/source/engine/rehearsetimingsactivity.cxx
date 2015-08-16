@@ -45,7 +45,6 @@
 #include "mouseeventhandler.hxx"
 #include "rehearsetimingsactivity.hxx"
 
-#include <boost/bind.hpp>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -167,11 +166,8 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
 
-    std::for_each( rContext.mrViewContainer.begin(),
-                   rContext.mrViewContainer.end(),
-                   boost::bind( &RehearseTimingsActivity::viewAdded,
-                                this,
-                                _1 ));
+    for( const auto& rView : rContext.mrViewContainer )
+        this->viewAdded( rView );
 }
 
 RehearseTimingsActivity::~RehearseTimingsActivity()
@@ -215,7 +211,10 @@ void RehearseTimingsActivity::start()
 
     // paint and show all sprites:
     paintAllSprites();
-    for_each_sprite( boost::bind( &cppcanvas::Sprite::show, _1 ) );
+    for_each_sprite(
+            []( const::boost::shared_ptr< ::cppcanvas::CustomSprite >& pSprite )
+            { pSprite->show(); }
+            );
 
     mrActivitiesQueue.addActivity( shared_from_this() );
 
@@ -233,7 +232,10 @@ double RehearseTimingsActivity::stop()
 
     mbActive = false; // will be removed from queue
 
-    for_each_sprite( boost::bind( &cppcanvas::Sprite::hide, _1 ) );
+    for_each_sprite(
+            []( const::boost::shared_ptr< ::cppcanvas::CustomSprite >& pSprite )
+            { pSprite->hide(); }
+            );
 
     return maElapsedTime.getElapsedTime();
 }
@@ -394,10 +396,14 @@ void RehearseTimingsActivity::viewsChanged()
         // new sprite pos, transformation might have changed:
         maSpriteRectangle = calcSpriteRectangle( maViews.front().first );
 
+        const ::basegfx::B2DPoint& maSpriteRectMin = maSpriteRectangle.getMinimum();
+
         // reposition sprites
-        for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
-                                      _1,
-                                      maSpriteRectangle.getMinimum()) );
+        for_each_sprite(
+            [&maSpriteRectMin]
+            ( const ::boost::shared_ptr< ::cppcanvas::CustomSprite >& pSprite )
+            { pSprite->move( maSpriteRectMin ); }
+            );
 
         // sprites changed, need screen update
         mrScreenUpdater.notifyUpdate();
@@ -407,10 +413,9 @@ void RehearseTimingsActivity::viewsChanged()
 void RehearseTimingsActivity::paintAllSprites() const
 {
     for_each_sprite(
-        boost::bind( &RehearseTimingsActivity::paint, this,
-                     // call getContentCanvas() on each sprite:
-                     boost::bind(
-                         &cppcanvas::CustomSprite::getContentCanvas, _1 ) ) );
+        [this]( const ::boost::shared_ptr< ::cppcanvas::CustomSprite >& pSprite )
+        { this->paint( pSprite->getContentCanvas() ); }
+        );
 }
 
 void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas ) const

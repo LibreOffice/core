@@ -64,10 +64,8 @@ PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitm
     maPos(),
     mbVisible(false)
 {
-    std::for_each( rViewContainer.begin(),
-                   rViewContainer.end(),
-                   [this]( const UnoViewSharedPtr& sp )
-                   { this->viewAdded(sp); } );
+    for( const auto& rView : rViewContainer )
+        this->viewAdded( rView );
 }
 
 void PointerSymbol::setVisible( const bool bVisible )
