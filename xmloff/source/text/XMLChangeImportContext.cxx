@@ -24,12 +24,16 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CHANGE_ID;
+using xmloff::XML_change_id;
+using css::xml::sax::FastToken::NAMESPACE;
 
 TYPEINIT1( XMLChangeImportContext, SvXMLImportContext );
 
@@ -44,6 +48,20 @@ XMLChangeImportContext::XMLChangeImportContext(
         bIsStart(bStart),
         bIsEnd(bEnd),
         bIsOutsideOfParagraph(bOutsideOfParagraph)
+{
+    DBG_ASSERT(bStart || bEnd, "Must be either start, end, or both!");
+}
+
+XMLChangeImportContext::XMLChangeImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 /*Element*/,
+    bool bStart,
+    bool bEnd,
+    bool bOutsideOfParagraph )
+:   SvXMLImportContext( rImport ),
+    bIsStart(bStart),
+    bIsEnd(bEnd),
+    bIsOutsideOfParagraph(bOutsideOfParagraph)
 {
     DBG_ASSERT(bStart || bEnd, "Must be either start, end, or both!");
 }
@@ -86,6 +104,35 @@ void XMLChangeImportContext::StartElement(
         }
         // else: ignore
     }
+}
+
+void XMLChangeImportContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception )
+{
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_change_id ) )
+    {
+        // Id found! Now call RedlineImportHelper
+
+        // prepare parameters
+        rtl::Reference<XMLTextImportHelper> rHelper =
+            GetImport().GetTextImport();
+        OUString sID = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_change_id );
+
+        // call for bStart and bEnd (may both be true)
+        if( bIsStart )
+            rHelper->RedlineSetCursor(sID, true, bIsOutsideOfParagraph);
+        if( bIsEnd )
+            rHelper->RedlineSetCursor(sID, false, bIsOutsideOfParagraph);
+
+        // outside of paragraph and still open? set open redline ID
+        if( bIsOutsideOfParagraph )
+        {
+            rHelper->SetOpenRedlineId(sID);
+        }
+    }
+    // else: ignore
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
