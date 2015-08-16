@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3d5b8b9",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T20:54:29Z",
+      "side": 1,
+      "message": "Sorry, wrong operation",
+      "revId": "a0bb4b866a7e89c61d88addbb724635f9cddcf59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
