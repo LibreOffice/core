@@ -1081,22 +1081,40 @@ public:
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
+    XMLMetaImportContextBase(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        XMLHints_Impl& rHints,
+        bool& rIgnoreLeadingSpace );
 
     virtual ~XMLMetaImportContextBase();
 
     virtual void StartElement(
             const Reference<xml::sax::XAttributeList> & i_xAttrList) SAL_OVERRIDE;
+    virtual void startFastElement( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw (RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw (RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
             const Reference< xml::sax::XAttributeList > & i_xAttrList) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw (RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& i_rChars ) SAL_OVERRIDE;
+    virtual void characters( const OUString& rChars )
+        throw (RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue);
+    virtual void ProcessAttribute( sal_Int32 Element,
+        const OUString& rValue );
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange)
         = 0;
@@ -1114,6 +1132,18 @@ XMLMetaImportContextBase::XMLMetaImportContextBase(
     , m_rHints( i_rHints )
     , m_rIgnoreLeadingSpace( i_rIgnoreLeadingSpace )
     , m_xStart( GetImport().GetTextImport()->GetCursorAsRange()->getStart() )
+{
+}
+
+XMLMetaImportContextBase::XMLMetaImportContextBase(
+    SvXMLImport& rImport,
+    sal_Int32 /*Element*/,
+    XMLHints_Impl& rHints,
+    bool& rIgnoreLeadingSpace )
+:   SvXMLImportContext( rImport ),
+    m_rHints( rHints ),
+    m_rIgnoreLeadingSpace( rIgnoreLeadingSpace ),
+    m_xStart( GetImport().GetTextImport()->GetCursorAsRange()->getStart() )
 {
 }
 
@@ -1138,6 +1168,23 @@ void XMLMetaImportContextBase::StartElement(
     }
 }
 
+void XMLMetaImportContextBase::startFastElement(
+    sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( !xAttrList.is() )
+        return;
+
+    Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    xml::FastAttribute *attribs = attributes.getArray();
+    for( sal_Int16 i = 0; i < attributes.getLength(); i++ )
+    {
+        xml::FastAttribute attr = attribs[i];
+        ProcessAttribute( attr.Token, attr.Value );
+    }
+}
+
 void XMLMetaImportContextBase::EndElement()
 {
     SAL_WARN_IF(!m_xStart.is(), "xmloff.text", "no mxStart?");
@@ -1155,6 +1202,25 @@ void XMLMetaImportContextBase::EndElement()
     InsertMeta(xInsertionCursor);
 }
 
+void XMLMetaImportContextBase::endFastElement( sal_Int32 /*Element*/ )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SAL_WARN_IF(!m_xStart.is(), "xmloff.text", "no mxStart?");
+    if( !m_xStart.is() )
+        return;
+
+    const Reference< XTextRange > xEndRange(
+        GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
+
+    // create range for insertion
+    const Reference< XTextCursor > xInsertionCursor(
+        GetImport().GetTextImport()->GetText()->createTextCursorByRange(
+            xEndRange ) );
+    xInsertionCursor->gotoRange( m_xStart, sal_True );
+
+    InsertMeta( xInsertionCursor );
+}
+
 SvXMLImportContext * XMLMetaImportContextBase::CreateChildContext(
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
             const Reference< xml::sax::XAttributeList > & i_xAttrList )
@@ -1167,9 +1233,28 @@ SvXMLImportContext * XMLMetaImportContextBase::CreateChildContext(
         i_rLocalName, i_xAttrList, nToken, m_rHints, m_rIgnoreLeadingSpace );
 }
 
+Reference< xml::sax::XFastContextHandler > XMLMetaImportContextBase::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
+{
+    const SvXMLTokenMap& rTokenMap(
+        GetImport().GetTextImport()->GetTextPElemTokenMap() );
+    const sal_uInt16 nToken( rTokenMap.Get( Element ) );
+
+    return XMLImpSpanContext_Impl::createFastChildContext( GetImport(), Element, xAttrList,
+        nToken, m_rHints, m_rIgnoreLeadingSpace );
+}
+
 void XMLMetaImportContextBase::Characters( const OUString& i_rChars )
 {
     GetImport().GetTextImport()->InsertString(i_rChars, m_rIgnoreLeadingSpace);
+}
+
+void XMLMetaImportContextBase::characters( const OUString& rChars )
+    throw (RuntimeException, xml::sax::SAXException, std::exception)
+{
+    GetImport().GetTextImport()->InsertString( rChars, m_rIgnoreLeadingSpace );
 }
 
 void XMLMetaImportContextBase::ProcessAttribute(sal_uInt16 const i_nPrefix,
@@ -1178,6 +1263,15 @@ void XMLMetaImportContextBase::ProcessAttribute(sal_uInt16 const i_nPrefix,
     if ( (XML_NAMESPACE_XML == i_nPrefix) && IsXMLToken(i_rLocalName, XML_ID) )
     {
         m_XmlId = i_rValue;
+    }
+}
+
+void XMLMetaImportContextBase::ProcessAttribute( sal_Int32 Element,
+    const OUString& rValue )
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_XML | XML_id) )
+    {
+        m_XmlId = rValue;
     }
 }
 
