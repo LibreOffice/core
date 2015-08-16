@@ -1810,7 +1810,10 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
 /**
  * lok_doc_view_open_document:
  * @pDocView: The #LOKDocView instance
- * @pPath: The path of the document that #LOKDocView widget should try to open
+ * @pPath: (transfer full): The path of the document that #LOKDocView widget should try to open
+ * @cancellable:
+ * @callback:
+ * @userdata:
  *
  * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
  */
