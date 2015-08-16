@@ -29,7 +29,6 @@
 #include "shape.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
 #include <algorithm>
 
 
@@ -105,29 +104,21 @@ namespace slideshow
 
         void MediaShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
+            const ::basegfx::B2DRectangle& rBounds = getBounds();
             // determine ViewMediaShape that needs update
-            ViewMediaShapeVector::const_iterator       aIter(maViewMediaShapes.begin());
-            ViewMediaShapeVector::const_iterator const aEnd (maViewMediaShapes.end());
-            while( aIter != aEnd )
-            {
-                if( (*aIter)->getViewLayer()->isOnView(rView) )
-                    (*aIter)->resize(getBounds());
-
-                ++aIter;
-            }
+            for( const auto& pViewMediaShape : maViewMediaShapes )
+                if( pViewMediaShape->getViewLayer()->isOnView( rView ) )
+                    pViewMediaShape->resize( rBounds );
         }
 
 
 
         void MediaShape::implViewsChanged()
         {
+            const ::basegfx::B2DRectangle& rBounds = getBounds();
             // resize all ViewShapes
-            ::std::for_each( maViewMediaShapes.begin(),
-                             maViewMediaShapes.end(),
-                             ::boost::bind(
-                                 &ViewMediaShape::resize,
-                                 _1,
-                                 getBounds()) );
+            for( const auto& pViewMediaShape : maViewMediaShapes )
+                pViewMediaShape->resize( rBounds );
         }
 
 
@@ -156,21 +147,18 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
-                                            ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewMediaShape::getViewLayer, _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                        [&rLayer]
+                                        ( const ViewMediaShapeSharedPtr& pShape )
+                                        { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "MediaShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewMediaShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
-                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewMediaShape::getViewLayer,
-                                                            _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                         [&rLayer]
+                                         ( const ViewMediaShapeSharedPtr& pShape )
+                                         { return rLayer == pShape->getViewLayer(); } ) ) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -197,10 +185,9 @@ namespace slideshow
             // redraw all view shapes, by calling their update() method
             if( ::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewMediaShape::render ),
-                                     _1,
-                                     ::boost::cref( rCurrBounds ) ) )
+                                 [&rCurrBounds]
+                                 ( const ViewMediaShapeSharedPtr& pShape )
+                                 { return pShape->render( rCurrBounds ); } )
                 != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
@@ -215,9 +202,8 @@ namespace slideshow
 
         bool MediaShape::implStartIntrinsicAnimation()
         {
-            ::std::for_each( maViewMediaShapes.begin(),
-                             maViewMediaShapes.end(),
-                             ::boost::mem_fn( &ViewMediaShape::startMedia ) );
+            for( const auto& pViewMediaShape : maViewMediaShapes )
+                pViewMediaShape->startMedia();
 
             mbIsPlaying = true;
 
@@ -228,9 +214,8 @@ namespace slideshow
 
         bool MediaShape::implEndIntrinsicAnimation()
         {
-            ::std::for_each( maViewMediaShapes.begin(),
-                             maViewMediaShapes.end(),
-                             ::boost::mem_fn( &ViewMediaShape::endMedia ) );
+            for( const auto& pViewMediaShape : maViewMediaShapes )
+                pViewMediaShape->endMedia();
 
             mbIsPlaying = false;
 
@@ -241,9 +226,8 @@ namespace slideshow
 
         bool MediaShape::implPauseIntrinsicAnimation()
         {
-            ::std::for_each( maViewMediaShapes.begin(),
-                             maViewMediaShapes.end(),
-                             ::boost::mem_fn( &ViewMediaShape::pauseMedia ) );
+            for( const auto& pViewMediaShape : maViewMediaShapes )
+                pViewMediaShape->pauseMedia();
 
             mbIsPlaying = false;
 
@@ -261,10 +245,8 @@ namespace slideshow
 
         void MediaShape::implSetIntrinsicAnimationTime(double fTime)
         {
-            ::std::for_each( maViewMediaShapes.begin(),
-                             maViewMediaShapes.end(),
-                             ::boost::bind( &ViewMediaShape::setMediaTime,
-                                            _1, boost::cref(fTime)) );
+            for( const auto& pViewMediaShape : maViewMediaShapes )
+                pViewMediaShape->setMediaTime( fTime );
         }
 
 

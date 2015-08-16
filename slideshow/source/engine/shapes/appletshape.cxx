@@ -28,7 +28,6 @@
 #include "viewappletshape.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
 #include <algorithm>
 
 
@@ -128,15 +127,12 @@ namespace slideshow
 
         void AppletShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
+            const ::basegfx::B2DRectangle& rBounds = getBounds();
             // determine ViewAppletShape that needs update
-            ViewAppletShapeVector::const_iterator       aIter(maViewAppletShapes.begin());
-            ViewAppletShapeVector::const_iterator const aEnd (maViewAppletShapes.end());
-            while( aIter != aEnd )
+            for( const auto& pViewAppletShape : maViewAppletShapes )
             {
-                if( (*aIter)->getViewLayer()->isOnView(rView) )
-                    (*aIter)->resize(getBounds());
-
-                ++aIter;
+                if( pViewAppletShape->getViewLayer()->isOnView( rView ) )
+                    pViewAppletShape->resize( rBounds );
             }
         }
 
@@ -145,12 +141,9 @@ namespace slideshow
         void AppletShape::implViewsChanged()
         {
             // resize all ViewShapes
-            ::std::for_each( maViewAppletShapes.begin(),
-                             maViewAppletShapes.end(),
-                             ::boost::bind(
-                                 &ViewAppletShape::resize,
-                                 _1,
-                                 AppletShape::getBounds()) );
+            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            for( const auto& pViewAppletShape : maViewAppletShapes )
+                pViewAppletShape->resize( rBounds );
         }
 
 
@@ -190,21 +183,18 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewAppletShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
-                                            ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewAppletShape::getViewLayer, _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                        [&rLayer]
+                                        ( const ViewAppletShapeSharedPtr& pShape )
+                                        { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "AppletShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewAppletShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewAppletShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
-                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewAppletShape::getViewLayer,
-                                                            _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                         [&rLayer]
+                                         ( const ViewAppletShapeSharedPtr& pShape )
+                                         { return rLayer == pShape->getViewLayer(); } ) ) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -231,10 +221,9 @@ namespace slideshow
             // redraw all view shapes, by calling their update() method
             if( ::std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewAppletShape::render ),
-                                     _1,
-                                     ::boost::cref( rCurrBounds ) ) )
+                                 [&rCurrBounds]
+                                 ( const ViewAppletShapeSharedPtr& pShape )
+                                 { return pShape->render( rCurrBounds ); } )
                 != static_cast<ViewAppletShapeVector::difference_type>(maViewAppletShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
@@ -249,11 +238,10 @@ namespace slideshow
 
         bool AppletShape::implStartIntrinsicAnimation()
         {
-            ::std::for_each( maViewAppletShapes.begin(),
-                             maViewAppletShapes.end(),
-                             ::boost::bind( &ViewAppletShape::startApplet,
-                                            _1,
-                                            getBounds()) );
+            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            for( const auto& pViewAppletShape : maViewAppletShapes )
+                pViewAppletShape->startApplet( rBounds );
+
             mbIsPlaying = true;
 
             return true;
@@ -263,9 +251,8 @@ namespace slideshow
 
         bool AppletShape::implEndIntrinsicAnimation()
         {
-            ::std::for_each( maViewAppletShapes.begin(),
-                             maViewAppletShapes.end(),
-                             ::boost::mem_fn( &ViewAppletShape::endApplet ) );
+            for( const auto& pViewAppletShape : maViewAppletShapes )
+                pViewAppletShape->endApplet();
 
             mbIsPlaying = false;
 

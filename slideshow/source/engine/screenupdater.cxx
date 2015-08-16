@@ -137,20 +137,18 @@ namespace internal
             mpImpl->mbUpdateAllRequest )
         {
             // unconditionally update all views
-            std::for_each( mpImpl->mrViewContainer.begin(),
-                           mpImpl->mrViewContainer.end(),
-                           mpImpl->mbViewClobbered ?
-                           boost::mem_fn(&View::paintScreen) :
-                           boost::mem_fn(&View::updateScreen) );
+            for( const auto& pView : mpImpl->mrViewContainer )
+            {
+                if( mpImpl->mbViewClobbered )
+                    pView->paintScreen();
+                else
+                    pView->updateScreen();
+            }
         }
         else if( !mpImpl->maViewUpdateRequests.empty() )
         {
             // update notified views only
-            UpdateRequestVector::const_iterator aIter(
-                mpImpl->maViewUpdateRequests.begin() );
-            const UpdateRequestVector::const_iterator aEnd(
-                mpImpl->maViewUpdateRequests.end() );
-            while( aIter != aEnd )
+            for( const auto& rViewUpdateRequest : mpImpl->maViewUpdateRequests )
             {
                 // TODO(P1): this is O(n^2) in the number of views, if
                 // lots of views notify updates.
@@ -159,15 +157,13 @@ namespace internal
                 UnoViewVector::const_iterator aFoundView;
                 if( (aFoundView=std::find(mpImpl->mrViewContainer.begin(),
                                           aEndOfViews,
-                                          aIter->first)) != aEndOfViews )
+                                          rViewUpdateRequest.first)) != aEndOfViews )
                 {
-                    if( aIter->second )
+                    if( rViewUpdateRequest.second )
                         (*aFoundView)->paintScreen(); // force-paint
                     else
                         (*aFoundView)->updateScreen(); // update changes only
                 }
-
-                ++aIter;
             }
         }
 
@@ -195,9 +191,8 @@ namespace internal
         // TODO(F2): This will interfere with other updates, since it
         // happens out-of-sync with main animation loop. Might cause
         // artifacts.
-        std::for_each( mpImpl->mrViewContainer.begin(),
-                       mpImpl->mrViewContainer.end(),
-                       boost::mem_fn(&View::updateScreen) );
+        for( auto const& pView : mpImpl->mrViewContainer )
+            pView->updateScreen();
     }
 
     void ScreenUpdater::lockUpdates()

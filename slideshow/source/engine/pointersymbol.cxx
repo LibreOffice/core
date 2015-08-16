@@ -64,10 +64,8 @@ PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitm
     maPos(),
     mbVisible(false)
 {
-    std::for_each( rViewContainer.begin(),
-                   rViewContainer.end(),
-                   [this]( const UnoViewSharedPtr& sp )
-                   { this->viewAdded(sp); } );
+    for( const auto& rView : rViewContainer )
+        viewAdded( rView );
 }
 
 void PointerSymbol::setVisible( const bool bVisible )
@@ -76,19 +74,15 @@ void PointerSymbol::setVisible( const bool bVisible )
     {
         mbVisible = bVisible;
 
-        ViewsVecT::const_iterator       aIter( maViews.begin() );
-        ViewsVecT::const_iterator const aEnd ( maViews.end() );
-        while( aIter != aEnd )
+        for( const auto& rView : maViews )
         {
-            if( aIter->second )
+            if( rView.second )
             {
                 if( bVisible )
-                    aIter->second->show();
+                    rView.second->show();
                 else
-                    aIter->second->hide();
+                    rView.second->hide();
             }
-
-            ++aIter;
         }
 
         // sprites changed, need a screen update for this frame.
@@ -173,14 +167,11 @@ void PointerSymbol::viewChanged( const UnoViewSharedPtr& rView )
 void PointerSymbol::viewsChanged()
 {
     // reposition sprites on all views
-    ViewsVecT::const_iterator       aIter( maViews.begin() );
-    ViewsVecT::const_iterator const aEnd ( maViews.end() );
-    while( aIter != aEnd )
+    for( const auto& rView : maViews )
     {
-        if( aIter->second )
-            aIter->second->movePixel(
-                calcSpritePos( aIter->first ));
-        ++aIter;
+        if( rView.second )
+            rView.second->movePixel(
+                calcSpritePos( rView.first ) );
     }
 }
 
@@ -191,18 +182,15 @@ void PointerSymbol::viewsChanged(const geometry::RealPoint2D pos)
         maPos = pos;
 
         // reposition sprites on all views
-        ViewsVecT::const_iterator       aIter( maViews.begin() );
-        ViewsVecT::const_iterator const aEnd ( maViews.end() );
-        while( aIter != aEnd )
+        for( const auto& rView : maViews )
         {
-            if( aIter->second )
+            if( rView.second )
             {
-                aIter->second->movePixel(
-                calcSpritePos( aIter->first ));
+                rView.second->movePixel(
+                    calcSpritePos( rView.first ) );
                 mrScreenUpdater.notifyUpdate();
                 mrScreenUpdater.commitUpdates();
             }
-            ++aIter;
         }
     }
 }
