@@ -35,6 +35,7 @@ class SbiScanner
     OUString   aLine;
     const sal_Unicode* pLine;
     const sal_Unicode* pSaveLine;
+    StarBASIC* pBasic;                  // instance for error callbacks
 
     void scanAlphanumeric();
     void scanGoto();
@@ -43,7 +44,6 @@ protected:
     OUString aSym;
     OUString aError;
     SbxDataType eScanType;
-    StarBASIC* pBasic;                  // instance for error callbacks
     double nVal;                        // numeric value
     sal_Int32 nCurCol1;
     sal_Int32 nSavedCol1;
