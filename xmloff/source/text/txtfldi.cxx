@@ -1534,6 +1534,14 @@ XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
 {
 }
 
+XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLDatabaseFieldImportContext( rImport, rHlp, sAPI_database_name, Element, true )
+{
+}
+
 void XMLDatabaseNameImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken, const OUString& sAttrValue )
 {
@@ -1564,12 +1572,36 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
 }
 
 XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    const sal_Char* pServiceName,
+    sal_Int32 Element )
+:   XMLDatabaseFieldImportContext( rImport, rHlp, pServiceName, Element, false ),
+    sPropertyCondition(sAPI_condition),
+    sTrue(sAPI_true),
+    sCondition(),
+    bConditionOK(false)
+{
+}
+
+XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName)
 : XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database_next, nPrfx, sLocalName, false)
 ,   sPropertyCondition(sAPI_condition)
 ,   sTrue(sAPI_true)
 ,   bConditionOK(false)
+{
+}
+
+XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLDatabaseFieldImportContext( rImport, rHlp, sAPI_database_next, Element, false ),
+    sPropertyCondition(sAPI_condition),
+    sTrue(sAPI_true),
+    bConditionOK(false)
 {
 }
 
@@ -1625,6 +1657,17 @@ XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
         sPropertySetNumber(sAPI_set_number),
         nNumber(0),
         bNumberOK(false)
+{
+}
+
+XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLDatabaseNextImportContext( rImport, rHlp, sAPI_database_select, Element ),
+    sPropertySetNumber(sAPI_set_number),
+    nNumber(0),
+    bNumberOK(false)
 {
 }
 

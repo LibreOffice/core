@@ -495,6 +495,10 @@ public:
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName);
+    XMLDatabaseNameImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -516,6 +520,11 @@ protected:
                                  const sal_Char* pServiceName,
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName);
+    XMLDatabaseNextImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        const sal_Char* pServiceName,
+        sal_Int32 Element );
 
 public:
     TYPEINFO_OVERRIDE();
@@ -524,6 +533,10 @@ public:
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName);
+    XMLDatabaseNextImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -549,6 +562,10 @@ public:
                                    XMLTextImportHelper& rHlp,
                                    sal_uInt16 nPrfx,
                                    const OUString& sLocalName);
+    XMLDatabaseSelectImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
