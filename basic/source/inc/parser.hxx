@@ -68,7 +68,6 @@ public:
     SbiSymPool    aPublics;         // module global
     SbiSymPool    aRtlSyms;         // Runtime-Library
     SbiCodeGen    aGen;             // Code-Generator
-    StarBASIC*    pBasic;           // StarBASIC instance
     SbiSymPool*   pPool;
     SbiExprType   eCurExpr;
     short         nBase;            // OPTION BASE-value

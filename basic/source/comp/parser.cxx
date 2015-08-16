@@ -116,7 +116,6 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
           aRtlSyms( aGblStrings, SbRTL, this ),
           aGen( *pm, this, 1024 )
 {
-    pBasic   = pb;
     eCurExpr = SbSYMBOL;
     eEndTok  = NIL;
     pProc    = NULL;
