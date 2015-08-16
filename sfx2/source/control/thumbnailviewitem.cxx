@@ -274,12 +274,12 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
         fTransparence = pAttrs->fHighlightTransparence;
 
     sal_uInt32 nPrimitive = 0;
-    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
-                                               B2DPolyPolygon(Polygon(maDrawArea, THUMBNAILVIEW_ITEM_CORNER, THUMBNAILVIEW_ITEM_CORNER).getB2DPolygon()),
-                                               aFillColor,
-                                               fTransparence,
-                                               0.0,
-                                               true));
+    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(
+            new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea, THUMBNAILVIEW_ITEM_CORNER, THUMBNAILVIEW_ITEM_CORNER).getB2DPolygon()),
+                                                 aFillColor,
+                                                 fTransparence,
+                                                 0.0,
+                                                 true));
 
     // Draw thumbnail
     Point aPos = maPrev1Pos;

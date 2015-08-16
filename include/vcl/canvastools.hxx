@@ -30,8 +30,10 @@
 class Point;
 class Size;
 class Rectangle;
-class Polygon;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class Bitmap;
 class BitmapEx;
 class Color;

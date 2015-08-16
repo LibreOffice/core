@@ -997,8 +997,8 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     }
     else
     {
-        if ( !WIN_Polygon( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-            WIN_Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+        if ( !Polygon( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+            Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
     }
 
     SetROP2( mrParent.getHDC(), nOldROP );
@@ -1653,8 +1653,8 @@ void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
 
     POINT* pWinPtAry = (POINT*)pPtAry;
     // for Windows 95 and its maximum number of points
-    if ( !WIN_Polygon( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        WIN_Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+    if ( !Polygon( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        Polygon( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 }
 
 void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
@@ -1697,7 +1697,7 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         n += nPoints;
     }
 
-    if ( !WIN_PolyPolygon( mrParent.getHDC(), pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
+    if ( !PolyPolygon( mrParent.getHDC(), pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
          (nPolyPolyPoints > MAX_64KSALPOINTS) )
     {
         nPolyPolyPoints  = 0;
@@ -1712,9 +1712,9 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         if ( pWinPointAry[(UINT)nPoly] > MAX_64KSALPOINTS )
             pWinPointAry[(UINT)nPoly] = MAX_64KSALPOINTS;
         if ( nPoly == 1 )
-            WIN_Polygon( mrParent.getHDC(), pWinPointAryAry, *pWinPointAry );
+            Polygon( mrParent.getHDC(), pWinPointAryAry, *pWinPointAry );
         else
-            WIN_PolyPolygon( mrParent.getHDC(), pWinPointAryAry, (int*)pWinPointAry, nPoly );
+            PolyPolygon( mrParent.getHDC(), pWinPointAryAry, (int*)pWinPointAry, nPoly );
     }
 
     if ( pWinPointAry != aWinPointAry )

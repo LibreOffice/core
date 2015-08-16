@@ -697,7 +697,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     CHECK_GL_ERROR();
 }
 
-void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blockAA )
+void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA )
 {
     sal_uInt16 nPoints = rPolygon.GetSize() - 1;
     std::vector<GLfloat> aVertices(nPoints * 2);
@@ -1057,7 +1057,7 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     Rectangle aBoundRect;
     Point aCenter;
     rGradient.GetBoundRect( rRect, aBoundRect, aCenter );
-    Polygon aPoly( aBoundRect );
+    tools::Polygon aPoly( aBoundRect );
     aPoly.Rotate( aCenter, rGradient.GetAngle() % 3600 );
 
     GLfloat aTexCoord[8] = { 0, 1, 1, 1, 1, 0, 0, 0 };
@@ -1100,7 +1100,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
     Point aPt0( aRect.Left(), (aRect.Top() + aRect.Bottom() + 1) / 2 );
     Point aPt3( aRect.Right(), (aRect.Top() + aRect.Bottom() + 1) / 2 );
 
-    Polygon aPoly( 7 );
+    tools::Polygon aPoly( 7 );
     aPoly.SetPoint( aPt0,                0 );
     aPoly.SetPoint( aRect.TopLeft(),     1 );
     aPoly.SetPoint( aRect.TopRight(),    2 );

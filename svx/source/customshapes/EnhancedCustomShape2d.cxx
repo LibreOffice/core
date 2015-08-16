@@ -1375,7 +1375,7 @@ static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStar
         }
     }
 
-    Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC, bFullCircle );
+    tools::Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC, bFullCircle );
     basegfx::B2DPolygon aRetval;
 
     if ( bClockwise )

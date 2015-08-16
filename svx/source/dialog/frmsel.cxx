@@ -156,7 +156,7 @@ void FrameBorder::SetState( FrameBorderState eState )
     }
 }
 
-void FrameBorder::AddFocusPolygon( const Polygon& rFocus )
+void FrameBorder::AddFocusPolygon( const tools::Polygon& rFocus )
 {
     lclPolyPolyUnion( maFocusArea, rFocus );
 }
@@ -168,7 +168,7 @@ void FrameBorder::MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const
 
 void FrameBorder::AddClickRect( const Rectangle& rRect )
 {
-    lclPolyPolyUnion( maClickArea, Polygon( rRect ) );
+    lclPolyPolyUnion( maClickArea, tools::Polygon( rRect ) );
 }
 
 bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
@@ -404,7 +404,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
             aFocusVec.push_back( Point( aRect.Right() - nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
-            maTLBR.AddFocusPolygon( Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
+            maTLBR.AddFocusPolygon( tools::Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
 
             aFocusVec.clear();
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY ) );
@@ -413,7 +413,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
             aFocusVec.push_back( Point( aRect.Left()  + nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
-            maBLTR.AddFocusPolygon( Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
+            maBLTR.AddFocusPolygon( tools::Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
         }
     }
 
@@ -685,7 +685,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
     }
     else
         // no frame border selected -> draw tracking rectangle around entire control
-        aPPoly.Insert(Polygon(Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
+        aPPoly.Insert( tools::Polygon(Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
 
     aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
     for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)

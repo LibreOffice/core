@@ -794,7 +794,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
     }
 }
 
-void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit)
+void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -813,7 +813,7 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
     long nIndentHeight = (mnVirHeight / 2) - 1;
     long nIndentWidth2 = nIndentHeight-3;
 
-    Polygon aPoly(5);
+    tools::Polygon aPoly(5);
 
     for (j = 0; j < mpData->pIndents.size(); j++)
     {

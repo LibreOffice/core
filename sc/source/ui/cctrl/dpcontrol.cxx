@@ -187,7 +187,7 @@ void ScDPFieldButton::drawPopupButton()
 
     Size aArrowSize(4 * nScaleFactor, 2 * nScaleFactor);
 
-    Polygon aPoly(3);
+    tools::Polygon aPoly(3);
     aPoly.SetPoint(Point(aCenter.X() - aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 0);
     aPoly.SetPoint(Point(aCenter.X() + aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 1);
     aPoly.SetPoint(Point(aCenter.X(),                      aCenter.Y() + aArrowSize.Height()), 2);

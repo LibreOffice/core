@@ -116,12 +116,12 @@ void PDFWriter::DrawLine( const Point& rStart, const Point& rStop, const LineInf
     xImplementation->drawLine( rStart, rStop, rInfo );
 }
 
-void PDFWriter::DrawPolygon( const Polygon& rPoly )
+void PDFWriter::DrawPolygon( const tools::Polygon& rPoly )
 {
     xImplementation->drawPolygon( rPoly );
 }
 
-void PDFWriter::DrawPolyLine( const Polygon& rPoly )
+void PDFWriter::DrawPolyLine( const tools::Polygon& rPoly )
 {
     xImplementation->drawPolyLine( rPoly );
 }
@@ -156,12 +156,12 @@ void PDFWriter::DrawChord( const Rectangle& rRect, const Point& rStart, const Po
     xImplementation->drawArc( rRect, rStart, rStop, false, true );
 }
 
-void PDFWriter::DrawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
+void PDFWriter::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rInfo )
 {
     xImplementation->drawPolyLine( rPoly, rInfo );
 }
 
-void PDFWriter::DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo )
+void PDFWriter::DrawPolyLine( const tools::Polygon& rPoly, const ExtLineInfo& rInfo )
 {
     xImplementation->drawPolyLine( rPoly, rInfo );
 }

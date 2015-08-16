@@ -492,7 +492,7 @@ public:
                         break;
                     case 2:
                     {
-                        Polygon aPoly(aSub);
+                        tools::Polygon aPoly(aSub);
                         aPoly.Rotate(aSub.Center(), 450);
                         aPoly.Clip(aSmaller);
                         aRegion = vcl::Region(aPoly);
@@ -504,11 +504,11 @@ public:
                         sal_Int32 nTW = aSub.GetWidth()/6;
                         sal_Int32 nTH = aSub.GetHeight()/6;
                         Rectangle aTiny(Point(4, 4), Size(nTW*2, nTH*2));
-                        aPolyPoly.Insert(Polygon(aTiny));
+                        aPolyPoly.Insert( tools::Polygon(aTiny));
                         aTiny.Move(nTW*3, nTH*3);
-                        aPolyPoly.Insert(Polygon(aTiny));
+                        aPolyPoly.Insert( tools::Polygon(aTiny));
                         aTiny.Move(nTW, nTH);
-                        aPolyPoly.Insert(Polygon(aTiny));
+                        aPolyPoly.Insert( tools::Polygon(aTiny));
 
                         aRegion = vcl::Region(aPolyPoly);
                         break;
@@ -541,7 +541,7 @@ public:
             aShrunk.Move(nDx, nDy);
             aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
                                  r.GetHeight()-nDy*2));
-            Polygon aPoly(aShrunk);
+            tools::Polygon aPoly(aShrunk);
             tools::PolyPolygon aPPoly(aPoly);
             rDev.SetLineColor(Color(COL_RED));
             rDev.SetFillColor(Color(COL_RED));
@@ -737,7 +737,7 @@ public:
                     Rectangle aSubRect(r);
                     aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
                     aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
-                    Polygon aPoly(SAL_N_ELEMENTS(aPoints));
+                    tools::Polygon aPoly(SAL_N_ELEMENTS(aPoints));
                     for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
                     {
                         aPoly.SetPoint(Point(aSubRect.Left() +

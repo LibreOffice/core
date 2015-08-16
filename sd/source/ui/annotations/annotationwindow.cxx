@@ -691,7 +691,7 @@ void AnnotationWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
         else
             SetFillColor(COL_BLACK);
         SetLineColor();
-        DrawPolygon(Polygon(maPopupTriangle));
+        DrawPolygon( ::tools::Polygon(maPopupTriangle));
     }
 }
 

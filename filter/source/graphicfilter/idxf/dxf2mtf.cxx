@@ -271,7 +271,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     else {
         double fAng;
         nPoints=OptPointsPerCircle;
-        Polygon aPoly(nPoints);
+        tools::Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
             fAng=2*3.14159265359/(double)(nPoints-1)*(double)i;
             rTransform.Transform(
@@ -281,7 +281,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
         }
         pVirDev->DrawPolyLine(aPoly);
         if (rE.fThickness!=0) {
-            Polygon aPoly2(nPoints);
+            tools::Polygon aPoly2(nPoints);
             for (i=0; i<nPoints; i++) {
                 fAng=2*3.14159265359/(double)(nPoints-1)*(double)i;
                 rTransform.Transform(
@@ -335,7 +335,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         double fAng;
         nPoints=(sal_uInt16)(fdA/360.0*(double)OptPointsPerCircle+0.5);
         if (nPoints<2) nPoints=2;
-        Polygon aPoly(nPoints);
+        tools::Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
             fAng=3.14159265359/180.0 * ( fA1 + fdA/(double)(nPoints-1)*(double)i );
             rTransform.Transform(
@@ -345,7 +345,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         }
         pVirDev->DrawPolyLine(aPoly);
         if (rE.fThickness!=0) {
-            Polygon aPoly2(nPoints);
+            tools::Polygon aPoly2(nPoints);
             for (i=0; i<nPoints; i++) {
                 fAng=3.14159265359/180.0 * ( fA1 + fdA/(double)(nPoints-1)*(double)i );
                 rTransform.Transform(
@@ -363,7 +363,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
 void DXF2GDIMetaFile::DrawTraceEntity(const DXFTraceEntity & rE, const DXFTransform & rTransform)
 {
     if (SetLineAttribute(rE)) {
-        Polygon aPoly(4);
+        tools::Polygon aPoly(4);
         rTransform.Transform(rE.aP0,aPoly[0]);
         rTransform.Transform(rE.aP1,aPoly[1]);
         rTransform.Transform(rE.aP3,aPoly[2]);
@@ -371,7 +371,7 @@ void DXF2GDIMetaFile::DrawTraceEntity(const DXFTraceEntity & rE, const DXFTransf
         pVirDev->DrawPolygon(aPoly);
         if (rE.fThickness!=0) {
             sal_uInt16 i;
-            Polygon aPoly2(4);
+            tools::Polygon aPoly2(4);
             DXFVector aVAdd(0,0,rE.fThickness);
             rTransform.Transform(rE.aP0+aVAdd,aPoly2[0]);
             rTransform.Transform(rE.aP1+aVAdd,aPoly2[1]);
@@ -389,14 +389,14 @@ void DXF2GDIMetaFile::DrawSolidEntity(const DXFSolidEntity & rE, const DXFTransf
     if (SetAreaAttribute(rE)) {
         sal_uInt16 nN;
         if (rE.aP2==rE.aP3) nN=3; else nN=4;
-        Polygon aPoly(nN);
+        tools::Polygon aPoly(nN);
         rTransform.Transform(rE.aP0,aPoly[0]);
         rTransform.Transform(rE.aP1,aPoly[1]);
         rTransform.Transform(rE.aP3,aPoly[2]);
         if (nN>3) rTransform.Transform(rE.aP2,aPoly[3]);
         pVirDev->DrawPolygon(aPoly);
         if (rE.fThickness!=0) {
-            Polygon aPoly2(nN);
+            tools::Polygon aPoly2(nN);
             DXFVector aVAdd(0,0,rE.fThickness);
             rTransform.Transform(rE.aP0+aVAdd,aPoly2[0]);
             rTransform.Transform(rE.aP1+aVAdd,aPoly2[1]);
@@ -506,7 +506,7 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
         pBE=pBE->pSucc;
     }
     if (nPolySize<2) return;
-    Polygon aPoly(nPolySize);
+    tools::Polygon aPoly(nPolySize);
     fW=0.0;
     pBE=rE.pSucc;
     for (i=0; i<nPolySize; i++) {
@@ -526,7 +526,7 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
         if ((rE.nFlags&1)!=0) pVirDev->DrawPolygon(aPoly);
         else pVirDev->DrawPolyLine(aPoly);
         if (rE.fThickness!=0) {
-            Polygon aPoly2(nPolySize);
+            tools::Polygon aPoly2(nPolySize);
             pBE=rE.pSucc;
             for (i=0; i<nPolySize; i++) {
                 rTransform.Transform(
@@ -547,7 +547,7 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
     sal_Int32 i, nPolySize = rE.nCount;
     if ( nPolySize && rE.pP )
     {
-        Polygon aPoly( (sal_uInt16)nPolySize);
+        tools::Polygon aPoly( (sal_uInt16)nPolySize);
         for ( i = 0; i < nPolySize; i++ )
         {
             rTransform.Transform( rE.pP[ (sal_uInt16)i ], aPoly[ (sal_uInt16)i ] );
@@ -611,7 +611,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
             sal_uInt16 i, nSize = (sal_uInt16)aPtAry.size();
             if ( nSize )
             {
-                Polygon aPoly( nSize );
+                tools::Polygon aPoly( nSize );
                 for ( i = 0; i < nSize; i++ )
                     aPoly[ i ] = aPtAry[ i ];
                 aPolyPoly.Insert( aPoly );
@@ -627,7 +627,7 @@ void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTran
     sal_uInt16 nN,i;
     if (SetLineAttribute(rE)) {
         if (rE.aP2==rE.aP3) nN=3; else nN=4;
-        Polygon aPoly(nN);
+        tools::Polygon aPoly(nN);
         rTransform.Transform(rE.aP0,aPoly[0]);
         rTransform.Transform(rE.aP1,aPoly[1]);
         rTransform.Transform(rE.aP2,aPoly[2]);

@@ -337,7 +337,7 @@ void doTestCode()
     Point aLIPoints[] = { Point( 4000, 10000 ),
                           Point( 8000, 12000 ),
                           Point( 3000, 19000 ) };
-    Polygon aLIPoly( 3, aLIPoints );
+    tools::Polygon aLIPoly( 3, aLIPoints );
     aWriter.SetLineColor( Color( COL_BLUE ) );
     aWriter.SetFillColor();
     aWriter.DrawPolyLine( aLIPoly, aLI );
@@ -1458,7 +1458,7 @@ void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect ) const
     rRect.Bottom()  = rRect.Top() + aSize.Height();
 }
 
-void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
+void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
     sal_uInt16 nPoints = rPoly.GetSize();
     /*
@@ -9241,7 +9241,7 @@ void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
     {
         if ( bPolyLine )
         {
-            Polygon aPoly = rPolyPoly.GetObject( 0 );
+            tools::Polygon aPoly = rPolyPoly.GetObject( 0 );
             aPoly.Move( nX, nY );
             drawPolyLine( aPoly );
         }
@@ -9498,7 +9498,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
         PDFWriter::ExtLineInfo aInfo;
         convertLineInfoToExtLineInfo( rInfo, aInfo );
         Point aPolyPoints[2] = { rStart, rStop };
-        Polygon aPoly( 2, aPolyPoints );
+        tools::Polygon aPoly( 2, aPolyPoints );
         drawPolyLine( aPoly, aInfo );
     }
 }
@@ -9847,7 +9847,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     ImplFontEntry* pFontEntry = m_pReferenceDevice->mpFontEntry;
     if (pFontEntry->mnOrientation)
     {
-        Polygon aPoly( aRect );
+        tools::Polygon aPoly( aRect );
         aPoly.Rotate( rPos, pFontEntry->mnOrientation);
         aRect = aPoly.GetBoundRect();
     }
@@ -9952,7 +9952,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawPolygon( const Polygon& rPoly )
+void PDFWriterImpl::drawPolygon( const tools::Polygon& rPoly )
 {
     MARK( "drawPolygon" );
 
@@ -10480,7 +10480,7 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
+void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly )
 {
     MARK( "drawPolyLine" );
 
@@ -10500,7 +10500,7 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
+void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const LineInfo& rInfo )
 {
     MARK( "drawPolyLine with LineInfo" );
 
@@ -10598,7 +10598,7 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
     }
 }
 
-void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo )
+void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo )
 {
     MARK( "drawPolyLine with ExtLineInfo" );
 
@@ -11079,7 +11079,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
         {
             aLine.append("/Domain[ 0 1 ]\n"
                     "/Coords[ " );
-            Polygon     aPoly( 2 );
+            tools::Polygon aPoly( 2 );
             aPoly[0] = aBoundRect.BottomCenter();
             aPoly[1] = aBoundRect.TopCenter();
             aPoly.Rotate( aCenter, 3600 - nAngle );

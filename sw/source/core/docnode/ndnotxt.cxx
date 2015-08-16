@@ -116,7 +116,6 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
         const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {
-            // #i102238#
             double nGrfDPIx = 0.0;
             double nGrfDPIy = 0.0;
             {
@@ -147,7 +146,7 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
             sal_uInt16 nPolyCount = pContour->Count();
             for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
-                Polygon& rPoly = (*pContour)[j];
+                tools::Polygon& rPoly = (*pContour)[j];
 
                 sal_uInt16 nCount = rPoly.GetSize();
                 for( sal_uInt16 i=0 ; i<nCount; i++ )
@@ -158,7 +157,7 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
                     else if( bPixelContour )
                     {
                         rPoly[i] = pOutDev->PixelToLogic( rPoly[i], aGrfMap );
-                        // #i102238#
+
                         if ( nGrfDPIx != 0 && nGrfDPIy != 0 )
                         {
                             rPoly[i] = Point( rPoly[i].getX() * pOutDev->GetDPIX() / nGrfDPIx,
@@ -214,9 +213,7 @@ bool SwNoTextNode::GetContourAPI( tools::PolyPolygon &rContour ) const
             sal_uInt16 nPolyCount = rContour.Count();
             for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
-                // --> OD #i102238# - use the right <tools::PolyPolygon> instance
-                Polygon& rPoly = rContour[j];
-                // <--
+                tools::Polygon& rPoly = rContour[j];
 
                 sal_uInt16 nCount = rPoly.GetSize();
                 for( sal_uInt16 i=0 ; i<nCount; i++ )

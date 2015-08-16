@@ -76,17 +76,17 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
     if (mbHover)
         fTransparence = pAttrs->fHighlightTransparence;
 
-    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
-                                               B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
-                                               aFillColor,
-                                               fTransparence,
-                                               0.0,
-                                               true));
+    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference(
+            new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon( ::tools::Polygon(maDrawArea,5,5).getB2DPolygon()),
+                                                 aFillColor,
+                                                 fTransparence,
+                                                 0.0,
+                                                 true));
 
     // Create rounded rectangle border
-    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference(new PolygonStrokePrimitive2D(
-                                              Polygon(maThumbnailArea, 5, 5).getB2DPolygon(),
-                                              LineAttribute(BColor(0.5, 0.5, 0.5), 2.0)));
+    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference(
+            new PolygonStrokePrimitive2D( ::tools::Polygon(maThumbnailArea, 5, 5).getB2DPolygon(),
+                                          LineAttribute(BColor(0.5, 0.5, 0.5), 2.0)));
 
     // Paint the thumbnails side by side on a 2x2 grid
     long nThumbPadding = 4;

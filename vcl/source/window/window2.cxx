@@ -226,7 +226,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     }
 }
 
-void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
+void Window::InvertTracking( const tools::Polygon& rPoly, sal_uInt16 nFlags )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
 
@@ -235,7 +235,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
 
     OutputDevice *pOutDev = GetOutDev();
 
-    Polygon aPoly( pOutDev->ImplLogicToDevicePixel( rPoly ) );
+    tools::Polygon aPoly( pOutDev->ImplLogicToDevicePixel( rPoly ) );
 
     SalGraphics* pGraphics;
 

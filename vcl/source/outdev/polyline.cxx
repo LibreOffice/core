@@ -32,7 +32,7 @@
 
 #include "salgdi.hxx"
 
-void OutputDevice::DrawPolyLine( const Polygon& rPoly )
+void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 {
     assert(!is_double_buffered_window());
 
@@ -79,7 +79,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         }
     }
 
-    Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
     const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
 
     // #100127# Forward beziers to sal, if any
@@ -88,7 +88,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
-            aPoly = Polygon::SubdivideBezier(aPoly);
+            aPoly = tools::Polygon::SubdivideBezier(aPoly);
             pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
             mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
         }
@@ -102,7 +102,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         mpAlphaVDev->DrawPolyLine( rPoly );
 }
 
-void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
+void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rLineInfo )
 {
     assert(!is_double_buffered_window());
 
@@ -140,7 +140,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
 
-        const Polygon aToolsPolygon( rB2DPolygon );
+        const tools::Polygon aToolsPolygon( rB2DPolygon );
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
 
@@ -214,7 +214,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     else
     {
         // fallback to old polygon drawing if needed
-        const Polygon aToolsPolygon( rB2DPolygon );
+        const tools::Polygon aToolsPolygon( rB2DPolygon );
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
@@ -223,14 +223,14 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     }
 }
 
-void OutputDevice::drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo)
+void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLineInfo)
 {
     sal_uInt16 nPoints(rPoly.GetSize());
 
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
-    Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
 
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
@@ -260,7 +260,7 @@ void OutputDevice::drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo)
         // NO way to find out there that it's a curve.
         if( aPoly.HasFlags() )
         {
-            aPoly = Polygon::SubdivideBezier( aPoly );
+            aPoly = tools::Polygon::SubdivideBezier( aPoly );
             nPoints = aPoly.GetSize();
         }
 
@@ -345,7 +345,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                 if( fLineWidth != 0.0 )
                     aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
 
-                const Polygon aToolsPolygon( rB2DPolygon );
+                const tools::Polygon aToolsPolygon( rB2DPolygon );
                 mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
             }
             return true;

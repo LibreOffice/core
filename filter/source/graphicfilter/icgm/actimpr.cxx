@@ -593,7 +593,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
     }
 }
 
-void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
+void CGMImpressOutAct::DrawPolygon( tools::Polygon& rPoly )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
 
@@ -623,7 +623,7 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
     }
 }
 
-void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
+void CGMImpressOutAct::DrawPolyLine( tools::Polygon& rPoly )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
 
@@ -653,7 +653,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
     }
 }
 
-void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
+void CGMImpressOutAct::DrawPolybezier( tools::Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     if ( ( nPoints > 1 ) && ImplCreateShape( "com.sun.star.drawing.OpenBezierShape" ) )
@@ -703,7 +703,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
 
         for( sal_uInt32 a = 0; a < nNumPolys; a++ )
         {
-            Polygon aPolygon( rPolyPolygon.GetObject( a ) );
+            tools::Polygon aPolygon( rPolyPolygon.GetObject( a ) );
             sal_uInt32 nNumPoints = aPolygon.GetSize();
 
             // make room in arrays

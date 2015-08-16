@@ -73,7 +73,7 @@ void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
         nTop = rRect.Top();
         nBottom = rRect.Bottom();
     }
-    Polygon aPoly;
+    tools::Polygon aPoly;
     Point aTmp( bLeft ? nLeft : nRight, nMid );
     Point aNxt( bLeft ? nRight : nLeft, nTop );
     aPoly.Insert( 0, aTmp );

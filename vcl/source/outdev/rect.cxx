@@ -112,7 +112,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     }
     else
     {
-        const Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
+        const tools::Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
 
         if ( aRoundRectPoly.GetSize() >= 2 )
         {
@@ -162,7 +162,7 @@ void OutputDevice::Invert( const Rectangle& rRect, InvertFlags nFlags )
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
 
-void OutputDevice::Invert( const Polygon& rPoly, InvertFlags nFlags )
+void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
 {
     assert(!is_double_buffered_window());
     if ( !IsDeviceOutputNecessary() )
@@ -173,7 +173,7 @@ void OutputDevice::Invert( const Polygon& rPoly, InvertFlags nFlags )
     if ( nPoints < 2 )
         return;
 
-    Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
+    tools::Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
 
     // we need a graphics
     if ( !mpGraphics )

@@ -1164,7 +1164,11 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
 
 
 
-bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
+                                                ::com::sun::star::uno::Any& rValue )
+    throw(::com::sun::star::beans::UnknownPropertyException,
+          ::com::sun::star::lang::WrappedTargetException,
+          ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1756,7 +1760,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
             GeoStat aNewGeo( aCustomShapeGeoData.aGeo );
             if ( bMirroredX )
             {
-                Polygon aPol( Rect2Poly( aRect, aNewGeo ) );
+                tools::Polygon aPol( Rect2Poly( aRect, aNewGeo ) );
                 Rectangle aBoundRect( aPol.GetBoundRect() );
 
                 Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
@@ -1768,7 +1772,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }
                 // turn and move polygon
-                Polygon aPol0(aPol);
+                tools::Polygon aPol0(aPol);
                 aPol[0]=aPol0[1];
                 aPol[1]=aPol0[0];
                 aPol[2]=aPol0[3];
@@ -1778,7 +1782,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
             }
             if ( bMirroredY )
             {
-                Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
+                tools::Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
                 Rectangle aBoundRect( aPol.GetBoundRect() );
 
                 Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
@@ -1790,7 +1794,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }
                 // turn and move polygon
-                Polygon aPol0(aPol);
+                tools::Polygon aPol0(aPol);
                 aPol[0]=aPol0[1];
                 aPol[1]=aPol0[0];
                 aPol[2]=aPol0[3];

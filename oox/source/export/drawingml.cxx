@@ -2451,7 +2451,7 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
     for( sal_uInt16 i = 0; i < rPolyPolygon.Count(); i ++ )
     {
 
-        const Polygon& rPoly = rPolyPolygon[ i ];
+        const tools::Polygon& rPoly = rPolyPolygon[ i ];
         Rectangle aRect( rPoly.GetBoundRect() );
 
         mpFS->startElementNS( XML_a, XML_path,

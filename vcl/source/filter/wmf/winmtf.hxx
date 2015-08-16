@@ -278,8 +278,8 @@ public:
 
     void        ClosePath();
     void        AddPoint( const Point& rPoint );
-    void        AddPolygon( const Polygon& rPoly );
-    void        AddPolyLine( const Polygon& rPoly );
+    void        AddPolygon( const tools::Polygon& rPoly );
+    void        AddPolyLine( const tools::Polygon& rPoly );
     void        AddPolyPolygon( const tools::PolyPolygon& rPolyPolygon );
 };
 
@@ -598,10 +598,10 @@ class WinMtfOutput
     Size                ImplMap( const Size& rSize, bool bDoWorldTransform = true);
     Rectangle           ImplMap( const Rectangle& rRectangle );
     void                ImplMap( vcl::Font& rFont );
-    Polygon&            ImplMap( Polygon& rPolygon );
-    tools::PolyPolygon&        ImplMap( tools::PolyPolygon& rPolyPolygon );
-    Polygon&            ImplScale( Polygon& rPolygon );
-    tools::PolyPolygon&        ImplScale( tools::PolyPolygon& rPolyPolygon );
+    tools::Polygon&     ImplMap( tools::Polygon& rPolygon );
+    tools::PolyPolygon& ImplMap( tools::PolyPolygon& rPolyPolygon );
+    tools::Polygon&     ImplScale( tools::Polygon& rPolygon );
+    tools::PolyPolygon& ImplScale( tools::PolyPolygon& rPolyPolygon );
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
     void                ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly );
@@ -654,7 +654,7 @@ public:
 
     void                ClearPath(){ aPathObj.Init(); };
     void                ClosePath(){ aPathObj.ClosePath(); };
-    const tools::PolyPolygon&  GetPathObj(){ return aPathObj; };
+    const tools::PolyPolygon& GetPathObj(){ return aPathObj; };
 
     void                MoveTo( const Point& rPoint, bool bRecordPath = false );
     void                LineTo( const Point& rPoint, bool bRecordPath = false );
@@ -678,22 +678,20 @@ public:
                             const Point& rStartAngle,
                             const Point& rEndAngle
                         );
-    void                DrawPolygon( Polygon& rPolygon, bool bRecordPath = false );
-    void                DrawPolygon( Polygon& rPolygon, bool /*bDrawTo*/, bool bRecordPath)
+    void                DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath = false );
+    void                DrawPolygon( tools::Polygon& rPolygon, bool /*bDrawTo*/, bool bRecordPath)
                         {
                             //For ReadAndDrawPolygon template compatibility
                             DrawPolygon(rPolygon, bRecordPath);
                         }
     void                DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath = false );
-    void                DrawPolyLine(
-                            Polygon& rPolygon,
-                            bool bDrawTo = false,
-                            bool bRecordPath = false
+    void                DrawPolyLine( tools::Polygon& rPolygon,
+                                      bool bDrawTo = false,
+                                      bool bRecordPath = false
                         );
-    void                DrawPolyBezier(
-                            Polygon& rPolygin,
-                            bool bDrawTo = false,
-                            bool bRecordPath = false
+    void                DrawPolyBezier( tools::Polygon& rPolygin,
+                                        bool bDrawTo = false,
+                                        bool bRecordPath = false
                         );
     void                DrawText( Point& rPosition,
                                   OUString& rString,
@@ -768,7 +766,7 @@ public:
 private:
     template <class T> void ReadAndDrawPolyPolygon();
     template <class T> void ReadAndDrawPolyLine();
-    template <class T> Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
+    template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
     template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
 
     Rectangle ReadRectangle();

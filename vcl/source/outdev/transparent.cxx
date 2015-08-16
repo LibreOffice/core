@@ -40,7 +40,7 @@ namespace
      * coordinates to integer coordinates, to ensure that it has at least 2
      * pixels in both X and Y directions.
      */
-    Polygon toPolygon( const basegfx::B2DPolygon& rPoly )
+    tools::Polygon toPolygon( const basegfx::B2DPolygon& rPoly )
     {
         basegfx::B2DRange aRange = rPoly.getB2DRange();
         double fW = aRange.getWidth(), fH = aRange.getHeight();
@@ -52,7 +52,7 @@ namespace
             double nW = std::max<double>(1.0, rtl::math::round(fW));
             double nH = std::max<double>(1.0, rtl::math::round(fH));
 
-            Polygon aTarget;
+            tools::Polygon aTarget;
             aTarget.Insert(0, Point(nX, nY));
             aTarget.Insert(1, Point(nX+nW, nY));
             aTarget.Insert(2, Point(nX+nW, nY+nH));
@@ -60,7 +60,7 @@ namespace
             aTarget.Insert(4, Point(nX, nY));
             return aTarget;
         }
-        return Polygon(rPoly);
+        return tools::Polygon(rPoly);
     }
 
     tools::PolyPolygon toPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )

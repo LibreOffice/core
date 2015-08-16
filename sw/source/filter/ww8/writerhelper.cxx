@@ -637,7 +637,7 @@ namespace sw
             return false;
         }
 
-        Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly)
+        tools::Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly)
         {
             if(1 == rPolyPoly.Count())
             {
@@ -663,12 +663,12 @@ namespace sw
                     nPointCount = 0x0000ffff;
                 }
 
-                Polygon aRetval((sal_uInt16)nPointCount);
+                tools::Polygon aRetval((sal_uInt16)nPointCount);
                 sal_uInt32 nAppendIndex(0L);
 
                 for(a = 0; a < rPolyPoly.Count(); a++)
                 {
-                    const Polygon& rCandidate = rPolyPoly[a];
+                    const tools::Polygon& rCandidate = rPolyPoly[a];
 
                     for(sal_uInt16 b(0); nAppendIndex <= nPointCount && b < rCandidate.GetSize(); b++)
                     {
@@ -680,9 +680,9 @@ namespace sw
             }
         }
 
-        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd)
+        tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd)
         {
-            Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
+            tools::Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
             Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
             Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());

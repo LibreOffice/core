@@ -2500,11 +2500,11 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
 
         pDev->SetLineColor();
         pDev->SetFillColor( Color( COL_BLACK ) );
-        pDev->DrawPolygon( Polygon( aCenterPos, nRadX, nRadY ) );
+        pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         nRadX -= aBrd1Size.Width();
         nRadY -= aBrd1Size.Height();
         pDev->SetFillColor( Color( COL_WHITE ) );
-        pDev->DrawPolygon( Polygon( aCenterPos, nRadX, nRadY ) );
+        pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         if ( mbChecked )
         {
             nRadX -= aBrd1Size.Width();
@@ -2514,7 +2514,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
             if ( !nRadY )
                 nRadY = 1;
             pDev->SetFillColor( Color( COL_BLACK ) );
-            pDev->DrawPolygon( Polygon( aCenterPos, nRadX, nRadY ) );
+            pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         }
 
         pDev->Pop();

@@ -743,10 +743,10 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly);
+        tools::Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly);
 
         /// Undo all scaling / move tricks of the wrap polygon done during import.
-        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd);
+        tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd);
 
         /** Make setting a drawing object's layer in a Writer document easy
 

@@ -794,7 +794,7 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
     {
         if( maAttr.IsRotated() )
         {
-            Polygon aPoly( Rectangle( rPt, rSz ) );
+            tools::Polygon aPoly( Rectangle( rPt, rSz ) );
 
             aPoly.Rotate( rPt, maAttr.GetRotation() % 3600 );
             const Rectangle aRotBoundRect( aPoly.GetBoundRect() );

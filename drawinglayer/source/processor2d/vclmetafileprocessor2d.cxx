@@ -519,15 +519,15 @@ namespace drawinglayer
                 aEndArrow.transform(maCurrentTransformation);
 
                 pRetval = new SvtGraphicStroke(
-                    Polygon(aLocalPolygon),
-                    tools::PolyPolygon(aStartArrow),
-                    tools::PolyPolygon(aEndArrow),
-                    mfCurrentUnifiedTransparence,
-                    fLineWidth,
-                    eCap,
-                    eJoin,
-                    fMiterLength,
-                    aDashArray);
+                        tools::Polygon(aLocalPolygon),
+                        tools::PolyPolygon(aStartArrow),
+                        tools::PolyPolygon(aEndArrow),
+                        mfCurrentUnifiedTransparence,
+                        fLineWidth,
+                        eCap,
+                        eJoin,
+                        fMiterLength,
+                        aDashArray);
             }
 
             return pRetval;
@@ -1266,7 +1266,7 @@ namespace drawinglayer
 
                                 if(aCandidate.count() > 1)
                                 {
-                                    const Polygon aToolsPolygon(aCandidate);
+                                    const tools::Polygon aToolsPolygon(aCandidate);
 
                                     mpMetaFile->AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
                                 }

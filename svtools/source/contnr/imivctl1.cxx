@@ -2930,7 +2930,7 @@ void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetLineColor(aFocus.aPenColor);
     rRenderContext.SetFillColor();
-    Polygon aPolygon (aFocus.aRect);
+    tools::Polygon aPolygon (aFocus.aRect);
 
     LineInfo aLineInfo(LINE_DASH);
 

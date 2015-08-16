@@ -46,7 +46,6 @@
 
 
 #define GradientStyle_RECT win32GradientStyle_RECT
-#define Polygon win32Polygon
 #undef WB_LEFT
 #undef WB_RIGHT
 
@@ -174,7 +173,6 @@ namespace dxcanvas
 
 #undef DELETE
 #undef GradientStyle_RECT
-#undef Polygon
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_WINSTUFF_HXX
 

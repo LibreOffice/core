@@ -737,8 +737,8 @@ public:
 
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
-    void                        DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
-    void                        DrawPixel( const Polygon& rPts, const Color& rColor );
+    void                        DrawPixel( const tools::Polygon& rPts, const Color* pColors = NULL );
+    void                        DrawPixel( const tools::Polygon& rPts, const Color& rColor );
 
     Color                       GetPixel( const Point& rPt ) const;
     ///@}
@@ -771,7 +771,7 @@ public:
     ///@{
 public:
     void Invert( const Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
-    void Invert( const Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
+    void Invert( const tools::Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
     ///@}
 
     /** @name Line functions
@@ -807,7 +807,7 @@ public:
         @see DrawPolygon
         @see DrawPolyPolygon
      */
-    void                        DrawPolyLine( const Polygon& rPoly );
+    void                        DrawPolyLine( const tools::Polygon& rPoly );
 
     void                        DrawPolyLine(
                                     const basegfx::B2DPolygon&,
@@ -825,7 +825,7 @@ public:
         @see DrawPolygon
         @see DrawPolyPolygon
      */
-    void                        DrawPolyLine( const Polygon& rPoly,
+    void                        DrawPolyLine( const tools::Polygon& rPoly,
                                               const LineInfo& rLineInfo );
 
     // #i101491#
@@ -842,7 +842,7 @@ private:
     // #i101491#
     // Helper which holds the old line geometry creation and is extended to use AA when
     // switched on. Advantage is that line geometry is only temporarily used for paint
-    SAL_DLLPRIVATE void         drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo);
+    SAL_DLLPRIVATE void         drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLineInfo);
 
     ///@}
 
@@ -863,7 +863,7 @@ public:
 
         @see DrawPolyLine
      */
-    void                        DrawPolygon( const Polygon& rPoly );
+    void                        DrawPolygon( const tools::Polygon& rPoly );
     void                        DrawPolygon( const basegfx::B2DPolygon& );
 
     /** Render the given poly-polygon
@@ -881,7 +881,7 @@ public:
 
 private:
 
-    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly );
     // #i101491#
@@ -1725,17 +1725,17 @@ public:
     Point                       LogicToPixel( const Point& rLogicPt ) const;
     Size                        LogicToPixel( const Size& rLogicSize ) const;
     Rectangle                   LogicToPixel( const Rectangle& rLogicRect ) const;
-    Polygon                     LogicToPixel( const Polygon& rLogicPoly ) const;
+    tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly ) const;
     tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
-    vcl::Region                      LogicToPixel( const vcl::Region& rLogicRegion )const;
+    vcl::Region                 LogicToPixel( const vcl::Region& rLogicRegion )const;
     Point                       LogicToPixel( const Point& rLogicPt,
                                               const MapMode& rMapMode ) const;
     Size                        LogicToPixel( const Size& rLogicSize,
                                               const MapMode& rMapMode ) const;
     Rectangle                   LogicToPixel( const Rectangle& rLogicRect,
                                               const MapMode& rMapMode ) const;
-    Polygon                     LogicToPixel( const Polygon& rLogicPoly,
+    tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
@@ -1743,7 +1743,7 @@ public:
     Point                       PixelToLogic( const Point& rDevicePt ) const;
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
     Rectangle                   PixelToLogic( const Rectangle& rDeviceRect ) const;
-    Polygon                     PixelToLogic( const Polygon& rDevicePoly ) const;
+    tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
@@ -1753,7 +1753,7 @@ public:
                                               const MapMode& rMapMode ) const;
     Rectangle                   PixelToLogic( const Rectangle& rDeviceRect,
                                               const MapMode& rMapMode ) const;
-    Polygon                     PixelToLogic( const Polygon& rDevicePoly,
+    tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
                                               const MapMode& rMapMode ) const;
@@ -1923,7 +1923,7 @@ private:
 
      @returns Polygon based on physical device pixel coordinates and units.
      */
-    SAL_DLLPRIVATE Polygon      ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const;
+    SAL_DLLPRIVATE tools::Polygon ImplLogicToDevicePixel( const tools::Polygon& rLogicPoly ) const;
 
     /** Convert a logical polypolygon to a polypolygon in physical device pixel units.
 

@@ -46,7 +46,7 @@ namespace basegfx
 
     private:
         // internal data.
-        ImplType                                    mpPolygon;
+        ImplType mpPolygon;
 
     public:
         B3DPolygon();

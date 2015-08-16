@@ -54,26 +54,26 @@ inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); 
 
 inline void MoveRect(Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
 inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); rPnt.Y()+=S.Height(); }
-inline void MovePoly(Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
+inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
 inline void MovePoly(tools::PolyPolygon& rPoly, const Size& S)  { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
 SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bNoJustify = false);
 inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact);
-void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
-SVX_DLLPUBLIC void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs);
+SVX_DLLPUBLIC void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
 
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2);
-void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2);
+void MirrorPoly(tools::Polygon& rPoly, const Point& rRef1, const Point& rRef2);
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);
-SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
+SVX_DLLPUBLIC void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
 /**
@@ -239,8 +239,8 @@ public:
     void RecalcTan();
 };
 
-Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo);
-void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
+tools::Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo);
+void Poly2Rect(const tools::Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
 
 SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
 SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);

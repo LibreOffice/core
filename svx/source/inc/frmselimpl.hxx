@@ -65,7 +65,7 @@ public:
     inline const frame::Style& GetUIStyle() const { return maUIStyle; }
 
     inline void ClearFocusArea() { maFocusArea.Clear(); }
-    void AddFocusPolygon( const Polygon& rFocus );
+    void AddFocusPolygon( const tools::Polygon& rFocus );
     void MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const;
 
     inline void ClearClickArea() { maClickArea.Clear(); }

@@ -152,8 +152,8 @@ private:
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
     void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
-    void WMFRecord_Polygon(const Polygon & rPoly);
-    void WMFRecord_PolyLine(const Polygon & rPoly);
+    void WMFRecord_Polygon(const tools::Polygon & rPoly);
+    void WMFRecord_PolyLine(const tools::Polygon & rPoly);
     void WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly);
     void WMFRecord_Rectangle(const Rectangle & rRect);
     void WMFRecord_RestoreDC();

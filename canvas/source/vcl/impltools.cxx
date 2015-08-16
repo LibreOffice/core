@@ -152,7 +152,7 @@ namespace vclcanvas
             if( rPolyPoly.Count() != 1 )
                 return false;
 
-            const ::Polygon& rPoly( rPolyPoly[0] );
+            const ::tools::Polygon& rPoly( rPolyPoly[0] );
 
             sal_uInt16 nCount( rPoly.GetSize() );
             if( nCount < 4 )

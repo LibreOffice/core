@@ -540,14 +540,14 @@ Rectangle OutputDevice::ImplLogicToDevicePixel( const Rectangle& rLogicRect ) co
                                         maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
 }
 
-Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
+tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogicPoly ) const
 {
     if ( !mbMap && !mnOutOffX && !mnOutOffY )
         return rLogicPoly;
 
     sal_uInt16  i;
     sal_uInt16  nPoints = rLogicPoly.GetSize();
-    Polygon aPoly( rLogicPoly );
+    tools::Polygon aPoly( rLogicPoly );
 
     // get pointer to Point-array (copy data)
     const Point* pPointAry = aPoly.GetConstPointAry();
@@ -590,7 +590,7 @@ tools::PolyPolygon OutputDevice::ImplLogicToDevicePixel( const tools::PolyPolygo
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
-        Polygon& rPoly = aPolyPoly[i];
+        tools::Polygon& rPoly = aPolyPoly[i];
         rPoly = ImplLogicToDevicePixel( rPoly );
     }
     return aPolyPoly;
@@ -1009,7 +1009,7 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect ) const
                                         maThresRes.mnThresLogToPixY )+mnOutOffOrigY );
 }
 
-Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
+tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly ) const
 {
 
     if ( !mbMap )
@@ -1017,7 +1017,7 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
 
     sal_uInt16  i;
     sal_uInt16  nPoints = rLogicPoly.GetSize();
-    Polygon aPoly( rLogicPoly );
+    tools::Polygon aPoly( rLogicPoly );
 
     // get pointer to Point-array (copy data)
     const Point* pPointAry = aPoly.GetConstPointAry();
@@ -1048,7 +1048,7 @@ tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicP
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
-        Polygon& rPoly = aPolyPoly[i];
+        tools::Polygon& rPoly = aPolyPoly[i];
         rPoly = LogicToPixel( rPoly );
     }
     return aPolyPoly;
@@ -1162,8 +1162,8 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
                                         aThresRes.mnThresLogToPixY )+mnOutOffOrigY );
 }
 
-Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
-                                    const MapMode& rMapMode ) const
+tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly,
+                                           const MapMode& rMapMode ) const
 {
 
     if ( rMapMode.IsDefault() )
@@ -1176,7 +1176,7 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
 
     sal_uInt16  i;
     sal_uInt16  nPoints = rLogicPoly.GetSize();
-    Polygon aPoly( rLogicPoly );
+    tools::Polygon aPoly( rLogicPoly );
 
     // get pointer to Point-array (copy data)
     const Point* pPointAry = aPoly.GetConstPointAry();
@@ -1254,7 +1254,7 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
                                         maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
+tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly ) const
 {
 
     if ( !mbMap )
@@ -1262,7 +1262,7 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
 
     sal_uInt16  i;
     sal_uInt16  nPoints = rDevicePoly.GetSize();
-    Polygon aPoly( rDevicePoly );
+    tools::Polygon aPoly( rDevicePoly );
 
     // get pointer to Point-array (copy data)
     const Point* pPointAry = aPoly.GetConstPointAry();
@@ -1293,7 +1293,7 @@ tools::PolyPolygon OutputDevice::PixelToLogic( const tools::PolyPolygon& rDevice
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
-        Polygon& rPoly = aPolyPoly[i];
+        tools::Polygon& rPoly = aPolyPoly[i];
         rPoly = PixelToLogic( rPoly );
     }
     return aPolyPoly;
@@ -1410,8 +1410,8 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
                                         aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
-                                    const MapMode& rMapMode ) const
+tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly,
+                                           const MapMode& rMapMode ) const
 {
 
     // calculate nothing if default-MapMode
@@ -1425,7 +1425,7 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
 
     sal_uInt16  i;
     sal_uInt16  nPoints = rDevicePoly.GetSize();
-    Polygon aPoly( rDevicePoly );
+    tools::Polygon aPoly( rDevicePoly );
 
     // get pointer to Point-array (copy data)
     const Point* pPointAry = aPoly.GetConstPointAry();

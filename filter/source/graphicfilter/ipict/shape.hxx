@@ -36,7 +36,7 @@ namespace PictReaderShape {
   void drawRectangle(VirtualDevice *dev, bool drawFrame, Rectangle const &rect, Size const &pSize);
 
   /** draws a polygon knowing penSize */
-  void drawPolygon(VirtualDevice *dev, bool drawFrame, Polygon const &rect, Size const &pSize);
+void drawPolygon(VirtualDevice *dev, bool drawFrame, tools::Polygon const &rect, Size const &pSize);
 
   /** draws an ellipse knowing penSize */
   void drawEllipse(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, Size const &pSize);

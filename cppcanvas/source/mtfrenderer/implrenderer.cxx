@@ -1547,7 +1547,7 @@ namespace cppcanvas
                     case MetaActionType::GRADIENT:
                     {
                         MetaGradientAction* pGradAct = static_cast<MetaGradientAction*>(pCurrAct);
-                        createGradientAction( ::Polygon( pGradAct->GetRect() ),
+                        createGradientAction( ::tools::Polygon( pGradAct->GetRect() ),
                                               pGradAct->GetGradient(),
                                               rFactoryParms,
                                               true,
@@ -2009,9 +2009,9 @@ namespace cppcanvas
                     case MetaActionType::ARC:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
-                        const Polygon aToolsPoly( static_cast<MetaArcAction*>(pCurrAct)->GetRect(),
-                                                  static_cast<MetaArcAction*>(pCurrAct)->GetStartPoint(),
-                                                  static_cast<MetaArcAction*>(pCurrAct)->GetEndPoint(), POLY_ARC );
+                        const ::tools::Polygon aToolsPoly( static_cast<MetaArcAction*>(pCurrAct)->GetRect(),
+                                                         static_cast<MetaArcAction*>(pCurrAct)->GetStartPoint(),
+                                                         static_cast<MetaArcAction*>(pCurrAct)->GetEndPoint(), POLY_ARC );
                         ::basegfx::B2DPolygon aPoly( aToolsPoly.getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
 
@@ -2023,9 +2023,9 @@ namespace cppcanvas
                     case MetaActionType::PIE:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
-                        const Polygon aToolsPoly( static_cast<MetaPieAction*>(pCurrAct)->GetRect(),
-                                                  static_cast<MetaPieAction*>(pCurrAct)->GetStartPoint(),
-                                                  static_cast<MetaPieAction*>(pCurrAct)->GetEndPoint(), POLY_PIE );
+                        const ::tools::Polygon aToolsPoly( static_cast<MetaPieAction*>(pCurrAct)->GetRect(),
+                                                         static_cast<MetaPieAction*>(pCurrAct)->GetStartPoint(),
+                                                         static_cast<MetaPieAction*>(pCurrAct)->GetEndPoint(), POLY_PIE );
                         ::basegfx::B2DPolygon aPoly( aToolsPoly.getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
 
@@ -2037,9 +2037,9 @@ namespace cppcanvas
                     case MetaActionType::CHORD:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
-                        const Polygon aToolsPoly( static_cast<MetaChordAction*>(pCurrAct)->GetRect(),
-                                                  static_cast<MetaChordAction*>(pCurrAct)->GetStartPoint(),
-                                                  static_cast<MetaChordAction*>(pCurrAct)->GetEndPoint(), POLY_CHORD );
+                        const ::tools::Polygon aToolsPoly( static_cast<MetaChordAction*>(pCurrAct)->GetRect(),
+                                                         static_cast<MetaChordAction*>(pCurrAct)->GetStartPoint(),
+                                                         static_cast<MetaChordAction*>(pCurrAct)->GetEndPoint(), POLY_CHORD );
                         ::basegfx::B2DPolygon aPoly( aToolsPoly.getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
 

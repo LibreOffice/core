@@ -82,9 +82,9 @@ public:
 
         See accessor method descriptions for argument description
      */
-    SvtGraphicStroke( const Polygon&        rPath,
-                      const tools::PolyPolygon&    rStartArrow,
-                      const tools::PolyPolygon&    rEndArrow,
+    SvtGraphicStroke( const tools::Polygon& rPath,
+                      const tools::PolyPolygon& rStartArrow,
+                      const tools::PolyPolygon& rEndArrow,
                       double                fTransparency,
                       double                fStrokeWidth,
                       CapType               aCap,
@@ -94,7 +94,7 @@ public:
 
     // accessors
     /// Query path to stroke
-    void            getPath             ( Polygon& ) const;
+    void            getPath             ( tools::Polygon& ) const;
     /** Get the polygon that is put at the start of the line
 
         The polygon is in a special normalized position: the center of
@@ -141,7 +141,7 @@ public:
 
     // mutators
     /// Set path to stroke
-    void    setPath             ( const Polygon& );
+    void    setPath             ( const tools::Polygon& );
     /** Set the polygon that is put at the start of the line
 
         The polygon has to be in a special normalized position, and
@@ -178,9 +178,9 @@ private:
     VCL_DLLPUBLIC friend SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass );
     VCL_DLLPUBLIC friend SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass );
 
-    Polygon         maPath;
-    tools::PolyPolygon     maStartArrow;
-    tools::PolyPolygon     maEndArrow;
+    tools::Polygon  maPath;
+    tools::PolyPolygon maStartArrow;
+    tools::PolyPolygon maEndArrow;
     double          mfTransparency;
     double          mfStrokeWidth;
     CapType         maCapType;

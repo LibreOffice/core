@@ -111,7 +111,7 @@ private:
         // counts the bitmaps and actions (nNumberOfActions and nNumberOfBitmaps
         // have to be set to 0 at the beginning, since this method is recursive)
 
-    static Polygon PolyPolygonToPolygon(const tools::PolyPolygon & rPoly);
+    static tools::Polygon PolyPolygonToPolygon(const tools::PolyPolygon & rPoly);
         // generates a relatively sane polygon on the basis of a PolyPolygon
 
     Rectangle MapRectangle( const Rectangle& rRect );
@@ -120,7 +120,7 @@ private:
     void WriteRGBColor(const Color & rColor);
     void WriteString( const OUString & rString );
     void WriteRectangle(const Rectangle & rRect);
-    void WritePolygon(const Polygon & rPoly);
+    void WritePolygon(const tools::Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
 
     static void ConvertLinePattern(PictPattern & rPat, bool bVisible);
@@ -151,7 +151,7 @@ private:
                          const Point & rStartPt, const Point & rEndPt);
     void WriteOpcode_SameArc(PictDrawingMethod eMethod, const Rectangle & rRect,
                              const Point & rStartPt, const Point & rEndPt);
-    void WriteOpcode_Poly(PictDrawingMethod eMethod, const Polygon & rPoly);
+    void WriteOpcode_Poly(PictDrawingMethod eMethod, const tools::Polygon & rPoly);
     void WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap);
     void WriteOpcode_EndOfFile();
 
@@ -220,15 +220,15 @@ void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 }
 
 
-Polygon PictWriter::PolyPolygonToPolygon(const tools::PolyPolygon & rPolyPoly)
+tools::Polygon PictWriter::PolyPolygonToPolygon(const tools::PolyPolygon & rPolyPoly)
 {
     sal_uInt16 nCount,nSize1,nSize2,np,i1,i2,i3,nBestIdx1,nBestIdx2;
     long nDistSqr;
     Point aP1,aPRel;
-    Polygon aPoly1, aPoly2, aPoly3;
+    tools::Polygon aPoly1, aPoly2, aPoly3;
 
     nCount=rPolyPoly.Count();
-    if (nCount==0) return Polygon(0);
+    if (nCount==0) return tools::Polygon(0);
 
     aPoly1=rPolyPoly.GetObject(0);
     for (np=1; np<nCount; np++) {
@@ -332,11 +332,11 @@ void PictWriter::WriteRectangle(const Rectangle & rRect)
            .WriteInt16( aRect.Bottom() ).WriteInt16( aRect.Right() );
 }
 
-void PictWriter::WritePolygon(const Polygon & rPoly)
+void PictWriter::WritePolygon(const tools::Polygon & rPoly)
 {
     sal_uInt16 nDataSize,i,nSize;
     short nMinX = 0, nMinY = 0, nMaxX = 0, nMaxY = 0;
-    Polygon aPoly(rPoly);
+    tools::Polygon aPoly(rPoly);
 
     nSize=aPoly.GetSize();
 
@@ -846,7 +846,7 @@ void PictWriter::WriteOpcode_SameArc(PictDrawingMethod eMethod, const Rectangle 
 }
 
 
-void PictWriter::WriteOpcode_Poly(PictDrawingMethod eMethod, const Polygon & rPoly)
+void PictWriter::WriteOpcode_Poly(PictDrawingMethod eMethod, const tools::Polygon & rPoly)
 {
     sal_uInt16 oc;
 
@@ -1380,7 +1380,7 @@ void PictWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx
 
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
-                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a).getDefaultAdaptiveSubdivision());
+                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a).getDefaultAdaptiveSubdivision());
                 WriteOpcode_Poly(PDM_PAINT, aPolygon);
             }
 
@@ -1598,13 +1598,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 if( aLineColor!=Color( COL_TRANSPARENT ) )
                 {
-                    const Polygon&  rPoly = pA->GetPolygon();
+                    const tools::Polygon&  rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
                     {
                         if(pA->GetLineInfo().IsDefault())
                         {
-                            Polygon aSimplePoly;
+                            tools::Polygon aSimplePoly;
                             if ( rPoly.HasFlags() )
                                 rPoly.AdaptiveSubdivide( aSimplePoly );
                             else
@@ -1639,9 +1639,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pMA);
 
-                const Polygon& rPoly = pA->GetPolygon();
+                const tools::Polygon& rPoly = pA->GetPolygon();
 
-                Polygon aSimplePoly;
+                tools::Polygon aSimplePoly;
                 if ( rPoly.HasFlags() )
                     rPoly.AdaptiveSubdivide( aSimplePoly );
                 else
@@ -1671,7 +1671,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 {
                     if ( aSimplePolyPoly[ i ].HasFlags() )
                     {
-                        Polygon aSimplePoly;
+                        tools::Polygon aSimplePoly;
                         aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
                         aSimplePolyPoly[ i ] = aSimplePoly;
                     }

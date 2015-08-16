@@ -211,7 +211,7 @@ IMAPOBJ_SETEVENT:
         if( aCoords.size() >=6 )
         {
             sal_uInt16 nCount = aCoords.size() / 2;
-            Polygon aPoly( nCount );
+            tools::Polygon aPoly( nCount );
             for( sal_uInt16 i=0; i<nCount; i++ )
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );
             IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, OUString(), aTarget, aName,

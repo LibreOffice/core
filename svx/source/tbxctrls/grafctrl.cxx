@@ -750,7 +750,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                                 if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0)
                                 {
-                                    Polygon aPol(aNewRect);
+                                    tools::Polygon aPol(aNewRect);
 
                                     // also transform origin offset
                                     if (aGeo.nShearAngle!=0)

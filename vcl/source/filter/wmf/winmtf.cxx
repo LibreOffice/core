@@ -97,22 +97,22 @@ basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
 void WinMtfPathObj::AddPoint( const Point& rPoint )
 {
     if ( bClosed )
-        Insert( Polygon() );
-    Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
+        Insert( tools::Polygon() );
+    tools::Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPoint );
     bClosed = false;
 }
 
-void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
+void WinMtfPathObj::AddPolyLine( const tools::Polygon& rPolyLine )
 {
     if ( bClosed )
-        Insert( Polygon() );
-    Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
+        Insert( tools::Polygon() );
+    tools::Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPolyLine );
     bClosed = false;
 }
 
-void WinMtfPathObj::AddPolygon( const Polygon& rPoly )
+void WinMtfPathObj::AddPolygon( const tools::Polygon& rPoly )
 {
     Insert( rPoly );
     bClosed = true;
@@ -130,7 +130,7 @@ void WinMtfPathObj::ClosePath()
 {
     if ( Count() )
     {
-        Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
+        tools::Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
         if ( rPoly.GetSize() > 2 )
         {
             Point aFirst( rPoly[ 0 ] );
@@ -483,7 +483,7 @@ void WinMtfOutput::ImplMap( vcl::Font& rFont )
         rFont.SetOrientation( 3600 - rFont.GetOrientation() );
 }
 
-Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
+tools::Polygon& WinMtfOutput::ImplMap( tools::Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     for ( sal_uInt16 i = 0; i < nPoints; i++ )
@@ -493,7 +493,7 @@ Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
     return rPolygon;
 }
 
-Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
+tools::Polygon& WinMtfOutput::ImplScale( tools::Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     for ( sal_uInt16 i = 0; i < nPoints; i++ )
@@ -653,7 +653,7 @@ void WinMtfOutput::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPo
                 mpGDIMetaFile->AddAction( new MetaRectAction( rPolyPoly.GetBoundRect() ) );
             else
             {
-                Polygon aPoly( rPolyPoly[ 0 ] );
+                tools::Polygon aPoly( rPolyPoly[ 0 ] );
                 sal_uInt16 nCount = aPoly.GetSize();
                 if ( nCount )
                 {
@@ -1022,7 +1022,7 @@ void WinMtfOutput::MoveTo( const Point& rPoint, bool bRecordPath )
         // fdo#57353 create new subpath for subsequent moves
         if ( aPathObj.Count() )
             if ( aPathObj[ aPathObj.Count() - 1 ].GetSize() )
-                aPathObj.Insert( Polygon() );
+                aPathObj.Insert( tools::Polygon() );
         aPathObj.AddPoint( aDest );
     }
     maActPos = aDest;
@@ -1049,7 +1049,7 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
 
     if ( mbComplexClip )
     {
-        Polygon aPoly( ImplMap( rRect ) );
+        tools::Polygon aPoly( ImplMap( rRect ) );
         tools::PolyPolygon aPolyPolyRect( aPoly );
         tools::PolyPolygon aDest;
         tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
@@ -1064,7 +1064,7 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
                 ImplSetNonPersistentLineColorTransparenz();
                 mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
                 UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
             }
             else
             {
@@ -1101,7 +1101,7 @@ void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
         ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
         UpdateLineStyle();
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+        mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
     }
     else
     {
@@ -1127,10 +1127,10 @@ void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const P
             Point aCenter( aRect.Center() );
             Size  aRad( aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
 
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
         }
         else
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_ARC ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, POLY_ARC ), maLineStyle.aLineInfo ) );
     }
     else
         mpGDIMetaFile->AddAction( new MetaArcAction( aRect, aStart, aEnd ) );
@@ -1153,7 +1153,7 @@ void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const P
         ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaPieAction( aRect, aStart, aEnd ) );
         UpdateLineStyle();
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_PIE ), maLineStyle.aLineInfo ) );
+        mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, POLY_PIE ), maLineStyle.aLineInfo ) );
     }
     else
     {
@@ -1176,7 +1176,7 @@ void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const
         ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
         UpdateLineStyle();
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_CHORD ), maLineStyle.aLineInfo ) );
+        mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, POLY_CHORD ), maLineStyle.aLineInfo ) );
     }
     else
     {
@@ -1185,7 +1185,7 @@ void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const
     }
 }
 
-void WinMtfOutput::DrawPolygon( Polygon& rPolygon, bool bRecordPath )
+void WinMtfOutput::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
 {
     UpdateClipRegion();
     ImplMap( rPolygon );
@@ -1290,7 +1290,7 @@ void WinMtfOutput::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bReco
     }
 }
 
-void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, bool bTo, bool bRecordPath )
+void WinMtfOutput::DrawPolyLine( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
 {
     UpdateClipRegion();
 
@@ -1313,7 +1313,7 @@ void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, bool bTo, bool bRecordPath )
     }
 }
 
-void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, bool bTo, bool bRecordPath )
+void WinMtfOutput::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
 {
     UpdateClipRegion();
 

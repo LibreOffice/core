@@ -659,7 +659,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     if (mpFontEntry->mnOrientation)
     {
-        Polygon aPoly( aPixelRect );
+        tools::Polygon aPoly( aPixelRect );
         aPoly.Rotate( Point(nBaseX+mnTextOffX, nBaseY+mnTextOffY), mpFontEntry->mnOrientation);
         aPixelRect = aPoly.GetBoundRect();
     }

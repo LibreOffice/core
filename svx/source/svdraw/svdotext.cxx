@@ -1122,7 +1122,7 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
-    Polygon aPol(maRect);
+    tools::Polygon aPol(maRect);
     if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
@@ -1149,7 +1149,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         rOutliner.Clear();
         bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
-        Polygon aPol(aR);
+        tools::Polygon aPol(aR);
         if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
 
         aRetval.append(aPol.getB2DPolygon());
@@ -1162,7 +1162,7 @@ void SdrTextObj::RecalcSnapRect()
 {
     if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0)
     {
-        Polygon aPol(maRect);
+        tools::Polygon aPol(maRect);
         if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.nTan);
         if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         maSnapRect=aPol.GetBoundRect();

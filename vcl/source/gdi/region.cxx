@@ -44,7 +44,7 @@ namespace
         const sal_uInt16 nPolyCount = rPolyPoly.Count();
         for (sal_uInt16 nPoly = 0; nPoly < nPolyCount; ++nPoly)
         {
-            const Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
+            const tools::Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
 
             // Iterate over all edges of the current polygon.
             const sal_uInt16 nSize = aPoly.GetSize();
@@ -95,7 +95,7 @@ namespace
         const sal_uInt16 nPolyCount = rPolyPoly.Count();
         for (sal_uInt16 nPoly = 0; nPoly < nPolyCount; ++nPoly)
         {
-            const Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
+            const tools::Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
 
             // Iterate over all edges of the current polygon.
             const sal_uInt16 nSize = aPoly.GetSize();
@@ -195,7 +195,7 @@ namespace
         for ( sal_uInt16 nPoly = 0; nPoly < nPolyCount; nPoly++ )
         {
             // get reference to current polygon
-            const Polygon&  aPoly = rPolyPoly.GetObject( nPoly );
+            const tools::Polygon&  aPoly = rPolyPoly.GetObject( nPoly );
             const sal_uInt16    nSize = aPoly.GetSize();
 
             // not enough points ( <= 2 )? -> nothing to do!
@@ -289,7 +289,7 @@ tools::PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
 
         for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
-            aRetval.Insert(Polygon(*aRectIter));
+            aRetval.Insert( tools::Polygon(*aRectIter) );
         }
     }
     else
@@ -324,7 +324,7 @@ Region::Region(const Rectangle& rRect)
     mpRegionBand.reset(rRect.IsEmpty() ? 0 : new RegionBand(rRect));
 }
 
-Region::Region(const Polygon& rPolygon)
+Region::Region(const tools::Polygon& rPolygon)
 :   mpB2DPolyPolygon(),
     mpPolyPolygon(),
     mpRegionBand(),
@@ -1682,7 +1682,7 @@ void vcl::Region::GetRegionRectangles(RectangleVector& rTarget) const
     }
 }
 
-static inline bool ImplPolygonRectTest( const Polygon& rPoly, Rectangle* pRectOut = NULL )
+static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, Rectangle* pRectOut = NULL )
 {
     bool bIsRect = false;
     const Point* pPoints = rPoly.GetConstPointAry();
@@ -1748,7 +1748,7 @@ vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPo
 
     for( int i = 0; i < nPolygons; i++ )
     {
-        const Polygon& rPoly = rPolyPoly[i];
+        const tools::Polygon& rPoly = rPolyPoly[i];
 
         if( ImplPolygonRectTest( rPoly ) )
         {
@@ -1770,7 +1770,7 @@ vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPo
 
     for( int i = 0; i < nPolygons; i++ )
     {
-        const Polygon& rPoly = rPolyPoly[i];
+        const tools::Polygon& rPoly = rPolyPoly[i];
 
         if( ImplPolygonRectTest( rPoly, &aRect ) )
         {

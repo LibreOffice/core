@@ -3803,7 +3803,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                 const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
                 if (pPolyPoly && pPolyPoly->Count())
                 {
-                    Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
+                    tools::Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
                     OStringBuffer aVerticies;
                     for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
                         aVerticies.append(";(").append(aPoly[i].X()).append(",").append(aPoly[i].Y()).append(")");

@@ -280,10 +280,224 @@ void ImplPolygon::ImplCreateFlagArray()
     }
 }
 
-
-Polygon Polygon::SubdivideBezier( const Polygon& rPoly )
+inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
-    Polygon aPoly;
+    const long nDX = rPt.X() - rCenter.X();
+    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0L ) ? 0.000000001 : nDX ) );
+
+    return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
+}
+
+class ImplPointFilter
+{
+public:
+    virtual void LastPoint() = 0;
+    virtual void Input( const Point& rPoint ) = 0;
+
+protected:
+    ~ImplPointFilter() {}
+};
+
+class ImplPolygonPointFilter : public ImplPointFilter
+{
+    std::unique_ptr<ImplPolygon> mxPoly;
+    sal_uInt16      mnSize;
+public:
+    explicit ImplPolygonPointFilter(sal_uInt16 nDestSize)
+        : mxPoly(new ImplPolygon(nDestSize))
+        , mnSize(0)
+    {
+    }
+
+    virtual ~ImplPolygonPointFilter()
+    {
+    }
+
+    virtual void    LastPoint() SAL_OVERRIDE;
+    virtual void    Input( const Point& rPoint ) SAL_OVERRIDE;
+
+    ImplPolygon*    release() { return mxPoly.release(); }
+};
+
+void ImplPolygonPointFilter::Input( const Point& rPoint )
+{
+    if ( !mnSize || (rPoint != mxPoly->mpPointAry[mnSize-1]) )
+    {
+        mnSize++;
+        if ( mnSize > mxPoly->mnPoints )
+            mxPoly->ImplSetSize( mnSize );
+        mxPoly->mpPointAry[mnSize-1] = rPoint;
+    }
+}
+
+void ImplPolygonPointFilter::LastPoint()
+{
+    if ( mnSize < mxPoly->mnPoints )
+        mxPoly->ImplSetSize( mnSize );
+};
+
+class ImplEdgePointFilter : public ImplPointFilter
+{
+    Point               maFirstPoint;
+    Point               maLastPoint;
+    ImplPointFilter&    mrNextFilter;
+    const long          mnLow;
+    const long          mnHigh;
+    const int           mnEdge;
+    int                 mnLastOutside;
+    bool                mbFirst;
+
+public:
+                        ImplEdgePointFilter( int nEdge, long nLow, long nHigh,
+                                             ImplPointFilter& rNextFilter ) :
+                            mrNextFilter( rNextFilter ),
+                            mnLow( nLow ),
+                            mnHigh( nHigh ),
+                            mnEdge( nEdge ),
+                            mnLastOutside( 0 ),
+                            mbFirst( true )
+                        {
+                        }
+
+    virtual             ~ImplEdgePointFilter() {}
+
+    Point               EdgeSection( const Point& rPoint, int nEdge ) const;
+    int                 VisibleSide( const Point& rPoint ) const;
+    bool                IsPolygon() const
+                            { return maFirstPoint == maLastPoint; }
+
+    virtual void        Input( const Point& rPoint ) SAL_OVERRIDE;
+    virtual void        LastPoint() SAL_OVERRIDE;
+};
+
+inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const
+{
+    if ( mnEdge & EDGE_HORZ )
+    {
+        return rPoint.X() < mnLow ? EDGE_LEFT :
+                                     rPoint.X() > mnHigh ? EDGE_RIGHT : 0;
+    }
+    else
+    {
+        return rPoint.Y() < mnLow ? EDGE_TOP :
+                                     rPoint.Y() > mnHigh ? EDGE_BOTTOM : 0;
+    }
+}
+
+Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
+{
+    long lx = maLastPoint.X();
+    long ly = maLastPoint.Y();
+    long md = rPoint.X() - lx;
+    long mn = rPoint.Y() - ly;
+    long nNewX;
+    long nNewY;
+
+    if ( nEdge & EDGE_VERT )
+    {
+        nNewY = (nEdge == EDGE_TOP) ? mnLow : mnHigh;
+        long dy = nNewY - ly;
+        if ( !md )
+            nNewX = lx;
+        else if ( (LONG_MAX / std::abs(md)) >= std::abs(dy) )
+            nNewX = (dy * md) / mn + lx;
+        else
+        {
+            BigInt ady = dy;
+            ady *= md;
+            if( ady.IsNeg() )
+                if( mn < 0 )
+                    ady += mn/2;
+                else
+                    ady -= (mn-1)/2;
+            else
+                if( mn < 0 )
+                    ady -= (mn+1)/2;
+                else
+                    ady += mn/2;
+            ady /= mn;
+            nNewX = (long)ady + lx;
+        }
+    }
+    else
+    {
+        nNewX = (nEdge == EDGE_LEFT) ? mnLow : mnHigh;
+        long dx = nNewX - lx;
+        if ( !mn )
+            nNewY = ly;
+        else if ( (LONG_MAX / std::abs(mn)) >= std::abs(dx) )
+            nNewY = (dx * mn) / md + ly;
+        else
+        {
+            BigInt adx = dx;
+            adx *= mn;
+            if( adx.IsNeg() )
+                if( md < 0 )
+                    adx += md/2;
+                else
+                    adx -= (md-1)/2;
+            else
+                if( md < 0 )
+                    adx -= (md+1)/2;
+                else
+                    adx += md/2;
+            adx /= md;
+            nNewY = (long)adx + ly;
+        }
+    }
+
+    return Point( nNewX, nNewY );
+}
+
+void ImplEdgePointFilter::Input( const Point& rPoint )
+{
+    int nOutside = VisibleSide( rPoint );
+
+    if ( mbFirst )
+    {
+        maFirstPoint = rPoint;
+        mbFirst      = false;
+        if ( !nOutside )
+            mrNextFilter.Input( rPoint );
+    }
+    else if ( rPoint == maLastPoint )
+        return;
+    else if ( !nOutside )
+    {
+        if ( mnLastOutside )
+            mrNextFilter.Input( EdgeSection( rPoint, mnLastOutside ) );
+        mrNextFilter.Input( rPoint );
+    }
+    else if ( !mnLastOutside )
+        mrNextFilter.Input( EdgeSection( rPoint, nOutside ) );
+    else if ( nOutside != mnLastOutside )
+    {
+        mrNextFilter.Input( EdgeSection( rPoint, mnLastOutside ) );
+        mrNextFilter.Input( EdgeSection( rPoint, nOutside ) );
+    }
+
+    maLastPoint    = rPoint;
+    mnLastOutside  = nOutside;
+}
+
+void ImplEdgePointFilter::LastPoint()
+{
+    if ( !mbFirst )
+    {
+        int nOutside = VisibleSide( maFirstPoint );
+
+        if ( nOutside != mnLastOutside )
+            Input( maFirstPoint );
+        mrNextFilter.LastPoint();
+    }
+}
+
+namespace tools
+{
+
+tools::Polygon Polygon::SubdivideBezier( const tools::Polygon& rPoly )
+{
+    tools::Polygon aPoly;
 
     // #100127# Use adaptive subdivide instead of fixed 25 segments
     rPoly.AdaptiveSubdivide( aPoly );
@@ -301,14 +515,6 @@ inline void Polygon::ImplMakeUnique()
             mpImplPolygon->mnRefCount--;
         mpImplPolygon = new ImplPolygon( *mpImplPolygon );
     }
-}
-
-inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
-{
-    const long nDX = rPt.X() - rCenter.X();
-    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0L ) ? 0.000000001 : nDX ) );
-
-    return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
 
 Polygon::Polygon()
@@ -334,7 +540,7 @@ Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pFla
         mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
-Polygon::Polygon( const Polygon& rPoly )
+Polygon::Polygon( const tools::Polygon& rPoly )
 {
     DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
@@ -386,13 +592,13 @@ Polygon::Polygon( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nV
             const Point     aTR( aRect.Right() - nHorzRound, aRect.Top() + nVertRound );
             const Point     aBR( aRect.Right() - nHorzRound, aRect.Bottom() - nVertRound );
             const Point     aBL( aRect.Left() + nHorzRound, aRect.Bottom() - nVertRound );
-            Polygon*        pEllipsePoly = new Polygon( Point(), nHorzRound, nVertRound );
-            sal_uInt16          i, nEnd, nSize4 = pEllipsePoly->GetSize() >> 2;
+            tools::Polygon* pEllipsePoly = new tools::Polygon( Point(), nHorzRound, nVertRound );
+            sal_uInt16 i, nEnd, nSize4 = pEllipsePoly->GetSize() >> 2;
 
             mpImplPolygon = new ImplPolygon( pEllipsePoly->GetSize() + 1 );
 
-            const Point*    pSrcAry = pEllipsePoly->GetConstPointAry();
-            Point*          pDstAry = mpImplPolygon->mpPointAry;
+            const Point* pSrcAry = pEllipsePoly->GetConstPointAry();
+            Point* pDstAry = mpImplPolygon->mpPointAry;
 
             for( i = 0, nEnd = nSize4; i < nEnd; i++ )
                 ( pDstAry[ i ] = pSrcAry[ i ] ) += aTR;
@@ -717,9 +923,9 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData
         }
         else if( nOptimizeFlags & ( PolyOptimizeFlags::REDUCE | PolyOptimizeFlags::NO_SAME ) )
         {
-            Polygon         aNewPoly;
-            const Point&    rFirst = mpImplPolygon->mpPointAry[ 0 ];
-            sal_uIntPtr         nReduce;
+            tools::Polygon aNewPoly;
+            const Point& rFirst = mpImplPolygon->mpPointAry[ 0 ];
+            sal_uIntPtr nReduce;
 
             if( nOptimizeFlags & ( PolyOptimizeFlags::REDUCE ) )
                 nReduce = pData ? pData->GetAbsValue() : 4UL;
@@ -912,12 +1118,12 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         }
 
         // fill result polygon
-        rResult = Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
+        rResult = tools::Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
         ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
     }
 }
 
-void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent )
+void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent )
 {
     const double    fBound = 2000.0 * ( 100 - nPercent ) * 0.01;
     sal_uInt16      nNumNoChange = 0,
@@ -926,8 +1132,8 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
     while( nNumNoChange < 2 )
     {
         sal_uInt16  nPntCnt = rPoly.GetSize(), nNewPos = 0;
-        Polygon aNewPoly( nPntCnt );
-        bool    bChangeInThisRun = false;
+        tools::Polygon aNewPoly( nPntCnt );
+        bool bChangeInThisRun = false;
 
         for( sal_uInt16 n = 0; n < nPntCnt; n++ )
         {
@@ -1081,210 +1287,6 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
         const long nY = rPt.Y() - nCenterY;
         rPt.X() = (long) FRound( fCos * nX + fSin * nY ) + nCenterX;
         rPt.Y() = -(long) FRound( fSin * nX - fCos * nY ) + nCenterY;
-    }
-}
-
-class ImplPointFilter
-{
-public:
-    virtual void LastPoint() = 0;
-    virtual void Input( const Point& rPoint ) = 0;
-
-protected:
-    ~ImplPointFilter() {}
-};
-
-class ImplPolygonPointFilter : public ImplPointFilter
-{
-    std::unique_ptr<ImplPolygon> mxPoly;
-    sal_uInt16      mnSize;
-public:
-    explicit ImplPolygonPointFilter(sal_uInt16 nDestSize)
-        : mxPoly(new ImplPolygon(nDestSize))
-        , mnSize(0)
-    {
-    }
-
-    virtual ~ImplPolygonPointFilter()
-    {
-    }
-
-    virtual void    LastPoint() SAL_OVERRIDE;
-    virtual void    Input( const Point& rPoint ) SAL_OVERRIDE;
-
-    ImplPolygon*    release() { return mxPoly.release(); }
-};
-
-void ImplPolygonPointFilter::Input( const Point& rPoint )
-{
-    if ( !mnSize || (rPoint != mxPoly->mpPointAry[mnSize-1]) )
-    {
-        mnSize++;
-        if ( mnSize > mxPoly->mnPoints )
-            mxPoly->ImplSetSize( mnSize );
-        mxPoly->mpPointAry[mnSize-1] = rPoint;
-    }
-}
-
-void ImplPolygonPointFilter::LastPoint()
-{
-    if ( mnSize < mxPoly->mnPoints )
-        mxPoly->ImplSetSize( mnSize );
-};
-
-class ImplEdgePointFilter : public ImplPointFilter
-{
-    Point               maFirstPoint;
-    Point               maLastPoint;
-    ImplPointFilter&    mrNextFilter;
-    const long          mnLow;
-    const long          mnHigh;
-    const int           mnEdge;
-    int                 mnLastOutside;
-    bool                mbFirst;
-
-public:
-                        ImplEdgePointFilter( int nEdge, long nLow, long nHigh,
-                                             ImplPointFilter& rNextFilter ) :
-                            mrNextFilter( rNextFilter ),
-                            mnLow( nLow ),
-                            mnHigh( nHigh ),
-                            mnEdge( nEdge ),
-                            mnLastOutside( 0 ),
-                            mbFirst( true )
-                        {
-                        }
-
-    virtual             ~ImplEdgePointFilter() {}
-
-    Point               EdgeSection( const Point& rPoint, int nEdge ) const;
-    int                 VisibleSide( const Point& rPoint ) const;
-    bool                IsPolygon() const
-                            { return maFirstPoint == maLastPoint; }
-
-    virtual void        Input( const Point& rPoint ) SAL_OVERRIDE;
-    virtual void        LastPoint() SAL_OVERRIDE;
-};
-
-inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const
-{
-    if ( mnEdge & EDGE_HORZ )
-    {
-        return rPoint.X() < mnLow ? EDGE_LEFT :
-                                     rPoint.X() > mnHigh ? EDGE_RIGHT : 0;
-    }
-    else
-    {
-        return rPoint.Y() < mnLow ? EDGE_TOP :
-                                     rPoint.Y() > mnHigh ? EDGE_BOTTOM : 0;
-    }
-}
-
-Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
-{
-    long lx = maLastPoint.X();
-    long ly = maLastPoint.Y();
-    long md = rPoint.X() - lx;
-    long mn = rPoint.Y() - ly;
-    long nNewX;
-    long nNewY;
-
-    if ( nEdge & EDGE_VERT )
-    {
-        nNewY = (nEdge == EDGE_TOP) ? mnLow : mnHigh;
-        long dy = nNewY - ly;
-        if ( !md )
-            nNewX = lx;
-        else if ( (LONG_MAX / std::abs(md)) >= std::abs(dy) )
-            nNewX = (dy * md) / mn + lx;
-        else
-        {
-            BigInt ady = dy;
-            ady *= md;
-            if( ady.IsNeg() )
-                if( mn < 0 )
-                    ady += mn/2;
-                else
-                    ady -= (mn-1)/2;
-            else
-                if( mn < 0 )
-                    ady -= (mn+1)/2;
-                else
-                    ady += mn/2;
-            ady /= mn;
-            nNewX = (long)ady + lx;
-        }
-    }
-    else
-    {
-        nNewX = (nEdge == EDGE_LEFT) ? mnLow : mnHigh;
-        long dx = nNewX - lx;
-        if ( !mn )
-            nNewY = ly;
-        else if ( (LONG_MAX / std::abs(mn)) >= std::abs(dx) )
-            nNewY = (dx * mn) / md + ly;
-        else
-        {
-            BigInt adx = dx;
-            adx *= mn;
-            if( adx.IsNeg() )
-                if( md < 0 )
-                    adx += md/2;
-                else
-                    adx -= (md-1)/2;
-            else
-                if( md < 0 )
-                    adx -= (md+1)/2;
-                else
-                    adx += md/2;
-            adx /= md;
-            nNewY = (long)adx + ly;
-        }
-    }
-
-    return Point( nNewX, nNewY );
-}
-
-void ImplEdgePointFilter::Input( const Point& rPoint )
-{
-    int nOutside = VisibleSide( rPoint );
-
-    if ( mbFirst )
-    {
-        maFirstPoint = rPoint;
-        mbFirst      = false;
-        if ( !nOutside )
-            mrNextFilter.Input( rPoint );
-    }
-    else if ( rPoint == maLastPoint )
-        return;
-    else if ( !nOutside )
-    {
-        if ( mnLastOutside )
-            mrNextFilter.Input( EdgeSection( rPoint, mnLastOutside ) );
-        mrNextFilter.Input( rPoint );
-    }
-    else if ( !mnLastOutside )
-        mrNextFilter.Input( EdgeSection( rPoint, nOutside ) );
-    else if ( nOutside != mnLastOutside )
-    {
-        mrNextFilter.Input( EdgeSection( rPoint, mnLastOutside ) );
-        mrNextFilter.Input( EdgeSection( rPoint, nOutside ) );
-    }
-
-    maLastPoint    = rPoint;
-    mnLastOutside  = nOutside;
-}
-
-void ImplEdgePointFilter::LastPoint()
-{
-    if ( !mbFirst )
-    {
-        int nOutside = VisibleSide( maFirstPoint );
-
-        if ( nOutside != mnLastOutside )
-            Input( maFirstPoint );
-        mrNextFilter.LastPoint();
     }
 }
 
@@ -1454,7 +1456,7 @@ void Polygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
     }
 }
 
-void Polygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
+void Polygon::Insert( sal_uInt16 nPos, const tools::Polygon& rPoly )
 {
     const sal_uInt16 nInsertCount = rPoly.mpImplPolygon->mnPoints;
 
@@ -1480,7 +1482,7 @@ Point& Polygon::operator[]( sal_uInt16 nPos )
     return mpImplPolygon->mpPointAry[nPos];
 }
 
-Polygon& Polygon::operator=( const Polygon& rPoly )
+tools::Polygon& Polygon::operator=( const tools::Polygon& rPoly )
 {
     DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
@@ -1502,7 +1504,7 @@ Polygon& Polygon::operator=( const Polygon& rPoly )
     return *this;
 }
 
-bool Polygon::operator==( const Polygon& rPoly ) const
+bool Polygon::operator==( const tools::Polygon& rPoly ) const
 {
 
     if ( (rPoly.mpImplPolygon == mpImplPolygon) )
@@ -1511,7 +1513,7 @@ bool Polygon::operator==( const Polygon& rPoly ) const
         return false;
 }
 
-bool Polygon::IsEqual( const Polygon& rPoly ) const
+bool Polygon::IsEqual( const tools::Polygon& rPoly ) const
 {
     bool bIsEqual = true;
     sal_uInt16 i;
@@ -1532,7 +1534,7 @@ bool Polygon::IsEqual( const Polygon& rPoly ) const
     return bIsEqual;
 }
 
-SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
+SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Polygon::>> - Solar-Version not set on rIStream" );
 
@@ -1583,7 +1585,7 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
     return rIStream;
 }
 
-SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
+SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Polygon::<< - Solar-Version not set on rOStream" );
 
@@ -1948,5 +1950,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
         mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
     }
 }
+
+} // namespace tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
