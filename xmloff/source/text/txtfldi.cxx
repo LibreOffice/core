@@ -1362,6 +1362,28 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
 {
 }
 
+XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    const sal_Char* pServiceName,
+    sal_Int32 Element, bool bUseDisply)
+:   XMLTextFieldImportContext(rImport, rHlp, pServiceName, Element)
+,   sPropertyDataBaseName(sAPI_data_base_name)
+,   sPropertyDataBaseURL(sAPI_data_base_u_r_l)
+,   sPropertyTableName(sAPI_data_table_name)
+,   sPropertyDataCommandType(sAPI_data_command_type)
+,   sPropertyIsVisible(sAPI_is_visible)
+,   nCommandType( sdb::CommandType::TABLE )
+,   bCommandTypeOK(false)
+,   bDisplay( true )
+,   bDisplayOK( false )
+,   bUseDisplay( bUseDisply )
+,   bDatabaseOK(false)
+,   bDatabaseNameOK(false)
+,   bDatabaseURLOK(false)
+,   bTableOK(false)
+{
+}
+
 void XMLDatabaseFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken, const OUString& sAttrValue )
 {
@@ -1440,7 +1462,27 @@ SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
     return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
                                                   xAttrList);
 }
+Reference< XFastContextHandler > XMLDatabaseFieldImportContext::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( RuntimeException, SAXException, std::exception )
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_FORM | XML_connection_resource) )
+    {
+        if( xAttrList.is() &&
+            xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_XLINK | XML_href ) )
+        {
+            sDatabaseURL = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_XLINK | XML_href );
+            bDatabaseOK = true;
+            bDatabaseURLOK = true;
+        }
 
+        // we call ProcessAttributei in order to set bValid appropriately
+        ProcessAttribute( xmloff::token::XML_TOKEN_INVALID, OUString() );
+    }
+
+    return SvXMLImportContext::createFastChildContext( Element, xAttrList );
+}
 
 void XMLDatabaseFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
