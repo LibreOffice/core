@@ -1294,9 +1294,16 @@ public:
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
+    XMLMetaImportContext(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        XMLHints_Impl& rHints,
+        bool& rIgnoreLeadingSpace );
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue) SAL_OVERRIDE;
+    virtual void ProcessAttribute( sal_Int32 Element,
+        const OUString& rValue ) SAL_OVERRIDE;
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) SAL_OVERRIDE;
 };
@@ -1312,6 +1319,17 @@ XMLMetaImportContext::XMLMetaImportContext(
     : XMLMetaImportContextBase( i_rImport, i_nPrefix, i_rLocalName,
             i_rHints, i_rIgnoreLeadingSpace )
     , m_bHaveAbout(false)
+{
+}
+
+XMLMetaImportContext::XMLMetaImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    XMLHints_Impl& rHints,
+    bool& rIgnoreLeadingSpace )
+:   XMLMetaImportContextBase( rImport, Element, rHints, rIgnoreLeadingSpace ),
+    m_bHaveAbout(false)
+
 {
 }
 
@@ -1343,6 +1361,32 @@ void XMLMetaImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
     {
         XMLMetaImportContextBase::ProcessAttribute(
             i_nPrefix, i_rLocalName, i_rValue);
+    }
+}
+
+void XMLMetaImportContext::ProcessAttribute( sal_Int32 Element,
+    const OUString& rValue )
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_XHTML | XML_about) )
+    {
+        m_sAbout = rValue;
+        m_bHaveAbout = true;
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_XHTML | XML_property) )
+    {
+        m_sProperty = rValue;
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_XHTML | XML_content) )
+    {
+        m_sContent= rValue;
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_XHTML | XML_datatype) )
+    {
+        m_sDatatype = rValue;
+    }
+    else
+    {
+        XMLMetaImportContextBase::ProcessAttribute( Element, rValue );
     }
 }
 
