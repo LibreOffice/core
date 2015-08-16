@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_73e4083b",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3189,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T03:56:42Z",
+      "side": 1,
+      "message": "the problem is: what if you _want_ to get the default name again.",
+      "revId": "6ad0f3e282b112f6871767189dc945d1d93b8ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
