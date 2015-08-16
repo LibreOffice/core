@@ -34,6 +34,24 @@
       "revId": "a82a5fa4e8fe98ab71e7910509d5286face96784",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_931a6c16",
+        "filename": "vcl/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T06:42:49Z",
+      "side": 1,
+      "message": "\"nYAdvance is 0 since it is LTR (horizontal)\"\nduh... I knew that was a stupid question :-)",
+      "parentUuid": "9aed3d3a_730088ab",
+      "revId": "a82a5fa4e8fe98ab71e7910509d5286face96784",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
