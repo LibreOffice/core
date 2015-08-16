@@ -303,7 +303,7 @@ class SbiRuntime
     SbxVariableRef PopVar();
     SbxVariable* GetTOS( short=0 );
     void TOSMakeTemp();
-    bool ClearExprStack();
+    void ClearExprStack();
 
     void PushGosub( const sal_uInt8* );
     void PopGosub();
