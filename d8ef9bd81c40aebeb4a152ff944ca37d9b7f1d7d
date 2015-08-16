@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3393843",
+        "filename": "sw/source/uibase/config/viewopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T17:17:35Z",
+      "side": 1,
+      "message": "no, do not do that out of order.\n\nwhen a previous path in a series need tweaking,\nwhat you want to do is:\n\n+ checkout les last patch of the series\n+ make a new commit with the fixup to the older patch\n+ git rebase -i HEAD~\u003cthe number needed to go back\u003e\n\nand move the fixup patch immediately after the\npatch needing fixing and change the mode of\nthe new \u0027fixup\u0027 patch to... \u0027f\u0027\nsave/apply\nthen repush the series to gerrit\n\ngit push origin HEAD:refs/for/master",
+      "revId": "d8ef9bd81c40aebeb4a152ff944ca37d9b7f1d7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
