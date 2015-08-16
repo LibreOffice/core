@@ -125,7 +125,7 @@ public:
 
 struct SVGShapeDescriptor
 {
-    tools::PolyPolygon                 maShapePolyPoly;
+    tools::PolyPolygon          maShapePolyPoly;
     Color                       maShapeFillColor;
     Color                       maShapeLineColor;
     sal_Int32                   mnStrokeWidth;
@@ -320,8 +320,8 @@ private:
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
     Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
     Rectangle&              ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
-    Polygon&                ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) const;
-    tools::PolyPolygon&            ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
+    tools::Polygon&         ImplMap( const tools::Polygon& rPoly, tools::Polygon& rDstPoly ) const;
+    tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL,
                                            bool bApplyMapping = true );

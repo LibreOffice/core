@@ -28,7 +28,7 @@
  * coefficient array has been allocated, which can be freed by the caller
  * using a delete.
  */
-bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
+bool CalcSpline(tools::Polygon& rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T);
 
@@ -39,7 +39,7 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
  * In the first case the polygon has 0, in the second case PolyMax points.
  * To prevent coordinate overflows we limit them to +/-32000.
  */
-bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly);
+bool Spline2Poly(tools::Polygon& rSpln, bool Periodic, tools::Polygon& rPoly);
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX
 

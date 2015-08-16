@@ -116,7 +116,7 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
                 if( nRot10 )
                 {
-                    Polygon aPoly( Rectangle( aPt, aSz ) );
+                    tools::Polygon aPoly( Rectangle( aPt, aSz ) );
 
                     aPoly.Rotate( aPt, nRot10 );
                     const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
@@ -439,7 +439,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     sal_uInt8           cR0, cG0, cB0, cR1, cG1, cB1;
     bool                bRet = false;
 
-    Polygon             aPoly( Rectangle( Point(), rUnrotatedSzPix ) );
+    tools::Polygon aPoly( Rectangle( Point(), rUnrotatedSzPix ) );
     aPoly.Rotate( Point(), nRot10 );
     Rectangle           aNewBound( aPoly.GetBoundRect() );
 
@@ -883,7 +883,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
     if( nRot10 )
     {
-        Polygon aPoly( Rectangle( rPoint, rSize ) );
+        tools::Polygon aPoly( Rectangle( rPoint, rSize ) );
         aPoly.Rotate( rPoint, nRot10 );
         const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
         aOutputPointPix = pOutputDevice->LogicToPixel( aRotBoundRect.TopLeft() );
@@ -1611,7 +1611,7 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
 
     if( nRot10 )
     {
-        Polygon aPoly( Rectangle( aOutPt, aOutSz ) );
+        tools::Polygon aPoly( Rectangle( aOutPt, aOutSz ) );
 
         aPoly.Rotate( aOutPt, nRot10 );
         const Rectangle aRotBoundRect( aPoly.GetBoundRect() );

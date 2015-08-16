@@ -72,7 +72,7 @@ public:
     void                        CloseRegion() ;
     void                        NewRegion() ;
     void                        EndFigure() ;
-    void                        RegPolyLine( Polygon&, bool bReverse = false ) ;
+    void                        RegPolyLine( tools::Polygon&, bool bReverse = false ) ;
     void                        SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType );
     void                        SetGradientAngle( long nAngle );
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
@@ -82,9 +82,9 @@ public:
     virtual void                DrawEllipticalArc( FloatPoint&, FloatPoint&, double&,
                                     sal_uInt32, double&, double&) {} ;
     virtual void                DrawBitmap( CGMBitmapDescriptor* ) {} ;
-    virtual void                DrawPolygon( Polygon& ) {} ;
-    virtual void                DrawPolyLine( Polygon& ) {} ;
-    virtual void                DrawPolybezier( Polygon& ) {} ;
+    virtual void                DrawPolygon( tools::Polygon& ) {} ;
+    virtual void                DrawPolyLine( tools::Polygon& ) {} ;
+    virtual void                DrawPolybezier( tools::Polygon& ) {} ;
     virtual void                DrawPolyPolygon( tools::PolyPolygon& ) {} ;
     virtual void                DrawText( ::com::sun::star::awt::Point&, ::com::sun::star::awt::Size&, char*, sal_uInt32, FinalFlag ) {} ;
     virtual void                AppendText( char*, sal_uInt32, FinalFlag ) {} ;
@@ -122,9 +122,9 @@ public:
     virtual void                DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
                                     sal_uInt32 etype, double& startangle, double& endangle ) SAL_OVERRIDE ;
     virtual void                DrawBitmap( CGMBitmapDescriptor* ) SAL_OVERRIDE ;
-    virtual void                DrawPolygon( Polygon& ) SAL_OVERRIDE ;
-    virtual void                DrawPolyLine( Polygon& ) SAL_OVERRIDE ;
-    virtual void                DrawPolybezier( Polygon& ) SAL_OVERRIDE ;
+    virtual void                DrawPolygon( tools::Polygon& ) SAL_OVERRIDE ;
+    virtual void                DrawPolyLine( tools::Polygon& ) SAL_OVERRIDE ;
+    virtual void                DrawPolybezier( tools::Polygon& ) SAL_OVERRIDE ;
     virtual void                DrawPolyPolygon( tools::PolyPolygon& ) SAL_OVERRIDE ;
     virtual void                DrawText( ::com::sun::star::awt::Point& TextRectPos, ::com::sun::star::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
     virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;

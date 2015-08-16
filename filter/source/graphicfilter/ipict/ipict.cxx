@@ -186,7 +186,7 @@ private:
 
     void ReadRectangle(Rectangle & rRect);
 
-    sal_uLong ReadPolygon(Polygon & rPoly);
+    sal_uLong ReadPolygon(tools::Polygon & rPoly);
 
     sal_uLong ReadPixPattern(Pattern &pattern);
 
@@ -202,7 +202,7 @@ private:
     sal_uLong ReadAndDrawOval(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSameOval(PictDrawingMethod eMethod);
 
-    Polygon aLastPolygon;
+    tools::Polygon aLastPolygon;
     sal_uLong ReadAndDrawPolygon(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSamePolygon(PictDrawingMethod eMethod);
 
@@ -459,7 +459,7 @@ void PictReader::ReadRectangle(Rectangle & rRect)
 }
 
 
-sal_uLong PictReader::ReadPolygon(Polygon & rPoly)
+sal_uLong PictReader::ReadPolygon(tools::Polygon & rPoly)
 {
     sal_uInt16 nSize,i;
     sal_uLong nDataSize;

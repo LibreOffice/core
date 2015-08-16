@@ -2409,7 +2409,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     aStart.Y += aCenter.Y;
                     aEnd.X += aCenter.X;
                     aEnd.Y += aCenter.Y;
-                    Polygon aPolygon( aRect, Point( aStart.X, aStart.Y ), Point( aEnd.X, aEnd.Y ), ePolyKind );
+                    tools::Polygon aPolygon( aRect, Point( aStart.X, aStart.Y ), Point( aEnd.X, aEnd.Y ), ePolyKind );
                     bool bNeedText = true;
                     if ( mnAngle )
                     {

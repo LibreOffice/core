@@ -126,7 +126,7 @@ void CGM::ImplDoClass4()
             case 0x01 : /*PolyLine*/
             {
                 sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
-                Polygon aPolygon( (sal_uInt16)nPoints );
+                tools::Polygon aPolygon( (sal_uInt16)nPoints );
                 for ( sal_uInt32 i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
@@ -150,7 +150,7 @@ void CGM::ImplDoClass4()
                     FloatPoint  aFloatPoint;
                     if ( mbFigure )
                     {
-                        Polygon aPolygon( nPoints );
+                        tools::Polygon aPolygon( nPoints );
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             ImplGetPoint( aFloatPoint, true );
@@ -161,7 +161,7 @@ void CGM::ImplDoClass4()
                     else
                     {
                         mpOutAct->BeginGroup();
-                        Polygon aPolygon( (sal_uInt16)2 );
+                        tools::Polygon aPolygon( (sal_uInt16)2 );
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             ImplGetPoint( aFloatPoint, true );
@@ -254,7 +254,7 @@ void CGM::ImplDoClass4()
 
                 sal_uInt16 nPoints = sal::static_int_cast< sal_uInt16 >(
                     mnElementSize / ImplGetPointSize());
-                Polygon aPolygon( nPoints );
+                tools::Polygon aPolygon( nPoints );
                 for ( sal_uInt16 i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
@@ -283,7 +283,7 @@ void CGM::ImplDoClass4()
                     pPoints[ nPoints++ ] = Point( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
                     {
-                        Polygon aPolygon( nPoints );
+                        tools::Polygon aPolygon( nPoints );
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             aPolygon.SetPoint( pPoints[ i ], i );
@@ -408,7 +408,7 @@ void CGM::ImplDoClass4()
                     {
                         Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
                             Size( ( static_cast< long >( 2 * fRadius ) ), (long)( 2 * fRadius) ) );
-                        Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), POLY_ARC );
+                        tools::Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), POLY_ARC );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, true );
                         else
@@ -525,7 +525,7 @@ void CGM::ImplDoClass4()
                     Rectangle aBoundingBox(
                         Point( (long)( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ),
                         Size( static_cast< long >( 2 * aRadius.X ), (long)( 2 * aRadius.X ) ) );
-                    Polygon aPolygon( aBoundingBox,
+                    tools::Polygon aPolygon( aBoundingBox,
                         Point( (long)vector[ 0 ], (long)vector[ 1 ] ),
                         Point( (long)vector[ 2 ], (long)vector[ 3 ] ), POLY_ARC );
                     mpOutAct->RegPolyLine( aPolygon );
@@ -704,7 +704,7 @@ void CGM::ImplDoClass4()
 
                 sal_uInt16 nNumberOfPoints = sal::static_int_cast< sal_uInt16 >(( mnElementSize - pElement->nIntegerPrecision ) / ImplGetPointSize());
 
-                Polygon aPolygon( nNumberOfPoints );
+                tools::Polygon aPolygon( nNumberOfPoints );
 
                 for ( sal_uInt16 i = 0; i < nNumberOfPoints; i++)
                 {

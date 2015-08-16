@@ -307,8 +307,8 @@ void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Recta
 
     drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(Polygon(aRect).getB2DPolygon()),
-        maFillColor.getBColor()));
+            new PolyPolygonColorPrimitive2D(B2DPolyPolygon(::tools::Polygon(aRect).getB2DPolygon()),
+                                            maFillColor.getBColor()));
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> mpProcessor(

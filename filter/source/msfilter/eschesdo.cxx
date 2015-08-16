@@ -393,7 +393,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 aStart.Y() += aCenter.Y();
                 aEnd.X() += aCenter.X();
                 aEnd.Y() += aCenter.Y();
-                Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
+                tools::Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 if( rObj.GetAngle() )
                 {
                     aPolygon.Rotate( rRect.TopLeft(), (sal_uInt16)( rObj.GetAngle() / 10 ) );

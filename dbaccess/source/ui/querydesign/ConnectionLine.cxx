@@ -272,7 +272,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     LineInfo aLineInfo;
     if ( m_pTabConn->IsSelected() )
         aLineInfo.SetWidth(3);
-    Polygon aPoly;
+    tools::Polygon aPoly;
     aPoly.Insert(0,m_aSourceDescrLinePos);
     aPoly.Insert(1,m_aSourceConnPos);
     aPoly.Insert(2,m_aDestConnPos);

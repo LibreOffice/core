@@ -130,14 +130,14 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
     return bNoErr;
 }
 
-double GetLength( const Polygon& rPolygon )
+double GetLength( const tools::Polygon& rPolygon )
 {
     double fLength = 0;
     if ( rPolygon.GetSize() > 1 )
     {
         sal_uInt16 nCount = rPolygon.GetSize();
         while( --nCount )
-            fLength += ((Polygon&)rPolygon).CalcDistance( nCount, nCount - 1 );
+            fLength += ((tools::Polygon&)rPolygon).CalcDistance( nCount, nCount - 1 );
     }
     return fLength;
 }
@@ -528,14 +528,14 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
     return aOutlines2d;
 }
 
-void CalcDistances( const Polygon& rPoly, std::vector< double >& rDistances )
+void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistances )
 {
     sal_uInt16 i, nCount = rPoly.GetSize();
     if ( nCount > 1 )
     {
         for ( i = 0; i < nCount; i++ )
         {
-            double fDistance = i ? ((Polygon&)rPoly).CalcDistance( i, i - 1 ) : 0.0;
+            double fDistance = i ? ((tools::Polygon&)rPoly).CalcDistance( i, i - 1 ) : 0.0;
             rDistances.push_back( fDistance );
         }
         std::partial_sum( rDistances.begin(), rDistances.end(), rDistances.begin() );
@@ -550,7 +550,8 @@ void CalcDistances( const Polygon& rPoly, std::vector< double >& rDistances )
     }
 }
 
-void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances, const Rectangle& rTextAreaBoundRect, Polygon& rPoly )
+void InsertMissingOutlinePoints( const tools::Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances,
+                                 const Rectangle& rTextAreaBoundRect, tools::Polygon& rPoly )
 {
     sal_uInt16 nSize = rPoly.GetSize();
     if (nSize == 0)
@@ -603,7 +604,7 @@ void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vec
     }
 }
 
-void GetPoint( const Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
+void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
 {
     fy1 = fx1 = 0.0;
     if ( rPoly.GetSize() > 1 )
@@ -648,7 +649,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
         {
             if ( nOutline2dIdx >= aOutlines2d.Count() )
                 break;
-            const Polygon& rOutlinePoly( aOutlines2d[ nOutline2dIdx++ ] );
+            const tools::Polygon& rOutlinePoly( aOutlines2d[ nOutline2dIdx++ ] );
             const sal_uInt16 nPointCount = rOutlinePoly.GetSize();
             if ( nPointCount > 1 )
             {
@@ -708,8 +709,8 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
         {
             if ( ( nOutline2dIdx + 1 ) >= aOutlines2d.Count() )
                 break;
-            const Polygon& rOutlinePoly( aOutlines2d[ nOutline2dIdx++ ] );
-            const Polygon& rOutlinePoly2( aOutlines2d[ nOutline2dIdx++ ] );
+            const tools::Polygon& rOutlinePoly( aOutlines2d[ nOutline2dIdx++ ] );
+            const tools::Polygon& rOutlinePoly2( aOutlines2d[ nOutline2dIdx++ ] );
             const sal_uInt16 nPointCount = rOutlinePoly.GetSize();
             const sal_uInt16 nPointCount2 = rOutlinePoly2.GetSize();
             if ( ( nPointCount > 1 ) && ( nPointCount2 > 1 ) )
@@ -745,7 +746,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                 }
 
                                 // create local polygon copy to work on
-                                 Polygon aLocalPoly(aCandidate);
+                                tools::Polygon aLocalPoly(aCandidate);
 
                                 InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, aLocalPoly );
                                 InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, aLocalPoly );

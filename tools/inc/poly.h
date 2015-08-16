@@ -47,12 +47,14 @@ public:
 
 #define MAX_POLYGONS        ((sal_uInt16)0x3FF0)
 
+namespace tools {
 class Polygon;
+}
 
 class SAL_WARN_UNUSED ImplPolyPolygon
 {
 public:
-    Polygon**           mpPolyAry;
+    tools::Polygon** mpPolyAry;
     sal_uIntPtr         mnRefCount;
     sal_uInt16          mnCount;
     sal_uInt16          mnSize;

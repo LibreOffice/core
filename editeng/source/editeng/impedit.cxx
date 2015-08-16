@@ -402,7 +402,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
         Rectangle aRect( aPnt1, aPnt2 );
         if ( pPolyPoly )
         {
-            Polygon aTmpPoly( 4 );
+            tools::Polygon aTmpPoly( 4 );
             aTmpPoly[0] = aRect.TopLeft();
             aTmpPoly[1] = aRect.TopRight();
             aTmpPoly[2] = aRect.BottomRight();

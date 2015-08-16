@@ -33,20 +33,5 @@ BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 )
 }
 }
 
-extern "C"
-{
-BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt )
-{
-    return Polygon( hDC, ppt, ncnt );
-}
-}
-
-extern "C"
-{
-BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt )
-{
-    return PolyPolygon( hDC, ppt, npcnt, ncnt );
-}
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

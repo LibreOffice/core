@@ -378,7 +378,7 @@ bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
              ( nRadius == rEqObj.nRadius ) );
 }
 
-IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
+IMapPolygonObject::IMapPolygonObject( const tools::Polygon& rPoly,
                                       const OUString& rURL,
                                       const OUString& rAltText,
                                       const OUString& rDesc,
@@ -392,7 +392,7 @@ IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
     ImpConstruct( rPoly, bPixelCoords );
 }
 
-void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, bool bPixel )
+void IMapPolygonObject::ImpConstruct( const tools::Polygon& rPoly, bool bPixel )
 {
     if ( bPixel )
         aPoly = Application::GetDefaultDevice()->PixelToLogic( rPoly, MapMode( MAP_100TH_MM ) );
@@ -457,9 +457,9 @@ bool IMapPolygonObject::IsHit( const Point& rPoint ) const
     return aPoly.IsInside( rPoint );
 }
 
-Polygon IMapPolygonObject::GetPolygon( bool bPixelCoords ) const
+tools::Polygon IMapPolygonObject::GetPolygon( bool bPixelCoords ) const
 {
-    Polygon aNewPoly;
+    tools::Polygon aNewPoly;
 
     if ( bPixelCoords )
         aNewPoly = Application::GetDefaultDevice()->LogicToPixel( aPoly, MapMode( MAP_100TH_MM ) );
@@ -515,7 +515,7 @@ bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 
     if ( IMapObject::IsEqual( rEqObj ) )
     {
-        const Polygon&   rEqPoly = rEqObj.aPoly;
+        const tools::Polygon&   rEqPoly = rEqObj.aPoly;
         const sal_uInt16 nCount = aPoly.GetSize();
         const sal_uInt16 nEqCount = rEqPoly.GetSize();
 

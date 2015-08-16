@@ -111,7 +111,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
         mpAlphaVDev->DrawPixel( rPt );
 }
 
-void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
+void OutputDevice::DrawPixel( const tools::Polygon& rPts, const Color* pColors )
 {
     assert(!is_double_buffered_window());
 
@@ -158,7 +158,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
         mpAlphaVDev->DrawPixel( rPts, pColors );
 }
 
-void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
+void OutputDevice::DrawPixel( const tools::Polygon& rPts, const Color& rColor )
 {
     assert(!is_double_buffered_window());
 

@@ -748,7 +748,7 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
 
     // creating initial bound volume ( without rotation. skewing.and camera )
     basegfx::B3DPolygon aBoundVolume;
-    const Polygon aPolygon( rBoundRect );
+    const tools::Polygon aPolygon( rBoundRect );
 
     for ( i = 0L; i < 4L; i++ )
     {
@@ -787,7 +787,7 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
     if ( aTransformation2D.IsParallel() )
         aBoundVolume = aTransformation2D.ApplySkewSettings( aBoundVolume );
 
-    Polygon aTransformed( 8 );
+    tools::Polygon aTransformed( 8 );
     for ( i = 0L; i < 8L; i++ )
         aTransformed[ (sal_uInt16)i ] = aTransformation2D.Transform2D( aBoundVolume.getB3DPoint( i ) );
 

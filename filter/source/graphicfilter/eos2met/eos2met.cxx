@@ -207,7 +207,7 @@ private:
     void METCloseFigure();
     void METMove(Point aPt);
     void METLine(Point aPt1, Point aPt2);
-    void METLine(const Polygon & rPolygon);
+    void METLine(const tools::Polygon & rPolygon);
     void METLine(const tools::PolyPolygon & rPolyPolygon);
     void METLineAtCurPos(Point aPt);
     void METBox(bool bFill, bool bBoundary,
@@ -297,7 +297,7 @@ void METWriter::WriteClipRect( const Rectangle& rRect )
     sal_uInt32 nPathId = ( rRect.IsEmpty() ) ? 0 : 1;
     if ( nPathId )
     {
-        Polygon aPoly( rRect );
+        tools::Polygon aPoly( rRect );
         METBeginPath( nPathId );
         METLine( aPoly );
         METEndPath();
@@ -1289,7 +1289,7 @@ void METWriter::METLine(Point aPt1, Point aPt2)
 }
 
 
-void METWriter::METLine(const Polygon & rPolygon)
+void METWriter::METLine(const tools::Polygon & rPolygon)
 {
     sal_uInt16 nNumPoints,i,j,nOrderPoints;
     bool bFirstOrder;
@@ -1761,8 +1761,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDILineColor);
                     METBeginPath(1);
-                    Polygon aSimplePoly;
-                    const Polygon& rPoly = pA->GetPolygon();
+                    tools::Polygon aSimplePoly;
+                    const tools::Polygon& rPoly = pA->GetPolygon();
                     if ( rPoly.HasFlags() )
                         rPoly.AdaptiveSubdivide( aSimplePoly );
                     else
@@ -1780,8 +1780,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             case MetaActionType::POLYGON:
             {
                 const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pMA);
-                Polygon aSimplePoly;
-                const Polygon& rPoly = pA->GetPolygon();
+                tools::Polygon aSimplePoly;
+                const tools::Polygon& rPoly = pA->GetPolygon();
                 if ( rPoly.HasFlags() )
                     rPoly.AdaptiveSubdivide( aSimplePoly );
                 else
@@ -1819,7 +1819,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 {
                     if ( aSimplePolyPoly[ i ].HasFlags() )
                     {
-                        Polygon aSimplePoly;
+                        tools::Polygon aSimplePoly;
                         aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
                         aSimplePolyPoly[ i ] = aSimplePoly;
                     }
@@ -1877,7 +1877,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pMA);
                 sal_uInt16                  i;
                 OUString                    aStr;
-                Polygon                     aPolyDummy(1);
+                tools::Polygon aPolyDummy(1);
                 short                       nOrientation;
                 Point                       aPt( pA->GetPoint() );
 
@@ -1930,7 +1930,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 sal_uInt16                          i;
                 sal_Int32                       nNormSize;
                 OUString                        aStr;
-                Polygon                         aPolyDummy(1);
+                tools::Polygon aPolyDummy(1);
                 short                           nOrientation;
                 Point                           aPt( pA->GetPoint() );
                 Point                           aPt2;

@@ -58,7 +58,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
     Rectangle aRect( pData->maPixPos, pData->maPixSize );
     if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation || pData->mnPixSlant )
     {
-        Polygon aPoly( aRect );
+        tools::Polygon aPoly( aRect );
         if( aPoly.GetSize() == 5 )
         {
             aPoly[1].X() += 1;  // include the right border
@@ -105,7 +105,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
                     pAry[5].X() -= delta;
                     pAry[6] = aPoly.GetPoint( 4 );
                 }
-                aPoly = Polygon( 7, pAry);
+                aPoly = tools::Polygon( 7, pAry);
             }
 
             if ( pData->mnOrientation )

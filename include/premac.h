@@ -19,7 +19,6 @@
 
 #define Line MacOSLine
 #define Point MacOSPoint
-#define Polygon MacOSPolygon
 #define Size MacOSSize
 #define TimeValue MacOSTimeValue
 

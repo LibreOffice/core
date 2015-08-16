@@ -172,12 +172,12 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         ( rGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL ||
           rGradient.GetStyle() == GradientStyle_RADIAL || rGradient.GetStyle() == GradientStyle_ELLIPTICAL ) )
     {
-        SvXMLElementExport  aDesc( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
-        Color               aStartColor( rGradient.GetStartColor() ), aEndColor( rGradient.GetEndColor() );
-        sal_uInt16          nAngle = rGradient.GetAngle() % 3600;
-        Point               aObjRectCenter( rObjRect.Center() );
-        Polygon             aPoly( rObjRect );
-        static sal_Int32    nCurGradientId = 1;
+        SvXMLElementExport aDesc( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
+        Color aStartColor( rGradient.GetStartColor() ), aEndColor( rGradient.GetEndColor() );
+        sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+        Point aObjRectCenter( rObjRect.Center() );
+        tools::Polygon aPoly( rObjRect );
+        static sal_Int32 nCurGradientId = 1;
 
         aPoly.Rotate( aObjRectCenter, nAngle );
         Rectangle aRect( aPoly.GetBoundRect() );
@@ -200,7 +200,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
             if( rGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
             {
-                Polygon aLinePoly( 2 );
+                tools::Polygon aLinePoly( 2 );
 
                 aLinePoly[ 0 ] = Point( aObjRectCenter.X(), aRect.Top() );
                 aLinePoly[ 1 ] = Point( aObjRectCenter.X(), aRect.Bottom() );
@@ -1687,9 +1687,9 @@ Rectangle& SVGActionWriter::ImplMap( const Rectangle& rRect, Rectangle& rDstRect
     return( rDstRect = Rectangle( ImplMap( aTL, aTL ), ImplMap( aSz, aSz ) ) );
 }
 
-Polygon& SVGActionWriter::ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) const
+tools::Polygon& SVGActionWriter::ImplMap( const tools::Polygon& rPoly, tools::Polygon& rDstPoly ) const
 {
-    rDstPoly = Polygon( rPoly.GetSize() );
+    rDstPoly = tools::Polygon( rPoly.GetSize() );
 
     for( sal_uInt16 i = 0, nSize = rPoly.GetSize(); i < nSize; ++i )
     {
@@ -1702,7 +1702,7 @@ Polygon& SVGActionWriter::ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) con
 
 tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const
 {
-    Polygon aPoly;
+    tools::Polygon aPoly;
 
     rDstPolyPoly = tools::PolyPolygon();
 
@@ -1723,7 +1723,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
 
     for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
     {
-        const Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
+        const tools::Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
         sal_uInt16 n = 1, nSize = rPoly.GetSize();
 
         if( nSize > 1 )
@@ -2124,7 +2124,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
                 ImplMap( aTmpCenter, aCenter );
                 const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
-                Polygon aPoly( 2 );
+                tools::Polygon aPoly( 2 );
                 // Setting x value of a gradient vector to rotation center to
                 // place a gradient vector in a target polygon.
                 // This would help editing it in SVG editors like inkscape.
@@ -2555,7 +2555,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     {
         if( rFont.GetStrikeout() != STRIKEOUT_NONE || rFont.GetUnderline() != UNDERLINE_NONE )
         {
-            Polygon     aPoly( 4 );
+            tools::Polygon aPoly( 4 );
             const long  nLineHeight = std::max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
 
             if( rFont.GetStrikeout() )
@@ -2799,28 +2799,28 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    Polygon aPoly;
+                    tools::Polygon aPoly;
 
                     switch( nType )
                     {
                         case( MetaActionType::ARC ):
                         {
                             const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
-                            aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                         }
                         break;
 
                         case( MetaActionType::PIE ):
                         {
                             const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
-                            aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                         }
                         break;
 
                         case( MetaActionType::CHORD ):
                         {
                             const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
-                            aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                         }
                         break;
 
@@ -2843,8 +2843,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
-                    const Polygon&              rPoly = pA->GetPolygon();
+                    const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pAction);
+                    const tools::Polygon& rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
                     {
@@ -2876,9 +2876,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
-                    const Polygon               aRectPoly( pA->GetRect() );
-                    const tools::PolyPolygon           aRectPolyPoly( aRectPoly );
+                    const MetaGradientAction* pA = static_cast<const MetaGradientAction*>(pAction);
+                    const tools::Polygon aRectPoly( pA->GetRect() );
+                    const tools::PolyPolygon aRectPolyPoly( aRectPoly );
 
                     ImplWriteGradientEx( aRectPolyPoly, pA->GetGradient(), nWriteFlags );
                 }
@@ -2910,7 +2910,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaTransparentAction*    pA = static_cast<const MetaTransparentAction*>(pAction);
-                    const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                    const tools::PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
 
                     if( rPolyPoly.Count() )
                     {
@@ -3077,9 +3077,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
-                    SvMemoryStream      aMemStm( const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(), StreamMode::READ );
-                    SvtGraphicStroke    aStroke;
-                    tools::PolyPolygon         aStartArrow, aEndArrow;
+                    SvMemoryStream aMemStm( const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(), StreamMode::READ );
+                    SvtGraphicStroke aStroke;
+                    tools::PolyPolygon aStartArrow, aEndArrow;
 
                     ReadSvtGraphicStroke( aMemStm, aStroke );
                     aStroke.getStartArrow( aStartArrow );
@@ -3087,7 +3087,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     // Currently no support for strokes with start/end arrow(s)
                     // added that support
-                    Polygon aPoly;
+                    tools::Polygon aPoly;
 
                     aStroke.getPath(aPoly);
 

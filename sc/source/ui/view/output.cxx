@@ -1675,7 +1675,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                                 //  don't cover the cell contents.
                                 if ( rThisRowInfo.bChanged )
                                 {
-                                    Polygon aPoly( 4, aPoints );
+                                    tools::Polygon aPoly( 4, aPoints );
 
                                     // for DrawPolygon, whitout Pen one pixel is left out
                                     // to the right and below...
@@ -1690,7 +1690,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                         }
                         else
                         {
-                            Polygon aPoly( 4, aPoints );
+                            tools::Polygon aPoly( 4, aPoints );
                             const Color* pColor = pInfo->pColorScale.get();
 
                             // for DrawPolygon, whitout Pen one pixel is left out
@@ -1946,14 +1946,14 @@ bool ScOutputData::SetChangedClip()
         }
         else if (bHad)
         {
-            aPoly.Insert( Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
+            aPoly.Insert( tools::Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
             bHad = false;
         }
         nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
-        aPoly.Insert( Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
+        aPoly.Insert( tools::Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
 
     bool bRet = (aPoly.Count() != 0);
     if (bRet)
@@ -2134,10 +2134,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                 Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
                 Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
 
-                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aLowerRight ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aUpperRight ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerRight ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperRight ) ), lclCornerRectTransparency );
             }
         }
     }

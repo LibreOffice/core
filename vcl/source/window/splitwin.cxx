@@ -1925,7 +1925,7 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectang
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
 
-    Polygon aPoly(3);
+    tools::Polygon aPoly(3);
 
     if (bHorizontal)
     {

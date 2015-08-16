@@ -373,8 +373,8 @@ private:
 
     SvStream * pOrdFile;
 
-    void AddPointsToPath(const Polygon & rPoly);
-    void AddPointsToArea(const Polygon & rPoly);
+    void AddPointsToPath(const tools::Polygon & rPoly);
+    void AddPointsToArea(const tools::Polygon & rPoly);
     void CloseFigure();
     void PushAttr(sal_uInt16 nPushOrder);
     void PopAttr();
@@ -391,8 +391,8 @@ private:
 
 
     bool    IsLineInfo();
-    void        DrawPolyLine( const Polygon& rPolygon );
-    void        DrawPolygon( const Polygon& rPolygon );
+    void        DrawPolyLine( const tools::Polygon& rPolygon );
+    void        DrawPolygon( const tools::Polygon& rPolygon );
     void        DrawPolyPolygon( const tools::PolyPolygon& rPolygon );
     sal_uInt16  ReadBigEndianWord();
     sal_uLong   ReadBigEndian3BytesLong();
@@ -463,7 +463,7 @@ bool OS2METReader::IsLineInfo()
     return ( ! ( aLineInfo.IsDefault() || ( aLineInfo.GetStyle() == LINE_NONE ) || ( pVirDev->GetLineColor() == COL_TRANSPARENT ) ) );
 }
 
-void OS2METReader::DrawPolyLine( const Polygon& rPolygon )
+void OS2METReader::DrawPolyLine( const tools::Polygon& rPolygon )
 {
     if ( aLineInfo.GetStyle() == LINE_DASH || ( aLineInfo.GetWidth() > 1 ) )
         pVirDev->DrawPolyLine( rPolygon, aLineInfo );
@@ -471,7 +471,7 @@ void OS2METReader::DrawPolyLine( const Polygon& rPolygon )
         pVirDev->DrawPolyLine( rPolygon );
 }
 
-void OS2METReader::DrawPolygon( const Polygon& rPolygon )
+void OS2METReader::DrawPolygon( const tools::Polygon& rPolygon )
 {
     if ( IsLineInfo() )
     {
@@ -500,7 +500,7 @@ void OS2METReader::DrawPolyPolygon( const tools::PolyPolygon& rPolyPolygon )
         pVirDev->DrawPolyPolygon( rPolyPolygon );
 }
 
-void OS2METReader::AddPointsToArea(const Polygon & rPoly)
+void OS2METReader::AddPointsToArea(const tools::Polygon & rPoly)
 {
     sal_uInt16 nOldSize, nNewSize,i;
 
@@ -508,7 +508,7 @@ void OS2METReader::AddPointsToArea(const Polygon & rPoly)
     tools::PolyPolygon * pPP=&(pAreaStack->aPPoly);
     if (pPP->Count()==0 || pAreaStack->bClosed) pPP->Insert(rPoly);
     else {
-        Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
+        tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
         nOldSize=aLastPoly.GetSize();
         if (aLastPoly.GetPoint(nOldSize-1)==rPoly.GetPoint(0)) nOldSize--;
         nNewSize=nOldSize+rPoly.GetSize();
@@ -521,7 +521,7 @@ void OS2METReader::AddPointsToArea(const Polygon & rPoly)
     pAreaStack->bClosed=false;
 }
 
-void OS2METReader::AddPointsToPath(const Polygon & rPoly)
+void OS2METReader::AddPointsToPath(const tools::Polygon & rPoly)
 {
     sal_uInt16 nOldSize, nNewSize,i;
 
@@ -529,7 +529,7 @@ void OS2METReader::AddPointsToPath(const Polygon & rPoly)
     tools::PolyPolygon * pPP=&(pPathStack->aPPoly);
     if (pPP->Count()==0 /*|| pPathStack->bClosed==sal_True*/) pPP->Insert(rPoly);
     else {
-        Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
+        tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
         nOldSize=aLastPoly.GetSize();
         if (aLastPoly.GetPoint(nOldSize-1)!=rPoly.GetPoint(0)) pPP->Insert(rPoly);
         else {
@@ -828,7 +828,7 @@ void OS2METReader::ReadLine(bool bGivenPos, sal_uInt16 nOrderLen)
     if (bCoord32) nPolySize=nOrderLen/8; else nPolySize=nOrderLen/4;
     if (!bGivenPos) nPolySize++;
     if (nPolySize==0) return;
-    Polygon aPolygon(nPolySize);
+    tools::Polygon aPolygon(nPolySize);
     for (i=0; i<nPolySize; i++) {
         if (i==0 && !bGivenPos) aPolygon.SetPoint(aAttr.aCurPos,i);
         else aPolygon.SetPoint(ReadPoint(),i);
@@ -857,7 +857,7 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     else aP0=aAttr.aCurPos;
     nPolySize=nOrderLen/2;
     if (nPolySize==0) return;
-    Polygon aPolygon(nPolySize);
+    tools::Polygon aPolygon(nPolySize);
     for (i=0; i<nPolySize; i++) {
 #if defined SOLARIS && defined PPC
         sal_uInt8 nunsignedbyte;
@@ -903,9 +903,9 @@ void OS2METReader::ReadBox(bool bGivenPos)
     Rectangle aBoxRect( P0, aAttr.aCurPos );
 
     if ( pAreaStack )
-        AddPointsToArea( Polygon( aBoxRect ) );
+        AddPointsToArea( tools::Polygon( aBoxRect ) );
     else if ( pPathStack )
-        AddPointsToPath( Polygon( aBoxRect ) );
+        AddPointsToPath( tools::Polygon( aBoxRect ) );
     else
     {
         if ( nFlags & 0x20 )
@@ -926,7 +926,7 @@ void OS2METReader::ReadBox(bool bGivenPos)
 
         if ( IsLineInfo() )
         {
-            Polygon aPolygon( aBoxRect, nHRound, nVRound );
+            tools::Polygon aPolygon( aBoxRect, nHRound, nVRound );
             if ( nFlags & 0x40 )
             {
                 pVirDev->Push( PushFlags::LINECOLOR );
@@ -1024,7 +1024,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     }
     else
     {
-        Polygon aDummyPoly(4);
+        tools::Polygon aDummyPoly(4);
 
         aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() ), 0);                                 // TOP LEFT
         aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() - aSize.Height() ), 1);                // BOTTOM LEFT
@@ -1174,7 +1174,7 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 void OS2METReader::ReadPolygons()
 {
     tools::PolyPolygon aPolyPoly;
-    Polygon aPoly;
+    tools::Polygon aPoly;
     Point aPoint;
 
     sal_uInt8 nFlags(0);
@@ -1231,7 +1231,7 @@ void OS2METReader::ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen)
     if( !nNumPoints )
         return;
 
-    Polygon aPolygon( nNumPoints );
+    tools::Polygon aPolygon( nNumPoints );
 
     for( i=0; i < nNumPoints; i++ )
     {
@@ -1244,16 +1244,16 @@ void OS2METReader::ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen)
     if( !( nNumPoints % 4 ) )
     {
         // create bezier polygon
-        const sal_uInt16    nSegPoints = 25;
-        const sal_uInt16    nSegments = aPolygon.GetSize() >> 2;
-        Polygon         aBezPoly( nSegments * nSegPoints );
+        const sal_uInt16 nSegPoints = 25;
+        const sal_uInt16 nSegments = aPolygon.GetSize() >> 2;
+        tools::Polygon aBezPoly( nSegments * nSegPoints );
 
         sal_uInt16 nSeg, nBezPos, nStartPos;
         for( nSeg = 0, nBezPos = 0, nStartPos = 0; nSeg < nSegments; nSeg++, nStartPos += 4 )
         {
-            const Polygon aSegPoly( aPolygon[ nStartPos ], aPolygon[ nStartPos + 1 ],
-                                    aPolygon[ nStartPos + 3 ], aPolygon[ nStartPos + 2 ],
-                                    nSegPoints );
+            const tools::Polygon aSegPoly( aPolygon[ nStartPos ], aPolygon[ nStartPos + 1 ],
+                                           aPolygon[ nStartPos + 3 ], aPolygon[ nStartPos + 2 ],
+                                           nSegPoints );
 
             for( sal_uInt16 nSegPos = 0; nSegPos < nSegPoints; )
                 aBezPoly[ nBezPos++ ] = aSegPoly[ nSegPos++ ];
@@ -1288,7 +1288,7 @@ void OS2METReader::ReadFillet(bool bGivenPos, sal_uInt16 nOrderLen)
     if (bCoord32) nNumPoints=nOrderLen/8; else nNumPoints=nOrderLen/4;
     if (!bGivenPos) nNumPoints++;
     if (nNumPoints==0) return;
-    Polygon aPolygon(nNumPoints);
+    tools::Polygon aPolygon(nNumPoints);
     for (i=0; i<nNumPoints; i++) {
         if (i==0 && !bGivenPos) aPolygon.SetPoint(aAttr.aCurPos,i);
         else aPolygon.SetPoint(ReadPoint(),i);
@@ -1313,7 +1313,7 @@ void OS2METReader::ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen)
     }
     if (bCoord32) nNumPoints=1+nOrderLen/10;
     else nNumPoints=1+nOrderLen/6;
-    Polygon aPolygon(nNumPoints);
+    tools::Polygon aPolygon(nNumPoints);
     aPolygon.SetPoint(aAttr.aCurPos,0);
     for (i=1; i<nNumPoints; i++) aPolygon.SetPoint(ReadPoint(),i);
     aAttr.aCurPos=aPolygon.GetPoint(nNumPoints-1);
@@ -1355,7 +1355,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 break;
             case  3:   // DIAMOND
             case  7: { // SOLIDDIAMOND
-                Polygon aPoly(4);
+                tools::Polygon aPoly(4);
                 aPoly.SetPoint(Point(x,y+4),0);
                 aPoly.SetPoint(Point(x+4,y),1);
                 aPoly.SetPoint(Point(x,y-4),2);
@@ -1365,7 +1365,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
             }
             case  4:   // SQARE
             case  8: { // SOLIDSUARE
-                Polygon aPoly(4);
+                tools::Polygon aPoly(4);
                 aPoly.SetPoint(Point(x+4,y+4),0);
                 aPoly.SetPoint(Point(x+4,y-4),1);
                 aPoly.SetPoint(Point(x-4,y-4),2);
@@ -1374,7 +1374,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 break;
             }
             case  5: { // SIXPOINTSTAR
-                Polygon aPoly(12);
+                tools::Polygon aPoly(12);
                 aPoly.SetPoint(Point(x  ,y-4),0);
                 aPoly.SetPoint(Point(x+2,y-2),1);
                 aPoly.SetPoint(Point(x+4,y-2),2);
@@ -1391,7 +1391,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 break;
             }
             case  6: { // EIGHTPOINTSTAR
-                Polygon aPoly(16);
+                tools::Polygon aPoly(16);
                 aPoly.SetPoint(Point(x  ,y-4),0);
                 aPoly.SetPoint(Point(x+1,y-2),1);
                 aPoly.SetPoint(Point(x+3,y-3),2);

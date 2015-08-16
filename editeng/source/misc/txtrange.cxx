@@ -50,7 +50,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     {
         const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(i).getDefaultAdaptiveSubdivision());
         nPointCount += aCandidate.count();
-        mpPolyPolygon->Insert( Polygon(aCandidate), (sal_uInt16)i );
+        mpPolyPolygon->Insert( tools::Polygon(aCandidate), (sal_uInt16)i );
     }
 
     if( pLinePolyPolygon )
@@ -62,7 +62,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
         {
             const basegfx::B2DPolygon aCandidate(pLinePolyPolygon->getB2DPolygon(i).getDefaultAdaptiveSubdivision());
             nPointCount += aCandidate.count();
-            mpLinePolyPolygon->Insert( Polygon(aCandidate), (sal_uInt16)i );
+            mpLinePolyPolygon->Insert( tools::Polygon(aCandidate), (sal_uInt16)i );
         }
     }
     else
@@ -306,7 +306,7 @@ void SvxBoundArgs::Calc( const tools::PolyPolygon& rPoly )
     nAct = 0;
     for( sal_uInt16 i = 0; i < rPoly.Count(); ++i )
     {
-        const Polygon& rPol = rPoly[ i ];
+        const tools::Polygon& rPol = rPoly[ i ];
         nCount = rPol.GetSize();
         if( nCount )
         {

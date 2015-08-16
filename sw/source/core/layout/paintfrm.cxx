@@ -1929,10 +1929,10 @@ bool DrawFillAttributes(
                     tools::PolyPolygon tempRegion;
                     for (size_t i = 0; i < rPaintRegion.size(); ++i)
                     {
-                        tempRegion.Insert(Polygon(rPaintRegion[i].SVRect()));
+                        tempRegion.Insert( tools::Polygon(rPaintRegion[i].SVRect()));
                     }
-                    basegfx::B2DPolyPolygon const maskRegion(
-                            tempRegion.getB2DPolyPolygon());
+                    basegfx::B2DPolyPolygon const maskRegion( tempRegion.getB2DPolyPolygon());
+
                     primitives.realloc(1);
                     primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
                             maskRegion, rSequence);
@@ -2259,7 +2259,7 @@ void DrawGraphic(
                         aTmpGrf.Intersection( rOut );
                         if ( aTmpGrf.HasArea() )
                         {
-                            Polygon aGrfPoly( aTmpGrf.SVRect() );
+                            tools::Polygon aGrfPoly( aTmpGrf.SVRect() );
                             aDrawPoly.Insert( aGrfPoly );
                         }
                     }
@@ -6344,8 +6344,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 
 /*static*/ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, SwViewShell* _pViewShell, const Color& rColorUp, const Color& rColorDown)
 {
-    Polygon aTriangleUp(3);
-    Polygon aTriangleDown(3);
+    tools::Polygon aTriangleUp(3);
+    tools::Polygon aTriangleDown(3);
 
     aTriangleUp.SetPoint(aMiddleFirst + Point(0,_pViewShell->GetOut()->PixelToLogic(Size(0,-3)).Height()),0);
     aTriangleUp.SetPoint(aMiddleFirst + Point(_pViewShell->GetOut()->PixelToLogic(Size(-3,0)).Width(),_pViewShell->GetOut()->PixelToLogic(Size(0,3)).Height()),1);

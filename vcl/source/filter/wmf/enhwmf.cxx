@@ -381,7 +381,7 @@ static bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sa
 
             Rectangle aRectangle(Point(nx1, ny1), Point(nx2, ny2));
 
-            Polygon aPolygon(aRectangle);
+            tools::Polygon aPolygon(aRectangle);
             tools::PolyPolygon aPolyPolyOr1(aPolygon);
             tools::PolyPolygon aPolyPolyOr2(rPolyPoly);
             rPolyPoly.GetUnion(aPolyPolyOr1, aPolyPolyOr2);
@@ -485,7 +485,7 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const bool skipFirst)
         nStartIndex ++;
     }
 
-    Polygon aPolygon = ReadPolygon<T>(nStartIndex, nPoints);
+    tools::Polygon aPolygon = ReadPolygon<T>(nStartIndex, nPoints);
     drawer(pOut, aPolygon, skipFirst, bRecordPath);
 }
 
@@ -497,14 +497,14 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const bool skipFirst)
  * pWMF: the stream containings the polygons
  * */
 template <class T>
-Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
+tools::Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
 {
     bool bRecordOk = nPoints <= SAL_MAX_UINT16;
     SAL_WARN_IF(!bRecordOk, "vcl.filter", "polygon record has more polygons than we can handle");
     if (!bRecordOk)
-        return Polygon();
+        return tools::Polygon();
 
-    Polygon aPolygon(nPoints);
+    tools::Polygon aPolygon(nPoints);
     for (sal_uInt16 i = nStartIndex ; i < nPoints && pWMF->good(); i++ )
     {
         T nX, nY;
@@ -545,7 +545,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
         // Get polygon points:
         for ( i = 0; ( i < nPoly ) && pWMF->good(); i++ )
         {
-            Polygon aPolygon = ReadPolygon<T>(0, pnPoints[i]);
+            tools::Polygon aPolygon = ReadPolygon<T>(0, pnPoints[i]);
             pOut->DrawPolyLine( aPolygon, false, bRecordPath );
         }
     }
@@ -603,7 +603,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
                     ++nReadPoints;
                 }
 
-                aPolyPoly.Insert(Polygon(nPointCount, pPtAry.get()));
+                aPolyPoly.Insert( tools::Polygon(nPointCount, pPtAry.get()) );
             }
 
             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );

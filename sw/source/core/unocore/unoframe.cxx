@@ -1474,7 +1474,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                             const :: drawing::PointSequence* pPointSeq = aParam.getConstArray();
                             sal_Int32 nPoints = pPointSeq[i].getLength();
                             const :: awt::Point* pPoints = pPointSeq[i].getConstArray();
-                            Polygon aSet( (sal_uInt16)nPoints );
+                            tools::Polygon aSet( (sal_uInt16)nPoints );
                             for(sal_Int32 j = 0; j < nPoints; j++)
                             {
                                 Point aPoint(pPoints[j].X, pPoints[j].Y);
@@ -2038,7 +2038,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         drawing::PointSequence* pPSeq = aPtSeq.getArray();
                         for(sal_uInt16 i = 0; i < aContour.Count(); i++)
                         {
-                            const Polygon& rPoly = aContour.GetObject(i);
+                            const tools::Polygon& rPoly = aContour.GetObject(i);
                             pPSeq[i].realloc(rPoly.GetSize());
                             awt::Point* pPoints = pPSeq[i].getArray();
                             for(sal_uInt16 j = 0; j < rPoly.GetSize(); j++)

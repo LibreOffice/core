@@ -713,9 +713,9 @@ inline Point lclToMapUnit( long nSubXPos, long nSubYPos )
 }
 
 /** Returns a polygon constructed from a vector of points. */
-inline Polygon lclCreatePolygon( const PointVec& rPoints )
+inline tools::Polygon lclCreatePolygon( const PointVec& rPoints )
 {
-    return Polygon( static_cast< sal_uInt16 >( rPoints.size() ), &rPoints[ 0 ] );
+    return tools::Polygon( static_cast< sal_uInt16 >( rPoints.size() ), &rPoints[ 0 ] );
 }
 
 /** Returns a polygon constructed from the five passed points. */

@@ -197,7 +197,7 @@ private:
     void                ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
     void                ImplScale( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
 
-    void                ImplAddPath( const Polygon & rPolygon );
+    void                ImplAddPath( const tools::Polygon & rPolygon );
     void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
                                     SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray& rDashArray );
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
@@ -206,7 +206,7 @@ private:
     void                ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev );
     void                ImplIntersect( const tools::PolyPolygon& rPolyPoly );
     void                ImplPolyPoly( const tools::PolyPolygon & rPolyPolygon, bool bTextOutline = false );
-    void                ImplPolyLine( const Polygon & rPolygon );
+    void                ImplPolyLine( const tools::Polygon & rPolygon );
 
     void                ImplSetClipRegion( vcl::Region& rRegion );
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
@@ -714,7 +714,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 Rectangle   aRect = static_cast<const MetaEllipseAction*>(pMA)->GetRect();
                 Point       aCenter = aRect.Center();
-                Polygon     aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
+                tools::Polygon aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
@@ -722,7 +722,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::ARC :
             {
-                Polygon aPoly( static_cast<const MetaArcAction*>(pMA)->GetRect(), static_cast<const MetaArcAction*>(pMA)->GetStartPoint(),
+                tools::Polygon aPoly( static_cast<const MetaArcAction*>(pMA)->GetRect(), static_cast<const MetaArcAction*>(pMA)->GetStartPoint(),
                     static_cast<const MetaArcAction*>(pMA)->GetEndPoint(), POLY_ARC );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
@@ -731,7 +731,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::PIE :
             {
-                Polygon aPoly( static_cast<const MetaPieAction*>(pMA)->GetRect(), static_cast<const MetaPieAction*>(pMA)->GetStartPoint(),
+                tools::Polygon aPoly( static_cast<const MetaPieAction*>(pMA)->GetRect(), static_cast<const MetaPieAction*>(pMA)->GetStartPoint(),
                     static_cast<const MetaPieAction*>(pMA)->GetEndPoint(), POLY_PIE );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
@@ -740,7 +740,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::CHORD :
             {
-                Polygon aPoly( static_cast<const MetaChordAction*>(pMA)->GetRect(), static_cast<const MetaChordAction*>(pMA)->GetStartPoint(),
+                tools::Polygon aPoly( static_cast<const MetaChordAction*>(pMA)->GetRect(), static_cast<const MetaChordAction*>(pMA)->GetStartPoint(),
                     static_cast<const MetaChordAction*>(pMA)->GetEndPoint(), POLY_CHORD );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
@@ -749,7 +749,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::POLYLINE :
             {
-                Polygon aPoly( static_cast<const MetaPolyLineAction*>(pMA)->GetPolygon() );
+                tools::Polygon aPoly( static_cast<const MetaPolyLineAction*>(pMA)->GetPolygon() );
                 const LineInfo& rLineInfo = static_cast<const MetaPolyLineAction*>(pMA)->GetLineInfo();
                 ImplWriteLineInfo( rLineInfo );
 
@@ -768,7 +768,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             && POLY_NORMAL != aPoly.GetFlags(a + 2)
                             && a + 3 < nPoints)
                         {
-                            const Polygon aSnippet(4,
+                            const tools::Polygon aSnippet(4,
                                 aPoly.GetConstPointAry() + a,
                                 aPoly.GetConstFlagAry() + a);
                             ImplPolyLine(aSnippet);
@@ -776,7 +776,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         }
                         else
                         {
-                            const Polygon aSnippet(2,
+                            const tools::Polygon aSnippet(2,
                                 aPoly.GetConstPointAry() + a);
                             ImplPolyLine(aSnippet);
                         }
@@ -1301,7 +1301,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             SvtGraphicStroke aStroke;
                             ReadSvtGraphicStroke( aMemStm, aStroke );
 
-                            Polygon aPath;
+                            tools::Polygon aPath;
                             aStroke.getPath( aPath );
 
                             tools::PolyPolygon aStartArrow;
@@ -1565,7 +1565,7 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
 
 
 
-void PSWriter::ImplAddPath( const Polygon & rPolygon )
+void PSWriter::ImplAddPath( const tools::Polygon & rPolygon )
 {
     sal_uInt16 nPointCount = rPolygon.GetSize();
     if ( nPointCount > 1 )
@@ -1656,7 +1656,7 @@ void PSWriter::ImplPolyPoly( const tools::PolyPolygon & rPolyPoly, bool bTextOut
 
 
 
-void PSWriter::ImplPolyLine( const Polygon & rPoly )
+void PSWriter::ImplPolyLine( const tools::Polygon & rPoly )
 {
     if ( bLineColor )
     {
@@ -2149,7 +2149,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         pVirDev->SetTextAlign( eTextAlign );
 
         sal_Int16 nRotation = maFont.GetOrientation();
-        Polygon aPolyDummy( 1 );
+        tools::Polygon aPolyDummy( 1 );
 
         Point aPos( rPos );
         if ( nRotation )

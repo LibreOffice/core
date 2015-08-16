@@ -471,7 +471,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 MetaPolyLineAction* pMetaPolyLineAction = static_cast<MetaPolyLineAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                Polygon aPolygon = pMetaPolyLineAction->GetPolygon();
+                tools::Polygon aPolygon = pMetaPolyLineAction->GetPolygon();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
                 {
                     rWriter.startElement("point");
@@ -496,7 +496,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 MetaPolygonAction* pMetaPolygonAction = static_cast<MetaPolygonAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                Polygon aPolygon = pMetaPolygonAction->GetPolygon();
+                tools::Polygon aPolygon = pMetaPolygonAction->GetPolygon();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
                 {
                     rWriter.startElement("point");

@@ -125,7 +125,7 @@ inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
     rRect.Justify();
 }
 
-inline void ImplScalePoly( Polygon& rPoly, double fScaleX, double fScaleY )
+inline void ImplScalePoly( tools::Polygon& rPoly, double fScaleX, double fScaleY )
 {
     for( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
         ImplScalePoint( rPoly[ i ], fScaleX, fScaleY );
@@ -769,12 +769,12 @@ MetaPolyLineAction::MetaPolyLineAction() :
 MetaPolyLineAction::~MetaPolyLineAction()
 {}
 
-MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly ) :
+MetaPolyLineAction::MetaPolyLineAction( const tools::Polygon& rPoly ) :
     MetaAction  ( MetaActionType::POLYLINE ),
     maPoly      ( rPoly )
 {}
 
-MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly, const LineInfo& rLineInfo ) :
+MetaPolyLineAction::MetaPolyLineAction( const tools::Polygon& rPoly, const LineInfo& rLineInfo ) :
     MetaAction  ( MetaActionType::POLYLINE ),
     maLineInfo  ( rLineInfo ),
     maPoly      ( rPoly )
@@ -811,7 +811,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 3);
 
-    Polygon aSimplePoly;
+    tools::Polygon aSimplePoly;
     maPoly.AdaptiveSubdivide( aSimplePoly );
 
     WritePolygon( rOStm, aSimplePoly );                               // Version 1
@@ -849,7 +849,7 @@ MetaPolygonAction::MetaPolygonAction() :
 MetaPolygonAction::~MetaPolygonAction()
 {}
 
-MetaPolygonAction::MetaPolygonAction( const Polygon& rPoly ) :
+MetaPolygonAction::MetaPolygonAction( const tools::Polygon& rPoly ) :
     MetaAction  ( MetaActionType::POLYGON ),
     maPoly      ( rPoly )
 {}
@@ -881,7 +881,7 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
-    Polygon aSimplePoly;                            // Version 1
+    tools::Polygon aSimplePoly;                            // Version 1
     maPoly.AdaptiveSubdivide( aSimplePoly );
     WritePolygon( rOStm, aSimplePoly );
 
@@ -949,11 +949,11 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     sal_uInt16 nNumberOfComplexPolygons = 0;
     sal_uInt16 i, nPolyCount = maPolyPoly.Count();
 
-    Polygon aSimplePoly;                                // Version 1
+    tools::Polygon aSimplePoly;                                // Version 1
     rOStm.WriteUInt16( nPolyCount );
     for ( i = 0; i < nPolyCount; i++ )
     {
-        const Polygon& rPoly = maPolyPoly.GetObject( i );
+        const tools::Polygon& rPoly = maPolyPoly.GetObject( i );
         if ( rPoly.HasFlags() )
             nNumberOfComplexPolygons++;
         rPoly.AdaptiveSubdivide( aSimplePoly );
@@ -963,7 +963,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt16( nNumberOfComplexPolygons );                  // Version 2
     for ( i = 0; nNumberOfComplexPolygons && ( i < nPolyCount ); i++ )
     {
-        const Polygon& rPoly = maPolyPoly.GetObject( i );
+        const tools::Polygon& rPoly = maPolyPoly.GetObject( i );
         if ( rPoly.HasFlags() )
         {
             rOStm.WriteUInt16( i );
@@ -995,7 +995,7 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
         {
             sal_uInt16 nIndex(0);
             rIStm.ReadUInt16( nIndex );
-            Polygon aPoly;
+            tools::Polygon aPoly;
             aPoly.Read( rIStm );
             if (nIndex >= maPolyPoly.Count())
             {
@@ -3238,7 +3238,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                     SvtGraphicStroke aStroke;
                     ReadSvtGraphicStroke( aMemStm, aStroke );
 
-                    Polygon aPath;
+                    tools::Polygon aPath;
                     aStroke.getPath( aPath );
                     aPath.Move( nXMove, nYMove );
                     aStroke.setPath( aPath );

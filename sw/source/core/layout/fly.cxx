@@ -2532,7 +2532,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
 
                     for ( sal_uInt16 j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
                     {
-                        Polygon& rPoly = rContour[ j ];
+                        tools::Polygon& rPoly = rContour[ j ];
 
                         for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
                         {

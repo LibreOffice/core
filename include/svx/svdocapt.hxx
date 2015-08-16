@@ -41,7 +41,7 @@ namespace sdr { namespace properties {
 class SdrCaptObjGeoData : public SdrTextObjGeoData
 {
 public:
-    Polygon                     aTailPoly;
+    tools::Polygon aTailPoly;
 };
 
 
@@ -60,18 +60,18 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 private:
-    Polygon                     aTailPoly;  // the whole tail polygon
+    tools::Polygon aTailPoly;  // the whole tail polygon
     bool                        mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     bool                        mbFixedTail; // for calc note box fixed tail, default FALSE
     Point                       maFixedTailPos; // for calc note box fixed tail position.
 
 private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
-    SVX_DLLPRIVATE void ImpCalcTail1(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail2(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail3(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail4(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail (const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail4(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
     SVX_DLLPRIVATE void ImpRecalcTail();
 
 public:

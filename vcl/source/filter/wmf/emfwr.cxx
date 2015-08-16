@@ -270,7 +270,7 @@ void EMFWriter::ImplWritePlusPoint( const Point& rPoint )
     m_rStm.WriteUInt16( aPoint.X() ).WriteUInt16( aPoint.Y() );
 }
 
-void EMFWriter::ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_uInt32& nTrans )
+void EMFWriter::ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, const sal_uInt32& nTrans )
 {
     ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
     if( rPoly.GetSize() )
@@ -664,7 +664,7 @@ void EMFWriter::ImplWriteRect( const Rectangle& rRect )
        .WriteInt32( aRect.Bottom() );
 }
 
-void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, bool bClose )
+void EMFWriter::ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose )
 {
     if( rPoly.GetSize() )
     {
@@ -726,7 +726,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly 
 
                     for( i = 0; i < nPolyCount; i++ )
                     {
-                        const Polygon& rPoly = rPolyPoly[ i ];
+                        const tools::Polygon& rPoly = rPolyPoly[ i ];
 
                         for( n = 0; n < rPoly.GetSize(); n++ )
                             ImplWritePoint( rPoly[ n ] );
@@ -751,7 +751,7 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
     for ( i = 0; i < nPolyCount; i++ )
     {
         n = 0;
-        const Polygon& rPoly = rPolyPoly[ i ];
+        const tools::Polygon& rPoly = rPolyPoly[ i ];
         while ( n < rPoly.GetSize() )
         {
             if( n == 0 )
@@ -771,7 +771,7 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
             if ( nBezPoints )
             {
                 ImplBeginRecord( WIN_EMR_POLYBEZIERTO );
-                Polygon aNewPoly( nBezPoints + 1 );
+                tools::Polygon aNewPoly( nBezPoints + 1 );
                 aNewPoly[ 0 ] = rPoly[ n - 1 ];
                 for ( o = 0; o < nBezPoints; o++ )
                     aNewPoly[ o + 1 ] = rPoly[ n + o ];
@@ -791,7 +791,7 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
                 if ( nPoints > 1 )
                 {
                     ImplBeginRecord( WIN_EMR_POLYLINETO );
-                    Polygon aNewPoly( nPoints + 1 );
+                    tools::Polygon aNewPoly( nPoints + 1 );
                     aNewPoly[ 0 ] = rPoly[ n - 1];
                     for ( o = 1; o <= nPoints; o++ )
                         aNewPoly[ o ] = rPoly[ n - 1 + o ];
@@ -969,7 +969,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                ImplWritePolygonRecord( Polygon(aCandidate), false );
+                ImplWritePolygonRecord( tools::Polygon(aCandidate), false );
             }
         }
 
@@ -983,8 +983,8 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
 
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
-                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                ImplWritePolyPolygonRecord(tools::PolyPolygon(Polygon(aPolygon)));
+                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(aPolygon) ));
             }
 
             maVDev->SetLineColor(aOldLineColor);
@@ -1120,28 +1120,28 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
-                    Polygon aPoly;
+                    tools::Polygon aPoly;
 
                     switch( nType )
                     {
                         case( MetaActionType::ARC ):
                         {
                             const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
-                            aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                         }
                         break;
 
                         case( MetaActionType::PIE ):
                         {
                             const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
-                            aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                         }
                         break;
 
                         case( MetaActionType::CHORD ):
                         {
                             const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
-                            aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
+                            aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                         }
                         break;
 
@@ -1161,7 +1161,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( maVDev->IsLineColor() )
                 {
                     const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
-                    const Polygon&              rPoly = pA->GetPolygon();
+                    const tools::Polygon& rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
                     {

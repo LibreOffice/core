@@ -143,7 +143,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
     else
     {
-        Polygon aPol(Rect2Poly(maRect,aGeo));
+        tools::Polygon aPol(Rect2Poly(maRect,aGeo));
 
         for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
         {
@@ -153,7 +153,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         if(bXMirr != bYMirr)
         {
             // turn polygon and move it a little
-            Polygon aPol0(aPol);
+            tools::Polygon aPol0(aPol);
 
             aPol[0] = aPol0[1];
             aPol[1] = aPol0[0];
@@ -229,7 +229,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
     SetGlueReallyAbsolute(true);
 
     // when this is a SdrPathObj, aRect may be uninitialized
-    Polygon aPol(Rect2Poly(maRect.IsEmpty() ? GetSnapRect() : maRect, aGeo));
+    tools::Polygon aPol(Rect2Poly(maRect.IsEmpty() ? GetSnapRect() : maRect, aGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
     for (sal_uInt16 i=0; i<nPointCount; i++) {
@@ -256,14 +256,14 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
         bRota90Merk=aGeo.nRotationAngle % 9000 ==0;
     }
-    Polygon aPol(Rect2Poly(maRect,aGeo));
+    tools::Polygon aPol(Rect2Poly(maRect,aGeo));
     sal_uInt16 i;
     sal_uInt16 nPointCount=aPol.GetSize();
     for (i=0; i<nPointCount; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
     // turn polygon and move it a little
-    Polygon aPol0(aPol);
+    tools::Polygon aPol0(aPol);
     aPol[0]=aPol0[1];
     aPol[1]=aPol0[0];
     aPol[2]=aPol0[3];

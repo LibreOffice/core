@@ -88,6 +88,8 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
+namespace tools {
+
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Polygon
 {
 private:
@@ -96,7 +98,7 @@ private:
     TOOLS_DLLPRIVATE inline void ImplMakeUnique();
 
 public:
-    static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
+    static void         ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
     void                ImplRead( SvStream& rIStream );
     void                ImplWrite( SvStream& rOStream ) const;
 
@@ -119,7 +121,7 @@ public:
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints = 0 );
 
-                        Polygon( const Polygon& rPoly );
+                        Polygon( const tools::Polygon& rPoly );
                         ~Polygon();
 
     void                SetPoint( const Point& rPt, sal_uInt16 nPos );
@@ -162,7 +164,7 @@ public:
         the original polygon is guaranteed to be smaller than one
         pixel.
      */
-    void                AdaptiveSubdivide( Polygon& rResult, const double d = 1.0 ) const;
+    void                AdaptiveSubdivide( tools::Polygon& rResult, const double d = 1.0 ) const;
     static Polygon      SubdivideBezier( const Polygon& rPoly );
 
     void                Move( long nHorzMove, long nVertMove );
@@ -172,21 +174,21 @@ public:
     void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
 
     void                Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags = POLY_NORMAL );
-    void                Insert( sal_uInt16 nPos, const Polygon& rPoly );
+    void                Insert( sal_uInt16 nPos, const tools::Polygon& rPoly );
 
     const Point&        operator[]( sal_uInt16 nPos ) const { return GetPoint( nPos ); }
     Point&              operator[]( sal_uInt16 nPos );
 
-    Polygon&            operator=( const Polygon& rPoly );
-    bool                operator==( const Polygon& rPoly ) const;
-    bool                operator!=( const Polygon& rPoly ) const
+    tools::Polygon&     operator=( const tools::Polygon& rPoly );
+    bool                operator==( const tools::Polygon& rPoly ) const;
+    bool                operator!=( const tools::Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }
-    bool                IsEqual( const Polygon& rPoly ) const;
+    bool                IsEqual( const tools::Polygon& rPoly ) const;
 
     // streaming a Polygon does ignore PolyFlags, so use the Write Or Read
     // method to take care of PolyFlags
-    TOOLS_DLLPUBLIC friend SvStream&    ReadPolygon( SvStream& rIStream, Polygon& rPoly );
-    TOOLS_DLLPUBLIC friend SvStream&    WritePolygon( SvStream& rOStream, const Polygon& rPoly );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly );
+    TOOLS_DLLPUBLIC friend SvStream&    WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly );
 
     void                Read( SvStream& rIStream );
     void                Write( SvStream& rOStream ) const;
@@ -202,7 +204,6 @@ public:
     explicit Polygon(const ::basegfx::B2DPolygon& rPolygon);
 };
 
-namespace tools {
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED PolyPolygon
 {
@@ -213,14 +214,14 @@ private:
 
 public:
                         PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
-                        PolyPolygon( const Polygon& rPoly );
+                        PolyPolygon( const tools::Polygon& rPoly );
                         PolyPolygon( const tools::PolyPolygon& rPolyPoly );
                         ~PolyPolygon();
 
-    void                Insert( const Polygon& rPoly, sal_uInt16 nPos = POLYPOLY_APPEND );
+    void                Insert( const tools::Polygon& rPoly, sal_uInt16 nPos = POLYPOLY_APPEND );
     void                Remove( sal_uInt16 nPos );
     void                Replace( const Polygon& rPoly, sal_uInt16 nPos );
-    const Polygon&      GetObject( sal_uInt16 nPos ) const;
+    const tools::Polygon& GetObject( sal_uInt16 nPos ) const;
 
     bool                IsRect() const;
 
@@ -261,10 +262,10 @@ public:
     void                Rotate( const Point& rCenter, double fSin, double fCos );
     void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
 
-    const Polygon&      operator[]( sal_uInt16 nPos ) const { return GetObject( nPos ); }
-    Polygon&            operator[]( sal_uInt16 nPos );
+    const tools::Polygon& operator[]( sal_uInt16 nPos ) const { return GetObject( nPos ); }
+    tools::Polygon& operator[]( sal_uInt16 nPos );
 
-    tools::PolyPolygon&        operator=( const tools::PolyPolygon& rPolyPoly );
+    tools::PolyPolygon& operator=( const tools::PolyPolygon& rPolyPoly );
     bool                operator==( const tools::PolyPolygon& rPolyPoly ) const;
     bool                operator!=( const tools::PolyPolygon& rPolyPoly ) const
                             { return !(PolyPolygon::operator==( rPolyPoly )); }

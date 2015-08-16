@@ -127,7 +127,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
     {
         const ColorChanger aColors(&rRenderContext, m_nTextBoundaries, m_nColor);
         tools::PolyPolygon aPoly;
-        aPoly.Insert(Polygon(aWholeRect,nCornerWidth,nCornerWidth));
+        aPoly.Insert( tools::Polygon(aWholeRect,nCornerWidth,nCornerWidth));
 
         Color aStartColor(m_nColor);
         aStartColor.IncreaseLuminance(10);
@@ -149,7 +149,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
                         Size(aSize.Width() - nCornerWidth - nCornerWidth,
                              aSize.Height() - nCornerHeight - nCornerHeight));
         ColorChanger aColors(&rRenderContext, COL_WHITE, COL_WHITE);
-        rRenderContext.DrawPolyLine(Polygon(rRenderContext.PixelToLogic(aRect)),
+        rRenderContext.DrawPolyLine( tools::Polygon(rRenderContext.PixelToLogic(aRect)),
                                     LineInfo(LINE_SOLID, 2));
     }
 }

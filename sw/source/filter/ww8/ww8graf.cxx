@@ -424,7 +424,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     if (!bCouldRead)
         return 0;
 
-    Polygon aP( nCount );
+    tools::Polygon aP( nCount );
     Point aPt;
     for (sal_uInt16 i=0; i<nCount; ++i)
     {

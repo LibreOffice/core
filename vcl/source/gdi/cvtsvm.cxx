@@ -51,12 +51,12 @@ void ImplWriteRect( SvStream& rOStm, const Rectangle& rRect )
     WritePair( rOStm, rRect.BottomRight() );
 }
 
-void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
+void ImplReadPoly( SvStream& rIStm, tools::Polygon& rPoly )
 {
     sal_Int32   nSize;
 
     rIStm.ReadInt32( nSize );
-    rPoly = Polygon( (sal_uInt16) nSize );
+    rPoly = tools::Polygon( (sal_uInt16) nSize );
 
     for( sal_uInt16 i = 0; i < (sal_uInt16) nSize; i++ )
         ReadPair( rIStm, rPoly[ i ] );
@@ -64,7 +64,7 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 
 void ImplReadPolyPoly( SvStream& rIStm, tools::PolyPolygon& rPolyPoly )
 {
-    Polygon aPoly;
+    tools::Polygon aPoly;
     sal_Int32   nPolyCount;
 
     rIStm.ReadInt32( nPolyCount );
@@ -94,7 +94,7 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const tools::PolyPolygon& rPolyPo
         // #i102224# Here the possible curved nature of Polygon was
         // ignored (for all those years). Adapted to at least write
         // a polygon representing the curve as good as possible
-         Polygon aSimplePoly;
+        tools::Polygon aSimplePoly;
          rPolyPoly[n].AdaptiveSubdivide(aSimplePoly);
          const sal_uInt16 nSize(aSimplePoly.GetSize());
 
@@ -325,7 +325,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
 
         for(a = 0; a < nPolygonCount; a++)
         {
-            const Polygon& rCandidate = rPolyPolygon.GetObject(a);
+            const tools::Polygon& rCandidate = rPolyPolygon.GetObject(a);
             const sal_uInt16 nPointCount(rCandidate.GetSize());
 
             if(nPointCount)
@@ -357,7 +357,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
 
             for(a = 0; a < nPolygonCount; a++)
             {
-                const Polygon& rCandidate = rPolyPolygon.GetObject(a);
+                const tools::Polygon& rCandidate = rPolyPolygon.GetObject(a);
                 const sal_uInt16 nPointCount(rCandidate.GetSize());
 
                 if(nPointCount)
@@ -424,7 +424,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPol
             nPointCount = nMaxPolygons;
         }
 
-        Polygon aCandidate(nPointCount);
+        tools::Polygon aCandidate(nPointCount);
 
         if (nPointCount)
         {
@@ -504,7 +504,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     // TODO: fix reindentation below if you can accept being blamed by the SCM
         MapMode     aMapMode;
-        Polygon     aActionPoly;
+        tools::Polygon     aActionPoly;
         Rectangle   aRect;
         Point       aPt, aPt1;
         Size        aSz;
@@ -683,7 +683,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        const Polygon aPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+                        const tools::Polygon aPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
 
                         rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
@@ -704,7 +704,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        const Polygon aPoly( aRect, aPt, aPt1, POLY_ARC );
+                        const tools::Polygon aPoly( aRect, aPt, aPt1, POLY_ARC );
 
                         rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
@@ -725,7 +725,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        const Polygon aPoly( aRect, aPt, aPt1, POLY_PIE );
+                        const tools::Polygon aPoly( aRect, aPt, aPt1, POLY_PIE );
 
                         rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
@@ -1578,8 +1578,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( MetaActionType::CHORD ):
             {
                 const MetaChordAction* pAct = static_cast<const MetaChordAction*>(pAction);
-                Polygon                aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
-                                                pAct->GetEndPoint(), POLY_CHORD );
+                tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
+                                           pAct->GetEndPoint(), POLY_CHORD );
                 const sal_uInt16       nPoints = aChordPoly.GetSize();
 
                 rOStm.WriteInt16( GDI_POLYGON_ACTION );
@@ -1599,7 +1599,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 // #i102224# Here the possible curved nature of Polygon was
                 // ignored (for all those years). Adapted to at least write
                 // a polygon representing the curve as good as possible
-                Polygon aSimplePoly;
+                tools::Polygon aSimplePoly;
                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
@@ -1685,7 +1685,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 // #i102224# Here the possible curved nature of Polygon was
                 // ignored (for all those years). Adapted to at least write
                 // a polygon representing the curve as good as possible
-                Polygon aSimplePoly;
+                tools::Polygon aSimplePoly;
                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
 

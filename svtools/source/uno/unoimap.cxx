@@ -226,7 +226,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     case IMAP_OBJ_POLYGON:
     default:
         {
-            const Polygon aPoly( static_cast<const IMapPolygonObject*>(&rMapObject)->GetPolygon(false) );
+            const tools::Polygon aPoly( static_cast<const IMapPolygonObject*>(&rMapObject)->GetPolygon(false) );
 
             const sal_uInt16 nCount = aPoly.GetSize();
             maPolygon.realloc( nCount );
@@ -283,7 +283,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
         {
             const sal_uInt16 nCount = (sal_uInt16)maPolygon.getLength();
 
-            Polygon aPoly( nCount );
+            tools::Polygon aPoly( nCount );
             for( sal_uInt16 nPoint = 0; nPoint < nCount; nPoint++ )
             {
                 Point aPoint( maPolygon[nPoint].X, maPolygon[nPoint].Y );

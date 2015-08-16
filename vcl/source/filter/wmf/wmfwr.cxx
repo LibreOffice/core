@@ -611,9 +611,9 @@ void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, c
     WriteRectangle(rRect);
 }
 
-void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
+void WMFWriter::WMFRecord_Polygon(const tools::Polygon & rPoly)
 {
-    Polygon aSimplePoly;
+    tools::Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
         rPoly.AdaptiveSubdivide( aSimplePoly );
     else
@@ -625,9 +625,9 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
         WritePointXY(aSimplePoly.GetPoint(i));
 }
 
-void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
+void WMFWriter::WMFRecord_PolyLine(const tools::Polygon & rPoly)
 {
-    Polygon aSimplePoly;
+    tools::Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
         rPoly.AdaptiveSubdivide( aSimplePoly );
     else
@@ -641,7 +641,7 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
 
 void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
 {
-    const Polygon * pPoly;
+    const tools::Polygon * pPoly;
     sal_uInt16 nCount,nSize,i,j;
 
     nCount=rPolyPoly.Count();
@@ -650,7 +650,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
     {
         if ( aSimplePolyPoly[ i ].HasFlags() )
         {
-            Polygon aSimplePoly;
+            tools::Polygon aSimplePoly;
             aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
             aSimplePolyPoly[ i ] = aSimplePoly;
         }
@@ -981,7 +981,7 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                WMFRecord_PolyLine(Polygon(aCandidate));
+                WMFRecord_PolyLine( tools::Polygon(aCandidate) );
             }
         }
 
@@ -996,8 +996,8 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
-                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                WMFRecord_Polygon(Polygon(aPolygon));
+                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                WMFRecord_Polygon( tools::Polygon(aPolygon) );
             }
 
             aSrcLineColor = aOldLineColor;
@@ -1119,7 +1119,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case MetaActionType::POLYLINE:
                 {
                     const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pMA);
-                    const Polygon&              rPoly = pA->GetPolygon();
+                    const tools::Polygon& rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
                     {

@@ -864,10 +864,10 @@ Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt
                   -FRound( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
 }
 
-Polygon GDIMetaFile::ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
-                                            const Size& rOffset, double fSin, double fCos )
+tools::Polygon GDIMetaFile::ImplGetRotatedPolygon( const tools::Polygon& rPoly, const Point& rRotatePt,
+                                                   const Size& rOffset, double fSin, double fCos )
 {
-    Polygon aRet( rPoly );
+    tools::Polygon aRet( rPoly );
 
     aRet.Rotate( rRotatePt, fSin, fCos );
     aRet.Move( rOffset.Width(), rOffset.Height() );
@@ -922,7 +922,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
         const double    fSin = sin( fAngle );
         const double    fCos = cos( fAngle );
         Rectangle       aRect=Rectangle( Point(), GetPrefSize() );
-        Polygon         aPoly( aRect );
+        tools::Polygon aPoly( aRect );
 
         aPoly.Rotate( Point(), fSin, fCos );
 
@@ -977,7 +977,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::ROUNDRECT ):
                 {
                     MetaRoundRectAction*    pAct = static_cast<MetaRoundRectAction*>(pAction);
-                    const Polygon           aRoundRectPoly( pAct->GetRect(), pAct->GetHorzRound(), pAct->GetVertRound() );
+                    const tools::Polygon aRoundRectPoly( pAct->GetRect(), pAct->GetHorzRound(), pAct->GetVertRound() );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aRoundRectPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -986,7 +986,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::ELLIPSE ):
                 {
                     MetaEllipseAction*      pAct = static_cast<MetaEllipseAction*>(pAction);
-                    const Polygon           aEllipsePoly( pAct->GetRect().Center(), pAct->GetRect().GetWidth() >> 1, pAct->GetRect().GetHeight() >> 1 );
+                    const tools::Polygon aEllipsePoly( pAct->GetRect().Center(), pAct->GetRect().GetWidth() >> 1, pAct->GetRect().GetHeight() >> 1 );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aEllipsePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -995,7 +995,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::ARC ):
                 {
                     MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
-                    const Polygon   aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_ARC );
+                    const tools::Polygon aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_ARC );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aArcPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -1004,7 +1004,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::PIE ):
                 {
                     MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
-                    const Polygon   aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_PIE );
+                    const tools::Polygon aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_PIE );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aPiePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -1013,7 +1013,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::CHORD ):
                 {
                     MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
-                    const Polygon       aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_CHORD );
+                    const tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), POLY_CHORD );
 
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aChordPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
@@ -1075,7 +1075,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::BMPSCALE ):
                 {
                     MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
-                    Polygon             aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
                     Rectangle           aBmpRect( aBmpPoly.GetBoundRect() );
                     BitmapEx            aBmpEx( pAct->GetBitmap() );
 
@@ -1088,7 +1088,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::BMPSCALEPART ):
                 {
                     MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
-                    Polygon                 aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
                     Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
                     BitmapEx                aBmpEx( pAct->GetBitmap() );
 
@@ -1102,7 +1102,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::BMPEXSCALE ):
                 {
                     MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-                    Polygon                 aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
                     Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
                     BitmapEx                aBmpEx( pAct->GetBitmapEx() );
 
@@ -1115,7 +1115,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( MetaActionType::BMPEXSCALEPART ):
                 {
                     MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
-                    Polygon                     aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
                     Rectangle                   aBmpRect( aBmpPoly.GetBoundRect() );
                     BitmapEx                    aBmpEx( pAct->GetBitmapEx() );
 
@@ -1202,7 +1202,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                 {
                                     SvtGraphicStroke aStroke;
                                     ReadSvtGraphicStroke( aMemStm, aStroke );
-                                    Polygon aPath;
+                                    tools::Polygon aPath;
                                     aStroke.getPath( aPath );
                                     aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
                                     WriteSvtGraphicStroke( aDest, aStroke );
@@ -1256,7 +1256,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 {
                     MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pAction);
                     GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
-                    Polygon                     aMtfPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                    tools::Polygon aMtfPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
                     Rectangle                   aMtfRect( aMtfPoly.GetBoundRect() );
 
                     aTransMtf.Rotate( nAngle10 );
@@ -1269,7 +1269,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 {
                     MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
                     GDIMetaFile     aEPSMtf( pAct->GetSubstitute() );
-                    Polygon         aEPSPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                    tools::Polygon aEPSPoly( ImplGetRotatedPolygon( Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
                     Rectangle       aEPSRect( aEPSPoly.GetBoundRect() );
 
                     aEPSMtf.Rotate( nAngle10 );

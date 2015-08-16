@@ -19,7 +19,6 @@
 
 #undef Line
 #undef Point
-#undef Polygon
 #undef Size
 #undef TimeValue
 

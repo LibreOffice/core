@@ -270,8 +270,8 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
     if( GetType() != GRAPHIC_NONE )
     {
-        Polygon         aClipPoly( Rectangle( rPt, rSz ) );
-        const sal_uInt16    nRot10 = pAttr->GetRotation() % 3600;
+        tools::Polygon aClipPoly( Rectangle( rPt, rSz ) );
+        const sal_uInt16 nRot10 = pAttr->GetRotation() % 3600;
         const Point     aOldOrigin( rPt );
         const MapMode   aMap100( MAP_100TH_MM );
         Size            aSize100;
@@ -318,7 +318,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
             if( nRot10 )
             {
-                Polygon aOriginPoly( 1 );
+                tools::Polygon aOriginPoly( 1 );
 
                 aOriginPoly[ 0 ] = rPt;
                 aOriginPoly.Rotate( aOldOrigin, nRot10 );
@@ -481,7 +481,7 @@ bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
         if ( pAttr && pAttr->IsCropped() )
         {
             tools::PolyPolygon aClipPolyPoly;
-            bool        bRectClip;
+            bool bRectClip;
             ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
         }
         bRet = mpMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );

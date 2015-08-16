@@ -259,7 +259,7 @@ namespace vclcanvas
             const Point& rEndPoint( tools::mapRealPoint2D( _aEndPoint,
                                                            viewState, renderState ) );
 
-            ::Polygon aPoly(4);
+            ::tools::Polygon aPoly(4);
             aPoly.SetPoint( rStartPoint, 0 );
             aPoly.SetFlags( 0, POLY_NORMAL );
             aPoly.SetPoint( rCtrlPoint1, 1 );

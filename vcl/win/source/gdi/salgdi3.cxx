@@ -2316,7 +2316,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
             pPoints[i].Y() = -pPoints[i].Y();
 
         // insert into polypolygon
-        Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
+        tools::Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
         // convert to B2DPolyPolygon
         // TODO: get rid of the intermediate PolyPolygon
         rB2DPolyPoly.append( aPoly.getB2DPolygon() );

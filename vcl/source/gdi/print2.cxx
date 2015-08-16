@@ -429,36 +429,36 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
             break;
 
         case MetaActionType::ROUNDRECT:
-            aActionBounds = Polygon( static_cast<const MetaRoundRectAction&>(rAct).GetRect(),
-                                     static_cast<const MetaRoundRectAction&>(rAct).GetHorzRound(),
-                                     static_cast<const MetaRoundRectAction&>(rAct).GetVertRound() ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaRoundRectAction&>(rAct).GetRect(),
+                                            static_cast<const MetaRoundRectAction&>(rAct).GetHorzRound(),
+                                            static_cast<const MetaRoundRectAction&>(rAct).GetVertRound() ).GetBoundRect();
             break;
 
         case MetaActionType::ELLIPSE:
         {
             const Rectangle& rRect = static_cast<const MetaEllipseAction&>(rAct).GetRect();
-            aActionBounds = Polygon( rRect.Center(),
-                                     rRect.GetWidth() >> 1,
-                                     rRect.GetHeight() >> 1 ).GetBoundRect();
+            aActionBounds = tools::Polygon( rRect.Center(),
+                                            rRect.GetWidth() >> 1,
+                                            rRect.GetHeight() >> 1 ).GetBoundRect();
             break;
         }
 
         case MetaActionType::ARC:
-            aActionBounds = Polygon( static_cast<const MetaArcAction&>(rAct).GetRect(),
-                                     static_cast<const MetaArcAction&>(rAct).GetStartPoint(),
-                                     static_cast<const MetaArcAction&>(rAct).GetEndPoint(), POLY_ARC ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaArcAction&>(rAct).GetRect(),
+                                            static_cast<const MetaArcAction&>(rAct).GetStartPoint(),
+                                            static_cast<const MetaArcAction&>(rAct).GetEndPoint(), POLY_ARC ).GetBoundRect();
             break;
 
         case MetaActionType::PIE:
-            aActionBounds = Polygon( static_cast<const MetaPieAction&>(rAct).GetRect(),
-                                     static_cast<const MetaPieAction&>(rAct).GetStartPoint(),
-                                     static_cast<const MetaPieAction&>(rAct).GetEndPoint(), POLY_PIE ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaPieAction&>(rAct).GetRect(),
+                                            static_cast<const MetaPieAction&>(rAct).GetStartPoint(),
+                                            static_cast<const MetaPieAction&>(rAct).GetEndPoint(), POLY_PIE ).GetBoundRect();
             break;
 
         case MetaActionType::CHORD:
-            aActionBounds = Polygon( static_cast<const MetaChordAction&>(rAct).GetRect(),
-                                     static_cast<const MetaChordAction&>(rAct).GetStartPoint(),
-                                     static_cast<const MetaChordAction&>(rAct).GetEndPoint(), POLY_CHORD ).GetBoundRect();
+            aActionBounds = tools::Polygon( static_cast<const MetaChordAction&>(rAct).GetRect(),
+                                            static_cast<const MetaChordAction&>(rAct).GetStartPoint(),
+                                            static_cast<const MetaChordAction&>(rAct).GetEndPoint(), POLY_CHORD ).GetBoundRect();
             break;
 
         case MetaActionType::POLYLINE:
@@ -774,7 +774,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 }
                 case MetaActionType::POLYGON:
                 {
-                    const Polygon aPoly(
+                    const tools::Polygon aPoly(
                         static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
                     if( !basegfx::tools::isRectangle(
                             aPoly.getB2DPolygon()) ||

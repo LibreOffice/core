@@ -25,8 +25,10 @@
 class Point;
 class Rectangle;
 class SvStream;
-class Polygon;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class OutputDevice;
 
 #define XPOLYPOLY_APPEND     0xFFFF
@@ -63,7 +65,7 @@ protected:
 public:
     XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
     XPolygon( const XPolygon& rXPoly );
-    XPolygon( const Polygon& rPoly );
+    XPolygon( const tools::Polygon& rPoly );
     XPolygon( const Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
               sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,

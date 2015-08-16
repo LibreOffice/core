@@ -97,16 +97,14 @@ void setupMethodStubs( functor_vector_type& res )
     const Point aPt3(0,0);
     const Point aPt4(450,450);
 
-    const Rectangle   aRect(aPt1,aPt2);
+    const Rectangle aRect(aPt1,aPt2);
     const Rectangle   aRect2(aPt3,aPt4);
-    const Polygon     aPoly(aRect);
-    const Polygon     aPoly2(aRect2);
-    tools::PolyPolygon       aPolyPoly(aPoly);
+    const tools::Polygon aPoly(aRect);
+    const tools::Polygon aPoly2(aRect2);
+    tools::PolyPolygon aPolyPoly(aPoly);
     aPolyPoly.Insert( aPoly2 );
-    Polygon           aPoly3(aPoly2);
-    aPoly3.Rotate( aPoly3.GetBoundRect().Center(),
-                   900 );
-
+    tools::Polygon aPoly3(aPoly2);
+    aPoly3.Rotate( aPoly3.GetBoundRect().Center(), 900 );
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
 #ifdef FIXME_VDEV
@@ -193,7 +191,7 @@ void setupMethodStubs( functor_vector_type& res )
     add(res,
         "DrawPolyLine",
         boost::bind(
-            (void (OutputDevice::*)( const Polygon& ))(
+                (void (OutputDevice::*)( const tools::Polygon& ))(
                 &OutputDevice::DrawPolyLine),
             _1,
             aPoly ));
@@ -204,7 +202,7 @@ void setupMethodStubs( functor_vector_type& res )
     add(res,
         "DrawPolyLine(LineInfo)",
         boost::bind(
-            (void (OutputDevice::*)( const Polygon&, const LineInfo& ))(
+                (void (OutputDevice::*)( const tools::Polygon&, const LineInfo& ))(
                 &OutputDevice::DrawPolyLine),
             _1,
             aPoly, aLineInfo ));
@@ -213,7 +211,7 @@ void setupMethodStubs( functor_vector_type& res )
     add(res,
         "DrawPolygon",
         boost::bind(
-            (void (OutputDevice::*)( const Polygon& ))
+                (void (OutputDevice::*)( const tools::Polygon& ))
                 &OutputDevice::DrawPolygon,
             _1,
             aPoly ));
@@ -830,8 +828,8 @@ void outDevGrind(vcl::RenderContext& rTarget, sal_Int32 nTurns = 100)
     setupMethodStubs( aMethods );
 
     const Rectangle aClipRect(10,10,1000,1000);
-    const Polygon   aPoly1( aClipRect );
-    Polygon         aPoly2( aClipRect );
+    const tools::Polygon aPoly1( aClipRect );
+    tools::Polygon aPoly2( aClipRect );
     aPoly2.Rotate(aClipRect.Center(),450);
     tools::PolyPolygon     aClipPoly(aPoly1);
     aClipPoly.Insert(aPoly2);

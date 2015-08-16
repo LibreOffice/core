@@ -19,7 +19,6 @@
 
 /* not protected, do only include once! */
 
-#undef Polygon
 #undef Rectangle
 #undef DELETE
 #undef OPTIONAL
@@ -79,8 +78,6 @@
 extern "C"
 {
 BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
-BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt );
-BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

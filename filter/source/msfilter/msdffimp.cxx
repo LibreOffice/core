@@ -539,7 +539,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 sal_uInt32  nPointCount = 0;
                                                 for ( k = 0; bNotFound && ( k < nPolySize ); k++ )
                                                 {
-                                                    const Polygon& rPolygon = aPolyPoly.GetObject( k );
+                                                    const tools::Polygon& rPolygon = aPolyPoly.GetObject( k );
                                                     for ( j = 0; bNotFound && ( j < rPolygon.GetSize() ); j++ )
                                                     {
                                                         PolyFlags eFlags = rPolygon.GetFlags( j );
@@ -5381,7 +5381,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
             if (bOk)
             {
-                pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
+                pTextImpRec->pWrapPolygon = new tools::Polygon(nNumElemVert);
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
                     sal_Int32 nX(0), nY(0);
@@ -7353,7 +7353,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
         pClientDataBuffer = 0;
 
     if (rCopy.pWrapPolygon)
-        pWrapPolygon = new Polygon(*rCopy.pWrapPolygon);
+        pWrapPolygon = new tools::Polygon(*rCopy.pWrapPolygon);
     else
         pWrapPolygon = 0;
 }

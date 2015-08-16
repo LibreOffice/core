@@ -560,7 +560,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 SvtGraphicStroke aStroke;
                                 ReadSvtGraphicStroke( aMemStm, aStroke );
 
-                                Polygon aPath;
+                                tools::Polygon aPath;
                                 aStroke.getPath( aPath );
 
                                 tools::PolyPolygon aStartArrow;
@@ -619,7 +619,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                                 && POLY_NORMAL != aPath.GetFlags(a + 2)
                                                 && a + 3 < nPoints)
                                             {
-                                                const Polygon aSnippet(4,
+                                                const tools::Polygon aSnippet(4,
                                                     aPath.GetConstPointAry() + a,
                                                     aPath.GetConstFlagAry() + a);
                                                 m_rOuterFace.DrawPolyLine( aSnippet, aInfo );
@@ -627,7 +627,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                             }
                                             else
                                             {
-                                                const Polygon aSnippet(2,
+                                                const tools::Polygon aSnippet(2,
                                                     aPath.GetConstPointAry() + a);
                                                 m_rOuterFace.DrawPolyLine( aSnippet, aInfo );
                                             }

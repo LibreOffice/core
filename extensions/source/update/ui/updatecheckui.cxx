@@ -90,9 +90,9 @@ namespace
 class BubbleWindow : public FloatingWindow
 {
     Point           maTipPos;
-    vcl::Region          maBounds;
-    Polygon         maRectPoly;
-    Polygon         maTriPoly;
+    vcl::Region     maBounds;
+    tools::Polygon  maRectPoly;
+    tools::Polygon  maTriPoly;
     OUString        maBubbleTitle;
     OUString        maBubbleText;
     Image           maBubbleImage;
@@ -785,7 +785,7 @@ void BubbleWindow::Resize()
         return;
 
     Rectangle aRect( 0, TIP_HEIGHT, aSize.Width(), aSize.Height() - TIP_HEIGHT );
-    maRectPoly = Polygon( aRect, 6, 6 );
+    maRectPoly = tools::Polygon( aRect, 6, 6 );
     vcl::Region aRegion( maRectPoly );
     long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
 
@@ -794,7 +794,7 @@ void BubbleWindow::Resize()
     aPointArr[1] = Point( nTipOffset, 0 );
     aPointArr[2] = Point( nTipOffset + TIP_WIDTH , TIP_HEIGHT );
     aPointArr[3] = Point( nTipOffset, TIP_HEIGHT );
-     maTriPoly = Polygon( 4, aPointArr );
+    maTriPoly = tools::Polygon( 4, aPointArr );
     vcl::Region aTriRegion( maTriPoly );
 
     aRegion.Union( aTriRegion);

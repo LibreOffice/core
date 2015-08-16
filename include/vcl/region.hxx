@@ -27,8 +27,12 @@
 
 class ImplRegionBand;
 class RegionBand;
-class Polygon;
-namespace tools { class PolyPolygon; }
+
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
+
 namespace vcl { class Window; }
 class OutputDevice;
 class Bitmap;
@@ -66,7 +70,7 @@ public:
 
     explicit Region(bool bIsNull = false); // default creates empty region, with true a null region is created
     explicit Region(const Rectangle& rRect);
-    explicit Region(const Polygon& rPolygon);
+    explicit Region(const tools::Polygon& rPolygon);
     explicit Region(const tools::PolyPolygon& rPolyPoly);
     explicit Region(const basegfx::B2DPolyPolygon&);
     Region(const vcl::Region& rRegion);

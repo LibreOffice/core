@@ -77,7 +77,7 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
 
         const Color& rFieldTextColor = SwViewOption::GetFontColor();
         rRenderContext.SetFillColor(rFieldTextColor);
-        rRenderContext.DrawPolygon(Polygon(3, aArr));
+        rRenderContext.DrawPolygon( tools::Polygon(3, aArr));
     }
     else
     {

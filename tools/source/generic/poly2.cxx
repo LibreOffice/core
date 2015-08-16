@@ -41,7 +41,7 @@ ImplPolyPolygon::ImplPolyPolygon( sal_uInt16 nInitSize )
     mnCount     = nInitSize;
     mnSize      = nInitSize;
     mnResize    = 16;
-    mpPolyAry   = new Polygon*[ nInitSize ];
+    mpPolyAry   = new tools::Polygon*[ nInitSize ];
 }
 
 ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
@@ -53,9 +53,9 @@ ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
 
     if ( rImplPolyPoly.mpPolyAry )
     {
-        mpPolyAry = new Polygon*[mnSize];
+        mpPolyAry = new tools::Polygon*[mnSize];
         for ( sal_uInt16 i = 0; i < mnCount; i++ )
-            mpPolyAry[i] = new Polygon( *rImplPolyPoly.mpPolyAry[i] );
+            mpPolyAry[i] = new tools::Polygon( *rImplPolyPoly.mpPolyAry[i] );
     }
     else
         mpPolyAry = NULL;
@@ -86,12 +86,12 @@ PolyPolygon::PolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
     mpImplPolyPolygon = new ImplPolyPolygon( nInitSize, nResize );
 }
 
-PolyPolygon::PolyPolygon( const Polygon& rPoly )
+PolyPolygon::PolyPolygon( const tools::Polygon& rPoly )
 {
     if ( rPoly.GetSize() )
     {
         mpImplPolyPolygon = new ImplPolyPolygon( 1 );
-        mpImplPolyPolygon->mpPolyAry[0] = new Polygon( rPoly );
+        mpImplPolyPolygon->mpPolyAry[0] = new tools::Polygon( rPoly );
     }
     else
         mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
@@ -113,7 +113,7 @@ PolyPolygon::~PolyPolygon()
         delete mpImplPolyPolygon;
 }
 
-void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
+void PolyPolygon::Insert( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
     if ( mpImplPolyPolygon->mnCount >= MAX_POLYGONS )
         return;
@@ -128,16 +128,16 @@ void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
         nPos = mpImplPolyPolygon->mnCount;
 
     if ( !mpImplPolyPolygon->mpPolyAry )
-        mpImplPolyPolygon->mpPolyAry = new Polygon*[mpImplPolyPolygon->mnSize];
+        mpImplPolyPolygon->mpPolyAry = new tools::Polygon*[mpImplPolyPolygon->mnSize];
     else if ( mpImplPolyPolygon->mnCount == mpImplPolyPolygon->mnSize )
     {
         sal_uInt16      nOldSize = mpImplPolyPolygon->mnSize;
         sal_uInt16      nNewSize = nOldSize + mpImplPolyPolygon->mnResize;
-        Polygon**       pNewAry;
+        tools::Polygon** pNewAry;
 
         if ( nNewSize >= MAX_POLYGONS )
             nNewSize = MAX_POLYGONS;
-        pNewAry = new Polygon*[nNewSize];
+        pNewAry = new tools::Polygon*[nNewSize];
         memcpy( pNewAry, mpImplPolyPolygon->mpPolyAry, nPos*sizeof(Polygon*) );
         memcpy( pNewAry+nPos+1, mpImplPolyPolygon->mpPolyAry+nPos,
                 (nOldSize-nPos)*sizeof(Polygon*) );
@@ -152,7 +152,7 @@ void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
                  (mpImplPolyPolygon->mnCount-nPos)*sizeof(Polygon*) );
     }
 
-    mpImplPolyPolygon->mpPolyAry[nPos] = new Polygon( rPoly );
+    mpImplPolyPolygon->mpPolyAry[nPos] = new tools::Polygon( rPoly );
     mpImplPolyPolygon->mnCount++;
 }
 
@@ -173,7 +173,7 @@ void PolyPolygon::Remove( sal_uInt16 nPos )
              (mpImplPolyPolygon->mnCount-nPos)*sizeof(Polygon*) );
 }
 
-void PolyPolygon::Replace( const Polygon& rPoly, sal_uInt16 nPos )
+void PolyPolygon::Replace( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
     assert(nPos < Count() && "PolyPolygon::Replace(): nPos >= nSize");
 
@@ -184,10 +184,10 @@ void PolyPolygon::Replace( const Polygon& rPoly, sal_uInt16 nPos )
     }
 
     delete mpImplPolyPolygon->mpPolyAry[nPos];
-    mpImplPolyPolygon->mpPolyAry[nPos] = new Polygon( rPoly );
+    mpImplPolyPolygon->mpPolyAry[nPos] = new tools::Polygon( rPoly );
 }
 
-const Polygon& PolyPolygon::GetObject( sal_uInt16 nPos ) const
+const tools::Polygon& PolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
     assert(nPos < Count() && "PolyPolygon::GetObject(): nPos >= nSize");
 
@@ -276,7 +276,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimize
                 if( bEdges )
                 {
                     mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( PolyOptimizeFlags::NO_SAME );
-                    Polygon::ImplReduceEdges( *( mpImplPolyPolygon->mpPolyAry[ i ] ), fArea, nPercent );
+                    tools::Polygon::ImplReduceEdges( *( mpImplPolyPolygon->mpPolyAry[ i ] ), fArea, nPercent );
                 }
 
                 if( bool(nOptimizeFlags) )
@@ -290,7 +290,7 @@ void PolyPolygon::AdaptiveSubdivide( tools::PolyPolygon& rResult, const double d
 {
     rResult.Clear();
 
-    Polygon aPolygon;
+    tools::Polygon aPolygon;
 
     for( sal_uInt16 i = 0; i < mpImplPolyPolygon->mnCount; i++ )
     {
@@ -304,7 +304,7 @@ tools::PolyPolygon PolyPolygon::SubdivideBezier( const tools::PolyPolygon& rPoly
     sal_uInt16 i, nPolys = rPolyPoly.Count();
     tools::PolyPolygon aPolyPoly( nPolys );
     for( i=0; i<nPolys; ++i )
-        aPolyPoly.Insert( Polygon::SubdivideBezier( rPolyPoly.GetObject(i) ) );
+        aPolyPoly.Insert( tools::Polygon::SubdivideBezier( rPolyPoly.GetObject(i) ) );
 
     return aPolyPoly;
 }
@@ -476,7 +476,7 @@ Rectangle PolyPolygon::GetBoundRect() const
 
     for ( sal_uInt16 n = 0; n < nPolyCount; n++ )
     {
-        const Polygon*  pPoly = mpImplPolyPolygon->mpPolyAry[n];
+        const tools::Polygon*  pPoly = mpImplPolyPolygon->mpPolyAry[n];
         const Point*    pAry = pPoly->GetConstPointAry();
         sal_uInt16          nPointCount = pPoly->GetSize();
 
@@ -553,7 +553,7 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
-    Polygon* pPoly;
+    tools::Polygon* pPoly;
     sal_uInt16 nPolyCount(0);
 
     // Read number of polygons
@@ -579,7 +579,7 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         {
-            pPoly = new Polygon;
+            pPoly = new tools::Polygon;
             ReadPolygon( rIStream, *pPoly );
             rPolyPoly.mpImplPolyPolygon->mpPolyAry[i] = pPoly;
         }
@@ -611,7 +611,7 @@ void PolyPolygon::Read( SvStream& rIStream )
 
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
-    Polygon* pPoly;
+    tools::Polygon* pPoly;
     sal_uInt16 nPolyCount(0);
 
     // Read number of polygons
@@ -637,7 +637,7 @@ void PolyPolygon::Read( SvStream& rIStream )
 
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         {
-            pPoly = new Polygon;
+            pPoly = new tools::Polygon;
             pPoly->ImplRead( rIStream );
             mpImplPolyPolygon->mpPolyAry[i] = pPoly;
         }
@@ -668,7 +668,7 @@ basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
 
     for(sal_uInt16 a(0); a < mpImplPolyPolygon->mnCount; a++)
     {
-        Polygon* pCandidate = mpImplPolyPolygon->mpPolyAry[a];
+        tools::Polygon* pCandidate = mpImplPolyPolygon->mpPolyAry[a];
         aRetval.append(pCandidate->getB2DPolygon());
     }
 
@@ -689,7 +689,7 @@ PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
         for(sal_uInt16 a(0); a < nCount; a++)
         {
             basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
-            mpImplPolyPolygon->mpPolyAry[a] = new Polygon( aCandidate );
+            mpImplPolyPolygon->mpPolyAry[a] = new tools::Polygon( aCandidate );
         }
     }
     else

@@ -67,7 +67,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 
     // define an invisible button with the size of a page
     Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
-    Polygon aPoly( aRect );
+    tools::Polygon aPoly( aRect );
     FillStyle aFill = FillStyle( Color(COL_WHITE) );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );
 
@@ -331,7 +331,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
 
 
 
-sal_uInt16 Writer::defineShape( const Polygon& rPoly, const FillStyle& rFillStyle )
+sal_uInt16 Writer::defineShape( const tools::Polygon& rPoly, const FillStyle& rFillStyle )
 {
     const tools::PolyPolygon aPolyPoly( rPoly );
     return defineShape( aPolyPoly, rFillStyle );
@@ -368,7 +368,7 @@ sal_uInt16 Writer::defineShape( const tools::PolyPolygon& rPolyPoly, const FillS
     sal_uInt16 i;
     for( i = 0; i < nCount; i++ )
     {
-        const Polygon& rPoly = rPolyPoly[ i ];
+        const tools::Polygon& rPoly = rPolyPoly[ i ];
         if( rPoly.GetSize() )
             Impl_addPolygon( aBits, rPoly, true );
     }
@@ -413,7 +413,7 @@ sal_uInt16 Writer::defineShape( const tools::PolyPolygon& rPolyPoly, sal_uInt16 
     sal_uInt16 i;
     for( i = 0; i < nCount; i++ )
     {
-        const Polygon& rPoly = rPolyPoly[ i ];
+        const tools::Polygon& rPoly = rPolyPoly[ i ];
         if( rPoly.GetSize() )
             Impl_addPolygon( aBits, rPoly, false );
     }

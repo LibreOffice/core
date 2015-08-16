@@ -1776,8 +1776,11 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             case IMAP_OBJ_POLYGON:
                             {
-                                Polygon aArea(static_cast<IMapPolygonObject*>(pArea)->GetPolygon(false));
-                                aStr.append(CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()), Size(aLogPos.X() - pPage->GetLftBorder(), aLogPos.Y() - pPage->GetUppBorder()), fLogicToPixel, aURL));
+                                tools::Polygon aArea(static_cast<IMapPolygonObject*>(pArea)->GetPolygon(false));
+                                aStr.append(CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()),
+                                                                  Size(aLogPos.X() - pPage->GetLftBorder(),
+                                                                       aLogPos.Y() - pPage->GetUppBorder()),
+                                                                  fLogicToPixel, aURL));
                             }
                             break;
 

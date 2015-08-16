@@ -74,7 +74,7 @@ private:
     void                ImplWriteSize( const Size& rSize);
     void                ImplWriteRect( const Rectangle& rRect );
     void                ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClose );
-    void                ImplWritePolygonRecord( const Polygon& rPoly, bool bClose );
+    void                ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose );
     void                ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
     void                ImplWriteTextRecord( const Point& rPos, const OUString& rText, const long* pDXArray, sal_uInt32 nWidth );
@@ -83,7 +83,7 @@ private:
     void                ImplWrite( const GDIMetaFile& rMtf );
     void                WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSizeLog );
     void                ImplWritePlusEOF();
-    void                ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_uInt32& nTrans );
+    void                ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, const sal_uInt32& nTrans );
     void                ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTrans );
     void                ImplWritePlusPoint( const Point& rPoint );
 

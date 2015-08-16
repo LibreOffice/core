@@ -33,8 +33,10 @@
 namespace vcl { class Window; }
 class Bitmap;
 class BitmapEx;
-class Polygon;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class Size;
 class Graphic;
 class GDIMetaFile;

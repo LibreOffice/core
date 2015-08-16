@@ -41,7 +41,9 @@
 class GraphicFilter;
 class VirtualDevice;
 class INetURLObject;
-class Polygon;
+namespace tools {
+    class Polygon;
+}
 
 class SVX_DLLPUBLIC XOutBitmap
 {
@@ -62,9 +64,9 @@ public:
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
 
-    static Polygon      GetCountour( const Bitmap& rBmp, const sal_uIntPtr nContourFlags,
-                                     const sal_uInt8 cEdgeDetectThreshold = 50,
-                                     const Rectangle* pWorkRect = NULL );
+    static tools::Polygon GetCountour( const Bitmap& rBmp, const sal_uIntPtr nContourFlags,
+                                       const sal_uInt8 cEdgeDetectThreshold = 50,
+                                       const Rectangle* pWorkRect = NULL );
 };
 
 SVX_DLLPUBLIC bool DitherBitmap( Bitmap& rBitmap );

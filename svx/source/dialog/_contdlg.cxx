@@ -350,7 +350,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERT(  m_pContourWnd->GetGraphic().GetType() != GRAPHIC_NONE, "Graphic must've been set first!" );
 
-    tools::PolyPolygon     aPolyPoly( rPolyPoly );
+    tools::PolyPolygon aPolyPoly( rPolyPoly );
     const MapMode   aMap100( MAP_100TH_MM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
@@ -358,7 +358,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
     for ( sal_uInt16 j = 0, nPolyCount = aPolyPoly.Count(); j < nPolyCount; j++ )
     {
-        Polygon& rPoly = aPolyPoly[ j ];
+        tools::Polygon& rPoly = aPolyPoly[ j ];
 
         for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
         {
@@ -388,7 +388,7 @@ tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
 
         for ( sal_uInt16 j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
         {
-            Polygon& rPoly = aRetPolyPoly[ j ];
+            tools::Polygon& rPoly = aRetPolyPoly[ j ];
 
             for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
             {
