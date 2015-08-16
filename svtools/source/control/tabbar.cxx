@@ -2460,7 +2460,7 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
             SetFillColor(pItem->maTabTextColor);
         }
 
-        Polygon aPoly(3);
+        tools::Polygon aPoly(3);
         aPoly.SetPoint(Point(nX, nY), 0);
         aPoly.SetPoint(Point(nX + nTriangleWidth, nY - nTriangleWidth), 1);
         aPoly.SetPoint(Point(nX + nTriangleWidth, nY + nTriangleWidth), 2);
@@ -2480,7 +2480,7 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
             SetLineColor(pItem->maTabTextColor);
             SetFillColor(pItem->maTabTextColor);
         }
-        Polygon aPoly(3);
+        tools::Polygon aPoly(3);
         aPoly.SetPoint(Point(nX, nY), 0);
         aPoly.SetPoint(Point(nX - nTriangleWidth, nY - nTriangleWidth), 1);
         aPoly.SetPoint(Point(nX - nTriangleWidth, nY + nTriangleWidth), 2);

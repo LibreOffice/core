@@ -34,8 +34,10 @@ class MetaCommentAction;
 class SvStream;
 class Color;
 class BitmapEx;
-class Polygon;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class Gradient;
 
 
@@ -93,7 +95,7 @@ private:
 
     SAL_DLLPRIVATE Point                ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
                                                              const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE Polygon              ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE tools::Polygon       ImplGetRotatedPolygon( const tools::Polygon& rPoly, const Point& rRotatePt,
                                                                const Size& rOffset, double fSin, double fCos );
     SAL_DLLPRIVATE tools::PolyPolygon   ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPoly, const Point& rRotatePt,
                                                                    const Size& rOffset, double fSin, double fCos );

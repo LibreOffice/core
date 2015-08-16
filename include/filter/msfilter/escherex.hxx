@@ -590,7 +590,7 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
                                             maPointB    ( rPB ),
                                             mXConnectToB( rSB ) {}
 
-    static sal_uInt32 GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
+                    static sal_uInt32 GetClosestPoint( const tools::Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
 };
 
 struct MSFILTER_DLLPUBLIC EscherExContainer
@@ -885,7 +885,7 @@ public:
                     sal_uInt32 nFlags,
                     bool bBezier,
                     ::com::sun::star::awt::Rectangle& rGeoRect,
-                    Polygon* pPolygon = NULL
+                    tools::Polygon* pPolygon = NULL
                 );
 
     static sal_uInt32 GetGradientColor(

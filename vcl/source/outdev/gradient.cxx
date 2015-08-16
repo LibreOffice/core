@@ -37,7 +37,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     assert(!is_double_buffered_window());
 
     // Convert rectangle to a tools::PolyPolygon by first converting to a Polygon
-    Polygon aPolygon ( rRect );
+    tools::Polygon aPolygon ( rRect );
     tools::PolyPolygon aPolyPoly ( aPolygon );
 
     DrawGradient ( aPolyPoly, rGradient );
@@ -323,7 +323,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
 
     // Create border
     Rectangle aBorderRect = aRect;
-    Polygon     aPoly( 4 );
+    tools::Polygon aPoly( 4 );
     if (fBorder > 0.0)
     {
         nRed        = (sal_uInt8)nStartRed;
@@ -498,7 +498,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
         nSteps = 1;
 
     // determine output limits and stepsizes for all directions
-    Polygon aPoly;
+    tools::Polygon aPoly;
     double  fScanLeft = aRect.Left();
     double  fScanTop = aRect.Top();
     double  fScanRight = aRect.Right();
@@ -550,9 +550,9 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             break;
 
         if( rGradient.GetStyle() == GradientStyle_RADIAL || rGradient.GetStyle() == GradientStyle_ELLIPTICAL )
-            aPoly = Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+            aPoly = tools::Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
         else
-            aPoly = Polygon( aRect );
+            aPoly = tools::Polygon( aRect );
 
         aPoly.Rotate( aCenter, nAngle );
 
@@ -593,7 +593,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     // we should draw last inner Polygon if we output PolyPolygon
     if( xPolyPoly )
     {
-        const Polygon& rPoly = xPolyPoly->GetObject( 1 );
+        const tools::Polygon& rPoly = xPolyPoly->GetObject( 1 );
 
         if( !rPoly.GetBoundRect().IsEmpty() )
         {
@@ -677,7 +677,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
 
     // Create border
     Rectangle aBorderRect = aRect;
-    Polygon     aPoly( 4 );
+    tools::Polygon aPoly( 4 );
     if (fBorder > 0.0)
     {
         nRed        = (sal_uInt8)nStartRed;
@@ -842,7 +842,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
         nSteps = 1;
 
     // determine output limits and stepsizes for all directions
-    Polygon aPoly;
+    tools::Polygon aPoly;
     double  fScanLeft = aRect.Left();
     double  fScanTop = aRect.Top();
     double  fScanRight = aRect.Right();
@@ -879,9 +879,9 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
             break;
 
         if( rGradient.GetStyle() == GradientStyle_RADIAL || rGradient.GetStyle() == GradientStyle_ELLIPTICAL )
-            aPoly = Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+            aPoly = tools::Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
         else
-            aPoly = Polygon( aRect );
+            aPoly = tools::Polygon( aRect );
 
         aPoly.Rotate( aCenter, nAngle );
 
@@ -908,7 +908,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
     }
 
-    const Polygon& rPoly = xPolyPoly->GetObject( 1 );
+    const tools::Polygon& rPoly = xPolyPoly->GetObject( 1 );
 
     if( !rPoly.GetBoundRect().IsEmpty() )
     {

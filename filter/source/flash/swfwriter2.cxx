@@ -471,7 +471,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
     sal_uInt16 i,n;
     for( i = 0; i < nCount; i++ )
     {
-        Polygon& rPoly = aPolyPoly[ i ];
+        tools::Polygon& rPoly = aPolyPoly[ i ];
 
         const sal_uInt16 nSize = rPoly.GetSize();
         if( nSize )

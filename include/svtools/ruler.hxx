@@ -673,7 +673,7 @@ private:
     SVT_DLLPRIVATE void ImplDrawBorders(vcl::RenderContext& rRenderContext,
                                         long nMin, long nMax, long nVirTop, long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawIndent(vcl::RenderContext& rRenderContext,
-                                       const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false);
+                                       const tools::Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false);
     SVT_DLLPRIVATE void ImplDrawIndents(vcl::RenderContext& rRenderContext,
                                         long nMin, long nMax, long nVirTop, long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, sal_uInt16 nStyle);

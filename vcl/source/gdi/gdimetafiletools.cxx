@@ -62,7 +62,7 @@ namespace
                         {
                             rTarget.AddAction(
                                 new MetaPolyLineAction(
-                                    Polygon(aResult.getB2DPolygon(a))));
+                                        tools::Polygon(aResult.getB2DPolygon(a))));
                         }
                     }
                     else
@@ -599,11 +599,11 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     }
                     else
                     {
-                        const Polygon aToolsPoly(
-                            rRect,
-                            pA->GetStartPoint(),
-                            pA->GetEndPoint(),
-                            POLY_ARC);
+                        const tools::Polygon aToolsPoly(
+                                rRect,
+                                pA->GetStartPoint(),
+                                pA->GetEndPoint(),
+                                POLY_ARC);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -625,11 +625,11 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     }
                     else
                     {
-                        const Polygon aToolsPoly(
-                            rRect,
-                            pA->GetStartPoint(),
-                            pA->GetEndPoint(),
-                            POLY_PIE);
+                        const tools::Polygon aToolsPoly(
+                                rRect,
+                                pA->GetStartPoint(),
+                                pA->GetEndPoint(),
+                                POLY_PIE);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -651,11 +651,11 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     }
                     else
                     {
-                        const Polygon aToolsPoly(
-                            rRect,
-                            pA->GetStartPoint(),
-                            pA->GetEndPoint(),
-                            POLY_CHORD);
+                        const tools::Polygon aToolsPoly(
+                                rRect,
+                                pA->GetStartPoint(),
+                                pA->GetEndPoint(),
+                                POLY_CHORD);
 
                         bDone = handleGeometricContent(
                             aClips.back(),
@@ -913,7 +913,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else if(rComment.equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_BEGIN"))
                     {
                         SvtGraphicStroke aStroke;
-                        Polygon aPath;
+                        tools::Polygon aPath;
 
                         {   // read SvtGraphicFill
                             SvMemoryStream aMemStm(const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(),StreamMode::READ);
@@ -939,7 +939,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                     // add clipped geometry
                                     for(sal_uInt32 a(0); a < aResult.count(); a++)
                                     {
-                                        aStroke.setPath(Polygon(aResult.getB2DPolygon(a)));
+                                        aStroke.setPath(tools::Polygon(aResult.getB2DPolygon(a)));
                                         addSvtGraphicStroke(aStroke, aTarget);
                                     }
 
@@ -949,7 +949,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             else
                             {
                                 // exchange with empty polygon
-                                aStroke.setPath(Polygon());
+                                aStroke.setPath(tools::Polygon());
                                 addSvtGraphicStroke(aStroke, aTarget);
                                 bDone = true;
                             }

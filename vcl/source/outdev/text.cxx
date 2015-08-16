@@ -147,7 +147,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
             nY += nBaseY;
             // inflate because polygons are drawn smaller
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
-            Polygon   aPoly( aRect );
+            tools::Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontEntry->mnOrientation );
             ImplDrawPolygon( aPoly );
             return;
@@ -209,7 +209,7 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
         {
             // inflate by +1+1 because polygons are drawn smaller
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
-            Polygon   aPoly( aRect );
+            tools::Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontEntry->mnOrientation );
             return aPoly.GetBoundRect();
         }
@@ -263,7 +263,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
         return false;
 
     // calculate rotation offset
-    Polygon aPoly( aBoundRect );
+    tools::Polygon aPoly( aBoundRect );
     aPoly.Rotate( Point(), mpFontEntry->mnOwnOrientation );
     Point aPoint = aPoly.GetBoundRect().TopLeft();
     aPoint += Point( nX, nY );
@@ -2818,7 +2818,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                 // convert units to logical width
                 for (sal_uInt16 j = 0; j < aPolyPoly.Count(); ++j)
                 {
-                    Polygon& rPoly = aPolyPoly[j];
+                    tools::Polygon& rPoly = aPolyPoly[j];
                     for (sal_uInt16 k = 0; k < rPoly.GetSize(); ++k)
                     {
                         Point& rPt = rPoly[k];
@@ -2903,7 +2903,7 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
         for( unsigned int i = 0; i < aIt->count(); ++i )
-            rPolyPoly.Insert(Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
+            rPolyPoly.Insert(tools::Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
 
     return true;
 }

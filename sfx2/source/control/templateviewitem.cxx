@@ -79,12 +79,12 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     if (mbHover)
         fTransparence = pAttrs->fHighlightTransparence;
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
-                                               B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
-                                               aFillColor,
-                                               fTransparence,
-                                               0.0,
-                                               true));
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+            new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea,5,5).getB2DPolygon()),
+                                                 aFillColor,
+                                                 fTransparence,
+                                                 0.0,
+                                                 true));
 
     // Draw thumbnail
     Size aImageSize = maPreview1.GetSizePixel();

@@ -48,8 +48,10 @@ class SotStorage;
 class SvStream;
 class SdrObject;
 class SdrOle2Obj;
-class Polygon;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class FmFormModel;
 class SdrModel;
 class SwFlyFrameFormat;
@@ -212,7 +214,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     static const int RELTO_DEFAULT = 2;
 
     SdrObject*      pObj;
-    Polygon*        pWrapPolygon;
+    tools::Polygon* pWrapPolygon;
     char*           pClientAnchorBuffer;
     sal_uInt32      nClientAnchorLen;
     char*           pClientDataBuffer;

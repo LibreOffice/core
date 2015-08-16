@@ -447,7 +447,7 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
                 {
                     // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
                     // are different and methods need to be changed thoroughly with interaction rework
-                    const Polygon aPathPolygon(rPathPolyPolygon.getB2DPolygon(0));
+                    const tools::Polygon aPathPolygon(rPathPolyPolygon.getB2DPolygon(0));
                     const sal_uInt16 nPointCount(aPathPolygon.GetSize());
 
                     if(nPointCount >= 3)
@@ -489,7 +489,7 @@ bool SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
 
             for(sal_uInt16 b(0); !bRetval && b < nPolygonCount; b++)
             {
-                const Polygon& rPathPolygon = aPathPolyPolygon[b];
+                const tools::Polygon& rPathPolygon = aPathPolyPolygon[b];
                 const sal_uInt16 nPointCount(rPathPolygon.GetSize());
 
                 bRetval = (nPointCount >= 3);

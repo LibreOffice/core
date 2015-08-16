@@ -45,9 +45,11 @@ class Point;
 class OutputDevice;
 class GDIMetaFile;
 class MapMode;
-class Polygon;
 class LineInfo;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class Bitmap;
 class BitmapEx;
 class Image;
@@ -789,11 +791,11 @@ The following structure describes the permissions used in PDF security
     void                DrawLine( const Point& rStartPt, const Point& rEndPt );
     void                DrawLine( const Point& rStartPt, const Point& rEndPt,
                                   const LineInfo& rLineInfo );
-    void                DrawPolyLine( const Polygon& rPoly );
-    void                DrawPolyLine( const Polygon& rPoly,
+    void                DrawPolyLine( const tools::Polygon& rPoly );
+    void                DrawPolyLine( const tools::Polygon& rPoly,
                                       const LineInfo& rLineInfo );
-    void                DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo );
-    void                DrawPolygon( const Polygon& rPoly );
+    void                DrawPolyLine( const tools::Polygon& rPoly, const ExtLineInfo& rInfo );
+    void                DrawPolygon( const tools::Polygon& rPoly );
     void                DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                DrawRect( const Rectangle& rRect );
     void                DrawRect( const Rectangle& rRect,

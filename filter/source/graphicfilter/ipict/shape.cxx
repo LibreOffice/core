@@ -216,7 +216,7 @@ namespace PictReaderShape {
   }
 
   //--------------------  draws a polygon --------------------
-  void drawPolygon(VirtualDevice *dev, bool drawFrame, Polygon const &orig, Size const &pSize) {
+void drawPolygon(VirtualDevice *dev, bool drawFrame, tools::Polygon const &orig, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
     long decalTL[2] = {0, 0}, decalBR[2] = { pSize.Width(), pSize.Height()};
     if (drawFrame) {

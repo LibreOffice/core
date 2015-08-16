@@ -479,11 +479,12 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
     return aRetBmp;
 };
 
-Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
-                                 const sal_uInt8 cEdgeDetectThreshold, const Rectangle* pWorkRectPixel )
+tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
+                                        const sal_uInt8 cEdgeDetectThreshold,
+                                        const Rectangle* pWorkRectPixel )
 {
     Bitmap      aWorkBmp;
-    Polygon     aRetPoly;
+    tools::Polygon aRetPoly;
     Point       aTmpPoint;
     Rectangle   aWorkRect( aTmpPoint, rBmp.GetSizePixel() );
 
@@ -599,7 +600,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
             const sal_uInt16 nNewSize1 = nPolyPos << 1;
 
-            aRetPoly = Polygon( nPolyPos, pPoints1.get() );
+            aRetPoly = tools::Polygon( nPolyPos, pPoints1.get() );
             aRetPoly.SetSize( nNewSize1 + 1 );
             aRetPoly[ nNewSize1 ] = aRetPoly[ 0 ];
 

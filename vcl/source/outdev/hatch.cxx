@@ -331,7 +331,7 @@ void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& r
 
     for( long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
     {
-        const Polygon& rPoly = rPolyPoly[ (sal_uInt16) nPoly ];
+        const tools::Polygon& rPoly = rPolyPoly[ (sal_uInt16) nPoly ];
 
         if( rPoly.GetSize() > 1 )
         {

@@ -1071,7 +1071,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
             if (bOk)
             {
-                pImpRec->pWrapPolygon = new Polygon(nNumElemVert);
+                pImpRec->pWrapPolygon = new tools::Polygon(nNumElemVert);
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
                     sal_Int32 nX(0), nY(0);

@@ -91,7 +91,7 @@ void Writer::map( tools::PolyPolygon& rPolyPolygon ) const
         sal_uInt16 nPoly, nPoint, nPointCount;
         for( nPoly = 0; nPoly < nPolyCount; nPoly++ )
         {
-            Polygon& rPoly = rPolyPolygon[nPoly];
+            tools::Polygon& rPoly = rPolyPolygon[nPoly];
             nPointCount = rPoly.GetSize();
 
             for( nPoint = 0; nPoint < nPointCount; nPoint++ )
@@ -115,7 +115,7 @@ sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
 
 
 
-void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFilled )
+void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, bool bFilled )
 {
     Point aLastPoint( rPoly[0] );
 
@@ -259,7 +259,7 @@ void Writer::Impl_addEndShapeRecord( BitStream& rBits )
 
 
 
-void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled )
+void Writer::Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled )
 {
     tools::PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled );
@@ -267,7 +267,7 @@ void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled )
 
 
 
-void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
+void Writer::Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
     tools::PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled, rFillColor, rLineColor );
@@ -588,9 +588,9 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 
 #if 0 // makes the calculated bound rect visible for debugging
 {
-        Polygon aTmpPoly( aPoly );
-        sal_uInt16 nID = FlashGeometryExporter::writePolygonShape( aMovieStream, aTmpPoly, false, Color(COL_MAGENTA), Color(COL_MAGENTA), mpClipPolyPolygon  );
-        ImplPlaceObject( nID );
+    tools::Polygon aTmpPoly( aPoly );
+    sal_uInt16 nID = FlashGeometryExporter::writePolygonShape( aMovieStream, aTmpPoly, false, Color(COL_MAGENTA), Color(COL_MAGENTA), mpClipPolyPolygon  );
+    ImplPlaceObject( nID );
 }
 #endif
 
@@ -679,7 +679,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         //  fancy lines (like dashes).
         if( ( aOldFont.GetStrikeout() != STRIKEOUT_NONE ) || ( aOldFont.GetUnderline() != UNDERLINE_NONE ) )
         {
-            Polygon     aPoly( 4 );
+            tools::Polygon aPoly( 4 );
             const long  nLineHeight = std::max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
 
             if( aOldFont.GetStrikeout() != STRIKEOUT_NONE )
@@ -955,7 +955,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
             sal_uInt16 nBitmapId = defineBitmap(bmpSource, nJPEGQuality);
 
-            Polygon aPoly( destRect );
+            tools::Polygon aPoly( destRect );
 
             // AS: Since images are being cropped now, no translation is normally necessary.
             //  However, some things like graphical bullet points still get translated.
@@ -1134,7 +1134,7 @@ void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* 
         mpVDev->SetLineColor( *pLineColor );
 
     const Point aPtAry[2] = { rPt1, rPt2 };
-    Polygon aPoly( 2, aPtAry );
+    tools::Polygon aPoly( 2, aPtAry );
     Impl_writePolyPolygon( aPoly, false );
 
     mpVDev->SetLineColor( aOldColor );
@@ -1151,7 +1151,7 @@ void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
     }
     else
     {
-        Polygon aPoly( rRect, nRadX, nRadY );
+        tools::Polygon aPoly( rRect, nRadX, nRadY );
         Impl_writePolyPolygon( aPoly, true );
     }
 }
@@ -1160,7 +1160,7 @@ void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
 
 void Writer::Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY )
 {
-    Polygon aPoly( rCenter, nRadX, nRadY );
+    tools::Polygon aPoly( rCenter, nRadX, nRadY );
     Impl_writePolyPolygon( aPoly, false );
 }
 
@@ -1170,7 +1170,7 @@ void Writer::Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY )
 */
 bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
 {
-    Polygon aPolygon;
+    tools::Polygon aPolygon;
     rStroke.getPath( aPolygon );
     tools::PolyPolygon aPolyPolygon( aPolygon );
 
@@ -1349,7 +1349,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                Impl_writePolygon(Polygon(aCandidate), false );
+                Impl_writePolygon( tools::Polygon(aCandidate), false );
             }
         }
 
@@ -1363,8 +1363,8 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
 
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
-                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                Impl_writePolyPolygon(tools::PolyPolygon(Polygon(aPolygon)), true );
+                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                Impl_writePolyPolygon(tools::PolyPolygon(tools::Polygon(aPolygon)), true );
             }
 
             mpVDev->SetLineColor(aOldLineColor);
@@ -1449,28 +1449,28 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( MetaActionType::CHORD ):
             case( MetaActionType::POLYGON ):
             {
-                Polygon aPoly;
+                tools::Polygon aPoly;
 
                 switch( nType )
                 {
                     case( MetaActionType::ARC ):
                     {
                         const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
-                        aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
+                        aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                     }
                     break;
 
                     case( MetaActionType::PIE ):
                     {
                         const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
-                        aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
+                        aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                     }
                     break;
 
                     case( MetaActionType::CHORD ):
                     {
                         const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
-                        aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
+                        aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                     }
                     break;
 
@@ -1489,8 +1489,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
             case( MetaActionType::POLYLINE ):
             {
-                const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
-                const Polygon&              rPoly = pA->GetPolygon();
+                const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pAction);
+                const tools::Polygon& rPoly = pA->GetPolygon();
 
                 if( rPoly.GetSize() )
                 {
@@ -1521,7 +1521,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
 
-                Polygon aPoly( pA->GetRect() );
+                tools::Polygon aPoly( pA->GetRect() );
                 Impl_writeGradientEx( aPoly, pA->GetGradient() );
             }
             break;

@@ -847,9 +847,10 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
 
     // Draw background
     drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new PolyPolygonColorPrimitive2D(
-                B2DPolyPolygon(Polygon(Rectangle(Point(), GetOutputSizePixel()), 0, 0).getB2DPolygon()),
-                maFillColor.getBColor()));
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+            new PolyPolygonColorPrimitive2D(
+                    B2DPolyPolygon( ::tools::Polygon(Rectangle(Point(), GetOutputSizePixel()), 0, 0).getB2DPolygon()),
+                    maFillColor.getBColor()));
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;

@@ -1810,7 +1810,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
 
                 if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
                 {
-                    Polygon aPoly( maRect );
+                    tools::Polygon aPoly( maRect );
                     if( nShearAngle )
                     {
                         sal_uInt16 nPointCount=aPoly.GetSize();
@@ -3104,7 +3104,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 
         if ( bMirroredX )
         {
-            Polygon aPol = Rect2Poly(maRect, aNewGeo);
+            tools::Polygon aPol = Rect2Poly(maRect, aNewGeo);
             Rectangle aBoundRect( aPol.GetBoundRect() );
 
             Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
@@ -3116,7 +3116,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
                 MirrorPoint(aPol[i],aRef1,aRef2);
             }
             // mirror polygon and move it a bit
-            Polygon aPol0(aPol);
+            tools::Polygon aPol0(aPol);
             aPol[0]=aPol0[1];
             aPol[1]=aPol0[0];
             aPol[2]=aPol0[3];
@@ -3126,7 +3126,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         }
         if ( bMirroredY )
         {
-            Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
+            tools::Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
             Rectangle aBoundRect( aPol.GetBoundRect() );
 
             Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
@@ -3138,7 +3138,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
                 MirrorPoint(aPol[i],aRef1,aRef2);
             }
             // mirror polygon and move it a bit
-            Polygon aPol0(aPol);
+            tools::Polygon aPol0(aPol);
             aPol[0]=aPol0[1]; // This was WRONG for vertical (!)
             aPol[1]=aPol0[0]; // #i121932# Despite my own comment above
             aPol[2]=aPol0[3]; // it was *not* wrong even when the reordering

@@ -802,7 +802,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     if( aPolyPolygon.Count() == 1 && aPolyPolygon[ 0 ].GetSize() == 2)
     {
-        const Polygon& rPoly = aPolyPolygon[ 0 ];
+        const tools::Polygon& rPoly = aPolyPolygon[ 0 ];
 
         bFlipH = ( rPoly[ 0 ].X() > rPoly[ 1 ].X() );
         bFlipV = ( rPoly[ 0 ].Y() > rPoly[ 1 ].Y() );

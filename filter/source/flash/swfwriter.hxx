@@ -273,7 +273,7 @@ public:
 
     /** defines a flash shape from a filled polygon.
         The coordinates must be in twips */
-    sal_uInt16 defineShape( const Polygon& rPoly, const FillStyle& rFillStyle );
+    sal_uInt16 defineShape( const tools::Polygon& rPoly, const FillStyle& rFillStyle );
 
     /** defines a flash shape from a filled polypolygon.
         The coordinates must be in twips */
@@ -337,8 +337,8 @@ private:
     void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void Impl_writeActions( const GDIMetaFile& rMtf );
-    void Impl_writePolygon( const Polygon& rPoly, bool bFilled );
-    void Impl_writePolygon( const Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
+    void Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled );
+    void Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
     void Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence = 0);
     void Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
     void Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth );
@@ -352,7 +352,7 @@ private:
 
     FlashFont& Impl_getFont( const vcl::Font& rFont );
 
-    static void Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFilled );
+    static void Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, bool bFilled );
 
     static void Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, bool bFilled );
     static void Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int16 dy );

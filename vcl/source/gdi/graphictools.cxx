@@ -40,7 +40,7 @@ SvtGraphicStroke::SvtGraphicStroke() :
 {
 }
 
-SvtGraphicStroke::SvtGraphicStroke( const Polygon&      rPath,
+SvtGraphicStroke::SvtGraphicStroke( const tools::Polygon& rPath,
                                     const tools::PolyPolygon&  rStartArrow,
                                     const tools::PolyPolygon&  rEndArrow,
                                     double              fTransparency,
@@ -61,7 +61,7 @@ SvtGraphicStroke::SvtGraphicStroke( const Polygon&      rPath,
 {
 }
 
-void SvtGraphicStroke::getPath( Polygon& rPath ) const
+void SvtGraphicStroke::getPath( tools::Polygon& rPath ) const
 {
     rPath = maPath;
 }
@@ -86,7 +86,7 @@ void SvtGraphicStroke::getDashArray( DashArray& rDashArray ) const
     rDashArray = maDashArray;
 }
 
-void SvtGraphicStroke::setPath( const Polygon& rPoly )
+void SvtGraphicStroke::setPath( const tools::Polygon& rPoly )
 {
     maPath = rPoly;
 }

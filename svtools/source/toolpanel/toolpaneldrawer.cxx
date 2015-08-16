@@ -210,7 +210,7 @@ namespace svt
             aDottedStyle.SetDistance( 1 );
 
             m_pPaintDevice->SetLineColor( COL_BLACK );
-            m_pPaintDevice->DrawPolyLine( Polygon( aTextPixelBox ), aDottedStyle );
+            m_pPaintDevice->DrawPolyLine( tools::Polygon( aTextPixelBox ), aDottedStyle );
             m_pPaintDevice->EnableMapMode( false );
         }
         else

@@ -171,12 +171,13 @@ OutputDevice* VCLUnoHelper::GetOutputDevice( const ::com::sun::star::uno::Refere
     return pOutDev;
 }
 
-Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY )
+tools::Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX,
+                                            const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY )
 {
     sal_Int32 nLen = DataX.getLength();
     const sal_Int32* pDataX = DataX.getConstArray();
     const sal_Int32* pDataY = DataY.getConstArray();
-    Polygon aPoly( (sal_uInt16) nLen );
+    tools::Polygon aPoly( (sal_uInt16) nLen );
     for ( sal_Int32 n = 0; n < nLen; n++ )
     {
         Point aPnt;

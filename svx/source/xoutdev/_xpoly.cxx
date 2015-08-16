@@ -198,7 +198,7 @@ XPolygon::XPolygon( const XPolygon& rXPoly )
 }
 
 /// create a XPolygon out of a standard polygon
-XPolygon::XPolygon( const Polygon& rPoly )
+XPolygon::XPolygon( const tools::Polygon& rPoly )
 {
 
     sal_uInt16 nSize = rPoly.GetSize();
@@ -862,7 +862,7 @@ basegfx::B2DPolygon XPolygon::getB2DPolygon() const
     // here. This needs one more conversion but avoids different convertors in
     // the long run
     DBG_ASSERT(pImpXPolygon != 0, "XPolygon::getB2DPolygon(): XPolygon has no implementation incarnated (!)");
-    const Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
+    const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
 
     return aSource.getB2DPolygon();
 }
@@ -873,7 +873,7 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
     // here. This needs one more conversion but avoids different convertors in
     // the long run
 
-    const Polygon aSource(rPolygon);
+    const tools::Polygon aSource(rPolygon);
     sal_uInt16 nSize = aSource.GetSize();
     pImpXPolygon = new ImpXPolygon( nSize );
     pImpXPolygon->nPoints = nSize;

@@ -1794,7 +1794,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
 {
     bool bNoError = true;
 
-    Polygon aPolygon;
+    tools::Polygon aPolygon;
     tools::PolyPolygon aPolyPolygon;
 
     if ( rAny.getValueType() == cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
@@ -1829,7 +1829,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                     if ( pArray && pFlags )
                     {
                         nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
-                        aPolygon = Polygon( nInnerSequenceCount );
+                        aPolygon = tools::Polygon( nInnerSequenceCount );
                         for( b = 0; b < nInnerSequenceCount; b++)
                         {
                             css::drawing::PolygonFlags ePolyFlags = *pFlags++;
@@ -1872,7 +1872,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                     if ( pArray != NULL )
                     {
                         nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
-                        aPolygon = Polygon( nInnerSequenceCount );
+                        aPolygon = tools::Polygon( nInnerSequenceCount );
                         for( b = 0; b < nInnerSequenceCount; b++)
                         {
                             aPolygon[ b ] = Point( pArray->X, pArray->Y );
@@ -1899,7 +1899,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
             if ( pArray != NULL )
             {
                 nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
-                aPolygon = Polygon( nInnerSequenceCount );
+                aPolygon = tools::Polygon( nInnerSequenceCount );
                 for( a = 0; a < nInnerSequenceCount; a++)
                 {
                     aPolygon[ a ] = Point( pArray->X, pArray->Y );
@@ -1917,7 +1917,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
           sal_uInt32 nFlags,
           bool bBezier,
           ::com::sun::star::awt::Rectangle& rGeoRect,
-          Polygon* pPolygon )
+    tools::Polygon* pPolygon )
 {
     static const char sPolyPolygonBezier [] = "PolyPolygonBezier";
     static const char sPolyPolygon       [] = "PolyPolygon";
@@ -1946,7 +1946,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
         {
             if ( ( aPolyPolygon.Count() == 1 ) && ( aPolyPolygon[ 0 ].GetSize() == 2 ) )
             {
-                const Polygon& rPoly = aPolyPolygon[ 0 ];
+                const tools::Polygon& rPoly = aPolyPolygon[ 0 ];
                 rGeoRect = ::com::sun::star::awt::Rectangle(
                     rPoly[ 0 ].X(),
                         rPoly[ 0 ].Y(),
@@ -1958,7 +1958,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
         }
         else
         {
-            Polygon aPolygon;
+            tools::Polygon aPolygon;
 
             sal_uInt16 nPolyCount = aPolyPolygon.Count();
             sal_uInt32 nTotalPoints(0), nTotalBezPoints(0);
@@ -2166,7 +2166,7 @@ void lcl_Rotate(sal_Int32 nAngle, Point center, Point& pt)
 Generally, draw the connector from top to bottom, from left to right when meet the adjust value,
 but when (X1>X2 or Y1>Y2),the draw director must be reverse, FlipV or FlipH should be set to true.
 */
-bool lcl_GetAngle(Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngle )
+bool lcl_GetAngle(tools::Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngle )
 {
     Point aStart = rPoly[0];
     Point aEnd = rPoly[rPoly.GetSize()-1];
@@ -2288,7 +2288,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgePath ) )
                                     {
                                         tools::PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
-                                        Polygon aPoly;
+                                        tools::Polygon aPoly;
                                         if ( aPolyPolygon.Count() > 0 )
                                         {
                                             AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
@@ -4499,7 +4499,7 @@ struct EscherShapeListEntry
                                         n_EscherId  ( nId ) {}
 };
 
-sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rPoint )
+sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const tools::Polygon& rPoly, const ::com::sun::star::awt::Point& rPoint )
 {
     sal_uInt16 nCount = rPoly.GetSize();
     sal_uInt16 nClosest = nCount;
@@ -4670,7 +4670,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     const SdrGluePointList* pList = pCustoShape->GetGluePointList();
                     if ( pList )
                     {
-                        Polygon aPoly;
+                        tools::Polygon aPoly;
                         sal_uInt16 nNum, nAnz = pList->GetCount();
                         if ( nAnz )
                         {
@@ -4699,7 +4699,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                         for ( a = 0; a < aPolyPoly.Count(); a++ )
                         {
-                            const Polygon& rPoly = aPolyPoly.GetObject( a );
+                            const tools::Polygon& rPoly = aPolyPoly.GetObject( a );
                             for ( b = 0; b < rPoly.GetSize(); b++ )
                             {
                                 if ( rPoly.GetFlags( b ) != POLY_NORMAL )
@@ -4725,9 +4725,9 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             ::com::sun::star::awt::Point aPoint( aXShape->getPosition() );
             ::com::sun::star::awt::Size  aSize( aXShape->getSize() );
 
-            Rectangle   aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-            Point       aCenter( aRect.Center() );
-            Polygon     aPoly( 4 );
+            Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
+            Point aCenter( aRect.Center() );
+            tools::Polygon aPoly( 4 );
 
             aPoly[ 0 ] = Point( aCenter.X(), aRect.Top() );
             aPoly[ 1 ] = Point( aRect.Left(), aCenter.Y() );

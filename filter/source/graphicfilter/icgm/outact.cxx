@@ -67,7 +67,7 @@ void CGMOutAct::NewRegion()
 {
     if ( mnIndex > 2 )
     {
-        Polygon aPolygon( mnIndex, mpPoints, mpFlags );
+        tools::Polygon aPolygon( mnIndex, mpPoints, mpFlags );
         maPolyPolygon.Insert( aPolygon );
     }
     mnIndex = 0;
@@ -82,7 +82,7 @@ void CGMOutAct::EndFigure()
     mnIndex = 0;
 }
 
-void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
+void CGMOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     if ( nPoints )

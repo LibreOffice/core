@@ -711,7 +711,7 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
             {
                 Point       aTmpPoint;
                 Rectangle   aTmpRectangle( aTmpPoint, aSizePix );
-                Polygon     aPoly( aTmpRectangle );
+                tools::Polygon aPoly( aTmpRectangle );
                 aPoly.Rotate( aTmpPoint, (sal_uInt16) nAngle10 );
 
                 Rectangle           aNewBound( aPoly.GetBoundRect() );

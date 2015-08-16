@@ -470,7 +470,7 @@ void RectType::Draw(OutputDevice& rOut)
             RotatePoint(aPts[i],Pos1.x,Pos1.y,sn,cs);
         }
         SetLine(L,rOut);
-        Polygon aPoly(4,aPts);
+        tools::Polygon aPoly(4,aPts);
         rOut.DrawPolygon(aPoly);
     }
 }
@@ -479,7 +479,7 @@ void PolyType::Draw(OutputDevice& rOut)
 {
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
     SetLine(L,rOut);
-    Polygon aPoly(nPoints);
+    tools::Polygon aPoly(nPoints);
     sal_uInt16 i;
     for(i=0;i<nPoints;i++) aPoly.SetPoint(Point(EckP[i].x,EckP[i].y),i);
     if ((Flags & PolyClosBit) !=0) {
@@ -493,8 +493,8 @@ void SplnType::Draw(OutputDevice& rOut)
 {
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
     SetLine(L,rOut);
-    Polygon aPoly(0);
-    Polygon aSpln(nPoints);
+    tools::Polygon aPoly(0);
+    tools::Polygon aSpln(nPoints);
     sal_uInt16 i;
     for(i=0;i<nPoints;i++) aSpln.SetPoint(Point(EckP[i].x,EckP[i].y),i);
     if ((Flags & PolyClosBit) !=0) {

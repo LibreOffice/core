@@ -28,11 +28,11 @@ class Fraction;
 
 class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 {
-    Polygon             aPoly;
+    tools::Polygon aPoly;
     Rectangle           aEllipse;
     bool                bEllipse;
 
-    SVT_DLLPRIVATE void             ImpConstruct( const Polygon& rPoly, bool bPixel );
+    SVT_DLLPRIVATE void ImpConstruct( const tools::Polygon& rPoly, bool bPixel );
 
 protected:
 
@@ -42,7 +42,7 @@ protected:
 
 public:
                         IMapPolygonObject() : bEllipse(false) {}
-                        IMapPolygonObject( const Polygon& rPoly,
+                        IMapPolygonObject( const tools::Polygon& rPoly,
                                            const OUString& rURL,
                                            const OUString& rAltText,
                                            const OUString& rDesc,
@@ -55,7 +55,7 @@ public:
     virtual sal_uInt16      GetType() const SAL_OVERRIDE;
     virtual bool        IsHit( const Point& rPoint ) const SAL_OVERRIDE;
 
-    Polygon             GetPolygon( bool bPixelCoords = true ) const;
+    tools::Polygon      GetPolygon( bool bPixelCoords = true ) const;
 
     bool                HasExtraEllipse() const { return bEllipse; }
     const Rectangle&    GetExtraEllipse() const { return aEllipse; }

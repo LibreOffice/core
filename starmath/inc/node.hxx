@@ -416,7 +416,7 @@ public:
  */
 class SmPolyLineNode : public SmGraphicNode
 {
-    Polygon     aPoly;
+    tools::Polygon aPoly;
     Size        aToSize;
     long        nWidth;
 
@@ -424,7 +424,7 @@ public:
     SmPolyLineNode(const SmToken &rNodeToken);
 
     long         GetWidth() const { return nWidth; }
-    Polygon     &GetPolygon() { return aPoly; }
+    tools::Polygon &GetPolygon() { return aPoly; }
 
     virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth) SAL_OVERRIDE;
     virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight) SAL_OVERRIDE;

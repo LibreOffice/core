@@ -701,7 +701,7 @@ void Splitter::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaint
 {
     rRenderContext.DrawRect(rPaintRect);
 
-    Polygon aPoly(rPaintRect);
+    tools::Polygon aPoly(rPaintRect);
     tools::PolyPolygon aPolyPoly(aPoly);
     rRenderContext.DrawTransparent(aPolyPoly, 85);
 

@@ -445,13 +445,13 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     {
         if (bRoundEdges)
         {
-            Polygon aPoly(aRect, nCornerRadius, nCornerRadius);
+            tools::Polygon aPoly(aRect, nCornerRadius, nCornerRadius);
             tools::PolyPolygon aPolyPoly(aPoly);
             rRenderContext.DrawTransparent(aPolyPoly, nPercent);
         }
         else
         {
-            Polygon aPoly(aRect);
+            tools::Polygon aPoly(aRect);
             tools::PolyPolygon aPolyPoly(aPoly);
             rRenderContext.DrawTransparent(aPolyPoly, nPercent);
         }

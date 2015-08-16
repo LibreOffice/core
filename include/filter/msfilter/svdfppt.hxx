@@ -45,8 +45,10 @@ class SdPage;
 class SdrPage;
 class SdrObject;
 class SvStream;
-class Polygon;
-namespace tools { class PolyPolygon; }
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 class SfxItemSet;
 class Outliner;
 class Graphic;

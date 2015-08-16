@@ -358,7 +358,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             else
             {
                 long nRad = nDotSize/2;
-                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
             }
             rYOff = ((nHeight*250)/1000)/2; // Center to the another EmphasisMarks
@@ -375,7 +375,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             else
             {
                 long nRad = nDotSize/2;
-                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
                 // BorderWidth is 15%
                 long nBorder = (nDotSize*150)/1000;
@@ -383,8 +383,8 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                     rPolyLine = true;
                 else
                 {
-                    Polygon aPoly2( Point( nRad, nRad ),
-                                    nRad-nBorder, nRad-nBorder );
+                    tools::Polygon aPoly2( Point( nRad, nRad ),
+                                           nRad-nBorder, nRad-nBorder );
                     rPolyPoly.Insert( aPoly2 );
                 }
             }
@@ -401,7 +401,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             else
             {
                 long nRad = nDotSize/2;
-                Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
+                tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
             }
             rWidth = nDotSize;
@@ -427,12 +427,12 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             }
             else
             {
-                Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
-                               reinterpret_cast<const Point*>(aAccentPos),
-                               aAccentPolyFlags );
+                tools::Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
+                                      reinterpret_cast<const Point*>(aAccentPos),
+                                      aAccentPolyFlags );
                 double dScale = ((double)nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );
-                Polygon aTemp;
+                tools::Polygon aTemp;
                 aPoly.AdaptiveSubdivide( aTemp );
                 Rectangle aBoundRect = aTemp.GetBoundRect();
                 rWidth = aBoundRect.GetWidth();
@@ -1918,7 +1918,7 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
     {
         if ( bPolyLine )
         {
-            Polygon aPoly = rPolyPoly.GetObject( 0 );
+            tools::Polygon aPoly = rPolyPoly.GetObject( 0 );
             aPoly.Move( nX, nY );
             DrawPolyLine( aPoly );
         }
@@ -1956,7 +1956,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     EnableMapMode( false );
 
     FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-    tools::PolyPolygon         aPolyPoly;
+    tools::PolyPolygon  aPolyPoly;
     Rectangle           aRect1;
     Rectangle           aRect2;
     long                nEmphasisYOff;

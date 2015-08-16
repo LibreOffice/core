@@ -680,7 +680,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     const IMapPolygonObject* pPolyObj =
                         static_cast<const IMapPolygonObject *>(pObj);
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
-                    Polygon aPoly( pPolyObj->GetPolygon() );
+                    tools::Polygon aPoly( pPolyObj->GetPolygon() );
                     sal_uInt16 nCount = aPoly.GetSize();
                     OStringBuffer aTmpBuf;
                     if( nCount>0 )

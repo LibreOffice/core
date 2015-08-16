@@ -1239,7 +1239,7 @@ public:
     void                                HideTracking();
     void                                InvertTracking( const Rectangle& rRect,
                                                         sal_uInt16 nFlags = SHOWTRACK_SMALL );
-    void                                InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
+    void                                InvertTracking( const tools::Polygon& rPoly, sal_uInt16 nFlags = 0 );
 
     void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );

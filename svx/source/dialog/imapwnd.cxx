@@ -240,8 +240,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             }
             else
             {
-                const Polygon&  rPoly = pIMapPolyObj->GetPolygon( false );
-                Polygon         aDrawPoly( rPoly );
+                const tools::Polygon& rPoly = pIMapPolyObj->GetPolygon( false );
+                tools::Polygon aDrawPoly( rPoly );
 
                 // clipped on CanvasPane
                 aDrawPoly.Clip( aClipRect );
@@ -315,10 +315,10 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         {
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ) );
-            Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
+            tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
             delete pPathObj;
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), "", "", "", "", "", true, false );
+            IMapPolygonObject* pObj = new IMapPolygonObject( tools::Polygon(aPoly), "", "", "", "", "", true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
             pCircObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }
@@ -334,7 +334,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 
             if ( rXPolyPoly.count() )
             {
-                Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
+                tools::Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
                 pPathObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
             }
@@ -381,7 +381,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             {
                 const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
                 SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ) );
-                Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
+                tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
 
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
@@ -402,7 +402,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 
                 if ( rXPolyPoly.count() )
                 {
-                    Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
+                    tools::Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
                     IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
                     pUserData->ReplaceObject( IMapObjectPtr(pObj) );
                 }

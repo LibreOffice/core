@@ -54,7 +54,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     if ( mbInitLineColor )
         InitLineColor();
 
-    Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+    tools::Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
     if ( aRectPoly.GetSize() >= 2 )
     {
         const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aRectPoly.GetConstPointAry());
@@ -104,7 +104,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    Polygon         aArcPoly( aRect, aStart, aEnd, POLY_ARC );
+    tools::Polygon aArcPoly( aRect, aStart, aEnd, POLY_ARC );
 
     if ( aArcPoly.GetSize() >= 2 )
     {
@@ -148,7 +148,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    Polygon         aPiePoly( aRect, aStart, aEnd, POLY_PIE );
+    tools::Polygon aPiePoly( aRect, aStart, aEnd, POLY_PIE );
 
     if ( aPiePoly.GetSize() >= 2 )
     {
@@ -199,7 +199,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
     const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    Polygon         aChordPoly( aRect, aStart, aEnd, POLY_CHORD );
+    tools::Polygon aChordPoly( aRect, aStart, aEnd, POLY_CHORD );
 
     if ( aChordPoly.GetSize() >= 2 )
     {

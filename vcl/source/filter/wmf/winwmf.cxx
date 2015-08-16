@@ -350,7 +350,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             }
             else
             {
-                Polygon aPoly(nPoints);
+                tools::Polygon aPoly(nPoints);
                 for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
                     aPoly[ i ] = ReadPoint();
                 pOut->DrawPolygon(aPoly);
@@ -429,7 +429,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         pPtAry[b] = ReadPoint();
                     }
 
-                    aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
+                    aPolyPoly.Insert( tools::Polygon(nPointCount, pPtAry) );
                 }
 
                 bRecordOk &= pWMF->good();
@@ -458,7 +458,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             }
             else
             {
-                Polygon aPoly(nPoints);
+                tools::Polygon aPoly(nPoints);
                 for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
                     aPoly[ i ] = ReadPoint();
                 pOut->DrawPolyLine( aPoly );

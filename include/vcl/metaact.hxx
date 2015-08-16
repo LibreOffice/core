@@ -338,7 +338,7 @@ class VCL_DLLPUBLIC MetaPolyLineAction : public MetaAction
 private:
 
     LineInfo            maLineInfo;
-    Polygon             maPoly;
+    tools::Polygon      maPoly;
 
 public:
                         MetaPolyLineAction();
@@ -350,13 +350,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaPolyLineAction( const Polygon& );
-    explicit            MetaPolyLineAction( const Polygon&, const LineInfo& );
+    explicit            MetaPolyLineAction( const tools::Polygon& );
+    explicit            MetaPolyLineAction( const tools::Polygon&, const LineInfo& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const Polygon&      GetPolygon() const { return maPoly; }
+    const tools::Polygon& GetPolygon() const { return maPoly; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
 };
 
@@ -364,7 +364,7 @@ class VCL_DLLPUBLIC MetaPolygonAction : public MetaAction
 {
 private:
 
-    Polygon             maPoly;
+    tools::Polygon      maPoly;
 
 public:
                         MetaPolygonAction();
@@ -376,12 +376,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaPolygonAction( const Polygon& );
+    explicit            MetaPolygonAction( const tools::Polygon& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const Polygon&      GetPolygon() const { return maPoly; }
+    const tools::Polygon& GetPolygon() const { return maPoly; }
 };
 
 class VCL_DLLPUBLIC MetaPolyPolygonAction : public MetaAction

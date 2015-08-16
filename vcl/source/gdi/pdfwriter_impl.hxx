@@ -145,7 +145,7 @@ public:
         // converts a rectangle to 10th points page space
         void convertRect( Rectangle& rRect ) const;
         // appends a polygon optionally closing it
-        void appendPolygon( const Polygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
+        void appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polygon optionally closing it
         void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polypolygon optionally closing the subpaths
@@ -1215,11 +1215,11 @@ public:
 
     void drawLine( const Point& rStart, const Point& rStop );
     void drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo );
-    void drawPolygon( const Polygon& rPoly );
+    void drawPolygon( const tools::Polygon& rPoly );
     void drawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    void drawPolyLine( const Polygon& rPoly );
-    void drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo );
-    void drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
+    void drawPolyLine( const tools::Polygon& rPoly );
+    void drawPolyLine( const tools::Polygon& rPoly, const LineInfo& rInfo );
+    void drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
 
     void drawPixel( const Point& rPt, const Color& rColor );
 

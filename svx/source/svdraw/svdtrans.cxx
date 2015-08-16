@@ -59,7 +59,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 }
 
 
-void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     sal_uInt16 nCount=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nCount; i++) {
@@ -75,7 +75,7 @@ void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, cons
     }
 }
 
-void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs)
+void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs)
 {
     sal_uInt16 nCount=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nCount; i++) {
@@ -133,7 +133,7 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
     }
 }
 
-void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2)
+void MirrorPoly(tools::Polygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
     sal_uInt16 nCount=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nCount; i++) {
@@ -149,7 +149,7 @@ void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
     }
 }
 
-void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
+void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
     sal_uInt16 nCount=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nCount; i++) {
@@ -480,9 +480,9 @@ void GeoStat::RecalcTan()
 
 
 
-Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
+tools::Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
 {
-    Polygon aPol(5);
+    tools::Polygon aPol(5);
     aPol[0]=rRect.TopLeft();
     aPol[1]=rRect.TopRight();
     aPol[2]=rRect.BottomRight();
@@ -493,7 +493,7 @@ Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
     return aPol;
 }
 
-void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
+void Poly2Rect(const tools::Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
 {
     rGeo.nRotationAngle=GetAngle(rPol[1]-rPol[0]);
     rGeo.nRotationAngle=NormAngle360(rGeo.nRotationAngle);

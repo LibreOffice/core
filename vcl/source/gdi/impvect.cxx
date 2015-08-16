@@ -123,24 +123,23 @@ extern "C" int SAL_CALL ImplColorSetCmpFnc( const void* p1, const void* p2 )
 
 class ImplPointArray
 {
-    Point*              mpArray;
-    sal_uLong               mnSize;
-    sal_uLong               mnRealSize;
+    Point* mpArray;
+    sal_uLong mnSize;
+    sal_uLong mnRealSize;
 
 public:
 
-                        ImplPointArray();
-                        ~ImplPointArray();
+    ImplPointArray();
+   ~ImplPointArray();
 
-    void                ImplSetSize( sal_uLong nSize );
+    void ImplSetSize( sal_uLong nSize );
+    sal_uLong ImplGetRealSize() const { return mnRealSize; }
+    void ImplSetRealSize( sal_uLong nRealSize ) { mnRealSize = nRealSize; }
+    void ImplCreatePoly( tools::Polygon& rPoly ) const;
 
-    sal_uLong               ImplGetRealSize() const { return mnRealSize; }
-    void                ImplSetRealSize( sal_uLong nRealSize ) { mnRealSize = nRealSize; }
-
-    inline Point&       operator[]( sal_uLong nPos );
+    inline Point& operator[]( sal_uLong nPos );
     inline const Point& operator[]( sal_uLong nPos ) const;
 
-    void                ImplCreatePoly( Polygon& rPoly ) const;
 };
 
 ImplPointArray::ImplPointArray() :
@@ -183,9 +182,9 @@ inline const Point& ImplPointArray::operator[]( sal_uLong nPos ) const
     return mpArray[ nPos ];
 }
 
-void ImplPointArray::ImplCreatePoly( Polygon& rPoly ) const
+void ImplPointArray::ImplCreatePoly( tools::Polygon& rPoly ) const
 {
-    rPoly = Polygon( sal::static_int_cast<sal_uInt16>(mnRealSize), mpArray );
+    rPoly = tools::Polygon( sal::static_int_cast<sal_uInt16>(mnRealSize), mpArray );
 }
 
 class ImplVectMap
@@ -265,7 +264,7 @@ class ImplChain
 {
 private:
 
-    Polygon         maPoly;
+    tools::Polygon maPoly;
     Point           maStartPt;
     sal_uLong           mnArraySize;
     sal_uLong           mnCount;
@@ -285,7 +284,7 @@ public:
     inline void     ImplAdd( sal_uInt8 nCode );
     void            ImplEndAdd( sal_uLong nTypeFlag );
 
-    const Polygon&  ImplGetPoly() const { return maPoly; }
+    const tools::Polygon& ImplGetPoly() const { return maPoly; }
 };
 
 ImplChain::ImplChain( sal_uLong nInitCount, long nResize ) :
@@ -316,7 +315,7 @@ void ImplChain::ImplGetSpace()
 
 void ImplChain::ImplBeginAdd( const Point& rStartPt )
 {
-    maPoly = Polygon();
+    maPoly = tools::Polygon();
     maStartPt = rStartPt;
     mnCount = 0UL;
 }
@@ -776,7 +775,7 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
 
         for( ; nCurPoly < nCount; ++nCurPoly )
         {
-            const Polygon&      rPoly = rPolyPoly.GetObject( nCurPoly );
+            const tools::Polygon& rPoly = rPolyPoly.GetObject( nCurPoly );
             const sal_uInt16    nSize( rPoly.GetSize() );
             sal_uInt16          nDepth( 0 ), i( 0 );
             const bool          bRight( rPoly.IsRightOrientated() );
@@ -789,7 +788,7 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
 
             if( nSize && ( ( !bRight && !bHole ) || ( bRight && bHole ) ) )
             {
-                Polygon     aNewPoly( nSize );
+                tools::Polygon aNewPoly( nSize );
                 sal_uInt16  nPrim( 0 ), nSec( nSize - 1 );
 
                 if( rPoly.HasFlags() )
@@ -814,7 +813,7 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
         // put outmost polygon to the front
         if( nFirstPoly > 0 )
         {
-            const Polygon aFirst( rPolyPoly.GetObject( static_cast< sal_uInt16 >( nFirstPoly ) ) );
+            const tools::Polygon aFirst( rPolyPoly.GetObject( static_cast< sal_uInt16 >( nFirstPoly ) ) );
 
             rPolyPoly.Remove( static_cast< sal_uInt16 >( nFirstPoly ) );
             rPolyPoly.Insert( aFirst, 0 );
@@ -980,7 +979,7 @@ void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 
                 else
                     aChain.ImplEndAdd( bInner ? VECT_POLY_OUTLINE_INNER : VECT_POLY_OUTLINE_OUTER );
 
-                const Polygon& rPoly = aChain.ImplGetPoly();
+                const tools::Polygon& rPoly = aChain.ImplGetPoly();
 
                 if( rPoly.GetSize() > 2 )
                 {

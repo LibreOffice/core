@@ -163,7 +163,7 @@ namespace vclcanvas
             // vertex values in the loop below (as ::Polygon is a
             // pimpl class, creating one every loop turn would really
             // stress the mem allocator)
-            ::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
+            ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
 
             OSL_ENSURE( nStepCount >= 3,
                         "fillLinearGradient(): stepcount smaller than 3" );
@@ -335,7 +335,7 @@ namespace vclcanvas
 
 
             const sal_uInt32 nNumPoints( aOuterPoly.count() );
-            ::Polygon        aTempPoly( static_cast<sal_uInt16>(nNumPoints+1) );
+            ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(nNumPoints+1) );
 
             // increase number of steps by one: polygonal gradients have
             // the outermost polygon rendered in rColor2, and the
@@ -412,8 +412,8 @@ namespace vclcanvas
                 // here, keep it all the way and only change the vertex values
                 // in the loop below (as ::Polygon is a pimpl class, creating
                 // one every loop turn would really stress the mem allocator)
-                ::tools::PolyPolygon    aTempPolyPoly;
-                ::Polygon               aTempPoly2( static_cast<sal_uInt16>(nNumPoints+1) );
+                ::tools::PolyPolygon aTempPolyPoly;
+                ::tools::Polygon aTempPoly2( static_cast<sal_uInt16>(nNumPoints+1) );
 
                 aTempPoly2[0] = rBounds.TopLeft();
                 aTempPoly2[1] = rBounds.TopRight();
@@ -641,11 +641,11 @@ namespace vclcanvas
                 rOutDev.DrawRect( vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
                 rOutDev.SetLineColor( COL_BLUE );
-                ::Polygon aPoly1(
+                ::tools::Polygon aPoly1(
                     vcl::unotools::rectangleFromB2DRectangle( aRect ));
                 ::basegfx::B2DPolygon aPoly2( aPoly1.getB2DPolygon() );
                 aPoly2.transform( aTextureTransform );
-                ::Polygon aPoly3( aPoly2 );
+                ::tools::Polygon aPoly3( aPoly2 );
                 rOutDev.DrawPolygon( aPoly3 );
             }
 #endif

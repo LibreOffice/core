@@ -684,7 +684,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_wrapPolygon,
                                                        XML_edited, "0",
                                                        FSEND);
-                Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
+                tools::Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
                 for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
                     m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == 0 ? XML_start : XML_lineTo),
                                                             XML_x, OString::number(aPoly[i].X()),
