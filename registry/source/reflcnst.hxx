@@ -32,54 +32,54 @@ extern const sal_uInt16 minorVersion;
 extern const sal_uInt16 majorVersion;
 
 #define OFFSET_MAGIC                0
-#define OFFSET_SIZE                 (OFFSET_MAGIC + sizeof(magic))
-#define OFFSET_MINOR_VERSION        (OFFSET_SIZE + sizeof(sal_uInt32))
-#define OFFSET_MAJOR_VERSION        (OFFSET_MINOR_VERSION + sizeof(minorVersion))
-#define OFFSET_N_ENTRIES            (OFFSET_MAJOR_VERSION + sizeof(sal_uInt16))
-#define OFFSET_TYPE_SOURCE          (OFFSET_N_ENTRIES + sizeof(sal_uInt16))
-#define OFFSET_TYPE_CLASS           (OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
-#define OFFSET_THIS_TYPE            (OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
-#define OFFSET_UIK                  (OFFSET_THIS_TYPE + sizeof(sal_uInt16))
-#define OFFSET_DOKU                 (OFFSET_UIK + sizeof(sal_uInt16))
-#define OFFSET_FILENAME             (OFFSET_DOKU + sizeof(sal_uInt16))
+#define OFFSET_SIZE                 static_cast<sal_uInt32>(OFFSET_MAGIC + sizeof(magic))
+#define OFFSET_MINOR_VERSION        static_cast<sal_uInt32>(OFFSET_SIZE + sizeof(sal_uInt32))
+#define OFFSET_MAJOR_VERSION        static_cast<sal_uInt32>(OFFSET_MINOR_VERSION + sizeof(minorVersion))
+#define OFFSET_N_ENTRIES            static_cast<sal_uInt32>(OFFSET_MAJOR_VERSION + sizeof(majorVersion))
+#define OFFSET_TYPE_SOURCE          static_cast<sal_uInt32>(OFFSET_N_ENTRIES + sizeof(sal_uInt16))
+#define OFFSET_TYPE_CLASS           static_cast<sal_uInt32>(OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
+#define OFFSET_THIS_TYPE            static_cast<sal_uInt32>(OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
+#define OFFSET_UIK                  static_cast<sal_uInt32>(OFFSET_THIS_TYPE + sizeof(sal_uInt16))
+#define OFFSET_DOKU                 static_cast<sal_uInt32>(OFFSET_UIK + sizeof(sal_uInt16))
+#define OFFSET_FILENAME             static_cast<sal_uInt32>(OFFSET_DOKU + sizeof(sal_uInt16))
 
-#define OFFSET_N_SUPERTYPES         (OFFSET_FILENAME + sizeof(sal_uInt16))
-#define OFFSET_SUPERTYPES           (OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
+#define OFFSET_N_SUPERTYPES         static_cast<sal_uInt32>(OFFSET_FILENAME + sizeof(sal_uInt16))
+#define OFFSET_SUPERTYPES           static_cast<sal_uInt32>(OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
 
-#define OFFSET_CP_SIZE              (OFFSET_SUPERTYPES + sizeof(sal_uInt16))
-#define OFFSET_CP                   (OFFSET_CP_SIZE + sizeof(sal_uInt16))
+#define OFFSET_CP_SIZE              static_cast<sal_uInt32>(OFFSET_SUPERTYPES + sizeof(sal_uInt16))
+#define OFFSET_CP                   static_cast<sal_uInt32>(OFFSET_CP_SIZE + sizeof(sal_uInt16))
 
 #define CP_OFFSET_ENTRY_SIZE        0
-#define CP_OFFSET_ENTRY_TAG         (CP_OFFSET_ENTRY_SIZE + sizeof(sal_uInt32))
-#define CP_OFFSET_ENTRY_DATA        (CP_OFFSET_ENTRY_TAG + sizeof(sal_uInt16))
-#define CP_OFFSET_ENTRY_UIK1        CP_OFFSET_ENTRY_DATA
-#define CP_OFFSET_ENTRY_UIK2        (CP_OFFSET_ENTRY_UIK1 + sizeof(sal_uInt32))
-#define CP_OFFSET_ENTRY_UIK3        (CP_OFFSET_ENTRY_UIK2 + sizeof(sal_uInt16))
-#define CP_OFFSET_ENTRY_UIK4        (CP_OFFSET_ENTRY_UIK3 + sizeof(sal_uInt16))
-#define CP_OFFSET_ENTRY_UIK5        (CP_OFFSET_ENTRY_UIK4 + sizeof(sal_uInt32))
+#define CP_OFFSET_ENTRY_TAG         static_cast<sal_uInt32>(CP_OFFSET_ENTRY_SIZE + sizeof(sal_uInt32))
+#define CP_OFFSET_ENTRY_DATA        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_TAG + sizeof(sal_uInt16))
+#define CP_OFFSET_ENTRY_UIK1        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_DATA)
+#define CP_OFFSET_ENTRY_UIK2        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK1 + sizeof(sal_uInt32))
+#define CP_OFFSET_ENTRY_UIK3        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK2 + sizeof(sal_uInt16))
+#define CP_OFFSET_ENTRY_UIK4        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK3 + sizeof(sal_uInt16))
+#define CP_OFFSET_ENTRY_UIK5        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK4 + sizeof(sal_uInt32))
 
 #define FIELD_OFFSET_ACCESS         0
-#define FIELD_OFFSET_NAME           (FIELD_OFFSET_ACCESS + sizeof(sal_uInt16))
-#define FIELD_OFFSET_TYPE           (FIELD_OFFSET_NAME + sizeof(sal_uInt16))
-#define FIELD_OFFSET_VALUE          (FIELD_OFFSET_TYPE + sizeof(sal_uInt16))
-#define FIELD_OFFSET_DOKU           (FIELD_OFFSET_VALUE + sizeof(sal_uInt16))
-#define FIELD_OFFSET_FILENAME       (FIELD_OFFSET_DOKU + sizeof(sal_uInt16))
+#define FIELD_OFFSET_NAME           static_cast<sal_uInt32>(FIELD_OFFSET_ACCESS + sizeof(sal_uInt16))
+#define FIELD_OFFSET_TYPE           static_cast<sal_uInt32>(FIELD_OFFSET_NAME + sizeof(sal_uInt16))
+#define FIELD_OFFSET_VALUE          static_cast<sal_uInt32>(FIELD_OFFSET_TYPE + sizeof(sal_uInt16))
+#define FIELD_OFFSET_DOKU           static_cast<sal_uInt32>(FIELD_OFFSET_VALUE + sizeof(sal_uInt16))
+#define FIELD_OFFSET_FILENAME       static_cast<sal_uInt32>(FIELD_OFFSET_DOKU + sizeof(sal_uInt16))
 
 #define PARAM_OFFSET_TYPE           0
-#define PARAM_OFFSET_MODE           (PARAM_OFFSET_TYPE + sizeof(sal_uInt16))
-#define PARAM_OFFSET_NAME           (PARAM_OFFSET_MODE + sizeof(sal_uInt16))
+#define PARAM_OFFSET_MODE           static_cast<sal_uInt32>(PARAM_OFFSET_TYPE + sizeof(sal_uInt16))
+#define PARAM_OFFSET_NAME           static_cast<sal_uInt32>(PARAM_OFFSET_MODE + sizeof(sal_uInt16))
 
 #define METHOD_OFFSET_SIZE          0
-#define METHOD_OFFSET_MODE          (METHOD_OFFSET_SIZE + sizeof(sal_uInt16))
-#define METHOD_OFFSET_NAME          (METHOD_OFFSET_MODE + sizeof(sal_uInt16))
-#define METHOD_OFFSET_RETURN        (METHOD_OFFSET_NAME + sizeof(sal_uInt16))
-#define METHOD_OFFSET_DOKU          (METHOD_OFFSET_RETURN + sizeof(sal_uInt16))
-#define METHOD_OFFSET_PARAM_COUNT   (METHOD_OFFSET_DOKU + sizeof(sal_uInt16))
+#define METHOD_OFFSET_MODE          static_cast<sal_uInt32>(METHOD_OFFSET_SIZE + sizeof(sal_uInt16))
+#define METHOD_OFFSET_NAME          static_cast<sal_uInt32>(METHOD_OFFSET_MODE + sizeof(sal_uInt16))
+#define METHOD_OFFSET_RETURN        static_cast<sal_uInt32>(METHOD_OFFSET_NAME + sizeof(sal_uInt16))
+#define METHOD_OFFSET_DOKU          static_cast<sal_uInt32>(METHOD_OFFSET_RETURN + sizeof(sal_uInt16))
+#define METHOD_OFFSET_PARAM_COUNT   static_cast<sal_uInt32>(METHOD_OFFSET_DOKU + sizeof(sal_uInt16))
 
 #define REFERENCE_OFFSET_TYPE       0
-#define REFERENCE_OFFSET_NAME       (REFERENCE_OFFSET_TYPE + sizeof(sal_uInt16))
-#define REFERENCE_OFFSET_DOKU       (REFERENCE_OFFSET_NAME + sizeof(sal_uInt16))
-#define REFERENCE_OFFSET_ACCESS     (REFERENCE_OFFSET_DOKU + sizeof(sal_uInt16))
+#define REFERENCE_OFFSET_NAME       static_cast<sal_uInt32>(REFERENCE_OFFSET_TYPE + sizeof(sal_uInt16))
+#define REFERENCE_OFFSET_DOKU       static_cast<sal_uInt32>(REFERENCE_OFFSET_NAME + sizeof(sal_uInt16))
+#define REFERENCE_OFFSET_ACCESS     static_cast<sal_uInt32>(REFERENCE_OFFSET_DOKU + sizeof(sal_uInt16))
 
 enum CPInfoTag
 {
