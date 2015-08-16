@@ -1002,7 +1002,7 @@ SbxVariableRef SbiRuntime::PopVar()
     return xVar;
 }
 
-bool SbiRuntime::ClearExprStack()
+void SbiRuntime::ClearExprStack()
 {
     // Attention: Clear() doesn't suffice as methods must be deleted
     while ( nExprLvl )
@@ -1010,7 +1010,6 @@ bool SbiRuntime::ClearExprStack()
         PopVar();
     }
     refExprStk->Clear();
-    return false;
 }
 
 // Take variable from the expression-stack without removing it
