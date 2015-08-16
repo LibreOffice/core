@@ -1684,6 +1684,21 @@ XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
 {
 }
 
+XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLDatabaseFieldImportContext( rImport, rHlp, sAPI_database_number,
+            Element, true ),
+    sPropertyNumberingType( sAPI_numbering_type ),
+    sPropertySetNumber( sAPI_set_number ),
+    sNumberFormat("1"),
+    sNumberSync(GetXMLToken(XML_FALSE)),
+    nValue(0),
+    bValueOK(false)
+{
+}
+
 void XMLDatabaseNumberImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )

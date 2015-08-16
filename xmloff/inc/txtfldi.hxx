@@ -577,6 +577,10 @@ public:
                                    XMLTextImportHelper& rHlp,
                                    sal_uInt16 nPrfx,
                                    const OUString& sLocalName);
+    XMLDatabaseNumberImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
