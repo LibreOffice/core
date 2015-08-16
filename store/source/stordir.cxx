@@ -191,7 +191,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
                     memset (&rFindData.m_pszName[n], 0, k);
                 }
 
-                rFindData.m_nLength  = n;
+                rFindData.m_nLength  = static_cast<sal_Int32>(n);
                 rFindData.m_nAttrib |= aPage.attrib();
                 rFindData.m_nSize    = aPage.dataLength();
 

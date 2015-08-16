@@ -244,7 +244,7 @@ class PageCache_Impl :
 
     static inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
     {
-        return ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
+        return static_cast<int>((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
     }
     inline int hash_index_Impl (sal_uInt32 nOffset)
     {

@@ -128,7 +128,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     */
     sal_uInt16 capacity() const
     {
-        return (store::ntohs(base::m_aDescr.m_nSize) - self::thePageSize);
+        return static_cast<sal_uInt16>(store::ntohs(base::m_aDescr.m_nSize) - self::thePageSize);
     }
 
     /** capacityCount (must be even).
@@ -142,7 +142,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     */
     sal_uInt16 usage() const
     {
-        return (store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
+        return static_cast<sal_uInt16>(store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
     }
 
     /** usageCount.
