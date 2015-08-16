@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3ce58b3",
+        "filename": "sw/inc/viewopt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T04:36:35Z",
+      "side": 1,
+      "message": "initialization missing in constructor",
+      "revId": "5b8c08eff28e48af04d480f8638c982a3e24a096",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
