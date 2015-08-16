@@ -16,6 +16,24 @@
       "revId": "a82a5fa4e8fe98ab71e7910509d5286face96784",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_730088ab",
+        "filename": "vcl/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2015-08-16T06:05:32Z",
+      "side": 1,
+      "message": "Without changing the direction ( line 481 ), nXAdvance is the width of the character instead of its height. On the other hand, nYAdvance is 0 since it is LTR (horizontal). Simply swapping nXAdvance and nYAdvance doesn\u0027t work since they don\u0027t have the right value.\nI\u0027ve tried to change text direction ( line 481 ) to HB_DIRECTION_TTB (TTB means top to bottom), but all the values between 561 and 564 become zero. It\u0027s pity that HB_DIRECTION_TTB doesn\u0027t work out as my expectation. Hence I overwrite nXAdvance with nVirtAdv.",
+      "parentUuid": "9aed3d3a_9390ac97",
+      "revId": "a82a5fa4e8fe98ab71e7910509d5286face96784",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
