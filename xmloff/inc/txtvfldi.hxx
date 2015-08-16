@@ -597,6 +597,10 @@ public:
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLDatabaseDisplayImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 Element );
 
 protected:
 
@@ -606,6 +610,8 @@ protected:
 
     /// create, prepare and insert database field master and database field
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

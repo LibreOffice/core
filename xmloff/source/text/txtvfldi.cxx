@@ -1258,6 +1258,22 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
 {
 }
 
+XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLDatabaseFieldImportContext( rImport, rHlp, sAPI_database, Element, false ),
+    sPropertyColumnName(sAPI_data_column_name),
+    sPropertyDatabaseFormat(sAPI_is_data_base_format),
+    sPropertyCurrentPresentation(sAPI_current_presentation),
+    sPropertyIsVisible(sAPI_is_visible),
+    aValueHelper(rImport, rHlp, false, true, false, false),
+    bColumnOK(false),
+    bDisplay( true ),
+    bDisplayOK( false )
+{
+}
+
 void XMLDatabaseDisplayImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken, const OUString& sAttrValue )
 {
@@ -1369,7 +1385,84 @@ void XMLDatabaseDisplayImportContext::EndElement()
     GetImportHelper().InsertString(GetContent());
 }
 
+void XMLDatabaseDisplayImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception )
+{
+    // we have an endFastElement of our own, because database fields need
+    // to be attached to a field master before they can be inserted into
+    // the document. Database stuff (database, table, column) all goes
+    // to the field master, value & style go to the field.
 
+    if (bValid)
+    {
+
+        // so here goes: we start with the master
+        Reference<XPropertySet> xMaster;
+
+        // create and prepare field master first
+        if (CreateField(xMaster,
+                        OUString(
+                            sAPI_fieldmaster_database)))
+        {
+            Any aAny;
+            aAny <<= sColumnName;
+            xMaster->setPropertyValue(sPropertyColumnName, aAny);
+
+            // fieldmaster takes database, table and column name
+            XMLDatabaseFieldImportContext::PrepareField(xMaster);
+
+            // create field
+            Reference<XPropertySet> xField;
+            if (CreateField(xField,
+                            OUString(
+                                sAPI_database)))
+            {
+                // attach field master
+                Reference<XDependentTextField> xDepField(xField, UNO_QUERY);
+                if (xDepField.is())
+                {
+                    // attach field to field master
+                    xDepField->attachTextFieldMaster(xMaster);
+
+                    // attach field to document
+                    Reference<XTextContent> xTextContent(xField, UNO_QUERY);
+                    if (xTextContent.is())
+                    {
+                        // insert, set field properties and exit!
+                        GetImportHelper().InsertTextContent(xTextContent);
+
+                        // prepare field: format from database?
+                        sal_Bool bTmp = !aValueHelper.IsFormatOK();
+                        aAny.setValue( &bTmp, cppu::UnoType<bool>::get() );
+                        xField->setPropertyValue(sPropertyDatabaseFormat,aAny);
+
+                        // value, value-type and format done by value helper
+                        aValueHelper.PrepareField(xField);
+
+                        // visibility
+                        if( bDisplayOK )
+                        {
+                            aAny.setValue( &bDisplay, cppu::UnoType<bool>::get() );
+                            xField->setPropertyValue(sPropertyIsVisible, aAny);
+                        }
+
+                        // set presentation
+                        aAny <<= GetContent();
+                        xField->setPropertyValue(sPropertyCurrentPresentation,
+                                                    aAny);
+
+                        // success!
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // above: exit on success; so for all error cases we end up here!
+    // write element content
+    GetImportHelper().InsertString(GetContent());
+}
 
 // value import helper
 
