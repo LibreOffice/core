@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3ec9891",
+        "filename": "slideshow/source/engine/screenupdater.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 0,
+      "message": "After looking at this loop, I thought it would be more readable as a range-based for-loop.",
+      "revId": "7e383cb50c6020b86ac7857ece8a6273b7eb1a5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_13e81c7c",
+        "filename": "slideshow/source/engine/shapes/appletshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 0,
+      "message": "After looking at this loop, it seems it would be much more readable as a range-based for-loop. Feel free to disagree.",
+      "revId": "7e383cb50c6020b86ac7857ece8a6273b7eb1a5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_73f9a84d",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 0,
+      "message": "Again, I think this is more readable as a range-based for-loop",
+      "revId": "7e383cb50c6020b86ac7857ece8a6273b7eb1a5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_b3f2106e",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 0,
+      "message": "After looking at this loop, I think this would be much more readable as a range-based for-loop.",
+      "revId": "7e383cb50c6020b86ac7857ece8a6273b7eb1a5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

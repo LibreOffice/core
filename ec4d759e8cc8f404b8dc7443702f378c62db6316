@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_5302a43f",
+        "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 1,
+      "message": "I\u0027m not sold on this change or any of the changes I made that are similar to it, so I wont be heartbroken if you disagree or think I need to remove it.",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_33ff2036",
+        "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_93fc2c40",
+        "filename": "slideshow/source/engine/rehearsetimingsactivity.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_73e248a1",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 1,
+      "message": "I\u0027m not sold on this change, but I thought I\u0027d include it in here as part of my efforts to reduce the use of boost::bind",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_d3ed1490",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 1,
+      "message": "I\u0027m not sold on this change, but I thought I\u0027d include it in here as part of my efforts to reduce the use of boost::bind",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_d394f4e9",
+        "filename": "slideshow/source/engine/shapes/drawshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-16T21:12:35Z",
+      "side": 1,
+      "message": "Since aTranslatedRegions will end up as the same size as maHyperlinkRegions, I thought it would improve the performance of the loop to reserve the necessary capacity before the loop.",
+      "revId": "ec4d759e8cc8f404b8dc7443702f378c62db6316",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
