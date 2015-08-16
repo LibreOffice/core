@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_73d8881e",
+        "filename": "external/graphite/graphite2.win64.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 0,
+      "message": "Since this patch are no longer applied, why not drop it entirely?",
+      "revId": "46791546a8aaef40eafc08e6e71b4b0785324564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

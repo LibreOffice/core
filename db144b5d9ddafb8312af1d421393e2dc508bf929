@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_93db8c1b",
+        "filename": "external/graphite/UnpackedTarball_graphite.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 1,
+      "message": "What is need of these commented out lines?",
+      "revId": "db144b5d9ddafb8312af1d421393e2dc508bf929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_d3035475",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 1,
+      "message": "What is the purpose of this change?",
+      "revId": "db144b5d9ddafb8312af1d421393e2dc508bf929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_33ce005b",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 9055,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 1,
+      "message": "What is the purpose of the change here? This is not graphite-specific code, so what are the effects of this on the other layout engine?",
+      "revId": "db144b5d9ddafb8312af1d421393e2dc508bf929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_13e77ce5",
+        "filename": "vcl/source/glyphs/graphite_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 1,
+      "message": "If this code is no longer needed, it should just be removed not commented out.",
+      "revId": "db144b5d9ddafb8312af1d421393e2dc508bf929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_f3ebf8ae",
+        "filename": "vcl/source/glyphs/graphite_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 1,
+      "message": "What is the commented out code for?",
+      "revId": "db144b5d9ddafb8312af1d421393e2dc508bf929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_53d104fb",
+        "filename": "vcl/source/glyphs/graphite_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-16T16:29:19Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "db144b5d9ddafb8312af1d421393e2dc508bf929",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
