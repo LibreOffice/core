@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_9390ac97",
+        "filename": "vcl/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T02:22:20Z",
+      "side": 1,
+      "message": "maybe a stupid question.. but why swapping nXAdvance and nYAdvance doesn\u0027t do the trick.\nmore to the point if nXAdvance is wrong in this case, how come nYAdvance is right ?",
+      "revId": "a82a5fa4e8fe98ab71e7910509d5286face96784",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
