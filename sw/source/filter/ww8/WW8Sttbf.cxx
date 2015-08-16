@@ -32,6 +32,8 @@ namespace ww8
     {
         if (checkSeek(rSt, nPos))
         {
+            sal_Size nRemainingSize = rSt.remainingSize();
+            nSize = std::min<sal_uInt32>(nRemainingSize, nSize);
             mp_data.reset(new sal_uInt8[nSize]);
             mn_size = rSt.Read(mp_data.get(), nSize);
         }
