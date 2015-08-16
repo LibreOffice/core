@@ -4409,6 +4409,16 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
     bValid = true;
 }
 
+XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_datetime, Element )
+{
+    sServicePrefix = sAPI_presentation_prefix;
+    bValid = true;
+}
+
 /// process attribute values
 void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16,
                                    const OUString& )

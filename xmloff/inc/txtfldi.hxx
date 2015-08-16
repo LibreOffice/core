@@ -1443,6 +1443,10 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
+    XMLDateTimeFieldImportContext(
+        SvXMLImport& rImport,               /// XML Import
+        XMLTextImportHelper& rHlp,          /// Text import helper
+        sal_Int32 Element );                /// element token
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
