@@ -16,6 +16,24 @@
       "revId": "6ad0f3e282b112f6871767189dc945d1d93b8ecb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_b3d4d047",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3189,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-16T04:07:37Z",
+      "side": 1,
+      "message": "actually there is already a command for taht \u0027Restore Default Command\u0027\nso I guess that is fine.\nBut at least add some comment below to explain the \u0027hack\u0027\nBecause that is really not obvious, and in 1,2,5 years a poor dev will stumble upon this and wonder \u0027WTF\u0027 :-)",
+      "parentUuid": "9aed3d3a_73e4083b",
+      "revId": "6ad0f3e282b112f6871767189dc945d1d93b8ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
