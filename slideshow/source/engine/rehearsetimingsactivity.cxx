@@ -167,11 +167,8 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
 
-    std::for_each( rContext.mrViewContainer.begin(),
-                   rContext.mrViewContainer.end(),
-                   boost::bind( &RehearseTimingsActivity::viewAdded,
-                                this,
-                                _1 ));
+    for( const auto& rView : rContext.mrViewContainer )
+        viewAdded( rView );
 }
 
 RehearseTimingsActivity::~RehearseTimingsActivity()
