@@ -1432,9 +1432,16 @@ public:
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
+    XMLMetaFieldImportContext(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        XMLHints_Impl& rHints,
+        bool& rIgnoreLeadingSpace );
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue) SAL_OVERRIDE;
+    virtual void ProcessAttribute( sal_Int32 Element,
+        const OUString& rValue ) SAL_OVERRIDE;
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) SAL_OVERRIDE;
 };
@@ -1452,6 +1459,15 @@ XMLMetaFieldImportContext::XMLMetaFieldImportContext(
 {
 }
 
+XMLMetaFieldImportContext::XMLMetaFieldImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    XMLHints_Impl& rHints,
+    bool& rIgnoreLeadingSpace )
+:   XMLMetaImportContextBase( rImport, Element, rHints, rIgnoreLeadingSpace )
+{
+}
+
 void XMLMetaFieldImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
     OUString const & i_rLocalName, OUString const & i_rValue)
 {
@@ -1464,6 +1480,19 @@ void XMLMetaFieldImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
     {
         XMLMetaImportContextBase::ProcessAttribute(
             i_nPrefix, i_rLocalName, i_rValue);
+    }
+}
+
+void XMLMetaFieldImportContext::ProcessAttribute( sal_Int32 Element,
+    const OUString& rValue )
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_STYLE | XML_data_style_name) )
+    {
+        m_DataStyleName = rValue;
+    }
+    else
+    {
+        XMLMetaImportContextBase::ProcessAttribute( Element, rValue );
     }
 }
 
