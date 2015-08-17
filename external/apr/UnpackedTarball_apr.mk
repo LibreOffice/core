@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,apr))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,apr,$(APR_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,apr,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,apr, \
+    external/apr/uuid.patch \
+))
+
 # vim: set noet sw=4 ts=4:
