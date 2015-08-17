@@ -711,7 +711,7 @@ protected:
 protected:
     void SetList(const ::com::sun::star::uno::Any& rItems, bool bComboBox);
     void CreateControl(vcl::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xModel);
-    DECL_LINK( OnClick, void* );
+    DECL_LINK_TYPED( OnClick, VclPtr<CheckBox>, void );
 };
 
 

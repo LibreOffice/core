@@ -277,9 +277,10 @@ namespace svt
 
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
-        VclPtr<CheckBox>   pBox;
-        Rectangle   aFocusRect;
-        Link<>      m_aClickLink,m_aModifyLink;
+        VclPtr<CheckBox>             pBox;
+        Rectangle                    aFocusRect;
+        Link<VclPtr<CheckBox>,void>  m_aClickLink;
+        Link<>                       m_aModifyLink;
 
     public:
         CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
@@ -294,7 +295,7 @@ namespace svt
         virtual void DataChanged( const DataChangedEvent& _rEvent ) SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
 
-        void SetClickHdl(const Link<>& rHdl) {m_aClickLink = rHdl;}
+        void SetClickHdl(const Link<VclPtr<CheckBox>,void>& rHdl) {m_aClickLink = rHdl;}
 
         void SetModifyHdl(const Link<>& rHdl) {m_aModifyLink = rHdl;}
 

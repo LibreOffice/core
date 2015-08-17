@@ -2692,7 +2692,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == ::com::sun::star::form::FormComponentType::CHECKBOX)
-        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<>() );
+        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<VclPtr<CheckBox>,void>() );
 
 }
 
@@ -3114,7 +3114,7 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 }
 
 
-IMPL_LINK_NOARG(DbFilterField, OnClick)
+IMPL_LINK_NOARG_TYPED(DbFilterField, OnClick, VclPtr<CheckBox>, void)
 {
     TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().GetState();
     OUString aText;
@@ -3136,7 +3136,6 @@ IMPL_LINK_NOARG(DbFilterField, OnClick)
         m_aText = aText;
         m_aCommitLink.Call(this);
     }
-    return 1;
 }
 
 TYPEINIT0(FmXGridCell);
@@ -3857,7 +3856,7 @@ void FmXCheckBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<>());
+    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<VclPtr<CheckBox>,void>());
     m_pBox = NULL;
 
     FmXDataCell::disposing();
