@@ -19,6 +19,8 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
 
+#include <sot/storage.hxx>
+
 #define USE_UTF8_CODEPAGE 0
 #if USE_UTF8_CODEPAGE
 #define CODEPAGE_MS 65001
@@ -592,6 +594,14 @@ void exportDirStream(SvStream& rStrm)
 void VbaExport::exportVBA()
 {
     // start here with the VBA export
+
+    const OUString aVbaStreamLocation("/tmp/vba_out.bin");
+    SvFileStream aVbaStream(aVbaStreamLocation, STREAM_READWRITE);
+
+    tools::SvRef<SotStorage> aStorage(new SotStorage(aVbaStream));
+    SotStorage* pVBAStream = aStorage->OpenSotStorage("VBA", STREAM_READWRITE);
+    SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
+
     const OUString aDirFileName("/tmp/vba_dir_out.bin");
     SvFileStream aDirStream(aDirFileName, STREAM_READWRITE);
 
@@ -601,12 +611,9 @@ void VbaExport::exportVBA()
     aDirStream.Seek(0);
 
     SvMemoryStream aMemoryStream(4096, 4096);
-    OUString aCompressedFileName("/tmp/vba_dir_out_compressed.bin");
-    SvFileStream aCompressedStream(aCompressedFileName, STREAM_READWRITE);
-
     aMemoryStream.WriteStream(aDirStream);
 
-    VBACompression aCompression(aCompressedStream, aMemoryStream);
+    VBACompression aCompression(*pDirStream, aMemoryStream);
     aCompression.write();
 
     css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
@@ -620,7 +627,9 @@ void VbaExport::exportVBA()
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
         SAL_DEBUG(aModuleInfo.ModuleType);
     }
-
+    pDirStream->Commit();
+    pVBAStream->Commit();
+    aStorage->Commit();
 }
 
 css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
