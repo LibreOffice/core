@@ -54,7 +54,9 @@ public:
     /// Draw to the provided HDC.
     virtual void        DrawTextImpl(HDC hDC) const = 0;
 
-protected:
+    virtual bool        CacheGlyphs(SalGraphics& rGraphics) const = 0;
+    virtual bool        DrawCachedGlyphs(SalGraphics& rGraphics) const = 0;
+
     HDC                 mhDC;               // WIN32 device handle
     HFONT               mhFont;             // WIN32 font handle
     int                 mnBaseAdv;          // x-offset relative to Layout origin
@@ -73,6 +75,8 @@ public:
     virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
+    virtual bool    CacheGlyphs(SalGraphics& rGraphics) const SAL_OVERRIDE;
+    virtual bool    DrawCachedGlyphs(SalGraphics& rGraphics) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
@@ -160,6 +164,8 @@ public:
     virtual bool  LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;    // first step of layout
     virtual void  AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;  // adjusting after fallback etc.
     virtual void  DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
+    virtual bool  CacheGlyphs(SalGraphics& rGraphics) const SAL_OVERRIDE;
+    virtual bool  DrawCachedGlyphs(SalGraphics& rGraphics) const SAL_OVERRIDE;
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
