@@ -282,7 +282,7 @@
 #include <limits>
 #include <list>
 #include <memory>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

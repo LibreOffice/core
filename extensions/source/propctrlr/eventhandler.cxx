@@ -68,7 +68,7 @@
 
 #include <map>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
 {
