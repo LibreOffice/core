@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_530c6442",
+        "filename": "slideshow/source/engine/shapes/appletshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-17T01:46:55Z",
+      "side": 1,
+      "message": "As far as I could tell capturing getBounds() outside the loop in line 132 makes more sense, but I could be wrong.",
+      "revId": "b213d70efa4963f52af3163665c1f3ddaad12ef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
