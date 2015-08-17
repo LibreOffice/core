@@ -101,6 +101,7 @@ enum class FileViewFlags
     NONE               = 0x00,
     ONLYFOLDER         = 0x01,
     MULTISELECTION     = 0x02,
+    SHOW_TYPE          = 0x04,
     SHOW_ONLYTITLE     = 0x10,
     SHOW_NONE          = 0x20,
 };
@@ -531,7 +532,10 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
         SetTabJustify(2, AdjustRight); // column "Size"
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
-        mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
+        if (nFlags & FileViewFlags::SHOW_TYPE)
+        {
+            mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
+        }
         mpHeaderBar->InsertItem(COLUMN_SIZE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
         mpHeaderBar->InsertItem(COLUMN_DATE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
     }
@@ -998,7 +1002,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 
 // class SvtFileView -----------------------------------------------------
 SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
-                          bool bOnlyFolder, bool bMultiSelection ) :
+                          bool bOnlyFolder, bool bMultiSelection, bool bShowType ) :
 
     Control( pParent, nBits )
 {
@@ -1007,6 +1011,8 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
         nFlags |= FileViewFlags::ONLYFOLDER;
     if ( bMultiSelection )
         nFlags |= FileViewFlags::MULTISELECTION;
+    if ( bShowType )
+        nFlags |= FileViewFlags::SHOW_TYPE;
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(

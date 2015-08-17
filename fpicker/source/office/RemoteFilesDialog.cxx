@@ -232,7 +232,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
 
     m_pFileView = VclPtr< SvtFileView >::Create( m_pContainer, WB_BORDER | WB_TABSTOP,
                                        REMOTEDLG_TYPE_PATHDLG == m_eType,
-                                       m_bMultiselection );
+                                       m_bMultiselection, false );
 
     m_pFileView->Show();
     m_pFileView->EnableAutoResize();

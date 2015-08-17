@@ -74,7 +74,7 @@ protected:
     virtual void GetFocus() SAL_OVERRIDE;
 
 public:
-    SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
+    SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection, bool bShowType = true );
     virtual ~SvtFileView();
     virtual void dispose() SAL_OVERRIDE;
 
