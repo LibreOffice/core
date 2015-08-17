@@ -1579,6 +1579,8 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
 
     pImpl->PreDraw();
 
+    // FIXME: This code snippet is mostly copied from the one in
+    // UniscribeLayout::DrawTextImpl. Should be factored out.
     int nBaseClusterOffset = 0;
     int nBaseGlyphPos = -1;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
@@ -1626,16 +1628,6 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
             pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
             nAdvance += mpGlyphAdvances[i];
         }
-#if 0
-        ScriptTextOut(hDC, &rScriptCache,
-            aPos.X(), aPos.Y(), 0, NULL,
-            &rVisualItem.mpScriptItem->a, NULL, 0,
-            mpOutGlyphs + nMinGlyphPos,
-            nEndGlyphPos - nMinGlyphPos,
-            mpGlyphAdvances + nMinGlyphPos,
-            mpJustifications ? mpJustifications + nMinGlyphPos : NULL,
-            mpGlyphOffsets + nMinGlyphPos);
-#endif
     }
     pImpl->PostDraw();
 
