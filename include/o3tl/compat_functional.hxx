@@ -32,8 +32,7 @@
 #ifndef INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
 #define INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
 
-#include <utility>
-#include <functional>
+#include <sal/config.h>
 
 namespace o3tl
 {
@@ -58,30 +57,6 @@ struct select2nd
         return cp.second;
     }
 };
-
-/// Call F1 with the result of F2 applied to the one input parameter
-template<class F1, class F2>
-class unary_compose : public std::unary_function<typename F2::argument_type, typename F1::result_type>
-{
-    public:
-        unary_compose(const F1& fnction1, const F2& fnction2) : ftor1(fnction1), ftor2(fnction2) {}
-
-        typename F1::result_type operator()(const typename F2::argument_type& y) const
-        {
-            return ftor1(ftor2(y));
-        }
-
-    protected:
-        F1 ftor1;
-        F2 ftor2;
-};
-
-/// Create functor that calls F1 with the result of F2 applied to the one input parameter
-template<class F1, class F2>
-inline unary_compose<F1, F2> compose1(const F1& fnction1, const F2& fnction2)
-{
-    return unary_compose<F1, F2>(fnction1, fnction2);
-}
 
 }   // namespace o3tl
 
