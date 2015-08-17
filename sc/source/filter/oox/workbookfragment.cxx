@@ -494,6 +494,9 @@ void WorkbookFragment::finalizeImport()
         aIt->first.reset();
     }
 
+    sal_Int16 nActiveSheet = getViewSettings().getActiveCalcSheet();
+    getWorksheets().finalizeImport( nActiveSheet );
+
     // final conversions, e.g. calculation settings and view settings
     finalizeWorkbookImport();
 

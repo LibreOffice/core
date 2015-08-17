@@ -84,6 +84,7 @@ public:
         if sSheetNameRef doesn't start with '#' it is ignored and not modified
     */
     void                convertSheetNameRef( OUString& sSheetNameRef ) const;
+    void finalizeImport( sal_Int16 nActiveSheet );
 
 private:
     struct SheetInfo : public SheetInfoModel

@@ -34,6 +34,7 @@
 #include <oox/token/properties.hxx>
 #include "biffinputstream.hxx"
 #include "excelhandlers.hxx"
+#include "document.hxx"
 
 namespace oox {
 namespace xls {
@@ -179,7 +180,6 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
         sal_Int16 nCalcSheet = -1;
         OUString aSheetName = rPreferredName.isEmpty() ? "Sheet" : rPreferredName;
-        PropertySet aPropSet;
         if( nSheetPos < xSheetsIA->getCount() )
         {
             nCalcSheet = static_cast< sal_Int16 >( nSheetPos );
@@ -190,7 +190,6 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
                 aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
                 xSheetName->setName( aSheetName );
             }
-            aPropSet.set( xSheetName );
         }
         else
         {
@@ -198,11 +197,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
             // new sheet - insert with unused name
             aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
             xSheets->insertNewByName( aSheetName, nCalcSheet );
-            aPropSet.set( xSheetsIA->getByIndex( nCalcSheet ) );
         }
-
-        // sheet properties
-        aPropSet.setProperty( PROP_IsVisible, bVisible );
 
         // return final sheet index if sheet exists
         return IndexNamePair( nCalcSheet, aSheetName );
@@ -222,6 +217,20 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
     maSheetInfos.push_back( xSheetInfo );
     maSheetInfosByName[ rModel.maName ] = xSheetInfo;
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
+}
+
+void WorksheetBuffer::finalizeImport( sal_Int16 nActiveSheet )
+{
+    ScDocument& rDoc = getScDocument();
+
+    for ( auto aSheetInfo: maSheetInfos )
+    {
+        // make sure at least 1 sheet (the active one) is visible
+        if ( aSheetInfo->mnCalcSheet == nActiveSheet)
+            rDoc.SetVisible( aSheetInfo->mnCalcSheet, true );
+        else
+            rDoc.SetVisible( aSheetInfo->mnCalcSheet, (aSheetInfo->mnState == XML_visible) ? 1 : 0 );
+    }
 }
 
 } // namespace xls
