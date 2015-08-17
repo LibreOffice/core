@@ -757,7 +757,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbFill                              = true;
     mbSecondary                         = false;
     mbNonHomogeneous                    = false;
-    mbDoubleBuffering                   = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE"); // when we are not sure, assume it cannot do double-buffering via RenderContext
+    mbDoubleBufferingRequested = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE"); // when we are not sure, assume it cannot do double-buffering via RenderContext
 }
 
 WindowImpl::~WindowImpl()
@@ -1074,7 +1074,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
-        if (!(nStyle & WB_DEFAULTWIN) && SupportsDoubleBuffering())
+        if (!(nStyle & WB_DEFAULTWIN) && mpWindowImpl->mbDoubleBufferingRequested)
             mpWindowImpl->mpFrameData->mpBuffer = VclPtrInstance<VirtualDevice>();
         mpWindowImpl->mpFrameData->mbInBufferedPaint = false;
 
@@ -3905,7 +3905,7 @@ Any Window::GetSystemDataAny() const
 
 bool Window::SupportsDoubleBuffering() const
 {
-    return mpWindowImpl->mbDoubleBuffering;
+    return mpWindowImpl->mpFrameData->mpBuffer;
 }
 
 /*

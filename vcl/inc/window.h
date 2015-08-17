@@ -376,7 +376,7 @@ public:
                         mbFill:1,
                         mbSecondary:1,
                         mbNonHomogeneous:1,
-                        mbDoubleBuffering:1;
+                        mbDoubleBufferingRequested:1;
 
     vcl::RenderSettings maRenderSettings;
 
