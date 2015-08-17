@@ -864,16 +864,15 @@ namespace
                 // get result
                 switch(eWebDAVResponseParserMode)
                 {
-                    // *(std::vector<T>*) & is a horrible hack but hopefully works,
-                    // I was not able to come up with something sane :-/
+                    //TODO: Clean up reinterpret_casts:
                     case WebDAVResponseParserMode_PropFind:
-                        rResult = *(std::vector<T>*) &pWebDAVResponseParser->getResult_PropFind();
+                        rResult = reinterpret_cast<std::vector<T> const &>(pWebDAVResponseParser->getResult_PropFind());
                         break;
                     case WebDAVResponseParserMode_PropName:
-                        rResult = *(std::vector<T>*) &pWebDAVResponseParser->getResult_PropName();
+                        rResult = reinterpret_cast<std::vector<T> const &>(pWebDAVResponseParser->getResult_PropName());
                         break;
                     case WebDAVResponseParserMode_Lock:
-                        rResult = *(std::vector<T>*) &pWebDAVResponseParser->getResult_Lock();
+                        rResult = reinterpret_cast<std::vector<T> const &>(pWebDAVResponseParser->getResult_Lock());
                         break;
                 }
             }

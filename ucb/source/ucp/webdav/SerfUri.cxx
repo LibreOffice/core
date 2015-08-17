@@ -83,7 +83,7 @@ SerfUri::SerfUri( const OUString & inUri )
     }
     if ( !mAprUri.path )
     {
-        mAprUri.path = (char *)"/";
+        mAprUri.path = const_cast<char *>("/");
     }
 
     init( &mAprUri );
