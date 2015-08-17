@@ -839,7 +839,8 @@ namespace
     void parseWebDAVResponse(
         const uno::Reference< io::XInputStream >& xInputStream,
         std::vector< T >& rResult,
-        WebDAVResponseParserMode eWebDAVResponseParserMode)
+        WebDAVResponseParserMode eWebDAVResponseParserMode,
+        std::vector<T> const & (WebDAVResponseParser::* fn)() const)
     {
         if(xInputStream.is())
         {
@@ -862,19 +863,7 @@ namespace
                 xParser->parseStream(myInputSource);
 
                 // get result
-                switch(eWebDAVResponseParserMode)
-                {
-                    //TODO: Clean up reinterpret_casts:
-                    case WebDAVResponseParserMode_PropFind:
-                        rResult = reinterpret_cast<std::vector<T> const &>(pWebDAVResponseParser->getResult_PropFind());
-                        break;
-                    case WebDAVResponseParserMode_PropName:
-                        rResult = reinterpret_cast<std::vector<T> const &>(pWebDAVResponseParser->getResult_PropName());
-                        break;
-                    case WebDAVResponseParserMode_Lock:
-                        rResult = reinterpret_cast<std::vector<T> const &>(pWebDAVResponseParser->getResult_Lock());
-                        break;
-                }
+                rResult = (pWebDAVResponseParser->*fn)();
             }
             catch(uno::Exception&)
             {
@@ -892,21 +881,21 @@ namespace http_dav_ucp
     std::vector< ucb::Lock > parseWebDAVLockResponse(const uno::Reference< io::XInputStream >& xInputStream)
     {
         std::vector< ucb::Lock > aResult;
-        parseWebDAVResponse< ucb::Lock >(xInputStream, aResult, WebDAVResponseParserMode_Lock);
+        parseWebDAVResponse< ucb::Lock >(xInputStream, aResult, WebDAVResponseParserMode_Lock, &WebDAVResponseParser::getResult_Lock);
         return aResult;
     }
 
     std::vector< DAVResource > parseWebDAVPropFindResponse(const uno::Reference< io::XInputStream >& xInputStream)
     {
         std::vector< DAVResource > aResult;
-        parseWebDAVResponse< DAVResource >(xInputStream, aResult, WebDAVResponseParserMode_PropFind);
+        parseWebDAVResponse< DAVResource >(xInputStream, aResult, WebDAVResponseParserMode_PropFind, &WebDAVResponseParser::getResult_PropFind);
         return aResult;
     }
 
     std::vector< DAVResourceInfo > parseWebDAVPropNameResponse(const uno::Reference< io::XInputStream >& xInputStream)
     {
         std::vector< DAVResourceInfo > aResult;
-        parseWebDAVResponse< DAVResourceInfo >(xInputStream, aResult, WebDAVResponseParserMode_PropName);
+        parseWebDAVResponse< DAVResourceInfo >(xInputStream, aResult, WebDAVResponseParserMode_PropName, &WebDAVResponseParser::getResult_PropName);
         return aResult;
     }
 } // namespace http_dav_ucp
