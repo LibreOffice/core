@@ -38,7 +38,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

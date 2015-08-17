@@ -58,7 +58,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <limits>

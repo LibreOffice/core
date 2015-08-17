@@ -66,7 +66,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
