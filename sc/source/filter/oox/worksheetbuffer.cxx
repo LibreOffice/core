@@ -34,6 +34,7 @@
 #include <oox/token/properties.hxx>
 #include "biffinputstream.hxx"
 #include "excelhandlers.hxx"
+#include "document.hxx"
 
 namespace oox {
 namespace xls {
@@ -76,9 +77,13 @@ void WorksheetBuffer::importSheet( SequenceInputStream& rStrm )
     insertSheet( aModel );
 }
 
-sal_Int16 WorksheetBuffer::insertEmptySheet( const OUString& rPreferredName, bool bVisible )
+sal_Int16 WorksheetBuffer::insertEmptySheet( const OUString& rPreferredName )
 {
-    return createSheet( rPreferredName, SAL_MAX_INT32, bVisible ).first;
+    IndexNamePair aIndexName = createSheet( rPreferredName, SAL_MAX_INT32 );
+    ScDocument& rDoc = getScDocument();
+
+    rDoc.SetVisible( aIndexName.first, false );
+    return aIndexName.first;
 }
 
 sal_Int32 WorksheetBuffer::getWorksheetCount() const
@@ -170,7 +175,7 @@ WorksheetBuffer::SheetInfo::SheetInfo( const SheetInfoModel& rModel, sal_Int16 n
 {
 }
 
-WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPreferredName, sal_Int32 nSheetPos, bool bVisible )
+WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPreferredName, sal_Int32 nSheetPos )
 {
     //FIXME: Rewrite this block using ScDocument[Import] instead of UNO
     try
@@ -179,7 +184,6 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
         sal_Int16 nCalcSheet = -1;
         OUString aSheetName = rPreferredName.isEmpty() ? "Sheet" : rPreferredName;
-        PropertySet aPropSet;
         if( nSheetPos < xSheetsIA->getCount() )
         {
             nCalcSheet = static_cast< sal_Int16 >( nSheetPos );
@@ -190,7 +194,6 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
                 aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
                 xSheetName->setName( aSheetName );
             }
-            aPropSet.set( xSheetName );
         }
         else
         {
@@ -198,11 +201,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
             // new sheet - insert with unused name
             aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
             xSheets->insertNewByName( aSheetName, nCalcSheet );
-            aPropSet.set( xSheetsIA->getByIndex( nCalcSheet ) );
         }
-
-        // sheet properties
-        aPropSet.setProperty( PROP_IsVisible, bVisible );
 
         // return final sheet index if sheet exists
         return IndexNamePair( nCalcSheet, aSheetName );
@@ -217,11 +216,25 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
 void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
 {
     sal_Int32 nWorksheet = static_cast< sal_Int32 >( maSheetInfos.size() );
-    IndexNamePair aIndexName = createSheet( rModel.maName, nWorksheet, rModel.mnState == XML_visible );
+    IndexNamePair aIndexName = createSheet( rModel.maName, nWorksheet );
     std::shared_ptr< SheetInfo > xSheetInfo( new SheetInfo( rModel, aIndexName.first, aIndexName.second ) );
     maSheetInfos.push_back( xSheetInfo );
     maSheetInfosByName[ rModel.maName ] = xSheetInfo;
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
+}
+
+void WorksheetBuffer::finalizeImport( sal_Int16 nActiveSheet )
+{
+    ScDocument& rDoc = getScDocument();
+
+    for ( auto aSheetInfo: maSheetInfos )
+    {
+        // make sure at least 1 sheet (the active one) is visible
+        if ( aSheetInfo->mnCalcSheet == nActiveSheet)
+            rDoc.SetVisible( aSheetInfo->mnCalcSheet, true );
+        else
+            rDoc.SetVisible( aSheetInfo->mnCalcSheet, (aSheetInfo->mnState == XML_visible) ? 1 : 0 );
+    }
 }
 
 } // namespace xls
