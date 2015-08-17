@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <acmplwrd.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <breakit.hxx>
 #include <cellatr.hxx>
 #include <checkit.hxx>
@@ -892,7 +892,7 @@ namespace
     class TransWrp
     {
     private:
-        boost::scoped_ptr< ::utl::TransliterationWrapper > xTransWrp;
+        std::unique_ptr<utl::TransliterationWrapper> xTransWrp;
     public:
         TransWrp()
         {
