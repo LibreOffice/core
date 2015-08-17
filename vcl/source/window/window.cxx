@@ -1075,7 +1075,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
         if (!(nStyle & WB_DEFAULTWIN) && mpWindowImpl->mbDoubleBufferingRequested)
-            mpWindowImpl->mpFrameData->mpBuffer = VclPtrInstance<VirtualDevice>();
+            RequestDoubleBuffering(true);
         mpWindowImpl->mpFrameData->mbInBufferedPaint = false;
 
         if ( pRealParent && IsTopWindow() )
@@ -3906,6 +3906,18 @@ Any Window::GetSystemDataAny() const
 bool Window::SupportsDoubleBuffering() const
 {
     return mpWindowImpl->mpFrameData->mpBuffer;
+}
+
+void Window::RequestDoubleBuffering(bool bRequest)
+{
+    if (bRequest)
+    {
+        mpWindowImpl->mpFrameData->mpBuffer = VclPtrInstance<VirtualDevice>();
+        // Make sure that the buffer size matches the frame size.
+        mpWindowImpl->mpFrameData->mpBuffer->SetOutputSizePixel(mpWindowImpl->mpFrameWindow->GetOutputSizePixel());
+    }
+    else
+        mpWindowImpl->mpFrameData->mpBuffer.reset();
 }
 
 /*

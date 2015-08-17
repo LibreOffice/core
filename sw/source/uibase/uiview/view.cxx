@@ -719,6 +719,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bIsPreviewDoubleClick(false),
     m_bAnnotationMode(false)
 {
+    static bool bRequestDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_ENABLE");
+    if (bRequestDoubleBuffering)
+        m_pEditWin->RequestDoubleBuffering(true);
+
     // According to discussion with MBA and further
     // investigations, no old SfxViewShell will be set as parameter <pOldSh>,
     // if function "New Window" is performed to open an additional view beside
@@ -1056,7 +1060,13 @@ SwView::~SwView()
     m_pTogglePageBtn.disposeAndClear();
     delete m_pGlosHdl;
     delete m_pViewImpl;
+
+    // If this was enabled in the ctor for the frame, then disable it here.
+    static bool bRequestDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_ENABLE");
+    if (bRequestDoubleBuffering)
+        m_pEditWin->RequestDoubleBuffering(false);
     m_pEditWin.disposeAndClear();
+
     delete m_pFormatClipboard;
 }
 

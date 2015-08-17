@@ -913,6 +913,8 @@ public:
 
     /// Can the widget derived from this Window do the double-buffering via RenderContext properly?
     bool                                SupportsDoubleBuffering() const;
+    /// Enable/disable double-buffering of the frame window and all its children.
+    void                                RequestDoubleBuffering(bool bRequest);
 
     void                                EnableAllResize( bool bEnable = true );
 
