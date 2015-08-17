@@ -139,11 +139,11 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
             _allRTTI.insert( t_string2PtrMap::value_type( rUNOname, pRTTI ) ) );
         assert(insertion.second && "### rtti insertion failed?!");
 
-        return (type_info *)pRTTI;
+        return reinterpret_cast<type_info*>(pRTTI);
     }
     else
     {
-        return (type_info *)iFind->second;
+        return reinterpret_cast<type_info*>(iFind->second);
     }
 }
 
@@ -159,7 +159,7 @@ RTTInfos::~RTTInfos() throw ()
     for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
           iPos != _allRTTI.end(); ++iPos )
     {
-        __type_info * pType = (__type_info *)iPos->second;
+        __type_info * pType = reinterpret_cast<__type_info*>(iPos->second);
         pType->~__type_info(); // obsolete, but good style...
         ::rtl_freeMemory( pType );
     }
@@ -274,7 +274,7 @@ struct ExceptionType
     ObjectFunction *    _pCopyCtor;
     sal_Int32           _n5;
 
-    inline ExceptionType( typelib_TypeDescription * pTypeDescr ) throw ()
+    explicit ExceptionType( typelib_TypeDescription * pTypeDescr ) throw ()
         : _n0( 0 )
         , _n1( 0 )
         , _n2( -1 )
@@ -282,9 +282,18 @@ struct ExceptionType
         , _n4( pTypeDescr->nSize )
         , _pCopyCtor( new ObjectFunction( pTypeDescr, copyConstruct ) )
         , _n5( 0 )
-        { _pTypeInfo = msci_getRTTI( pTypeDescr->pTypeName ); }
-    inline ~ExceptionType() throw ()
-        { delete _pCopyCtor; }
+    {
+        _pTypeInfo = msci_getRTTI( pTypeDescr->pTypeName );
+    }
+
+    ~ExceptionType() throw ()
+    {
+        delete _pCopyCtor;
+    }
+
+    // Copy assignment is forbidden and not implemented.
+    ExceptionType (const ExceptionType &) SAL_DELETED_FUNCTION;
+    ExceptionType & operator= (const ExceptionType &) SAL_DELETED_FUNCTION;
 };
 
 struct RaiseInfo
@@ -295,7 +304,7 @@ struct RaiseInfo
     void *              _types;
     sal_Int32           _n3, _n4;
 
-    RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
+    explicit RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
     ~RaiseInfo() throw ();
 };
 
@@ -369,7 +378,7 @@ ExceptionInfos::~ExceptionInfos() throw ()
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
           iPos != _allRaiseInfos.end(); ++iPos )
     {
-        delete (RaiseInfo *)iPos->second;
+        delete reinterpret_cast<RaiseInfo*>(iPos->second);
     }
 }
 
