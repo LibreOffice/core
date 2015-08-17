@@ -752,13 +752,16 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     aOutputData.DrawEdit(true);
 
     // Autofilter- and Pivot-Buttons
-
+    MapMode aOldMM = pContentDev->GetMapMode();
     pContentDev->SetMapMode(MAP_PIXEL);
 
     DrawButtons(nX1, nX2, rTableInfo, pContentDev);
 
-    aOutputData.DrawClipMarks();
+    pContentDev->SetMapMode(aOldMM);
 
+    aOutputData.DrawClipMarks(*pContentDev);
+
+    pContentDev->SetMapMode(MAP_PIXEL);
     // In any case, Szenario / ChangeTracking must happen after DrawGrid, also for !bGridFirst
 
     //! Test, ob ChangeTrack-Anzeige aktiv ist
@@ -1385,7 +1388,10 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     nSizeY = ScViewData::ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
-                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    Size aCellBtnSize = pContentDev->PixelToLogic(Size(nSizeX-1, nSizeY-1));
+                    aScrPos = pContentDev->PixelToLogic(aScrPos);
+
+                    aCellBtn.setBoundingBox(aScrPos, aCellBtnSize, bLayoutRTL);
                     aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
                     aCellBtn.setDrawBaseButton(false);
                     aCellBtn.setDrawPopupButton(true);
@@ -1413,9 +1419,12 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                 long nPosY = aScrPos.Y();
                 // bLayoutRTL is handled in setBoundingBox
 
+                Size aCellBtnSize = pContentDev->PixelToLogic(Size(nSizeX-1, nSizeY-1));
+                Point aCellBtnPos = pContentDev->PixelToLogic(Point(nPosX, nPosY));
+
                 OUString aStr = pDoc->GetString(nCol, nRow, nTab);
                 aCellBtn.setText(aStr);
-                aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                aCellBtn.setBoundingBox(aCellBtnPos, aCellBtnSize, bLayoutRTL);
                 aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                 aCellBtn.setDrawBaseButton(pInfo->bPivotButton);
                 aCellBtn.setDrawPopupButton(pInfo->bPivotPopupButton);
@@ -1427,6 +1436,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
         if ( bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
         {
             Rectangle aRect = GetListValButtonRect( aListValPos );
+            aRect = pContentDev->PixelToLogic(aRect);
+
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
             pContentDev->SetClipRegion(vcl::Region(aRect));

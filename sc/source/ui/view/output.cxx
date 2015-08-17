@@ -2501,19 +2501,19 @@ void ScOutputData::AddPDFNotes()
     }
 }
 
-void ScOutputData::DrawClipMarks()
+void ScOutputData::DrawClipMarks(vcl::RenderContext& rRenderContext)
 {
     if (!bAnyClipped)
         return;
 
     Color aArrowFillCol( COL_LIGHTRED );
 
-    DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
+    DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
     {
         //  use DrawMode to change the arrow's outline color
-        mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine );
+        rRenderContext.SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine );
         //  use text color also for the fill color
         aArrowFillCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
     }
@@ -2609,20 +2609,23 @@ void ScOutputData::DrawClipMarks()
 
                     long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
+                    aMarkSize = rRenderContext.PixelToLogic(aMarkSize);
 
                     if ( pInfo->nClipMark & ( bLayoutRTL ? SC_CLIPMARK_RIGHT : SC_CLIPMARK_LEFT ) )
                     {
                         //  visually left
                         Rectangle aMarkRect = aCellRect;
                         aMarkRect.Right() = aCellRect.Left()+nMarkPixel-1;
-                        SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, true );
+                        aMarkRect = rRenderContext.PixelToLogic(aMarkRect);
+                        SvxFont::DrawArrow( rRenderContext, aMarkRect, aMarkSize, aArrowFillCol, true );
                     }
                     if ( pInfo->nClipMark & ( bLayoutRTL ? SC_CLIPMARK_LEFT : SC_CLIPMARK_RIGHT ) )
                     {
                         //  visually right
                         Rectangle aMarkRect = aCellRect;
                         aMarkRect.Left() = aCellRect.Right()-nMarkPixel+1;
-                        SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, false );
+                        aMarkRect = rRenderContext.PixelToLogic(aMarkRect);
+                        SvxFont::DrawArrow( rRenderContext, aMarkRect, aMarkSize, aArrowFillCol, false );
                     }
                 }
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
@@ -2631,7 +2634,7 @@ void ScOutputData::DrawClipMarks()
         nPosY += pThisRowInfo->nHeight;
     }
 
-    mpDev->SetDrawMode(nOldDrawMode);
+    rRenderContext.SetDrawMode(nOldDrawMode);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
