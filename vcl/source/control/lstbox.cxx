@@ -972,12 +972,12 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
 
 void ListBox::Select()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_SELECT, maSelectHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_SELECT, [this] () { maSelectHdl.Call(this); } );
 }
 
 void ListBox::DoubleClick()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_DOUBLECLICK, maDoubleClickHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_DOUBLECLICK, [this] () { maDoubleClickHdl.Call(this); } );
 }
 
 void ListBox::Clear()

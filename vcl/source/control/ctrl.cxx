@@ -258,7 +258,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
             {
                 mbHasControlFocus = true;
                 CompatStateChanged( StateChangedType::ControlFocus );
-                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
+                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, [this] () { maGetFocusHdl.Call(this); } ) )
                     // been destroyed within the handler
                     return true;
             }
@@ -272,7 +272,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
                 {
                     mbHasControlFocus = false;
                     CompatStateChanged( StateChangedType::ControlFocus );
-                    if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
+                    if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, [this] () { maLoseFocusHdl.Call(this); } ) )
                         // been destroyed within the handler
                         return true;
                 }
@@ -320,7 +320,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, const Link<>& rHandler, void* pCaller )
+bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, std::function<void()> callHandler )
 {
     VclPtr<Control> xThis(this);
 
@@ -328,7 +328,7 @@ bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, const Link<>& 
 
     if ( !xThis->IsDisposed() )
     {
-        rHandler.Call( pCaller );
+        callHandler();
 
         if ( !xThis->IsDisposed() )
             return false;

@@ -114,7 +114,7 @@ void Button::SetCommandHandler(const OUString& aCommand)
 
 void Button::Click()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, maClickHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, [this] () { maClickHdl.Call(this); } );
 }
 
 OUString Button::GetStandardText( StandardButtonType eButton )
@@ -1548,7 +1548,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
 
 void PushButton::Toggle()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_PUSHBUTTON_TOGGLE, maToggleHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_PUSHBUTTON_TOGGLE, [this] () { maToggleHdl.Call(this); } );
 }
 
 void PushButton::SetSymbol( SymbolType eSymbol )
@@ -2640,7 +2640,7 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 
 void RadioButton::Toggle()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_RADIOBUTTON_TOGGLE, maToggleHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_RADIOBUTTON_TOGGLE, [this] () { maToggleHdl.Call(this); } );
 }
 
 bool RadioButton::SetModeRadioImage( const Image& rImage )
@@ -3595,7 +3595,7 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 
 void CheckBox::Toggle()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_CHECKBOX_TOGGLE, maToggleHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_CHECKBOX_TOGGLE, [this] () { maToggleHdl.Call(this); } );
 }
 
 void CheckBox::SetState( TriState eState )

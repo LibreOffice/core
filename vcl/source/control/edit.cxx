@@ -2416,7 +2416,7 @@ void Edit::Modify()
         if ( mpUpdateDataTimer )
             mpUpdateDataTimer->Start();
 
-        if ( ImplCallEventListenersAndHandler( VCLEVENT_EDIT_MODIFY, maModifyHdl, this ) )
+        if ( ImplCallEventListenersAndHandler( VCLEVENT_EDIT_MODIFY, [this] () { maModifyHdl.Call(this); } ) )
             // have been destroyed while calling into the handlers
             return;
 

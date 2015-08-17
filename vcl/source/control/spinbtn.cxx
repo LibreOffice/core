@@ -81,7 +81,7 @@ void SpinButton::Up()
         ImplMoveFocus(true);
     }
 
-    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_UP, maUpHdlLink, this);
+    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_UP, [this] () { maUpHdlLink.Call(this); } );
 }
 
 void SpinButton::Down()
@@ -94,7 +94,7 @@ void SpinButton::Down()
         ImplMoveFocus(false);
     }
 
-    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_DOWN, maDownHdlLink, this);
+    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_DOWN, [this] () { maDownHdlLink.Call(this); } );
 }
 
 void SpinButton::Resize()
