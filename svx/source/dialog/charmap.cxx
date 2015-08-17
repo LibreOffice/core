@@ -340,6 +340,7 @@ void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
 void SvxShowCharSet::SetFont( const vcl::Font& rFont )
 {
     Control::SetFont(rFont);
+    mbRecalculateFont = true;
     Invalidate();
 }
 
