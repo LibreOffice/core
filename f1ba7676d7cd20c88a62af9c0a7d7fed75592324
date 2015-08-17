@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_991d6b69",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-17T16:52:45Z",
+      "side": 1,
+      "message": "oh noes - i\u0027ve reverted the bugfix and now this test still passes.\n\nthe problem is, after the DelToEndOf... the cursor is positioned on the paragraph after the table:\n\n(gdb) p *pCrsr\n$4 \u003d SwPaM \u003d {\n  point \u003d SwPosition (node 20, offset 0),\n  mark \u003d SwPosition (node 20, offset 0)\n}\n\nso in this case also moving the cursor forward does nothing and the 2 positions compare equal.\n\nit\u0027s necessary to check also that the cursor is inside the table.\n\nSwCrsrShell::IsCrsrInTable() should help for that.",
+      "revId": "f1ba7676d7cd20c88a62af9c0a7d7fed75592324",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
