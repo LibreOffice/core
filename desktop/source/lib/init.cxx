@@ -35,11 +35,13 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
@@ -233,6 +235,7 @@ static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
                                   int nX,
                                   int nY);
 static void doc_resetSelection (LibreOfficeKitDocument* pThis);
+static char* doc_getStyles(LibreOfficeKitDocument* pThis);
 
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
@@ -267,6 +270,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->getTextSelection = doc_getTextSelection;
             m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
             m_pDocumentClass->resetSelection = doc_resetSelection;
+            m_pDocumentClass->getStyles = doc_getStyles;
 
             gDocumentClass = m_pDocumentClass;
         }
@@ -864,6 +868,36 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
+static char* doc_getStyles(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    boost::property_tree::ptree aTree;
+    uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
+
+    for (sal_Int32 nStyleFam = 0; nStyleFam < aStyleFamilies.getLength(); ++nStyleFam)
+    {
+        boost::property_tree::ptree aChildren;
+        OUString sStyleFam = aStyleFamilies[nStyleFam];
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(sStyleFam), uno::UNO_QUERY);
+        uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+        for (sal_Int32 nInd = 0; nInd < aStyles.getLength(); ++nInd)
+        {
+            boost::property_tree::ptree aChild;
+            aChild.put("", aStyles[nInd]);
+            aChildren.push_back(std::make_pair("", aChild));
+        }
+        aTree.add_child(sStyleFam.toUtf8().getStr(), aChildren);
+    }
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    strcpy(pJson, aStream.str().c_str());
+    pJson[aStream.str().size()] = '\0';
+    return pJson;
+}
 static char* lo_getError (LibreOfficeKit *pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);

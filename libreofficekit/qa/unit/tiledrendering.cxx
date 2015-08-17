@@ -9,6 +9,7 @@
 
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -67,6 +68,7 @@ public:
     void testDocumentTypes( Office* pOffice );
     void testImpressSlideNames( Office* pOffice );
     void testCalcSheetNames( Office* pOffice );
+    void testGetStyles( Office* pOffice );
 #if 0
     void testOverlay( Office* pOffice );
 #endif
@@ -93,6 +95,7 @@ void TiledRenderingTest::runAllTests()
     testDocumentTypes( pOffice.get() );
     testImpressSlideNames( pOffice.get() );
     testCalcSheetNames( pOffice.get() );
+    testGetStyles( pOffice.get() );
 #if 0
     testOverlay( pOffice.get() );
 #endif
@@ -179,6 +182,38 @@ void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
     CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
     CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 1 ), "TestText2" ) == 0 );
     CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 2 ), "Sheet3" ) == 0 );
+}
+
+void TiledRenderingTest::testGetStyles( Office* pOffice )
+{
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_text.odt";
+    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_text.odt#";
+
+    // FIXME: LOK will fail when trying to open a locked file
+    remove( sLockFile.c_str() );
+
+    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->getStyles();
+    std::stringstream aStream(pJSON);
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT( aTree.size() > 0 );
+
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+    {
+        CPPUNIT_ASSERT( rPair.second.size() > 0);
+        if (rPair.first != "CharacterStyles" &&
+            rPair.first != "ParagraphStyles" &&
+            rPair.first != "FrameStyles" &&
+            rPair.first != "PageStyles" &&
+            rPair.first != "NumberingStyles" &&
+            rPair.first != "CellStyles" &&
+            rPair.first != "ShapeStyles")
+        {
+            CPPUNIT_FAIL("Unknown style family: " + rPair.first);
+        }
+    }
 }
 
 #if 0
