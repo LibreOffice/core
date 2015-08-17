@@ -16,6 +16,24 @@
       "revId": "1aed837f7d105881db54b4e707c26ac4da304c84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_0e6e33c9",
+        "filename": "vcl/unx/gtk/a11y/atktext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-08-17T07:20:09Z",
+      "side": 0,
+      "message": "The same check already occurs inside of Reference\u003cT\u003e::set (i.e., that function works properly on an arbitrary Any, not just one containing an interface).",
+      "parentUuid": "9aed3d3a_689c176a",
+      "revId": "1aed837f7d105881db54b4e707c26ac4da304c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
