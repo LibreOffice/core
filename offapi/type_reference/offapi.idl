@@ -15287,7 +15287,6 @@ module com {
      [property] boolean ShowTableBoundaries;
      [property] boolean ShowTables;
      [property] boolean ShowTabstops;
-     [property] boolean HideWhitespace;
      [property] boolean ShowTextBoundaries;
      [property] boolean ShowTextFieldBackground;
      [property] boolean ShowVertRuler;
