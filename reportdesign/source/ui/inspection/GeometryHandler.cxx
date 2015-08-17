@@ -103,7 +103,7 @@
 #include "dlgpage.hxx"
 #include "helpids.hrc"
 #include <toolkit/helper/convert.hxx>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 #define DATA_OR_FORMULA     0
 #define FUNCTION            1
