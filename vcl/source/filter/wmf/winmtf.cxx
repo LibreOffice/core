@@ -236,7 +236,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     {
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
         SolarMutexGuard aGuard;
-        VclPtrInstance< VirtualDevice > pVDev;
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
         // converting the cell height into a font height
         aFont.SetSize( aFontSize );
         pVDev->SetFont( aFont );
@@ -1451,7 +1451,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     {
         // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
         SolarMutexGuard aGuard;
-        VclPtrInstance< VirtualDevice > pVDev;
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
         sal_Int32 nTextWidth;
         pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
         pVDev->SetFont( maFont );
@@ -1499,7 +1499,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         {
             // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
             SolarMutexGuard aGuard;
-            VclPtrInstance< VirtualDevice > pVDev;
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
             pDX = new long[ rText.getLength() ];
             pVDev->SetMapMode( MAP_100TH_MM );
             pVDev->SetFont( maLatestFont );
