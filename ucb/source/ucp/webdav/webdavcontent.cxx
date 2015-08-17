@@ -2169,9 +2169,9 @@ uno::Any Content::open(
                     // cache headers.
                     if ( !m_xCachedProps.get())
                         m_xCachedProps.reset(
-                            new CachableContentProperties( aResource ) );
+                            new CachableContentProperties( ContentProperties( aResource ) ) );
                     else
-                        m_xCachedProps->addProperties( aResource );
+                        m_xCachedProps->addProperties( ContentProperties( aResource ) );
 
                     m_xResAccess.reset(
                         new DAVResourceAccess( *xResAccess.get() ) );
@@ -2215,7 +2215,7 @@ uno::Any Content::open(
                         // cache headers.
                         if ( !m_xCachedProps.get())
                             m_xCachedProps.reset(
-                                new CachableContentProperties( aResource ) );
+                                new CachableContentProperties( ContentProperties( aResource ) ) );
                         else
                             m_xCachedProps->addProperties(
                                 aResource.properties );
@@ -3362,7 +3362,7 @@ Content::ResourceType Content::getResourceType(
         {
             osl::MutexGuard g(m_aMutex);
             m_xCachedProps.reset(
-                new CachableContentProperties( resources[ 0 ] ) );
+                new CachableContentProperties( ContentProperties( resources[ 0 ] ) ) );
             m_xCachedProps->containsAllNames(
                 aProperties, m_aFailedPropNames );
         }
