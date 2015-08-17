@@ -77,8 +77,8 @@ protected:
 public:
     SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
 
-    void                SetNewColorList( XColorListRef pColTab )
-                            { mpNewColorList = pColTab; }
+    void                SetNewColorList( XColorListRef pColorList )
+                            { mpNewColorList = pColorList; }
     XColorListRef         GetNewColorList() const { return mpNewColorList; }
     const XColorListRef   GetColorList() const { return mpColorList; }
 
@@ -223,13 +223,13 @@ private:
 
     VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
 
-    const SfxItemSet&   rOutAttrs;
-    RECT_POINT          eRP;
+    const SfxItemSet&   m_rOutAttrs;
+    RECT_POINT          m_eRP;
 
-    XColorListRef         pColorList;
-    XGradientListRef      pGradientList;
-    XHatchListRef         pHatchingList;
-    XBitmapListRef        pBitmapList;
+    XColorListRef         m_pColorList;
+    XGradientListRef      m_pGradientList;
+    XHatchListRef         m_pHatchingList;
+    XBitmapListRef        m_pBitmapList;
 
     // Placeholders for pointer-based entries; these will be inited
     // to point to these so that the page is usable without that
@@ -238,22 +238,22 @@ private:
     ChangeType          maFixed_ChangeType;
     bool                maFixed_sal_Bool;
 
-    ChangeType*         pnColorListState;
-    ChangeType*         pnBitmapListState;
-    ChangeType*         pnGradientListState;
-    ChangeType*         pnHatchingListState;
+    ChangeType*         m_pnColorListState;
+    ChangeType*         m_pnBitmapListState;
+    ChangeType*         m_pnGradientListState;
+    ChangeType*         m_pnHatchingListState;
 
-    sal_uInt16 nPageType;
-    sal_uInt16 nDlgType;
-    sal_Int32  nPos;
+    sal_uInt16 m_nPageType;
+    sal_uInt16 m_nDlgType;
+    sal_Int32  m_nPos;
 
-    bool*               pbAreaTP;
+    bool*               m_pbAreaTP;
 
-    XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
+    XFillAttrSetItem    m_aXFillAttr;
+    SfxItemSet&         m_rXFSet;
 
-    SfxMapUnit          ePoolUnit;
-    FieldUnit           eFUnit;
+    SfxMapUnit          m_ePoolUnit;
+    FieldUnit           m_eFUnit;
 
     //UUUU
     bool                mbOfferImportButton;
@@ -298,22 +298,22 @@ public:
     virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
+    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
     void    SetGradientList( XGradientListRef pGrdLst)
-                { pGradientList = pGrdLst; }
+                { m_pGradientList = pGrdLst; }
     void    SetHatchingList( XHatchListRef pHtchLst)
-                { pHatchingList = pHtchLst; }
-    void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
+                { m_pHatchingList = pHtchLst; }
+    void    SetBitmapList( XBitmapListRef pBmpLst) { m_pBitmapList = pBmpLst; }
 
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPos( sal_uInt16 nInPos ) { nPos = nInPos; }
-    void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_uInt16 nInPos ) { m_nPos = nInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
-    void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
-    void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
-    void    SetBmpChgd( ChangeType* pIn ) { pnBitmapListState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
+    void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
+    void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
+    void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
 };
 
 
