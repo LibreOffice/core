@@ -122,7 +122,7 @@ class VtableFactory::GuardedBlocks:
     public std::vector<Block>, private boost::noncopyable
 {
 public:
-    GuardedBlocks(VtableFactory const & factory):
+    explicit GuardedBlocks(VtableFactory const & factory):
         m_factory(factory), m_guarded(true) {}
 
     ~GuardedBlocks();
@@ -144,7 +144,7 @@ VtableFactory::GuardedBlocks::~GuardedBlocks() {
 
 class VtableFactory::BaseOffset {
 public:
-    BaseOffset(typelib_InterfaceTypeDescription * type) { calculate(type, 0); }
+    explicit BaseOffset(typelib_InterfaceTypeDescription * type) { calculate(type, 0); }
 
     sal_Int32 getFunctionOffset(OUString const & name) const
     { return m_map.find(name)->second; }
