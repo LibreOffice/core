@@ -865,7 +865,7 @@ def __draw__(d, count = True):
             __time__.sleep(0.2)
         __time__.sleep(0.2)
     _.drawpage.add(shape)
-    if __group__:
+    if __group__ != 0:
         __group__.add(shape)
         if count:
             _.shapecache[next(_.shapecount)] = str(_.time)
@@ -880,7 +880,7 @@ def __zoom__():
 
 def __lefthang__(shape):
     global __grouplefthang__
-    if __group__:
+    if __group__ != 0:
         p = shape.getPosition()
         if p.X < __grouplefthang__:
             __grouplefthang__ = p.X
@@ -915,7 +915,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
             if _.continuous or dot:
                 last = shape.PolyPolygon[-1][-1]
                 if not (turtlepos and (abs(last.X - turtlepos.X) > 100 or abs(last.Y - turtlepos.Y) > 100) and 
-                  (not __group__ or (shape.getPosition().X > 0 and turtle.getPosition().X > 0))): # picture [ ] keeps hanging shapes
+                  (__group__ == 0 or (shape.getPosition().X > 0 and turtle.getPosition().X > 0))): # picture [ ] keeps hanging shapes
                     if dot or _.linestyle == __LineStyle_DOTTED__:
                          shape.PolyPolygon = tuple( list(shape.PolyPolygon) + __dots__(n, turtlepos, dx, dy))
                     else:
@@ -1009,7 +1009,7 @@ def __fillit__(filled = True):
         oldshape.Name = ""
         shape.Name = __ACTUAL__
         _.shapecache[__ACTUAL__] = shape
-        if __group__:
+        if __group__ != 0:
             __group__.remove(oldshape)
         __visible__(shape, True)
         _.drawpage.remove(oldshape)
@@ -1461,7 +1461,7 @@ def __groupend__(name = ""):
     __grouplefthang__ = min(__groupstack__.pop(), __grouplefthang__)
     if name != "":
       name = __groupstack__.pop()
-    if name and ".SVG" == name[-4:].upper() and g:
+    if name and ".SVG" == name[-4:].upper() and g != 0:
       _.doc.CurrentController.select(g)
       __dispatcher__(".uno:Copy")
       ctx = XSCRIPTCONTEXT.getComponentContext()
@@ -1489,7 +1489,7 @@ def __groupend__(name = ""):
         __time__.sleep(0.1)
       create_valid_svg_file(name)
     __group__ = __groupstack__.pop()
-    if __group__ and g:
+    if __group__ != 0 and g != 0:
         __group__.add(g)
     __removeshape__(__ACTUAL__)
 
