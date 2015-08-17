@@ -338,7 +338,7 @@ public:
                             SCCOL nRefEndX, SCROW nRefEndY,
                             const Color& rColor, sal_uInt16 nType );
     void    DrawChangeTrack();
-    void    DrawClipMarks();
+    void    DrawClipMarks(vcl::RenderContext& rRenderContext);
 
     void    DrawNoteMarks(vcl::RenderContext& rRenderContext);
     void    AddPDFNotes();
