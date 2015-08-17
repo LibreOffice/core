@@ -41,7 +41,7 @@ namespace svt
     {
         if ( m_aDialogClosedLink.IsSet() )
         {
-            ::com::sun::star::ui::dialogs::DialogClosedEvent aEvt( aEvent );
+            css::ui::dialogs::DialogClosedEvent aEvt( aEvent );
             m_aDialogClosedLink.Call( &aEvt );
         }
     }
@@ -49,7 +49,7 @@ namespace svt
     // XEventListener methods
     void SAL_CALL DialogClosedListener::disposing( const EventObject& ) throw(RuntimeException, std::exception)
     {
-        m_aDialogClosedLink = Link<>();
+        m_aDialogClosedLink = Link<css::ui::dialogs::DialogClosedEvent*,void>();
     }
 
 

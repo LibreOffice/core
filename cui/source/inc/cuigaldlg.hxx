@@ -287,7 +287,7 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( DClickFoundHdl, void* );
                         DECL_LINK_TYPED( PreviewTimerHdl, Timer*, void );
                         DECL_LINK(EndSearchProgressHdl, void *);
-                        DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent* );
+                        DECL_LINK_TYPED( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
 public:
                         TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );

@@ -1274,14 +1274,12 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 
 
 
-IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt )
+IMPL_LINK_TYPED( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )
 {
     DBG_ASSERT( xFolderPicker.is(), "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
 
     OUString sURL = xFolderPicker->getDirectory();
     StartSearchFiles( sURL, pEvt->DialogResult );
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

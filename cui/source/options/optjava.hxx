@@ -93,7 +93,7 @@ private:
     DECL_LINK_TYPED(ResetHdl_Impl, Idle *, void);
 
     DECL_LINK(              StartFolderPickerHdl, void * );
-    DECL_LINK(              DialogClosedHdl, css::ui::dialogs::DialogClosedEvent* );
+    DECL_LINK_TYPED(        DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
     DECL_LINK(ExpertConfigHdl_Impl, void *);
 

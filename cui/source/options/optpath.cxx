@@ -693,7 +693,7 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 
 
 
-IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
+IMPL_LINK_TYPED( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if ( RET_OK == pEvt->DialogResult )
     {
@@ -702,7 +702,6 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
         OUString sURL = xFolderPicker->getDirectory();
         ChangeCurrentEntry( sURL );
     }
-    return 0L;
 }
 
 

@@ -60,7 +60,7 @@ private:
     DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
     DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
 
-    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent* );
+    DECL_LINK_TYPED( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
     void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
                              OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );

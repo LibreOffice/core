@@ -421,7 +421,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl)
 
 
 
-IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
+IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if ( RET_OK == pEvt->DialogResult )
     {
@@ -429,7 +429,6 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
         AddFolder( xFolderPicker->getDirectory() );
     }
-    return 0L;
 }
 
 
