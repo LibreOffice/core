@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,python))
 
-$(eval $(call gb_Executable_add_defs,python,\
-    -DMY_PYVERSION=L\"$(PYTHON_VERSION)\" \
-))
-
 $(eval $(call gb_Executable_use_static_libraries,python,\
     ooopathutils \
 ))
