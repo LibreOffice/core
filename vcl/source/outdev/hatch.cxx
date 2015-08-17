@@ -178,7 +178,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
             do
             {
-                DrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                 aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                 aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
             }
@@ -190,7 +190,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                 CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
                 do
                 {
-                    DrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                    DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                     aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                     aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
                 }
@@ -202,7 +202,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                     CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
                     do
                     {
-                        DrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                        DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                         aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                         aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
                     }
@@ -321,7 +321,7 @@ void OutputDevice::CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt
     }
 }
 
-void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& rPolyPoly,
+void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, bool bMtf )
 {
     assert(!is_double_buffered_window());
@@ -335,7 +335,7 @@ void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& r
 
         if( rPoly.GetSize() > 1 )
         {
-            Line    aCurSegment( rPoly[ 0 ], Point() );
+            tools::Line aCurSegment( rPoly[ 0 ], Point() );
 
             for( long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
             {
@@ -347,7 +347,7 @@ void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& r
                     if( ( fabs( fX - aCurSegment.GetStart().X() ) <= 0.0000001 ) &&
                         ( fabs( fY - aCurSegment.GetStart().Y() ) <= 0.0000001 ) )
                     {
-                        const Line      aPrevSegment( rPoly[ (sal_uInt16)( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
+                        const tools::Line aPrevSegment( rPoly[ (sal_uInt16)( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
                         const double    fPrevDistance = rLine.GetDistance( aPrevSegment.GetStart() );
                         const double    fCurDistance = rLine.GetDistance( aCurSegment.GetEnd() );
 
@@ -360,7 +360,7 @@ void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& r
                     else if( ( fabs( fX - aCurSegment.GetEnd().X() ) <= 0.0000001 ) &&
                              ( fabs( fY - aCurSegment.GetEnd().Y() ) <= 0.0000001 ) )
                     {
-                        const Line aNextSegment( aCurSegment.GetEnd(), rPoly[ (sal_uInt16)( ( i + 1 ) % nCount ) ] );
+                        const tools::Line aNextSegment( aCurSegment.GetEnd(), rPoly[ (sal_uInt16)( ( i + 1 ) % nCount ) ] );
 
                         if( ( fabs( rLine.GetDistance( aNextSegment.GetEnd() ) ) <= 0.0000001 ) &&
                             ( rLine.GetDistance( aCurSegment.GetStart() ) > 0.0 ) )

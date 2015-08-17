@@ -24,6 +24,9 @@
 #include <cstdlib>
 #include <math.h>
 
+namespace tools
+{
+
 double Line::GetLength() const
 {
     return hypot( maStart.X() - maEnd.X(), maStart.Y() - maEnd.Y() );
@@ -46,7 +49,7 @@ bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
     return bRet;
 }
 
-bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
+bool Line::Intersection( const tools::Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
 {
     const double    fAx = maEnd.X() - maStart.X();
     const double    fAy = maEnd.Y() - maStart.Y();
@@ -133,5 +136,7 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
 
     return fDist;
 }
+
+} //namespace tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

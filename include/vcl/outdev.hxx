@@ -80,7 +80,9 @@ class TextRectInfo;
 class FontMetric;
 class GDIMetaFile;
 class GfxLink;
-class Line;
+namespace tools {
+    class Line;
+}
 class LineInfo;
 class AlphaMask;
 class FontCharMap;
@@ -972,7 +974,7 @@ public:
 private:
 
     SAL_DLLPRIVATE void         CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         DrawHatchLine( const Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
 
