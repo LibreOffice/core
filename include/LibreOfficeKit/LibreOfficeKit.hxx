@@ -246,6 +246,14 @@ public:
     {
         mpDoc->pClass->resetSelection(mpDoc);
     }
+
+    /**
+     * Returns a json map, {"familyName1" : ["list of style names in the family1"], etc.}
+     */
+    inline char* getStyles()
+    {
+        return mpDoc->pClass->getStyles(mpDoc);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 
