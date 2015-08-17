@@ -69,15 +69,13 @@ protected:
 
         @param nEvent
             the event to notify to our event listeners
-        @param rHandler
-            the handler to call
-        @param pCaller
-            the parameter to pass to the handler call
+        @param callHandler
+            the lambda function that calls the handler
         @return
             if the Control instance has been destroyed in any of the call
     */
     bool        ImplCallEventListenersAndHandler(
-                    sal_uLong nEvent, const Link<>& rHandler, void* pCaller
+                    sal_uLong nEvent, std::function<void()> callHandler
                 );
 
     /** draws the given text onto the given device

@@ -77,7 +77,7 @@ void FixedHyperlink::MouseButtonUp( const MouseEvent& )
 {
     // calls the link if the control is enabled and the mouse is over the text.
     if ( IsEnabled() && ImplIsOverText(GetPointerPosPixel()) )
-        ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, m_aClickHdl, this );
+        ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, [this] () { m_aClickHdl.Call(this); } );
 }
 
 void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )

@@ -1323,12 +1323,12 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
 
 void ScrollBar::Scroll()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_SCROLL, maScrollHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_SCROLL, [this] () { maScrollHdl.Call(this); } );
 }
 
 void ScrollBar::EndScroll()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_ENDSCROLL, maEndScrollHdl, this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_ENDSCROLL, [this] () { maEndScrollHdl.Call(this); } );
 }
 
 long ScrollBar::DoScroll( long nNewPos )
