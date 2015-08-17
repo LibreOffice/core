@@ -46,7 +46,7 @@ struct BridgeRuntimeError
 {
     OUString m_message;
 
-    inline BridgeRuntimeError( OUString const & message )
+    explicit BridgeRuntimeError( OUString const & message )
         : m_message( message )
         {}
 };
@@ -142,20 +142,20 @@ class JLocalAutoRef
     jobject m_jo;
 
 public:
-    inline JLocalAutoRef( JNI_context const & jni )
+    explicit JLocalAutoRef( JNI_context const & jni )
         : m_jni( jni ),
           m_jo( 0 )
         {}
-    inline explicit JLocalAutoRef( JNI_context const & jni, jobject jo )
+    explicit JLocalAutoRef( JNI_context const & jni, jobject jo )
         : m_jni( jni ),
           m_jo( jo )
         {}
     inline JLocalAutoRef( JLocalAutoRef & auto_ref );
     inline ~JLocalAutoRef();
 
-    inline jobject get() const
+    jobject get() const
         { return m_jo; }
-    inline bool is() const
+    bool is() const
         { return (0 != m_jo); }
     inline jobject release();
     inline void reset( jobject jo );
