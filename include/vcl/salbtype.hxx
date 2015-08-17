@@ -548,15 +548,25 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
 
         for( long j = 0L; ( j < mnCount ) && !bFound; j++ )
             if( rCol == mpBitmapColor[ j ] )
-                nRetIndex = ( (sal_uInt16) j ), bFound = true;
+            {
+                nRetIndex = ( (sal_uInt16) j );
+                bFound = true;
+            }
 
         if( !bFound )
         {
-            long nActErr, nLastErr = rCol.GetColorError( mpBitmapColor[ nRetIndex = mnCount - 1 ] );
+            nRetIndex = mnCount - 1;
+            sal_uLong nLastErr = rCol.GetColorError( mpBitmapColor[ nRetIndex ] );
 
             for( long i = nRetIndex - 1; i >= 0L; i-- )
-                if ( ( nActErr = rCol.GetColorError( mpBitmapColor[ i ] ) ) < nLastErr )
-                    nLastErr = nActErr, nRetIndex = (sal_uInt16) i;
+            {
+                const sal_uLong nActErr = rCol.GetColorError( mpBitmapColor[ i ] );
+                if ( nActErr < nLastErr )
+                {
+                    nLastErr = nActErr;
+                    nRetIndex = (sal_uInt16) i;
+                }
+            }
         }
     }
 
@@ -674,7 +684,9 @@ inline void ColorMask::GetColorFor24Bit( BitmapColor& rColor, const sal_uInt8* p
 inline void ColorMask::SetColorFor24Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const
 {
     const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
-    pPixel[ 0 ] = (sal_uInt8) nVal; pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL ); pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
+    pPixel[ 0 ] = (sal_uInt8) nVal;
+    pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
+    pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
 }
 
 inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, const sal_uInt8* pPixel ) const
@@ -697,8 +709,10 @@ inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8&
 inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const
 {
     const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
-    pPixel[ 0 ] = (sal_uInt8) nVal; pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
-    pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL ); pPixel[ 3 ] = (sal_uInt8) ( nVal >> 24UL );
+    pPixel[ 0 ] = (sal_uInt8) nVal;
+    pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
+    pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
+    pPixel[ 3 ] = (sal_uInt8) ( nVal >> 24UL );
 }
 
 #endif // INCLUDED_VCL_SALBTYPE_HXX
