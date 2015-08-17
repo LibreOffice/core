@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aed3d3a_8e588358",
+        "filename": "slideshow/source/engine/screenupdater.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-17T16:15:45Z",
+      "side": 1,
+      "message": "same-line bracket sneaked in? ;)",
+      "revId": "b213d70efa4963f52af3163665c1f3ddaad12ef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_530c6442",
         "filename": "slideshow/source/engine/shapes/appletshape.cxx",
         "patchSetId": 3
@@ -13,6 +30,24 @@
       "writtenOn": "2015-08-17T01:46:55Z",
       "side": 1,
       "message": "As far as I could tell capturing getBounds() outside the loop in line 132 makes more sense, but I could be wrong.",
+      "revId": "b213d70efa4963f52af3163665c1f3ddaad12ef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_2e5b3756",
+        "filename": "slideshow/source/engine/shapes/appletshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-17T16:15:45Z",
+      "side": 1,
+      "message": "quite, good catch",
+      "parentUuid": "9aed3d3a_530c6442",
       "revId": "b213d70efa4963f52af3163665c1f3ddaad12ef1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
