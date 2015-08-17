@@ -81,7 +81,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTDelete->SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
 
-    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, ModifyHdl) );
     m_pLBServerType->SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
 
     InitDetails( );
@@ -296,13 +296,18 @@ IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, )
     return 1;
 }
 
-IMPL_LINK_NOARG( PlaceEditDialog, EditHdl )
+IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )
 {
     UpdateLabel( );
 
     OUString sUrl = GetServerUrl( );
     OUString sName = OUString( m_pEDServerName->GetText() ).trim( );
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
+}
+
+IMPL_LINK_NOARG( PlaceEditDialog, ModifyHdl )
+{
+    EditHdl(nullptr);
     return 1;
 }
 

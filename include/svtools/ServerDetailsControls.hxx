@@ -25,7 +25,7 @@
 class DetailsContainer
 {
     protected:
-        Link<>                 m_aChangeHdl;
+        Link<DetailsContainer*,void> m_aChangeHdl;
         VclPtr<VclGrid>        m_pDetailsGrid;
         VclPtr<VclHBox>        m_pHostBox;
         VclPtr<Edit>           m_pEDHost;
@@ -40,7 +40,7 @@ class DetailsContainer
         DetailsContainer( VclBuilderContainer* pBuilder );
         virtual ~DetailsContainer( );
 
-        void setChangeHdl( const Link<>& rLink ) { m_aChangeHdl = rLink; }
+        void setChangeHdl( const Link<DetailsContainer*,void>& rLink ) { m_aChangeHdl = rLink; }
 
         virtual void show( bool bShow = true );
         virtual INetURLObject getUrl( );
