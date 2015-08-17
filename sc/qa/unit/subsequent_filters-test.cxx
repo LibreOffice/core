@@ -204,7 +204,6 @@ public:
     void testEmbeddedImageXLS();
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
-    void testRefStringConfigXLSX();
 
     void testBnc762542();
 
@@ -302,7 +301,6 @@ public:
     CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
-    CPPUNIT_TEST(testRefStringConfigXLSX);
 
     CPPUNIT_TEST(testBnc762542);
 
@@ -3109,53 +3107,9 @@ void ScFiltersTest::testRefStringXLSX()
     double nVal = rDoc.GetValue(2, 2, 0);
     ASSERT_DOUBLES_EQUAL(3.0, nVal);
 
-    ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
-    CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, aCalcConfig.meStringRefAddressSyntax);
+    const ScCalcConfig& rCalcConfig = rDoc.GetCalcConfig();
+    CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, rCalcConfig.meStringRefAddressSyntax);
 
-    //make sure ref syntax gets saved for MSO-produced docs
-    xDocSh = saveAndReload( &(*xDocSh), XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.Is());
-
-    ScDocument& rDoc2 = xDocSh->GetDocument();
-    aCalcConfig = rDoc2.GetCalcConfig();
-    CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, aCalcConfig.meStringRefAddressSyntax);
-
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testRefStringConfigXLSX()
-{
-    ScDocShellRef xDocSh = loadDoc("empty.", XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
-
-    xDocSh = saveAndReload( &(*xDocSh), XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.Is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    ScCalcConfig aConfig = rDoc.GetCalcConfig();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_OOO,
-                            aConfig.meStringRefAddressSyntax);
-
-    xDocSh = loadDoc("empty-noconf.", XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open 2nd doc", xDocSh.Is());
-
-    //set ref syntax to something else than ExcelA1 (native to xlsx format) ...
-    ScDocument& rDoc2 = xDocSh->GetDocument();
-    aConfig = rDoc2.GetCalcConfig();
-    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
-    rDoc2.SetCalcConfig( aConfig );
-
-    ScDocShellRef xNewDocSh = saveAndReload( &(*xDocSh), XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to reload 2nd doc", xNewDocSh.Is());
-
-    // ... and make sure it got saved
-    ScDocument& rDoc3 = xNewDocSh->GetDocument();
-    aConfig = rDoc3.GetCalcConfig();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_A1_XL_A1,
-                            aConfig.meStringRefAddressSyntax);
-
-    xDocSh->DoClose();
-    xNewDocSh->DoClose();
 }
 
 void ScFiltersTest::testBnc762542()
