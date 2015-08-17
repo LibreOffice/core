@@ -1117,6 +1117,33 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
         m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, false );
 }
 
+namespace
+{
+    class RandomPool
+    {
+    private:
+        rtlRandomPool m_aRandomPool;
+    public:
+        RandomPool()
+        {
+            // Get a random number generator and seed it with current timestamp
+            TimeValue aTime;
+            osl_getSystemTime( &aTime );
+            m_aRandomPool = rtl_random_createPool ();
+            rtl_random_addBytes (m_aRandomPool, &aTime, 8);
+        }
+        rtlRandomPool get()
+        {
+            return m_aRandomPool;
+        }
+        ~RandomPool()
+        {
+            // Clean up random pool memory
+            rtl_random_destroyPool(m_aRandomPool);
+        }
+    };
+}
+
 uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 {
     // In case the target local file does not exist or empty
@@ -1218,20 +1245,15 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             aManList.push_back( aPropSeq );
         }
 
-        // Get a random number generator and seed it with current timestamp
-        // This will be used to generate random salt and initialisation vectors
-        // for encrypted streams
-        TimeValue aTime;
-        osl_getSystemTime( &aTime );
-        rtlRandomPool aRandomPool = rtl_random_createPool ();
-        rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+        {
+            // This will be used to generate random salt and initialisation vectors
+            // for encrypted streams
+            RandomPool aRandomPool;
 
-        // call saveContents ( it will recursively save sub-directories
-        OUString aEmptyString;
-        m_pRootFolder->saveContents( aEmptyString, aManList, aZipOut, GetEncryptionKey(), aRandomPool );
-
-        // Clean up random pool memory
-        rtl_random_destroyPool ( aRandomPool );
+            // call saveContents ( it will recursively save sub-directories
+            OUString aEmptyString;
+            m_pRootFolder->saveContents(aEmptyString, aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
+        }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )
         {
