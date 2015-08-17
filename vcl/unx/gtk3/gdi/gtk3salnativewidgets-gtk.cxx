@@ -137,25 +137,40 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
     buttonRect.SetSize(Size(buttonWidth, buttonHeight));
     buttonRect.setY(aAreaRect.Top());
     buttonRect.Bottom() = buttonRect.Top() + aAreaRect.GetHeight();
+    Rectangle partRect(buttonRect);
     if ( nPart == PART_BUTTON_UP )
     {
-        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
+        if (AllSettings::GetLayoutRTL())
+            partRect.setX(aAreaRect.Left());
+        else
+            partRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
     }
     else if( nPart == PART_BUTTON_DOWN )
     {
-        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2*buttonRect.GetWidth()));
+        if (AllSettings::GetLayoutRTL())
+            partRect.setX(aAreaRect.Left() + buttonRect.GetWidth());
+        else
+            partRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2 * buttonRect.GetWidth()));
     }
     else
     {
-        buttonRect.Right() = (aAreaRect.Left() + (aAreaRect.GetWidth() - 2*buttonRect.GetWidth()))-1;
-        buttonRect.Left()   = aAreaRect.Left();
-        buttonRect.Top()    = aAreaRect.Top();
-        buttonRect.Bottom() = aAreaRect.Bottom();
+        if (AllSettings::GetLayoutRTL())
+        {
+            partRect.Right() = aAreaRect.Left() + aAreaRect.GetWidth();
+            partRect.Left()  = aAreaRect.Left() + (2 * buttonRect.GetWidth()) - 1;
+        }
+        else
+        {
+            partRect.Right() = (aAreaRect.Left() + (aAreaRect.GetWidth() - 2 * buttonRect.GetWidth())) - 1;
+            partRect.Left()  = aAreaRect.Left();
+        }
+        partRect.Top()    = aAreaRect.Top();
+        partRect.Bottom() = aAreaRect.Bottom();
     }
 
     gtk_style_context_restore(mpSpinStyle);
 
-    return buttonRect;
+    return partRect;
 }
 
 Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
