@@ -173,14 +173,11 @@ private:
     CachableContentProperties( const CachableContentProperties & ); // n.i.
 
 public:
-    explicit CachableContentProperties( const DAVResource& rResource );
     explicit CachableContentProperties( const ContentProperties & rProps );
 
     void addProperties( const ContentProperties & rProps );
 
     void addProperties( const std::vector< DAVPropertyValue > & rProps );
-
-    void addProperties( const DAVResource & rResource );
 
     bool containsAllNames(
                     const com::sun::star::uno::Sequence<

@@ -591,11 +591,6 @@ CachableContentProperties::CachableContentProperties(
     addProperties( rProps );
 }
 
-CachableContentProperties::CachableContentProperties(
-     const DAVResource & rResource )
-{
-    addProperties( rResource );
-}
 
 void CachableContentProperties::addProperties(
     const ContentProperties & rProps )
@@ -616,6 +611,7 @@ void CachableContentProperties::addProperties(
     }
 }
 
+
 void CachableContentProperties::addProperties(
     const std::vector< DAVPropertyValue > & rProps )
 {
@@ -629,11 +625,6 @@ void CachableContentProperties::addProperties(
 
         ++it;
      }
-}
-
-void CachableContentProperties::addProperties( const DAVResource & rResource )
-{
-    addProperties( rResource.properties );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
