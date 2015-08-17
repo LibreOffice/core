@@ -93,7 +93,7 @@ namespace {
         // Otherwise, compute the distance to the center of the rectangle.
         if ( !rRect.IsInside( rPoint ) )
         {
-            Line aLine( rPoint, rRect.Center( ) );
+            tools::Line aLine( rPoint, rRect.Center( ) );
             nDist = aLine.GetLength( );
         }
 

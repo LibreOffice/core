@@ -22,6 +22,9 @@
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 
+namespace tools
+{
+
 class TOOLS_DLLPUBLIC Line
 {
 private:
@@ -40,12 +43,14 @@ public:
 
     double          GetLength() const;
 
-    bool            Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const;
-    bool            Intersection( const Line& rLine, Point& rIntersection ) const;
+    bool            Intersection( const tools::Line& rLine, double& rIntersectionX, double& rIntersectionY ) const;
+    bool            Intersection( const tools::Line& rLine, Point& rIntersection ) const;
 
     double          GetDistance( const double& rPtX, const double& rPtY ) const;
     double          GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }
 };
+
+} // namespace tools
 
 #endif
 
