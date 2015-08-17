@@ -23,7 +23,7 @@
 #include "unohelper.hxx"
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

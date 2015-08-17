@@ -19,7 +19,6 @@
 
 #include "tools/PropertySet.hxx"
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

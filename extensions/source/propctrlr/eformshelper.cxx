@@ -34,7 +34,7 @@
 
 #include <functional>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 namespace pcr
 {

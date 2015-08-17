@@ -20,7 +20,7 @@
 #include "TSortIndex.hxx"
 #include <algorithm>
 #include <iterator>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 using namespace connectivity;
 
