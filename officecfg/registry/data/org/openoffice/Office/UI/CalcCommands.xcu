@@ -1861,7 +1861,7 @@
       </node>
       <node oor:name=".uno:FillCellsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fi~ll Cells</value>
+          <value xml:lang="en-US">F~ill Cells</value>
         </prop>
       </node>
       <node oor:name=".uno:CellContentsMenu" oor:op="replace">
