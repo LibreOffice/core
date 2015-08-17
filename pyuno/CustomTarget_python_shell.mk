@@ -27,7 +27,8 @@ $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh : \
 	cat $^ > $@ && chmod +x $@
 
 $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh : \
-		$(SRCDIR)/pyuno/zipcore/$(if $(filter MACOSX,$(OS)),mac,nonmac).sh
+		$(SRCDIR)/pyuno/zipcore/$(if $(filter MACOSX,$(OS)),mac,nonmac).sh \
+		$(BUILDDIR)/config_$(gb_Side)/config_python.h
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e "s/%%PYVERSION%%/$(pyuno_PYTHON_SHELL_VERSION)/g" \
 		$< > $@

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_python.h>
+
 #include <cstddef>
 #include <stdlib.h>
 #include <wchar.h>
@@ -98,14 +100,14 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t pythonpath2[MAX_PATH];
     wchar_t * pythonpath2End = tools::buildPath(
         pythonpath2, path, pathEnd,
-        MY_STRING(L"\\python-core-" MY_PYVERSION L"\\lib"));
+        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib"));
     if (pythonpath2End == NULL) {
         exit(EXIT_FAILURE);
     }
     wchar_t pythonpath3[MAX_PATH];
     wchar_t * pythonpath3End = tools::buildPath(
         pythonpath3, path, pathEnd,
-        MY_STRING(L"\\python-core-" MY_PYVERSION L"\\lib\\site-packages"));
+        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib\\site-packages"));
     if (pythonpath3End == NULL) {
         exit(EXIT_FAILURE);
     }
@@ -113,21 +115,21 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t pythonpath4[MAX_PATH];
     wchar_t * pythonpath4End = tools::buildPath(
         pythonpath4, path, pathEnd,
-        MY_STRING(L"\\python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
+        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib\\lib-dynload"));
     if (pythonpath4End == NULL) {
         exit(EXIT_FAILURE);
     }
 #endif
     wchar_t pythonhome[MAX_PATH];
     wchar_t * pythonhomeEnd = tools::buildPath(
-        pythonhome, path, pathEnd, MY_STRING(L"\\python-core-" MY_PYVERSION));
+        pythonhome, path, pathEnd, MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING));
     if (pythonhomeEnd == NULL) {
         exit(EXIT_FAILURE);
     }
     wchar_t pythonexe[MAX_PATH];
     wchar_t * pythonexeEnd = tools::buildPath(
         pythonexe, path, pathEnd,
-        MY_STRING(L"\\python-core-" MY_PYVERSION L"\\bin\\python.exe"));
+        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\bin\\python.exe"));
     if (pythonexeEnd == NULL) {
         exit(EXIT_FAILURE);
     }
