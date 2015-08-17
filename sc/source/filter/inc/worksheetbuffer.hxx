@@ -62,7 +62,7 @@ public:
     void                importSheet( SequenceInputStream& rStrm );
     /** Inserts a new empty sheet into the document. Looks for an unused name.
          @return  Index of the new sheet in the Calc document. */
-    sal_Int16           insertEmptySheet( const OUString& rPreferredName, bool bVisible );
+    sal_Int16           insertEmptySheet( const OUString& rPreferredName );
 
     /** Returns the number of original sheets contained in the workbook. */
     sal_Int32           getWorksheetCount() const;
@@ -84,6 +84,7 @@ public:
         if sSheetNameRef doesn't start with '#' it is ignored and not modified
     */
     void                convertSheetNameRef( OUString& sSheetNameRef ) const;
+    void finalizeImport( sal_Int16 nActiveSheet );
 
 private:
     struct SheetInfo : public SheetInfoModel
@@ -98,7 +99,7 @@ private:
     typedef ::std::pair< sal_Int16, OUString > IndexNamePair;
 
     /** Creates a new sheet in the Calc document. Does not insert anything in the own lists. */
-    IndexNamePair       createSheet( const OUString& rPreferredName, sal_Int32 nSheetPos, bool bVisible );
+    IndexNamePair       createSheet( const OUString& rPreferredName, sal_Int32 nSheetPos );
     /** Creates a new sheet in the Calc document and inserts the related SheetInfo. */
     void                insertSheet( const SheetInfoModel& rModel );
 

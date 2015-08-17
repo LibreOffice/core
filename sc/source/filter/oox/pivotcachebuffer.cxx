@@ -1371,7 +1371,7 @@ void PivotCache::prepareSourceDataSheet()
     {
         maColSpans.insert( ValueRange( rRange.StartColumn, rRange.EndColumn ) );
         OUString aSheetName = "DPCache_" + maSheetSrcModel.maSheet;
-        rRange.Sheet = getWorksheets().insertEmptySheet( aSheetName, false );
+        rRange.Sheet = getWorksheets().insertEmptySheet( aSheetName );
         mbValidSource = mbDummySheet = rRange.Sheet >= 0;
     }
 }
