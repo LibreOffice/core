@@ -187,6 +187,7 @@ class WinSalGraphics : public SalGraphics
     friend class ScopedFont;
     friend class OpenGLCompatibleDC;
     friend class WinLayout;
+    friend class UniscribeLayout;
 
 protected:
     std::unique_ptr<SalGraphicsImpl> mpImpl;
