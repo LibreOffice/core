@@ -16,6 +16,24 @@
       "revId": "d8ef9bd81c40aebeb4a152ff944ca37d9b7f1d7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_cefe0b05",
+        "filename": "sw/source/uibase/config/viewopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-08-17T02:01:05Z",
+      "side": 1,
+      "message": "Right. I should\u0027ve done that. Honestly, I thought reviewers would ask for some rework or enough change that this tiny detail wouldn\u0027t matter (after all, the last patch ensures all is correct).\n\nI wanted to get some initial feedback as I had no idea if the feature would even gather enough interest at all.",
+      "parentUuid": "9aed3d3a_f3393843",
+      "revId": "d8ef9bd81c40aebeb4a152ff944ca37d9b7f1d7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
