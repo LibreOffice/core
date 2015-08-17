@@ -37,7 +37,7 @@
 #include <unotools/sharedunocomponent.hxx>
 #include "TConnection.hxx"
 
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 #include <iterator>
 #include <set>

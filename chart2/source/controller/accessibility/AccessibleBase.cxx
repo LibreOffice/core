@@ -48,7 +48,7 @@
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/compat_functional.hxx>
+#include <o3tl/functional.hxx>
 
 #include <algorithm>
 
