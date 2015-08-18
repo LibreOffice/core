@@ -127,7 +127,7 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
         if ( aURL.GetProtocol() != INetProtocol::NotValid )    // maybe the path is already a valid
             aStrURL = aStrPath;                             // hyperlink, then we can use this path directly
         else
-            utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aStrURL );
+            osl::FileBase::getFileURLFromSystemPath( aStrPath, aStrURL );
 
         //#105788# always create a URL even if it is not valid
         if( aStrURL == aEmptyStr )

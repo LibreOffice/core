@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <osl/file.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
@@ -564,7 +565,7 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
     OUString sRet;
     INetURLObject aURL( rTopic );
     if( INetProtocol::NotValid == aURL.GetProtocol() )
-        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, sRet );
+        osl::FileBase::getFileURLFromSystemPath(rTopic, sRet);
     if( sRet.isEmpty() )
         sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
     return sRet;

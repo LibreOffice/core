@@ -35,7 +35,6 @@ namespace utl
         Returning sal_True and an empty URL means that the URL doesn't point to a local file.
         */
         static bool ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn);
-        static bool ConvertSystemPathToURL( const OUString& rName, OUString& rReturn );
 
         /**
         Converts a "UCB compatible" URL into a "physical" file name.

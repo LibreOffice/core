@@ -538,7 +538,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
     else
     {
         OUString aTmpMatch;
-        ::utl::LocalFileHelper::ConvertSystemPathToURL( aText, aTmpMatch );
+        osl::FileBase::getFileURLFromSystemPath( aText, aTmpMatch );
         aMatch = aTmpMatch;
     }
 

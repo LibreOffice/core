@@ -18,7 +18,7 @@
  */
 
 #include <editeng/numitem.hxx>
-
+#include <osl/file.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/urihelper.hxx>
@@ -2066,7 +2066,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
                                 if( INetProtocol::NotValid == aURL.GetProtocol() )
-                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBookmarkURL );
+                                    osl::FileBase::getFileURLFromSystemPath( pPtr->aTarget, aBookmarkURL );
                                 if( aBookmarkURL.isEmpty() )
                                     aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
                                 pInfo->SetBookmark( aBookmarkURL );
