@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cstddef>
 #include <cstring>
 #include <map>
@@ -854,11 +855,10 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
 
     DBG( "%p pre-Player::getPreferredPlayerWindowSize, member %d x %d", this, mnWidth, mnHeight );
 
-    TimeValue aTimeout = { 10, 0 };
 #if OSL_DEBUG_LEVEL > 2
     osl::Condition::Result aResult =
 #endif
-                                 maSizeCondition.wait( &aTimeout );
+                                 maSizeCondition.wait( std::chrono::seconds(10) );
 
     DBG( "%p Player::getPreferredPlayerWindowSize after waitCondition %d, member %d x %d", this, aResult, mnWidth, mnHeight );
 

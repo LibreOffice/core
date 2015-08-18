@@ -18,6 +18,7 @@
  */
 
 #include <boost/bind.hpp>
+#include <chrono>
 #include <iostream>
 #include <osl/conditn.hxx>
 #include <vcl/graph.hxx>
@@ -85,9 +86,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
         mPlayer.setTime( ( fMediaTime > 0 ? fMediaTime : 0 ) * MSEC_IN_SEC );
         mPlayer.pause();
 
-        const TimeValue timeout = {2, 0};
-
-        condition.wait(&timeout);
+        condition.wait(std::chrono::seconds(2));
 
         if ( !mPlayer.hasVout() )
         {
