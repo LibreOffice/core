@@ -184,25 +184,30 @@ OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, Outlin
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
     EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
-    EditPaM aPaM = pOutl->pEditEngine->InsertText(mxOverflowingContent,
+    EditSelection aNewSel = pOutl->pEditEngine->InsertText(mxOverflowingContent,
                                                   OUString(),
                                                   aStartSel.Min(),
                                                   true);
 
     // Separate Paragraphs
-    pOutl->pEditEngine->InsertParaBreak(EditSelection(aPaM, aPaM));
+    pOutl->pEditEngine->InsertParaBreak(aNewSel);
 
     return pOutl->CreateParaObject();
 }
 
-OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *pOutliner)
+// XXX: This method should probably be removed
+OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *)
 {
+    /*
     // Simply Juxtaposing; no within-para merging
     OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
     // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
     pOverflowingPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
 
     return pOverflowingPObj;
+    */
+    assert(0); // Should not be called
+    return NULL;
 }
 
 
@@ -218,7 +223,9 @@ OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, Outl
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
     EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
-    EditPaM aPaM = pOutl->pEditEngine->InsertText(mxOverflowingContent,
+    // We don't need to mark the selection
+    // EditSelection aNewSel =
+    pOutl->pEditEngine->InsertText(mxOverflowingContent,
                                                   OUString(),
                                                   aStartSel.Min(),
                                                   true);
