@@ -200,7 +200,7 @@ int GetVerticalFlags( sal_UCS4 nChar )
          are GF_NONE also, but already handled in the outer if condition
         */
         if((nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
-        || (nChar == 0xFF3B || nChar == 0xFF3D)
+        || (nChar == 0xFF3B || nChar == 0xFF3D || nChar==0xFF08 || nChar==0xFF09)
         || (nChar >= 0xFF5B && nChar <= 0xFF9F) // halfwidth forms
         || (nChar == 0xFFE3) )
             return GF_NONE; // not rotated
