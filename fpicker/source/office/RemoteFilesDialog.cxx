@@ -183,7 +183,6 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     get( m_pAddService_btn, "add_service_btn" );
     get( m_pServices_lb, "services_lb" );
     get( m_pFilter_lb, "filter_lb" );
-    get( m_pName_ed, "name_ed" );
     get( m_pNewFolder, "new_folder" );
 
     m_eMode = ( nBits & WB_SAVEAS ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
@@ -193,6 +192,9 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_bIsConnected = false;
     m_bServiceChanged = false;
     m_nCurrentFilter = LISTBOX_ENTRY_NOTFOUND;
+
+    m_pName_ed = VclPtr< AutocompleteEdit >::Create( get< vcl::Window >( "filename_container" ) );
+    m_pName_ed->Show();
 
     m_pFilter_lb->Enable( false );
     m_pName_ed->Enable( false );
@@ -1252,8 +1254,31 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     m_pTreeView->SetSelectHdl( Link<>() );
 
     // read cached data for this url and fill the tree
-    const ::std::vector< std::pair< OUString, OUString > >& rFolders = m_pFileView->GetSubFolders();
-    m_pTreeView->FillTreeEntry( rURL, rFolders );
+    const ::std::vector< SvtContentEntry >& rFolders = m_pFileView->GetContent();
+    ::std::vector< std::pair< OUString, OUString > > aFolders;
+
+    m_pName_ed->ClearEntries();
+
+    for( ::std::vector< SvtContentEntry >::size_type i = 0; i < rFolders.size(); i++ )
+    {
+        int nTitleStart = rFolders[i].maURL.lastIndexOf( '/' );
+        if( nTitleStart != -1 )
+        {
+            OUString sTitle( INetURLObject::decode(
+                                rFolders[i].maURL.copy( nTitleStart + 1 ),
+                                INetURLObject::DECODE_WITH_CHARSET ) );
+
+            if( rFolders[i].mbIsFolder )
+            {
+                aFolders.push_back( std::pair< OUString, OUString > ( sTitle, rFolders[i].maURL ) );
+            }
+
+            // add entries to the autocompletion mechanism
+            m_pName_ed->AddEntry( sTitle );
+        }
+    }
+
+    m_pTreeView->FillTreeEntry( rURL, aFolders );
 
     m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
 

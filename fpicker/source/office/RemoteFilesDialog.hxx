@@ -12,6 +12,7 @@
 
 #include <comphelper/docpasswordrequest.hxx>
 
+#include <svtools/autocmpledit.hxx>
 #include <svtools/foldertree.hxx>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
@@ -156,7 +157,7 @@ private:
     VclPtr< SvtFileView > m_pFileView;
     VclPtr< FileViewContainer > m_pContainer;
     VclPtr< ListBox > m_pFilter_lb;
-    VclPtr< Edit > m_pName_ed;
+    VclPtr< AutocompleteEdit > m_pName_ed;
     PopupMenu* m_pAddMenu;
 
     ImageList m_aImages;

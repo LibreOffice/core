@@ -36,6 +36,7 @@ class ViewTabListBox_Impl;
 class SvtFileView_Impl;
 class SvTreeListEntry;
 class HeaderBar;
+struct SvtContentEntry;
 
 /// the result of an action in the FileView
 enum FileViewResult
@@ -173,7 +174,7 @@ public:
 
     void                    EndInplaceEditing( bool _bCancel );
 
-    ::std::vector< std::pair< OUString, OUString > > GetSubFolders();
+    ::std::vector< SvtContentEntry > GetContent();
 
 protected:
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
