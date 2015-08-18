@@ -165,10 +165,10 @@ private:
         whether there would be an overflow when adding an area, setting the
         proper state if so.
 
-        @return true if a HardRecalcState is effective and area is not to be
-        added.
+        @return HARDRECALCSTATE_ETERNAL if a HardRecalcState is effective and
+                area is not to be added.
       */
-    bool                CheckHardRecalcStateCondition() const;
+    ScDocument::HardRecalcState CheckHardRecalcStateCondition() const;
 
     /** Finally erase all areas pushed as to-be-erased. */
     void                FinallyEraseAreas();

@@ -62,7 +62,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 {
     if ( !pBASM )
         return ;    // Clipboard or Undo
-    if ( !bHardRecalcState )
+    if ( eHardRecalcState == HARDRECALCSTATE_OFF )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
@@ -110,7 +110,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bB
     SCCOL nCol1 = rRange.aStart.Col();
     SCCOL nCol2 = rRange.aEnd.Col();
 
-    if (!bHardRecalcState)
+    if (eHardRecalcState == HARDRECALCSTATE_OFF)
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
@@ -260,7 +260,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
     if ( !pBASM )
         return ;    // Clipboard or Undo
-    if ( !bHardRecalcState )
+    if (eHardRecalcState == HARDRECALCSTATE_OFF)
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         if ( pBASM->AreaBroadcast( rHint ) )
@@ -418,7 +418,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     //ATTENTION: _not_ SetAutoCalc( true ) because this might call CalcFormulaTree( true )
     //ATTENTION: if it was disabled before and bHasForcedFormulas is set
     bAutoCalc = true;
-    if ( bHardRecalcState )
+    if (eHardRecalcState != HARDRECALCSTATE_OFF)
         CalcAll();
     else
     {

@@ -2228,7 +2228,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
         return;
     }
 
-    if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
+    if ( !pDocument->IsInDtorClear() && pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
     {
         if (nHint & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
         {
@@ -2285,7 +2285,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
     if (IsInChangeTrack())
         return;
 
-    if ( pDocument->GetHardRecalcState() )
+    if ( pDocument->GetHardRecalcState() != ScDocument::HARDRECALCSTATE_OFF )
     {
         SetDirtyVar();
         pDocument->SetStreamValid(aPos.Tab(), false);
@@ -2328,7 +2328,7 @@ void ScFormulaCell::SetDirtyVar()
 void ScFormulaCell::SetDirtyAfterLoad()
 {
     bDirty = true;
-    if ( !pDocument->GetHardRecalcState() )
+    if ( pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
         pDocument->PutInFormulaTree( this );
 }
 
@@ -2341,7 +2341,7 @@ void ScFormulaCell::SetTableOpDirty()
 {
     if ( !IsInChangeTrack() )
     {
-        if ( pDocument->GetHardRecalcState() )
+        if ( pDocument->GetHardRecalcState() != ScDocument::HARDRECALCSTATE_OFF )
             bTableOpDirty = true;
         else
         {

@@ -179,7 +179,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nSrcVer( SC_CURRENT_VERSION ),
         nSrcMaxRow( MAXROW ),
         nFormulaTrackCount(0),
-        bHardRecalcState(false),
+        eHardRecalcState(HARDRECALCSTATE_OFF),
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),

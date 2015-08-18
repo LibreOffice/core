@@ -275,6 +275,15 @@ friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
 
     typedef ::std::vector<ScTable*> TableContainer;
+
+public:
+    enum HardRecalcState
+    {
+        HARDRECALCSTATE_OFF = 0,    /// normal calculation of dependencies
+        HARDRECALCSTATE_TEMPORARY,  /// CalcAll() without broadcast/notify but setting up new listeners
+        HARDRECALCSTATE_ETERNAL     /// no new listeners are setup, no broadcast/notify
+    };
+
 private:
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
@@ -391,7 +400,7 @@ private:
     sal_uInt16              nSrcVer;                        // file version (load/save)
     SCROW               nSrcMaxRow;                     // number of lines to load/save
     sal_uInt16              nFormulaTrackCount;
-    bool                bHardRecalcState;               // false: soft, true: hard
+    HardRecalcState     eHardRecalcState;               // off, temporary, eternal
     SCTAB               nVisibleTab;                    // for OLE etc., don't use inside ScDocument
 
     ScLkUpdMode         eLinkMode;
@@ -1949,8 +1958,8 @@ public:
     void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;
-    bool                GetHardRecalcState() { return bHardRecalcState; }
-    void                SetHardRecalcState( bool bVal ) { bHardRecalcState = bVal; }
+    HardRecalcState     GetHardRecalcState() { return eHardRecalcState; }
+    void                SetHardRecalcState( HardRecalcState eVal ) { eHardRecalcState = eVal; }
     void                StartAllListeners();
     void                StartNeededListeners();
     void                StartAllListeners( const ScRange& rRange );

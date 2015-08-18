@@ -166,14 +166,13 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
     }
 }
 
-bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
+ScDocument::HardRecalcState ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
 {
-    if ( pDoc->GetHardRecalcState() )
-        return true;
-    if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
-    {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
-        if ( !pDoc->GetHardRecalcState() )
-        {
+    ScDocument::HardRecalcState eState = pDoc->GetHardRecalcState();
+    if (eState == ScDocument::HARDRECALCSTATE_OFF)
+    {
+        if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
+        {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
             SfxObjectShell* pShell = pDoc->GetDocumentShell();
             OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
@@ -181,11 +180,11 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
                 pShell->SetError( SCWARN_CORE_HARD_RECALC, OUString( OSL_LOG_PREFIX ) );
 
             pDoc->SetAutoCalc( false );
-            pDoc->SetHardRecalcState( true );
+            eState = ScDocument::HARDRECALCSTATE_ETERNAL;
+            pDoc->SetHardRecalcState( eState );
         }
-        return true;
     }
-    return false;
+    return eState;
 }
 
 bool ScBroadcastAreaSlot::StartListeningArea(
@@ -193,7 +192,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
 {
     bool bNewArea = false;
     OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
-    if (CheckHardRecalcStateCondition())
+    if (CheckHardRecalcStateCondition() == ScDocument::HARDRECALCSTATE_ETERNAL)
         return false;
     if ( !rpArea )
     {
@@ -234,7 +233,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
 void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 {
     OSL_ENSURE( pArea, "InsertListeningArea: pArea NULL");
-    if (CheckHardRecalcStateCondition())
+    if (CheckHardRecalcStateCondition() == ScDocument::HARDRECALCSTATE_ETERNAL)
         return;
     if (aBroadcastAreaTbl.insert( pArea).second)
         pArea->IncRef();

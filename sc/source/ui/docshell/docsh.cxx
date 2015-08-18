@@ -362,13 +362,15 @@ void ScDocShell::AfterXMLLoading(bool bRet)
 
     if (pModificator)
     {
-        bool bRecalcState = aDocument.GetHardRecalcState();
-        //temporarily set hard-recalc to prevent calling ScFormulaCell::Notify()
-        //which will set the cells dirty.
-        aDocument.SetHardRecalcState(true);
+        ScDocument::HardRecalcState eRecalcState = aDocument.GetHardRecalcState();
+        // Temporarily set hard-recalc to prevent calling
+        // ScFormulaCell::Notify() during destruction of the Modificator which
+        // will set the cells dirty.
+        if (eRecalcState == ScDocument::HARDRECALCSTATE_OFF)
+            aDocument.SetHardRecalcState(ScDocument::HARDRECALCSTATE_TEMPORARY);
         delete pModificator;
-        aDocument.SetHardRecalcState(bRecalcState);
         pModificator = NULL;
+        aDocument.SetHardRecalcState(eRecalcState);
     }
     else
     {
