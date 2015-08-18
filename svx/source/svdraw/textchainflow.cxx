@@ -87,10 +87,6 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bOverflow = bIsPageOverflow && mpNextLink;
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
-    // Reset update mode
-    pFlowOutl->SetUpdateMode(bOldUpdateMode);
-
-
     // Get old state on whether to merge para-s or not
     // NOTE: We handle UF/OF using the _old_ state. The new one is simply saved
     bool bMustMergeParaAmongLinks = GetTextChain()->GetIsPartOfLastParaInNextLink(mpTargetLink);
@@ -107,6 +103,9 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     mpUnderflChText = bUnderflow ?
                       new UFlowChainedText(pFlowOutl, bMustMergeParaAmongLinks) :
                       NULL;
+
+    // Reset update mode // Reset it here because we use WriteRTF (needing updatemode = true) in the two constructors above
+    pFlowOutl->SetUpdateMode(bOldUpdateMode);
 
     // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
     impUpdateCursorInfo();
