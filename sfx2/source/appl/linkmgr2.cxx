@@ -564,7 +564,7 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
     OUString sRet;
     INetURLObject aURL( rTopic );
     if( INetProtocol::NotValid == aURL.GetProtocol() )
-        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rBaseURL, sRet );
+        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, sRet );
     if( sRet.isEmpty() )
         sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
     return sRet;

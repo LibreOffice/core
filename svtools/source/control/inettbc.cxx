@@ -460,8 +460,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
     }
 }
 
-
-OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL, const OUString& aWorkDir )
+OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL )
 {
     OUString aMatch;
     OUString aText = _aText;
@@ -538,13 +537,12 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
     else
     {
         OUString aTmpMatch;
-        ::utl::LocalFileHelper::ConvertSystemPathToURL( aText, aWorkDir, aTmpMatch );
+        ::utl::LocalFileHelper::ConvertSystemPathToURL( aText, aTmpMatch );
         aMatch = aTmpMatch;
     }
 
     return aMatch;
 }
-
 
 void SvtMatchContext_Impl::doExecute()
 {
@@ -586,7 +584,7 @@ void SvtMatchContext_Impl::doExecute()
         if( schedule() )
         {
             if ( eProt == INetProtocol::NotValid )
-                aMatch = SvtURLBox::ParseSmart( aText, aBaseURL, aWorkDir );
+                aMatch = SvtURLBox::ParseSmart( aText, aBaseURL );
             else
                 aMatch = aText;
             if ( !aMatch.isEmpty() )
@@ -1217,7 +1215,7 @@ OUString SvtURLBox::GetURL()
 
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
-        OUString aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
+        OUString aName = ParseSmart( aText, aBaseURL );
         aObj.SetURL(aName);
         OUString aURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( aURL.isEmpty() )

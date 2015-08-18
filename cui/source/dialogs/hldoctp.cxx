@@ -118,7 +118,6 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
     // get data from dialog-controls
     OUString aStrURL;
     OUString aStrPath ( m_pCbbPath->GetText() );
-    const OUString aBaseURL ( m_pCbbPath->GetBaseURL() );
     OUString aStrMark( m_pEdTarget->GetText() );
 
     if ( aStrPath != aEmptyStr )
@@ -127,7 +126,7 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
         if ( aURL.GetProtocol() != INetProtocol::NotValid )    // maybe the path is already a valid
             aStrURL = aStrPath;                             // hyperlink, then we can use this path directly
         else
-            utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
+            utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aStrURL );
 
         //#105788# always create a URL even if it is not valid
         if( aStrURL == aEmptyStr )

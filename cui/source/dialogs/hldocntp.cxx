@@ -407,7 +407,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 
     OUString            aStrURL;
     OUString            aTempStrURL( m_pCbbPath->GetText() );
-    utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, m_pCbbPath->GetBaseURL(), aStrURL );
+    utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, aStrURL );
 
     OUString            aStrPath = aStrURL;
     bool            bZeroPath = aStrPath.isEmpty();

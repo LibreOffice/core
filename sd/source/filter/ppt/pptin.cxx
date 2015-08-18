@@ -2066,7 +2066,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
                                 if( INetProtocol::NotValid == aURL.GetProtocol() )
-                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBaseURL, aBookmarkURL );
+                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBookmarkURL );
                                 if( aBookmarkURL.isEmpty() )
                                     aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
                                 pInfo->SetBookmark( aBookmarkURL );

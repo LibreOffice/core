@@ -36,7 +36,7 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString&, OUString& rReturn )
+bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, OUString& rReturn )
 {
     bool ok = osl::FileBase::getFileURLFromSystemPath(rName, rReturn)
         == osl::FileBase::E_None;

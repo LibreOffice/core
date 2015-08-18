@@ -80,7 +80,7 @@ public:
 
     void                            UpdatePickList( );
 
-    static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL, const OUString& aWorkDir );
+    static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
 
     void                            SetFilter(const OUString& _sFilter);
 
