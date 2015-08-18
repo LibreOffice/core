@@ -443,79 +443,82 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiCloseRecord( r, nPos );
     }
     // User defined types
-    sal_uInt16 nTypes = rTypes->Count();
-    if (nTypes > 0 )
+    if (rTypes)
     {
-        nPos = SbiOpenRecord( r, B_SBXOBJECTS, nTypes );
-
-        for (sal_uInt16 i = 0; i < nTypes; i++)
+        sal_uInt16 nTypes = rTypes->Count();
+        if (nTypes > 0 )
         {
-            SbxObject* pType = static_cast< SbxObject* > ( rTypes->Get(i) );
-            OUString aTypeName = pType->GetClassName();
+            nPos = SbiOpenRecord( r, B_SBXOBJECTS, nTypes );
 
-            r.WriteUniOrByteString( aTypeName, eCharSet );
-
-            SbxArray  *pTypeMembers = pType->GetProperties();
-            sal_uInt16 nTypeMembers = pTypeMembers->Count();
-
-            r.WriteInt16(nTypeMembers);
-
-            for (sal_uInt16 j = 0; j < nTypeMembers; j++)
+            for (sal_uInt16 i = 0; i < nTypes; i++)
             {
+                SbxObject* pType = static_cast< SbxObject* > ( rTypes->Get(i) );
+                OUString aTypeName = pType->GetClassName();
 
-                SbxProperty* pTypeElem = static_cast< SbxProperty* > ( pTypeMembers->Get(j) );
+                r.WriteUniOrByteString( aTypeName, eCharSet );
 
-                OUString aElemName = pTypeElem->GetName();
-                r.WriteUniOrByteString( aElemName, eCharSet );
+                SbxArray  *pTypeMembers = pType->GetProperties();
+                sal_uInt16 nTypeMembers = pTypeMembers->Count();
 
-                SbxDataType dataType =   pTypeElem->GetType();
-                r.WriteInt16(dataType);
+                r.WriteInt16(nTypeMembers);
 
-                SbxFlagBits nElemFlags = pTypeElem->GetFlags();
-                r.WriteUInt32(static_cast< sal_uInt32 > (nElemFlags) );
-
-                SbxBase* pElemObject = pTypeElem->GetObject();
-
-                if (pElemObject)
+                for (sal_uInt16 j = 0; j < nTypeMembers; j++)
                 {
-                    r.WriteInt16(1); // has elem Object
 
-                    if( dataType == SbxOBJECT )
+                    SbxProperty* pTypeElem = static_cast< SbxProperty* > ( pTypeMembers->Get(j) );
+
+                    OUString aElemName = pTypeElem->GetName();
+                    r.WriteUniOrByteString( aElemName, eCharSet );
+
+                    SbxDataType dataType =   pTypeElem->GetType();
+                    r.WriteInt16(dataType);
+
+                    SbxFlagBits nElemFlags = pTypeElem->GetFlags();
+                    r.WriteUInt32(static_cast< sal_uInt32 > (nElemFlags) );
+
+                    SbxBase* pElemObject = pTypeElem->GetObject();
+
+                    if (pElemObject)
                     {
-                        // nested user defined types
-                        // declared before use, so it is ok to reference it by name on load
-                        SbxObject* pNestedType = static_cast< SbxObject* > ( pElemObject );
-                        r.WriteUniOrByteString( pNestedType->GetClassName(), eCharSet );
-                    }
-                    else
-                    {
-                        // an array
-                        SbxDimArray* pArray = static_cast< SbxDimArray* > ( pElemObject );
+                        r.WriteInt16(1); // has elem Object
 
-                        bool bFixedSize = pArray->hasFixedSize();
-                        if (bFixedSize)
-                            r.WriteInt16(1);
-                        else
-                            r.WriteInt16(0);
-
-                        sal_Int32 nDims = pArray->GetDims();
-                        r.WriteInt32(nDims);
-
-                        for (sal_Int32 d = 0; d < nDims; d++)
+                        if( dataType == SbxOBJECT )
                         {
-                            sal_Int32 lBound;
-                            sal_Int32 uBound;
-                            pArray->GetDim32(d, lBound, uBound);
-                            r.WriteInt32(lBound).WriteInt32(uBound);
+                            // nested user defined types
+                            // declared before use, so it is ok to reference it by name on load
+                            SbxObject* pNestedType = static_cast< SbxObject* > ( pElemObject );
+                            r.WriteUniOrByteString( pNestedType->GetClassName(), eCharSet );
+                        }
+                        else
+                        {
+                            // an array
+                            SbxDimArray* pArray = static_cast< SbxDimArray* > ( pElemObject );
+
+                            bool bFixedSize = pArray->hasFixedSize();
+                            if (bFixedSize)
+                                r.WriteInt16(1);
+                            else
+                                r.WriteInt16(0);
+
+                            sal_Int32 nDims = pArray->GetDims();
+                            r.WriteInt32(nDims);
+
+                            for (sal_Int32 d = 0; d < nDims; d++)
+                            {
+                                sal_Int32 lBound;
+                                sal_Int32 uBound;
+                                pArray->GetDim32(d, lBound, uBound);
+                                r.WriteInt32(lBound).WriteInt32(uBound);
+                            }
                         }
                     }
-                }
-                else
-                    r.WriteInt16(0); // no elem Object
+                    else
+                        r.WriteInt16(0); // no elem Object
 
+                }
             }
+        SbiCloseRecord( r, nPos );
         }
-    SbiCloseRecord( r, nPos );
     }
     // Set overall length
     SbiCloseRecord( r, nStart );
