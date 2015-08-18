@@ -1199,14 +1199,21 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
                             // #i69458# lock fields to prevent access to the result set while calculating layout
+                            // tdf#92324: and do not unlock: keep document locked during printing to avoid
+                            // ExpFields update during printing, generation of preview, etc.
                             rWorkShell.LockExpFields();
                             rWorkShell.CalcLayout();
-                            rWorkShell.UnlockExpFields();
                         }
 
                         SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
+                        // tdf#92324: Allow ExpFields update only by explicit instruction to avoid
+                        // database cursor movement on any other fields update, for example during
+                        // print preview and other operations
+                        if ( rWorkShell.IsExpFieldsLocked() )
+                            rWorkShell.UnlockExpFields();
                         rWorkShell.SwViewShell::UpdateFields();
+                        rWorkShell.LockExpFields();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
                         // launch MailMergeEvent if required
@@ -1441,6 +1448,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+            if ( xWorkDocSh.Is() && pWorkView->GetWrtShell().IsExpFieldsLocked() )
+            {
+                // Unlock ducment fields after merge complete
+                pWorkView->GetWrtShell().UnlockExpFields();
+            }
 
             if( !bCreateSingleFile )
             {

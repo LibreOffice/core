@@ -403,6 +403,11 @@ void SwEditShell::UnlockExpFields()
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
 }
 
+bool SwEditShell::IsExpFieldsLocked() const
+{
+    return GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked();
+}
+
 void SwEditShell::SetFieldUpdateFlags( SwFieldUpdateFlags eFlags )
 {
     getIDocumentSettingAccess().setFieldUpdateFlags( eFlags );
