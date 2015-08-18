@@ -19,6 +19,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/PageNumberType.hpp>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -246,6 +247,30 @@ DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf74524, "tdf74524.odt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Any aField1 = xFields->nextElement();
+    uno::Reference<lang::XServiceInfo> xServiceInfo1(aField1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo1->supportsService(OUString("com.sun.star.text.textfield.PageNumber")));
+    uno::Reference<beans::XPropertySet> xPropertySet(aField1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(style::NumberingType::PAGE_DESCRIPTOR)), xPropertySet->getPropertyValue(OUString("NumberingType")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(0)), xPropertySet->getPropertyValue(OUString("Offset")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(text::PageNumberType_CURRENT), xPropertySet->getPropertyValue(OUString("SubType")));
+    uno::Reference<text::XTextContent> xField1(aField1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xField1->getAnchor()->getString());
+    uno::Any aField2 = xFields->nextElement();
+    uno::Reference<lang::XServiceInfo> xServiceInfo2(aField2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo2->supportsService(OUString("com.sun.star.text.textfield.Annotation")));
+    uno::Reference<beans::XPropertySet> xPropertySet2(aField2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Comment 1")), xPropertySet2->getPropertyValue(OUString("Content")));
+    uno::Reference<text::XTextContent> xField2(aField2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello 1World"), xField2->getAnchor()->getString());
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
 }
 
 DECLARE_ODFIMPORT_TEST(testPageStyleLayoutRight, "hello.odt")
