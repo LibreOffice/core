@@ -23,7 +23,7 @@
 #include <list>
 #include <unordered_map>
 
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 
 #include <rtl/byteseq.hxx>
 #include <rtl/ref.hxx>
@@ -70,8 +70,11 @@ namespace cppu_threadpool {
 
     struct WaitingThread
     {
-        oslCondition condition;
+        osl::Condition condition;
         rtl::Reference< ORequestThread > thread;
+
+        explicit WaitingThread(
+            rtl::Reference<ORequestThread> const & theThread);
     };
 
     typedef ::std::list < struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;

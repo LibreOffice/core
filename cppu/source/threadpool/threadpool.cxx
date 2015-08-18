@@ -39,6 +39,10 @@ using namespace ::rtl;
 
 namespace cppu_threadpool
 {
+    WaitingThread::WaitingThread(
+        rtl::Reference<ORequestThread> const & theThread): thread(theThread)
+    {}
+
     struct theDisposedCallerAdmin :
         public rtl::StaticWithInit< DisposedCallerAdminHolder, theDisposedCallerAdmin >
     {
@@ -138,9 +142,7 @@ namespace cppu_threadpool
      ******************/
     void ThreadPool::waitInPool( rtl::Reference< ORequestThread > const & pThread )
     {
-        struct WaitingThread waitingThread;
-        waitingThread.condition = osl_createCondition();
-        waitingThread.thread = pThread;
+        WaitingThread waitingThread(pThread);
         {
             MutexGuard guard( m_mutexWaitingThreadList );
             m_lstThreads.push_front( &waitingThread );
@@ -148,7 +150,7 @@ namespace cppu_threadpool
 
         // let the thread wait 2 seconds
         TimeValue time = { 2 , 0 };
-        osl_waitCondition( waitingThread.condition , &time );
+        waitingThread.condition.wait( &time );
 
         {
             MutexGuard guard ( m_mutexWaitingThreadList );
@@ -161,8 +163,6 @@ namespace cppu_threadpool
                 m_lstThreads.erase( ii );
             }
         }
-
-        osl_destroyCondition( waitingThread.condition );
     }
 
     void ThreadPool::joinWorkers()
@@ -174,7 +174,7 @@ namespace cppu_threadpool
                  ++ ii )
             {
                 // wake the threads up
-                osl_setCondition( (*ii)->condition );
+                (*ii)->condition.set();
             }
         }
         m_aThreadAdmin.join();
@@ -198,7 +198,7 @@ namespace cppu_threadpool
                 m_lstThreads.pop_back();
 
                 // let the thread go
-                osl_setCondition( pWaitingThread->condition );
+                pWaitingThread->condition.set();
                 return true;
             }
         }

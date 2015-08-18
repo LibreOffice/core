@@ -28,18 +28,10 @@ namespace cppu_threadpool {
 
     JobQueue::JobQueue() :
         m_nToDo( 0 ),
-        m_bSuspended( false ),
-        m_cndWait( osl_createCondition() )
+        m_bSuspended( false )
     {
-        osl_resetCondition( m_cndWait );
         m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
-
-    JobQueue::~JobQueue()
-    {
-        osl_destroyCondition( m_cndWait );
-    }
-
 
     void JobQueue::add( void *pThreadSpecificData, RequestFun * doRequest )
     {
@@ -48,7 +40,7 @@ namespace cppu_threadpool {
         m_lstJob.push_back( job );
         if( ! m_bSuspended )
         {
-            osl_setCondition( m_cndWait );
+            m_cndWait.set();
         }
         m_nToDo ++;
     }
@@ -78,7 +70,7 @@ namespace cppu_threadpool {
                 }
             }
 
-            osl_waitCondition( m_cndWait , 0 );
+            m_cndWait.wait();
 
             struct Job job={0,0};
             {
@@ -92,7 +84,7 @@ namespace cppu_threadpool {
                         && (m_lstCallstack.empty()
                             || m_lstCallstack.front() != 0) )
                     {
-                        osl_resetCondition( m_cndWait );
+                        m_cndWait.reset();
                     }
                     break;
                 }
@@ -106,7 +98,7 @@ namespace cppu_threadpool {
                 if( m_lstJob.empty()
                     && (m_lstCallstack.empty() || m_lstCallstack.front() != 0) )
                 {
-                    osl_resetCondition( m_cndWait );
+                    m_cndWait.reset();
                 }
             }
 
@@ -150,7 +142,7 @@ namespace cppu_threadpool {
         if( !m_lstCallstack.empty()  && ! m_lstCallstack.front() )
         {
             // The thread is waiting for a disposed pCallerId, let it go
-            osl_setCondition( m_cndWait );
+            m_cndWait.set();
         }
     }
 
@@ -166,7 +158,7 @@ namespace cppu_threadpool {
         m_bSuspended = false;
         if( ! m_lstJob.empty() )
         {
-            osl_setCondition( m_cndWait );
+            m_cndWait.set();
         }
     }
 

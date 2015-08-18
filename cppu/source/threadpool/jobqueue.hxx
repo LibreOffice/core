@@ -23,7 +23,7 @@
 #include <list>
 #include <sal/types.h>
 
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -49,7 +49,6 @@ namespace cppu_threadpool
     {
     public:
         JobQueue();
-        ~JobQueue();
 
         void add( void *pThreadSpecificData, RequestFun * doRequest );
 
@@ -69,7 +68,7 @@ namespace cppu_threadpool
         CallStackList m_lstCallstack;
         sal_Int32 m_nToDo;
         bool m_bSuspended;
-        oslCondition m_cndWait;
+        osl::Condition m_cndWait;
         DisposedCallerAdminHolder m_DisposedCallerAdmin;
     };
 }
