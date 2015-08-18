@@ -134,6 +134,7 @@ public:
     void testUnoParagraph();
     void testTdf60967();
     void testSearchWithTransliterate();
+    void testTdf74230();
     void testTdf74363();
     void testTdf80663();
     void testTdf57197();
@@ -205,6 +206,7 @@ public:
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf74230);
     CPPUNIT_TEST(testTdf74363);
     CPPUNIT_TEST(testTdf80663);
     CPPUNIT_TEST(testTdf57197);
@@ -1630,6 +1632,26 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf74230()
+{
+    createDoc();
+    //exporting the empty document to ODT via TempFile
+    uno::Sequence<beans::PropertyValue> aDescriptor;
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    CPPUNIT_ASSERT(aTempFile.IsValid());
+    //loading an XML DOM of the "styles.xml" of the TempFile
+    xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(),"styles.xml");
+    //pXmlDoc should not be null
+    CPPUNIT_ASSERT(pXmlDoc);
+    //asserting XPath in loaded XML DOM
+    assertXPath(pXmlDoc, "//office:styles/style:default-style[@style:family='graphic']/style:graphic-properties[@svg:stroke-color='#3465a4']");
+    assertXPath(pXmlDoc, "//office:styles/style:default-style[@style:family='graphic']/style:graphic-properties[@draw:fill-color='#729fcf']");
+    //deleting the TempFile
+    aTempFile.EnableKillingFile();
 }
 
 void SwUiWriterTest::testTdf74363()
