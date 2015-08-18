@@ -16,6 +16,24 @@
       "revId": "2382083278b99ffce0558ff7b65a772ddc291d06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_992f2ba1",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-18T19:24:16Z",
+      "side": 1,
+      "message": "... oh actually now i remember the proper spelling is \"com.sun.star.text.textfield.Annotation\"",
+      "parentUuid": "9aed3d3a_5925a3c0",
+      "revId": "2382083278b99ffce0558ff7b65a772ddc291d06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
