@@ -66,8 +66,22 @@ using namespace ::std;
 #define ZF_STANDARD_DATETIME    50
 #define ZF_STANDARD_SCIENTIFIC  60
 #define ZF_STANDARD_FRACTION    70
-#define ZF_STANDARD_NEWEXTENDED 75
-#define ZF_STANDARD_NEWEXTENDEDMAX  SV_MAX_ANZ_STANDARD_FORMATE-2   // 98
+
+// Additional builtin formats not fitting into the first 10 of a category (TLOT
+// = The Legacy Of Templin; unfortunately TLOT intended only 10 builtin formats
+// per category, more would overwrite the next category):
+#define ZF_STANDARD_NEWEXTENDED_DATE_SYS_DMMMYYYY 75
+#define ZF_STANDARD_NEWEXTENDED_DATE_SYS_DMMMMYYYY 76
+#define ZF_STANDARD_NEWEXTENDED_DATE_SYS_NNDMMMYY 77
+#define ZF_STANDARD_NEWEXTENDED_DATE_SYS_NNDMMMMYYYY 78
+#define ZF_STANDARD_NEWEXTENDED_DATE_SYS_NNNNDMMMMYYYY 79
+#define ZF_STANDARD_NEWEXTENDED_DATE_DIN_DMMMYYYY 80
+#define ZF_STANDARD_NEWEXTENDED_DATE_DIN_DMMMMYYYY 81
+#define ZF_STANDARD_NEWEXTENDED_DATE_DIN_MMDD 82
+#define ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYMMDD 83
+#define ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYYYMMDD 84
+#define ZF_STANDARD_NEWEXTENDED_DATE_WW 85
+
 #define ZF_STANDARD_LOGICAL     SV_MAX_ANZ_STANDARD_FORMATE-1 //  99
 #define ZF_STANDARD_TEXT        SV_MAX_ANZ_STANDARD_FORMATE   // 100
 
@@ -2132,12 +2146,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     sal_Int32 nIdx;
     bool bDefault;
 
-    // Counter for additional builtin formats not fitting into the first 10
-    // of a category (TLOT:=The Legacy Of Templin), altogether about 20 formats.
-    // Has to be incremented on each ImpInsertNewStandardformat, new formats
-    // must be appended, not inserted!
-    sal_uInt16 nNewExtended = ZF_STANDARD_NEWEXTENDED;
-
     // Number
     uno::Sequence< i18n::NumberFormatCode > aFormatSeq =
         aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
@@ -2358,61 +2366,57 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ));
 
-    //! Unfortunately TLOT intended only 10 builtin formats per category, more
-    //! would overwrite the next category (ZF_STANDARD_TIME) :-((
-    //! Therefore they are inserted with nNewExtended++ (which is also limited)
-
     // D. MMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, ZF_STANDARD_NEWEXTENDED_DATE_SYS_DMMMYYYY ));
 
     // D. MMMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, ZF_STANDARD_NEWEXTENDED_DATE_SYS_DMMMMYYYY ));
 
     // NN, D. MMM YY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, ZF_STANDARD_NEWEXTENDED_DATE_SYS_NNDMMMYY ));
 
     // NN, D. MMMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, ZF_STANDARD_NEWEXTENDED_DATE_SYS_NNDMMMMYYYY ));
 
     // NNN, D. MMMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, ZF_STANDARD_NEWEXTENDED_DATE_SYS_NNNNDMMMMYYYY ));
 
     // Hard coded DIN (Deutsche Industrie Norm) and EN (European Norm) date formats
 
     // D. MMM. YYYY   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, ZF_STANDARD_NEWEXTENDED_DATE_DIN_DMMMYYYY ));
 
     // D. MMMM YYYY   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, ZF_STANDARD_NEWEXTENDED_DATE_DIN_DMMMMYYYY ));
 
     // MM-DD   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, ZF_STANDARD_NEWEXTENDED_DATE_DIN_MMDD ));
 
     // YY-MM-DD   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYMMDD ));
 
     // YYYY-MM-DD   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYYYMMDD ));
 
 
 
@@ -2516,19 +2520,16 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
 
-    // Week of year   must be appended here because of nNewExtended
+    // Week of year
     const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
     aSingleFormatCode.Code = rKeyword[NF_KEY_WW];
     ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ));
+                     CLOffset + SetIndexTable( NF_DATE_WW, ZF_STANDARD_NEWEXTENDED_DATE_WW ));
 
     {
         osl::MutexGuard aGuard(&theIndexTable.maMtx);
         theIndexTable.mbInitialized = true;
     }
-    SAL_WARN_IF( nNewExtended > ZF_STANDARD_NEWEXTENDEDMAX, "svl.numbers",
-        "ImpGenerateFormats: overflow of nNewExtended standard formats" );
-    assert( nNewExtended <= ZF_STANDARD_NEWEXTENDEDMAX );
 
     // Now all additional format codes provided by I18N, but only if not
     // changing SystemCL, then they are appended last after user defined.
