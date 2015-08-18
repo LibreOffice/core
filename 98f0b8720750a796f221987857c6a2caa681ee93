@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_d99413ea",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-18T14:52:33Z",
+      "side": 1,
+      "message": "in this case we need to assert that the pXmlDoc is not null as well.\n\n(the reason why this is a conditional in filter tests is that it is invoked twice and in the first case the file has not been exported yet)",
+      "revId": "98f0b8720750a796f221987857c6a2caa681ee93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
