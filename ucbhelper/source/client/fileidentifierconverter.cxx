@@ -31,24 +31,6 @@ using namespace com::sun::star;
 
 namespace ucbhelper {
 
-
-
-//  getLocalFileURL
-
-
-
-OUString
-getLocalFileURL()
-{
-    // If there were more file systems than just "file:///" (e.g., the obsolete
-    // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
-    // their com.sun.star.ucb.XFileIdentifierConverter.getFileProviderLocality
-    // and return the most local one:
-    return OUString("file:///");
-}
-
-
-
 //  getFileURLFromSystemPath
 
 

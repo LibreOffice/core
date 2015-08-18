@@ -31,20 +31,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 namespace ucbhelper {
 
-
-/** Get a 'root' URL for the most 'local' file content provider.
-
-    @descr
-    The result can be used as the rBaseURL parameter of
-    ucb::getFileURLFromSystemPath().
-
-    @returns
-    either a 'root' URL for the most 'local' file content provider, or an
-    empty string, if no such URL can meaningfully be constructed.
- */
-UCBHELPER_DLLPUBLIC OUString getLocalFileURL();
-
-
 /** Using a specific content provider manager, convert a file path in system
     dependent notation to a (file) URL.
 
