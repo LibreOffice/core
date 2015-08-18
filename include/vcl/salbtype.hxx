@@ -550,22 +550,14 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
                 return j;
             }
 
-        nRetIndex = mnCount - 1;
-        if( nRetIndex )
+        sal_uLong nLastErr = rCol.GetColorError( mpBitmapColor[ nRetIndex ] );
+        for( sal_uInt16 i = 1; i < mnCount; ++i )
         {
-            sal_uLong nLastErr = rCol.GetColorError( mpBitmapColor[ nRetIndex ] );
-            sal_uInt16 i = nRetIndex - 1;
-            for(;;)
+            const sal_uLong nActErr = rCol.GetColorError( mpBitmapColor[ i ] );
+            if ( nActErr < nLastErr )
             {
-                const sal_uLong nActErr = rCol.GetColorError( mpBitmapColor[ i ] );
-                if ( nActErr < nLastErr )
-                {
-                    nLastErr = nActErr;
-                    nRetIndex = i;
-                }
-                if (!i)
-                    break;
-                --i;
+                nLastErr = nActErr;
+                nRetIndex = i;
             }
         }
     }
