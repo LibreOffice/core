@@ -1392,8 +1392,8 @@ static bool HasSimilarScheme(const BitmapColor& rBitmapColor1, const BitmapColor
 static sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor& rBitmapColor)
 {
     sal_uInt16 nReturn = 0;
+    sal_uInt16 nLastErr = SAL_MAX_UINT16;
     bool bFound = false;
-    sal_uLong nLastErr = 3 * 255 + 1;
 
     // Prefer those colors which have similar scheme as the input
     // Allow bigger and bigger variance of the schemes until we find
@@ -1404,7 +1404,7 @@ static sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor&
         {
             if( HasSimilarScheme(rBitmapColor, rPalette[i], nVariance) )
             {
-                sal_uLong nActErr = rBitmapColor.GetColorError( rPalette[i] );
+                const sal_uInt16 nActErr = rBitmapColor.GetColorError( rPalette[i] );
                 if( nActErr < nLastErr )
                 {
                     nLastErr = nActErr;

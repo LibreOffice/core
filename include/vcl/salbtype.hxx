@@ -138,7 +138,7 @@ public:
 
     inline BitmapColor& Merge( const BitmapColor& rColor, sal_uInt8 cTransparency );
 
-    inline sal_uLong    GetColorError( const BitmapColor& rBitmapColor ) const;
+    inline sal_uInt16   GetColorError( const BitmapColor& rBitmapColor ) const;
 };
 
 // - BitmapPalette -
@@ -398,13 +398,14 @@ inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uIn
 
 
 
-inline sal_uLong BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
+inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
 {
     DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
     DBG_ASSERT( !rBitmapColor.mbIndex, "Pixel represents index into colortable!" );
-    return( (sal_uLong) ( labs( mcBlueOrIndex - rBitmapColor.mcBlueOrIndex ) +
-                      labs( mcGreen - rBitmapColor.mcGreen ) +
-                      labs( mcRed - rBitmapColor.mcRed ) ) );
+    return static_cast<sal_uInt16>(
+        abs( static_cast<int>(mcBlueOrIndex) - static_cast<int>(rBitmapColor.mcBlueOrIndex) ) +
+        abs( static_cast<int>(mcGreen) - static_cast<int>(rBitmapColor.mcGreen) ) +
+        abs( static_cast<int>(mcRed) - static_cast<int>(rBitmapColor.mcRed) ) );
 }
 
 inline BitmapPalette::BitmapPalette() :
@@ -550,10 +551,10 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
                 return j;
             }
 
-        sal_uLong nLastErr = rCol.GetColorError( mpBitmapColor[ nRetIndex ] );
-        for( sal_uInt16 i = 1; i < mnCount; ++i )
+        sal_uInt16 nLastErr = SAL_MAX_UINT16;
+        for( sal_uInt16 i = 0; i < mnCount; ++i )
         {
-            const sal_uLong nActErr = rCol.GetColorError( mpBitmapColor[ i ] );
+            const sal_uInt16 nActErr = rCol.GetColorError( mpBitmapColor[ i ] );
             if ( nActErr < nLastErr )
             {
                 nLastErr = nActErr;
