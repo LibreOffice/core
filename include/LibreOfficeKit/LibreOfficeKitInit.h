@@ -40,7 +40,7 @@ extern "C"
     #endif
     #define SEPARATOR         '/'
 
-    void *_dlopen(const char *pFN)
+    void *lok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
 #if defined __clang__ && defined __linux__ \
@@ -52,17 +52,17 @@ extern "C"
                       );
     }
 
-    char *_dlerror(void)
+    char *lok_dlerror(void)
     {
         return dlerror();
     }
 
-    void *_dlsym(void *Hnd, const char *pName)
+    void *lok_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
 
-    int _dlclose(void *Hnd)
+    int lok_dlclose(void *Hnd)
     {
         return dlclose(Hnd);
     }
@@ -80,24 +80,24 @@ extern "C"
     #define SEPARATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
 
-    void *_dlopen(const char *pFN)
+    void *lok_loadlib(const char *pFN)
     {
         return (void *) LoadLibrary(pFN);
     }
 
-    char *_dlerror(void)
+    char *lok_dlerror(void)
     {
         LPSTR buf = NULL;
         FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
         return buf;
     }
 
-    void *_dlsym(void *Hnd, const char *pName)
+    void *lok_dlsym(void *Hnd, const char *pName)
     {
         return GetProcAddress((HINSTANCE) Hnd, pName);
     }
 
-    int _dlclose(void *Hnd)
+    int lok_dlclose(void *Hnd)
     {
         return FreeLibrary((HINSTANCE) Hnd);
     }
@@ -139,16 +139,12 @@ extern "C"
     }
 #endif
 
-typedef LibreOfficeKit *(HookFunction)( const char *install_path);
-
-typedef LibreOfficeKit *(HookFunction2)( const char *install_path, const char *user_profile_path );
-
-static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_path )
+static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 {
     char *imp_lib;
     void *dlhandle;
-    HookFunction *pSym;
-    HookFunction2 *pSym2;
+
+    *_imp_lib = NULL;
 
 #if !(defined(__APPLE__) && defined(__arm__))
     size_t partial_length;
@@ -172,7 +168,7 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     imp_lib[partial_length++] = SEPARATOR;
     strcpy(imp_lib + partial_length, TARGET_LIB);
 
-    dlhandle = _dlopen(imp_lib);
+    dlhandle = lok_loadlib(imp_lib);
     if (!dlhandle)
     {
         // If TARGET_LIB exists, and likely is a real library (not a
@@ -183,18 +179,18 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
         if (stat(imp_lib, &st) == 0 && st.st_size > 100)
         {
             fprintf(stderr, "failed to open library '%s': %s\n",
-                    imp_lib, _dlerror());
+                    imp_lib, lok_dlerror());
             free(imp_lib);
             return NULL;
         }
 
         strcpy(imp_lib + partial_length, TARGET_MERGED_LIB);
 
-        dlhandle = _dlopen(imp_lib);
+        dlhandle = lok_loadlib(imp_lib);
         if (!dlhandle)
         {
             fprintf(stderr, "failed to open library '%s': %s\n",
-                    imp_lib, _dlerror());
+                    imp_lib, lok_dlerror());
             free(imp_lib);
             return NULL;
         }
@@ -203,23 +199,41 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
     imp_lib = strdup("the app executable");
     dlhandle = RTLD_MAIN_ONLY;
 #endif
+    *_imp_lib = imp_lib;
+    return dlhandle;
+}
 
-    pSym2 = (HookFunction2 *) _dlsym( dlhandle, "libreofficekit_hook_2" );
+typedef LibreOfficeKit *(LokHookFunction)( const char *install_path);
+
+typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char *user_profile_path );
+
+typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_path );
+
+static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_path )
+{
+    char *imp_lib;
+    void *dlhandle;
+    LokHookFunction *pSym;
+    LokHookFunction2 *pSym2;
+
+    dlhandle = lok_dlopen(install_path, &imp_lib);
+
+    pSym2 = (LokHookFunction2 *) lok_dlsym(dlhandle, "libreofficekit_hook_2");
     if (!pSym2)
     {
         if (user_profile_path != NULL)
         {
             fprintf( stderr, "the LibreOffice version in '%s' does not support passing a user profile to the hook function\n",
                      imp_lib );
-            _dlclose( dlhandle );
+            lok_dlclose( dlhandle );
             free( imp_lib );
             return NULL;
         }
-        pSym = (HookFunction *) _dlsym( dlhandle, "libreofficekit_hook" );
+        pSym = (LokHookFunction *) lok_dlsym( dlhandle, "libreofficekit_hook" );
         if (!pSym)
         {
             fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
-            _dlclose( dlhandle );
+            lok_dlclose( dlhandle );
             free( imp_lib );
             return NULL;
         }
