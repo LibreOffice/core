@@ -3780,6 +3780,14 @@ void ScDocument::CalcAll()
         if (*it)
             (*it)->CalcAll();
     ClearFormulaTree();
+
+    // In hard recalc state caches were not added as listeners, invalidate them
+    // so the next non-CalcAll() normal lookup will not be presented with
+    // outdated data.
+    /* TODO: come up with more detailed hard recalc states so we can
+     * differentiate between hard recalc after load and others. */
+    if (GetHardRecalcState())
+        ClearLookupCaches();
 }
 
 void ScDocument::CompileAll()
