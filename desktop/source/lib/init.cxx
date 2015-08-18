@@ -1101,6 +1101,17 @@ LibreOfficeKit *libreofficekit_hook(const char* install_path)
     return libreofficekit_hook_2(install_path, NULL);
 }
 
+#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE) && defined(DISABLE_DYNLOADING)
+__attribute__ ((visibility("default")))
+#else
+SAL_DLLPUBLIC_EXPORT
+#endif
+int lok_preinit()
+{
+    SAL_INFO("lok", "Hello World");
+    return 0;
+}
+
 static void lo_destroy(LibreOfficeKit* pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
