@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aed3d3a_199f9b04",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-18T14:53:38Z",
+      "side": 1,
+      "message": "comparing boolean with _EQUAL is a bit overly complex, just use ASSERT(..IsValid())",
+      "revId": "98f0b8720750a796f221987857c6a2caa681ee93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_d99413ea",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 1
