@@ -18,6 +18,7 @@
  */
 
 #include "hldocntp.hxx"
+#include <osl/file.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfac.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -454,7 +455,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 
         if( aNewURL.GetProtocol() == INetProtocol::File )
         {
-            utl::LocalFileHelper::ConvertURLToSystemPath( aNewURL.GetMainURL( INetURLObject::NO_DECODE ), aStrTmp );
+            osl::FileBase::getSystemPathFromFileURL(aNewURL.GetMainURL( INetURLObject::NO_DECODE ), aStrTmp);
         }
         else
         {

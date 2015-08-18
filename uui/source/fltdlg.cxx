@@ -23,10 +23,10 @@
 
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/button.hxx>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -200,7 +200,8 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
 {
     OUString sShortName( sName );
 
-    if( ::utl::LocalFileHelper::ConvertURLToSystemPath( sName, sShortName ) )
+    if (osl::FileBase::getSystemPathFromFileURL(sName, sShortName) == osl::FileBase::E_None)
+
     {
         // it's a system file ... build short name by using osl functionality
     }

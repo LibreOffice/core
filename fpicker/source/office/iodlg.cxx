@@ -70,7 +70,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <osl/file.h>
+#include <osl/file.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
@@ -1070,7 +1070,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             else
             {
                 OUString aCurPath;
-                if ( ::utl::LocalFileHelper::ConvertURLToSystemPath( aFileName, aCurPath ) )
+                if (osl::FileBase::getSystemPathFromFileURL(aFileName, aCurPath) == osl::FileBase::E_None)
                 {
                     // if content does not exist: at least its path must exist
                     INetURLObject aPathObj = aFileObj;
@@ -1409,7 +1409,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 
         if ( aObj.getSegmentCount() )
         {
-            ::utl::LocalFileHelper::ConvertURLToSystemPath( rURL, sText );
+            osl::FileBase::getSystemPathFromFileURL(rURL, sText);
             if ( !sText.isEmpty() )
             {
                 // no Fsys path for server file system ( only UCB has mountpoints! )
@@ -1431,7 +1431,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
         {
             aObj.removeFinalSlash();
             OUString sURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            if ( !::utl::LocalFileHelper::ConvertURLToSystemPath( sURL, sText ) )
+            if (osl::FileBase::getSystemPathFromFileURL(sURL, sText) != osl::FileBase::E_None)
                 sText = sURL;
         }
 
@@ -1785,7 +1785,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
     {
         // create make a human-readable string from the URL
         OUString sDisplayPath( _rURL );
-        ::utl::LocalFileHelper::ConvertURLToSystemPath( _rURL, sDisplayPath );
+        osl::FileBase::getSystemPathFromFileURL(_rURL, sDisplayPath);
 
         // build an own exception which tells "access denied"
         InteractiveAugmentedIOException aException;

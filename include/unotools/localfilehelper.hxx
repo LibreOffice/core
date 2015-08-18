@@ -44,7 +44,6 @@ namespace utl
         file system is present ( watch: this doesn't mean that this file really exists! )
         */
         static bool ConvertURLToPhysicalName( const OUString& rName, OUString& rReturn );
-        static bool ConvertURLToSystemPath( const OUString& rName, OUString& rReturn );
 
         static bool IsLocalFile(const OUString& rName);
 

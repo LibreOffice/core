@@ -635,7 +635,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 throw ::com::sun::star::lang::IllegalArgumentException();
             }
 
-            OUString      sPath        ;
+            OUString      sPath;
             OUString      sURL  (sTemp);
             INetURLObject aCheck(sURL );
             if (aCheck.GetProtocol()==INetProtocol::NotValid)
@@ -662,7 +662,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             else
             // It's a valid URL. but now we must know, if it is a local one or not.
             // It's a question of using ucb or not!
-            if (::utl::LocalFileHelper::ConvertURLToSystemPath(sURL,sPath))
+            if (osl::FileBase::getSystemPathFromFileURL(sURL, sPath) == osl::FileBase::E_None)
             {
                 // it's a local file, we can use vcl without special handling
                 // And we have to use the system notation of the incoming URL.

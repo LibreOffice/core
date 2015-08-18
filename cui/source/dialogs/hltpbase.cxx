@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/file.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/formats.hxx>
@@ -483,7 +484,7 @@ OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
     switch(aURLObj.GetProtocol())
     {
         case INetProtocol::File:
-            utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL );
+            osl::FileBase::getSystemPathFromFileURL(aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL);
             break;
         case INetProtocol::Ftp :
             {

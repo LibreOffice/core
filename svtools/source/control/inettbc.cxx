@@ -42,6 +42,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/instance.hxx>
 #include <salhelper/thread.hxx>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -988,7 +989,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                         if ( bFound )
                         {
                             OUString aFile;
-                            if (::utl::LocalFileHelper::ConvertURLToSystemPath(aURL,aFile))
+                            if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
                                 InsertEntry(aFile);
                             else
                                 InsertEntry(aURL);

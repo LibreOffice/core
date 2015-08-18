@@ -1263,7 +1263,7 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
     m_sSavePath = SvtPathOptions().GetWorkPath();
     INetURLObject aObj( m_sSavePath );
     OUString sPath;
-    ::utl::LocalFileHelper::ConvertURLToSystemPath( aObj.GetMainURL( INetURLObject::NO_DECODE ), sPath );
+    osl::FileBase::getSystemPathFromFileURL(aObj.GetMainURL( INetURLObject::NO_DECODE ), sPath);
     m_pSaveDirED->SetText( sPath );
 
     impl_refresh();
@@ -1373,7 +1373,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     {
         m_sSavePath = xFolderPicker->getDirectory();
         OUString sPath;
-        ::utl::LocalFileHelper::ConvertURLToSystemPath( m_sSavePath, sPath );
+        osl::FileBase::getSystemPathFromFileURL(m_sSavePath, sPath);
         m_pSaveDirED->SetText( sPath );
     }
 }

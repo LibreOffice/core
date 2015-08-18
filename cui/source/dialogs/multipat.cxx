@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -77,7 +78,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
         aPath.removeFinalSlash();
         OUString aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
         OUString sInsPath;
-        ::utl::LocalFileHelper::ConvertURLToSystemPath( aURL, sInsPath );
+        osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 
         sal_uLong nPos = m_pRadioLB->GetEntryPos( sInsPath, 1 );
         if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
@@ -111,7 +112,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl)
         aPath.removeFinalSlash();
         OUString aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
         OUString sInsPath;
-        ::utl::LocalFileHelper::ConvertURLToSystemPath( aURL, sInsPath );
+        osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 
         if ( LISTBOX_ENTRY_NOTFOUND != m_pPathLB->GetEntryPos( sInsPath ) )
         {
@@ -314,7 +315,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
         OUString sPath = rPath.getToken( i, cDelim );
         OUString sSystemPath;
         bool bIsSystemPath =
-            ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
+            osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
         OUString sEntry( '\t' );
         sEntry += (bIsSystemPath ? sSystemPath : OUString(sPath));
@@ -346,7 +347,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
         OUString sPath = rPath.getToken( i, cDelim );
         OUString sSystemPath;
         bool bIsSystemPath =
-            ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
+            osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
         if ( bIsSystemPath )
             nPos = m_pPathLB->InsertEntry( sSystemPath );

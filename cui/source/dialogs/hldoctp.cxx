@@ -18,6 +18,7 @@
  */
 
 #include "cuihyperdlg.hxx"
+#include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
@@ -210,7 +211,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
         OUString aURL( aDlg.GetPath() );
         OUString aPath;
 
-        utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
+        osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
         m_pCbbPath->SetBaseURL( aURL );
         m_pCbbPath->SetText( aPath );

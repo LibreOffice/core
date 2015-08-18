@@ -29,6 +29,7 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -235,7 +236,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
                     OUString      sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
                     OUString      sFile;
 
-                    if (::utl::LocalFileHelper::ConvertURLToSystemPath(sMainURL,sFile))
+                    if (osl::FileBase::getSystemPathFromFileURL(sMainURL, sFile) == osl::FileBase::E_None)
                         pURLBox->InsertEntry(sFile);
                     else
                         pURLBox->InsertEntry(sMainURL);

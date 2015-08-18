@@ -46,16 +46,6 @@ bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, OUString& r
     return ok;
 }
 
-bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& rReturn )
-{
-    bool ok = osl::FileBase::getSystemPathFromFileURL(rName, rReturn)
-        == osl::FileBase::E_None;
-    if (!ok) {
-        rReturn.clear();
-    }
-    return ok;
-}
-
 bool LocalFileHelper::ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn)
 {
     bool ok = osl::FileBase::getFileURLFromSystemPath(rName, rReturn)
