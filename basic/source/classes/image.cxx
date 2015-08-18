@@ -278,7 +278,6 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                             {
                                 // nested user defined types
                                 // declared before use, so it is ok to reference it by name on load
-                                // nested types not structuraly compatible with arrays at the moment
                                 OUString aNestedTypeName = r.ReadUniOrByteString(eCharSet);
                                 SbxObject* pNestedTypeObj = static_cast< SbxObject* >( rTypes->Find( aNestedTypeName, SbxCLASS_OBJECT ) );
                                 if (pNestedTypeObj)
@@ -290,7 +289,6 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                             else
                             {
                                 // an array
-                                // not compatible with nested user defined types at the moment
                                 SbxDimArray* pArray = new SbxDimArray();
 
                                 sal_Int16 isFixedSize;
@@ -486,14 +484,12 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
                     {
                         // nested user defined types
                         // declared before use, so it is ok to reference it by name on load
-                        // not compatible with arrays at the moment
                         SbxObject* pNestedType = static_cast< SbxObject* > ( pElemObject );
                         r.WriteUniOrByteString( pNestedType->GetClassName(), eCharSet );
                     }
                     else
                     {
                         // an array
-                        // not compatible with nested user defined types at the moment
                         SbxDimArray* pArray = static_cast< SbxDimArray* > ( pElemObject );
 
                         bool bFixedSize = pArray->hasFixedSize();
