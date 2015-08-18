@@ -94,7 +94,6 @@
 #include <sax/tools/converter.hxx>
 #include <string.h>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <vector>
 #include <zlib.h>
 

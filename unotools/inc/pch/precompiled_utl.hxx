@@ -189,7 +189,6 @@
 #include <ucbhelper/activedatasink.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <uno/data.h>

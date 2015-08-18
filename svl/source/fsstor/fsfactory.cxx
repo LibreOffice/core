@@ -26,7 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <unotools/tempfile.hxx>
