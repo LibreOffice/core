@@ -72,6 +72,7 @@
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/text/XTextField.hpp"
 #include "com/sun/star/text/TextMarkupType.hpp"
+#include "com/sun/star/text/PageNumberType.hpp"
 #include <osl/file.hxx>
 #include <paratr.hxx>
 #include <drawfont.hxx>
@@ -133,6 +134,7 @@ public:
     void testTdf78742();
     void testUnoParagraph();
     void testTdf60967();
+    void testTdf74524();
     void testSearchWithTransliterate();
     void testTdf74230();
     void testTdf74363();
@@ -205,6 +207,7 @@ public:
     CPPUNIT_TEST(testTdf78742);
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testTdf60967);
+    CPPUNIT_TEST(testTdf74524);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf74230);
     CPPUNIT_TEST(testTdf74363);
@@ -1598,6 +1601,27 @@ void SwUiWriterTest::testTdf60967()
     pCrsr->Move(fnMoveForward);
     SwPosition xPosAfterUndoMove(*(pCrsr->GetPoint()));
     CPPUNIT_ASSERT(xPosAfterUndoMove==xPosAfterRedo);
+}
+
+void SwUiWriterTest::testTdf74524()
+{
+    createDoc("tdf.odt");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Any aField1 = xFields->nextElement();
+    uno::Reference<beans::XPropertySet> xPropertySet(aField1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(style::NumberingType::PAGE_DESCRIPTOR)), xPropertySet->getPropertyValue(OUString("NumberingType")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(0)), xPropertySet->getPropertyValue(OUString("Offset")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(text::PageNumberType_CURRENT), xPropertySet->getPropertyValue(OUString("SubType")));
+    uno::Reference<text::XTextContent> xField1(aField1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xField1->getAnchor()->getString());
+    uno::Any aField2 = xFields->nextElement();
+    uno::Reference<beans::XPropertySet> xPropertySet2(aField2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Comment 1")), xPropertySet2->getPropertyValue(OUString("Content")));
+    uno::Reference<text::XTextContent> xField2(aField2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello 1World"), xField2->getAnchor()->getString());
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
