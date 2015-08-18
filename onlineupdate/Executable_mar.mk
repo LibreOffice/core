@@ -24,7 +24,10 @@ $(eval $(call gb_Executable_add_libs,mar,\
 ))
 endif
 
-$(eval $(call gb_Executable_use_externals,mar,nss3))
+$(eval $(call gb_Executable_use_externals,mar,\
+	nss3 \
+	plc4 \
+))
 
 $(eval $(call gb_Executable_add_cobjects,mar,\
 	onlineupdate/source/libmar/src/mar_create \
