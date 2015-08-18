@@ -70,6 +70,121 @@ using namespace formula;
 IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
 #endif
 
+#define DEBUG_CALCULATION 0
+#if DEBUG_CALCULATION
+static ScAddress aDebugCalculationTriggerAddress(1,2,0);    // Sheet1.B3, whatever you like
+
+struct DebugCalculationEntry
+{
+          ScAddress     maPos;
+          OUString      maResult;
+    const ScDocument*   mpDoc;
+
+    DebugCalculationEntry( const ScAddress& rPos, const ScDocument* pDoc ) :
+        maPos(rPos),
+        mpDoc(pDoc)
+    {
+    }
+};
+
+/** Debug/dump formula cell calculation chain.
+    Either, somewhere set aDC.mbActive=true, or
+    aDC.maTrigger=ScAddress(col,row,tab) of interest from where to start.
+    This does not work for deep recursion > MAXRECURSION, the results are
+    somewhat.. funny.. ;)
+ */
+static struct DebugCalculation
+{
+    std::vector< DebugCalculationEntry >    mvPos;
+    std::vector< DebugCalculationEntry >    mvResults;
+    ScAddress                               maTrigger;
+    bool                                    mbActive;
+    bool                                    mbSwitchOff;
+    bool                                    mbPrint;
+    bool                                    mbPrintResults;
+
+    DebugCalculation() : mbActive(false), mbSwitchOff(false), mbPrint(true), mbPrintResults(false) {}
+
+    /** Print chain in encountered dependency order. */
+    void print() const
+    {
+        for (auto const& it : mvPos)
+        {
+            OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc));
+            fprintf( stderr, "%s -> ", aStr.toUtf8().getStr());
+        }
+        fprintf( stderr, "%s", "END\n");
+    }
+
+    /** Print chain results. */
+    void printResults() const
+    {
+        for (auto const& it : mvResults)
+        {
+            OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc));
+            aStr += "(" + it.maResult + ")";
+            fprintf( stderr, "%s, ", aStr.toUtf8().getStr());
+        }
+        fprintf( stderr, "%s", "END\n");
+    }
+
+    void storeResult( const svl::SharedString& rStr )
+    {
+        if (mbActive && !mvPos.empty())
+            mvPos.back().maResult = rStr.getString();
+    }
+
+    void storeResult( const double& fVal )
+    {
+        if (mbActive && !mvPos.empty())
+            storeResult( rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 2, '.', true));
+    }
+
+} aDC;
+
+struct DebugCalculationStacker
+{
+    DebugCalculationStacker( const ScAddress& rPos, const ScDocument* pDoc )
+    {
+        if (!aDC.mbActive && rPos == aDC.maTrigger)
+            aDC.mbActive = aDC.mbSwitchOff = true;
+        if (aDC.mbActive)
+        {
+            aDC.mvPos.push_back( DebugCalculationEntry( rPos, pDoc));
+            aDC.mbPrint = true;
+        }
+    }
+
+    ~DebugCalculationStacker()
+    {
+        if (aDC.mbActive)
+        {
+            if (!aDC.mvPos.empty())
+            {
+                if (aDC.mbPrint)
+                {
+                    aDC.print();
+                    aDC.mbPrint = false;
+                }
+                if (aDC.mbPrintResults)
+                {
+                    // Store results until final result is available, reversing order.
+                    aDC.mvResults.push_back( aDC.mvPos.back());
+                }
+                aDC.mvPos.pop_back();
+                if (aDC.mbPrintResults && aDC.mvPos.empty())
+                {
+                    aDC.printResults();
+                    std::vector< DebugCalculationEntry >().swap( aDC.mvResults);
+                }
+                if (aDC.mbSwitchOff && aDC.mvPos.empty())
+                    aDC.mbActive = false;
+            }
+        }
+    }
+};
+#endif
+
 namespace {
 
 // More or less arbitrary, of course all recursions must fit into available
@@ -1432,6 +1547,17 @@ bool ScFormulaCell::MarkUsedExternalReferences()
 
 void ScFormulaCell::Interpret()
 {
+#if DEBUG_CALCULATION
+    static bool bDebugCalculationInit = true;
+    if (bDebugCalculationInit)
+    {
+        aDC.maTrigger = aDebugCalculationTriggerAddress;
+        aDC.mbPrintResults = true;
+        bDebugCalculationInit = false;
+    }
+    DebugCalculationStacker aDebugEntry( aPos, pDocument);
+#endif
+
     if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
         return;     // no double/triple processing
 
@@ -1660,6 +1786,13 @@ void ScFormulaCell::Interpret()
             }
         } while (bIterationFromRecursion || bResumeIteration);
     }
+
+#if DEBUG_CALCULATION
+    if (aResult.IsValue())
+        aDC.storeResult( aResult.GetDouble());
+    else
+        aDC.storeResult( aResult.GetString());
+#endif
 }
 
 void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
