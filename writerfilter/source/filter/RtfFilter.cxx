@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/localfilehelper.hxx>
+#include <osl/file.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -119,7 +119,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         // If this is set, write to this file, instead of the real document during paste.
         char* pEnv = getenv("SW_DEBUG_RTF_PASTE_TO");
         OUString aOutStr;
-        if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aOutStr))
+        if (!bIsNewDoc && pEnv && osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aOutStr) == osl::FileBase::E_None)
         {
             std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(aOutStr, StreamMode::WRITE));
             std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
@@ -132,7 +132,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         if (!bIsNewDoc && pEnv)
         {
             OUString aInStr;
-            utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aInStr);
+            osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aInStr);
             SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
             uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
             xInputStream.set(xStream, uno::UNO_QUERY);
