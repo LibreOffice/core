@@ -248,7 +248,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     {
         int nGlyphRotation = *aI;
 
-        std::vector<int>::const_iterator aNext = std::find_if(aI+1, aEnd, hasRotation);
+        std::vector<int>::const_iterator aNext = nGlyphRotation?(aI+1):std::find_if(aI+1, aEnd, hasRotation);
 
         size_t nStartIndex = std::distance(aStart, aI);
         size_t nLen = std::distance(aI, aNext);
