@@ -82,12 +82,6 @@ bool LocalFileHelper::IsLocalFile(const OUString& rName)
     return ConvertURLToPhysicalName(rName, aTmp);
 }
 
-bool LocalFileHelper::IsFileContent(const OUString& rName)
-{
-    OUString aTmp;
-    return ConvertURLToSystemPath(rName, aTmp);
-}
-
 typedef ::std::vector< OUString* > StringList_Impl;
 
 ::com::sun::star::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )

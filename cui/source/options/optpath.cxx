@@ -154,8 +154,6 @@ OUString Convert_Impl( const OUString& rValue )
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INetProtocol::File )
             aReturn += aObj.PathToFileName();
-        else if ( ::utl::LocalFileHelper::IsFileContent( aValue ) )
-            aReturn += aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         if ( i+1 < nCount)
             aReturn += OUStringLiteral1<MULTIPATH_DELIMITER>();
     }
