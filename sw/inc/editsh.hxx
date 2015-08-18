@@ -386,6 +386,7 @@ public:
     void UpdateExpFields(bool bCloseDB = false);///< only every expression fields update
     void LockExpFields();
     void UnlockExpFields();
+    bool IsExpFieldsLocked() const;
 
     SwFieldUpdateFlags GetFieldUpdateFlags(bool bDocSettings = false) const;
     void SetFieldUpdateFlags( SwFieldUpdateFlags eFlags );
