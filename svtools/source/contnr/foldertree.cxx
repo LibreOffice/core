@@ -92,11 +92,11 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
 
     if( pParent && !IsExpanded( pParent ) )
     {
-        while( GetChildCount( pParent ) > 0 )
+        while (SvTreeListEntry* pChild = FirstChild(pParent))
         {
-            SvTreeListEntry* pChild = FirstChild( pParent );
-            GetModel()->Remove( pChild );
+            GetModel()->Remove(pChild);
         }
+
 
         for(::std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
         {
