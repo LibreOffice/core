@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_5925a3c0",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-18T19:19:44Z",
+      "side": 1,
+      "message": "another thing to test here is that the field is an annotation field; use XServiceInfo and check for the \"com.sun.star.text.TextField.Annotation\" service",
+      "revId": "2382083278b99ffce0558ff7b65a772ddc291d06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
