@@ -33,6 +33,8 @@ public:
     // tests taken from the VBA specification
     // section 3.2
 
+    // section 3.2.1
+    void testSpec321();
     // section 3.2.2
     void testSpec322();
     // section 3.2.3
@@ -47,6 +49,7 @@ public:
     CPPUNIT_TEST(testSimple2);
     CPPUNIT_TEST(testSimple3);
     CPPUNIT_TEST(testComplex1);
+    CPPUNIT_TEST(testSpec321);
     CPPUNIT_TEST(testSpec322);
     CPPUNIT_TEST(testSpec323);
     CPPUNIT_TEST_SUITE_END();
@@ -166,6 +169,28 @@ void TestVbaCompression::testComplex1()
     }
 }
 
+void TestVbaCompression::testSpec321()
+{
+    OUString aTestFile = getPathFromSrc("/oox/qa/unit/data/vba/spec321.bin");
+    OUString aReference = getPathFromSrc("/oox/qa/unit/data/vba/reference/spec321.bin");
+
+    SvMemoryStream aOutputMemoryStream(4096, 4096);
+    SvMemoryStream aReferenceMemoryStream(4096, 4096);
+    ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug_spec321.bin");
+
+    CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
+
+    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
+    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+
+    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+            aOutputMemoryStream.GetSize());
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+    }
+}
+
 void TestVbaCompression::testSpec322()
 {
     OUString aTestFile = getPathFromSrc("/oox/qa/unit/data/vba/spec322.bin");
@@ -195,7 +220,7 @@ void TestVbaCompression::testSpec323()
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
-    ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug_spec321.bin");
+    ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug_spec323.bin");
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
