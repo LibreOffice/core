@@ -53,15 +53,15 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
                           "ShadowTabPage",
                           "cui/ui/shadowtabpage.ui",
                           rInAttrs ),
-    rOutAttrs           ( rInAttrs ),
-    eRP                 ( RP_LT ),
-    pnColorListState    ( 0 ),
-    nPageType           ( 0 ),
-    nDlgType            ( 0 ),
-    pbAreaTP            ( 0 ),
-    bDisable            ( false ),
-    aXFillAttr          ( rInAttrs.GetPool() ),
-    rXFSet              ( aXFillAttr.GetItemSet() )
+    m_rOutAttrs           ( rInAttrs ),
+    m_eRP                 ( RP_LT ),
+    m_pnColorListState    ( 0 ),
+    m_nPageType           ( 0 ),
+    m_nDlgType            ( 0 ),
+    m_pbAreaTP            ( 0 ),
+    m_bDisable            ( false ),
+    m_aXFillAttr          ( rInAttrs.GetPool() ),
+    m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
     get(m_pTsbShowShadow,"TSB_SHOW_SHADOW");
     get(m_pGridShadow,"gridSHADOW");
@@ -88,52 +88,52 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     SetFieldUnit( *m_pMtrDistance, eFUnit );
 
     // determine PoolUnit
-    SfxItemPool* pPool = rOutAttrs.GetPool();
+    SfxItemPool* pPool = m_rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
-    ePoolUnit = pPool->GetMetric( SDRATTR_SHADOWXDIST );
+    m_ePoolUnit = pPool->GetMetric( SDRATTR_SHADOWXDIST );
 
     // setting the output device
     drawing::FillStyle eXFS = drawing::FillStyle_SOLID;
-    if( rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
+    if( m_rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
     {
-        eXFS = (drawing::FillStyle) ( static_cast<const XFillStyleItem&>( rOutAttrs.
+        eXFS = (drawing::FillStyle) ( static_cast<const XFillStyleItem&>( m_rOutAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
         switch( eXFS )
         {
             case drawing::FillStyle_SOLID:
-                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
+                if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
                 {
                     XFillColorItem aColorItem( static_cast<const XFillColorItem&>(
-                                        rOutAttrs.Get( XATTR_FILLCOLOR ) ) );
-                    rXFSet.Put( aColorItem );
+                                        m_rOutAttrs.Get( XATTR_FILLCOLOR ) ) );
+                    m_rXFSet.Put( aColorItem );
                 }
             break;
 
             case drawing::FillStyle_GRADIENT:
-                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
+                if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
                 {
                     XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(
-                                            rOutAttrs.Get( XATTR_FILLGRADIENT ) ) );
-                    rXFSet.Put( aGradientItem );
+                                            m_rOutAttrs.Get( XATTR_FILLGRADIENT ) ) );
+                    m_rXFSet.Put( aGradientItem );
                 }
             break;
 
             case drawing::FillStyle_HATCH:
-                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
+                if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
                 {
                     XFillHatchItem aHatchItem( static_cast<const XFillHatchItem& >(
-                                    rOutAttrs.Get( XATTR_FILLHATCH ) ) );
-                    rXFSet.Put( aHatchItem );
+                                    m_rOutAttrs.Get( XATTR_FILLHATCH ) ) );
+                    m_rXFSet.Put( aHatchItem );
                 }
             break;
 
             case drawing::FillStyle_BITMAP:
             {
-                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
+                if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
                 {
                     XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem& >(
-                                        rOutAttrs.Get( XATTR_FILLBITMAP ) ) );
-                    rXFSet.Put( aBitmapItem );
+                                        m_rOutAttrs.Get( XATTR_FILLBITMAP ) ) );
+                    m_rXFSet.Put( aBitmapItem );
                 }
             }
             break;
@@ -143,7 +143,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     }
     else
     {
-        rXFSet.Put( XFillColorItem( OUString(), COL_LIGHTRED ) );
+        m_rXFSet.Put( XFillColorItem( OUString(), COL_LIGHTRED ) );
     }
 
     if(drawing::FillStyle_NONE == eXFS)
@@ -155,8 +155,8 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
         eXFS = drawing::FillStyle_SOLID;
     }
 
-    rXFSet.Put( XFillStyleItem( eXFS ) );
-    m_pCtlXRectPreview->SetRectangleAttributes(aXFillAttr.GetItemSet());
+    m_rXFSet.Put( XFillStyleItem( eXFS ) );
+    m_pCtlXRectPreview->SetRectangleAttributes(m_aXFillAttr.GetItemSet());
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );
 
     m_pTsbShowShadow->SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
@@ -185,9 +185,9 @@ void SvxShadowTabPage::dispose()
 
 void SvxShadowTabPage::Construct()
 {
-    m_pLbShadowColor->Fill( pColorList );
+    m_pLbShadowColor->Fill( m_pColorList );
 
-    if( bDisable )
+    if( m_bDisable )
     {
         m_pTsbShowShadow->Disable();
         m_pGridShadow->Disable();
@@ -205,33 +205,33 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
 
-    if( nDlgType == 0 )
+    if( m_nDlgType == 0 )
     {
-        if( pColorList.is() )
+        if( m_pColorList.is() )
         {
             // ColorList
-            if( *pnColorListState & ChangeType::CHANGED ||
-                *pnColorListState & ChangeType::MODIFIED )
+            if( *m_pnColorListState & ChangeType::CHANGED ||
+                *m_pnColorListState & ChangeType::MODIFIED )
             {
-                if( *pnColorListState & ChangeType::CHANGED )
+                if( *m_pnColorListState & ChangeType::CHANGED )
                 {
                     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( GetParentDialog() );
                     if( pArea )
                     {
-                        pColorList = pArea->GetNewColorList();
+                        m_pColorList = pArea->GetNewColorList();
                     }
                     else
                     {
                         SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( GetParentDialog() );
                         if( pLine )
-                            pColorList = pLine->GetNewColorList();
+                            m_pColorList = pLine->GetNewColorList();
                     }
                 }
 
                 // aLbShadowColor
                 nPos = m_pLbShadowColor->GetSelectEntryPos();
                 m_pLbShadowColor->Clear();
-                m_pLbShadowColor->Fill( pColorList );
+                m_pLbShadowColor->Fill( m_pColorList );
                 nCount = m_pLbShadowColor->GetEntryCount();
                 if( nCount == 0 )
                     ; // this case should not occur
@@ -250,7 +250,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 m_pCtlXRectPreview->SetRectangleAttributes( rAttribs );
                 ModifyShadowHdl_Impl( this );
             }
-            nPageType = PT_SHADOW;
+            m_nPageType = PT_SHADOW;
         }
     }
 }
@@ -271,7 +271,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     bool                bModified = false;
 
-    if( !bDisable )
+    if( !m_bDisable )
     {
         const SfxPoolItem*  pOld = NULL;
 
@@ -295,7 +295,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         // a bit intricate inquiry whether there was something changed,
         // as the items can't be displayed directly on controls
         sal_Int32 nX = 0L, nY = 0L;
-        sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, ePoolUnit );
+        sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
 
         switch( m_pCtlPosition->GetActualRP() )
         {
@@ -315,17 +315,17 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         // and the new distance values would return a wrong result because in such a
         // case the new distance values would match the default values of the MetricField !!!!
         if ( !m_pMtrDistance->IsEmptyFieldValue()                                  ||
-             rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
-             rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )
+             m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
+             m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )
         {
             sal_Int32 nOldX = 9876543; // impossible value, so DontCare
             sal_Int32 nOldY = 9876543;
-            if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
-                rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
+            if( m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
+                m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
             {
-                nOldX = static_cast<const SdrMetricItem&>( rOutAttrs.
+                nOldX = static_cast<const SdrMetricItem&>( m_rOutAttrs.
                                     Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-                nOldY = static_cast<const SdrMetricItem&>( rOutAttrs.
+                nOldY = static_cast<const SdrMetricItem&>( m_rOutAttrs.
                                     Get( SDRATTR_SHADOWYDIST ) ).GetValue();
             }
             SdrMetricItem aXItem( makeSdrShadowXDistItem(nX) );
@@ -374,7 +374,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,m_nPageType));
 
     return bModified;
 }
@@ -383,7 +383,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    if( !bDisable )
+    if( !m_bDisable )
     {
         // all objects can have a shadow
         // at the moment there are only 8 possible positions where a shadow can be set
@@ -413,9 +413,9 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
             sal_Int32 nY = static_cast<const SdrMetricItem&>( rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
 
             if( nX != 0 )
-                SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
+                SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
             else
-                SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, ePoolUnit );
+                SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
 
             // setting the shadow control
             if     ( nX <  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_LT );
@@ -432,7 +432,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         else
         {
             // determine default-distance
-            SfxItemPool* pPool = rOutAttrs.GetPool();
+            SfxItemPool* pPool = m_rOutAttrs.GetPool();
             const SdrMetricItem* pXDistItem = static_cast<const SdrMetricItem*>(&pPool->GetDefaultItem(SDRATTR_SHADOWXDIST));
             const SdrMetricItem* pYDistItem = static_cast<const SdrMetricItem*>(&pPool->GetDefaultItem(SDRATTR_SHADOWYDIST));
             if (pXDistItem && pYDistItem)
@@ -440,9 +440,9 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
                 sal_Int32 nX = pXDistItem->GetValue();
                 sal_Int32 nY = pYDistItem->GetValue();
                 if( nX != 0 )
-                    SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
+                    SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
                 else
-                    SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, ePoolUnit );
+                    SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
             }
 
             // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
@@ -514,22 +514,22 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )
-        rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+        m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     else
-        rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+        m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
+        m_rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
     }
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     XFillTransparenceItem aItem( nVal );
-    rXFSet.Put( XFillTransparenceItem( aItem ) );
+    m_rXFSet.Put( XFillTransparenceItem( aItem ) );
 
     // shadow removal
     sal_Int32 nX = 0L, nY = 0L;
-    sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, ePoolUnit );
+    sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
     switch( m_pCtlPosition->GetActualRP() )
     {
         case RP_LT: nX = nY = -nXY;      break;
@@ -545,7 +545,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 
     m_pCtlXRectPreview->SetShadowPosition(Point(nX, nY));
 
-    m_pCtlXRectPreview->SetShadowAttributes(aXFillAttr.GetItemSet());
+    m_pCtlXRectPreview->SetShadowAttributes(m_aXFillAttr.GetItemSet());
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );
     m_pCtlXRectPreview->Invalidate();
 
@@ -556,7 +556,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 
 void SvxShadowTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
 {
-    eRP = eRcPt;
+    m_eRP = eRcPt;
 
     // repaint shadow
     ModifyShadowHdl_Impl( pWindow );

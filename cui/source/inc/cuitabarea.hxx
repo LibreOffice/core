@@ -332,20 +332,20 @@ private:
     VclPtr<MetricField>        m_pMtrTransparent;
     VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
 
-    const SfxItemSet&   rOutAttrs;
-    RECT_POINT          eRP;
+    const SfxItemSet&   m_rOutAttrs;
+    RECT_POINT          m_eRP;
 
-    XColorListRef       pColorList;
-    ChangeType*         pnColorListState;
-    sal_uInt16          nPageType;
-    sal_uInt16          nDlgType;
-    bool*               pbAreaTP;
+    XColorListRef       m_pColorList;
+    ChangeType*         m_pnColorListState;
+    sal_uInt16          m_nPageType;
+    sal_uInt16          m_nDlgType;
+    bool*               m_pbAreaTP;
 
-    bool                bDisable;
+    bool                m_bDisable;
 
-    XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
-    SfxMapUnit          ePoolUnit;
+    XFillAttrSetItem    m_aXFillAttr;
+    SfxItemSet&         m_rXFSet;
+    SfxMapUnit          m_ePoolUnit;
 
     DECL_LINK( ClickShadowHdl_Impl, void * );
     DECL_LINK( ModifyShadowHdl_Impl, void * );
@@ -365,11 +365,11 @@ public:
     virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
+    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
