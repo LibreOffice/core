@@ -19,6 +19,7 @@
 
 
 #include <new>
+#include <memory>
 #include <sal/types.h>
 #include <sal/macros.h>
 #include <osl/endian.h>
@@ -514,9 +515,9 @@ public:
     OString         m_returnTypeName;
     RTMethodMode    m_mode;
     sal_uInt16      m_paramCount;
-    ParamEntry*     m_params;
+    std::unique_ptr<ParamEntry[]> m_params;
     sal_uInt16      m_excCount;
-    OString*        m_excNames;
+    std::unique_ptr<OString[]>    m_excNames;
     OString         m_doku;
 
     MethodEntry();
@@ -540,16 +541,12 @@ protected:
 MethodEntry::MethodEntry()
     : m_mode(RTMethodMode::INVALID)
     , m_paramCount(0)
-    , m_params(NULL)
     , m_excCount(0)
-    , m_excNames(NULL)
 {
 }
 
 MethodEntry::~MethodEntry()
 {
-    delete[] m_params;
-    delete[] m_excNames;
 }
 
 void MethodEntry::setData(const OString&    name,
@@ -596,11 +593,11 @@ void MethodEntry::reallocParams(sal_uInt16 size)
             newParams[i].setData(m_params[i].m_typeName, m_params[i].m_name, m_params[i].m_mode);
         }
 
-        delete[] m_params;
+        m_params.reset();
     }
 
     m_paramCount = size;
-    m_params = newParams;
+    m_params.reset( newParams );
 }
 
 void MethodEntry::reallocExcs(sal_uInt16 size)
@@ -620,10 +617,8 @@ void MethodEntry::reallocExcs(sal_uInt16 size)
         newExcNames[i] = m_excNames[i];
     }
 
-    delete[] m_excNames;
-
     m_excCount = size;
-    m_excNames = newExcNames;
+    m_excNames.reset( newExcNames );
 }
 
 
@@ -654,7 +649,7 @@ public:
     sal_uInt16          m_referenceCount;
     ReferenceEntry*     m_references;
 
-    sal_uInt8*          m_blop;
+    std::unique_ptr<sal_uInt8[]> m_blop;
     sal_uInt32          m_blopSize;
 
     TypeWriter(typereg_Version version,
@@ -701,7 +696,6 @@ TypeWriter::TypeWriter(typereg_Version version,
     , m_methods(NULL)
     , m_referenceCount(referenceCount)
     , m_references(NULL)
-    , m_blop(NULL)
     , m_blopSize(0)
 {
     if (m_nSuperTypes > 0)
@@ -726,9 +720,6 @@ TypeWriter::~TypeWriter()
 {
     if (m_superTypeNames)
         delete[] m_superTypeNames;
-
-    if (m_blop)
-        delete[] m_blop;
 
     if (m_fieldCount)
         delete[] m_fields;
@@ -1151,8 +1142,7 @@ void TypeWriter::createBlop()
     delete[] pBlopMethods;
     delete[] pBlopReferences;
 
-    delete[] m_blop;
-    m_blop = blop;
+    m_blop.reset( blop );
     m_blopSize = blopSize;
 }
 
@@ -1259,7 +1249,7 @@ void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 *
     SAL_THROW_EXTERN_C()
 {
     TypeWriter * writer = static_cast< TypeWriter * >(handle);
-    if (writer->m_blop == 0) {
+    if (!writer->m_blop) {
         try {
             writer->createBlop();
         } catch (std::bad_alloc &) {
@@ -1267,7 +1257,7 @@ void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 *
         }
     }
     *size = writer->m_blopSize;
-    return writer->m_blop;
+    return writer->m_blop.get();
 }
 
 static const sal_uInt8* TYPEREG_CALLTYPE getBlop(TypeWriterImpl hEntry)

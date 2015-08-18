@@ -296,7 +296,6 @@ void XRMResParser::Error( const OString &rError )
 XRMResExport::XRMResExport(
     const OString &rOutputFile, const OString &rFilePath )
                 : XRMResParser(),
-                pResData( NULL ),
                 sPath( rFilePath )
 {
     pOutputStream.open( rOutputFile, PoOfstream::APP );
@@ -311,7 +310,6 @@ XRMResExport::XRMResExport(
 XRMResExport::~XRMResExport()
 {
     pOutputStream.close();
-    delete pResData;
 }
 
 void XRMResExport::Output( const OString& ) {}
@@ -345,7 +343,7 @@ void XRMResExport::WorkOnText(
 
     if ( !pResData )
     {
-        pResData = new ResData( GetGID() );
+        pResData.reset( new ResData( GetGID() ) );
     }
     pResData->sText[sLang] = rText;
 }
@@ -363,8 +361,7 @@ void XRMResExport::EndOfText(
                 "Xrmex", pOutputStream, sPath, sResourceType,
                 pResData->sGId, OString(), OString(), sAct );
     }
-    delete pResData;
-    pResData = NULL;
+    pResData.reset();
 }
 
 
@@ -376,8 +373,7 @@ XRMResMerge::XRMResMerge(
     const OString &rFilename )
                 : XRMResParser(),
                 pMergeDataFile( NULL ),
-                sFilename( rFilename ) ,
-                pResData( NULL )
+                sFilename( rFilename )
 {
     if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))
     {
@@ -400,7 +396,6 @@ XRMResMerge::~XRMResMerge()
 {
     pOutputStream.close();
     delete pMergeDataFile;
-    delete pResData;
 }
 
 void XRMResMerge::WorkOnDesc(
@@ -409,7 +404,7 @@ void XRMResMerge::WorkOnDesc(
 {
     WorkOnText( rOpenTag, rText);
     if ( pMergeDataFile && pResData ) {
-        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData.get() );
         if ( pEntrys ) {
             OString sCur;
             OString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
@@ -470,8 +465,7 @@ void XRMResMerge::WorkOnDesc(
             }
         }
     }
-    delete pResData;
-    pResData = NULL;
+    pResData.reset();
 }
 
 void XRMResMerge::WorkOnText(
@@ -480,7 +474,7 @@ void XRMResMerge::WorkOnText(
 {
     if ( pMergeDataFile ) {
         if ( !pResData ) {
-            pResData = new ResData( GetGID(), sFilename );
+            pResData.reset( new ResData( GetGID(), sFilename ) );
             pResData->sResTyp = sResourceType;
         }
     }
@@ -499,7 +493,7 @@ void XRMResMerge::EndOfText(
 
     Output( rCloseTag );
     if ( pMergeDataFile && pResData ) {
-        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData.get() );
         if ( pEntrys ) {
             OString sCur;
             for( size_t n = 0; n < aLanguages.size(); n++ ){
@@ -532,8 +526,7 @@ void XRMResMerge::EndOfText(
             }
         }
     }
-    delete pResData;
-    pResData = NULL;
+    pResData.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

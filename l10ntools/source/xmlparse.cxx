@@ -78,17 +78,16 @@ XMLParentNode::~XMLParentNode()
 {
     if( m_pChildList )
     {
-            RemoveAndDeleteAllChildren();
-            delete m_pChildList;
+        RemoveAndDeleteAllChildren();
     }
-    m_pChildList = NULL;
 }
+
 XMLParentNode::XMLParentNode( const XMLParentNode& rObj)
 : XMLChildNode( rObj )
 {
     if( rObj.m_pChildList )
     {
-        m_pChildList=new XMLChildNodeList();
+        m_pChildList.reset( new XMLChildNodeList() );
         for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
         {
             XMLChildNode* pNode = (*rObj.m_pChildList)[ i ];
@@ -109,9 +108,8 @@ XMLParentNode::XMLParentNode( const XMLParentNode& rObj)
             }
         }
     }
-    else
-        m_pChildList = NULL;
 }
+
 XMLParentNode& XMLParentNode::operator=(const XMLParentNode& rObj)
 {
     if(this!=&rObj)
@@ -120,17 +118,15 @@ XMLParentNode& XMLParentNode::operator=(const XMLParentNode& rObj)
         if( m_pChildList )
         {
             RemoveAndDeleteAllChildren();
-            delete m_pChildList;
-            m_pChildList = NULL;
         }
         if( rObj.m_pChildList )
         {
-            m_pChildList=new XMLChildNodeList();
+            m_pChildList.reset( new XMLChildNodeList() );
             for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
                 AddChild( (*rObj.m_pChildList)[ i ] );
         }
         else
-            m_pChildList = NULL;
+            m_pChildList.reset();
 
     }
     return *this;
@@ -138,7 +134,7 @@ XMLParentNode& XMLParentNode::operator=(const XMLParentNode& rObj)
 void XMLParentNode::AddChild( XMLChildNode *pChild )
 {
     if ( !m_pChildList )
-        m_pChildList = new XMLChildNodeList();
+        m_pChildList.reset( new XMLChildNodeList() );
     m_pChildList->push_back( pChild );
 }
 
@@ -313,14 +309,12 @@ XMLFile::~XMLFile()
         {
             delete pos->second;             // Check and delete content also ?
         }
-        delete m_pXMLStrings;
-        m_pXMLStrings = NULL;
     }
 }
+
 XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created from memory stream
     : XMLParentNode( NULL )
     , m_sFileName( rFileName )
-    , m_pXMLStrings( NULL )
 {
     m_aNodes_localize.insert( TagMap::value_type(OString("bookmark") , sal_True) );
     m_aNodes_localize.insert( TagMap::value_type(OString("variable") , sal_True) );
@@ -333,9 +327,7 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
 
 void XMLFile::Extract( XMLFile *pCur )
 {
-    delete m_pXMLStrings; // Elements ?
-
-    m_pXMLStrings = new XMLHashMap();
+    m_pXMLStrings.reset( new XMLHashMap() );
     if ( !pCur )
         SearchL10NElements( this );
     else
@@ -401,7 +393,6 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
 XMLFile::XMLFile( const XMLFile& rObj )
     : XMLParentNode( rObj )
     , m_sFileName( rObj.m_sFileName )
-    , m_pXMLStrings( 0 )
 {
     if( this != &rObj )
     {
@@ -419,11 +410,11 @@ XMLFile& XMLFile::operator=(const XMLFile& rObj)
         m_aNodes_localize = rObj.m_aNodes_localize;
         m_vOrder = rObj.m_vOrder;
 
-        delete m_pXMLStrings;
+        m_pXMLStrings.reset();
 
         if( rObj.m_pXMLStrings )
         {
-            m_pXMLStrings = new XMLHashMap();
+            m_pXMLStrings.reset( new XMLHashMap() );
             for( XMLHashMap::iterator pos = rObj.m_pXMLStrings->begin() ; pos != rObj.m_pXMLStrings->end() ; ++pos )
             {
                 LangHashMap* pElem=pos->second;
@@ -577,7 +568,6 @@ XMLElement::XMLElement(
 )
     : XMLParentNode( pParent )
     , m_sElementName( rName )
-    , m_pAttributes( NULL )
     , m_sProject(OString())
     , m_sFilename(OString())
     , m_sId(OString())
@@ -591,7 +581,6 @@ XMLElement::XMLElement(
 XMLElement::XMLElement(const XMLElement& rObj)
     : XMLParentNode( rObj )
     , m_sElementName( rObj.m_sElementName )
-    , m_pAttributes( 0 )
     , m_sProject( rObj.m_sProject )
     , m_sFilename( rObj.m_sFilename )
     , m_sId( rObj.m_sId )
@@ -602,7 +591,7 @@ XMLElement::XMLElement(const XMLElement& rObj)
 {
     if ( rObj.m_pAttributes )
     {
-        m_pAttributes = new XMLAttributeList();
+        m_pAttributes.reset( new XMLAttributeList() );
         for ( size_t i = 0; i < rObj.m_pAttributes->size(); i++ )
             AddAttribute( (*rObj.m_pAttributes)[ i ]->GetName(), (*rObj.m_pAttributes)[ i ]->GetValue() );
     }
@@ -626,11 +615,11 @@ XMLElement& XMLElement::operator=(const XMLElement& rObj)
         {
             for ( size_t i = 0; i < m_pAttributes->size(); i++ )
                 delete (*m_pAttributes)[ i ];
-            delete m_pAttributes;
+            m_pAttributes.reset();
         }
         if ( rObj.m_pAttributes )
         {
-            m_pAttributes = new XMLAttributeList();
+            m_pAttributes.reset( new XMLAttributeList() );
             for ( size_t i = 0; i < rObj.m_pAttributes->size(); i++ )
                 AddAttribute( (*rObj.m_pAttributes)[ i ]->GetName(), (*rObj.m_pAttributes)[ i ]->GetValue() );
         }
@@ -641,7 +630,7 @@ XMLElement& XMLElement::operator=(const XMLElement& rObj)
 void XMLElement::AddAttribute( const OString &rAttribute, const OString &rValue )
 {
     if ( !m_pAttributes )
-        m_pAttributes = new XMLAttributeList();
+        m_pAttributes.reset( new XMLAttributeList() );
     m_pAttributes->push_back( new XMLAttribute( rAttribute, rValue ) );
 }
 
@@ -682,9 +671,6 @@ XMLElement::~XMLElement()
     {
         for ( size_t i = 0; i < m_pAttributes->size(); i++ )
             delete (*m_pAttributes)[ i ];
-
-        delete m_pAttributes;
-        m_pAttributes = NULL;
     }
 }
 
@@ -817,8 +803,7 @@ static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
 
 
 SimpleXMLParser::SimpleXMLParser()
-    : m_pXMLFile(NULL)
-    , m_pCurNode(NULL)
+    : m_pCurNode(NULL)
     , m_pCurData(NULL)
 {
     m_aParser = XML_ParserCreate( NULL );
@@ -942,18 +927,18 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
         return 0;
     }
 
-    m_pXMLFile = pXMLFileIn;
-    m_pXMLFile->SetName( rFileName );
+    XMLFile* pXMLFile = pXMLFileIn;
+    pXMLFile->SetName( rFileName );
 
-    m_pCurNode = m_pXMLFile;
+    m_pCurNode = pXMLFile;
     m_pCurData = NULL;
 
     m_aErrorInformation.m_eCode = XML_ERROR_NONE;
     m_aErrorInformation.m_nLine = 0;
     m_aErrorInformation.m_nColumn = 0;
-    if ( !m_pXMLFile->GetName().isEmpty())
+    if ( !pXMLFile->GetName().isEmpty())
     {
-        m_aErrorInformation.m_sMessage = "File " + m_pXMLFile->GetName() + " parsed successfully";
+        m_aErrorInformation.m_sMessage = "File " + pXMLFile->GetName() + " parsed successfully";
     }
     else
         m_aErrorInformation.m_sMessage = "XML-File parsed successfully";
@@ -965,8 +950,8 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
         m_aErrorInformation.m_nColumn = XML_GetErrorColumnNumber( m_aParser );
 
         m_aErrorInformation.m_sMessage = "ERROR: ";
-        if ( !m_pXMLFile->GetName().isEmpty())
-            m_aErrorInformation.m_sMessage += m_pXMLFile->GetName();
+        if ( !pXMLFile->GetName().isEmpty())
+            m_aErrorInformation.m_sMessage += pXMLFile->GetName();
         else
             m_aErrorInformation.m_sMessage += OString( "XML-File (");
 
@@ -1047,14 +1032,14 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
         default:
             break;
         }
-        delete m_pXMLFile;
-        m_pXMLFile = NULL;
+        delete pXMLFile;
+        pXMLFile = NULL;
     }
 
     osl_unmapMappedFile(h, p, s);
     osl_closeFile(h);
 
-    return m_pXMLFile;
+    return pXMLFile;
 }
 
 namespace

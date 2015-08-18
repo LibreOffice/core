@@ -110,12 +110,12 @@ class XMLData;
 class XMLParentNode : public XMLChildNode
 {
 private:
-    XMLChildNodeList* m_pChildList;
+    std::unique_ptr<XMLChildNodeList> m_pChildList;
 
 protected:
     XMLParentNode( XMLParentNode *pPar )
-        : XMLChildNode( pPar ), m_pChildList( NULL ){}
-    XMLParentNode(): m_pChildList(NULL){}
+        : XMLChildNode( pPar ) {}
+    XMLParentNode() {}
 
     XMLParentNode( const XMLParentNode& );
 
@@ -124,7 +124,7 @@ protected:
 
 public:
     /// returns child list of this node
-    XMLChildNodeList *GetChildList() { return m_pChildList; }
+    XMLChildNodeList *GetChildList() { return m_pChildList.get(); }
 
     /// adds a new child
     void AddChild(
@@ -158,7 +158,7 @@ public:
     void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
     void Extract( XMLFile *pCur = NULL );
 
-    XMLHashMap* GetStrings(){ return m_pXMLStrings; }
+    XMLHashMap* GetStrings(){ return m_pXMLStrings.get(); }
     void Write( OString const &rFilename );
     bool Write( std::ofstream &rStream, XMLNode *pCur = NULL );
 
@@ -181,7 +181,7 @@ protected:
     OString m_sFileName;
 
     TagMap m_aNodes_localize;
-    XMLHashMap* m_pXMLStrings;
+    std::unique_ptr<XMLHashMap> m_pXMLStrings;
 
     std::vector <OString> m_vOrder;
 };
@@ -201,7 +201,7 @@ class XMLElement : public XMLParentNode
 {
 private:
     OString m_sElementName;
-    XMLAttributeList *m_pAttributes;
+    std::unique_ptr<XMLAttributeList> m_pAttributes;
     OString m_sProject;
     OString m_sFilename;
     OString m_sId;
@@ -230,7 +230,7 @@ public:
     OString GetName() const { return m_sElementName; }
 
     /// returns list of attributes of this element
-    XMLAttributeList *GetAttributeList() { return m_pAttributes; }
+    XMLAttributeList *GetAttributeList() { return m_pAttributes.get(); }
 
     /// adds a new attribute to this element, typically used by parser
     void AddAttribute( const OString &rAttribute, const OString &rValue );
@@ -338,7 +338,6 @@ private:
     XML_Parser m_aParser;
     XMLError m_aErrorInformation;
 
-    XMLFile *m_pXMLFile;
     XMLParentNode *m_pCurNode;
     XMLData *m_pCurData;
 

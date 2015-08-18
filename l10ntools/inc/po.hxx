@@ -11,6 +11,7 @@
 #define INCLUDED_L10NTOOLS_INC_PO_HXX
 
 #include <fstream>
+#include <memory>
 #include <rtl/string.hxx>
 #include <boost/noncopyable.hpp>
 
@@ -32,7 +33,7 @@ class PoEntry
 {
 private:
 
-    GenPoEntry* m_pGenPo;
+    std::unique_ptr<GenPoEntry> m_pGenPo;
     bool m_bIsInitialized;
 
 public:

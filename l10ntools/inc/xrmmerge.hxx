@@ -72,7 +72,7 @@ public:
 class XRMResExport : public XRMResParser
 {
 private:
-    ResData *pResData;
+    std::unique_ptr<ResData> pResData;
     OString sPath;
     PoOfstream pOutputStream;
 protected:
@@ -105,7 +105,7 @@ class XRMResMerge : public XRMResParser
 private:
     MergeDataFile *pMergeDataFile;
     OString sFilename;
-    ResData *pResData;
+    std::unique_ptr<ResData> pResData;
     std::ofstream pOutputStream;
     std::vector<OString> aLanguages;
 
