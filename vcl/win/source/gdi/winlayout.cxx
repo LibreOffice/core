@@ -204,7 +204,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     if (nGlyphIndex == DROPPED_OUTGLYPH)
         return true;
 
-    SAL_INFO("vcl.gdi.opengl", "AddChunkOfGlyphs " << this << " " << nGlyphIndex << " old: " << maOpenGLGlyphCache);
+    SAL_INFO("vcl.gdi.opengl", "this=" << this << " " << nGlyphIndex << " old: " << maOpenGLGlyphCache);
 
     auto n = maOpenGLGlyphCache.begin();
     while (n != maOpenGLGlyphCache.end() &&
@@ -262,25 +262,8 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         return false;
     }
 
-    if (SelectObject(hDC, hOrigFont) == NULL)
-        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-    if (!DeleteDC(hDC))
-        SAL_WARN("vcl.gdi", "DeleteDC failed: " << WindowsErrorString(GetLastError()));
-
-    OpenGLCompatibleDC aDC(rGraphics, 0, 0, aSize.cx, aSize.cy);
-
-    hOrigFont = SelectFont(aDC.getCompatibleHDC(), rLayout.mhFont);
-    if (hOrigFont == NULL)
-    {
-        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-        return false;
-    }
-
-    SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
-    SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
-
     std::vector<ABC> aABC(nCount);
-    if (!GetCharABCWidthsI(aDC.getCompatibleHDC(), 0, nCount, aGlyphIndices.data(), aABC.data()))
+    if (!GetCharABCWidthsI(hDC, 0, nCount, aGlyphIndices.data(), aABC.data()))
     {
         SAL_WARN("vcl.gdi", "GetCharABCWidthsI failed: " << WindowsErrorString(GetLastError()));
         return false;
@@ -292,8 +275,30 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
 
     // Avoid kerning as we want to be able to use individual rectangles for each glyph
     std::vector<int> aDX(nCount);
+    int totWidth = 0;
     for (int i = 0; i < nCount; i++)
+    {
         aDX[i] = std::abs(aABC[i].abcA) + aABC[i].abcB + std::abs(aABC[i].abcC);
+        totWidth += aDX[i];
+    }
+
+    if (SelectObject(hDC, hOrigFont) == NULL)
+        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
+    if (!DeleteDC(hDC))
+        SAL_WARN("vcl.gdi", "DeleteDC failed: " << WindowsErrorString(GetLastError()));
+
+    OpenGLCompatibleDC aDC(rGraphics, 0, 0, totWidth, aSize.cy);
+
+    hOrigFont = SelectFont(aDC.getCompatibleHDC(), rLayout.mhFont);
+    if (hOrigFont == NULL)
+    {
+        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
+        return false;
+    }
+
+    SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
+    SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
+
     if (!ExtTextOutW(aDC.getCompatibleHDC(), 0, 0, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
     {
         SAL_WARN("vcl.gdi", "ExtTextOutW failed: " << WindowsErrorString(GetLastError()));
@@ -317,7 +322,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
 
     SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
-    SAL_INFO("vcl.gdi.opengl", "AddChunkOfGlyphs " << this << " now: " << maOpenGLGlyphCache << DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC()));
+    SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache << DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC()));
 
     return true;
 }
