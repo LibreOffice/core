@@ -26,7 +26,6 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
 #include <osl/detail/file.h>
@@ -120,15 +119,12 @@ OUString ConstructTempDir_Impl( const OUString* pParent )
                 com::sun::star::ucb::UniversalContentBroker::create(
                     comphelper::getProcessComponentContext() ) );
 
-        // if parent given try to use it
-        OUString aTmp( *pParent );
-
         // test for valid filename
         OUString aRet;
-        ::osl::FileBase::getFileURLFromSystemPath(
-            ::ucbhelper::getSystemPathFromFileURL( pBroker, aTmp ),
-            aRet );
-        if ( !aRet.isEmpty() )
+        if ((osl::FileBase::getSystemPathFromFileURL(*pParent, aRet)
+             == osl::FileBase::E_None)
+            && (osl::FileBase::getFileURLFromSystemPath(aRet, aRet)
+                == osl::FileBase::E_None))
         {
             ::osl::DirectoryItem aItem;
             sal_Int32 i = aRet.getLength();
