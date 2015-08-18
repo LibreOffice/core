@@ -38,10 +38,13 @@ class SvStream;
 // Version  F: #57844 introduction of SvNumberformat::StringToDouble
 // Version 10: #29955 generate for-loop-level in Statement-PCodes
 // Version 11: #29955 force anew compilation because of build-inconsistences
+// Version 12: aoo#64377 increase code size that basic can handle
+//             tdf#75973 support user defined types B_USERTYPES in password protected macros
+//
 
 #define B_LEGACYVERSION 0x00000011L
-#define B_CURVERSION 0x00000012L
 #define B_EXT_IMG_VERSION 0x00000012L
+#define B_CURVERSION 0x00000012L
 
 // The file contains either a module- or a library-record.
 // Those records contain further records. Every record's got
@@ -68,6 +71,9 @@ class SvStream;
 #define B_MODEND        0x454D      // ME module end
 #define B_SBXOBJECTS    0x5853      // SX SBX objects
 #define B_EXTSOURCE     0x5345      // ES extended source
+
+#define B_USERTYPES     0x4369      // UT user defined types
+
 
 // A library record contains only module records
 //  sal_uInt16 identifier BL
@@ -152,6 +158,28 @@ class SvStream;
 // SBX-objects:
 // sal_uInt16 number of objects
 // ....   object data
+
+// user defined types B_USERTYPES :
+//  sal_uInt16  identifier UT
+//  sal_uInt32  the record's length
+//  sal_uInt16  number of types
+//  Data for every user defined type:
+//    string instance type name
+//    sal_Int16  number of type members
+//    Data for every type member:
+//      string     name
+//      sal_Int16 type
+//      sal_uInt32 flags
+//      sal_Int16 hasObjects (0/1)
+//      If hasObjects
+//        If member type is nested type
+//          string   nested type name
+//        Else (array declaration)
+//          sal_Int16  isFixedSize (0/1)
+//          sal_Int32  number of dimensions
+//          Data for every dimension:
+//            sal_Int32  lower bound
+//            sal_Int32  upper bound
 
 #endif
 

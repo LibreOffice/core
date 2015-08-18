@@ -40,6 +40,7 @@ public:
     void testStarBasic();
     void testVba();
     void testMSP();
+    void testPasswordProtectedStarBasic();
 #endif
     CPPUNIT_TEST_SUITE(ScMacrosTest);
 #if !defined(MACOSX)
@@ -48,6 +49,7 @@ public:
     CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
+    CPPUNIT_TEST(testPasswordProtectedStarBasic);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -93,6 +95,37 @@ void ScMacrosTest::testMSP()
 
     SAL_INFO("sc.qa", "Result is " << sResult );
     CPPUNIT_ASSERT_MESSAGE("TestMSP ( for fdo#67547) failed", sResult == "OK" );
+    xDocSh->DoClose();
+}
+
+void ScMacrosTest::testPasswordProtectedStarBasic()
+{
+    const OUString aFileNameBase("testTypePassword.ods");
+    OUString aFileName;
+    createFileURL(aFileNameBase, aFileName);
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load testTypePassword.ods", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:MyLibrary.Module1.Main?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    OUString aValue = rDoc.GetString(0,0,0);
+    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1", aValue == "success");
+
     xDocSh->DoClose();
 }
 

@@ -240,6 +240,99 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 }
                 break;
             }
+            case B_USERTYPES:
+            {
+                //assuming an empty string with just the lead 32bit/16bit len indicator
+                const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
+                const size_t nMinRecordSize = nMinStringSize + sizeof(sal_Int16);
+                const size_t nMaxRecords = r.remainingSize() / nMinRecordSize;
+                if (nCount > nMaxRecords)
+                {
+                    SAL_WARN("basic", "Parsing error: " << nMaxRecords <<
+                             " max possible entries, but " << nCount << " claimed, truncating");
+                    nCount = nMaxRecords;
+                }
+
+                // User defined types
+                for (sal_uInt16 i = 0; i < nCount; i++)
+                {
+                    OUString aTypeName = r.ReadUniOrByteString(eCharSet);
+
+                    sal_Int16 nTypeMembers;
+                    r.ReadInt16(nTypeMembers);
+
+                    SbxObject *pType = new SbxObject(aTypeName);
+                    SbxArray *pTypeMembers = pType->GetProperties();
+
+                    for (sal_uInt16 j = 0; j < nTypeMembers; j++)
+                    {
+                        OUString aMemberName = r.ReadUniOrByteString(eCharSet);
+
+                        sal_Int16 aIntMemberType;
+                        r.ReadInt16(aIntMemberType);
+                        SbxDataType aMemberType = static_cast< SbxDataType > ( aIntMemberType );
+
+                        SbxProperty *pTypeElem = new SbxProperty( aMemberName, aMemberType );
+
+                        sal_uInt32 aIntFlag;
+                        r.ReadUInt32(aIntFlag);
+                        SbxFlagBits nElemFlags = static_cast< SbxFlagBits > ( aIntFlag );
+
+                        pTypeElem->SetFlags(nElemFlags);
+
+                        sal_Int16 hasObject;
+                        r.ReadInt16(hasObject);
+
+                        if (hasObject == 1)
+                        {
+                            if(aMemberType == SbxOBJECT)
+                            {
+                                // nested user defined types
+                                // declared before use, so it is ok to reference it by name on load
+                                OUString aNestedTypeName = r.ReadUniOrByteString(eCharSet);
+                                SbxObject* pNestedTypeObj = static_cast< SbxObject* >( rTypes->Find( aNestedTypeName, SbxCLASS_OBJECT ) );
+                                if (pNestedTypeObj)
+                                {
+                                    SbxObject* pCloneObj = cloneTypeObjectImpl( *pNestedTypeObj );
+                                    pTypeElem->PutObject( pCloneObj );
+                                }
+                            }
+                            else
+                            {
+                                // an array
+                                SbxDimArray* pArray = new SbxDimArray();
+
+                                sal_Int16 isFixedSize;
+                                r.ReadInt16(isFixedSize);
+                                if (isFixedSize == 1)
+                                    pArray->setHasFixedSize( true );
+
+                                sal_Int32 nDims;
+                                r.ReadInt32(nDims);
+                                for (sal_Int32 d = 0; d < nDims; d++)
+                                {
+                                    sal_Int32 lBound;
+                                    sal_Int32 uBound;
+                                    r.ReadInt32(lBound).ReadInt32(uBound);
+                                    pArray->unoAddDim32(lBound, uBound);
+                                }
+
+                                pTypeElem->PutObject( pArray );
+                            }
+                        }
+
+                        pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
+
+                    }
+
+                    pType->Remove( OUString("Name"), SbxCLASS_DONTCARE );
+                    pType->Remove( OUString("Parent"), SbxCLASS_DONTCARE );
+
+                    AddType(pType);
+                }
+
+                break;
+            }
             case B_MODEND:
                 goto done;
             default:
@@ -359,6 +452,84 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
         pByteStrings.reset();
         SbiCloseRecord( r, nPos );
+    }
+    // User defined types
+    if (rTypes)
+    {
+        sal_uInt16 nTypes = rTypes->Count();
+        if (nTypes > 0 )
+        {
+            nPos = SbiOpenRecord( r, B_USERTYPES, nTypes );
+
+            for (sal_uInt16 i = 0; i < nTypes; i++)
+            {
+                SbxObject* pType = static_cast< SbxObject* > ( rTypes->Get(i) );
+                OUString aTypeName = pType->GetClassName();
+
+                r.WriteUniOrByteString( aTypeName, eCharSet );
+
+                SbxArray  *pTypeMembers = pType->GetProperties();
+                sal_uInt16 nTypeMembers = pTypeMembers->Count();
+
+                r.WriteInt16(nTypeMembers);
+
+                for (sal_uInt16 j = 0; j < nTypeMembers; j++)
+                {
+
+                    SbxProperty* pTypeElem = static_cast< SbxProperty* > ( pTypeMembers->Get(j) );
+
+                    OUString aElemName = pTypeElem->GetName();
+                    r.WriteUniOrByteString( aElemName, eCharSet );
+
+                    SbxDataType dataType =   pTypeElem->GetType();
+                    r.WriteInt16(dataType);
+
+                    SbxFlagBits nElemFlags = pTypeElem->GetFlags();
+                    r.WriteUInt32(static_cast< sal_uInt32 > (nElemFlags) );
+
+                    SbxBase* pElemObject = pTypeElem->GetObject();
+
+                    if (pElemObject)
+                    {
+                        r.WriteInt16(1); // has elem Object
+
+                        if( dataType == SbxOBJECT )
+                        {
+                            // nested user defined types
+                            // declared before use, so it is ok to reference it by name on load
+                            SbxObject* pNestedType = static_cast< SbxObject* > ( pElemObject );
+                            r.WriteUniOrByteString( pNestedType->GetClassName(), eCharSet );
+                        }
+                        else
+                        {
+                            // an array
+                            SbxDimArray* pArray = static_cast< SbxDimArray* > ( pElemObject );
+
+                            bool bFixedSize = pArray->hasFixedSize();
+                            if (bFixedSize)
+                                r.WriteInt16(1);
+                            else
+                                r.WriteInt16(0);
+
+                            sal_Int32 nDims = pArray->GetDims();
+                            r.WriteInt32(nDims);
+
+                            for (sal_Int32 d = 0; d < nDims; d++)
+                            {
+                                sal_Int32 lBound;
+                                sal_Int32 uBound;
+                                pArray->GetDim32(d, lBound, uBound);
+                                r.WriteInt32(lBound).WriteInt32(uBound);
+                            }
+                        }
+                    }
+                    else
+                        r.WriteInt16(0); // no elem Object
+
+                }
+            }
+        SbiCloseRecord( r, nPos );
+        }
     }
     // Set overall length
     SbiCloseRecord( r, nStart );
