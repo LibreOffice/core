@@ -50,7 +50,6 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
@@ -72,7 +71,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -175,18 +173,7 @@ ZipPackage::~ZipPackage()
 
 bool ZipPackage::isLocalFile() const
 {
-    OUString aSystemPath;
-    uno::Reference< XUniversalContentBroker > xUcb(
-        UniversalContentBroker::create(
-            m_xContext ) );
-    try
-    {
-        aSystemPath = getSystemPathFromFileURL( xUcb, m_aURL );
-    }
-    catch ( Exception& )
-    {
-    }
-    return !aSystemPath.isEmpty();
+    return m_aURL.startsWithIgnoreAsciiCase("file:");
 }
 
 void ZipPackage::parseManifest()
