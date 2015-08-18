@@ -116,7 +116,7 @@ private:
     bool m_bOutputStreamClosed;
     bool m_bInputStreamClosed;
 
-    oslCondition m_conditionBytesAvail;
+    osl::Condition m_conditionBytesAvail;
     Mutex     m_mutexAccess;
     I_FIFO      *m_pFIFO;
 };
@@ -131,12 +131,10 @@ OPipeImpl::OPipeImpl()
     m_bInputStreamClosed    = false;
 
     m_pFIFO = new MemFIFO;
-    m_conditionBytesAvail = osl_createCondition();
 }
 
 OPipeImpl::~OPipeImpl()
 {
-    osl_destroyCondition( m_conditionBytesAvail );
     delete m_pFIFO;
 }
 
@@ -164,7 +162,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
             if( nOccupiedBufferLen < nBytesToRead )
             {
                 // wait outside guarded section
-                osl_resetCondition( m_conditionBytesAvail );
+                m_conditionBytesAvail.reset();
             }
             else {
                 // necessary bytes are available
@@ -174,7 +172,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
         } // end guarded section
 
         // wait for new data outside guarded section!
-        osl_waitCondition( m_conditionBytesAvail , 0 );
+        m_conditionBytesAvail.wait();
     }
 }
 
@@ -208,7 +206,7 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
             }
         }
 
-        osl_waitCondition( m_conditionBytesAvail , 0 );
+        m_conditionBytesAvail.wait();
     }
 }
 
@@ -268,7 +266,7 @@ void OPipeImpl::closeInput()
     m_pFIFO = 0;
 
     // readBytes may throw an exception
-    osl_setCondition( m_conditionBytesAvail );
+    m_conditionBytesAvail.set();
 
     setSuccessor( Reference< XConnectable > () );
     return;
@@ -334,7 +332,7 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     }
 
     // readBytes may check again if enough bytes are available
-    osl_setCondition( m_conditionBytesAvail );
+    m_conditionBytesAvail.set();
 }
 
 
@@ -355,7 +353,7 @@ void OPipeImpl::closeOutput()
     MutexGuard guard( m_mutexAccess );
 
     m_bOutputStreamClosed = true;
-    osl_setCondition( m_conditionBytesAvail );
+    m_conditionBytesAvail.set();
     setPredecessor( Reference < XConnectable > () );
     return;
 }
