@@ -3,8 +3,8 @@ FontName: OpenSymbol
 FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
-Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann
-Version: 102.6
+Copyright: (c) 2009 Sun Microsystems Inc.\nTHERE DOES NOT EXIST (c) 2011 Julien Nabet\nPRECEDES <-> DOES NOT SUCCEED (c) 2011 Olivier Hallot\nPRIME <-> TRIPLE PRIME (c) 2013 Mathias Hasselmann\nphi <-> phi1 (c) 2015 Khaled Hosny
+Version: 102.7
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -773,7 +773,7 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.6" 
+LangName: 1033 "" "" "Regular" "OpenSymbol" 
 GaspTable: 1 65535 2 0
 Encoding: Custom
 UnicodeInterp: none
@@ -105039,8 +105039,8 @@ EndSplineSet
 Validated: 16385
 EndChar
 
-StartChar: phi
-Encoding: 954 966 954
+StartChar: phi1
+Encoding: 954 981 954
 Width: 1067
 Flags: W
 HStem: 892.524 48.4775<480.52 486.132 580.854 586.484>
@@ -105980,8 +105980,8 @@ EndSplineSet
 Validated: 16385
 EndChar
 
-StartChar: phi1
-Encoding: 960 981 960
+StartChar: phi
+Encoding: 960 966 960
 Width: 1235
 Flags: W
 HStem: -18.1895 52.1895<714 854.086> 869 62<321.383 492.494 803.829 998.555>
