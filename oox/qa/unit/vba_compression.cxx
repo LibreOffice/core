@@ -33,6 +33,8 @@ public:
     // tests taken from the VBA specification
     // section 3.2
 
+    // section 3.2.2
+    void testSpec322();
     // section 3.2.3
     void testSpec323();
 
@@ -45,6 +47,7 @@ public:
     CPPUNIT_TEST(testSimple2);
     CPPUNIT_TEST(testSimple3);
     CPPUNIT_TEST(testComplex1);
+    CPPUNIT_TEST(testSpec322);
     CPPUNIT_TEST(testSpec323);
     CPPUNIT_TEST_SUITE_END();
 
@@ -149,6 +152,28 @@ void TestVbaCompression::testComplex1()
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
     ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug_complex1.bin");
+
+    CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
+
+    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
+    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+
+    size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
+            aOutputMemoryStream.GetSize());
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL((int)pReferenceData[i], (int)pData[i]);
+    }
+}
+
+void TestVbaCompression::testSpec322()
+{
+    OUString aTestFile = getPathFromSrc("/oox/qa/unit/data/vba/spec322.bin");
+    OUString aReference = getPathFromSrc("/oox/qa/unit/data/vba/reference/spec322.bin");
+
+    SvMemoryStream aOutputMemoryStream(4096, 4096);
+    SvMemoryStream aReferenceMemoryStream(4096, 4096);
+    ReadFiles(aTestFile, aReference, aOutputMemoryStream, aReferenceMemoryStream, "/tmp/vba_debug_spec322.bin");
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
