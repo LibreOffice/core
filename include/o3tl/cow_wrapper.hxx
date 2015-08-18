@@ -38,8 +38,8 @@ namespace o3tl
     struct UnsafeRefCountingPolicy
     {
         typedef sal_uInt32 ref_count_t;
-        static void incrementCount( ref_count_t& rCount ) { ++rCount; }
-        static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
+        static inline void incrementCount( ref_count_t& rCount ) { ++rCount; }
+        static inline bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
     };
 
     /** Thread-safe refcounting
@@ -219,6 +219,16 @@ int cow_wrapper_client::queryUnmodified() const
             MTPolicy::incrementCount( m_pimpl->m_ref_count );
         }
 
+        /** Move-construct and steal xvalues shared resource
+         */
+        explicit cow_wrapper( cow_wrapper&& rSrc ) :
+            m_pimpl( rSrc.m_pimpl )
+        {
+            // must give xvalue a new shared resource to destroy
+            // when the destructor is called
+            rSrc.m_pimpl = new impl_t;
+        }
+
         ~cow_wrapper() // nothrow, if ~T does not throw
         {
             release();
@@ -232,6 +242,17 @@ int cow_wrapper_client::queryUnmodified() const
 
             release();
             m_pimpl = rSrc.m_pimpl;
+
+            return *this;
+        }
+
+        /// stealing xvalues resource
+        cow_wrapper& operator=( cow_wrapper&& rSrc )
+        {
+            release();
+            m_pimpl = rSrc.m_pimpl;
+
+            rSrc.m_pimpl = new impl_t;
 
             return *this;
         }
@@ -250,7 +271,7 @@ int cow_wrapper_client::queryUnmodified() const
         }
 
         /// true, if not shared with any other cow_wrapper instance
-        bool is_unique() const // nothrow
+        inline bool is_unique() const // nothrow
         {
             return m_pimpl->m_ref_count == 1;
         }
@@ -275,7 +296,7 @@ int cow_wrapper_client::queryUnmodified() const
         const_pointer     get() const { return &m_pimpl->m_value; }
 
         /// true, if both cow_wrapper internally share the same object
-        bool              same_object( const cow_wrapper& rOther ) const
+        inline bool       same_object( const cow_wrapper& rOther ) const
         {
             return rOther.m_pimpl == m_pimpl;
         }
