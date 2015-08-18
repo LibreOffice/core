@@ -182,15 +182,6 @@ public:
 
         BitmapID() : m_nSize( 0 ), m_nChecksum( 0 ), m_nMaskChecksum( 0 ) {}
 
-        BitmapID& operator=( const BitmapID& rCopy )
-        {
-            m_aPixelSize    = rCopy.m_aPixelSize;
-            m_nSize         = rCopy.m_nSize;
-            m_nChecksum     = rCopy.m_nChecksum;
-            m_nMaskChecksum = rCopy.m_nMaskChecksum;
-            return *this;
-        }
-
         bool operator==( const BitmapID& rComp ) const
         {
             return (m_aPixelSize == rComp.m_aPixelSize &&
@@ -701,7 +692,7 @@ private:
     // graphics state
     struct GraphicsState
     {
-        vcl::Font                       m_aFont;
+        vcl::Font                        m_aFont;
         MapMode                          m_aMapMode;
         Color                            m_aLineColor;
         Color                            m_aFillColor;
@@ -741,42 +732,6 @@ private:
                 m_nFlags( PushFlags::ALL ),
                 m_nUpdateFlags( 0xffff )
         {}
-        GraphicsState( const GraphicsState& rState ) :
-                m_aFont( rState.m_aFont ),
-                m_aMapMode( rState.m_aMapMode ),
-                m_aLineColor( rState.m_aLineColor ),
-                m_aFillColor( rState.m_aFillColor ),
-                m_aTextLineColor( rState.m_aTextLineColor ),
-                m_aOverlineColor( rState.m_aOverlineColor ),
-                m_aClipRegion( rState.m_aClipRegion ),
-                m_bClipRegion( rState.m_bClipRegion ),
-                m_nAntiAlias( rState.m_nAntiAlias ),
-                m_nLayoutMode( rState.m_nLayoutMode ),
-                m_aDigitLanguage( rState.m_aDigitLanguage ),
-                m_nTransparentPercent( rState.m_nTransparentPercent ),
-                m_nFlags( rState.m_nFlags ),
-                m_nUpdateFlags( rState.m_nUpdateFlags )
-        {
-        }
-
-        GraphicsState& operator=(const GraphicsState& rState )
-        {
-            m_aFont                 = rState.m_aFont;
-            m_aMapMode              = rState.m_aMapMode;
-            m_aLineColor            = rState.m_aLineColor;
-            m_aFillColor            = rState.m_aFillColor;
-            m_aTextLineColor        = rState.m_aTextLineColor;
-            m_aOverlineColor        = rState.m_aOverlineColor;
-            m_aClipRegion           = rState.m_aClipRegion;
-            m_bClipRegion           = rState.m_bClipRegion;
-            m_nAntiAlias            = rState.m_nAntiAlias;
-            m_nLayoutMode           = rState.m_nLayoutMode;
-            m_aDigitLanguage        = rState.m_aDigitLanguage;
-            m_nTransparentPercent   = rState.m_nTransparentPercent;
-            m_nFlags                = rState.m_nFlags;
-            m_nUpdateFlags          = rState.m_nUpdateFlags;
-            return *this;
-        }
     };
     std::list< GraphicsState >              m_aGraphicsStack;
     GraphicsState                           m_aCurrentPDFState;
