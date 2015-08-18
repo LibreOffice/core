@@ -162,6 +162,11 @@ namespace
       return nRotation != 0;
     }
 
+    bool noRotation(int nRotation)
+    {
+      return nRotation == 0;
+    }
+
     double toRadian(int nDegree10th)
     {
         return (3600 - (nDegree10th)) * M_PI / 1800.0;
@@ -248,7 +253,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     {
         int nGlyphRotation = *aI;
 
-        std::vector<int>::const_iterator aNext = std::find_if(aI+1, aEnd, hasRotation);
+        std::vector<int>::const_iterator aNext = std::find_if(aI+1, aEnd, nGlyphRotation?noRotation:hasRotation);
 
         size_t nStartIndex = std::distance(aStart, aI);
         size_t nLen = std::distance(aI, aNext);
