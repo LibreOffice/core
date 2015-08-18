@@ -21,7 +21,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -54,7 +53,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <ucbhelper/content.hxx>
 
 #include "fsstorage.hxx"
@@ -67,20 +65,7 @@ using namespace ::com::sun::star;
 // TODO: move to a standard helper
 bool isLocalFile_Impl( const OUString& aURL )
 {
-    OUString aSystemPath;
-
-    try
-    {
-        aSystemPath = ::ucbhelper::getSystemPathFromFileURL(
-            ucb::UniversalContentBroker::create(
-                comphelper::getProcessComponentContext() ),
-            aURL );
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
-    return ( !aSystemPath.isEmpty() );
+    return aURL.startsWithIgnoreAsciiCase("file:");
 }
 
 struct FSStorage_Impl
