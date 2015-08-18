@@ -18,6 +18,7 @@
  */
 
 #include "scriptcont.hxx"
+#include <filefmt.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -652,7 +653,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                         throw uno::RuntimeException();
                     }
                     SvMemoryStream aMemStream;
-                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
+                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream, B_CURVERSION );
 
                     sal_Size nSize = aMemStream.Tell();
                     Sequence< sal_Int8 > aBinSeq( nSize );
@@ -795,7 +796,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
-                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
+                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream, B_CURVERSION );
 
                         sal_Size nSize = aMemStream.Tell();
                         Sequence< sal_Int8 > aBinSeq( nSize );
