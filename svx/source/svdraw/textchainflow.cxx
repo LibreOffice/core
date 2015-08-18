@@ -156,6 +156,12 @@ bool TextChainFlow::IsUnderflow() const
 // XXX:Would it be possible to unify undeflow and its possibly following overrflow?
 void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
+    bool bOldUpdateMode = pOutl->GetUpdateMode();
+
+    // We need this since it's required by WriteRTF
+    pOutl->SetUpdateMode(true);
+
+
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
     OutlinerParaObject *pNewText = impGetMergedUnderflowParaObject(pOutl);
@@ -173,6 +179,9 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     pOutl->SetMaxAutoPaperSize(aOldSize);
     pOutl->SetText(*pNewText);
 
+    // Reset update mode
+    pOutl->SetUpdateMode(bOldUpdateMode);
+
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 
     // Check for new overflow
@@ -181,6 +190,11 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 
 void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pOverflOutl)
 {
+    bool bOldUpdateMode = pNonOverflOutl->GetUpdateMode();
+
+    // We need this since it's required by WriteRTF
+    pNonOverflOutl->SetUpdateMode(true);
+
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // Leave only non overflowing text
     impLeaveOnlyNonOverflowingText(pNonOverflOutl);
@@ -190,6 +204,9 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
     {
         impMoveChainedTextToNextLink(pOverflOutl);
     }
+
+    // Reset update mode
+    pNonOverflOutl->SetUpdateMode(bOldUpdateMode);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 }
