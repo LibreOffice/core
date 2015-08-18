@@ -224,8 +224,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 
 
 PoEntry::PoEntry()
-    : m_pGenPo( 0 )
-    , m_bIsInitialized( false )
+    : m_bIsInitialized( false )
 {
 }
 
@@ -233,8 +232,7 @@ PoEntry::PoEntry(
     const OString& rSourceFile, const OString& rResType, const OString& rGroupId,
     const OString& rLocalId, const OString& rHelpText,
     const OString& rText, const TYPE eType )
-    : m_pGenPo( 0 )
-    , m_bIsInitialized( false )
+    : m_bIsInitialized( false )
 {
     if( rSourceFile.isEmpty() )
         throw NOSOURCFILE;
@@ -247,7 +245,7 @@ PoEntry::PoEntry(
     else if ( rHelpText.getLength() == 5 )
         throw WRONGHELPTEXT;
 
-    m_pGenPo = new GenPoEntry();
+    m_pGenPo.reset( new GenPoEntry() );
     m_pGenPo->setReference(rSourceFile.copy(rSourceFile.lastIndexOf('/')+1));
 
     OString sMsgCtxt =
@@ -273,7 +271,6 @@ PoEntry::PoEntry(
 
 PoEntry::~PoEntry()
 {
-    delete m_pGenPo;
 }
 
 PoEntry::PoEntry( const PoEntry& rPo )
@@ -296,13 +293,12 @@ PoEntry& PoEntry::operator=(const PoEntry& rPo)
         }
         else
         {
-            m_pGenPo = new GenPoEntry( *(rPo.m_pGenPo) );
+            m_pGenPo.reset( new GenPoEntry( *(rPo.m_pGenPo) ) );
         }
     }
     else
     {
-        delete m_pGenPo;
-        m_pGenPo = 0;
+        m_pGenPo.reset();
     }
     m_bIsInitialized = rPo.m_bIsInitialized;
     return *this;
@@ -594,7 +590,7 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
             }
             else
             {
-                rPoEntry.m_pGenPo = new GenPoEntry( aGenPo );
+                rPoEntry.m_pGenPo.reset( new GenPoEntry( aGenPo ) );
             }
             rPoEntry.m_bIsInitialized = true;
         }

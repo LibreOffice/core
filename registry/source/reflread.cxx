@@ -256,16 +256,14 @@ class ConstantPool : public BlopObject
 {
 public:
 
-    sal_uInt16  m_numOfEntries;
-    sal_Int32*  m_pIndex;           // index values may be < 0 for cached string constants
+    sal_uInt16                   m_numOfEntries;
+    std::unique_ptr<sal_Int32[]> m_pIndex;           // index values may be < 0 for cached string constants
 
-    StringCache* m_pStringCache;
+    std::unique_ptr<StringCache> m_pStringCache;
 
     ConstantPool(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries)
         : BlopObject(buffer, len, false)
         , m_numOfEntries(numEntries)
-        , m_pIndex(NULL)
-        , m_pStringCache(NULL)
     {
     }
 
@@ -292,30 +290,19 @@ public:
 
 ConstantPool::~ConstantPool()
 {
-    delete[] m_pIndex;
-    delete m_pStringCache;
 }
 
 sal_uInt32 ConstantPool::parseIndex()
 {
-    if (m_pIndex)
-    {
-        delete[] m_pIndex;
-        m_pIndex = NULL;
-    }
-
-    if (m_pStringCache)
-    {
-        delete m_pStringCache;
-        m_pStringCache = NULL;
-    }
+    m_pIndex.reset();
+    m_pStringCache.reset();
 
     sal_uInt32  offset = 0;
     sal_uInt16  numOfStrings = 0;
 
     if (m_numOfEntries)
     {
-        m_pIndex = new sal_Int32[m_numOfEntries];
+        m_pIndex.reset( new sal_Int32[m_numOfEntries] );
 
         for (int i = 0; i < m_numOfEntries; i++)
         {
@@ -334,7 +321,7 @@ sal_uInt32 ConstantPool::parseIndex()
 
     if (numOfStrings)
     {
-        m_pStringCache = new StringCache(numOfStrings);
+        m_pStringCache.reset( new StringCache(numOfStrings) );
     }
 
     m_bufferLen = offset;
@@ -883,13 +870,12 @@ public:
     sal_uInt16      m_numOfMethodEntries;
     sal_uInt16      m_numOfParamEntries;
     size_t          m_PARAM_ENTRY_SIZE;
-    sal_uInt32*     m_pIndex;
+    std::unique_ptr<sal_uInt32[]>  m_pIndex;
     ConstantPool*   m_pCP;
 
     MethodList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
         : BlopObject(buffer, len, false)
         , m_numOfEntries(numEntries)
-        , m_pIndex(NULL)
         , m_pCP(pCP)
     {
         if ( m_numOfEntries > 0 )
@@ -926,7 +912,6 @@ private:
 
 MethodList::~MethodList()
 {
-    if (m_pIndex) delete[] m_pIndex;
 }
 
 sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index )
@@ -936,18 +921,14 @@ sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index )
 
 sal_uInt32 MethodList::parseIndex()
 {
-    if (m_pIndex)
-    {
-        delete[] m_pIndex;
-        m_pIndex = NULL;
-    }
+    m_pIndex.reset();
 
     sal_uInt32 offset = 0;
 
     if (m_numOfEntries)
     {
         offset = 2 * sizeof(sal_uInt16);
-        m_pIndex = new sal_uInt32[m_numOfEntries];
+        m_pIndex.reset( new sal_uInt32[m_numOfEntries] );
 
         for (int i = 0; i < m_numOfEntries; i++)
         {

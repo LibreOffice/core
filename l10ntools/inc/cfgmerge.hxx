@@ -159,7 +159,7 @@ class CfgMerge : public CfgParser
 private:
     MergeDataFile *pMergeDataFile;
     std::vector<OString> aLanguages;
-    ResData *pResData;
+    std::unique_ptr<ResData> pResData;
 
     OString sFilename;
     bool bEnglish;

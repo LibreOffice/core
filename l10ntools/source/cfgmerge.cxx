@@ -399,7 +399,6 @@ CfgMerge::CfgMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename, const OString &rLanguage )
                 : pMergeDataFile( NULL ),
-                pResData( NULL ),
                 sFilename( rFilename ),
                 bEnglish( false )
 {
@@ -429,7 +428,6 @@ CfgMerge::~CfgMerge()
 {
     pOutputStream.close();
     delete pMergeDataFile;
-    delete pResData;
 }
 
 void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
@@ -447,7 +445,7 @@ void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            pResData = new ResData( sGroupId, sFilename );
+            pResData.reset( new ResData( sGroupId, sFilename ) );
             pResData->sId = sLocalId;
             pResData->sResTyp = pStackData->sResTyp;
         }
@@ -466,7 +464,7 @@ void CfgMerge::WorkOnResourceEnd()
 {
 
     if ( pMergeDataFile && pResData && bLocalize && bEnglish ) {
-        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData.get() );
         if ( pEntrys ) {
             OString sCur;
 
@@ -511,8 +509,7 @@ void CfgMerge::WorkOnResourceEnd()
             }
         }
     }
-    delete pResData;
-    pResData = NULL;
+    pResData.reset();
     bEnglish = false;
 }
 
