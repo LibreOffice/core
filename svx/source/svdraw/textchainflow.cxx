@@ -71,12 +71,12 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 {
     bool bOldUpdateMode = pFlowOutl->GetUpdateMode();
 
-    // XXX: This could be reorganized moving most of this stuff inside EditingTextChainFlow (we need update=true anyway for TextChainFlow though)
+    // We need this since it's required to check overflow
+    pFlowOutl->SetUpdateMode(true);
+
+    // XXX: This could be reorganized moving most of this stuff inside EditingTextChainFlow
     if (pParamOutl != NULL)
     {
-        // We need this since it's required to check overflow
-        pFlowOutl->SetUpdateMode(true);
-
         // XXX: does this work if you do it before setting the text? Seems so.
         impSetFlowOutlinerParams(pFlowOutl, pParamOutl);
     }
@@ -87,10 +87,9 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bOverflow = bIsPageOverflow && mpNextLink;
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
-    if (pParamOutl != NULL)
-    {
-        pFlowOutl->SetUpdateMode(bOldUpdateMode);
-    }
+    // Reset update mode
+    pFlowOutl->SetUpdateMode(bOldUpdateMode);
+
 
     // Get old state on whether to merge para-s or not
     // NOTE: We handle UF/OF using the _old_ state. The new one is simply saved
