@@ -229,10 +229,7 @@
 #   include <netinet/tcp.h>
 #   include <machine/endian.h>
 #   include <sys/time.h>
-/* fixme are premac and postmac still needed here? */
-#   include <premac.h>
 #   include <mach-o/dyld.h>
-#   include <postmac.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
 #       ifndef _LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
