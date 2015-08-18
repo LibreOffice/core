@@ -860,8 +860,10 @@ void EditorWindow::HandleCodeCompletion()
 
         if( aVect.empty() )//nothing to do
             return;
+
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
+
         if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
         {//correct variable name, if autocorrection on
             const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );
@@ -3002,6 +3004,10 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
 
 bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
 {// modifies xClass!!!
+
+    if ( xClass == NULL )
+        return false;
+
     Reference< reflection::XIdlField> xField = xClass->getField( sFieldName );
     if( xField != NULL )
     {
@@ -3016,6 +3022,11 @@ bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
 
 bool UnoTypeCodeCompletetor::CheckMethod( const OUString& sMethName )
 {// modifies xClass!!!
+
+
+    if ( xClass == NULL )
+        return false;
+
     Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
     if( xMethod != NULL ) //method OK, check return type
     {
