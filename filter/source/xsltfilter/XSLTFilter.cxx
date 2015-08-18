@@ -24,7 +24,7 @@
 #include <sax/tools/documenthandleradapter.hxx>
 
 #include <osl/time.h>
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 
@@ -110,7 +110,7 @@ namespace XSLT
 
         css::uno::Reference<xslt::XXSLTTransformer> m_tcontrol;
 
-        oslCondition m_cTransformed;
+        osl::Condition m_cTransformed;
         bool m_bTerminated;
         bool m_bError;
 
@@ -127,8 +127,6 @@ namespace XSLT
 
         // ctor...
         XSLTFilter(const css::uno::Reference<XComponentContext> &r);
-
-        virtual ~XSLTFilter();
 
         // XStreamListener
         virtual void SAL_CALL
@@ -162,14 +160,7 @@ namespace XSLT
 
     XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):
         m_xContext(r), m_bTerminated(false), m_bError(false)
-    {
-        m_cTransformed = osl_createCondition();
-    }
-
-    XSLTFilter::~XSLTFilter()
-    {
-        osl_destroyCondition(m_cTransformed);
-    }
+    {}
 
     void
     XSLTFilter::disposing(const EventObject&) throw (RuntimeException, std::exception)
@@ -233,7 +224,7 @@ namespace XSLT
     void
     XSLTFilter::started() throw (RuntimeException, std::exception)
     {
-        osl_resetCondition(m_cTransformed);
+        m_cTransformed.reset();
     }
     void
     XSLTFilter::error(const Any& a) throw (RuntimeException, std::exception)
@@ -244,18 +235,18 @@ namespace XSLT
             SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << e.Message);
         }
         m_bError = true;
-        osl_setCondition(m_cTransformed);
+        m_cTransformed.set();
     }
     void
     XSLTFilter::closed() throw (RuntimeException, std::exception)
     {
-        osl_setCondition(m_cTransformed);
+        m_cTransformed.set();
     }
     void
     XSLTFilter::terminated() throw (RuntimeException, std::exception)
     {
         m_bTerminated = true;
-        osl_setCondition(m_cTransformed);
+        m_cTransformed.set();
     }
 
     OUString
@@ -370,8 +361,8 @@ namespace XSLT
                         // transform
                         m_tcontrol->start();
                         TimeValue timeout = { TRANSFORMATION_TIMEOUT_SEC, 0};
-                        oslConditionResult result(osl_waitCondition(m_cTransformed, &timeout));
-                        while (osl_cond_result_timeout == result) {
+                        osl::Condition::Result result(m_cTransformed.wait(&timeout));
+                        while (osl::Condition::result_timeout == result) {
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
                                         ::com::sun::star::ucb::InteractiveAugmentedIOException exc(
@@ -391,10 +382,10 @@ namespace XSLT
                                         xInterActionHandler->handle(xRequest);
                                         if (pAbort->wasSelected()) {
                                                 m_bError = true;
-                                                osl_setCondition(m_cTransformed);
+                                                m_cTransformed.set();
                                         }
                                 }
-                                result = osl_waitCondition(m_cTransformed, &timeout);
+                                result = m_cTransformed.wait(&timeout);
                         };
                         if (!m_bError) {
                                 xSaxParser->parseStream(aInput);
@@ -528,7 +519,7 @@ namespace XSLT
     {
         ExtendedDocumentHandlerAdapter::endDocument();
         // wait for the transformer to finish
-        osl_waitCondition(m_cTransformed, 0);
+        m_cTransformed.wait();
         m_tcontrol->terminate();
         if (!m_bError && !m_bTerminated)
             {
