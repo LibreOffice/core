@@ -121,7 +121,7 @@ public:
     int queryUnmodified() const;
 
 private:
-    otl::cow_wrapper< cow_wrapper_client_impl > maImpl;
+    o3tl::cow_wrapper< cow_wrapper_client_impl > maImpl;
 };
         </pre>
         and the implementation file would look like this:
@@ -187,8 +187,8 @@ int cow_wrapper_client::queryUnmodified() const
 
         void release()
         {
-            if( !MTPolicy::decrementCount(m_pimpl->m_ref_count) )
-                boost::checked_delete(m_pimpl), m_pimpl=0;
+            if( m_pimpl && !MTPolicy::decrementCount(m_pimpl->m_ref_count) )
+                boost::checked_delete(m_pimpl), m_pimpl = nullptr;
         }
 
     public:
@@ -219,6 +219,14 @@ int cow_wrapper_client::queryUnmodified() const
             MTPolicy::incrementCount( m_pimpl->m_ref_count );
         }
 
+        /** Move-construct and steal rSrc shared resource
+         */
+        explicit cow_wrapper( cow_wrapper&& rSrc ) :
+            m_pimpl( rSrc.m_pimpl )
+        {
+            rSrc.m_pimpl = nullptr;
+        }
+
         ~cow_wrapper() // nothrow, if ~T does not throw
         {
             release();
@@ -232,6 +240,18 @@ int cow_wrapper_client::queryUnmodified() const
 
             release();
             m_pimpl = rSrc.m_pimpl;
+
+            return *this;
+        }
+
+        /// stealing rSrc's resource
+        cow_wrapper& operator=( cow_wrapper&& rSrc )
+        {
+            // self-movement guts ourself, see also 17.6.4.9
+            release();
+            m_pimpl = rSrc.m_pimpl;
+
+            rSrc.m_pimpl = nullptr;
 
             return *this;
         }
