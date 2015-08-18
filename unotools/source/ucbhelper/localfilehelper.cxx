@@ -20,10 +20,8 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
@@ -37,78 +35,44 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-sal_Bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn )
+sal_Bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString&, OUString& rReturn )
 {
-    rReturn = "";
-
-    Reference< XUniversalContentBroker > pBroker(
-        UniversalContentBroker::create(
-            comphelper::getProcessComponentContext() ) );
-    try
-    {
-        rReturn = ::ucbhelper::getFileURLFromSystemPath( pBroker, rBaseURL, rName );
+    sal_Bool ok = osl::FileBase::getFileURLFromSystemPath(rName, rReturn)
+        == osl::FileBase::E_None;
+    if (!ok) {
+        rReturn = "";
     }
-    catch ( ::com::sun::star::uno::RuntimeException& )
-    {
-        return sal_False;
-    }
-
-    return !rReturn.isEmpty();
+    return ok;
 }
 
 sal_Bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& rReturn )
 {
-    rReturn = "";
-    Reference< XUniversalContentBroker > pBroker(
-        UniversalContentBroker::create(
-            comphelper::getProcessComponentContext() ) );
-    try
-    {
-        rReturn = ::ucbhelper::getSystemPathFromFileURL( pBroker, rName );
+    bool ok = osl::FileBase::getSystemPathFromFileURL(rName, rReturn)
+        == osl::FileBase::E_None;
+    if (!ok) {
+        rReturn = "";
     }
-    catch ( ::com::sun::star::uno::RuntimeException& )
-    {
-    }
-
-    return !rReturn.isEmpty();
+    return ok;
 }
 
 bool LocalFileHelper::ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn)
 {
-    rReturn = OUString();
-    Reference< XUniversalContentBroker > pBroker(
-        UniversalContentBroker::create(
-            comphelper::getProcessComponentContext() ) );
-    try
-    {
-        OUString aBase( ::ucbhelper::getLocalFileURL() );
-        rReturn = ::ucbhelper::getFileURLFromSystemPath( pBroker, aBase, rName );
+    bool ok = osl::FileBase::getFileURLFromSystemPath(rName, rReturn)
+        == osl::FileBase::E_None;
+    if (!ok) {
+        rReturn = "";
     }
-    catch (const ::com::sun::star::uno::RuntimeException&)
-    {
-    }
-
-    return !rReturn.isEmpty();
+    return ok;
 }
 
 bool LocalFileHelper::ConvertURLToPhysicalName(const OUString& rName, OUString& rReturn)
 {
-    rReturn = "";
-    Reference< XUniversalContentBroker > pBroker(
-        UniversalContentBroker::create(
-            comphelper::getProcessComponentContext() ) );
-    try
-    {
-        INetURLObject aObj( rName );
-        INetURLObject aLocal( ::ucbhelper::getLocalFileURL() );
-        if ( aObj.GetProtocol() == aLocal.GetProtocol() )
-            rReturn = ::ucbhelper::getSystemPathFromFileURL( pBroker, rName );
+    bool ok = osl::FileBase::getSystemPathFromFileURL(rName, rReturn)
+        == osl::FileBase::E_None;
+    if (!ok) {
+        rReturn = "";
     }
-    catch (const ::com::sun::star::uno::RuntimeException&)
-    {
-    }
-
-    return !rReturn.isEmpty();
+    return ok;
 }
 
 sal_Bool LocalFileHelper::IsLocalFile(const OUString& rName)
