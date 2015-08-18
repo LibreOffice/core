@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_99772b02",
+        "filename": "chart2/source/view/main/VDataSeries.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-08-18T12:20:00Z",
+      "side": 1,
+      "message": "test must be done before evaluation of aValuesX[i]",
+      "range": {
+        "startLine": 524,
+        "startChar": 53,
+        "endLine": 524,
+        "endChar": 77
+      },
+      "revId": "8daeb2310aeb87a5879a3033f1a7c046344ad320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
