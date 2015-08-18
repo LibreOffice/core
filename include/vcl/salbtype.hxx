@@ -105,7 +105,6 @@ private:
 public:
 
     inline              BitmapColor();
-    inline              BitmapColor( const BitmapColor& rBitmapColor );
     inline              BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
     inline              BitmapColor( const Color& rColor );
     explicit inline     BitmapColor( sal_uInt8 cIndex );
@@ -114,7 +113,6 @@ public:
 
     inline bool         operator==( const BitmapColor& rBitmapColor ) const;
     inline bool         operator!=( const BitmapColor& rBitmapColor ) const;
-    inline BitmapColor& operator=( const BitmapColor& rBitmapColor );
 
     inline bool         IsIndex() const;
 
@@ -276,14 +274,6 @@ inline BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBl
 {
 }
 
-inline BitmapColor::BitmapColor( const BitmapColor& rBitmapColor ) :
-            mcBlueOrIndex   ( rBitmapColor.mcBlueOrIndex ),
-            mcGreen         ( rBitmapColor.mcGreen ),
-            mcRed           ( rBitmapColor.mcRed ),
-            mbIndex         ( rBitmapColor.mbIndex )
-{
-}
-
 inline BitmapColor::BitmapColor( const Color& rColor ) :
             mcBlueOrIndex   ( rColor.GetBlue() ),
             mcGreen         ( rColor.GetGreen() ),
@@ -310,16 +300,6 @@ inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
 inline bool BitmapColor::operator!=( const BitmapColor& rBitmapColor ) const
 {
     return !( *this == rBitmapColor );
-}
-
-inline BitmapColor& BitmapColor::operator=( const BitmapColor& rBitmapColor )
-{
-    mcBlueOrIndex = rBitmapColor.mcBlueOrIndex;
-    mcGreen = rBitmapColor.mcGreen;
-    mcRed = rBitmapColor.mcRed;
-    mbIndex = rBitmapColor.mbIndex;
-
-    return *this;
 }
 
 inline bool BitmapColor::IsIndex() const
