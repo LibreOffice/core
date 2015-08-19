@@ -127,7 +127,9 @@ protected:
 
     // handler for AutoGrowing text with active Outliner
     DECL_LINK(ImpOutlinerStatusEventHdl,EditStatus*);
-    DECL_LINK(ImpChainingEventHdl,void*);
+
+    // Chaining
+    void ImpChainingEventHdl();
     DECL_LINK(ImpAfterCutOrPasteChainingEventHdl,void*);
 
     DECL_LINK_TYPED(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,void);

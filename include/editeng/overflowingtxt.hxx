@@ -72,20 +72,12 @@ public:
         OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
         ESelection GetInsertionPointSel() const;
 
-        //OUString GetHeadingLines() const;
-        //OUString GetEndingLines() const;
-        //bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
-
 private:
     friend class Outliner;
-    // Constructor
-    //OverflowingText(EditTextObject *pTObj);
     OverflowingText(com::sun::star::uno::Reference<
         com::sun::star::datatransfer::XTransferable> xOverflowingContent);
 
-    OutlinerParaObject *impMakeOverflowingParaObject(Outliner *pOutliner);
 
-    //const EditTextObject *mpContentTextObj;
     com::sun::star::uno::Reference<
         com::sun::star::datatransfer::XTransferable> mxOverflowingContent;
 };

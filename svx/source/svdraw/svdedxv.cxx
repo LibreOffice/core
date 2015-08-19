@@ -491,7 +491,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
     return 0;
 }
 
-IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
+void SdrObjEditView::ImpChainingEventHdl()
 {
     if(pTextEditOutliner )
     {
@@ -503,11 +503,11 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
 
              // XXX: IsChainable and GetNilChainingEvent are a bit mixed up atm
             if (!pTextObj->IsChainable()) {
-                return 0;
+                return;
             }
             // This is true during an underflow-caused overflow (with pEdtOutl->SetText())
             if (pTextChain->GetNilChainingEvent(pTextObj)) {
-                return 0;
+                return;
             }
 
             // We prevent to trigger further handling of overflow/underflow for pTextObj
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             fprintf(stderr, "[OnChaining] No Edit Outliner View\n");
         }
     }
-    return 0;
+
 }
 
 IMPL_LINK_NOARG(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl)
@@ -557,7 +557,7 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl)
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( GetTextEditObject());
     if (!pTextObj)
         return 0;
-    ImpChainingEventHdl(NULL);
+    ImpChainingEventHdl();
     TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
     ImpMoveCursorAfterChainingEvent(pCursorManager);
     return 0;
@@ -829,7 +829,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                 pTextEditOutlinerView->SetEndCutPasteLinkHdl(LINK(this,SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl) );
                 /* We should call:
                  *
-                    ImpChainingEventHdl(NULL);
+                    ImpChainingEventHdl();
                     TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
                     ImpMoveCursorAfterChainingEvent(pCursorManager);
                 */
@@ -1346,7 +1346,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             }
 
             /* Start chaining processing */
-            ImpChainingEventHdl(NULL);
+            ImpChainingEventHdl();
             ImpMoveCursorAfterChainingEvent(pCursorManager);
             /* End chaining processing */
 
