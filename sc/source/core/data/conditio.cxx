@@ -2153,18 +2153,18 @@ void ScConditionalFormat::endRendering()
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {
     for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-        InsertNew( itr->Clone() );
+        InsertNew( (*itr)->Clone() );
 }
 
 ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList)
 {
     for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-        InsertNew( itr->Clone(pDoc) );
+        InsertNew( (*itr)->Clone(pDoc) );
 }
 
 void ScConditionalFormatList::InsertNew( ScConditionalFormat* pNew )
 {
-    maConditionalFormats.insert(pNew);
+    m_ConditionalFormats.insert(std::unique_ptr<ScConditionalFormat>(pNew));
 }
 
 bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const
@@ -2174,7 +2174,7 @@ bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) con
     bool bEqual = ( nCount == r.size() );
     const_iterator locIterator = begin();
     for(const_iterator itr = r.begin(); itr != r.end() && bEqual; ++itr, ++locIterator)
-        if ( !locIterator->EqualEntries(*itr) ) // Entries differ?
+        if (!(*locIterator)->EqualEntries(**itr)) // Entries differ?
             bEqual = false;
 
     return bEqual;
@@ -2184,8 +2184,8 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
     //FIXME: Binary search
     for( iterator itr = begin(); itr != end(); ++itr)
-        if (itr->GetKey() == nKey)
-            return &(*itr);
+        if ((*itr)->GetKey() == nKey)
+            return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
     return NULL;
@@ -2195,8 +2195,8 @@ const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
     //FIXME: Binary search
     for ( const_iterator itr = begin(); itr != end(); ++itr)
-        if (itr->GetKey() == nKey)
-            return &(*itr);
+        if ((*itr)->GetKey() == nKey)
+            return itr->get();
 
     SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
     return NULL;
@@ -2204,20 +2204,26 @@ const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 
 void ScConditionalFormatList::CompileAll()
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->CompileAll();
+    for (auto const& it : m_ConditionalFormats)
+    {
+        it->CompileAll();
+    }
 }
 
 void ScConditionalFormatList::CompileXML()
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->CompileXML();
+    for (auto const& it : m_ConditionalFormats)
+    {
+        it->CompileXML();
+    }
 }
 
 void ScConditionalFormatList::UpdateReference( sc::RefUpdateContext& rCxt )
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->UpdateReference(rCxt);
+    for (auto const& it : m_ConditionalFormats)
+    {
+        it->UpdateReference(rCxt);
+    }
 
     if (rCxt.meMode == URM_INSDEL)
     {
@@ -2228,38 +2234,50 @@ void ScConditionalFormatList::UpdateReference( sc::RefUpdateContext& rCxt )
 
 void ScConditionalFormatList::InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize)
 {
-    for(iterator it = begin(), itEnd = end(); it != itEnd; ++it)
+    for (auto const& it : m_ConditionalFormats)
+    {
         it->InsertRow(nTab, nColStart, nColEnd, nRowPos, nSize);
+    }
 }
 
 void ScConditionalFormatList::InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize)
 {
-    for(iterator it = begin(), itEnd = end(); it != itEnd; ++it)
+    for (auto const& it : m_ConditionalFormats)
+    {
         it->InsertCol(nTab, nRowStart, nRowEnd, nColPos, nSize);
+    }
 }
 
 void ScConditionalFormatList::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (auto const& it : m_ConditionalFormats)
+    {
         it->UpdateInsertTab(rCxt);
+    }
 }
 
 void ScConditionalFormatList::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (auto const& it : m_ConditionalFormats)
+    {
         it->UpdateDeleteTab(rCxt);
+    }
 }
 
 void ScConditionalFormatList::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (auto const& it : m_ConditionalFormats)
+    {
         it->UpdateMoveTab(rCxt);
+    }
 }
 
 void ScConditionalFormatList::RenameCellStyle( const OUString& rOld, const OUString& rNew )
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->RenameCellStyle(rOld,rNew);
+    for (auto const& it : m_ConditionalFormats)
+    {
+        it->RenameCellStyle(rOld, rNew);
+    }
 }
 
 bool ScConditionalFormatList::CheckAllEntries()
@@ -2270,10 +2288,10 @@ bool ScConditionalFormatList::CheckAllEntries()
     iterator itr = begin();
     while(itr != end())
     {
-        if(itr->GetRange().empty())
+        if ((*itr)->GetRange().empty())
         {
             bValid = false;
-            maConditionalFormats.erase(itr++);
+            m_ConditionalFormats.erase(itr++);
         }
         else
             ++itr;
@@ -2285,54 +2303,56 @@ bool ScConditionalFormatList::CheckAllEntries()
 void ScConditionalFormatList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     for( iterator itr = begin(); itr != end(); ++itr)
-        itr->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
+        (*itr)->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
 
     CheckAllEntries();
 }
 
 void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
 {
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->SourceChanged( rAddr );
+    for (auto const& it : m_ConditionalFormats)
+    {
+        it->SourceChanged( rAddr );
+    }
 }
 
 ScConditionalFormatList::iterator ScConditionalFormatList::begin()
 {
-    return maConditionalFormats.begin();
+    return m_ConditionalFormats.begin();
 }
 
 ScConditionalFormatList::const_iterator ScConditionalFormatList::begin() const
 {
-    return maConditionalFormats.begin();
+    return m_ConditionalFormats.begin();
 }
 
 ScConditionalFormatList::iterator ScConditionalFormatList::end()
 {
-    return maConditionalFormats.end();
+    return m_ConditionalFormats.end();
 }
 
 ScConditionalFormatList::const_iterator ScConditionalFormatList::end() const
 {
-    return maConditionalFormats.end();
+    return m_ConditionalFormats.end();
 }
 
 size_t ScConditionalFormatList::size() const
 {
-    return maConditionalFormats.size();
+    return m_ConditionalFormats.size();
 }
 
 bool ScConditionalFormatList::empty() const
 {
-    return maConditionalFormats.empty();
+    return m_ConditionalFormats.empty();
 }
 
 void ScConditionalFormatList::erase( sal_uLong nIndex )
 {
     for( iterator itr = begin(); itr != end(); ++itr )
     {
-        if( itr->GetKey() == nIndex )
+        if( (*itr)->GetKey() == nIndex )
         {
-            maConditionalFormats.erase(itr);
+            m_ConditionalFormats.erase(itr);
             break;
         }
     }
@@ -2340,17 +2360,17 @@ void ScConditionalFormatList::erase( sal_uLong nIndex )
 
 void ScConditionalFormatList::startRendering()
 {
-    for(iterator itr = begin(); itr != end(); ++itr)
+    for (auto const& it : m_ConditionalFormats)
     {
-        itr->startRendering();
+        it->startRendering();
     }
 }
 
 void ScConditionalFormatList::endRendering()
 {
-    for(iterator itr = begin(); itr != end(); ++itr)
+    for (auto const& it : m_ConditionalFormats)
     {
-        itr->endRendering();
+        it->endRendering();
     }
 }
 

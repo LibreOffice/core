@@ -3021,10 +3021,10 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
             for (ScConditionalFormatList::const_iterator itr = pList->begin();
                     itr != pList->end(); ++itr)
             {
-                size_t nEntryCount = itr->size();
+                size_t nEntryCount = (*itr)->size();
                 for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
-                    const ScFormatEntry* pFormatEntry = itr->GetEntry(nFormatEntry);
+                    const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(nFormatEntry);
                     if (!pFormatEntry || (pFormatEntry->GetType() != condformat::CONDITION &&
                                 pFormatEntry->GetType() != condformat::DATE))
                         continue;

@@ -1440,7 +1440,7 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtL
         for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
                         itr != pCondFmtList->end(); ++itr)
         {
-            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr, xExtLst, nIndex ));
+            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), **itr, xExtLst, nIndex ));
             if( xCondfmtRec->IsValid() )
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }
