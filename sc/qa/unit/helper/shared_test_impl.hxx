@@ -20,9 +20,9 @@ struct FindCondFormatByEnclosingRange
     FindCondFormatByEnclosingRange(const ScRange& rRange):
         mrRange(rRange) {}
 
-    bool operator()(const ScConditionalFormat& rFormat)
+    bool operator()(const std::unique_ptr<ScConditionalFormat>& pFormat)
     {
-        if(rFormat.GetRange().Combine() == mrRange)
+        if (pFormat->GetRange().Combine() == mrRange)
             return true;
 
         return false;
@@ -58,9 +58,9 @@ void testDataBar_Impl(ScDocument& rDoc)
         ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
                 pList->end(), FindCondFormatByEnclosingRange(aData[i].aRange));
         CPPUNIT_ASSERT(itr != pList->end());
-        CPPUNIT_ASSERT_EQUAL(size_t(1), itr->size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), (*itr)->size());
 
-        const ScFormatEntry* pFormatEntry = itr->GetEntry(0);
+        const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(0);
         CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::DATABAR);
         const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pFormatEntry);
         CPPUNIT_ASSERT(pDataBar);
@@ -95,9 +95,9 @@ void testColorScale2Entry_Impl(ScDocument& rDoc)
         ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
                             pList->end(), FindCondFormatByEnclosingRange(aData2Entry[i].aRange));
         CPPUNIT_ASSERT(itr != pList->end());
-        CPPUNIT_ASSERT_EQUAL(size_t(1), itr->size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), (*itr)->size());
 
-        const ScFormatEntry* pFormatEntry = itr->GetEntry(0);
+        const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(0);
         CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::COLORSCALE);
         const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(pFormatEntry);
         CPPUNIT_ASSERT_EQUAL(size_t(2), pColFormat->size());
@@ -134,9 +134,9 @@ void testColorScale3Entry_Impl(ScDocument& rDoc)
         ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
                             pList->end(), FindCondFormatByEnclosingRange(aData3Entry[i].aRange));
         CPPUNIT_ASSERT(itr != pList->end());
-        CPPUNIT_ASSERT_EQUAL(size_t(1), itr->size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), (*itr)->size());
 
-        const ScFormatEntry* pFormatEntry = itr->GetEntry(0);
+        const ScFormatEntry* pFormatEntry = (*itr)->GetEntry(0);
         CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::COLORSCALE);
         const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(pFormatEntry);
         CPPUNIT_ASSERT_EQUAL(size_t(3), pColFormat->size());

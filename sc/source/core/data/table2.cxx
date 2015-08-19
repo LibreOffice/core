@@ -583,12 +583,12 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     for(ScConditionalFormatList::const_iterator itr = pTable->mpCondFormatList->begin(),
             itrEnd = pTable->mpCondFormatList->end(); itr != itrEnd; ++itr)
     {
-        const ScRangeList& rCondFormatRange = itr->GetRange();
+        const ScRangeList& rCondFormatRange = (*itr)->GetRange();
         if(!rCondFormatRange.Intersects( aOldRange ))
             continue;
 
         ScRangeList aIntersectedRange = rCondFormatRange.GetIntersectedRange(aOldRange);
-        ScConditionalFormat* pNewFormat = itr->Clone(pDocument);
+        ScConditionalFormat* pNewFormat = (*itr)->Clone(pDocument);
 
         pNewFormat->SetRange(aIntersectedRange);
         sc::RefUpdateContext aRefCxt(*pDocument);
@@ -603,8 +603,8 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
                 itrCond != mpCondFormatList->end(); ++itrCond)
         {
-            if(itrCond->GetKey() > nMax)
-                nMax = itrCond->GetKey();
+            if ((*itrCond)->GetKey() > nMax)
+                nMax = (*itrCond)->GetKey();
         }
         pNewFormat->SetKey(nMax + 1);
         mpCondFormatList->InsertNew(pNewFormat);

@@ -1113,11 +1113,11 @@ namespace {
 ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, ScDocument* pDoc, SCTAB nTab)
 {
     ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
-    for (auto itr = pList->begin(); itr != pList->end(); ++itr)
+    for (auto const& it : *pList)
     {
-        if (itr->GetRange() == rRange)
+        if (it->GetRange() == rRange)
         {
-            return &(*itr);
+            return it.get();
         }
     }
 

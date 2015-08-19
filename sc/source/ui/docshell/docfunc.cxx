@@ -5379,13 +5379,13 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     ScConditionalFormatList* pOldList = rDoc.GetCondFormList(nTab);
     for(ScConditionalFormatList::const_iterator itr = pOldList->begin(), itrEnd = pOldList->end(); itr != itrEnd; ++itr)
     {
-        rDoc.RemoveCondFormatData(itr->GetRange(), nTab, itr->GetKey());
+        rDoc.RemoveCondFormatData((*itr)->GetRange(), nTab, (*itr)->GetKey());
     }
 
     // then set new entries
     for(ScConditionalFormatList::iterator itr = pList->begin(); itr != pList->end(); ++itr)
     {
-        rDoc.AddCondFormatData(itr->GetRange(), nTab, itr->GetKey());
+        rDoc.AddCondFormatData((*itr)->GetRange(), nTab, (*itr)->GetKey());
     }
 
     rDoc.SetCondFormList(pList, nTab);

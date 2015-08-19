@@ -5878,7 +5878,7 @@ void Test::testCondCopyPasteSheet()
     ScConditionalFormatList* pList = m_pDoc->GetCondFormList(1);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
 
-    ScConditionalFormat& rFormat = *pList->begin();
+    ScConditionalFormat& rFormat = **pList->begin();
     const ScRangeList& rRange = rFormat.GetRange();
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,1,3,3,1)), rRange);
     sal_uInt32 nKey = rFormat.GetKey();

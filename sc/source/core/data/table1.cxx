@@ -2101,7 +2101,7 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
     for(ScConditionalFormatList::const_iterator itr = mpCondFormatList->begin();
             itr != mpCondFormatList->end(); ++itr)
     {
-        sal_uLong nKey = itr->GetKey();
+        sal_uLong nKey = (*itr)->GetKey();
         if(nKey > nMax)
             nMax = nKey;
     }

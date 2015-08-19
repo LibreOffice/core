@@ -26,13 +26,15 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 
+#include <comphelper/stl_types.hxx>
+
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 
 #include <map>
+#include <set>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -431,7 +433,7 @@ public:
 
     bool            MarkUsedExternalReferences() const;
 
-    //  sorted (via boost::ptr_set) by Index
+    //  sorted (via std::set) by Index
     //  operator== only for sorting
     bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
     bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
@@ -444,8 +446,9 @@ public:
 class SC_DLLPUBLIC ScConditionalFormatList
 {
 private:
-    typedef boost::ptr_set<ScConditionalFormat> ConditionalFormatContainer;
-    ConditionalFormatContainer maConditionalFormats;
+    typedef std::set<std::unique_ptr<ScConditionalFormat>,
+        comphelper::UniquePtrValueLess<ScConditionalFormat>> ConditionalFormatContainer;
+    ConditionalFormatContainer m_ConditionalFormats;
 
     void operator =(ScConditionalFormatList const &) SAL_DELETED_FUNCTION;
 

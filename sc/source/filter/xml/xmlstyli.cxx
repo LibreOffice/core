@@ -514,10 +514,10 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
     for(ScConditionalFormatList::iterator itr = pFormatList->begin(), itrEnd = pFormatList->end();
                     itr != itrEnd; ++itr)
     {
-        if(itr->EqualEntries(*mpCondFormat))
+        if ((*itr)->EqualEntries(*mpCondFormat))
         {
-            ScRangeList& rRangeList = itr->GetRangeList();
-            sal_uInt32 nCondId = itr->GetKey();
+            ScRangeList& rRangeList = (*itr)->GetRangeList();
+            sal_uInt32 nCondId = (*itr)->GetKey();
             size_t n = aRangeList.size();
             for(size_t i = 0; i < n; ++i)
             {
