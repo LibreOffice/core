@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <comphelper/fileurl.hxx>
 
 #include "ids.hrc"
 
@@ -80,9 +81,7 @@ getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
     if (!getStringRequestArgument(rArguments, "Uri",  pValue))
         return false;
     // Use the resource name only for file URLs, to avoid confusion:
-    //TODO! work with ucp locality concept instead of hardcoded "file"?
-    if (pValue
-        && pValue->matchIgnoreAsciiCase("file:"))
+    if (pValue && comphelper::isFileUrl(*pValue))
         getStringRequestArgument(rArguments, "ResourceName", pValue);
     return true;
 }

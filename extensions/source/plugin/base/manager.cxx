@@ -40,6 +40,7 @@
 
 #include <cstdarg>
 
+#include <comphelper/fileurl.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -220,7 +221,7 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
     pImpl->provideNewStream( pImpl->getDescription().Mimetype,
                              Reference< com::sun::star::io::XActiveDataSource >(),
                              url,
-                             0, 0, url.startsWith("file:") );
+                             0, 0, comphelper::isFileUrl(url) );
 
     if( ! pImpl->getPluginComm() )
     {

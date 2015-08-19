@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <comphelper/fileurl.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -173,7 +174,7 @@ ZipPackage::~ZipPackage()
 
 bool ZipPackage::isLocalFile() const
 {
-    return m_aURL.startsWithIgnoreAsciiCase("file:");
+    return comphelper::isFileUrl(m_aURL);
 }
 
 void ZipPackage::parseManifest()

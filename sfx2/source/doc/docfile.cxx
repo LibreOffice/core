@@ -66,6 +66,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
@@ -94,7 +95,6 @@
 #include <svtools/asynclink.hxx>
 #include <svl/inettype.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/progresshandlerwrap.hxx>
@@ -1027,7 +1027,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                     sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
 
                     // check whether system file locking has been used, the default value is false
-                    bool bUseSystemLock = ::utl::LocalFileHelper::IsFileUrl( pImp->m_aLogicName ) && IsSystemFileLockingUsed();
+                    bool bUseSystemLock = comphelper::isFileUrl( pImp->m_aLogicName ) && IsSystemFileLockingUsed();
 
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                     // if system lock is used the writeable stream should be available
@@ -1861,7 +1861,7 @@ void SfxMedium::Transfer_Impl()
 
         OUString aDestURL( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if ( ::utl::LocalFileHelper::IsFileUrl( aDestURL ) || !aDest.removeSegment() )
+        if ( comphelper::isFileUrl( aDestURL ) || !aDest.removeSegment() )
         {
             TransactedTransferForFS_Impl( aSource, aDest, xComEnv );
 

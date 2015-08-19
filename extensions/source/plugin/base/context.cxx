@@ -47,6 +47,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/fileurl.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 
@@ -139,7 +140,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         plugin->provideNewStream( OUString(),
                                   Reference< XActiveDataSource >(),
                                   aUrl,
-                                  0, 0, aUrl.startsWith("file:") );
+                                  0, 0, comphelper::isFileUrl(aUrl) );
         return;
     }
 

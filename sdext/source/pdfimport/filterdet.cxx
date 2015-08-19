@@ -32,6 +32,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <string.h>
@@ -256,7 +257,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
         // check for hybrid PDF
         oslFileHandle aFile = NULL;
         if( bSuccess &&
-            ( aURL.isEmpty() || !aURL.startsWith( "file:" ) )
+            ( aURL.isEmpty() || !comphelper::isFileUrl(aURL) )
         )
         {
             sal_uInt64 nWritten = 0;

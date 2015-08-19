@@ -77,6 +77,7 @@
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
@@ -2429,7 +2430,7 @@ OUString GetURL_Impl(
 
     // dont touch file urls, those should already be in internal form
     // they won't get better here (#112849#)
-    if (rName.startsWith("file:"))
+    if (comphelper::isFileUrl(rName))
     {
         return rName;
     }

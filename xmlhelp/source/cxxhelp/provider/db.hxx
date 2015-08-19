@@ -20,7 +20,7 @@
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DB_HXX
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-
+#include <comphelper/fileurl.hxx>
 #include <osl/diagnose.h>
 #include <rtl/string.hxx>
 #include <unordered_map>
@@ -95,7 +95,7 @@ namespace helpdatafileproxy {
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {
-            OSL_ASSERT(rFileURL.startsWith("file:"));
+            OSL_ASSERT(comphelper::isFileUrl(rFileURL));
         }
         ~Hdf()
             { releaseHashMap(); }

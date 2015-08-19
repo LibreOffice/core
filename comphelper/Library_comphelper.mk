@@ -89,6 +89,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/documentiologring \
     comphelper/source/misc/evtlistenerhlp \
     comphelper/source/misc/evtmethodhelper \
+    comphelper/source/misc/fileurl \
     comphelper/source/misc/getexpandeduri \
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \

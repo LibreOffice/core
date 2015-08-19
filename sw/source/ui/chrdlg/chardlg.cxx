@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <comphelper/fileurl.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
@@ -255,7 +256,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link<OUString *, bool>(), false );
         // #i100683# file URLs should be normalized in the UI
-        if ( sURL.startsWith("file:") )
+        if ( comphelper::isFileUrl(sURL) )
             sURL = URIHelper::simpleNormalizedMakeRelative(OUString(), sURL);
     }
 

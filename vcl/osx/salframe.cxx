@@ -19,6 +19,7 @@
 
 #include <string>
 
+#include <comphelper/fileurl.hxx>
 #include "rtl/ustrbuf.hxx"
 
 #include "osl/file.h"
@@ -323,7 +324,7 @@ void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( i_rDocURL.startsWith( "file:" ) )
+    if( comphelper::isFileUrl(i_rDocURL) )
     {
         OUString aSysPath;
         osl_getSystemPathFromFileURL( i_rDocURL.pData, &aSysPath.pData );

@@ -43,7 +43,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
@@ -53,7 +53,6 @@
 #include <vcl/help.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/security.hxx>
@@ -1963,7 +1962,7 @@ void FileDialogHelper_Impl::saveConfig()
         if ( ! mbIsSaveDlg )
         {
             OUString aPath = getPath();
-            if ( utl::LocalFileHelper::IsFileUrl( aPath ) )
+            if ( comphelper::isFileUrl( aPath ) )
             {
                 SetToken( aUserData, 1, ' ', aPath );
                 bWriteConfig = true;

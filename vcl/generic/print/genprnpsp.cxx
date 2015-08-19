@@ -36,6 +36,7 @@
 #  include <sys/stat.h>
 #endif
 
+#include <comphelper/fileurl.hxx>
 #include "rtl/ustring.hxx"
 
 #include "vcl/button.hxx"
@@ -1124,7 +1125,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 else
                     osl_createTempFile( NULL, NULL, &aPDFUrl.pData );
                 // normalize to file URL
-                if( !aPDFUrl.startsWith( "file:" ) )
+                if( !comphelper::isFileUrl(aPDFUrl) )
                 {
                     // this is not a file URL, but it should
                     // form it into a osl friendly file URL

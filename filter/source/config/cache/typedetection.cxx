@@ -31,7 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <framework/interaction.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -1136,7 +1136,7 @@ void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     bool bSuccess = false;
     OUString sURL = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
     bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_READONLY(), false );
-    if ( utl::LocalFileHelper::IsFileUrl( sURL ) )
+    if ( comphelper::isFileUrl( sURL ) )
     {
         // OOo uses own file locking mechanics in case of local file
         bSuccess = rDescriptor.addInputStreamOwnLock();

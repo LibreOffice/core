@@ -33,12 +33,6 @@
 extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
-
-
-extern bool isFileURL( const OUString & rURL );
-
-
-
 bool copyStreams( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xIS, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOS );
 bool createDirectory( OUString& rURL );
 

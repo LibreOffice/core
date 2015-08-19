@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "filglob.hxx"
 #include "filid.hxx"
@@ -1065,7 +1066,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     if( m_nState & Deleted )
         return;
 
-    if( !aTransferInfo.SourceURL.startsWith( "file:" ) )
+    if( !comphelper::isFileUrl(aTransferInfo.SourceURL) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_TRANSFER_INVALIDSCHEME );

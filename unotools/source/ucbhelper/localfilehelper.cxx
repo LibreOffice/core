@@ -36,11 +36,6 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-bool LocalFileHelper::IsFileUrl(const OUString& rUrl)
-{
-    return rUrl.startsWithIgnoreAsciiCase("file:");
-}
-
 typedef ::std::vector< OUString* > StringList_Impl;
 
 ::com::sun::star::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )

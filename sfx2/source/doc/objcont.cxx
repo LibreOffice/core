@@ -25,6 +25,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <comphelper/fileurl.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
@@ -46,7 +47,6 @@
 
 #include <unotools/saveopt.hxx>
 #include <unotools/useroptions.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <vcl/settings.hxx>
@@ -387,7 +387,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     if ( !pFile )
         return;
 
-    if ( !::utl::LocalFileHelper::IsFileUrl( pFile->GetName() ) )
+    if ( !comphelper::isFileUrl( pFile->GetName() ) )
         // update only for documents loaded from the local file system
         return;
 
@@ -532,7 +532,7 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
         // TODO/REFACTOR:
         // Title?
 
-        if( ::utl::LocalFileHelper::IsFileUrl( rFileName ) )
+        if( comphelper::isFileUrl( rFileName ) )
         {
             OUString aFoundName;
             if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )

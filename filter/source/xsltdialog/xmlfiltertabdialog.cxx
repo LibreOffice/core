@@ -20,6 +20,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/fileurl.hxx>
 #include <tools/resid.hxx>
 #include <vcl/layout.hxx>
 #include <osl/file.hxx>
@@ -193,7 +194,7 @@ bool XMLFilterTabDialog::onOk()
     if( 0 == nErrorId )
     {
         // 4. see if the export xslt is valid
-        if( (mpNewInfo->maExportXSLT != mpOldInfo->maExportXSLT) && isFileURL( mpNewInfo->maExportXSLT ) )
+        if( (mpNewInfo->maExportXSLT != mpOldInfo->maExportXSLT) && comphelper::isFileUrl( mpNewInfo->maExportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maExportXSLT );
             osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
@@ -209,7 +210,7 @@ bool XMLFilterTabDialog::onOk()
     if( 0 == nErrorId )
     {
         // 5. see if the import xslt is valid
-        if( (mpNewInfo->maImportXSLT != mpOldInfo->maImportXSLT) && isFileURL( mpNewInfo->maImportXSLT ) )
+        if( (mpNewInfo->maImportXSLT != mpOldInfo->maImportXSLT) && comphelper::isFileUrl( mpNewInfo->maImportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maImportXSLT );
             osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
@@ -233,7 +234,7 @@ bool XMLFilterTabDialog::onOk()
     if( 0 == nErrorId )
     {
         // 6. see if the import template is valid
-        if( (mpNewInfo->maImportTemplate != mpOldInfo->maImportTemplate) && isFileURL( mpNewInfo->maImportTemplate ) )
+        if( (mpNewInfo->maImportTemplate != mpOldInfo->maImportTemplate) && comphelper::isFileUrl( mpNewInfo->maImportTemplate ) )
         {
             osl::File aFile( mpNewInfo->maImportTemplate );
             osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );

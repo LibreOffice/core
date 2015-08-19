@@ -41,6 +41,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -141,7 +142,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::be
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
             //Load the Styles from the Template URL Supplied in the TypeDetection file
-            if(msTemplateName.indexOf("file:")==-1)
+            if(!comphelper::isFileUrl(msTemplateName))
             {
                 SvtPathOptions aOptions;
                 OUString PathString = aOptions.SubstituteVariable(OUString("$(progurl)"));

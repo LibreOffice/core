@@ -42,7 +42,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -60,13 +60,6 @@
 #include "ostreamcontainer.hxx"
 
 using namespace ::com::sun::star;
-
-
-// TODO: move to a standard helper
-bool isLocalFile_Impl( const OUString& aURL )
-{
-    return aURL.startsWithIgnoreAsciiCase("file:");
-}
 
 struct FSStorage_Impl
 {
@@ -403,7 +396,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     {
         if ( nOpenMode & embed::ElementModes::WRITE )
         {
-            if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            if ( aFileURL.GetProtocol() == INetProtocol::File )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
@@ -1351,7 +1344,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     {
         if ( nOpenMode & embed::ElementModes::WRITE )
         {
-            if ( isLocalFile_Impl( aFileURL ) )
+            if ( comphelper::isFileUrl( aFileURL ) )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );

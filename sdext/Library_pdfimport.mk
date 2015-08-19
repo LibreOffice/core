@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,pdfimport,\
 
 $(eval $(call gb_Library_use_libraries,pdfimport,\
     basegfx \
+    comphelper \
     vcl \
     cppu \
     cppuhelper \

@@ -32,6 +32,7 @@
 #include <osl/file.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
+#include <comphelper/fileurl.hxx>
 
 #include "officeinstallationdirectories.hxx"
 
@@ -46,7 +47,7 @@ using namespace comphelper;
 
 static bool makeCanonicalFileURL( OUString & rURL )
 {
-    OSL_ENSURE(rURL.startsWithIgnoreAsciiCase("file:"), "File URL expected!");
+    OSL_ENSURE(comphelper::isFileUrl(rURL), "File URL expected!");
 
     OUString aNormalizedURL;
     if ( osl::FileBase::getAbsoluteFileURL( OUString(),

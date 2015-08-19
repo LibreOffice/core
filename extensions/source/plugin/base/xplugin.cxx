@@ -43,6 +43,7 @@
 #include <com/sun/star/plugin/PluginManager.hpp>
 
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <plugin/impl.hxx>
 #include <sal/log.hxx>
@@ -451,7 +452,7 @@ void XPlugin_Impl::modelChanged()
     provideNewStream( m_aDescription.Mimetype,
                       uno::Reference< XActiveDataSource >(),
                       aURL,
-                      0, 0, aURL.startsWith("file:") );
+                      0, 0, comphelper::isFileUrl(aURL) );
     m_nProvidingState = PROVIDING_NONE;
 }
 
@@ -787,7 +788,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         if( isfile && stype == NP_ASFILEONLY )
         {
             OString aFileName;
-            if( url.startsWith("file:") )
+            if( comphelper::isFileUrl(url) )
             {
                 OUString aSysName;
                 osl_getSystemPathFromFileURL( url.pData, &aSysName.pData );

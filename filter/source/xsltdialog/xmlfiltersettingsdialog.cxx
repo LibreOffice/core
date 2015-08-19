@@ -1622,11 +1622,6 @@ OUString string_decode( const OUString & rText )
     return Uri::decode( rText, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 }
 
-bool isFileURL( const OUString & rURL )
-{
-    return rURL.startsWith("file:");
-}
-
 bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS )
 {
     try
