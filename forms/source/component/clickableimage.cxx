@@ -628,7 +628,7 @@ namespace frm
         switch (nHandle)
         {
             case PROPERTY_ID_BUTTONTYPE :
-                DBG_ASSERT(isA(rValue, static_cast<FormButtonType*>(NULL)), "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+                DBG_ASSERT(rValue.has<FormButtonType>(), "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
                 rValue >>= m_eButtonType;
                 break;
 

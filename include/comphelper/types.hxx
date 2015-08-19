@@ -69,18 +69,6 @@ namespace comphelper
         return  _rType.equals(cppu::getTypeFavourUnsigned(pDummy));
     }
 
-
-    /** check if a type you have at hand at runtime is equal to another type you have at compile time
-        same comment as for the other isA ....
-    */
-    template <class TYPE>
-    bool isA(const css::uno::Any& _rVal, TYPE* pDummy)
-    {
-        return  _rVal.getValueType().equals(
-            cppu::getTypeFavourUnsigned(pDummy));
-    }
-
-
     /** check if a type you have at hand at runtime is equal to another type you have at compile time
     */
     template <class TYPE>

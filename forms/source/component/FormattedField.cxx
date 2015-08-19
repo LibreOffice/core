@@ -208,7 +208,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
     if( !xFormSet.is() )
         return;
     Any aTmp(xFormSet->getPropertyValue( PROPERTY_TARGET_URL ));
-    if (!isA(aTmp, static_cast< OUString* >(NULL)) ||
+    if (!aTmp.has<OUString>() ||
         getString(aTmp).isEmpty() )
         return;
     Reference<XIndexAccess>  xElements(xParent, UNO_QUERY);
@@ -690,8 +690,8 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         if (hasProperty(s_aLocaleProp, xFormat))
         {
             Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
-            DBG_ASSERT(isA(aLocale, static_cast<Locale*>(NULL)), "OFormattedModel::write : invalid language property !");
-            if (isA(aLocale, static_cast<Locale*>(NULL)))
+            DBG_ASSERT(aLocale.has<Locale>(), "OFormattedModel::write : invalid language property !");
+            if (aLocale.has<Locale>())
             {
                 Locale const * pLocale = static_cast<Locale const *>(aLocale.getValue());
                 eFormatLanguage = LanguageTag::convertToLanguageType( *pLocale, false);
