@@ -230,22 +230,6 @@ OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, Outlin
     return TextChainingUtils::JuxtaposeParaObject(mxOverflowingContent, pOutl, pNextPObj);
 }
 
-// XXX: This method should probably be removed
-OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *)
-{
-    /*
-    // Simply Juxtaposing; no within-para merging
-    OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
-    // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
-    pOverflowingPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
-
-    return pOverflowingPObj;
-    */
-    assert(0); // Should not be called
-    return NULL;
-}
-
-
 OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
 {
     return TextChainingUtils::DeeplyMergeParaObject(mxOverflowingContent, pOutl, pNextPObj);
