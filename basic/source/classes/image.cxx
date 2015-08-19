@@ -240,7 +240,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 }
                 break;
             }
-            case B_SBXOBJECTS:
+            case B_USERTYPES:
 
                 // User defined types
                 for (sal_uInt16 i = 0; i < nCount; i++)
@@ -448,7 +448,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         sal_uInt16 nTypes = rTypes->Count();
         if (nTypes > 0 )
         {
-            nPos = SbiOpenRecord( r, B_SBXOBJECTS, nTypes );
+            nPos = SbiOpenRecord( r, B_USERTYPES, nTypes );
 
             for (sal_uInt16 i = 0; i < nTypes; i++)
             {
