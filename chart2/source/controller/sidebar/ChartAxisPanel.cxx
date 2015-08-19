@@ -238,7 +238,7 @@ void ChartAxisPanel::Initialize()
 
     updateData();
 
-    Link<> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
+    Link<Button*,void> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
     mpCBShowLabel->SetClickHdl(aLink);
     mpCBReverse->SetClickHdl(aLink);
 
@@ -328,8 +328,9 @@ void ChartAxisPanel::SelectionInvalid()
 {
 }
 
-IMPL_LINK(ChartAxisPanel, CheckBoxHdl, CheckBox*, pCheckbox)
+IMPL_LINK_TYPED(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
 {
+    CheckBox* pCheckbox = static_cast<CheckBox*>(pButton);
     OUString aCID = getCID(mxModel);
     bool bChecked = pCheckbox->IsChecked();
 
@@ -340,8 +341,6 @@ IMPL_LINK(ChartAxisPanel, CheckBoxHdl, CheckBox*, pCheckbox)
     }
     else if (pCheckbox == mpCBReverse.get())
         setReverse(mxModel, aCID, bChecked);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ChartAxisPanel, ListBoxHdl)

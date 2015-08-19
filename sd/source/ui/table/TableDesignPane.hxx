@@ -87,7 +87,7 @@ private:
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
     DECL_LINK(implValueSetHdl, void *);
-    DECL_LINK(implCheckBoxHdl, void *);
+    DECL_LINK_TYPED(implCheckBoxHdl, Button*, void);
 
 private:
     ViewShellBase& mrBase;

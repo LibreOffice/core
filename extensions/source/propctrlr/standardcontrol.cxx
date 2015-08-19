@@ -1322,10 +1322,9 @@ namespace pcr
     }
 
 
-    IMPL_LINK( DropDownEditControl, DropDownHdl, PushButton*, /*pPb*/ )
+    IMPL_LINK_NOARG_TYPED( DropDownEditControl, DropDownHdl, Button*, void )
     {
         ShowDropDown(!m_bDropdown);
-        return 0;
     }
 
 

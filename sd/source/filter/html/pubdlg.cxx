@@ -939,7 +939,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 }
 
 // Clickhandler for the radiobuttons of the design-selection
-IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
+IMPL_LINK_TYPED( SdPublishingDlg, DesignHdl, Button *, pButton, void )
 {
     if(pButton == pPage1_NewDesign)
     {
@@ -968,8 +968,6 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
         if(m_pDesign)
             SetDesign(m_pDesign);
     }
-
-    return 0;
 }
 
 // Clickhandler for the choice of one design
@@ -988,7 +986,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
 }
 
 // Clickhandler for the delete of one design
-IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, DesignDeleteHdl, Button*, void)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
 
@@ -1006,42 +1004,35 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
     m_bDesignListDirty = true;
 
     UpdatePage();
-
-    return 0;
 }
 
 // Clickhandler for the other servertypess
-IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
+IMPL_LINK_TYPED( SdPublishingDlg, WebServerHdl, Button *, pButton, void )
 {
     bool bASP = pButton == pPage2_ASP;
 
     pPage2_ASP->Check( bASP );
     pPage2_PERL->Check( !bASP );
     UpdatePage();
-
-    return 0;
 }
 
 // Clickhandler for the Radiobuttons of the graphicformat choice
-IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
+IMPL_LINK_TYPED( SdPublishingDlg, GfxFormatHdl, Button *, pButton, void )
 {
     pPage3_Png->Check( pButton == pPage3_Png );
     pPage3_Gif->Check( pButton == pPage3_Gif );
     pPage3_Jpg->Check( pButton == pPage3_Jpg );
     pPage3_Quality->Enable(pButton == pPage3_Jpg);
-    return 0;
 }
 
 // Clickhandler for the Radiobuttons Standard/Frames
-IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, BaseHdl, Button*, void)
 {
     UpdatePage();
-
-    return 0;
 }
 
 // Clickhandler for the Checkbox of the Title page
-IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, ContentHdl, Button*, void)
 {
     if(pPage2_Content->IsChecked())
     {
@@ -1059,17 +1050,14 @@ IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
             UpdatePage();
         }
     }
-    return 0;
 }
 
 // Clickhandler for the Resolution Radiobuttons
-IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
+IMPL_LINK_TYPED( SdPublishingDlg, ResolutionHdl, Button *, pButton, void )
 {
     pPage3_Resolution_1->Check(pButton == pPage3_Resolution_1);
     pPage3_Resolution_2->Check(pButton == pPage3_Resolution_2);
     pPage3_Resolution_3->Check(pButton == pPage3_Resolution_3);
-
-    return 0;
 }
 
 // Clickhandler for the ValueSet with the bitmap-buttons
@@ -1081,7 +1069,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl)
 }
 
 // Fill the SfxItemSet with the settings of the dialog
-IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
+IMPL_LINK_TYPED( SdPublishingDlg, ColorHdl, Button *, pButton, void)
 {
     SvColorDialog aDlg(this);
 
@@ -1120,17 +1108,15 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
     pPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
                                m_aVLinkColor, m_aALinkColor );
     pPage6_Preview->Invalidate();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, SlideChgHdl, Button*, void)
 {
     UpdatePage();
-    return 0;
 }
 
 // Clickhandler for the Ok Button
-IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, FinishHdl, Button*, void)
 {
     //End
     SdPublishingDesign* pDesign = new SdPublishingDesign();
@@ -1202,7 +1188,6 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
         Save();
 
     EndDialog(RET_OK);
-    return 0;
 }
 
 // Refresh the dialogs when changing from pages
@@ -1381,11 +1366,10 @@ void SdPublishingDlg::LoadPreviewButtons()
 }
 
 // Clickhandler for the Forward Button
-IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, NextPageHdl, Button*, void)
 {
     aAssistentFunc.NextPage();
     ChangePage();
-    return 0;
 }
 
 // Sets the Controls in the dialog to the settings in the design
@@ -1527,11 +1511,10 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
 }
 
 // Clickhandler for the back Button
-IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, LastPageHdl, Button*, void)
 {
     aAssistentFunc.PreviousPage();
     ChangePage();
-    return 0;
 }
 
 // Load Designs

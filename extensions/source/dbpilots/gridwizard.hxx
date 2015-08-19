@@ -94,8 +94,8 @@ namespace dbp
         virtual bool        canAdvance() const SAL_OVERRIDE;
 
     protected:
-        DECL_LINK(OnMoveOneEntry, PushButton*);
-        DECL_LINK(OnMoveAllEntries, PushButton*);
+        DECL_LINK_TYPED(OnMoveOneEntry, Button*, void);
+        DECL_LINK_TYPED(OnMoveAllEntries, Button*, void);
         DECL_LINK(OnEntrySelected, ListBox*);
         DECL_LINK(OnEntryDoubleClicked, ListBox*);
 

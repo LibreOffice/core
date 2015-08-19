@@ -71,7 +71,7 @@ protected: //methods
     bool isValid();
     void setDirty();
 
-    DECL_LINK( ChooseRangeHdl, void* );
+    DECL_LINK_TYPED( ChooseRangeHdl, Button*, void );
     DECL_LINK( ControlChangedHdl, void* );
     DECL_LINK( ControlEditedHdl, void* );
 

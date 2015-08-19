@@ -48,7 +48,7 @@ class ScSolverOptionsDialog : public ModalDialog
     DECL_LINK( EngineSelectHdl, void* );
     DECL_LINK( SettingsSelHdl, void* );
     DECL_LINK( SettingsDoubleClickHdl, void* );
-    DECL_LINK( ButtonHdl, PushButton* );
+    DECL_LINK_TYPED( ButtonHdl, Button*, void );
 
     void    ReadFromComponent();
     void    FillListBox();

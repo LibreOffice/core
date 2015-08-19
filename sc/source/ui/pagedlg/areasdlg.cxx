@@ -465,7 +465,7 @@ void ScPrintAreasDlg::Impl_FillLists()
 
 // Handler:
 
-IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
 {
     if ( pBtnOk == pBtn )
     {
@@ -511,8 +511,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
     }
     else if ( pBtnCancel == pBtn )
         Close();
-
-    return 0;
 }
 
 IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )

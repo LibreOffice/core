@@ -252,7 +252,7 @@ void PlaceEditDialog::UpdateLabel( )
     }
 }
 
-IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
+IMPL_LINK_TYPED( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
 {
     if ( m_xCurrentDetails.get() )
     {
@@ -285,15 +285,12 @@ IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
             EndDialog( RET_OK );
         }
     }
-
-    return 1;
 }
 
-IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, )
+IMPL_LINK_TYPED( PlaceEditDialog, DelHdl, Button*, /*pButton*/, void)
 {
     // ReUsing existing symbols...
     EndDialog( RET_NO );
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )

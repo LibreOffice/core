@@ -75,14 +75,14 @@ protected:
 
     DECL_LINK( SeriesSelectionChangedHdl, void* );
     DECL_LINK( RoleSelectionChangedHdl, void* );
-    DECL_LINK( MainRangeButtonClickedHdl, void* );
-    DECL_LINK( CategoriesRangeButtonClickedHdl, void* );
-    DECL_LINK( AddButtonClickedHdl, void* );
-    DECL_LINK( RemoveButtonClickedHdl, void* );
+    DECL_LINK_TYPED( MainRangeButtonClickedHdl, Button*, void );
+    DECL_LINK_TYPED( CategoriesRangeButtonClickedHdl, Button*, void );
+    DECL_LINK_TYPED( AddButtonClickedHdl, Button*, void );
+    DECL_LINK_TYPED( RemoveButtonClickedHdl, Button*, void );
     DECL_LINK( RangeModifiedHdl, Edit* );
     DECL_LINK( RangeUpdateDataHdl, Edit* );
-    DECL_LINK( UpButtonClickedHdl, void* );
-    DECL_LINK( DownButtonClickedHdl, void* );
+    DECL_LINK_TYPED( UpButtonClickedHdl, Button*, void );
+    DECL_LINK_TYPED( DownButtonClickedHdl, Button*, void );
 
     // ____ RangeSelectionListenerParent ____
     virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;

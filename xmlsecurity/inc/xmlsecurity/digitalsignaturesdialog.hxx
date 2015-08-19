@@ -88,13 +88,13 @@ private:
     bool m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 
-    DECL_LINK(ViewButtonHdl, void *);
-    DECL_LINK(AddButtonHdl, void *);
-    DECL_LINK(RemoveButtonHdl, void *);
+    DECL_LINK_TYPED(ViewButtonHdl, Button*, void);
+    DECL_LINK_TYPED(AddButtonHdl, Button*, void);
+    DECL_LINK_TYPED(RemoveButtonHdl, Button*, void);
     DECL_LINK(          SignatureHighlightHdl, void* );
     DECL_LINK(          SignatureSelectHdl, void* );
     DECL_LINK(          StartVerifySignatureHdl, void* );
-    DECL_LINK(          OKButtonHdl, void* );
+    DECL_LINK_TYPED(          OKButtonHdl, Button*, void );
 
     void                ImplGetSignatureInformations(bool bUseTempStream);
     void                ImplFillSignaturesBox();

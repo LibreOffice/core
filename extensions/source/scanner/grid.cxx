@@ -705,14 +705,13 @@ void GridWindow::ChangeMode(int nType)
     Invalidate();
 }
 
-IMPL_LINK( GridDialog, ClickButtonHdl, Button*, pButton )
+IMPL_LINK_TYPED( GridDialog, ClickButtonHdl, Button*, pButton, void )
 {
     if (pButton == m_pResetButton)
     {
         int nType = m_pResetTypeBox->GetSelectEntryPos();
         m_pGridWindow->ChangeMode(nType);
     }
-    return 0;
 }
 
 double* GridDialog::getNewYValues()

@@ -89,7 +89,7 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     m_pSettingsWIN->SetSelectHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl));
     m_pHideEmptyParagraphsCB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl));
 
-    Link<> aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
+    Link<Button*,void> aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
     m_pPrevSetIB->SetClickHdl(aLink);
     m_pNextSetIB->SetClickHdl(aLink);
 }
@@ -160,7 +160,7 @@ bool SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReas
     return true;
 }
 
-IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
 {
     try
     {
@@ -185,10 +185,9 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
         OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         ScopedVclPtrInstance<MessageDialog>::Create(this, e.Message)->Execute();
     }
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton, void)
 {
     VclPtr<SwSelectAddressBlockDialog> pDlg(
                 VclPtr<SwSelectAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem()));
@@ -212,10 +211,9 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
     pDlg.reset();
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
@@ -229,7 +227,6 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
         GetWizard()->UpdateRoadmap();
         GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     }
-    return 0;
 }
 
 void SwMailMergeAddressBlockPage::EnableAddressBlock(bool bAll, bool bSelective)
@@ -244,13 +241,12 @@ void SwMailMergeAddressBlockPage::EnableAddressBlock(bool bAll, bool bSelective)
     m_pStep4->Enable(bSelective);
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox, void)
 {
-    EnableAddressBlock(pBox->IsEnabled(), pBox->IsChecked());
+    EnableAddressBlock(pBox->IsEnabled(), static_cast<CheckBox*>(pBox)->IsChecked());
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetAddressBlock(m_pAddressCB->IsChecked());
     m_pWizard->UpdateRoadmap();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
@@ -266,14 +262,13 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, Button*, pBox, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    rConfigItem.SetHideEmptyParagraphs( pBox->IsChecked() );
-    return 0;
+    rConfigItem.SetHideEmptyParagraphs( static_cast<CheckBox*>(pBox)->IsChecked() );
 }
 
-IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, Button*, pButton, void)
 {
     //if no pButton is given, the first set has to be pre-set
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
@@ -320,7 +315,6 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
         m_pAddressListPB->SetText(m_sChangeAddress);
     }
     EnableAddressBlock(bHasResultSet, m_pAddressCB->IsChecked());
-    return 0;
 }
 
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
@@ -341,13 +335,13 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     get(m_pDependentRB, "dependent");
     get(m_pCountryED, "country");
 
-    Link<> aCustomizeHdl = LINK(this, SwSelectAddressBlockDialog, NewCustomizeHdl_Impl);
+    Link<Button*,void> aCustomizeHdl = LINK(this, SwSelectAddressBlockDialog, NewCustomizeHdl_Impl);
     m_pNewPB->SetClickHdl(aCustomizeHdl);
     m_pCustomizePB->SetClickHdl(aCustomizeHdl);
 
     m_pDeletePB->SetClickHdl(LINK(this, SwSelectAddressBlockDialog, DeleteHdl_Impl));
 
-    Link<> aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
+    Link<Button*,void> aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
     m_pNeverRB->SetClickHdl(aLk);
     m_pAlwaysRB->SetClickHdl(aLk);
     m_pDependentRB->SetClickHdl(aLk);
@@ -427,7 +421,7 @@ OUString     SwSelectAddressBlockDialog::GetCountry() const
     return OUString();
 }
 
-IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwSelectAddressBlockDialog, DeleteHdl_Impl, Button*, pButton, void)
 {
     if(m_aAddressBlocks.getLength())
     {
@@ -445,10 +439,9 @@ IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
             pButton->Enable(false);
         m_pPreview->RemoveSelectedAddress();
     }
-    return 0;
 }
 
-IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, Button*, pButton, void)
 {
     bool bCustomize = pButton == m_pCustomizePB;
     SwCustomizeAddressBlockDialog::DialogType nType = bCustomize ?
@@ -478,13 +471,11 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
         }
         m_pDeletePB->Enable( m_aAddressBlocks.getLength() > 1);
     }
-    return 0;
 }
 
-IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwSelectAddressBlockDialog, IncludeHdl_Impl, Button*, pButton, void)
 {
     m_pCountryED->Enable(m_pDependentRB == pButton);
-    return 0;
 }
 
 #define USER_DATA_SALUTATION        -1
@@ -562,7 +553,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     Link<> aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
     m_pFieldCB->SetModifyHdl(aFieldsLink);
     m_pFieldCB->SetSelectHdl(aFieldsLink);
-    Link<> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
+    Link<Button*,void> aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
     m_pInsertFieldIB->SetClickHdl(aImgButtonHdl);
     m_pRemoveFieldIB->SetClickHdl(aImgButtonHdl);
     m_pUpIB->SetClickHdl(aImgButtonHdl);
@@ -596,10 +587,9 @@ void SwCustomizeAddressBlockDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, OKHdl_Impl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox)
@@ -617,7 +607,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl)
     return 0;
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pButton)
+IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, void)
 {
     if (m_pInsertFieldIB == pButton)
     {
@@ -643,7 +633,6 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pBut
         m_pDragED->MoveCurrentItem(nMove);
     }
     UpdateImageButtons_Impl();
-    return 0;
 }
 
 sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
@@ -1242,13 +1231,12 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
     return aAssignments;
 }
 
-IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, OkHdl_Impl, Button*, void)
 {
     m_rConfigItem.SetColumnAssignment(
                             m_rConfigItem.GetCurrentDBData(),
                             CreateAssignments() );
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)

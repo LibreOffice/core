@@ -501,8 +501,9 @@ void SvxHFPage::InitHandler()
     m_pBackgroundBtn->SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
-IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxHFPage, TurnOnHdl, Button *, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if ( m_pTurnOnBox->IsChecked() )
     {
         m_pDistFT->Enable();
@@ -563,7 +564,6 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
             m_pTurnOnBox->Check();
     }
     UpdateExample();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxHFPage, DistModify)
@@ -585,7 +585,7 @@ IMPL_LINK_NOARG(SvxHFPage, BorderModify)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
+IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)
 {
     if(!pBBSet)
     {
@@ -749,8 +749,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 
         UpdateExample();
     }
-
-    return 0;
 }
 
 void SvxHFPage::UpdateExample()

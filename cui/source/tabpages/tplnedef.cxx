@@ -259,13 +259,13 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         {
             case RET_BTN_1:
             {
-                ClickModifyHdl_Impl( this );
+                ClickModifyHdl_Impl( NULL );
             }
             break;
 
             case RET_BTN_2:
             {
-                ClickAddHdl_Impl( this );
+                ClickAddHdl_Impl( NULL );
             }
             break;
 
@@ -439,7 +439,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 
 
 
-IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
 {
     if( !m_pCbxSynchronize->IsChecked() && m_pMtrLength1->GetUnit() != eFUnit )
     {
@@ -503,8 +503,6 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
 
     }
     SelectTypeHdl_Impl( NULL );
-
-    return 0L;
 }
 
 
@@ -544,7 +542,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
     OUString aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
@@ -629,12 +627,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
 
@@ -699,12 +696,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
         }
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
 
@@ -736,12 +732,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
 
@@ -818,12 +813,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     OUString aStrFilterType( "*.sod" );
@@ -873,8 +867,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
-
-    return 0L;
 }
 
 

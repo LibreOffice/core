@@ -279,9 +279,9 @@ namespace dbaui
         bool                     m_bUseHeaderLine;
 
     private:
-        DECL_LINK( ImplPrevHdl  , void* );
-        DECL_LINK( ImplNextHdl  , void* );
-        DECL_LINK( ImplOKHdl    , void* );
+        DECL_LINK_TYPED( ImplPrevHdl, Button*, void );
+        DECL_LINK_TYPED( ImplNextHdl, Button*, void);
+        DECL_LINK_TYPED( ImplOKHdl, Button*, void );
         DECL_LINK( ImplActivateHdl, void* );
         bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData( const ICopyTableSourceObject& _rSourceObject,

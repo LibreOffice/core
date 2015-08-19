@@ -302,7 +302,7 @@ namespace svt
         CheckBox&   GetBox() {return *pBox;};
 
     private:
-        DECL_LINK( OnClick, void* );
+        DECL_LINK_TYPED( OnClick, Button*, void );
     };
 
 

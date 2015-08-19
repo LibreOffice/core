@@ -72,7 +72,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     get( msMonitor,             "monitor_str"           );
     get( msAllMonitors,         "allmonitors_str"       );
 
-    Link<> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
+    Link<Button*,void> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
 
     aRbtAll->SetClickHdl( aLink );
     aRbtAtDia->SetClickHdl( aLink );
@@ -144,7 +144,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
 
     InitMonitorSettings();
 
-    ChangeRangeHdl( this );
+    ChangeRangeHdl( NULL );
 
     ClickWindowPresentationHdl( NULL );
     ChangePauseHdl( NULL );
@@ -322,18 +322,16 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 /**
  *      Handler: Enabled/Disabled Listbox "Dias"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
+IMPL_LINK_NOARG_TYPED(SdStartPresentationDlg, ChangeRangeHdl, Button*, void)
 {
     aLbDias->Enable( aRbtAtDia->IsChecked() );
     aLbCustomshow->Enable( aRbtCustomshow->IsChecked() );
-
-    return 0L;
 }
 
 /**
  *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
+IMPL_LINK_NOARG_TYPED(SdStartPresentationDlg, ClickWindowPresentationHdl, Button*, void)
 {
     const bool bAuto = aRbtAuto->IsChecked();
     const bool bWindow = aRbtWindow->IsChecked();
@@ -353,8 +351,6 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
     }
     else
         aCbxAlwaysOnTop->Enable();
-
-    return 0L;
 }
 
 /**

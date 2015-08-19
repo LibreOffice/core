@@ -51,10 +51,11 @@ class SwBreakDlg: public SvxStandardDialog
 
     bool            bHtmlMode;
 
-    DECL_LINK( ClickHdl, void * );
-    DECL_LINK( PageNumHdl, CheckBox * );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
+    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( PageNumHdl, Button*, void );
     DECL_LINK(PageNumModifyHdl, void *);
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
 
     void CheckEnable();
 

@@ -53,8 +53,9 @@ private:
 
     void        ChangeCurrentEntry( const OUString& _rFolder );
 
-    DECL_LINK(PathHdl_Impl, void *);
-    DECL_LINK(StandardHdl_Impl, void *);
+    DECL_LINK_TYPED(PathHdl_Impl, Button*, void);
+    DECL_LINK(DoubleClickPathHdl_Impl, void *);
+    DECL_LINK_TYPED(StandardHdl_Impl, Button*, void);
 
     DECL_LINK(PathSelect_Impl, void *);
     DECL_LINK(  HeaderSelect_Impl, HeaderBar * );

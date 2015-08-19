@@ -45,10 +45,9 @@ OUString InputDialog::getEntryText() const
     return m_pEntry->GetText();
 }
 
-IMPL_LINK(InputDialog,ClickHdl,PushButton*, pButton)
+IMPL_LINK_TYPED(InputDialog,ClickHdl, Button*, pButton, void)
 {
     EndDialog(pButton == m_pOK ? RET_OK : RET_CANCEL);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

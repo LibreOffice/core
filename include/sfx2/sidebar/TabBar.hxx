@@ -98,9 +98,9 @@ private:
     class Item
     {
     public:
-        DECL_LINK(HandleClick, Button*);
+        DECL_LINK_TYPED(HandleClick, Button*, void);
         VclPtr<RadioButton> mpButton;
-        ::rtl::OUString msDeckId;
+        OUString msDeckId;
         ::std::function<void (const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;
         bool mbIsHiddenByDefault;
@@ -116,7 +116,7 @@ private:
     void Layout();
     void UpdateButtonIcons();
 
-    DECL_LINK(OnToolboxClicked, void*);
+    DECL_LINK_TYPED(OnToolboxClicked, Button*, void);
 
     SidebarController* pParentSidebarController;
 

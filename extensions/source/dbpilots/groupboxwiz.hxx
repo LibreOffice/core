@@ -100,7 +100,7 @@ namespace dbp
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
         virtual bool        canAdvance() const SAL_OVERRIDE;
 
-        DECL_LINK( OnMoveEntry, PushButton* );
+        DECL_LINK_TYPED( OnMoveEntry, Button*, void );
         DECL_LINK( OnEntrySelected, ListBox* );
         DECL_LINK( OnNameModified, Edit* );
 

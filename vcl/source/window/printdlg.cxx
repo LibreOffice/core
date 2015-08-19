@@ -673,14 +673,14 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     mpForwardBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     mpBackwardBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
-    maJobPage.mpCollateBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.mpCollateBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maJobPage.mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.mpToFileBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.mpPapersizeFromSetup->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.mpToFileBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+    maOptionsPage.mpPapersizeFromSetup->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+    maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+    maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+    maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     // setup modify hdl
     mpPageEdit->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maJobPage.mpCopyCountField->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -1006,7 +1006,7 @@ void PrintDialog::setupOptionalUI()
                 pVal->Value >>= bVal;
             maNUpPage.mpBrochureBtn->Check( bVal );
             maNUpPage.mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
-            maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+            maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
 
             maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
             maControlToPropertyMap[maNUpPage.mpBrochureBtn] = aPropertyName;
@@ -1546,7 +1546,13 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
+IMPL_LINK( PrintDialog, ToggleHdl, void*, pButton )
+{
+    ClickHdl(static_cast<Button*>(pButton));
+    return 0;
+}
+
+IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpOKButton || pButton == mpCancelButton )
     {
@@ -1639,7 +1645,6 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         }
         checkControlDependencies();
     }
-    return 0;
 }
 
 IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
@@ -1932,12 +1937,10 @@ void PrintProgressDialog::dispose()
     ModelessDialog::dispose();
 }
 
-IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton )
+IMPL_LINK_TYPED( PrintProgressDialog, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpButton )
         mbCanceled = true;
-
-    return 0;
 }
 
 void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )

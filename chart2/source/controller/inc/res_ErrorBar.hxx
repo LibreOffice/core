@@ -122,11 +122,12 @@ private:
     bool                 m_bHasInternalDataProvider;
     bool                 m_bEnableDataTableDialog;
 
-    DECL_LINK( CategoryChosen, void * );
+    DECL_LINK_TYPED( CategoryChosen, Button*, void );
+    DECL_LINK( CategoryChosen2, void* );
     DECL_LINK( SynchronizePosAndNeg, void * );
     DECL_LINK( PosValueChanged, void * );
-    DECL_LINK( IndicatorChanged, void * );
-    DECL_LINK( ChooseRange, PushButton * );
+    DECL_LINK_TYPED( IndicatorChanged, Button *, void );
+    DECL_LINK_TYPED( ChooseRange, Button *, void );
     DECL_LINK( RangeChanged, Edit * );
 
     void UpdateControlStates();

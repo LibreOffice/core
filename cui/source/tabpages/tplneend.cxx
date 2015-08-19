@@ -209,7 +209,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
                                                            ,"AskChangeLineEndDialog"
                                                            ,"cui/ui/querychangelineenddialog.ui" );
             if ( aQueryBox->Execute() == RET_YES )
-                ClickModifyHdl_Impl( this );
+                ClickModifyHdl_Impl( NULL );
         }
     }
     nPos = m_pLbLineEnds->GetSelectEntryPos();
@@ -321,7 +321,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 
 
 
-IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
@@ -397,12 +397,11 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             }
         }
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 {
     if( pPolyObj )
     {
@@ -423,10 +422,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( true, false );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
-                    return 0L; // cancel, additional safety, which
+                    return; // cancel, additional safety, which
                             // has no use for group objects though.
             }
-            else return 0L; // cancel
+            else return; // cancel
         }
 
         basegfx::B2DPolyPolygon aNewPolyPolygon(static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly());
@@ -512,12 +511,11 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
@@ -548,12 +546,11 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
 
@@ -631,12 +628,11 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     OUString aStrFilterType( "*.soe" );
@@ -686,7 +682,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
                           ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
-    return 0L;
 }
 
 void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )

@@ -192,10 +192,9 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
 #endif
 }
 
-IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, CheckBox*, pCheckBox )
+IMPL_LINK_TYPED(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void )
 {
-    maConfig.mbEmptyStringAsZero = pCheckBox->IsChecked();
-    return 0;
+    maConfig.mbEmptyStringAsZero = static_cast<CheckBox*>(pCheckBox)->IsChecked();
 }
 
 IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
@@ -230,10 +229,9 @@ IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox*, pSyntax)
     return 0;
 }
 
-IMPL_LINK(ScCalcOptionsDialog, CBUseOpenCLHdl, CheckBox*, pCheckBox)
+IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)
 {
-    maConfig.mbOpenCLSubsetOnly = pCheckBox->IsChecked();
-    return 0;
+    maConfig.mbOpenCLSubsetOnly = static_cast<CheckBox*>(pCheckBox)->IsChecked();
 }
 
 IMPL_LINK(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, NumericField*, pSpin)
@@ -691,8 +689,7 @@ struct Reduction : Op
 
 }
 
-IMPL_STATIC_LINK(
-    ScCalcOptionsDialog, TestClickHdl, PushButton*, pButton)
+IMPL_STATIC_LINK_TYPED(ScCalcOptionsDialog, TestClickHdl, Button*, pButton, void)
 {
     pButton->Disable();
 
@@ -821,8 +818,6 @@ IMPL_STATIC_LINK(
 
     xTestDocument->mpDoc->CalcAll();
     ScInterpreter::SetGlobalConfig(xTestDocument->maOldCalcConfig);
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
     get(m_pNextPB, "next");
     get(m_pEditPB, "edit");
 
-    Link<> aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
+    Link<Button*,void> aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
     m_pEditPB->SetClickHdl(aButtonLk);
     if( bNextButton )
     {
@@ -106,10 +106,9 @@ void sw::DropDownFieldDialog::Apply()
     }
 }
 
-IMPL_LINK(sw::DropDownFieldDialog, ButtonHdl, PushButton*, pButton)
+IMPL_LINK_TYPED(sw::DropDownFieldDialog, ButtonHdl, Button*, pButton, void)
 {
     EndDialog(m_pNextPB == pButton ? RET_OK : RET_YES );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

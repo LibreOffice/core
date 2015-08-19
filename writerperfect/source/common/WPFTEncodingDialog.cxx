@@ -189,11 +189,10 @@ OUString WPFTEncodingDialog::GetEncoding() const
     return getEncoding(m_pLbCharset);
 }
 
-IMPL_LINK_NOARG(WPFTEncodingDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(WPFTEncodingDialog, CancelHdl, Button*, void)
 {
     m_userHasCancelled=true;
     Close();
-    return 0;
 }
 
 IMPL_LINK(WPFTEncodingDialog, DoubleClickHdl, ListBox *, pLb)

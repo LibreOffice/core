@@ -70,7 +70,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
 
 
     // set handlers
-    Link<> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
+    Link<Button*, void> aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     m_pRbtLinktypInternet->SetClickHdl( aLink );
     m_pRbtLinktypFTP->SetClickHdl     ( aLink );
     m_pCbAnonymous->SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
@@ -343,11 +343,10 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, Button*, void)
 {
     OUString aScheme = GetSchemeFromButtons();
     SetScheme(aScheme);
-    return 0L;
 }
 
 /*************************************************************************
@@ -356,7 +355,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, void)
 {
     // disable login-editfields if checked
     if ( m_pCbAnonymous->IsChecked() )
@@ -376,8 +375,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
     }
     else
         setFTPUser(maStrOldUser, maStrOldPassword);
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -398,7 +395,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, Button*, void)
 {
 
     // Open URL if available
@@ -413,8 +410,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
     static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
-
-    return 0L;
 }
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()

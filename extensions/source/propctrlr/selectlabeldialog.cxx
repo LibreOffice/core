@@ -250,7 +250,7 @@ namespace pcr
         if (pData)
             m_xSelectedControl = Reference< XPropertySet > (*static_cast<Reference< XPropertySet > *>(pData));
 
-        m_pNoAssignment->SetClickHdl(Link<>());
+        m_pNoAssignment->SetClickHdl(Link<Button*,void>());
         m_pNoAssignment->Check(pData == NULL);
         m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
 
@@ -258,7 +258,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton)
+    IMPL_LINK_TYPED(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton, void)
     {
         DBG_ASSERT(pButton == m_pNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
         (void)pButton;
@@ -292,8 +292,6 @@ namespace pcr
             m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
             m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
         }
-
-        return 0L;
     }
 
 

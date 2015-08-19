@@ -193,7 +193,7 @@ void SvxSearchAttributeDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
+IMPL_LINK_NOARG_TYPED(SvxSearchAttributeDialog, OKHdl, Button*, void)
 {
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);
@@ -235,7 +235,6 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
             rList.Remove( n );
 
     EndDialog( RET_OK );
-    return 0;
 }
 
 // class SvxSearchSimilarityDialog ---------------------------------------

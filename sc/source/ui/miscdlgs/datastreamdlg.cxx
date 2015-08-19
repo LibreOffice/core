@@ -40,13 +40,13 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
     get(m_pVclFrameMove, "framemove");
 
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
-    m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
+    m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
     m_pRBAddressValue->Enable(false);
     m_pRBScriptData->Enable(false);
     m_pRBDirectData->Hide();
     m_pRBScriptData->Hide();
     m_pRBNoMove->Hide();
-    m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
+    m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamDlg, BrowseHdl ) );
     UpdateEnable();
@@ -79,17 +79,20 @@ void DataStreamDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl)
+IMPL_LINK_NOARG_TYPED(DataStreamDlg, BrowseHdl, Button*, void)
 {
     sfx2::FileDialogHelper aFileDialog(0, 0);
     if ( aFileDialog.Execute() != ERRCODE_NONE )
-        return 0;
+        return;
 
     m_pCbUrl->SetText( aFileDialog.GetPath() );
     UpdateEnable();
-    return 0;
 }
 
+IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateClickHdl, Button*, void)
+{
+    UpdateEnable();
+}
 IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl)
 {
     UpdateEnable();

@@ -95,7 +95,7 @@ private:
     void RefEditModified();
 
     DECL_LINK(GetFocusHdl, Control*);
-    DECL_LINK(BtnPressedHdl, Button*);
+    DECL_LINK_TYPED(BtnPressedHdl, Button*, void);
     DECL_LINK(TreeItemSelectHdl, void*);
     DECL_LINK(RefModifiedHdl, void*);
 };

@@ -327,7 +327,7 @@ void SwLabPage::SetToBusinessCard()
     m_pAddressFrame->Hide();
 };
 
-IMPL_LINK_NOARG(SwLabPage, AddrHdl)
+IMPL_LINK_NOARG_TYPED(SwLabPage, AddrHdl, Button*, void)
 {
     OUString aWriting;
 
@@ -336,7 +336,6 @@ IMPL_LINK_NOARG(SwLabPage, AddrHdl)
 
     m_pWritingEdit->SetText( aWriting );
     m_pWritingEdit->GrabFocus();
-    return 0;
 }
 
 IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
@@ -352,7 +351,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwLabPage, FieldHdl)
+IMPL_LINK_NOARG_TYPED(SwLabPage, FieldHdl, Button*, void)
 {
     OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
                   m_pTableLB->GetSelectEntry() + "." +
@@ -362,13 +361,11 @@ IMPL_LINK_NOARG(SwLabPage, FieldHdl)
     Selection aSel = m_pWritingEdit->GetSelection();
     m_pWritingEdit->GrabFocus();
     m_pWritingEdit->SetSelection(aSel);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwLabPage, PageHdl)
+IMPL_LINK_NOARG_TYPED(SwLabPage, PageHdl, Button*, void)
 {
     m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwLabPage, MakeHdl)

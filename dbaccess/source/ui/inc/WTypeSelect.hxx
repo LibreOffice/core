@@ -92,7 +92,7 @@ namespace dbaui
         friend class OWizTypeSelectList;
 
         DECL_LINK( ColumnSelectHdl, MultiListBox* );
-        DECL_LINK( ButtonClickHdl, Button * );
+        DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
     protected:
         VclPtr<OWizTypeSelectList>      m_pColumnNames;
         VclPtr<FixedText>               m_pColumns;

@@ -362,7 +362,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
+IMPL_LINK_NOARG_TYPED( ScCondFormatList, AddBtnHdl, Button*, void )
 {
     VclPtr<ScCondFrmtEntry> pNewEntry = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
     maEntries.push_back( pNewEntry );
@@ -373,10 +373,9 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
     mpDialogParent->InvalidateRefData();
     pNewEntry->SetActive();
     RecalcAll();
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
+IMPL_LINK_NOARG_TYPED( ScCondFormatList, RemoveBtnHdl, Button*, void )
 {
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
@@ -389,7 +388,6 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
     }
     mpDialogParent->InvalidateRefData();
     RecalcAll();
-    return 0;
 }
 
 IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
@@ -798,13 +796,12 @@ IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
 // ------------------------------------------------------
 // Conditional Format Dialog button click event handler.
 //
-IMPL_LINK( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn)
+IMPL_LINK_TYPED( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnOk)
         OkPressed();
     else if (pBtn == mpBtnCancel)
         CancelPressed();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

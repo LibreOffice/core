@@ -95,13 +95,12 @@ short ScLinkedAreaDlg::Execute()
 #define FILTERNAME_HTML  "HTML (StarCalc)"
 #define FILTERNAME_QUERY "calc_HTML_WebQuery"
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl)
+IMPL_LINK_NOARG_TYPED(ScLinkedAreaDlg, BrowseHdl, Button*, void)
 {
     if ( !pDocInserter )
         pDocInserter = new sfx2::DocumentInserter(
             OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
     pDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
@@ -204,10 +203,9 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, RangeHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl)
+IMPL_LINK_NOARG_TYPED(ScLinkedAreaDlg, ReloadHdl, Button*, void)
 {
     UpdateEnable();
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )

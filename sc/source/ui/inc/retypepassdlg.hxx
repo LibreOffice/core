@@ -85,8 +85,8 @@ private:
     OUString        maTextHashGood;
     OUString        maTextHashRegen;
 
-    DECL_LINK( OKHdl, void* );
-    DECL_LINK( RetypeBtnHdl, PushButton* );
+    DECL_LINK_TYPED( OKHdl, Button*, void );
+    DECL_LINK_TYPED( RetypeBtnHdl, Button*, void );
 
     struct TableItem
     {
@@ -131,9 +131,9 @@ private:
 
     VclPtr<RadioButton>    m_pBtnRemovePassword;
 
-    DECL_LINK( OKHdl, void* );
-    DECL_LINK( RadioBtnHdl, RadioButton* );
-    DECL_LINK( CheckBoxHdl, void* );
+    DECL_LINK_TYPED( OKHdl, Button*, void );
+    DECL_LINK_TYPED( RadioBtnHdl, Button*, void );
+    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
     DECL_LINK( PasswordModifyHdl, void* );
 
     ScPassHashProtectable* mpProtected;

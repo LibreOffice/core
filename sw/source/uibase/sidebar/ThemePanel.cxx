@@ -491,8 +491,8 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
     get(mpApplyButton,   "apply");
 
     mpApplyButton->SetClickHdl(LINK(this, ThemePanel, ClickHdl));
-    mpListBoxFonts->SetDoubleClickHdl(LINK(this, ThemePanel, ClickHdl));
-    mpListBoxColors->SetDoubleClickHdl(LINK(this, ThemePanel, ClickHdl));
+    mpListBoxFonts->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickHdl));
+    mpListBoxColors->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickHdl));
 
     std::vector<FontSet> aFontSets = initFontSets();
     for (size_t i = 0; i < aFontSets.size(); ++i)
@@ -521,7 +521,11 @@ void ThemePanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(ThemePanel, ClickHdl)
+IMPL_LINK_NOARG_TYPED(ThemePanel, ClickHdl, Button*, void)
+{
+    DoubleClickHdl(NULL);
+}
+IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     if (pDocSh)

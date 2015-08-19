@@ -81,7 +81,7 @@ private:
     bool            bOne;
     const SubsetMap* pSubsetMap;
 
-    DECL_LINK(OKHdl, void *);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
     DECL_LINK(FontSelectHdl, void *);
     DECL_LINK(SubsetSelectHdl, void *);
     DECL_LINK(CharDoubleClickHdl, void *);

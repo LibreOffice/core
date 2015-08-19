@@ -236,7 +236,7 @@ class MappingDialog_Impl : public ModalDialog
 
 
 
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK(ListBoxSelectHdl, ListBox*);
 
 public:
@@ -437,7 +437,7 @@ IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
     return 0;
 }
 
-IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl)
+IMPL_LINK_NOARG_TYPED(MappingDialog_Impl, OkHdl, Button*, void)
 {
     if(bModified)
     {
@@ -465,7 +465,6 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl)
         pConfig->SetMapping(aDesc, &aNew);
     }
     EndDialog(bModified ? RET_OK : RET_CANCEL);
-    return 0;
 }
 
 class DBChangeDialog_Impl : public ModalDialog

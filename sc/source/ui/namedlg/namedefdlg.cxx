@@ -327,16 +327,14 @@ void ScNameDefDlg::SetActive()
     RefInputDone();
 }
 
-IMPL_LINK_NOARG(ScNameDefDlg, CancelBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDefDlg, CancelBtnHdl, Button*, void)
 {
     CancelPushed();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDefDlg, AddBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDefDlg, AddBtnHdl, Button*, void)
 {
     AddPushed();
-    return 0;
 };
 
 IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)

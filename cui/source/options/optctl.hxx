@@ -39,7 +39,7 @@ private:
 
     VclPtr<ListBox>             m_pNumeralsLB;
 
-    DECL_LINK( SequenceCheckingCB_Hdl, void* );
+    DECL_LINK_TYPED( SequenceCheckingCB_Hdl, Button*, void );
 
 public:
     SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );

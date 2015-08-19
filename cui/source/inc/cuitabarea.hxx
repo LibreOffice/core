@@ -71,7 +71,7 @@ private:
 
 protected:
     virtual short       Ok() SAL_OVERRIDE;
-    DECL_LINK( CancelHdlImpl, void * );
+    DECL_LINK_TYPED( CancelHdlImpl, Button*, void );
     void                SavePalettes();
 
 public:
@@ -140,9 +140,9 @@ class SvxTransparenceTabPage : public SvxTabPage
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    DECL_LINK(ClickTransOffHdl_Impl, void * );
-    DECL_LINK(ClickTransLinearHdl_Impl, void * );
-    DECL_LINK(ClickTransGradientHdl_Impl, void * );
+    DECL_LINK_TYPED(ClickTransOffHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(ClickTransLinearHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(ClickTransGradientHdl_Impl, Button*, void );
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
     DECL_LINK(ModifiedTrgrHdl_Impl, void*);
 
@@ -269,13 +269,15 @@ private:
     DECL_LINK( ModifyHatchingHdl_Impl, void * );
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
-    DECL_LINK( ModifyStepCountHdl_Impl, void * );
+    DECL_LINK( ModifyStepCountHdl_Impl, void* );
+    DECL_LINK_TYPED( ModifyStepCountClickHdl_Impl, Button*, void );
 
     //UUUU
-    DECL_LINK( ClickImportHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
 
     DECL_LINK( ModifyTileHdl_Impl, void * );
-    DECL_LINK( ClickScaleHdl_Impl, void * );
+    DECL_LINK_TYPED( ModifyTileClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickScaleHdl_Impl, Button*, void );
     void ClickInvisibleHdl_Impl();
     void ClickHatchingHdl_Impl();
     void ClickGradientHdl_Impl();
@@ -347,7 +349,7 @@ private:
     SfxItemSet&         m_rXFSet;
     SfxMapUnit          m_ePoolUnit;
 
-    DECL_LINK( ClickShadowHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickShadowHdl_Impl, Button*, void );
     DECL_LINK( ModifyShadowHdl_Impl, void * );
 
 public:
@@ -418,13 +420,13 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    DECL_LINK( ClickAddHdl_Impl, void * );
-    DECL_LINK( ClickModifyHdl_Impl, void * );
-    DECL_LINK( ClickDeleteHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK( ChangeGradientHdl_Impl, void * );
     DECL_LINK( ModifiedHdl_Impl, void * );
-    DECL_LINK( ClickLoadHdl_Impl, void * );
-    DECL_LINK( ClickSaveHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
     long CheckChanges_Impl();
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
@@ -498,11 +500,11 @@ private:
 
     DECL_LINK( ChangeHatchHdl_Impl, void * );
     DECL_LINK( ModifiedHdl_Impl, void * );
-    DECL_LINK( ClickAddHdl_Impl, void * );
-    DECL_LINK( ClickModifyHdl_Impl, void * );
-    DECL_LINK( ClickDeleteHdl_Impl, void * );
-    DECL_LINK( ClickLoadHdl_Impl, void * );
-    DECL_LINK( ClickSaveHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
     long CheckChanges_Impl();
 
@@ -580,15 +582,15 @@ private:
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    DECL_LINK( ClickAddHdl_Impl, void * );
-    DECL_LINK( ClickImportHdl_Impl, void * );
-    DECL_LINK( ClickModifyHdl_Impl, void * );
-    DECL_LINK( ClickDeleteHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK( ChangeBitmapHdl_Impl, void * );
     DECL_LINK( ChangePixelColorHdl_Impl, void * );
     DECL_LINK( ChangeBackgrndColorHdl_Impl, void * );
-    DECL_LINK( ClickLoadHdl_Impl, void * );
-    DECL_LINK( ClickSaveHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
     long CheckChanges_Impl();
 
@@ -648,8 +650,8 @@ private:
     VclPtr<FixedText>          m_pTableName;
 
     DECL_LINK( EmbedToggleHdl_Impl, void * );
-    DECL_LINK( ClickLoadHdl_Impl, void * );
-    DECL_LINK( ClickSaveHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void  );
 
     XPropertyListRef GetList();
     bool GetEmbed();
@@ -712,10 +714,10 @@ private:
     void ImpColorCountChanged();
 
 
-    DECL_LINK( ClickAddHdl_Impl, void * );
-    DECL_LINK( ClickModifyHdl_Impl, void * );
-    DECL_LINK( ClickDeleteHdl_Impl, void * );
-    DECL_LINK( ClickWorkOnHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickWorkOnHdl_Impl, Button*, void );
 
     DECL_LINK( SelectColorLBHdl_Impl, void * );
     DECL_LINK( SelectValSetHdl_Impl, void * );

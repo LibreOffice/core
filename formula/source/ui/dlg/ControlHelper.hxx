@@ -100,8 +100,8 @@ private:
     VclPtr<ArgEdit>        pEdArg;
     VclPtr<RefButton>      pRefBtn;
 
-    DECL_LINK(  FxBtnClickHdl, ImageButton* );
-    DECL_LINK(  RefBtnClickHdl,RefButton* );
+    DECL_LINK_TYPED( FxBtnClickHdl, Button*, void );
+    DECL_LINK_TYPED( RefBtnClickHdl,Button*, void );
     DECL_LINK(  FxBtnFocusHdl, ImageButton* );
     DECL_LINK(  RefBtnFocusHdl,RefButton* );
     DECL_LINK(  EdFocusHdl, ArgEdit* );

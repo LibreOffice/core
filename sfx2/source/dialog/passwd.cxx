@@ -60,7 +60,7 @@ IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
+IMPL_LINK_NOARG_TYPED(SfxPasswordDialog, OKHdl, Button*, void)
 {
     bool bConfirmFailed = bool( mnExtras & SfxShowExtras::CONFIRM ) &&
                           ( GetConfirm() != GetPassword() );
@@ -75,7 +75,6 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
     }
     else
         EndDialog( RET_OK );
-    return 0;
 }
 
 // CTOR / DTOR -----------------------------------------------------------
@@ -112,8 +111,7 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
     Link<> aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
     mpPassword1ED->SetModifyHdl( aLink );
     mpPassword2ED->SetModifyHdl( aLink );
-    aLink = LINK( this, SfxPasswordDialog, OKHdl );
-    mpOKBtn->SetClickHdl( aLink );
+    mpOKBtn->SetClickHdl( LINK( this, SfxPasswordDialog, OKHdl ) );
 
     if (pGroupText)
         mpPassword1Box->set_label(*pGroupText);

@@ -900,12 +900,11 @@ void SvxStdParagraphTabPage::EnableContextualMode()
     m_pContextualCB->Show();
 }
 
-IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SvxStdParagraphTabPage, AutoHdl_Impl, Button*, pBox, void )
 {
-    bool bEnable = !pBox->IsChecked();
+    bool bEnable = !static_cast<CheckBox*>(pBox)->IsChecked();
     m_pFLineLabel->Enable(bEnable);
     m_pFLineIndent->Enable(bEnable);
-    return 0;
 }
 
 void SvxStdParagraphTabPage::SetPageWidth( sal_uInt16 nPageWidth )
@@ -1018,7 +1017,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_NEW )
         m_pLastLineLB->RemoveEntry( nLastLinePos );
 
-    Link<> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
+    Link<Button*,void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     m_pLeft->SetClickHdl( aLink );
     m_pRight->SetClickHdl( aLink );
     m_pCenter->SetClickHdl( aLink );
@@ -1263,7 +1262,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
 {
     bool bJustify = m_pJustify->IsChecked();
     m_pLastLineFT->Enable(bJustify);
@@ -1271,7 +1270,6 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
     m_pExpandCB->Enable(bJustify && bLastLineIsBlock);
     UpdateExample_Impl();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
@@ -1976,7 +1974,7 @@ void SvxExtParagraphTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, PageBreakHdl_Impl, Button*, void)
 {
     switch ( m_pPageBreakBox->GetState() )
     {
@@ -2015,19 +2013,16 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)
             m_pBreakPositionLB->Enable(false);
             break;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxExtParagraphTabPage, KeepTogetherHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, KeepTogetherHdl_Impl, Button*, void)
 {
     bool bEnable = m_pKeepTogetherBox->GetState() == TRISTATE_FALSE;
     m_pWidowBox->Enable(bEnable);
     m_pOrphanBox->Enable(bEnable);
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, WidowHdl_Impl, Button*, void)
 {
     switch ( m_pWidowBox->GetState() )
     {
@@ -2047,10 +2042,9 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl)
             m_pWidowRowLabel->Enable(false);
             break;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, OrphanHdl_Impl, Button*, void)
 {
     switch( m_pOrphanBox->GetState() )
     {
@@ -2070,10 +2064,9 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl)
             m_pOrphanRowLabel->Enable(false);
             break;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, HyphenClickHdl_Impl, Button*, void)
 {
 
     bool bEnable = m_pHyphenBox->GetState() == TRISTATE_TRUE;
@@ -2084,11 +2077,9 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl)
     m_pMaxHyphenLabel->Enable(bEnable);
     m_pMaxHyphenEdit->Enable(bEnable);
     m_pHyphenBox->SetState( bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, Button*, void)
 {
     bool bEnable = false;
     if ( m_pApplyCollBtn->GetState() == TRISTATE_TRUE &&
@@ -2107,7 +2098,6 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl)
         m_pPagenumText->Enable(bEnable);
         m_pPagenumEdit->Enable(bEnable);
     }
-    return 0;
 }
 
 IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
@@ -2171,7 +2161,7 @@ SvxAsianTabPage::SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     get(m_pHangingPunctCB,"checkHangPunct");
     get(m_pScriptSpaceCB,"checkApplySpacing");
 
-    Link<> aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
+    Link<Button*,void> aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
     m_pHangingPunctCB->SetClickHdl( aLink );
     m_pScriptSpaceCB->SetClickHdl( aLink );
     m_pForbiddenRulesCB->SetClickHdl( aLink );
@@ -2262,10 +2252,9 @@ void SvxAsianTabPage::Reset( const SfxItemSet* rSet )
     lcl_SetBox(*rSet, SID_ATTR_PARA_SCRIPTSPACE, *m_pScriptSpaceCB );
 }
 
-IMPL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, CheckBox*, pBox )
+IMPL_STATIC_LINK_TYPED( SvxAsianTabPage, ClickHdl_Impl, Button*, pBox, void )
 {
-    pBox->EnableTriState( false );
-    return 0;
+    static_cast<CheckBox*>(pBox)->EnableTriState( false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

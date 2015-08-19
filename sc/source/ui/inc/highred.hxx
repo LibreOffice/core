@@ -61,8 +61,8 @@ private:
     void                    Init();
 
     DECL_LINK( RefHandle, SvxTPFilter* );
-    DECL_LINK(HighlightHandle, CheckBox*);
-    DECL_LINK(OKBtnHdl, PushButton*);
+    DECL_LINK_TYPED(HighlightHandle, Button*, void);
+    DECL_LINK_TYPED(OKBtnHdl, Button*, void);
 
 protected:
 

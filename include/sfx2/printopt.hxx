@@ -76,9 +76,9 @@ private:
                         DECL_DLLPRIVATE_LINK( ToggleOutputPrinterRBHdl, RadioButton* pButton );
                         DECL_DLLPRIVATE_LINK( ToggleOutputPrintFileRBHdl, RadioButton* pButton );
 
-                        DECL_DLLPRIVATE_LINK( ClickReduceTransparencyCBHdl, CheckBox* pBox );
-                        DECL_DLLPRIVATE_LINK( ClickReduceGradientsCBHdl, CheckBox* pBox );
-                        DECL_DLLPRIVATE_LINK( ClickReduceBitmapsCBHdl, CheckBox* pBox );
+                        DECL_DLLPRIVATE_LINK_TYPED( ClickReduceTransparencyCBHdl, Button*, void );
+                        DECL_DLLPRIVATE_LINK_TYPED( ClickReduceGradientsCBHdl, Button*, void );
+                        DECL_DLLPRIVATE_LINK_TYPED( ClickReduceBitmapsCBHdl, Button*, void );
 
                         DECL_DLLPRIVATE_LINK( ToggleReduceGradientsStripesRBHdl, RadioButton* pButton );
                         DECL_DLLPRIVATE_LINK( ToggleReduceBitmapsResolutionRBHdl, RadioButton* pButton );

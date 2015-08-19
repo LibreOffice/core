@@ -566,7 +566,7 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     PreviewHdl(0);
 }
 
-IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl)
+IMPL_LINK_NOARG_TYPED(SwLabFormatPage, SaveHdl, Button*, void)
 {
     SwLabRec aRec;
     aRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
@@ -595,7 +595,6 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl)
         m_pMakeFI->SetText(aItem.aMake);
         m_pTypeFI->SetText(aItem.aType);
     }
-    return 0;
 }
 
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
@@ -636,7 +635,7 @@ void SwSaveLabelDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, OkHdl, Button*, void)
 {
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     OUString sMake(m_pMakeCB->GetText());
@@ -647,7 +646,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
         {
             SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
             ScopedVclPtrInstance<MessageDialog>::Create(this, "CannotSaveLabelDialog", "modules/swriter/ui/cannotsavelabeldialog.ui")->Execute();
-            return 0;
+            return;
         }
 
         ScopedVclPtrInstance<MessageDialog> aQuery(this, "QuerySaveLabelDialog",
@@ -659,13 +658,12 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             replaceAll("%1", sMake).replaceAll("%2", sType));
 
         if (RET_YES != aQuery->Execute())
-            return 0;
+            return;
     }
     rLabRec.aType = sType;
     rCfg.SaveLabel(sMake, sType, rLabRec);
     bSuccess = true;
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl)

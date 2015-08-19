@@ -26,14 +26,14 @@ class SwWrtShell;
 class SwFootNoteOptionDlg :public SfxTabDialog
 {
     SwWrtShell &rSh;
-    Link<> aOldOkHdl;
+    Link<Button*, void> aOldOkHdl;
 
     sal_uInt16 m_nFootNoteId;
     sal_uInt16 m_nEndNoteId;
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
-    DECL_LINK( OkHdl, Button * );
+    DECL_LINK_TYPED( OkHdl, Button *, void );
 
 public:
     SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh );

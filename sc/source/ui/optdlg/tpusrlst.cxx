@@ -480,7 +480,7 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
 {
     if ( pBtn == mpBtnNew || pBtn == mpBtnDiscard )
     {
@@ -660,7 +660,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
     else if ( pViewData && (pBtn == mpBtnCopy) )
     {
         if ( bCopyDone )
-            return 0;
+            return;
 
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
@@ -708,8 +708,6 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             mpEdCopyFrom->SetSelection( Selection( 0, SELECTION_MAX ) );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )

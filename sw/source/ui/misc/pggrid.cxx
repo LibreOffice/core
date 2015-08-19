@@ -95,15 +95,14 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     m_pCharWidthMF->SetDownHdl(aSizeLink);
     m_pCharWidthMF->SetLoseFocusHdl(aSizeLink);
 
-    Link<> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
+    Link<Button*,void> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
     m_pNoGridRB->SetClickHdl(aGridTypeHdl);
     m_pLinesGridRB->SetClickHdl(aGridTypeHdl);
     m_pCharsGridRB->SetClickHdl(aGridTypeHdl);
 
-    Link<> aModifyLk = LINK(this, SwTextGridPage, GridModifyHdl);
-    m_pColorLB->SetSelectHdl(aModifyLk);
-    m_pPrintCB->SetClickHdl(aModifyLk);
-    m_pRubyBelowCB->SetClickHdl(aModifyLk);
+    m_pColorLB->SetSelectHdl(LINK(this, SwTextGridPage, GridModifyHdl));
+    m_pPrintCB->SetClickHdl(LINK(this, SwTextGridPage, GridModifyClickHdl));
+    m_pRubyBelowCB->SetClickHdl(LINK(this, SwTextGridPage, GridModifyClickHdl));
 
     m_pDisplayCB->SetClickHdl(LINK(this, SwTextGridPage, DisplayGridHdl));
 
@@ -485,7 +484,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
     return 0;
 }
 
-IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwTextGridPage, GridTypeHdl, Button*, pButton, void)
 {
     bool bEnable = m_pNoGridRB.get() != pButton;
     m_pLayoutFL->Enable(bEnable);
@@ -509,17 +508,19 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
     }
 
     GridModifyHdl(0);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl)
+IMPL_LINK_NOARG_TYPED(SwTextGridPage, DisplayGridHdl, Button*, void)
 {
     bool bChecked = m_pDisplayCB->IsChecked();
     m_pPrintCB->Enable(bChecked);
     m_pPrintCB->Check(bChecked);
-    return 0;
 }
 
+IMPL_LINK_NOARG_TYPED(SwTextGridPage, GridModifyClickHdl, Button*, void)
+{
+    GridModifyHdl(0);
+}
 IMPL_LINK_NOARG(SwTextGridPage, GridModifyHdl)
 {
     const SfxItemSet& rOldSet = GetItemSet();

@@ -86,8 +86,8 @@ public:
     ScConditionalFormat* GetConditionalFormat() const;
     void RecalcAll();
 
-    DECL_LINK( AddBtnHdl, void* );
-    DECL_LINK( RemoveBtnHdl, void* );
+    DECL_LINK_TYPED( AddBtnHdl, Button*, void );
+    DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
     DECL_LINK( ScrollHdl, void* );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
@@ -147,7 +147,7 @@ public:
 
     void InvalidateRefData();
 
-    DECL_LINK( BtnPressedHdl, Button* );
+    DECL_LINK_TYPED( BtnPressedHdl, Button*, void );
     DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
 };
 

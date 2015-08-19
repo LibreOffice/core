@@ -127,7 +127,7 @@ namespace dbaui
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
-        virtual Link<> getControlModifiedLink() SAL_OVERRIDE;
+        virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK( this, MySQLNativeSetupPage, OnModified ); }
 
     private:
         DECL_LINK( OnModified, Edit* );
@@ -156,7 +156,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
 
-        DECL_LINK(OnTestJavaClickHdl,PushButton*);
+        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified,Edit*);
         VclPtr<FixedText>          m_pHeaderText;
         VclPtr<FixedText>          m_pFTHelpText;
@@ -193,7 +193,7 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
-        DECL_LINK(OnTestJavaClickHdl,PushButton*);
+        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified,Edit*);
         VclPtr<FixedText>          m_pFTDriverClass;
         VclPtr<Edit>               m_pETDriverClass;
@@ -286,7 +286,7 @@ namespace dbaui
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
         Link<> getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
-        DECL_LINK(OnOpenSelected, CheckBox*);
+        DECL_LINK_TYPED(OnOpenSelected, Button*, void);
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;

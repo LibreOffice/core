@@ -259,10 +259,10 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(CheckBoxControl, OnClick)
+    IMPL_LINK_NOARG_TYPED(CheckBoxControl, OnClick, Button*, void)
     {
         m_aClickLink.Call(pBox);
-        return m_aModifyLink.Call(pBox);
+        m_aModifyLink.Call(pBox);
     }
 
 

@@ -131,11 +131,11 @@ class ExtMgrDialog : public ModelessDialog,
 
     bool removeExtensionWarn( const OUString &rExtensionTitle ) const;
 
-    DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleCloseBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleExtTypeCbx, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleAddBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleUpdateBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleExtTypeCbx, Button*, void );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK( startProgress, void * );
@@ -197,9 +197,9 @@ class UpdateRequiredDialog : public ModalDialog,
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
 
-    DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleCloseBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleUpdateBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK( startProgress, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );

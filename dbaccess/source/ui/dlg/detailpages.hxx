@@ -104,7 +104,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnButtonClicked, Button * );
+        DECL_LINK_TYPED( OnButtonClicked, Button *, void );
     };
 
     // OAdoDetailsPage
@@ -174,7 +174,7 @@ namespace dbaui
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
-        DECL_LINK(OnTestJavaClickHdl,PushButton*);
+        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified,Edit*);
 
         VclPtr<Edit>               m_pEDHostname;
@@ -235,7 +235,7 @@ namespace dbaui
 
         sal_Int32           m_iSSLPort;
         sal_Int32           m_iNormalPort;
-        DECL_LINK( OnCheckBoxClick, CheckBox * );
+        DECL_LINK_TYPED( OnCheckBoxClick, Button*, void );
     };
 
     // OMozillaDetailsPage Detail page for Mozilla and Thunderbird addressbook

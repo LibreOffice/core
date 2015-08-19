@@ -459,13 +459,13 @@ long SvxBitmapTabPage::CheckChanges_Impl()
             {
                 case RET_BTN_1:
                 {
-                    ClickModifyHdl_Impl( this );
+                    ClickModifyHdl_Impl( NULL );
                 }
                 break;
 
                 case RET_BTN_2:
                 {
-                    ClickAddHdl_Impl( this );
+                    ClickAddHdl_Impl( NULL );
                 }
                 break;
 
@@ -482,7 +482,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
 
 
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
 {
 
     OUString aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
@@ -582,7 +582,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return 0L;
 }
 
 
@@ -592,7 +591,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg( OUString("Import") );
@@ -670,13 +669,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
                           ,"NoLoadedFileDialog"
                           ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
     }
-
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
 
@@ -735,12 +732,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             }
         }
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
 
@@ -769,12 +765,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
     ResMgr& rMgr = CUI_MGR();
@@ -872,12 +867,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     OUString aStrFilterType( "*.sob" );
@@ -940,8 +934,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
                           ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
-
-    return 0L;
 }
 
 

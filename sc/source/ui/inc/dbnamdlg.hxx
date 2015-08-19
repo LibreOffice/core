@@ -91,10 +91,10 @@ private:
     void            UpdateDBData( const OUString& rStrName );
     void            SetInfoStrings( const ScDBData* pDBData );
 
-    DECL_LINK( CancelBtnHdl, void * );
-    DECL_LINK( OkBtnHdl, void * );
-    DECL_LINK( AddBtnHdl, void * );
-    DECL_LINK( RemoveBtnHdl, void * );
+    DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
+    DECL_LINK_TYPED( OkBtnHdl, Button*, void );
+    DECL_LINK_TYPED( AddBtnHdl, Button*, void );
+    DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
     DECL_LINK( NameModifyHdl, void * );
     DECL_LINK( AssModifyHdl, void * );
 };

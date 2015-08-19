@@ -21,7 +21,7 @@ class SfxCheckinDialog : public ModalDialog
 
         VclPtr<OKButton>   m_pOKBtn;
 
-        DECL_DLLPRIVATE_LINK(OKHdl, void *);
+        DECL_DLLPRIVATE_LINK_TYPED(OKHdl, Button*, void);
 
     public:
         SfxCheckinDialog( vcl::Window* pParent );

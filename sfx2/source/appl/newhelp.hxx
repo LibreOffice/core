@@ -138,7 +138,7 @@ private:
     void                InitializeIndex();
     void                ClearIndex();
 
-    DECL_LINK(OpenHdl, void *);
+    DECL_LINK_TYPED(OpenHdl, Button*, void);
     DECL_LINK_TYPED(IdleHdl, Idle*, void);
     DECL_LINK_TYPED(TimeoutHdl, Timer*, void);
 
@@ -216,7 +216,8 @@ private:
     void                RememberSearchText( const OUString& rSearchText );
 
     DECL_LINK(SearchHdl, void *);
-    DECL_LINK(OpenHdl, void *);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
+    DECL_LINK_TYPED(OpenHdl, Button*, void);
     DECL_LINK(ModifyHdl, void *);
 
 public:
@@ -259,7 +260,7 @@ private:
     VclPtr<BookmarksBox_Impl>  m_pBookmarksBox;
     VclPtr<PushButton>         m_pBookmarksPB;
 
-    DECL_LINK(OpenHdl, void *);
+    DECL_LINK_TYPED(OpenHdl, Button*, void);
 
 public:
     BookmarksTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
@@ -450,11 +451,11 @@ private:
                             getCursor() const;
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
-    DECL_LINK_TYPED(SelectHdl, Idle *, void);
+    DECL_LINK_TYPED(        SelectHdl, Idle *, void);
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );
     DECL_LINK(              FindHdl, sfx2::SearchDialog* );
     DECL_LINK(              CloseHdl, sfx2::SearchDialog* );
-    DECL_LINK(              CheckHdl, CheckBox* );
+    DECL_LINK_TYPED(        CheckHdl, Button*, void );
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );

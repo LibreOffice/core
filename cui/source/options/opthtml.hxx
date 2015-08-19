@@ -47,7 +47,7 @@ class OfaHtmlTabPage : public SfxTabPage
     VclPtr<CheckBox>        aSaveGrfLocalCB;
     VclPtr<SvxTextEncodingBox> aCharSetLB;
 
-    DECL_LINK(CheckBoxHdl_Impl, CheckBox*);
+    DECL_LINK_TYPED(CheckBoxHdl_Impl, Button*, void);
 
 public:
     virtual ~OfaHtmlTabPage();

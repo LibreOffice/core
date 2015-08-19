@@ -173,12 +173,11 @@ IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
     return 0;
 }
 
-IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)
 {
     mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
 
     mrPagePropPanel.ClosePageSizePopup();
-    return 0;
 }
 
 } } // end of namespace sw::sidebar

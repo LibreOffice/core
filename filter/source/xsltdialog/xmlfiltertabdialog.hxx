@@ -46,7 +46,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 
     DECL_STATIC_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl * );
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
 
     ResMgr& mrResMgr;
 

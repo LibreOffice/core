@@ -109,7 +109,7 @@ private:
     // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-                            DECL_LINK( ClickNewThemeHdl, void* );
+                            DECL_LINK_TYPED( ClickNewThemeHdl, Button*, void );
                             DECL_LINK( SelectThemeHdl, void* );
                             DECL_LINK( ShowContextMenuHdl, void* );
                             DECL_LINK( PopupMenuHdl, Menu* );

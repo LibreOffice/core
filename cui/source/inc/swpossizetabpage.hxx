@@ -99,12 +99,13 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
 
     DECL_LINK(RangeModifyHdl, void *);
-    DECL_LINK(AnchorTypeHdl, void *);
+    DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
+    DECL_LINK_TYPED(AnchorTypeHdl, Button*, void);
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
-    DECL_LINK(MirrorHdl, void *);
+    DECL_LINK_TYPED(MirrorHdl, Button*, void);
     DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK(ProtectHdl, void *);
+    DECL_LINK_TYPED(ProtectHdl, Button*, void);
 
     void            InitPos(short nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,

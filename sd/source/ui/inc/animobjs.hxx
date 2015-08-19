@@ -133,14 +133,14 @@ private:
 
     ScopeLock       maPlayLock;
 
-    DECL_LINK( ClickFirstHdl, void * );
-    DECL_LINK( ClickStopHdl, void * );
-    DECL_LINK( ClickPlayHdl, void * );
-    DECL_LINK( ClickLastHdl, void * );
-    DECL_LINK( ClickGetObjectHdl, void * );
-    DECL_LINK( ClickRemoveBitmapHdl, void * );
-    DECL_LINK( ClickRbtHdl, void * );
-    DECL_LINK( ClickCreateGroupHdl, void * );
+    DECL_LINK_TYPED( ClickFirstHdl, Button*, void );
+    DECL_LINK_TYPED( ClickStopHdl, Button*, void );
+    DECL_LINK_TYPED( ClickPlayHdl, Button*, void );
+    DECL_LINK_TYPED( ClickLastHdl, Button*, void );
+    DECL_LINK_TYPED( ClickGetObjectHdl, Button*, void );
+    DECL_LINK_TYPED( ClickRemoveBitmapHdl, Button*, void );
+    DECL_LINK_TYPED( ClickRbtHdl, Button*, void );
+    DECL_LINK_TYPED( ClickCreateGroupHdl, Button*, void );
     DECL_LINK( ModifyBitmapHdl, void * );
     DECL_LINK( ModifyTimeHdl, void * );
 

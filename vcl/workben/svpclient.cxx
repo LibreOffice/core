@@ -113,9 +113,9 @@ public:
     void parseList( const OString& rList );
     static OString processCommand( const OString& rCommand );
 
-    DECL_LINK( ListHdl, Button* );
+    DECL_LINK_TYPED( ListHdl, Button*, void );
     DECL_LINK( SelectHdl, ListBox* );
-    DECL_STATIC_LINK( MyWin, QuitHdl, Button* );
+    DECL_STATIC_LINK_TYPED( MyWin, QuitHdl, Button*, void );
 };
 
 void Main()
@@ -231,16 +231,14 @@ OString MyWin::processCommand( const OString& rCommand )
     return aAnswer.makeStringAndClear();
 }
 
-IMPL_LINK( MyWin, ListHdl, Button*, )
+IMPL_LINK_NOARG_TYPED( MyWin, ListHdl, Button*, void)
 {
     parseList( processCommand( "list" ) );
-    return 0;
 }
 
-IMPL_STATIC_LINK( MyWin, QuitHdl, Button*, )
+IMPL_STATIC_LINK_NOARG_TYPED( MyWin, QuitHdl, Button*, void)
 {
     processCommand( "quit" );
-    return 0;
 }
 
 IMPL_LINK( MyWin, SelectHdl, ListBox*, )

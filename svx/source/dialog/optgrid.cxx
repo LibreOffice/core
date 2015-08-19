@@ -157,7 +157,7 @@ SvxGridTabPage::SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 
     pCbxRotate->SetClickHdl( LINK( this, SvxGridTabPage, ClickRotateHdl_Impl ) );
-    Link<> aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
+    Link<Button*,void> aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
     pCbxUseGridsnap->SetClickHdl( aLink );
     pCbxSynchronize->SetClickHdl( aLink );
     pCbxGridVisible->SetClickHdl( aLink );
@@ -326,14 +326,12 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 }
 
 
-IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
 {
     if( pCbxRotate->IsChecked() )
         pMtrFldAngle->Enable();
     else
         pMtrFldAngle->Disable();
-
-    return 0L;
 }
 
 
@@ -352,10 +350,9 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 }
 
 
-IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ChangeGridsnapHdl_Impl, Button*, void)
 {
     bAttrModified = true;
-    return 0;
 }
 
 

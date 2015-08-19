@@ -43,8 +43,8 @@ private:
     VclPtr<PushButton>                 m_pAddBtn;
     VclPtr<PushButton>                 m_pDelBtn;
 
-    DECL_LINK(AddHdl_Impl, void *);
-    DECL_LINK(DelHdl_Impl, void *);
+    DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DelHdl_Impl, Button*, void);
     DECL_LINK(SelectHdl_Impl, void *);
     DECL_LINK(CheckHdl_Impl, svx::SvxRadioButtonListBox*);
 
@@ -64,8 +64,8 @@ private:
     VclPtr<PushButton>                 m_pAddBtn;
     VclPtr<PushButton>                 m_pDelBtn;
 
-    DECL_LINK(AddHdl_Impl, void *);
-    DECL_LINK(DelHdl_Impl, void *);
+    DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DelHdl_Impl, Button*, void);
     DECL_LINK(SelectHdl_Impl, void *);
 
 public:

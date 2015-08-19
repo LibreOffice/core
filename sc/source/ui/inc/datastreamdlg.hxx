@@ -46,8 +46,9 @@ class DataStreamDlg : public ModalDialog
     VclPtr<VclFrame>       m_pVclFrameLimit;
     VclPtr<VclFrame>       m_pVclFrameMove;
 
+    DECL_LINK_TYPED(UpdateClickHdl, Button*, void);
     DECL_LINK(UpdateHdl, void *);
-    DECL_LINK(BrowseHdl, void *);
+    DECL_LINK_TYPED(BrowseHdl, Button*, void);
 
     void UpdateEnable();
     ScRange GetStartRange();

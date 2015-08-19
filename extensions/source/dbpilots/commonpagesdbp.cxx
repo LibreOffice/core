@@ -193,7 +193,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, /*_pButton*/ )
+    IMPL_LINK_NOARG_TYPED( OTableSelectionPage, OnSearchClicked, Button*, void )
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
@@ -215,7 +215,6 @@ namespace dbp
             m_pDatasource->SelectEntry(sDataSourceName);
             LINK(this, OTableSelectionPage, OnListboxSelection).Call(m_pDatasource);
         }
-        return 0L;
     }
 
     IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox*, _pBox )
@@ -231,9 +230,6 @@ namespace dbp
         if (m_pDatasource == _pBox)
         {   // new data source selected
             implFillTables();
-        }
-        else
-        {
         }
 
         updateDialogTravelUI();
@@ -416,10 +412,9 @@ namespace dbp
         implEnableWindows();
     }
 
-    IMPL_LINK( OMaybeListSelectionPage, OnRadioSelected, RadioButton*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( OMaybeListSelectionPage, OnRadioSelected, Button*, void )
     {
         implEnableWindows();
-        return 0L;
     }
 
 

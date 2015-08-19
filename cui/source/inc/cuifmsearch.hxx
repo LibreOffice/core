@@ -157,9 +157,9 @@ protected:
 
 private:
     // Handler for the Controls
-    DECL_LINK( OnClickedFieldRadios, Button* );
-    DECL_LINK(OnClickedSearchAgain, void *);
-    DECL_LINK( OnClickedSpecialSettings, Button* );
+    DECL_LINK_TYPED( OnClickedFieldRadios, Button*, void );
+    DECL_LINK_TYPED(OnClickedSearchAgain, Button *, void);
+    DECL_LINK_TYPED( OnClickedSpecialSettings, Button*, void );
 
     DECL_LINK(OnSearchTextModified, void *);
 

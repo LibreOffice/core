@@ -261,7 +261,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK( ORadioSelectionPage, OnMoveEntry, PushButton*, _pButton )
+    IMPL_LINK_TYPED( ORadioSelectionPage, OnMoveEntry, Button*, _pButton, void )
     {
         bool bMoveLeft = (m_pMoveLeft == _pButton);
         if (bMoveLeft)
@@ -282,7 +282,6 @@ namespace dbp
             m_pExistingRadios->GrabFocus();
         else
             m_pRadioName->GrabFocus();
-        return 0L;
     }
 
 

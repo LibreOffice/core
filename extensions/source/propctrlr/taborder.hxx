@@ -83,10 +83,10 @@ namespace pcr
 
         ImageList*                  pImageList;
 
-        DECL_LINK( MoveUpClickHdl, Button* );
-        DECL_LINK( MoveDownClickHdl, Button* );
-        DECL_LINK( AutoOrderClickHdl, Button* );
-        DECL_LINK( OKClickHdl, Button* );
+        DECL_LINK_TYPED( MoveUpClickHdl, Button*, void );
+        DECL_LINK_TYPED( MoveDownClickHdl, Button*, void );
+        DECL_LINK_TYPED( AutoOrderClickHdl, Button*, void );
+        DECL_LINK_TYPED( OKClickHdl, Button*, void );
 
         void FillList();
         Image GetImage(

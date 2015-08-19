@@ -1582,7 +1582,7 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 
 
 
-IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
+IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
 {
     if (m_pLinguModulesEditPB == pBtn)
     {
@@ -1670,7 +1670,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDeleteDictionaryDialog",
                                                    "cui/ui/querydeletedictionarydialog.ui");
         if (RET_NO == aQuery->Execute())
-            return 0;
+            return;
 
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetCurEntry();
         if (pEntry)
@@ -1758,8 +1758,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     {
         OSL_FAIL( "pBtn unexpected value" );
     }
-
-    return 0;
 }
 
 
@@ -2274,7 +2272,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
+IMPL_LINK_TYPED( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )
 {
     bool bUp = m_pPrioUpPB == pBtn;
     sal_uLong  nCurPos = m_pModulesCLB->GetSelectEntryPos();
@@ -2300,22 +2298,19 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
         SelectHdl_Impl(m_pModulesCLB);
         m_pModulesCLB->SetUpdateMode(true);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxEditModulesDlg, ClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, ClickHdl_Impl, Button*, void)
 {
     // store language config
     LangSelectHdl_Impl(m_pLanguageLB);
     EndDialog( RET_OK );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(0);
-    return 0;
 }
 
 

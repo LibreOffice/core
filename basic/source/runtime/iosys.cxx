@@ -70,8 +70,8 @@ class SbiInputDialog : public ModalDialog {
     VclPtr<OKButton> aOk;
     VclPtr<CancelButton> aCancel;
     OUString aText;
-    DECL_LINK( Ok, vcl::Window * );
-    DECL_LINK( Cancel, vcl::Window * );
+    DECL_LINK_TYPED( Ok, Button *, void );
+    DECL_LINK_TYPED( Cancel, Button *, void );
 public:
     SbiInputDialog( vcl::Window*, const OUString& );
     virtual ~SbiInputDialog() { disposeOnce(); }
@@ -115,21 +115,15 @@ void SbiInputDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( SbiInputDialog, Ok, vcl::Window *, pWindow )
+IMPL_LINK_NOARG_TYPED( SbiInputDialog, Ok, Button *, void )
 {
-    (void)pWindow;
-
     aText = aInput->GetText();
     EndDialog( 1 );
-    return 0;
 }
 
-IMPL_LINK( SbiInputDialog, Cancel, vcl::Window *, pWindow )
+IMPL_LINK_NOARG_TYPED( SbiInputDialog, Cancel, Button *, void )
 {
-    (void)pWindow;
-
     EndDialog();
-    return 0;
 }
 
 SbiStream::SbiStream()

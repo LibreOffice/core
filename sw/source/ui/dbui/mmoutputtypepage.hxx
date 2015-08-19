@@ -35,7 +35,7 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK(TypeHdl_Impl, void *);
+    DECL_LINK_TYPED(TypeHdl_Impl, Button*, void);
 
 public:
     SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);

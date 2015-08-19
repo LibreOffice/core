@@ -92,7 +92,7 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
     ImplSetValue( fValue );
 }
 
-IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
+IMPL_LINK_TYPED( ScDPGroupEditHelper, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpRbAuto )
     {
@@ -105,7 +105,6 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
         mpEdValue->Enable();
         mpEdValue->GrabFocus();
     }
-    return 0;
 }
 
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
@@ -332,7 +331,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
     return nDatePart;
 }
 
-IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
+IMPL_LINK_TYPED( ScDPDateGroupDlg, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpRbNumDays )
     {
@@ -351,7 +350,6 @@ IMPL_LINK( ScDPDateGroupDlg, ClickHdl, RadioButton*, pButton )
         // disable OK button if no date part selected
         CheckHdl( mpLbUnits );
     }
-    return 0;
 }
 
 IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )

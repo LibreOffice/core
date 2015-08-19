@@ -94,10 +94,10 @@ private:
     Link<>              aPrevHdlLink;
     Link<>              aNextHdlLink;
 
-    DECL_LINK(Stamp, void *);
-    DECL_LINK(OKHdl, void *);
-    DECL_LINK(PrevHdl, void *);
-    DECL_LINK(NextHdl, void *);
+    DECL_LINK_TYPED(Stamp, Button*, void);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
+    DECL_LINK_TYPED(PrevHdl, Button*, void);
+    DECL_LINK_TYPED(NextHdl, Button*, void);
 };
 
 #endif

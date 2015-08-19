@@ -120,7 +120,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pUseCharUnit->Hide();
     }
 
-    Link<> aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
+    Link<Button*,void> aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
     m_pShowStandardizedPageCount->SetClickHdl(aLink);
 }
 
@@ -154,10 +154,9 @@ VclPtr<SfxTabPage> SwLoadOptPage::Create( vcl::Window* pParent,
     return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
 }
 
-IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl)
+IMPL_LINK_NOARG_TYPED(SwLoadOptPage, StandardizedPageCountCheckHdl, Button*, void)
 {
     m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
-    return 0;
 }
 
 bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )

@@ -735,10 +735,9 @@ void IndexTabPage_Impl::ClearIndex()
     m_pIndexCB->Clear();
 }
 
-IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
+IMPL_LINK_NOARG_TYPED(IndexTabPage_Impl, OpenHdl, Button*, void)
 {
     m_pIndexCB->GetDoubleClickHdl().Call(m_pIndexCB);
-    return 0;
 }
 
 IMPL_LINK_TYPED( IndexTabPage_Impl, IdleHdl, Idle*, pIdle, void )
@@ -945,9 +944,8 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
     m_pResultsLB->set_height_request(aSize.Height());
     get(m_pOpenBtn, "display");
 
-    Link<> aLink = LINK( this, SearchTabPage_Impl, SearchHdl );
-    m_pSearchED->SetSearchLink( aLink );
-    m_pSearchBtn->SetClickHdl(aLink);
+    m_pSearchED->SetSearchLink( LINK( this, SearchTabPage_Impl, SearchHdl ) );
+    m_pSearchBtn->SetClickHdl(LINK( this, SearchTabPage_Impl, ClickHdl ));
     m_pSearchED->SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
     m_pOpenBtn->SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
 
@@ -1042,6 +1040,11 @@ void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 
 
 
+IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ClickHdl, Button*, void)
+{
+    SearchHdl(NULL);
+}
+
 IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 {
     OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
@@ -1081,10 +1084,9 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
+IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, OpenHdl, Button*, void)
 {
     m_pResultsLB->GetDoubleClickHdl().Call(m_pResultsLB);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
@@ -1333,10 +1335,9 @@ void BookmarksTabPage_Impl::dispose()
 }
 
 
-IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl)
+IMPL_LINK_NOARG_TYPED(BookmarksTabPage_Impl, OpenHdl, Button*, void)
 {
     m_pBookmarksBox->GetDoubleClickHdl().Call(m_pBookmarksBox);
-    return 0;
 }
 
 void BookmarksTabPage_Impl::ActivatePage()
@@ -2350,8 +2351,9 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, /*pDlg*/ )
 
 
 
-IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if ( xConfiguration.is() )
     {
         bool bChecked = pBox->IsChecked();
@@ -2368,8 +2370,6 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
             SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::CheckHdl(): unexpected exception" );
         }
     }
-
-    return 0;
 }
 
 

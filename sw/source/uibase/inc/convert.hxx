@@ -55,10 +55,10 @@ class SwConvertTableDlg: public SfxModalDialog
     SwTableAutoFormat* pTAutoFormat;
     SwWrtShell*     pShell;
 
-    DECL_LINK( AutoFormatHdl, PushButton* );
-    DECL_LINK( BtnHdl, Button* );
-    DECL_LINK(CheckBoxHdl, void * = 0);
-    DECL_LINK( ReapeatHeaderCheckBoxHdl, void* = 0);
+    DECL_LINK_TYPED( AutoFormatHdl, Button*, void );
+    DECL_LINK_TYPED( BtnHdl, Button*, void );
+    DECL_LINK_TYPED( CheckBoxHdl, Button* = 0, void );
+    DECL_LINK_TYPED( ReapeatHeaderCheckBoxHdl, Button* = 0, void );
 
 public:
     SwConvertTableDlg( SwView& rView, bool bToTable );

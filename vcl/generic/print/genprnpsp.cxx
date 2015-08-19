@@ -97,7 +97,7 @@ namespace
         VclPtr<Edit>        m_pEdit;
         OUString&           m_rReturnValue;
 
-        DECL_LINK( ClickBtnHdl, Button* );
+        DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
 
     public:
         // parent window, Query text, initial value
@@ -130,7 +130,7 @@ namespace
         SetText(rQuery);
     }
 
-    IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
+    IMPL_LINK_TYPED( QueryString, ClickBtnHdl, Button*, pButton, void )
     {
         if (pButton == m_pOKButton)
         {
@@ -139,7 +139,6 @@ namespace
         }
         else
             EndDialog();
-        return 0;
     }
 
     int QueryFaxNumber(OUString& rNumber)

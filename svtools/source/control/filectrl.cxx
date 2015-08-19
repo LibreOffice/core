@@ -186,11 +186,9 @@ void FileControl::Resize()
 
 
 
-IMPL_LINK_NOARG(FileControl, ButtonHdl)
+IMPL_LINK_NOARG_TYPED(FileControl, ButtonHdl, Button*, void)
 {
     ImplBrowseFile( );
-
-    return 0;
 }
 
 void FileControl::GetFocus()

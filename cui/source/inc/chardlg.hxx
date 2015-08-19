@@ -215,8 +215,8 @@ private:
     bool                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     DECL_LINK(          SelectHdl_Impl, ListBox* );
-    DECL_LINK(CbClickHdl_Impl, void *);
-    DECL_LINK(TristClickHdl_Impl, void *);
+    DECL_LINK_TYPED(CbClickHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(TristClickHdl_Impl, Button*, void);
     DECL_LINK(UpdatePreview_Impl, void *);
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
@@ -290,11 +290,11 @@ private:
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
     void                SetEscapement_Impl( sal_uInt16 nEsc );
 
-    DECL_LINK(          PositionHdl_Impl, RadioButton* );
-    DECL_LINK(          RotationHdl_Impl, RadioButton* );
+    DECL_LINK_TYPED(    PositionHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(    RotationHdl_Impl, Button*, void );
     DECL_LINK(          FontModifyHdl_Impl, void *);
-    DECL_LINK(          AutoPositionHdl_Impl, CheckBox* );
-    DECL_LINK(          FitToLineHdl_Impl, CheckBox* );
+    DECL_LINK_TYPED(    AutoPositionHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(    FitToLineHdl_Impl, Button*, void );
     DECL_LINK(          KerningSelectHdl_Impl, void *);
     DECL_LINK(          KerningModifyHdl_Impl, void *);
     DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
@@ -344,7 +344,7 @@ private:
     void                SelectCharacter( ListBox* pBox );
     void                SetBracket( sal_Unicode cBracket, bool bStart );
 
-    DECL_LINK(TwoLinesHdl_Impl, void *);
+    DECL_LINK_TYPED(TwoLinesHdl_Impl, Button*, void);
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
 
 public:

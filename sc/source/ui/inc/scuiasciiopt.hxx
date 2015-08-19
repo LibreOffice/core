@@ -102,8 +102,9 @@ private:
 
                                 DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
                                 DECL_LINK( FirstRowHdl, NumericField* );
-                                DECL_LINK( RbSepFixHdl, RadioButton* );
+                                DECL_LINK_TYPED( RbSepFixHdl, Button*, void );
                                 DECL_LINK( SeparatorHdl, Control* );
+                                DECL_LINK_TYPED( SeparatorClickHdl, Button*, void );
                                 DECL_LINK( LbColTypeHdl, ListBox* );
                                 DECL_LINK(UpdateTextHdl, void *);
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox* );

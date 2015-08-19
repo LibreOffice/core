@@ -218,8 +218,9 @@ void ScaleTabPage::EnableControls()
     EnableValueHdl(m_pCbx_AutoTimeResolution);
 }
 
-IMPL_LINK( ScaleTabPage, EnableValueHdl, CheckBox *, pCbx )
+IMPL_LINK_TYPED( ScaleTabPage, EnableValueHdl, Button *, pButton, void )
 {
+    CheckBox * pCbx = static_cast<CheckBox*>(pButton);
     bool bEnable = pCbx && !pCbx->IsChecked() && pCbx->IsEnabled();
     if (pCbx == m_pCbxAutoMin)
     {
@@ -248,7 +249,6 @@ IMPL_LINK( ScaleTabPage, EnableValueHdl, CheckBox *, pCbx )
     {
         m_pFmtFldOrigin->Enable( bEnable );
     }
-    return 0;
 }
 
 enum AxisTypeListBoxEntry

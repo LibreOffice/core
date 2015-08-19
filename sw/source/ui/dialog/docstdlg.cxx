@@ -140,7 +140,7 @@ void SwDocStatPage::Update()
     SetData(aDocStat);
 }
 
-IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
+IMPL_LINK_NOARG_TYPED(SwDocStatPage, UpdateHdl, Button*, void)
 {
     Update();
     SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());
@@ -148,7 +148,6 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
     if(pFEShell)
         m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount(false)));
     //pButton->Disable();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

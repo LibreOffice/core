@@ -89,13 +89,13 @@ friend class SfxTabDialogController;
     bool                bItemsReset;
     bool                bStandardPushed;
 
-    DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
-    DECL_DLLPRIVATE_LINK_TYPED( DeactivatePageHdl, TabControl *, bool );
-    DECL_DLLPRIVATE_LINK(OkHdl, void *);
-    DECL_DLLPRIVATE_LINK(ResetHdl, void *);
-    DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
-    DECL_DLLPRIVATE_LINK(UserHdl, void *);
-    DECL_DLLPRIVATE_LINK(CancelHdl, void *);
+    DECL_DLLPRIVATE_LINK(ActivatePageHdl, TabControl * );
+    DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl *, bool );
+    DECL_DLLPRIVATE_LINK_TYPED(OkHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK_TYPED(ResetHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK_TYPED(BaseFmtHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK_TYPED(UserHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK_TYPED(CancelHdl, Button*, void);
     SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
 
 protected:
@@ -201,7 +201,7 @@ public:
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
     SfxItemSet*         GetExampleSet() { return pExampleSet; }
 
-    void                SetApplyHandler(const Link<>& _rHdl);
+    void                SetApplyHandler(const Link<Button*,void>& _rHdl);
 
     SAL_DLLPRIVATE void Start_Impl();
 

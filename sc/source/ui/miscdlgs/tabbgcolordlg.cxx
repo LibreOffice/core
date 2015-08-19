@@ -129,16 +129,13 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
-{
-
 //    Handler, called when the OK button is pushed
-
+IMPL_LINK_NOARG_TYPED(ScTabBgColorDlg, TabBgColorOKHdl_Impl, Button*, void)
+{
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
     m_aTabBgColor = aColor;
     EndDialog( RET_OK );
-    return 0;
 }
 
 ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle)

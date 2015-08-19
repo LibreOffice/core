@@ -44,9 +44,9 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         bool                   m_bCreateForm;
 
-        DECL_LINK(Up_Click,void*);
-        DECL_LINK(NewFolder_Click,void*);
-        DECL_LINK(Save_Click,void*);
+        DECL_LINK_TYPED(Up_Click, Button*, void);
+        DECL_LINK_TYPED(NewFolder_Click, Button*, void);
+        DECL_LINK_TYPED(Save_Click, Button*, void);
         DECL_LINK(Dbl_Click_FileView,void*);
 
         /// sets the fixedtext to the right content

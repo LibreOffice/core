@@ -74,7 +74,7 @@ namespace abp
         virtual bool    Close() SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnCancelClicked, void* );
+        DECL_LINK_TYPED( OnCancelClicked, Button*, void );
 
         /** creates a new data source of the type indicated by m_aSettings
             <p>If another data source has been created before, this one is deleted.</p>

@@ -273,7 +273,7 @@ Image TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
         mxFrame);
 }
 
-IMPL_LINK(TabBar::Item, HandleClick, Button*,)
+IMPL_LINK_NOARG_TYPED(TabBar::Item, HandleClick, Button*, void)
 {
     try
     {
@@ -281,8 +281,6 @@ IMPL_LINK(TabBar::Item, HandleClick, Button*,)
     }
     catch(const css::uno::Exception&)
     {} // workaround for #i123198#
-
-    return 1;
 }
 
 const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
@@ -336,10 +334,10 @@ void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
     rFocusManager.SetButtons(aButtons);
 }
 
-IMPL_LINK_NOARG(TabBar, OnToolboxClicked)
+IMPL_LINK_NOARG_TYPED(TabBar, OnToolboxClicked, Button*, void)
 {
     if (!mpMenuButton)
-        return 0;
+        return;
 
     std::vector<DeckMenuData> aMenuData;
 
@@ -366,8 +364,6 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked)
             mpMenuButton->GetSizePixel()),
         aMenuData);
     mpMenuButton->Check(false);
-
-    return 0;
 }
 
 } } // end of namespace sfx2::sidebar

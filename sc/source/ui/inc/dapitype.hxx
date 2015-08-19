@@ -47,7 +47,7 @@ public:
     void AppendNamedRange(const OUString& rNames);
 
 private:
-    DECL_LINK( RadioClickHdl, RadioButton * );
+    DECL_LINK_TYPED( RadioClickHdl, Button *, void );
 };
 
 class ScDataPilotServiceDlg : public ModalDialog

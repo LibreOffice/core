@@ -128,16 +128,15 @@ void LoginDialog::EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled )
     m_pAccountED->Enable( !bUseSysCredsEnabled );
 }
 
-IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(LoginDialog, OKHdl_Impl, Button*, void)
 {
     // trim the strings
     m_pNameED->SetText(comphelper::string::strip(m_pNameED->GetText(), ' '));
     m_pPasswordED->SetText(comphelper::string::strip(m_pPasswordED->GetText(), ' '));
     EndDialog( RET_OK );
-    return 1;
 }
 
-IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl)
+IMPL_LINK_NOARG_TYPED(LoginDialog, PathHdl_Impl, Button*, void)
 {
     try
     {
@@ -157,14 +156,11 @@ IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl)
     {
         SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught UNO exception: " << e.Message);
     }
-
-    return 1;
 }
 
-IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl)
+IMPL_LINK_NOARG_TYPED(LoginDialog, UseSysCredsHdl_Impl, Button*, void)
 {
     EnableUseSysCredsControls_Impl( m_pUseSysCredsCB->IsChecked() );
-    return 1;
 }
 
 LoginDialog::LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,

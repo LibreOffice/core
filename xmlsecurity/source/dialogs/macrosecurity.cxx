@@ -48,14 +48,12 @@
 using namespace ::com::sun::star;
 
 
-IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurity, OkBtnHdl, Button*, void)
 {
     mpLevelTP->ClosePage();
     mpTrustSrcTP->ClosePage();
 
     EndDialog( RET_OK );
-
-    return 0;
 }
 
 MacroSecurity::MacroSecurity( vcl::Window* _pParent,
@@ -184,7 +182,7 @@ void MacroSecurityLevelTP::dispose()
     MacroSecurityTP::dispose();
 }
 
-IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurityLevelTP, RadioButtonHdl, Button*, void)
 {
     sal_uInt16 nNewLevel = 0;
     if( m_pVeryHighRB->IsChecked() )
@@ -199,8 +197,6 @@ IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl)
         mnCurLevel = nNewLevel;
         mpDlg->EnableReset();
     }
-
-    return 0;
 }
 
 void MacroSecurityLevelTP::ClosePage()
@@ -219,7 +215,7 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
 }
 
 
-IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, Button*, void)
 {
     if( m_pTrustCertLB->FirstSelected() )
     {
@@ -242,10 +238,9 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
             aViewer->Execute();
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, Button*, void)
 {
     if( m_pTrustCertLB->FirstSelected() )
     {
@@ -255,11 +250,9 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl)
         FillCertLB();
         ImplCheckButtons();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, AddLocPBHdl, Button*, void)
 {
     try
     {
@@ -269,7 +262,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
         short nRet = xFolderPicker->execute();
 
         if( ui::dialogs::ExecutableDialogResults::OK != nRet )
-            return 0;
+            return;
 
         OUString aPathStr = xFolderPicker->getDirectory();
         INetURLObject aNewObj( aPathStr );
@@ -295,11 +288,9 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
     {
         SAL_WARN( "xmlsecurity.dialogs", "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, Button*, void)
 {
     sal_Int32  nSel = m_pTrustFileLocLB->GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
@@ -316,8 +307,6 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl)
         }
         ImplCheckButtons();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl)

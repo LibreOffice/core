@@ -66,8 +66,8 @@ private:
     bool                bWordWrapTextEnabled;
     bool                bFitToSizeEnabled;
 
-    DECL_LINK( ClickFullWidthHdl_Impl, void * );
-    DECL_LINK( ClickHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickFullWidthHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
 
     /** Return whether the text direction is from left to right (</sal_True>) or
         top to bottom (</sal_False>).

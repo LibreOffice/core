@@ -591,9 +591,9 @@ IMPL_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
     return 0;
 }
 
-IMPL_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
+IMPL_LINK_TYPED( _SvxMacroTabPage, AssignDeleteHdl_Impl, Button*, pBtn, void )
 {
-    return GenericHandler_Impl( this, pBtn );
+    GenericHandler_Impl( this, static_cast<PushButton*>(pBtn) );
 }
 
 IMPL_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, )
@@ -723,8 +723,8 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     m_xDocEvents = xDocEvents;
     m_xModifiable = xModifiable;
     SvHeaderTabListBox&    rListBox = mpImpl->pEventLB->GetListBox();
-    HeaderBar&            rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link<>              aLnk(LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
+    HeaderBar&             rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
+    Link<Button*,void>     aLnk(LINK(this, _SvxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pDeletePB->SetClickHdl(    aLnk );
     mpImpl->pAssignPB->SetClickHdl(    aLnk );
     if( mpImpl->pAssignComponentPB )
@@ -860,7 +860,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< fra
 
 
 
-IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
+IMPL_LINK_NOARG_TYPED(AssignComponentDialog, ButtonHandler, Button*, void)
 {
     OUString aMethodName = mpMethodEdit->GetText();
     maURL.clear();
@@ -870,7 +870,6 @@ IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
         maURL += aMethodName;
     }
     EndDialog(1);
-    return 0;
 }
 
 AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUString& rURL )
@@ -901,12 +900,10 @@ void AssignComponentDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
 {
-    (void)pButton; //unused
     GetTabPage()->FillItemSet( 0 );
     EndDialog( RET_OK );
-    return 0;
 }
 
 

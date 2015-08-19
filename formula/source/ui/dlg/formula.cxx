@@ -125,10 +125,10 @@ public:
     DECL_LINK( ModifyHdl, ParaWin* );
     DECL_LINK( FxHdl, ParaWin* );
 
-    DECL_LINK(MatrixHdl, void *);
+    DECL_LINK_TYPED(MatrixHdl, Button*, void);
     DECL_LINK(FormulaHdl, void *);
     DECL_LINK(FormulaCursorHdl, void *);
-    DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK_TYPED( BtnHdl, Button*, void );
     DECL_LINK(DblClkHdl, void *);
     DECL_LINK(FuncSelHdl, void *);
     DECL_LINK(StructSelHdl, void *);
@@ -1035,7 +1035,7 @@ void FormulaDlg_Impl::DoEnter(bool bOk)
 }
 
 
-IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
 {
     if ( pBtn == m_pBtnCancel )
     {
@@ -1065,9 +1065,6 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
         m_pMEFormula->Invalidate();
         m_pMEFormula->Update();
     }
-
-
-    return 0;
 }
 
 
@@ -1597,10 +1594,9 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, StructSelHdl)
     bStructUpdate=true;
     return 0;
 }
-IMPL_LINK_NOARG(FormulaDlg_Impl, MatrixHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, MatrixHdl, Button*, void)
 {
     bUserMatrixFlag=true;
-    return 0;
 }
 
 IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)

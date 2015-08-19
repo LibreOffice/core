@@ -43,9 +43,9 @@ private:
     SvxChartColorTableItem* pColorConfig;
     XColorListRef           pColorList;
 
-    DECL_LINK( ResetToDefaults, void * );
-    DECL_LINK( AddChartColor, void * );
-    DECL_LINK( RemoveChartColor, PushButton * );
+    DECL_LINK_TYPED( ResetToDefaults, Button *, void );
+    DECL_LINK_TYPED( AddChartColor, Button *, void );
+    DECL_LINK_TYPED( RemoveChartColor, Button *, void );
     DECL_LINK( ListClickedHdl, ColorLB * );
     DECL_LINK(BoxClickedHdl, void *);
 

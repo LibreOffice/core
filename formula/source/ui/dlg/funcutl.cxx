@@ -294,20 +294,16 @@ void ArgInput::EdModify()
     aEdModifyLink.Call(this);
 }
 
-IMPL_LINK( ArgInput, FxBtnClickHdl, ImageButton*, pBtn )
+IMPL_LINK_TYPED( ArgInput, FxBtnClickHdl, Button*, pBtn, void )
 {
     if(pBtn == pBtnFx)
         FxClick();
-
-    return 0;
 }
 
-IMPL_LINK( ArgInput, RefBtnClickHdl,RefButton*, pBtn )
+IMPL_LINK_TYPED( ArgInput, RefBtnClickHdl, Button*, pBtn, void )
 {
     if(pRefBtn == pBtn)
         RefClick();
-
-    return 0;
 }
 
 IMPL_LINK( ArgInput, FxBtnFocusHdl, ImageButton*, pBtn )

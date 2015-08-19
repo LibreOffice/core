@@ -96,7 +96,7 @@ public:
     NextButton (vcl::Window* pParent);
 
     void ForceFocusEventBroadcast();
-    void SetClickHdl (const Link<>& rLink);
+    void SetClickHdl (const Link<Button*,void>& rLink);
     bool IsEnabled();
     void Enable (bool bEnable);
 
@@ -229,19 +229,19 @@ public:
     DECL_LINK( SelectRegionHdl, ListBox * );
     DECL_LINK_TYPED( UpdatePreviewHdl, Idle *, void );
     DECL_LINK_TYPED( UpdatePageListHdl, Idle *, void );
-    DECL_LINK( StartTypeHdl, RadioButton * );
+    DECL_LINK_TYPED( StartTypeHdl, Button *, void );
     DECL_LINK( SelectTemplateHdl, void * );
-    DECL_LINK( NextPageHdl, void * );
-    DECL_LINK( LastPageHdl, void * );
-    DECL_LINK( PreviewFlagHdl, void * );
+    DECL_LINK_TYPED( NextPageHdl, Button*, void );
+    DECL_LINK_TYPED( LastPageHdl, Button*, void );
+    DECL_LINK_TYPED( PreviewFlagHdl, Button*, void );
     DECL_LINK_TYPED( EffectPreviewIdleHdl, Idle *, void );
     DECL_LINK( EffectPreviewClickHdl, void * );
     DECL_LINK( SelectLayoutHdl, void * );
     DECL_LINK( PageSelectHdl, void * );
-    DECL_LINK( PresTypeHdl, void * );
+    DECL_LINK_TYPED( PresTypeHdl, Button*, void );
     DECL_LINK( UpdateUserDataHdl, void * );
     DECL_LINK( SelectEffectHdl, void* );
-    DECL_LINK( OpenButtonHdl, Button * );
+    DECL_LINK_TYPED( OpenButtonHdl, Button *, void );
 
     OUString            maCreateStr;
     OUString            maOpenStr;
@@ -1101,11 +1101,11 @@ IMPL_LINK_NOARG(AssistentDlgImpl, SelectEffectHdl)
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, OpenButtonHdl, Button*, pButton )
+IMPL_LINK_TYPED( AssistentDlgImpl, OpenButtonHdl, Button*, pButton, void )
 {
     // Clear the selection and forward the call.
     mpPage1OpenLB->SetNoSelection();
-    return mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
+    mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
 }
 
 IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Idle *, void)
@@ -1134,15 +1134,13 @@ IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewClickHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, PreviewFlagHdl)
-
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PreviewFlagHdl, Button*, void)
 {
     if( mpPreviewFlag->IsChecked() != mbPreview )
     {
         mbPreview = mpPreviewFlag->IsChecked();
         UpdatePreview(true);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(AssistentDlgImpl, SelectTemplateHdl)
@@ -1189,9 +1187,9 @@ IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePreviewHdl, Idle *, void)
     UpdatePreview( true );
 }
 
-IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
+IMPL_LINK_TYPED( AssistentDlgImpl, StartTypeHdl, Button *, pButton, void )
 {
-    StartType eType = pButton == mpPage1EmptyRB?ST_EMPTY:pButton == mpPage1TemplateRB?ST_TEMPLATE:ST_OPEN;
+    StartType eType = pButton == mpPage1EmptyRB ? ST_EMPTY : pButton == mpPage1TemplateRB ? ST_TEMPLATE:ST_OPEN;
 
     if(eType == ST_TEMPLATE)
         ProvideTemplates();
@@ -1209,10 +1207,9 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
         mpPage1OpenLB->SelectEntryPos(0);
 
     maPrevIdle.Start();
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, NextPageHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, NextPageHdl, Button*, void)
 {
     // When changing from the first to the second page make sure that the
     // templates are present.
@@ -1223,18 +1220,16 @@ IMPL_LINK_NOARG(AssistentDlgImpl, NextPageHdl)
     LeavePage();
     maAssistentFunc.NextPage();
     ChangePage();
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, LastPageHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, LastPageHdl, Button*, void)
 {
     LeavePage();
     maAssistentFunc.PreviousPage();
     ChangePage();
-    return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PresTypeHdl, Button*, void)
 {
     if (maDocFile.isEmpty())
     {
@@ -1247,7 +1242,6 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
     mpPage3PresTimeTMF->Enable(bKiosk);
     mpPage3BreakTMF->Enable(bKiosk);
     mpPage3LogoCB->Enable(bKiosk);
-    return 0;
 }
 
 IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
@@ -1728,14 +1722,18 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 AssistentDlg::AssistentDlg(vcl::Window* pParent, bool bAutoPilot) :
     ModalDialog(pParent, "Assistent", "modules/simpress/ui/assistentdialog.ui")
 {
-    Link<> aFinishLink = LINK(this,AssistentDlg, FinishHdl);
-    mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
+    mpImpl = new AssistentDlgImpl( this, LINK(this,AssistentDlg, FinishHdl2), bAutoPilot );
 
     // button assignment
     mpImpl->mpFinishButton->SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
 }
 
-IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlg, FinishHdl, Button*, void)
+{
+    FinishHdl2(NULL);
+}
+
+IMPL_LINK_NOARG(AssistentDlg, FinishHdl2)
 {
     if( GetStartType() == ST_OPEN )
     {
@@ -1865,7 +1863,7 @@ void NextButton::ForceFocusEventBroadcast()
     }
 }
 
-void NextButton::SetClickHdl (const Link<>& rLink)
+void NextButton::SetClickHdl (const Link<Button*,void>& rLink)
 {
     // Forward the setting of the click handler to the two buttons
     // regardless of which one is currently visible.

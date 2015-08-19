@@ -89,7 +89,7 @@ void ChineseTranslationDialog::getSettings( bool& rbDirectionToSimplified
     rbTranslateCommonTerms = m_pCB_Translate_Commonterms->IsChecked();
 }
 
-IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl)
+IMPL_LINK_NOARG_TYPED(ChineseTranslationDialog, OkHdl, Button*, void)
 {
     //save settings to configuration
     SvtLinguConfig  aLngCfg;
@@ -100,10 +100,9 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl)
     aLngCfg.SetProperty( OUString( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
 
     EndDialog( RET_OK );
-    return 0;
 }
 
-IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl)
+IMPL_LINK_NOARG_TYPED(ChineseTranslationDialog, DictionaryHdl, Button*, void)
 {
     if( !m_pDictionaryDialog )
     {
@@ -128,7 +127,6 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl)
             m_pDictionaryDialog->Execute();
         }
     }
-    return 0;
 }
 
 

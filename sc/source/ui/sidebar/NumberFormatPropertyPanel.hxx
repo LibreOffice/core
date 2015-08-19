@@ -86,6 +86,7 @@ private:
 
     DECL_LINK(NumFormatSelectHdl, ListBox*);
     DECL_LINK(NumFormatValueHdl, void*);
+    DECL_LINK_TYPED(NumFormatValueClickHdl, Button*, void);
 
     void Initialize();
 };

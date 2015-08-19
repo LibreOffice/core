@@ -263,7 +263,7 @@ IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )
     return 0;
 }
 
-IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(ScMoveTableDlg, OkHdl, Button*, void)
 {
     sal_uInt16  nDocSel     = pLbDoc->GetSelectEntryPos();
     sal_uInt16  nDocLast    = pLbDoc->GetEntryCount()-1;
@@ -294,8 +294,6 @@ IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl)
     }
 
     EndDialog( RET_OK );
-
-    return 0;
 }
 
 IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )

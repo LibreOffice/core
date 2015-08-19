@@ -142,14 +142,14 @@ namespace svx
 
     public:
         void    SetOptionsChangedHdl( const Link<>& _rHdl );
-        void    SetIgnoreHdl( const Link<>& _rHdl );
-        void    SetIgnoreAllHdl( const Link<>& _rHdl );
-        void    SetChangeHdl( const Link<>& _rHdl );
-        void    SetChangeAllHdl( const Link<>& _rHdl );
+        void    SetIgnoreHdl( const Link<Button*,void>& _rHdl );
+        void    SetIgnoreAllHdl( const Link<Button*,void>& _rHdl );
+        void    SetChangeHdl( const Link<Button*,void>& _rHdl );
+        void    SetChangeAllHdl( const Link<Button*,void>& _rHdl );
 
         void    SetClickByCharacterHdl( const Link<>& _rHdl );
-        void    SetConversionFormatChangedHdl( const Link<>& _rHdl );
-        void    SetFindHdl( const Link<>& _rHdl );
+        void    SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl );
+        void    SetFindHdl( const Link<Button*,void>& _rHdl );
 
         OUString  GetCurrentString( ) const;
         void    SetCurrentString(
@@ -180,11 +180,11 @@ namespace svx
         void            EnableRubySupport( bool bVal );
 
     private:
-        DECL_LINK( OnOption, void* );
+        DECL_LINK_TYPED( OnOption, Button*, void );
         DECL_LINK( OnSuggestionModified, void* );
         DECL_LINK( OnSuggestionSelected, void* );
-        DECL_LINK( OnConversionDirectionClicked, CheckBox* );
-        DECL_LINK( ClickByCharacterHdl, CheckBox* );
+        DECL_LINK_TYPED( OnConversionDirectionClicked, Button*, void );
+        DECL_LINK_TYPED( ClickByCharacterHdl, Button*, void );
 
         /// fill the suggestion list box with suggestions for the actual input
         void FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions );
@@ -210,11 +210,11 @@ namespace svx
         HHDictList          m_aDictList;
         css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
-        DECL_LINK( OkHdl, void* );
+        DECL_LINK_TYPED( OkHdl, Button*, void );
         DECL_LINK( DictsLB_SelectHdl, void* );
-        DECL_LINK( NewDictHdl, void* );
-        DECL_LINK( EditDictHdl, void* );
-        DECL_LINK( DeleteDictHdl, void* );
+        DECL_LINK_TYPED( NewDictHdl, Button*, void );
+        DECL_LINK_TYPED( EditDictHdl, Button*, void );
+        DECL_LINK_TYPED( DeleteDictHdl, Button*, void );
 
         void                Init();       ///< reads settings from core and init controls
     public:
@@ -234,7 +234,7 @@ namespace svx
 
         bool m_bEntered;
 
-        DECL_LINK( OKHdl, void* );
+        DECL_LINK_TYPED( OKHdl, Button*, void );
         DECL_LINK( ModifyHdl, void* );
     public:
         HangulHanjaNewDictDialog( vcl::Window* _pParent );
@@ -297,8 +297,8 @@ namespace svx
         DECL_LINK( EditModifyHdl4, Edit* );
 
         DECL_LINK( BookLBSelectHdl, void* );
-        DECL_LINK( NewPBPushHdl, void* );
-        DECL_LINK( DeletePBPushHdl, void* );
+        DECL_LINK_TYPED( NewPBPushHdl, Button*, void );
+        DECL_LINK_TYPED( DeletePBPushHdl, Button*, void );
 
         void            InitEditDictDialog( sal_uInt32 _nSelDict );
         void            UpdateOriginalLB();

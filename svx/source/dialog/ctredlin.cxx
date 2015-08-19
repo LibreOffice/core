@@ -392,7 +392,7 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     pTable->set_height_request(aControlSize.Height());
     m_pViewData = VclPtr<SvxRedlinTable>::Create(*pTable, 0);
 
-    Link<> aLink=LINK( this, SvxTPView, PbClickHdl);
+    Link<Button*,void> aLink=LINK( this, SvxTPView, PbClickHdl);
 
     m_pAccept->SetClickHdl(aLink);
     m_pAcceptAll->SetClickHdl(aLink);
@@ -509,8 +509,9 @@ void SvxTPView::EnableUndo(bool nFlag)
 }
 
 
-IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
+IMPL_LINK_TYPED( SvxTPView, PbClickHdl, Button*, pButton, void )
 {
+    PushButton* pPushB = static_cast<PushButton*>(pButton);
     if (pPushB == m_pAccept)
     {
         AcceptClickLk.Call(this);
@@ -531,8 +532,6 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
     {
         UndoClickLk.Call(this);
     }
-
-    return 0;
 }
 
 SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
@@ -571,7 +570,7 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     m_pIbClock2->SetClickHdl( LINK( this, SvxTPFilter,TimeHdl) );
     m_pBtnRange->SetClickHdl( LINK( this, SvxTPFilter, RefHandle));
 
-    Link<> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
+    Link<Button*,void> aLink=LINK( this, SvxTPFilter, RowEnableHdl) ;
     m_pCbDate->SetClickHdl(aLink);
     m_pCbAuthor->SetClickHdl(aLink);
     m_pCbRange->SetClickHdl(aLink);
@@ -915,8 +914,9 @@ IMPL_LINK( SvxTPFilter, SelDateHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
+IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
 {
+    CheckBox* pCB = static_cast<CheckBox*>(pButton);
     if (pCB == m_pCbDate)
     {
         m_pLbDate->Enable(m_pCbDate->IsChecked());
@@ -947,11 +947,11 @@ IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
     }
 
     ModifyHdl(pCB);
-    return 0;
 }
 
-IMPL_LINK( SvxTPFilter, TimeHdl, ImageButton*,pIB )
+IMPL_LINK_TYPED( SvxTPFilter, TimeHdl, Button*, pButton, void )
 {
+    ImageButton* pIB = static_cast<ImageButton*>(pButton);
     Date aDate( Date::SYSTEM );
     tools::Time aTime( tools::Time::SYSTEM );
     if (pIB == m_pIbClock)
@@ -965,7 +965,6 @@ IMPL_LINK( SvxTPFilter, TimeHdl, ImageButton*,pIB )
         m_pTfDate2->SetTime(aTime);
     }
     ModifyHdl(m_pDfDate);
-    return 0;
 }
 
 IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
@@ -1089,13 +1088,12 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
     return 0;
 }
 
-IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
+IMPL_LINK_TYPED( SvxTPFilter, RefHandle, Button*, pRef, void )
 {
     if(pRef!=NULL)
     {
         aRefLink.Call(this);
     }
-    return 0;
 }
 
 SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel)

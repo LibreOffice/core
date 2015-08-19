@@ -223,7 +223,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
 protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
-        DECL_LINK(ClickAddBrowseHdl_Impl, void * );
+        DECL_LINK_TYPED(ClickAddBrowseHdl_Impl, Button*, void );
 
 
 public:
@@ -321,19 +321,19 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
         DECL_LINK( NumberTypeSelectHdl_Impl, ListBox * );
         DECL_LINK( LevelHdl_Impl, ListBox * );
-        DECL_LINK_TYPED(PopupActivateHdl_Impl, Menu *, bool);
+        DECL_LINK_TYPED( PopupActivateHdl_Impl, Menu *, bool);
         DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
-        DECL_LINK(BulletHdl_Impl, void *);
+        DECL_LINK_TYPED( BulletHdl_Impl, Button*, void);
         DECL_LINK( SizeHdl_Impl, MetricField * );
-        DECL_LINK( RatioHdl_Impl, CheckBox * );
-        DECL_LINK(CharFmtHdl_Impl, void *);
+        DECL_LINK_TYPED( RatioHdl_Impl, Button*, void );
+        DECL_LINK( CharFmtHdl_Impl, void *);
         DECL_LINK( EditModifyHdl_Impl, Edit * );
         DECL_LINK( AllLevelHdl_Impl, NumericField * );
         DECL_LINK( OrientHdl_Impl, ListBox * );
-        DECL_LINK( SameLevelHdl_Impl, CheckBox * );
+        DECL_LINK_TYPED( SameLevelHdl_Impl, Button*, void );
         DECL_LINK( BulColorHdl_Impl, ColorListBox* );
         DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
-        DECL_LINK_TYPED(PreviewInvalidateHdl_Impl, Timer *, void);
+        DECL_LINK_TYPED( PreviewInvalidateHdl_Impl, Timer *, void);
 
 public:
         SvxNumOptionsTabPage(vcl::Window* pParent,
@@ -426,10 +426,10 @@ class SvxNumPositionTabPage : public SfxTabPage
     void                InitControls();
 
     DECL_LINK( LevelHdl_Impl, ListBox * );
-    DECL_LINK(EditModifyHdl_Impl, void *);
+    DECL_LINK( EditModifyHdl_Impl, void *);
     DECL_LINK( DistanceHdl_Impl, MetricField * );
-    DECL_LINK( RelativeHdl_Impl, CheckBox * );
-    DECL_LINK(StandardHdl_Impl, void *);
+    DECL_LINK_TYPED( RelativeHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( StandardHdl_Impl, Button*, void);
 
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();

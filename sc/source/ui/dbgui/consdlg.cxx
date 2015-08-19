@@ -363,7 +363,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
     return 0;
 }
 
-IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
 {
     sal_uInt16 nDataAreaCount = pLbConsAreas->GetEntryCount();
 
@@ -419,10 +419,9 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
     }
     else
         Close(); // no area defined -> Cancel
-    return 0;
 }
 
-IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
 {
     if ( pBtn == pBtnCancel )
         Close();
@@ -484,7 +483,6 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             pLbConsAreas->RemoveEntry( pLbConsAreas->GetSelectEntryPos() );
         pBtnRemove->Disable();
     }
-    return 0;
 }
 
 IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )

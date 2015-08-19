@@ -66,9 +66,9 @@ private:
     void                FillLanguageBox();
     void                ClearLanguageBox();
 
-    DECL_LINK(AddHdl, void *);
-    DECL_LINK(DeleteHdl, void *);
-    DECL_LINK(MakeDefHdl, void *);
+    DECL_LINK_TYPED(AddHdl, Button*, void);
+    DECL_LINK_TYPED(DeleteHdl, Button*, void);
+    DECL_LINK_TYPED(MakeDefHdl, Button*, void);
     DECL_LINK(SelectHdl, void *);
 
 public:

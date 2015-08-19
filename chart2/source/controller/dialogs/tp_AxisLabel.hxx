@@ -65,7 +65,7 @@ private:
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
     bool                m_bComplexCategories;
 
-    DECL_LINK ( ToggleShowLabel, void* );
+    DECL_LINK_TYPED ( ToggleShowLabel, Button*, void );
 
 public:
     SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );

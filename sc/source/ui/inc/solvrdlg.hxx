@@ -80,7 +80,7 @@ private:
     bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
 
-    DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK_TYPED( BtnHdl, Button*, void );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
 };

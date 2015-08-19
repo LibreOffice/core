@@ -365,7 +365,7 @@ protected:
 
     SvxConfigPage( vcl::Window*, const SfxItemSet& );
 
-    DECL_LINK( MoveHdl, Button * );
+    DECL_LINK_TYPED( MoveHdl, Button *, void );
 
     virtual SaveInData* CreateSaveInData(
         const css::uno::Reference< css::ui::XUIConfigurationManager >&,
@@ -442,10 +442,10 @@ private:
 
     DECL_LINK( SelectMenu, ListBox * );
     DECL_LINK( SelectMenuEntry, Control * );
-    DECL_LINK( NewMenuHdl, Button * );
+    DECL_LINK_TYPED( NewMenuHdl, Button *, void );
     DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK( AddCommandsHdl, Button * );
+    DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
 
     void            Init() SAL_OVERRIDE;
@@ -482,7 +482,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 
     void UpdateButtonStates();
 
-    DECL_LINK( MoveHdl, Button * );
+    DECL_LINK_TYPED( MoveHdl, Button *, void );
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( SelectHdl, Control* );
 
@@ -536,10 +536,10 @@ private:
     DECL_LINK( SelectToolbarEntry, Control * );
     DECL_LINK_TYPED( ToolbarSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK( NewToolbarHdl, Button * );
-    DECL_LINK( AddCommandsHdl, Button * );
+    DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
+    DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
-    DECL_LINK( MoveHdl, Button * );
+    DECL_LINK_TYPED( MoveHdl, Button *, void );
 
     void            UpdateButtonStates() SAL_OVERRIDE;
     short           QueryReset() SAL_OVERRIDE;
@@ -690,8 +690,8 @@ public:
         GetSelectedIcon();
 
     DECL_LINK_TYPED( SelectHdl, ToolBox *, void );
-    DECL_LINK( ImportHdl, PushButton * );
-    DECL_LINK( DeleteHdl, PushButton * );
+    DECL_LINK_TYPED( ImportHdl, Button *, void );
+    DECL_LINK_TYPED( DeleteHdl, Button *, void );
 };
 
 class SvxIconReplacementDialog : public MessBox

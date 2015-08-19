@@ -115,7 +115,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemS
     m_pTsbAuto->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickAutoHdl_Impl ) );
     m_pTsbPixel->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickPixelHdl_Impl ) );
 
-    Link<> aLink( LINK( this, SvxTextAnimationPage, ClickDirectionHdl_Impl ) );
+    Link<Button*,void> aLink( LINK( this, SvxTextAnimationPage, ClickDirectionHdl_Impl ) );
     m_pBtnUp->SetClickHdl( aLink );
     m_pBtnLeft->SetClickHdl( aLink );
     m_pBtnRight->SetClickHdl( aLink );
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
     return 0L;
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickEndlessHdl_Impl, Button*, void)
 {
 
     if( eAniKind != SDRTEXTANI_SLIDE )
@@ -542,10 +542,9 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
             m_pNumFldCount->SetValue( m_pNumFldCount->GetValue() );
         }
     }
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickAutoHdl_Impl, Button*, void)
 {
     TriState eState = m_pTsbAuto->GetState();
     if( eState != TRISTATE_FALSE )
@@ -558,11 +557,9 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
         m_pMtrFldDelay->Enable();
         m_pMtrFldDelay->SetValue( m_pMtrFldDelay->GetValue() );
     }
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickPixelHdl_Impl, Button*, void)
 {
     TriState eState = m_pTsbPixel->GetState();
     if( eState == TRISTATE_TRUE )
@@ -597,18 +594,14 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 
         m_pMtrFldAmount->SetValue( nValue );
     }
-
-    return 0L;
 }
 
-IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
+IMPL_LINK_TYPED( SvxTextAnimationPage, ClickDirectionHdl_Impl, Button *, pBtn, void )
 {
     m_pBtnUp->Check( pBtn == m_pBtnUp );
     m_pBtnLeft->Check( pBtn == m_pBtnLeft );
     m_pBtnRight->Check( pBtn == m_pBtnRight );
     m_pBtnDown->Check( pBtn == m_pBtnDown );
-
-    return 0L;
 }
 
 void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )

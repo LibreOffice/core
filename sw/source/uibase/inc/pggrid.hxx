@@ -71,11 +71,12 @@ class SwTextGridPage: public SfxTabPage
     void PutGridItem(SfxItemSet& rSet);
     static void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
 
-    DECL_LINK(GridTypeHdl, RadioButton*);
+    DECL_LINK_TYPED(GridTypeHdl, Button*, void);
     DECL_LINK(CharorLineChangedHdl, SpinField*);
     DECL_LINK(TextSizeChangedHdl, SpinField*);
     DECL_LINK(GridModifyHdl, void*);
-    DECL_LINK(DisplayGridHdl, void *);
+    DECL_LINK_TYPED(GridModifyClickHdl, Button*, void);
+    DECL_LINK_TYPED(DisplayGridHdl, Button*, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

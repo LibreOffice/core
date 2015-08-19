@@ -67,7 +67,7 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
     bool                m_bStop;
 
     void                Test();
-    DECL_LINK(StopHdl, void *);
+    DECL_LINK_TYPED(StopHdl, Button*, void);
     DECL_LINK(TestHdl, void*);
 public:
     explicit SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
@@ -105,9 +105,9 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
 
     SwMailMergeConfigItem& rConfigItem;
 
-    DECL_LINK(OKHdl_Impl, void *);
-    DECL_LINK( CheckBoxHdl_Impl, CheckBox*);
-    DECL_LINK(RadioButtonHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( CheckBoxHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(RadioButtonHdl_Impl, Button*, void);
 
 public:
     SwAuthenticationSettingsDialog(SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem);
@@ -207,25 +207,22 @@ void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
     m_pSecureCB     ->SaveValue();
 }
 
-IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwMailConfigPage, ReplyToHdl, Button*, pBox, void)
 {
-    bool bEnable = pBox->IsChecked();
+    bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pReplyToFT->Enable(bEnable);
     m_pReplyToED->Enable(bEnable);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl)
+IMPL_LINK_NOARG_TYPED(SwMailConfigPage, AuthenticationHdl, Button*, void)
 {
     ScopedVclPtrInstance< SwAuthenticationSettingsDialog > aDlg(this, *m_pConfigItem);
     aDlg->Execute();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwMailConfigPage, TestHdl)
+IMPL_LINK_NOARG_TYPED(SwMailConfigPage, TestHdl, Button*, void)
 {
     ScopedVclPtrInstance<SwTestAccountSettingsDialog>::Create(this)->Execute();
-    return 0;
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
@@ -276,10 +273,9 @@ void SwTestAccountSettingsDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl)
+IMPL_LINK_NOARG_TYPED(SwTestAccountSettingsDialog, StopHdl, Button*, void)
 {
     m_bStop = true;
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl)
@@ -425,7 +421,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     get(m_pOKPB,"ok");
 
     m_pAuthenticationCB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
-    Link<> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
+    Link<Button*,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
     m_pSeparateAuthenticationRB->SetClickHdl( aRBLink );
     m_pSMTPAfterPOPRB->SetClickHdl( aRBLink );
     m_pOKPB->SetClickHdl( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
@@ -481,7 +477,7 @@ void SwAuthenticationSettingsDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAuthenticationSettingsDialog, OKHdl_Impl, Button*, void)
 {
     rConfigItem.SetAuthentication( m_pAuthenticationCB->IsChecked() );
     rConfigItem.SetSMTPAfterPOP(m_pSMTPAfterPOPRB->IsChecked());
@@ -494,20 +490,17 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl)
 
     rConfigItem.SetInServerPassword(m_pInPasswordED->GetText());
     EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, Button*, pBox, void)
 {
-    bool bChecked = pBox->IsChecked();
+    bool bChecked = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pSeparateAuthenticationRB->Enable(bChecked);
     m_pSMTPAfterPOPRB->Enable(bChecked);
     RadioButtonHdl_Impl( 0 );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, Button*, void)
 {
     bool bSeparate = m_pSeparateAuthenticationRB->IsChecked();
     bool bIsEnabled = m_pSeparateAuthenticationRB->IsEnabled();
@@ -532,8 +525,6 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl)
     m_pIMAPRB->Enable(bNotSeparate);
     m_pInPasswordFT->Enable(bNotSeparate);
     m_pInPasswordED->Enable(bNotSeparate);
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

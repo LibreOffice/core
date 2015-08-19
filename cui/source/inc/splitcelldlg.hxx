@@ -41,7 +41,7 @@ public:
     SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
     virtual ~SvxSplitTableDlg();
 
-    DECL_LINK( ClickHdl, Button * );
+    DECL_LINK_TYPED( ClickHdl, Button *, void );
 
     virtual bool IsHorizontal() const SAL_OVERRIDE;
     virtual bool IsProportional() const SAL_OVERRIDE;

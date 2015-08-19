@@ -1140,7 +1140,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pLocaleSettingLB->SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
     m_pDatePatternsED->SetModifyHdl( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
 
-    Link<> aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
+    Link<Button*,void> aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
     m_pAsianSupportCB->SetClickHdl( aLink );
     m_pCTLSupportCB->SetClickHdl( aLink );
 
@@ -1615,10 +1615,10 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED(  OfaLanguagesTabPage, SupportHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     DBG_ASSERT( pBox, "OfaLanguagesTabPage::SupportHdl(): pBox invalid" );
-
     bool bCheck = pBox->IsChecked();
     if ( m_pAsianSupportCB == pBox )
     {
@@ -1638,8 +1638,6 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     }
     else
         SAL_WARN( "cui.options", "OfaLanguagesTabPage::SupportHdl(): wrong pBox" );
-
-    return 0;
 }
 
 namespace

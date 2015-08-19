@@ -183,7 +183,7 @@ bool ScHighlightChgDlg::IsRefInputMode() const
     return m_pEdAssign->IsVisible();
 }
 
-IMPL_LINK( ScHighlightChgDlg, HighlightHandle, CheckBox*, pCb )
+IMPL_LINK_TYPED( ScHighlightChgDlg, HighlightHandle, Button*, pCb, void )
 {
     if(pCb!=NULL)
     {
@@ -200,7 +200,6 @@ IMPL_LINK( ScHighlightChgDlg, HighlightHandle, CheckBox*, pCb )
             m_pCbReject->Disable();
         }
     }
-    return 0;
 }
 
 IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
@@ -217,7 +216,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
     return 0;
 }
 
-IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
+IMPL_LINK_TYPED( ScHighlightChgDlg, OKBtnHdl, Button*, pOKBtn, void )
 {
     if (pOKBtn == m_pOkButton)
     {
@@ -246,7 +245,6 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
         pViewData->GetDocShell()->PostPaintGridAll();
         Close();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

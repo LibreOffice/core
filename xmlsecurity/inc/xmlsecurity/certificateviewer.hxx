@@ -129,7 +129,7 @@ private:
     OUString            msCertOK;
     OUString            msCertNotValidated;
 
-    DECL_LINK(          ViewCertHdl, void* );
+    DECL_LINK_TYPED(    ViewCertHdl, Button*, void );
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear();
     SvTreeListEntry*        InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,

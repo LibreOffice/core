@@ -440,7 +440,7 @@ IMPL_LINK( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
+IMPL_LINK_TYPED( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
 {
     if (pButton == m_pCB_LAENGE)
     {
@@ -455,7 +455,6 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
             m_pMF_LAENGE->Enable();
         }
     }
-    return 0;
 }
 
 

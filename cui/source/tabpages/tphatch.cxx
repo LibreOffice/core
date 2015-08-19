@@ -276,13 +276,13 @@ long SvxHatchTabPage::CheckChanges_Impl()
         {
             case RET_BTN_1:
             {
-                ClickModifyHdl_Impl( this );
+                ClickModifyHdl_Impl( NULL );
             }
             break;
 
             case RET_BTN_2:
             {
-                ClickAddHdl_Impl( this );
+                ClickAddHdl_Impl( NULL );
             }
             break;
 
@@ -473,7 +473,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
@@ -565,12 +565,11 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbHatchings->GetSelectEntryPos();
 
@@ -633,12 +632,11 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
             }
         }
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbHatchings->GetSelectEntryPos();
 
@@ -666,12 +664,11 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -762,12 +759,11 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     OUString aStrFilterType( "*.soh" );
@@ -830,8 +826,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
                           ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
-
-    return 0L;
 }
 
 

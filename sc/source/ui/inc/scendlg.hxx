@@ -51,8 +51,8 @@ private:
     const OUString      aDefScenarioName;
     bool                bIsEdit;
 
-    DECL_LINK(OkHdl, void *);
-    DECL_LINK( EnableHdl, CheckBox * );
+    DECL_LINK_TYPED( OkHdl, Button*, void);
+    DECL_LINK_TYPED( EnableHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX

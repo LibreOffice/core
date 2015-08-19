@@ -56,11 +56,11 @@ private:
     sfx2::FileDialogHelper* pFileDlg;
     VclPtr<vcl::Window>     pOldDefDlgParent;
 
-    DECL_LINK(OKHdl, void *);
-    DECL_LINK(PrevHdl, void *);
-    DECL_LINK(NextHdl, void *);
-    DECL_LINK(RadioButtonHdl, void *);
-    DECL_LINK(InsertFileHdl, PushButton *);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
+    DECL_LINK_TYPED(PrevHdl, Button*, void);
+    DECL_LINK_TYPED(NextHdl, Button*, void);
+    DECL_LINK_TYPED(RadioButtonHdl, Button*, void);
+    DECL_LINK_TYPED(InsertFileHdl, Button *, void);
     DECL_LINK_TYPED(DlgClosedHdl, sfx2::FileDialogHelper *, void);
 
     virtual void    Apply() SAL_OVERRIDE;

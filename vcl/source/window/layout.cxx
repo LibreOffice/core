@@ -2053,10 +2053,9 @@ void MessageDialog::response(short nResponseId)
     EndDialog(nResponseId);
 }
 
-IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
+IMPL_LINK_TYPED(MessageDialog, ButtonHdl, Button *, pButton, void)
 {
     response(get_response(pButton));
-    return 0;
 }
 
 short MessageDialog::get_response(const vcl::Window *pWindow) const

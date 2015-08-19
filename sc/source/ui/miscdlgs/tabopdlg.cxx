@@ -244,7 +244,7 @@ static bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
 
 // Handler:
 
-IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnOk)
     {
@@ -320,8 +320,6 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
     }
     else if (pBtn == m_pBtnCancel)
         Close();
-
-    return 0;
 }
 
 IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )

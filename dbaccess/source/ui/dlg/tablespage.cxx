@@ -400,7 +400,7 @@ namespace dbaui
     }
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryChecked, Control*, _pControl )
     {
-        return OnControlModified(_pControl);
+        return OnControlModified(static_cast<Button*>(_pControl));
     }
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
     {

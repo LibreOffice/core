@@ -40,6 +40,7 @@ class _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_LINK( SelectMacro_Impl, ListBox * );
 
     DECL_DLLPRIVATE_LINK( AssignDeleteHdl_Impl, PushButton * );
+    DECL_DLLPRIVATE_LINK_TYPED( AssignDeleteClickHdl_Impl, Button *, void );
 
     DECL_DLLPRIVATE_LINK_TYPED( TimeOut_Impl, Idle*, void );
 

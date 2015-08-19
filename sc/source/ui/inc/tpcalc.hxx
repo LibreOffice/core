@@ -67,16 +67,16 @@ private:
     VclPtr<FixedText>      m_pFtPrec;
     VclPtr<NumericField>   m_pEdPrec;
 
-    ScDocOptions*   pOldOptions;
-    ScDocOptions*   pLocalOptions;
-    sal_uInt16          nWhichCalc;
+    ScDocOptions*          pOldOptions;
+    ScDocOptions*          pLocalOptions;
+    sal_uInt16             nWhichCalc;
 
 private:
     void            Init();
 
     // Handler:
-    DECL_LINK( RadioClickHdl, RadioButton* );
-    DECL_LINK( CheckClickHdl, CheckBox* );
+    DECL_LINK_TYPED( RadioClickHdl, Button*, void );
+    DECL_LINK_TYPED( CheckClickHdl, Button*, void );
 };
 
 #endif

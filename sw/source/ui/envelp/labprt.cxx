@@ -45,7 +45,7 @@ SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 
     // Install handlers
-    Link<> aLk = LINK(this, SwLabPrtPage, CountHdl);
+    Link<Button*,void> aLk = LINK(this, SwLabPrtPage, CountHdl);
     m_pPageButton->SetClickHdl( aLk );
     m_pSingleButton->SetClickHdl( aLk );
 
@@ -80,7 +80,7 @@ void SwLabPrtPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
+IMPL_LINK_TYPED( SwLabPrtPage, CountHdl, Button *, pButton, void )
 {
     if (pButton == m_pPrtSetup)
     {
@@ -94,7 +94,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         pDlg.disposeAndClear();
         GrabFocus();
         m_pPrinterInfo->SetText(pPrinter->GetName());
-        return 0;
+        return;
     }
     const bool bEnable = pButton == m_pSingleButton;
     m_pSingleGrid->Enable(bEnable);
@@ -105,7 +105,6 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     {
         m_pColField->GrabFocus();
     }
-    return 0;
 }
 
 VclPtr<SfxTabPage> SwLabPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)

@@ -105,9 +105,9 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
     std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelFolders;
 
-    DECL_LINK(ClickHdl, Button*);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK_TYPED(MenuSelectHdl, MenuButton*, void);
-    DECL_LINK(ExtLinkClickHdl, Button*);
+    DECL_LINK_TYPED(ExtLinkClickHdl, Button*, void);
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
 

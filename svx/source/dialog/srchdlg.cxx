@@ -644,29 +644,29 @@ void SvxSearchDialog::InitControls_Impl()
     m_pSearchTmplLB->SetLoseFocusHdl( aLink );
     m_pReplaceTmplLB->SetLoseFocusHdl( aLink );
 
-    aLink = LINK( this, SvxSearchDialog, CommandHdl_Impl );
-    m_pSearchBtn->SetClickHdl( aLink );
-    m_pSearchAllBtn->SetClickHdl( aLink );
-    m_pReplaceBtn->SetClickHdl( aLink );
-    m_pReplaceAllBtn->SetClickHdl( aLink );
-    m_pCloseBtn->SetClickHdl( aLink );
-    m_pSimilarityBtn->SetClickHdl( aLink );
-    m_pJapOptionsBtn->SetClickHdl( aLink );
-    m_pSearchComponent1PB->SetClickHdl( aLink );
-    m_pSearchComponent2PB->SetClickHdl( aLink );
+    Link<Button*,void> aLink2 = LINK( this, SvxSearchDialog, CommandHdl_Impl );
+    m_pSearchBtn->SetClickHdl( aLink2 );
+    m_pSearchAllBtn->SetClickHdl( aLink2 );
+    m_pReplaceBtn->SetClickHdl( aLink2 );
+    m_pReplaceAllBtn->SetClickHdl( aLink2 );
+    m_pCloseBtn->SetClickHdl( aLink2 );
+    m_pSimilarityBtn->SetClickHdl( aLink2 );
+    m_pJapOptionsBtn->SetClickHdl( aLink2 );
+    m_pSearchComponent1PB->SetClickHdl( aLink2 );
+    m_pSearchComponent2PB->SetClickHdl( aLink2 );
 
-    aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
-    m_pWordBtn->SetClickHdl( aLink );
-    m_pSelectionBtn->SetClickHdl( aLink );
-    m_pMatchCaseCB->SetClickHdl( aLink );
-    m_pRegExpBtn->SetClickHdl( aLink );
-    m_pBackwardsBtn->SetClickHdl( aLink );
-    m_pNotesBtn->SetClickHdl( aLink );
-    m_pSimilarityBox->SetClickHdl( aLink );
-    m_pJapOptionsCB->SetClickHdl( aLink );
-    m_pJapMatchFullHalfWidthCB->SetClickHdl( aLink );
-    m_pIgnoreDiacritics->SetClickHdl( aLink );
-    m_pIgnoreKashida->SetClickHdl( aLink );
+    aLink2 = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+    m_pWordBtn->SetClickHdl( aLink2 );
+    m_pSelectionBtn->SetClickHdl( aLink2 );
+    m_pMatchCaseCB->SetClickHdl( aLink2 );
+    m_pRegExpBtn->SetClickHdl( aLink2 );
+    m_pBackwardsBtn->SetClickHdl( aLink2 );
+    m_pNotesBtn->SetClickHdl( aLink2 );
+    m_pSimilarityBox->SetClickHdl( aLink2 );
+    m_pJapOptionsCB->SetClickHdl( aLink2 );
+    m_pJapMatchFullHalfWidthCB->SetClickHdl( aLink2 );
+    m_pIgnoreDiacritics->SetClickHdl( aLink2 );
+    m_pIgnoreKashida->SetClickHdl( aLink2 );
     m_pLayoutBtn->SetClickHdl( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
     m_pFormatBtn->SetClickHdl( LINK( this, SvxSearchDialog, FormatHdl_Impl ) );
     m_pNoFormatBtn->SetClickHdl(
@@ -808,8 +808,8 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     if ( pSearchItem->GetAppFlag() == SvxSearchApp::CALC )
     {
         m_pCalcGrid->Show();
-        Link<> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
-        m_pCalcSearchInLB->SetSelectHdl( aLink );
+        Link<Button*,void> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
+        m_pCalcSearchInLB->SetSelectHdl( LINK( this, SvxSearchDialog, LBSelectHdl_Impl ) );
         m_pRowsBtn->SetClickHdl( aLink );
         m_pColumnsBtn->SetClickHdl( aLink );
         m_pAllSheetsCB->SetClickHdl( aLink );
@@ -1108,10 +1108,21 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
 
 
-IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
+IMPL_LINK( SvxSearchDialog, LBSelectHdl_Impl, Control *, pCtrl )
+{
+    ClickHdl_Impl(pCtrl);
+    return 0;
+}
+
+IMPL_LINK_TYPED( SvxSearchDialog, FlagHdl_Impl, Button *, pCtrl, void )
+{
+    ClickHdl_Impl(pCtrl);
+}
+
+void SvxSearchDialog::ClickHdl_Impl(void* pCtrl)
 {
     if ( pCtrl && !bSet )
-        SetModifyFlag_Impl( pCtrl );
+        SetModifyFlag_Impl( static_cast<Control*>(pCtrl) );
     else
         bSet = false;
 
@@ -1207,13 +1218,13 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
         }
     }
 
-    if (m_pAllSheetsCB == pCtrl)
+    if (pCtrl == m_pAllSheetsCB)
     {
         bSet = true;
         ModifyHdl_Impl(m_pSearchLB);
     }
 
-    if (m_pJapOptionsCB == pCtrl)
+    if (pCtrl == m_pJapOptionsCB)
     {
         bool bEnableJapOpt = m_pJapOptionsCB->IsChecked();
         m_pMatchCaseCB->Enable(!bEnableJapOpt );
@@ -1223,12 +1234,11 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();
-    return 0;
 }
 
 
 
-IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
+IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
 {
     bool bInclusive = ( m_pLayoutBtn->GetText() == aLayoutStr );
 
@@ -1387,8 +1397,6 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
                 pImpl->xCommand2Dispatch->dispatch(pImpl->aCommand2URL, aArgs);
         }
     }
-
-    return 0;
 }
 
 
@@ -1435,13 +1443,13 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
 
 
 
-IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
 {
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();
 
     if ( bFormat )
-        return 0;
+        return;
     OUString sDesc;
 
     if ( m_pLayoutBtn->IsChecked() )
@@ -1518,7 +1526,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
     pImpl->bSaveToModule = false;
     FlagHdl_Impl(m_pLayoutBtn);
     pImpl->bSaveToModule = true;
-    return 0;
 }
 
 
@@ -1880,14 +1887,14 @@ IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSearchDialog, FormatHdl_Impl, Button*, void)
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     DBG_ASSERT( pSh, "no DocShell" );
 
     if ( !pSh || !pImpl->pRanges )
-        return 0;
+        return;
 
     sal_sSize nCnt = 0;
     const sal_uInt16* pPtr = pImpl->pRanges;
@@ -1968,12 +1975,11 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
             PaintAttrText_Impl(); // Set AttributText in GroupBox
         }
     }
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSearchDialog, NoFormatHdl_Impl, Button*, void)
 {
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
     bool bWriterApp =
@@ -2009,15 +2015,14 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
     TemplateHdl_Impl(m_pLayoutBtn);
     pImpl->bSaveToModule = true;
     m_pNoFormatBtn->Disable();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
 {
     if ( !pSearchList || !pImpl->pRanges )
-        return 0;
+        return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
@@ -2027,7 +2032,6 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
         pDlg->Execute();
     }
     PaintAttrText_Impl();
-    return 0;
 }
 
 

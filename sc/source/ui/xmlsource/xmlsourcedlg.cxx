@@ -94,7 +94,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maXMLParam.maImgElementRepeat = Image(ScResId(IMG_ELEMENT_REPEAT));
     maXMLParam.maImgAttribute = Image(ScResId(IMG_ELEMENT_ATTRIBUTE));
 
-    Link<> aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
+    Link<Button*,void> aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
     mpBtnSelectSource->SetClickHdl(aBtnHdl);
     mpBtnOk->SetClickHdl(aBtnHdl);
     mpBtnCancel->SetClickHdl(aBtnHdl);
@@ -669,7 +669,7 @@ IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
     return 0;
 }
 
-IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
+IMPL_LINK_TYPED(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSelectSource)
         SelectSourceFile();
@@ -677,7 +677,6 @@ IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
         OkPressed();
     else if (pBtn == mpBtnCancel)
         CancelPressed();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScXMLSourceDlg, TreeItemSelectHdl)

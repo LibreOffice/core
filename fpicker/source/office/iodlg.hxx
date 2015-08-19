@@ -92,18 +92,19 @@ private:
 
     DECL_LINK( FilterSelectHdl_Impl, void* );
     DECL_LINK_TYPED( FilterSelectTimerHdl_Impl, Timer*, void );
-    DECL_LINK( NewFolderHdl_Impl, PushButton* );
+    DECL_LINK_TYPED( NewFolderHdl_Impl, Button*, void );
     DECL_LINK( OpenHdl_Impl, void* );
-    DECL_LINK       (                CancelHdl_Impl, void* );
+    DECL_LINK_TYPED( OpenClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( CancelHdl_Impl, Button*, void );
     DECL_LINK( FileNameGetFocusHdl_Impl, void* );
     DECL_LINK( FileNameModifiedHdl_Impl, void* );
 
     DECL_LINK( URLBoxModifiedHdl_Impl, void* );
-    DECL_LINK( ConnectToServerPressed_Hdl, void* );
+    DECL_LINK_TYPED( ConnectToServerPressed_Hdl, Button*, void );
 
-    DECL_LINK       (                AddPlacePressed_Hdl, void* );
-    DECL_LINK       (                RemovePlacePressed_Hdl, void* );
-    DECL_LINK       (                Split_Hdl, void* );
+    DECL_LINK_TYPED(                AddPlacePressed_Hdl, Button*, void );
+    DECL_LINK_TYPED(                RemovePlacePressed_Hdl, Button*, void );
+    DECL_LINK      (                Split_Hdl, void* );
 
     void                        Init_Impl( WinBits nBits );
     /** find a filter with the given wildcard
@@ -128,9 +129,9 @@ private:
     DECL_LINK(DblClickHdl_Impl, void *);
     DECL_LINK(EntrySelectHdl_Impl, void *);
     DECL_LINK( OpenDoneHdl_Impl, SvtFileView* );
-    DECL_LINK(AutoExtensionHdl_Impl, void *);
-    DECL_LINK( ClickHdl_Impl, CheckBox* );
-    DECL_LINK(PlayButtonHdl_Impl, void *);
+    DECL_LINK_TYPED(AutoExtensionHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(PlayButtonHdl_Impl, Button*, void);
 
 
     // removes a filter with wildcards from the path and returns it

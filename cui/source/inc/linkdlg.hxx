@@ -66,11 +66,11 @@ class SvBaseLinksDlg : public ModalDialog
 
     DECL_LINK( LinksSelectHdl, SvTabListBox * );
     DECL_LINK( LinksDoubleClickHdl, SvTabListBox * );
-    DECL_LINK( AutomaticClickHdl, RadioButton * );
-    DECL_LINK( ManualClickHdl, RadioButton * );
-    DECL_LINK(UpdateNowClickHdl, void *);
-    DECL_LINK( ChangeSourceClickHdl, PushButton * );
-    DECL_LINK( BreakLinkClickHdl, PushButton * );
+    DECL_LINK_TYPED( AutomaticClickHdl, Button *, void );
+    DECL_LINK_TYPED( ManualClickHdl, Button *, void );
+    DECL_LINK_TYPED(UpdateNowClickHdl, Button *, void);
+    DECL_LINK_TYPED( ChangeSourceClickHdl, Button *, void );
+    DECL_LINK_TYPED( BreakLinkClickHdl, Button *, void );
     DECL_LINK_TYPED( UpdateWaitingHdl, Idle *, void );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
     sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );

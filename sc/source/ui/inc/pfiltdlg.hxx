@@ -92,7 +92,7 @@ private:
     // Handler:
     DECL_LINK( LbSelectHdl, ListBox* );
     DECL_LINK( ValModifyHdl, ComboBox* );
-    DECL_LINK( CheckBoxHdl,  CheckBox* );
+    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX

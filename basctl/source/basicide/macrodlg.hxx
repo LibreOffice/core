@@ -71,7 +71,7 @@ private:
     DECL_LINK(MacroDoubleClickHdl, void *);
     DECL_LINK( BasicSelectHdl, SvTreeListBox * );
     DECL_LINK( EditModifyHdl, Edit * );
-    DECL_LINK( ButtonHdl, Button * );
+    DECL_LINK_TYPED( ButtonHdl, Button *, void );
 
     void                CheckButtons();
     void                SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry );

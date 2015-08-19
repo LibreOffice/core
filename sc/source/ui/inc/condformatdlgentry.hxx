@@ -242,7 +242,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
     virtual OUString GetExpressionString() SAL_OVERRIDE;
     void Init();
 
-    DECL_LINK( OptionBtnHdl, void* );
+    DECL_LINK_TYPED( OptionBtnHdl, Button*, void );
     DECL_LINK( DataBarTypeSelectHdl, void* );
 public:
     ScDataBarFrmtEntry( vcl::Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = NULL );

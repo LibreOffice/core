@@ -352,15 +352,15 @@ void ChartSeriesPanel::Initialize()
 
     updateData();
 
-    Link<> aLink = LINK(this, ChartSeriesPanel, CheckBoxHdl);
+    Link<Button*,void> aLink = LINK(this, ChartSeriesPanel, CheckBoxHdl);
     mpCBLabel->SetClickHdl(aLink);
     mpCBTrendline->SetClickHdl(aLink);
     mpCBXError->SetClickHdl(aLink);
     mpCBYError->SetClickHdl(aLink);
 
-    aLink = LINK(this, ChartSeriesPanel, RadioBtnHdl);
-    mpRBPrimaryAxis->SetToggleHdl(aLink);
-    mpRBSecondaryAxis->SetToggleHdl(aLink);
+    Link<> aLink2 = LINK(this, ChartSeriesPanel, RadioBtnHdl);
+    mpRBPrimaryAxis->SetToggleHdl(aLink2);
+    mpRBSecondaryAxis->SetToggleHdl(aLink2);
 
     mpLBLabelPlacement->SetSelectHdl(LINK(this, ChartSeriesPanel, ListBoxHdl));
 }
@@ -459,8 +459,9 @@ void ChartSeriesPanel::SelectionInvalid()
 {
 }
 
-IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
+IMPL_LINK_TYPED(ChartSeriesPanel, CheckBoxHdl, Button*, pButton, void)
 {
+    CheckBox* pCheckBox = static_cast<CheckBox*>(pButton);
     bool bChecked = pCheckBox->IsChecked();
     OUString aCID = getCID(mxModel);
     if (pCheckBox == mpCBLabel.get())
@@ -471,8 +472,6 @@ IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setErrorBarVisible(mxModel, aCID, false, bChecked);
     else if (pCheckBox == mpCBYError.get())
         setErrorBarVisible(mxModel, aCID, true, bChecked);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl)

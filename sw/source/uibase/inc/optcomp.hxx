@@ -51,7 +51,7 @@ private:
 
     // handler
     DECL_LINK(SelectHdl, void *);
-    DECL_LINK(UseAsDefaultHdl, void *);
+    DECL_LINK_TYPED(UseAsDefaultHdl, Button*, void);
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );

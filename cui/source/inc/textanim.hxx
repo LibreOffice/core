@@ -66,10 +66,10 @@ private:
     SfxMapUnit          eUnit;
 
     DECL_LINK( SelectEffectHdl_Impl, void * );
-    DECL_LINK( ClickEndlessHdl_Impl, void * );
-    DECL_LINK( ClickAutoHdl_Impl, void * );
-    DECL_LINK( ClickPixelHdl_Impl, void * );
-    DECL_LINK( ClickDirectionHdl_Impl, ImageButton * );
+    DECL_LINK_TYPED( ClickEndlessHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickAutoHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickPixelHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickDirectionHdl_Impl, Button*, void );
 
     void                SelectDirection( SdrTextAniDirection nValue );
     sal_uInt16              GetSelectedDirection();

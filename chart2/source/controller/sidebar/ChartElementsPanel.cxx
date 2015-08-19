@@ -356,7 +356,7 @@ void ChartElementsPanel::Initialize()
     xBroadcaster->addModifyListener(mxListener);
     updateData();
 
-    Link<> aLink = LINK(this, ChartElementsPanel, CheckBoxHdl);
+    Link<Button*,void> aLink = LINK(this, ChartElementsPanel, CheckBoxHdl);
     mpCBTitle->SetClickHdl(aLink);
     mpCBSubtitle->SetClickHdl(aLink);
     mpCBXAxis->SetClickHdl(aLink);
@@ -475,8 +475,9 @@ void ChartElementsPanel::updateModel(
     xBroadcasterNew->addModifyListener(mxListener);
 }
 
-IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
+IMPL_LINK_TYPED(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
 {
+    CheckBox* pCheckBox = static_cast<CheckBox*>(pButton);
     bool bChecked = pCheckBox->IsChecked();
     if (pCheckBox == mpCBTitle.get())
         setTitleVisible(mxModel, TitleHelper::MAIN_TITLE, bChecked);
@@ -515,8 +516,6 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setGridVisible(mxModel, GridType::VERT_MINOR, bChecked);
     else if (pCheckBox == mpCBGridHorizontalMinor.get())
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl)

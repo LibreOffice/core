@@ -27,7 +27,7 @@ RemoteDialog::RemoteDialog( vcl::Window *pWindow )
 
     m_pButtonConnect->SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
     SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
-    m_pButtonClose->SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
+    m_pButtonClose->SetClickHdl( LINK( this, RemoteDialog, CloseClickHdl ) );
 }
 
 RemoteDialog::~RemoteDialog()
@@ -43,29 +43,27 @@ void RemoteDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
+IMPL_LINK_NOARG_TYPED(RemoteDialog, HandleConnectButton, Button*, void)
 {
 //     setBusy( true );
     // Fixme: Try and connect
 #if defined(ENABLE_SDREMOTE) && defined(ENABLE_SDREMOTE_BLUETOOTH)
     long aSelected = m_pClientBox->GetActiveEntryIndex();
     if ( aSelected < 0 )
-        return 1;
+        return;
     TClientBoxEntry aEntry = m_pClientBox->GetEntryData(aSelected);
     OUString aPin ( m_pClientBox->getPin() );
     if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
     {
-        return CloseHdl( 0 );
+        CloseHdl( 0 );
     }
-    else
-    {
-        return 1;
-    }
-#else
-    return 0;
 #endif
 }
 
+IMPL_LINK_NOARG_TYPED( RemoteDialog, CloseClickHdl, Button*, void )
+{
+    CloseHdl(NULL);
+}
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
 {
 #ifdef ENABLE_SDREMOTE

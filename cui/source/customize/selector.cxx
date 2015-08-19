@@ -954,7 +954,7 @@ IMPL_LINK( SvxScriptSelectorDialog, FunctionDoubleClickHdl, Control*, pCtrl )
 {
     (void)pCtrl;
     if (m_pOKButton->IsEnabled())
-        return ClickHdl(m_pOKButton);
+        ClickHdl(m_pOKButton);
     return 0;
 }
 
@@ -979,7 +979,7 @@ SvxScriptSelectorDialog::UpdateUI()
     }
 }
 
-IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
 {
     if (pButton == m_pCancelButton)
     {
@@ -1016,8 +1016,6 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
             }
         }
     }
-
-    return 0;
 }
 
 void

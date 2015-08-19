@@ -323,11 +323,10 @@ void UpdateInstallDialog::setError(OUString const & exceptionMessage)
     m_pMle_info->SetText(m_pMle_info->GetText() + exceptionMessage + "\n");
 }
 
-IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
+IMPL_LINK_NOARG_TYPED(UpdateInstallDialog, cancelHandler, Button*, void)
 {
     m_thread->stop();
     EndDialog();
-    return 0;
 }
 
 void UpdateInstallDialog::Thread::downloadExtensions()

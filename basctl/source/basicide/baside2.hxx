@@ -233,7 +233,7 @@ protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
-    DECL_LINK( ButtonHdl, ImageButton * );
+    DECL_LINK_TYPED( ButtonHdl, Button *, void );
     DECL_LINK(TreeListHdl, void *);
     DECL_LINK( implEndDragHdl, HeaderBar * );
     DECL_LINK_TYPED( EditAccHdl, Accelerator *, void );

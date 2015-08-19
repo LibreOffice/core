@@ -151,7 +151,7 @@ class SfxNewFileDialog_Impl
     DECL_LINK(TemplateSelect, void*);
     DECL_LINK(DoubleClick, ListBox*);
     DECL_LINK(Expand, void*);
-    DECL_LINK(LoadFile, void*);
+    DECL_LINK_TYPED(LoadFile, Button*, void);
     sal_uInt16  GetSelectedTemplatePos() const;
 
 public:
@@ -292,10 +292,9 @@ IMPL_LINK( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, LoadFile)
+IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, LoadFile, Button*, void)
 {
     pAntiImpl->EndDialog(RET_TEMPLATE_LOAD);
-    return 0;
 }
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const

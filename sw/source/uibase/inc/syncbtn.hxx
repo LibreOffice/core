@@ -27,7 +27,7 @@ class SwSyncBtnDlg : public SfxFloatingWindow
 {
     VclPtr<PushButton> m_pSyncBtn;
 
-    DECL_STATIC_LINK( SwSyncBtnDlg, BtnHdl, void* );
+    DECL_STATIC_LINK_TYPED( SwSyncBtnDlg, BtnHdl, Button*, void );
 
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);

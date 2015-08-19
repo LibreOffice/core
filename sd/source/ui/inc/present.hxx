@@ -69,8 +69,8 @@ private:
     VclPtr<FixedText>          msMonitorExternal;
     VclPtr<FixedText>          msExternal;
 
-                        DECL_LINK( ChangeRangeHdl, void * );
-                        DECL_LINK( ClickWindowPresentationHdl, void * );
+                        DECL_LINK_TYPED( ChangeRangeHdl, Button*, void );
+                        DECL_LINK_TYPED( ClickWindowPresentationHdl, Button*, void );
                         DECL_LINK( ChangePauseHdl, void * );
 
     void                InitMonitorSettings();

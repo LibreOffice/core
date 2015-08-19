@@ -208,14 +208,14 @@ namespace dbaui
         return 0L;
     }
 
-    IMPL_LINK(OParameterDialog, OnButtonClicked, PushButton*, pButton)
+    IMPL_LINK_TYPED(OParameterDialog, OnButtonClicked, Button*, pButton, void)
     {
         if (m_pCancelBtn == pButton)
         {
             // no interpreting of the given values anymore ....
             m_pParam->SetLoseFocusHdl(Link<>()); // no direct call from the control anymore ...
             m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
-            m_pCancelBtn->SetClickHdl(Link<>());
+            m_pCancelBtn->SetClickHdl(Link<Button*,void>());
             m_pCancelBtn->Click();
         }
         else if (m_pOKBtn == pButton)
@@ -227,7 +227,7 @@ namespace dbaui
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
                     // so the next time it is called we need an error message, again ....
                     // (TODO : there surely are better solutions for this ...)
-                return 1L;
+                return;
             }
 
             if (m_xParams.is())
@@ -253,7 +253,7 @@ namespace dbaui
 
             }
             // to close the dialog (which is more code than a simple EndDialog)
-            m_pOKBtn->SetClickHdl(Link<>());
+            m_pOKBtn->SetClickHdl(Link<Button*,void>());
             m_pOKBtn->Click();
         }
         else if (m_pTravelNext == pButton)
@@ -278,8 +278,6 @@ namespace dbaui
                 // so the next time it is called we need an error message, again ....
                 // (TODO : there surely are better solutions for this ...)
         }
-
-        return 0L;
     }
 
     IMPL_LINK(OParameterDialog, OnEntrySelected, ListBox*, /*pList*/)

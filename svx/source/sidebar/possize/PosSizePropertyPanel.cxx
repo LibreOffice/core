@@ -472,7 +472,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl )
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
 {
     if ( mpCbxScale->IsChecked() )
     {
@@ -483,8 +483,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl )
     // mpCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
     SvtViewOptions aPageOpt(E_TABPAGE, "cui/ui/possizetabpage/PositionAndSize");
     aPageOpt.SetUserItem( USERITEM_NAME, ::com::sun::star::uno::makeAny( ::rtl::OUString::number( int(mpCbxScale->IsChecked()) ) ) );
-
-    return 0;
 }
 
 

@@ -710,11 +710,10 @@ void OSQLMessageBox::dispose()
     ButtonDialog::dispose();
 }
 
-IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( OSQLMessageBox, ButtonClickHdl, Button *, void )
 {
     ScopedVclPtrInstance< OExceptionChainDialog > aDlg( this, m_pImpl->aDisplayInfo );
     aDlg->Execute();
-    return 0;
 }
 
 // OSQLWarningBox

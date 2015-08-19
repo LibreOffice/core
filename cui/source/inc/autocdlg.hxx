@@ -161,7 +161,8 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     SvLBoxButtonData*   pCheckButtonData;
 
         DECL_LINK(SelectHdl, OfaACorrCheckListBox*);
-        DECL_LINK(EditHdl, void *);
+        DECL_LINK_TYPED(EditHdl, Button*, void);
+        DECL_LINK(DoubleClickEditHdl, void*);
         SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
 
@@ -252,7 +253,8 @@ private:
         bool bSWriter:1;
 
         DECL_LINK(SelectHdl, SvTabListBox*);
-        DECL_LINK(NewDelHdl, PushButton*);
+        DECL_LINK_TYPED(NewDelHdl, Button*, void);
+        DECL_LINK(NewDelActionHdl, PushButton*);
         DECL_LINK(ModifyHdl, Edit*);
 
         void RefillReplaceBox(  bool bFromReset,
@@ -312,7 +314,8 @@ private:
     CollatorWrapper* pCompareClass;
     LanguageType    eLang;
 
-    DECL_LINK(NewDelHdl, void*);
+    DECL_LINK_TYPED(NewDelHdl, Button*, void);
+    DECL_LINK(NewDelActionHdl, void*);
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
                     /// Box filled with new language
@@ -380,8 +383,8 @@ private:
     sal_UCS4    cStartQuote;
     sal_UCS4    cEndQuote;
 
-    DECL_LINK( QuoteHdl, PushButton* );
-    DECL_LINK( StdQuoteHdl, PushButton* );
+    DECL_LINK_TYPED( QuoteHdl, Button*, void );
+    DECL_LINK_TYPED( StdQuoteHdl, Button*, void );
 
     OUString            ChangeStringExt_Impl( sal_UCS4 );
 
@@ -453,7 +456,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
 
     void CopyToClipboard() const;
-    DECL_LINK(DeleteHdl, void *);
+    DECL_LINK_TYPED(DeleteHdl, Button*, void);
 };
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------
@@ -496,7 +499,7 @@ private:
         Calls the displayPropertyPage function of the smart tag recognizer
         associated with the currently selected smart tag type.
     */
-    DECL_LINK(ClickHdl, void *);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
 
     /** Handler for the list box
 

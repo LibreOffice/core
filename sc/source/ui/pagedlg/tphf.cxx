@@ -147,7 +147,7 @@ void ScHFPage::DeactivatePage()
 
 // Handler:
 
-IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
+IMPL_LINK_NOARG_TYPED(ScHFPage, TurnOnHdl, Button*, void)
 {
     SvxHFPage::TurnOnHdl( m_pTurnOnBox );
 
@@ -155,18 +155,15 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
         m_pBtnEdit->Enable();
     else
         m_pBtnEdit->Disable();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScHFPage, BtnHdl)
+IMPL_LINK_NOARG_TYPED(ScHFPage, BtnHdl, Button*, void)
 {
     // When the Edit-Dialog is directly called from the Button's Click-Handler,
     // the GrabFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
     // With the new StarView, this workaround should be again considered!
 
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ), NULL, true );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScHFPage, HFEditHdl)

@@ -218,22 +218,20 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG(FinalPage, OnRegister)
+    IMPL_LINK_NOARG_TYPED(FinalPage, OnRegister, Button*, void)
     {
         bool bEnable = m_pRegisterName->IsChecked();
         m_pNameLabel->Enable(bEnable);
         m_pName->Enable(bEnable);
         implCheckName();
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(FinalPage, OnEmbed)
+    IMPL_LINK_NOARG_TYPED(FinalPage, OnEmbed, Button*, void)
     {
         bool bEmbed = m_pEmbed->IsChecked();
         m_pLocationLabel->Enable(!bEmbed);
         m_pLocation->Enable(!bEmbed);
         m_pBrowse->Enable(!bEmbed);
-        return 0L;
     }
 
 }   // namespace abp

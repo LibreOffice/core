@@ -133,14 +133,14 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     SwTableRep*     pRep;
     sal_Int32       nGBFormatLen;
 
-    DECL_LINK( PageHdl, Button* );
-    DECL_LINK( AutoFormatHdl, PushButton* );
-    DECL_LINK( TableFormatHdl, PushButton* );
-    DECL_LINK( DBFormatHdl, Button* );
-    DECL_LINK( TableToFromHdl, Button* );
+    DECL_LINK_TYPED( PageHdl, Button*, void );
+    DECL_LINK_TYPED( AutoFormatHdl, Button*, void );
+    DECL_LINK_TYPED( TableFormatHdl, Button*, void );
+    DECL_LINK_TYPED( DBFormatHdl, Button*, void );
+    DECL_LINK_TYPED( TableToFromHdl, Button*, void );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, ListBox* );
-    DECL_LINK( HeaderHdl, Button* );
+    DECL_LINK_TYPED( HeaderHdl, Button*, void );
 
     bool SplitTextToColArr( const OUString& rText, _DB_Columns& rColArr, bool bInsField );
         using SfxModalDialog::Notify;

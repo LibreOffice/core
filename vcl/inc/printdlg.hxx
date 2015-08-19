@@ -241,7 +241,8 @@ namespace vcl
         virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
 
         DECL_LINK( SelectHdl, ListBox* );
-        DECL_LINK( ClickHdl, Button* );
+        DECL_LINK_TYPED( ClickHdl, Button*, void );
+        DECL_LINK( ToggleHdl, void* );
         DECL_LINK( ModifyHdl, Edit* );
         DECL_LINK( UIOptionsChanged, void* );
 
@@ -274,7 +275,7 @@ namespace vcl
         sal_Int32           mnCur;
         sal_Int32           mnMax;
 
-        DECL_LINK( ClickHdl, Button* );
+        DECL_LINK_TYPED( ClickHdl, Button*, void );
 
     public:
         PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);

@@ -41,11 +41,11 @@ public:
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( EditModifiedHdl, Edit * );
-    DECL_STATIC_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton* );
-    DECL_LINK( AsZeroModifiedHdl, CheckBox*);
+    DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
+    DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK( ConversionModifiedHdl, ListBox*);
     DECL_LINK( SyntaxModifiedHdl, ListBox*);
-    DECL_LINK( CBUseOpenCLHdl, CheckBox*);
+    DECL_LINK_TYPED( CBUseOpenCLHdl, Button*, void);
     DECL_LINK( SpinOpenCLMinSizeHdl, NumericField*);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}

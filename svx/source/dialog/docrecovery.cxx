@@ -678,7 +678,7 @@ void SaveDialog::dispose()
     Dialog::dispose();
 }
 
-IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
+IMPL_LINK_NOARG_TYPED(SaveDialog, OKButtonHdl, Button*, void)
 {
     // start crash-save with progress
     ScopedVclPtrInstance< SaveProgressDialog > pProgress(this, m_pCore);
@@ -691,7 +691,6 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
         nResult = DLG_RET_OK_AUTOLUNCH;
 
     EndDialog(nResult);
-    return 0;
 }
 
 SaveProgressDialog::SaveProgressDialog(vcl::Window* pParent, RecoveryCore* pCore)
@@ -1166,7 +1165,7 @@ void RecoveryDialog::end()
     m_bWaitForCore = false;
 }
 
-IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
+IMPL_LINK_NOARG_TYPED(RecoveryDialog, NextButtonHdl, Button*, void)
 {
     switch (m_eRecoveryState)
     {
@@ -1183,13 +1182,10 @@ IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
     if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_HANDLED)
     {
         EndDialog(DLG_RET_OK);
-        return DLG_RET_OK;
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
+IMPL_LINK_NOARG_TYPED(RecoveryDialog, CancelButtonHdl, Button*, void)
 {
     switch (m_eRecoveryState)
     {
@@ -1209,10 +1205,7 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
     if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_HANDLED)
     {
         EndDialog();
-        return DLG_RET_CANCEL;
     }
-
-    return 0;
 }
 
 OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
@@ -1332,7 +1325,7 @@ OUString BrokenRecoveryDialog::getSaveDirURL()
 }
 
 
-IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
+IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, OkButtonHdl, Button*, void)
 {
     OUString sPhysicalPath = comphelper::string::strip(m_pSaveDirED->GetText(), ' ');
     OUString sURL;
@@ -1342,21 +1335,18 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
         impl_askForSavePath();
 
     EndDialog(DLG_RET_OK);
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl)
+IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, CancelButtonHdl, Button*, void)
 {
     EndDialog();
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl)
+IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, SaveButtonHdl, Button*, void)
 {
     impl_askForSavePath();
-    return 0;
 }
 
 

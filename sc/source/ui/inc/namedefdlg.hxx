@@ -64,8 +64,8 @@ private:
     bool IsNameValid();
     bool IsFormulaValid();
 
-    DECL_LINK( CancelBtnHdl, void * );
-    DECL_LINK( AddBtnHdl, void* );
+    DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
+    DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK( NameModifyHdl, void* );
     DECL_LINK( AssignGetFocusHdl, void * );
 

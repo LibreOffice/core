@@ -51,7 +51,7 @@ void FmShowColsDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
+IMPL_LINK_NOARG_TYPED(FmShowColsDialog, OnClickedOk, Button*, void)
 {
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
@@ -75,7 +75,6 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     }
 
     EndDialog(RET_OK);
-    return 0L;
 }
 
 

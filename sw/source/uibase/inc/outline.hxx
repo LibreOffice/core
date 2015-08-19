@@ -59,8 +59,8 @@ class SwOutlineTabDialog : public SfxTabDialog
     bool                bModified : 1;
 
 protected:
-    DECL_LINK(CancelHdl, void *);
-    DECL_LINK( FormHdl, Button * );
+    DECL_LINK_TYPED(CancelHdl, Button*, void);
+    DECL_LINK_TYPED( FormHdl, Button *, void );
     DECL_LINK( MenuSelectHdl, Menu * );
 
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;

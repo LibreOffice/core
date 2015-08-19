@@ -1463,7 +1463,7 @@ class DemoWidgets : public WorkWindow
     VclPtr<ComboBox> mpGLCombo;
     VclPtr<PushButton> mpGLButton;
 
-    DECL_LINK(GLTestClick, void *);
+    DECL_LINK_TYPED(GLTestClick, Button*, void);
 
 public:
     DemoWidgets() :
@@ -1554,7 +1554,7 @@ public:
     static void leave() { OpenGLZone::leave(); }
 };
 
-IMPL_LINK_NOARG(DemoWidgets,GLTestClick)
+IMPL_LINK_NOARG_TYPED(DemoWidgets, GLTestClick, Button*, void)
 {
     sal_Int32 nSelected = mpGLCombo->GetSelectEntryPos();
 
@@ -1584,8 +1584,6 @@ IMPL_LINK_NOARG(DemoWidgets,GLTestClick)
 
     if (bEnterLeave)
         OpenGLZoneTest::leave();
-
-    return 0;
 }
 
 class DemoPopup : public FloatingWindow

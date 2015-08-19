@@ -657,7 +657,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     }
 }
 
-IMPL_LINK(XMLFilterTestDialog, ClickHdl_Impl, PushButton *, pButton )
+IMPL_LINK_TYPED(XMLFilterTestDialog, ClickHdl_Impl, Button *, pButton, void )
 {
     if (m_pPBExportBrowse == pButton)
     {
@@ -679,8 +679,6 @@ IMPL_LINK(XMLFilterTestDialog, ClickHdl_Impl, PushButton *, pButton )
     {
         Close();
     }
-
-    return 0;
 }
 
 /** returns the front most open component that supports the given service */

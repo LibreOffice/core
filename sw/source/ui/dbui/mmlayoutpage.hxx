@@ -68,8 +68,8 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     DECL_LINK(PreviewLoadedHdl_Impl, void*);
     DECL_LINK(ZoomHdl_Impl, ListBox*);
     DECL_LINK(ChangeAddressHdl_Impl, void *);
-    DECL_LINK(GreetingsHdl_Impl, PushButton*);
-    DECL_LINK(AlignToTextHdl_Impl, CheckBox*);
+    DECL_LINK_TYPED(GreetingsHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(AlignToTextHdl_Impl, Button*, void);
 
     static SwFrameFormat*        InsertAddressFrame(
                             SwWrtShell& rShell,

@@ -1012,13 +1012,13 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
 {
 
     sfx2::FileDialogHelper aFileDialog(0, 0);
     aFileDialog.SetTitle(CUI_RES(RID_SVXSTR_ADD_IMAGE));
     if ( aFileDialog.Execute() != ERRCODE_NONE )
-        return 0;
+        return;
 
     OUString aPath = SvtPathOptions().GetGalleryPath();
     OUString aPathToken = aPath.getToken( 1 , SEARCHPATH_DELIMITER );
@@ -1103,7 +1103,6 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl)
         }
 
     }
-      return 0;
 }
 
 // static
@@ -2008,9 +2007,9 @@ IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox *, pBox )
 
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, SameLevelHdl_Impl, Button*, pBox, void )
 {
-    bool bSet = pBox->IsChecked();
+    bool bSet = static_cast<CheckBox*>(pBox)->IsChecked();
     pActNum->SetContinuousNumbering(bSet);
     bool bRepaint = false;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2024,7 +2023,6 @@ IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, CheckBox *, pBox )
     }
     SetModified(bRepaint);
     InitControls();
-    return 0;
 }
 
 IMPL_LINK( SvxNumOptionsTabPage, BulColorHdl_Impl, ColorListBox*, pBox )
@@ -2198,7 +2196,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
 {
     VclPtrInstance< SvxCharacterMap > pMap( this, true );
 
@@ -2255,7 +2253,6 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 
         SetModified();
     }
-    return 0;
 }
 
 IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
@@ -2326,16 +2323,15 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
     return 0;
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, RatioHdl_Impl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxNumOptionsTabPage, RatioHdl_Impl, Button*, pBox, void )
 {
-    if (pBox->IsChecked())
+    if (static_cast<CheckBox*>(pBox)->IsChecked())
     {
         if (bLastWidthModified)
             SizeHdl_Impl(m_pWidthMF);
         else
             SizeHdl_Impl(m_pHeightMF);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl)
@@ -3472,9 +3468,9 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
     return 0;
 }
 
-IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxNumPositionTabPage, RelativeHdl_Impl, Button*, pBox, void )
 {
-    bool bOn = pBox->IsChecked();
+    bool bOn = static_cast<CheckBox*>(pBox)->IsChecked();
     bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && SAL_MAX_UINT16 != nActNumLvl;
     bool bSetValue = false;
     long nValue = 0;
@@ -3512,7 +3508,6 @@ IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
     m_pDistBorderMF->Enable(bOn || bSingleSelection);
     m_pDistBorderFT->Enable(bOn || bSingleSelection);
     bLastRelative = bOn;
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl)
@@ -3648,7 +3643,7 @@ IMPL_LINK( SvxNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxNumPositionTabPage, StandardHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumPositionTabPage, StandardHdl_Impl, Button*, void)
 {
     sal_uInt16 nMask = 1;
     SvxNumRule aTmpNumRule( pActNum->GetFeatureFlags(),
@@ -3685,7 +3680,6 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, StandardHdl_Impl)
 
     InitControls();
     SetModified();
-    return 0;
 }
 
 void SvxNumPositionTabPage::SetModified(bool bRepaint)

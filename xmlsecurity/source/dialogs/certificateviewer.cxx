@@ -420,7 +420,7 @@ void CertificateViewerCertPathTP::ActivatePage()
     }
 }
 
-IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
+IMPL_LINK_NOARG_TYPED(CertificateViewerCertPathTP, ViewCertHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
@@ -431,8 +431,6 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
                 false );
         aViewer->Execute();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)

@@ -92,10 +92,10 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 protected:
     virtual void Apply() SAL_OVERRIDE;
     DECL_LINK( SelectHdl, SvTabListBox* );
-    DECL_LINK(NewHdl, void *);
-    DECL_LINK( DeleteHdl, Button*  );
+    DECL_LINK_TYPED(NewHdl, Button *, void);
+    DECL_LINK_TYPED( DeleteHdl, Button*, void  );
     DECL_LINK(ModifyHdl, void *);
-    DECL_LINK(RenameHdl, void *);
+    DECL_LINK_TYPED(RenameHdl, Button *, void);
 
 public:
     SwGlossaryGroupDlg(vcl::Window * pParent,

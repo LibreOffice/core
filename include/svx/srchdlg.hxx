@@ -231,15 +231,17 @@ private:
     mutable sal_Int32           nTransliterationFlags;
 
     DECL_LINK( ModifyHdl_Impl, ComboBox* );
-    DECL_LINK( FlagHdl_Impl, Control* );
-    DECL_LINK( CommandHdl_Impl, Button* );
-    DECL_LINK(TemplateHdl_Impl, void *);
+    DECL_LINK_TYPED( FlagHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( CommandHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(TemplateHdl_Impl, Button*, void);
     DECL_LINK( FocusHdl_Impl, Control* );
+    DECL_LINK( LBSelectHdl_Impl, Control* );
     DECL_LINK(LoseFocusHdl_Impl, void *);
-    DECL_LINK(FormatHdl_Impl, void *);
-    DECL_LINK(NoFormatHdl_Impl, void *);
-    DECL_LINK(AttributeHdl_Impl, void *);
+    DECL_LINK_TYPED(FormatHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(NoFormatHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(AttributeHdl_Impl, Button*, void);
     DECL_LINK_TYPED( TimeoutHdl_Impl, Timer*, void );
+    void            ClickHdl_Impl(void* pCtrl);
 
     void            Construct_Impl();
     void            InitControls_Impl();

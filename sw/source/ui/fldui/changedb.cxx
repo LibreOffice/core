@@ -217,7 +217,7 @@ void SwChangeDBDlg::UpdateFields()
     pSh->EndAllAction();
 }
 
-IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl)
+IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, ButtonHdl, Button*, void)
 {
     OUString sTableName;
     OUString sColumnName;
@@ -229,8 +229,6 @@ IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl)
     pSh->ChgDBData(aData);
     ShowDBName(pSh->GetDBData());
     EndDialog(RET_OK);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
@@ -261,12 +259,11 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     }
 }
 
-IMPL_LINK_NOARG(SwChangeDBDlg, AddDBHdl)
+IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, AddDBHdl, Button*, void)
 {
     const OUString sNewDB = SwDBManager::LoadAndRegisterDataSource();
     if (!sNewDB.isEmpty())
         m_pAvailDBTLB->AddDataSource(sNewDB);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
+IMPL_LINK_NOARG_TYPED(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
 {
     ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDefaultCompatDialog",
                                                "modules/swriter/ui/querydefaultcompatdialog.ui");
@@ -358,8 +358,6 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 
         WriteOptions();
     }
-
-    return 0;
 }
 
 void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )

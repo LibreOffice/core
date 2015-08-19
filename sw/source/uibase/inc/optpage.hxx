@@ -60,7 +60,7 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<FixedText>  m_pMetricLabel;
     VclPtr<ListBox>    m_pMetricLB;
 
-    DECL_LINK(VertRulerHdl, CheckBox*);
+    DECL_LINK_TYPED(VertRulerHdl, Button*, void);
 public:
     SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwContentOptPage();
@@ -105,7 +105,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     bool bAttrModified;
     bool bPreview;
 
-    DECL_LINK(AutoClickHdl, void *);
+    DECL_LINK_TYPED(AutoClickHdl, Button*, void);
     DECL_LINK(SelectHdl, void *);
 
 public:
@@ -173,7 +173,7 @@ class SwStdFontTabPage : public SfxTabPage
     OUString sScriptAsian;
     OUString sScriptComplex;
 
-    DECL_LINK(StandardHdl, void *);
+    DECL_LINK_TYPED(StandardHdl, Button*, void);
     DECL_LINK(ModifyHdl, ComboBox * );
     DECL_LINK(ModifyHeightHdl, FontSizeBox * );
     DECL_LINK(LoseFocusHdl, ComboBox * );
@@ -219,7 +219,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     SwWrtShell* pWrtShell;
     bool        bHTMLMode;
 
-    DECL_LINK(CheckBoxHdl, void *);
+    DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
 
 public:
     SwTableOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
@@ -388,7 +388,7 @@ private:
     bool bAttrModified;
 
     void Init();
-    DECL_LINK(AutoClickHdl, void*);
+    DECL_LINK_TYPED(AutoClickHdl, Button*, void);
 };
 #endif // DBG_UTIL
 
@@ -403,8 +403,8 @@ class SwCompareOptionsTabPage : public SfxTabPage
     VclPtr<NumericField> m_pLenNF;
     VclPtr<CheckBox>     m_pStoreRsidCB;
 
-    DECL_LINK(ComparisonHdl, void *);
-    DECL_LINK(IgnoreHdl, void *);
+    DECL_LINK_TYPED(ComparisonHdl, Button*, void);
+    DECL_LINK_TYPED(IgnoreHdl, Button*, void);
 
 public:
     SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

@@ -187,7 +187,7 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
     m_pListBox->Show();
     const OUString sTitle(ModuleRes(RID_STR_INSERT));
     m_aInsertButton->SetText(sTitle);
-    m_aInsertButton->SetClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
+    m_aInsertButton->SetClickHdl(LINK( this, OAddFieldWindow, OnClickHdl ) );
     m_aInsertButton->Show();
 
     m_aFixedLine->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
@@ -499,6 +499,11 @@ IMPL_LINK_NOARG( OAddFieldWindow, OnSelectHdl )
     m_aActions->EnableItem(SID_ADD_CONTROL_PAIR, ( m_pListBox.get() && m_pListBox->GetSelectionCount() > 0 ));
 
     return 0L;
+}
+
+IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnClickHdl, Button*, void )
+{
+    OnDoubleClickHdl(NULL);
 }
 
 IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl )

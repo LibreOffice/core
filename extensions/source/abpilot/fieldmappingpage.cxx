@@ -78,7 +78,7 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG( FieldMappingPage, OnInvokeDialog )
+    IMPL_LINK_NOARG_TYPED( FieldMappingPage, OnInvokeDialog, Button*, void )
     {
         AddressSettings& rSettings = getSettings();
 
@@ -90,8 +90,6 @@ namespace abp
             else
                 implUpdateHint();
         }
-
-        return 0L;
     }
 
 

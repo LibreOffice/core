@@ -153,13 +153,13 @@ namespace editeng
 
     private:
         DECL_LINK( OnOptionsChanged, void* );
-        DECL_LINK( OnIgnore, void* );
-        DECL_LINK( OnIgnoreAll, void* );
-        DECL_LINK( OnChange, void* );
-        DECL_LINK( OnChangeAll, void* );
+        DECL_LINK_TYPED( OnIgnore, Button*, void );
+        DECL_LINK_TYPED( OnIgnoreAll, Button*, void );
+        DECL_LINK_TYPED( OnChange, Button*, void );
+        DECL_LINK_TYPED( OnChangeAll, Button*, void );
         DECL_LINK( OnByCharClicked, CheckBox* );
-        DECL_LINK( OnConversionTypeChanged, void* );
-        DECL_LINK( OnFind, void* );
+        DECL_LINK_TYPED( OnConversionTypeChanged, Button*, void );
+        DECL_LINK_TYPED( OnFind, Button*, void );
 
         /** proceed, after the current convertible has been handled
 
@@ -819,14 +819,13 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnore)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnIgnore, Button*, void)
     {
         // simply ignore, and proceed
         implProceed( false );
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnoreAll)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnIgnoreAll, Button*, void)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnIgnoreAll: no dialog! How this?" );
 
@@ -842,11 +841,9 @@ namespace editeng
             // and proceed
             implProceed( false );
         }
-
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChange)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnChange, Button*, void)
     {
         // change
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
@@ -854,11 +851,9 @@ namespace editeng
             implChange( m_pConversionDialog->GetCurrentSuggestion( ) );
         // and proceed
         implProceed( false );
-
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChangeAll)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnChangeAll, Button*, void)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
         if ( m_pConversionDialog )
@@ -878,8 +873,6 @@ namespace editeng
             // and proceed
             implProceed( false );
         }
-
-        return 0L;
     }
 
     IMPL_LINK( HangulHanjaConversion_Impl, OnByCharClicked, CheckBox*, _pBox )
@@ -891,15 +884,14 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnConversionTypeChanged)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnConversionTypeChanged, Button*, void)
     {
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
         if( m_pConversionDialog )
             m_eConversionFormat = m_pConversionDialog->GetConversionFormat( );
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnFind)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnFind, Button*, void)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnFind: where did this come from?" );
         if ( m_pConversionDialog )
@@ -955,7 +947,6 @@ namespace editeng
                 OSL_FAIL( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
             }
         }
-        return 0L;
     }
 
     bool    HangulHanjaConversion::m_bUseSavedValues        = false;

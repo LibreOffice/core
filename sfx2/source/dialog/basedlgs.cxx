@@ -623,7 +623,7 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 // SfxSingleTabDialog ----------------------------------------------------
 
-IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
 
 /*  [Description]
 
@@ -635,7 +635,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
     {
         // TabPage without ItemSet
         EndDialog( RET_OK );
-        return 1;
+        return;
     }
 
     if ( !GetOutputItemSet() )
@@ -648,7 +648,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
     {
         int nRet = pImpl->m_pSfxPage->DeactivatePage( GetOutputSetImpl() );
         if ( nRet != SfxTabPage::LEAVE_PAGE )
-            return 0;
+            return;
         else
             bModified = ( GetOutputItemSet()->Count() > 0 );
     }
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
     }
     else
         EndDialog();
-    return 0;
+    return;
 }
 
 

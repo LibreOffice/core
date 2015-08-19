@@ -694,7 +694,7 @@ IMPL_LINK( ObjectPage, BasicBoxHighlightHdl, TreeListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
+IMPL_LINK_TYPED( ObjectPage, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == m_pEditButton)
     {
@@ -749,8 +749,6 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         NewDialog();
     else if (pButton == m_pDelButton)
         DeleteCurrent();
-
-    return 0;
 }
 
 bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )

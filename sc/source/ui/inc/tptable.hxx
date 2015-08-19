@@ -73,8 +73,8 @@ private:
 private:
 
     // Handler:
-    DECL_LINK(PageDirHdl, void *);
-    DECL_LINK( PageNoHdl, CheckBox* );
+    DECL_LINK_TYPED(PageDirHdl, Button*, void);
+    DECL_LINK_TYPED( PageNoHdl, Button*, void );
     DECL_LINK(ScaleHdl, void *);
 };
 

@@ -59,7 +59,7 @@ private:
     bool            bHidePrint;
 
     // Handler:
-    DECL_LINK( ButtonClickHdl, TriStateBox* );
+    DECL_LINK_TYPED( ButtonClickHdl, Button*, void );
     void        UpdateButtons();
 };
 

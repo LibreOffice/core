@@ -132,7 +132,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     Link<> a2Link=LINK( this, ScFunctionDockWin, SetSelectionHdl);
     aFuncList->SetDoubleClickHdl(a2Link);
     aDDFuncList->SetSelectHdl(aLink);
-    aInsertButton->SetClickHdl(a2Link);
+    aInsertButton->SetClickHdl(LINK( this, ScFunctionDockWin, SetSelectionClickHdl));
 
     Link<> a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
     aPrivatSplit->SetCtrModifiedHdl(a3Link);
@@ -955,6 +955,10 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 #*
 #************************************************************************/
 
+IMPL_LINK_TYPED( ScFunctionDockWin, SetSelectionClickHdl, Button*, pCtrl, void )
+{
+    SetSelectionHdl(pCtrl);
+}
 IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 {
     if (static_cast<ImageButton *>(pCtrl) == aInsertButton.get() ||

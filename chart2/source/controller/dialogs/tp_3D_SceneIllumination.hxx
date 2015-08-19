@@ -60,9 +60,9 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    DECL_LINK( ClickLightSourceButtonHdl, LightButton* );
+    DECL_LINK_TYPED( ClickLightSourceButtonHdl, Button*, void );
     DECL_LINK( SelectColorHdl, ColorLB* );
-    DECL_LINK( ColorDialogHdl, Button* );
+    DECL_LINK_TYPED( ColorDialogHdl, Button*, void );
     DECL_LINK( PreviewChangeHdl, void* );
     DECL_LINK( PreviewSelectHdl, void* );
 

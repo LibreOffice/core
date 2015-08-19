@@ -84,8 +84,8 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pConditionCB->SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
     m_pTbLinks->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     m_pStyleLB->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    m_pRemovePB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    m_pAssignPB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    m_pRemovePB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
+    m_pAssignPB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
     m_pTbLinks->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
     m_pStyleLB->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
     m_pFilterLB->SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
@@ -213,9 +213,9 @@ void SwCondCollPage::Reset(const SfxItemSet *)
 
 }
 
-IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SwCondCollPage, OnOffHdl, Button*, pBox, void )
 {
-    const bool bEnable = pBox->IsChecked();
+    const bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pContextFT->Enable( bEnable );
     m_pUsedFT->Enable( bEnable );
     m_pTbLinks->EnableList( bEnable );
@@ -226,9 +226,12 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
     m_pAssignPB->Enable( bEnable );
     if( bEnable )
         SelectHdl(0);
-    return 0;
 }
 
+IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveClickHdl, Button*, pBtn, void)
+{
+    AssignRemoveHdl(static_cast<PushButton*>(pBtn));
+}
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
     SvTreeListEntry* pE = m_pTbLinks->FirstSelected();

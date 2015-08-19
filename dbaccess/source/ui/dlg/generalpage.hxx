@@ -186,10 +186,10 @@ namespace dbaui
 
     protected:
         DECL_LINK( OnEmbeddedDBTypeSelected, ListBox* );
-        DECL_LINK( OnCreateDatabaseModeSelected, RadioButton* );
-        DECL_LINK( OnSetupModeSelected, RadioButton* );
+        DECL_LINK_TYPED( OnCreateDatabaseModeSelected, Button*, void );
+        DECL_LINK_TYPED( OnSetupModeSelected, Button*, void );
         DECL_LINK( OnDocumentSelected, ListBox* );
-        DECL_LINK( OnOpenDocument, PushButton* );
+        DECL_LINK_TYPED( OnOpenDocument, Button*, void );
     };
 
 }   // namespace dbaui

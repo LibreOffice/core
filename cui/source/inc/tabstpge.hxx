@@ -107,12 +107,12 @@ private:
     void            SetFillAndTabType_Impl();
 
     // Handler
-    DECL_LINK( NewHdl_Impl, Button* );
-    DECL_LINK(DelHdl_Impl, void *);
-    DECL_LINK(DelAllHdl_Impl, void *);
+    DECL_LINK_TYPED( NewHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(DelHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(DelAllHdl_Impl, Button*, void );
 
-    DECL_LINK( FillTypeCheckHdl_Impl, RadioButton* );
-    DECL_LINK( TabTypeCheckHdl_Impl, RadioButton* );
+    DECL_LINK_TYPED( FillTypeCheckHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( TabTypeCheckHdl_Impl, Button*, void );
 
     DECL_LINK(SelectHdl_Impl, void *);
     DECL_LINK(ModifyHdl_Impl, void *);

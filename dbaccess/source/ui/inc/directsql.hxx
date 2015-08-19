@@ -85,8 +85,9 @@ namespace dbaui
         virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnExecute, void* );
+        DECL_LINK_TYPED( OnExecute, Button*, void );
         DECL_LINK( OnClose, void* );
+        DECL_LINK_TYPED( OnCloseClick, Button*, void );
         DECL_LINK( OnListEntrySelected, void* );
         DECL_LINK( OnStatementModified, void* );
 

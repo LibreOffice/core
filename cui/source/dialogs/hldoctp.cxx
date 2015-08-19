@@ -189,7 +189,7 @@ void SvxHyperlinkDocTp::SetInitFocus()
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
 {
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
@@ -218,8 +218,6 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
         if ( aOldURL != GetCurrentURL() )
             ModifiedPathHdl_Impl (NULL);
     }
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -228,7 +226,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
 {
     if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
          maStrURL.isEmpty() ||
@@ -250,8 +248,6 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl)
         mpMarkWnd->SetError( LERR_DOCNOTOPEN );
 
     ShowMarkWnd ();
-
-    return 0L;
 }
 
 /*************************************************************************

@@ -70,7 +70,7 @@ class ODateTimeDialog : public ModalDialog
     */
     sal_Int32 getFormatKey(bool _bDate) const;
 
-    DECL_LINK( CBClickHdl, CheckBox* );
+    DECL_LINK_TYPED( CBClickHdl, Button*, void );
     ODateTimeDialog(const ODateTimeDialog&) SAL_DELETED_FUNCTION;
     void operator =(const ODateTimeDialog&) SAL_DELETED_FUNCTION;
 

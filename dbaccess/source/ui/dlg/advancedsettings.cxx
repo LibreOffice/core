@@ -100,7 +100,7 @@ namespace dbaui
             if ( rFeatures.has( nItemId ) )
             {
                 get(*setting->ppControl, setting->sControlId);
-                (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
+                (*setting->ppControl)->SetClickHdl( getControlModifiedClickLink() );
                 (*setting->ppControl)->Show();
 
                 // check whether this must be a tristate check box
@@ -336,7 +336,7 @@ namespace dbaui
         get(m_pAutoRetrievingLabel, "queryft");
         get(m_pAutoRetrieving, "query");
 
-        m_pAutoRetrievingEnabled->SetClickHdl( getControlModifiedLink() );
+        m_pAutoRetrievingEnabled->SetClickHdl( getControlModifiedClickLink() );
         m_pAutoIncrement->SetModifyHdl( getControlModifiedLink() );
         m_pAutoRetrieving->SetModifyHdl( getControlModifiedLink() );
 

@@ -91,8 +91,8 @@ private:
     void FillAreaLists      ();
     bool VerifyEdit         ( formula::RefEdit* pEd );
 
-    DECL_LINK( OkHdl,        void* );
-    DECL_LINK( ClickHdl,     PushButton* );
+    DECL_LINK_TYPED( OkHdl,    Button*, void );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( ModifyHdl,    formula::RefEdit* );
     DECL_LINK( SelectHdl,    ListBox* );

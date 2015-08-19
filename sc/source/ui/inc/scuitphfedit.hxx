@@ -98,7 +98,7 @@ private:
     static bool IsDateEntry(EditTextObject* pTextObj);
     static bool IsExtFileNameEntry(EditTextObject* pTextObj);
     DECL_LINK( ListHdl_Impl, ListBox* );
-    DECL_LINK( ClickHdl,  PushButton* );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_STATIC_LINK( ScHFEditPage, MenuHdl, ScExtIButton* );
 };
 

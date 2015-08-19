@@ -148,7 +148,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pDelBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelHdl_Impl ) );
     m_pDelAllBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelAllHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl );
+    Link<Button*,void> aLink = LINK( this, SvxTabulatorTabPage, TabTypeCheckHdl_Impl );
     m_pLeftTab->SetClickHdl( aLink );
     m_pRightTab->SetClickHdl( aLink );
     m_pDezTab->SetClickHdl( aLink );
@@ -461,7 +461,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     pFillBtn->Check();
 }
 
-IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
+IMPL_LINK_TYPED( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
 {
     // Add a new one and select it
     // Get the value from the display
@@ -469,7 +469,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 
     // If the pBtn == 0 && the value == 0 then do not create a tab, because we create via OK
     if ( nVal == 0 && pBtn == 0 )
-        return 0;
+        return;
 
     long nOffset = 0;
     const SfxPoolItem* pItem = 0;
@@ -514,20 +514,19 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     bCheck = true;
     // Set the selection into the position Edit
     m_pTabBox->SetSelection(Selection(0, m_pTabBox->GetText().getLength()));
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue() );
 
     if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
-        return 0;
+        return;
 
     if ( m_pTabBox->GetEntryCount() == 1 )
     {
         DelAllHdl_Impl( 0 );
-        return 0;
+        return;
     }
 
     // Delete Tab
@@ -555,10 +554,9 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 
     // If no RadioButton was clicked, we need to put anyway
     bCheck = true;
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelAllHdl_Impl, Button*, void)
 {
     if ( aNewTabs.Count() )
     {
@@ -568,10 +566,9 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
         // So that we put in FillItemSet()
         bCheck = true;
     }
-    return 0;
 }
 
-IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
+IMPL_LINK_TYPED( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void )
 {
     bCheck = true;
     SvxTabAdjust eAdj;
@@ -601,10 +598,9 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
         aNewTabs.Remove( nPos );
         aNewTabs.Insert( aAktTab );
     }
-    return 0;
 }
 
-IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
+IMPL_LINK_TYPED( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, Button *, pBox, void )
 {
     bCheck = true;
     sal_uInt8 cFill = ' ';
@@ -630,7 +626,6 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
         aNewTabs.Remove( nPos );
         aNewTabs.Insert( aAktTab );
     }
-    return 0;
 }
 
 IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )

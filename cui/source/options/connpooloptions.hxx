@@ -59,7 +59,7 @@ namespace offapp
         virtual void        ActivatePage( const SfxItemSet& _rSet) SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnEnabledDisabled, const CheckBox* );
+        DECL_LINK_TYPED( OnEnabledDisabled, Button*, void );
         DECL_LINK( OnDriverRowChanged, const void* );
 
         void implInitControls(const SfxItemSet& _rSet, bool _bFromReset);

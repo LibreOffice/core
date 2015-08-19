@@ -92,7 +92,7 @@ private:
 
     void Initialize();
 
-    DECL_LINK(CheckBoxHdl, CheckBox*);
+    DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
     DECL_LINK(ListBoxHdl, void*);
 };
 

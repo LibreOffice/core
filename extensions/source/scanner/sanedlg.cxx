@@ -607,7 +607,7 @@ void SaneDlg::InitFields()
     }
 }
 
-IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
+IMPL_LINK_TYPED( SaneDlg, ClickBtnHdl, Button*, pButton, void )
 {
     if( mrSane.IsOpen() )
     {
@@ -679,7 +679,6 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
         mrSane.Close();
         EndDialog();
     }
-    return 0;
 }
 
 IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )

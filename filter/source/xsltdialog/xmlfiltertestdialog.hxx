@@ -44,7 +44,7 @@ public:
     void updateCurrentDocumentButtonState( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > * pRef = NULL );
 
 private:
-    DECL_LINK(ClickHdl_Impl, PushButton * );
+    DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );
 
     void onExportBrowse();
     void onExportCurrentDocument();

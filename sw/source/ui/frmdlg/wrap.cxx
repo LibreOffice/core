@@ -120,13 +120,13 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pBottomMarginED->SetLastHdl(aLk);
     m_pBottomMarginED->SetLoseFocusHdl(aLk);
 
-    aLk = LINK(this, SwWrapTabPage, WrapTypeHdl);
-    m_pNoWrapRB->SetClickHdl(aLk);
-    m_pWrapLeftRB->SetClickHdl(aLk);
-    m_pWrapRightRB->SetClickHdl(aLk);
-    m_pWrapParallelRB->SetClickHdl(aLk);
-    m_pWrapThroughRB->SetClickHdl(aLk);
-    m_pIdealWrapRB->SetClickHdl(aLk);
+    Link<Button*,void> aLk2 = LINK(this, SwWrapTabPage, WrapTypeHdl);
+    m_pNoWrapRB->SetClickHdl(aLk2);
+    m_pWrapLeftRB->SetClickHdl(aLk2);
+    m_pWrapRightRB->SetClickHdl(aLk2);
+    m_pWrapParallelRB->SetClickHdl(aLk2);
+    m_pWrapThroughRB->SetClickHdl(aLk2);
+    m_pIdealWrapRB->SetClickHdl(aLk2);
     ApplyImageList();
     m_pWrapOutlineCB->SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
 }
@@ -612,7 +612,7 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwWrapTabPage, WrapTypeHdl, RadioButton *, pBtn )
+IMPL_LINK_TYPED( SwWrapTabPage, WrapTypeHdl, Button *, pBtn, void )
 {
     bool bWrapThrough = (pBtn == m_pWrapThroughRB);
     m_pWrapTransparentCB->Enable( bWrapThrough && !m_bHtmlMode );
@@ -624,10 +624,9 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, RadioButton *, pBtn )
         (pBtn != m_pNoWrapRB) );
 
     ContourHdl(0);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
+IMPL_LINK_NOARG_TYPED(SwWrapTabPage, ContourHdl, Button*, void)
 {
     bool bEnable = !(m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled());
 
@@ -639,8 +638,6 @@ IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
         m_bContourImage = !bEnable;
         ApplyImageList();
     }
-
-    return 0;
 }
 
 void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )

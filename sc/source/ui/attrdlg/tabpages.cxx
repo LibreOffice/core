@@ -159,9 +159,9 @@ SfxTabPage::sfxpg ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
+IMPL_LINK_TYPED( ScTabPageProtection, ButtonClickHdl, Button*, pBox, void )
 {
-    TriState eState = pBox->GetState();
+    TriState eState = static_cast<TriStateBox*>(pBox)->GetState();
     if ( eState == TRISTATE_INDET )
         bDontCare = true;                           // everything combined at DontCare
     else
@@ -184,8 +184,6 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
     }
 
     UpdateButtons();        // TriState and Logic-Enable
-
-    return 0;
 }
 
 void ScTabPageProtection::UpdateButtons()

@@ -2252,8 +2252,9 @@ IMPL_LINK_TYPED( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
     }
 }
 
-IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( CalendarField, ImplClickHdl, Button*, pButton, void )
 {
+    PushButton* pBtn = static_cast<PushButton*>(pButton);
     mpFloatWin->EndPopupMode();
     EndDropDown();
     GrabFocus();
@@ -2277,8 +2278,6 @@ IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
             Modify();
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)

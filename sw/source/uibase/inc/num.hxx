@@ -94,8 +94,8 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK(EditModifyHdl, void *);
     DECL_LINK( DistanceHdl, MetricField * );
-    DECL_LINK( RelativeHdl, CheckBox * );
-    DECL_LINK(StandardHdl, void *);
+    DECL_LINK_TYPED( RelativeHdl, Button*, void );
+    DECL_LINK_TYPED(StandardHdl, Button*, void);
 
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
@@ -150,7 +150,7 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
     protected:
         virtual short   Ok() SAL_OVERRIDE;
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
-        DECL_LINK(RemoveNumberingHdl, void *);
+        DECL_LINK_TYPED(RemoveNumberingHdl, Button*, void);
     public:
         SwSvxNumBulletTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,

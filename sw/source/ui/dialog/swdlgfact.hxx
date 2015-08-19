@@ -135,7 +135,7 @@ public:
         : AbstractTabDialog_Impl(p)
     {
     }
-    DECL_LINK(ApplyHdl, void*);
+    DECL_LINK_TYPED(ApplyHdl, Button*, void);
 private:
     Link<> m_aHandler;
     virtual void                SetApplyHdl( const Link<>& rLink ) SAL_OVERRIDE;

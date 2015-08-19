@@ -393,7 +393,7 @@ void CmisDetailsContainer::selectRepository( )
     }
 }
 
-IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
+IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
 {
     OUString sBindingUrl = m_pEDHost->GetText().trim( );
 
@@ -456,8 +456,6 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
         m_pLBRepository->SelectEntryPos( 0 );
         selectRepository( );
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG( CmisDetailsContainer, SelectRepoHdl  )

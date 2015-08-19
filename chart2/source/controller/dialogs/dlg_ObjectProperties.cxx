@@ -640,10 +640,10 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
     }
 }
 
-IMPL_LINK_NOARG(SchAttribTabDlg, OKPressed)
+IMPL_LINK_TYPED(SchAttribTabDlg, OKPressed, Button*, pButton, void)
 {
     m_bOKPressed = true;
-    return m_aOriginalOKClickHdl.Call( this );
+    m_aOriginalOKClickHdl.Call( pButton );
 }
 
 } //namespace chart

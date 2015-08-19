@@ -719,9 +719,9 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pField )
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
 {
-    bool bOn = pBox->IsChecked();
+    bool bOn = static_cast<CheckBox*>(pBox)->IsChecked();
     bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
     bool bSetValue = false;
     long nValue = 0;
@@ -755,7 +755,6 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
         m_pDistBorderMF->SetText(aEmptyOUStr);
     m_pDistBorderMF->Enable(bOn || bSingleSelection || pOutlineDlg);
     bLastRelative = bOn;
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
@@ -893,7 +892,7 @@ IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pField )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl)
+IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, StandardHdl, Button*, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -927,7 +926,6 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl)
 
     InitControls();
     SetModified();
-    return 0;
 }
 
 #ifdef DBG_UTIL
@@ -1022,10 +1020,9 @@ short  SwSvxNumBulletTabDialog::Ok()
     return nRet;
 }
 
-IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, RemoveNumberingHdl)
+IMPL_LINK_NOARG_TYPED(SwSvxNumBulletTabDialog, RemoveNumberingHdl, Button*, void)
 {
     EndDialog(RET_USER);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

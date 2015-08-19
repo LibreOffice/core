@@ -208,7 +208,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*,  )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, NewHdl, Button*, void)
 {
     OUString sGroup = m_pNameED->GetText()
         + OUStringLiteral1<GLOS_DELIM>()
@@ -225,17 +225,15 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
     m_pGroupTLB->Select(pEntry);
     m_pGroupTLB->MakeVisible(pEntry);
     m_pGroupTLB->GetModel()->Resort();
-
-    return 0;
 }
 
-IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
+IMPL_LINK_TYPED( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
 {
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     if(!pEntry)
     {
         pButton->Enable(false);
-        return 0;
+        return;
     }
     GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
     OUString const sEntry(pUserData->sGroupName);
@@ -276,10 +274,9 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
         pButton->Enable(false);
     //the content must be deleted - otherwise the new handler would be called in Apply()
     m_pNameED->SetText(aEmptyOUStr);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
@@ -322,7 +319,6 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     m_pGroupTLB->Select(pEntry);
     m_pGroupTLB->MakeVisible(pEntry);
     m_pGroupTLB->GetModel()->Resort();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)

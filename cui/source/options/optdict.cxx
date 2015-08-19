@@ -133,7 +133,7 @@ void SvxNewDictionaryDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
 {
     OUString sDict = comphelper::string::stripEnd(pNameEdit->GetText(), ' ');
     // add extension for personal dictionaries
@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
         // duplicate names?
         ScopedVclPtrInstance<MessageDialog>::Create(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VCL_MESSAGE_INFO)->Execute();
         pNameEdit->GrabFocus();
-        return 0;
+        return;
     }
 
     // create and add
@@ -202,7 +202,6 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 
 
     EndDialog( RET_OK );
-    return 0;
 }
 
 
@@ -273,8 +272,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     pWordED->SetModifyHdl(LINK(this, SvxEditDictionaryDialog, ModifyHdl));
     pReplaceED->SetModifyHdl(LINK(this, SvxEditDictionaryDialog, ModifyHdl));
-    pWordED->SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
-    pReplaceED->SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
+    pWordED->SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelActionHdl));
+    pReplaceED->SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelActionHdl));
 
     // fill listbox with all available WB's
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
@@ -593,7 +592,12 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
 
 
 
-IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelHdl, Button*, pBtn, void)
+{
+    NewDelActionHdl(static_cast<PushButton*>(pBtn));
+}
+
+IMPL_LINK(SvxEditDictionaryDialog, NewDelActionHdl, PushButton*, pBtn)
 {
     SvTreeListEntry* pEntry = pWordsLB->FirstSelected();
 

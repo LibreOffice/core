@@ -153,7 +153,7 @@ private:
     DECL_LINK( ChangePosYHdl, void * );
     DECL_LINK( ChangeWidthHdl, void * );
     DECL_LINK( ChangeHeightHdl, void * );
-    DECL_LINK( ClickAutoHdl, void * );
+    DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
     DECL_LINK( AngleModifiedHdl, void * );
     DECL_LINK( RotationHdl, void * );
     DECL_LINK_TYPED( FlipHdl, ToolBox *, void );

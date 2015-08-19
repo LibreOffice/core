@@ -353,16 +353,12 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl )
     return 0;
 }
 
-IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 {
-
     OUString aTemplName(m_pFollowLb->GetSelectEntry());
     if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 ))
     {
     }
-
-    return 0;
-
 }
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl )
@@ -375,12 +371,11 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl )
     return 0;
 }
 
-IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pBaseLb->GetSelectEntry());
     if (aTemplName != SfxResId(STR_NONE))
         Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 );
-    return 0;
 }
 
 // Internal: Perform functions through the Dispatcher

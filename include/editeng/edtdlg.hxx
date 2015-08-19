@@ -36,6 +36,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2
 namespace vcl { class Window; }
 class ResId;
 class SvxSpellWrapper;
+class Button;
 
 class AbstractThesaurusDialog : public VclAbstractDialog
 {
@@ -57,13 +58,13 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual void     SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
     virtual void     SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
     virtual void     SetOptionsChangedHdl( const Link<>& _rHdl ) = 0;
-    virtual void     SetIgnoreHdl( const Link<>& _rHdl ) = 0;
-    virtual void     SetIgnoreAllHdl( const Link<>& _rHdl ) = 0;
-    virtual void     SetChangeHdl( const Link<>& _rHdl ) = 0;
-    virtual void     SetChangeAllHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetIgnoreHdl( const Link<Button*,void>& _rHdl ) = 0;
+    virtual void     SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) = 0;
+    virtual void     SetChangeHdl( const Link<Button*,void>& _rHdl ) = 0;
+    virtual void     SetChangeAllHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual void     SetClickByCharacterHdl( const Link<>& _rHdl ) = 0;
-    virtual void     SetConversionFormatChangedHdl( const Link<>& _rHdl ) = 0;
-    virtual void     SetFindHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl ) = 0;
+    virtual void     SetFindHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual bool     GetUseBothDirections() const= 0;
     virtual editeng::HangulHanjaConversion::ConversionDirection
                      GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;

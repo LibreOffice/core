@@ -341,14 +341,14 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pLbFormat->SetSelectHdl( aLink );
     m_pLbLanguage->SetSelectHdl( aLink );
     m_pLbCurrency->SetSelectHdl( aLink );
-    m_pCbSourceFormat->SetClickHdl( aLink );
+    m_pCbSourceFormat->SetClickHdl( LINK( this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl ) );
 
     aLink = LINK( this, SvxNumberFormatTabPage, OptHdl_Impl );
 
     m_pEdDecimals->SetModifyHdl( aLink );
     m_pEdLeadZeroes->SetModifyHdl( aLink );
-    m_pBtnNegRed->SetClickHdl( aLink );
-    m_pBtnThousand->SetClickHdl( aLink );
+    m_pBtnNegRed->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
+    m_pBtnThousand->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
     m_pLbFormat->SetDoubleClickHdl( HDL( DoubleClickHdl_Impl ) );
     m_pEdFormat->SetModifyHdl( HDL( EditHdl_Impl ) );
     m_pIbAdd->SetClickHdl( HDL( ClickHdl_Impl ) );
@@ -732,7 +732,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             // delete it in case of bOneAreaFlag and resulting category change).
             // Upon switching tab pages we need all settings to be consistent
             // in case this page will be redisplayed later.
-            bDataChanged = (ClickHdl_Impl(m_pIbAdd) != 0);
+            bDataChanged = Click_Impl(m_pIbAdd);
             nCurKey = pNumFmtShell->GetCurNumFmtKey();
         }
         else if(nCurKey == NUMKEY_UNDEFINED)
@@ -1190,6 +1190,10 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
 #*
 #************************************************************************/
 
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatClickHdl_Impl, Button*, pLb, void )
+{
+    SelFormatHdl_Impl(pLb);
+}
 IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 {
     if (pLb == m_pCbSourceFormat)
@@ -1311,9 +1315,13 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, ClickHdl_Impl, Button*, pIB, void)
 {
-    bool        bDeleted = false;
+    Click_Impl(static_cast<PushButton*>(pIB));
+}
+bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
+{
+    bool            bDeleted = false;
     sal_uLong       nReturn = 0;
     const sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
     const sal_uLong nReturnAdded    = 0x2;  // temp: format added
@@ -1554,6 +1562,10 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 #*
 #************************************************************************/
 
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, OptClickHdl_Impl, Button*, pOptCtrl, void )
+{
+    OptHdl_Impl(pOptCtrl);
+}
 IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
 {
     if (   (pOptCtrl == m_pEdLeadZeroes)

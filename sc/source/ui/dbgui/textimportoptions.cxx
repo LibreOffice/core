@@ -72,7 +72,7 @@ bool ScTextImportOptionsDlg::isDateConversionSet() const
 
 void ScTextImportOptionsDlg::init()
 {
-    Link<> aLink = LINK( this, ScTextImportOptionsDlg, OKHdl );
+    Link<Button*,void> aLink = LINK( this, ScTextImportOptionsDlg, OKHdl );
     m_pBtnOk->SetClickHdl(aLink);
     aLink = LINK( this, ScTextImportOptionsDlg, RadioHdl );
     m_pRbAutomatic->SetClickHdl(aLink);
@@ -88,13 +88,12 @@ void ScTextImportOptionsDlg::init()
     m_pLbCustomLang->Disable();
 }
 
-IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(ScTextImportOptionsDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK( ScTextImportOptionsDlg, RadioHdl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( ScTextImportOptionsDlg, RadioHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pRbAutomatic)
     {
@@ -104,7 +103,6 @@ IMPL_LINK( ScTextImportOptionsDlg, RadioHdl, RadioButton*, pBtn )
     {
         m_pLbCustomLang->Enable();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -117,6 +117,7 @@ private:
     void UpdateLook();
 
     DECL_LINK( implControlHdl, Control* );
+    DECL_LINK_TYPED( implClickHdl, Button*, void );
     DECL_LINK(implPropertyHdl, void *);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
     DECL_LINK_TYPED(lateInitCallback, Timer *, void);

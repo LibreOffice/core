@@ -567,7 +567,7 @@ void SfxTabDialog::Start( bool bShow )
 
 
 
-void SfxTabDialog::SetApplyHandler(const Link<>& _rHdl)
+void SfxTabDialog::SetApplyHandler(const Link<Button*, void>& _rHdl)
 {
     DBG_ASSERT( m_pApplyBtn, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
     if ( m_pApplyBtn )
@@ -860,10 +860,9 @@ short SfxTabDialog::Ok()
     return bModified ? RET_OK : RET_CANCEL;
 }
 
-IMPL_LINK_NOARG(SfxTabDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(SfxTabDialog, CancelHdl, Button*, void)
 {
     EndDialog( RET_USER_CANCEL );
-    return 0;
 }
 
 
@@ -898,7 +897,7 @@ void SfxTabDialog::RefreshInputSet()
 
 
 
-IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
+IMPL_LINK_NOARG_TYPED(SfxTabDialog, OkHdl, Button*, void)
 
 /*  [Description]
 
@@ -919,7 +918,6 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
             Close();
         }
     }
-    return 0;
 }
 
 bool SfxTabDialog::Apply()
@@ -968,7 +966,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
 
 
 
-IMPL_LINK_NOARG(SfxTabDialog, UserHdl)
+IMPL_LINK_NOARG_TYPED(SfxTabDialog, UserHdl, Button*, void)
 
 /*  [Description]
 
@@ -989,12 +987,11 @@ IMPL_LINK_NOARG(SfxTabDialog, UserHdl)
             nRet = RET_USER_CANCEL;
         EndDialog( nRet );
     }
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
+IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
 
 /*  [Description]
 
@@ -1016,12 +1013,11 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
     }
     else
         pDataObject->pTabPage->Reset( pSet );
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
+IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
 
 /*  [Description]
 
@@ -1094,7 +1090,6 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
         pDataObject->pTabPage->Reset( &aTmpSet );
         pDataObject->pTabPage->pImpl->mbStandard = true;
     }
-    return 1;
 }
 
 

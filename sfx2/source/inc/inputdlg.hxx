@@ -15,6 +15,7 @@
 class Edit;
 class FixedText;
 class PushButton;
+class Button;
 
 class InputDialog : public ModalDialog
 {
@@ -26,7 +27,7 @@ public:
 
 private:
 
-    DECL_LINK(ClickHdl, PushButton*);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
 
 private:
 

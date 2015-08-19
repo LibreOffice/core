@@ -483,27 +483,24 @@ void ScNameDlg::GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap)
     maRangeMap.swap(rRangeMap);
 }
 
-IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, OkBtnHdl, Button*, void)
 {
     Close();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, CancelBtnHdl, Button*, void)
 {
     CancelPushed();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, AddBtnHdl, Button*, void)
 {
-    return long(AddPushed());
+    AddPushed();
 }
 
-IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, RemoveBtnHdl, Button*, void)
 {
     RemovePushed();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl)

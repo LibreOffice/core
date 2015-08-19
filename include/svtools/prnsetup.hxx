@@ -53,7 +53,7 @@ private:
 
     SVT_DLLPRIVATE void         ImplSetInfo();
 
-                    DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, void* );
+                    DECL_DLLPRIVATE_LINK_TYPED( ImplPropertiesHdl, Button*, void );
                     DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, void* );
                     DECL_DLLPRIVATE_LINK_TYPED( ImplStatusHdl, Timer*, void );
 
@@ -70,7 +70,7 @@ public:
 
     virtual short   Execute() SAL_OVERRIDE;
 
-    void                SetOptionsHdl( const Link<>& rLink );
+    void            SetOptionsHdl( const Link<Button*,void>& rLink );
 };
 
 

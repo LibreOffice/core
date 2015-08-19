@@ -478,12 +478,10 @@ namespace pcr
     }
 
 
-    IMPL_LINK( OBrowserLine, OnButtonClicked, PushButton*, _pButton )
+    IMPL_LINK_TYPED( OBrowserLine, OnButtonClicked, Button*, _pButton, void )
     {
         if ( m_pClickListener )
             m_pClickListener->buttonClicked( this, _pButton == m_pBrowseButton );
-
-        return 0L;
     }
 
 

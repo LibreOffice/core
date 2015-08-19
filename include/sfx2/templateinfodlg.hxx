@@ -34,7 +34,7 @@ public:
 
 protected:
 
-    DECL_LINK (CloseHdl, void*);
+    DECL_LINK_TYPED(CloseHdl, Button*, void);
 
 private:
 

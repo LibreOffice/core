@@ -216,7 +216,7 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     m_pDocumentStartRB->Check();
     m_pPageStartNF->Enable(false);
     m_pPageStartNF->SetValue(lcl_GetCurrentPage(mpSh));
-    Link<> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
+    Link<Button*,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
     m_pDocumentStartRB->SetClickHdl(aStartPageHdl);
     m_pPageStartRB->SetClickHdl(aStartPageHdl);
 
@@ -250,22 +250,19 @@ IMPL_LINK_NOARG(SwTitlePageDlg, DownHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, RestartNumberingHdl, Button*, void)
 {
     m_pRestartNumberingNF->Enable(m_pRestartNumberingCB->IsChecked());
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, SetPageNumberHdl, Button*, void)
 {
     m_pSetPageNumberNF->Enable(m_pSetPageNumberCB->IsChecked());
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, StartPageHdl, Button*, void)
 {
     m_pPageStartNF->Enable(m_pPageStartRB->IsChecked());
-    return 0;
 }
 
 SwTitlePageDlg::~SwTitlePageDlg()
@@ -291,16 +288,14 @@ void SwTitlePageDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, EditHdl, Button*, void)
 {
     SwView& rView = mpSh->GetView();
     rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), "page", *mpSh);
     rView.InvalidateRulerPos();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, OKHdl, Button*, void)
 {
     lcl_PushCursor(mpSh);
 
@@ -350,7 +345,6 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl)
     if (!m_pUseExistingPagesRB->IsChecked())
         mpSh->GotoPage(GetInsertPosition(), false);
     EndDialog( RET_OK );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

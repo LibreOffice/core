@@ -237,7 +237,7 @@ namespace dbaui
 
         fillIndexList();
 
-        m_pUnique->SetClickHdl(LINK(this, DbaIndexDialog, OnModified));
+        m_pUnique->SetClickHdl(LINK(this, DbaIndexDialog, OnModifiedClick));
         m_pFields->SetModifyHdl(LINK(this, DbaIndexDialog, OnModified));
 
         m_pClose->SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
@@ -557,7 +557,7 @@ namespace dbaui
             OnResetIndex();
     }
 
-    IMPL_LINK_NOARG( DbaIndexDialog, OnCloseDialog )
+    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnCloseDialog, Button*, void )
     {
         if (m_pIndexList->IsEditingActive())
         {
@@ -567,7 +567,7 @@ namespace dbaui
             m_pIndexList->EndEditing();
             if (m_bEditAgain)
                 // could not commit the new name (started a new - asynchronous - edit trial)
-                return 1L;
+                return;
         }
 
         // the currently selected entry
@@ -592,17 +592,15 @@ namespace dbaui
         {
             case RET_YES:
                 if (!implCommitPreviouslySelected())
-                    return 1L;
+                    return;
                 break;
             case RET_NO:
                 break;
             default:
-                return 1L;
+                return;
         }
 
         EndDialog(RET_OK);
-
-        return 0L;
     }
 
     IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvTreeListEntry*, _pEntry )
@@ -733,6 +731,10 @@ namespace dbaui
         return true;
     }
 
+    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnModifiedClick, Button*, void )
+    {
+        OnModified(NULL);
+    }
     IMPL_LINK_NOARG( DbaIndexDialog, OnModified )
     {
         OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");

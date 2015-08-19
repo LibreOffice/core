@@ -142,9 +142,9 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
     m_pMtrFldHelpline1Len->SetModifyHdl( aLink );
     m_pMtrFldHelpline2Len->SetModifyHdl( aLink );
     m_pMtrFldDecimalPlaces->SetModifyHdl( aLink );
-    m_pTsbBelowRefEdge->SetClickHdl( aLink );
-    m_pTsbParallel->SetClickHdl( aLink );
-    m_pTsbShowUnit->SetClickHdl( aLink );
+    m_pTsbBelowRefEdge->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
+    m_pTsbParallel->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
+    m_pTsbShowUnit->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
     m_pLbUnit->SetSelectHdl( aLink );
 }
 
@@ -613,7 +613,7 @@ void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RECT_POINT /*eRP*/ )
     ChangeAttrHdl_Impl( pWindow );
 }
 
-IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
+IMPL_LINK_TYPED( SvxMeasurePage, ClickAutoPosHdl_Impl, Button*, p, void )
 {
     if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
     {
@@ -658,10 +658,12 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
         }
     }
     ChangeAttrHdl_Impl( p );
-
-    return 0L;
 }
 
+IMPL_LINK_TYPED( SvxMeasurePage, ChangeAttrClickHdl_Impl, Button*, p, void )
+{
+    ChangeAttrHdl_Impl(p);
+}
 IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 {
 

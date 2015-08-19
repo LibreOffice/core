@@ -147,13 +147,13 @@ private:
     OUString m_sModuleShortName;
     OUString m_sModuleUIName;
 
-    DECL_LINK(ChangeHdl, void *);
-    DECL_LINK(RemoveHdl, void *);
+    DECL_LINK_TYPED(ChangeHdl, Button *, void);
+    DECL_LINK_TYPED(RemoveHdl, Button *, void);
     DECL_LINK(                  SelectHdl, Control * );
-    DECL_LINK(Save, void *);
-    DECL_LINK(Load, void *);
-    DECL_LINK(Default, void *);
-    DECL_LINK(RadioHdl, void *);
+    DECL_LINK_TYPED(Save, Button *, void);
+    DECL_LINK_TYPED(Load, Button *, void);
+    DECL_LINK_TYPED(Default, Button *, void);
+    DECL_LINK_TYPED(RadioHdl, Button *, void);
 
     DECL_LINK_TYPED(LoadHdl, sfx2::FileDialogHelper *, void);
     DECL_LINK_TYPED(SaveHdl, sfx2::FileDialogHelper *, void);

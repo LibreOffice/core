@@ -417,10 +417,9 @@ void OAddTableDlg::impl_addTable()
     }
 }
 
-IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( OAddTableDlg, AddClickHdl, Button*, void )
 {
     TableListDoubleClickHdl(NULL);
-    return 0;
 }
 
 IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl )
@@ -442,18 +441,17 @@ IMPL_LINK_NOARG( OAddTableDlg, TableListSelectHdl )
     return 0;
 }
 
-IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( OAddTableDlg, CloseClickHdl, Button*, void )
 {
-    return int(Close());
+    Close();
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, OnTypeSelected )
+IMPL_LINK_NOARG_TYPED( OAddTableDlg, OnTypeSelected, Button*, void )
 {
     if ( m_pCaseTables->IsChecked() )
         impl_switchTo( Tables );
     else
         impl_switchTo( Queries );
-    return 0;
 }
 
 bool OAddTableDlg::Close()

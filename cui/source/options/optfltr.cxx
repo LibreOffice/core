@@ -73,16 +73,14 @@ void OfaMSFilterTabPage::dispose()
 }
 
 
-IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl)
+IMPL_LINK_NOARG_TYPED(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, Button*, void)
 {
     aWBasicWbctblCB->Enable( aWBasicCodeCB->IsChecked() );
-    return 0;
 }
 
-IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl)
+IMPL_LINK_NOARG_TYPED(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, Button*, void)
 {
     aEBasicExectblCB->Enable( aEBasicCodeCB->IsChecked() );
-    return 0;
 }
 
 VclPtr<SfxTabPage> OfaMSFilterTabPage::Create( vcl::Window* pParent,

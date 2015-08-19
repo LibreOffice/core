@@ -101,7 +101,7 @@ private:
     void                        SetSecondFormula( const OUString& rFmlaStr );
 
                                 DECL_LINK(SelectHdl, void *);
-                                DECL_LINK(CheckHdl, void *);
+                                DECL_LINK_TYPED(CheckHdl, Button*, void);
 
     VclPtr<ListBox>                    m_pLbAllow;
     VclPtr<CheckBox>                   m_pCbAllow;      /// Allow blank cells.
@@ -299,7 +299,7 @@ private:
 
     // Handler ------------------------
     DECL_LINK(SelectActionHdl, void *);
-    DECL_LINK(ClickSearchHdl, void *);
+    DECL_LINK_TYPED(ClickSearchHdl, Button*, void);
 
 public:
             ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );

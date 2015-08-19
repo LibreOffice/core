@@ -40,8 +40,8 @@ class SvRTLInputBox : public ModalDialog
     void InitButtons( const Size& rDlgSize );
     void PositionEdit( const Size& rDlgSize );
     void PositionPrompt( const OUString& rPrompt, const Size& rDlgSize );
-    DECL_LINK( OkHdl, Button * );
-    DECL_LINK( CancelHdl, Button * );
+    DECL_LINK_TYPED( OkHdl, Button *, void );
+    DECL_LINK_TYPED( CancelHdl, Button *, void );
 
 public:
     SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
@@ -129,22 +129,16 @@ void SvRTLInputBox::PositionPrompt(const OUString& rPrompt,const Size& rDlgSize)
 }
 
 
-IMPL_LINK( SvRTLInputBox, OkHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvRTLInputBox, OkHdl, Button *, void )
 {
-    (void)pButton;
-
     aText = aEdit->GetText();
     EndDialog( 1 );
-    return 0;
 }
 
-IMPL_LINK( SvRTLInputBox, CancelHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvRTLInputBox, CancelHdl, Button *, void )
 {
-    (void)pButton;
-
     aText.clear();
     EndDialog();
-    return 0;
 }
 
 

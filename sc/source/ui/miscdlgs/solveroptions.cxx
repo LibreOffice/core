@@ -350,12 +350,10 @@ void ScSolverOptionsDialog::EditOption()
     }
 }
 
-IMPL_LINK( ScSolverOptionsDialog, ButtonHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScSolverOptionsDialog, ButtonHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnEdit)
         EditOption();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl)

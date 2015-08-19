@@ -258,7 +258,7 @@ IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NewHdl, Button*, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -289,10 +289,9 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
             pDocSh->PostPaintGridAll();
             }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_PrevHdl, Button*, void)
 {
     if (pDoc)
     {
@@ -302,10 +301,9 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl)
         SetButtonState();
         FillCtrls(nCurrentRow);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NextHdl, Button*, void)
 {
     if (pDoc)
     {
@@ -315,19 +313,17 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl)
         SetButtonState();
         FillCtrls(nCurrentRow);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
 {
     if (pDoc)
     {
         FillCtrls(nCurrentRow);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -344,13 +340,11 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl)
         pDocSh->SetDocumentModified();
         pDocSh->PostPaintGridAll();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_CloseHdl, Button*, void)
 {
     EndDialog( );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl)

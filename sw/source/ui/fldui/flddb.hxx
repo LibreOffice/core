@@ -58,7 +58,7 @@ class SwFieldDBPage : public SwFieldPage
     DECL_LINK( NumSelectHdl, NumFormatListBox* );
     DECL_LINK( TreeSelectHdl, SvTreeListBox* );
     DECL_LINK(ModifyHdl, void *);
-    DECL_LINK(AddDBHdl, void *);
+    DECL_LINK_TYPED(AddDBHdl, Button*, void);
 
     void                CheckInsert();
 

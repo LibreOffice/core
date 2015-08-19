@@ -195,8 +195,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pPathCtrl, "paths");
 
     m_pStandardBtn->SetClickHdl(LINK(this, SvxPathTabPage, StandardHdl_Impl));
-    Link<> aLink = LINK( this, SvxPathTabPage, PathHdl_Impl );
-    m_pPathBtn->SetClickHdl( aLink );
+    m_pPathBtn->SetClickHdl( LINK( this, SvxPathTabPage, PathHdl_Impl ) );
 
     Size aControlSize(236 , 147);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
@@ -224,7 +223,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aTabs[3] = aTabs[2] + nWidth2 + 12;
     pPathBox->SetTabs(aTabs, MAP_PIXEL);
 
-    pPathBox->SetDoubleClickHdl( aLink );
+    pPathBox->SetDoubleClickHdl( LINK( this, SvxPathTabPage, DoubleClickPathHdl_Impl ) );
     pPathBox->SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( MULTIPLE_SELECTION );
     pPathBox->SetHighlightRange();
@@ -405,7 +404,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     while ( pEntry )
@@ -456,7 +455,6 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
         }
         pEntry = pPathBox->NextSelected( pEntry );
     }
-    return 0;
 }
 
 
@@ -526,7 +524,13 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 
 
 
-IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
+IMPL_LINK_NOARG(SvxPathTabPage, DoubleClickPathHdl_Impl)
+{
+    PathHdl_Impl(NULL);
+    return 0;
+}
+
+IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     sal_uInt16 nPos = ( pEntry != NULL ) ? static_cast<PathUserData_Impl*>(pEntry->GetUserData())->nRealId : 0;
@@ -541,7 +545,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
     }
 
     if(pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
-        return 0;
+        return;
 
     if ( IsMultiPath_Impl( nPos ) )
     {
@@ -615,7 +619,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
             {
                 short nRet = xFolderPicker->execute();
                 if ( ExecutableDialogResults::OK != nRet )
-                    return 0;
+                    return;
 
                 OUString sFolder( xFolderPicker->getDirectory() );
                 ChangeCurrentEntry( sFolder );
@@ -626,7 +630,6 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
             SAL_WARN( "cui.options", "SvxPathTabPage::PathHdl_Impl: exception from folder picker" );
         }
     }
-    return 0;
 }
 
 

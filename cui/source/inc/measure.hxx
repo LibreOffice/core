@@ -60,8 +60,9 @@ private:
 
     void                FillUnitLB();
 
-    DECL_LINK( ClickAutoPosHdl_Impl, void * );
+    DECL_LINK_TYPED( ClickAutoPosHdl_Impl, Button*, void );
     DECL_LINK( ChangeAttrHdl_Impl, void * );
+    DECL_LINK_TYPED( ChangeAttrClickHdl_Impl, Button*, void );
 
 public:
 

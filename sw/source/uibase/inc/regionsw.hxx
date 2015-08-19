@@ -108,21 +108,21 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );
 
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK(NameEditHdl, void *);
     DECL_LINK( ConditionEditHdl, Edit * );
 
-    DECL_LINK( ChangePasswdHdl, Button * );
-    DECL_LINK( ChangeProtectHdl, TriStateBox * );
-    DECL_LINK( ChangeHideHdl, TriStateBox * );
+    DECL_LINK_TYPED( ChangePasswdHdl, Button *, void );
+    DECL_LINK_TYPED( ChangeProtectHdl, Button *, void );
+    DECL_LINK_TYPED( ChangeHideHdl, Button *, void );
     // #114856# edit in readonly sections
-    DECL_LINK( ChangeEditInReadonlyHdl, TriStateBox * );
-    DECL_LINK(ChangeDismissHdl, void *);
-    DECL_LINK( UseFileHdl, CheckBox* );
-    DECL_LINK(FileSearchHdl, void *);
-    DECL_LINK(OptionsHdl, void *);
+    DECL_LINK_TYPED( ChangeEditInReadonlyHdl, Button *, void );
+    DECL_LINK_TYPED(ChangeDismissHdl, Button*, void);
+    DECL_LINK_TYPED( UseFileHdl, Button*, void );
+    DECL_LINK_TYPED(FileSearchHdl, Button*, void);
+    DECL_LINK_TYPED(OptionsHdl, Button*, void);
     DECL_LINK( FileNameHdl, Edit* );
-    DECL_LINK( DDEHdl, CheckBox* );
+    DECL_LINK_TYPED( DDEHdl, Button*, void );
     DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
     DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
 
@@ -171,13 +171,13 @@ class SwInsertSectionTabPage : public SfxTabPage
     sfx2::DocumentInserter* m_pDocInserter;
     VclPtr<vcl::Window>     m_pOldDefDlgParent;
 
-    DECL_LINK( ChangeHideHdl, CheckBox * );
-    DECL_LINK( ChangeProtectHdl, CheckBox * );
-    DECL_LINK( ChangePasswdHdl, Button * );
+    DECL_LINK_TYPED( ChangeHideHdl, Button *, void );
+    DECL_LINK_TYPED( ChangeProtectHdl, Button *, void );
+    DECL_LINK_TYPED( ChangePasswdHdl, Button *, void );
     DECL_LINK(NameEditHdl, void *);
-    DECL_LINK( UseFileHdl, CheckBox* );
-    DECL_LINK(FileSearchHdl, void *);
-    DECL_LINK( DDEHdl, CheckBox* );
+    DECL_LINK_TYPED( UseFileHdl, Button*, void );
+    DECL_LINK_TYPED(FileSearchHdl, Button*, void );
+    DECL_LINK_TYPED( DDEHdl, Button*, void );
     DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
 
 public:
@@ -222,7 +222,7 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
     VclPtr<FixedText>       pEndSuffixFT;
     VclPtr<Edit>            pEndSuffixED;
 
-    DECL_LINK( FootEndHdl, CheckBox * );
+    DECL_LINK_TYPED( FootEndHdl, Button*, void );
     void ResetState( bool bFootnote, const SwFormatFootnoteEndAtTextEnd& );
 
 public:

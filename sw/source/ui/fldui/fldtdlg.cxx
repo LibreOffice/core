@@ -180,7 +180,7 @@ SfxItemSet* SwFieldDlg::CreateInputItemSet( sal_uInt16 nID  )
 }
 
 // kick off inserting of new fields
-IMPL_LINK_NOARG(SwFieldDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldDlg, OKHdl, Button*, void)
 {
     if (GetOKButton().IsEnabled())
     {
@@ -189,14 +189,11 @@ IMPL_LINK_NOARG(SwFieldDlg, OKHdl)
 
         GetOKButton().GrabFocus();  // because of InputField-Dlg
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwFieldDlg, CancelHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldDlg, CancelHdl, Button*, void)
 {
     Close();
-    return 0;
 }
 
 // newly initialise dialog after Doc-Switch

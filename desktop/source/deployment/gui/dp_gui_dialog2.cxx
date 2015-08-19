@@ -131,9 +131,9 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
 
-    DECL_DLLPRIVATE_LINK( HandleOptionsBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleEnableBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleOptionsBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleEnableBtn, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleRemoveBtn, Button*, void );
 
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
@@ -486,7 +486,7 @@ IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
 }
 
 
-IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
+IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -502,12 +502,10 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
             pDlg->Execute();
         }
     }
-
-    return 1;
 }
 
 
-IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn)
+IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -523,12 +521,10 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn)
             m_pParent->enablePackage( pEntry->m_xPackage, bEnable );
         }
     }
-
-    return 1;
 }
 
 
-IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn)
+IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleRemoveBtn, Button*, void)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -537,8 +533,6 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn)
         TEntry_Impl pEntry = GetEntryData( nActive );
         m_pParent->removePackage( pEntry->m_xPackage );
     }
-
-    return 1;
 }
 
 
@@ -951,7 +945,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 }
 
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCancelBtn, Button*, void)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -964,13 +958,11 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn)
             OSL_FAIL( "### unexpected RuntimeException!" );
         }
     }
-    return 1;
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCloseBtn, Button*, void)
 {
     Close();
-    return 1;
 }
 
 
@@ -1056,7 +1048,7 @@ void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage
 }
 
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleAddBtn, Button*, void)
 {
     setBusy( true );
 
@@ -1068,23 +1060,20 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn)
     }
 
     setBusy( false );
-    return 1;
 }
 
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
     m_pManager->createPackageList();
-    return 1;
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 {
 #if ENABLE_EXTENSION_UPDATE
     m_pManager->checkUpdates( false, true );
 #endif
-    return 1;
 }
 
 
@@ -1282,7 +1271,7 @@ bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn)
+IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -1295,7 +1284,6 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn)
             OSL_FAIL( "### unexpected RuntimeException!" );
         }
     }
-    return 1;
 }
 
 
@@ -1388,7 +1376,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn)
+IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleUpdateBtn, Button*, void)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1404,12 +1392,10 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn)
     aGuard.clear();
 
     m_pManager->getCmdQueue()->checkForUpdates( vUpdateEntries );
-
-    return 1;
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
+IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1422,8 +1408,6 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
         else
             EndDialog();
     }
-
-    return 1;
 }
 
 

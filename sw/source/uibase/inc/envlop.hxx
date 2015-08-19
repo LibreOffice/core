@@ -91,8 +91,8 @@ class SwEnvPage : public SfxTabPage
     OUString      sActDBName;
 
     DECL_LINK( DatabaseHdl, ListBox * );
-    DECL_LINK(FieldHdl, void *);
-    DECL_LINK(SenderHdl, void *);
+    DECL_LINK_TYPED(FieldHdl, Button*, void );
+    DECL_LINK_TYPED(SenderHdl, Button*, void );
 
     void InitDatabaseBox();
 

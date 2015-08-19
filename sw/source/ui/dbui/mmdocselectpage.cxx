@@ -61,14 +61,14 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
     m_pCurrentDocRB->Check();
     DocSelectHdl(m_pNewDocRB);
 
-    Link<> aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
+    Link<Button*,void> aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
     m_pCurrentDocRB->SetClickHdl(aDocSelectLink);
     m_pNewDocRB->SetClickHdl(aDocSelectLink);
     m_pLoadDocRB->SetClickHdl(aDocSelectLink);
     m_pLoadTemplateRB->SetClickHdl(aDocSelectLink);
     m_pRecentDocRB->SetClickHdl(aDocSelectLink);
 
-    Link<> aFileSelectHdl = LINK(this, SwMailMergeDocSelectPage, FileSelectHdl);
+    Link<Button*,void> aFileSelectHdl = LINK(this, SwMailMergeDocSelectPage, FileSelectHdl);
     m_pBrowseDocPB->SetClickHdl(aFileSelectHdl);
     m_pBrowseTemplatePB->SetClickHdl(aFileSelectHdl);
 
@@ -109,17 +109,15 @@ void SwMailMergeDocSelectPage::dispose()
     svt::OWizardPage::dispose();
 }
 
-IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeDocSelectPage, DocSelectHdl, Button*, pButton, void)
 {
     m_pRecentDocLB->Enable(m_pRecentDocRB == pButton);
 
     m_pWizard->UpdateRoadmap();
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
-
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
 {
     bool bTemplate = m_pBrowseTemplatePB == pButton;
 
@@ -170,8 +168,6 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     }
     m_pWizard->UpdateRoadmap();
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
-
-    return 0;
 }
 
 bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )

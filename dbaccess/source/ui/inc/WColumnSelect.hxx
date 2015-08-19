@@ -42,7 +42,7 @@ namespace dbaui
         VclPtr<PushButton>   m_pColumns_LH;
         VclPtr<ListBox>      m_pNewColumnNames; // right side
 
-        DECL_LINK( ButtonClickHdl, Button * );
+        DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
         DECL_LINK( ListDoubleClickHdl, ListBox * );
 
         static void clearListBox(ListBox& _rListBox);

@@ -337,7 +337,7 @@ void SvxHyphenWordDialog::SelRight()
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, CutHdl_Impl, Button*, void)
 {
     if( !m_bBusy )
     {
@@ -345,11 +345,10 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl)
         ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
         m_bBusy = false;
     }
-    return 0;
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, void )
 {
     if( !m_bBusy )
     {
@@ -371,11 +370,10 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, /*pButton*/ )
             DBG_ASSERT( false, "Hyphenate All failed" );
         }
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, DeleteHdl_Impl, Button*, void)
 {
     if( !m_bBusy )
     {
@@ -383,11 +381,10 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl)
         ContinueHyph_Impl( 0 );
         m_bBusy = false;
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, ContinueHdl_Impl, Button*, void)
 {
     if( !m_bBusy )
     {
@@ -395,11 +392,10 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl)
         ContinueHyph_Impl();
         m_bBusy = false;
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, CancelHdl_Impl, Button*, void)
 {
     if( !m_bBusy )
     {
@@ -408,11 +404,10 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl)
         EndDialog();
         m_bBusy = false;
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, Left_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, Left_Impl, Button*, void)
 {
     if( !m_bBusy )
     {
@@ -420,11 +415,10 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, Left_Impl)
         SelLeft();
         m_bBusy = false;
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, Right_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, Right_Impl, Button*, void)
 {
     if( !m_bBusy )
     {
@@ -432,7 +426,6 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, Right_Impl)
         SelRight();
         m_bBusy = false;
     }
-    return 0;
 }
 
 

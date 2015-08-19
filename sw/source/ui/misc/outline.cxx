@@ -159,6 +159,7 @@ static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 }
 
 sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
+
 SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* pSwItemSet,
     SwWrtShell &rSh)
     : SfxTabDialog(pParent, "OutlineNumberingDialog",
@@ -229,15 +230,14 @@ void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
     }
 }
 
-IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(SwOutlineTabDialog, CancelHdl, Button*, void)
 {
     if (!bModified)
         rWrtSh.ResetModified();
     EndDialog();
-    return 0;
 }
 
-IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
 {
     PopupMenu *pFormMenu = get_menu("form");
     // fill PopupMenu
@@ -257,7 +257,6 @@ IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
 
     pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
     pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
-    return 0;
 }
 
 IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )

@@ -107,17 +107,17 @@ class SwIndexMarkPane
     void            InsertMark();
     void            UpdateMark();
 
-    DECL_LINK( InsertHdl, Button * );
-    DECL_LINK(CloseHdl, void *);
-    DECL_LINK(DelHdl, void *);
-    DECL_LINK(NextHdl, void *);
-    DECL_LINK(NextSameHdl, void *);
-    DECL_LINK(PrevHdl, void *);
-    DECL_LINK(PrevSameHdl, void *);
-    DECL_LINK( ModifyHdl, ListBox* );
+    DECL_LINK_TYPED( InsertHdl, Button *, void );
+    DECL_LINK_TYPED(CloseHdl, Button*, void);
+    DECL_LINK_TYPED(DelHdl, Button*, void);
+    DECL_LINK_TYPED(NextHdl, Button*, void);
+    DECL_LINK_TYPED(NextSameHdl, Button*, void);
+    DECL_LINK_TYPED(PrevHdl, Button*, void);
+    DECL_LINK_TYPED(PrevSameHdl, Button*, void);
+    DECL_LINK( ModifyHdl, ListBox* pBox );
     DECL_LINK( KeyDCBModifyHdl, ComboBox * );
-    DECL_LINK(NewUserIdxHdl, void *);
-    DECL_LINK( SearchTypeHdl, CheckBox*);
+    DECL_LINK_TYPED(NewUserIdxHdl, Button*, void);
+    DECL_LINK_TYPED( SearchTypeHdl, Button*, void);
     DECL_LINK( PhoneticEDModifyHdl, Edit * );
 
     //this method updates the values from 'nLangForPhoneticReading' and 'bIsPhoneticReadingEnabled'
@@ -205,11 +205,11 @@ class SwAuthorMarkPane
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xBibAccess;
 
-    DECL_LINK(InsertHdl, void *);
-    DECL_LINK(CloseHdl, void *);
-    DECL_LINK(CreateEntryHdl, PushButton*);
+    DECL_LINK_TYPED(InsertHdl, Button*, void);
+    DECL_LINK_TYPED(CloseHdl, Button*, void);
+    DECL_LINK_TYPED(CreateEntryHdl, Button*, void);
     DECL_LINK(CompEntryHdl, ListBox*);
-    DECL_LINK(ChangeSourceHdl, RadioButton*);
+    DECL_LINK_TYPED(ChangeSourceHdl, Button*, void);
     DECL_LINK(IsEntryAllowedHdl, Edit*);
     DECL_LINK(EditModifyHdl, Edit*);
 

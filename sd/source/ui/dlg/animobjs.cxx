@@ -247,21 +247,18 @@ void AnimationWindow::dispose()
     SfxDockingWindow::dispose();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
+IMPL_LINK_NOARG_TYPED(AnimationWindow, ClickFirstHdl, Button*, void)
 {
     m_nCurrentFrame = (m_FrameList.empty()) ? EMPTY_FRAMELIST : 0;
     UpdateControl();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
+IMPL_LINK_NOARG_TYPED(AnimationWindow, ClickStopHdl, Button*, void)
 {
     bMovie = false;
-    return 0L;
 }
 
-IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
+IMPL_LINK_TYPED( AnimationWindow, ClickPlayHdl, Button *, p, void )
 {
     ScopeLockGuard aGuard( maPlayLock );
 
@@ -376,20 +373,16 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     m_pRbtGroup->Enable( bRbtGroupEnabled );
     m_pBtnGetAllObjects->Enable( bBtnGetAllObjectsEnabled );
     m_pBtnGetOneObject->Enable( bBtnGetOneObjectEnabled );
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
+IMPL_LINK_NOARG_TYPED(AnimationWindow, ClickLastHdl, Button*, void)
 {
     m_nCurrentFrame =
         (m_FrameList.empty()) ? EMPTY_FRAMELIST : m_FrameList.size() - 1 ;
     UpdateControl();
-
-    return 0L;
 }
 
-IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
+IMPL_LINK_TYPED( AnimationWindow, ClickRbtHdl, Button*, p, void )
 {
     if (m_FrameList.empty() || p == m_pRbtGroup || m_pRbtGroup->IsChecked())
     {
@@ -409,11 +402,9 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
         m_pTimeField->Enable();
         m_pLbLoopCount->Enable();
     }
-
-    return 0L;
 }
 
-IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
+IMPL_LINK_TYPED( AnimationWindow, ClickGetObjectHdl, Button*, pBtn, void )
 {
     bAllObjects = pBtn == m_pBtnGetAllObjects;
 
@@ -422,10 +413,9 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
-    return 0L;
 }
 
-IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
+IMPL_LINK_TYPED( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
 {
     SdPage*     pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
     SdrObject*  pObject;
@@ -496,18 +486,15 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     m_pCtlDisplay->SetScale(aFrac);
 
     UpdateControl();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
+IMPL_LINK_NOARG_TYPED(AnimationWindow, ClickCreateGroupHdl, Button*, void)
 {
     // Code now in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_CREATE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
-    return 0L;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
@@ -1130,7 +1117,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         }
     }
 
-    ClickFirstHdl( this );
+    ClickFirstHdl( NULL );
 }
 
 void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )

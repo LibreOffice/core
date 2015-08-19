@@ -48,7 +48,7 @@ public:
     void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols);
 
 protected:
-    DECL_LINK(OnClickedOk, void *);
+    DECL_LINK_TYPED(OnClickedOk, Button*, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX

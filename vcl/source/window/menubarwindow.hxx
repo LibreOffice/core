@@ -27,6 +27,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/window.hxx>
 
+class Button;
+
 /** Toolbox that holds the close button (right hand side of the menubar).
 
 This is also used by the online update check; when an update is available, it
@@ -101,9 +103,9 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
-    DECL_LINK_TYPED(CloseHdl, ToolBox *, void);
-    DECL_LINK(FloatHdl, void *);
-    DECL_LINK(HideHdl, void *);
+    DECL_LINK_TYPED(CloseHdl, ToolBox*, void);
+    DECL_LINK_TYPED(FloatHdl, Button*, void);
+    DECL_LINK_TYPED(HideHdl, Button*, void);
     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
     DECL_LINK( ShowHideListener, VclWindowEvent* );
 

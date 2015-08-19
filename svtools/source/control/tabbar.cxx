@@ -822,14 +822,14 @@ void TabBar::ImplInitControls()
 
     if ((mnWinStyle & WB_INSERTTAB) && !mpImpl->mpAddButton)
     {
-        Link<> aLink = LINK(this, TabBar, ImplAddClickHandler);
+        Link<Button*,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
         mpImpl->mpAddButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
         mpImpl->mpAddButton->SetClickHdl(aLink);
         mpImpl->mpAddButton->SetSymbol(SymbolType::PLUS);
         mpImpl->mpAddButton->Show();
     }
 
-    Link<> aLink = LINK( this, TabBar, ImplClickHdl );
+    Link<Button*,void> aLink = LINK( this, TabBar, ImplClickHdl );
 
     if (mnWinStyle & (WB_MINSCROLL | WB_SCROLL))
     {
@@ -929,8 +929,9 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
     }
 }
 
-IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
+IMPL_LINK_TYPED( TabBar, ImplClickHdl, Button*, pButton, void )
 {
+    ImplTabButton* pBtn = static_cast<ImplTabButton*>(pButton);
     EndEditMode();
 
     sal_uInt16 nNewPos = mnFirstPos;
@@ -958,19 +959,16 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
     }
     else
     {
-        return 0;
+        return;
     }
 
     if (nNewPos != mnFirstPos)
         SetFirstPageId(GetPageId(nNewPos));
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(TabBar, ImplAddClickHandler)
+IMPL_LINK_NOARG_TYPED(TabBar, ImplAddClickHandler, Button*, void)
 {
     AddTabClick();
-    return 0;
 }
 
 void TabBar::MouseMove(const MouseEvent& rMEvt)

@@ -300,24 +300,21 @@ void SwParagraphNumTabPage::EnableNewStart()
     m_pNewStartBX->Show();
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwParagraphNumTabPage, NewStartHdl_Impl, Button*, void)
 {
     bool bEnable = m_pNewStartCB->IsChecked();
     m_pNewStartNumberCB->Enable(bEnable);
     m_pNewStartNF->Enable(bEnable && m_pNewStartNumberCB->IsChecked());
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwParagraphNumTabPage, LineCountHdl_Impl, Button*, void)
 {
     m_pRestartParaCountCB->Enable(m_pCountParaCB->IsChecked());
 
     bool bEnableRestartValue = m_pRestartParaCountCB->IsEnabled() &&
                                m_pRestartParaCountCB->IsChecked();
     m_pRestartBX->Enable(bEnableRestartValue);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl )
@@ -331,11 +328,10 @@ IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwParagraphNumTabPage, EditNumStyleHdl_Impl, Button*, void)
 {
     OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
     ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PSEUDO, 0 );
-    return 0;
 }
 
 // Internal: Perform functions through the Dispatcher

@@ -266,22 +266,22 @@ void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link<
      pDlg->SetOptionsChangedHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link<Button*,void>& _rHdl )
 {
      pDlg->SetIgnoreHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreAllHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreAllHdl( const Link<Button*,void>& _rHdl )
 {
      pDlg->SetIgnoreAllHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetChangeHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetChangeHdl( const Link<Button*,void>& _rHdl )
 {
     pDlg->SetChangeHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<Button*,void>& _rHdl )
 {
     pDlg->SetChangeAllHdl(_rHdl );
 }
@@ -291,11 +291,11 @@ void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Lin
      pDlg->SetClickByCharacterHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl )
 {
     pDlg->SetConversionFormatChangedHdl(_rHdl );
 }
-void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link<Button*,void>& _rHdl )
 {
      pDlg->SetFindHdl(_rHdl );
 }

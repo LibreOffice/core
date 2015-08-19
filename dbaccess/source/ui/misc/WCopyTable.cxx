@@ -717,7 +717,7 @@ void OCopyTableWizard::dispose()
     WizardDialog::dispose();
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)
+IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplPrevHdl, Button*, void)
 {
     m_ePressed = WIZARD_PREV;
     if ( GetCurLevel() )
@@ -732,10 +732,9 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)
         else
             ShowPrevPage();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
+IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplNextHdl, Button*, void)
 {
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
@@ -750,7 +749,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
         else
             ShowNextPage();
     }
-    return 0;
 }
 
 bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
@@ -836,7 +834,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     return bRet;
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
+IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplOKHdl, Button*, void)
 {
     m_ePressed = WIZARD_FINISH;
     bool bFinish = DeactivatePage();
@@ -868,7 +866,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                         m_mNameMapping.clear();
                         pPage->setDisplayRow(nBreakPos);
                         ShowPage(3);
-                        return 0;
+                        return;
                     }
                 }
                 if ( m_xDestConnection.is() )
@@ -906,7 +904,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                             else if ( xAbort->wasSelected() )
                             {
                                 ShowPage(3);
-                                return 0;
+                                return;
                             }
                         }
                     }
@@ -924,7 +922,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 
         EndDialog(RET_OK);
     }
-    return bFinish ? 1 : 0;
 }
 
 

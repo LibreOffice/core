@@ -119,7 +119,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
     get(m_pBtnEdit, "edit");
 
     m_pBtnRemove->SetClickHdl(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
-    m_pBtnEdit->SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+    m_pBtnEdit->SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnClickHdl));
     m_pBtnAdd->SetClickHdl(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
     m_pCtrlManager->SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
 }
@@ -155,13 +155,16 @@ ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
     return m_pCtrlManager->GetSelection();
 }
 
-IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, RemoveBtnHdl, Button*, void)
 {
     m_pCtrlManager->DeleteSelection();
     mbModified = true;
-    return 0;
 }
 
+IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnClickHdl, Button*, void)
+{
+    EditBtnHdl(nullptr);
+}
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
 {
     ScConditionalFormat* pFormat = m_pCtrlManager->GetSelection();
@@ -174,11 +177,9 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, AddBtnHdl, Button*, void)
 {
     EndDialog( DLG_RET_ADD );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

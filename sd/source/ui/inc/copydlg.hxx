@@ -70,8 +70,8 @@ private:
     ::sd::View*         mpView;
 
     DECL_LINK( SelectColorHdl, void * );
-    DECL_LINK( SetViewData, void * );
-    DECL_LINK( SetDefault, void * );
+    DECL_LINK_TYPED( SetViewData, Button*, void );
+    DECL_LINK_TYPED( SetDefault, Button*, void );
 };
 
 } // end of namespace sd

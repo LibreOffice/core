@@ -48,8 +48,8 @@ private:
     VclPtr<CheckBox> m_pRestartEachPageCB;
     VclPtr<CheckBox> m_pNumberingOnCB;
     VclPtr<CheckBox> m_pNumberingOnFooterHeader;
-    DECL_LINK(OKHdl, void *);
-    DECL_LINK(LineOnOffHdl, void * = 0);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
+    DECL_LINK_TYPED(LineOnOffHdl, Button* = 0, void);
     DECL_LINK(ModifyHdl, void * = 0);
 
 public:

@@ -61,9 +61,10 @@ private:
     static std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
     void InsertEntry( SvTreeListEntry *pEntry);
 
-    DECL_LINK( StandardHdl_Impl, void * );
-    DECL_LINK( ResetBtnHdl_Impl, void * );
-    DECL_LINK( SearchHdl_Impl, void* );
+    DECL_LINK_TYPED( StandardHdl_Impl, Button*, void );
+    DECL_LINK( DoubleClickHdl_Impl, void* );
+    DECL_LINK_TYPED( ResetBtnHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( SearchHdl_Impl, Button*, void );
     DECL_LINK( ExpandingHdl_Impl, void* );
 
 public:

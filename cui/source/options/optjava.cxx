@@ -236,12 +236,11 @@ void SvxJavaOptionsPage::dispose()
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
 {
     bool bEnable = m_pJavaEnableCB->IsChecked();
     m_pJavaBox->Enable(bEnable);
     bEnable ? m_pJavaList->EnableTable() : m_pJavaList->DisableTable();
-    return 0;
 }
 
 
@@ -273,7 +272,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
 {
     try
     {
@@ -294,13 +293,11 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
     {
         SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception: " << e.Message);
     }
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
     Sequence< OUString > aParameterList;
@@ -344,12 +341,11 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
     else
         m_pParamDlg->SetParameters( aParameterList );
 #endif
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
     OUString sClassPath;
@@ -389,7 +385,6 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
     else
         m_pPathDlg->SetClassPath( sClassPath );
 #endif
-    return 0;
 }
 
 
@@ -433,7 +428,7 @@ IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, 
 
 
 
-IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
 {
     ScopedVclPtrInstance< CuiAboutConfigTabPage > m_pExpertConfigDlg(this);
     m_pExpertConfigDlg->Reset();//initialize and reset function
@@ -444,7 +439,6 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
     }
 
     m_pExpertConfigDlg.disposeAndClear();
-    return 0;
 }
 
 
@@ -844,7 +838,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
 {
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
     if (!sParam.isEmpty())
@@ -857,8 +851,6 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
         ModifyHdl_Impl( m_pParameterEdit );
         EnableRemoveButton();
     }
-
-    return 0;
 }
 
 
@@ -881,7 +873,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -896,8 +888,6 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
         }
     }
     EnableRemoveButton();
-
-    return 0;
 }
 
 
@@ -979,7 +969,7 @@ void SvxJavaClassPathDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
@@ -1011,12 +1001,11 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
         }
     }
     EnableRemoveButton();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
@@ -1048,12 +1037,11 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
         }
     }
     EnableRemoveButton();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pPathList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1069,7 +1057,6 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
     }
 
     EnableRemoveButton();
-    return 0;
 }
 
 

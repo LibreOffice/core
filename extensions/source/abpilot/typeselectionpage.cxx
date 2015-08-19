@@ -133,7 +133,7 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_pOE, AST_OE, bWithMozilla ) );
         m_aAllTypes.push_back( ButtonItem( m_pOther, AST_OTHER, true ) );
 
-        Link<> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        Link<Button*,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
@@ -262,11 +262,10 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG( TypeSelectionPage, OnTypeSelected )
+    IMPL_LINK_NOARG_TYPED( TypeSelectionPage, OnTypeSelected, Button*, void )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
         updateDialogTravelUI();
-        return 0L;
     }
 
 

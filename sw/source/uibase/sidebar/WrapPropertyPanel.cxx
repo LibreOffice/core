@@ -113,7 +113,7 @@ void WrapPropertyPanel::dispose()
 
 void WrapPropertyPanel::Initialize()
 {
-    Link<> aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
+    Link<Button*,void> aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
     mpRBNoWrap->SetClickHdl(aLink);
     mpRBWrapLeft->SetClickHdl(aLink);
     mpRBWrapRight->SetClickHdl(aLink);
@@ -164,7 +164,7 @@ void WrapPropertyPanel::Initialize()
     mpBindings->Update( FN_FRAME_WRAP_IDEAL );
 }
 
-IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl)
+IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, WrapTypeHdl, Button*, void)
 {
     sal_uInt16 nSlot = 0;
     if ( mpRBWrapLeft->IsChecked() )
@@ -193,8 +193,6 @@ IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl)
     }
     SfxBoolItem bStateItem( nSlot, true );
     mpBindings->GetDispatcher()->Execute( nSlot, SfxCallMode::RECORD, &bStateItem, 0L );
-
-    return 0;
 }
 
 void WrapPropertyPanel::NotifyItemUpdate(

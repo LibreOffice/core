@@ -492,7 +492,7 @@ VclPtr<SfxTabPage> SvxShadowTabPage::Create( vcl::Window* pWindow,
 
 
 
-IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_FALSE )
     {
@@ -505,8 +505,6 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
     m_pCtlPosition->Invalidate();
 
     ModifyShadowHdl_Impl( NULL );
-
-    return 0L;
 }
 
 

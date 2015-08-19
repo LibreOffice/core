@@ -219,7 +219,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pBtnAssign->SetClickHdl( LINK( this, Svx3DWin, ClickAssignHdl ) );
     m_pBtnUpdate->SetClickHdl( LINK( this, Svx3DWin, ClickUpdateHdl ) );
 
-    Link<> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
+    Link<Button*,void> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     m_pBtnGeo->SetClickHdl( aLink );
     m_pBtnRepresentation->SetClickHdl( aLink );
     m_pBtnLight->SetClickHdl( aLink );
@@ -274,31 +274,31 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pBtnSpecularColor->SetClickHdl( aLink );
 
 
-    aLink = LINK( this, Svx3DWin, SelectHdl );
-    m_pLbMatFavorites->SetSelectHdl( aLink );
-    m_pLbMatColor->SetSelectHdl( aLink );
-    m_pLbMatEmission->SetSelectHdl( aLink );
-    m_pLbMatSpecular->SetSelectHdl( aLink );
-    m_pLbLight1->SetSelectHdl( aLink );
-    m_pLbLight2->SetSelectHdl( aLink );
-    m_pLbLight3->SetSelectHdl( aLink );
-    m_pLbLight4->SetSelectHdl( aLink );
-    m_pLbLight5->SetSelectHdl( aLink );
-    m_pLbLight6->SetSelectHdl( aLink );
-    m_pLbLight7->SetSelectHdl( aLink );
-    m_pLbLight8->SetSelectHdl( aLink );
-    m_pLbAmbientlight->SetSelectHdl( aLink );
-    m_pLbShademode->SetSelectHdl( aLink );
+    Link<> aLink2 = LINK( this, Svx3DWin, SelectHdl );
+    m_pLbMatFavorites->SetSelectHdl( aLink2 );
+    m_pLbMatColor->SetSelectHdl( aLink2 );
+    m_pLbMatEmission->SetSelectHdl( aLink2 );
+    m_pLbMatSpecular->SetSelectHdl( aLink2 );
+    m_pLbLight1->SetSelectHdl( aLink2 );
+    m_pLbLight2->SetSelectHdl( aLink2 );
+    m_pLbLight3->SetSelectHdl( aLink2 );
+    m_pLbLight4->SetSelectHdl( aLink2 );
+    m_pLbLight5->SetSelectHdl( aLink2 );
+    m_pLbLight6->SetSelectHdl( aLink2 );
+    m_pLbLight7->SetSelectHdl( aLink2 );
+    m_pLbLight8->SetSelectHdl( aLink2 );
+    m_pLbAmbientlight->SetSelectHdl( aLink2 );
+    m_pLbShademode->SetSelectHdl( aLink2 );
 
-    aLink = LINK( this, Svx3DWin, ModifyHdl );
-    m_pMtrMatSpecularIntensity->SetModifyHdl( aLink );
-    m_pNumHorizontal->SetModifyHdl( aLink );
-    m_pNumVertical->SetModifyHdl( aLink );
-    m_pMtrSlant->SetModifyHdl( aLink );
+    aLink2 = LINK( this, Svx3DWin, ModifyHdl );
+    m_pMtrMatSpecularIntensity->SetModifyHdl( aLink2 );
+    m_pNumHorizontal->SetModifyHdl( aLink2 );
+    m_pNumVertical->SetModifyHdl( aLink2 );
+    m_pMtrSlant->SetModifyHdl( aLink2 );
 
     // Preview callback
-    aLink = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
-    m_pCtlLightPreview->SetUserSelectionChangeCallback(aLink);
+    aLink2 = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
+    m_pCtlLightPreview->SetUserSelectionChangeCallback(aLink2);
 
     aSize = GetOutputSizePixel();
     SetMinOutputSizePixel( aSize );
@@ -356,7 +356,7 @@ void Svx3DWin::dispose()
 void Svx3DWin::Construct()
 {
     m_pBtnGeo->Check();
-    Link<> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
+    Link<Button*,void> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     aLink.Call(m_pBtnGeo);
     m_pCtlLightPreview->Hide();
 }
@@ -2141,7 +2141,7 @@ void Svx3DWin::Resize()
     SfxDockingWindow::Resize();
 }
 
-IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
+IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickUpdateHdl, Button*, void)
 {
     bUpdate = !m_pBtnUpdate->IsChecked();
     m_pBtnUpdate->Check( bUpdate );
@@ -2160,12 +2160,10 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
     {
         // Controls can be disabled during certain circumstances
     }
-
-    return 0L;
 }
 
 
-IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
+IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickAssignHdl, Button*, void)
 {
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
     if (pDispatcher != NULL)
@@ -2174,13 +2172,11 @@ IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
         pDispatcher->Execute(
             SID_3D_ASSIGN, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     }
-
-    return 0L;
 }
 
 
 
-IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
+IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
 {
 
     if( pBtn )
@@ -2285,12 +2281,12 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         m_pBtnTexture->Check( eViewType == VIEWTYPE_TEXTURE );
         m_pBtnMaterial->Check( eViewType == VIEWTYPE_MATERIAL );
      }
-    return 0L;
 }
 
 
-IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
+IMPL_LINK_TYPED( Svx3DWin, ClickHdl, Button *, pButton, void )
 {
+    PushButton* pBtn = static_cast<PushButton*>(pButton);
     if( pBtn )
     {
         bool bUpdatePreview = false;
@@ -2443,12 +2439,11 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
         else if( bUpdatePreview )
             UpdatePreview();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
+IMPL_LINK_TYPED( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
 {
     SvColorDialog aColorDlg( this );
     ColorLB* pLb;
@@ -2473,7 +2468,6 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
         if( LBSelectColor( pLb, aColor ) )
             SelectHdl( pLb );
     }
-    return 0L;
 }
 
 

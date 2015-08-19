@@ -41,8 +41,8 @@ private:
 
     bool                mbMarkWndOpen;
 
-    DECL_LINK (ClickFileopenHdl_Impl  , void * );
-    DECL_LINK (ClickTargetHdl_Impl    , void * );
+    DECL_LINK_TYPED (ClickFileopenHdl_Impl, Button*, void );
+    DECL_LINK_TYPED (ClickTargetHdl_Impl  , Button*, void );
 
     DECL_LINK (ModifiedPathHdl_Impl  , void * ); ///< Contens of combobox "Path" modified
     DECL_LINK (ModifiedTargetHdl_Impl, void * ); ///< Contens of editfield "Target" modified

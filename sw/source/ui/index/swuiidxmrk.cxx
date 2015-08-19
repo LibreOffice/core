@@ -582,7 +582,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NewUserIdxHdl, Button*, void)
 {
     ScopedVclPtrInstance< SwNewUserIdxDlg > pDlg(this);
     if(RET_OK == pDlg->Execute())
@@ -591,27 +591,24 @@ IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
         m_pTypeDCB->InsertEntry(sNewName);
         m_pTypeDCB->SelectEntry(sNewName);
     }
-    return 0;
 }
 
-IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, CheckBox*, pBox)
+IMPL_LINK_TYPED( SwIndexMarkPane, SearchTypeHdl, Button*, pBox, void)
 {
-    bool bEnable = pBox->IsChecked() && pBox->IsEnabled();
+    bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked() && pBox->IsEnabled();
     m_pSearchCaseWordOnlyCB->Enable(bEnable);
     m_pSearchCaseSensitiveCB->Enable(bEnable);
-    return 0;
 }
 
-IMPL_LINK( SwIndexMarkPane, InsertHdl, Button *, pButton )
+IMPL_LINK_TYPED( SwIndexMarkPane, InsertHdl, Button *, pButton, void )
 {
     Apply();
     //close the dialog if only one entry is available
     if(!bNewMark && !m_pPrevBT->IsVisible() && !m_pNextBT->IsVisible())
         CloseHdl(pButton);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, CloseHdl, Button*, void)
 {
     if(bNewMark)
     {
@@ -623,7 +620,6 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl)
     {
         m_rDialog.EndDialog();
     }
-    return 0;
 }
 
 // select index type only when inserting
@@ -702,40 +698,35 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, NextHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NextHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark();
     UpdateDialog();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, NextSameHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NextSameHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark(true);
     UpdateDialog();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, PrevHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, PrevHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark();
     UpdateDialog();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, PrevSameHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, PrevSameHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark(true);
     UpdateDialog();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl)
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, DelHdl, Button*, void)
 {
     bDel = true;
     InsertUpdate();
@@ -748,7 +739,6 @@ IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl)
         CloseHdl(m_pCloseBT);
         SfxViewFrame::Current()->GetBindings().Invalidate(FN_EDIT_IDX_ENTRY_DLG);
     }
-    return 0;
 }
 
 // renew dialog view
@@ -1110,7 +1100,7 @@ void    SwAuthorMarkPane::ReInitDlg(SwWrtShell& rWrtShell)
     InitControls();
 }
 
-IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
+IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, CloseHdl, Button*, void)
 {
     if(bNewEntry)
     {
@@ -1122,7 +1112,6 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
     {
         m_rDialog.EndDialog();
     }
-    return 0;
 }
 
 static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const OUString& rColumnTitle)
@@ -1184,7 +1173,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
+IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
 {
     //insert or update the SwAuthorityField...
     if(pSh)
@@ -1206,7 +1195,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
             {
                 ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if(RET_YES != aQuery->Execute())
-                    return 0;
+                    return;
             }
         }
 
@@ -1235,10 +1224,9 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
     }
     if(!bNewEntry)
         CloseHdl(0);
-    return 0;
 }
 
-IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
 {
     bool bCreate = pButton == m_pCreateEntryPB;
     OUString sOldId = m_sCreatedEntry[0];
@@ -1280,10 +1268,9 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
         m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
         m_pActionBT->Enable();
     }
-    return 0;
 }
 
-IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
 {
     bool bFromComp = (pButton == m_pFromComponentRB);
     bIsFromComponent = bFromComp;
@@ -1342,7 +1329,6 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
     }
     m_pEntryLB->SelectEntryPos(0);
     CompEntryHdl(m_pEntryLB);
-    return 0;
 }
 
 IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)

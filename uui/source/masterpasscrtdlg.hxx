@@ -37,7 +37,7 @@ private:
     VclPtr<OKButton> m_pOKBtn;
 
 
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     DECL_LINK(EditHdl_Impl, void *);
 
 public:

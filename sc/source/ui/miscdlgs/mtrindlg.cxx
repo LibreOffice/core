@@ -96,7 +96,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 
 // Handler:
 
-IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
+IMPL_LINK_NOARG_TYPED(ScMetricInputDlg, SetDefValHdl, Button*, void)
 {
     if ( m_pBtnDefVal->IsChecked() )
     {
@@ -105,7 +105,6 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
     }
     else
         m_pEdValue->SetValue( nCurrentValue );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScMetricInputDlg, ModifyHdl)

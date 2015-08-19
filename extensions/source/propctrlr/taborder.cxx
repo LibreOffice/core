@@ -224,21 +224,19 @@ namespace pcr
     }
 
 
-    IMPL_LINK( TabOrderDialog, MoveUpClickHdl, Button*, /*pButton*/ )
+    IMPL_LINK_NOARG_TYPED( TabOrderDialog, MoveUpClickHdl, Button*, void )
     {
         m_pLB_Controls->MoveSelection( -1 );
-        return 0;
     }
 
 
-    IMPL_LINK( TabOrderDialog, MoveDownClickHdl, Button*, /*pButton*/ )
+    IMPL_LINK_NOARG_TYPED( TabOrderDialog, MoveDownClickHdl, Button*, void )
     {
         m_pLB_Controls->MoveSelection( 1 );
-        return 0;
     }
 
 
-    IMPL_LINK( TabOrderDialog, AutoOrderClickHdl, Button*, /*pButton*/ )
+    IMPL_LINK_NOARG_TYPED( TabOrderDialog, AutoOrderClickHdl, Button*, void )
     {
         try
         {
@@ -257,12 +255,10 @@ namespace pcr
         {
             OSL_FAIL( "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
         }
-
-        return 0;
     }
 
 
-    IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
+    IMPL_LINK_NOARG_TYPED( TabOrderDialog, OKClickHdl, Button*, void )
     {
         sal_uLong nEntryCount = m_pLB_Controls->GetEntryCount();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
@@ -289,7 +285,6 @@ namespace pcr
         m_xModel->setControlModels( aSortedControlModelSeq );
 
         EndDialog( RET_OK );
-        return 0;
     }
 
 

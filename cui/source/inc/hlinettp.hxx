@@ -47,9 +47,9 @@ private:
 
     bool                mbMarkWndOpen;
 
-    DECL_LINK (Click_SmartProtocol_Impl  , void * ); ///< Radiobutton clicked: Type HTTP or FTP
-    DECL_LINK (ClickAnonymousHdl_Impl    , void * ); ///< Checkbox : Anonymous User
-    DECL_LINK (ClickBrowseHdl_Impl       , void * ); ///< Button : Browse
+    DECL_LINK_TYPED (Click_SmartProtocol_Impl  , Button*, void ); ///< Radiobutton clicked: Type HTTP or FTP
+    DECL_LINK_TYPED (ClickAnonymousHdl_Impl    , Button*, void ); ///< Checkbox : Anonymous User
+    DECL_LINK_TYPED (ClickBrowseHdl_Impl       , Button*, void ); ///< Button : Browse
     DECL_LINK (ModifiedLoginHdl_Impl     , void * ); ///< Contens of editfield "Login" modified
     DECL_LINK (LostFocusTargetHdl_Impl   , void * ); ///< Combobox "Target" lost its focus
     DECL_LINK (ModifiedTargetHdl_Impl    , void * ); ///< Contens of editfield "Target" modified

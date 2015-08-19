@@ -52,9 +52,10 @@ namespace svx
         bool                m_bModified;
 
 #ifdef INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
-        DECL_LINK( NewHdl, void * );
-        DECL_LINK( EditHdl, void * );
-        DECL_LINK( DeleteHdl, void * );
+        DECL_LINK_TYPED( NewHdl, Button*, void );
+        DECL_LINK_TYPED( EditHdl, Button*, void );
+        DECL_LINK_TYPED( DeleteHdl, Button*, void );
+        DECL_LINK(PathBoxDoubleClickHdl, void *);
 
         DECL_LINK(PathSelect_Impl, void *);
 

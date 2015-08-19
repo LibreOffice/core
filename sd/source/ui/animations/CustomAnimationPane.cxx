@@ -187,16 +187,16 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
     fillDurationComboBox( mpCBSpeed );
 
-    mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBChangeEffect->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBRemoveEffect->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
+    mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpPBChangeEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpPBRemoveEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpLBStart->SetSelectHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpCBSpeed->SetSelectHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBPropertyMore->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBMoveUp->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
+    mpPBPropertyMore->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpPBMoveUp->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
 
     maStrModify = mpFTEffect->GetText();
 
@@ -2018,6 +2018,11 @@ IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl)
 {
     onChangeProperty();
     return 0;
+}
+
+IMPL_LINK_TYPED( CustomAnimationPane, implClickHdl, Button*, pBtn, void )
+{
+    implControlHdl(pBtn);
 }
 
 /// this link is called when one of the controls is modified

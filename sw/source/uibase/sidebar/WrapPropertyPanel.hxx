@@ -78,7 +78,7 @@ namespace sw { namespace sidebar {
 
         void Initialize();
 
-        DECL_LINK(WrapTypeHdl, void*);
+        DECL_LINK_TYPED(WrapTypeHdl, Button*, void);
     };
 
 } } // end of namespace ::sw::sidebar

@@ -500,7 +500,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     return nX;
 }
 
-IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
+IMPL_LINK_TYPED(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
 {
     DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
@@ -520,7 +520,7 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
 
         if (lResult)
             // the link already handled it
-            return 0;
+            return;
     }
 
     if (pButton == m_aFirstBtn.get())
@@ -533,7 +533,6 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
         pParent->MoveToLast();
     else if( pButton == m_aNewBtn.get() )
         pParent->AppendNew();
-    return 0;
 }
 
 void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAll)

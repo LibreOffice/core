@@ -69,7 +69,7 @@ private:
     DECL_LINK( ToggleCompressionRB, void* );
     DECL_LINK( ToggleReduceResolutionRB, void* );
 
-    DECL_LINK( CalculateClickHdl, void* );
+    DECL_LINK_TYPED( CalculateClickHdl, Button*, void );
 
     void Update();
     void UpdateNewWidthMF();

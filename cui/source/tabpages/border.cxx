@@ -1196,10 +1196,9 @@ IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
     return 0;
 }
 
-IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED( SvxBorderTabPage, SyncHdl_Impl, Button*, pBox, void)
 {
-    mbSync = pBox->IsChecked();
-    return 0;
+    mbSync = static_cast<CheckBox*>(pBox)->IsChecked();
 }
 
 void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )

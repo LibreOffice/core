@@ -206,7 +206,7 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
     Link<> aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
 
     m_pLbHorAlign->SetSelectHdl( aLink );
-    m_pBtnWrap->SetClickHdl( aLink );
+    m_pBtnWrap->SetClickHdl( LINK( this, AlignmentTabPage, UpdateEnableClickHdl ) );
 
     // Asian vertical mode
     m_pCbAsianMode->Show( SvtCJKOptions().IsVerticalTextEnabled() );
@@ -428,6 +428,11 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
     }
 
     return eMethodOld != eMethodNew;
+}
+
+IMPL_LINK_NOARG_TYPED(AlignmentTabPage, UpdateEnableClickHdl, Button*, void)
+{
+    UpdateEnableControls();
 }
 
 IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl)

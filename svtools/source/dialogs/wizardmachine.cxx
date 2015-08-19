@@ -412,16 +412,16 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(OWizardMachine, OnFinish)
+    IMPL_LINK_NOARG_TYPED(OWizardMachine, OnFinish, Button*, void)
     {
         if ( isTravelingSuspended() )
-            return 0;
+            return;
         WizardTravelSuspension aTravelGuard( *this );
         if ( !prepareLeaveCurrentState( eFinish ) )
         {
-            return 0L;
+            return;
         }
-        return onFinish() ? 1L : 0L;
+        onFinish();
     }
 
 
@@ -629,23 +629,21 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(OWizardMachine, OnPrevPage)
+    IMPL_LINK_NOARG_TYPED(OWizardMachine, OnPrevPage, Button*, void)
     {
         if ( isTravelingSuspended() )
-            return 0;
+            return;
         WizardTravelSuspension aTravelGuard( *this );
-        bool nRet = travelPrevious();
-        return nRet ? 1 : 0;
+        travelPrevious();
     }
 
 
-    IMPL_LINK_NOARG(OWizardMachine, OnNextPage)
+    IMPL_LINK_NOARG_TYPED(OWizardMachine, OnNextPage, Button*, void)
     {
         if ( isTravelingSuspended() )
-            return 0;
+            return;
         WizardTravelSuspension aTravelGuard( *this );
-        bool nRet = travelNext();
-        return nRet ? 1 : 0;
+        travelNext();
     }
 
 

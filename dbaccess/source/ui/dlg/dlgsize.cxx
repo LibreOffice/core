@@ -76,9 +76,8 @@ sal_Int32 DlgSize::GetValue()
     return (sal_Int32)m_pMF_VALUE->GetValue( FUNIT_CM );
 }
 
-IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( DlgSize, CbClickHdl, Button *, pButton, void )
 {
-
     if( pButton == m_pCB_STANDARD )
     {
         m_pMF_VALUE->Enable(!m_pCB_STANDARD->IsChecked());
@@ -93,7 +92,6 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
             SetValue( m_nPrevValue );
         }
     }
-    return 0;
 }
 
 }   // namespace dbaui

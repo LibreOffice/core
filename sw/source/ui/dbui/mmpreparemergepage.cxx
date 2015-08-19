@@ -50,14 +50,14 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     get(m_pEditPB, "edit");
 
     m_pEditPB->SetClickHdl( LINK( this, SwMailMergePrepareMergePage, EditDocumentHdl_Impl));
-    Link<> aMoveLink(LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl));
+    Link<Button*,void> aMoveLink(LINK( this, SwMailMergePrepareMergePage, MoveClickHdl_Impl));
     m_pFirstPB->SetClickHdl( aMoveLink );
     m_pPrevPB->SetClickHdl( aMoveLink );
     m_pNextPB->SetClickHdl( aMoveLink );
     m_pLastPB->SetClickHdl( aMoveLink );
-    m_pRecordED->SetModifyHdl( aMoveLink );
+    m_pRecordED->SetModifyHdl( LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl) );
     m_pExcludeCB->SetClickHdl(LINK(this, SwMailMergePrepareMergePage, ExcludeHdl_Impl));
-    aMoveLink.Call(m_pRecordED);
+    MoveHdl_Impl(m_pRecordED);
 }
 
 SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
@@ -78,13 +78,16 @@ void SwMailMergePrepareMergePage::dispose()
     svt::OWizardPage::dispose();
 }
 
-IMPL_LINK_NOARG(SwMailMergePrepareMergePage, EditDocumentHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergePrepareMergePage, EditDocumentHdl_Impl, Button*, void)
 {
     m_pWizard->SetRestartPage(MM_PREPAREMERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_DOC);
-    return 0;
 }
 
+IMPL_LINK_TYPED( SwMailMergePrepareMergePage, MoveClickHdl_Impl, Button*, pCtrl, void)
+{
+    MoveHdl_Impl(pCtrl);
+}
 IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -135,11 +138,10 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     return 0;
 }
 
-IMPL_LINK( SwMailMergePrepareMergePage, ExcludeHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED( SwMailMergePrepareMergePage, ExcludeHdl_Impl, Button*, pBox, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    rConfigItem.ExcludeRecord( rConfigItem.GetResultSetPosition(), pBox->IsChecked());
-    return 0;
+    rConfigItem.ExcludeRecord( rConfigItem.GetResultSetPosition(), static_cast<CheckBox*>(pBox)->IsChecked());
 };
 
 void  SwMailMergePrepareMergePage::ActivatePage()

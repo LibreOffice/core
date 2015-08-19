@@ -68,7 +68,7 @@ IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
@@ -99,10 +99,9 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
 
         SelectHdl_Impl( NULL );
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
@@ -129,10 +128,9 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl)
 
         SelectHdl_Impl( NULL );
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pRadioLB->FirstSelected();
     delete static_cast<OUString*>(pEntry->GetUserData());
@@ -156,10 +154,9 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
     }
 
     SelectHdl_Impl( NULL );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, DelHdl_Impl, Button*, void)
 {
     sal_uInt16 nPos = m_pPathLB->GetSelectEntryPos();
     m_pPathLB->RemoveEntry( nPos );
@@ -175,7 +172,6 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl)
     }
 
     SelectHdl_Impl( NULL );
-    return 0;
 }
 
 SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)

@@ -67,7 +67,7 @@ ConditionField::ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *p
     m_pFormula->SetClickHdl( LINK( this, ConditionField, OnFormula ) );
 }
 
-IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton )
+IMPL_LINK_TYPED( ConditionField, OnFormula, Button*, _pClickedButton, void )
 {
     OUString sFormula(m_pSubEdit->GetText());
     const sal_Int32 nLen = sFormula.getLength();
@@ -83,7 +83,6 @@ IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton )
         ReportFormula aFormula( sFormula );
         m_pSubEdit->SetText(aFormula.getUndecoratedContent());
     }
-    return 0L;
 }
 
 // class SvxColorWindow_Impl --------------------------------------------------
@@ -363,7 +362,7 @@ IMPL_LINK_NOARG_TYPED( Condition, OnFormatAction, ToolBox*, void )
     ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),aCol);
 }
 
-IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
+IMPL_LINK_TYPED( Condition, OnConditionAction, Button*, _pClickedButton, void )
 {
     if ( _pClickedButton == m_pMoveUp )
         m_rAction.moveConditionUp( getConditionIndex() );
@@ -373,7 +372,6 @@ IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
         m_rAction.addCondition( getConditionIndex() );
     else if ( _pClickedButton == m_pRemoveCondition )
         m_rAction.deleteCondition( getConditionIndex() );
-    return 0L;
 }
 
 void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)

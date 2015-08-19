@@ -78,7 +78,7 @@ private:
     sal_Int32           m_nNbPoints;
 
     void UpdateControlStates();
-    DECL_LINK( SelectTrendLine, RadioButton * );
+    DECL_LINK_TYPED( SelectTrendLine, Button *, void );
     DECL_LINK( ChangeValue, void *);
 };
 

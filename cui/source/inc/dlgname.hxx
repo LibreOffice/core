@@ -139,8 +139,8 @@ private:
     VclPtr<FixedImage>     pFtImage;
     Image*          pImage;
 
-    DECL_LINK(Button1Hdl, void *);
-    DECL_LINK(Button2Hdl, void *);
+    DECL_LINK_TYPED(Button1Hdl, Button*, void);
+    DECL_LINK_TYPED(Button2Hdl, Button*, void);
 
 public:
     SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );

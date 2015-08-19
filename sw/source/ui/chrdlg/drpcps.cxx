@@ -679,7 +679,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     bModified = false;
 }
 
-IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
+IMPL_LINK_NOARG_TYPED(SwDropCapsPage, ClickHdl, Button*, void)
 {
     bool bChecked = m_pDropCapsBox->IsChecked();
 
@@ -705,11 +705,9 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
         m_pPict->SetText("");
 
     bModified = true;
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
+IMPL_LINK_NOARG_TYPED(SwDropCapsPage, WholeWordHdl, Button*, void)
 {
     m_pDropCapsField->Enable( !m_pWholeWordCB->IsChecked() );
     m_pSwitchText->Enable(!m_pWholeWordCB->IsChecked());
@@ -717,8 +715,6 @@ IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
     ModifyHdl(m_pDropCapsField);
 
     bModified = true;
-
-    return 0;
 }
 
 IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )

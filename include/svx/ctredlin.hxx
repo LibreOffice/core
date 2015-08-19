@@ -200,11 +200,11 @@ private:
     bool            bModified;
 
     DECL_LINK( SelDateHdl, ListBox* );
-    DECL_LINK( RowEnableHdl, CheckBox* );
-    DECL_LINK( TimeHdl, ImageButton* );
+    DECL_LINK_TYPED( RowEnableHdl, Button*, void );
+    DECL_LINK_TYPED( TimeHdl, Button*, void );
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( ModifyDate, void* );
-    DECL_LINK( RefHandle, PushButton* );
+    DECL_LINK_TYPED( RefHandle, Button*, void );
 
 protected:
 
@@ -299,7 +299,7 @@ private:
     bool bEnableRejectAll;
     bool bEnableUndo;
 
-    DECL_LINK( PbClickHdl, PushButton* );
+    DECL_LINK_TYPED( PbClickHdl, Button*, void );
 
 public:
     SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);

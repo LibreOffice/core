@@ -241,11 +241,10 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
 
 
-IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl)
+IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, ClickOKHdl, Button*, void)
 {
     insertSelectedFontwork();
     EndDialog( RET_OK );
-    return 0;
 }
 
 

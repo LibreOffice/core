@@ -151,14 +151,14 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     get(m_pColumnsEdit, "columnssb");
     get(m_pBookModeChk, "bookmode");
     get(m_pOKBtn, "ok");
-    Link<> aLink = LINK(this, SvxZoomDialog, UserHdl);
+    Link<Button*,void> aLink = LINK(this, SvxZoomDialog, UserHdl);
     m_p100Btn->SetClickHdl(aLink);
     m_pOptimalBtn->SetClickHdl(aLink);
     m_pPageWidthBtn->SetClickHdl(aLink);
     m_pWholePageBtn->SetClickHdl(aLink);
     m_pUserBtn->SetClickHdl(aLink);
 
-    Link<> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
+    Link<Button*,void> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
     m_pAutomaticBtn->SetClickHdl(aViewLayoutLink);
     m_pSingleBtn->SetClickHdl(aViewLayoutLink);
     m_pColumnsBtn->SetClickHdl(aViewLayoutLink);
@@ -166,7 +166,7 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     Link<> aViewLayoutSpinLink = LINK(this, SvxZoomDialog, ViewLayoutSpinHdl);
     m_pColumnsEdit->SetModifyHdl(aViewLayoutSpinLink);
 
-    Link<> aViewLayoutCheckLink = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
+    Link<Button*,void> aViewLayoutCheckLink = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
     m_pBookModeChk->SetClickHdl(aViewLayoutCheckLink);
 
     m_pOKBtn->SetClickHdl(LINK(this, SvxZoomDialog, OKHdl));
@@ -313,7 +313,7 @@ void SvxZoomDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK(SvxZoomDialog, UserHdl, RadioButton *, pButton)
+IMPL_LINK_TYPED(SvxZoomDialog, UserHdl, Button *, pButton, void)
 {
     mbModified = true;
 
@@ -326,7 +326,6 @@ IMPL_LINK(SvxZoomDialog, UserHdl, RadioButton *, pButton)
     {
         m_pUserEdit->Disable();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
@@ -338,7 +337,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
     return 0;
 }
 
-IMPL_LINK(SvxZoomDialog, ViewLayoutUserHdl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutUserHdl, Button*, pButton, void)
 {
     mbModified = true;
 
@@ -362,10 +361,7 @@ IMPL_LINK(SvxZoomDialog, ViewLayoutUserHdl, RadioButton*, pButton)
     else
     {
         OSL_FAIL("Wrong Button");
-        return 0;
     }
-
-    return 0;
 }
 
 IMPL_LINK(SvxZoomDialog, ViewLayoutSpinHdl, NumericField*, pEdit)
@@ -388,17 +384,15 @@ IMPL_LINK(SvxZoomDialog, ViewLayoutSpinHdl, NumericField*, pEdit)
     return 0;
 }
 
-IMPL_LINK(SvxZoomDialog, ViewLayoutCheckHdl, CheckBox*, pCheckBox)
+IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutCheckHdl, Button*, pCheckBox, void)
 {
     if (pCheckBox == m_pBookModeChk && !m_pColumnsBtn->IsChecked())
-        return 0;
+        return;
 
     mbModified = true;
-
-    return 0;
 }
 
-IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton)
+IMPL_LINK_TYPED(SvxZoomDialog, OKHdl, Button*, pButton, void)
 {
     if (mbModified || m_pOKBtn != pButton)
     {
@@ -442,7 +436,7 @@ IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton)
         else
         {
             OSL_FAIL("Wrong Button");
-            return 0;
+            return;
         }
         mpOutSet.reset(new SfxItemSet(mrSet));
         mpOutSet->Put(aZoomItem);
@@ -465,7 +459,6 @@ IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton)
     {
         EndDialog();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

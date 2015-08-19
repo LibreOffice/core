@@ -238,7 +238,7 @@ IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
 /**
  * sets values of selection
  */
-IMPL_LINK_NOARG(CopyDlg, SetViewData)
+IMPL_LINK_NOARG_TYPED(CopyDlg, SetViewData, Button*, void)
 {
     Rectangle aRect = mpView->GetAllMarkedRect();
 
@@ -254,14 +254,12 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData)
         Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
         m_pLbStartColor->SelectEntry( aColor );
     }
-
-    return 0;
 }
 
 /**
  * resets values to default
  */
-IMPL_LINK_NOARG(CopyDlg, SetDefault)
+IMPL_LINK_NOARG_TYPED(CopyDlg, SetDefault, Button*, void)
 {
     m_pNumFldCopies->SetValue( 1L );
 
@@ -282,8 +280,6 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault)
         m_pLbStartColor->SelectEntry( aColor );
         m_pLbEndColor->SelectEntry( aColor );
     }
-
-    return 0;
 }
 
 } // end of namespace sd

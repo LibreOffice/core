@@ -77,7 +77,7 @@ void ScNamePasteDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
+IMPL_LINK_TYPED( ScNamePasteDlg, ButtonHdl, Button *, pButton, void )
 {
     if( pButton == m_pBtnPasteAll )
     {
@@ -97,7 +97,6 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
     {
         EndDialog( BTN_PASTE_CLOSE );
     }
-    return 0;
 }
 
 std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const

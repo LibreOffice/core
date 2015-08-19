@@ -57,8 +57,8 @@ private:
     VclPtr<MetricField>    m_pLineLengthEdit;
     VclPtr<MetricField>    m_pLineDistEdit;
 
-    DECL_LINK(HeightPage, void *);
-    DECL_LINK(HeightMetric, void *);
+    DECL_LINK_TYPED(HeightPage, Button*, void);
+    DECL_LINK_TYPED(HeightMetric, Button*, void);
     DECL_LINK(HeightModify, void *);
     DECL_LINK( LineWidthChanged_Impl, void * );
     DECL_LINK( LineColorSelected_Impl, void * );

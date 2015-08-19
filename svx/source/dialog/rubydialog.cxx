@@ -564,7 +564,7 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
 {
     const Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
     if (!aRubyValues.getLength())
@@ -590,16 +590,14 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
             OSL_FAIL("Exception caught");
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CloseHdl_Impl, Button*, void)
 {
     Close();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxRubyDialog, StylistHdl_Impl, Button*, void)
 {
     SfxPoolItem* pState = nullptr;
     SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
@@ -609,7 +607,6 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
     }
     delete pState;
-    return 0;
 }
 
 IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)

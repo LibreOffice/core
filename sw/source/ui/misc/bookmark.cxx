@@ -65,7 +65,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 }
 
 // callback to delete a text mark
-IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
+IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, DeleteHdl, Button*, void)
 {
     // remove text marks from the ComboBox
 
@@ -76,7 +76,6 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
     m_pDeleteBtn->Enable(false);   // no further entries there
 
     m_pOkBtn->Enable();            // the OK handler deletes
-    return 0;
 }
 
 // callback for OKButton. Inserts a new text mark to the current position.

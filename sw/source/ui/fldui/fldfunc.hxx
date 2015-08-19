@@ -67,14 +67,15 @@ class SwFieldFuncPage : public SwFieldPage
     bool            bDropDownLBChanged;
 
     DECL_LINK(TypeHdl, void *);
-    DECL_LINK(SelectHdl, void * = 0);
+    DECL_LINK(SelectHdl, void *);
     DECL_LINK(InsertMacroHdl, void *);
-    DECL_LINK(ModifyHdl, void * = 0);
-    DECL_LINK( ListModifyHdl, Control*);
+    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK(ListModifyReturnActionHdl, Control *);
+    DECL_LINK_TYPED( ListModifyHdl, Button*, void);
     DECL_LINK( ListEnableHdl, void*);
 
     // select Macro
-    DECL_LINK( MacroHdl, Button * );
+    DECL_LINK_TYPED( MacroHdl, Button *, void );
 
     void                UpdateSubType();
     static OUString     TurnMacroString(const OUString &rMacro);

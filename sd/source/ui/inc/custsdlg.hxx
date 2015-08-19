@@ -51,8 +51,9 @@ private:
 
     void            CheckState();
 
-    DECL_LINK( ClickButtonHdl, void * );
-    DECL_LINK( StartShowHdl, void* );
+    DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
+    DECL_LINK( SelectHdl, void* );
+    DECL_LINK_TYPED( StartShowHdl, Button*, void );
 
 public:
                 SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
@@ -82,8 +83,9 @@ private:
     void            CheckState();
     void            CheckCustomShow();
 
-    DECL_LINK( ClickButtonHdl, void * );
-    DECL_LINK( OKHdl, void * );
+    DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
+    DECL_LINK( ClickButtonHdl2, void* );
+    DECL_LINK_TYPED( OKHdl, Button*, void );
 
 public:
 

@@ -188,7 +188,7 @@ void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTa
     implInsertIndex(_rIndex, aTablePos->aIndexList, *m_pLB_TableIndexes);
 }
 
-IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, OKClickHdl, Button*, void )
 {
     // let all tables write their INF file
 
@@ -199,10 +199,9 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
         aLoop->WriteInfFile(m_aDSN);
 
     EndDialog();
-    return 0;
 }
 
-IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, AddClickHdl, Button*, void )
 {
     OUString aSelection = m_pLB_FreeIndexes->GetSelectEntry();
     OUString aTableName = m_pCB_Tables->GetText();
@@ -210,10 +209,9 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
     InsertTableIndex( aTableName, aIndex );
 
     checkButtons();
-    return 0;
 }
 
-IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveClickHdl, Button*, void )
 {
     OUString aSelection = m_pLB_TableIndexes->GetSelectEntry();
     OUString aTableName = m_pCB_Tables->GetText();
@@ -221,10 +219,9 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
     InsertFreeIndex( aIndex );
 
     checkButtons();
-    return 0;
 }
 
-IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, AddAllClickHdl, Button*, void )
 {
     sal_uInt16 nCnt = m_pLB_FreeIndexes->GetEntryCount();
     OUString aTableName = m_pCB_Tables->GetText();
@@ -233,10 +230,9 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
         InsertTableIndex( aTableName, RemoveFreeIndex( m_pLB_FreeIndexes->GetEntry(0), true ) );
 
     checkButtons();
-    return 0;
 }
 
-IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveAllClickHdl, Button*, void )
 {
     sal_uInt16 nCnt = m_pLB_TableIndexes->GetEntryCount();
     OUString aTableName = m_pCB_Tables->GetText();
@@ -245,7 +241,6 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
         InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0), true ) );
 
     checkButtons();
-    return 0;
 }
 
 IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, /*NOTINTERESTEDIN*/ )

@@ -85,11 +85,11 @@ protected:
     VclPtr<PushButton>     m_pRemoveAll;
 
     DECL_LINK( TableSelectHdl, ComboBox* );
-    DECL_LINK( AddClickHdl, PushButton* );
-    DECL_LINK( RemoveClickHdl, PushButton* );
-    DECL_LINK( AddAllClickHdl, PushButton* );
-    DECL_LINK( RemoveAllClickHdl, PushButton* );
-    DECL_LINK( OKClickHdl, PushButton* );
+    DECL_LINK_TYPED( AddClickHdl, Button*, void );
+    DECL_LINK_TYPED( RemoveClickHdl, Button*, void );
+    DECL_LINK_TYPED( AddAllClickHdl, Button*, void );
+    DECL_LINK_TYPED( RemoveAllClickHdl, Button*, void );
+    DECL_LINK_TYPED( OKClickHdl, Button*, void );
     DECL_LINK( OnListEntrySelected, ListBox* );
 
     OUString            m_aDSN;

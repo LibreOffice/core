@@ -110,11 +110,9 @@ void AlignmentPropertyPanel::Initialize()
     Link<> aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
     mpMFLeftIndent->SetModifyHdl ( aLink );
 
-    aLink = LINK(this, AlignmentPropertyPanel, CBOXMergnCellClkHdl);
-    mpCBXMergeCell->SetClickHdl ( aLink );
+    mpCBXMergeCell->SetClickHdl ( LINK(this, AlignmentPropertyPanel, CBOXMergnCellClkHdl) );
 
-    aLink = LINK(this, AlignmentPropertyPanel, CBOXWrapTextClkHdl);
-    mpCBXWrapText->SetClickHdl ( aLink );
+    mpCBXWrapText->SetClickHdl ( LINK(this, AlignmentPropertyPanel, CBOXWrapTextClkHdl) );
 
     //rotation
     mpMtrAngle->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
@@ -122,10 +120,10 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->EnableAutocomplete( false );
     mpCBStacked->SetClickHdl(LINK(this, AlignmentPropertyPanel, ClickStackHdl));
 
-    aLink = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
-    mpRefEdgeBottom->SetClickHdl(aLink);
-    mpRefEdgeTop->SetClickHdl(aLink);
-    mpRefEdgeStd->SetClickHdl(aLink);
+    Link<Button*,void> aLink2 = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
+    mpRefEdgeBottom->SetClickHdl(aLink2);
+    mpRefEdgeTop->SetClickHdl(aLink2);
+    mpRefEdgeStd->SetClickHdl(aLink2);
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
     mpMtrAngle->InsertValue(45, FUNIT_CUSTOM);
@@ -141,7 +139,7 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtRotate);
 }
 
-IMPL_LINK( AlignmentPropertyPanel, ReferenceEdgeHdl, Control*, pControl )
+IMPL_LINK_TYPED( AlignmentPropertyPanel, ReferenceEdgeHdl, Button*, pControl, void )
 {
     SvxRotateMode eMode;
     if(pControl == mpRefEdgeBottom)
@@ -152,7 +150,6 @@ IMPL_LINK( AlignmentPropertyPanel, ReferenceEdgeHdl, Control*, pControl )
         eMode = SVX_ROTATE_MODE_STANDARD;
     SvxRotateModeItem aItem(eMode,ATTR_ROTATE_MODE);
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LOCKPOS, SfxCallMode::RECORD, &aItem, 0l);
-    return 0;
 }
 
 IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
@@ -193,13 +190,12 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
     return 0;
 }
-IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl )
+IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
 {
     bool bVertical = mpCBStacked->IsChecked();
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, &aStackItem, 0L );
-    return 0;
 }
 IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl)
 {
@@ -211,7 +207,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl)
     return 0L;
 }
 
-IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl)
+IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void)
 {
     bool bState = mpCBXMergeCell->IsChecked();
 
@@ -224,16 +220,13 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl)
         GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SfxCallMode::RECORD);
     GetBindings()->Invalidate(FID_MERGE_TOGGLE,true);
     //modified end
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl)
+IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXWrapTextClkHdl, Button*, void)
 {
     bool bState = mpCBXWrapText->IsChecked();
     SfxBoolItem aItem( SID_ATTR_ALIGN_LINEBREAK , bState);
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LINEBREAK, SfxCallMode::RECORD, &aItem, 0L);
-    return 0;
 }
 
 VclPtr<vcl::Window> AlignmentPropertyPanel::Create (

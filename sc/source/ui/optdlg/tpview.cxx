@@ -75,7 +75,7 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     pDrawLB->    SetSelectHdl(aSelObjHdl);
     pGridLB->    SetSelectHdl( LINK( this, ScTpContentOptions, GridHdl ) );
 
-    Link<> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
+    Link<Button*, void> aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
     pFormulaCB  ->SetClickHdl(aCBHdl);
     pNilCB      ->SetClickHdl(aCBHdl);
     pAnnotCB    ->SetClickHdl(aCBHdl);
@@ -260,10 +260,10 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
+IMPL_LINK_TYPED( ScTpContentOptions, CBHdl, Button*, pBtn, void )
 {
     ScViewOption eOption = VOPT_FORMULAS;
-    bool         bChecked = pBtn->IsChecked();
+    bool         bChecked = static_cast<CheckBox*>(pBtn)->IsChecked();
 
     if (      pFormulaCB   == pBtn )   eOption = VOPT_FORMULAS;
     else if ( pNilCB       == pBtn )   eOption = VOPT_NULLVALS;
@@ -280,8 +280,6 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
     else if ( pRowColHeaderCB  == pBtn )   eOption = VOPT_HEADER;
 
     pLocalOptions->SetOption( eOption, bChecked );
-
-    return 0;
 }
 
 void ScTpContentOptions::InitGridOpt()
@@ -698,10 +696,9 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
     return 0;
 }
 
-IMPL_LINK( ScTpLayoutOptions, AlignHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( ScTpLayoutOptions, AlignHdl, Button*, pBox, void )
 {
-    m_pAlignLB->Enable(pBox->IsChecked());
-    return 0;
+    m_pAlignLB->Enable(static_cast<CheckBox*>(pBox)->IsChecked());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

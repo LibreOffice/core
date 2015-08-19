@@ -67,7 +67,7 @@ private:
     void            SetupType_Impl( sal_uInt16 nType );
     DECL_LINK( AnsatzSelectHdl_Impl, ListBox * );
     DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox * );
-    DECL_LINK( LineOptHdl_Impl, Button * );
+    DECL_LINK_TYPED( LineOptHdl_Impl, Button *, void );
     DECL_LINK( SelectCaptTypeHdl_Impl, void * );
 
     const SfxItemSet&   rOutAttrs;

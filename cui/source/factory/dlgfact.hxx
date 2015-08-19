@@ -140,13 +140,13 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void      SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) SAL_OVERRIDE;
     virtual void      SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) SAL_OVERRIDE;
     virtual void      SetOptionsChangedHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
-    virtual void      SetIgnoreHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
-    virtual void      SetIgnoreAllHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetChangeHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetChangeAllHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetIgnoreHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE;
+    virtual void      SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetChangeHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetChangeAllHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
     virtual void      SetClickByCharacterHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetConversionFormatChangedHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetFindHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
+    virtual void      SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetFindHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE;
     virtual bool      GetUseBothDirections( ) const SAL_OVERRIDE;
     virtual editeng::HangulHanjaConversion::ConversionDirection
                       GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const SAL_OVERRIDE;

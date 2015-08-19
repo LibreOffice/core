@@ -88,7 +88,7 @@ private:
     INetURLObject startUrl_;
     rtl::Reference< SearchThread > maSearchThread;
 
-                        DECL_LINK( ClickCancelBtn, void* );
+                        DECL_LINK_TYPED( ClickCancelBtn, Button*, void );
     void                Terminate();
 
 public:
@@ -133,7 +133,7 @@ private:
     rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
 
-    DECL_LINK( ClickCancelBtn, void* );
+    DECL_LINK_TYPED( ClickCancelBtn, Button*, void );
     void                Terminate();
 
 public:
@@ -158,7 +158,7 @@ private:
     GalleryTheme*       pTheme;
     GalleryProgress     aStatusProgress;
 
-                        DECL_LINK( ClickCancelBtn, void* );
+                        DECL_LINK_TYPED( ClickCancelBtn, Button*, void );
                         DECL_LINK_TYPED( TimeoutHdl, Idle*, void );
                         DECL_LINK( ActualizeHdl, INetURLObject* );
 
@@ -188,7 +188,7 @@ private:
     VclPtr<ListBox> m_pLbResName;
     GalleryTheme*   pThm;
 
-    DECL_LINK( ClickOkHdl, void* );
+    DECL_LINK_TYPED( ClickOkHdl, Button*, void );
 public:
     GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
     virtual ~GalleryIdDialog();
@@ -278,10 +278,10 @@ class TPGalleryThemeProperties : public SfxTabPage
     void                TakeFiles();
     void                DoPreview();
 
-                        DECL_LINK( ClickPreviewHdl, void* );
-                        DECL_LINK( ClickSearchHdl, void* );
-                        DECL_LINK( ClickTakeHdl, void* );
-                        DECL_LINK( ClickTakeAllHdl, void* );
+                        DECL_LINK_TYPED( ClickPreviewHdl, Button*, void );
+                        DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
+                        DECL_LINK_TYPED( ClickTakeHdl, Button*, void );
+                        DECL_LINK_TYPED( ClickTakeAllHdl, Button*, void );
                         DECL_LINK( SelectFoundHdl, void* );
                         DECL_LINK( SelectFileTypeHdl, void* );
                         DECL_LINK( DClickFoundHdl, void* );

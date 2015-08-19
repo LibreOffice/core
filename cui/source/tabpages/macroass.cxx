@@ -297,6 +297,11 @@ IMPL_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, )
     return 0;
 }
 
+IMPL_LINK_TYPED( _SfxMacroTabPage, AssignDeleteClickHdl_Impl, Button*, pBtn, void )
+{
+    AssignDeleteHdl_Impl(static_cast<PushButton*>(pBtn));
+}
+
 IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
@@ -367,8 +372,8 @@ void _SfxMacroTabPage::InitAndSetHandler()
     HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
     Link<>              aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
-    mpImpl->pDeletePB->SetClickHdl( aLnk );
-    mpImpl->pAssignPB->SetClickHdl( aLnk );
+    mpImpl->pDeletePB->SetClickHdl( LINK(this, _SfxMacroTabPage, AssignDeleteClickHdl_Impl ) );
+    mpImpl->pAssignPB->SetClickHdl( LINK(this, _SfxMacroTabPage, AssignDeleteClickHdl_Impl ) );
     rListBox.SetDoubleClickHdl( aLnk );
 
     rListBox.SetSelectHdl( LINK( this, _SfxMacroTabPage, SelectEvent_Impl ));

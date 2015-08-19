@@ -116,7 +116,7 @@ namespace dbaui
 
         DECL_LINK( OnScroll, ScrollBar*);
 
-        DECL_LINK( FormatClickHdl, Button * );
+        DECL_LINK_TYPED( FormatClickHdl, Button *, void );
         DECL_LINK( ChangeHdl, ListBox * );
 
         // used by ActivatePropertyField

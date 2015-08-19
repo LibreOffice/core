@@ -60,7 +60,7 @@ private:
     sal_Int32        m_nOldLinkMode;
 
     DECL_LINK(MetricHdl, void *);
-    DECL_LINK(StandardizedPageCountCheckHdl, void *);
+    DECL_LINK_TYPED(StandardizedPageCountCheckHdl, Button*, void);
 
 public:
     SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet);

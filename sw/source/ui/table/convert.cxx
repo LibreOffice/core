@@ -147,7 +147,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     }
     mpKeepColumn->SaveValue();
 
-    Link<> aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
+    Link<Button*,void> aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
     mpTabBtn->SetClickHdl( aLk );
     mpSemiBtn->SetClickHdl( aLk );
     mpParaBtn->SetClickHdl( aLk );
@@ -197,7 +197,7 @@ void SwConvertTableDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK( SwConvertTableDlg, AutoFormatHdl, PushButton*, pButton )
+IMPL_LINK_TYPED( SwConvertTableDlg, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -206,10 +206,9 @@ IMPL_LINK( SwConvertTableDlg, AutoFormatHdl, PushButton*, pButton )
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
-    return 0;
 }
 
-IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton )
+IMPL_LINK_TYPED( SwConvertTableDlg, BtnHdl, Button*, pButton, void )
 {
     if( pButton == mpTabBtn )
         mpKeepColumn->SetState( mpKeepColumn->GetSavedValue() );
@@ -221,22 +220,18 @@ IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton )
     }
     mpKeepColumn->Enable( mpTabBtn->IsChecked() );
     mpOtherEd->Enable( mpOtherBtn->IsChecked() );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(SwConvertTableDlg, CheckBoxHdl, Button*, void)
 {
     mpRepeatHeaderCB->Enable(mpHeaderCB->IsChecked());
     ReapeatHeaderCheckBoxHdl();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
 {
     bool bEnable = mpHeaderCB->IsChecked() && mpRepeatHeaderCB->IsChecked();
     mpRepeatRows->Enable(bEnable);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

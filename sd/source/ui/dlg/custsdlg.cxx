@@ -52,13 +52,13 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
     m_pLbCustomShows->set_width_request(m_pLbCustomShows->approximate_char_width() * 32);
     m_pLbCustomShows->SetDropDownLineCount(8);
 
-    Link<> aLink( LINK( this, SdCustomShowDlg, ClickButtonHdl ) );
+    Link<Button*,void> aLink( LINK( this, SdCustomShowDlg, ClickButtonHdl ) );
     m_pBtnNew->SetClickHdl( aLink );
     m_pBtnEdit->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
     m_pBtnCopy->SetClickHdl( aLink );
     m_pCbxUseCustomShow->SetClickHdl( aLink );
-    m_pLbCustomShows->SetSelectHdl( aLink );
+    m_pLbCustomShows->SetSelectHdl( LINK( this, SdCustomShowDlg, SelectHdl ) );
 
     m_pBtnStartShow->SetClickHdl( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
 
@@ -117,10 +117,14 @@ void SdCustomShowDlg::CheckState()
         pCustomShowList->Seek( nPos );
 }
 
+IMPL_LINK_TYPED( SdCustomShowDlg, ClickButtonHdl, Button *, p, void )
+{
+    SelectHdl(p);
+}
 /**
  * ButtonHdl()
  */
-IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
+IMPL_LINK( SdCustomShowDlg, SelectHdl, void *, p )
 {
     // new CustomShow
     if( p == m_pBtnNew )
@@ -262,11 +266,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 }
 
 // StartShow-Hdl
-IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl)
+IMPL_LINK_NOARG_TYPED(SdCustomShowDlg, StartShowHdl, Button*, void)
 {
     EndDialog( RET_YES );
-
-    return 0;
 }
 
 // CheckState
@@ -292,12 +294,13 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     get( m_pBtnCancel, "cancel" );
     get( m_pBtnHelp, "help" );
 
-    Link<> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
+    Link<Button*,void> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
+    Link<> aLink2= LINK( this, SdDefineCustomShowDlg, ClickButtonHdl2 );
     m_pBtnAdd->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
-    m_pEdtName->SetModifyHdl( aLink );
-    m_pLbPages->SetSelectHdl( aLink ); // because of status
-    m_pLbCustomPages->SetSelectHdl( aLink ); // because of status
+    m_pEdtName->SetModifyHdl( aLink2 );
+    m_pLbPages->SetSelectHdl( aLink2 ); // because of status
+    m_pLbCustomPages->SetSelectHdl( aLink2 ); // because of status
 
     m_pBtnOK->SetClickHdl( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
 
@@ -380,8 +383,12 @@ void SdDefineCustomShowDlg::CheckState()
     m_pBtnRemove->Enable( bCSPages );
 }
 
+IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl, Button*, p, void )
+{
+    ClickButtonHdl2(p);
+}
 // ButtonHdl()
-IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
+IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl2, void *, p )
 {
     if( p == m_pBtnAdd )
     {
@@ -486,7 +493,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
 }
 
 // OK-Hdl
-IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(SdDefineCustomShowDlg, OKHdl, Button*, void)
 {
     // check name...
     bool bDifferent = true;
@@ -520,8 +527,6 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
 
         m_pEdtName->GrabFocus();
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

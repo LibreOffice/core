@@ -103,7 +103,7 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk)
+    IMPL_LINK_NOARG_TYPED(ODocumentLinkDialog, OnOk, Button*, void)
     {
         // get the current URL
         OUString sURL = m_pURL->GetText();
@@ -128,7 +128,7 @@ namespace svx
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
             ScopedVclPtrInstance< MessageDialog > aError(this, sMsg);
             aError->Execute();
-            return 0L;
+            return;
         } // if (!bFileExists)
         INetURLObject aURL( sURL );
         if ( aURL.GetProtocol() != INetProtocol::File )
@@ -137,7 +137,7 @@ namespace svx
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
             ScopedVclPtrInstance< MessageDialog > aError(this, sMsg);
             aError->Execute();
-            return 0L;
+            return;
         }
 
         OUString sCurrentText = m_pName->GetText();
@@ -152,16 +152,15 @@ namespace svx
 
                 m_pName->SetSelection(Selection(0,sCurrentText.getLength()));
                 m_pName->GrabFocus();
-                return 0L;
+                return;
             }
         }
 
         EndDialog(RET_OK);
-        return 0L;
     }
 
 
-    IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile)
+    IMPL_LINK_NOARG_TYPED(ODocumentLinkDialog, OnBrowseFile, Button*, void)
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
@@ -180,7 +179,7 @@ namespace svx
         }
 
         if (0 != aFileDlg.Execute())
-            return 0L;
+            return;
 
         if (m_pName->GetText().isEmpty())
         {   // default the name to the base of the chosen URL
@@ -202,7 +201,6 @@ namespace svx
         m_pURL->SetText(aTransformer.get(OFileNotation::N_SYSTEM));
 
         validate();
-        return 0L;
     }
 
 

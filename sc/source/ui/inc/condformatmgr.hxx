@@ -67,9 +67,10 @@ private:
     ScDocument* mpDoc;
     ScAddress maPos;
 
-    DECL_LINK(RemoveBtnHdl, void*);
+    DECL_LINK_TYPED(RemoveBtnHdl, Button*, void);
+    DECL_LINK_TYPED(EditBtnClickHdl, Button*, void);
+    DECL_LINK_TYPED(AddBtnHdl, Button*, void);
     DECL_LINK(EditBtnHdl, void*);
-    DECL_LINK(AddBtnHdl, void*);
 
     bool mbModified;
 };

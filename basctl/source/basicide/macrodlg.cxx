@@ -613,7 +613,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 
 
 
-IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
+IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
 {
     // apart from New/Record the Description is done by LoseFocus
     if (pButton == m_pRunButton)
@@ -633,7 +633,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
                     ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
-                    return 0;
+                    return;
                 }
             }
         }
@@ -644,12 +644,12 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
                 m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                 m_pMacroNameEdit->GrabFocus();
-                return 0;
+                return;
             }
 
             SbMethod* pMethod = GetMacro();
             if ( pMethod && !QueryReplaceMacro( pMethod->GetName(), this ) )
-                return 0;
+                return;
         }
 
         EndDialog(Macro_OkRun);
@@ -666,7 +666,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         ScriptDocument aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
-            return 0;
+            return;
         BasicManager* pBasMgr = aDocument.getBasicManager();
         OUString aLib( aDesc.GetLibName() );
         OUString aMod( aDesc.GetName() );
@@ -712,7 +712,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
                     m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                     m_pMacroNameEdit->GrabFocus();
-                    return 1;
+                    return;
                 }
                 SbMethod* pMethod = CreateMacro();
                 if ( pMethod )
@@ -739,7 +739,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         ScriptDocument aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
         if ( !aDocument.isAlive() )
-            return 0;
+            return;
         BasicManager* pBasMgr = aDocument.getBasicManager();
         OUString aLib( aDesc.GetLibName() );
         OUString aMod( aDesc.GetName() );
@@ -783,7 +783,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         if ( nRet ) // not only closed
         {
             EndDialog(Macro_Edit);
-            return 0;
+            return;
         }
 
         Shell* pShell = GetShell();
@@ -792,7 +792,6 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
         m_pBasicBox->UpdateEntries();
     }
-    return 0;
 }
 
 

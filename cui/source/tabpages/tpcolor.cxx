@@ -121,7 +121,7 @@ void SvxColorTabPage::UpdateTableName()
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
     bool bLoaded = false;
@@ -189,8 +189,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
         }
     }
     Update( bLoaded );
-
-    return 0;
 }
 
 void SvxColorTabPage::EnableSave( bool bCanSave )
@@ -203,7 +201,7 @@ void SvxColorTabPage::EnableSave( bool bCanSave )
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -258,7 +256,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
                           ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
-    return 0;
 }
 
 void SvxColorTabPage::Update(bool bLoaded)
@@ -561,14 +558,14 @@ long SvxColorTabPage::CheckChanges_Impl()
             {
                 case RET_BTN_1:
                 {
-                    ClickModifyHdl_Impl( this );
+                    ClickModifyHdl_Impl( NULL );
                     aColor = pColorList->GetColor( nPos )->GetColor();
                 }
                 break;
 
                 case RET_BTN_2:
                 {
-                    ClickAddHdl_Impl( this );
+                    ClickAddHdl_Impl( NULL );
                     nPos = m_pLbColor->GetSelectEntryPos();
                     aColor = pColorList->GetColor( nPos )->GetColor();
                 }
@@ -690,7 +687,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_COLOR ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_COLOR ) );
@@ -771,13 +768,11 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     }
 
     UpdateModified();
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
 
@@ -841,12 +836,11 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
             *pnColorListState |= ChangeType::MODIFIED;
         }
     }
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
 {
     boost::scoped_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
 
@@ -881,13 +875,11 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 
         m_pCtlPreviewNew->Invalidate();
     }
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbColor->GetSelectEntryPos();
 
@@ -918,8 +910,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
         }
     }
     UpdateModified();
-
-    return 0;
 }
 
 

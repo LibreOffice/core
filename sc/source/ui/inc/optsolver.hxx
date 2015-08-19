@@ -189,11 +189,11 @@ private:
     bool    FindTimeout( sal_Int32& rTimeout );
     void    ShowError( bool bCondition, formula::RefEdit* pFocus );
 
-    DECL_LINK( BtnHdl, PushButton* );
-    DECL_LINK( DelBtnHdl, PushButton* );
+    DECL_LINK_TYPED( BtnHdl, Button*, void );
+    DECL_LINK_TYPED( DelBtnHdl, Button*, void );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
-    DECL_LINK(ScrollHdl, void *);
+    DECL_LINK( ScrollHdl, void *);
     DECL_LINK( CursorUpHdl, ScCursorRefEdit* );
     DECL_LINK( CursorDownHdl, ScCursorRefEdit* );
     DECL_LINK( CondModifyHdl, void* );
@@ -230,7 +230,7 @@ class ScSolverSuccessDialog : public ModalDialog
     VclPtr<PushButton> m_pBtnOk;
     VclPtr<PushButton> m_pBtnCancel;
 
-    DECL_LINK(ClickHdl, PushButton*);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
 
 public:
     ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );

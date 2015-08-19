@@ -56,8 +56,8 @@ private:
 
     DECL_LINK( SelectHdl, SvxColorValueSet* );
     DECL_LINK( SelectPaletteHdl, void *);
-    DECL_LINK( AutoColorClickHdl, void * );
-    DECL_LINK( OpenPickerClickHdl, void * );
+    DECL_LINK_TYPED( AutoColorClickHdl, Button*, void );
+    DECL_LINK_TYPED( OpenPickerClickHdl, Button*, void );
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;

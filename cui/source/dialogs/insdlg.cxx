@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
+IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
@@ -132,13 +132,11 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
         INetURLObject aObj( aPathSeq[0] );
         m_pEdFilepath->SetText( aObj.PathToFileName() );
     }
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
+IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, RadioHdl, Button*, void)
 {
     if ( m_pRbNewObject->IsChecked() )
     {
@@ -150,7 +148,6 @@ IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
         m_pFileFrame->Show();
         m_pObjectTypeFrame->Hide();
     }
-    return 0;
 }
 
 
@@ -180,7 +177,7 @@ SvInsertOleDlg::SvInsertOleDlg
     get(m_pCbFilelink, "linktofile");
     m_pLbObjecttype->SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
     m_pBtnFilepath->SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
-    Link<> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
+    Link<Button*,void> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     m_pRbNewObject->SetClickHdl( aLink );
     m_pRbObjectFromfile->SetClickHdl( aLink );
     m_pRbNewObject->Check();
@@ -363,7 +360,7 @@ uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( OUString*
     return uno::Reference< io::XInputStream >();
 }
 
-IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
+IMPL_LINK_NOARG_TYPED(SvInsertPlugInDialog, BrowseHdl, Button*, void)
 {
     Sequence< OUString > aFilterNames, aFilterTypes;
     fillNetscapePluginFilters( aFilterNames, aFilterTypes );
@@ -390,8 +387,6 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
         INetURLObject aObj( aPathSeq[0] );
         m_pEdFileurl->SetText(aObj.PathToFileName());
     }
-
-    return 0;
 }
 
 
@@ -552,7 +547,7 @@ void SfxInsertFloatingFrameDialog::Init()
     get(m_pNMMarginHeight, "height");
     get(m_pCBMarginHeightDefault, "defaultheight");
 
-    Link<> aLink( LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
+    Link<Button*, void> aLink( LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
     m_pCBMarginWidthDefault->SetClickHdl( aLink );
     m_pCBMarginHeightDefault->SetClickHdl( aLink );
 
@@ -738,8 +733,9 @@ short SfxInsertFloatingFrameDialog::Execute()
 
 
 
-IMPL_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
+IMPL_LINK_TYPED( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void )
 {
+    CheckBox* pCB = static_cast<CheckBox*>(pButton);
     if ( pCB == m_pCBMarginWidthDefault )
     {
         if ( pCB->IsChecked() )
@@ -755,13 +751,11 @@ IMPL_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
         m_pFTMarginHeight->Enable( !pCB->IsChecked() );
         m_pNMMarginHeight->Enable( !pCB->IsChecked() );
     }
-
-    return 0L;
 }
 
 
 
-IMPL_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, )
+IMPL_LINK_NOARG_TYPED( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
 {
     vcl::Window* pOldParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -779,7 +773,6 @@ IMPL_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, )
             INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
 
     Application::SetDefDialogParent( pOldParent );
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

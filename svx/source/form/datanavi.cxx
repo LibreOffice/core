@@ -2351,8 +2351,9 @@ namespace svxform
     }
 
 
-    IMPL_LINK( AddDataItemDialog, CheckHdl, CheckBox *, pBox )
+    IMPL_LINK_TYPED( AddDataItemDialog, CheckHdl, Button *, pButton, void )
     {
+        CheckBox* pBox = static_cast<CheckBox*>(pButton);
         // Condition buttons are only enable if their check box is checked
         m_pReadonlyBtn->Enable( m_pReadonlyCB->IsChecked() );
         m_pRequiredBtn->Enable( m_pRequiredCB->IsChecked() );
@@ -2381,13 +2382,12 @@ namespace svxform
                 sTemp.clear();
             m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
         }
-
-        return 0;
     }
 
 
-    IMPL_LINK( AddDataItemDialog, ConditionHdl, PushButton *, pBtn )
+    IMPL_LINK_TYPED( AddDataItemDialog, ConditionHdl, Button *, pButton, void )
     {
+        PushButton* pBtn = static_cast<PushButton*>(pButton);
         OUString sTemp, sPropName;
         if ( m_pDefaultBtn == pBtn )
             sPropName = PN_BINDING_EXPR;
@@ -2427,7 +2427,6 @@ namespace svxform
                     sPropName, makeAny( OUString( sNewCondition ) ) );
             }
         }
-        return 0;
     }
 
     void copyPropSet( const Reference< XPropertySet >& xFrom, Reference< XPropertySet >& xTo )
@@ -2465,7 +2464,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(AddDataItemDialog, OKHdl)
+    IMPL_LINK_NOARG_TYPED(AddDataItemDialog, OKHdl, Button*, void)
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
         bool bIsHandleText = ( DITText == m_eItemType );
@@ -2478,7 +2477,7 @@ namespace svxform
             ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_INVALID_XMLNAME ) );
             aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
             aErrBox->Execute();
-            return 0;
+            return;
         }
 
         OUString sDataType( m_pDataTypeLB->GetSelectEntry() );
@@ -2523,14 +2522,13 @@ namespace svxform
         }
         // then close the dialog
         EndDialog( RET_OK );
-        return 0;
     }
 
 
     void AddDataItemDialog::InitDialog()
     {
         // set handler
-        Link<> aLink = LINK( this, AddDataItemDialog, CheckHdl );
+        Link<Button*,void> aLink = LINK( this, AddDataItemDialog, CheckHdl );
         m_pRequiredCB->SetClickHdl( aLink );
         m_pRelevantCB->SetClickHdl( aLink );
         m_pConstraintCB->SetClickHdl( aLink );
@@ -2830,7 +2828,7 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG(AddConditionDialog, EditHdl)
+    IMPL_LINK_NOARG_TYPED(AddConditionDialog, EditHdl, Button*, void)
     {
         Reference< XNameContainer > xNameContnr;
         try
@@ -2851,11 +2849,10 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "AddDataItemDialog::EditHdl(): exception caught" );
         }
-        return 0;
     }
 
 
-    IMPL_LINK_NOARG(AddConditionDialog, OKHdl)
+    IMPL_LINK_NOARG_TYPED(AddConditionDialog, OKHdl, Button*, void)
     {
 /*!!!
         try
@@ -2869,7 +2866,6 @@ namespace svxform
         }
 */
         EndDialog( RET_OK );
-        return 0;
     }
 
 
@@ -2928,7 +2924,7 @@ namespace svxform
             sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT /*| HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED*/ );
 
         m_pNamespacesList->SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
-        Link<> aLink = LINK( this, NamespaceItemDialog, ClickHdl );
+        Link<Button*,void> aLink = LINK( this, NamespaceItemDialog, ClickHdl );
         m_pAddNamespaceBtn->SetClickHdl( aLink );
         m_pEditNamespaceBtn->SetClickHdl( aLink );
         m_pDeleteNamespaceBtn->SetClickHdl( aLink );
@@ -2966,8 +2962,9 @@ namespace svxform
     }
 
 
-    IMPL_LINK( NamespaceItemDialog, ClickHdl, PushButton *, pBtn )
+    IMPL_LINK_TYPED( NamespaceItemDialog, ClickHdl, Button *, pButton, void )
     {
+        PushButton* pBtn = static_cast<PushButton*>(pButton);
         if ( m_pAddNamespaceBtn == pBtn )
         {
             ScopedVclPtrInstance< ManageNamespaceDialog > aDlg(this, m_pConditionDlg, false);
@@ -3012,11 +3009,10 @@ namespace svxform
         }
 
         SelectHdl( m_pNamespacesList );
-        return 0;
     }
 
 
-    IMPL_LINK_NOARG(NamespaceItemDialog, OKHdl)
+    IMPL_LINK_NOARG_TYPED(NamespaceItemDialog, OKHdl, Button*, void)
     {
         try
         {
@@ -3044,7 +3040,6 @@ namespace svxform
         }
         // and close the dialog
         EndDialog( RET_OK );
-        return 0;
     }
 
 
@@ -3107,7 +3102,7 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
+    IMPL_LINK_NOARG_TYPED(ManageNamespaceDialog, OKHdl, Button*, void)
     {
         OUString sPrefix = m_pPrefixED->GetText();
 
@@ -3118,7 +3113,7 @@ namespace svxform
                 ScopedVclPtrInstance< MessageDialog > aErrBox(this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) );
                 aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
                 aErrBox->Execute();
-                return 0;
+                return;
             }
         }
         catch ( Exception& )
@@ -3128,7 +3123,6 @@ namespace svxform
 
         // no error so close the dialog
         EndDialog( RET_OK );
-        return 0;
     }
 
     AddSubmissionDialog::AddSubmissionDialog(
@@ -3176,18 +3170,16 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl)
+    IMPL_LINK_NOARG_TYPED(AddSubmissionDialog, RefHdl, Button*, void)
     {
         ScopedVclPtrInstance< AddConditionDialog > aDlg(this, PN_BINDING_EXPR, m_xTempBinding );
         aDlg->SetCondition( m_pRefED->GetText() );
         if ( aDlg->Execute() == RET_OK )
             m_pRefED->SetText( aDlg->GetCondition() );
-
-        return 0;
     }
 
 
-    IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl)
+    IMPL_LINK_NOARG_TYPED(AddSubmissionDialog, OKHdl, Button*, void)
     {
         OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
@@ -3195,7 +3187,7 @@ namespace svxform
             ScopedVclPtrInstance< MessageDialog > aErrorBox(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME));
             aErrorBox->set_primary_text( Application::GetDisplayName() );
             aErrorBox->Execute();
-            return 0;
+            return;
         }
 
         if ( !m_xSubmission.is() )
@@ -3247,7 +3239,6 @@ namespace svxform
         }
 
         EndDialog( RET_OK );
-        return 0;
     }
 
 
@@ -3419,7 +3410,7 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl)
+    IMPL_LINK_NOARG_TYPED(AddInstanceDialog, FilePickerHdl, Button*, void)
     {
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
@@ -3433,8 +3424,6 @@ namespace svxform
 
         if( aDlg.Execute() == ERRCODE_NONE )
             m_pURLED->SetText( aDlg.GetPath() );
-
-        return 0;
     }
 
     LinkedInstanceWarningBox::LinkedInstanceWarningBox( vcl::Window* pParent )

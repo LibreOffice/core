@@ -82,6 +82,7 @@ private:
     void            UseSplitterInitPos();
 
                     DECL_LINK( SetSelectionHdl, void* );
+                    DECL_LINK_TYPED( SetSelectionClickHdl, Button*, void );
                     DECL_LINK( SelHdl, ListBox* );
                     DECL_LINK(SetSplitHdl,ScPrivatSplit*);
                     DECL_LINK_TYPED( TimerHdl, Idle*, void );

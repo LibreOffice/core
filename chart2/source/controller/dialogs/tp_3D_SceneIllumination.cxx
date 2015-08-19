@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl)
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton )
+IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )
 {
     bool bIsAmbientLight = (pButton==m_pBtn_AmbientLight_Color);
     ColorLB* pListBox = ( bIsAmbientLight ? m_pLB_AmbientLight : m_pLB_LightSource);
@@ -449,7 +449,6 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton )
         }
         SelectColorHdl( pListBox );
     }
-    return 0;
 }
 
 IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorLB*, pListBox )
@@ -482,10 +481,11 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorLB*, pListBox 
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightButton*, pButton )
+IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*, pBtn, void )
 {
+    LightButton* pButton = static_cast<LightButton*>(pBtn);
     if( !pButton )
-        return 0;
+        return;
 
     LightSourceInfo* pInfo = 0;
     sal_Int32 nL=0;
@@ -525,7 +525,6 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightBut
         lcl_selectColor( *m_pLB_LightSource, pInfo->aLightSource.nDiffuseColor );
     }
     this->updatePreview();
-    return 0;
 }
 
 void ThreeD_SceneIllumination_TabPage::updatePreview()

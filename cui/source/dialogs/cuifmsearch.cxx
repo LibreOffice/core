@@ -288,7 +288,7 @@ bool FmSearchDialog::Close()
     return ModalDialog::Close();
 }
 
-IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
+IMPL_LINK_TYPED(FmSearchDialog, OnClickedFieldRadios, Button*, pButton, void)
 {
     if ((pButton == m_prbSearchForText) || (pButton == m_prbSearchForNull) || (pButton == m_prbSearchForNotNull))
     {
@@ -306,11 +306,9 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
             m_plbField->Disable();
             m_pSearchEngine->RebuildUsedFields(-1);
         }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
+IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedSearchAgain, Button*, void)
 {
     if (m_pbClose->IsEnabled())
     {   // the button has the function 'search'
@@ -352,10 +350,9 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
         m_pSearchEngine->CancelSearch();
             // the ProgressHandler is called when it's really finished, here it's only a demand
     }
-    return 0;
 }
 
-IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
+IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
 {
     if (m_ppbApproxSettings == pButton)
     {
@@ -395,8 +392,6 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
             OnCheckBoxToggled( m_pHalfFullFormsCJK );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)

@@ -199,7 +199,7 @@ public:
         virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
     private:
-        DECL_LINK(OnClick, Button*);
+        DECL_LINK_TYPED(OnClick, Button*, void);
         sal_uInt16 ArrangeControls();
 
         void PositionDataSource(sal_Int32 nRecord);

@@ -218,7 +218,7 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(TableDesignWidget, implCheckBoxHdl, Button*, void)
 {
     mbOptionsChanged = true;
 
@@ -226,7 +226,6 @@ IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
         ApplyOptions();
 
     FillDesignPreviewControl();
-    return 0;
 }
 
 void TableDesignWidget::ApplyOptions()

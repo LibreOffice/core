@@ -34,7 +34,7 @@ class ScDocShell;
 
 class ScNamePasteDlg : public ModalDialog
 {
-    DECL_LINK( ButtonHdl, Button * );
+    DECL_LINK_TYPED( ButtonHdl, Button *, void );
 
 private:
     VclPtr<PushButton> m_pBtnPasteAll;

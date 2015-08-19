@@ -133,7 +133,7 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     return 0;
 }
 
-IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
+IMPL_LINK_TYPED( RTSDialog, ClickButton, Button*, pButton, void )
 {
     if( pButton == m_pOKButton )
     {
@@ -155,8 +155,6 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
     }
     else if( pButton == m_pCancelButton )
         EndDialog();
-
-    return 0;
 }
 
 /*

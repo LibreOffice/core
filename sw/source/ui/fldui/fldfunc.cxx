@@ -168,12 +168,12 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldFuncPage, InsertMacroHdl));
     m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldFuncPage, InsertHdl));
     m_pMacroBT->SetClickHdl            (LINK(this, SwFieldFuncPage, MacroHdl));
-    Link<> aListModifyLk( LINK(this, SwFieldFuncPage, ListModifyHdl));
+    Link<Button*,void> aListModifyLk( LINK(this, SwFieldFuncPage, ListModifyHdl));
     m_pListAddPB->SetClickHdl(aListModifyLk);
     m_pListRemovePB->SetClickHdl(aListModifyLk);
     m_pListUpPB->SetClickHdl(aListModifyLk);
     m_pListDownPB->SetClickHdl(aListModifyLk);
-    m_pListItemED->SetReturnActionLink(aListModifyLk);
+    m_pListItemED->SetReturnActionLink(LINK(this, SwFieldFuncPage, ListModifyReturnActionHdl));
     Link<> aListEnableLk = LINK(this, SwFieldFuncPage, ListEnableHdl);
     m_pListItemED->SetModifyHdl(aListEnableLk);
     m_pListItemsLB->SetSelectHdl(aListEnableLk);
@@ -417,13 +417,17 @@ IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl)
 
 IMPL_LINK_NOARG(SwFieldFuncPage, InsertMacroHdl)
 {
-    SelectHdl();
+    SelectHdl(NULL);
     InsertHdl();
 
     return 0;
 }
 
-IMPL_LINK( SwFieldFuncPage, ListModifyHdl, Control*, pControl)
+IMPL_LINK_TYPED( SwFieldFuncPage, ListModifyHdl, Button*, pControl, void)
+{
+    ListModifyReturnActionHdl(pControl);
+}
+IMPL_LINK( SwFieldFuncPage, ListModifyReturnActionHdl, Control*, pControl)
 {
     m_pListItemsLB->SetUpdateMode(false);
     if(pControl == m_pListAddPB ||
@@ -528,7 +532,7 @@ void SwFieldFuncPage::UpdateSubType()
 }
 
 // call MacroBrowser, fill Listbox with Macros
-IMPL_LINK( SwFieldFuncPage, MacroHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwFieldFuncPage, MacroHdl, Button *, pBtn, void )
 {
     vcl::Window* pDefModalDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pBtn );
@@ -537,8 +541,6 @@ IMPL_LINK( SwFieldFuncPage, MacroHdl, Button *, pBtn )
         UpdateSubType();
 
     Application::SetDefDialogParent( pDefModalDlgParent );
-
-    return 0;
 }
 
 bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
@@ -599,7 +601,7 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
         InsertField( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // enable/disable Insert if applicable
+    ModifyHdl(NULL);    // enable/disable Insert if applicable
 
     return false;
 }

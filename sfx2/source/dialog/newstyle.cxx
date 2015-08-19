@@ -28,9 +28,12 @@
 
 // PRIVATE METHODES ------------------------------------------------------
 
-IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
+IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKClickHdl, Button*, void )
 {
-    (void)pControl; //unused
+    OKHdl(NULL);
+}
+IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, /*pControl*/ )
+{
     const OUString aName( m_pColBox->GetText() );
     SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily() );
     if ( pStyle )
@@ -67,7 +70,7 @@ SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rIn
     m_pColBox->set_height_request(m_pColBox->GetTextHeight() * 10);
     get(m_pOKBtn, "ok");
 
-    m_pOKBtn->SetClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
+    m_pOKBtn->SetClickHdl(LINK(this, SfxNewStyleDlg, OKClickHdl));
     m_pColBox->SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
     m_pColBox->SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
 

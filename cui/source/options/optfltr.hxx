@@ -37,8 +37,8 @@ class OfaMSFilterTabPage : public SfxTabPage
     VclPtr<CheckBox>       aPBasicStgCB;
 
 
-    DECL_LINK(LoadWordBasicCheckHdl_Impl, void *);
-    DECL_LINK(LoadExcelBasicCheckHdl_Impl, void *);
+    DECL_LINK_TYPED(LoadWordBasicCheckHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(LoadExcelBasicCheckHdl_Impl, Button*, void);
 public:
     OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();

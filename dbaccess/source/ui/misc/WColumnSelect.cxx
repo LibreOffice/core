@@ -183,7 +183,7 @@ bool OWizColumnSelect::LeavePage()
         return true;
 }
 
-IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
 {
     ListBox *pLeft = NULL;
     ListBox *pRight = NULL;
@@ -213,7 +213,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
     }
 
     if (!pLeft || !pRight)
-        return 0;
+        return;
 
     Reference< XDatabaseMetaData > xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
@@ -244,8 +244,6 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 
     if(m_pOrgColumnNames->GetEntryCount())
         m_pOrgColumnNames->SelectEntryPos(0);
-
-    return 0;
 }
 
 IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox *, pListBox )

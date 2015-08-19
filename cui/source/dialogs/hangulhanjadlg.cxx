@@ -660,37 +660,37 @@ namespace svx
     }
 
 
-    void HangulHanjaConversionDialog::SetIgnoreHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetIgnoreHdl( const Link<Button*,void>& _rHdl )
     {
         m_pIgnore->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetIgnoreAllHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetIgnoreAllHdl( const Link<Button*,void>& _rHdl )
     {
         m_pIgnoreAll->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetChangeHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetChangeHdl( const Link<Button*,void>& _rHdl )
     {
         m_pReplace->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetChangeAllHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetChangeAllHdl( const Link<Button*,void>& _rHdl )
     {
         m_pReplaceAll->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetFindHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetFindHdl( const Link<Button*,void>& _rHdl )
     {
         m_pFind->SetClickHdl( _rHdl );
     }
 
 
-    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl )
     {
         m_pSimpleConversion->SetClickHdl( _rHdl );
         m_pHangulBracketed->SetClickHdl( _rHdl );
@@ -728,18 +728,16 @@ namespace svx
     }
 
 
-    IMPL_LINK( HangulHanjaConversionDialog, ClickByCharacterHdl, CheckBox *, pBox )
+    IMPL_LINK_TYPED( HangulHanjaConversionDialog, ClickByCharacterHdl, Button*, pBox, void )
     {
         m_aClickByCharacterLink.Call( pBox );
 
-        bool bByCharacter = pBox->IsChecked();
+        bool bByCharacter = static_cast<CheckBox*>(pBox)->IsChecked();
         m_pSuggestions->DisplayListBox( !bByCharacter );
-
-        return 0L;
     }
 
 
-    IMPL_LINK( HangulHanjaConversionDialog, OnConversionDirectionClicked, CheckBox *, pBox )
+    IMPL_LINK_TYPED( HangulHanjaConversionDialog, OnConversionDirectionClicked, Button *, pBox, void )
     {
         CheckBox *pOtherBox = 0;
         if ( pBox == m_pHangulOnly )
@@ -748,21 +746,18 @@ namespace svx
             pOtherBox = m_pHangulOnly;
         if ( pBox && pOtherBox )
         {
-            bool bBoxChecked = pBox->IsChecked();
+            bool bBoxChecked = static_cast<CheckBox*>(pBox)->IsChecked();
             if ( bBoxChecked )
                 pOtherBox->Check( false );
             pOtherBox->Enable( !bBoxChecked );
         }
-
-        return 0L;
     }
 
-    IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnOption )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaConversionDialog, OnOption, Button*, void )
     {
         ScopedVclPtrInstance< HangulHanjaOptionsDialog > aOptDlg(this);
         aOptDlg->Execute();
         m_aOptionsChangedLink.Call( this );
-        return 0L;
     }
 
 
@@ -967,7 +962,7 @@ namespace svx
         }
     }
 
-    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, OkHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, OkHdl, Button*, void)
     {
         sal_uInt32              nCnt = m_aDictList.size();
         sal_uInt32              n = 0;
@@ -1018,7 +1013,6 @@ namespace svx
         aLngCfg.SetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES, aTmp );
 
         EndDialog( RET_OK );
-        return 0;
     }
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DictsLB_SelectHdl)
@@ -1031,7 +1025,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, NewDictHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, NewDictHdl, Button*, void)
     {
         OUString                    aName;
         ScopedVclPtrInstance< HangulHanjaNewDictDialog > aNewDlg(this);
@@ -1060,11 +1054,9 @@ namespace svx
                 }
             }
         }
-
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, EditDictHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, EditDictHdl, Button*, void)
     {
         SvTreeListEntry*    pEntry = m_pDictsLB->FirstSelected();
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
@@ -1073,10 +1065,9 @@ namespace svx
             ScopedVclPtrInstance< HangulHanjaEditDictDialog > aEdDlg(this, m_aDictList, m_pDictsLB->GetSelectEntryPos());
             aEdDlg->Execute();
         }
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, DeleteDictHdl, Button*, void)
     {
         sal_uLong nSelPos = m_pDictsLB->GetSelectEntryPos();
         if( nSelPos != TREELIST_ENTRY_NOTFOUND )
@@ -1104,8 +1095,6 @@ namespace svx
                 }
             }
         }
-
-        return 0L;
     }
 
     HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(vcl::Window* _pParent)
@@ -1193,7 +1182,7 @@ namespace svx
         pEntry->SetUserData( new OUString( _rName ) );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaNewDictDialog, OKHdl, Button*, void)
     {
         OUString  aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
 
@@ -1202,7 +1191,6 @@ namespace svx
             m_pDictNameED->SetText( aName );     // do this in case of trailing chars have been deleted
 
         EndDialog( RET_OK );
-        return 0;
     }
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl)
@@ -1554,7 +1542,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, NewPBPushHdl )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, NewPBPushHdl, Button*, void )
     {
         DBG_ASSERT( m_pSuggestions, "-HangulHanjaEditDictDialog::NewPBPushHdl(): no suggestions... search in hell..." );
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
@@ -1591,7 +1579,6 @@ namespace svx
         {
             DBG_WARNING( "+HangulHanjaEditDictDialog::NewPBPushHdl(): dictionary faded away..." );
         }
-        return 0;
     }
 
     bool HangulHanjaEditDictDialog::DeleteEntryFromDictionary( const OUString&, const Reference< XConversionDictionary >& xDict  )
@@ -1623,7 +1610,7 @@ namespace svx
         return bRemovedSomething;
     }
 
-    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, DeletePBPushHdl )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, DeletePBPushHdl, Button*, void )
     {
         if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
         {
@@ -1631,7 +1618,6 @@ namespace svx
             m_bModifiedOriginal = true;
             InitEditDictDialog( m_nCurrentDict );
         }
-        return 0;
     }
 
     void HangulHanjaEditDictDialog::InitEditDictDialog( sal_uInt32 _nSelDict )

@@ -266,24 +266,20 @@ IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
     return 0L;
 }
 
-IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl)
+IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ClickPreviewHdl, Button*, void)
 {
     Calculate( aBmp, aMtf );
     m_pMtfWin->SetGraphic( aMtf );
     m_pBtnPreview->Disable();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl)
+IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ClickOKHdl, Button*, void)
 {
     if( m_pBtnPreview->IsEnabled() )
         Calculate( aBmp, aMtf );
 
     SaveSettings();
     EndDialog( RET_OK );
-
-    return 0L;
 }
 
 IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )

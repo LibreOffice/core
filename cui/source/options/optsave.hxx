@@ -60,7 +60,7 @@ private:
 
     SvxSaveTabPage_Impl*    pImpl;
 
-    DECL_LINK( AutoClickHdl_Impl, CheckBox * );
+    DECL_LINK_TYPED( AutoClickHdl_Impl, Button*, void );
     DECL_LINK( FilterHdl_Impl, ListBox * );
     DECL_LINK(ODFVersionHdl_Impl, void *);
 

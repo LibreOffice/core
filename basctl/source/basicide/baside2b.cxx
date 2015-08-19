@@ -1783,12 +1783,11 @@ bool WatchWindow::RemoveSelectedWatch()
 }
 
 
-IMPL_LINK( WatchWindow, ButtonHdl, ImageButton *, pButton )
+IMPL_LINK_TYPED( WatchWindow, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == aRemoveWatchButton.get())
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
-    return 0;
 }
 
 IMPL_LINK_NOARG(WatchWindow, TreeListHdl)

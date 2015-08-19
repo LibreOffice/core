@@ -120,13 +120,12 @@ void ScSolverSuccessDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScSolverSuccessDialog, ClickHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnOk)
         EndDialog(RET_OK);
     else
         EndDialog();
-    return 0;
 }
 
 ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
@@ -600,7 +599,7 @@ bool ScOptSolverDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
 {
     if ( pBtn == m_pBtnSolve || pBtn == m_pBtnCancel )
     {
@@ -640,8 +639,6 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
             maProperties = pOptDlg->GetProperties();
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
@@ -679,7 +676,7 @@ IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl)
     return 0;
 }
 
-IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScOptSolverDlg, DelBtnHdl, Button*, pBtn, void )
 {
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
         if( pBtn == mpDelButton[nRow] )
@@ -703,8 +700,6 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
                 }
             }
         }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl)

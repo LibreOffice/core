@@ -54,8 +54,8 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    DECL_LINK( ClickCheckboxHdl, CheckBox * );
-    DECL_LINK( ClickBookletHdl, void * );
+    DECL_LINK_TYPED( ClickCheckboxHdl, Button*, void );
+    DECL_LINK_TYPED( ClickBookletHdl, Button*, void );
 
     void updateControls();
 

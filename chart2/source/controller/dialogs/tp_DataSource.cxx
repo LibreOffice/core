@@ -572,13 +572,13 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, void)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
     m_pCurrentRangeChoosingField = m_pEDT_RANGE;
     if( !m_pEDT_RANGE->GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
-        return 0;
+        return;
 
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
     bool bHasSelectedEntry = (pEntry != 0);
@@ -611,26 +611,23 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
     }
     else
         m_pCurrentRangeChoosingField = 0;
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, CategoriesRangeButtonClickedHdl, Button*, void)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
     m_pCurrentRangeChoosingField = m_pEDT_CATEGORIES;
     if( !m_pEDT_CATEGORIES->GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
-        return 0;
+        return;
 
     OUString aStr( SCH_RESSTR( m_pFT_CATEGORIES->IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
         m_rDialogModel.getCategoriesRange(), aStr, *this );
-    return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, AddButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -666,11 +663,9 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl)
             m_pLB_SERIES->Select( pNextEntry );
     }
     SeriesSelectionChangedHdl( 0 );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, RemoveButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -710,11 +705,9 @@ IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl)
         }
         SeriesSelectionChangedHdl( 0 );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, UpButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -727,11 +720,9 @@ IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl)
         fillSeriesListBox();
         SeriesSelectionChangedHdl(0);
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, DownButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -744,8 +735,6 @@ IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl)
         fillSeriesListBox();
         SeriesSelectionChangedHdl(0);
     }
-
-    return 0;
 }
 
 IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )

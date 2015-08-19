@@ -178,7 +178,7 @@ protected:
     DECL_LINK( InternalInteractiveChange, void*);
     DECL_LINK( InternalSelectionChange, void*);
     DECL_LINK( ScrollBarMove, void*);
-    DECL_LINK( ButtonPress, void*);
+    DECL_LINK_TYPED( ButtonPress, Button*, void);
 
     // initialize local parameters
     void Init();

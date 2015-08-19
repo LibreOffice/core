@@ -623,7 +623,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
     return 0L;
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
+IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 {
     OUString  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
@@ -640,8 +640,6 @@ IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
     {
         ImplGalleryThemeProperties( aName, true );
     }
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

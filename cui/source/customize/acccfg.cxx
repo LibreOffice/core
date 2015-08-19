@@ -1050,20 +1050,18 @@ void SfxAcceleratorConfigPage::ResetConfig()
     m_pEntriesBox->Clear();
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Load, Button*, void)
 {
     // ask for filename, where we should load the new config data from
     StartFileDialog( 0, aLoadAccelConfigStr );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Save, Button*, void)
 {
     StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Default, Button*, void)
 {
     uno::Reference<form::XReset> xReset(m_xAct, uno::UNO_QUERY);
     if (xReset.is())
@@ -1075,11 +1073,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
     m_pEntriesBox->SetUpdateMode(true);
     m_pEntriesBox->Invalidate();
     m_pEntriesBox->Select(m_pEntriesBox->GetEntry(0, 0));
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, ChangeHdl, Button*, void)
 {
     sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
     TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
@@ -1093,10 +1089,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
     m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
     ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
 {
     // get selected entry
     sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
@@ -1108,7 +1103,6 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
     (pEntry->m_sCommand).clear();
 
     ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
-    return 0;
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
@@ -1199,7 +1193,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RadioHdl, Button*, void)
 {
     uno::Reference<ui::XAcceleratorConfiguration> xOld = m_xAct;
 
@@ -1210,7 +1204,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 
     // nothing changed? => do nothing!
     if ( m_xAct.is() && ( xOld == m_xAct ) )
-        return 0;
+        return;
 
     m_pEntriesBox->SetUpdateMode( false );
     ResetConfig();
@@ -1229,7 +1223,6 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
         m_pGroupLBox->Select( pEntry );
 
     ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
-    return 1L;
 }
 
 

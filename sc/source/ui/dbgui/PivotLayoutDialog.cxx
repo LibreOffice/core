@@ -644,17 +644,15 @@ bool ScPivotLayoutDialog::Close()
     return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }
 
-IMPL_LINK( ScPivotLayoutDialog, OKClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScPivotLayoutDialog, OKClicked, Button*, void )
 {
     ApplyChanges();
     Close();
-    return 0;
 }
 
-IMPL_LINK( ScPivotLayoutDialog, CancelClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScPivotLayoutDialog, CancelClicked, Button*, void )
 {
     Close();
-    return 0;
 }
 
 IMPL_LINK(ScPivotLayoutDialog, GetFocusHandler, Control*, pCtrl)

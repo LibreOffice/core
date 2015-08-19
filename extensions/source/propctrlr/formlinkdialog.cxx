@@ -660,10 +660,9 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG( FormLinkDialog, OnSuggest )
+    IMPL_LINK_NOARG_TYPED( FormLinkDialog, OnSuggest, Button*, void )
     {
         initializeFieldRowsFrom( m_aRelationDetailColumns, m_aRelationMasterColumns );
-        return 0L;
     }
 
 

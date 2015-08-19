@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
+IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
 {
     if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
     {
@@ -674,10 +674,9 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
         else if ( pPageInfo->m_pExtPage )
             pPageInfo->m_pExtPage->ResetPage();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
 {
     pTreeLB->EndSelection();
     if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
@@ -695,7 +694,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
                 {
                     // the page mustn't be left
                     pTreeLB->Select(pCurrentPageEntry);
-                    return 0;
+                    return;
                 }
             }
             pPageInfo->m_pPage->Hide();
@@ -724,7 +723,6 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
         pEntry = pTreeLB->Next(pEntry);
     }
     EndDialog(RET_OK);
-    return 0;
 }
 
 // an opened group shall be completely visible

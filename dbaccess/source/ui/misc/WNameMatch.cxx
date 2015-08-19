@@ -204,7 +204,7 @@ bool OWizNameMatching::LeavePage()
 
 OUString OWizNameMatching::GetTitle() const { return ModuleRes(STR_WIZ_NAME_MATCHING_TITEL); }
 
-IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if ( pEntry )
@@ -229,11 +229,9 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 
         TableListClickHdl(m_pCTRL_LEFT);
     }
-
-    return 0;
 }
 
-IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if ( pEntry )
@@ -254,7 +252,6 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
             m_pCTRL_RIGHT->GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
         TableListRightSelectHdl(m_pCTRL_RIGHT);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl )
@@ -325,7 +322,7 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl )
     return 0;
 }
 
-IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( OWizNameMatching, AllNoneClickHdl, Button *, pButton, void )
 {
     bool bAll = pButton == m_pAll;
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->First();
@@ -334,8 +331,6 @@ IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton )
         m_pCTRL_LEFT->SetCheckButtonState( pEntry, bAll ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
         pEntry = m_pCTRL_LEFT->Next(pEntry);
     }
-
-    return 0;
 }
 
 // class OColumnString

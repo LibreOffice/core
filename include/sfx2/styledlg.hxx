@@ -31,7 +31,7 @@ class SFX2_DLLPUBLIC SfxStyleDialog: public SfxTabDialog
 {
 private:
     SfxStyleSheetBase*          pStyle;
-    DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
+    DECL_DLLPRIVATE_LINK_TYPED( CancelHdl, Button *, void );
     sal_uInt16 m_nOrganizerId;
 protected:
     virtual void   RefreshInputSet() SAL_OVERRIDE;

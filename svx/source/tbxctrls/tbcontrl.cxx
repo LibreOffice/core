@@ -1380,7 +1380,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
+IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
 {
     Color aColor;
     switch ( theSlotId )
@@ -1410,15 +1410,13 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
         maSelectedLink.Call(&aColor);
 
     maColorSelectFunction(maCommand, aColor);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
+IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, OpenPickerClickHdl, Button*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
     mrPaletteManager.PopupColorPicker(maCommand);
-    return 0;
 }
 
 void SvxColorWindow_Impl::Resize()

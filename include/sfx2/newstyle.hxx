@@ -40,6 +40,7 @@ private:
     SfxStyleSheetBasePool&  rPool;
 
     DECL_DLLPRIVATE_LINK( OKHdl, Control * );
+    DECL_DLLPRIVATE_LINK_TYPED( OKClickHdl, Button *, void );
     DECL_DLLPRIVATE_LINK( ModifyHdl, ComboBox * );
 
 public:

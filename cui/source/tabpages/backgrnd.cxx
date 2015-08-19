@@ -1163,7 +1163,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     return 0;
 }
 
-IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
 {
     if (m_pBtnLink == pBox)
     {
@@ -1207,10 +1207,9 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
         else
             m_pPreviewWin2->NotifyChange( NULL );
     }
-    return 0;
 }
 
-IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( SvxBackgroundTabPage, RadioClickHdl_Impl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnPosition)
     {
@@ -1225,16 +1224,15 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
         m_pWndPosition->Disable();
         m_pWndPosition->Invalidate();
     }
-    return 0;
 }
 
 /** Handler, called by pressing the browse button.
     Create graphic/insert dialog, set path and start.
 */
-IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
 {
     if ( pPageImpl->pLoadIdle->IsActive() )
-        return 0;
+        return;
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
     OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
@@ -1261,7 +1259,6 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
     }
     else
         DELETEZ( pImportDlg );
-    return 0;
 }
 
 /** Delayed loading of the graphic.

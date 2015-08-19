@@ -59,10 +59,10 @@ private:
     const bool          mbShowSignatures;
     sal_Int32           mnActSecLevel;
 
-    DECL_LINK(          ViewSignsBtnHdl, void* );
-    DECL_LINK(          EnableBtnHdl, void* );
-    DECL_LINK(          DisableBtnHdl, void* );
-    DECL_LINK(          AlwaysTrustCheckHdl, void* );
+    DECL_LINK_TYPED(    ViewSignsBtnHdl, Button*, void );
+    DECL_LINK_TYPED(    EnableBtnHdl, Button*, void );
+    DECL_LINK_TYPED(    DisableBtnHdl, Button*, void );
+    DECL_LINK_TYPED(    AlwaysTrustCheckHdl, Button*, void );
 
     void                InitControls();
 

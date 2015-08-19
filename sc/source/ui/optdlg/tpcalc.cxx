@@ -206,7 +206,7 @@ SfxTabPage::sfxpg ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( ScTpCalcOptions, RadioClickHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnDateStd)
     {
@@ -220,12 +220,11 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
     {
         pLocalOptions->SetDate( 1, 1, 1904 );
     }
-
-    return 0;
 }
 
-IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
+IMPL_LINK_TYPED( ScTpCalcOptions, CheckClickHdl, Button*, p, void )
 {
+    CheckBox* pBtn = static_cast<CheckBox*>(p);
     if (pBtn == m_pBtnGeneralPrec)
     {
         if (pBtn->IsChecked())
@@ -254,8 +253,6 @@ IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
             m_pFtEps->Disable(); m_pEdEps->Disable();
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

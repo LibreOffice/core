@@ -1291,7 +1291,7 @@ IMPL_LINK_NOARG(UpdateDialog, allHandler)
     return 0;
 }
 
-IMPL_LINK_NOARG(UpdateDialog, okHandler)
+IMPL_LINK_NOARG_TYPED(UpdateDialog, okHandler, Button*, void)
 {
     //If users are going to update a shared extension then we need
     //to warn them
@@ -1314,13 +1314,12 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler)
     }
 
     EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK_NOARG(UpdateDialog, closeHandler) {
+IMPL_LINK_NOARG_TYPED(UpdateDialog, closeHandler, Button*, void)
+{
     m_thread->stop();
     EndDialog();
-    return 0;
 }
 
 IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )

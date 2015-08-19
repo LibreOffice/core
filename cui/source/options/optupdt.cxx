@@ -277,20 +277,18 @@ void SvxOnlineUpdateTabPage::FillUserData()
 
 
 
-IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, Button*, pBox, void )
 {
-    bool bEnabled = pBox->IsChecked();
+    bool bEnabled = static_cast<CheckBox*>(pBox)->IsChecked();
 
     m_pEveryDayButton->Enable(bEnabled);
     m_pEveryWeekButton->Enable(bEnabled);
     m_pEveryMonthButton->Enable(bEnabled);
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, Button*, void)
 {
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
@@ -308,13 +306,11 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
         if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(xFolderPicker->getDirectory(), aFolder))
             m_pDestPath->SetText( aFolder );
     }
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
 {
     uno::Reference < uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
@@ -361,8 +357,6 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
          OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
             OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

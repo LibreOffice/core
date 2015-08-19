@@ -300,7 +300,7 @@ VclPtr<SfxTabPage> SwCharURLPage::Create(  vcl::Window* pParent,
     return VclPtr<SwCharURLPage>::Create( pParent, *rAttrSet );
 }
 
-IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)
+IMPL_LINK_NOARG_TYPED(SwCharURLPage, InsertFileHdl, Button*, void)
 {
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
@@ -308,14 +308,12 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)
         Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
         m_pURLED->SetText(xFP->getFiles().getConstArray()[0]);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwCharURLPage, EventHdl)
+IMPL_LINK_NOARG_TYPED(SwCharURLPage, EventHdl, Button*, void)
 {
     bModified |= SwMacroAssignDlg::INetFormatDlg( this,
                     ::GetActiveView()->GetWrtShell(), pINetItem );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

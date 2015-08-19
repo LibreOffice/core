@@ -174,19 +174,17 @@ void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)
 
 
 
-IMPL_LINK_NOARG(SvxPostItDialog, PrevHdl)
+IMPL_LINK_NOARG_TYPED(SvxPostItDialog, PrevHdl, Button*, void)
 {
     aPrevHdlLink.Call( this );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxPostItDialog, NextHdl)
+IMPL_LINK_NOARG_TYPED(SvxPostItDialog, NextHdl, Button*, void)
 {
     aNextHdlLink.Call( this );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
+IMPL_LINK_NOARG_TYPED(SvxPostItDialog, Stamp, Button*, void)
 {
     Date aDate( Date::SYSTEM );
     tools::Time aTime( tools::Time::SYSTEM );
@@ -211,12 +209,11 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     sal_Int32 nLen = aStr.getLength();
     m_pEditED->GrabFocus();
     m_pEditED->SetSelection( Selection( nLen, nLen ) );
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
+IMPL_LINK_NOARG_TYPED(SvxPostItDialog, OKHdl, Button*, void)
 {
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     pOutSet = new SfxItemSet( rSet );
@@ -227,7 +224,6 @@ IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
     pOutSet->Put( SvxPostItTextItem( m_pEditED->GetText(),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );
     EndDialog( RET_OK );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

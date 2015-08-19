@@ -300,7 +300,7 @@ void SpellDialog::Init_Impl()
     m_pCheckGrammarCB->SetClickHdl( LINK( this, SpellDialog, CheckGrammarHdl ));
     m_pOptionsPB->SetClickHdl( LINK( this, SpellDialog, ExtClickHdl ) );
 
-    m_pSuggestionLB->SetDoubleClickHdl( LINK( this, SpellDialog, ChangeHdl ) );
+    m_pSuggestionLB->SetDoubleClickHdl( LINK( this, SpellDialog, DoubleClickChangeHdl ) );
 
     m_pSentenceED->SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
 
@@ -473,7 +473,7 @@ IMPL_LINK( SpellDialog, InitHdl, SpellDialog *, )
 
 
 
-IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SpellDialog, ExtClickHdl, Button *, pBtn, void )
 {
     if (m_pOptionsPB == pBtn)
         StartSpellOptDlg_Impl();
@@ -503,14 +503,12 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
             }
         }
     }
-    return 0;
 }
 
-IMPL_LINK( SpellDialog, CheckGrammarHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
 {
-    rParent.SetGrammarChecking( pBox->IsChecked() );
+    rParent.SetGrammarChecking( static_cast<CheckBox*>(pBox)->IsChecked() );
     Impl_Restore();
-    return 0;
 }
 
 void SpellDialog::StartSpellOptDlg_Impl()
@@ -573,7 +571,13 @@ OUString SpellDialog::getReplacementString() const
 
 
 
-IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
+IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl)
+{
+    ChangeHdl(NULL);
+    return 0;
+}
+
+IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeHdl, Button*, void)
 {
     if(m_pSentenceED->IsUndoEditMode())
     {
@@ -590,12 +594,11 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
     }
     if(!m_pChangePB->IsEnabled())
         m_pIgnorePB->GrabFocus();
-    return 1;
 }
 
 
 
-IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
+IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeAllHdl, Button*, void)
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     OUString aString = getReplacementString();
@@ -622,11 +625,10 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
     SpellContinue_Impl();
     bModified = false;
     m_pSentenceED->UndoActionEnd();
-    return 1;
 }
 
 
-IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
+IMPL_LINK_TYPED( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     // add word to IgnoreAll list
@@ -670,16 +672,14 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
     SpellContinue_Impl();
     bModified = false;
     m_pSentenceED->UndoActionEnd();
-    return 1;
 }
 
 
-IMPL_LINK_NOARG(SpellDialog, UndoHdl)
+IMPL_LINK_NOARG_TYPED(SpellDialog, UndoHdl, Button*, void)
 {
     m_pSentenceED->Undo();
     if(!m_pSentenceED->GetUndoActionCount())
         m_pUndoPB->Enable(false);
-    return 0;
 }
 
 
@@ -742,7 +742,7 @@ void SpellDialog::Impl_Restore()
     m_pIgnorePB->SetText(m_sIgnoreOnceST);
 }
 
-IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
+IMPL_LINK_NOARG_TYPED(SpellDialog, IgnoreHdl, Button*, void)
 {
     if (m_sResumeST.equals(m_pIgnorePB->GetText()))
     {
@@ -757,7 +757,6 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
         // the word is being ignored
         SpellContinue_Impl( false, true );
     }
-    return 1;
 }
 
 
@@ -900,9 +899,9 @@ int SpellDialog::InitUserDicts()
 }
 
 
-IMPL_LINK(SpellDialog, AddToDictClickHdl, PushButton*, )
+IMPL_LINK_NOARG_TYPED(SpellDialog, AddToDictClickHdl, Button*, void)
 {
-    return AddToDictionaryExecute(1, m_pAddToDictMB->GetPopupMenu());
+    AddToDictionaryExecute(1, m_pAddToDictMB->GetPopupMenu());
 }
 
 
@@ -987,12 +986,11 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
 };
 
 
-IMPL_LINK_NOARG(SpellDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(SpellDialog, CancelHdl, Button*, void)
 {
     //apply changes and ignored text parts first - if there are any
     rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(true), false);
     Close();
-    return 0;
 }
 
 

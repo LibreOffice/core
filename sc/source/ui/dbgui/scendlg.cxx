@@ -162,7 +162,7 @@ void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& r
     m_pCbProtect->Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
 }
 
-IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(ScNewScenarioDlg, OkHdl, Button*, void)
 {
     OUString      aName = comphelper::string::strip(m_pEdName->GetText(), ' ');
     ScDocument* pDoc    = static_cast<ScTabViewShell*>(SfxViewShell::Current())->GetViewData().GetDocument();
@@ -181,16 +181,14 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
     }
     else
         EndDialog( RET_OK );
-    return 0;
 
     //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
 }
 
-IMPL_LINK( ScNewScenarioDlg, EnableHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( ScNewScenarioDlg, EnableHdl, Button*, pBox, void )
 {
     if (pBox == m_pCbShowFrame)
         m_pLbColor->Enable( m_pCbShowFrame->IsChecked() );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

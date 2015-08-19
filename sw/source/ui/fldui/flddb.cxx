@@ -475,14 +475,13 @@ IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldDBPage, AddDBHdl, Button*, void)
 {
     OUString sNewDB = SwDBManager::LoadAndRegisterDataSource();
     if(!sNewDB.isEmpty())
     {
         m_pDatabaseTLB->AddDataSource(sNewDB);
     }
-    return 0;
 }
 
 // Modify

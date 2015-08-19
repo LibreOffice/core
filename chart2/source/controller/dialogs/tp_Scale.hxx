@@ -100,7 +100,7 @@ private:
     void EnableControls();
 
     DECL_LINK( SelectAxisTypeHdl, void* );
-    DECL_LINK( EnableValueHdl, CheckBox* );
+    DECL_LINK_TYPED( EnableValueHdl, Button*, void );
     DECL_STATIC_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField* );
 
     /** shows a warning window due to an invalid input.

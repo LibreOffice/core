@@ -60,8 +60,8 @@ namespace svx
 
     protected:
         DECL_LINK(OnTextModified, void *);
-        DECL_LINK( OnBrowseFile, void* );
-        DECL_LINK( OnOk, void* );
+        DECL_LINK_TYPED( OnBrowseFile, Button*, void );
+        DECL_LINK_TYPED( OnOk, Button*, void );
 
         void validate( );
     };

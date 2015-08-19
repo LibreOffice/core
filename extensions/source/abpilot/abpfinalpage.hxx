@@ -68,8 +68,8 @@ namespace abp
 
     private:
         DECL_LINK( OnNameModified, Edit* );
-        DECL_LINK(OnRegister, void *);
-        DECL_LINK(OnEmbed, void *);
+        DECL_LINK_TYPED(OnRegister, Button*, void);
+        DECL_LINK_TYPED(OnEmbed, Button*, void);
 
         bool    isValidName() const;
         void        implCheckName();

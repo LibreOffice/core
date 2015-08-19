@@ -62,7 +62,7 @@ private:
     PagePropertyPanel& mrPagePropPanel;
 
     DECL_LINK(ImplSizeHdl, void*);
-    DECL_LINK(MoreButtonClickHdl_Impl, void*);
+    DECL_LINK_TYPED(MoreButtonClickHdl_Impl, Button*, void);
 };
 
 } } // end of namespace sw::sidebar

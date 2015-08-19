@@ -192,11 +192,10 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         mpButtonOk->Disable();
 }
 
-IMPL_LINK( ScStatisticsInputOutputDialog, OkClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, OkClicked, Button*, void )
 {
     CalculateInputAndWriteToOutput();
     Close();
-    return 0;
 }
 
 IMPL_LINK( ScStatisticsInputOutputDialog, GetFocusHandler, Control*, pCtrl )

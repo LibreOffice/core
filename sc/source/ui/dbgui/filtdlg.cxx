@@ -707,7 +707,7 @@ bool ScFilterDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
+IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
 {
     if ( pBtn == pBtnOk )
     {
@@ -740,8 +740,6 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
     {
         Close();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
@@ -1023,7 +1021,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
 {
     //  Column headers:
     //      Field list: Columnxx <-> column header string
@@ -1057,8 +1055,6 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         UpdateValueList( 3 );
         UpdateValueList( 4 );
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )

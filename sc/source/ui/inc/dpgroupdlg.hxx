@@ -46,7 +46,7 @@ private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
 
-    DECL_LINK( ClickHdl, RadioButton* );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
 
 private:
     VclPtr<RadioButton>        mpRbAuto;
@@ -119,7 +119,7 @@ public:
     sal_Int32           GetDatePart() const;
 
 private:
-    DECL_LINK( ClickHdl, RadioButton* );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK( CheckHdl, SvxCheckListBox* );
 
 private:

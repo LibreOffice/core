@@ -60,8 +60,8 @@ protected:
 
     ~SwGreetingsHandler() {}
 
-    DECL_LINK(IndividualHdl_Impl, void *);
-    DECL_LINK(GreetingHdl_Impl, PushButton*);
+    DECL_LINK_TYPED(IndividualHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(GreetingHdl_Impl, Button*, void);
 
     void    Contains(bool bContainsGreeting);
     virtual void    UpdatePreview();
@@ -79,10 +79,10 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 
     OUString            m_sDocument;
 
-    DECL_LINK(ContainsHdl_Impl, CheckBox*);
-    DECL_LINK(InsertDataHdl_Impl, ImageButton*);
+    DECL_LINK_TYPED(ContainsHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(InsertDataHdl_Impl, Button*, void);
     DECL_LINK(GreetingSelectHdl_Impl, void *);
-    DECL_LINK(AssignHdl_Impl, PushButton*);
+    DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
 
     virtual void        UpdatePreview() SAL_OVERRIDE;
     virtual void        ActivatePage() SAL_OVERRIDE;
@@ -101,8 +101,8 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
 
     VclPtr<OKButton>            m_pOK;
 
-    DECL_LINK(ContainsHdl_Impl, CheckBox*);
-    DECL_LINK(OKHdl, void *);
+    DECL_LINK_TYPED(ContainsHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
 public:
     SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* pWizard);
     virtual ~SwMailBodyDialog();

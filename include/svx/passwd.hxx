@@ -47,7 +47,7 @@ private:
 
     bool            bEmpty;
 
-    DECL_LINK(ButtonHdl, void *);
+    DECL_LINK_TYPED(ButtonHdl, Button*, void);
     DECL_LINK(EditModifyHdl, void *);
 
 public:

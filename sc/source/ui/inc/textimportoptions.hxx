@@ -50,9 +50,9 @@ private:
 
     VclPtr<CheckBox>       m_pBtnConvertDate;
 
-    DECL_LINK(OKHdl, void *);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
 
-    DECL_LINK( RadioHdl, RadioButton* );
+    DECL_LINK_TYPED( RadioHdl, Button*, void );
 };
 
 #endif

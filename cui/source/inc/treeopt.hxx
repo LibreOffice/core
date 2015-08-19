@@ -185,8 +185,8 @@ private:
 protected:
     DECL_STATIC_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox* );
     DECL_LINK(ShowPageHdl_Impl, void *);
-    DECL_LINK(BackHdl_Impl, void *);
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(BackHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     void SelectHdl_Impl();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

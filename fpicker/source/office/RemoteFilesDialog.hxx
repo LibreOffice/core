@@ -180,7 +180,7 @@ private:
 
     void SavePassword( const OUString& rURL, const OUString& rUser, const OUString& rPassword );
 
-    DECL_LINK ( AddServiceHdl, void * );
+    DECL_LINK_TYPED ( AddServiceHdl, Button*, void );
     DECL_LINK ( SelectServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
 
@@ -198,10 +198,10 @@ private:
 
     DECL_LINK_TYPED( SelectBreadcrumbHdl, Breadcrumb *, void );
 
-    DECL_LINK( NewFolderHdl, void * );
+    DECL_LINK_TYPED( NewFolderHdl, Button*, void );
 
-    DECL_LINK( OkHdl, void * );
-    DECL_LINK( CancelHdl, void * );
+    DECL_LINK_TYPED( OkHdl, Button*, void );
+    DECL_LINK_TYPED( CancelHdl, Button*, void );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX

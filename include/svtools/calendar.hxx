@@ -37,6 +37,7 @@ class DataChangedEvent;
 class FloatingWindow;
 class PushButton;
 class ImplCFieldFloatWin;
+class Button;
 
 /*************************************************************************
 
@@ -358,7 +359,7 @@ private:
     bool                mbNone;
 
                         DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, Calendar*, void );
-                        DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
+                        DECL_DLLPRIVATE_LINK_TYPED( ImplClickHdl, Button*, void );
                         DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
 
 public:

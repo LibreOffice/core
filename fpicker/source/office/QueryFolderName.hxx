@@ -32,7 +32,7 @@ private:
     VclPtr<VclFrame> m_pNameLine;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK( OKHdl, void * );
+    DECL_LINK_TYPED( OKHdl, Button*, void );
     DECL_LINK( NameHdl, void * );
 
 public:

@@ -114,7 +114,7 @@ namespace pcr
         void                IndentTitle( bool _bIndent );
 
     private:
-        DECL_LINK( OnButtonClicked, PushButton* );
+        DECL_LINK_TYPED( OnButtonClicked, Button*, void );
         DECL_LINK( OnButtonFocus, PushButton* );
 
         void    implHideBrowseButton( bool _bPrimary, bool _bReLayout );

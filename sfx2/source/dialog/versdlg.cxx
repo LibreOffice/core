@@ -213,7 +213,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 
     m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
 
-    Link<> aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
+    Link<Button*,void> aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
     m_pViewButton->SetClickHdl ( aClickLink );
     m_pSaveButton->SetClickHdl ( aClickLink );
     m_pDeleteButton->SetClickHdl ( aClickLink );
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl)
     return 0L;
 }
 
-IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
+IMPL_LINK_TYPED( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     SvTreeListEntry *pEntry = m_pVersionBox->FirstSelected();
@@ -463,8 +463,6 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
         VclPtrInstance< SfxCmisVersionsDialog > pDlg(pViewFrame);
         pDlg->Execute();
     }
-
-    return 0L;
 }
 
 SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
@@ -520,13 +518,12 @@ void SfxViewVersionDialog_Impl::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
+IMPL_LINK_TYPED(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton, void)
 {
     assert(pButton == m_pOKButton);
     (void)pButton;
     m_rInfo.aComment = m_pEdit->GetText();
     EndDialog(RET_OK);
-    return 0L;
 }
 
 SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )

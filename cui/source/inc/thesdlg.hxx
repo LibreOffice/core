@@ -142,8 +142,8 @@ public:
     OUString                getErrStr() const { return m_aErrStr; }
 
     // Handler
-    DECL_LINK( ReplaceBtnHdl_Impl, Button * );
-    DECL_LINK( LeftBtnHdl_Impl, Button * );
+    DECL_LINK_TYPED( ReplaceBtnHdl_Impl, Button *, void );
+    DECL_LINK_TYPED( LeftBtnHdl_Impl, Button *, void );
     DECL_LINK( LanguageHdl_Impl, ListBox * );
     DECL_LINK( WordSelectHdl_Impl, ComboBox * );
     DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );

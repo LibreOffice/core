@@ -123,7 +123,7 @@ private:
     DECL_LINK( LinesChanged_Impl, void* );
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
     DECL_LINK( ModifyWidthHdl_Impl, void*);
-    DECL_LINK( SyncHdl_Impl, CheckBox*);
+    DECL_LINK_TYPED( SyncHdl_Impl, Button*, void);
 
     sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
     sal_uInt16              GetPresetStringId( sal_uInt16 nValueSetIdx ) const;

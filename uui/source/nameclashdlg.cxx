@@ -25,7 +25,7 @@
 
 // NameClashDialog ---------------------------------------------------------
 
-IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
+IMPL_LINK_TYPED( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
 {
     long nRet = (long) ABORT;
     if ( m_pBtnRename == pBtn )
@@ -36,7 +36,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
         {
             ScopedVclPtrInstance< MessageDialog > aError(nullptr, maSameName);
             aError->Execute();
-            return 1;
+            return;
         }
         maNewName = aNewName;
     }
@@ -44,8 +44,6 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
         nRet = (long) OVERWRITE;
 
     EndDialog( nRet );
-
-    return 1;
 }
 
 
@@ -63,7 +61,7 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
     get(m_pBtnRename, "rename");
     get(m_pBtnCancel, "cancel");
 
-    Link<> aLink( LINK( this, NameClashDialog, ButtonHdl_Impl ) );
+    Link<Button*,void> aLink( LINK( this, NameClashDialog, ButtonHdl_Impl ) );
     m_pBtnOverwrite->SetClickHdl( aLink );
     m_pBtnRename->SetClickHdl( aLink );
     m_pBtnCancel->SetClickHdl( aLink );

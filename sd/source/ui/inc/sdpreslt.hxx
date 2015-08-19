@@ -47,7 +47,7 @@ public:
     void                GetAttr(SfxItemSet& rOutAttrs);
 
     DECL_LINK(ClickLayoutHdl, void *);
-    DECL_LINK(ClickLoadHdl, void *);
+    DECL_LINK_TYPED(ClickLoadHdl, Button*, void);
 
 private:
     ::sd::DrawDocShell* mpDocSh;

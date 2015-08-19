@@ -240,7 +240,7 @@ void SwFieldEditDlg::InsertHdl()
 }
 
 // kick off changing of the field
-IMPL_LINK_NOARG(SwFieldEditDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldEditDlg, OKHdl, Button*, void)
 {
     if (GetOKButton()->IsEnabled())
     {
@@ -249,8 +249,6 @@ IMPL_LINK_NOARG(SwFieldEditDlg, OKHdl)
             pTabPage->FillItemSet(0);
         EndDialog( RET_OK );
     }
-
-    return 0;
 }
 
 short SwFieldEditDlg::Execute()
@@ -260,7 +258,7 @@ short SwFieldEditDlg::Execute()
 }
 
 // Traveling between fields of the same type
-IMPL_LINK( SwFieldEditDlg, NextPrevHdl, Button *, pButton )
+IMPL_LINK_TYPED( SwFieldEditDlg, NextPrevHdl, Button *, pButton, void )
 {
     bool bNext = pButton == m_pNextBT;
 
@@ -292,11 +290,9 @@ IMPL_LINK( SwFieldEditDlg, NextPrevHdl, Button *, pButton )
     pTabPage->EditNewField();
 
     Init();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldEditDlg, AddressHdl, Button*, void)
 {
     SwFieldPage* pTabPage = static_cast<SwFieldPage*>(GetTabPage());
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
@@ -341,7 +337,6 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl)
     {
         pSh->UpdateFields( *pCurField );
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

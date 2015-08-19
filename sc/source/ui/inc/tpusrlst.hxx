@@ -96,7 +96,7 @@ private:
 
     // Handler:
     DECL_LINK( LbSelectHdl,     ListBox* );
-    DECL_LINK( BtnClickHdl,     PushButton* );
+    DECL_LINK_TYPED( BtnClickHdl, Button*, void );
     DECL_LINK( EdEntriesModHdl, VclMultiLineEdit* );
 };
 

@@ -205,13 +205,11 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,sal_True);
 }
 
-IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
+IMPL_LINK_TYPED( ODateTimeDialog, CBClickHdl, Button*, _pBox, void )
 {
-   (void)_pBox;
-
-     if ( _pBox == m_pDate || _pBox == m_pTime)
-     {
-         bool bDate = m_pDate->IsChecked();
+    if ( _pBox == m_pDate || _pBox == m_pTime)
+    {
+        bool bDate = m_pDate->IsChecked();
         bool bTime = m_pTime->IsChecked();
         if (!bDate && !bTime)
         {
@@ -222,7 +220,6 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
             m_pPB_OK->Enable();
         }
     }
-    return 1L;
 }
 
 sal_Int32 ODateTimeDialog::getFormatKey(bool _bDate) const

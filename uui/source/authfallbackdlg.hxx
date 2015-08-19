@@ -35,8 +35,8 @@ public:
 
 private:
 
-    DECL_LINK ( OKHdl, Button * );
-    DECL_LINK ( CancelHdl, Button * );
+    DECL_LINK_TYPED ( OKHdl, Button *, void );
+    DECL_LINK_TYPED ( CancelHdl, Button *, void );
 };
 
 #endif // INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX

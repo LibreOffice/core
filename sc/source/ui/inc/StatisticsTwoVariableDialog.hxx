@@ -83,7 +83,7 @@ private:
     void GetRangeFromSelection();
 
     DECL_LINK( GroupByChanged,   void* );
-    DECL_LINK( OkClicked,        PushButton* );
+    DECL_LINK_TYPED( OkClicked, Button*, void );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
     DECL_LINK( RefInputModifyHandler, void* );

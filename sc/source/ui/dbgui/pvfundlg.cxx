@@ -523,10 +523,9 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     mpBtnOptions->SetClickHdl( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
 }
 
-IMPL_LINK( ScDPSubtotalDlg, RadioClickHdl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( ScDPSubtotalDlg, RadioClickHdl, Button*, pBtn, void )
 {
     mpLbFunc->Enable( pBtn == mpRbUser );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl)
@@ -535,7 +534,7 @@ IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl)
     return 0;
 }
 
-IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScDPSubtotalDlg, ClickHdl, Button*, pBtn, void )
 {
     if (pBtn == mpBtnOptions)
     {
@@ -543,7 +542,6 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
         if( pDlg->Execute() == RET_OK )
             pDlg->FillLabelData( maLabelData );
     }
-    return 0;
 }
 
 ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
@@ -795,13 +793,12 @@ sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
     return bFound ? nPos : LISTBOX_ENTRY_NOTFOUND;
 }
 
-IMPL_LINK( ScDPSubtotalOptDlg, RadioClickHdl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( ScDPSubtotalOptDlg, RadioClickHdl, Button*, pBtn, void )
 {
     m_pLbSortBy->Enable( pBtn != m_pRbSortMan );
-    return 0;
 }
 
-IMPL_LINK( ScDPSubtotalOptDlg, CheckHdl, CheckBox*, pCBox )
+IMPL_LINK_TYPED( ScDPSubtotalOptDlg, CheckHdl, Button*, pCBox, void )
 {
     if (pCBox == m_pCbShow)
     {
@@ -815,7 +812,6 @@ IMPL_LINK( ScDPSubtotalOptDlg, CheckHdl, CheckBox*, pCBox )
         m_pFtShowUsing->Enable(bEnableUsing);
         m_pLbShowUsing->Enable(bEnableUsing);
     }
-    return 0;
 }
 
 IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )

@@ -74,13 +74,13 @@ class SwAddressListDialog : public SfxModalDialog
 
     void DetectTablesAndQueries(SvTreeListEntry* pSelect, bool bWidthDialog);
 
-    DECL_LINK(FilterHdl_Impl, void *);
-    DECL_LINK(LoadHdl_Impl, void *);
-    DECL_LINK(CreateHdl_Impl, PushButton*);
+    DECL_LINK_TYPED(FilterHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(LoadHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(CreateHdl_Impl, Button*, void);
     DECL_LINK(ListBoxSelectHdl_Impl, void *);
-    DECL_LINK(EditHdl_Impl, PushButton*);
-    DECL_LINK(TableSelectHdl_Impl, PushButton*);
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(EditHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(TableSelectHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 
     DECL_LINK(StaticListBoxSelectHdl_Impl, SvTreeListEntry*);
 

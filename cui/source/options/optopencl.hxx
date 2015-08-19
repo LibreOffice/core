@@ -52,15 +52,15 @@ private:
     VclPtr<PushButton> mpWhiteListAdd;
     VclPtr<PushButton> mpWhiteListDelete;
 
-    DECL_LINK(BlackListEditHdl, void*);
-    DECL_LINK(BlackListAddHdl, void*);
-    DECL_LINK(BlackListDeleteHdl, void*);
+    DECL_LINK_TYPED(BlackListEditHdl, Button*, void);
+    DECL_LINK_TYPED(BlackListAddHdl, Button*, void);
+    DECL_LINK_TYPED(BlackListDeleteHdl, Button*, void);
 
-    DECL_LINK(WhiteListEditHdl, void*);
-    DECL_LINK(WhiteListAddHdl, void*);
-    DECL_LINK(WhiteListDeleteHdl, void*);
+    DECL_LINK_TYPED(WhiteListEditHdl, Button*, void);
+    DECL_LINK_TYPED(WhiteListAddHdl, Button*, void);
+    DECL_LINK_TYPED(WhiteListDeleteHdl, Button*, void);
 
-    DECL_LINK(EnableOpenCLHdl, void*);
+    DECL_LINK_TYPED(EnableOpenCLHdl, Button*, void);
 
     long EditHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
     long AddHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);

@@ -373,11 +373,6 @@ using namespace ::com::sun::star;
         OnModified( NULL );
     }
 
-    Link<> MySQLNativeSetupPage::getControlModifiedLink()
-    {
-        return LINK( this, MySQLNativeSetupPage, OnModified );
-    }
-
     IMPL_LINK( MySQLNativeSetupPage, OnModified, Edit*, _pEdit )
     {
         SetRoadmapStateValue( m_aMySQLSettings->canAdvance() );
@@ -540,7 +535,7 @@ using namespace ::com::sun::star;
         SetRoadmapStateValue(bRoadmapState);
     }
 
-    IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
 
@@ -564,7 +559,6 @@ using namespace ::com::sun::star;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
         ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg->Execute();
-        return 0L;
     }
 
     IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
@@ -664,7 +658,7 @@ using namespace ::com::sun::star;
         return bEnableTestConnection;
     }
 
-    IMPL_LINK(OJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OJDBCConnectionPageSetup, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
@@ -686,7 +680,6 @@ using namespace ::com::sun::star;
         sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
         aMsg->Execute();
-        return 0L;
     }
 
     IMPL_LINK(OJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
@@ -761,8 +754,8 @@ using namespace ::com::sun::star;
         get(m_pCBPasswordRequired, "passRequiredCheckbutton");
         get(m_pPBTestConnection, "testConnectionButton");
         m_pETUserName->SetModifyHdl(getControlModifiedLink());
-        m_pCBPasswordRequired->SetClickHdl(getControlModifiedLink());
-           m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
+        m_pCBPasswordRequired->SetClickHdl(getControlModifiedClickLink());
+        m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
 
         LayoutHelper::fitSizeRightAligned( *m_pPBTestConnection );
     }
@@ -843,7 +836,7 @@ using namespace ::com::sun::star;
         get(m_pFTFinalText, "finishText");
 
         m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
-        m_pCBStartTableWizard->SetClickHdl(getControlModifiedLink());
+        m_pCBStartTableWizard->SetClickHdl(getControlModifiedClickLink());
         m_pRBRegisterDataSource->SetState(true);
     }
 
@@ -911,12 +904,10 @@ using namespace ::com::sun::star;
         return true;
     }
 
-    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, CheckBox*, _pBox)
+    IMPL_LINK_TYPED(OFinalDBPageSetup, OnOpenSelected, Button*, _pBox, void)
     {
-        m_pCBStartTableWizard->Enable( _pBox->IsEnabled() && _pBox->IsChecked() );
+        m_pCBStartTableWizard->Enable( _pBox->IsEnabled() && static_cast<CheckBox*>(_pBox)->IsChecked() );
         callModifiedHdl();
-        // outta here
-        return 0L;
     }
 }
 

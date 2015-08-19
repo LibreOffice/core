@@ -378,16 +378,15 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
     return 0;
 }
 
-IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)
 {
-    bool bCheck = pBox->IsChecked();
+    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pStartED->Enable(!bCheck);
     m_pEndED->Enable(!bCheck);
     m_pStartFT->Enable(!bCheck);
     m_pEndFT->Enable(!bCheck);
 
     ModifyHdl(m_pStartED);
-    return 0;
 }
 
 IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)

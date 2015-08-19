@@ -102,10 +102,14 @@ namespace dbaui
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 
-    IMPL_LINK_NOARG(OGenericAdministrationPage, OnControlModified)
+    IMPL_LINK(OGenericAdministrationPage, OnControlModified, Button*, /*pCtrl*/)
     {
         callModifiedHdl();
-        return 0L;
+        return 0;
+    }
+    IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
+    {
+        getControlModifiedLink().Call(pCtrl);
     }
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString& _sCurr)
     {
@@ -209,7 +213,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OGenericAdministrationPage, OnTestConnectionClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
@@ -248,7 +252,6 @@ namespace dbaui
             if ( !bSuccess )
                 m_pAdminDialog->clearPassword();
         }
-        return 0L;
     }
 
     // LayoutHelper

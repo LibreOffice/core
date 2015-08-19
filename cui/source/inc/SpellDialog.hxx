@@ -171,17 +171,18 @@ private:
     css::uno::Reference<
         css::linguistic2::XSpellChecker1 >     xSpell;
 
-    DECL_LINK(ChangeHdl, void *);
-    DECL_LINK(ChangeAllHdl, void *);
-    DECL_LINK( IgnoreAllHdl, Button * );
-    DECL_LINK(IgnoreHdl, void *);
-    DECL_LINK( CheckGrammarHdl, CheckBox* );
-    DECL_LINK( ExtClickHdl, Button * );
-    DECL_LINK(CancelHdl, void *);
+    DECL_LINK_TYPED(ChangeHdl, Button*, void);
+    DECL_LINK(DoubleClickChangeHdl, void*);
+    DECL_LINK_TYPED(ChangeAllHdl, Button*, void);
+    DECL_LINK_TYPED( IgnoreAllHdl, Button*, void );
+    DECL_LINK_TYPED(IgnoreHdl, Button*, void);
+    DECL_LINK_TYPED( CheckGrammarHdl, Button*, void );
+    DECL_LINK_TYPED( ExtClickHdl, Button*, void );
+    DECL_LINK_TYPED(CancelHdl, Button*, void);
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
-    DECL_LINK(UndoHdl, void *);
+    DECL_LINK_TYPED(UndoHdl, Button*, void);
     DECL_LINK_TYPED( AddToDictSelectHdl, MenuButton*, void );
-    DECL_LINK( AddToDictClickHdl, PushButton* );
+    DECL_LINK_TYPED( AddToDictClickHdl, Button*, void );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
     DECL_LINK( HandleHyperlink, FixedHyperlink * );

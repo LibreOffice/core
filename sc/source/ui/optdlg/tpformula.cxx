@@ -58,13 +58,13 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString());
     mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString());
 
-    Link<> aLink = LINK( this, ScTpFormulaOptions, ButtonHdl );
-    mpBtnSepReset->SetClickHdl(aLink);
-    mpBtnCustomCalcDefault->SetClickHdl(aLink);
-    mpBtnCustomCalcCustom->SetClickHdl(aLink);
-    mpBtnCustomCalcDetails->SetClickHdl(aLink);
+    Link<Button*,void> aLink2 = LINK( this, ScTpFormulaOptions, ButtonHdl );
+    mpBtnSepReset->SetClickHdl(aLink2);
+    mpBtnCustomCalcDefault->SetClickHdl(aLink2);
+    mpBtnCustomCalcCustom->SetClickHdl(aLink2);
+    mpBtnCustomCalcDetails->SetClickHdl(aLink2);
 
-    aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
+    Link<> aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
     mpEdSepFuncArg->SetModifyHdl(aLink);
     mpEdSepArrayCol->SetModifyHdl(aLink);
     mpEdSepArrayRow->SetModifyHdl(aLink);
@@ -195,7 +195,7 @@ bool ScTpFormulaOptions::IsValidSeparatorSet() const
     return true;
 }
 
-IMPL_LINK( ScTpFormulaOptions, ButtonHdl, Button*, pBtn )
+IMPL_LINK_TYPED( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )
 {
     if (pBtn == mpBtnSepReset)
         ResetSeparators();
@@ -205,8 +205,6 @@ IMPL_LINK( ScTpFormulaOptions, ButtonHdl, Button*, pBtn )
         UpdateCustomCalcRadioButtons(false);
     else if (pBtn == mpBtnCustomCalcDetails)
         LaunchCustomCalcSettings();
-
-    return 0;
 }
 
 IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit*, pEdit )

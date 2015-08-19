@@ -61,7 +61,7 @@ class SwColumnDlg : public SfxModalDialog
     bool                bFrameChanged : 1;
 
     DECL_LINK(ObjectHdl, ListBox*);
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
 
 public:
     SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
@@ -141,11 +141,11 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK( ColModify, NumericField * );
     DECL_LINK( GapModify, MetricField * );
     DECL_LINK( EdModify, MetricField * );
-    DECL_LINK( AutoWidthHdl, CheckBox * );
+    DECL_LINK_TYPED( AutoWidthHdl, Button *, void );
     DECL_LINK( SetDefaultsHdl, ValueSet * );
 
-    DECL_LINK(Up, void *);
-    DECL_LINK(Down, void *);
+    DECL_LINK_TYPED(Up, Button *, void);
+    DECL_LINK_TYPED(Down, Button *, void);
     DECL_LINK( UpdateColMgr, void* );
     void Timeout();
 

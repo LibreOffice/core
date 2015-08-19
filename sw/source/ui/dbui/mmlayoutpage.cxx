@@ -146,7 +146,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     ::SetFieldUnit( *m_pLeftMF, eFieldUnit );
     ::SetFieldUnit( *m_pTopMF, eFieldUnit );
 
-    Link<> aUpDownHdl = LINK(this, SwMailMergeLayoutPage, GreetingsHdl_Impl );
+    Link<Button*,void> aUpDownHdl = LINK(this, SwMailMergeLayoutPage, GreetingsHdl_Impl );
     m_pUpPB->SetClickHdl(aUpDownHdl);
     m_pDownPB->SetClickHdl(aUpDownHdl);
     m_pAlignToBodyCB->SetClickHdl(LINK(this, SwMailMergeLayoutPage, AlignToTextHdl_Impl));
@@ -704,7 +704,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeLayoutPage, GreetingsHdl_Impl, Button*, pButton, void)
 {
     bool bDown = pButton == m_pDownPB;
     bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
@@ -715,17 +715,14 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
         //insert a new paragraph before the greeting line
         m_pExampleWrtShell->SplitNode();
     }
-
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeLayoutPage, AlignToTextHdl_Impl, Button*, pBox, void)
 {
-    bool bCheck = pBox->IsChecked() && pBox->IsEnabled();
+    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked() && pBox->IsEnabled();
     m_pLeftFT->Enable(!bCheck);
     m_pLeftMF->Enable(!bCheck);
     ChangeAddressHdl_Impl( 0 );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

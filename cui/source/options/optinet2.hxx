@@ -155,14 +155,14 @@ private:
 
     OUString            m_sPasswordStoringDeactivateStr;
 
-    DECL_LINK(SecurityOptionsHdl, void *);
-    DECL_LINK(SavePasswordHdl, void* );
-    DECL_STATIC_LINK(SvxSecurityTabPage, MasterPasswordHdl, void *);
-    DECL_LINK(MasterPasswordCBHdl, void* );
-    DECL_LINK(ShowPasswordsHdl, void *);
-    DECL_STATIC_LINK(SvxSecurityTabPage, MacroSecPBHdl, void* );
-    DECL_LINK(CertPathPBHdl, void* );
-    DECL_LINK(TSAURLsPBHdl, void* );
+    DECL_LINK_TYPED(SecurityOptionsHdl, Button*, void);
+    DECL_LINK_TYPED(SavePasswordHdl, Button*, void);
+    DECL_STATIC_LINK_TYPED(SvxSecurityTabPage, MasterPasswordHdl, Button*, void);
+    DECL_LINK_TYPED(MasterPasswordCBHdl, Button*, void);
+    DECL_LINK_TYPED(ShowPasswordsHdl, Button*, void);
+    DECL_STATIC_LINK_TYPED(SvxSecurityTabPage, MacroSecPBHdl, Button*, void );
+    DECL_LINK_TYPED(CertPathPBHdl, Button*, void );
+    DECL_LINK_TYPED(TSAURLsPBHdl, Button*, void );
 
     void                InitControls();
 
@@ -195,7 +195,7 @@ class SvxEMailTabPage : public SfxTabPage
 
     SvxEMailTabPage_Impl* pImpl;
 
-    DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
+    DECL_LINK_TYPED(  FileDialogHdl_Impl, Button*, void );
 
 public:
     SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

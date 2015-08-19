@@ -71,7 +71,7 @@ protected:
     SVT_DLLPRIVATE void     GetFocus() SAL_OVERRIDE;
     SVT_DLLPRIVATE void     StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
-    DECL_DLLPRIVATE_LINK( ButtonHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ButtonHdl, Button*, void );
 
 public:
                     FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode = FileControlMode::NONE );

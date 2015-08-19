@@ -1591,11 +1591,10 @@ void SwDBManager::MergeCancel()
     bCancel = true;
 }
 
-IMPL_LINK( SwDBManager, PrtCancelHdl, Button *, pButton )
+IMPL_LINK_TYPED( SwDBManager, PrtCancelHdl, Button *, pButton, void )
 {
     pButton->GetParent()->Hide();
     MergeCancel();
-    return 0;
 }
 
 // determine the column's Numberformat and transfer to the forwarded Formatter,

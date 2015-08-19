@@ -46,7 +46,7 @@ namespace abp
         virtual void        DeactivatePage() SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnInvokeDialog, void* );
+        DECL_LINK_TYPED( OnInvokeDialog, Button*, void );
 
         void implUpdateHint();
     };

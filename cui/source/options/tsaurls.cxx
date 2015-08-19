@@ -50,7 +50,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     }
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(TSAURLsDialog, OKHdl_Impl, Button*, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
@@ -63,8 +63,6 @@ IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl)
     batch->commit();
 
     EndDialog(RET_OK);
-
-    return 0;
 }
 
 TSAURLsDialog::~TSAURLsDialog()
@@ -97,7 +95,7 @@ void TSAURLsDialog::AddTSAURL(const OUString& rURL)
     m_pURLListBox->SetUpdateMode(true);
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(TSAURLsDialog, AddHdl_Impl, Button*, void)
 {
     OUString aURL;
     OUString aDesc( get<FixedText>("enteraurl")->GetText() );
@@ -112,22 +110,18 @@ IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl)
         AddTSAURL(aURL);
         m_pOKBtn->Enable();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nSel = m_pURLListBox->GetSelectEntryPos();
 
     if (nSel == LISTBOX_ENTRY_NOTFOUND)
-        return 0;
+        return;
 
     m_aURLs.erase(m_pURLListBox->GetEntry(nSel));
     m_pURLListBox->RemoveEntry(nSel);
     m_pOKBtn->Enable();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

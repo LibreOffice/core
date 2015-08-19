@@ -63,13 +63,13 @@ private:
     void SetButtonState();
 
     // Handler:
-    DECL_LINK(Impl_NewHdl, void *);
-    DECL_LINK(Impl_PrevHdl, void *);
-    DECL_LINK(Impl_NextHdl, void *);
+    DECL_LINK_TYPED(Impl_NewHdl, Button*, void);
+    DECL_LINK_TYPED(Impl_PrevHdl, Button*, void);
+    DECL_LINK_TYPED(Impl_NextHdl, Button*, void);
 
-    DECL_LINK(Impl_RestoreHdl, void *);
-    DECL_LINK(Impl_DeleteHdl, void *);
-    DECL_LINK(Impl_CloseHdl, void *);
+    DECL_LINK_TYPED(Impl_RestoreHdl, Button*, void);
+    DECL_LINK_TYPED(Impl_DeleteHdl, Button*, void);
+    DECL_LINK_TYPED(Impl_CloseHdl, Button*, void);
 
     DECL_LINK(Impl_ScrollHdl, void *);
     DECL_LINK( Impl_DataModifyHdl,  Edit*    );

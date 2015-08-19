@@ -153,7 +153,7 @@ void ScRetypePassDlg::WriteNewDataToDocument(ScDocument& rDoc) const
 
 void ScRetypePassDlg::Init()
 {
-    Link<> aLink = LINK( this, ScRetypePassDlg, OKHdl );
+    Link<Button*,void> aLink = LINK( this, ScRetypePassDlg, OKHdl );
     mpBtnOk->SetClickHdl(aLink);
 
     aLink = LINK( this, ScRetypePassDlg, RetypeBtnHdl );
@@ -263,13 +263,12 @@ void ScRetypePassDlg::CheckHashStatus()
     mpBtnOk->Disable();
 }
 
-IMPL_LINK_NOARG(ScRetypePassDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(ScRetypePassDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
 {
     ScPassHashProtectable* pProtected = NULL;
     if (pBtn == mpBtnRetypeDoc)
@@ -289,7 +288,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
 
     if (!pProtected)
         // What the ... !?
-        return 0;
+        return;
 
     ScopedVclPtrInstance< ScRetypePassInputDlg > aDlg(this, pProtected);
     if (aDlg->Execute() == RET_OK)
@@ -310,7 +309,6 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         SetDocData();
         CheckHashStatus();
     }
-    return 0;
 }
 
 ScRetypePassInputDlg::ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected)
@@ -363,16 +361,16 @@ OUString ScRetypePassInputDlg::GetNewPassword() const
 
 void ScRetypePassInputDlg::Init()
 {
-    Link<> aLink = LINK( this, ScRetypePassInputDlg, OKHdl );
+    Link<Button*,void> aLink = LINK( this, ScRetypePassInputDlg, OKHdl );
     m_pBtnOk->SetClickHdl(aLink);
     aLink = LINK( this, ScRetypePassInputDlg, RadioBtnHdl );
     m_pBtnRetypePassword->SetClickHdl(aLink);
     m_pBtnRemovePassword->SetClickHdl(aLink);
     aLink = LINK( this, ScRetypePassInputDlg, CheckBoxHdl );
     m_pBtnMatchOldPass->SetClickHdl(aLink);
-    aLink = LINK( this, ScRetypePassInputDlg, PasswordModifyHdl );
-    m_pPassword1Edit->SetModifyHdl(aLink);
-    m_pPassword2Edit->SetModifyHdl(aLink);
+    Link<> aLink2 = LINK( this, ScRetypePassInputDlg, PasswordModifyHdl );
+    m_pPassword1Edit->SetModifyHdl(aLink2);
+    m_pPassword2Edit->SetModifyHdl(aLink2);
 
     m_pBtnOk->Disable();
     m_pBtnRetypePassword->Check();
@@ -416,13 +414,12 @@ void ScRetypePassInputDlg::CheckPasswordInput()
     m_pBtnOk->Enable(bPassGood);
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(ScRetypePassInputDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK( ScRetypePassInputDlg, RadioBtnHdl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( ScRetypePassInputDlg, RadioBtnHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnRetypePassword)
     {
@@ -436,14 +433,11 @@ IMPL_LINK( ScRetypePassInputDlg, RadioBtnHdl, RadioButton*, pBtn )
         m_pPasswordGrid->Disable();
         m_pBtnOk->Enable();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(ScRetypePassInputDlg, CheckBoxHdl, Button*, void)
 {
     CheckPasswordInput();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScRetypePassInputDlg, PasswordModifyHdl)

@@ -407,7 +407,7 @@ namespace pcr
 
     private:
         DECL_LINK( ReturnHdl, OMultilineFloatingEdit* );
-        DECL_LINK( DropDownHdl, PushButton* );
+        DECL_LINK_TYPED( DropDownHdl, Button*, void );
 
         bool ShowDropDown( bool bShow );
     };

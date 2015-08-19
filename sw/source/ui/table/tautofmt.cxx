@@ -207,7 +207,7 @@ void SwAutoFormatDlg::dispose()
 
 void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
 {
-    Link<> aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
+    Link<Button*,void> aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
     m_pBtnBorder->SetClickHdl( aLk );
     m_pBtnFont->SetClickHdl( aLk );
     m_pBtnPattern->SetClickHdl( aLk );
@@ -277,7 +277,7 @@ void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
 
 // Handler:
 
-IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwAutoFormatDlg, CheckHdl, Button *, pBtn, void )
 {
     SwTableAutoFormat* pData  = &(*pTableTable)[nIndex];
     bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked(), bDataChgd = true;
@@ -305,10 +305,9 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 
         m_pWndPreview->NotifyChange( *pData );
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
+IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
 {
     bool bOk = false, bFormatInserted = false;
     while( !bOk )
@@ -363,10 +362,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
         else
             bOk = true;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
+IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RemoveHdl, Button*, void)
 {
     OUString aMessage = aStrDelMsg;
     aMessage += "\n\n";
@@ -399,11 +397,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
     pBox.reset();
 
     SelFormatHdl( 0 );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
+IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
 {
     bool bOk = false;
     while( !bOk )
@@ -463,7 +459,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
         else
             bOk = true;
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
@@ -500,12 +495,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwAutoFormatDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, OkHdl, Button*, void)
 {
     if( bSetAutoFormat )
         pShell->SetTableAutoFormat( (*pTableTable)[ nIndex ] );
     EndDialog( RET_OK );
-    return sal_IntPtr(true);
 }
 
 AutoFormatPreview::AutoFormatPreview(vcl::Window* pParent, WinBits nStyle) :

@@ -91,8 +91,8 @@ namespace dbaui
         virtual bool    checkTestConnection();
 
     private:
-        DECL_LINK(OnBrowseConnections, PushButton*);
-        DECL_LINK(OnCreateDatabase, PushButton*);
+        DECL_LINK_TYPED(OnBrowseConnections, Button*, void);
+        DECL_LINK_TYPED(OnCreateDatabase, Button*, void);
         OUString    impl_getURL( bool _bPrefix ) const;
         void        impl_setURL( const OUString& _rURL, bool _bPrefix );
         void        implUpdateURLDependentStates() const;

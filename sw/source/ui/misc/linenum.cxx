@@ -193,7 +193,7 @@ void SwLineNumberingDlg::dispose()
 }
 
 
-IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, OKHdl, Button*, void)
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
@@ -252,8 +252,6 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
        m_pNumberingOnFooterHeader->SetState(TRISTATE_FALSE);
 
     EndDialog( RET_OK );
-
-    return 0;
 }
 
 // modify
@@ -269,12 +267,11 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
 }
 
 // On/Off
-IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl)
+IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, LineOnOffHdl, Button*, void)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked();
     m_pBodyContent->Enable(bEnable);
     ModifyHdl();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

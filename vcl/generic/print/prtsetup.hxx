@@ -59,7 +59,7 @@ class RTSDialog : public TabDialog
     bool mbDataModified;
 
     DECL_LINK( ActivatePage, TabControl* );
-    DECL_LINK( ClickButton, Button* );
+    DECL_LINK_TYPED( ClickButton, Button*, void );
 
     // helper functions
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );

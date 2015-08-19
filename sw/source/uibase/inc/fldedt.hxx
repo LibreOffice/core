@@ -32,8 +32,8 @@ class SwFieldEditDlg : public SfxSingleTabDialog
     VclPtr<PushButton> m_pNextBT;
     VclPtr<PushButton> m_pAddressBT;
 
-    DECL_LINK(AddressHdl, void *);
-    DECL_LINK(NextPrevHdl, Button *);
+    DECL_LINK_TYPED(AddressHdl, Button *, void);
+    DECL_LINK_TYPED(NextPrevHdl, Button *, void);
 
     void            Init();
     VclPtr<SfxTabPage> CreatePage(sal_uInt16 nGroup);
@@ -45,7 +45,7 @@ public:
     virtual ~SwFieldEditDlg();
     virtual void dispose() SAL_OVERRIDE;
 
-    DECL_LINK(OKHdl, void *);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
 
     virtual short   Execute() SAL_OVERRIDE;
 

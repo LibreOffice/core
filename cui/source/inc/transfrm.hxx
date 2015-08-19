@@ -130,16 +130,16 @@ private:
     RECT_POINT          meRP;
 
 
-    DECL_LINK( ChangePosProtectHdl, void * );
-    DECL_LINK( ChangeSizeProtectHdl, void * );
+    DECL_LINK_TYPED( ChangePosProtectHdl, Button*, void );
+    DECL_LINK_TYPED( ChangeSizeProtectHdl, Button*, void );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 
     DECL_LINK( ChangeWidthHdl, void * );
     DECL_LINK( ChangeHeightHdl, void * );
-    DECL_LINK( ClickSizeProtectHdl, void * );
-    DECL_LINK( ClickAutoHdl, void * );
+    DECL_LINK_TYPED( ClickSizeProtectHdl, Button*, void );
+    DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
 
 public:
     SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );

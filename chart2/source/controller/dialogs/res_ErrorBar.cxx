@@ -138,7 +138,7 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
     m_pRbPercent->SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
     m_pRbFunction->SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
     m_pRbRange->SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
-    m_pLbFunction->SetSelectHdl( LINK( this, ErrorBarResources, CategoryChosen ));
+    m_pLbFunction->SetSelectHdl( LINK( this, ErrorBarResources, CategoryChosen2 ));
 
     m_pCbSyncPosNeg->Check( false );
     m_pCbSyncPosNeg->SetToggleHdl( LINK( this, ErrorBarResources, SynchronizePosAndNeg ));
@@ -340,7 +340,13 @@ void ErrorBarResources::UpdateControlStates()
     }
 }
 
-IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen )
+IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen2 )
+{
+   CategoryChosen(NULL);
+   return 0;
+}
+
+IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )
 {
     m_bErrorKindUnique = true;
     SvxChartKindError eOldError = m_eErrorKind;
@@ -396,7 +402,6 @@ IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen )
     }
 
     UpdateControlStates();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ErrorBarResources, SynchronizePosAndNeg)
@@ -422,7 +427,7 @@ IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged)
     return 0;
 }
 
-IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged)
+IMPL_LINK_NOARG_TYPED(ErrorBarResources, IndicatorChanged, Button*, void)
 {
     m_bIndicatorUnique = true;
     if( m_pRbBoth->IsChecked())
@@ -435,14 +440,13 @@ IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged)
         m_bIndicatorUnique = false;
 
     UpdateControlStates();
-    return 0;
 }
 
-IMPL_LINK( ErrorBarResources, ChooseRange, PushButton*, pButton )
+IMPL_LINK_TYPED( ErrorBarResources, ChooseRange, Button*, pButton, void )
 {
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())
-        return 0;
+        return;
     OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
 
     OUString aUIString;
@@ -468,8 +472,6 @@ IMPL_LINK( ErrorBarResources, ChooseRange, PushButton*, pButton )
     }
     else
         m_pCurrentRangeChoosingField = 0;
-
-    return 0;
 }
 
 IMPL_LINK( ErrorBarResources, RangeChanged, Edit *, pEdit )

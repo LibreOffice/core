@@ -340,7 +340,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB )
     return 0L;
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, CalculateClickHdl, Button*, void )
 {
     sal_Int32 aSize = 0;
 
@@ -361,7 +361,6 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
         aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);
         m_pFixedText6->SetText(aNewSizeString);
     }
-    return 0L;
 }
 
 Rectangle CompressGraphicsDialog::GetScaledCropRectangle()

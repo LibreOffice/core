@@ -256,31 +256,25 @@ IMPL_LINK( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )
     return 0;
 }
 
-IMPL_LINK( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioButton )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )
 {
-    (void)pRadioButton;
-
     sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
         SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
-    return 0;
 }
 
-IMPL_LINK( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ManualClickHdl, Button*, void )
 {
-    (void)pRadioButton;
-
     sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
         SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
+IMPL_LINK_NOARG_TYPED(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
 {
     SvTabListBox& rListBox = *m_pTbLinks;
     sal_uLong nSelCnt = rListBox.GetSelectionCount();
@@ -352,13 +346,10 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 
         pNewMgr->CloseCachedComps();
     }
-    return 0;
 }
 
-IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
 {
-    (void)pPushButton;
-
     sal_uLong nSelectionCount = m_pTbLinks->GetSelectionCount();
     if(nSelectionCount > 1)
     {
@@ -424,20 +415,17 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         if ( pLink && !pLink->GetLinkSourceName().isEmpty() )
             pLink->Edit( this, LINK( this, SvBaseLinksDlg, EndEditHdl ) );
     }
-    return 0;
 }
 
-IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
 {
-    (void)pPushButton;
-
     bool bModified = false;
     if(m_pTbLinks->GetSelectionCount() <= 1)
     {
         sal_uLong nPos;
         SvBaseLinkRef xLink = GetSelEntry( &nPos );
         if( !xLink.Is() )
-            return 0;
+            return;
 
         ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() );
 
@@ -515,7 +503,6 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         if( pLinkMgr && pLinkMgr->GetPersist() )
             pLinkMgr->GetPersist()->SetModified();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )

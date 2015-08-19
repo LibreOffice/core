@@ -85,11 +85,11 @@ struct LicenseDialogImpl : public ModalDialog
     VclPtr<PushButton> m_pAcceptButton;
     VclPtr<PushButton> m_pDeclineButton;
 
-    DECL_LINK(PageDownHdl, void *);
+    DECL_LINK_TYPED(PageDownHdl, Button*, void);
     DECL_LINK(ScrolledHdl, void *);
     DECL_LINK(EndReachedHdl, void *);
-    DECL_LINK(CancelHdl, void *);
-    DECL_LINK(AcceptHdl, void *);
+    DECL_LINK_TYPED(CancelHdl, Button*, void);
+    DECL_LINK_TYPED(AcceptHdl, Button*, void);
 
     bool m_bLicenseRead;
 
@@ -241,16 +241,14 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_pDown->SetStyle( aStyle );
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, AcceptHdl)
+IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, AcceptHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, CancelHdl)
+IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, CancelHdl, Button*, void)
 {
     EndDialog();
-    return 0;
 }
 
 void LicenseDialogImpl::Activate()
@@ -284,10 +282,9 @@ IMPL_LINK_NOARG(LicenseDialogImpl, ScrolledHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, PageDownHdl)
+IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, PageDownHdl, Button*, void)
 {
     m_pLicense->ScrollDown( SCROLL_PAGEDOWN );
-    return 0;
 }
 
 IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl)

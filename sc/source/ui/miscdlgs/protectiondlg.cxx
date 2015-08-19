@@ -89,13 +89,11 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
 
 void ScTableProtectionDlg::Init()
 {
-    Link<> aLink = LINK( this, ScTableProtectionDlg, CheckBoxHdl );
-    m_pBtnProtect->SetClickHdl(aLink);
+    m_pBtnProtect->SetClickHdl(LINK( this, ScTableProtectionDlg, CheckBoxHdl ));
 
-    aLink = LINK( this, ScTableProtectionDlg, OKHdl );
-    m_pBtnOk->SetClickHdl(aLink);
+    m_pBtnOk->SetClickHdl(LINK( this, ScTableProtectionDlg, OKHdl ));
 
-    aLink = LINK( this, ScTableProtectionDlg, PasswordModifyHdl );
+    Link<> aLink = LINK( this, ScTableProtectionDlg, PasswordModifyHdl );
     m_pPassword1Edit->SetModifyHdl(aLink);
     m_pPassword2Edit->SetModifyHdl(aLink);
 
@@ -122,7 +120,7 @@ void ScTableProtectionDlg::EnableOptionalWidgets(bool bEnable)
     m_pOptionsListBox->Invalidate();
 }
 
-IMPL_LINK( ScTableProtectionDlg, CheckBoxHdl, CheckBox*, pBtn )
+IMPL_LINK_TYPED( ScTableProtectionDlg, CheckBoxHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnProtect)
     {
@@ -130,14 +128,11 @@ IMPL_LINK( ScTableProtectionDlg, CheckBoxHdl, CheckBox*, pBtn )
         EnableOptionalWidgets(bChecked);
         m_pBtnOk->Enable(bChecked);
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(ScTableProtectionDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl)

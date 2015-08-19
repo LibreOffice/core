@@ -27,8 +27,8 @@ private:
     OUString    m_sManual;
 
     DECL_LINK(CheckHdl_Impl, SvSimpleTable *);
-    DECL_LINK(AddHdl_Impl, void *);
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 
     void HandleCheckEntry(SvTreeListEntry* _pEntry);
     void AddCertPath(const OUString &rProfile, const OUString &rPath);

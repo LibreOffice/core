@@ -196,7 +196,7 @@ class SwAutoMarkDlg_Impl : public ModalDialog
 
     bool                bCreateMode;
 
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
 public:
     SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
                        bool bCreate);
@@ -473,7 +473,7 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     return pDesc;
 }
 
-IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
+IMPL_LINK_NOARG_TYPED( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
 {
     if(m_pShowExampleCB->IsChecked())
     {
@@ -514,8 +514,6 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
     SetViewWindow( bSetViewWindow ? m_pExampleContainerWIN.get() : 0 );
 
     setOptimalLayoutSize();
-
-    return 0;
 }
 
 bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
@@ -636,8 +634,8 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 
     OUString*       pStyleArr;
 
-    DECL_LINK(OkHdl, void *);
-    DECL_LINK(LeftRightHdl, PushButton*);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
+    DECL_LINK_TYPED(LeftRightHdl, Button*, void);
     DECL_LINK(HeaderDragHdl, void *);
 
 public:
@@ -730,7 +728,7 @@ void SwAddStylesDlg_Impl::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwAddStylesDlg_Impl, OkHdl, Button*, void)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         pStyleArr[i].clear();
@@ -750,7 +748,6 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
 
     //TODO write back style names
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
@@ -759,7 +756,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
     return 0;
 }
 
-IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED(SwAddStylesDlg_Impl, LeftRightHdl, Button*, pBtn, void)
 {
     bool bLeft = pBtn == m_pLeftPB;
     SvTreeListEntry* pEntry = m_pHeaderTree->FirstSelected();
@@ -783,7 +780,6 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
         pEntry->SetUserData(reinterpret_cast<void*>(nLevel));
         m_pHeaderTree->Invalidate();
     }
-    return 0;
 }
 
 SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
@@ -874,7 +870,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
     pMenu->SetSelectHdl(LINK(this, SwTOXSelectTabPage, MenuExecuteHdl));
 
-    Link<> aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
+    Link<Button*,void> aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
     m_pAddStylesCB->SetClickHdl(aLk);
     m_pFromHeadingsCB->SetClickHdl(aLk);
     m_pTOXMarksCB->SetClickHdl(aLk);
@@ -1395,8 +1391,9 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, ModifyHdl)
     return 0;
 }
 
-IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
+IMPL_LINK_TYPED(SwTOXSelectTabPage, CheckBoxHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if(TOX_CONTENT == aCurType.eType)
@@ -1421,10 +1418,9 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
         m_pCaseSensitiveCB->Enable(m_pCollectSameCB->IsChecked());
     }
     ModifyHdl(0);
-    return 0;
 };
 
-IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl)
+IMPL_LINK_NOARG_TYPED(SwTOXSelectTabPage, RadioButtonHdl, Button*, void)
 {
     bool bEnable = m_pFromCaptionsRB->IsChecked();
     m_pCaptionSequenceFT->Enable(bEnable);
@@ -1432,7 +1428,6 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl)
     m_pDisplayTypeFT->Enable(bEnable);
     m_pDisplayTypeLB->Enable(bEnable);
     ModifyHdl(0);
-    return 0;
 }
 
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
@@ -1475,7 +1470,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     return 0;
 };
 
-IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwTOXSelectTabPage, AddStylesHdl, Button*, pButton, void)
 {
     ScopedVclPtrInstance<SwAddStylesDlg_Impl> pDlg(
         pButton, static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
@@ -1483,7 +1478,6 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
     pDlg->Execute();
     pDlg.disposeAndClear();
     ModifyHdl(0);
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu, bool)
@@ -1910,9 +1904,9 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     m_pSortContentRB->SetClickHdl(LINK(this, SwTOXEntryTabPage, SortKeyHdl));
     m_pAllLevelsPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, AllLevelsHdl));
 
-    m_pAlphaDelimCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
-    m_pCommaSeparatedCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
-    m_pRelToStyleCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
+    m_pAlphaDelimCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyClickHdl));
+    m_pCommaSeparatedCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyClickHdl));
+    m_pRelToStyleCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyClickHdl));
 
     FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pTabPosMF, aMetric);
@@ -2013,6 +2007,10 @@ void SwTOXEntryTabPage::dispose()
 
 
 // pVoid is used as signal to change all levels of the example
+IMPL_LINK_TYPED(SwTOXEntryTabPage, ModifyClickHdl, Button*, pVoid, void)
+{
+    ModifyHdl(pVoid);
+}
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
 {
     UpdateDescriptor();
@@ -2214,7 +2212,7 @@ VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const Sf
     return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, EditStyleHdl, Button*, pBtn, void)
 {
     if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
     {
@@ -2228,10 +2226,9 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
             &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
-    return 0;
 }
 
-IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, RemoveInsertAuthHdl, Button*, pButton, void)
 {
     bool bInsert = pButton == m_pAuthInsertPB;
     if(bInsert)
@@ -2257,7 +2254,6 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
         }
     }
     ModifyHdl(0);
-    return 0;
 }
 
 void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
@@ -2294,7 +2290,7 @@ bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
 
 // This function initializes the default value in the Token
 // put here the UI dependent initializations
-IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, InsertTokenHdl, Button*, pBtn, void)
 {
     OUString sText;
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
@@ -2346,10 +2342,9 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     aInsert.nChapterFormat = nChapterFormat; // i89791
     m_pTokenWIN->InsertAtSelection(sText, aInsert);
     ModifyHdl(0);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
+IMPL_LINK_NOARG_TYPED(SwTOXEntryTabPage, AllLevelsHdl, Button*, void)
 {
     //get current level
     //write it into all levels
@@ -2361,7 +2356,6 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
 
         ModifyHdl(this);
     }
-    return 0;
 }
 
 void SwTOXEntryTabPage::WriteBackLevel()
@@ -2419,11 +2413,10 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, SortKeyHdl, Button*, pButton, void)
 {
     bool bEnable = m_pSortContentRB == pButton;
     m_pSortKeyFrame->Enable(bEnable);
-    return 0;
 }
 
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
@@ -2642,7 +2635,7 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, AutoRightHdl, Button*, pBox, void)
 {
     //the most right style::TabStop is usually right aligned
     Control* pCurCtrl = m_pTokenWIN->GetActiveControl();
@@ -2651,14 +2644,13 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
             "no style::TabStop selected!");
 
     const SwFormToken& rToken = static_cast<SwTOXButton*>(pCurCtrl)->GetFormToken();
-    bool bChecked = pBox->IsChecked();
+    bool bChecked = static_cast<CheckBox*>(pBox)->IsChecked();
     if(rToken.eTokenType == TOKEN_TAB_STOP)
         static_cast<SwTOXButton*>(pCurCtrl)->SetTabAlign(
             bChecked ? SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT);
     m_pTabPosFT->Enable(!bChecked);
     m_pTabPosMF->Enable(!bChecked);
     ModifyHdl(0);
-    return 0;
 }
 
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
@@ -2730,7 +2722,7 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     sAdditionalAccnameString2 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING2);
     sAdditionalAccnameString3 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING3);
 
-    Link<> aLink(LINK(this, SwTokenWindow, ScrollHdl));
+    Link<Button*,void> aLink(LINK(this, SwTokenWindow, ScrollHdl));
     m_pLeftScrollWin->SetClickHdl(aLink);
     m_pRightScrollWin->SetClickHdl(aLink);
 }
@@ -3287,10 +3279,10 @@ void SwTokenWindow::AdjustScrolling()
     }
 }
 
-IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
+IMPL_LINK_TYPED(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
 {
     if(aControlList.empty())
-        return 0;
+        return;
 
     const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
@@ -3382,8 +3374,6 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         pCtrl = *(aControlList.rbegin());
         m_pRightScrollWin->Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
     }
-
-    return 0;
 }
 
 OUString SwTokenWindow::GetPattern() const
@@ -3752,7 +3742,7 @@ VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
     return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn, void )
 {
     if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectEntryPos())
     {
@@ -3766,11 +3756,10 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
             &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
-    return 0;
 }
 
 // allocate templates
-IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
+IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, AssignHdl, Button*, void)
 {
     sal_Int32 nLevPos   = m_pLevelLB->GetSelectEntryPos();
     sal_Int32 nTemplPos = m_pParaLayLB->GetSelectEntryPos();
@@ -3789,10 +3778,9 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
         m_pLevelLB->SelectEntry(aStr);
         Modify();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
+IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, StdHdl, Button*, void)
 {
     const sal_Int32 nPos = m_pLevelLB->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
@@ -3804,7 +3792,6 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
         m_pCurrentForm->SetTemplate(nPos, aEmptyOUStr);
         Modify();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl)
@@ -4219,7 +4206,7 @@ void SwAutoMarkDlg_Impl::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwAutoMarkDlg_Impl, OkHdl, Button*, void)
 {
     bool bError = false;
     if(m_pEntriesBB->IsModified() || bCreateMode)
@@ -4239,7 +4226,6 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
     }
     if( !bError )
         EndDialog(RET_OK);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

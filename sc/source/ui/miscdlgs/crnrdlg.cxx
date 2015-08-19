@@ -500,7 +500,7 @@ bool ScColRowNameRangesDlg::IsRefInputMode() const
 
 // handler called when OK is clicked, calls the add button handler before
 // passing the range lists to the document
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, OkBtnHdl, Button*, void)
 {
     AddBtnHdl( 0 );
 
@@ -514,17 +514,15 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl)
     pDocShell->SetDocumentModified();
 
     Close();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, CancelBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, CancelBtnHdl, Button*, void)
 {
     Close();
-    return 0;
 }
 
 // handler called when add button clicked: set ranges and add to listbox
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
 {
     OUString aNewArea( pEdAssign->GetText() );
     OUString aNewData( pEdAssign2->GetText() );
@@ -577,10 +575,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
                 pEdAssign2->GrabFocus();
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
 {
     OUString aRangeStr = pLbRange->GetSelectEntry();
     sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
@@ -588,7 +585,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
         (reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if (itr == aRangeMap.end())
-        return 0;
+        return;
     const ScRange& rRange = itr->second;
 
     ScRangePair* pPair = NULL;
@@ -638,7 +635,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
             Range1SelectHdl( 0 );
         }
     }
-    return 0;
 }
 
 // handler called when a row in the listbox is selected, updates form input fields
@@ -768,7 +764,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl)
 }
 
 // handler for the radio button for columns, adjust ranges
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, ColClickHdl, Button*, void)
 {
     if ( !pBtnColHead->GetSavedValue() )
     {
@@ -785,11 +781,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
         aRange.aEnd.SetRow( MAXROW );
         AdjustColRowData( aRange );
     }
-    return 0;
 }
 
 // handler for the radio button for columns, adjust range
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RowClickHdl, Button*, void)
 {
     if ( !pBtnRowHead->GetSavedValue() )
     {
@@ -806,7 +801,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
         aRange.aEnd.SetCol( MAXCOL );
         AdjustColRowData( aRange );
     }
-    return 0;
 }
 
 IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )

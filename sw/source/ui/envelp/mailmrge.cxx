@@ -252,7 +252,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pAllRB->Check();
 
     // Install handlers
-    Link<> aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
+    Link<Button*,void> aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
     m_pOkBTN->SetClickHdl(aLk);
 
     m_pPathPB->SetClickHdl(LINK(this, SwMailMergeDlg, InsertPathHdl));
@@ -279,9 +279,9 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pSaveIndividualRB->SetClickHdl( aLk );
     aLk.Call( m_pSaveSingleDocRB );
 
-    aLk = LINK(this, SwMailMergeDlg, ModifyHdl);
-    m_pFromNF->SetModifyHdl(aLk);
-    m_pToNF->SetModifyHdl(aLk);
+    Link<> aLk2 = LINK(this, SwMailMergeDlg, ModifyHdl);
+    m_pFromNF->SetModifyHdl(aLk2);
+    m_pToNF->SetModifyHdl(aLk2);
     m_pFromNF->SetMax(SAL_MAX_INT32);
     m_pToNF->SetMax(SAL_MAX_INT32);
 
@@ -420,16 +420,15 @@ void SwMailMergeDlg::Apply()
 {
 }
 
-IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwMailMergeDlg, ButtonHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pOkBTN) {
         if( ExecQryShell() )
             EndDialog(RET_OK);
     }
-    return 0;
 }
 
-IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, RadioButton *, pBtn )
+IMPL_LINK_TYPED( SwMailMergeDlg, OutputTypeHdl, Button *, pBtn, void )
 {
     bool bPrint = pBtn == m_pPrinterRB;
     m_pSingleJobsCB->Enable(bPrint);
@@ -450,11 +449,9 @@ IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, RadioButton *, pBtn )
         m_pFilterLB->Enable(false);
         m_pGenerateFromDataBaseCB->Enable(false);
     }
-
-    return 0;
 }
 
-IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
+IMPL_LINK_TYPED( SwMailMergeDlg, SaveTypeHdl, Button*,  pBtn, void )
 {
     bool bIndividual = pBtn == m_pSaveIndividualRB;
 
@@ -470,12 +467,11 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
         m_pFilterFT->Enable( false );
         m_pFilterLB->Enable( false );
     }
-    return 0;
 }
 
-IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SwMailMergeDlg, FilenameHdl, Button*, pBox, void )
 {
-    bool bEnable = pBox->IsChecked();
+    bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pColumnFT->Enable( bEnable );
     m_pColumnLB->Enable(bEnable);
     m_pPathFT->Enable( bEnable );
@@ -483,7 +479,6 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
     m_pPathPB->Enable( bEnable );
     m_pFilterFT->Enable( bEnable );
     m_pFilterLB->Enable( bEnable );
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl)
@@ -585,7 +580,7 @@ bool SwMailMergeDlg::ExecQryShell()
     return true;
 }
 
-IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeDlg, InsertPathHdl, Button*, void)
 {
     OUString sPath( m_pPathED->GetText() );
     if( sPath.isEmpty() ) {
@@ -603,7 +598,6 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
         else
             m_pPathED->SetText(aURL.GetFull());
     }
-    return 0;
 }
 
 uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const

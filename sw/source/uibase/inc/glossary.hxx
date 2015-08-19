@@ -128,11 +128,11 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( GrpSelect, SvTreeListBox * );
     DECL_LINK( MenuHdl, Menu * );
     DECL_LINK_TYPED( EnableHdl, Menu *, bool );
-    DECL_LINK(BibHdl, void *);
+    DECL_LINK_TYPED(BibHdl, Button *, void);
     DECL_LINK_TYPED(EditHdl, MenuButton *, void);
-    DECL_LINK(InsertHdl, void *);
-    DECL_LINK( PathHdl, Button * );
-    DECL_LINK( CheckBoxHdl, CheckBox * );
+    DECL_LINK_TYPED(InsertHdl, Button *, void);
+    DECL_LINK_TYPED( PathHdl, Button *, void );
+    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
     DECL_LINK( PreviewLoadedHdl, void * );
 
     virtual void    Apply() SAL_OVERRIDE;

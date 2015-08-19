@@ -459,9 +459,9 @@ namespace svxform
         OUString            m_sFL_Binding;
         OUString            m_sFT_BindingExp;
 
-        DECL_LINK(          CheckHdl, CheckBox * );
-        DECL_LINK(          ConditionHdl, PushButton * );
-        DECL_LINK(OKHdl, void *);
+        DECL_LINK_TYPED(    CheckHdl, Button*, void );
+        DECL_LINK_TYPED(    ConditionHdl, Button*, void );
+        DECL_LINK_TYPED(    OKHdl, Button*, void);
 
         void                InitDialog();
         void                InitFromNode();
@@ -493,8 +493,8 @@ namespace svxform
 
         DECL_LINK(ModifyHdl, void *);
         DECL_LINK_TYPED(ResultHdl, Idle *, void);
-        DECL_LINK(EditHdl, void *);
-        DECL_LINK(OKHdl, void *);
+        DECL_LINK_TYPED(EditHdl, Button*, void);
+        DECL_LINK_TYPED(OKHdl, Button*, void);
 
     public:
         AddConditionDialog(vcl::Window* pParent,
@@ -529,8 +529,8 @@ namespace svxform
         XNameContainer_ref& m_rNamespaces;
 
         DECL_LINK(          SelectHdl, SvSimpleTable * );
-        DECL_LINK(          ClickHdl, PushButton * );
-        DECL_LINK(OKHdl, void *);
+        DECL_LINK_TYPED(    ClickHdl, Button*, void );
+        DECL_LINK_TYPED(    OKHdl, Button*, void);
 
         void                LoadNamespaces();
 
@@ -550,7 +550,7 @@ namespace svxform
 
         VclPtr<AddConditionDialog> m_pConditionDlg;
 
-        DECL_LINK(OKHdl, void *);
+        DECL_LINK_TYPED(OKHdl, Button*, void);
 
     public:
         ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
@@ -591,8 +591,8 @@ namespace svxform
         XPropertySet_ref    m_xTempBinding;
         XPropertySet_ref    m_xCreatedBinding;
 
-        DECL_LINK(RefHdl, void *);
-        DECL_LINK(OKHdl, void *);
+        DECL_LINK_TYPED(RefHdl, Button*, void);
+        DECL_LINK_TYPED(OKHdl, Button*, void);
 
         void                FillAllBoxes();
 
@@ -636,7 +636,7 @@ namespace svxform
 
         OUString                m_sAllFilterName;
 
-        DECL_LINK(FilePickerHdl, void *);
+        DECL_LINK_TYPED(FilePickerHdl, Button*, void);
 
     public:
         AddInstanceDialog( vcl::Window* pParent, bool _bEdit );

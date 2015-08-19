@@ -95,13 +95,12 @@ void SdPhotoAlbumDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CancelHdl, Button*, void)
 {
     Close();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
@@ -466,12 +465,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             aInfo->Execute();
         }
         EndDialog();
-        return 0;
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, FileHdl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
@@ -510,10 +507,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
         }
     }
     EnableDisableButtons();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, UpHdl, Button*, void)
 {
     if (pImagesLst->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND
         && pImagesLst->GetSelectEntryPos() != 0)
@@ -542,10 +538,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
     }
 
     EnableDisableButtons();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, DownHdl, Button*, void)
 {
     sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
@@ -571,16 +566,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
 
     }
     EnableDisableButtons();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl)
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
 {
     pImagesLst->RemoveEntry( pImagesLst->GetSelectEntryPos() );
     pImg->SetImage(Image());
 
     EnableDisableButtons();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)

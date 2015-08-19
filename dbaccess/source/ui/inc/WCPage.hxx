@@ -51,9 +51,9 @@ namespace dbaui
         bool               m_bPKeyAllowed;
         bool               m_bUseHeaderAllowed;
 
-        DECL_LINK( AppendDataClickHdl, Button* );
-        DECL_LINK( RadioChangeHdl, Button* );
-        DECL_LINK( KeyClickHdl, Button* );
+        DECL_LINK_TYPED( AppendDataClickHdl, Button*, void );
+        DECL_LINK_TYPED( RadioChangeHdl, Button*, void );
+        DECL_LINK_TYPED( KeyClickHdl, Button*, void );
 
         bool checkAppendData();
         void SetAppendDataRadio();

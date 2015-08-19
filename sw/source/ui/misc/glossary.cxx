@@ -125,7 +125,7 @@ class SwNewGlosNameDlg : public ModalDialog
 
 protected:
     DECL_LINK( Modify, Edit * );
-    DECL_LINK(Rename, void *);
+    DECL_LINK_TYPED(Rename, Button*, void);
 
 public:
     SwNewGlosNameDlg( vcl::Window* pParent,
@@ -614,7 +614,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 }
 
 // dialog manage regions
-IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, BibHdl, Button*, void)
 {
     SwGlossaries* pGloss = ::GetGlossaries();
     if( pGloss->IsGlosPathErr() )
@@ -687,7 +687,6 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                 PathHdl(m_pPathBtn);
         }
     }
-    return 0;
 }
 
 // initialisation; from Ctor and after editing regions
@@ -810,7 +809,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
+IMPL_LINK_NOARG_TYPED(SwNewGlosNameDlg, Rename, Button*, void)
 {
     SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
     OUString sNew = GetAppCharClass().uppercase(m_pNewShort->GetText());
@@ -822,13 +821,12 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
     }
     else
         EndDialog(RET_OK);
-    return 0;
 }
 
-IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwGlossaryDlg, CheckBoxHdl, Button *, pBox, void )
 {
     SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    bool bCheck = pBox->IsChecked();
+    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
     if (pBox == m_pInsertTipCB)
         rCfg.SetAutoTextTip(bCheck);
     else if(pBox == m_pFileRelCB)
@@ -836,7 +834,6 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
     else
         rCfg.SetSaveRelNet(bCheck);
     rCfg.Commit();
-    return 0;
 }
 
 // TreeListBox for groups and blocks
@@ -1034,7 +1031,7 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
     return OUString();
 }
 
-IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
@@ -1055,13 +1052,11 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
             }
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, InsertHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 void SwGlossaryDlg::ShowPreview()

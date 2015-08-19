@@ -378,7 +378,7 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 |
 \**********************************************************************/
 
-IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
+IMPL_LINK_NOARG_TYPED(IconChoiceDialog, OkHdl, Button*, void)
 {
     bInOK = true;
 
@@ -392,11 +392,10 @@ IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
             Close();
         }
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(IconChoiceDialog, ApplyHdl)
+IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ApplyHdl, Button*, void)
 {
     bInOK = true;
 
@@ -410,10 +409,9 @@ IMPL_LINK_NOARG(IconChoiceDialog, ApplyHdl)
             Close();
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
+IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ResetHdl, Button*, void)
 {
     ResetPageImpl ();
 
@@ -428,18 +426,13 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
     }
     else
         pData->pPage->Reset( *pSet );
-
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(IconChoiceDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(IconChoiceDialog, CancelHdl, Button*, void)
 {
     Close();
-
-    return 0;
 }
 
 /**********************************************************************

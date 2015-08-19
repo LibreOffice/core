@@ -112,8 +112,8 @@ private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     DECL_LINK(DblClickHdl, void *);
-    DECL_LINK( RadioClickHdl, RadioButton* );
-    DECL_LINK( ClickHdl, PushButton* );
+    DECL_LINK_TYPED( RadioClickHdl, Button* , void);
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
 
 private:
     VclPtr<RadioButton>         mpRbNone;
@@ -151,8 +151,8 @@ private:
     /** Searches for a listbox entry, starts search at specified position. */
     sal_Int32 FindListBoxEntry( const ListBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK( RadioClickHdl, RadioButton* );
-    DECL_LINK( CheckHdl, CheckBox* );
+    DECL_LINK_TYPED( RadioClickHdl, Button*, void );
+    DECL_LINK_TYPED( CheckHdl, Button*, void );
     DECL_LINK( SelectHdl, ListBox* );
 
 private:

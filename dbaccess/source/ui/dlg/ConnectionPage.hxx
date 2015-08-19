@@ -52,7 +52,7 @@ namespace dbaui
         VclPtr<PushButton>         m_pTestConnection;
 
         // called when the test connection button was clicked
-        DECL_LINK(OnTestJavaClickHdl, PushButton*);
+        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified, Edit*);
 
     public:

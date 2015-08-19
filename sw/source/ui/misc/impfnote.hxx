@@ -62,8 +62,8 @@ class SwEndNoteOptionPage : public SfxTabPage
     inline void SelectNumbering(int eNum);
     int GetNumbering() const;
 
-    DECL_LINK(PosPageHdl, void *);
-    DECL_LINK(PosChapterHdl, void *);
+    DECL_LINK_TYPED(PosPageHdl, Button*, void);
+    DECL_LINK_TYPED(PosChapterHdl, Button*, void);
     DECL_LINK(NumCountHdl, void *);
 
 public:

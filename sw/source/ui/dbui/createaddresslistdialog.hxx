@@ -62,12 +62,12 @@ class SwCreateAddressListDialog : public SfxModalDialog
     SwCSVData*              m_pCSVData;
     VclPtr<SwFindEntryDialog>      m_pFindDlg;
 
-    DECL_LINK(NewHdl_Impl, void *);
-    DECL_LINK(DeleteHdl_Impl, void *);
-    DECL_LINK(FindHdl_Impl, void *);
-    DECL_LINK(CustomizeHdl_Impl, PushButton*);
-    DECL_LINK(OkHdl_Impl, void *);
-    DECL_LINK(DBCursorHdl_Impl, PushButton*);
+    DECL_LINK_TYPED(NewHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DeleteHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(FindHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(CustomizeHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(OkHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DBCursorHdl_Impl, Button*, void);
     DECL_LINK(DBNumCursorHdl_Impl, void *);
 
     void UpdateButtons();
@@ -93,9 +93,9 @@ class SwFindEntryDialog : public ModelessDialog
 
     VclPtr<SwCreateAddressListDialog>  m_pParent;
 
-    DECL_LINK(FindHdl_Impl, void *);
+    DECL_LINK_TYPED(FindHdl_Impl, Button*, void);
     DECL_LINK(FindEnableHdl_Impl, void *);
-    DECL_LINK(CloseHdl_Impl, void *);
+    DECL_LINK_TYPED(CloseHdl_Impl, Button*, void);
 
 public:
     SwFindEntryDialog(SwCreateAddressListDialog* pParent);

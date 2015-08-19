@@ -65,9 +65,9 @@ namespace dbaui
         Image               m_aImgUp;
         Image               m_aImgDown;
 
-        DECL_LINK( ButtonClickHdl, Button * );
-        DECL_LINK( RightButtonClickHdl, Button * );
-        DECL_LINK( AllNoneClickHdl, Button * );
+        DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
+        DECL_LINK_TYPED( RightButtonClickHdl, Button *, void );
+        DECL_LINK_TYPED( AllNoneClickHdl, Button *, void );
         DECL_LINK( TableListClickHdl, void* );
         DECL_LINK( TableListRightSelectHdl, void* );
 

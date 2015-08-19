@@ -251,7 +251,7 @@ bool ScFillSeriesDlg::CheckEndVal()
 
 // Handler:
 
-IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
+IMPL_LINK_TYPED( ScFillSeriesDlg, DisableHdl, Button *, pBtn, void )
 {
     if ( pBtn == m_pBtnDate )
     {
@@ -284,10 +284,9 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
         m_pFtEndVal->Disable();
         m_pEdEndVal->Disable();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(ScFillSeriesDlg, OKHdl, Button*, void)
 {
     if ( m_pBtnLeft->IsChecked() )             theFillDir = FILL_TO_LEFT;
     else if ( m_pBtnRight->IsChecked() )       theFillDir = FILL_TO_RIGHT;
@@ -328,8 +327,6 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
         ScopedVclPtr<MessageDialog>::Create(this, aErrMsgInvalidVal)->Execute();
         pEdWrong->GrabFocus();
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

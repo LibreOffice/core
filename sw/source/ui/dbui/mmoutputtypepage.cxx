@@ -35,7 +35,7 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
     get(m_pLetterHint, "letterft");
     get(m_pMailHint, "emailft");
 
-    Link<> aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
+    Link<Button*,void> aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
     m_pLetterRB->SetClickHdl(aLink);
     m_pMailRB->SetClickHdl(aLink);
 
@@ -64,7 +64,7 @@ void SwMailMergeOutputTypePage::dispose()
 }
 
 
-IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeOutputTypePage, TypeHdl_Impl, Button*, void)
 {
     bool bLetter = m_pLetterRB->IsChecked();
     m_pLetterHint->Show(bLetter);
@@ -72,7 +72,6 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
     m_pWizard->GetConfigItem().SetOutputToLetter(bLetter);
     m_pWizard->updateRoadmapItemLabel( MM_ADDRESSBLOCKPAGE );
     m_pWizard->UpdateRoadmap();
-    return 0;
 }
 
 
@@ -364,7 +363,7 @@ void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
     UpdateTransferStatus();
 }
 
-IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
+IMPL_LINK_TYPED( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
 {
     m_bCancel = true;
     if(m_pImpl->xMailDispatcher.is())
@@ -382,13 +381,11 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
             m_pPaused->Show(false);
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwSendMailDialog, CloseHdl_Impl, Button*, void)
 {
     ModelessDialog::Show( false );
-    return 0;
 }
 
 IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )

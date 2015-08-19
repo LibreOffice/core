@@ -69,7 +69,7 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
     pTabPage->get(m_pFI_MovingAverage,"imageMovingAverage");
     FillValueSets();
 
-    Link<> aLink = LINK(this, TrendlineResources, SelectTrendLine );
+    Link<Button*,void> aLink = LINK(this, TrendlineResources, SelectTrendLine );
     m_pRB_Linear->SetClickHdl( aLink );
     m_pRB_Logarithmic->SetClickHdl( aLink );
     m_pRB_Exponential->SetClickHdl( aLink );
@@ -77,10 +77,10 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
     m_pRB_Polynomial->SetClickHdl( aLink );
     m_pRB_MovingAverage->SetClickHdl( aLink );
 
-    aLink = LINK(this, TrendlineResources, ChangeValue );
-    m_pNF_Degree->SetModifyHdl( aLink );
-    m_pNF_Period->SetModifyHdl( aLink );
-    m_pFmtFld_InterceptValue->SetModifyHdl( aLink );
+    Link<> aLink2 = LINK(this, TrendlineResources, ChangeValue );
+    m_pNF_Degree->SetModifyHdl( aLink2 );
+    m_pNF_Period->SetModifyHdl( aLink2 );
+    m_pFmtFld_InterceptValue->SetModifyHdl( aLink2 );
 
     Reset( rInAttrs );
     UpdateControlStates();
@@ -89,7 +89,7 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
 TrendlineResources::~TrendlineResources()
 {}
 
-IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
+IMPL_LINK_TYPED( TrendlineResources, SelectTrendLine, Button *, pRadioButton, void )
 {
     if( pRadioButton == m_pRB_Linear )
         m_eTrendLineType = CHREGRESS_LINEAR;
@@ -106,8 +106,6 @@ IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
     m_bTrendLineUnique = true;
 
     UpdateControlStates();
-
-    return 0;
 }
 
 void TrendlineResources::Reset( const SfxItemSet& rInAttrs )

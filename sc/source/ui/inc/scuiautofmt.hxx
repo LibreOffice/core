@@ -62,13 +62,13 @@ private:
     void Init           ();
     void UpdateChecks   ();
 
-    DECL_LINK( CheckHdl, Button * );
-    DECL_LINK( AddHdl, void * );
-    DECL_LINK( RemoveHdl, void * );
+    DECL_LINK_TYPED( CheckHdl, Button*, void );
+    DECL_LINK_TYPED( AddHdl, Button*, void );
+    DECL_LINK_TYPED( RemoveHdl, Button*, void );
     DECL_LINK( SelFmtHdl, void * );
-    DECL_LINK( CloseHdl, PushButton * );
+    DECL_LINK_TYPED( CloseHdl, Button *, void );
     DECL_LINK( DblClkHdl, void * );
-    DECL_LINK( RenameHdl, void *);
+    DECL_LINK_TYPED( RenameHdl, Button*, void);
 
 };
 #endif

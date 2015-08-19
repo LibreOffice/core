@@ -104,18 +104,18 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     OUString        m_sCC;
     OUString        m_sBCC;
 
-    DECL_LINK(OutputTypeHdl_Impl, RadioButton*);
-    DECL_LINK(CopyToHdl_Impl, PushButton*);
-    DECL_LINK(SaveStartHdl_Impl, PushButton* );
-    DECL_LINK(SaveOutputHdl_Impl, PushButton* );
+    DECL_LINK_TYPED(OutputTypeHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(CopyToHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(SaveStartHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(SaveOutputHdl_Impl, Button* , void);
     DECL_LINK(PrinterChangeHdl_Impl, ListBox* );
-    DECL_LINK(PrintHdl_Impl, void *);
-    DECL_LINK(PrinterSetupHdl_Impl, PushButton* );
+    DECL_LINK_TYPED(PrintHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(PrinterSetupHdl_Impl, Button*, void );
     DECL_LINK(SendTypeHdl_Impl, ListBox*);
-    DECL_LINK(SendAsHdl_Impl, PushButton*);
-    DECL_LINK(SendDocumentsHdl_Impl, PushButton*);
-    DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
-    DECL_LINK(SaveCancelHdl_Impl, void *);
+    DECL_LINK_TYPED(SendAsHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(SendDocumentsHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(SaveCancelHdl_Impl, Button*, void);
 
     int documentStartPageNumber( int document ) const;
     int documentEndPageNumber( int document ) const;
@@ -178,8 +178,8 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    DECL_DLLPRIVATE_LINK( StopHdl_Impl, PushButton* );
-    DECL_DLLPRIVATE_LINK( CloseHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( StopHdl_Impl, Button*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( CloseHdl_Impl, Button* , void);
     DECL_DLLPRIVATE_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
     DECL_DLLPRIVATE_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
     DECL_DLLPRIVATE_LINK_TYPED( RemoveThis, Idle*, void );

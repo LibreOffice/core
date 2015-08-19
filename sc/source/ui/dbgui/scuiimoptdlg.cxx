@@ -302,7 +302,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     return nCode;
 }
 
-IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
+IMPL_LINK_TYPED( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
 {
     if (pCheckBox == m_pCbFixed)
     {
@@ -314,7 +314,6 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
         m_pCbShown->Enable( bEnable );
         m_pCbQuoteAll->Enable( bEnable );
     }
-    return 0;
 }
 
 IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )

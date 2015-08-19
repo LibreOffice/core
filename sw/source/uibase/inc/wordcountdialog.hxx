@@ -50,7 +50,7 @@ class SwWordCountFloatDlg : public SfxModelessDialog
 
     VclPtr<CloseButton> m_pClosePB;
 
-    DECL_STATIC_LINK( SwWordCountFloatDlg, CloseHdl, void* );
+    DECL_STATIC_LINK_TYPED( SwWordCountFloatDlg, CloseHdl, Button*, void );
 public:
     SwWordCountFloatDlg(     SfxBindings* pBindings,
                              SfxChildWindow* pChild,

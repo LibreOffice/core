@@ -953,7 +953,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         m_pCtlPos->Reset();
 
         // #i2379# Disable controls for protected objects
-        ChangePosProtectHdl( this );
+        ChangePosProtectHdl( NULL );
     }
 
     { // #i75273# set width
@@ -1018,7 +1018,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     ClickSizeProtectHdl( NULL );
 
     // #i2379# Disable controls for protected objects
-    ChangeSizeProtectHdl( this );
+    ChangeSizeProtectHdl( NULL );
 }
 
 
@@ -1068,12 +1068,11 @@ SfxTabPage::sfxpg SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
+IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangePosProtectHdl, Button*, void)
 {
     // #106572# Remember user's last choice
     m_pTsbSizeProtect->SetState( m_pTsbPosProtect->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : mnProtectSizeState );
     UpdateControlStates();
-    return 0L;
 }
 
 
@@ -1112,7 +1111,7 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
+IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeSizeProtectHdl, Button*, void)
 {
     if( m_pTsbSizeProtect->IsEnabled() )
     {
@@ -1128,8 +1127,6 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
     }
 
     UpdateControlStates();
-
-    return 0L;
 }
 
 
@@ -1498,23 +1495,20 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
 
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl)
+IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickSizeProtectHdl, Button*, void)
 {
     UpdateControlStates();
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
+IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickAutoHdl, Button*, void)
 {
     if( m_pCbxScale->IsChecked() )
     {
         mfOldWidth  = std::max( (double)GetCoreValue( *m_pMtrWidth,  mePoolUnit ), 1.0 );
         mfOldHeight = std::max( (double)GetCoreValue( *m_pMtrHeight, mePoolUnit ), 1.0 );
     }
-
-    return 0L;
 }
 
 

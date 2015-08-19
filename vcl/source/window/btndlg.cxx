@@ -211,7 +211,7 @@ void ButtonDialog::ImplPosControls()
     mbFormat = false;
 }
 
-IMPL_LINK( ButtonDialog, ImplClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ButtonDialog, ImplClickHdl, Button*, pBtn, void )
 {
     for (auto & it : m_ItemList)
     {
@@ -222,8 +222,6 @@ IMPL_LINK( ButtonDialog, ImplClickHdl, PushButton*, pBtn )
             break;
         }
     }
-
-    return 0;
 }
 
 void ButtonDialog::Resize()

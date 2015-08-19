@@ -91,7 +91,7 @@ public:
     virtual ~XMLFilterSettingsDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    DECL_LINK(ClickHdl_Impl, PushButton * );
+    DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );
     DECL_LINK(SelectionChangedHdl_Impl, void * );
     DECL_LINK(DoubleClickHdl_Impl, void * );
 

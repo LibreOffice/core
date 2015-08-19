@@ -67,17 +67,14 @@ namespace dbaui
         return ModalDialog::Execute();
     }
 
-    IMPL_LINK( TextConnectionSettingsDialog, OnOK, PushButton*, /*_pButton*/ )
+    IMPL_LINK_NOARG_TYPED( TextConnectionSettingsDialog, OnOK, Button*, void )
     {
         if ( m_pTextConnectionHelper->prepareLeave() )
         {
             bool bUnused = false;
             m_pTextConnectionHelper->FillItemSet( m_rItems, bUnused );
             EndDialog( RET_OK );
-            return 1L;
         }
-
-        return 0L;
     }
 
 } // namespace dbaui

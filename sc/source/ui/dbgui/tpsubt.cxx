@@ -564,7 +564,7 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( ScTpSubTotalOptions, CheckHdl, Button*, pBox, void )
 {
     if ( pBox == pBtnSort )
     {
@@ -599,8 +599,6 @@ IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
         else
             pLbUserDef->Disable();
     }
-
-    return 0;
 }
 
 ScTpSubTotalGroup1::~ScTpSubTotalGroup1()

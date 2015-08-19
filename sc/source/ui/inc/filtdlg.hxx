@@ -148,8 +148,8 @@ private:
     // Handler:
     DECL_LINK( LbSelectHdl,  ListBox* );
     DECL_LINK( ValModifyHdl, ComboBox* );
-    DECL_LINK( CheckBoxHdl,  CheckBox* );
-    DECL_LINK( EndDlgHdl,    Button* );
+    DECL_LINK_TYPED( CheckBoxHdl,  Button*, void );
+    DECL_LINK_TYPED( EndDlgHdl,    Button*, void );
     DECL_LINK( ScrollHdl, void* );
     DECL_LINK( MoreExpandedHdl, void* );
 
@@ -216,7 +216,7 @@ private:
     // Handler
     DECL_LINK( FilterAreaSelHdl, ListBox* );
     DECL_LINK( FilterAreaModHdl, formula::RefEdit* );
-    DECL_LINK( EndDlgHdl,        Button* );
+    DECL_LINK_TYPED( EndDlgHdl,  Button*, void );
 
     // Hack: RefInput control
     DECL_LINK_TYPED( TimeOutHdl, Idle*, void );

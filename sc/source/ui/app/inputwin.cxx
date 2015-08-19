@@ -1070,7 +1070,7 @@ void ScInputBarGroup::DecrementVerticalSize()
     }
 }
 
-IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
+IMPL_LINK_NOARG_TYPED(ScInputBarGroup, ClickHdl, Button*, void)
 {
     vcl::Window* w = GetParent();
     ScInputWindow* pParent;
@@ -1079,7 +1079,7 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
     if (pParent == NULL)
     {
         OSL_FAIL("The parent window pointer pParent is null");
-        return 1;
+        return;
     }
     if (aMultiTextWnd->GetNumLines() > 1)
     {
@@ -1094,7 +1094,6 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
     // Restore focus to input line(s) if necessary
     if (  SC_MOD()->GetInputHdl()->IsTopMode() )
         aMultiTextWnd->GrabFocus();
-    return 0;
 }
 
 void ScInputBarGroup::TriggerToolboxLayout()

@@ -70,11 +70,11 @@ namespace dbaui
 
         IAddTableDialogContext& m_rContext;
 
-        DECL_LINK( AddClickHdl, Button* );
-        DECL_LINK( CloseClickHdl, Button* );
+        DECL_LINK_TYPED( AddClickHdl, Button*, void );
+        DECL_LINK_TYPED( CloseClickHdl, Button*, void);
         DECL_LINK( TableListDoubleClickHdl, void* );
         DECL_LINK( TableListSelectHdl, void* );
-        DECL_LINK( OnTypeSelected, void* );
+        DECL_LINK_TYPED( OnTypeSelected, Button*, void );
 
     public:
         OAddTableDlg(

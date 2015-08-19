@@ -394,7 +394,7 @@ bool ScDbNameDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScDbNameDlg, OkBtnHdl, Button*, void)
 {
     AddBtnHdl( 0 );
 
@@ -408,16 +408,14 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
     }
 
     Close();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDbNameDlg, CancelBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScDbNameDlg, CancelBtnHdl, Button*, void)
 {
     Close();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AddBtnHdl, Button*, void)
 {
     OUString  aNewName = comphelper::string::strip(m_pEdName->GetText(), ' ');
     OUString  aNewArea = m_pEdAssign->GetText();
@@ -499,7 +497,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
             m_pEdName->GrabFocus();
         }
     }
-    return 0;
 }
 
 namespace {
@@ -517,7 +514,7 @@ public:
 
 }
 
-IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScDbNameDlg, RemoveBtnHdl, Button*, void)
 {
     OUString aStrEntry = m_pEdName->GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
@@ -566,7 +563,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
             NameModifyHdl( 0 );
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)

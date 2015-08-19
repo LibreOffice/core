@@ -70,7 +70,7 @@ private:
 
     void initial();
 
-    DECL_LINK( PBClickHdl, PushButton *);
+    DECL_LINK_TYPED( PBClickHdl, Button*, void);
     DECL_LINK(VSSelectHdl, void *);
 };
 }}

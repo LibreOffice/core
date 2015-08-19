@@ -179,17 +179,15 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG( OAddessBookSourcePilot, OnCancelClicked )
+    IMPL_LINK_NOARG_TYPED( OAddessBookSourcePilot, OnCancelClicked, Button*, void )
     {
         // do cleanups
         implCleanup();
 
         // reset the click hdl
-        m_pCancel->SetClickHdl( Link<>() );
+        m_pCancel->SetClickHdl( Link<Button*, void>() );
         // simulate the click again - this time, the default handling of the button will strike ....
         m_pCancel->Click();
-
-        return 0L;
     }
 
 

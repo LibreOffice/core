@@ -49,7 +49,7 @@ struct PasswordToOpenModifyDialog_Impl
     bool                        m_bIsPasswordToModify;
 
 
-    DECL_LINK( OkBtnClickHdl, OKButton * );
+    DECL_LINK_TYPED( OkBtnClickHdl, Button*, void );
 
     PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent,
             sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
@@ -94,7 +94,7 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         m_pOptionsExpander->Hide();
 }
 
-IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, /*pBtn*/ )
+IMPL_LINK_NOARG_TYPED( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, void )
 {
     bool bInvalidState = !m_pOpenReadonlyCB->IsChecked() &&
             m_pPasswdToOpenED->GetText().isEmpty() &&
@@ -137,8 +137,6 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, /*pBtn*/ 
             m_pParent->EndDialog( RET_OK );
         }
     }
-
-    return 0;
 }
 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(

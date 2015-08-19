@@ -63,7 +63,7 @@ void ScSortWarningDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScSortWarningDlg, BtnHdl, Button*, pBtn, void )
 {
     if ( pBtn == aBtnExtSort )
     {
@@ -73,7 +73,6 @@ IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
     {
         EndDialog( BTN_CURRENT_SELECTION );
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

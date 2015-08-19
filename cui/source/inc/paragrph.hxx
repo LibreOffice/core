@@ -83,8 +83,8 @@ private:
     long                    nAbst;
     long                    nWidth;
     long                    nMinFixDist;
-    bool                bRelativeMode;
-    bool                bNegativeIndents;
+    bool                    bRelativeMode;
+    bool                    bNegativeIndents;
 
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
@@ -92,7 +92,7 @@ private:
 
     DECL_LINK( LineDistHdl_Impl, ListBox* );
     DECL_LINK(ModifyHdl_Impl, void *);
-    DECL_LINK( AutoHdl_Impl, CheckBox* );
+    DECL_LINK_TYPED( AutoHdl_Impl, Button*, void );
 
 protected:
     virtual sfxpg           DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -152,7 +152,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     VclPtr<VclFrame>                m_pPropertiesFL;
     VclPtr<svx::FrameDirectionListBox>  m_pTextDirectionLB;
 
-    DECL_LINK(AlignHdl_Impl, void *);
+    DECL_LINK_TYPED(AlignHdl_Impl, Button*, void);
     DECL_LINK(LastLineHdl_Impl, void *);
     DECL_LINK(TextDirectionHdl_Impl, void *);
 
@@ -253,12 +253,12 @@ private:
     bool                bHtmlMode;
     sal_uInt16              nStdPos;
 
-    DECL_LINK(PageBreakHdl_Impl, void *);
-    DECL_LINK(KeepTogetherHdl_Impl, void *);
-    DECL_LINK(WidowHdl_Impl, void *);
-    DECL_LINK(OrphanHdl_Impl, void *);
-    DECL_LINK(HyphenClickHdl_Impl, void *);
-    DECL_LINK(ApplyCollClickHdl_Impl, void *);
+    DECL_LINK_TYPED(PageBreakHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(KeepTogetherHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(WidowHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(OrphanHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(HyphenClickHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(ApplyCollClickHdl_Impl, Button*, void);
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
 
@@ -276,7 +276,7 @@ class SvxAsianTabPage : public SfxTabPage
 
     SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
-    DECL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, CheckBox* );
+    DECL_STATIC_LINK_TYPED( SvxAsianTabPage, ClickHdl_Impl, Button*, void );
 
 public:
     virtual ~SvxAsianTabPage();

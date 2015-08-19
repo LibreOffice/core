@@ -326,23 +326,20 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
     pDocShell->PostPaint( maInputRange, PAINT_GRID );
 }
 
-IMPL_LINK( ScRandomNumberGeneratorDialog, OkClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, OkClicked, Button*, void )
 {
     ApplyClicked(NULL);
     CloseClicked(NULL);
-    return 0;
 }
 
-IMPL_LINK( ScRandomNumberGeneratorDialog, ApplyClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, ApplyClicked, Button*, void )
 {
     SelectGeneratorAndGenerateNumbers();
-    return 0;
 }
 
-IMPL_LINK( ScRandomNumberGeneratorDialog, CloseClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, CloseClicked, Button*, void )
 {
     Close();
-    return 0;
 }
 
 IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control*, pCtrl )

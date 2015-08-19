@@ -523,7 +523,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
 {
     //  bei Gross-/Kleinschreibung die Werte-Listen aktualisieren
 
@@ -542,8 +542,6 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         m_pEdVal2->SetText( aCurVal2 );
         m_pEdVal3->SetText( aCurVal3 );
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )

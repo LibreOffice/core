@@ -70,8 +70,8 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     OUString m_aIconMediaType;
 
     DECL_LINK(DoubleClickHdl, void*);
-    DECL_LINK(BrowseHdl, void *);
-    DECL_LINK(RadioHdl, void *);
+    DECL_LINK_TYPED(BrowseHdl, Button*, void);
+    DECL_LINK_TYPED(RadioHdl, Button*, void);
     void SelectDefault();
     ListBox& GetObjectTypes()
         { return *m_pLbObjecttype; }
@@ -103,7 +103,7 @@ private:
     INetURLObject* m_pURL;
     OUString m_aCommands;
 
-    DECL_LINK(BrowseHdl, void *);
+    DECL_LINK_TYPED(BrowseHdl, Button*, void);
     OUString GetPlugInFile() const { return m_pEdFileurl->GetText(); }
     OUString GetPlugInOptions() const { return m_pEdPluginsOptions->GetText(); }
 
@@ -136,8 +136,8 @@ private:
     VclPtr<NumericField> m_pNMMarginHeight;
     VclPtr<CheckBox> m_pCBMarginHeightDefault;
 
-    DECL_LINK(OpenHdl, PushButton* );
-    DECL_LINK(CheckHdl, CheckBox* );
+    DECL_LINK_TYPED(OpenHdl, Button*, void );
+    DECL_LINK_TYPED(CheckHdl, Button*, void );
 
     void Init();
 

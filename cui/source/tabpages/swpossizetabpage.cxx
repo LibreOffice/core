@@ -563,7 +563,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pHeightMF->SetLoseFocusHdl( aLk );
     m_pHoriByMF->SetLoseFocusHdl( aLk );
     m_pVertByMF->SetLoseFocusHdl( aLk );
-    m_pFollowCB->SetClickHdl( aLk );
+    m_pFollowCB->SetClickHdl( LINK(this, SvxSwPosSizeTabPage, RangeModifyClickHdl) );
 
     aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
     m_pWidthMF->SetModifyHdl( aLk );
@@ -571,12 +571,12 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     m_pHoriByMF->SetModifyHdl( aLk );
     m_pVertByMF->SetModifyHdl( aLk );
 
-    aLk = LINK(this, SvxSwPosSizeTabPage, AnchorTypeHdl);
-    m_pToPageRB->SetClickHdl( aLk );
-    m_pToParaRB->SetClickHdl( aLk );
-    m_pToCharRB->SetClickHdl( aLk );
-    m_pAsCharRB->SetClickHdl( aLk );
-    m_pToFrameRB->SetClickHdl( aLk );
+    Link<Button*,void> aLk2 = LINK(this, SvxSwPosSizeTabPage, AnchorTypeHdl);
+    m_pToPageRB->SetClickHdl( aLk2 );
+    m_pToParaRB->SetClickHdl( aLk2 );
+    m_pToCharRB->SetClickHdl( aLk2 );
+    m_pAsCharRB->SetClickHdl( aLk2 );
+    m_pToFrameRB->SetClickHdl( aLk2 );
 
     m_pHoriLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, PosHdl));
     m_pVertLB->SetSelectHdl(LINK(this, SvxSwPosSizeTabPage, PosHdl));
@@ -1137,6 +1137,10 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
    return nRet;
 }
 
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyClickHdl, Button*, void)
+{
+    RangeModifyHdl(NULL);
+}
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
 {
     if(m_bPositioningDisabled)
@@ -1221,7 +1225,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl)
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
 {
     m_pHoriMirrorCB->Enable(!m_pAsCharRB->IsChecked() && !m_bIsMultiSelection);
 
@@ -1239,15 +1243,12 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl)
         PosHdl(m_pHoriLB);
         PosHdl(m_pVertLB);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl)
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, MirrorHdl, Button*, void)
 {
     short nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
-
-    return 0;
 }
 
 IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
@@ -1408,10 +1409,9 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl)
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
 {
     m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
-    return 0;
 }
 
 short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)

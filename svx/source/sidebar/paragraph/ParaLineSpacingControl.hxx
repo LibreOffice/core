@@ -23,6 +23,7 @@
 #include <sfx2/tbxctrl.hxx>
 
 class SvxLineSpacingItem;
+class Button;
 
 namespace svx {
 
@@ -70,7 +71,7 @@ private:
 
     DECL_LINK(LineSPDistHdl_Impl, ListBox*);
     DECL_LINK(LineSPDistAtHdl_Impl, void*);
-    DECL_LINK(PredefinedValuesHandler, void*);
+    DECL_LINK_TYPED(PredefinedValuesHandler, Button*, void);
 };
 
 }

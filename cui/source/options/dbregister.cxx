@@ -145,7 +145,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     Size aHeadSize = rBar.GetSizePixel();
 
     m_pPathBox->SetStyle( m_pPathBox->GetStyle()|nBits );
-    m_pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
+    m_pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, PathBoxDoubleClickHdl ) );
     m_pPathBox->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, PathSelect_Impl ) );
     m_pPathBox->SetSelectionMode( SINGLE_SELECTION );
     m_pPathBox->SetPosSizePixel( Point( 0, aHeadSize.Height() ),
@@ -273,7 +273,7 @@ void DbRegistrationOptionsPage::FillUserData()
     SetUserData( aUserData );
 }
 
-IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
+IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
     if ( pEntry )
@@ -282,32 +282,35 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
         if ( aQuery->Execute() == RET_YES )
             m_pPathBox->GetModel()->Remove(pEntry);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
+IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, NewHdl, Button*, void)
 {
     OUString sNewName,sNewLocation;
     openLinkDialog(sNewName,sNewLocation);
+}
+
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl)
+{
+    EditHdl(NULL);
     return 0;
 }
 
-IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
+
+IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, EditHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pPathBox->GetCurEntry();
     if ( !pEntry )
-        return 0L;
+        return;
 
     DatabaseRegistration* pOldRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
     if ( !pOldRegistration || pOldRegistration->bReadOnly )
-        return 0L;
+        return;
 
     OUString sOldName = SvTabListBox::GetEntryText(pEntry,0);
     m_pCurEntry = pEntry;
     openLinkDialog( sOldName, pOldRegistration->sLocation, pEntry );
     m_pCurEntry = NULL;
-
-    return 1L;
 }
 
 

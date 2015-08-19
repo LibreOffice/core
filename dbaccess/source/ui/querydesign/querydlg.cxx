@@ -241,14 +241,12 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     return 1;
 }
 
-IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( DlgQryJoin, OKClickHdl, Button*, void )
 {
-
     m_pConnData->Update();
     m_pOrigConnData->CopyFrom( *m_pConnData );
 
     EndDialog(RET_OK);
-    return 1;
 }
 
 IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )

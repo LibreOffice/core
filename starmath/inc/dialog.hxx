@@ -62,7 +62,7 @@ class SmPrintOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox>       m_pNoRightSpaces;
     VclPtr<CheckBox>       m_pSaveOnlyUsedSymbols;
 
-    DECL_LINK(SizeButtonClickHdl, Button *);
+    DECL_LINK_TYPED(SizeButtonClickHdl, Button *, void);
 
     virtual bool    FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
@@ -104,7 +104,7 @@ class SmFontDialog : public ModalDialog
 
     DECL_LINK(FontSelectHdl, ComboBox *);
     DECL_LINK(FontModifyHdl, ComboBox *);
-    DECL_LINK(AttrChangeHdl, CheckBox *);
+    DECL_LINK_TYPED(AttrChangeHdl, Button *, void);
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
@@ -132,7 +132,7 @@ class SmFontSizeDialog : public ModalDialog
     VclPtr<MetricField> m_pBorderSize;
     VclPtr<PushButton> m_pDefaultButton;
 
-    DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
 
 public:
     SmFontSizeDialog(vcl::Window *pParent);
@@ -160,7 +160,7 @@ class SmFontTypeDialog : public ModalDialog
     VclPtr<OutputDevice> pFontListDev;
 
     DECL_LINK(MenuSelectHdl, Menu *);
-    DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
 
 public:
     SmFontTypeDialog(vcl::Window *pParent, OutputDevice *pFntListDevice);
@@ -224,8 +224,8 @@ class SmDistanceDialog : public ModalDialog
 
     DECL_LINK(GetFocusHdl, Control *);
     DECL_LINK(MenuSelectHdl, Menu *);
-    DECL_LINK(DefaultButtonClickHdl, Button *);
-    DECL_LINK(CheckBoxClickHdl, CheckBox *);
+    DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
+    DECL_LINK_TYPED(CheckBoxClickHdl, Button *, void);
 
     using   Window::SetHelpId;
     static void SetHelpId(MetricField &rField, const OString& sHelpId);
@@ -254,7 +254,7 @@ class SmAlignDialog : public ModalDialog
     VclPtr<RadioButton> m_pRight;
     VclPtr<PushButton>  m_pDefaultButton;
 
-    DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
 
 public:
     SmAlignDialog(vcl::Window *pParent);
@@ -367,8 +367,8 @@ class SmSymbolDialog : public ModalDialog
     DECL_LINK(SymbolSetChangeHdl, void*);
     DECL_LINK(SymbolChangeHdl, void*);
     DECL_LINK(SymbolDblClickHdl, void*);
-    DECL_LINK(EditClickHdl, void*);
-    DECL_LINK(GetClickHdl, void*);
+    DECL_LINK_TYPED(EditClickHdl, Button*, void);
+    DECL_LINK_TYPED(GetClickHdl, Button*, void);
 
     void            FillSymbolSets(bool bDeleteText = true);
     const SmSym    *GetSymbol() const;
@@ -439,9 +439,9 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(SubsetChangeHdl, ListBox*);
     DECL_LINK(StyleChangeHdl, ComboBox *);
     DECL_LINK(CharHighlightHdl, void *);
-    DECL_LINK(AddClickHdl, Button *);
-    DECL_LINK(ChangeClickHdl, Button *);
-    DECL_LINK(DeleteClickHdl, Button *);
+    DECL_LINK_TYPED(AddClickHdl, Button *, void);
+    DECL_LINK_TYPED(ChangeClickHdl, Button *, void);
+    DECL_LINK_TYPED(DeleteClickHdl, Button *, void);
 
     void    FillSymbols(ComboBox &rComboBox, bool bDeleteText = true);
     void    FillSymbolSets(ComboBox &rComboBox, bool bDeleteText = true);

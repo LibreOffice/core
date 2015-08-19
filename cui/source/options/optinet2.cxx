@@ -666,15 +666,14 @@ void SvxSecurityTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl)
+IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
 {
     if ( !mpSecOptDlg )
         mpSecOptDlg = VclPtr<svx::SecurityOptionsDialog>::Create( this, mpSecOptions );
     mpSecOptDlg->Execute();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
+IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
 {
     try
     {
@@ -725,11 +724,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
     {
         m_pSavePasswordsCB->Check( !m_pSavePasswordsCB->IsChecked() );
     }
-
-    return 0;
 }
 
-IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
+IMPL_STATIC_LINK_NOARG_TYPED(SvxSecurityTabPage, MasterPasswordHdl, Button*, void)
 {
     try
     {
@@ -741,11 +738,9 @@ IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
     }
     catch (const Exception&)
     {}
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
+IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, MasterPasswordCBHdl, Button*, void)
 {
     try
     {
@@ -785,11 +780,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
     {
         m_pSavePasswordsCB->Check( !m_pSavePasswordsCB->IsChecked() );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
+IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
 {
     try
     {
@@ -804,10 +797,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
     }
     catch (const Exception&)
     {}
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
+IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
 {
     if (!mpCertPathDlg)
         mpCertPathDlg = VclPtr<CertPathDialog>::Create(this);
@@ -820,11 +812,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
         ScopedVclPtrInstance< MessageDialog > aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
         aWarnBox->Execute();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl)
+IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
 {
     // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
     // invocations. Seems clearer to my little brain that way.
@@ -832,11 +822,9 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl)
     ScopedVclPtrInstance<TSAURLsDialog> pTSAURLsDlg(this);
 
     pTSAURLsDlg->Execute();
-
-    return 0;
 }
 
-IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
+IMPL_STATIC_LINK_NOARG_TYPED(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
 {
     try
     {
@@ -849,7 +837,6 @@ IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
         OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         (void)e;
     }
-    return 0;
 }
 
 
@@ -1076,7 +1063,7 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
 
 /* -------------------------------------------------------------------------*/
 
-IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
+IMPL_LINK_TYPED(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
 {
     if (m_pMailerURLPB == pButton && !pImpl->bROProgram)
     {
@@ -1103,7 +1090,6 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
             m_pMailerURLED->SetText(sPath);
         }
     }
-    return 0;
 }
 
 

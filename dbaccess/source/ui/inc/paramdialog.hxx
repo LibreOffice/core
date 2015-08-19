@@ -98,7 +98,7 @@ namespace dbaui
         DECL_LINK_TYPED(OnVisitedTimeout, Timer*, void);
         DECL_LINK(OnValueModified, Control*);
         DECL_LINK(OnEntrySelected, ListBox*);
-        DECL_LINK(OnButtonClicked, PushButton*);
+        DECL_LINK_TYPED(OnButtonClicked, Button*, void);
         DECL_LINK(OnValueLoseFocus, Control*);
     };
 

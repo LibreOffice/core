@@ -205,11 +205,10 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
         mpButtonOk->Disable();
 }
 
-IMPL_LINK( ScStatisticsTwoVariableDialog, OkClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, OkClicked, Button*, void )
 {
     CalculateInputAndWriteToOutput();
     Close();
-    return 0;
 }
 
 IMPL_LINK( ScStatisticsTwoVariableDialog, GetFocusHandler, Control*, pCtrl )

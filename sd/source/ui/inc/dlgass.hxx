@@ -45,7 +45,8 @@ public:
     virtual ~AssistentDlg();
     virtual void dispose() SAL_OVERRIDE;
 
-    DECL_LINK( FinishHdl, void * );
+    DECL_LINK_TYPED( FinishHdl, Button*, void );
+    DECL_LINK( FinishHdl2, void* );
 
     SfxObjectShellLock GetDocument();
     OutputType GetOutputMedium() const;

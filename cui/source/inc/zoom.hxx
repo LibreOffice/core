@@ -48,12 +48,12 @@ private:
     std::unique_ptr<SfxItemSet> mpOutSet;
     bool                        mbModified;
 
-    DECL_LINK(UserHdl, RadioButton*);
+    DECL_LINK_TYPED(UserHdl, Button*, void);
     DECL_LINK(SpinHdl, void*);
-    DECL_LINK(ViewLayoutUserHdl, RadioButton*);
+    DECL_LINK_TYPED(ViewLayoutUserHdl, Button*, void);
     DECL_LINK(ViewLayoutSpinHdl, NumericField*);
-    DECL_LINK(ViewLayoutCheckHdl, CheckBox*);
-    DECL_LINK(OKHdl, Button*);
+    DECL_LINK_TYPED(ViewLayoutCheckHdl, Button*, void);
+    DECL_LINK_TYPED(OKHdl, Button*, void);
 
 public:
     SvxZoomDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet);

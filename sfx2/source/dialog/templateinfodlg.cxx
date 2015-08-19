@@ -126,10 +126,9 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
     }
 }
 
-IMPL_LINK_NOARG (SfxTemplateInfoDlg, CloseHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateInfoDlg, CloseHdl, Button*, void)
 {
     Close();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

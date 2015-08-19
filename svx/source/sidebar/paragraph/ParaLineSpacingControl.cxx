@@ -66,19 +66,19 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
     meLNSpaceUnit = SFX_MAPUNIT_100TH_MM;
 
-    Link<> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
+    Link<Button*,void> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
     mpSpacing1Button->SetClickHdl(aLink);
     mpSpacing115Button->SetClickHdl(aLink);
     mpSpacing15Button->SetClickHdl(aLink);
     mpSpacing2Button->SetClickHdl(aLink);
 
-    aLink = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
-    mpLineDist->SetSelectHdl(aLink);
+    Link<> aLink2 = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
+    mpLineDist->SetSelectHdl(aLink2);
     SelectEntryPos(LLINESPACE_1);
 
-    aLink = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
-    mpLineDistAtPercentBox->SetModifyHdl( aLink );
-    mpLineDistAtMetricBox->SetModifyHdl( aLink );
+    aLink2 = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
+    mpLineDistAtPercentBox->SetModifyHdl( aLink2 );
+    mpLineDistAtMetricBox->SetModifyHdl( aLink2 );
 
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = NULL;
@@ -409,7 +409,7 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, int eS
     }
 }
 
-IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, void *, pControl)
+IMPL_LINK_TYPED(ParaLineSpacingControl, PredefinedValuesHandler, Button*, pControl, void)
 {
     if (pControl == mpSpacing1Button)
     {
@@ -427,8 +427,6 @@ IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, void *, pControl)
     {
         ExecuteLineSpacing(LLINESPACE_2);
     }
-
-    return 0;
 }
 
 void ParaLineSpacingControl::ExecuteLineSpacing(sal_uInt16 nEntry)

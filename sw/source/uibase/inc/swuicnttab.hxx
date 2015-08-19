@@ -94,7 +94,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
     DECL_LINK(CreateExample_Hdl, void*);
-    DECL_LINK(ShowPreviewHdl, void*);
+    DECL_LINK_TYPED(ShowPreviewHdl, Button*, void);
 
 public:
     SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet& rSet,
@@ -203,13 +203,13 @@ class SwTOXSelectTabPage : public SfxTabPage
     bool            m_bWaitingInitialSettings;
 
     DECL_LINK(TOXTypeHdl,   ListBox* );
-    DECL_LINK(AddStylesHdl, PushButton* );
+    DECL_LINK_TYPED(AddStylesHdl, Button*, void );
     DECL_LINK_TYPED(MenuEnableHdl, Menu*, bool);
     DECL_LINK(MenuExecuteHdl, Menu*);
     DECL_LINK(LanguageHdl, ListBox*);
 
-    DECL_LINK(CheckBoxHdl,  CheckBox*   );
-    DECL_LINK(RadioButtonHdl, void *);
+    DECL_LINK_TYPED(CheckBoxHdl, Button*, void );
+    DECL_LINK_TYPED(RadioButtonHdl, Button*, void);
     DECL_LINK(ModifyHdl, void*);
 
       void  ApplyTOXDescription();
@@ -272,7 +272,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     DECL_LINK(TbxFocusHdl, SwTOXEdit* );
     DECL_LINK(NextItemBtnHdl, SwTOXButton* );
     DECL_LINK(TbxFocusBtnHdl, SwTOXButton* );
-    DECL_LINK(ScrollHdl, ImageButton* );
+    DECL_LINK_TYPED(ScrollHdl, Button*, void );
 
     void    SetActiveControl(Control* pSet);
 
@@ -411,24 +411,25 @@ class SwTOXEntryTabPage : public SfxTabPage
     bool            bInLevelHdl;
 
     DECL_LINK(StyleSelectHdl, ListBox*);
-    DECL_LINK(EditStyleHdl, PushButton*);
-    DECL_LINK(InsertTokenHdl, PushButton*);
+    DECL_LINK_TYPED(EditStyleHdl, Button*, void);
+    DECL_LINK_TYPED(InsertTokenHdl, Button*, void);
     DECL_LINK(LevelHdl, SvTreeListBox*);
-    DECL_LINK(AutoRightHdl, CheckBox*);
+    DECL_LINK_TYPED(AutoRightHdl, Button*, void);
     DECL_LINK(TokenSelectedHdl, SwFormToken*);
     DECL_LINK(TabPosHdl, MetricField*);
     DECL_LINK(FillCharHdl, ComboBox*);
-    DECL_LINK(RemoveInsertAuthHdl, PushButton*);
-    DECL_LINK(SortKeyHdl, RadioButton*);
+    DECL_LINK_TYPED(RemoveInsertAuthHdl, Button*, void);
+    DECL_LINK_TYPED(SortKeyHdl, Button*, void);
     DECL_LINK(ChapterInfoHdl, ListBox*);
     DECL_LINK(ChapterInfoOutlineHdl, NumericField*);
     DECL_LINK(NumberFormatHdl, ListBox*);
 
-    DECL_LINK(AllLevelsHdl, void *);
+    DECL_LINK_TYPED(AllLevelsHdl, Button*, void);
 
     void            WriteBackLevel();
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, void*);
+    DECL_LINK_TYPED(ModifyClickHdl, Button*, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -464,11 +465,11 @@ class SwTOXStylesTabPage : public SfxTabPage
 
     SwForm*         m_pCurrentForm;
 
-    DECL_LINK( EditStyleHdl, Button *);
-    DECL_LINK(StdHdl, void *);
+    DECL_LINK_TYPED( EditStyleHdl, Button *, void);
+    DECL_LINK_TYPED(StdHdl, Button*, void);
     DECL_LINK(EnableSelectHdl, void *);
     DECL_LINK(DoubleClickHdl, void *);
-    DECL_LINK(AssignHdl, void *);
+    DECL_LINK_TYPED(AssignHdl, Button*, void);
     void Modify();
 
     SwForm&     GetForm()

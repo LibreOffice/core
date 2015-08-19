@@ -177,21 +177,21 @@ private:
 
     void    LoadPreviewButtons();
 
-    DECL_LINK( FinishHdl, void * );
-    DECL_LINK( NextPageHdl, void * );
-    DECL_LINK( LastPageHdl, void * );
+    DECL_LINK_TYPED( FinishHdl, Button*, void );
+    DECL_LINK_TYPED( NextPageHdl, Button*, void );
+    DECL_LINK_TYPED( LastPageHdl, Button*, void );
 
-    DECL_LINK( DesignHdl, RadioButton * );
+    DECL_LINK_TYPED( DesignHdl, Button*, void );
     DECL_LINK( DesignSelectHdl, void * );
-    DECL_LINK( DesignDeleteHdl, void * );
-    DECL_LINK( BaseHdl, void * );
-    DECL_LINK( ContentHdl, void * );
-    DECL_LINK( GfxFormatHdl, RadioButton * );
-    DECL_LINK( ResolutionHdl, RadioButton * );
+    DECL_LINK_TYPED( DesignDeleteHdl, Button*, void );
+    DECL_LINK_TYPED( BaseHdl, Button*, void );
+    DECL_LINK_TYPED( ContentHdl, Button*, void );
+    DECL_LINK_TYPED( GfxFormatHdl, Button *, void );
+    DECL_LINK_TYPED( ResolutionHdl, Button*, void );
     DECL_LINK( ButtonsHdl, void * );
-    DECL_LINK( ColorHdl, PushButton * );
-    DECL_LINK( WebServerHdl, RadioButton * );
-    DECL_LINK( SlideChgHdl, void * );
+    DECL_LINK_TYPED( ColorHdl, Button*, void );
+    DECL_LINK_TYPED( WebServerHdl, Button *, void );
+    DECL_LINK_TYPED( SlideChgHdl, Button*, void );
 
 public:
 

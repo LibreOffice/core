@@ -264,7 +264,7 @@ void PrinterSetupDialog::dispose()
     ModalDialog::dispose();
 }
 
-void PrinterSetupDialog::SetOptionsHdl( const Link<>& rLink )
+void PrinterSetupDialog::SetOptionsHdl( const Link<Button*,void>& rLink )
 {
     m_pBtnOptions->SetClickHdl( rLink );
     m_pBtnOptions->Show( rLink.IsSet() );
@@ -301,13 +301,11 @@ IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplStatusHdl, Timer *, void)
 
 
 
-IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
+IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
 {
     if ( !mpTempPrinter )
         mpTempPrinter = VclPtr<Printer>::Create( mpPrinter->GetJobSetup() );
     mpTempPrinter->Setup( this );
-
-    return 0;
 }
 
 

@@ -351,15 +351,13 @@ void OWizTypeSelect::EnableAuto(bool bEnable)
     m_pAutoType->Show(bEnable);
 }
 
-IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( OWizTypeSelect, ButtonClickHdl, Button *, void )
 {
     sal_Int32 nBreakPos;
     m_pParent->CheckColumns(nBreakPos);
     fillColumnList(m_pAutoEt->GetText().toInt32());
 
     ActivatePage();
-
-    return 0;
 }
 
 OWizTypeSelectList::~OWizTypeSelectList()

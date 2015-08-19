@@ -118,7 +118,7 @@ short SfxStyleDialog::Ok()
 
 
 
-IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SfxStyleDialog, CancelHdl, Button *, void )
 
 /*  [Description]
 
@@ -127,7 +127,6 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 */
 
 {
-    (void)pButton; //unused
     SfxTabPage* pPage = GetTabPage(m_nOrganizerId);
 
     const SfxItemSet* pInSet = GetInputSetImpl();
@@ -148,7 +147,6 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
     if ( pPage )
         pPage->Reset( GetInputSetImpl() );
     EndDialog();
-    return 0;
 }
 
 OUString SfxStyleDialog::GenerateUnusedName(SfxStyleSheetBasePool &rPool)

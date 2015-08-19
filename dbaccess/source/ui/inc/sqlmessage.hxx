@@ -95,7 +95,7 @@ public:
 private:
     void Construct( WinBits nStyle, MessageType eImage );
 
-    DECL_LINK(ButtonClickHdl, Button* );
+    DECL_LINK_TYPED(ButtonClickHdl, Button*, void );
 
 private:
     void    impl_positionControls();

@@ -70,9 +70,9 @@ private:
 
     void SelectGeneratorAndGenerateNumbers();
 
-    DECL_LINK( OkClicked,        PushButton* );
-    DECL_LINK( CloseClicked,     PushButton* );
-    DECL_LINK( ApplyClicked,     PushButton* );
+    DECL_LINK_TYPED( OkClicked,        Button*, void );
+    DECL_LINK_TYPED( CloseClicked,     Button*, void );
+    DECL_LINK_TYPED( ApplyClicked,     Button*, void );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
 

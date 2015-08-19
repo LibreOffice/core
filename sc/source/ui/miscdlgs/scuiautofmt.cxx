@@ -163,7 +163,7 @@ void ScAutoFormatDlg::UpdateChecks()
 
 // Handler:
 
-IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
+IMPL_LINK_TYPED( ScAutoFormatDlg, CloseHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pBtnOk || pBtn == m_pBtnCancel)
     {
@@ -172,7 +172,6 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 
         EndDialog( (pBtn == m_pBtnOk) ? RET_OK : RET_CANCEL );
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl)
@@ -184,7 +183,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl)
     return 0;
 }
 
-IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
+IMPL_LINK_TYPED( ScAutoFormatDlg, CheckHdl, Button *, pBtn, void )
 {
     ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
     bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked();
@@ -209,11 +208,9 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
     }
 
     m_pWndPreview->NotifyChange( pData );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, AddHdl, Button*, void)
 {
     if ( !bFmtInserted && pSelFmtData )
     {
@@ -279,11 +276,9 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
                 bOk = true;
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RemoveHdl, Button*, void)
 {
     if ( (nIndex > 0) && (m_pLbFormat->GetEntryCount() > 0) )
     {
@@ -317,11 +312,9 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
     }
 
     SelFmtHdl( 0 );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RenameHdl, Button*, void)
 {
     bool bOk = false;
     while( !bOk )
@@ -400,8 +393,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         else
             bOk = true;
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)

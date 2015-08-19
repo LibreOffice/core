@@ -372,41 +372,40 @@ void SvxOpenCLTabPage::EnableOpenCLHdl(VclFrame* pFrame, bool aEnable)
     pFrame->Enable(aEnable);
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, BlackListEditHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, BlackListEditHdl, Button*, void)
 {
-    return EditHdl(mpBlackList, maConfig.maBlackList, "bledit");
+    EditHdl(mpBlackList, maConfig.maBlackList, "bledit");
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, BlackListAddHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, BlackListAddHdl, Button*, void)
 {
-    return AddHdl(mpBlackList, maConfig.maBlackList, "bladd");
+    AddHdl(mpBlackList, maConfig.maBlackList, "bladd");
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, BlackListDeleteHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, BlackListDeleteHdl, Button*, void)
 {
-    return DeleteHdl(mpBlackList, maConfig.maBlackList);
+    DeleteHdl(mpBlackList, maConfig.maBlackList);
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, WhiteListEditHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, WhiteListEditHdl, Button*, void)
 {
-    return EditHdl(mpWhiteList, maConfig.maWhiteList, "wledit");
+    EditHdl(mpWhiteList, maConfig.maWhiteList, "wledit");
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, WhiteListAddHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, WhiteListAddHdl, Button*, void)
 {
-    return AddHdl(mpWhiteList, maConfig.maWhiteList, "wladd");
+    AddHdl(mpWhiteList, maConfig.maWhiteList, "wladd");
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, WhiteListDeleteHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, WhiteListDeleteHdl, Button*, void)
 {
-    return DeleteHdl(mpWhiteList, maConfig.maWhiteList);
+    DeleteHdl(mpWhiteList, maConfig.maWhiteList);
 }
 
-IMPL_LINK_NOARG(SvxOpenCLTabPage, EnableOpenCLHdl)
+IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, EnableOpenCLHdl, Button*, void)
 {
     EnableOpenCLHdl(mpBlackListFrame, mpUseOpenCL->IsChecked());
     EnableOpenCLHdl(mpWhiteListFrame, mpUseOpenCL->IsChecked());
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

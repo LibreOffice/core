@@ -515,7 +515,7 @@ void BackingWindow::Resize()
         Invalidate();
 }
 
-IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
+IMPL_LINK_TYPED(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
 {
     OUString aNode;
 
@@ -552,10 +552,9 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
         {
         }
     }
-    return 0;
 }
 
-IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
+IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
 {
     // dispatch the appropriate URL and end the dialog
     if( pButton == mpWriterAllButton )
@@ -604,7 +603,6 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         mpLocalView->reload();
         mpLocalView->GrabFocus();
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )

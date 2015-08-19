@@ -653,32 +653,24 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, KeepMineHandle)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepMineHandle, Button*, void)
 {
     KeepHandler( true );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, KeepOtherHandle)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepOtherHandle, Button*, void)
 {
     KeepHandler( false );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, KeepAllMineHandle)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepAllMineHandle, Button*, void)
 {
     KeepAllHandler( true );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, KeepAllOthersHandle)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepAllOthersHandle, Button*, void)
 {
     KeepAllHandler( false );
-
-    return 0;
 }
 
 void ScConflictsDlg::UpdateView()

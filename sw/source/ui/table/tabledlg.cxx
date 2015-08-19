@@ -137,15 +137,15 @@ void  SwFormatTablePage::Init()
     m_aRightMF.SetMetricFieldMin(-999999);
 
     //handler
-    Link<> aLk = LINK( this, SwFormatTablePage, AutoClickHdl );
-    m_pFullBtn->SetClickHdl( aLk );
-    m_pFreeBtn->SetClickHdl( aLk );
-    m_pLeftBtn->SetClickHdl( aLk );
-    m_pFromLeftBtn->SetClickHdl( aLk );
-    m_pRightBtn->SetClickHdl( aLk );
-    m_pCenterBtn->SetClickHdl( aLk );
+    Link<Button*,void> aLk2 = LINK( this, SwFormatTablePage, AutoClickHdl );
+    m_pFullBtn->SetClickHdl( aLk2 );
+    m_pFreeBtn->SetClickHdl( aLk2 );
+    m_pLeftBtn->SetClickHdl( aLk2 );
+    m_pFromLeftBtn->SetClickHdl( aLk2 );
+    m_pRightBtn->SetClickHdl( aLk2 );
+    m_pCenterBtn->SetClickHdl( aLk2 );
 
-    aLk = LINK( this, SwFormatTablePage, UpDownLoseFocusHdl );
+    Link<> aLk = LINK( this, SwFormatTablePage, UpDownLoseFocusHdl );
     m_pTopMF->SetUpHdl( aLk );
     m_pBottomMF->SetUpHdl( aLk );
     m_aRightMF.SetUpHdl( aLk );
@@ -167,8 +167,9 @@ void  SwFormatTablePage::Init()
     m_pRelWidthCB->SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
 }
 
-IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
+IMPL_LINK_TYPED( SwFormatTablePage, RelWidthClickHdl, Button*, p, void )
 {
+    CheckBox* pBtn = static_cast<CheckBox*>(p);
     OSL_ENSURE(pTableData, "table data not available?");
     bool bIsChecked = pBtn->IsChecked();
     sal_Int64 nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue(FUNIT_TWIP ));
@@ -199,11 +200,9 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         m_pRightFT->Enable(bEnable);
     }
     bModified = true;
-
-    return 0;
 }
 
-IMPL_LINK( SwFormatTablePage, AutoClickHdl, void *, pControl )
+IMPL_LINK_TYPED( SwFormatTablePage, AutoClickHdl, Button*, pControl, void )
 {
     bool bRestore = true,
          bLeftEnable = false,
@@ -265,7 +264,6 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, void *, pControl )
     }
     ModifyHdl(m_aWidthMF.get());
     bModified = true;
-    return 0;
 }
 
 void SwFormatTablePage::RightModify()
@@ -858,7 +856,7 @@ void  SwTableColumnPage::Init(bool bWeb)
     }
     SetMetric(*m_pSpaceED, aMetric);
 
-    Link<> aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
+    Link<Button*,void> aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
     m_pUpBtn->SetClickHdl( aLk );
     m_pDownBtn->SetClickHdl( aLk );
 
@@ -867,7 +865,7 @@ void  SwTableColumnPage::Init(bool bWeb)
     m_pProportionalCB->SetClickHdl( aLk );
 }
 
-IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
+IMPL_LINK_TYPED( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
 {
     //move display window
     if(pControl == m_pDownBtn.get())
@@ -902,7 +900,6 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
     m_pDownBtn->Enable(aValueTable[0] > 0);
     m_pUpBtn->Enable(aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
     UpdateCols(0);
-    return 0;
 }
 
 IMPL_LINK( SwTableColumnPage, UpHdl, MetricField*, pEdit )
@@ -929,16 +926,15 @@ IMPL_LINK( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SwTableColumnPage, ModeHdl, Button*, pBox, void )
 {
-    bool bCheck = pBox->IsChecked();
+    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
     if (pBox == m_pProportionalCB)
     {
         if(bCheck)
             m_pModifyTableCB->Check();
         m_pModifyTableCB->Enable(!bCheck && bModifyTable);
     }
-    return 0;
 }
 
 bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
@@ -1692,7 +1688,7 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwTextFlowPage, PageBreakHdl_Impl, Button*, void)
 {
     if( m_pPgBrkCB->IsChecked() )
     {
@@ -1727,10 +1723,9 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl)
             m_pPgBrkBeforeRB-> Enable(false);
             m_pPgBrkAfterRB->  Enable(false);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwTextFlowPage, ApplyCollClickHdl_Impl, Button*, void)
 {
     bool bEnable = false;
     if ( m_pPageCollCB->IsChecked() &&
@@ -1749,10 +1744,9 @@ IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl)
         m_pPageNoFT->Enable(bEnable);
         m_pPageNoNF->Enable(bEnable);
     }
-    return 0;
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( SwTextFlowPage, PageBreakPosHdl_Impl, Button*, pBtn, void )
 {
     if ( m_pPgBrkCB->IsChecked() )
     {
@@ -1779,10 +1773,9 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
             m_pPageNoNF->Enable(false);
         }
     }
-    return 0;
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( SwTextFlowPage, PageBreakTypeHdl_Impl, Button*, pBtn, void )
 {
     if ( pBtn == m_pColBrkRB || m_pPgBrkAfterRB->IsChecked() )
     {
@@ -1794,27 +1787,22 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
     }
     else if ( m_pPgBrkBeforeRB->IsChecked() )
         PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);
-    return 0;
 }
 
-IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SwTextFlowPage, SplitHdl_Impl, Button*, pBox, void )
 {
-    m_pSplitRowCB->Enable(pBox->IsChecked());
-    return 0;
+    m_pSplitRowCB->Enable(static_cast<CheckBox*>(pBox)->IsChecked());
 }
 
-IMPL_STATIC_LINK(
-    SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
+IMPL_STATIC_LINK_TYPED(
+    SwTextFlowPage, SplitRowHdl_Impl, Button*, pBox, void )
 {
-    pBox->EnableTriState(false);
-    return 0;
+    static_cast<TriStateBox*>(pBox)->EnableTriState(false);
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl)
+IMPL_LINK_NOARG_TYPED(SwTextFlowPage, HeadLineCBClickHdl, Button*, void)
 {
     m_pRepeatHeaderCombo->Enable(m_pHeadLineCB->IsChecked());
-
-    return 0;
 }
 
 void SwTextFlowPage::DisablePageBreak()

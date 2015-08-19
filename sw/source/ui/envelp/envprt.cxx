@@ -84,7 +84,7 @@ void SwEnvPrtPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
+IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, ClickHdl, Button*, void)
 {
     if (m_pBottomButton->IsChecked())
     {
@@ -106,10 +106,9 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
         m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(Bitmap(SW_RES(BMP_VER_CNTR_UPPER))));
         m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(Bitmap(SW_RES(BMP_VER_RGHT_UPPER))));
     }
-    return 0;
 }
 
-IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwEnvPrtPage, ButtonHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pPrtSetup)
     {
@@ -124,7 +123,6 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
             m_pPrinterInfo->SetText(pPrt->GetName());
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, AlignHdl, ToolBox *, void)

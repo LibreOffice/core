@@ -63,7 +63,7 @@ class ScTpContentOptions : public SfxTabPage
     void    InitGridOpt();
     DECL_LINK( GridHdl, ListBox* );
     DECL_LINK( SelLbObjHdl, ListBox* );
-    DECL_LINK( CBHdl, CheckBox* );
+    DECL_LINK_TYPED( CBHdl, Button*, void );
 
             ScTpContentOptions( vcl::Window*         pParent,
                              const SfxItemSet&  rArgSet );
@@ -107,7 +107,7 @@ class ScTpLayoutOptions : public SfxTabPage
     SvxStringArray  aUnitArr;
 
     DECL_LINK(MetricHdl, void *);
-    DECL_LINK( AlignHdl, CheckBox* );
+    DECL_LINK_TYPED( AlignHdl, Button*, void );
 
     ScDocument *pDoc;
 

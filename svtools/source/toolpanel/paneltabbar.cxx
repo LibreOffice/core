@@ -410,7 +410,7 @@ namespace svt
         }
 
     protected:
-        DECL_LINK( OnScroll, const PushButton* );
+        DECL_LINK_TYPED( OnScroll, Button*, void );
 
         void        impl_calcItemRects();
         Size        impl_calculateItemContentSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent ) const;
@@ -924,8 +924,9 @@ namespace svt
     }
 
 
-    IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
+    IMPL_LINK_TYPED( PanelTabBar_Impl, OnScroll, Button*, pButton, void )
     {
+        PushButton* i_pButton = static_cast<PushButton*>(pButton);
         if ( i_pButton == m_aScrollBack.get() )
         {
             OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Impl::OnScroll: inconsistency!" );
@@ -940,8 +941,6 @@ namespace svt
         }
 
         UpdateScrollButtons();
-
-        return 0L;
     }
 
 

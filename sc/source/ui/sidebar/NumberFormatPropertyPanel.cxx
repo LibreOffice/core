@@ -100,8 +100,8 @@ void NumberFormatPropertyPanel::Initialize()
     mpEdDecimals->SetAccessibleName(OUString( "Decimal Places"));
     mpEdLeadZeroes->SetAccessibleName(OUString( "Leading Zeroes"));
 
-    mpBtnNegRed->SetClickHdl( aLink );
-    mpBtnThousand->SetClickHdl( aLink );
+    mpBtnNegRed->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
+    mpBtnThousand->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
 
     mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
 }
@@ -118,6 +118,10 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
     return 0L;
 }
 
+IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueClickHdl, Button*, void )
+{
+    NumFormatValueHdl(nullptr);
+}
 IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl )
 {
     OUString      aFormat;

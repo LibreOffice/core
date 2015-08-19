@@ -32,7 +32,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 private:
     VclPtr<PushButton> m_pBtnRemove;
-    DECL_LINK( RemoveHdl, PushButton * );
+    DECL_LINK_TYPED( RemoveHdl, Button *, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SUBTDLG_HXX

@@ -52,7 +52,7 @@ private:
     bool IsValidSeparator(const OUString& rSep) const;
     bool IsValidSeparatorSet() const;
 
-    DECL_LINK( ButtonHdl, Button* );
+    DECL_LINK_TYPED( ButtonHdl, Button*, void );
     DECL_LINK( SepModifyHdl, Edit* );
     DECL_LINK( SepEditOnFocusHdl, Edit* );
 

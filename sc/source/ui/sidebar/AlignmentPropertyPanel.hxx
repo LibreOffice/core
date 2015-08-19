@@ -98,11 +98,11 @@ private:
     SfxBindings*                                mpBindings;
 
     DECL_LINK( MFLeftIndentMdyHdl, void * );
-    DECL_LINK( CBOXMergnCellClkHdl, void * );
-    DECL_LINK( CBOXWrapTextClkHdl, void * );
+    DECL_LINK_TYPED( CBOXMergnCellClkHdl, Button*, void );
+    DECL_LINK_TYPED( CBOXWrapTextClkHdl, Button*, void );
     DECL_LINK( AngleModifiedHdl, void * );
-    DECL_LINK( ClickStackHdl, void * );
-    DECL_LINK( ReferenceEdgeHdl, Control* );
+    DECL_LINK_TYPED( ClickStackHdl, Button*, void );
+    DECL_LINK_TYPED( ReferenceEdgeHdl, Button*, void );
 
     void Initialize();
     static void FormatDegrees(double& dTmp);

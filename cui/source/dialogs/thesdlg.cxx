@@ -340,7 +340,7 @@ void SvxThesaurusDialog::LookUp( const OUString &rText )
     LookUp_Impl();
 }
 
-IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn )
+IMPL_LINK_TYPED( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn, void )
 {
     if (pBtn && aLookUpHistory.size() >= 2)
     {
@@ -349,7 +349,6 @@ IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn )
         aLookUpHistory.pop();
         LookUp_Impl();
     }
-    return 0;
 }
 
 IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
@@ -543,10 +542,9 @@ void SvxThesaurusDialog::dispose()
     SvxStandardDialog::dispose();
 }
 
-IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, /*pBtn*/ )
+IMPL_LINK_NOARG_TYPED( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, void )
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )

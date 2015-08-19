@@ -1087,7 +1087,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
 
 
 
-IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
+IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
 {
     if (
         (!bLandscape && pBtn == m_pLandscapeBtn) ||
@@ -1111,7 +1111,6 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
         SwapFirstValues_Impl( bBorderModified );
         UpdateExample_Impl( true );
     }
-    return 0;
 }
 
 
@@ -1649,12 +1648,11 @@ void SvxPageDescPage::CalcMargin_Impl()
 
 
 
-IMPL_LINK_NOARG(SvxPageDescPage, CenterHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPageDescPage, CenterHdl_Impl, Button*, void)
 {
     m_pBspWin->SetHorz( m_pHorzBox->IsChecked() );
     m_pBspWin->SetVert( m_pVertBox->IsChecked() );
     UpdateExample_Impl();
-    return 0;
 }
 
 void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
@@ -1673,10 +1671,10 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 
 
 
-IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
+IMPL_LINK_TYPED( SvxPageDescPage, RegisterModify, Button*, pBox, void )
 {
     bool bEnable = false;
-    if(pBox->IsChecked())
+    if(static_cast<CheckBox*>(pBox)->IsChecked())
     {
         bEnable = true;
         if(USHRT_MAX == m_pRegisterLB->GetSelectEntryPos())
@@ -1684,7 +1682,6 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
     }
     m_pRegisterFT->Enable( bEnable );
     m_pRegisterLB->Enable( bEnable );
-    return 0;
 }
 
 

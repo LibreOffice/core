@@ -86,7 +86,7 @@ void TextUnderlineControl::initial()
         GetSettings().GetStyleSettings().GetMenuColor() :
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
 
-    Link<> aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
+    Link<Button*,void> aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
     maPBOptions->SetClickHdl(aLink);
 
     maVSUnderline->SetStyle( maVSUnderline->GetStyle()| WB_3DLOOK | WB_NO_DIRECTSELECT );
@@ -126,8 +126,8 @@ void TextUnderlineControl::initial()
     maVSUnderline->SetItemData(10, reinterpret_cast<void*>(UNDERLINE_WAVE));
 
     maVSUnderline->SetColCount();
-    aLink =  LINK( this, TextUnderlineControl, VSSelectHdl ) ;
-    maVSUnderline->SetSelectHdl(aLink);
+    Link<> aLink2 =  LINK( this, TextUnderlineControl, VSSelectHdl ) ;
+    maVSUnderline->SetSelectHdl(aLink2);
 
     maVSUnderline->StartSelection();
     maVSUnderline->Show();
@@ -228,7 +228,7 @@ IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
     return 0L;
 }
 
-IMPL_LINK(TextUnderlineControl, PBClickHdl, PushButton *, pPBtn)
+IMPL_LINK_TYPED(TextUnderlineControl, PBClickHdl, Button *, pPBtn, void)
 {
     if(pPBtn == maPBOptions.get())
     {
@@ -239,7 +239,6 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, PushButton *, pPBtn)
         }
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }
-    return 0;
 }
 
 }}

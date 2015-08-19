@@ -87,14 +87,12 @@ void SchOptionTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
+IMPL_LINK_NOARG_TYPED(SchOptionTabPage, EnableHdl, Button*, void)
 {
     if( m_nAllSeriesAxisIndex == 0 )
         m_pCBAxisSideBySide->Enable( m_pRbtAxis2->IsChecked());
     else if( m_nAllSeriesAxisIndex == 1 )
         m_pCBAxisSideBySide->Enable( m_pRbtAxis1->IsChecked());
-
-    return 0;
 }
 
 VclPtr<SfxTabPage> SchOptionTabPage::Create(vcl::Window* pWindow,

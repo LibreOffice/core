@@ -59,20 +59,24 @@ void SwBreakDlg::Apply()
     }
 }
 
-IMPL_LINK_NOARG(SwBreakDlg, ClickHdl)
+IMPL_LINK_NOARG_TYPED(SwBreakDlg, ClickHdl, Button*, void)
+{
+    CheckEnable();
+}
+
+IMPL_LINK_NOARG(SwBreakDlg, SelectHdl)
 {
     CheckEnable();
     return 0;
 }
 
 // Handler for Change Page Number
-IMPL_LINK( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwBreakDlg, PageNumHdl, Button*, pBox, void )
 {
-    if(pBox->IsChecked())
+    if(static_cast<CheckBox*>(pBox)->IsChecked())
         m_pPageNumEdit->SetValue(1);
     else
         m_pPageNumEdit->SetText(OUString());
-    return 0;
 }
 
 // By changing the Page number the checkbox is checked.
@@ -87,7 +91,7 @@ IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl)
  * checks whether pagenumber nPage is a legal pagenumber (left pages with even
  * numbers etc. for a page template with alternating pages)
  */
-IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwBreakDlg, OkHdl, Button*, void)
 {
     if(m_pPageNumBox->IsChecked()) {
         // In case of differing page descriptions, test validity
@@ -114,11 +118,10 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
         if(!bOk) {
             ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_ILLEGAL_PAGENUM), VCL_MESSAGE_INFO)->Execute();
             m_pPageNumEdit->GrabFocus();
-            return 0;
+            return;
         }
     }
     EndDialog(RET_OK);
-    return 0;
 }
 
 SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
@@ -137,11 +140,11 @@ SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
 
     m_pPageNumEdit->SetAccessibleName(m_pPageNumBox->GetText());
 
-    Link<> aLk = LINK(this,SwBreakDlg,ClickHdl);
+    Link<Button*,void> aLk = LINK(this,SwBreakDlg,ClickHdl);
     m_pPageBtn->SetClickHdl( aLk );
     m_pLineBtn->SetClickHdl( aLk );
     m_pColumnBtn->SetClickHdl( aLk );
-    m_pPageCollBox->SetSelectHdl( aLk );
+    m_pPageCollBox->SetSelectHdl( LINK(this,SwBreakDlg,SelectHdl) );
 
     get<OKButton>("ok")->SetClickHdl(LINK(this,SwBreakDlg,OkHdl));;
     m_pPageNumBox->SetClickHdl(LINK(this,SwBreakDlg,PageNumHdl));

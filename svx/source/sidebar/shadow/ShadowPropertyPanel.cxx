@@ -123,8 +123,7 @@ void ShadowPropertyPanel::Initialize()
     pColorList = static_cast<const SvxColorListItem*>(pItem) ->GetColorList();
     mpLBShadowColor->Fill(pColorList);
     mpShowShadow->SetState( TRISTATE_FALSE );
-    Link<> bLink = LINK(this, ShadowPropertyPanel, ClickShadowHdl );
-    mpShowShadow->SetClickHdl( bLink );
+    mpShowShadow->SetClickHdl( LINK(this, ShadowPropertyPanel, ClickShadowHdl ) );
     Link<> aLink = LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl );
     mpShadowTransMetric->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
     mpLBShadowColor->SetSelectHdl( aLink );
@@ -137,21 +136,18 @@ void ShadowPropertyPanel::Initialize()
     InsertAngleValues();
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl)
+IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
 {
     if( mpShowShadow->GetState() == TRISTATE_FALSE )
     {
         SdrOnOffItem aItem(makeSdrShadowItem(false));
         GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_SHADOW, SfxCallMode::RECORD, &aItem, 0L);
     }
-
     else
     {
         SdrOnOffItem aItem(makeSdrShadowItem(true));
         GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_SHADOW, SfxCallMode::RECORD, &aItem, 0L);
     }
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl)

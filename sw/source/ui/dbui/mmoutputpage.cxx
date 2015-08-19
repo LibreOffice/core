@@ -271,7 +271,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
     if(!rConfigItem.IsMailAvailable())
         m_pSendMailRB->Hide();
 
-    Link<> aLink = LINK(this, SwMailMergeOutputPage, OutputTypeHdl_Impl);
+    Link<Button*,void> aLink = LINK(this, SwMailMergeOutputPage, OutputTypeHdl_Impl);
     m_pSaveStartDocRB->SetClickHdl(aLink);
     m_pSaveMergedDocRB->SetClickHdl(aLink);
     m_pPrintRB->SetClickHdl(aLink);
@@ -392,7 +392,7 @@ bool SwMailMergeOutputPage::canAdvance() const
     return false;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, OutputTypeHdl_Impl, Button*, pButton, void)
 {
     vcl::Window* aControls[] =
     {
@@ -526,19 +526,17 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
     m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB.get() : 0);
 
     SetUpdateMode(false);
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, Button*, pButton, void)
 {
     bool bEnableFromTo = pButton == m_pFromRB;
     m_pFromNF->Enable(bEnableFromTo);
     m_pToFT->Enable(bEnableFromTo);
     m_pToNF->Enable(bEnableFromTo);
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, CopyToHdl_Impl, Button*, pButton, void)
 {
     ScopedVclPtrInstance< SwCopyToDialog > pDlg(pButton);
     pDlg->SetCC(m_sCC );
@@ -548,10 +546,9 @@ IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
         m_sCC =     pDlg->GetCC() ;
         m_sBCC =    pDlg->GetBCC();
     }
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, SaveStartHdl_Impl, Button*, pButton, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pSourceView = rConfigItem.GetSourceView();
@@ -588,13 +585,11 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
 
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwMailMergeOutputPage, SaveCancelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeOutputPage, SaveCancelHdl_Impl, Button*, void)
 {
     m_bCancelSaving = true;
-    return 0;
 }
 
 int SwMailMergeOutputPage::documentStartPageNumber( int document ) const
@@ -641,20 +636,20 @@ int SwMailMergeOutputPage::documentEndPageNumber( int document ) const
     }
 }
 
-IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, SaveOutputHdl_Impl, Button*, pButton, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pTargetView = rConfigItem.GetTargetView();
     OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
-        return 0;
+        return;
 
     if(m_pSaveAsOneRB->IsChecked())
     {
         OUString sFilter;
         const OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
         if (sPath.isEmpty())
-            return 0;
+            return;
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
@@ -699,7 +694,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         OUString sFilter;
         OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
         if (sPath.isEmpty())
-            return 0;
+            return;
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
@@ -805,7 +800,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                     else
                     {
                         xTempDocShell->DoClose();
-                        return 0;
+                        return;
                     }
                 }
                 else
@@ -819,7 +814,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
     }
     m_pWizard->enableButtons(WizardButtonFlags::CANCEL, true);
     m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
-    return 0;
 }
 
 IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
@@ -865,12 +859,12 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeOutputPage, PrintHdl_Impl, Button*, void)
 {
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
     OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
-        return 0;
+        return;
 
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = 0;
@@ -920,16 +914,14 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     pTargetView->SetMailMergeConfigItem(0, 0, false);
     m_pWizard->enableButtons(WizardButtonFlags::CANCEL, true);
     m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, PrinterSetupHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, PrinterSetupHdl_Impl, Button*, pButton, void)
 {
     if( !m_pTempPrinter )
         PrinterChangeHdl_Impl(m_pPrinterLB);
     if(m_pTempPrinter)
         m_pTempPrinter->Setup(pButton);
-    return 0;
 }
 
 IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
@@ -958,7 +950,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwMailMergeOutputPage, SendAsHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, SendAsHdl_Impl, Button*, pButton, void)
 {
     VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton, m_pWizard);
     pDlg->SetBody(m_sBody);
@@ -966,11 +958,10 @@ IMPL_LINK(SwMailMergeOutputPage, SendAsHdl_Impl, PushButton*, pButton)
     {
         m_sBody = pDlg->GetBody();
     }
-    return 0;
 }
 
 // Send documents as e-mail
-IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
 
@@ -978,7 +969,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     SwView* pTargetView = rConfigItem.GetTargetView();
     OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
-        return 0;
+        return;
 
     if(rConfigItem.GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(rConfigItem.GetMailAddress()) )
@@ -993,7 +984,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
 
         if(nRet != RET_OK && nRet != RET_YES)
-            return 0;
+            return;
     }
     //add the documents
     sal_uInt32 nBegin = 0;
@@ -1072,7 +1063,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         pSfxFlt = pFilterContainer->GetFilter4Extension(sExtension, SfxFilterFlags::EXPORT);
 
     if(!pSfxFlt)
-        return 0;
+        return;
     OUString sMimeType = pSfxFlt->GetMimeType();
 
     if(m_pSubjectED->GetText().isEmpty())
@@ -1087,7 +1078,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 m_pSubjectED->SetText(aQuery->GetValue());
         }
         else
-            return 0;
+            return;
     }
     if(!bAsBody && m_pAttachmentED->GetText().isEmpty())
     {
@@ -1108,7 +1099,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             m_pAttachmentED->SetText(sAttach);
         }
         else
-            return 0;
+            return;
     }
     SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName() );
     OUString sEMailColumn = m_pMailToLB->GetSelectEntry();
@@ -1116,7 +1107,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
     Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
     if(sEMailColumn.isEmpty() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
-        return 0;
+        return;
 
     OUString sFilterOptions;
     if(MM_DOCTYPE_TEXT == nDocType)
@@ -1309,9 +1300,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     ::osl::File::remove( sTargetTempURL );
 
     m_pWizard->enableButtons(WizardButtonFlags::FINISH, true);
-    //the dialog deletes itself
-    //delete pDlg;
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

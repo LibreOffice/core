@@ -189,11 +189,11 @@ private:
 
     bool                bOnly3DChanged;
 
-    DECL_LINK( ClickViewTypeHdl, void * );
-    DECL_LINK( ClickUpdateHdl, void * );
-    DECL_LINK( ClickAssignHdl, void * );
-    DECL_LINK( ClickHdl, PushButton * );
-    DECL_LINK( ClickColorHdl, PushButton * );
+    DECL_LINK_TYPED( ClickViewTypeHdl, Button*, void );
+    DECL_LINK_TYPED( ClickUpdateHdl, Button*, void );
+    DECL_LINK_TYPED( ClickAssignHdl, Button*, void );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
+    DECL_LINK_TYPED( ClickColorHdl, Button*, void );
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( ModifyHdl, void * );
     void ClickLight(PushButton &rBtn);

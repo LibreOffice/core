@@ -726,18 +726,17 @@ IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )
     return 1;
 }
 
-IMPL_LINK_NOARG( ClientBox, DeauthoriseHdl )
+IMPL_LINK_NOARG_TYPED( ClientBox, DeauthoriseHdl, Button*, void )
 {
     long aSelected = GetActiveEntryIndex();
     if ( aSelected < 0 )
-        return 1;
+        return;
     TClientBoxEntry aEntry = GetEntryData(aSelected);
 
 #ifdef ENABLE_SDREMOTE
     RemoteServer::deauthoriseClient( aEntry->m_pClientInfo );
 #endif
     populateEntries();
-    return 1;
 }
 
 } //namespace dp_gui

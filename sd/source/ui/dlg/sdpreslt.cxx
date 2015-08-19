@@ -177,13 +177,13 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
 /**
  * Click handler for load button
  */
-IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
+IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
 {
     VclPtrInstance< SfxNewFileDialog > pDlg(this, SFXWB_PREVIEW);
     pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())
-        return 0;
+        return;
 
     sal_uInt16 nResult = pDlg->Execute();
     // Inserted update to force repaint
@@ -283,8 +283,6 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             }
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

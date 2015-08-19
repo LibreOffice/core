@@ -104,7 +104,7 @@ namespace dbaui
         m_pJavaDriver->SetModifyHdl(getControlModifiedLink());
         m_pJavaDriver->SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
         m_pUserName->SetModifyHdl(getControlModifiedLink());
-        m_pPasswordRequired->SetClickHdl(getControlModifiedLink());
+        m_pPasswordRequired->SetClickHdl(getControlModifiedClickLink());
 
         m_pTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
         m_pTestJavaDriver->SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
@@ -288,7 +288,7 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    IMPL_LINK(OConnectionTabPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OConnectionTabPage, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
@@ -311,7 +311,6 @@ namespace dbaui
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
         ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg->Execute();
-        return 0L;
     }
     bool OConnectionTabPage::checkTestConnection()
     {

@@ -34,14 +34,13 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
-IMPL_STATIC_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
+IMPL_STATIC_LINK_NOARG_TYPED(SwWordCountFloatDlg, CloseHdl, Button*, void)
 {
     SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
     if (pVFrame != NULL)
     {
         pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
     }
-    return 0;
 }
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()

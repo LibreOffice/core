@@ -395,7 +395,10 @@ namespace dbp
     {
         PushButton* pSimulateButton = m_pExistFields == _pList ? m_pSelectOne : m_pDeselectOne;
         if (pSimulateButton->IsEnabled())
-            return OnMoveOneEntry( pSimulateButton );
+        {
+            OnMoveOneEntry( pSimulateButton );
+            return 0;
+        }
         else
             return 1L;
     }
@@ -408,7 +411,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, PushButton*, _pButton)
+    IMPL_LINK_TYPED(OGridFieldsSelection, OnMoveOneEntry, Button*, _pButton, void)
     {
         bool bMoveRight = (m_pSelectOne == _pButton);
         ListBox& rMoveTo = bMoveRight ? *m_pSelFields : *m_pExistFields;
@@ -459,11 +462,10 @@ namespace dbp
         }
 
         implCheckButtons();
-        return 0;
     }
 
 
-    IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, PushButton*, _pButton)
+    IMPL_LINK_TYPED(OGridFieldsSelection, OnMoveAllEntries, Button*, _pButton, void)
     {
         bool bMoveRight = (m_pSelectAll == _pButton);
         m_pExistFields->Clear();
@@ -471,7 +473,6 @@ namespace dbp
         fillListBox(bMoveRight ? *m_pSelFields : *m_pExistFields, getContext().aFieldNames);
 
         implCheckButtons();
-        return 0;
     }
 
 

@@ -107,11 +107,11 @@ void OCollectionView::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(OCollectionView, Save_Click)
+IMPL_LINK_NOARG_TYPED(OCollectionView, Save_Click, Button*, void)
 {
     OUString sName = m_pName->GetText();
     if ( sName.isEmpty() )
-        return 0;
+        return;
     try
     {
         OUString sSubFolder = m_pView->GetCurrentURL();
@@ -170,7 +170,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                     pRequest->addContinuation(pApprove);
                     xHandler->handle(xRequest);
 
-                    return 0;
+                    return;
                 }
             }
         }
@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
             {
                 ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
                 if ( aBox->Execute() != RET_YES )
-                    return 0;
+                    return;
             }
             m_pName->SetText(sName);
             EndDialog( RET_OK );
@@ -192,10 +192,9 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
+IMPL_LINK_NOARG_TYPED(OCollectionView, NewFolder_Click, Button*, void)
 {
     try
     {
@@ -211,10 +210,9 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(OCollectionView, Up_Click)
+IMPL_LINK_NOARG_TYPED(OCollectionView, Up_Click, Button*, void)
 {
     try
     {
@@ -236,7 +234,6 @@ IMPL_LINK_NOARG(OCollectionView, Up_Click)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)

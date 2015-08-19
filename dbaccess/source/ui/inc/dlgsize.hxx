@@ -37,7 +37,7 @@ namespace dbaui
         void            SetValue( sal_Int32 nVal );
 
     protected:
-        DECL_LINK( CbClickHdl, Button * );
+        DECL_LINK_TYPED( CbClickHdl, Button *, void );
 
         VclPtr<MetricField>    m_pMF_VALUE;
         VclPtr<CheckBox>       m_pCB_STANDARD;

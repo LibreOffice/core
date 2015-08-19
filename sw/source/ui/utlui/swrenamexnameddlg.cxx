@@ -86,7 +86,7 @@ void SwRenameXNamedDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwRenameXNamedDlg, OkHdl, Button*, void)
 {
     try
     {
@@ -97,7 +97,6 @@ IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)
         OSL_FAIL("name wasn't changed");
     }
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, Edit*, pEdit)

@@ -127,7 +127,7 @@ void CancelableDialog::dispose()
     Dialog::dispose();
 }
 
-void CancelableDialog::SetCancelHdl( const Link<>& rLink )
+void CancelableDialog::SetCancelHdl( const Link<Button*,void>& rLink )
 {
     m_pCancelButton->SetClickHdl( rLink );
 }

@@ -161,8 +161,8 @@ private:
 
     DECL_LINK(selectionHandler, void *);
     DECL_LINK(allHandler, void *);
-    DECL_LINK(okHandler, void *);
-    DECL_LINK(closeHandler, void *);
+    DECL_LINK_TYPED(okHandler, Button*, void);
+    DECL_LINK_TYPED(closeHandler, Button*, void);
     DECL_LINK(hyperlink_clicked, FixedHyperlink *);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >

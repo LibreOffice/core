@@ -56,7 +56,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     SfxRequest&     rReq;
 
     DECL_LINK(ModifyHdl, BookmarkCombo *);
-    DECL_LINK(DeleteHdl, void *);
+    DECL_LINK_TYPED(DeleteHdl, Button*, void);
 
     virtual void Apply() SAL_OVERRIDE;
 

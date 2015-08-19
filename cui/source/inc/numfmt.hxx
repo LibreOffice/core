@@ -149,13 +149,16 @@ private:
     void    MakePreviewText( const OUString& rFormat );
     void    ChangePreviewText( sal_uInt16 nPos );
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
+    bool    Click_Impl(PushButton* pIB);
     // Handler
     DECL_LINK( LostFocusHdl_Impl, Edit* );
     DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* );
     DECL_LINK( SelFormatHdl_Impl, void * );
-    DECL_LINK( ClickHdl_Impl, PushButton* );
+    DECL_LINK_TYPED( SelFormatClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
     DECL_LINK( EditHdl_Impl, Edit* );
     DECL_LINK( OptHdl_Impl, void * );
+    DECL_LINK_TYPED( OptClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED(TimeHdl_Impl, Timer *, void);
 };
 

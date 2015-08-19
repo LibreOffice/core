@@ -650,7 +650,7 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
+IMPL_LINK_TYPED( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
 {
     if ( pButton == m_pCloseButton )
     {
@@ -670,7 +670,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
             SFEntry* userData = 0;
             if ( !pEntry )
             {
-                return 0;
+                return;
             }
             userData = static_cast<SFEntry*>(pEntry->GetUserData());
             if ( userData )
@@ -683,7 +683,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
 
                 if ( !node.is() )
                 {
-                    return 0;
+                    return;
                 }
 
                 if ( pButton == m_pRunButton )
@@ -693,7 +693,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     Reference< provider::XScriptProvider > mspNode;
                     if( !xProp.is() )
                     {
-                        return 0;
+                        return;
                     }
 
                     if ( xModel.is() )
@@ -701,13 +701,13 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         Reference< XEmbeddedScripts >  xEmbeddedScripts( xModel, UNO_QUERY);
                         if( !xEmbeddedScripts.is() )
                         {
-                            return 0;
+                            return;
                         }
 
                         if (!xEmbeddedScripts->getAllowMacroExecution())
                         {
                             // Please FIXME: Show a message box if AllowMacroExecution is false
-                            return 0;
+                            return;
                         }
                     }
 
@@ -796,7 +796,6 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
             }
         }
     }
-    return 0;
 }
 
 Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvTreeListEntry* pEntry )

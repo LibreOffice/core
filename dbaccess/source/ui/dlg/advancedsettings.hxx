@@ -91,6 +91,7 @@ namespace dbaui
 
     private:
         void    impl_initBooleanSettings();
+        DECL_LINK(ClickHdl, Button*);
     };
 
     // GeneratedValuesPage

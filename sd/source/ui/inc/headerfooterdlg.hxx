@@ -38,9 +38,9 @@ class HeaderFooterDialog : public TabDialog
 {
 private:
     DECL_LINK( ActivatePageHdl, TabControl * );
-    DECL_LINK( ClickApplyToAllHdl, void * );
-    DECL_LINK( ClickApplyHdl, void * );
-    DECL_LINK( ClickCancelHdl, void * );
+    DECL_LINK_TYPED( ClickApplyToAllHdl, Button*, void );
+    DECL_LINK_TYPED( ClickApplyHdl, Button*, void );
+    DECL_LINK_TYPED( ClickCancelHdl, Button*, void );
 
     VclPtr<TabControl>      mpTabCtrl;
 

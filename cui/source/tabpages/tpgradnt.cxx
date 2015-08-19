@@ -306,14 +306,14 @@ long SvxGradientTabPage::CheckChanges_Impl()
             {
                 case RET_BTN_1:
                 {
-                    ClickModifyHdl_Impl( this );
+                    ClickModifyHdl_Impl( NULL );
                     aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
 
                 case RET_BTN_2:
                 {
-                    ClickAddHdl_Impl( this );
+                    ClickAddHdl_Impl( NULL );
                     nPos = m_pLbGradients->GetSelectEntryPos();
                     aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
                 }
@@ -430,7 +430,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 
 
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
@@ -528,12 +528,11 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
 
@@ -596,12 +595,11 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
         }
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
 
@@ -629,12 +627,11 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -735,12 +732,11 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return 0L;
 }
 
 
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -804,8 +800,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
                           ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }
     }
-
-    return 0L;
 }
 
 

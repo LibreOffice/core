@@ -284,12 +284,10 @@ bool XMLFilterTabDialog::onOk()
 
 
 
-IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
+IMPL_LINK_NOARG_TYPED(XMLFilterTabDialog, OkHdl, Button*, void)
 {
     if( onOk() )
         EndDialog(1);
-
-    return 0;
 }
 
 

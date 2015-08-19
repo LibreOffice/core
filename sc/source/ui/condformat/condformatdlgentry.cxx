@@ -1286,7 +1286,7 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl )
     return 0;
 }
 
-IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
+IMPL_LINK_NOARG_TYPED( ScDataBarFrmtEntry, OptionBtnHdl, Button*, void )
 {
     SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
@@ -1298,7 +1298,6 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
         SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc);
         DataBarTypeSelectHdl(NULL);
     }
-    return 0;
 }
 
 ScDateFrmtEntry::ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat ):

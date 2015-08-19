@@ -293,7 +293,7 @@ void OSaveAsDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
+IMPL_LINK_TYPED(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
 {
     if (pButton == m_pImpl->m_pPB_OK)
     {
@@ -320,7 +320,6 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
         showError( aNameError, this, m_xContext );
         m_pImpl->m_pTitle->GrabFocus();
     }
-    return 0;
 }
 
 IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )

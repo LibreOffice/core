@@ -85,16 +85,16 @@ private:
 
     void UpdateLook();
 
-    DECL_LINK( ApplyToAllButtonClicked, void * );
-    DECL_LINK( PlayButtonClicked, void * );
-    DECL_LINK( AutoPreviewClicked, void * );
+    DECL_LINK_TYPED( ApplyToAllButtonClicked, Button*, void );
+    DECL_LINK_TYPED( PlayButtonClicked, Button*, void );
+    DECL_LINK_TYPED( AutoPreviewClicked, Button*, void );
 
     DECL_LINK( TransitionSelected, void * );
     DECL_LINK( AdvanceSlideRadioButtonToggled, void * );
     DECL_LINK( AdvanceTimeModified, void * );
     DECL_LINK( SpeedListBoxSelected, void * );
     DECL_LINK( SoundListBoxSelected, void * );
-    DECL_LINK( LoopSoundBoxChecked, void * );
+    DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
     DECL_LINK_TYPED(LateInitCallback, Timer *, void);
 

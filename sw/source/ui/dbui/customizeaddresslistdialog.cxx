@@ -40,11 +40,11 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     get(m_pDownPB, "down");
 
     m_pFieldsLB->SetSelectHdl(LINK(this, SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl));
-    Link<> aAddRenameLk = LINK(this, SwCustomizeAddressListDialog, AddRenameHdl_Impl );
+    Link<Button*,void> aAddRenameLk = LINK(this, SwCustomizeAddressListDialog, AddRenameHdl_Impl );
     m_pAddPB->SetClickHdl(aAddRenameLk);
     m_pRenamePB->SetClickHdl(aAddRenameLk);
     m_pDeletePB->SetClickHdl(LINK(this, SwCustomizeAddressListDialog, DeleteHdl_Impl ));
-    Link<> aUpDownLk = LINK(this, SwCustomizeAddressListDialog, UpDownHdl_Impl);
+    Link<Button*,void> aUpDownLk = LINK(this, SwCustomizeAddressListDialog, UpDownHdl_Impl);
     m_pUpPB->SetClickHdl(aUpDownLk);
     m_pDownPB->SetClickHdl(aUpDownLk);
 
@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl)
     return 0;
 }
 
-IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, void)
 {
     bool bRename = pButton == m_pRenamePB;
     sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
@@ -124,10 +124,9 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         m_pFieldsLB->SelectEntryPos(nPos);
     }
     UpdateButtons();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCustomizeAddressListDialog, DeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
     m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectEntryPos());
@@ -141,10 +140,9 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
         aDataIter->erase(aDataIter->begin() + nPos);
 
     UpdateButtons();
-    return 0;
 }
 
-IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwCustomizeAddressListDialog, UpDownHdl_Impl, Button*, pButton, void)
 {
     sal_Int32 nPos;
     sal_Int32 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
@@ -169,7 +167,6 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
     }
 
     UpdateButtons();
-    return 0;
 }
 
 void SwCustomizeAddressListDialog::UpdateButtons()

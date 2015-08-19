@@ -184,7 +184,7 @@ class SvxScriptSelectorDialog : public ModelessDialog
     bool                        m_bShowSlots;
     Link<>                          m_aAddHdl;
 
-    DECL_LINK( ClickHdl, Button * );
+    DECL_LINK_TYPED( ClickHdl, Button *, void );
     DECL_LINK( SelectHdl, Control* );
     DECL_LINK( FunctionDoubleClickHdl, Control* );
 

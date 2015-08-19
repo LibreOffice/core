@@ -350,9 +350,9 @@ namespace svt
         TabPage* GetOrCreatePage( const WizardState i_nState );
 
     private:
-        DECL_DLLPRIVATE_LINK(OnNextPage, void*);
-        DECL_DLLPRIVATE_LINK(OnPrevPage, void*);
-        DECL_DLLPRIVATE_LINK(OnFinish, void*);
+        DECL_DLLPRIVATE_LINK_TYPED(OnNextPage, Button*, void);
+        DECL_DLLPRIVATE_LINK_TYPED(OnPrevPage, Button*, void);
+        DECL_DLLPRIVATE_LINK_TYPED(OnFinish, Button*, void);
 
         SVT_DLLPRIVATE void     implResetDefault(vcl::Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();

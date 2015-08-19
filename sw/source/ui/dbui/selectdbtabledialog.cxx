@@ -157,7 +157,7 @@ void SwSelectDBTableDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwSelectDBTableDialog, PreviewHdl, Button*, pButton, void)
 {
     SvTreeListEntry* pEntry = m_pTable->FirstSelected();
     if(pEntry)
@@ -190,8 +190,6 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
         VclPtrInstance< SwDBTablePreviewDialog > pDlg(pButton, aProperties);
         pDlg->Execute();
     }
-
-    return 0;
 }
 
 OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)

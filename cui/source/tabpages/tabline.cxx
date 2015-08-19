@@ -183,12 +183,11 @@ short SvxLineTabDialog::Ok()
 
 
 
-IMPL_LINK_NOARG(SvxLineTabDialog, CancelHdlImpl)
+IMPL_LINK_NOARG_TYPED(SvxLineTabDialog, CancelHdlImpl, Button*, void)
 {
     SavePalettes();
 
     EndDialog();
-    return 0;
 }
 
 void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

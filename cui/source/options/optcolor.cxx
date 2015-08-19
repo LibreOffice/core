@@ -179,7 +179,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 public:
-    void SetLinks (Link<> const&, Link<> const&, Link<> const&);
+    void SetLinks (Link<Button*,void> const&, Link<> const&, Link<> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
@@ -221,7 +221,7 @@ private:
         void SetAppearance(Wallpaper const& aTextWall, ColorListBox const& aSampleList);
         void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
-        void SetLinks (Link<> const&, Link<> const&, Link<> const&);
+        void SetLinks (Link<Button*,void> const&, Link<> const&, Link<> const&);
         void Update (ColorConfigEntry, ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigEntry, ColorConfigValue&);
@@ -416,7 +416,7 @@ void ColorConfigWindow_Impl::Entry::SetAppearance(
 
 // SetLinks()
 void ColorConfigWindow_Impl::Entry::SetLinks(
-    Link<> const& aCheckLink, Link<> const& aColorLink,
+    Link<Button*,void> const& aCheckLink, Link<> const& aColorLink,
     Link<> const& aGetFocusLink)
 {
     m_pColorList->SetSelectHdl(aColorLink);
@@ -691,7 +691,7 @@ void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
 
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks (
-    Link<> const& aCheckLink, Link<> const& aColorLink, Link<> const& aGetFocusLink
+    Link<Button*,void> const& aCheckLink, Link<> const& aColorLink, Link<> const& aGetFocusLink
 ) {
     for (unsigned i = 0; i != vEntries.size(); ++i)
         vEntries[i]->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
@@ -847,7 +847,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     EditableExtendedColorConfig*    pExtColorConfig;
 
     DECL_LINK(ScrollHdl, ScrollBar*);
-    DECL_LINK(ClickHdl, CheckBox*);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK(ColorHdl, ColorListBox*);
     DECL_LINK(ControlFocusHdl, Control*);
 
@@ -901,7 +901,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     m_pVScroll->SetScrollHdl(aScrollLink);
     m_pVScroll->SetEndScrollHdl(aScrollLink);
 
-    Link<> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
+    Link<Button*,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
     Link<> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
     Link<> aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_pScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
@@ -1002,11 +1002,10 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
+IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ClickHdl, Button*, pBox, void)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set");
-    m_pScrollWindow->ClickHdl(pColorConfig, pBox);
-    return 0;
+    m_pScrollWindow->ClickHdl(pColorConfig, static_cast<CheckBox*>(pBox));
 }
 
 // a color list has changed
@@ -1071,7 +1070,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
         get<vcl::Window>("preview")->GetText());
 
     m_pColorSchemeLB->SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
-    Link<> aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
+    Link<Button*,void> aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
     m_pSaveSchemePB->SetClickHdl(aLk);
     m_pDeleteSchemePB->SetClickHdl(aLk);
 }
@@ -1188,7 +1187,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
+IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
 {
     if (m_pSaveSchemePB == pButton)
     {
@@ -1230,7 +1229,6 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
         }
     }
     m_pDeleteSchemePB->Enable( m_pColorSchemeLB->GetEntryCount() > 1 );
-    return 0;
 }
 
 IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDialog )

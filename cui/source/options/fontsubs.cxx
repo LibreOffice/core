@@ -89,15 +89,16 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
 
     aTextColor = m_pCheckLB->GetTextColor();
     Link<> aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
+    Link<Button*,void> aClickLink(LINK(this, SvxFontSubstTabPage, ClickHdl));
 
     m_pCheckLB->SetSelectHdl(aLink);
-    m_pUseTableCB->SetClickHdl(aLink);
+    m_pUseTableCB->SetClickHdl(aClickLink);
     m_pFont1CB->SetSelectHdl(aLink);
     m_pFont1CB->SetModifyHdl(aLink);
     m_pFont2CB->SetSelectHdl(aLink);
     m_pFont2CB->SetModifyHdl(aLink);
-    m_pApply->SetClickHdl(aLink);
-    m_pDelete->SetClickHdl(aLink);
+    m_pApply->SetClickHdl(aClickLink);
+    m_pDelete->SetClickHdl(aClickLink);
 
     m_pNonPropFontsOnlyCB->SetClickHdl(LINK(this, SvxFontSubstTabPage, NonPropFontsHdl));
 
@@ -256,6 +257,11 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_pFontHeightLB->SaveValue();
 }
 
+IMPL_LINK_TYPED(SvxFontSubstTabPage, ClickHdl, Button*, pButton, void)
+{
+    SelectHdl(pButton);
+}
+
 IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
 {
     if (pWin == m_pApply || pWin == m_pDelete)
@@ -333,10 +339,10 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
 }
 
 
-IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
 {
     OUString sFontName = m_pFontNameLB->GetSelectEntry();
-    bool bNonPropOnly = pBox->IsChecked();
+    bool bNonPropOnly = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pFontNameLB->Clear();
     FontList aFntLst( Application::GetDefaultDevice() );
     m_pFontNameLB->InsertEntry(m_sAutomatic);
@@ -348,7 +354,6 @@ IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
             m_pFontNameLB->InsertEntry(rInfo.GetName());
     }
     m_pFontNameLB->SelectEntry(sFontName);
-    return 0;
 }
 
 void SvxFontSubstTabPage::CheckEnable()

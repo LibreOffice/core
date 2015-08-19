@@ -57,7 +57,7 @@ class OPasswordDialog : public ModalDialog
     VclPtr<Edit>     m_pEDPasswordRepeat;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK( OKHdl_Impl, void * );
+    DECL_LINK_TYPED( OKHdl_Impl, Button*, void );
     DECL_LINK( ModifiedHdl, Edit * );
 
 public:
@@ -95,7 +95,7 @@ OPasswordDialog::OPasswordDialog(vcl::Window* _pParent,const OUString& _sUserNam
     m_pEDOldPassword->SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
 }
 
-IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(OPasswordDialog, OKHdl_Impl, Button*, void)
 {
     if( m_pEDPassword->GetText() == m_pEDPasswordRepeat->GetText() )
         EndDialog( RET_OK );
@@ -108,7 +108,6 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
         m_pEDPasswordRepeat->SetText( OUString() );
         m_pEDPassword->GrabFocus();
     }
-    return 0;
 }
 
 IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
@@ -207,7 +206,7 @@ VclPtr<SfxTabPage> OUserAdmin::Create( vcl::Window* pParent, const SfxItemSet* _
     return VclPtr<OUserAdmin>::Create( pParent, *_rAttrSet );
 }
 
-IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
+IMPL_LINK_TYPED( OUserAdmin, UserHdl, Button *, pButton, void )
 {
     try
     {
@@ -270,14 +269,10 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
     catch(const SQLException& e)
     {
         ::dbaui::showError(::dbtools::SQLExceptionInfo(e), this, m_xORB);
-        return 0;
     }
     catch(Exception& )
     {
-        return 0;
     }
-
-    return 0;
 }
 
 IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )

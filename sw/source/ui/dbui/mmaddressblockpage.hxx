@@ -63,13 +63,13 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK(AddressListHdl_Impl, void *);
-    DECL_LINK(SettingsHdl_Impl, PushButton*);
-    DECL_LINK(AssignHdl_Impl, PushButton*);
-    DECL_LINK(AddressBlockHdl_Impl, CheckBox*);
-    DECL_LINK(InsertDataHdl_Impl, ImageButton*);
+    DECL_LINK_TYPED(AddressListHdl_Impl, Button *, void);
+    DECL_LINK_TYPED(SettingsHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(AddressBlockHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(InsertDataHdl_Impl, Button*, void);
     DECL_LINK(AddressBlockSelectHdl_Impl, void *);
-    DECL_LINK(HideParagraphsHdl_Impl, CheckBox*);
+    DECL_LINK_TYPED(HideParagraphsHdl_Impl, Button*, void);
 
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
@@ -99,9 +99,9 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     com::sun::star::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
-    DECL_LINK(NewCustomizeHdl_Impl, PushButton*);
-    DECL_LINK(DeleteHdl_Impl, PushButton*);
-    DECL_LINK(IncludeHdl_Impl, RadioButton*);
+    DECL_LINK_TYPED(NewCustomizeHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DeleteHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(IncludeHdl_Impl, Button*, void);
 
     using Window::SetSettings;
 
@@ -220,10 +220,10 @@ private:
     SwMailMergeConfigItem&  m_rConfigItem;
     DialogType              m_eType;
 
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     DECL_LINK(ListBoxSelectHdl_Impl, DDListBox*);
     DECL_LINK(EditModifyHdl_Impl, void *);
-    DECL_LINK(ImageButtonHdl_Impl, ImageButton*);
+    DECL_LINK_TYPED(ImageButtonHdl_Impl, Button*, void);
     DECL_LINK(SelectionChangedHdl_Impl, AddressMultiLineEdit*);
     DECL_LINK(FieldChangeHdl_Impl, void *);
 
@@ -257,7 +257,7 @@ class SwAssignFieldsDialog : public SfxModalDialog
     SwMailMergeConfigItem&  m_rConfigItem;
 
     ::com::sun::star::uno::Sequence< OUString > CreateAssignments();
-    DECL_LINK(OkHdl_Impl, void *);
+    DECL_LINK_TYPED(OkHdl_Impl, Button*, void);
     DECL_LINK(AssignmentModifyHdl_Impl, void*);
 
 public:

@@ -59,7 +59,7 @@ void CellLineStyleControl::dispose()
 void CellLineStyleControl::Initialize()
 {
     //maPushButtonMoreOptions->SetIcoPosX(2);
-    Link<> aLink = LINK(this, CellLineStyleControl, PBClickHdl);
+    Link<Button*,void> aLink = LINK(this, CellLineStyleControl, PBClickHdl);
     maPushButtonMoreOptions->SetClickHdl(aLink);
 
     maCellLineStyleValueSet->SetStyle(maCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
@@ -88,8 +88,7 @@ void CellLineStyleControl::Initialize()
     }
 
     SetAllNoSel();
-    aLink = LINK(this, CellLineStyleControl, VSSelectHdl);
-    maCellLineStyleValueSet->SetSelectHdl(aLink);
+    maCellLineStyleValueSet->SetSelectHdl(LINK(this, CellLineStyleControl, VSSelectHdl));
     maCellLineStyleValueSet->StartSelection();
     maCellLineStyleValueSet->Show();
 }
@@ -185,7 +184,7 @@ IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
     return 0L;
 }
 
-IMPL_LINK(CellLineStyleControl, PBClickHdl, PushButton *, pPBtn)
+IMPL_LINK_TYPED(CellLineStyleControl, PBClickHdl, Button *, pPBtn, void)
 {
     if(pPBtn == maPushButtonMoreOptions.get())
     {
@@ -196,8 +195,6 @@ IMPL_LINK(CellLineStyleControl, PBClickHdl, PushButton *, pPBtn)
 
         mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
     }
-
-    return 0;
 }
 
 void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis)

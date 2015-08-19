@@ -173,10 +173,10 @@ public:
     bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK_TYPED( PipetteHdl, ToolBox*, void );
-                DECL_LINK( CbxHdl, CheckBox* );
-                DECL_LINK( CbxTransHdl, CheckBox* );
+                DECL_LINK_TYPED( CbxHdl, Button*, void);
+                DECL_LINK_TYPED( CbxTransHdl, Button*, void );
                 DECL_LINK( FocusLbHdl, ColorLB* );
-                DECL_LINK(ExecHdl, void *);
+                DECL_LINK_TYPED(ExecHdl, Button*, void);
 };
 
 
@@ -199,8 +199,9 @@ IMPL_LINK_TYPED( MaskData, PipetteHdl, ToolBox*, pTbx, void )
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aBItem, 0L );
 }
 
-IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
+IMPL_LINK_TYPED( MaskData, CbxHdl, Button*, pButton, void )
 {
+    CheckBox* pCbx = static_cast<CheckBox*>(pButton);
     bIsReady =  pMask->m_pCbx1->IsChecked() || pMask->m_pCbx2->IsChecked() ||
                 pMask->m_pCbx3->IsChecked() || pMask->m_pCbx4->IsChecked();
 
@@ -229,14 +230,13 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
         pMask->m_pTbxPipette->CheckItem( pMask->m_pTbxPipette->GetItemId(0) );
         PipetteHdl(pMask->m_pTbxPipette);
     }
-
-    return 0;
 }
 
 
 
-IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
+IMPL_LINK_TYPED( MaskData, CbxTransHdl, Button*, pButton, void )
 {
+    CheckBox* pCbx = static_cast<CheckBox*>(pButton);
     bIsReady = pCbx->IsChecked();
     if ( bIsReady )
     {
@@ -292,8 +292,6 @@ IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
         pMask->m_pBtnExec->Enable();
     else
         pMask->m_pBtnExec->Disable();
-
-    return 0L;
 }
 
 
@@ -311,12 +309,10 @@ IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 
 
 
-IMPL_LINK_NOARG(MaskData, ExecHdl)
+IMPL_LINK_NOARG_TYPED(MaskData, ExecHdl, Button*, void)
 {
     SfxBoolItem aBItem( SID_BMPMASK_EXEC, true );
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_EXEC, OWN_CALLMODE, &aBItem, 0L );
-
-    return 0L;
 }
 
 void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& /*Rect*/)

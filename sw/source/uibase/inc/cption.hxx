@@ -96,8 +96,8 @@ class SwCaptionDialog : public SvxStandardDialog
 
     DECL_LINK(SelectHdl, void *);
     DECL_LINK(ModifyHdl, void *);
-    DECL_LINK(OptionHdl, Button *);
-    DECL_LINK(CaptionHdl, void *);
+    DECL_LINK_TYPED(OptionHdl, Button *, void);
+    DECL_LINK_TYPED(CaptionHdl, Button *, void);
 
     virtual void Apply() SAL_OVERRIDE;
 

@@ -47,7 +47,7 @@ public:
     ScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
     virtual ~ScSortWarningDlg();
     virtual void dispose() SAL_OVERRIDE;
-    DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK_TYPED( BtnHdl, Button*, void );
 private:
     VclPtr<FixedText>       aFtText;
     VclPtr<PushButton>      aBtnExtSort;

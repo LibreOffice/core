@@ -50,9 +50,9 @@ class SwMailConfigPage : public SfxTabPage
 
     SwMailMergeConfigItem*  m_pConfigItem;
 
-    DECL_LINK(ReplyToHdl, CheckBox*);
-    DECL_LINK(AuthenticationHdl, void *);
-    DECL_LINK(TestHdl, void *);
+    DECL_LINK_TYPED(ReplyToHdl, Button*, void);
+    DECL_LINK_TYPED(AuthenticationHdl, Button*, void);
+    DECL_LINK_TYPED(TestHdl, Button*, void);
 
 public:
     SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet );

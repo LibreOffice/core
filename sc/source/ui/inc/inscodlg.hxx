@@ -100,9 +100,9 @@ private:
     void TestModes();
 
     // Handler
-    DECL_LINK( InsAllHdl, void* );
-    DECL_LINK( LinkBtnHdl, void* );
-    DECL_LINK( ShortCutHdl, PushButton* );
+    DECL_LINK_TYPED( InsAllHdl, Button*, void );
+    DECL_LINK_TYPED( LinkBtnHdl, Button*, void );
+    DECL_LINK_TYPED( ShortCutHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSCODLG_HXX

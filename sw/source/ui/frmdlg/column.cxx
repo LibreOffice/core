@@ -293,7 +293,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwColumnDlg, OkHdl, Button*, void)
 {
     // evaluate current selection
     SfxItemSet* pSet = 0;
@@ -371,7 +371,6 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         rWrtShell.EndAction();
     }
     EndDialog(RET_OK);
-    return 0;
 }
 
 #if OSL_DEBUG_LEVEL < 2
@@ -1076,8 +1075,9 @@ IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricField )
 
 // Handler behind the Checkbox for automatic width. When the box is checked
 // no expicit values for the column width can be entered.
-IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwColumnPage, AutoWidthHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
     pColMgr->SetCount(nCols, (sal_uInt16)nDist);
     for(sal_uInt16 i = 0; i < nCols; i++)
@@ -1090,11 +1090,10 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
     pColMgr->SetAutoWidth(pBox->IsChecked(), sal_uInt16(nDist));
     UpdateCols();
     Update(NULL);
-    return 0;
 }
 
 // scroll up the contents of the edits
-IMPL_LINK_NOARG(SwColumnPage, Up)
+IMPL_LINK_NOARG_TYPED(SwColumnPage, Up, Button*, void)
 {
     if( nFirstVis )
     {
@@ -1102,11 +1101,10 @@ IMPL_LINK_NOARG(SwColumnPage, Up)
         SetLabels( nFirstVis );
         Update(NULL);
     }
-    return 0;
 }
 
 // scroll down the contents of the edits.
-IMPL_LINK_NOARG(SwColumnPage, Down)
+IMPL_LINK_NOARG_TYPED(SwColumnPage, Down, Button*, void)
 {
     if( nFirstVis + nVisCols < nCols )
     {
@@ -1114,7 +1112,6 @@ IMPL_LINK_NOARG(SwColumnPage, Down)
         SetLabels( nFirstVis );
         Update(NULL);
     }
-    return 0;
 }
 
 // relict from ancient times - now directly without time handler; triggered by

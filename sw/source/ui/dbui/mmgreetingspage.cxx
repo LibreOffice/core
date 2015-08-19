@@ -79,7 +79,7 @@ static void lcl_StoreGreetingsBox(ComboBox& rBox,
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
 }
 
-IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
 {
     bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
     m_pFemaleFT->Enable(bIndividual);
@@ -101,10 +101,9 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
         m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
     UpdatePreview();
-    return 0;
 }
 
-IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
 {
     VclPtr<SwCustomizeAddressBlockDialog> pDlg(
             VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem(),
@@ -122,7 +121,6 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
         }
         UpdatePreview();
     }
-    return 0;
 }
 
 void    SwGreetingsHandler::UpdatePreview()
@@ -130,7 +128,7 @@ void    SwGreetingsHandler::UpdatePreview()
     //the base class does nothing
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void)
 {
     const OUString sPreview(m_pFemaleLB->GetSelectEntry() + "\n" + m_pMaleLB->GetSelectEntry());
     VclPtr<SwAssignFieldsDialog> pDlg(
@@ -141,7 +139,6 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
         m_pWizard->UpdateRoadmap();
         m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl)
@@ -258,9 +255,9 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_bIsTabPage = true;
 
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
-    Link<> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_pPersonalizedCB->SetClickHdl(aIndividualLink);
-    Link<> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
+    Link<Button*,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
     m_pAssignPB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, AssignHdl_Impl));
@@ -273,7 +270,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     m_pNeutralCB->SetSelectHdl(aLBoxLink);
     m_pNeutralCB->SetModifyHdl(aLBoxLink);
 
-    Link<> aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
+    Link<Button*,void> aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
     m_pPrevSetIB->SetClickHdl(aDataLink);
     m_pNextSetIB->SetClickHdl(aDataLink);
 
@@ -363,9 +360,9 @@ bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason 
     return true;
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwMailMergeGreetingsPage, ContainsHdl_Impl, Button*, pBox, void)
 {
-    bool bContainsGreeting = pBox->IsChecked();
+    bool bContainsGreeting = static_cast<CheckBox*>(pBox)->IsChecked();
     SwGreetingsHandler::Contains(bContainsGreeting);
     m_pPreviewFI-> Enable(bContainsGreeting);
     m_pPreviewWIN->Enable(bContainsGreeting);
@@ -376,10 +373,9 @@ IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     rConfig.SetGreetingLine(m_pGreetingLineCB->IsChecked(), false);
     m_pWizard->UpdateRoadmap();
-    return 0;
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
+IMPL_LINK_TYPED(SwMailMergeGreetingsPage, InsertDataHdl_Impl, Button*, pButton, void)
 {
     //if no pButton is given, the first set has to be pre-set
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
@@ -406,7 +402,6 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
     m_pNextSetIB->Enable(bEnable);
     m_pDocumentIndexFI->Enable(bEnable);
     m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
-    return 0;
 }
 
 SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWizard) :
@@ -447,9 +442,9 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWi
     m_pNeutralCB->SetHelpId(        HID_MM_BODY_CB_NEUTRAL          );
 
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
-    Link<> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_pPersonalizedCB->SetClickHdl(aIndividualLink);
-    Link<> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
+    Link<Button*,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
     m_pFemalePB->SetClickHdl(aGreetingLink);
     m_pMalePB->SetClickHdl(aGreetingLink);
     m_pOK->SetClickHdl(LINK(this, SwMailBodyDialog, OKHdl));
@@ -495,14 +490,14 @@ void SwMailBodyDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED(SwMailBodyDialog, ContainsHdl_Impl, Button*, pButton, void)
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     SwGreetingsHandler::Contains(pBox->IsChecked());
     m_pWizard->GetConfigItem().SetGreetingLine(pBox->IsChecked(), true);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwMailBodyDialog, OKHdl, Button*, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetGreetingLine(
@@ -527,7 +522,6 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
         rConfigItem.SetFemaleGenderValue(m_pFemaleFieldCB->GetText());
 
     EndDialog(RET_OK);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

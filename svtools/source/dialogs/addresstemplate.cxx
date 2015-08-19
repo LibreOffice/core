@@ -1155,7 +1155,7 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    IMPL_LINK_NOARG(AddressBookSourceDialog, OnOkClicked)
+    IMPL_LINK_NOARG_TYPED(AddressBookSourceDialog, OnOkClicked, Button*, void)
     {
         OUString sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
         if ( m_pImpl->bWorkingPersistent )
@@ -1178,11 +1178,10 @@ void AssignmentPersistentData::ImplCommit()
 
 
         EndDialog(RET_OK);
-        return 0L;
     }
 
 
-    IMPL_LINK_NOARG(AddressBookSourceDialog, OnAdministrateDatasources)
+    IMPL_LINK_NOARG_TYPED(AddressBookSourceDialog, OnAdministrateDatasources, Button*, void)
     {
         // create the dialog object
         Reference< XExecutableDialog > xAdminDialog;
@@ -1194,7 +1193,7 @@ void AssignmentPersistentData::ImplCommit()
         if (!xAdminDialog.is())
         {
             ShowServiceNotAvailableError(this, OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), true);
-            return 1L;
+            return;
         }
 
         // execute the dialog
@@ -1232,8 +1231,6 @@ void AssignmentPersistentData::ImplCommit()
         // try to preserve the current selection
 
 //      initializeDatasources();
-
-        return 0L;
     }
 
     bool AddressBookSourceDialog::PreNotify( NotifyEvent& _rNEvt )

@@ -151,11 +151,11 @@ private:
     void                Init_Impl();
     DECL_LINK(LayoutHdl_Impl, void *);
     DECL_LINK(PaperBinHdl_Impl, void *);
-    DECL_LINK(          SwapOrientation_Impl, RadioButton* );
+    DECL_LINK_TYPED(    SwapOrientation_Impl, Button*, void );
     void                SwapFirstValues_Impl( bool bSet );
     DECL_LINK(BorderModify_Impl, void *);
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
-    DECL_LINK(CenterHdl_Impl, void *);
+    DECL_LINK_TYPED(CenterHdl_Impl, Button*, void);
     void                UpdateExample_Impl( bool bResetbackground = false );
 
     DECL_LINK(          PaperSizeSelect_Impl, ListBox* );
@@ -168,7 +168,7 @@ private:
     DECL_LINK(RangeHdl_Impl, void *);
     void                CalcMargin_Impl();
 
-    DECL_LINK(          RegisterModify, CheckBox * );
+    DECL_LINK_TYPED(    RegisterModify, Button*, void );
 
     // page direction
     /** Disables vertical page direction entries in the text flow listbox. */

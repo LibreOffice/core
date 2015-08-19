@@ -415,13 +415,13 @@ private:
     SfxItemSet*             _pOptions;
     bool                    _bHelpDisabled;
 
-    DECL_LINK( Execute, void * );
+    DECL_LINK_TYPED( Execute, Button*, void );
 
 public:
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
             ~SfxDialogExecutor_Impl() { delete _pOptions; }
 
-    Link<>              GetLink() const { return LINK(const_cast<SfxDialogExecutor_Impl*>(this), SfxDialogExecutor_Impl, Execute); }
+    Link<Button*, void> GetLink() const { return LINK(const_cast<SfxDialogExecutor_Impl*>(this), SfxDialogExecutor_Impl, Execute); }
     const SfxItemSet*   GetOptions() const { return _pOptions; }
     void                DisableHelp() { _bHelpDisabled = true; }
 };
@@ -436,7 +436,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 {
 }
 
-IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
+IMPL_LINK_NOARG_TYPED(SfxDialogExecutor_Impl, Execute, Button*, void)
 {
     // Options noted locally
     if ( !_pOptions )
@@ -448,7 +448,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
 
     assert(_pOptions);
     if (!_pOptions)
-        return 0;
+        return;
 
     // Create Dialog
     VclPtrInstance<SfxPrintOptionsDialog> pDlg( static_cast<vcl::Window*>(_pSetupParent),
@@ -461,8 +461,6 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
         _pOptions = pDlg->GetOptions().Clone();
 
     }
-
-    return 0;
 }
 
 /**

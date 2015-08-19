@@ -180,7 +180,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 // ResetToDefaults
 
 
-IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
+IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, ResetToDefaults, Button*, void)
 {
     if( pColorConfig )
     {
@@ -192,14 +192,12 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
         m_pLbChartColors->SelectEntryPos( 0 );
         m_pPBRemove->Enable( true );
     }
-
-    return 0L;
 }
 
 // AddChartColor
 
 
-IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
+IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 {
     if( pColorConfig )
     {
@@ -213,19 +211,17 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
         m_pLbChartColors->SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
         m_pPBRemove->Enable( true );
     }
-
-    return 0L;
 }
 
 // RemoveChartColor
 
 
-IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
+IMPL_LINK_TYPED( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
 {
     sal_Int32 nIndex = m_pLbChartColors->GetSelectEntryPos();
 
     if (m_pLbChartColors->GetSelectEntryCount() == 0)
-        return 0L;
+        return;
 
     if( pColorConfig )
     {
@@ -249,8 +245,6 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
                 m_pPBRemove->Enable(true);
         }
     }
-
-    return 0L;
 }
 
 IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )

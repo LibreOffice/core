@@ -699,21 +699,19 @@ namespace dbaui
         return aDocument;
     }
 
-    IMPL_LINK( OGeneralPageWizard, OnCreateDatabaseModeSelected, RadioButton*, /*_pBox*/ )
+    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnCreateDatabaseModeSelected, Button*, void )
     {
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call( this );
 
         OnEmbeddedDBTypeSelected( m_pEmbeddedDBType );
-        return 1L;
     }
 
-    IMPL_LINK( OGeneralPageWizard, OnSetupModeSelected, RadioButton*, /*_pBox*/ )
+    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
     {
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call( this );
         OnDatasourceTypeSelected(m_pDatasourceType);
-        return 1L;
     }
 
     IMPL_LINK( OGeneralPageWizard, OnDocumentSelected, ListBox*, /*_pBox*/ )
@@ -722,7 +720,7 @@ namespace dbaui
         return 0L;
     }
 
-    IMPL_LINK( OGeneralPageWizard, OnOpenDocument, PushButton*, /*_pBox*/ )
+    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnOpenDocument, Button*, void )
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
@@ -742,15 +740,12 @@ namespace dbaui
                 aError->Execute();
                 m_pRB_ConnectDatabase->Check();
                 OnSetupModeSelected( m_pRB_ConnectDatabase );
-                return 0L;
+                return;
             }
             m_aBrowsedDocument.sURL = sPath;
             m_aBrowsedDocument.sFilter.clear();
             m_aChooseDocumentHandler.Call( this );
-            return 1L;
         }
-
-        return 0L;
     }
 
 }   // namespace dbaui

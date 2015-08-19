@@ -77,10 +77,10 @@ class SwSortDlg : public SvxStandardDialog
     virtual void        Apply() SAL_OVERRIDE;
     sal_Unicode         GetDelimChar() const;
 
-    DECL_LINK( CheckHdl, void * );
-    DECL_LINK( DelimHdl, RadioButton* );
+    DECL_LINK_TYPED( CheckHdl, Button*, void );
+    DECL_LINK_TYPED( DelimHdl, Button*, void );
     DECL_LINK( LanguageHdl, ListBox* );
-    DECL_LINK(DelimCharHdl, void *);
+    DECL_LINK_TYPED(DelimCharHdl, Button*,void);
 
 public:
     SwSortDlg(vcl::Window * pParent, SwWrtShell &rSh);

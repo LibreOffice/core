@@ -243,7 +243,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    IMPL_LINK( ODbaseDetailsPage, OnButtonClicked, Button*, pButton )
+    IMPL_LINK_TYPED( ODbaseDetailsPage, OnButtonClicked, Button*, pButton, void )
     {
         if (m_pIndexes == pButton)
         {
@@ -256,8 +256,6 @@ namespace dbaui
             // it was one of the checkboxes -> we count as modified from now on
             callModifiedHdl();
         }
-
-        return 0;
     }
 
     // OAdoDetailsPage
@@ -516,7 +514,7 @@ namespace dbaui
             m_pEDDriverClass->SetModifyFlag();
         }
     }
-    IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         OSL_ENSURE(m_bUseClass,"Who called me?");
@@ -541,7 +539,6 @@ namespace dbaui
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
         ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg->Execute();
-        return 0L;
     }
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
     {
@@ -704,7 +701,7 @@ namespace dbaui
         fillBool(*_rSet,m_pCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
-    IMPL_LINK( OLDAPDetailsPage, OnCheckBoxClick, CheckBox*, pCheckBox )
+    IMPL_LINK_TYPED( OLDAPDetailsPage, OnCheckBoxClick, Button*, pCheckBox, void )
     {
         callModifiedHdl();
         if ( pCheckBox == m_pCBUseSSL)
@@ -720,7 +717,6 @@ namespace dbaui
                 m_pNFPortNumber->SetValue(m_iNormalPort);
             }
         }
-        return 0;
     }
 
     void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)

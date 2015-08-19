@@ -152,7 +152,7 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     }
 }
 
-IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ORelationDialog, OKClickHdl, Button*, void )
 {
     // RadioButtons auslesen
     sal_uInt16 nAttrib = 0;
@@ -197,7 +197,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
         {
             m_pOrigConnData->CopyFrom( *m_pConnData );
             EndDialog( RET_OK );
-            return 0L;
+            return;
         }
     }
     catch( const SQLException& )
@@ -219,8 +219,6 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     Init(m_pConnData);
     m_xTableControl->Init( m_pConnData );
     m_xTableControl->lateInit();
-
-    return 0;
 }
 
 short ORelationDialog::Execute()

@@ -2125,10 +2125,9 @@ IMPL_LINK( SvxConfigPage, AsyncInfoMsg, OUString*, pMsg )
     return 0;
 }
 
-IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton )
+IMPL_LINK_TYPED( SvxConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
-    return 0;
 }
 
 void SvxConfigPage::MoveEntry( bool bMoveUp )
@@ -2554,10 +2553,8 @@ IMPL_LINK( SvxMenuConfigPage, AddFunctionHdl,
     return 0;
 }
 
-IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, NewMenuHdl, Button *, void )
 {
-    (void)pButton;
-
     VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
         nullptr, GetSaveInData()->GetEntries(), nullptr, true );
 
@@ -2567,14 +2564,10 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
         ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
         GetSaveInData()->SetModified();
     }
-
-    return 0;
 }
 
-IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
 {
-    (void)pButton;
-
     if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which also shows builtin commands
@@ -2593,7 +2586,6 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Show();
-    return 1;
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
@@ -2740,14 +2732,14 @@ void SvxMainMenuOrganizerDialog::UpdateButtonStates()
     m_pMoveDownButton->Enable( selection != last );
 }
 
-IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
+IMPL_LINK_TYPED( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
 {
     SvTreeListEntry *pSourceEntry = m_pMenuListBox->FirstSelected();
     SvTreeListEntry *pTargetEntry = NULL;
 
     if ( !pSourceEntry )
     {
-        return 0;
+        return;
     }
 
     if (pButton == m_pMoveDownButton)
@@ -2791,8 +2783,6 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
     {
         UpdateButtonStates();
     }
-
-    return 0;
 }
 
 
@@ -3051,10 +3041,9 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
     return false;
 }
 
-IMPL_LINK( SvxToolbarConfigPage, MoveHdl, Button *, pButton )
+IMPL_LINK_TYPED( SvxToolbarConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
-    return 0;
 }
 
 void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
@@ -4422,10 +4411,8 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
 {
-    (void)pButton;
-
     OUString prefix = CUI_RES( RID_SVXSTR_NEW_TOOLBAR );
 
     OUString aNewName =
@@ -4481,14 +4468,10 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 
         pData->SetModified();
     }
-
-    return 0;
 }
 
-IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 {
-    (void)pButton;
-
     if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which shows slot commands
@@ -4505,7 +4488,6 @@ IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Show();
-    return 1;
 }
 
 IMPL_LINK( SvxToolbarConfigPage, AddFunctionHdl,
@@ -5032,10 +5014,8 @@ IMPL_LINK_TYPED( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
     }
 }
 
-IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, ImportHdl, Button *, void)
 {
-    (void)pButton;
-
     sfx2::FileDialogHelper aImportDialog(
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
         SFXWB_GRAPHIC | SFXWB_MULTISELECTION );
@@ -5058,14 +5038,10 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
         uno::Sequence< OUString > paths = aImportDialog.GetMPath();
         ImportGraphics ( paths );
     }
-
-    return 0;
 }
 
-IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
+IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, DeleteHdl, Button *, void )
 {
-    (void)pButton;
-
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
     if ( ScopedVclPtr<WarningBox>::Create( this, WinBits(WB_OK_CANCEL), message )->Execute() == RET_OK )
     {
@@ -5092,7 +5068,6 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
             }
         }
     }
-    return 0;
 }
 
 bool SvxIconSelectorDialog::ReplaceGraphicItem(

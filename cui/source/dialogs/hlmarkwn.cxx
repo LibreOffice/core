@@ -150,7 +150,7 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
 
     mpBtApply->SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
     mpBtClose->SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    mpLbTree->SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    mpLbTree->SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl ) );
 
     // add lines to the Tree-ListBox
     mpLbTree->SetStyle( mpLbTree->GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -561,7 +561,13 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl)
+{
+    ClickApplyHdl_Impl(NULL);
+    return 0;
+}
+
+IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
 
@@ -574,8 +580,6 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
             mpParent->SetMarkStr(pData->aUStrLinkname);
         }
     }
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -584,7 +588,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
     if ( pEntry )
@@ -618,8 +622,6 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
     }
 
     Close();
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

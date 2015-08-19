@@ -150,7 +150,7 @@ struct SfxSecurityPage_Impl
     bool                m_bEndRedliningWarningDone;
 
     DECL_LINK( RecordChangesCBToggleHdl, void* );
-    DECL_LINK( ChangeProtectionPBHdl, void* );
+    DECL_LINK_TYPED( ChangeProtectionPBHdl, Button*, void );
 
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
     ~SfxSecurityPage_Impl();
@@ -377,10 +377,10 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
 }
 
 
-IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
+IMPL_LINK_NOARG_TYPED(SfxSecurityPage_Impl, ChangeProtectionPBHdl, Button*, void)
 {
     if (m_eRedlingMode == RL_NONE)
-        return 0;
+        return;
 
     // the push button text is always the opposite of the current state. Thus:
     const bool bCurrentProtection = m_pUnProtectPB->IsVisible();
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     {
         // ask for password and if dialog is canceled or no password provided return
         if (!lcl_GetPassword( m_rMyTabPage.GetParent(), bNewProtection, aPasswordText ))
-            return 0;
+            return;
 
         // provided password still needs to be checked?
         if (!bNewProtection && !m_bOrigPasswordIsConfirmed)
@@ -401,7 +401,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
             if (lcl_IsPasswordCorrect( aPasswordText ))
                 m_bOrigPasswordIsConfirmed = true;
             else
-                return 0;
+                return;
         }
     }
     DBG_ASSERT( m_bOrigPasswordIsConfirmed, "ooops... this should not have happened!" );
@@ -415,8 +415,6 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
 
     m_pUnProtectPB->Show(bNewProtection);
     m_pProtectPB->Show(!bNewProtection);
-
-    return 0;
 }
 
 

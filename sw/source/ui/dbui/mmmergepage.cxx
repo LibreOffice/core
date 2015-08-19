@@ -69,14 +69,13 @@ void SwMailMergeMergePage::dispose()
 }
 
 
-IMPL_LINK_NOARG(SwMailMergeMergePage, EditDocumentHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeMergePage, EditDocumentHdl_Impl, Button*, void)
 {
     m_pWizard->SetRestartPage(MM_MERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_RESULT_DOC);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeMergePage, FindHdl_Impl, Button*, void)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
 
@@ -94,8 +93,6 @@ IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
         pTargetView->GetViewFrame()->GetDispatcher()->Execute(
             FID_SEARCH_NOW, SfxCallMode::SYNCHRON, &aSearchItem, &aQuiet, 0L );
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwMailMergeMergePage, EnteredFindStringHdl_Impl)

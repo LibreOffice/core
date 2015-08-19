@@ -44,7 +44,7 @@ class GridDialog : public ModalDialog
 
     VclPtr<GridWindow>     m_pGridWindow;
 
-    DECL_LINK( ClickButtonHdl, Button* );
+    DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
 
 public:
     GridDialog(double* pXValues, double* pYValues, int nValues,

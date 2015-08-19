@@ -129,10 +129,9 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     m_pRepeatHeaderNF->SetMax( nMax );
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwInsTableDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 SwInsTableDlg::~SwInsTableDlg()
@@ -200,7 +199,7 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
     return 0;
 }
 
-IMPL_LINK( SwInsTableDlg, AutoFormatHdl, PushButton*, pButton )
+IMPL_LINK_TYPED( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -209,22 +208,17 @@ IMPL_LINK( SwInsTableDlg, AutoFormatHdl, PushButton*, pButton )
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(SwInsTableDlg, CheckBoxHdl, Button*, void)
 {
     m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
     ReapeatHeaderCheckBoxHdl();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, ReapeatHeaderCheckBoxHdl)
+IMPL_LINK_NOARG_TYPED(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
 {
     m_pRepeatGroup->Enable(m_pHeaderCB->IsChecked() && m_pRepeatHeaderCB->IsChecked());
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl)

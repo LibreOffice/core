@@ -84,11 +84,10 @@ void BreakDlg::dispose()
 }
 
 // Control-Handler for cancel button
-IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
+IMPL_LINK_NOARG_TYPED(BreakDlg, CancelButtonHdl, Button*, void)
 {
-  bCancel = true;
-  m_pBtnCancel->Disable();
-  return 0L;
+    bCancel = true;
+    m_pBtnCancel->Disable();
 }
 
 /**

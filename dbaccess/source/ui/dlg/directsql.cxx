@@ -60,7 +60,7 @@ namespace dbaui
         m_pSQL->GrabFocus();
 
         m_pExecute->SetClickHdl(LINK(this, DirectSQLDialog, OnExecute));
-        m_pClose->SetClickHdl(LINK(this, DirectSQLDialog, OnClose));
+        m_pClose->SetClickHdl(LINK(this, DirectSQLDialog, OnCloseClick));
         m_pSQLHistory->SetSelectHdl(LINK(this, DirectSQLDialog, OnListEntrySelected));
         m_pSQLHistory->SetDropDownLineCount(10);
 
@@ -314,16 +314,19 @@ namespace dbaui
         return 0L;
     }
 
+    IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnCloseClick, Button*, void )
+    {
+        EndDialog( RET_OK );
+    }
     IMPL_LINK_NOARG( DirectSQLDialog, OnClose )
     {
         EndDialog( RET_OK );
         return 0L;
     }
 
-    IMPL_LINK_NOARG( DirectSQLDialog, OnExecute )
+    IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnExecute, Button*, void )
     {
         executeCurrent();
-        return 0L;
     }
 
     IMPL_LINK_NOARG( DirectSQLDialog, OnListEntrySelected )

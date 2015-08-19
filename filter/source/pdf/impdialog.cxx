@@ -303,10 +303,9 @@ ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
     return NULL;
 }
 
-IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabDialog, CancelHdl, Button*, void)
 {
     EndDialog();
-    return 0;
 }
 
 
@@ -1291,7 +1290,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
         ImplPDFASecurityControl(!pGeneralPage->IsPdfaSelected());
 }
 
-IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
 {
     ScopedVclPtrInstance< SfxPasswordDialog > aPwdDialog( this, &msUserPwdTitle );
     aPwdDialog->SetMinLen( 0 );
@@ -1318,7 +1317,6 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
             maPreparedOwnerPassword = Sequence< NamedValue >();
     }
     enablePermissionControls();
-    return 0;
 }
 
 void ImpPDFTabSecurityPage::enablePermissionControls()
@@ -1532,23 +1530,21 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
 
 // reset the memory of Launch action present
 // when PDF/A-1 was requested
-IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, Button*, void)
 {
     mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
     mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
     mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
-    return 0;
 }
 
 
 // reset the memory of a launch action present
 // when PDF/A-1 was requested
-IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, Button*, void)
 {
     mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
     mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
     mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
-    return 0;
 }
 
 ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rErrors)
@@ -1683,7 +1679,7 @@ void ImpPDFTabSigningPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
+IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
 {
 
     Reference< security::XDocumentDigitalSignatures > xSigner(
@@ -1719,11 +1715,9 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
         if (mpLBSignTSA->GetEntryCount() > 1)
             mpLBSignTSA->Enable();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
+IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertClear, Button*, void )
 {
     mpEdSignCert->SetText(OUString(""));
     maSignCertificate.clear();
@@ -1733,8 +1727,6 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
     mpEdSignContactInfo->Enable( false );
     mpEdSignReason->Enable( false );
     mpLBSignTSA->Enable( false );
-
-    return 0;
 }
 
 

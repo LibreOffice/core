@@ -64,7 +64,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     m_pNextBtn->SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
     m_pOKBtn->SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
 
-    Link<> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
+    Link<Button*,void> aLk = LINK(this, SwJavaEditDialog, RadioButtonHdl);
     m_pUrlRB->SetClickHdl(aLk);
     m_pEditRB->SetClickHdl(aLk);
     m_pUrlPB->SetClickHdl(LINK(this, SwJavaEditDialog, InsertFileHdl));
@@ -110,7 +110,7 @@ void SwJavaEditDialog::dispose()
     SvxStandardDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl)
+IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, PrevHdl, Button*, void)
 {
     pSh->EnterStdMode();
 
@@ -119,11 +119,9 @@ IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl)
     pField = static_cast<SwScriptField*>(pMgr->GetCurField());
     CheckTravel();
     RadioButtonHdl(NULL);
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl)
+IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, NextHdl, Button*, void)
 {
     pSh->EnterStdMode();
 
@@ -132,15 +130,12 @@ IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl)
     pField = static_cast<SwScriptField*>(pMgr->GetCurField());
     CheckTravel();
     RadioButtonHdl(NULL);
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl)
+IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, OKHdl, Button*, void)
 {
     SetField();
     EndDialog( RET_OK );
-    return 0;
 }
 
 void SwJavaEditDialog::Apply()
@@ -237,7 +232,7 @@ bool SwJavaEditDialog::IsUpdate() const
     return pField && ( sal_uInt32(bIsUrl ? 1 : 0) != pField->GetFormat() || pField->GetPar2() != aType || pField->GetPar1() != aText );
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
+IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, RadioButtonHdl, Button*, void)
 {
     bool bEnable = m_pUrlRB->IsChecked();
     m_pUrlPB->Enable(bEnable);
@@ -254,10 +249,9 @@ IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
         if( m_pUrlPB->IsEnabled() && !bEnable )
             m_pUrlPB->Enable( false );
     }
-    return 0;
 }
 
-IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
+IMPL_LINK_TYPED( SwJavaEditDialog, InsertFileHdl, Button *, pBtn, void )
 {
     if ( !pFileDlg )
     {
@@ -270,7 +264,6 @@ IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
     }
 
     pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, DlgClosedHdl, sfx2::FileDialogHelper *, void)

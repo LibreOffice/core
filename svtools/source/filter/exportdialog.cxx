@@ -658,20 +658,20 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     setupControls();
 
     // Size
-    mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, SelectHdl ) );
 
     if (mpSbCompression)
         mpSbCompression->SetScrollHdl(LINK(this, ExportDialog, SbCompressionUpdateHdl));
     if (mpNfCompression)
-        mpNfCompression->SetModifyHdl(LINK(this, ExportDialog, UpdateHdl));
+        mpNfCompression->SetModifyHdl(LINK(this, ExportDialog, SelectHdl));
 
     mpMfSizeX->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeX ) );
     mpMfSizeY->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeY ) );
 
     mpNfResolution->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlNfResolution ) );
-    mpLbResolution->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpLbResolution->SetSelectHdl( LINK( this, ExportDialog, SelectHdl ) );
 
-    mpLbColorDepth->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpLbColorDepth->SetSelectHdl( LINK( this, ExportDialog, SelectHdl ) );
 
     mpCbInterlaced->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
@@ -1028,10 +1028,14 @@ void ExportDialog::dispose()
 |* stores values set in the ini-file
 |*
 \************************************************************************/
-IMPL_LINK_NOARG(ExportDialog, UpdateHdl)
+IMPL_LINK_NOARG(ExportDialog, SelectHdl)
+{
+    UpdateHdl(NULL);
+    return 0;
+}
+IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdl, Button*, void)
 {
     updateControls();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX)
@@ -1123,15 +1127,12 @@ IMPL_LINK_NOARG(ExportDialog, SbCompressionUpdateHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ExportDialog, OK)
+IMPL_LINK_NOARG_TYPED(ExportDialog, OK, Button*, void)
 {
     // writing config parameter
 
-
     mrFltCallPara.aFilterData = GetFilterData( true );
     EndDialog( RET_OK );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

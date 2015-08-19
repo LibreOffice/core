@@ -39,7 +39,7 @@ class VCL_DLLPUBLIC Button : public Control
 {
 private:
     std::unique_ptr<ImplCommonButtonData> mpButtonData;
-    Link<> maClickHdl;
+    Link<Button*,void> maClickHdl;
 
     /// Command URL (like .uno:Save) in case the button should handle it.
     OUString maCommand;
@@ -69,8 +69,8 @@ public:
 
     virtual void        Click();
 
-    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-    const Link<>&       GetClickHdl() const { return maClickHdl; }
+    void                SetClickHdl( const Link<Button*,void>& rLink ) { maClickHdl = rLink; }
+    const Link<Button*,void>& GetClickHdl() const { return maClickHdl; }
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
     void                SetCommandHandler(const OUString& aCommand);
@@ -94,7 +94,7 @@ public:
 protected:
 
     /// Handler for click, in case we want the button to handle uno commands (.uno:Something).
-    static sal_IntPtr   dispatchCommandHandler(void *, void *pCaller);
+    DECL_STATIC_LINK_TYPED(Button, dispatchCommandHandler, Button*, void);
 };
 
 

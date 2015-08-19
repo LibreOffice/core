@@ -40,7 +40,7 @@ class NameClashDialog : public ModalDialog
     OUString maSameName;
     OUString maNewName;
 
-    DECL_LINK( ButtonHdl_Impl, PushButton * );
+    DECL_LINK_TYPED( ButtonHdl_Impl, Button *, void );
 
 public:
     NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,

@@ -152,10 +152,10 @@ private:
     DECL_LINK( SelectHandle, void* );
     DECL_LINK( DeselectHandle, void* );
     DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );
-    DECL_LINK( KeepMineHandle, void* );
-    DECL_LINK( KeepOtherHandle, void* );
-    DECL_LINK( KeepAllMineHandle, void* );
-    DECL_LINK( KeepAllOthersHandle, void* );
+    DECL_LINK_TYPED( KeepMineHandle, Button*, void );
+    DECL_LINK_TYPED( KeepOtherHandle, Button*, void );
+    DECL_LINK_TYPED( KeepAllMineHandle, Button*, void );
+    DECL_LINK_TYPED( KeepAllOthersHandle, Button*, void );
 
 public:
                         ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );

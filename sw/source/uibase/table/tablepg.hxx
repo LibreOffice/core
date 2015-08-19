@@ -71,8 +71,8 @@ class SwFormatTablePage : public SfxTabPage
     void        Init();
     void        ModifyHdl(const Edit* pEdit);
 
-    DECL_LINK( AutoClickHdl, void * );
-    DECL_LINK( RelWidthClickHdl, CheckBox * );
+    DECL_LINK_TYPED( AutoClickHdl, Button*, void );
+    DECL_LINK_TYPED( RelWidthClickHdl, Button*, void );
     void RightModify();
     DECL_LINK( UpDownLoseFocusHdl, MetricField * );
 
@@ -117,12 +117,12 @@ class SwTableColumnPage : public SfxTabPage
     bool            bPercentMode:1;
 
     void        Init(bool bWeb);
-    DECL_LINK( AutoClickHdl, void * );
+    DECL_LINK_TYPED( AutoClickHdl, Button *, void );
     void        ModifyHdl( MetricField* pEdit );
     DECL_LINK( UpHdl, MetricField * );
     DECL_LINK( DownHdl, MetricField * );
     DECL_LINK( LoseFocusHdl, MetricField * );
-    DECL_LINK( ModeHdl, CheckBox * );
+    DECL_LINK_TYPED( ModeHdl, Button *, void );
     void        UpdateCols( sal_uInt16 nAktPos );
     SwTwips     GetVisibleWidth(sal_uInt16 nPos);
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
@@ -172,13 +172,13 @@ class SwTextFlowPage : public SfxTabPage
     bool            bPageBreak;
     bool            bHtmlMode;
 
-    DECL_LINK(PageBreakHdl_Impl, void *);
-    DECL_LINK(ApplyCollClickHdl_Impl, void *);
-    DECL_LINK( PageBreakPosHdl_Impl, RadioButton* );
-    DECL_LINK( PageBreakTypeHdl_Impl, RadioButton* );
-    DECL_LINK( SplitHdl_Impl, CheckBox* );
-    DECL_STATIC_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox* );
-    DECL_LINK( HeadLineCBClickHdl, void* = 0 );
+    DECL_LINK_TYPED(PageBreakHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(ApplyCollClickHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( PageBreakPosHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( PageBreakTypeHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( SplitHdl_Impl, Button*, void );
+    DECL_STATIC_LINK_TYPED( SwTextFlowPage, SplitRowHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( HeadLineCBClickHdl, Button* = 0, void );
 
 public:
     SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );

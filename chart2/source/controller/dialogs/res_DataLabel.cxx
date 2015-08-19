@@ -178,12 +178,12 @@ void DataLabelResources::SetNumberFormatter( SvNumberFormatter* pFormatter )
     m_pNumberFormatter = pFormatter;
 }
 
-IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
+IMPL_LINK_TYPED( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
 {
     if( !m_pPool || !m_pNumberFormatter )
     {
         OSL_FAIL("Missing item pool or number formatter");
-        return 1;
+        return;
     }
 
     if( pButton == m_pPB_NumberFormatForValue && !m_pCBNumber->IsChecked())
@@ -224,15 +224,13 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
                 rbMixedState = rbSourceMixedState = true;
         }
     }
-    return 0;
 }
 
-IMPL_LINK( DataLabelResources, CheckHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( DataLabelResources, CheckHdl, Button*, pBox, void )
 {
     if( pBox )
-        pBox->EnableTriState( false );
+        static_cast<CheckBox*>(pBox)->EnableTriState( false );
     EnableControls();
-    return 0;
 }
 
 void DataLabelResources::EnableControls()

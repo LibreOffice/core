@@ -124,7 +124,7 @@ void XMLFilterSettingsDialog::dispose()
     ModelessDialog::dispose();
 }
 
-IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
+IMPL_LINK_TYPED(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
 {
     m_bIsClosable = false;
 
@@ -158,7 +158,6 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
     }
 
     m_bIsClosable = true;
-    return 0;
 }
 
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl)

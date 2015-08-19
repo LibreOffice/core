@@ -35,7 +35,7 @@ private:
     VclPtr<FixedText>           m_pFtSubject;
     VclPtr<Edit>                m_pEdSubject;
 
-    DECL_STATIC_LINK(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *);
+    DECL_STATIC_LINK_TYPED(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void);
         ///< Button : Address book
     DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
 

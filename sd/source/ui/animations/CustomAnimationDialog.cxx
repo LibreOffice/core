@@ -989,6 +989,7 @@ public:
 
     void update( STLPropertySet* pSet );
     DECL_LINK( implSelectHdl, Control* );
+    DECL_LINK_TYPED( implClickHdl, Button*, void );
 
 private:
     void updateControlStates();
@@ -1051,7 +1052,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
 
     mpLBSound->SetSelectHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
 
-    mpPBSoundPreview->SetClickHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
+    mpPBSoundPreview->SetClickHdl( LINK( this, CustomAnimationEffectTabPage, implClickHdl ) );
 
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1296,6 +1297,11 @@ void CustomAnimationEffectTabPage::updateControlStates()
 
     nPos = mpLBSound->GetSelectEntryPos();
     mpPBSoundPreview->Enable( nPos >= 2 );
+}
+
+IMPL_LINK_TYPED( CustomAnimationEffectTabPage, implClickHdl, Button*, pBtn, void )
+{
+    implSelectHdl(pBtn);
 }
 
 IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, Control*, pControl )
@@ -1586,6 +1592,7 @@ public:
     void update( STLPropertySet* pSet );
 
     DECL_LINK( implControlHdl, Control* );
+    DECL_LINK_TYPED( implClickHdl, Button*, void );
 
 private:
     const STLPropertySet* mpSet;
@@ -1624,7 +1631,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
     fillRepeatComboBox( mpCBRepeat );
     fillDurationComboBox( mpCBDuration );
 
-    mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
+    mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implClickHdl ) );
     mpLBTrigger->SetSelectHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
 
     if( pSet->getPropertyState( nHandleStart ) != STLPropertyState_AMBIGUOUS )
@@ -1797,6 +1804,11 @@ void CustomAnimationDurationTabPage::dispose()
     mpRBInteractive.clear();
     mpLBTrigger.clear();
     TabPage::dispose();
+}
+
+IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implClickHdl, Button*, pBtn, void )
+{
+    implControlHdl(pBtn);
 }
 
 IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )

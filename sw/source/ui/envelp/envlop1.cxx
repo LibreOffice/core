@@ -266,7 +266,7 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
+IMPL_LINK_NOARG_TYPED(SwEnvPage, FieldHdl, Button*, void)
 {
     OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
                   m_pTableLB->GetSelectEntry() + "." +
@@ -276,10 +276,9 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
     Selection aSel = m_pAddrEdit->GetSelection();
     m_pAddrEdit->GrabFocus();
     m_pAddrEdit->SetSelection(aSel);
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
+IMPL_LINK_NOARG_TYPED(SwEnvPage, SenderHdl, Button*, void)
 {
     const bool bEnable = m_pSenderBox->IsChecked();
     GetParentSwEnvDlg()->aEnvItem.bSend = bEnable;
@@ -291,7 +290,6 @@ IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
             m_pSenderEdit->SetText(MakeSender());
     }
     m_pPreview->Invalidate();
-    return 0;
 }
 
 void SwEnvPage::InitDatabaseBox()

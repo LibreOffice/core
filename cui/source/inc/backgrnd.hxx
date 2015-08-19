@@ -134,9 +134,9 @@ private:
 
     DECL_LINK_TYPED( LoadIdleHdl_Impl, Idle*, void );
     DECL_LINK(SelectHdl_Impl, void *);
-    DECL_LINK(BrowseHdl_Impl, void *);
-    DECL_LINK( RadioClickHdl_Impl, RadioButton* );
-    DECL_LINK( FileClickHdl_Impl, CheckBox* );
+    DECL_LINK_TYPED(BrowseHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( RadioClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( FileClickHdl_Impl, Button*, void );
     DECL_LINK(BackgroundColorHdl_Impl, void *);
     DECL_LINK( TblDestinationHdl_Impl, ListBox* );
 };

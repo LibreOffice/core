@@ -90,7 +90,7 @@ class SwLabFormatPage : public SfxTabPage
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK_TYPED(PreviewHdl, Idle *, void);
     DECL_LINK( LoseFocusHdl, Control * );
-    DECL_LINK(SaveHdl, void *);
+    DECL_LINK_TYPED(SaveHdl, Button*, void);
 
     void ChangeMinMax();
 
@@ -123,7 +123,7 @@ class SwSaveLabelDlg : public ModalDialog
     VclPtr<SwLabFormatPage>   pLabPage;
     SwLabRec&       rLabRec;
 
-    DECL_LINK(OkHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK(ModifyHdl, void *);
 
 public:

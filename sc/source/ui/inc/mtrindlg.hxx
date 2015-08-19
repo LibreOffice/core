@@ -49,7 +49,7 @@ private:
     long            nDefaultValue;
     long            nCurrentValue;
 
-    DECL_LINK(SetDefValHdl, void *);
+    DECL_LINK_TYPED(SetDefValHdl, Button*, void);
     DECL_LINK(ModifyHdl, void *);
 };
 

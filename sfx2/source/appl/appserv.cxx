@@ -242,7 +242,7 @@ namespace
     class LicenseDialog : public ModalDialog
     {
     private:
-        DECL_LINK(ShowHdl, void *);
+        DECL_LINK_TYPED(ShowHdl, Button*, void);
     public:
         LicenseDialog(vcl::Window *pParent=NULL);
     };
@@ -253,11 +253,10 @@ namespace
         get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
     }
 
-    IMPL_LINK_NOARG(LicenseDialog, ShowHdl)
+    IMPL_LINK_NOARG_TYPED(LicenseDialog, ShowHdl, Button*, void)
     {
         EndDialog(RET_OK);
         showDocument("LICENSE");
-        return 0;
     }
 }
 

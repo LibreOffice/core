@@ -56,7 +56,7 @@ namespace dbp
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
         DECL_LINK( OnListboxDoubleClicked, ListBox* );
-        DECL_LINK( OnSearchClicked, PushButton* );
+        DECL_LINK_TYPED( OnSearchClicked, Button*, void );
 
         void implCollectDatasource();
         void implFillTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
@@ -79,7 +79,7 @@ namespace dbp
         virtual void dispose() SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnRadioSelected, RadioButton* );
+        DECL_LINK_TYPED( OnRadioSelected, Button*, void );
 
         // TabPage overridables
         void ActivatePage() SAL_OVERRIDE;

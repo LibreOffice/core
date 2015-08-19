@@ -131,19 +131,20 @@ class SwFrmPage: public SfxTabPage
     virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     DECL_LINK(RangeModifyHdl, void *);
-    DECL_LINK(AnchorTypeHdl, void *);
+    DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
+    DECL_LINK_TYPED(AnchorTypeHdl, Button*, void);
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
     void            InitPos(RndStdIds eId, sal_Int16 nH, sal_Int16 nHRel,
                             sal_Int16 nV, sal_Int16 nVRel,
                             long   nX,  long   nY);
 
-    DECL_LINK(RealSizeHdl, void *);
-    DECL_LINK( RelSizeClickHdl, CheckBox * );
-    DECL_LINK(MirrorHdl, void *);
+    DECL_LINK_TYPED(RealSizeHdl, Button *, void);
+    DECL_LINK_TYPED( RelSizeClickHdl, Button *, void );
+    DECL_LINK_TYPED(MirrorHdl, Button *, void);
 
-    DECL_LINK( AutoWidthClickHdl, void* );
-    DECL_LINK( AutoHeightClickHdl, void* );
+    DECL_LINK_TYPED( AutoWidthClickHdl, Button *, void);
+    DECL_LINK_TYPED( AutoHeightClickHdl, Button *, void);
 
     // update example
     void            UpdateExample();
@@ -221,8 +222,8 @@ class SwGrfExtPage: public SfxTabPage
     bool            bHtmlMode;
 
     // handler for mirroring
-    DECL_LINK(MirrorHdl, void *);
-    DECL_LINK(BrowseHdl, void *);
+    DECL_LINK_TYPED(MirrorHdl, Button*, void);
+    DECL_LINK_TYPED(BrowseHdl, Button*, void);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual ~SwGrfExtPage();
@@ -253,7 +254,7 @@ class SwFrmURLPage : public SfxTabPage
     VclPtr<CheckBox>        pServerCB;
     VclPtr<CheckBox>        pClientCB;
 
-    DECL_LINK(InsertFileHdl, void *);
+    DECL_LINK_TYPED(InsertFileHdl, Button*, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

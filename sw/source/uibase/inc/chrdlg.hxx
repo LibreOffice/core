@@ -74,8 +74,8 @@ class SwCharURLPage : public SfxTabPage
     SvxMacroItem*       pINetItem;
     bool                bModified;
 
-    DECL_LINK(InsertFileHdl, void *);
-    DECL_LINK(EventHdl, void *);
+    DECL_LINK_TYPED(InsertFileHdl, Button*, void);
+    DECL_LINK_TYPED(EventHdl, Button*, void);
 
 public:
                         SwCharURLPage( vcl::Window* pParent,

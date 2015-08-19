@@ -795,11 +795,11 @@ IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
     return 0;
 }
 
-IMPL_LINK( ScHFEditPage, ClickHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
 {
     pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )
-        return 0;
+        return;
 
     if ( pBtn == m_pBtnText )
     {
@@ -824,8 +824,6 @@ IMPL_LINK( ScHFEditPage, ClickHdl, PushButton*, pBtn )
     }
     InsertToDefinedList();
     pActiveEdWnd->GrabFocus();
-
-    return 0;
 }
 
 IMPL_STATIC_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )

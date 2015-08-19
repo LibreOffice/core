@@ -298,7 +298,7 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 
 // event handling routines
 
-IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
+IMPL_LINK_NOARG_TYPED(SchAxisLabelTabPage, ToggleShowLabel, Button*, void)
 {
     bool bEnable = ( m_pCbShowDescription->GetState() != TRISTATE_FALSE );
 
@@ -315,8 +315,6 @@ IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 
     m_pFtTextDirection->Enable( bEnable );
     m_pLbTextDirection->Enable( bEnable );
-
-    return 0L;
 }
 } //namespace chart
 

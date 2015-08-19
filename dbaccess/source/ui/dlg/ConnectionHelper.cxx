@@ -164,7 +164,7 @@ namespace dbaui
             m_pAdminDialog->enableConfirmSettings( !getURLNoPrefix().isEmpty() );
     }
 
-    IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OConnectionHelper, OnBrowseConnections, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
@@ -185,7 +185,7 @@ namespace dbaui
                             xFolderPicker->setDisplayDirectory(sOldPath);
                         if (0 == xFolderPicker->execute())
                             // cancelled by the user
-                            return 0L;
+                            return;
 
                         sOldPath = xFolderPicker->getDirectory();
                         switch (checkPathExistence(sOldPath))
@@ -194,7 +194,7 @@ namespace dbaui
                                 bDoBrowse = true;
                                 break;
                             case RET_CANCEL:
-                                return 0L;
+                                return;
                             default:
                                 break;
                         }
@@ -265,7 +265,7 @@ namespace dbaui
                     callModifiedHdl();
                 }
                 else
-                    return 1L;
+                    return;
             }
             break;
 #ifdef _ADO_DATALINK_BROWSE_
@@ -282,7 +282,7 @@ namespace dbaui
                     callModifiedHdl();
                 }
                 else
-                    return 1L;
+                    return;
             }
             break;
 #endif
@@ -337,11 +337,9 @@ namespace dbaui
         }
 
         checkTestConnection();
-
-        return 0L;
     }
 
-    IMPL_LINK(OConnectionHelper, OnCreateDatabase, PushButton*, /*_pButton*/)
+    IMPL_LINK_NOARG_TYPED(OConnectionHelper, OnCreateDatabase, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
@@ -363,8 +361,6 @@ namespace dbaui
         }
 
         checkTestConnection();
-
-        return 0L;
     }
 
     bool OConnectionHelper::checkTestConnection()

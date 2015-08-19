@@ -371,16 +371,17 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pCbTextSep->SetText( sTextSeparators );
 
     Link<> aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
+    Link<Button*,void> aSeparatorClickHdl =LINK( this, ScImportAsciiDlg, SeparatorClickHdl );
     pCbTextSep->SetSelectHdl( aSeparatorHdl );
     pCbTextSep->SetModifyHdl( aSeparatorHdl );
-    pCkbTab->SetClickHdl( aSeparatorHdl );
-    pCkbSemicolon->SetClickHdl( aSeparatorHdl );
-    pCkbComma->SetClickHdl( aSeparatorHdl );
-    pCkbAsOnce->SetClickHdl( aSeparatorHdl );
-    pCkbQuotedAsText->SetClickHdl( aSeparatorHdl );
-    pCkbDetectNumber->SetClickHdl( aSeparatorHdl );
-    pCkbSpace->SetClickHdl( aSeparatorHdl );
-    pCkbOther->SetClickHdl( aSeparatorHdl );
+    pCkbTab->SetClickHdl( aSeparatorClickHdl );
+    pCkbSemicolon->SetClickHdl( aSeparatorClickHdl );
+    pCkbComma->SetClickHdl( aSeparatorClickHdl );
+    pCkbAsOnce->SetClickHdl( aSeparatorClickHdl );
+    pCkbQuotedAsText->SetClickHdl( aSeparatorClickHdl );
+    pCkbDetectNumber->SetClickHdl( aSeparatorClickHdl );
+    pCkbSpace->SetClickHdl( aSeparatorClickHdl );
+    pCkbOther->SetClickHdl( aSeparatorClickHdl );
     pEdOther->SetModifyHdl( aSeparatorHdl );
 
     // *** text encoding ListBox ***
@@ -658,7 +659,7 @@ void ScImportAsciiDlg::UpdateVertical()
         mpDatStream->SetStreamCharSet(meCharSet);
 }
 
-IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
+IMPL_LINK_TYPED( ScImportAsciiDlg, RbSepFixHdl, Button*, pButton, void )
 {
     OSL_ENSURE( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
 
@@ -673,9 +674,12 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 
         SetupSeparatorCtrls();
     }
-    return 0;
 }
 
+IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorClickHdl, Button*, pCtrl, void )
+{
+    SeparatorHdl(pCtrl);
+}
 IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 {
     OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );

@@ -359,13 +359,12 @@ void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 
 // Handler:
 
-IMPL_LINK_NOARG(ScTablePage, PageDirHdl)
+IMPL_LINK_NOARG_TYPED(ScTablePage, PageDirHdl, Button*, void)
 {
     ShowImage();
-    return 0;
 }
 
-IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
+IMPL_LINK_TYPED( ScTablePage, PageNoHdl, Button*, pBtn, void )
 {
     if ( m_pBtnPageNo->IsChecked() )
     {
@@ -375,8 +374,6 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
     }
     else
         m_pEdPageNo->Disable();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScTablePage, ScaleHdl)

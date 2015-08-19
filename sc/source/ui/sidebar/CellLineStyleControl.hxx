@@ -42,7 +42,7 @@ private:
     void SetAllNoSel();
 
     DECL_LINK(VSSelectHdl, void*);
-    DECL_LINK(PBClickHdl, PushButton*);
+    DECL_LINK_TYPED(PBClickHdl, Button*, void);
 
 public:
     CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);

@@ -101,7 +101,7 @@ protected:
                                           OUString& aStrIntName, OUString& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
-    DECL_LINK (ClickScriptHdl_Impl, void * ); ///< Button : Script
+    DECL_LINK_TYPED (ClickScriptHdl_Impl, Button*, void ); ///< Button : Script
 
     OUString            aEmptyStr;
 

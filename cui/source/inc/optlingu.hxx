@@ -75,9 +75,9 @@ class SvxEditModulesDlg : public ModalDialog
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
     DECL_LINK(SelectHdl_Impl, SvxCheckListBox *);
-    DECL_LINK(UpDownHdl_Impl, PushButton *);
-    DECL_LINK(ClickHdl_Impl, void *);
-    DECL_LINK(BackHdl_Impl, void *);
+    DECL_LINK_TYPED(UpDownHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(ClickHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(BackHdl_Impl, Button*, void);
     DECL_LINK( LangSelectHdl_Impl, ListBox* );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
     DECL_LINK(OpenURLHdl_Impl, void *);
@@ -137,7 +137,7 @@ private:
     static sal_uLong GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
-    DECL_LINK( ClickHdl_Impl, PushButton * );
+    DECL_LINK_TYPED( ClickHdl_Impl, Button *, void );
     DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox * );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
     DECL_LINK(PostDblClickHdl_Impl, void *);

@@ -497,8 +497,8 @@ public:
 
 private:
     DECL_LINK( LineTypeChangeHdl, void* );
-    DECL_LINK( SplineDetailsDialogHdl, void* );
-    DECL_LINK( SteppedDetailsDialogHdl, void* );
+    DECL_LINK_TYPED( SplineDetailsDialogHdl, Button*, void );
+    DECL_LINK_TYPED( SteppedDetailsDialogHdl, Button*, void );
     SplinePropertiesDialog& getSplinePropertiesDialog();
     SteppedPropertiesDialog& getSteppedPropertiesDialog();
 
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, LineTypeChangeHdl)
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl)
+IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
@@ -614,9 +614,8 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl)
         m_pLB_LineType->SelectEntryPos( iOldLineTypePos );
         getSplinePropertiesDialog().fillControls( aOldParameter );
     }
-    return 0;
 }
-IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl)
+IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
@@ -635,7 +634,6 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl)
         m_pLB_LineType->SelectEntryPos( iOldLineTypePos );
         getSteppedPropertiesDialog().fillControls( aOldParameter );
     }
-    return 0;
 }
 
 class GeometryResourceGroup : public ChangingResource

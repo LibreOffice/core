@@ -663,10 +663,9 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
+IMPL_LINK_NOARG_TYPED(ScTPValidationValue, CheckHdl, Button*, void)
 {
     m_pCbSort->Enable( m_pCbShow->IsChecked() );
-    return 0;
 }
 
 // Input Help Page
@@ -841,7 +840,7 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
     return 0L;
 }
 
-IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
+IMPL_LINK_NOARG_TYPED(ScTPValidationError, ClickSearchHdl, Button*, void)
 {
     vcl::Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -856,8 +855,6 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
     {
         m_pEdtTitle->SetText( aScriptURL );
     }
-
-    return 0L;
 }
 
 bool ScValidationDlg::EnterRefStatus()

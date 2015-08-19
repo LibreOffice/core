@@ -831,7 +831,7 @@ void SfxDocumentPage::dispose()
 }
 
 
-IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
+IMPL_LINK_NOARG_TYPED(SfxDocumentPage, DeleteHdl, Button*, void)
 {
     OUString aName;
     if ( bEnableUseUserData && m_pUseUserDataCB->IsChecked() )
@@ -847,10 +847,9 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aTime ) );
     m_pDocNoValFt->SetText(OUString('1'));
     bHandleDelete = true;
-    return 0;
 }
 
-IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl)
+IMPL_LINK_NOARG_TYPED(SfxDocumentPage, SignatureHdl, Button*, void)
 {
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
@@ -859,11 +858,9 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl)
 
         ImplUpdateSignatures();
     }
-
-    return 0;
 }
 
-IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
+IMPL_STATIC_LINK_NOARG_TYPED(SfxDocumentPage, ChangePassHdl, Button*, void)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     do
@@ -882,7 +879,6 @@ IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
         pShell->SetModified();
     }
     while (false);
-    return 0;
 }
 
 void SfxDocumentPage::ImplUpdateSignatures()
@@ -1365,12 +1361,11 @@ CustomPropertiesEditButton::CustomPropertiesEditButton(vcl::Window* pParent, Win
     SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
 }
 
-IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl)
+IMPL_LINK_NOARG_TYPED(CustomPropertiesEditButton, ClickHdl, Button*, void)
 {
     VclPtrInstance< DurationDialog_Impl > pDurationDlg( this, m_pLine->m_aDurationField->GetDuration() );
     if ( RET_OK == pDurationDlg->Execute() )
         m_pLine->m_aDurationField->SetDuration( pDurationDlg->GetDuration() );
-    return 1;
 }
 
 void CustomPropertiesYesNoButton::Resize()
@@ -1540,8 +1535,9 @@ IMPL_STATIC_LINK(
     return 0;
 }
 
-IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pButton )
+IMPL_LINK_TYPED( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
 {
+    CustomPropertiesRemoveButton* pButton = static_cast<CustomPropertiesRemoveButton*>(pBtn);
     CustomPropertyLine* pLine = pButton->GetLine();
     std::vector< CustomPropertyLine* >::iterator pFound =
         std::find( m_aCustomPropertiesLines.begin(), m_aCustomPropertiesLines.end(), pLine );
@@ -1573,7 +1569,6 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
     }
 
     m_aRemovedHdl.Call(0);
-    return 0;
 }
 
 IMPL_LINK( CustomPropertiesWindow, EditLoseFocusHdl, CustomPropertiesEdit*, pEdit )
@@ -2189,11 +2184,10 @@ void SfxCustomPropertiesPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl)
+IMPL_LINK_NOARG_TYPED(SfxCustomPropertiesPage, AddHdl, Button*, void)
 {
     Any aAny;
     m_pPropertiesCtrl->AddLine( OUString(), aAny, true );
-    return 0;
 }
 
 bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )

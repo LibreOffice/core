@@ -43,7 +43,7 @@ class DropDownFieldDialog : public SvxStandardDialog
     SwWrtShell          &rSh;
     SwDropDownField*    pDropField;
 
-    DECL_LINK(ButtonHdl, PushButton*);
+    DECL_LINK_TYPED(ButtonHdl, Button*, void);
     virtual void    Apply() SAL_OVERRIDE;
 public:
     DropDownFieldDialog(   vcl::Window *pParent, SwWrtShell &rSh,

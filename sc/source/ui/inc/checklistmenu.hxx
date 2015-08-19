@@ -328,8 +328,8 @@ private:
     void selectCurrentMemberOnly(bool bSet);
     void cycleFocus(bool bReverse = false);
 
-    DECL_LINK( ButtonHdl, Button* );
-    DECL_LINK( TriStateHdl, void* );
+    DECL_LINK_TYPED( ButtonHdl, Button*, void );
+    DECL_LINK_TYPED( TriStateHdl, Button*, void );
     DECL_LINK( CheckHdl, SvTreeListBox* );
     DECL_LINK( EdModifyHdl, void* );
 

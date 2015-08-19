@@ -66,7 +66,8 @@ private:
     VclPtr<ListBox> mpListBoxColors;
     VclPtr<PushButton> mpApplyButton;
 
-    DECL_LINK(ClickHdl, void*);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
+    DECL_LINK(DoubleClickHdl, void*);
 };
 
 }} // end of namespace sw::sidebar

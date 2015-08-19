@@ -280,7 +280,7 @@ void SwCaptionDialog::Apply()
     our_aSepTextSave = m_pSepEdit->GetText();
 }
 
-IMPL_LINK( SwCaptionDialog, OptionHdl, Button*, pButton )
+IMPL_LINK_TYPED( SwCaptionDialog, OptionHdl, Button*, pButton, void )
 {
     OUString sFieldTypeName = m_pCategoryBox->GetText();
     if(sFieldTypeName == m_sNone)
@@ -300,7 +300,6 @@ IMPL_LINK( SwCaptionDialog, OptionHdl, Button*, pButton )
         ApplyCaptionOrder();
     }
     DrawSample();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwCaptionDialog, SelectHdl)
@@ -334,13 +333,11 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionDialog, CaptionHdl, Button*, void)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
     ScopedVclPtrInstance< SwCaptionOptDlg > aDlg( this, aSet );
     aDlg->Execute();
-
-    return 0;
 }
 
 void SwCaptionDialog::DrawSample()

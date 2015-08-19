@@ -158,7 +158,7 @@ private:
     void FillUserSortListBox    ();
 
     // Handler ------------------------
-    DECL_LINK( CheckHdl, CheckBox * );
+    DECL_LINK_TYPED( CheckHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX

@@ -48,7 +48,7 @@ private:
     ScDocument* mpDoc;
     ScAddress   maPos;
 
-    DECL_LINK(OkBtnHdl, void*);
+    DECL_LINK_TYPED(OkBtnHdl, Button*, void);
     DECL_LINK(TypeSelectHdl, void*);
     DECL_LINK(PosSelectHdl, void*);
 

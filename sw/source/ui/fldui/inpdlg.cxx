@@ -164,10 +164,9 @@ void SwFieldInputDlg::Apply()
     rSh.EndAllAction();
 }
 
-IMPL_LINK_NOARG(SwFieldInputDlg, NextHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldInputDlg, NextHdl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

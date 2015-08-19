@@ -72,9 +72,9 @@ friend class SfxStyleDialog;
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
     DECL_LINK( EditStyleSelectHdl_Impl, void * );
-    DECL_LINK( EditStyleHdl_Impl, void * );
+    DECL_LINK_TYPED( EditStyleHdl_Impl, Button*, void );
     DECL_LINK( EditLinkStyleSelectHdl_Impl, void * );
-    DECL_LINK( EditLinkStyleHdl_Impl, void * );
+    DECL_LINK_TYPED( EditLinkStyleHdl_Impl, Button*, void );
 
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();

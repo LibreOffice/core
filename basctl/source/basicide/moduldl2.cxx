@@ -351,7 +351,7 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 }
 
 // NewObjectDialog
-IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
+IMPL_LINK_NOARG_TYPED(NewObjectDialog, OkButtonHandler, Button*, void)
 {
     if (IsValidSbxName(m_pEdit->GetText()))
         EndDialog(1);
@@ -360,7 +360,6 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
         ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
         m_pEdit->GrabFocus();
     }
-    return 0;
 }
 
 NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode::Mode eMode,
@@ -434,21 +433,19 @@ sal_Int32 GotoLineDialog::GetLineNumber() const
     return m_pEdit->GetText().toInt32();
 }
 
-IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
+IMPL_LINK_NOARG_TYPED(GotoLineDialog, OkButtonHandler, Button*, void)
 {
     if ( GetLineNumber() )
         EndDialog(1);
     else
         m_pEdit->SetText(m_pEdit->GetText(), Selection(0, m_pEdit->GetText().getLength()));
-    return 0;
 }
 
 // ExportDialog
-IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
+IMPL_LINK_NOARG_TYPED(ExportDialog, OkButtonHandler, Button*, void)
 {
     mbExportAsPackage = m_pExportAsPackageButton->IsChecked();
     EndDialog(1);
-    return 0;
 }
 
 ExportDialog::ExportDialog(vcl::Window * pParent)
@@ -623,7 +620,7 @@ IMPL_LINK( LibPage, BasicSelectHdl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
+IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == m_pEditButton)
     {
@@ -640,7 +637,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
                                     SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
         EndTabDialog( 1 );
-        return 0;
+        return;
     }
     else if (pButton == m_pNewLibButton)
         NewLib();
@@ -709,7 +706,6 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         }
     }
     CheckButtons();
-    return 0;
 }
 
 IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )

@@ -127,7 +127,7 @@ public:
 
 protected:
 
-    DECL_LINK(ShowRootRegionHdl, void*);
+    DECL_LINK_TYPED(ShowRootRegionHdl, Button*, void);
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
 

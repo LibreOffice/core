@@ -244,7 +244,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     return pData;
 }
 
-IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
+IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
 {
     //check that min < max
     bool bWarn = false;
@@ -295,7 +295,6 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     {
         EndDialog(RET_OK);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )

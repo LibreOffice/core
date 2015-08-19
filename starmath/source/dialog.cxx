@@ -159,10 +159,9 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
     rFont.SetWeight((nIndex & 0x2) ? WEIGHT_BOLD : WEIGHT_NORMAL);
 }
 
-IMPL_LINK( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *,/*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, void )
 {
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
-    return 0;
 }
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rOptions)
@@ -314,7 +313,7 @@ IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
     return 0;
 }
 
-IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, /*pCheckBox*/ )
+IMPL_LINK_NOARG_TYPED( SmFontDialog, AttrChangeHdl, Button*, void )
 {
     if (m_pBoldCheckBox->IsChecked())
         maFont.SetWeight(FontWeight(WEIGHT_BOLD));
@@ -327,7 +326,6 @@ IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, /*pCheckBox*/ )
         maFont.SetItalic(ITALIC_NONE);
 
     m_pShowFont->SetFont(maFont);
-    return 0;
 }
 
 void SmFontDialog::SetFont(const vcl::Font &rFont)
@@ -420,7 +418,7 @@ public:
     }
 };
 
-IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
@@ -429,7 +427,6 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
-    return 0;
 }
 
 SmFontSizeDialog::SmFontSizeDialog(vcl::Window * pParent)
@@ -524,7 +521,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 }
 
 
-IMPL_LINK( SmFontTypeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SmFontTypeDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
@@ -533,7 +530,6 @@ IMPL_LINK( SmFontTypeDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt, true );
     }
-    return 0;
 }
 
 SmFontTypeDialog::SmFontTypeDialog(vcl::Window * pParent, OutputDevice *pFntListDevice)
@@ -721,7 +717,7 @@ IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu )
 }
 
 
-IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
@@ -730,10 +726,9 @@ IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
-    return 0;
 }
 
-IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, CheckBox *, pCheckBox )
+IMPL_LINK_TYPED( SmDistanceDialog, CheckBoxClickHdl, Button *, pCheckBox, void )
 {
     if (pCheckBox == m_pCheckBox1)
     {
@@ -743,7 +738,6 @@ IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, CheckBox *, pCheckBox )
         m_pFixedText4->Enable( bChecked );
         m_pMetricField4->Enable( bChecked );
     }
-    return 0;
 }
 
 
@@ -1027,7 +1021,7 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
     {
@@ -1036,7 +1030,6 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, /*pButton*/ )
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
-    return 0;
 }
 
 SmAlignDialog::SmAlignDialog(vcl::Window * pParent)
@@ -1472,7 +1465,7 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl )
     return 0;
 }
 
-IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
+IMPL_LINK_NOARG_TYPED(SmSymbolDialog, EditClickHdl, Button*, void)
 {
     ScopedVclPtrInstance<SmSymDefineDialog> pDialog(this, pFontListDev, rSymbolMgr);
 
@@ -1510,8 +1503,6 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
     if (nSymPos >= aSymbolSet.size())
         nSymPos = static_cast< sal_uInt16 >(aSymbolSet.size()) - 1;
     SelectSymbol( nSymPos );
-
-    return 0;
 }
 
 
@@ -1523,7 +1514,7 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl )
 }
 
 
-IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl )
+IMPL_LINK_NOARG_TYPED( SmSymbolDialog, GetClickHdl, Button*, void )
 {
     const SmSym *pSym = GetSymbol();
     if (pSym)
@@ -1535,8 +1526,6 @@ IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl )
                 SID_INSERTSYMBOL, SfxCallMode::RECORD,
                 new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()), 0L);
     }
-
-    return 0;
 }
 
 
@@ -1922,7 +1911,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
 }
 
 
-IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
@@ -1948,12 +1937,10 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton )
     FillSymbols(*pSymbols    ,false);
 
     UpdateButtons();
-
-    return 0;
 }
 
 
-IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
@@ -1989,12 +1976,10 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
     FillSymbols(*pSymbols    ,false);
 
     UpdateButtons();
-
-    return 0;
 }
 
 
-IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, pButton )
+IMPL_LINK_TYPED( SmSymDefineDialog, DeleteClickHdl, Button *, pButton, void )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
@@ -2017,8 +2002,6 @@ IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, pButton )
     }
 
     UpdateButtons();
-
-    return 0;
 }
 
 

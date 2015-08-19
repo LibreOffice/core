@@ -87,7 +87,7 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     SetFieldUnit( *m_pMtrFldTop, eFUnit );
     SetFieldUnit( *m_pMtrFldBottom, eFUnit );
 
-    Link<> aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
+    Link<Button*,void> aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
     m_pTsbAutoGrowWidth->SetClickHdl( aLink );
     m_pTsbAutoGrowHeight->SetClickHdl( aLink );
     m_pTsbFitToSize->SetClickHdl( aLink );
@@ -582,7 +582,7 @@ void SvxTextAttrPage::PointChanged( vcl::Window*, RECT_POINT eRP )
     to be moved to a valid and adjacent position.  This position depends on
     the current anchor position and the text writing direction.
 */
-IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
 {
     if( m_pTsbFullWidth->GetState() == TRISTATE_TRUE )
     {
@@ -631,7 +631,6 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
             }
         }
     }
-    return 0L;
 }
 
 /*************************************************************************
@@ -640,7 +639,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickHdl_Impl, Button*, void)
 {
     bool bAutoGrowWidth  = m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE;
     bool bAutoGrowHeight = m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE;
@@ -681,8 +680,6 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
 
     // #83698# enable/disable text anchoring dependent of contour
     m_pFlPosition->Enable(!bContour && !bHorAndVer);
-
-    return 0L;
 }
 
 

@@ -396,7 +396,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, OKHdl, Button*, void)
 {
     OUString aStr = m_pShowText->GetText();
 
@@ -408,7 +408,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
         m_pShowText->SetText( aOUStr );
     }
     EndDialog( RET_OK );
-    return 0;
 }
 
 void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)

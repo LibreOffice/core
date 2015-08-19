@@ -450,7 +450,7 @@ void SwInsertDBColAutoPilot::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, PageHdl, Button*, pButton, void )
 {
     bool bShowTable = pButton == m_pRbAsTable;
 
@@ -479,11 +479,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
         m_pPbTableFormat->Enable( 0 != m_pLbTableCol->GetEntryCount() );
 
     SelectHdl( bShowTable ? m_pLbTableDbColumn : m_pLbTextDbColumn );
-
-    return 0;
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
 {
     ListBox& rBox = m_pRbAsTable->IsChecked()
                         ? ( 0 == m_pLbTableCol->GetEntryData( 0 )
@@ -497,11 +495,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
     bool bFromDB = m_pRbDbFormatFromDb == pButton;
     (*it)->bIsDBFormat = bFromDB;
     m_pLbDbFormatFromUsr->Enable( !bFromDB );
-
-    return 0;
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
 {
     bool bChgEnable = true, bEnableTo = true, bEnableFrom = true;
     m_pLbTableDbColumn->SetUpdateMode( false );
@@ -642,8 +638,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton )
     }
     m_pLbTableDbColumn->SetUpdateMode( true );
     m_pLbTableCol->SetUpdateMode( true );
-
-    return 0;
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
@@ -662,7 +656,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, PushButton*, pButton )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
 {
     SwWrtShell& rSh = pView->GetWrtShell();
     bool bNewSet = false;
@@ -777,11 +771,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, PushButton*, pButton )
         delete pTableSet, pTableSet = 0;
         delete pRep, pRep = 0;
     }
-
-    return 0;
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, PushButton*, pButton )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -790,7 +782,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, PushButton*, pButton )
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
-    return 0;
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
@@ -854,7 +845,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton, void )
 {
     if( pButton == m_pCbTableHeadon )
     {
@@ -863,7 +854,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
         m_pRbHeadlColnms->Enable( bEnable );
         m_pRbHeadlEmpty->Enable( bEnable );
     }
-    return 0;
 }
 
 static void lcl_InsTextInArr( const OUString& rText, _DB_Columns& rColArr )

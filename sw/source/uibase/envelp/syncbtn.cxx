@@ -79,10 +79,9 @@ void SwSyncBtnDlg::dispose()
     SfxFloatingWindow::dispose();
 }
 
-IMPL_STATIC_LINK_NOARG(SwSyncBtnDlg, BtnHdl)
+IMPL_STATIC_LINK_NOARG_TYPED(SwSyncBtnDlg, BtnHdl, Button*, void)
 {
     SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SfxCallMode::ASYNCHRON);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

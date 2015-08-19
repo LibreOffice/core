@@ -80,7 +80,7 @@ private:
 
     Any                         maSelection;
 
-    DECL_LINK(CancelHdl, void *);
+    DECL_LINK_TYPED(CancelHdl, Button*, void);
 
     sal_uInt16 mnSigningPageId;
     sal_uInt16 mnSecurityPageId;
@@ -331,7 +331,7 @@ public:
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
     VclPtr<PushButton>                 mpPbSetPwd;
-    OUString                    msStrSetPwd;
+    OUString                           msStrSetPwd;
 
     VclPtr<VclContainer>               mpUserPwdSet;
     VclPtr<VclContainer>               mpUserPwdUnset;
@@ -366,7 +366,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
-    DECL_LINK( ClickmaPbSetPwdHdl, void* );
+    DECL_LINK_TYPED( ClickmaPbSetPwdHdl, Button*, void );
 
     void enablePermissionControls();
 
@@ -388,19 +388,19 @@ public:
 //class to implement the relative link stuff
 class ImpPDFTabLinksPage : public SfxTabPage
 {
-    VclPtr<CheckBox>                   m_pCbExprtBmkrToNmDst;
-    VclPtr<CheckBox>                   m_pCbOOoToPDFTargets;
-    VclPtr<CheckBox>                   m_pCbExportRelativeFsysLinks;
+    VclPtr<CheckBox>        m_pCbExprtBmkrToNmDst;
+    VclPtr<CheckBox>        m_pCbOOoToPDFTargets;
+    VclPtr<CheckBox>        m_pCbExportRelativeFsysLinks;
 
-    VclPtr<RadioButton>                m_pRbOpnLnksDefault;
+    VclPtr<RadioButton>     m_pRbOpnLnksDefault;
     bool                    mbOpnLnksDefaultUserState;
-    VclPtr<RadioButton>                m_pRbOpnLnksLaunch;
+    VclPtr<RadioButton>     m_pRbOpnLnksLaunch;
     bool                    mbOpnLnksLaunchUserState;
-    VclPtr<RadioButton>                m_pRbOpnLnksBrowser;
+    VclPtr<RadioButton>     m_pRbOpnLnksBrowser;
     bool                    mbOpnLnksBrowserUserState;
 
-    DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );
-    DECL_LINK( ClickRbOpnLnksBrowserHdl, void* );
+    DECL_LINK_TYPED( ClickRbOpnLnksDefaultHdl, Button*, void );
+    DECL_LINK_TYPED( ClickRbOpnLnksBrowserHdl, Button*, void );
 
 public:
     ImpPDFTabLinksPage( vcl::Window* pParent,
@@ -430,8 +430,8 @@ class ImpPDFTabSigningPage : public SfxTabPage
     VclPtr<ListBox>                    mpLBSignTSA;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
-    DECL_LINK( ClickmaPbSignCertSelect, void* );
-    DECL_LINK( ClickmaPbSignCertClear, void* );
+    DECL_LINK_TYPED( ClickmaPbSignCertSelect, Button*, void );
+    DECL_LINK_TYPED( ClickmaPbSignCertClear, Button*, void );
 
 public:
     ImpPDFTabSigningPage( vcl::Window* pParent,

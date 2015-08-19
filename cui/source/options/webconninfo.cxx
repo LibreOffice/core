@@ -206,7 +206,7 @@ void WebConnectionInfoDialog::FillPasswordList()
 }
 
 
-IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
+IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemovePasswordHdl, Button*, void)
 {
     try
     {
@@ -233,12 +233,10 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
     }
     catch( uno::Exception& )
     {}
-
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
+IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemoveAllPasswordsHdl, Button*, void)
 {
     try
     {
@@ -257,12 +255,10 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
     }
     catch( uno::Exception& )
     {}
-
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
+IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
 {
     try
     {
@@ -296,8 +292,6 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
     }
     catch( uno::Exception& )
     {}
-
-    return 0;
 }
 
 

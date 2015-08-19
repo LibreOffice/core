@@ -472,11 +472,9 @@ void SdTPAction::OpenFileDialog()
     }
 }
 
-IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
+IMPL_LINK_NOARG_TYPED(SdTPAction, ClickSearchHdl, Button*, void)
 {
     OpenFileDialog();
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)

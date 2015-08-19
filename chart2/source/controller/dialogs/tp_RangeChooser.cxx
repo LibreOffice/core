@@ -366,7 +366,7 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
+IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ChooseRangeHdl, Button*, void)
 {
     OUString aRange = m_pED_Range->GetText();
     // using assignment for broken gcc 3.3
@@ -374,8 +374,6 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );
-
-    return 0;
 }
 
 void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )

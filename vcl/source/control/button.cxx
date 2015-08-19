@@ -109,7 +109,7 @@ void Button::dispose()
 void Button::SetCommandHandler(const OUString& aCommand)
 {
     maCommand = aCommand;
-    SetClickHdl(Link<>(NULL, dispatchCommandHandler));
+    SetClickHdl( LINK( this, Button, dispatchCommandHandler) );
 }
 
 void Button::Click()
@@ -609,16 +609,12 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-sal_IntPtr Button::dispatchCommandHandler(void *, void *pCaller)
+IMPL_STATIC_LINK_TYPED( Button, dispatchCommandHandler, Button*, pButton, void )
 {
-    const Button *pButton = static_cast<Button*>(pCaller);
     if (pButton == NULL)
-        return 0;
+        return;
 
-    if (!comphelper::dispatchCommand(pButton->maCommand, uno::Sequence<beans::PropertyValue>()))
-        return 0;
-
-    return 1;
+    comphelper::dispatchCommand(pButton->maCommand, uno::Sequence<beans::PropertyValue>());
 }
 
 void PushButton::ImplInitPushButtonData()

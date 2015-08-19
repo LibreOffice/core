@@ -54,7 +54,7 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
 
-        DECL_LINK( OKClickHdl, Button* );
+        DECL_LINK_TYPED( OKClickHdl, Button*, void );
         DECL_LINK( LBChangeHdl, ListBox* );
         DECL_LINK( NaturalToggleHdl, CheckBox* );
 

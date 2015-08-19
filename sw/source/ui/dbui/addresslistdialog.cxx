@@ -290,7 +290,7 @@ void SwAddressListDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAddressListDialog, FilterHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
     {
         const OUString sCommand = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
         if (sCommand.isEmpty())
-            return 0;
+            return;
 
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         if(pUserData->xConnection.is() )
@@ -341,10 +341,9 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
             }
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAddressListDialog, LoadHdl_Impl, Button*, void)
 {
     SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
 
@@ -355,15 +354,13 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
         pNewSource->SetUserData(new AddressUserData_Impl());
         m_pListLB->Select(pNewSource);
     }
-    return 0;
 }
 
-IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
 {
     OUString sInputURL;
     VclPtr<SwCreateAddressListDialog> pDlg(
             VclPtr<SwCreateAddressListDialog>::Create(
-
                     pButton,
                     sInputURL,
                     m_pAddressPage->GetWizard()->GetConfigItem()));
@@ -439,10 +436,9 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
         {
         }
     }
-    return 0;
 }
 
-IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
 {
     SvTreeListEntry* pEntry = m_pListLB->FirstSelected();
     AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : 0;
@@ -471,7 +467,6 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         {
         }
     }
-    return 0;
 };
 
 IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
@@ -635,7 +630,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
 }
 
-IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwAddressListDialog, TableSelectHdl_Impl, Button*, pButton, void)
 {
     EnterWait();
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
@@ -652,13 +647,11 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
     }
 
     LeaveWait();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAddressListDialog, OKHdl_Impl, Button*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 uno::Reference< XDataSource>  SwAddressListDialog::GetSource()

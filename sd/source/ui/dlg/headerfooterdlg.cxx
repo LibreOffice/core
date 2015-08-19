@@ -145,7 +145,7 @@ private:
 
     bool            mbHandoutMode;
 
-    DECL_LINK( UpdateOnClickHdl, void * );
+    DECL_LINK_TYPED( UpdateOnClickHdl, Button*, void );
 
     DECL_LINK( LanguageChangeHdl, void * );
 
@@ -266,22 +266,19 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
+IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickApplyToAllHdl, Button*, void)
 {
     ApplyToAll();
-    return 0;
 }
 
-IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
+IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickApplyHdl, Button*, void)
 {
     Apply();
-    return 0;
 }
 
-IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
+IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickCancelHdl, Button*, void)
 {
     Cancel();
-    return 0;
 }
 
 short HeaderFooterDialog::Execute()
@@ -588,11 +585,9 @@ void HeaderFooterTabPage::update()
     mpCTPreview->update( aSettings );
 }
 
-IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
+IMPL_LINK_NOARG_TYPED(HeaderFooterTabPage, UpdateOnClickHdl, Button*, void)
 {
     update();
-
-    return 0;
 }
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet )

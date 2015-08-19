@@ -142,13 +142,14 @@ private:
                         mxPage;
 
 
-                        DECL_LINK( UpdateHdl, void* );
+                        DECL_LINK_TYPED( UpdateHdl, Button*, void );
+                        DECL_LINK( SelectHdl, void* );
                         DECL_LINK( UpdateHdlMtfSizeX, void* );
                         DECL_LINK( UpdateHdlMtfSizeY, void* );
                         DECL_LINK( UpdateHdlNfResolution, void* );
                         DECL_LINK( SbCompressionUpdateHdl, void* );
 
-                        DECL_LINK( OK, void* );
+                        DECL_LINK_TYPED( OK, Button*, void );
 
                         void setupSizeControls();
                         void createFilterOptions();

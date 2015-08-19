@@ -54,7 +54,7 @@ private:
     void                LoadConfig();
     void                SaveConfig();
 
-    DECL_LINK(FindHdl, void *);
+    DECL_LINK_TYPED(FindHdl, Button *, void);
 
 public:
     SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );

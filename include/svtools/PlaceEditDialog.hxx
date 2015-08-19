@@ -81,8 +81,8 @@ private:
     void InitDetails( );
     void UpdateLabel( );
 
-    DECL_LINK ( OKHdl, Button * );
-    DECL_LINK ( DelHdl, Button * );
+    DECL_LINK_TYPED ( OKHdl, Button *, void );
+    DECL_LINK_TYPED ( DelHdl, Button *, void );
     DECL_LINK_TYPED ( EditHdl, DetailsContainer*, void );
     DECL_LINK ( ModifyHdl, void* );
     DECL_LINK ( SelectTypeHdl, void * );

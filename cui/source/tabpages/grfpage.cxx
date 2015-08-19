@@ -118,8 +118,7 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     m_pTopMF->SetLoseFocusHdl( aLk );
     m_pBottomMF->SetLoseFocusHdl( aLk );
 
-    aLk = LINK(this, SvxGrfCropPage, OrigSizeHdl);
-    m_pOrigSizePB->SetClickHdl( aLk );
+    m_pOrigSizePB->SetClickHdl( LINK(this, SvxGrfCropPage, OrigSizeHdl) );
 
     aTimer.SetTimeoutHdl(LINK(this, SvxGrfCropPage, Timeout));
     aTimer.SetTimeout( 1500 );
@@ -571,7 +570,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     description: set original size
  --------------------------------------------------------------------*/
 
-IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
+IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, OrigSizeHdl, Button*, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -589,7 +588,6 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
     m_pWidthZoomMF->SetValue(100);
     m_pHeightZoomMF->SetValue(100);
     bSetOrigSize = true;
-    return 0;
 }
 /*--------------------------------------------------------------------
     description: compute scale

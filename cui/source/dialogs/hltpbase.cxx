@@ -307,7 +307,7 @@ SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 }
 
 // Click on imagebutton : Script
-IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
 {
     SvxHyperlinkItem *pHyperlinkItem = const_cast<SvxHyperlinkItem*>(static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK)));
@@ -365,8 +365,6 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         }
         delete pItemSet;
     }
-
-    return 0L;
 }
 
 // Get Macro-Infos

@@ -44,7 +44,7 @@ class SwLabPrtPage : public SfxTabPage
     VclPtr<FixedText>    m_pPrinterInfo;
     VclPtr<PushButton>   m_pPrtSetup;
 
-    DECL_LINK( CountHdl, Button * );
+    DECL_LINK_TYPED( CountHdl, Button *, void );
 
     SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetParentDialog());}
 

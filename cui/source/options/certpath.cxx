@@ -115,7 +115,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
         AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
 }
 
-IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
+IMPL_LINK_NOARG_TYPED(CertPathDialog, OKHdl_Impl, Button*, void)
 {
     try
     {
@@ -131,8 +131,6 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
     }
 
     EndDialog(RET_OK);
-
-    return 0;
 }
 
 OUString CertPathDialog::getDirectory() const
@@ -217,7 +215,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
     HandleCheckEntry(pEntry);
 }
 
-IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
+IMPL_LINK_NOARG_TYPED(CertPathDialog, AddHdl_Impl, Button*, void)
 {
     try
     {
@@ -240,8 +238,6 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
     {
         SAL_WARN("cui.options", "caught UNO exception: " << e.Message);
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

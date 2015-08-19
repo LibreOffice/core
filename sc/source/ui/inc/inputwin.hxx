@@ -226,7 +226,7 @@ private:
     VclPtr<ImageButton>     aButton;
     VclPtr<ScrollBar>       aScrollBar;
     long            nVertOffset;
-    DECL_LINK( ClickHdl, void* );
+    DECL_LINK_TYPED( ClickHdl, Button*, void );
     DECL_LINK( Impl_ScrollHdl, void* );
 
 };

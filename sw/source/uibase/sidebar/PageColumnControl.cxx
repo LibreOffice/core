@@ -105,12 +105,11 @@ IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
     return 0;
 }
 
-IMPL_LINK_NOARG(PageColumnControl, MoreButtonClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(PageColumnControl, MoreButtonClickHdl_Impl, Button*, void)
 {
     mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
 
     mrPagePropPanel.ClosePageColumnPopup();
-    return 0;
 }
 
 } } // end of namespace sw::sidebar

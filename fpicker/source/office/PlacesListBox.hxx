@@ -60,8 +60,8 @@ class PlacesListBox : public Control
         bool IsUpdated();
         const std::vector<PlacePtr>& GetPlaces() { return maPlaces;}
 
-        void SetAddHdl( const Link<>& rHdl );
-        void SetDelHdl( const Link<>& rHdl );
+        void SetAddHdl( const Link<Button*,void>& rHdl );
+        void SetDelHdl( const Link<Button*,void>& rHdl );
         void SetDelEnabled( bool enabled );
         void SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         void updateView( );

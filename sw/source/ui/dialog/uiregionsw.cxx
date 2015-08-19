@@ -754,7 +754,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
 }
 
 // in OkHdl the modified settings are being applied and reversed regions are deleted
-IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
+IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OkHdl, Button*, void)
 {
     // temp. Array because during changing of a region the position
     // inside of the "Core-Arrays" can be shifted:
@@ -828,15 +828,14 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 
     rSh.EndUndo();
     rSh.EndAllAction();
-
-    return 0;
 }
 
 // Toggle protect
-IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, ChangeProtectHdl, Button *, pButton, void )
 {
+    TriStateBox* pBox = static_cast<TriStateBox*>(pButton);
     if(!CheckPasswd(pBox))
-        return 0;
+        return;
     pBox->EnableTriState(false);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
@@ -853,14 +852,14 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     }
     m_pPasswdCB->Enable(bCheck);
     m_pPasswdPB->Enable(bCheck);
-    return 0;
 }
 
 // Toggle hide
-IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, ChangeHideHdl, Button *, pButton, void )
 {
+    TriStateBox* pBox = static_cast<TriStateBox*>(pButton);
     if(!CheckPasswd(pBox))
-        return 0;
+        return;
     pBox->EnableTriState(false);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
@@ -880,14 +879,14 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     bool bHide = TRISTATE_TRUE == pBox->GetState();
     m_pConditionED->Enable(bHide);
     m_pConditionFT->Enable(bHide);
-    return 0;
 }
 
 // Toggle edit in readonly
-IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, ChangeEditInReadonlyHdl, Button *, pButton, void )
 {
+    TriStateBox* pBox = static_cast<TriStateBox*>(pButton);
     if(!CheckPasswd(pBox))
-        return 0;
+        return;
     pBox->EnableTriState(false);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
@@ -898,15 +897,13 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
                 TRISTATE_TRUE == pBox->GetState());
         pEntry = m_pTree->NextSelected(pEntry);
     }
-
-    return 0;
 }
 
 // clear selected region
-IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
+IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, ChangeDismissHdl, Button*, void)
 {
     if(!CheckPasswd())
-        return 0;
+        return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     SvTreeListEntry* pChild;
     SvTreeListEntry* pParent;
@@ -965,14 +962,14 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         m_pOK->GrabFocus();
         UseFileHdl(m_pFileCB);
     }
-    return 0;
 }
 
 // link CheckBox to file?
-IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if(!CheckPasswd(pBox))
-        return 0;
+        return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     pBox->EnableTriState(false);
     bool bMulti = 1 < m_pTree->GetSelectionCount();
@@ -1022,27 +1019,25 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         m_pDDECB->Enable(false);
         m_pDDEFrame->Enable(false);
     }
-    return 0;
 }
 
 // call dialog paste file
-IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl)
+IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, FileSearchHdl, Button*, void)
 {
     if(!CheckPasswd(0))
-        return 0;
+        return;
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter =
         new ::sfx2::DocumentInserter( "swriter" );
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
+IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
 {
     if(!CheckPasswd())
-        return 0;
+        return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
 
     if(pEntry)
@@ -1135,8 +1130,6 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
             }
         }
     }
-
-    return 0;
 }
 
 // Applying of the filename or the linked region
@@ -1189,10 +1182,11 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, DDEHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if(!CheckPasswd(pBox))
-        return 0;
+        return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     if(pEntry)
     {
@@ -1235,17 +1229,16 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
         }
         m_pFilePB->Enable(bFile && !bDDE);
     }
-    return 0;
 }
 
-IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
 {
     bool bChange = pBox == m_pPasswdPB;
     if(!CheckPasswd(0))
     {
         if(!bChange)
             m_pPasswdCB->Check(!m_pPasswdCB->IsChecked());
-        return 0;
+        return;
     }
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
@@ -1288,7 +1281,6 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         }
         pEntry = m_pTree->NextSelected(pEntry);
     }
-    return 0;
 }
 
 // the current region name is being added to the TreeListBox immediately during
@@ -1686,23 +1678,21 @@ VclPtr<SfxTabPage> SwInsertSectionTabPage::Create( vcl::Window* pParent,
     return VclPtr<SwInsertSectionTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwInsertSectionTabPage, ChangeHideHdl, Button *, pBox, void )
 {
-    bool bHide = pBox->IsChecked();
+    bool bHide = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pConditionED->Enable(bHide);
     m_pConditionFT->Enable(bHide);
-    return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwInsertSectionTabPage, ChangeProtectHdl, Button *, pBox, void )
 {
-    bool bCheck = pBox->IsChecked();
+    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pPasswdCB->Enable(bCheck);
     m_pPasswdPB->Enable(bCheck);
-    return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
+IMPL_LINK_TYPED( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
 {
     bool bChange = pButton == m_pPasswdPB;
     bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
@@ -1730,7 +1720,6 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     }
     else
         m_aNewPasswd.realloc(0);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwInsertSectionTabPage, NameEditHdl)
@@ -1741,8 +1730,9 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, NameEditHdl)
     return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if( pBox->IsChecked() )
     {
         if( m_pWrtSh->HasSelection() &&
@@ -1768,21 +1758,20 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
         m_pDDECB->Check(false);
         DDEHdl(m_pDDECB);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
+IMPL_LINK_NOARG_TYPED(SwInsertSectionTabPage, FileSearchHdl, Button*, void)
 {
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter( "swriter" );
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
-    return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SwInsertSectionTabPage, DDEHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     bool bDDE = pBox->IsChecked();
     bool bFile = m_pFileCB->IsChecked();
     m_pFilePB->Enable(!bDDE && bFile);
@@ -1805,7 +1794,6 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
         m_pSubRegionED->Enable(bFile);
         m_pFileNameED->SetAccessibleName(m_pFileNameFT->GetText());
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, void )
@@ -1862,7 +1850,7 @@ SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage( vcl::Window *pParent,
     get(pEndSuffixFT,"endsuffix_label");
     get(pEndSuffixED,"endsuffix");
 
-    Link<> aLk( LINK( this, SwSectionFootnoteEndTabPage, FootEndHdl));
+    Link<Button*,void> aLk( LINK( this, SwSectionFootnoteEndTabPage, FootEndHdl));
     pFootnoteNtAtTextEndCB->SetClickHdl( aLk );
     pFootnoteNtNumCB->SetClickHdl( aLk );
     pEndNtAtTextEndCB->SetClickHdl( aLk );
@@ -2045,7 +2033,7 @@ VclPtr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( vcl::Window* pParent,
     return VclPtr<SwSectionFootnoteEndTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SwSectionFootnoteEndTabPage, FootEndHdl, Button *, pBox, void )
 {
     bool bFoot = pFootnoteNtAtTextEndCB == pBox || pFootnoteNtNumCB == pBox ||
                     pFootnoteNtNumFormatCB == pBox ;
@@ -2097,8 +2085,6 @@ IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, CheckBox *, pBox )
     pSuffixED->Enable( bEnableNumFormat );
     pPrefixFT->Enable( bEnableNumFormat );
     pSuffixFT->Enable( bEnableNumFormat );
-
-    return 0;
 }
 
 SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(

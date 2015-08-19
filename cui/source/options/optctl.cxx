@@ -24,7 +24,7 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
+IMPL_LINK_NOARG_TYPED(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, Button*, void)
 {
     bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
     m_pRestrictedCB->Enable( bIsSequenceChecking );
@@ -35,7 +35,6 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
         m_pTypeReplaceCB->Check();
         m_pRestrictedCB->Check();
     }
-    return 0;
 }
 
 SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet ) :

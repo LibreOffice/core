@@ -182,10 +182,9 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
         aCharSetLB->SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
 }
 
-IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, CheckBox*, pBox)
+IMPL_LINK_TYPED(OfaHtmlTabPage, CheckBoxHdl_Impl, Button*, pBox, void)
 {
-    aStarBasicWarningCB->Enable(!pBox->IsChecked());
-    return 0;
+    aStarBasicWarningCB->Enable(!static_cast<CheckBox*>(pBox)->IsChecked());
 }
 
 

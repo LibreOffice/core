@@ -113,7 +113,7 @@ void MacroWarning::SetDocumentURL( const OUString& rDocURL )
     mpDocNameFI->SetText( rDocURL );
 }
 
-IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
+IMPL_LINK_NOARG_TYPED(MacroWarning, ViewSignsBtnHdl, Button*, void)
 {
     DBG_ASSERT( mxCert.is(), "*MacroWarning::ViewSignsBtnHdl(): no certificate set!" );
 
@@ -126,11 +126,9 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
         else if( mxStore.is() )
             xD->showScriptingContentSignatures( mxStore, uno::Reference< io::XInputStream >() );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
+IMPL_LINK_NOARG_TYPED(MacroWarning, EnableBtnHdl, Button*, void)
 {
     if( mbSignedMode && mpAlwaysTrustCB->IsChecked() )
     {   // insert path into trusted path list
@@ -149,22 +147,18 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
     }
 
     EndDialog( RET_OK );
-    return 0;
 }
 
-IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl)
+IMPL_LINK_NOARG_TYPED(MacroWarning, DisableBtnHdl, Button*, void)
 {
     EndDialog();
-    return 0;
 }
 
-IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl)
+IMPL_LINK_NOARG_TYPED(MacroWarning, AlwaysTrustCheckHdl, Button*, void)
 {
     bool bEnable = ( mnActSecLevel < 2 || mpAlwaysTrustCB->IsChecked() );
     mpEnableBtn->Enable( bEnable );
     mpDisableBtn->Enable( !mpAlwaysTrustCB->IsChecked() );
-
-    return 0;
 }
 
 void MacroWarning::InitControls()

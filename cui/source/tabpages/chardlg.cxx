@@ -1496,9 +1496,9 @@ void SvxCharEffectsPage::Initialize()
     m_pEffectsLB->SelectEntryPos( 0 );
 
     m_pIndividualWordsBtn->SetClickHdl( LINK( this, SvxCharEffectsPage, CbClickHdl_Impl ) );
-    aLink = LINK( this, SvxCharEffectsPage, TristClickHdl_Impl );
-    m_pOutlineBtn->SetClickHdl( aLink );
-    m_pShadowBtn->SetClickHdl( aLink );
+    Link<Button*,void> aLink2 = LINK( this, SvxCharEffectsPage, TristClickHdl_Impl );
+    m_pOutlineBtn->SetClickHdl( aLink2 );
+    m_pShadowBtn->SetClickHdl( aLink2 );
 
     if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
@@ -1738,18 +1738,16 @@ IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, CbClickHdl_Impl, Button*, void)
 {
     UpdatePreview_Impl();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, TristClickHdl_Impl, Button*, void)
 {
     UpdatePreview_Impl();
-    return 0;
 }
 
 
@@ -2693,17 +2691,17 @@ void SvxCharPositionPage::Initialize()
     m_pKerningLB->SelectEntryPos( 0 );
     KerningSelectHdl_Impl( NULL );
 
-    Link<> aLink = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
-    m_pHighPosBtn->SetClickHdl( aLink );
-    m_pNormalPosBtn->SetClickHdl( aLink );
-    m_pLowPosBtn->SetClickHdl( aLink );
+    Link<Button*,void> aLink2 = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
+    m_pHighPosBtn->SetClickHdl( aLink2 );
+    m_pNormalPosBtn->SetClickHdl( aLink2 );
+    m_pLowPosBtn->SetClickHdl( aLink2 );
 
-    aLink = LINK( this, SvxCharPositionPage, RotationHdl_Impl );
-    m_p0degRB->SetClickHdl( aLink );
-    m_p90degRB->SetClickHdl( aLink );
-    m_p270degRB->SetClickHdl( aLink );
+    aLink2 = LINK( this, SvxCharPositionPage, RotationHdl_Impl );
+    m_p0degRB->SetClickHdl( aLink2 );
+    m_p90degRB->SetClickHdl( aLink2 );
+    m_p270degRB->SetClickHdl( aLink2 );
 
-    aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
+    Link<> aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
     m_pHighLowMF->SetModifyHdl( aLink );
     m_pFontSizeMF->SetModifyHdl( aLink );
 
@@ -2773,7 +2771,7 @@ void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
 
 
 
-IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( SvxCharPositionPage, PositionHdl_Impl, Button*, pBtn, void )
 {
     sal_uInt16 nEsc = SVX_ESCAPEMENT_OFF;   // also when pBtn == NULL
 
@@ -2783,12 +2781,11 @@ IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
         nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
 
     SetEscapement_Impl( nEsc );
-    return 0;
 }
 
 
 
-IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
 {
     bool bEnable = false;
     if (m_p90degRB == pBtn  || m_p270degRB == pBtn)
@@ -2796,7 +2793,6 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
     else
         OSL_ENSURE( m_p0degRB == pBtn, "unexpected button" );
     m_pFitToLineCB->Enable( bEnable );
-    return 0;
 }
 
 
@@ -2812,9 +2808,9 @@ IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl)
 
 
 
-IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SvxCharPositionPage, AutoPositionHdl_Impl, Button*, pBox, void )
 {
-    if ( pBox->IsChecked() )
+    if ( static_cast<CheckBox*>(pBox)->IsChecked() )
     {
         m_pHighLowFT->Disable();
         m_pHighLowMF->Disable();
@@ -2823,12 +2819,11 @@ IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, CheckBox*, pBox )
         PositionHdl_Impl( m_pHighPosBtn->IsChecked() ? m_pHighPosBtn
                                                       : m_pLowPosBtn->IsChecked() ? m_pLowPosBtn
                                                                                    : m_pNormalPosBtn );
-    return 0;
 }
 
 
 
-IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
+IMPL_LINK_TYPED( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
 {
     if (m_pFitToLineCB == pBox)
     {
@@ -2839,7 +2834,6 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 
         m_pPreviewWin->SetFontWidthScale( nVal );
     }
-    return 0;
 }
 
 
@@ -3168,8 +3162,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         m_pScalingAndRotationFT->Show();
         m_pScalingFT->Hide();
 
-        Link<> aOldLink( m_pFitToLineCB->GetClickHdl() );
-        m_pFitToLineCB->SetClickHdl( Link<>() );
+        Link<Button*,void> aOldLink( m_pFitToLineCB->GetClickHdl() );
+        m_pFitToLineCB->SetClickHdl( Link<Button*,void>() );
         if( eState >= SfxItemState::DEFAULT )
         {
             const SvxCharRotateItem& rItem =
@@ -3489,13 +3483,12 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, bool bStart )
 
 
 
-IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCharTwoLinesPage, TwoLinesHdl_Impl, Button*, void)
 {
     bool bChecked = m_pTwoLinesBtn->IsChecked();
     m_pEnclosingFrame->Enable( bChecked );
 
     UpdatePreview_Impl();
-    return 0;
 }
 
 

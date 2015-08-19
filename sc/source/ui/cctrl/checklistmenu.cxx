@@ -1177,7 +1177,7 @@ void ScCheckListMenuWindow::cycleFocus(bool bReverse)
     maTabStopCtrls[mnCurTabStop]->GrabFocus();
 }
 
-IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
+IMPL_LINK_TYPED( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn, void )
 {
     if (pBtn == maBtnOk.get())
         close(true);
@@ -1191,10 +1191,9 @@ IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
         selectCurrentMemberOnly(false);
         CheckHdl(maChecks.get());
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
+IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, TriStateHdl, Button*, void)
 {
     switch (mePrevToggleAllState)
     {
@@ -1214,7 +1213,6 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
     }
 
     mePrevToggleAllState = maChkToggleAll->GetState();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)

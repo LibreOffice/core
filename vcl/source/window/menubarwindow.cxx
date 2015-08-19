@@ -289,14 +289,16 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
     return 0;
 }
 
-IMPL_LINK_NOARG(MenuBarWindow, FloatHdl)
+IMPL_LINK_NOARG_TYPED(MenuBarWindow, FloatHdl, Button*, void)
 {
-    return pMenu ? static_cast<MenuBar*>(pMenu)->GetFloatButtonClickHdl().Call( pMenu ) : 0;
+    if (pMenu)
+        static_cast<MenuBar*>(pMenu)->GetFloatButtonClickHdl().Call( pMenu );
 }
 
-IMPL_LINK_NOARG(MenuBarWindow, HideHdl)
+IMPL_LINK_NOARG_TYPED(MenuBarWindow, HideHdl, Button*, void)
 {
-    return pMenu ? static_cast<MenuBar*>(pMenu)->GetHideButtonClickHdl().Call( pMenu ) : 0;
+    if (pMenu)
+        static_cast<MenuBar*>(pMenu)->GetHideButtonClickHdl().Call( pMenu );
 }
 
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )

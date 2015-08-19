@@ -199,7 +199,7 @@ bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
 
 // Handler:
 
-IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
+IMPL_LINK_TYPED( ScSolverDlg, BtnHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnOk)
     {
@@ -253,8 +253,6 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
     {
         Close();
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )

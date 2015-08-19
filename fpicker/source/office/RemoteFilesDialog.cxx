@@ -671,7 +671,7 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
     {}
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
+IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, AddServiceHdl, Button*, void )
 {
     ScopedVclPtrInstance< PlaceEditDialog > aDlg( this );
     aDlg->ShowPasswordControl();
@@ -711,8 +711,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
             // Do Nothing
             break;
     };
-
-    return 1;
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
@@ -982,7 +980,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr, voi
     OpenURL( pPtr->GetHdlURL() );
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl )
+IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, NewFolderHdl, Button*, void )
 {
     m_pFileView->EndInplaceEditing( false );
 
@@ -1006,11 +1004,9 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl )
         else
             bHandled = true;
     }
-
-    return 1;
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
+IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, OkHdl, Button*, void )
 {
     OUString sNameNoExt = m_pName_ed->GetText();
     OUString sPathNoExt;
@@ -1067,7 +1063,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
             sMsg = sMsg.replaceFirst( "$filename$", sName );
             ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
             if( aBox->Execute() != RET_YES )
-                return 0;
+                return;
         }
     }
     else
@@ -1077,18 +1073,17 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
             OpenURL( sPathNoExt );
             m_pName_ed->SetText( "" );
 
-            return 0;
+            return;
         }
 
         if( m_eMode == REMOTEDLG_MODE_OPEN )
-            return 0;
+            return;
     }
 
     EndDialog( RET_OK );
-    return 1;
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, CancelHdl )
+IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, CancelHdl, Button*, void )
 {
     if( m_pCurrentAsyncAction.is() )
     {
@@ -1099,7 +1094,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, CancelHdl )
     {
         EndDialog();
     }
-    return 1;
 }
 
 // SvtFileDialog_Base

@@ -584,18 +584,18 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
     }
 }
 
-IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( OFieldDescControl, FormatClickHdl, Button *, void )
 {
     // Create temporary Column, which is used for data exchange with Dialog
     if( !pActFieldDescr )
-        return 0;
+        return;
 
     sal_Int32 nOldFormatKey(pActFieldDescr->GetFormatKey());
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
     Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if (!pSupplierImpl)
-        return 0;
+        return;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
     if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,true))
@@ -618,7 +618,6 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
             UpdateFormatSample(pActFieldDescr);
         }
     }
-    return 0;
 }
 
 void OFieldDescControl::SetModified(bool /*bModified*/)

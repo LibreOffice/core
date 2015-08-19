@@ -140,12 +140,12 @@ void PlacesListBox::RemoveSelectedPlace() {
     RemovePlace(mpImpl->GetCurrRow());
 }
 
-void PlacesListBox::SetAddHdl( const Link<>& rHdl )
+void PlacesListBox::SetAddHdl( const Link<Button*,void>& rHdl )
 {
     mpAddBtn->SetClickHdl( rHdl );
 }
 
-void PlacesListBox::SetDelHdl( const Link<>& rHdl )
+void PlacesListBox::SetDelHdl( const Link<Button*,void>& rHdl )
 {
     mpDelBtn->SetClickHdl( rHdl );
 }

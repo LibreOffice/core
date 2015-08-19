@@ -180,7 +180,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     }
 
     // initialise
-    Link<> aLk = LINK(this,SwSortDlg, CheckHdl);
+    Link<Button*,void> aLk = LINK(this,SwSortDlg, CheckHdl);
     m_pKeyCB1->SetClickHdl( aLk );
     m_pKeyCB2->SetClickHdl( aLk );
     m_pKeyCB3->SetClickHdl( aLk );
@@ -385,15 +385,14 @@ void SwSortDlg::Apply()
         ScopedVclPtrInstance<MessageDialog>::Create( this->GetParent(), SW_RES(STR_SRTERR), VCL_MESSAGE_INFO)->Execute();
 }
 
-IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
+IMPL_LINK_TYPED( SwSortDlg, DelimHdl, Button*, pButton, void )
 {
     bool bEnable = pButton == m_pDelimFreeRB && m_pDelimFreeRB->IsEnabled();
     m_pDelimEdt->Enable( bEnable );
     m_pDelimPB->Enable( bEnable );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
+IMPL_LINK_NOARG_TYPED(SwSortDlg, DelimCharHdl, Button*, void)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
@@ -409,10 +408,9 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
                 m_pDelimEdt->SetText( OUString(sal_Unicode(pItem->GetValue())) );
         }
     }
-    return 0;
 }
 
-IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
+IMPL_LINK_TYPED( SwSortDlg, CheckHdl, Button*, pControl, void )
 {
     if( pControl == m_pRowRB.get())
     {
@@ -440,7 +438,6 @@ IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
                 !m_pKeyCB2->IsChecked() &&
                     !m_pKeyCB3->IsChecked())
         static_cast<CheckBox *>(pControl)->Check();
-    return 0;
 }
 
 IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )

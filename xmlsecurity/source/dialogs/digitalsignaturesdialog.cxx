@@ -380,7 +380,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
 {
     // Export all other signatures...
     SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
@@ -407,7 +407,6 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl)
     }
 
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl)
@@ -416,16 +415,15 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)
 {
     ImplShowSignaturesDetails();
-    return 0;
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
 {
     if( ! canAdd())
-        return 0;
+        return;
     try
     {
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
@@ -439,13 +437,13 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
             if ( !xCert.is() )
             {
                 SAL_WARN( "xmlsecurity.dialogs", "no certificate selected" );
-                return -1;
+                return;
             }
             OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
             if ( aCertSerial.isEmpty() )
             {
                 OSL_FAIL( "Error in Certificate, problem with serial number!" );
-                return -1;
+                return;
             }
 
             maSignatureHelper.StartMission();
@@ -525,14 +523,12 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
         ImplGetSignatureInformations(true);
         ImplFillSignaturesBox();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
 {
     if (!canRemove())
-        return 0;
+        return;
     if( m_pSignaturesLB->FirstSelected() )
     {
         try
@@ -569,8 +565,6 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
             ImplFillSignaturesBox();
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl)

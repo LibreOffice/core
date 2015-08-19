@@ -132,7 +132,7 @@ void SearchDialog::SaveConfig()
     aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 
-IMPL_LINK_NOARG(SearchDialog, FindHdl)
+IMPL_LINK_NOARG_TYPED(SearchDialog, FindHdl, Button*, void)
 {
     OUString sSrchTxt = m_pSearchEdit->GetText();
     sal_Int32 nPos = m_pSearchEdit->GetEntryPos( sSrchTxt );
@@ -141,7 +141,6 @@ IMPL_LINK_NOARG(SearchDialog, FindHdl)
     if ( nPos > 0 )
         m_pSearchEdit->InsertEntry( sSrchTxt, 0 );
     m_aFindHdl.Call( this );
-    return 0;
 }
 
 void SearchDialog::SetFocusOnEdit()

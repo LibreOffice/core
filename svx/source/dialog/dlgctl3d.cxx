@@ -1241,7 +1241,7 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress)
+IMPL_LINK_NOARG_TYPED(SvxLightCtl3D, ButtonPress, Button*, void)
 {
     if(SvxPreviewObjectType::SPHERE == GetSvx3DLightControl().GetObjectType())
     {
@@ -1251,8 +1251,6 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress)
     {
         GetSvx3DLightControl().SetObjectType(SvxPreviewObjectType::SPHERE);
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange)

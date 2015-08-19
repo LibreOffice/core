@@ -62,9 +62,9 @@ class LoginDialog : public ModalDialog
     void            HideControls_Impl( sal_uInt16 nFlags );
     void            EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled );
 
-    DECL_LINK(OKHdl_Impl, void *);
-    DECL_LINK(PathHdl_Impl, void *);
-    DECL_LINK(UseSysCredsHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(PathHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(UseSysCredsHdl_Impl, Button*, void);
 
 public:
     LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,

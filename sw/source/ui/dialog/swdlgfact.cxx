@@ -161,11 +161,10 @@ OUString AbstractTabDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 
-IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl)
+IMPL_LINK_NOARG_TYPED(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
 {
     if (pDlg->Apply())
         m_aHandler.Call(NULL);
-    return 0;
 }
 
 void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<>& rLink )

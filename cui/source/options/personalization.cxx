@@ -119,7 +119,7 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
     return OUString();
 }
 
-IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
+IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
 {
     OUString searchTerm;
     if( m_rSearchThread.is() )
@@ -140,7 +140,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
     }
 
     if( searchTerm.isEmpty( ) )
-        return 0;
+        return;
 
     // TODO FIXME!
     // Before the release, the allizom.org url should be changed to:
@@ -176,10 +176,9 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
     OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_rSearchThread->launch();
-    return 0;
 }
 
-IMPL_LINK( SelectPersonaDialog, ActionOK, PushButton*, /* pButton */ )
+IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
 {
     OUString aSelectedPersona = GetSelectedPersona();
 
@@ -195,19 +194,17 @@ IMPL_LINK( SelectPersonaDialog, ActionOK, PushButton*, /* pButton */ )
             m_rSearchThread->StopExecution();
         EndDialog( RET_OK );
     }
-    return 0;
 }
 
-IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
+IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionCancel, Button*, void )
 {
     if( m_rSearchThread.is() )
         m_rSearchThread->StopExecution();
 
     EndDialog();
-    return 0;
 }
 
-IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
+IMPL_LINK_TYPED( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
 {
     if( m_rSearchThread.is() )
         m_rSearchThread->StopExecution();
@@ -229,7 +226,6 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
             break;
         }
     }
-    return 0;
 }
 
 void SelectPersonaDialog::SetAppliedPersonaSetting( OUString& rPersonaSetting )
@@ -474,7 +470,7 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
     }
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( SvxPersonalizationTabPage, SelectPersona, Button*, void )
 {
     ScopedVclPtrInstance< SelectPersonaDialog > aDialog(nullptr);
 
@@ -486,19 +482,15 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
             SetPersonaSettings( aPersonaSetting );
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, RadioButton*, pButton )
+IMPL_LINK_TYPED( SvxPersonalizationTabPage, ForceSelect, Button*, pButton, void )
 {
     if ( pButton == m_pOwnPersona && m_aPersonaSettings.isEmpty() )
         SelectPersona( m_pSelectPersona );
-
-    return 0;
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
+IMPL_LINK_TYPED( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void )
 {
     m_pDefaultPersona->Check();
     for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
@@ -506,8 +498,6 @@ IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
         if( pButton == m_vDefaultPersonaImages[nIndex] )
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
     }
-
-    return 0;
 }
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox*, )

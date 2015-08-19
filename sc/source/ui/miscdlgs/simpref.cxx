@@ -190,7 +190,7 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
 
 // Handler:
 
-IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, OkBtnHdl, Button*, void)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
@@ -198,10 +198,9 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
     Link<> aUnoLink = aDoneHdl;     // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( &aResult );
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
@@ -209,7 +208,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
     Link<> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( &aResult );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

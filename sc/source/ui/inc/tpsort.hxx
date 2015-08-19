@@ -164,10 +164,10 @@ private:
     void FillUserSortListBox    ();
 
     // Handler ------------------------
-    DECL_LINK( EnableHdl, CheckBox * );
+    DECL_LINK_TYPED( EnableHdl, Button*, void );
     DECL_LINK( SelOutPosHdl, ListBox * );
     void EdOutPosModHdl ( Edit* pEd );
-    DECL_LINK( SortDirHdl, RadioButton * );
+    DECL_LINK_TYPED( SortDirHdl, Button *, void );
     DECL_LINK( FillAlgorHdl, void * );
 };
 

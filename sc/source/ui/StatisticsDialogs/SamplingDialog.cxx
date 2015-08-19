@@ -288,11 +288,10 @@ void ScSamplingDialog::PerformSampling()
     pDocShell->PostPaint(aModifiedRange, PAINT_GRID);
 }
 
-IMPL_LINK( ScSamplingDialog, OkClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( ScSamplingDialog, OkClicked, Button*, void )
 {
     PerformSampling();
     Close();
-    return 0;
 }
 
 IMPL_LINK( ScSamplingDialog, GetFocusHandler, Control*, pCtrl )

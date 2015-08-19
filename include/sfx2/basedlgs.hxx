@@ -200,7 +200,7 @@ protected:
 
     SingleTabDlgImpl*   pImpl;
 
-    DECL_DLLPRIVATE_LINK(OKHdl_Impl, void *);
+    DECL_DLLPRIVATE_LINK_TYPED(OKHdl_Impl, Button*, void);
 };
 
 #endif

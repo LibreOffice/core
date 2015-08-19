@@ -142,10 +142,10 @@ private:
     bool                    bItemsReset;
 
     DECL_LINK ( ChosePageHdl_Impl, void * );
-    DECL_LINK(OkHdl, void *);
-    DECL_LINK(ApplyHdl, void *);
-    DECL_LINK(ResetHdl, void *);
-    DECL_LINK(CancelHdl, void *);
+    DECL_LINK_TYPED(OkHdl, Button*, void);
+    DECL_LINK_TYPED(ApplyHdl, Button*, void);
+    DECL_LINK_TYPED(ResetHdl, Button*, void);
+    DECL_LINK_TYPED(CancelHdl, Button*, void);
 
     IconChoicePageData*     GetPageData ( sal_uInt16 nId );
     void                    Start_Impl();

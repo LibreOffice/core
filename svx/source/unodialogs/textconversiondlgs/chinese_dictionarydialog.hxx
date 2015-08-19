@@ -123,12 +123,12 @@ public:
     virtual short   Execute() SAL_OVERRIDE;
 
 private:
-    DECL_LINK( DirectionHdl, void* );
+    DECL_LINK_TYPED( DirectionHdl, Button*, void );
     DECL_LINK(EditFieldsHdl, void *);
     DECL_LINK( MappingSelectHdl, void* );
-    DECL_LINK( AddHdl, void* );
-    DECL_LINK( ModifyHdl, void* );
-    DECL_LINK( DeleteHdl, void* );
+    DECL_LINK_TYPED( AddHdl, Button*, void );
+    DECL_LINK_TYPED( ModifyHdl, Button*, void );
+    DECL_LINK_TYPED( DeleteHdl, Button*, void );
     DECL_LINK( HeaderBarClick, HeaderBar* );
 
     void initDictionaryControl(DictionaryList *pList,

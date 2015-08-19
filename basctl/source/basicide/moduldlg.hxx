@@ -51,7 +51,7 @@ private:
     VclPtr<Edit>           m_pEdit;
     VclPtr<OKButton>       m_pOKButton;
 
-    DECL_LINK(OkButtonHandler, void *);
+    DECL_LINK_TYPED(OkButtonHandler, Button*, void);
 public:
     NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
     virtual ~NewObjectDialog();
@@ -68,7 +68,7 @@ class GotoLineDialog : public ModalDialog
 {
     VclPtr<Edit>           m_pEdit;
     VclPtr<OKButton>       m_pOKButton;
-    DECL_LINK(OkButtonHandler, void *);
+    DECL_LINK_TYPED(OkButtonHandler, Button*, void);
 public:
     explicit GotoLineDialog(vcl::Window * pParent);
     virtual ~GotoLineDialog();
@@ -84,7 +84,7 @@ private:
 
     bool            mbExportAsPackage;
 
-    DECL_LINK(OkButtonHandler, void *);
+    DECL_LINK_TYPED(OkButtonHandler, Button*, void);
 
 public:
     explicit ExportDialog( vcl::Window * pParent );
@@ -191,7 +191,7 @@ protected:
     VclPtr<PushButton>         m_pDelButton;
 
     DECL_LINK( BasicBoxHighlightHdl, TreeListBox * );
-    DECL_LINK( ButtonHdl, Button * );
+    DECL_LINK_TYPED( ButtonHdl, Button *, void );
     void                CheckButtons();
     bool                GetSelection( ScriptDocument& rDocument, OUString& rLibName );
     void                DeleteCurrent();
@@ -231,7 +231,7 @@ protected:
 
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
     DECL_LINK( BasicSelectHdl, ListBox * );
-    DECL_LINK( ButtonHdl, Button * );
+    DECL_LINK_TYPED( ButtonHdl, Button *, void );
     DECL_LINK( CheckPasswordHdl, SvxPasswordDialog * );
     void                CheckButtons();
     void                DeleteCurrent();

@@ -847,8 +847,9 @@ void ScTabPageSortOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
+IMPL_LINK_TYPED( ScTabPageSortOptions, EnableHdl, Button*, pButton, void )
 {
+    CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if (pBox == m_pBtnCopyResult)
     {
         if ( pBox->IsChecked() )
@@ -873,7 +874,6 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
         else
             m_pLbSortUser->Disable();
     }
-    return 0;
 }
 
 IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
@@ -891,7 +891,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
     return 0;
 }
 
-IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
+IMPL_LINK_TYPED( ScTabPageSortOptions, SortDirHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pBtnTopDown)
     {
@@ -901,7 +901,6 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
     {
         m_pBtnHeader->SetText( aStrRowLabel );
     }
-    return 0;
 }
 
 void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )

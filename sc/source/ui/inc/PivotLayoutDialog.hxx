@@ -88,8 +88,8 @@ private:
     ScAddress::Details  maAddressDetails;
     bool                mbDialogLostFocus;
 
-    DECL_LINK(CancelClicked,       PushButton*);
-    DECL_LINK(OKClicked,           PushButton*);
+    DECL_LINK_TYPED(CancelClicked,       Button*, void);
+    DECL_LINK_TYPED(OKClicked,           Button*, void);
     DECL_LINK(GetFocusHandler,        Control*);
     DECL_LINK(LoseFocusHandler,       void*);
     DECL_LINK(ToggleSource,           void*);

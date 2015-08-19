@@ -41,8 +41,8 @@ class SwMailMergeMergePage : public svt::OWizardPage
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK(EditDocumentHdl_Impl, void *);
-    DECL_LINK(FindHdl_Impl, void *);
+    DECL_LINK_TYPED(EditDocumentHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(FindHdl_Impl, Button*, void);
     DECL_LINK(EnteredFindStringHdl_Impl, void*);
 
 public:

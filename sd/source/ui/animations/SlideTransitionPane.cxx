@@ -969,11 +969,11 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
     return 0;
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
 {
     DBG_ASSERT( mpDrawDoc, "Invalid Draw Document!" );
     if( !mpDrawDoc )
-        return 0;
+        return;
 
     ::sd::slidesorter::SharedPageSelection pPages (
         new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
@@ -992,14 +992,11 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked)
         lcl_CreateUndoForPages( pPages, mrBase );
         lcl_ApplyToPages( pPages, getTransitionEffectFromControls() );
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, PlayButtonClicked, Button*, void)
 {
     playCurrentEffect();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected)
@@ -1043,17 +1040,15 @@ IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected)
     return 0;
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LoopSoundBoxChecked, Button*, void)
 {
     applyToSelectedPages();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AutoPreviewClicked, Button*, void)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)

@@ -614,7 +614,7 @@ void SvtFileDialog::Init_Impl
 
     // Setting preferences of the control elements.
     _pImp->_pBtnNewFolder->SetClickHdl( LINK( this, SvtFileDialog, NewFolderHdl_Impl ) );
-    _pImp->_pBtnFileOpen->SetClickHdl( LINK( this, SvtFileDialog, OpenHdl_Impl ) );
+    _pImp->_pBtnFileOpen->SetClickHdl( LINK( this, SvtFileDialog, OpenClickHdl_Impl ) );
     _pImp->_pBtnCancel->SetClickHdl( LINK( this, SvtFileDialog, CancelHdl_Impl ) );
     _pImp->SetFilterListSelectHdl( LINK( this, SvtFileDialog, FilterSelectHdl_Impl ) );
     _pImp->_pEdFileName->SetGetFocusHdl( LINK( this, SvtFileDialog, FileNameGetFocusHdl_Impl ) );
@@ -674,7 +674,7 @@ void SvtFileDialog::Init_Impl
     Resize();
 }
 
-IMPL_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
 {
     _pFileView->EndInplaceEditing( false );
 
@@ -698,8 +698,6 @@ IMPL_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, )
         else
             bHandled = true;
     }
-
-    return 0;
 }
 
 bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt )
@@ -816,7 +814,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
 }
 
 
-IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvtFileDialog, CancelHdl_Impl, Button*, void)
 {
     if ( m_pCurrentAsyncAction.is() )
     {
@@ -827,10 +825,13 @@ IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl)
     {
         EndDialog();
     }
-    return 1L;
 }
 
 
+IMPL_LINK_TYPED( SvtFileDialog, OpenClickHdl_Impl, Button*, pVoid, void )
+{
+    OpenHdl_Impl(pVoid);
+}
 IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 {
     if ( _pImp->_bMultiSelection && _pFileView->GetSelectionCount() > 1 )
@@ -1253,7 +1254,7 @@ IMPL_LINK_NOARG( SvtFileDialog, URLBoxModifiedHdl_Impl )
 
 
 
-IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void )
 {
     _pFileView->EndInplaceEditing( false );
 
@@ -1273,13 +1274,11 @@ IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl )
             // Do Nothing
             break;
     };
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl )
+IMPL_LINK_NOARG_TYPED ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
 {
     // Maybe open the PlacesDialog would have been a better idea
     // there is an ux choice to make we did not make...
@@ -1288,15 +1287,13 @@ IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl )
         new Place( aURLObj.GetLastName(INetURLObject::DECODE_WITH_CHARSET),
                 OUString(_pFileView->GetViewURL()), true));
     _pImp->_pPlaces->AppendPlace(newPlace);
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG ( SvtFileDialog, RemovePlacePressed_Hdl )
+IMPL_LINK_NOARG_TYPED ( SvtFileDialog, RemovePlacePressed_Hdl, Button*, void )
 {
     _pImp->_pPlaces->RemoveSelectedPlace();
-    return 0;
 }
 
 
@@ -1549,7 +1546,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
 
 
 
-IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvtFileDialog, AutoExtensionHdl_Impl, Button*, void)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
@@ -1557,16 +1554,14 @@ IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl)
 
     // update the extension of the current file if necessary
     lcl_autoUpdateFileExtension( this, _pImp->GetCurFilter()->GetExtension() );
-
-    return 0;
 }
 
 
 
-IMPL_LINK( SvtFileDialog, ClickHdl_Impl, CheckBox*, pCheckBox )
+IMPL_LINK_TYPED( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
 {
     if ( ! _pFileNotifier )
-        return 0;
+        return;
 
     sal_Int16 nId = -1;
 
@@ -1585,19 +1580,15 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, CheckBox*, pCheckBox )
 
     if ( nId != -1 )
         _pFileNotifier->notify( CTRL_STATE_CHANGED, nId );
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvtFileDialog, PlayButtonHdl_Impl, Button*, void)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
                                 PUSHBUTTON_PLAY );
-
-    return 0;
 }
 
 
@@ -2860,12 +2851,11 @@ void QueryFolderNameDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
+IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, OKHdl, Button*, void)
 {
     // trim the strings
     m_pNameEdit->SetText(comphelper::string::strip(m_pNameEdit->GetText(), ' '));
     EndDialog( RET_OK );
-    return 1;
 }
 
 

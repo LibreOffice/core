@@ -54,7 +54,7 @@ namespace dbaui
         SfxItemSet&                                 m_rItems;
 
     private:
-        DECL_LINK( OnOK, PushButton* );
+        DECL_LINK_TYPED( OnOK, Button*, void );
     };
 
 } // namespace dbaui

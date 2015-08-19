@@ -41,7 +41,7 @@ class PasswordDialog : public ModalDialog
     OUString        aPasswdMismatch;
 
 
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 
 public:
     PasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,

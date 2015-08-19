@@ -80,7 +80,7 @@ private:
 
     bool            doScan;
 
-    DECL_LINK( ClickBtnHdl, Button* );
+    DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( ModifyHdl, Edit* );
     DECL_LINK( ReloadSaneOptionsHdl, Sane* );

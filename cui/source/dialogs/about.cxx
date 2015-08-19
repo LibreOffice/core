@@ -115,7 +115,7 @@ void AboutDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
+IMPL_LINK_TYPED( AboutDialog, HandleClick, Button*, pButton, void )
 {
     OUString sURL = "";
 
@@ -131,7 +131,7 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
 
     // If the URL is empty, don't do anything
     if ( sURL.isEmpty() )
-        return 1;
+        return;
     try
     {
         Reference< css::system::XSystemShellExecute > xSystemShellExecute(
@@ -147,8 +147,6 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         aErrorBox->SetText( GetText() );
         aErrorBox->Execute();
     }
-
-    return 1;
 }
 
 void AboutDialog::StyleControls()

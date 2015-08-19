@@ -194,8 +194,8 @@ SvxLineTabPage::SvxLineTabPage
     m_pLbEndStyle->SetSelectHdl( aEnd );
     m_pMtrStartWidth->SetModifyHdl( aStart );
     m_pMtrEndWidth->SetModifyHdl( aEnd );
-    m_pTsbCenterStart->SetClickHdl( aStart );
-    m_pTsbCenterEnd->SetClickHdl( aEnd );
+    m_pTsbCenterStart->SetClickHdl( LINK( this, SvxLineTabPage, ChangeStartClickHdl_Impl ) );
+    m_pTsbCenterEnd->SetClickHdl( LINK( this, SvxLineTabPage, ChangeEndClickHdl_Impl ) );
 
     // #116827#
     Link<> aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
@@ -1598,6 +1598,10 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
 
 
 
+IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartClickHdl_Impl, Button*, p, void )
+{
+    ChangeStartHdl_Impl(p);
+}
 IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 {
     if( m_pCbxSynchronize->IsChecked() )
@@ -1674,6 +1678,10 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
 
 
 
+IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndClickHdl_Impl, Button*, p, void )
+{
+    ChangeEndHdl_Impl(p);
+}
 IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
 {
     if( m_pCbxSynchronize->IsChecked() )
@@ -1789,16 +1797,15 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
     aSymbolLastSize=aSymbolSize;
     return 0;
 }
-IMPL_LINK( SvxLineTabPage, RatioHdl_Impl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxLineTabPage, RatioHdl_Impl, Button*, pBox, void )
 {
-    if (pBox->IsChecked())
+    if (static_cast<CheckBox*>(pBox)->IsChecked())
     {
         if (bLastWidthModified)
             SizeHdl_Impl(m_pSymbolWidthMF);
         else
             SizeHdl_Impl(m_pSymbolHeightMF);
     }
-    return 0;
 }
 
 

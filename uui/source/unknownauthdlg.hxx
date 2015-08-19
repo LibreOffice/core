@@ -39,8 +39,8 @@ private:
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
 
-    DECL_LINK(OKHdl_Impl, void *);
-    DECL_LINK(ViewCertHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(ViewCertHdl_Impl, Button*, void);
 
 public:
     UnknownAuthDialog(vcl::Window* pParent,

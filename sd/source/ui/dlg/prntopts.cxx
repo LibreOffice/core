@@ -52,7 +52,7 @@ SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs
     get( m_pCbxBack , "backcb" );
     get( m_pCbxPaperbin , "papertryfrmprntrcb" );
 
-    Link<> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
+    Link<Button*,void> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
     m_pRbtDefault->SetClickHdl( aLink );
     m_pRbtPagesize->SetClickHdl( aLink );
     m_pRbtPagetile->SetClickHdl( aLink );
@@ -213,20 +213,18 @@ VclPtr<SfxTabPage> SdPrintOptions::Create( vcl::Window* pWindow,
     return VclPtr<SdPrintOptions>::Create( pWindow, *rOutAttrs );
 }
 
-IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
+IMPL_LINK_TYPED( SdPrintOptions, ClickCheckboxHdl, Button*, pCbx, void )
 {
     // there must be at least one of them checked
     if( !m_pCbxDraw->IsChecked() && !m_pCbxNotes->IsChecked() && !m_pCbxOutline->IsChecked() && !m_pCbxHandout->IsChecked() )
-        pCbx->Check();
+        static_cast<CheckBox*>(pCbx)->Check();
 
     updateControls();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl)
+IMPL_LINK_NOARG_TYPED(SdPrintOptions, ClickBookletHdl, Button*, void)
 {
     updateControls();
-    return 0;
 }
 
 void SdPrintOptions::updateControls()

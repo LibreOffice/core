@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
+IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, ChoiceHdl_Impl, Button*, void)
 {
     if ( m_pBtnNew->IsChecked() )
         SetNewTable_Impl();
@@ -276,16 +276,14 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
         SetFromTo_Impl();
 
     DoEnable_Impl();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, BrowseHdl_Impl, Button*, void)
 {
     delete pDocInserter;
     pDocInserter = new ::sfx2::DocumentInserter(
             OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
@@ -302,7 +300,7 @@ void ScInsertTableDlg::DoEnable_Impl()
         m_pBtnOk->Disable();
 }
 
-IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
+IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, DoEnterHdl, Button*, void)
 {
     if(nTableCount > 1 || ScDocument::ValidTabName(m_pEdName->GetText()))
     {
@@ -313,7 +311,6 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
         OUString aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
         (void)ScopedVclPtrInstance<MessageDialog>::Create(this, aErrMsg)->Execute();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, BrowseTimeoutHdl, Timer *, void)

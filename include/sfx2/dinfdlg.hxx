@@ -207,9 +207,9 @@ private:
     bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
-    DECL_LINK(DeleteHdl, void *);
-    DECL_LINK(SignatureHdl, void *);
-    DECL_STATIC_LINK(SfxDocumentPage, ChangePassHdl, void *);
+    DECL_LINK_TYPED(DeleteHdl, Button*, void);
+    DECL_LINK_TYPED(SignatureHdl, Button*, void);
+    DECL_STATIC_LINK_TYPED(SfxDocumentPage, ChangePassHdl, Button*, void);
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
@@ -338,7 +338,7 @@ class CustomPropertiesEditButton : public PushButton
 public:
     CustomPropertiesEditButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
 
-    DECL_LINK(ClickHdl, void *);
+    DECL_LINK_TYPED(ClickHdl, Button*, void);
 };
 
 class CustomPropertiesRemoveButton : public ImageButton
@@ -427,7 +427,7 @@ private:
     Link<void*,void>                    m_aRemovedHdl;
 
     DECL_STATIC_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox* );
-    DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
+    DECL_LINK_TYPED(  RemoveHdl, Button*, void );
     DECL_LINK(  EditLoseFocusHdl, CustomPropertiesEdit* );
     DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
     //add lose focus handlers of Date/TimeField?
@@ -500,7 +500,7 @@ class SfxCustomPropertiesPage : public SfxTabPage
 private:
     VclPtr<CustomPropertiesControl> m_pPropertiesCtrl;
 
-    DECL_LINK(AddHdl, void *);
+    DECL_LINK_TYPED(AddHdl, Button*, void);
 
     using TabPage::DeactivatePage;
 

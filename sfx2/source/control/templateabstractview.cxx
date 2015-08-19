@@ -271,10 +271,9 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
     return TemplateAbstractView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
 }
 
-IMPL_LINK_NOARG(TemplateAbstractView, ShowRootRegionHdl)
+IMPL_LINK_NOARG_TYPED(TemplateAbstractView, ShowRootRegionHdl, Button*, void)
 {
     showRootRegion();
-    return 0;
 }
 
 void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)

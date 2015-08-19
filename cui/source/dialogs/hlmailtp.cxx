@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
+IMPL_STATIC_LINK_NOARG_TYPED(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if( pViewFrame )
@@ -253,9 +253,6 @@ IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
         SfxRequest aReq(SID_VIEW_DATA_SOURCE_BROWSER, SfxCallMode::SLOT, rPool);
         pViewFrame->ExecuteSlot( aReq, true );
     }
-
-
-    return 0L;
 }
 
 

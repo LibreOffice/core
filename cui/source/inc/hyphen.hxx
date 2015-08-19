@@ -70,13 +70,13 @@ class SvxHyphenWordDialog : public SfxModalDialog
     void            ContinueHyph_Impl( sal_Int32 nInsPos = -1 ); // continue by default
     sal_uInt16      GetHyphIndex_Impl();
 
-    DECL_LINK(Left_Impl, void *);
-    DECL_LINK(Right_Impl, void *);
-    DECL_LINK(CutHdl_Impl, void *);
-    DECL_LINK(ContinueHdl_Impl, void *);
-    DECL_LINK(DeleteHdl_Impl, void *);
-    DECL_LINK( HyphenateAllHdl_Impl, Button* );
-    DECL_LINK(CancelHdl_Impl, void *);
+    DECL_LINK_TYPED(Left_Impl, Button*, void);
+    DECL_LINK_TYPED(Right_Impl, Button*, void);
+    DECL_LINK_TYPED(CutHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(ContinueHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(DeleteHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( HyphenateAllHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(CancelHdl_Impl, Button*, void);
     DECL_LINK(GetFocusHdl_Impl, void *);
 
 public:

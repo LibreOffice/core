@@ -118,8 +118,7 @@ SvxSaveTabPage::SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     aDocTypeLB->SetEntryData(5, reinterpret_cast<void*>(APP_DRAW)         );
     aDocTypeLB->SetEntryData(6, reinterpret_cast<void*>(APP_MATH)         );
 
-    Link<> aLink = LINK( this, SvxSaveTabPage, AutoClickHdl_Impl );
-    aAutoSaveCB->SetClickHdl( aLink );
+    aAutoSaveCB->SetClickHdl( LINK( this, SvxSaveTabPage, AutoClickHdl_Impl ) );
     aAutoSaveEdit->SetMaxTextLen( 2 );
 
     SvtModuleOptions aModuleOpt;
@@ -186,7 +185,7 @@ SvxSaveTabPage::SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_WRITER_GLOBAL] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::WRITERGLOBAL);
     }
 
-    aLink = LINK( this, SvxSaveTabPage, ODFVersionHdl_Impl );
+    Link<> aLink = LINK( this, SvxSaveTabPage, ODFVersionHdl_Impl );
     aODFVersionLB->SetSelectHdl( aLink );
     aLink = LINK( this, SvxSaveTabPage, FilterHdl_Impl );
     aDocTypeLB->SetSelectHdl( aLink );
@@ -515,7 +514,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
 
 
 
-IMPL_LINK( SvxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
+IMPL_LINK_TYPED( SvxSaveTabPage, AutoClickHdl_Impl, Button*, pBox, void )
 {
     if ( pBox == aAutoSaveCB )
     {
@@ -532,7 +531,6 @@ IMPL_LINK( SvxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
             aUserAutoSaveCB->Disable();
         }
     }
-    return 0;
 }
 
 static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)

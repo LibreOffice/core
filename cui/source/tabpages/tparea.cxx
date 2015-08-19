@@ -75,7 +75,7 @@ const sal_uInt16 SvxTransparenceTabPage::pTransparenceRanges[] =
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransOffHdl_Impl, Button*, void)
 {
     // disable all other controls
     ActivateLinear(false);
@@ -88,11 +88,9 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl)
     m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
     InvalidatePreview( false );
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*, void)
 {
     // enable linear, disable other
     ActivateLinear(true);
@@ -101,11 +99,9 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl)
     // preview
     rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
     ModifyTransparentHdl_Impl (NULL);
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button*, void)
 {
     // enable gradient, disable other
     ActivateLinear(false);
@@ -114,8 +110,6 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl)
     // preview
     rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
     ModifiedTrgrHdl_Impl (NULL);
-
-    return 0L;
 }
 
 SvxTransparenceTabPage::~SvxTransparenceTabPage()
@@ -744,17 +738,18 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pLbHatching->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchingHdl_Impl ) );
     m_pLbBitmap->SetSelectHdl(   LINK( this, SvxAreaTabPage, ModifyBitmapHdl_Impl ) );
 
-    m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
+    m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountClickHdl_Impl ) );
     m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
 
     Link<> aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
-    m_pTsbTile->SetClickHdl( aLink );
-    m_pTsbStretch->SetClickHdl( aLink );
-    m_pTsbOriginal->SetClickHdl( aLink );
+    Link<Button*,void> aClickLink( LINK( this, SvxAreaTabPage, ModifyTileClickHdl_Impl ) );
+    m_pTsbTile->SetClickHdl( aClickLink );
+    m_pTsbStretch->SetClickHdl( aClickLink );
+    m_pTsbOriginal->SetClickHdl( aClickLink );
     m_pMtrFldXSize->SetModifyHdl( aLink );
     m_pMtrFldYSize->SetModifyHdl( aLink );
-    m_pRbtRow->SetClickHdl( aLink );
-    m_pRbtColumn->SetClickHdl( aLink );
+    m_pRbtRow->SetClickHdl( aClickLink );
+    m_pRbtColumn->SetClickHdl( aClickLink );
     m_pMtrFldOffset->SetModifyHdl( aLink );
     m_pMtrFldXOffset->SetModifyHdl( aLink );
     m_pMtrFldYOffset->SetModifyHdl( aLink );
@@ -2163,6 +2158,10 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 
 
 
+IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountClickHdl_Impl, Button*, p, void )
+{
+    ModifyStepCountHdl_Impl(p);
+}
 IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 {
     if( p == m_pTsbStepCount )
@@ -2192,7 +2191,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     return 0L;
 }
 
-IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvxAreaTabPage, ClickImportHdl_Impl, Button*, void )
 {
     ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg("Import");
@@ -2228,12 +2227,14 @@ IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
             ScopedVclPtrInstance<MessageDialog>::Create (this, OUString(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr)))->Execute();
         }
     }
-
-    return 0L;
 }
 
 //------------------------------------------------------------------------
 
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyTileClickHdl_Impl, Button*, void)
+{
+    ModifyTileHdl_Impl(NULL);
+}
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 {
     TriState eState = m_pTsbTile->GetState();
@@ -2387,7 +2388,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ClickScaleHdl_Impl, Button*, void)
 {
     if( m_pTsbScale->GetState() == TRISTATE_TRUE )
     {
@@ -2419,8 +2420,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
     }
 
     ModifyTileHdl_Impl( NULL );
-
-    return 0L;
 }
 
 

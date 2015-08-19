@@ -131,7 +131,7 @@ class ClientBox : public Control
     void DeleteRemoved();
 
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
-    DECL_DLLPRIVATE_LINK( DeauthoriseHdl, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( DeauthoriseHdl, Button*, void );
     //Index starts with 1.
     //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
     void checkIndex(sal_Int32 pos) const;

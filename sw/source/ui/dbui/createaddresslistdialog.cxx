@@ -421,7 +421,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_pCustomizePB->SetClickHdl(LINK(this, SwCreateAddressListDialog, CustomizeHdl_Impl));
     m_pOK->SetClickHdl(LINK(this, SwCreateAddressListDialog, OkHdl_Impl));
 
-    Link<> aLk = LINK(this, SwCreateAddressListDialog, DBCursorHdl_Impl);
+    Link<Button*,void> aLk = LINK(this, SwCreateAddressListDialog, DBCursorHdl_Impl);
     m_pStartPB->SetClickHdl(aLk);
     m_pPrevPB->SetClickHdl(aLk);
     m_pSetNoNF->SetModifyHdl(LINK(this, SwCreateAddressListDialog, DBNumCursorHdl_Impl));
@@ -520,7 +520,7 @@ void SwCreateAddressListDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, NewHdl_Impl, Button*, void)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     ::std::vector<OUString> aNewData;
@@ -533,10 +533,9 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)
     //the address control starts at 0
     m_pAddressControl->SetCurrentDataSet(nCurrent);
     UpdateButtons();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     if(m_pCSVData->aDBData.size() > 1)
@@ -555,10 +554,9 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
     m_pAddressControl->SetCurrentDataSet(nCurrent);
     m_pSetNoNF->SetMax(m_pCSVData->aDBData.size());
     UpdateButtons();
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
 {
     if(!m_pFindDlg)
     {
@@ -574,10 +572,9 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
     }
     else
         m_pFindDlg->Show(!m_pFindDlg->IsVisible());
-    return 0;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
 {
     VclPtrInstance< SwCustomizeAddressListDialog > pDlg(pButton, *m_pCSVData);
     if(RET_OK == pDlg->Execute())
@@ -600,7 +597,6 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
                     ++aHeaderIter)
             rColumnBox.InsertEntry(*aHeaderIter);
     }
-    return 0;
 }
 
 namespace
@@ -627,7 +623,7 @@ void lcl_WriteValues(const ::std::vector<OUString> *pFields, SvStream* pStream)
 
 }
 
-IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
 {
     if(m_sURL.isEmpty())
     {
@@ -665,11 +661,9 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         aMedium.Commit();
         EndDialog(RET_OK);
     }
-
-    return 0;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, PushButton*, pButton)
+IMPL_LINK_TYPED(SwCreateAddressListDialog, DBCursorHdl_Impl, Button*, pButton, void)
 {
     sal_uInt32 nValue = static_cast< sal_uInt32 >(m_pSetNoNF->GetValue());
 
@@ -692,7 +686,6 @@ IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, PushButton*, pButton)
         m_pSetNoNF->SetValue(nValue);
         DBNumCursorHdl_Impl(m_pSetNoNF);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwCreateAddressListDialog, DBNumCursorHdl_Impl)
@@ -789,14 +782,13 @@ void SwFindEntryDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, FindHdl_Impl, Button*, void)
 {
     sal_Int32 nColumn = -1;
     if(m_pFindOnlyCB->IsChecked())
         nColumn = m_pFindOnlyLB->GetSelectEntryPos();
     if(nColumn != LISTBOX_ENTRY_NOTFOUND)
         m_pParent->Find(m_pFindED->GetText(), nColumn);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
@@ -805,10 +797,9 @@ IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, CloseHdl_Impl, Button*, void)
 {
     Show(false);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

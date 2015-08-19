@@ -214,10 +214,9 @@ IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(CertificateChooser, ViewButtonHdl)
+IMPL_LINK_NOARG_TYPED(CertificateChooser, ViewButtonHdl, Button*, void)
 {
     ImplShowCertificateDetails();
-    return 0;
 }
 
 void CertificateChooser::ImplShowCertificateDetails()

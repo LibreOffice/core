@@ -59,7 +59,7 @@ private:
     css::uno::Reference<
         css::linguistic2::XDictionary >    xNewDic;
 
-    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
     DECL_LINK(ModifyHdl_Impl, void *);
 
 public:
@@ -132,7 +132,8 @@ private:
     DECL_LINK(SelectBookHdl_Impl, void *);
     DECL_LINK(SelectLangHdl_Impl, void *);
     DECL_LINK(SelectHdl, SvTabListBox*);
-    DECL_LINK(NewDelHdl, PushButton*);
+    DECL_LINK_TYPED(NewDelHdl, Button*, void);
+    DECL_LINK(NewDelActionHdl, PushButton*);
     DECL_LINK(ModifyHdl, Edit*);
 
 
