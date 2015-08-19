@@ -117,7 +117,6 @@ public:
     void ClearAllBP();
 
     // Store only image, no source (needed for new password protection)
-    bool     StoreBinaryData( SvStream& );
     bool     StoreBinaryData( SvStream&, sal_uInt16 nVer );
     bool     LoadBinaryData( SvStream& );
     bool     ExceedsLegacyModuleSize();
