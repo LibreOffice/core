@@ -1447,8 +1447,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         sal_uInt16 nAngle = 0;
         if ( rSource == "MetaFile" )
         {
-            ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *static_cast<css::uno::Sequence<sal_uInt8> const *>(aAny.getValue());
-            const sal_uInt8*    pAry = aSeq.getArray();
+            ::com::sun::star::uno::Sequence<sal_Int8> aSeq = *static_cast<css::uno::Sequence<sal_Int8> const *>(aAny.getValue());
+            const sal_Int8*    pAry = aSeq.getArray();
             sal_uInt32          nAryLen = aSeq.getLength();
 
             // the metafile is already rotated
@@ -1457,7 +1457,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             if ( pAry && nAryLen )
             {
                 Graphic         aGraphic;
-                SvMemoryStream  aTemp( const_cast<sal_uInt8 *>(pAry), nAryLen, StreamMode::READ );
+                SvMemoryStream  aTemp( const_cast<sal_Int8 *>(pAry), nAryLen, StreamMode::READ );
                 sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, ConvertDataFormat::WMF );
                 if ( nErrCode == ERRCODE_NONE )
                 {
