@@ -44,16 +44,18 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
         pOutl->SetText(*pNextPObj);
     }
 
+    EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
-    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
-    EditSelection aNewSel = pOutl->pEditEngine->InsertText(xOverflowingContent,
-                                                  OUString(),
-                                                  aStartSel.Min(),
-                                                  true);
+    EditSelection aStartSel(rEditEngine.CreateSelection(ESelection(0,0)));
+    EditSelection aNewSel = rEditEngine.InsertText(xOverflowingContent,
+                                                    OUString(),
+                                                    aStartSel.Min(),
+                                                    true);
 
     // Separate Paragraphs
-    pOutl->pEditEngine->InsertParaBreak(aNewSel);
+    rEditEngine.InsertParaBreak(aNewSel);
 
     return pOutl->CreateParaObject();
 }
@@ -69,15 +71,17 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
         pOutl->SetText(*pNextPObj);
     }
 
+    EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
-    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
+    EditSelection aStartSel(rEditEngine.CreateSelection(ESelection(0,0)));
     // We don't need to mark the selection
     // EditSelection aNewSel =
-    pOutl->pEditEngine->InsertText(xOverflowingContent,
-                                                  OUString(),
-                                                  aStartSel.Min(),
-                                                  true);
+    rEditEngine.InsertText(xOverflowingContent,
+                            OUString(),
+                            aStartSel.Min(),
+                            true);
 
     return pOutl->CreateParaObject();
 }
@@ -85,7 +89,8 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
 TranferableText TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
 {
     ESelection aWholeTextSel(0,0, 1000000, 1000000);
-    return pOutl->pEditEngine->CreateTransferable(aWholeTextSel);
+
+    return pOutl->GetEditEngine().CreateTransferable(aWholeTextSel);
 }
 
 
