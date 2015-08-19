@@ -26,6 +26,8 @@
 
 #include <tools/gen.hxx>
 
+#include <memory>
+
 class ImplOpenGLTexture
 {
 public:
@@ -35,10 +37,45 @@ public:
     int    mnHeight;
     GLenum mnFilter;
 
+    std::unique_ptr<std::vector<int>> mpSlotReferences;
+    int mnFreeSlots;
+
     ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate );
     ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
     ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight );
     ~ImplOpenGLTexture();
+
+    bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
+
+    void IncreaseRefCount(int nSlotNumber)
+    {
+        mnRefCount++;
+        if (mpSlotReferences && nSlotNumber >= 0)
+        {
+            if (mpSlotReferences->at(nSlotNumber) == 0)
+                mnFreeSlots--;
+            mpSlotReferences->at(nSlotNumber)++;
+        }
+    }
+
+    void DecreaseRefCount(int nSlotNumber)
+    {
+        mnRefCount--;
+        if (mpSlotReferences && nSlotNumber >= 0)
+        {
+            mpSlotReferences->at(nSlotNumber)--;
+            if (mpSlotReferences->at(nSlotNumber) == 0)
+                mnFreeSlots++;
+        }
+    }
+
+    bool ExistRefs()
+    {
+        return mnRefCount > 0;
+    }
+
+    bool InitializeSlots(int nSlotSize);
+    int FindFreeSlot();
 };
 
 class VCL_PLUGIN_PUBLIC OpenGLTexture
@@ -46,12 +83,14 @@ class VCL_PLUGIN_PUBLIC OpenGLTexture
 private:
     // if the rect size doesn't match the mpImpl one, this instance
     // is a sub-area from the real OpenGL texture
-    Rectangle          maRect;
-
+    Rectangle maRect;
     ImplOpenGLTexture* mpImpl;
+    int mnSlotNumber;
 
 public:
                     OpenGLTexture();
+                    OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber = 0);
+
                     OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
                     OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
