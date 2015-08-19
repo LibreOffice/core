@@ -333,18 +333,6 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
                     }
                 }
-                else if (_rType == cppu::UnoType<Sequence<sal_uInt8>>::get())
-                {
-                    Sequence<sal_uInt8> aTemp;
-                    bConversionSuccess = _rValue >>= aTemp;
-                    if (bConversionSuccess)
-                    {
-                        const Sequence<sal_uInt8>& rLeftSeq = *static_cast<const Sequence<sal_uInt8>*>(pData);
-                        const Sequence<sal_uInt8>& rRightSeq = aTemp;
-                        bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
-                            memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
-                    }
-                }
                 else if (_rType == cppu::UnoType<Sequence<sal_Int16>>::get())
                 {
                     Sequence<sal_Int16> aTemp;
