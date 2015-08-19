@@ -313,7 +313,8 @@ void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverf
     OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
     //impSetTextForEditingOutliner(pNewText); //XXX: Don't call it since we do everything with NonOverflowingText::ToParaObject // XXX: You may need this for Underflow
 
-    GetLinkTarget()->NbcSetOutlinerParaObject(pNewText);
+    // XXX: I'm not sure whether we need this (after all operations such as Paste don't change this - as far as I understand)
+    //GetLinkTarget()->NbcSetOutlinerParaObject(pNewText);
 }
 
 void EditingTextChainFlow::impSetTextForEditingOutliner(OutlinerParaObject *pNewText)
