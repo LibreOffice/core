@@ -33,7 +33,8 @@
 
 #include "i18nlangtag/mslangid.hxx"
 
-#include "unotools/syslocaleoptions.hxx"
+#include <unotools/configmgr.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include "vcl/settings.hxx"
 #include "vcl/keycod.hxx"
@@ -629,9 +630,12 @@ void Application::InitSettings(ImplSVData* pSVData)
 {
     assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
 
-    pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
     pSVData->maAppData.mpSettings = new AllSettings();
-    pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
+        pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+    }
 }
 
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )

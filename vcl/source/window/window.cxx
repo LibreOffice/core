@@ -22,7 +22,6 @@
 #include <tools/rc.h>
 
 #include <sal/types.h>
-
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
@@ -65,6 +64,7 @@
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/processfactory.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <cassert>
 #include <set>
@@ -1142,7 +1142,8 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 mpWindowImpl->meAlwaysInputMode   = pParent->mpWindowImpl->meAlwaysInputMode;
             }
 
-            OutputDevice::SetSettings( pParent->GetSettings() );
+            if (!utl::ConfigManager::IsAvoidConfig())
+                OutputDevice::SetSettings( pParent->GetSettings() );
         }
 
     }
@@ -1150,24 +1151,33 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     // setup the scale factor for Hi-DPI displays
     mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
 
-    const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
-    sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
-    mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
-    mnDPIY          = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
-    maFont          = rStyleSettings.GetAppFont();
-
-    ImplPointToLogic(*this, maFont);
-
-    if ( nStyle & WB_3DLOOK )
+    if (!utl::ConfigManager::IsAvoidConfig())
     {
-        SetTextColor( rStyleSettings.GetButtonTextColor() );
-        SetBackground( Wallpaper( rStyleSettings.GetFaceColor() ) );
+        const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
+        sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
+        mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
+        mnDPIY          = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
+        maFont          = rStyleSettings.GetAppFont();
+
+        if ( nStyle & WB_3DLOOK )
+        {
+            SetTextColor( rStyleSettings.GetButtonTextColor() );
+            SetBackground( Wallpaper( rStyleSettings.GetFaceColor() ) );
+        }
+        else
+        {
+            SetTextColor( rStyleSettings.GetWindowTextColor() );
+            SetBackground( Wallpaper( rStyleSettings.GetWindowColor() ) );
+        }
     }
     else
     {
-        SetTextColor( rStyleSettings.GetWindowTextColor() );
-        SetBackground( Wallpaper( rStyleSettings.GetWindowColor() ) );
+        mnDPIX          = 96;
+        mnDPIY          = 96;
+        maFont = GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, GetDefaultFontFlags::NONE );
     }
+
+    ImplPointToLogic(*this, maFont);
 
     (void)ImplUpdatePos();
 
@@ -1458,7 +1468,11 @@ void Window::ImplInitResolutionSettings()
 void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetSize();
-    sal_uInt16 nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
+    sal_uInt16 nScreenFontZoom;
+    if (!utl::ConfigManager::IsAvoidConfig())
+        nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
+    else
+        nScreenFontZoom = 100;
 
     if (aSize.Width())
     {
@@ -1483,7 +1497,11 @@ void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFo
 void Window::ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetSize();
-    sal_uInt16 nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
+    sal_uInt16 nScreenFontZoom;
+    if (!utl::ConfigManager::IsAvoidConfig())
+        nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
+    else
+        nScreenFontZoom = 100;
 
     if (rRenderContext.IsMapModeEnabled())
         aSize = rRenderContext.LogicToPixel(aSize);

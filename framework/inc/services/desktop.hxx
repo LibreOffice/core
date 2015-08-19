@@ -409,7 +409,7 @@ class Desktop : private cppu::BaseMutex,
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame;             /// last target of "loadComponentFromURL()"!
         css::uno::Any                                                   m_aInteractionRequest;
         bool                                                            m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
-        SvtCommandOptions                                               m_aCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
+        std::unique_ptr<SvtCommandOptions>                              m_xCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
         OUString                                                        m_sName;
         OUString                                                        m_sTitle;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier;

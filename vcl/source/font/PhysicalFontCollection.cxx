@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <i18nlangtag/mslangid.hxx>
+#include <unotools/configmgr.hxx>
 #include <tools/debug.hxx>
 
 #include <config_graphite.h>
@@ -458,6 +459,9 @@ void PhysicalFontCollection::InitMatchData() const
     if( mbMatchData )
         return;
     mbMatchData = true;
+
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
 
     // calculate MatchData for all entries
     const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
@@ -1175,7 +1179,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
 
     // use font fallback
     const utl::FontNameAttr* pFontAttr = NULL;
-    if( !aSearchName.isEmpty() )
+    if (!aSearchName.isEmpty() && !utl::ConfigManager::IsAvoidConfig())
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
@@ -1199,7 +1203,10 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
     if( rFSD.IsSymbolFont() )
     {
         LanguageTag aDefaultLanguageTag( OUString( "en"));
-        aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
+        if (utl::ConfigManager::IsAvoidConfig())
+            aSearchName = "OpenSymbol";
+        else
+            aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
         PhysicalFontFamily* pFoundData = ImplFindByTokenNames( aSearchName );
         if( pFoundData )
             return pFoundData;

@@ -50,6 +50,7 @@
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/collatorwrapper.hxx"
 #include "unotools/confignode.hxx"
+#include "unotools/configmgr.hxx"
 #include "unotools/syslocaleoptions.hxx"
 
 using namespace ::com::sun::star;
@@ -687,7 +688,10 @@ void ImplStyleData::SetStandardStyles()
     vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont( LanguageTag("en")) );
+    if (!utl::ConfigManager::IsAvoidConfig())
+        aStdFont.SetName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag("en")));
+    else
+        aStdFont.SetName("Liberation Serif");
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -2707,7 +2711,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     mpUILocaleDataWrapper       = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
-    maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
+    if (!utl::ConfigManager::IsAvoidConfig())
+        maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
 ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
@@ -2913,16 +2918,26 @@ namespace
 
 bool AllSettings::GetLayoutRTL()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
     return GetConfigLayoutRTL(false);
 }
 
 bool AllSettings::GetMathLayoutRTL()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
     return GetConfigLayoutRTL(true);
 }
 
 const LanguageTag& AllSettings::GetLanguageTag() const
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+    {
+        static LanguageTag aRet("en-US");
+        return aRet;
+    }
+
     // SYSTEM locale means: use settings from SvtSysLocale that is resolved
     if ( mxData->maLocale.isSystemLocale() )
         mxData->maLocale = mxData->maSysLocale.GetLanguageTag();
@@ -2932,6 +2947,12 @@ const LanguageTag& AllSettings::GetLanguageTag() const
 
 const LanguageTag& AllSettings::GetUILanguageTag() const
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+    {
+        static LanguageTag aRet("en-US");
+        return aRet;
+    }
+
     // the UILocale is never changed
     if ( mxData->maUILocale.isSystemLocale() )
         mxData->maUILocale = mxData->maSysLocale.GetUILanguageTag();

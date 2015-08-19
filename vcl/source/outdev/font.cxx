@@ -19,6 +19,7 @@
 
 #include "i18nlangtag/mslangid.hxx"
 
+#include <unotools/configmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
@@ -779,22 +780,27 @@ void ImplFontSubstitute( OUString& rFontName )
 vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLang,
                                         GetDefaultFontFlags nFlags, const OutputDevice* pOutDev )
 {
-    if (!pOutDev) // default is NULL
+    if (!pOutDev && !utl::ConfigManager::IsAvoidConfig()) // default is NULL
         pOutDev = Application::GetDefaultDevice();
 
-    LanguageTag aLanguageTag(
-            ( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW ) ?
-            Application::GetSettings().GetUILanguageTag() :
-            LanguageTag( eLang ));
-
-    utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-    OUString aDefault = rDefaults.getDefaultFont( aLanguageTag, nType );
     OUString aSearch;
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        LanguageTag aLanguageTag(
+                ( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW ) ?
+                Application::GetSettings().GetUILanguageTag() :
+                LanguageTag( eLang ));
 
-    if( !aDefault.isEmpty() )
-        aSearch = aDefault;
+        utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
+        OUString aDefault = rDefaults.getDefaultFont( aLanguageTag, nType );
+
+        if( !aDefault.isEmpty() )
+            aSearch = aDefault;
+        else
+            aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // use the UI font as a fallback
+    }
     else
-        aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // use the UI font as a fallback
+        aSearch = "Liberation Serif";
 
     vcl::Font aFont;
     aFont.SetPitch( PITCH_VARIABLE );
@@ -1498,9 +1504,12 @@ void OutputDevice::InitFont() const
     {
         // decide if antialiasing is appropriate
         bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);
-        bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontEntry->maFontSelData.mnHeight);
+        if (!utl::ConfigManager::IsAvoidConfig())
+        {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);
+            bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontEntry->maFontSelData.mnHeight);
+        }
         mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
 
         // select font in the device layers

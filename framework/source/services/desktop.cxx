@@ -63,6 +63,7 @@
 #include <vcl/svapp.hxx>
 
 #include <tools/errinf.hxx>
+#include <unotools/configmgr.hxx>
 #include <comphelper/extract.hxx>
 
 namespace framework{
@@ -162,7 +163,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   m_xLastFrame            (                                               )
         ,   m_aInteractionRequest   (                                               )
         ,   m_bSuspendQuickstartVeto( false                                     )
-        ,   m_aCommandOptions       (                                               )
         ,   m_sName                 (                                               )
         ,   m_sTitle                (                                               )
         ,   m_xDispatchRecorderSupplier(                                            )
@@ -646,8 +646,11 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     if ( aURL.Protocol.equalsIgnoreAsciiCase(".uno:") )
         aCommand = aURL.Path;
 
+    if (!m_xCommandOptions && !utl::ConfigManager::IsAvoidConfig())
+        m_xCommandOptions.reset(new SvtCommandOptions);
+
     // Make std::unordered_map lookup if the current URL is in the disabled list
-    if ( m_aCommandOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aCommand ) )
+    if (m_xCommandOptions && m_xCommandOptions->Lookup(SvtCommandOptions::CMDOPTION_DISABLED, aCommand))
         return css::uno::Reference< css::frame::XDispatch >();
     else
     {
