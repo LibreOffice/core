@@ -68,9 +68,9 @@ typedef const sal_uInt8*  ConstScanline;
 
 
 #define MASK_TO_COLOR( d_nVal, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_Col )                          \
-sal_uLong _def_cR = (sal_uInt8) ( d_RS < 0L ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS ); \
-sal_uLong _def_cG = (sal_uInt8) ( d_GS < 0L ? ( (d_nVal) & d_GM ) << -d_GS : ( (d_nVal) & d_GM ) >> d_GS ); \
-sal_uLong _def_cB = (sal_uInt8) ( d_BS < 0L ? ( (d_nVal) & d_BM ) << -d_BS : ( (d_nVal) & d_BM ) >> d_BS ); \
+const sal_uInt8 _def_cR = static_cast<sal_uInt8>( d_RS < 0 ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS ); \
+const sal_uInt8 _def_cG = static_cast<sal_uInt8>( d_GS < 0 ? ( (d_nVal) & d_GM ) << -d_GS : ( (d_nVal) & d_GM ) >> d_GS ); \
+const sal_uInt8 _def_cB = static_cast<sal_uInt8>( d_BS < 0 ? ( (d_nVal) & d_BM ) << -d_BS : ( (d_nVal) & d_BM ) >> d_BS ); \
 d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & mnROr ) >> mnROrShift ) ),                   \
                      (sal_uInt8) ( _def_cG | ( ( _def_cG & mnGOr ) >> mnGOrShift ) ),                   \
                      (sal_uInt8) ( _def_cB | ( ( _def_cB & mnBOr ) >> mnBOrShift ) ) );
@@ -184,33 +184,33 @@ public:
 // - ColorMask -
 class VCL_DLLPUBLIC ColorMask
 {
-    sal_uLong               mnRMask;
-    sal_uLong               mnGMask;
-    sal_uLong               mnBMask;
-    long                    mnRShift;
-    long                    mnGShift;
-    long                    mnBShift;
-    sal_uLong               mnROrShift;
-    sal_uLong               mnGOrShift;
-    sal_uLong               mnBOrShift;
-    sal_uLong               mnROr;
-    sal_uLong               mnGOr;
-    sal_uLong               mnBOr;
-    sal_uLong               mnAlphaChannel;
+    sal_uInt32              mnRMask;
+    sal_uInt32              mnGMask;
+    sal_uInt32              mnBMask;
+    sal_uInt32              mnAlphaChannel;
+    int                     mnRShift;
+    int                     mnGShift;
+    int                     mnBShift;
+    int                     mnROrShift;
+    int                     mnGOrShift;
+    int                     mnBOrShift;
+    sal_uInt8               mnROr;
+    sal_uInt8               mnGOr;
+    sal_uInt8               mnBOr;
 
-    SAL_DLLPRIVATE inline long ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_uLong& rOrShift ) const;
+    SAL_DLLPRIVATE inline int ImplCalcMaskShift( sal_uInt32 nMask, sal_uInt8 &rOr, int &rOrShift ) const;
 
 public:
 
-    inline              ColorMask( sal_uLong nRedMask = 0UL,
-                                   sal_uLong nGreenMask = 0UL,
-                                   sal_uLong nBlueMask = 0UL,
-                                   sal_uLong nAlphaChannel = 0UL );
+    inline              ColorMask( sal_uInt32 nRedMask = 0,
+                                   sal_uInt32 nGreenMask = 0,
+                                   sal_uInt32 nBlueMask = 0,
+                                   sal_uInt32 nAlphaChannel = 0 );
     inline              ~ColorMask() {}
 
-    inline sal_uLong    GetRedMask() const;
-    inline sal_uLong    GetGreenMask() const;
-    inline sal_uLong    GetBlueMask() const;
+    inline sal_uInt32   GetRedMask() const;
+    inline sal_uInt32   GetGreenMask() const;
+    inline sal_uInt32   GetBlueMask() const;
 
     inline void         GetColorFor8Bit( BitmapColor& rColor, const sal_uInt8* pPixel ) const;
     inline void         SetColorFor8Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const;
@@ -566,63 +566,62 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
     return nRetIndex;
 }
 
-inline ColorMask::ColorMask( sal_uLong nRedMask,
-                             sal_uLong nGreenMask,
-                             sal_uLong nBlueMask,
-                             sal_uLong nAlphaChannel ) :
+inline ColorMask::ColorMask( sal_uInt32 nRedMask,
+                             sal_uInt32 nGreenMask,
+                             sal_uInt32 nBlueMask,
+                             sal_uInt32 nAlphaChannel ) :
             mnRMask( nRedMask ),
             mnGMask( nGreenMask ),
             mnBMask( nBlueMask ),
-            mnROrShift( 0L ),
-            mnGOrShift( 0L ),
-            mnBOrShift( 0L ),
-            mnROr( 0L ),
-            mnGOr( 0L ),
-            mnBOr( 0L ),
-            mnAlphaChannel( nAlphaChannel )
+            mnAlphaChannel( nAlphaChannel ),
+            mnROrShift( 0 ),
+            mnGOrShift( 0 ),
+            mnBOrShift( 0 ),
+            mnROr( 0 ),
+            mnGOr( 0 ),
+            mnBOr( 0 )
 {
-    mnRShift = ( mnRMask ? ImplCalcMaskShift( mnRMask, mnROr, mnROrShift ) : 0L );
-    mnGShift = ( mnGMask ? ImplCalcMaskShift( mnGMask, mnGOr, mnGOrShift ) : 0L );
-    mnBShift = ( mnBMask ? ImplCalcMaskShift( mnBMask, mnBOr, mnBOrShift ) : 0L );
+    mnRShift = ( mnRMask ? ImplCalcMaskShift( mnRMask, mnROr, mnROrShift ) : 0 );
+    mnGShift = ( mnGMask ? ImplCalcMaskShift( mnGMask, mnGOr, mnGOrShift ) : 0 );
+    mnBShift = ( mnBMask ? ImplCalcMaskShift( mnBMask, mnBOr, mnBOrShift ) : 0 );
 }
 
-inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_uLong& rOrShift ) const
+inline int ColorMask::ImplCalcMaskShift( sal_uInt32 nMask, sal_uInt8& rOr, int& rOrShift ) const
 {
-    long    nShift;
-    long    nRet;
-    sal_uLong   nLen = 0UL;
-
     // from which bit starts the mask?
-    for( nShift = 31L; ( nShift >= 0L ) && !( nMask & ( (sal_uLong)1 << (sal_uLong) nShift ) ); nShift-- )
-    {}
+    int nShift = 31;
 
-    nRet = nShift;
+    while( nShift >= 0 && !( nMask & ( 1 << nShift ) ) )
+        --nShift;
+
+    const int nRet = nShift - 7;
+    int nLen = 0;
 
     // XXX determine number of bits set => walk right until null
-    while( ( nShift >= 0L ) && ( nMask & ( (sal_uLong)1 << (sal_uLong) nShift ) ) )
+    while( nShift >= 0 && ( nMask & ( 1 << nShift ) ) )
     {
         nShift--;
         nLen++;
     }
 
     assert( nLen <= 8 ); // mask length must be 8 bits or less
-    rOrShift = 8UL - nLen;
-    rOr = (sal_uInt8) ( ( 0xffUL >> nLen ) << rOrShift );
+    rOrShift = 8 - nLen;
+    rOr = static_cast<sal_uInt8>( ( 0xFF >> nLen ) << rOrShift );
 
-    return( nRet -= 7 );
+    return nRet;
 }
 
-inline sal_uLong ColorMask::GetRedMask() const
+inline sal_uInt32 ColorMask::GetRedMask() const
 {
     return mnRMask;
 }
 
-inline sal_uLong ColorMask::GetGreenMask() const
+inline sal_uInt32 ColorMask::GetGreenMask() const
 {
     return mnGMask;
 }
 
-inline sal_uLong ColorMask::GetBlueMask() const
+inline sal_uInt32 ColorMask::GetBlueMask() const
 {
     return mnBMask;
 }

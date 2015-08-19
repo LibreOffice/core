@@ -57,7 +57,7 @@ namespace unotools
         sal_Int8                                       m_nEndianness;
         bool                                           m_bPalette;
 
-        SAL_DLLPRIVATE void setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift );
+        SAL_DLLPRIVATE void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
 
         virtual ~VclCanvasBitmap();
 

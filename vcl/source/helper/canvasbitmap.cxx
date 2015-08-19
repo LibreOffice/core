@@ -53,7 +53,7 @@ namespace
     }
 }
 
-void VclCanvasBitmap::setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift )
+void VclCanvasBitmap::setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift )
 {
     // sort channels in increasing order of appearance in the pixel
     // (starting with the least significant bits)
@@ -89,9 +89,9 @@ void VclCanvasBitmap::setComponentInfo( sal_uLong redShift, sal_uLong greenShift
 
     m_aComponentBitCounts.realloc(3);
     sal_Int32* pCounts = m_aComponentBitCounts.getArray();
-    pCounts[redPos]    = bitcount(sal::static_int_cast<sal_uInt32>(redShift));
-    pCounts[greenPos]  = bitcount(sal::static_int_cast<sal_uInt32>(greenShift));
-    pCounts[bluePos]   = bitcount(sal::static_int_cast<sal_uInt32>(blueShift));
+    pCounts[redPos]   = bitcount(redShift);
+    pCounts[greenPos] = bitcount(greenShift);
+    pCounts[bluePos]  = bitcount(blueShift);
 }
 
 VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
@@ -206,9 +206,9 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
                 m_aLayout.IsMsbFirst = false; // doesn't matter
-                setComponentInfo( 0xff0000LL,
-                                  0x00ff00LL,
-                                  0x0000ffLL );
+                setComponentInfo( static_cast<sal_uInt32>(0xff0000UL),
+                                  static_cast<sal_uInt32>(0x00ff00UL),
+                                  static_cast<sal_uInt32>(0x0000ffUL) );
                 break;
 
             case BMP_FORMAT_24BIT_TC_RGB:
@@ -216,9 +216,9 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
                 m_aLayout.IsMsbFirst = false; // doesn't matter
-                setComponentInfo( 0x0000ffLL,
-                                  0x00ff00LL,
-                                  0xff0000LL );
+                setComponentInfo( static_cast<sal_uInt32>(0x0000ffUL),
+                                  static_cast<sal_uInt32>(0x00ff00UL),
+                                  static_cast<sal_uInt32>(0xff0000UL) );
                 break;
 
             case BMP_FORMAT_24BIT_TC_MASK:
