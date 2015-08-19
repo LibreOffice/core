@@ -160,7 +160,10 @@ inline std::basic_ostream<charT, traits> & operator <<(
     stream << "{";
     for (auto i = rCache.cbegin(); i != rCache.cend(); ++i)
     {
-        stream << "[" << i->mnFirstGlyph << ".." << (i->mnFirstGlyph + i->mnGlyphCount - 1) << "]";
+        stream << "[" << i->mnFirstGlyph;
+        if (i->mnGlyphCount > 1)
+            stream << ".." << (i->mnFirstGlyph + i->mnGlyphCount - 1);
+        stream << "]";
         if (i+1 != rCache.cend())
         {
             stream << ",";
@@ -278,9 +281,15 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     int totWidth = 0;
     for (int i = 0; i < nCount; i++)
     {
-        aDX[i] = std::abs(aABC[i].abcA) + aABC[i].abcB + std::abs(aABC[i].abcC);
+        aDX[i] = aABC[i].abcB + std::abs(aABC[i].abcC);
+        if (i == 0)
+            aDX[0] += std::abs(aABC[0].abcA);
+        if (i < nCount-1)
+            aDX[i] += std::abs(aABC[i+1].abcA);
         totWidth += aDX[i];
     }
+
+    SAL_INFO("vcl.gdi.opengl", "aSize=(" << aSize.cx << "," << aSize.cy << ") totWidth=" << totWidth);
 
     if (SelectObject(hDC, hOrigFont) == NULL)
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
