@@ -204,6 +204,7 @@ public:
     void testEmbeddedImageXLS();
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
+    void testHiddenSheetsXLSX();
 
     void testBnc762542();
 
@@ -303,6 +304,8 @@ public:
     CPPUNIT_TEST(testRefStringXLSX);
 
     CPPUNIT_TEST(testBnc762542);
+
+    CPPUNIT_TEST(testHiddenSheetsXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3136,6 +3139,17 @@ void ScFiltersTest::testBnc762542()
     }
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testHiddenSheetsXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("hidden_sheets.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1st sheet should be hidden", false, rDoc.IsVisible(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet should be visible", true, rDoc.IsVisible(1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("3rd sheet should be hidden", false, rDoc.IsVisible(2));
 }
 
 ScFiltersTest::ScFiltersTest()
