@@ -128,7 +128,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         SetModified();
                         for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
                             iter->Call( this );
-                        Commit();
+                        // tdf#93451: don't Commit() here, it's too early
                     }
 
 
