@@ -20,9 +20,9 @@
 #include "sal/config.h"
 
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 #include <osl/thread.h>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/datetime.hxx>
 #include <svx/svdotext.hxx>
@@ -212,7 +212,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
     {
         OUString aFileURLStr;
 
-        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aFileURLStr ) )
+        if( osl::FileBase::getFileURLFromSystemPath( rFileName, aFileURLStr ) == osl::FileBase::E_None )
             aFileURL = INetURLObject( aFileURLStr );
         else
             aFileURL.SetSmartURL( rFileName );

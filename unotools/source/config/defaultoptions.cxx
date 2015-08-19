@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/pathoptions.hxx>
@@ -30,7 +31,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 
-#include <unotools/localfilehelper.hxx>
 #include <rtl/instance.hxx>
 
 #include "itemholder1.hxx"
@@ -204,7 +204,7 @@ OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
                  nId == SvtPathOptions::PATH_PLUGIN )
             {
                 OUString aTmp;
-                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aRet, aTmp );
+                osl::FileBase::getFileURLFromSystemPath( aRet, aTmp );
                 aRet = aTmp;
             }
 

@@ -22,6 +22,7 @@
 #include "impdialog.hxx"
 
 #include "pdf.hrc"
+#include <osl/file.hxx>
 #include "tools/urlobj.hxx"
 #include "tools/fract.hxx"
 #include "tools/poly.hxx"
@@ -33,7 +34,6 @@
 #include "vcl/bmpacc.hxx"
 #include "vcl/svapp.hxx"
 #include "toolkit/awt/vclxdevice.hxx"
-#include "unotools/localfilehelper.hxx"
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
@@ -384,7 +384,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
     {
         OUString aTmp;
 
-        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFile, aTmp ) )
+        if( osl::FileBase::getFileURLFromSystemPath( rFile, aTmp ) == osl::FileBase::E_None )
             aURL = INetURLObject(aTmp);
     }
 

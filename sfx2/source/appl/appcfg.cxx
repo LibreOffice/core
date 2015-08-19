@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <osl/file.hxx>
 
 #include <stdlib.h>
 #include <vcl/msgbox.hxx>
@@ -51,7 +52,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/idle.hxx>
@@ -448,7 +448,7 @@ bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         OUString aValue;
                         switch ( nProp )
                         {
-                            case SvtPathOptions::PATH_ADDIN:        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetAddinPath(), aValue ); break;
+                            case SvtPathOptions::PATH_ADDIN:        osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetAddinPath(), aValue ); break;
                             case SvtPathOptions::PATH_AUTOCORRECT:  aValue = aPathCfg.GetAutoCorrectPath(); break;
                             case SvtPathOptions::PATH_AUTOTEXT:     aValue = aPathCfg.GetAutoTextPath(); break;
                             case SvtPathOptions::PATH_BACKUP:       aValue = aPathCfg.GetBackupPath(); break;
@@ -457,15 +457,15 @@ bool SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_CONFIG:       aValue = aPathCfg.GetConfigPath(); break;
                             case SvtPathOptions::PATH_DICTIONARY:   aValue = aPathCfg.GetDictionaryPath(); break;
                             case SvtPathOptions::PATH_FAVORITES:    aValue = aPathCfg.GetFavoritesPath(); break;
-                            case SvtPathOptions::PATH_FILTER:       ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetFilterPath(), aValue ); break;
+                            case SvtPathOptions::PATH_FILTER:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetFilterPath(), aValue ); break;
                             case SvtPathOptions::PATH_GALLERY:      aValue = aPathCfg.GetGalleryPath(); break;
                             case SvtPathOptions::PATH_GRAPHIC:      aValue = aPathCfg.GetGraphicPath(); break;
-                            case SvtPathOptions::PATH_HELP:         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetHelpPath(), aValue ); break;
+                            case SvtPathOptions::PATH_HELP:         osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetHelpPath(), aValue ); break;
                             case SvtPathOptions::PATH_LINGUISTIC:   aValue = aPathCfg.GetLinguisticPath(); break;
-                            case SvtPathOptions::PATH_MODULE:       ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetModulePath(), aValue ); break;
+                            case SvtPathOptions::PATH_MODULE:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetModulePath(), aValue ); break;
                             case SvtPathOptions::PATH_PALETTE:      aValue = aPathCfg.GetPalettePath(); break;
-                            case SvtPathOptions::PATH_PLUGIN:       ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetPluginPath(), aValue ); break;
-                            case SvtPathOptions::PATH_STORAGE:      ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetStoragePath(), aValue ); break;
+                            case SvtPathOptions::PATH_PLUGIN:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetPluginPath(), aValue ); break;
+                            case SvtPathOptions::PATH_STORAGE:      osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetStoragePath(), aValue ); break;
                             case SvtPathOptions::PATH_TEMP:         aValue = aPathCfg.GetTempPath(); break;
                             case SvtPathOptions::PATH_TEMPLATE:     aValue = aPathCfg.GetTemplatePath(); break;
                             case SvtPathOptions::PATH_USERCONFIG:   aValue = aPathCfg.GetUserConfigPath(); break;
@@ -798,7 +798,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_ADDIN:
                     {
                         OUString aTmp;
-                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
+                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetAddinPath( aTmp );
                         break;
                     }
@@ -814,7 +814,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_FILTER:
                     {
                         OUString aTmp;
-                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
+                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetFilterPath( aTmp );
                         break;
                     }
@@ -823,7 +823,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_HELP:
                     {
                         OUString aTmp;
-                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
+                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetHelpPath( aTmp );
                         break;
                     }
@@ -832,7 +832,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_MODULE:
                     {
                         OUString aTmp;
-                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
+                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetModulePath( aTmp );
                         break;
                     }
@@ -841,7 +841,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_PLUGIN:
                     {
                         OUString aTmp;
-                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
+                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetPluginPath( aTmp );
                         break;
                     }
@@ -849,7 +849,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_STORAGE:
                     {
                         OUString aTmp;
-                        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
+                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetStoragePath( aTmp );
                         break;
                     }

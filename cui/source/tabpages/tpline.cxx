@@ -18,6 +18,7 @@
  */
 
 #include <editeng/sizeitem.hxx>
+#include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -45,7 +46,6 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/gallery.hxx>
-#include <unotools/localfilehelper.hxx>
 #include "paragrph.hrc"
 #include "sfx2/opengrf.hxx"
 #include <svx/dialmgr.hxx>
@@ -309,7 +309,8 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
             // Convert URL encodings to UI characters (e.g. %20 for spaces)
             OUString aPhysicalName;
-            if (utl::LocalFileHelper::ConvertURLToPhysicalName(*it, aPhysicalName))
+            if (osl::FileBase::getSystemPathFromFileURL(*it, aPhysicalName)
+                == osl::FileBase::E_None)
             {
                 pUIName = &aPhysicalName;
             }

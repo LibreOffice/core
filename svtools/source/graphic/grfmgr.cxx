@@ -22,11 +22,11 @@
 #include <algorithm>
 
 #include <officecfg/Office/Common.hxx>
+#include <osl/file.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -237,7 +237,7 @@ void GraphicObject::ImplAutoSwapIn()
                         {
                             OUString aURLStr;
 
-                            if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
+                            if( osl::FileBase::getFileURLFromSystemPath( GetLink(), aURLStr ) == osl::FileBase::E_None )
                             {
                                 boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::READ ));
 

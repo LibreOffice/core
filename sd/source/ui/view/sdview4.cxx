@@ -18,7 +18,7 @@
  */
 
 #include "View.hxx"
-#include <unotools/localfilehelper.hxx>
+#include <osl/file.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfilt.hxx>
@@ -418,7 +418,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
         if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
             OUString aURLStr;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aCurrentDropFile, aURLStr );
+            osl::FileBase::getFileURLFromSystemPath( aCurrentDropFile, aURLStr );
             aURL = INetURLObject( aURLStr );
         }
 

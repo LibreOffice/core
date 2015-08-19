@@ -27,7 +27,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <svtools/transfer.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <sot/filelist.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -194,7 +193,7 @@ bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotClipboardForma
 void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
 {
     OUString aFileURL;
-    if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
+    if ( osl::FileBase::getFileURLFromSystemPath( rFilePath, aFileURL ) != osl::FileBase::E_None )
         aFileURL = rFilePath;
 
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );

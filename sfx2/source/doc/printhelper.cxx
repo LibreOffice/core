@@ -36,7 +36,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <tools/urlobj.hxx>

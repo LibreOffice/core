@@ -30,7 +30,6 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -3209,7 +3208,7 @@ sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
         if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
             OUString aURLStr;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rURL, aURLStr );
+            osl::FileBase::getFileURLFromSystemPath( rURL, aURLStr );
             aURL = INetURLObject( aURLStr );
         }
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );

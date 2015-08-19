@@ -19,6 +19,7 @@
 
 #include "dbfindex.hxx"
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 #include <tools/config.hxx>
 #include <sfx2/app.hxx>
 #include "moduledbu.hxx"
@@ -323,7 +324,7 @@ void ODbaseIndexDialog::Init()
     for(;pBegin != pEnd;++pBegin)
     {
         OUString aName;
-        ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
+        osl::FileBase::getSystemPathFromFileURL(pBegin->getStr(),aName);
         aURL.SetSmartURL(aName);
         OUString aExt = aURL.getExtension();
         if (aExt == aIndexExt)

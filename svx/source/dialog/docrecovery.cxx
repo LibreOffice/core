@@ -55,7 +55,6 @@
 #include <osl/security.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/localfilehelper.hxx>
 #include "svtools/treelistentry.hxx"
 #include <officecfg/Office/Recovery.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -1337,7 +1336,7 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
     OUString sPhysicalPath = comphelper::string::strip(m_pSaveDirED->GetText(), ' ');
     OUString sURL;
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
+    osl::FileBase::getFileURLFromSystemPath( sPhysicalPath, sURL );
     m_sSavePath = sURL;
     while (m_sSavePath.isEmpty())
         impl_askForSavePath();

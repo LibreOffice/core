@@ -32,6 +32,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/msgbox.hxx>
@@ -66,7 +67,6 @@
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <tools/diagnose_ex.h>
@@ -398,7 +398,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( !pImp->aTempName.isEmpty() )
     {
         OUString aTmp;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
+        osl::FileBase::getFileURLFromSystemPath( pImp->aTempName, aTmp );
         ::utl::UCBContentHelper::Kill( aTmp );
     }
 

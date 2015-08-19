@@ -59,7 +59,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
@@ -1136,7 +1135,7 @@ void GraphicFilter::ImplInit()
     {
         OUString url("$BRAND_BASE_DIR/" LIBO_LIB_FOLDER);
         rtl::Bootstrap::expandMacros(url); //TODO: detect failure
-        utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
+        osl::FileBase::getSystemPathFromFileURL(url, aFilterPath);
     }
 
     pErrorEx = new FilterErrorEx;

@@ -82,7 +82,6 @@
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/docinfohelper.hxx>
@@ -651,7 +650,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( pSalvageItem )
         {
             OUString aName( pMed->GetPhysicalName() );
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
+            osl::FileBase::getFileURLFromSystemPath( aName, aBaseURL );
         }
         else
             aBaseURL = pMed->GetBaseURL();

@@ -29,7 +29,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
 
@@ -203,7 +202,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
     sal_Unicode aPathBuffer[nMaxPathSize];
     if ( SystemPath::GetUserTemplateLocation( aPathBuffer, nMaxPathSize ))
         sPath = OUString( aPathBuffer );
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, sURL );
+    osl::FileBase::getFileURLFromSystemPath( sPath, sURL );
 
     OUString aUserTemplateURL( sURL );
     if ( !aUserTemplateURL.isEmpty())

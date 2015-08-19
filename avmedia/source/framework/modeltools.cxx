@@ -20,7 +20,6 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -80,7 +79,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
 
     // Create a temporary folder for conversion
     OUString sOutput;
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sOutput);
+    osl::FileBase::getFileURLFromSystemPath(::utl::TempFile::CreateTempName(), sOutput);
     // remove .tmp extension
     sOutput = sOutput.copy(0, sOutput.getLength()-4);
 

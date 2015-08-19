@@ -24,6 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include "dbase/DTable.hxx"
 #include "dbase/DIndexIter.hxx"
+#include <osl/file.hxx>
 #include <tools/config.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
@@ -31,7 +32,6 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <comphelper/extract.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -388,7 +388,7 @@ void ODbaseIndex::createINFEntry()
                       ".inf");
 
     OUString sPhysicalPath;
-    LocalFileHelper::ConvertURLToPhysicalName(sCfgFile, sPhysicalPath);
+    osl::FileBase::getSystemPathFromFileURL(sCfgFile, sPhysicalPath);
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
@@ -430,7 +430,8 @@ bool ODbaseIndex::DropImpl()
         m_pTable->getName() + ".inf";
 
     OUString sPhysicalPath;
-    OSL_VERIFY_RES( LocalFileHelper::ConvertURLToPhysicalName(sCfgFile, sPhysicalPath),
+    OSL_VERIFY_RES( osl::FileBase::getSystemPathFromFileURL(sCfgFile, sPhysicalPath)
+                    == osl::FileBase::E_None,
         "Can not convert Config Filename into Physical Name!");
 
     Config aInfFile(sPhysicalPath);

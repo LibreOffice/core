@@ -33,7 +33,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <memory>
@@ -385,7 +384,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, bool tr
         if ( aObj.GetProtocol() == INetProtocol::NotValid )
         {
             OUString aURL;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aName, aURL );
+            osl::FileBase::getFileURLFromSystemPath( m_aName, aURL );
             aObj.SetURL( aURL );
             m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }
@@ -568,7 +567,7 @@ bool SotStorage::IsStorageFile( const OUString & rFileName )
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
         OUString aURL;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
+        osl::FileBase::getFileURLFromSystemPath( aName, aURL );
         aObj.SetURL( aURL );
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }

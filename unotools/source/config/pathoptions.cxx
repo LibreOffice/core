@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/bootstrap.hxx>
 
 #include <unotools/ucbhelper.hxx>
@@ -241,7 +240,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
           )
         {
             // These office paths have to be converted to system pates
-            utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
+            osl::FileBase::getSystemPathFromFileURL( aPathValue, aResult );
             aPathValue = aResult;
         }
 
@@ -275,7 +274,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
             case SvtPathOptions::PATH_STORAGE:
             {
                 // These office paths have to be convert back to UCB-URL's
-                utl::LocalFileHelper::ConvertPhysicalNameToURL( rNewPath, aResult );
+                osl::FileBase::getFileURLFromSystemPath( rNewPath, aResult );
                 aNewValue = aResult;
             }
             break;
@@ -379,7 +378,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     {
         // Convert the URL to a system path for special path variables
         OUString aReturn;
-        utl::LocalFileHelper::ConvertURLToPhysicalName( aWorkText, aReturn );
+        osl::FileBase::getSystemPathFromFileURL( aWorkText, aReturn );
         return aReturn;
     }
 
@@ -795,7 +794,8 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 {
                     bIsURL = false;
                     OUString aURL;
-                    if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
+                    if ( osl::FileBase::getFileURLFromSystemPath( aPathToken, aURL )
+                         == osl::FileBase::E_None )
                         aObj.SetURL( aURL );
                 }
                 if ( aObj.GetProtocol() == INetProtocol::VndSunStarExpand )
@@ -819,8 +819,8 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 {
                     if ( !bIsURL )
                     {
-                        OUString sTmp(rIniFile);
-                        ::utl::LocalFileHelper::ConvertURLToPhysicalName(
+                        OUString sTmp;
+                        osl::FileBase::getSystemPathFromFileURL(
                                             aObj.GetMainURL( INetURLObject::NO_DECODE ), sTmp );
                         rIniFile = sTmp;
                     }

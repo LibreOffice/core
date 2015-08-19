@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include <boost/noncopyable.hpp>
+#include <osl/file.hxx>
 #include <tools/debug.hxx>
 
 #include <sal/config.h>
@@ -34,7 +35,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <unotools/pathoptions.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <osl/thread.h>
 
 #include <sal/macros.h>
@@ -124,7 +124,7 @@ void LangGuess_Impl::EnsureInitialized()
         // set default fingerprint path to where those get installed
         OUString aPhysPath;
         OUString aURL( SvtPathOptions().GetFingerprintPath() );
-        utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
+        osl::FileBase::getSystemPathFromFileURL( aURL, aPhysPath );
 #ifdef WNT
         aPhysPath += "\\";
 #else

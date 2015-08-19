@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <osl/file.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -67,7 +67,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <rtl/ustrbuf.hxx>
 
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -426,7 +425,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // doing
 
             OUString aTemp;
-            utl::LocalFileHelper::ConvertPhysicalNameToURL( pMed->GetPhysicalName(), aTemp );
+            osl::FileBase::getFileURLFromSystemPath( pMed->GetPhysicalName(), aTemp );
             INetURLObject aPhysObj( aTemp );
             SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(),
                              pVersionItem, SfxInt16Item, SID_VERSION, false );

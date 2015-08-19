@@ -187,7 +187,6 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
     @descr      We detect type of given URL automatically and build this short name depend on this type ...
                 If we couldnt make it right we return full given string without any changes ...
 
-    @seealso    class LocalFileHelper
     @seealso    method InetURLObject::getAbbreviated()
 
     @param      "sName", file name

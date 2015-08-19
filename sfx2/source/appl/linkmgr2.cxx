@@ -34,7 +34,6 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/dibtools.hxx>
@@ -431,7 +430,8 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
 
         OUString aTmp;
         OUString aURL = aFile;
-        if (utl::LocalFileHelper::ConvertPhysicalNameToURL(aFile, aTmp))
+        if (osl::FileBase::getFileURLFromSystemPath(aFile, aTmp)
+            == osl::FileBase::E_None)
             aURL = aTmp;
 
         if (!aURL.equalsIgnoreAsciiCase(pMed->GetName()))

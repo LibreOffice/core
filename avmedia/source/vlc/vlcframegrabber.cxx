@@ -21,11 +21,11 @@
 #include <chrono>
 #include <iostream>
 #include <osl/conditn.hxx>
+#include <osl/file.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngread.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
@@ -102,7 +102,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
     }
 
     rtl::OUString url;
-    utl::LocalFileHelper::ConvertPhysicalNameToURL( fileName, url );
+    osl::FileBase::getFileURLFromSystemPath( fileName, url );
     boost::shared_ptr<SvStream> stream( utl::UcbStreamHelper::CreateStream( url,
                                                                             STREAM_STD_READ ) );
 

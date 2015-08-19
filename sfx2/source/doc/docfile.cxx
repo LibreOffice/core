@@ -433,7 +433,7 @@ Reference < XContent > SfxMedium::GetContent() const
             // TODO: SAL_WARN( "sfx.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             OUString aURL;
             if ( !pImp->m_aName.isEmpty() )
-                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL );
+                osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aURL );
             else if ( !pImp->m_aLogicName.isEmpty() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             if (!aURL.isEmpty() )
@@ -685,7 +685,8 @@ bool SfxMedium::IsStorage()
     if ( pImp->pTempFile )
     {
         OUString aURL;
-        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL ) )
+        if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aURL )
+             == osl::FileBase::E_None )
         {
             SAL_WARN( "sfx.doc", "Physical name not convertible!");
         }
@@ -999,7 +1000,8 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                     // the file is not readonly, check the ACL
 
                     OUString aPhysPath;
-                    if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
+                    if ( osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath )
+                         == osl::FileBase::E_None )
                         bContentReadonly = IsReadonlyAccordingACL( aPhysPath.getStr() );
                 }
 #endif
@@ -1316,7 +1318,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
                     pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
                     pImp->bStorageBasedOnInStream = false;
                     OUString aTemp;
-                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTmpName, aTemp );
+                    osl::FileBase::getSystemPathFromFileURL( aTmpName, aTemp );
                     SetPhysicalName_Impl( aTemp );
 
                     pImp->bIsTemp = true;
@@ -1732,7 +1734,8 @@ void SfxMedium::Transfer_Impl()
     else if ( !pImp->m_aLogicName.isEmpty() && pImp->m_bSalvageMode )
     {
         // makes sense only in case logic name is set
-        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aNameURL ) )
+        if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aNameURL )
+             != osl::FileBase::E_None )
             SAL_WARN( "sfx.doc", "The medium name is not convertible!" );
     }
 
@@ -2011,8 +2014,12 @@ void SfxMedium::Transfer_Impl()
         if ( ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) && !pImp->pTempFile )
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
-              ::utl::LocalFileHelper::ConvertURLToPhysicalName(
-                  GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName );
+            if (osl::FileBase::getSystemPathFromFileURL(
+                  GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName )
+                != osl::FileBase::E_None)
+            {
+                pImp->m_aName.clear();
+            }
             pImp->m_bSalvageMode = false;
         }
     }
@@ -2248,7 +2255,8 @@ void SfxMedium::GetMedium_Impl()
             OUString aFileName;
             if (!pImp->m_aName.isEmpty())
             {
-                if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aFileName ) )
+                if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aFileName )
+                     != osl::FileBase::E_None )
                 {
                     SAL_WARN( "sfx.doc", "Physical name not convertible!");
                 }
@@ -2425,7 +2433,7 @@ void SfxMedium::Init_Impl()
             // try to convert the URL into a physical name - but never change a physical name
             // physical name may be set if the logical name is changed after construction
             if ( pImp->m_aName.isEmpty() )
-                ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName );
+                osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName );
             else
             {
                 DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
@@ -2932,7 +2940,8 @@ SfxMedium::~SfxMedium()
     if( pImp->bIsTemp && !pImp->m_aName.isEmpty() )
     {
         OUString aTemp;
-        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aTemp ))
+        if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aTemp )
+             != osl::FileBase::E_None )
         {
             SAL_WARN( "sfx.doc", "Physical name not convertible!");
         }

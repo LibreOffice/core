@@ -14,7 +14,6 @@
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 
 ScCollaboration::ScCollaboration( ScDocShell* pScDocShell ) :
     mpScDocShell( pScDocShell )
@@ -48,7 +47,7 @@ void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
     aTmpPath += ".ods";
 
     OUString aFileURL;
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
+    osl::FileBase::getFileURLFromSystemPath( aTmpPath, aFileURL );
 
     utl::MediaDescriptor aDescriptor;
     // some issue with hyperlinks:

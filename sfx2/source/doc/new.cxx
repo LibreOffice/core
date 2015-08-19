@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <osl/file.hxx>
 #include <sfx2/new.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
@@ -29,7 +30,6 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
 
 #include "doc.hrc"
 #include <sfx2/app.hxx>
@@ -196,7 +196,7 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
             // temp. fix until Templates are managed by UCB compatible service
             // does NOT work with locally cached components !
             OUString aTemp;
-            utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aTemp );
+            osl::FileBase::getFileURLFromSystemPath( aFileName, aTemp );
             aFileName = aTemp;
         }
 

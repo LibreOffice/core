@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/macros.h>
 #include "iodlg.hxx"
 #include <svtools/PlaceEditDialog.hxx>
@@ -39,7 +41,6 @@
 #include "svtools/svtabbx.hxx"
 #include "svtools/treelistentry.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
-#include <unotools/localfilehelper.hxx>
 
 #include "svtools/helpid.hrc"
 #include <svtools/svtools.hrc>
@@ -211,7 +212,8 @@ namespace
                     if ( INetProtocol::NotValid == aURL.GetProtocol() )
                     {
                         OUString sURL;
-                        if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aNewFile, sURL ) )
+                        if ( osl::FileBase::getFileURLFromSystemPath( aNewFile, sURL )
+                             == osl::FileBase::E_None )
                             aURL = INetURLObject( sURL );
                     }
                     if ( INetProtocol::File == aURL.GetProtocol() )
@@ -1784,8 +1786,12 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
     try
     {
         // create make a human-readable string from the URL
-        OUString sDisplayPath( _rURL );
-        osl::FileBase::getSystemPathFromFileURL(_rURL, sDisplayPath);
+        OUString sDisplayPath;
+        if (osl::FileBase::getSystemPathFromFileURL(_rURL, sDisplayPath)
+            == osl::FileBase::E_None)
+        {
+            sDisplayPath = _rURL;
+        }
 
         // build an own exception which tells "access denied"
         InteractiveAugmentedIOException aException;

@@ -56,7 +56,6 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 
 namespace {
@@ -348,7 +347,9 @@ bool utl::UCBContentHelper::IsYounger(
 
 bool utl::UCBContentHelper::Exists(OUString const & url) {
     OUString pathname;
-    if (utl::LocalFileHelper::ConvertURLToPhysicalName(url, pathname)) {
+    if (osl::FileBase::getSystemPathFromFileURL(url, pathname)
+        == osl::FileBase::E_None)
+    {
         // Try to create a directory entry for the given URL:
         OUString url2;
         if (osl::FileBase::getFileURLFromSystemPath(pathname, url2)

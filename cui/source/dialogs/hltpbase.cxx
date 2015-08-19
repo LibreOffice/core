@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <osl/file.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -24,7 +26,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/localfilehelper.hxx>
 #include "cuihyperdlg.hxx"
 #include "hltpbase.hxx"
 #include "macroass.hxx"

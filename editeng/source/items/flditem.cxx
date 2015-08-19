@@ -18,11 +18,10 @@
  */
 
 #include <comphelper/string.hxx>
+#include <osl/file.hxx>
 #include <vcl/metaact.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
-
-#include <unotools/localfilehelper.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/measfld.hxx>
@@ -1013,7 +1012,7 @@ OUString SvxExtFileField::GetFormatted() const
         // invalid? try to interpret string as system file name
         OUString aURLStr;
 
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFile, aURLStr );
+        osl::FileBase::getFileURLFromSystemPath( aFile, aURLStr );
 
         aURLObj.SetURL( aURLStr );
     }

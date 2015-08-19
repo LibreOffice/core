@@ -36,11 +36,9 @@
 
 #include <svl/itemset.hxx>
 #include <svl/urihelper.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/inettbc.hxx>
 
-#include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/sfx.hrc>

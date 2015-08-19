@@ -49,7 +49,6 @@
 
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
@@ -283,7 +282,7 @@ void Desktop::CreateTemporaryDirectory()
     OUString aTempPath( aTempBaseURL );
 
     // create new current temporary directory
-    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTempBaseURL, aRet );
+    osl::FileBase::getSystemPathFromFileURL( aTempBaseURL, aRet );
     ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
     aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
     if ( aTempPath.isEmpty() )
@@ -299,7 +298,11 @@ void Desktop::CreateTemporaryDirectory()
     }
 
     // set new current temporary directory
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempPath, aRet );
+    if (osl::FileBase::getFileURLFromSystemPath( aTempPath, aRet )
+        != osl::FileBase::E_None)
+    {
+        aRet.clear();
+    }
     CurrentTempURL::get() = aRet;
 }
 

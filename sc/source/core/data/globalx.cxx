@@ -20,9 +20,9 @@
 #include "callform.hxx"
 #include "global.hxx"
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/localfilehelper.hxx>
 
 #include <unotools/pathoptions.hxx>
 
@@ -56,10 +56,8 @@ void ScGlobal::InitAddIns()
         if (aPath.isEmpty())
             continue;
 
-        //  use LocalFileHelper to convert the path to a URL that always points
-        //  to the file on the server
         OUString aUrl;
-        if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
+        if ( osl::FileBase::getFileURLFromSystemPath( aPath, aUrl ) == osl::FileBase::E_None )
             aPath = aUrl;
 
         INetURLObject aObj;

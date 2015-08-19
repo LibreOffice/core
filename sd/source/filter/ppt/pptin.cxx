@@ -75,7 +75,6 @@
 
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <editeng/editstat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfac.hxx>
@@ -1969,7 +1968,8 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                             OUString aStr;
                                             if ( ReadString( aStr ) )
                                             {
-                                                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStr, aRetVal ) )
+                                                if( osl::FileBase::getFileURLFromSystemPath( aStr, aRetVal )
+                                                    == osl::FileBase::E_None )
                                                 {
                                                     aRetVal = INetURLObject( aRetVal ).GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
                                                 }else{
@@ -2065,8 +2065,11 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                                 OUString aBaseURL = pDocShell->GetMedium()->GetBaseURL();
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
-                                if( INetProtocol::NotValid == aURL.GetProtocol() )
-                                    osl::FileBase::getFileURLFromSystemPath( pPtr->aTarget, aBookmarkURL );
+                                if( INetProtocol::NotValid == aURL.GetProtocol()
+                                    && (osl::FileBase::getFileURLFromSystemPath(
+                                            pPtr->aTarget, aBookmarkURL)
+                                        != osl::FileBase::E_None) )
+                                    aBookmarkURL.clear();
                                 if( aBookmarkURL.isEmpty() )
                                     aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
                                 pInfo->SetBookmark( aBookmarkURL );

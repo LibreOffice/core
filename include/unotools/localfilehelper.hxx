@@ -29,21 +29,6 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC LocalFileHelper
     {
     public:
-        /**
-        Converts a "physical" file name into a "UCB compatible" URL ( if possible ).
-        If no UCP is available for the local file system, sal_False and an empty URL is returned.
-        Returning sal_True and an empty URL means that the URL doesn't point to a local file.
-        */
-        static bool ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn);
-
-        /**
-        Converts a "UCB compatible" URL into a "physical" file name.
-        If no UCP is available for the local file system, sal_False and an empty file name is returned,
-        otherwise sal_True and a valid URL, because a file name can always be converted if a UCP for the local
-        file system is present ( watch: this doesn't mean that this file really exists! )
-        */
-        static bool ConvertURLToPhysicalName( const OUString& rName, OUString& rReturn );
-
         static bool IsFileUrl(const OUString& rUrl);
 
         static          ::com::sun::star::uno::Sequence< OUString >

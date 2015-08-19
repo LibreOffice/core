@@ -25,7 +25,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configitem.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <unotools/bootstrap.hxx>
@@ -794,7 +793,7 @@ OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompli
     OUString   aTemp;
 
     osl::FileBase::getSystemPathFromFileURL( aOSLCompliantURL, aTemp );
-    utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemp, aResult );
+    osl::FileBase::getFileURLFromSystemPath( aTemp, aResult );
 
     // Not all OSL URL's can be mapped to UCB URL's!
     if ( aResult.isEmpty() )

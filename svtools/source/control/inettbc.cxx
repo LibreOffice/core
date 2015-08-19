@@ -55,7 +55,6 @@
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/urlfilter.hxx>
@@ -233,8 +232,8 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl )
         OUString sCompletion(*i);
 
         // convert the file into an URL
-        OUString sURL( sCompletion );
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCompletion, sURL );
+        OUString sURL;
+        osl::FileBase::getFileURLFromSystemPath( sCompletion, sURL );
             // note: if this doesn't work, we're not interested in: we're checking the
             // untouched sCompletion then
 
@@ -569,11 +568,10 @@ void SvtMatchContext_Impl::doExecute()
         return;
 
     OUString aMatch;
-    OUString aWorkDir( SvtPathOptions().GetWorkPath() );
     INetProtocol eProt = INetURLObject::CompareProtocolScheme( aText );
     INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
     if ( aBaseURL.isEmpty() )
-        eBaseProt = INetURLObject::CompareProtocolScheme( aWorkDir );
+        eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
     INetProtocol eSmartProt = pBox->GetSmartProtocol();
 
     // if the user input is a valid URL, go on with it

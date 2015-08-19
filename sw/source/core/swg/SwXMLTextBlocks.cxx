@@ -19,11 +19,11 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <comphelper/storagehelper.hxx>
@@ -521,7 +521,7 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
         OUString aURL;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
+        osl::FileBase::getFileURLFromSystemPath( aName, aURL );
         aObj.SetURL( aURL );
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }

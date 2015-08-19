@@ -23,6 +23,7 @@
 #include <limits.h>
 #include <vector>
 #include <osl/endian.h>
+#include <osl/file.hxx>
 #include <tools/solar.h>
 #include <rtl/math.hxx>
 
@@ -48,7 +49,6 @@
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
@@ -266,7 +266,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     OUString aURLStr;
 
-    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( OUString("d:\\ashape.dbg"), aURLStr ) )
+    if( osl::FileBase::getFileURLFromSystemPath( OUString("d:\\ashape.dbg"), aURLStr ) == osl::FileBase::E_None )
     {
         std::unique_ptr<SvStream> xOut(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::WRITE ));
 
@@ -3951,7 +3951,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 if ( !INetURLObject( maBaseURL ).GetNewAbsURL( aFileName, &aAbsURL ) )
                 {
                     OUString aValidURL;
-                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aValidURL ) )
+                    if( osl::FileBase::getFileURLFromSystemPath( aFileName, aValidURL ) == osl::FileBase::E_None )
                         aAbsURL = INetURLObject( aValidURL );
                 }
                 if( aAbsURL.GetProtocol() != INetProtocol::NotValid )
@@ -6374,7 +6374,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         }
 
         OUString aURLStr;
-        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
+        if( osl::FileBase::getFileURLFromSystemPath( Application::GetAppFileName(), aURLStr ) == osl::FileBase::E_None )
         {
             INetURLObject aURL( aURLStr );
 

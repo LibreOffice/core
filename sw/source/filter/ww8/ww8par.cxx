@@ -122,7 +122,6 @@
 #include <iostream>
 #include <dbgoutsw.hxx>
 #endif
-#include <unotools/localfilehelper.hxx>
 
 #include <svx/hlnkitem.hxx>
 #include "WW8Sttbf.hxx"
@@ -4743,7 +4742,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 OUString aURL;
                 // attempt to convert to url (won't work for obvious reasons on linux)
                 if ( !sPath.isEmpty() )
-                    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, aURL );
+                    osl::FileBase::getFileURLFromSystemPath( sPath, aURL );
                 if (aURL.isEmpty())
                     xDocProps->setTemplateURL( aURL );
                 else

@@ -28,8 +28,8 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -1504,7 +1504,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                     {
                         OUString aValidURL;
 
-                        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aURL, aValidURL ) )
+                        if( osl::FileBase::getFileURLFromSystemPath( aURL, aValidURL ) == osl::FileBase::E_None )
                             aURLObj = INetURLObject( aValidURL );
                     }
 

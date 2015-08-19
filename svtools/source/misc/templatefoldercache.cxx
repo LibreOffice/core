@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <osl/file.hxx>
 #include <svtools/templatefoldercache.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -565,7 +567,7 @@ namespace svt
         if ( INetProtocol::NotValid == aParser.GetProtocol() )
         {
             OUString sURL;
-            LocalFileHelper::ConvertPhysicalNameToURL( _rPath, sURL );
+            osl::FileBase::getFileURLFromSystemPath( _rPath, sURL );
             aParser.SetURL( sURL, INetURLObject::WAS_ENCODED );
         }
         return aParser.GetMainURL( INetURLObject::DECODE_TO_IURI );

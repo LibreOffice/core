@@ -33,6 +33,7 @@
 #include "globstr.hrc"
 #include "cellvalue.hxx"
 
+#include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -49,7 +50,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <vcl/msgbox.hxx>
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
@@ -2456,7 +2456,8 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
     if (isOwnDocument(rFile))
         return false;
     OUString aPhysical;
-    if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && !aPhysical.isEmpty())
+    if (osl::FileBase::getSystemPathFromFileURL(rFile, aPhysical)
+        == osl::FileBase::E_None)
     {
         // #i114504# try IsFolder/Exists only for file URLs
 

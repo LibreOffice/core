@@ -43,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -1089,14 +1088,18 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
             sPath = "/usr/bin";
 
         OUString sUrl;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath, sUrl);
+        osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
         aHelper.SetDisplayDirectory(sUrl);
         aHelper.AddFilter( m_sDefaultFilterName, OUString("*"));
 
         if ( ERRCODE_NONE == aHelper.Execute() )
         {
             sUrl = aHelper.GetPath();
-            ::utl::LocalFileHelper::ConvertURLToPhysicalName(sUrl, sPath);
+            if (osl::FileBase::getSystemPathFromFileURL(sUrl, sPath)
+                != osl::FileBase::E_None)
+            {
+                sPath.clear();
+            }
             m_pMailerURLED->SetText(sPath);
         }
     }

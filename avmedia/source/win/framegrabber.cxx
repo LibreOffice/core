@@ -36,9 +36,9 @@
 #include "player.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <vcl/dibtools.hxx>
 
 #define AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_DirectX"
@@ -71,7 +71,8 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
     {
         OUString aLocalStr;
 
-        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && !aLocalStr.isEmpty() )
+        if( osl::FileBase::getSystemPathFromFileURL( rURL, aLocalStr )
+            == osl::FileBase::E_None )
         {
             if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.getStr()) ) ) ) )
             {

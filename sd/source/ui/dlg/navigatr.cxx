@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/eitem.hxx>
@@ -593,7 +595,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
     if( aURL.GetProtocol() == INetProtocol::NotValid )
     {
         OUString aURLStr;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aURLStr );
+        osl::FileBase::getFileURLFromSystemPath( rFileName, aURLStr );
         aURL = INetURLObject( aURLStr );
     }
 

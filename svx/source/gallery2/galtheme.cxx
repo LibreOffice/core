@@ -24,12 +24,12 @@
 #include <algorithm>
 
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
@@ -1215,7 +1215,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
                 {
                     OUString aLocalURL;
 
-                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFile, aLocalURL ) )
+                    if( osl::FileBase::getFileURLFromSystemPath( aFile, aLocalURL ) == osl::FileBase::E_None )
                         aURL = INetURLObject( aLocalURL );
                 }
 
@@ -1468,7 +1468,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                     pObj->aURL = INetURLObject( aFileName );
 
                     if( ( pObj->aURL.GetProtocol() == INetProtocol::NotValid ) &&
-                        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aLocalURL ) )
+                        osl::FileBase::getFileURLFromSystemPath( aFileName, aLocalURL ) == osl::FileBase::E_None )
                     {
                         pObj->aURL = INetURLObject( aLocalURL );
                     }
