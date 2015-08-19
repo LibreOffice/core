@@ -31,9 +31,18 @@
 #include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"
 
+#include "opengl/FixedTextureAtlas.hxx"
+
+namespace
+{
+
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+}
+
+static std::vector<std::unique_ptr<FixedTextureAtlasManager>> sTextureAtlases;
+
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
@@ -314,6 +323,31 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     return 0;
 }
 
+void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int nHeight,
+                           const GLenum nFormat, const GLenum nType, sal_uInt8* pData)
+{
+    if (nWidth == nHeight)
+    {
+        if (sTextureAtlases.empty())
+        {
+            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 16))));
+            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 24))));
+            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 32))));
+            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 48))));
+            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 64))));
+        }
+        for (size_t i = 0; i < sTextureAtlases.size(); i++)
+        {
+            if (nWidth == sTextureAtlases[i]->GetSubtextureSize())
+            {
+                rTexture = sTextureAtlases[i]->InsertBuffer(nWidth, nHeight, nFormat, nType, pData);
+                return;
+            }
+        }
+    }
+    rTexture = OpenGLTexture (nWidth, nHeight, nFormat, nType, pData);
+}
+
 }
 
 Size OpenGLSalBitmap::GetSize() const
@@ -410,7 +444,8 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
     makeCurrent();
 
-    maTexture = OpenGLTexture (mnBufWidth, mnBufHeight, nFormat, nType, pData );
+    lclInstantiateTexture(maTexture, mnBufWidth, mnBufHeight, nFormat, nType, pData);
+
     SAL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
 
     if( bAllocated )
