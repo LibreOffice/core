@@ -114,7 +114,10 @@ char ColorFor(COLORREF aColor)
 {
     if (aColor == RGB(0xFF, 0xFF, 0xFF))
         return ' ';
-    return '0' + 10*((GetRValue(aColor) + GetGValue(aColor) + GetBValue(aColor)) / (0xFF*3));
+    else if (aColor == RGB(0x00, 0x00, 0x00))
+        return 'X';
+
+    return '0' + (10*(GetRValue(aColor) + GetGValue(aColor) + GetBValue(aColor))) / (0xFF*3);
 }
 
 OUString DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
