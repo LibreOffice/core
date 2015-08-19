@@ -401,22 +401,22 @@ private:
     VclPtr<PushButton>         m_pBtnLoad;
     VclPtr<PushButton>         m_pBtnSave;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&   m_rOutAttrs;
 
-    XColorListRef         pColorList;
-    XGradientListRef      pGradientList;
+    XColorListRef         m_pColorList;
+    XGradientListRef      m_pGradientList;
 
-    ChangeType*         pnGradientListState;
-    ChangeType*         pnColorListState;
-    sal_uInt16*         pPageType;
-    sal_uInt16          nDlgType;
-    sal_Int32*          pPos;
-    bool*               pbAreaTP;
+    ChangeType*         m_pnGradientListState;
+    ChangeType*         m_pnColorListState;
+    sal_uInt16*         m_pPageType;
+    sal_uInt16          m_nDlgType;
+    sal_Int32*          m_pPos;
+    bool*               m_pbAreaTP;
 
-    XFillStyleItem      aXFStyleItem;
-    XFillGradientItem   aXGradientItem;
-    XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
+    XFillStyleItem      m_aXFStyleItem;
+    XFillGradientItem   m_aXGradientItem;
+    XFillAttrSetItem    m_aXFillAttr;
+    SfxItemSet&         m_rXFSet;
 
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
@@ -443,17 +443,17 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
+    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
     void    SetGradientList( XGradientListRef pGrdLst)
-                { pGradientList = pGrdLst; }
+                { m_pGradientList = pGrdLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
 
-    void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+    void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
 
 /************************************************************************/
