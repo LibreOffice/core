@@ -387,7 +387,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     if ( !pFile )
         return;
 
-    if ( !::utl::LocalFileHelper::IsLocalFile( pFile->GetName() ) )
+    if ( !::utl::LocalFileHelper::IsFileUrl( pFile->GetName() ) )
         // update only for documents loaded from the local file system
         return;
 
@@ -532,7 +532,7 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
         // TODO/REFACTOR:
         // Title?
 
-        if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
+        if( ::utl::LocalFileHelper::IsFileUrl( rFileName ) )
         {
             OUString aFoundName;
             if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )

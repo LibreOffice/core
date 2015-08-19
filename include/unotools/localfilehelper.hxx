@@ -44,7 +44,7 @@ namespace utl
         */
         static bool ConvertURLToPhysicalName( const OUString& rName, OUString& rReturn );
 
-        static bool IsLocalFile(const OUString& rName);
+        static bool IsFileUrl(const OUString& rUrl);
 
         static          ::com::sun::star::uno::Sequence< OUString >
                                 GetFolderContents( const OUString& rFolder, bool bFolder );

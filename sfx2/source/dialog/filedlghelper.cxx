@@ -1963,8 +1963,7 @@ void FileDialogHelper_Impl::saveConfig()
         if ( ! mbIsSaveDlg )
         {
             OUString aPath = getPath();
-            if ( !aPath.isEmpty() &&
-                 utl::LocalFileHelper::IsLocalFile( aPath ) )
+            if ( utl::LocalFileHelper::IsFileUrl( aPath ) )
             {
                 SetToken( aUserData, 1, ' ', aPath );
                 bWriteConfig = true;

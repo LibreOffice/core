@@ -383,7 +383,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 
 bool SfxMedium::DocNeedsFileDateCheck() const
 {
-    return ( !IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
+    return !IsReadOnly() && GetURLObject().GetProtocol() == INetProtocol::File;
 }
 
 util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
@@ -733,7 +733,7 @@ void SfxMedium::StorageBackup_Impl()
 
     bool bBasedOnOriginalFile = ( !pImp->pTempFile && !( !pImp->m_aLogicName.isEmpty() && pImp->m_bSalvageMode )
         && !GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).isEmpty()
-        && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
+        && GetURLObject().GetProtocol() == INetProtocol::File
         && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
 
     if ( bBasedOnOriginalFile && pImp->m_aBackupURL.isEmpty()
@@ -948,7 +948,8 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
     try
     {
-        if ( pImp->m_bLocked && bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if ( pImp->m_bLocked && bLoading
+             && GetURLObject().GetProtocol() == INetProtocol::File )
         {
             // if the document is already locked the system locking might be temporarely off after storing
             // check whether the system file locking should be taken again
@@ -967,7 +968,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
         if ( !bResult && !IsReadOnly() )
         {
             bool bContentReadonly = false;
-            if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+            if ( bLoading && GetURLObject().GetProtocol() == INetProtocol::File )
             {
                 // let the original document be opened to check the possibility to open it for editing
                 // and to let the writable stream stay open to hold the lock on the document
@@ -1024,7 +1025,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                     sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
 
                     // check whether system file locking has been used, the default value is false
-                    bool bUseSystemLock = ::utl::LocalFileHelper::IsLocalFile( pImp->m_aLogicName ) && IsSystemFileLockingUsed();
+                    bool bUseSystemLock = ::utl::LocalFileHelper::IsFileUrl( pImp->m_aLogicName ) && IsSystemFileLockingUsed();
 
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                     // if system lock is used the writeable stream should be available
@@ -1857,7 +1858,7 @@ void SfxMedium::Transfer_Impl()
 
         OUString aDestURL( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if ( ::utl::LocalFileHelper::IsLocalFile( aDestURL ) || !aDest.removeSegment() )
+        if ( ::utl::LocalFileHelper::IsFileUrl( aDestURL ) || !aDest.removeSegment() )
         {
             TransactedTransferForFS_Impl( aSource, aDest, xComEnv );
 
@@ -2180,7 +2181,7 @@ void SfxMedium::ClearBackup_Impl()
 
 void SfxMedium::GetLockingStream_Impl()
 {
-    if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
+    if ( GetURLObject().GetProtocol() == INetProtocol::File
       && !pImp->m_xLockingStream.is() )
     {
         SFX_ITEMSET_ARG( pImp->m_pSet, pWriteStreamItem, SfxUnoAnyItem, SID_STREAM, false);
@@ -2293,7 +2294,7 @@ void SfxMedium::GetMedium_Impl()
                         aMedium.erase( utl::MediaDescriptor::PROP_READONLY() );
                         aMedium.addInputStream();
                     }
-                    else if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+                    else if ( GetURLObject().GetProtocol() == INetProtocol::File )
                     {
                         // use the special locking approach only for file URLs
                         aMedium.addInputStreamOwnLock();
@@ -3254,7 +3255,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
         bool bTransferSuccess = false;
 
         if ( GetContent().is()
-          && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
+          && GetURLObject().GetProtocol() == INetProtocol::File
           && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
             // if there is already such a document, we should copy it

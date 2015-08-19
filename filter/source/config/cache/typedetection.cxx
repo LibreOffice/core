@@ -1136,7 +1136,7 @@ void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     bool bSuccess = false;
     OUString sURL = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
     bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_READONLY(), false );
-    if ( !sURL.isEmpty() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( utl::LocalFileHelper::IsFileUrl( sURL ) )
     {
         // OOo uses own file locking mechanics in case of local file
         bSuccess = rDescriptor.addInputStreamOwnLock();

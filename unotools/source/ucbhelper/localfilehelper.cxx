@@ -56,10 +56,9 @@ bool LocalFileHelper::ConvertURLToPhysicalName(const OUString& rName, OUString& 
     return ok;
 }
 
-bool LocalFileHelper::IsLocalFile(const OUString& rName)
+bool LocalFileHelper::IsFileUrl(const OUString& rUrl)
 {
-    OUString aTmp;
-    return ConvertURLToPhysicalName(rName, aTmp);
+    return rUrl.startsWithIgnoreAsciiCase("file:");
 }
 
 typedef ::std::vector< OUString* > StringList_Impl;
