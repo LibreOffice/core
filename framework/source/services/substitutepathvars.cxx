@@ -1070,13 +1070,8 @@ throw ( RuntimeException )
         OUString aTemp;
         if ( osl::FileBase::getFileURLFromSystemPath( rURL, aTemp ) == osl::FileBase::E_None )
         {
-            if ( !aTemp.isEmpty() )
-            {
-                aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::NO_DECODE );
-                if( aURL.isEmpty() )
-                    return rURL;
-            }
-            else
+            aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::NO_DECODE );
+            if( aURL.isEmpty() )
                 return rURL;
         }
         else
