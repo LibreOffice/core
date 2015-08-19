@@ -20,8 +20,7 @@
 #ifndef INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR_HXX
 #define INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
@@ -57,7 +56,7 @@ namespace stoc_connector
             XStreamListener_hash_set;
 
     class PipeConnection :
-        public ::cppu::WeakImplHelper1< ::com::sun::star::connection::XConnection >
+        public ::cppu::WeakImplHelper< ::com::sun::star::connection::XConnection >
 
     {
     public:
@@ -86,7 +85,7 @@ namespace stoc_connector
     };
 
     class SocketConnection :
-        public ::cppu::WeakImplHelper2< ::com::sun::star::connection::XConnection, ::com::sun::star::connection::XConnectionBroadcaster >
+        public ::cppu::WeakImplHelper< ::com::sun::star::connection::XConnection, ::com::sun::star::connection::XConnectionBroadcaster >
 
     {
     public:

@@ -23,7 +23,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -50,7 +50,7 @@ namespace io_TextOutputStream
 
 // Implementation XTextOutputStream
 
-class OTextOutputStream : public WeakImplHelper2< XTextOutputStream2, XServiceInfo >
+class OTextOutputStream : public WeakImplHelper< XTextOutputStream2, XServiceInfo >
 {
     Reference< XOutputStream > mxStream;
 

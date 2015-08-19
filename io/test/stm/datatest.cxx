@@ -32,8 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -61,7 +60,7 @@ using namespace ::com::sun::star::beans;
  */
 
 class ODataStreamTest :
-        public WeakImplHelper1< XSimpleTest >
+        public WeakImplHelper< XSimpleTest >
 {
 public:
     ODataStreamTest( const Reference < XMultiServiceFactory > & rFactory ) :
@@ -367,7 +366,7 @@ OUString    ODataStreamTest_getImplementationName( int i) throw ()
     }
 }
 
-class MyPersistObject : public WeakImplHelper2< XPersistObject , XPropertySet >
+class MyPersistObject : public WeakImplHelper< XPersistObject , XPropertySet >
 {
 public:
     MyPersistObject( ) : m_sServiceName( OMyPersistObject_getServiceName() ) ,

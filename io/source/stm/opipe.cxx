@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/conditn.hxx>
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::lang;
 namespace io_stm{
 
 class OPipeImpl :
-    public WeakImplHelper3< XPipe , XConnectable , XServiceInfo >
+    public WeakImplHelper< XPipe , XConnectable , XServiceInfo >
 {
 public:
     OPipeImpl( );

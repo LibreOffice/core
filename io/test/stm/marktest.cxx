@@ -26,9 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>
-
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -44,7 +42,7 @@ using namespace ::com::sun::star::test;
 #include "testfactreg.hxx"
 
 
-class OMarkableOutputStreamTest : public WeakImplHelper1< XSimpleTest >
+class OMarkableOutputStreamTest : public WeakImplHelper< XSimpleTest >
 {
 public:
     OMarkableOutputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
@@ -403,7 +401,7 @@ OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 // Input stream
 
 
-class OMarkableInputStreamTest : public WeakImplHelper1< XSimpleTest >
+class OMarkableInputStreamTest : public WeakImplHelper< XSimpleTest >
 {
 public:
     OMarkableInputStreamTest( const Reference< XMultiServiceFactory > & rFactory );

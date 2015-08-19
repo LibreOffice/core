@@ -23,7 +23,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -36,7 +36,7 @@ using namespace ::com::sun::star::io;
 namespace io_acceptor
 {
 
-    typedef WeakImplHelper1< XConnection > MyPipeConnection;
+    typedef WeakImplHelper< XConnection > MyPipeConnection;
 
     class PipeConnection :
         public MyPipeConnection

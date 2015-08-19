@@ -23,7 +23,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -53,7 +53,7 @@ namespace io_TextInputStream
 #define INITIAL_UNICODE_BUFFER_CAPACITY     0x100
 #define READ_BYTE_COUNT                     0x100
 
-class OTextInputStream : public WeakImplHelper2< XTextInputStream2, XServiceInfo >
+class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo >
 {
     Reference< XInputStream > mxStream;
 

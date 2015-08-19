@@ -27,7 +27,7 @@
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -63,7 +63,7 @@ namespace io_acceptor {
             XStreamListener_hash_set;
 
 
-    class SocketConnection : public ::cppu::WeakImplHelper2<
+    class SocketConnection : public ::cppu::WeakImplHelper<
         ::com::sun::star::connection::XConnection,
         ::com::sun::star::connection::XConnectionBroadcaster>
 

@@ -23,8 +23,7 @@
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/endian.h>
 
@@ -50,7 +49,7 @@ using namespace ::com::sun::star::lang;
 namespace io_stm {
 
 class ODataInputStream :
-    public WeakImplHelper4 <
+    public WeakImplHelper <
                               XDataInputStream,
                               XActiveDataSink,
                               XConnectable,
@@ -496,7 +495,7 @@ Sequence<OUString> ODataInputStream_getSupportedServiceNames()
 
 
 class ODataOutputStream :
-    public WeakImplHelper4 <
+    public WeakImplHelper <
              XDataOutputStream,
              XActiveDataSource,
              XConnectable,
@@ -910,7 +909,7 @@ typedef std::unordered_map
 > ObjectContainer_Impl;
 
 class OObjectOutputStream:
-    public ImplInheritanceHelper2<
+    public ImplInheritanceHelper<
             ODataOutputStream, /* parent */
             XObjectOutputStream, XMarkableStream >
 {
@@ -1177,7 +1176,7 @@ Sequence< OUString > OObjectOutputStream::getSupportedServiceNames() throw (std:
 }
 
 class OObjectInputStream:
-    public ImplInheritanceHelper2<
+    public ImplInheritanceHelper<
         ODataInputStream, /* parent */
         XObjectInputStream, XMarkableStream >
 {

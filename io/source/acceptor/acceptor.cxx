@@ -22,7 +22,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/unourl.hxx"
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::connection;
 
 namespace io_acceptor
 {
-    class OAcceptor : public WeakImplHelper2< XAcceptor, XServiceInfo >
+    class OAcceptor : public WeakImplHelper< XAcceptor, XServiceInfo >
     {
     public:
         OAcceptor(const Reference< XComponentContext > & xCtx);
