@@ -31,10 +31,6 @@ namespace com { namespace sun { namespace star {
     struct PropertyValue;
 }}}}
 
-// define ----------------------------------------------------------------
-
-#define SfxSaveTabPage SvxSaveTabPage
-
 // class SvxSaveTabPage --------------------------------------------------
 
 struct SvxSaveTabPage_Impl;

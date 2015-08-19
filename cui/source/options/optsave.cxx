@@ -80,7 +80,7 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 
 // class SvxSaveTabPage --------------------------------------------------
 
-SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet ) :
+SvxSaveTabPage::SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, "OptSavePage", "cui/ui/optsavepage.ui", &rCoreSet ),
     pImpl               ( new SvxSaveTabPage_Impl )
 {
@@ -118,7 +118,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     aDocTypeLB->SetEntryData(5, reinterpret_cast<void*>(APP_DRAW)         );
     aDocTypeLB->SetEntryData(6, reinterpret_cast<void*>(APP_MATH)         );
 
-    Link<> aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
+    Link<> aLink = LINK( this, SvxSaveTabPage, AutoClickHdl_Impl );
     aAutoSaveCB->SetClickHdl( aLink );
     aAutoSaveEdit->SetMaxTextLen( 2 );
 
@@ -186,9 +186,9 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
         pImpl->aDefaultReadonlyArr[APP_WRITER_GLOBAL] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::WRITERGLOBAL);
     }
 
-    aLink = LINK( this, SfxSaveTabPage, ODFVersionHdl_Impl );
+    aLink = LINK( this, SvxSaveTabPage, ODFVersionHdl_Impl );
     aODFVersionLB->SetSelectHdl( aLink );
-    aLink = LINK( this, SfxSaveTabPage, FilterHdl_Impl );
+    aLink = LINK( this, SvxSaveTabPage, FilterHdl_Impl );
     aDocTypeLB->SetSelectHdl( aLink );
     aSaveAsLB->SetSelectHdl( aLink );
 
@@ -197,7 +197,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 
 
-SfxSaveTabPage::~SfxSaveTabPage()
+SvxSaveTabPage::~SvxSaveTabPage()
 {
     disposeOnce();
 }
@@ -226,13 +226,13 @@ void SvxSaveTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SfxSaveTabPage::Create( vcl::Window* pParent,
+VclPtr<SfxTabPage> SvxSaveTabPage::Create( vcl::Window* pParent,
                                            const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SfxSaveTabPage>::Create( pParent, *rAttrSet );
+    return VclPtr<SvxSaveTabPage>::Create( pParent, *rAttrSet );
 }
 
-void SfxSaveTabPage::DetectHiddenControls()
+void SvxSaveTabPage::DetectHiddenControls()
 {
     SvtOptionsDialogOptions aOptionsDlgOpt;
 
@@ -258,7 +258,7 @@ void SfxSaveTabPage::DetectHiddenControls()
 
 }
 
-bool SfxSaveTabPage::FillItemSet( SfxItemSet* rSet )
+bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
     SvtSaveOptions aSaveOpt;
@@ -397,7 +397,7 @@ bool isODFFormat( const OUString& sFilter )
     return bRet;
 }
 
-void SfxSaveTabPage::Reset( const SfxItemSet* )
+void SvxSaveTabPage::Reset( const SfxItemSet* )
 {
     SvtSaveOptions aSaveOpt;
     aLoadUserSettingsCB->Check(aSaveOpt.IsLoadUserSettings());
@@ -515,7 +515,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
 
 
 
-IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
+IMPL_LINK( SvxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 {
     if ( pBox == aAutoSaveCB )
     {
@@ -560,7 +560,7 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
     return sName;
 }
 
-IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
+IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
     sal_uInt16 nCurPos = aDocTypeLB->GetSelectEntryPos();
 
@@ -624,7 +624,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
     return 0;
 };
 
-IMPL_LINK_NOARG(SfxSaveTabPage, ODFVersionHdl_Impl)
+IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl)
 {
     sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectEntryData() );
     bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;
