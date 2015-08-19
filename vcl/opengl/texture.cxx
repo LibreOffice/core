@@ -33,7 +33,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     mnRefCount( 1 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
-    mnFilter( GL_NEAREST )
+    mnFilter( GL_NEAREST ),
+    mnFreeSlots(-1)
 {
     glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
@@ -56,7 +57,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
-    mnFilter( GL_NEAREST )
+    mnFilter( GL_NEAREST ),
+    mnFreeSlots(-1)
 {
     // FIXME We need the window height here
     // nY = GetHeight() - nHeight - nY;
@@ -82,7 +84,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
-    mnFilter( GL_NEAREST )
+    mnFilter( GL_NEAREST ),
+    mnFreeSlots(-1)
 {
     if( !mnTexture )
         glGenTextures( 1, &mnTexture );
@@ -107,10 +110,62 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
         glDeleteTextures( 1, &mnTexture );
 }
 
+bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+{
+    if (!pData || mnTexture == 0)
+        return false;
+    glBindTexture(GL_TEXTURE_2D, mnTexture);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, nX, mnHeight - nY - nHeight, nWidth, nHeight, nFormat, nType, pData);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    SAL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " Insert buff. to " << nX << " " << nY
+                                             << " size " << nWidth << "x" << nHeight << " from data" );
+    CHECK_GL_ERROR();
+
+    return true;
+}
+
+bool ImplOpenGLTexture::InitializeSlots(int nSlotSize)
+{
+    if (mpSlotReferences)
+        return false;
+
+    mpSlotReferences.reset(new std::vector<int>(nSlotSize, 0));
+    mnFreeSlots = nSlotSize;
+
+    return true;
+}
+
+int ImplOpenGLTexture::FindFreeSlot()
+{
+    if (mnFreeSlots > 0 && mpSlotReferences)
+    {
+        for (size_t i = 0; i < mpSlotReferences->size(); i++)
+        {
+            if (mpSlotReferences->at(i) <= 0)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 OpenGLTexture::OpenGLTexture() :
     maRect( 0, 0, 0, 0 ),
-    mpImpl( NULL )
+    mpImpl(NULL),
+    mnSlotNumber(-1)
 {
+}
+
+OpenGLTexture::OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber)
+    : maRect(aRectangle)
+    , mpImpl(pImpl)
+    , mnSlotNumber(nSlotNumber)
+{
+    if (mpImpl)
+        mpImpl->IncreaseRefCount(nSlotNumber);
 }
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
@@ -135,8 +190,10 @@ OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture )
 {
     maRect = rTexture.maRect;
     mpImpl = rTexture.mpImpl;
-    if( mpImpl )
-        mpImpl->mnRefCount++;
+    mnSlotNumber = rTexture.mnSlotNumber;
+
+    if (mpImpl)
+        mpImpl->IncreaseRefCount(mnSlotNumber);
 }
 
 OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
@@ -145,19 +202,19 @@ OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
     maRect = Rectangle( Point( rTexture.maRect.Left() + nX, rTexture.maRect.Top() + nY ),
                         Size( nWidth, nHeight ) );
     mpImpl = rTexture.mpImpl;
-    if( mpImpl )
-        mpImpl->mnRefCount++;
+    mnSlotNumber = rTexture.mnSlotNumber;
+    if (mpImpl)
+        mpImpl->IncreaseRefCount(mnSlotNumber);
     SAL_INFO( "vcl.opengl", "Copying texture " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 }
 
 OpenGLTexture::~OpenGLTexture()
 {
-    if( mpImpl )
+    if (mpImpl)
     {
-        if( mpImpl->mnRefCount == 1 )
+        mpImpl->DecreaseRefCount(mnSlotNumber);
+        if (!mpImpl->ExistRefs())
             delete mpImpl;
-        else
-            mpImpl->mnRefCount--;
     }
 }
 
@@ -333,25 +390,30 @@ OpenGLTexture::operator bool() const
 
 OpenGLTexture&  OpenGLTexture::operator=( const OpenGLTexture& rTexture )
 {
-    if( rTexture.mpImpl )
-        rTexture.mpImpl->mnRefCount++;
-    if( mpImpl )
+    if (rTexture.mpImpl)
     {
-        if( mpImpl->mnRefCount == 1 )
+        rTexture.mpImpl->IncreaseRefCount(rTexture.mnSlotNumber);
+    }
+
+    if (mpImpl)
+    {
+        mpImpl->DecreaseRefCount(mnSlotNumber);
+        if (!mpImpl->ExistRefs())
             delete mpImpl;
-        else
-            mpImpl->mnRefCount--;
     }
 
     maRect = rTexture.maRect;
     mpImpl = rTexture.mpImpl;
+    mnSlotNumber = rTexture.mnSlotNumber;
 
     return *this;
 }
 
 bool OpenGLTexture::operator==( const OpenGLTexture& rTexture ) const
 {
-    return (mpImpl == rTexture.mpImpl && maRect == rTexture.maRect );
+    return (mpImpl == rTexture.mpImpl
+         && maRect == rTexture.maRect
+         && mnSlotNumber == rTexture.mnSlotNumber);
 }
 
 bool OpenGLTexture::operator!=( const OpenGLTexture& rTexture ) const
