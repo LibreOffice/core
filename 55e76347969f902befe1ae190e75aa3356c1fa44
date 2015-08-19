@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_341d4610",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-19T14:12:58Z",
+      "side": 1,
+      "message": "Ha true. Should have caught that",
+      "parentUuid": "9aed3d3a_f413de0b",
+      "revId": "55e76347969f902befe1ae190e75aa3356c1fa44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_54f9eac7",
         "filename": "include/o3tl/cow_wrapper.hxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-19T13:39:29Z",
       "side": 1,
       "message": "neato. and while you\u0027re at it (either in this patch or separately) - have the file use 0/NULL/nullptr uniformly",
+      "revId": "55e76347969f902befe1ae190e75aa3356c1fa44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_941a5216",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-19T14:12:58Z",
+      "side": 1,
+      "message": "I replaced the other 0 to nullptr",
+      "parentUuid": "9aed3d3a_54f9eac7",
       "revId": "55e76347969f902befe1ae190e75aa3356c1fa44",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
