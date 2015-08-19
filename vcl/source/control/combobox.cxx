@@ -889,7 +889,7 @@ void ComboBox::Modify()
 
 void ComboBox::Impl::ImplUpdateFloatSelection()
 {
-    if (!m_pImplLB || m_pSubEdit)
+    if (!m_pImplLB || !m_pSubEdit)
         return;
 
     // move text in the ListBox into the visible region
