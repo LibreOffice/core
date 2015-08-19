@@ -38,6 +38,19 @@ class OutlinerParaObject;
 class EditTextObject;
 class Outliner;
 
+
+/*
+ * A collection of static methods for attaching text.
+ * Strongly coupled with some of the classes in this files
+ */
+class TextChainingUtils
+{
+    public:
+    static OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
+    static OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
+
+};
+
 /*
  * The classes OverflowingText and NonOverflowingText handle the
  * actual preparation of the OutlinerParaObjects to be used in destination

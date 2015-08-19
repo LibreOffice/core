@@ -33,6 +33,17 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 
+OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+{
+    return NULL;
+}
+
+OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+{
+    return NULL;
+}
+
+
 /* Helper functions for *OverflowingText classes  */
 
 ESelection getLastPositionSel(const EditTextObject *pTObj)
