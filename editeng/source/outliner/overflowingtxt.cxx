@@ -149,6 +149,11 @@ bool NonOverflowingText::IsLastParaInterrupted() const
 OutlinerParaObject *NonOverflowingText::RemoveOverflowingText(Outliner *pOutliner) const
 {
     pOutliner->QuickDelete(maContentSel);
+    fprintf(stderr, "Deleting selection from (Para: %d, Pos: %d) to (Para: %d, Pos: %d)\n",
+            maContentSel.nStartPara,
+            maContentSel.nStartPos,
+            maContentSel.nEndPara,
+            maContentSel.nEndPos);
     return pOutliner->CreateParaObject();
 }
 
