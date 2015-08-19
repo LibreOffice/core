@@ -25,6 +25,13 @@ namespace chart { namespace sidebar {
 
 namespace {
 
+SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pToolBoxColor)
+{
+    css::uno::Reference<css::frame::XToolbarController> xController = pToolBoxColor->GetFirstController();
+    SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
+    return pToolBoxColorControl;
+}
+
 OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
@@ -240,7 +247,7 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
     mbModelValid(true),
-    maFillColorWrapper(mxModel)
+    maFillColorWrapper(mxModel, getColorToolBoxControl(mpToolBoxColor.get()))
 {
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
     mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
@@ -273,8 +280,7 @@ void ChartAreaPanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
-    css::uno::Reference<css::frame::XToolbarController> xController = mpToolBoxColor->GetFirstController();
-    SvxColorToolBoxControl* pToolBoxColor = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
+    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mpToolBoxColor.get());
     pToolBoxColor->setColorSelectFunction(maFillColorWrapper);
 
     updateData();
@@ -427,6 +433,8 @@ void ChartAreaPanel::updateData()
     xPropSet->getPropertyValue("FillTransparenceGradientName") >>= aFillFloatTransparenceName;
     XFillFloatTransparenceItem aFillFloatTransparenceItem = getXTransparencyGradientForName(mxModel, aFillFloatTransparenceName);
     updateFillFloatTransparence(false, true, &aFillFloatTransparenceItem);
+
+    maFillColorWrapper.updateData();
 }
 
 void ChartAreaPanel::modelInvalid()

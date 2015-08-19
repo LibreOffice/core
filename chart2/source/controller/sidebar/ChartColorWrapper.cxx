@@ -11,6 +11,10 @@
 
 #include "ChartController.hxx"
 
+#include <editeng/colritem.hxx>
+#include <svx/tbcontrl.hxx>
+#include <svx/svxids.hrc>
+
 namespace chart { namespace sidebar {
 
 namespace {
@@ -56,13 +60,15 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
 }
 
 ChartColorWrapper::ChartColorWrapper(
-        css::uno::Reference<css::frame::XModel> xModel):
+        css::uno::Reference<css::frame::XModel> xModel,
+        SvxColorToolBoxControl* pControl):
     mxModel(xModel),
+    mpControl(pControl),
     maPropertyName("FillColor")
 {
 }
 
-void ChartColorWrapper::operator()(const OUString& rCommand, const Color& rColor)
+void ChartColorWrapper::operator()(const OUString& , const Color& rColor)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     assert(xPropSet.is());
@@ -73,6 +79,21 @@ void ChartColorWrapper::operator()(const OUString& rCommand, const Color& rColor
 void ChartColorWrapper::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     mxModel = xModel;
+}
+
+void ChartColorWrapper::updateData()
+{
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
+    css::uno::Any aAny = xPropSet->getPropertyValue(maPropertyName);
+    sal_uInt32 nColor = 0;
+    aAny >>= nColor;
+    Color aColor(nColor);
+
+    SvxColorItem aItem(aColor, SID_ATTR_FILL_COLOR);
+    mpControl->StateChanged(SID_ATTR_FILL_COLOR, SfxItemState::SET, &aItem);
 }
 
 } }

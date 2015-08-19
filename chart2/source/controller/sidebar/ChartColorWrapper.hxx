@@ -13,6 +13,8 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <tools/color.hxx>
 
+class SvxColorToolBoxControl;
+
 namespace chart { namespace sidebar {
 
 class ChartColorWrapper
@@ -20,16 +22,20 @@ class ChartColorWrapper
 private:
 
 public:
-    ChartColorWrapper(css::uno::Reference<css::frame::XModel> xModel);
+    ChartColorWrapper(css::uno::Reference<css::frame::XModel> xModel,
+            SvxColorToolBoxControl* pControl);
 
     void operator()(const OUString& rCommand, const Color& rColor);
 
     void updateModel(css::uno::Reference<css::frame::XModel> xModel);
+
+    void updateData();
+
 private:
 
-    // not the chart frame
-    // you need to get the chart frame through getActiveFrame
     css::uno::Reference<css::frame::XModel> mxModel;
+
+    SvxColorToolBoxControl* mpControl;
 
     OUString maPropertyName;
 };
