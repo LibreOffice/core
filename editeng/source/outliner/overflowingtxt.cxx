@@ -33,14 +33,55 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 
-OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
+        com::sun::star::uno::Reference<
+            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+        Outliner *pOutl,
+        OutlinerParaObject *pNextPObj)
 {
-    return NULL;
+    if (!pNextPObj) {
+        pOutl->SetToEmptyText();
+    } else {
+        pOutl->SetText(*pNextPObj);
+    }
+
+    // XXX: this code should be moved in Outliner directly
+    //          creating Outliner::InsertText(...transferable...)
+    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
+    EditSelection aNewSel = pOutl->pEditEngine->InsertText(xOverflowingContent,
+                                                  OUString(),
+                                                  aStartSel.Min(),
+                                                  true);
+
+    // Separate Paragraphs
+    pOutl->pEditEngine->InsertParaBreak(aNewSel);
+
+    return pOutl->CreateParaObject();
 }
 
-OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
+        com::sun::star::uno::Reference<
+            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+        Outliner *pOutl,
+        OutlinerParaObject *pNextPObj)
 {
-    return NULL;
+     if (!pNextPObj) {
+        pOutl->SetToEmptyText();
+    } else {
+        pOutl->SetText(*pNextPObj);
+    }
+
+    // XXX: this code should be moved in Outliner directly
+    //          creating Outliner::InsertText(...transferable...)
+    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
+    // We don't need to mark the selection
+    // EditSelection aNewSel =
+    pOutl->pEditEngine->InsertText(xOverflowingContent,
+                                                  OUString(),
+                                                  aStartSel.Min(),
+                                                  true);
+
+    return pOutl->CreateParaObject();
 }
 
 
@@ -186,24 +227,7 @@ ESelection NonOverflowingText::GetOverflowPointSel() const
 // XXX: In a sense a better name for OverflowingText and NonOverflowingText are respectively DestLinkText and SourceLinkText
 OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
 {
-    if (!pNextPObj) {
-        pOutl->SetToEmptyText();
-    } else {
-        pOutl->SetText(*pNextPObj);
-    }
-
-    // XXX: this code should be moved in Outliner directly
-    //          creating Outliner::InsertText(...transferable...)
-    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
-    EditSelection aNewSel = pOutl->pEditEngine->InsertText(mxOverflowingContent,
-                                                  OUString(),
-                                                  aStartSel.Min(),
-                                                  true);
-
-    // Separate Paragraphs
-    pOutl->pEditEngine->InsertParaBreak(aNewSel);
-
-    return pOutl->CreateParaObject();
+    return TextChainingUtils::JuxtaposeParaObject(mxOverflowingContent, pOutl, pNextPObj);
 }
 
 // XXX: This method should probably be removed
@@ -224,24 +248,7 @@ OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *)
 
 OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
 {
-
-    if (!pNextPObj) {
-        pOutl->SetToEmptyText();
-    } else {
-        pOutl->SetText(*pNextPObj);
-    }
-
-    // XXX: this code should be moved in Outliner directly
-    //          creating Outliner::InsertText(...transferable...)
-    EditSelection aStartSel(pOutl->pEditEngine->CreateSelection(ESelection(0,0)));
-    // We don't need to mark the selection
-    // EditSelection aNewSel =
-    pOutl->pEditEngine->InsertText(mxOverflowingContent,
-                                                  OUString(),
-                                                  aStartSel.Min(),
-                                                  true);
-
-    return pOutl->CreateParaObject();
+    return TextChainingUtils::DeeplyMergeParaObject(mxOverflowingContent, pOutl, pNextPObj);
 }
 
 // class OFlowChainedText

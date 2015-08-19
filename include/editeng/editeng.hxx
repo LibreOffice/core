@@ -145,7 +145,7 @@ class EDITENG_DLLPUBLIC EditEngine
     friend class EditDbg;
     friend class Outliner;
 
-    friend class OverflowingText;
+    friend class TextChainingUtils;
 
 public:
     typedef std::vector<EditView*> ViewsType;

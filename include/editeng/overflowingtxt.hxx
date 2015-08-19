@@ -46,9 +46,16 @@ class Outliner;
 class TextChainingUtils
 {
     public:
-    static OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
-    static OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
-
+    static OutlinerParaObject *JuxtaposeParaObject(
+            com::sun::star::uno::Reference<
+            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+            Outliner *,
+            OutlinerParaObject *);
+    static OutlinerParaObject *DeeplyMergeParaObject(
+            com::sun::star::uno::Reference<
+            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+            Outliner *,
+            OutlinerParaObject *);
 };
 
 /*
