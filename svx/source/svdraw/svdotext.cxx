@@ -2183,7 +2183,8 @@ void SdrTextObj::SetPreventChainable()
 
 bool SdrTextObj::GetPreventChainable() const
 {
-    return mbIsUnchainableClone;
+    // Prevent changing it 1) during dragging && 2) when we are editing it
+    return mbIsUnchainableClone || IsInEditMode();
 }
 
  SdrObject* SdrTextObj::getFullDragClone() const
