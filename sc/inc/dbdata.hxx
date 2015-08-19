@@ -26,8 +26,10 @@
 #include "global.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include <memory>
+#include <set>
 
 class ScDocument;
 struct ScSortParam;
@@ -73,9 +75,9 @@ private:
     using ScRefreshTimer::operator==;
 
 public:
-    struct less : public ::std::binary_function<ScDBData, ScDBData, bool>
+    struct less : public ::std::binary_function<std::unique_ptr<ScDBData>, std::unique_ptr<ScDBData>, bool>
     {
-        bool operator() (const ScDBData& left, const ScDBData& right) const;
+        bool operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const;
     };
 
     SC_DLLPUBLIC ScDBData(const OUString& rName,
@@ -185,12 +187,14 @@ public:
     {
         friend class ScDBCollection;
 
-        typedef ::boost::ptr_set<ScDBData, ScDBData::less> DBsType;
-        DBsType maDBs;
+        typedef ::std::set<std::unique_ptr<ScDBData>, ScDBData::less> DBsType;
+        DBsType m_DBs;
         ScDBCollection& mrParent;
         ScDocument& mrDoc;
         NamedDBs(ScDBCollection& rParent, ScDocument& rDoc);
         NamedDBs(const NamedDBs& r);
+        NamedDBs & operator=(NamedDBs const&) = delete;
+
     public:
         typedef DBsType::iterator iterator;
         typedef DBsType::const_iterator const_iterator;
@@ -201,10 +205,10 @@ public:
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
+        iterator findByUpperName2(const OUString& rName);
         // Takes ownership of p iff it returns true:
         SAL_WARN_UNUSED_RESULT bool insert(ScDBData* p);
         void erase(iterator itr);
-        void erase(const ScDBData& r);
         bool empty() const;
         size_t size() const;
         bool operator== (const NamedDBs& r) const;

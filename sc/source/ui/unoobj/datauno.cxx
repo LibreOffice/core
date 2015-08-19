@@ -2249,7 +2249,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 
     ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin();
     ::std::advance(itr, nIndex); // boundary check is done above.
-    return new ScDatabaseRangeObj(pDocShell, itr->GetName());
+    return new ScDatabaseRangeObj(pDocShell, (*itr)->GetName());
 }
 
 ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aName)
@@ -2380,7 +2380,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
             uno::Sequence<OUString> aSeq(rDBs.size());
             ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
             for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-                aSeq[i] = itr->GetName();
+                aSeq[i] = (*itr)->GetName();
 
             return aSeq;
         }

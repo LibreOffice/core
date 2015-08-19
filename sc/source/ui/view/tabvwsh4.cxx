@@ -1601,7 +1601,8 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
                 ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
                 for (; itr != itrEnd; ++itr)
                 {
-                    if (itr->IsStripData() && itr->HasImportParam() && !itr->HasImportSelection())
+                    if ((*itr)->IsStripData() && (*itr)->HasImportParam()
+                        && !(*itr)->HasImportSelection())
                     {
                         bReImport = true;
                         break;

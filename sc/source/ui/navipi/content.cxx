@@ -902,7 +902,7 @@ void ScContentTree::GetDbNames()
     ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
     for (; itr != itrEnd; ++itr)
     {
-        const OUString& aStrName = itr->GetName();
+        const OUString& aStrName = (*itr)->GetName();
         InsertContent(SC_CONTENT_DBAREA, aStrName);
     }
 }

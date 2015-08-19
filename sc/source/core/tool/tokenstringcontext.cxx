@@ -83,7 +83,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
         ScDBCollection::NamedDBs::const_iterator it = rNamedDBs.begin(), itEnd = rNamedDBs.end();
         for (; it != itEnd; ++it)
         {
-            const ScDBData& rData = *it;
+            const ScDBData& rData = **it;
             maNamedDBs.insert(IndexNameMapType::value_type(rData.GetIndex(), rData.GetName()));
         }
     }
