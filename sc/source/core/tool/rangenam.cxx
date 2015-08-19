@@ -680,7 +680,7 @@ ScRangeName::ScRangeName() {}
 ScRangeName::ScRangeName(const ScRangeName& r) :
     maData(r.maData)
 {
-    // boost::ptr_set clones and deletes, so each collection needs its own
+    // boost::ptr_map clones and deletes, so each collection needs its own
     // index to data.
     maIndexToData.resize( r.maIndexToData.size(), NULL);
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();

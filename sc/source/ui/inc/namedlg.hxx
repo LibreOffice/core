@@ -31,7 +31,6 @@
 #include "namemgrtable.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 
 #include <stack>
 #include <map>

@@ -22,6 +22,8 @@
 
 #include <list>
 #include <map>
+#include <set>
+
 #include "richstring.hxx"
 #include "worksheethelper.hxx"
 

@@ -28,7 +28,6 @@
 
 #include <map>
 #include <vector>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class ScDocument;
@@ -211,7 +210,7 @@ public:
     bool empty() const;
 
     /** Insert object into set.
-        @ATTENTION: The underlying ::boost::ptr_set_adapter::insert(p) takes
+        @ATTENTION: The underlying ::boost::ptr_map_adapter::insert(p) takes
         ownership of p and if it can't insert it deletes the object! So, if
         this insert here returns false the object where p pointed to is gone!
      */
