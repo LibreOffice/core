@@ -69,17 +69,6 @@ namespace comphelper
         return  _rType.equals(cppu::getTypeFavourUnsigned(pDummy));
     }
 
-    /** check if a type you have at hand at runtime is equal to another type you have at compile time
-    */
-    template <class TYPE>
-    bool isAReference(const css::uno::Any& _rVal, TYPE*)
-    {
-        return  _rVal.getValueType().equals(
-            cppu::getTypeFavourUnsigned(
-                static_cast<css::uno::Reference<TYPE>*>(NULL)));
-    }
-
-
     /** ask the given object for an XComponent interface and dispose on it
     */
     template <class TYPE>
