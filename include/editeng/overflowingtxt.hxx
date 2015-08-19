@@ -143,7 +143,7 @@ class EDITENG_DLLPUBLIC UFlowChainedText {
     protected:
 
     private:
-        OutlinerParaObject *mpUnderflowPObj;
+        TranferableText mxUnderflowingTxt;
 
         bool mbIsDeepMerge;
 };

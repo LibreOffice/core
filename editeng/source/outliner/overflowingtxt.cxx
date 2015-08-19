@@ -108,79 +108,6 @@ ESelection getLastPositionSel(const EditTextObject *pTObj)
     return aEndPos;
 }
 
-// Put a para next to each other in the same OutlinerParaObject
-OutlinerParaObject *impGetJuxtaposedParaObject(Outliner *pOutl,
-                                               OutlinerParaObject *pPObj1,
-                                               OutlinerParaObject *pPObj2)
-{
-    assert(pOutl && pPObj1 &&  pPObj2);
-
-    pOutl->SetText(*pPObj1);
-    pOutl->AddText(*pPObj2);
-    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
-
-    return pPObj;
-}
-
-// In a deep merge parts of text are not only juxtaposed but the last and first para become the same
-OutlinerParaObject *impGetDeeplyMergedParaObject(Outliner *pOutl,
-                                               OutlinerParaObject *pPObj1,
-                                               OutlinerParaObject *pPObj2)
-{
-    assert(pOutl && pPObj1 &&  pPObj2);
-
-    const EditTextObject rTObj1 = pPObj1->GetTextObject();
-    const EditTextObject rTObj2 = pPObj2->GetTextObject();
-    sal_Int32 nParaCount1 = rTObj1.GetParagraphCount();
-
-    // If no paras in the first text, just use second text
-    if (nParaCount1 == 0) {
-        pOutl->SetText(*pPObj2);
-        return pOutl->CreateParaObject();
-    }
-
-
-    sal_Int32 nLastPara1 = nParaCount1 - 1;
-
-    // If last para of first text is empty, discard it and just juxtapose
-    if (rTObj1.GetText(nLastPara1) == "" && nParaCount1 >= 2) {
-        pOutl->SetText(*pPObj1);
-        return impGetJuxtaposedParaObject(
-                pOutl,
-                pOutl->CreateParaObject(0, nParaCount1 - 1),
-                pPObj2);
-    }
-
-    /* --- Standard procedure: when pPObj1 is 'fine' --- */
-
-
-    // Cut first para of second object
-    OUString aFirstParaTxt2 = rTObj2.GetText(0);
-
-    // Prepare remainder for text 2
-    OutlinerParaObject *pRemainderPObj2 = NULL;
-    if (rTObj2.GetParagraphCount() > 1) {
-        pOutl->SetText(*pPObj2);
-        pRemainderPObj2 = pOutl->CreateParaObject(1); // from second para on
-    } else { // No text to append
-        pRemainderPObj2 = NULL;
-    }
-
-    // Set first object as text
-    pOutl->SetText(*pPObj1);
-
-    // Merges LastPara(pPObj1) with FirstPara(pPObj2)
-    Paragraph *pLastPara1 = pOutl->GetParagraph(nLastPara1);
-    OUString aLastParaTxt1 = pOutl->GetText(pLastPara1);
-    pOutl->SetText(aLastParaTxt1 + aFirstParaTxt2, pLastPara1); // XXX: This way it screws up attributes!
-
-    // add the remainder of the second text
-    if (pRemainderPObj2)
-        pOutl->AddText(*pRemainderPObj2);
-
-    return pOutl->CreateParaObject();
-}
-
 // class OverflowingText
 
 OverflowingText::OverflowingText(TranferableText xOverflowingContent) :
@@ -297,22 +224,21 @@ bool OFlowChainedText::IsLastParaInterrupted() const
 
 UFlowChainedText::UFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
 {
-    mpUnderflowPObj = pOutl->CreateParaObject();
+    mxUnderflowingTxt = TextChainingUtils::CreateTransferableFromText(pOutl);
     mbIsDeepMerge = bIsDeepMerge;
 }
 
 OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)
 {
     OutlinerParaObject *pNewText = NULL;
-    OutlinerParaObject *pCurText = mpUnderflowPObj;
 
     if (mbIsDeepMerge) {
         fprintf(stderr, "[TEXTCHAINFLOW - UF] Deep merging paras\n" );
-        pNewText = impGetDeeplyMergedParaObject(pOutl, pCurText, pNextLinkWholeText);
+        pNewText = TextChainingUtils::DeeplyMergeParaObject(mxUnderflowingTxt, pOutl, pNextLinkWholeText);
     } else {
         // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
         fprintf(stderr, "[TEXTCHAINFLOW - UF] Juxtaposing paras\n" );
-        pNewText = impGetJuxtaposedParaObject(pOutl, pCurText, pNextLinkWholeText);
+        pNewText = TextChainingUtils::JuxtaposeParaObject(mxUnderflowingTxt, pOutl, pNextLinkWholeText);
     }
 
     return pNewText;
