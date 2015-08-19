@@ -571,10 +571,11 @@ void ImpEditEngine::CheckPageOverflow()
     // setting overflow status
 
     sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
-    fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperSize is %d\n", nBoxHeight);
+    fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is %d\n", nBoxHeight);
     fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
 
     sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
+    fprintf(stderr, "[OVERFLOW-CHECK] Current Text Height is %d\n", nTxtHeight);
 
     sal_uInt32 nParaCount = GetParaPortions().Count();
     sal_uInt32 nFirstLineCount = GetLineCount(0);

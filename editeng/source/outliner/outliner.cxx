@@ -2208,8 +2208,6 @@ OverflowingText *Outliner::GetOverflowingText() const
         return NULL;
     }
 
-
-
     sal_Int32 nHeadPara = pEditEngine->GetOverflowingParaNum();
     sal_uInt32 nParaCount = GetParagraphCount();
 
