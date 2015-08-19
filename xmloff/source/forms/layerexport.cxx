@@ -50,6 +50,7 @@
 
 #include <com/sun/star/text/XText.hpp>
 
+#include <stack>
 #include <numeric>
 
 namespace xmloff

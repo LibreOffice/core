@@ -29,6 +29,8 @@
 #include <connectivity/FValue.hxx>
 #include "file/filedllapi.hxx"
 
+#include <stack>
+
 namespace connectivity
 {
     class OSQLParseNode;

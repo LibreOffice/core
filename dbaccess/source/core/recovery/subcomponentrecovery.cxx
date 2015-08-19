@@ -40,6 +40,8 @@
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/SettingsExportHelper.hxx>
 
+#include <stack>
+
 namespace dbaccess
 {
 

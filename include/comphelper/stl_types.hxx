@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <stack>
-
 #include <math.h>
 #include <functional>
 
