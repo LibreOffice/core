@@ -21,13 +21,13 @@
 #define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESDTA_HXX
 
 #include <com/sun/star/linguistic2/XMeaning.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace linguistic
 {
 
 class Meaning :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XMeaning
     >

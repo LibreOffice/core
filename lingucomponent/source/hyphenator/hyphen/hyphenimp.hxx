@@ -20,8 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_HYPHENATOR_HYPHEN_HYPHENIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_HYPHENATOR_HYPHEN_HYPHENIMP_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
@@ -56,7 +55,7 @@ struct HDInfo {
 };
 
 class Hyphenator :
-    public cppu::WeakImplHelper6
+    public cppu::WeakImplHelper
     <
         XHyphenator,
         XLinguServiceEventBroadcaster,

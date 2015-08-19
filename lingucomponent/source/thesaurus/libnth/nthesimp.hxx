@@ -20,8 +20,7 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_THESAURUS_LIBNTH_NTHESIMP_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -56,7 +55,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 }}}}
 
 class Thesaurus :
-    public cppu::WeakImplHelper5
+    public cppu::WeakImplHelper
     <
         XThesaurus,
         XInitialization,
