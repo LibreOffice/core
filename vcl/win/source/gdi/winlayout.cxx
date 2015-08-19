@@ -147,7 +147,7 @@ OUString DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
     }
     std::cerr << std::endl;
 
-    for (long y = 0; y < std::min(20l, aBitmap.bmHeight); y++)
+    for (long y = 0; y < aBitmap.bmHeight; y++)
     {
         for (long x = 0; x < std::min(75l, aBitmap.bmWidth); x++)
             std::cerr << ColorFor(GetPixel(hDC, x, y));
@@ -279,7 +279,10 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         std::cerr << aABC[i].abcA << ":" << aABC[i].abcB << ":" << aABC[i].abcC << " ";
     std::cerr << std::endl;
 
-    // Avoid kerning as we want to be able to use individual rectangles for each glyph
+    // Try hard to avoid overlap as we want to be able to use
+    // individual rectangles for each glyph. The ABC widths don't
+    // take anti-alising into consideration. Let's hope that leaving
+    // four pixels of "extra" space inbetween glyphs will help.
     std::vector<int> aDX(nCount);
     int totWidth = 0;
     for (int i = 0; i < nCount; i++)
@@ -289,6 +292,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
             aDX[0] += std::abs(aABC[0].abcA);
         if (i < nCount-1)
             aDX[i] += std::abs(aABC[i+1].abcA);
+        aDX[i] += 4;
         totWidth += aDX[i];
     }
 
@@ -299,9 +303,32 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     if (!DeleteDC(hDC))
         SAL_WARN("vcl.gdi", "DeleteDC failed: " << WindowsErrorString(GetLastError()));
 
-    OpenGLCompatibleDC aDC(rGraphics, 0, 0, totWidth, aSize.cy);
+    // Leave two pixels of extra space also at top and bottom
+    OpenGLCompatibleDC aDC(rGraphics, 0, 0, totWidth, aSize.cy + 4);
 
-    hOrigFont = SelectFont(aDC.getCompatibleHDC(), rLayout.mhFont);
+    HFONT hNonAntialiasedFont = NULL;
+
+#ifdef DBG_UTIL
+    static bool bNoAntialias = (std::getenv("VCL_GLYPH_CACHING_HACK_NO_ANTIALIAS") != NULL);
+    if (bNoAntialias)
+    {
+        LOGFONTW aLogfont;
+        if (!GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont))
+        {
+            SAL_WARN("vcl.gdi", "GetObject failed: " << WindowsErrorString(GetLastError()));
+            return false;
+        }
+        aLogfont.lfQuality = NONANTIALIASED_QUALITY;
+        hNonAntialiasedFont = CreateFontIndirectW(&aLogfont);
+        if (hNonAntialiasedFont == NULL)
+        {
+            SAL_WARN("vcl.gdi", "CreateFontIndirect failed: " << WindowsErrorString(GetLastError()));
+            return false;
+        }
+    }
+#endif
+
+    hOrigFont = SelectFont(aDC.getCompatibleHDC(), hNonAntialiasedFont != NULL ? hNonAntialiasedFont : rLayout.mhFont);
     if (hOrigFont == NULL)
     {
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
@@ -311,9 +338,15 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
     SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
 
-    if (!ExtTextOutW(aDC.getCompatibleHDC(), 0, 0, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
+    aDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
+
+    // The 2,2 is for the extra space
+    if (!ExtTextOutW(aDC.getCompatibleHDC(), 2, 2, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
     {
         SAL_WARN("vcl.gdi", "ExtTextOutW failed: " << WindowsErrorString(GetLastError()));
+        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
+        if (hNonAntialiasedFont != NULL)
+            DeleteObject(hNonAntialiasedFont);
         return false;
     }
 
@@ -325,7 +358,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         aChunk.maLocation[i].Right() = nPos + aDX[i];
         nPos = aChunk.maLocation[i].Right();
         aChunk.maLocation[i].Top() = 0;
-        aChunk.maLocation[i].Bottom() = aSize.cy;
+        aChunk.maLocation[i].Bottom() = aSize.cy + 4;
     }
 
     aChunk.mpTexture = std::unique_ptr<OpenGLTexture>(aDC.getTexture());
@@ -333,6 +366,8 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     maOpenGLGlyphCache.insert(n, aChunk);
 
     SelectFont(aDC.getCompatibleHDC(), hOrigFont);
+    if (hNonAntialiasedFont != NULL)
+        DeleteObject(hNonAntialiasedFont);
 
     SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache << DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC()));
 
@@ -1562,7 +1597,7 @@ void UniscribeLayout::DrawTextImpl(HDC hDC) const
 
 bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
 {
-    const bool bDoGlyphCaching = (std::getenv("SAL_ENABLE_GLYPH_CACHING") != NULL);
+    static bool bDoGlyphCaching = (std::getenv("SAL_ENABLE_GLYPH_CACHING") != NULL);
 
     if (!bDoGlyphCaching)
         return false;
@@ -1639,9 +1674,9 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
             const int n = mpOutGlyphs[i] - rChunk.mnFirstGlyph;
 
             SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
-                               rChunk.maLocation[n].GetWidth(), rChunk.maLocation[n].GetHeight(),
-                               nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.maLocation[n].GetHeight(),
-                               rChunk.maLocation[n].GetWidth(), rChunk.maLocation[n].GetHeight()); // ???
+                               rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
+                               nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.maLocation[n].getHeight(),
+                               rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
             pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
             nAdvance += mpGlyphAdvances[i];
         }
