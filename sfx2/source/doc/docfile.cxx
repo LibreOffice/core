@@ -42,6 +42,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
@@ -1014,6 +1015,19 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                             {
                                 bUIStatus = ShowLockedDocumentDialog( aLockData, bLoading, false );
                             }
+                        }
+                        catch( ucb::InteractiveNetworkWriteException& )
+                        {
+                            // this catch it's not really need, here just for the sake of doc:
+                            // This is the most likely reason:
+                            // - the remote site is a WebDAV with special configuration: read/only for read operations
+                            //   and read/write for write operations, the user is not allowed to lock/write and
+                            //   she cancelled the credentials request.
+                            //   this is not actually an error, but the exception is sent directly from ucb, avoiding the automatic
+                            //   management that takes part in cancelCommandExecution()
+                            // Unfortunately there is no InteractiveNetwork*Exception available to signal this more correctly
+                            // since it mostly happens on read/only part of webdav, this can be the most correct
+                            // exception available
                         }
                         catch( uno::Exception& )
                         {}
