@@ -289,7 +289,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                 break;
             }
             case TypeClass_STRUCT:
-                if (isA(_rType, static_cast<FontDescriptor*>(NULL)))
+                if (_rType == cppu::UnoType<FontDescriptor>::get())
                 {
                     FontDescriptor aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -301,19 +301,19 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                         bRes = false;
                     break;
                 }
-                if (isA(_rType, static_cast<Date*>(NULL)))
+                if (_rType == cppu::UnoType<Date>::get())
                 {
                     Date aDummy;
                     bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                     break;
                 }
-                if (isA(_rType, static_cast<Time*>(NULL)))
+                if (_rType == cppu::UnoType<Time>::get())
                 {
                     Time aDummy;
                     bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                     break;
                 }
-                if (isA(_rType, static_cast<DateTime*>(NULL)))
+                if (_rType == cppu::UnoType<DateTime>::get())
                 {
                     DateTime aDummy;
                     bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
@@ -321,7 +321,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                 }
                 break;
             case TypeClass_SEQUENCE:
-                if (isA(_rType, static_cast< Sequence<sal_Int8>* >(NULL)))
+                if (_rType == cppu::UnoType<Sequence<sal_Int8>>::get())
                 {
                     Sequence<sal_Int8> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -333,7 +333,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence<sal_uInt8>* >(NULL)))
+                else if (_rType == cppu::UnoType<Sequence<sal_uInt8>>::get())
                 {
                     Sequence<sal_uInt8> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -345,7 +345,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence<sal_Int16>* >(NULL)))
+                else if (_rType == cppu::UnoType<Sequence<sal_Int16>>::get())
                 {
                     Sequence<sal_Int16> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -357,7 +357,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_Int16)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence<sal_uInt16>* >(NULL)))
+                else if (_rType == cppu::UnoType<cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get())
                 {
                     Sequence<sal_uInt16> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -369,7 +369,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt16)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence<sal_Int32>* >(NULL)))
+                else if (_rType == cppu::UnoType<Sequence<sal_Int32>>::get())
                 {
                     Sequence<sal_Int32> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -381,7 +381,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_Int32)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence<sal_uInt32>* >(NULL)))
+                else if (_rType == cppu::UnoType<Sequence<sal_uInt32>>::get())
                 {
                     Sequence<sal_uInt32> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
@@ -393,7 +393,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt32)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence< OUString >* >(NULL)))
+                else if (_rType == cppu::UnoType<Sequence<OUString>>::get())
                 {
                     Sequence< OUString > aTemp;
                     bConversionSuccess = _rValue >>= aTemp;

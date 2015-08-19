@@ -55,20 +55,6 @@ namespace comphelper
     /// returns sal_True if objects of the types given are "compatible"
     COMPHELPER_DLLPUBLIC bool isAssignableFrom(const css::uno::Type& _rAssignable, const css::uno::Type& _rFrom);
 
-
-    /** just a small shortcut ...
-        check if a type you have at hand at runtime is equal to another type you have at compile time
-        if all our compiler would accept function calls with explicit template arguments (like
-        isA<classFoo>(runtimeType)), we wouldn't need the second parameter. But unfortunately at
-        least the current solaris compiler doesn't allow this ....
-        So this function is nearly senseless ....
-    */
-    template <class TYPE>
-    bool isA(const css::uno::Type& _rType, TYPE* pDummy)
-    {
-        return  _rType.equals(cppu::getTypeFavourUnsigned(pDummy));
-    }
-
     /** ask the given object for an XComponent interface and dispose on it
     */
     template <class TYPE>
