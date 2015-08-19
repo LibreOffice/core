@@ -496,7 +496,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             ScDBCollection::NamedDBs::iterator itr = rDBs.begin(), itrEnd = rDBs.end();
                             for (; itr != itrEnd; ++itr)
                             {
-                                ScDBData& rDBData = *itr;
+                                ScDBData& rDBData = **itr;
                                 if ( rDBData.IsStripData() &&
                                      rDBData.HasImportParam() && !rDBData.HasImportSelection() )
                                 {

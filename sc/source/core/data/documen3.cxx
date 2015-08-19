@@ -242,7 +242,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemove
         ScDBCollection::NamedDBs::const_iterator itr = rNamedDBs.begin(), itrEnd = rNamedDBs.end();
         for (; itr != itrEnd; ++itr)
         {
-            const ScDBData& rOldData = *itr;
+            const ScDBData& rOldData = **itr;
             if (!rOldData.HasAutoFilter())
                 continue;
 
@@ -1591,7 +1591,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
-            rStrings.insert(ScTypedStrData(itr->GetName(), 0.0, ScTypedStrData::DbName));
+            rStrings.insert(ScTypedStrData((*itr)->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
     // Content of name ranges

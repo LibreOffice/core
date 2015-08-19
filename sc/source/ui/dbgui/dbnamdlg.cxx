@@ -341,7 +341,7 @@ void ScDbNameDlg::UpdateNames()
     {
         DBsType::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; itr != itrEnd; ++itr)
-            m_pEdName->InsertEntry(itr->GetName());
+            m_pEdName->InsertEntry((*itr)->GetName());
     }
     else
     {
@@ -504,14 +504,14 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 
 namespace {
 
-class FindByName : public ::std::unary_function<ScDBData, bool>
+class FindByName : public ::std::unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const OUString& mrName;
 public:
     FindByName(const OUString& rName) : mrName(rName) {}
-    bool operator() (const ScDBData& r) const
+    bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
-        return r.GetName().equals(mrName);
+        return p->GetName().equals(mrName);
     }
 };
 
@@ -539,7 +539,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
             SCTAB nTab;
             SCCOL nColStart, nColEnd;
             SCROW nRowStart, nRowEnd;
-            itr->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
+            (*itr)->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
             aRemoveList.push_back(
                 ScRange( ScAddress( nColStart, nRowStart, nTab ),
                          ScAddress( nColEnd,   nRowEnd,   nTab ) ) );

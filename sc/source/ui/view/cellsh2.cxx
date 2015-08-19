@@ -719,7 +719,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         const ScDBCollection::NamedDBs& rDBs = pDBCol->getNamedDBs();
                         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
                         for (; itr != itrEnd; ++itr)
-                            aList.push_back(itr->GetName());
+                            aList.push_back((*itr)->GetName());
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");

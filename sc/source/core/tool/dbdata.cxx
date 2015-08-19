@@ -43,9 +43,9 @@ using ::std::find_if;
 using ::std::remove_if;
 using ::std::pair;
 
-bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) const
+bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const
 {
-    return ScGlobal::GetpTransliteration()->compareString(left.GetUpperName(), right.GetUpperName()) < 0;
+    return ScGlobal::GetpTransliteration()->compareString(left->GetUpperName(), right->GetUpperName()) < 0;
 }
 
 ScDBData::ScDBData( const OUString& rName,
@@ -670,7 +670,7 @@ public:
     }
 };
 
-class UpdateRefFunc : public unary_function<ScDBData, void>
+class UpdateRefFunc : public unary_function<std::unique_ptr<ScDBData>, void>
 {
     ScDocument* mpDoc;
     UpdateRefMode meMode;
@@ -698,9 +698,13 @@ public:
     {
         r.UpdateReference(mpDoc, meMode, mnCol1, mnRow1, mnTab1, mnCol2, mnRow2, mnTab2, mnDx, mnDy, mnDz);
     }
+    void operator() (std::unique_ptr<ScDBData> const& p)
+    {
+        p->UpdateReference(mpDoc, meMode, mnCol1, mnRow1, mnTab1, mnCol2, mnRow2, mnTab2, mnDx, mnDy, mnDz);
+    }
 };
 
-class UpdateMoveTabFunc : public unary_function<ScDBData, void>
+class UpdateMoveTabFunc : public unary_function<std::unique_ptr<ScDBData>, void>
 {
     SCTAB mnOldTab;
     SCTAB mnNewTab;
@@ -710,9 +714,13 @@ public:
     {
         r.UpdateMoveTab(mnOldTab, mnNewTab);
     }
+    void operator() (std::unique_ptr<ScDBData> const& p)
+    {
+        p->UpdateMoveTab(mnOldTab, mnNewTab);
+    }
 };
 
-class FindByCursor : public unary_function<ScDBData, bool>
+class FindByCursor : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     SCCOL mnCol;
     SCROW mnRow;
@@ -726,9 +734,13 @@ public:
     {
         return r.IsDBAtCursor(mnCol, mnRow, mnTab, mbStartOnly);
     }
+    bool operator() (std::unique_ptr<ScDBData> const& p)
+    {
+        return p->IsDBAtCursor(mnCol, mnRow, mnTab, mbStartOnly);
+    }
 };
 
-class FindByRange : public unary_function<ScDBData, bool>
+class FindByRange : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const ScRange& mrRange;
 public:
@@ -739,27 +751,32 @@ public:
         return r.IsDBAtArea(
             mrRange.aStart.Tab(), mrRange.aStart.Col(), mrRange.aStart.Row(), mrRange.aEnd.Col(), mrRange.aEnd.Row());
     }
+    bool operator() (std::unique_ptr<ScDBData> const& p)
+    {
+        return p->IsDBAtArea(
+            mrRange.aStart.Tab(), mrRange.aStart.Col(), mrRange.aStart.Row(), mrRange.aEnd.Col(), mrRange.aEnd.Row());
+    }
 };
 
-class FindByIndex : public unary_function<ScDBData, bool>
+class FindByIndex : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     sal_uInt16 mnIndex;
 public:
     FindByIndex(sal_uInt16 nIndex) : mnIndex(nIndex) {}
-    bool operator() (const ScDBData& r) const
+    bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
-        return r.GetIndex() == mnIndex;
+        return p->GetIndex() == mnIndex;
     }
 };
 
-class FindByUpperName : public unary_function<ScDBData, bool>
+class FindByUpperName : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const OUString& mrName;
 public:
     FindByUpperName(const OUString& rName) : mrName(rName) {}
-    bool operator() (const ScDBData& r) const
+    bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
-        return r.GetUpperName() == mrName;
+        return p->GetUpperName() == mrName;
     }
 };
 
@@ -779,41 +796,54 @@ public:
 ScDBCollection::NamedDBs::NamedDBs(ScDBCollection& rParent, ScDocument& rDoc) :
     mrParent(rParent), mrDoc(rDoc) {}
 
-ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r) :
-    maDBs(r.maDBs), mrParent(r.mrParent), mrDoc(r.mrDoc) {}
+ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r)
+    : mrParent(r.mrParent)
+    , mrDoc(r.mrDoc)
+{
+    for (auto const& it : r.m_DBs)
+    {
+        m_DBs.insert(std::unique_ptr<ScDBData>(new ScDBData(*it)));
+    }
+}
 
 ScDBCollection::NamedDBs::iterator ScDBCollection::NamedDBs::begin()
 {
-    return maDBs.begin();
+    return m_DBs.begin();
 }
 
 ScDBCollection::NamedDBs::iterator ScDBCollection::NamedDBs::end()
 {
-    return maDBs.end();
+    return m_DBs.end();
 }
 
 ScDBCollection::NamedDBs::const_iterator ScDBCollection::NamedDBs::begin() const
 {
-    return maDBs.begin();
+    return m_DBs.begin();
 }
 
 ScDBCollection::NamedDBs::const_iterator ScDBCollection::NamedDBs::end() const
 {
-    return maDBs.end();
+    return m_DBs.end();
 }
 
 ScDBData* ScDBCollection::NamedDBs::findByIndex(sal_uInt16 nIndex)
 {
     DBsType::iterator itr = find_if(
-        maDBs.begin(), maDBs.end(), FindByIndex(nIndex));
-    return itr == maDBs.end() ? NULL : &(*itr);
+        m_DBs.begin(), m_DBs.end(), FindByIndex(nIndex));
+    return itr == m_DBs.end() ? nullptr : itr->get();
 }
 
 ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
 {
     DBsType::iterator itr = find_if(
-        maDBs.begin(), maDBs.end(), FindByUpperName(rName));
-    return itr == maDBs.end() ? NULL : &(*itr);
+        m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));
+    return itr == m_DBs.end() ? nullptr : itr->get();
+}
+
+auto ScDBCollection::NamedDBs::findByUpperName2(const OUString& rName) -> iterator
+{
+    return find_if(
+        m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));
 }
 
 bool ScDBCollection::NamedDBs::insert(ScDBData* p)
@@ -822,7 +852,7 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
     if (!pData->GetIndex())
         pData->SetIndex(mrParent.nEntryIndex++);
 
-    pair<DBsType::iterator, bool> r = o3tl::ptr_container::insert(maDBs, std::move(pData));
+    pair<DBsType::iterator, bool> r = m_DBs.insert(std::move(pData));
 
     if (r.second && p->HasImportParam() && !p->HasImportSelection())
     {
@@ -834,27 +864,22 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 
 void ScDBCollection::NamedDBs::erase(iterator itr)
 {
-    maDBs.erase(itr);
-}
-
-void ScDBCollection::NamedDBs::erase(const ScDBData& r)
-{
-    maDBs.erase(r);
+    m_DBs.erase(itr);
 }
 
 bool ScDBCollection::NamedDBs::empty() const
 {
-    return maDBs.empty();
+    return m_DBs.empty();
 }
 
 size_t ScDBCollection::NamedDBs::size() const
 {
-    return maDBs.size();
+    return m_DBs.size();
 }
 
 bool ScDBCollection::NamedDBs::operator== (const NamedDBs& r) const
 {
-    return maDBs == r.maDBs;
+    return m_DBs == r.m_DBs;
 }
 
 ScDBCollection::AnonDBs::iterator ScDBCollection::AnonDBs::begin()
@@ -946,7 +971,7 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
     NamedDBs::DBsType::const_iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
     if (itr != maNamedDBs.end())
-        return &(*itr);
+        return itr->get();
 
     // Check for the sheet-local anonymous db range.
     const ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
@@ -970,7 +995,7 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool
     NamedDBs::DBsType::iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
     if (itr != maNamedDBs.end())
-        return &(*itr);
+        return itr->get();
 
     // Check for the sheet-local anonymous db range.
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
@@ -995,7 +1020,7 @@ const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1
     NamedDBs::DBsType::const_iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByRange(aRange));
     if (itr != maNamedDBs.end())
-        return &(*itr);
+        return itr->get();
 
     // Check for the sheet-local anonymous db range.
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
@@ -1024,7 +1049,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     NamedDBs::DBsType::iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByRange(aRange));
     if (itr != maNamedDBs.end())
-        return &(*itr);
+        return itr->get();
 
     // Check for the sheet-local anonymous db range.
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
@@ -1055,7 +1080,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
         NamedDBs::DBsType::iterator itr = maNamedDBs.begin(), itrEnd = maNamedDBs.end();
         for (; itr != itrEnd; ++itr)
         {
-            if (func(*itr))
+            if (func(**itr))
                 v.push_back(itr);
         }
     }
@@ -1109,17 +1134,17 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
         SCTAB nAreaTab;
         SCCOL nStartCol, nEndCol;
         SCROW nStartRow, nEndRow;
-        itr->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        (*itr)->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
         if ( nTab == nAreaTab && nCol+1 >= nStartCol && nCol <= nEndCol+1 &&
                                  nRow+1 >= nStartRow && nRow <= nEndRow+1 )
         {
             if ( nCol < nStartCol || nCol > nEndCol || nRow < nStartRow || nRow > nEndRow )
             {
                 if (!pNearData)
-                    pNearData = &(*itr);    // remember first adjacent area
+                    pNearData = itr->get(); // remember first adjacent area
             }
             else
-                return &(*itr);             // not "unbenannt"/"unnamed" and cursor within
+                return itr->get();          // not "unbenannt"/"unnamed" and cursor within
         }
     }
     if (pNearData)

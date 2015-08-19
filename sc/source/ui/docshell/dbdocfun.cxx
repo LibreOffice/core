@@ -118,8 +118,8 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
     bool bUndo = rDoc.IsUndoEnabled();
 
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    const ScDBData* p = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rName));
-    if (p)
+    auto const iter = rDBs.findByUpperName2(ScGlobal::pCharClass->uppercase(rName));
+    if (iter != rDBs.end())
     {
         ScDocShellModificator aModificator( rDocShell );
 
@@ -128,7 +128,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
             pUndoColl = new ScDBCollection( *pDocColl );
 
         rDoc.PreprocessDBDataUpdate();
-        rDBs.erase(*p);
+        rDBs.erase(iter);
         rDoc.CompileHybridFormula();
 
         if (bUndo)
@@ -153,18 +153,18 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
     ScDBCollection* pDocColl = rDoc.GetDBCollection();
     bool bUndo = rDoc.IsUndoEnabled();
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    const ScDBData* pOld = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rOld));
+    auto const iterOld = rDBs.findByUpperName2(ScGlobal::pCharClass->uppercase(rOld));
     const ScDBData* pNew = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rNew));
-    if (pOld && !pNew)
+    if (iterOld != rDBs.end() && !pNew)
     {
         ScDocShellModificator aModificator( rDocShell );
 
-        ScDBData* pNewData = new ScDBData(rNew, *pOld);
+        ScDBData* pNewData = new ScDBData(rNew, **iterOld);
 
         ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
 
         rDoc.PreprocessDBDataUpdate();
-        rDBs.erase(*pOld);
+        rDBs.erase(iterOld);
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
         {

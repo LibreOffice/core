@@ -343,7 +343,7 @@ bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList)
         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
         for (; !bSubTotal && itr != itrEnd; ++itr)
         {
-            const ScDBData& rDB = *itr;
+            const ScDBData& rDB = **itr;
             if (!rDB.HasAutoFilter())
                 continue;
 

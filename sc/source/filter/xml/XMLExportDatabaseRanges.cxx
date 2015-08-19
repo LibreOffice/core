@@ -160,6 +160,11 @@ public:
             write(rData.GetName(), rData);
     }
 
+    void operator() (std::unique_ptr<ScDBData> const& p)
+    {
+        return operator()(*p);
+    }
+
 private:
     void write(const OUString& rName, const ScDBData& rData)
     {
