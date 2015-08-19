@@ -861,7 +861,7 @@ void EditorWindow::HandleCodeCompletion()
         if( aVect.empty() )//nothing to do
             return;
 
-        OUString sBaseName = aVect[0];//variable name
+        OUString sBaseName = aVect[aVect.size()-1];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
 
         if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
