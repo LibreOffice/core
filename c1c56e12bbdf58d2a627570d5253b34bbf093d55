@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aed3d3a_54728a7d",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-19T12:40:01Z",
+      "side": 1,
+      "message": "Good point",
+      "parentUuid": "9aed3d3a_b49f96b3",
+      "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_14a5a203",
         "filename": "include/o3tl/cow_wrapper.hxx",
         "patchSetId": 1
@@ -65,6 +83,24 @@
       "side": 1,
       "message": "Heh - a heap alloc is really worse than just using the copy ctor as-is. ;)\n\nJust gutting the rSrc object, and checking for nullptr in the dtor could be better.",
       "parentUuid": "9aed3d3a_346546e1",
+      "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_346f0694",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-19T12:40:01Z",
+      "side": 1,
+      "message": "Yeah, you\u0027re right, I\u0027m not too much of a fan of this move ctor either.",
+      "parentUuid": "9aed3d3a_f4a91ee1",
       "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
