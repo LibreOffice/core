@@ -31,6 +31,8 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/stl_types.hxx>
+
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -266,15 +268,9 @@ private:
     SvxMSDffImportRec &operator=(const SvxMSDffImportRec&) SAL_DELETED_FUNCTION;
 };
 
-struct MSDffImportRecords_Less
-{
-    bool operator()(std::unique_ptr<SvxMSDffImportRec> const& left,
-                    std::unique_ptr<SvxMSDffImportRec> const& right) const
-    { return (*left) < (*right); }
-};
 /** list of all SvxMSDffImportRec instances of/for a group */
-typedef std::set<std::unique_ptr<SvxMSDffImportRec>, MSDffImportRecords_Less>
-    MSDffImportRecords;
+typedef std::set<std::unique_ptr<SvxMSDffImportRec>,
+        comphelper::UniquePtrValueLess<SvxMSDffImportRec>> MSDffImportRecords;
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */

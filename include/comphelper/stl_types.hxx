@@ -23,6 +23,7 @@
 
 #include <math.h>
 #include <functional>
+#include <memory>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -84,6 +85,19 @@ public:
     {
         return !!(lhs.Name == rhs);
     }
+};
+
+/// by-value less functor for std::set<std::unique_ptr<T>>
+template<class T> struct UniquePtrValueLess
+    : public ::std::binary_function<std::unique_ptr<T>, std::unique_ptr<T>, bool>
+{
+        bool operator()(std::unique_ptr<T> const& lhs,
+                        std::unique_ptr<T> const& rhs) const
+        {
+            assert(lhs.get());
+            assert(rhs.get());
+            return (*lhs) < (*rhs);
+        }
 };
 
 /** STL-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances

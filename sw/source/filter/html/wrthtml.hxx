@@ -29,6 +29,7 @@
 #include <vcl/field.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/stream.hxx>
+#include <comphelper/stl_types.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 #include "shellio.hxx"
@@ -262,16 +263,8 @@ struct SwHTMLFormatInfo
 
 };
 
-struct SwHTMLFormatInfo_Less
-{
-    bool operator()(std::unique_ptr<SwHTMLFormatInfo> const& lhs,
-                    std::unique_ptr<SwHTMLFormatInfo> const& rhs)
-    {
-        return (*lhs) < (*rhs);
-    }
-};
-
-typedef std::set<std::unique_ptr<SwHTMLFormatInfo>, SwHTMLFormatInfo_Less> SwHTMLFormatInfos;
+typedef std::set<std::unique_ptr<SwHTMLFormatInfo>,
+        comphelper::UniquePtrValueLess<SwHTMLFormatInfo>> SwHTMLFormatInfos;
 
 class IDocumentStylePoolAccess;
 

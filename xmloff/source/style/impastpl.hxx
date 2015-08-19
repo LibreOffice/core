@@ -28,6 +28,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+
+#include <comphelper/stl_types.hxx>
+
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
 
@@ -102,15 +105,8 @@ public:
 
 struct XMLAutoStyleFamily : boost::noncopyable
 {
-    struct XMLAutoStylePoolParent_Less
-    {
-        bool operator()(std::unique_ptr<XMLAutoStylePoolParent> const& lhs,
-                        std::unique_ptr<XMLAutoStylePoolParent> const& rhs) const
-        {
-            return (*lhs) < (*rhs);
-        }
-    };
-    typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>, XMLAutoStylePoolParent_Less> ParentSetType;
+    typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>,
+        comphelper::UniquePtrValueLess<XMLAutoStylePoolParent>> ParentSetType;
     typedef std::set<OUString> NameSetType;
 
     sal_uInt32 mnFamily;
@@ -140,16 +136,9 @@ struct XMLAutoStyleFamily : boost::noncopyable
 
 class SvXMLAutoStylePoolP_Impl
 {
-    struct XMLAutoStyleFamily_Less
-    {
-        bool operator()(std::unique_ptr<XMLAutoStyleFamily> const& lhs,
-                        std::unique_ptr<XMLAutoStyleFamily> const& rhs) const
-        {
-            return (*lhs) < (*rhs);
-        }
-    };
     // A set that finds and sorts based only on mnFamily
-    typedef std::set<std::unique_ptr<XMLAutoStyleFamily>, XMLAutoStyleFamily_Less> FamilySetType;
+    typedef std::set<std::unique_ptr<XMLAutoStyleFamily>,
+            comphelper::UniquePtrValueLess<XMLAutoStyleFamily>> FamilySetType;
 
     SvXMLExport& rExport;
     FamilySetType m_FamilySet;

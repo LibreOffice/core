@@ -26,6 +26,7 @@ class SwTextFrm;
 
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
+#include <comphelper/stl_types.hxx>
 
 #include <set>
 #include <memory>
@@ -63,16 +64,8 @@ public:
     { return reinterpret_cast<sal_IntPtr>(pPor) == reinterpret_cast<sal_IntPtr>(rBlinkPortion.pPor); }
 };
 
-struct SwBlinkPortion_Less
-{
-    bool operator()(std::unique_ptr<SwBlinkPortion> const& lhs,
-                    std::unique_ptr<SwBlinkPortion> const& rhs)
-    {
-        return (*lhs) < (*rhs);
-    }
-};
-
-typedef std::set<std::unique_ptr<SwBlinkPortion>, SwBlinkPortion_Less> SwBlinkSet;
+typedef std::set<std::unique_ptr<SwBlinkPortion>,
+            comphelper::UniquePtrValueLess<SwBlinkPortion>> SwBlinkSet;
 
 class SwBlink
 {
