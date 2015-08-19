@@ -25,7 +25,7 @@
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <simpleguesser.hxx>
@@ -74,7 +74,7 @@ static osl::Mutex &  GetLangGuessMutex()
 }
 
 class LangGuess_Impl :
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
         XLanguageGuessing,
         XServiceInfo >,
     private boost::noncopyable
