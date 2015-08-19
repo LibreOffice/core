@@ -39,7 +39,7 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
 
     // Hold a reference of the Control
     {
-        InterfaceRef xIFace(static_cast<XWeak*>(pCompImpl));
+        css::uno::Reference<css::uno::XInterface> xIFace(static_cast<XWeak*>(pCompImpl));
         m_xComp.set(xIFace, css::uno::UNO_QUERY);
     }
 
@@ -159,7 +159,7 @@ void OComponentEventThread::run()
     implStarted( );
 
     // Hold on to ourselves, so that we're not deleted if a dispose is called at some point in time
-    InterfaceRef xThis(static_cast<XWeak*>(this));
+    css::uno::Reference<css::uno::XInterface> xThis(static_cast<XWeak*>(this));
 
     do
     {

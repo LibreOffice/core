@@ -105,14 +105,14 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XChild
-    virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OGridControlModel"); }
 
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -136,7 +136,7 @@ public:
 
     // XGridColumnFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual StringSequence SAL_CALL getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
     virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -184,12 +184,12 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumnById(sal_Int32 nTypeId) const;
 
-    static OGridColumn* getColumnImplementation(const InterfaceRef& _rxIFace);
+    static OGridColumn* getColumnImplementation(const css::uno::Reference<css::uno::XInterface>& _rxIFace);
 
     virtual ElementDescription* createElementMetaData( ) SAL_OVERRIDE;
 
 protected:
-    virtual void implRemoved(const InterfaceRef& _rxObject) SAL_OVERRIDE;
+    virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) SAL_OVERRIDE;
     virtual void implInserted( const ElementDescription* _pElement ) SAL_OVERRIDE;
     virtual void impl_replacedElement(
                     const ::com::sun::star::container::ContainerEvent& _rEvent,

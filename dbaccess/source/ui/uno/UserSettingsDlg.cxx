@@ -62,14 +62,14 @@ OUString OUserSettingsDialog::getImplementationName_Static() throw(RuntimeExcept
     return OUString("org.openoffice.comp.dbu.OUserSettingsDialog");
 }
 
-::comphelper::StringSequence SAL_CALL OUserSettingsDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OUserSettingsDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence OUserSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> OUserSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.UserAdministrationDialog";
     return aSupported;
 }

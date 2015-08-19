@@ -233,15 +233,15 @@ protected:
 
 // XServiceInfo
     virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
 // XServiceInfo - static version
-    static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+    static  css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XControl
-    virtual void                                        SAL_CALL setContext(const InterfaceRef& Context) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual InterfaceRef                                SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void                                        SAL_CALL setContext(const css::uno::Reference<css::uno::XInterface>& Context) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface>                                SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void                                        SAL_CALL createPeer(const ::com::sun::star::uno::Reference<css::awt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<css::awt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<css::awt::XWindowPeer>  SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool                                    SAL_CALL setModel(const ::com::sun::star::uno::Reference<css::awt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -336,7 +336,7 @@ protected:
     ::osl::Mutex                    m_aMutex;
     oslInterlockedCount             m_lockCount;
 
-    InterfaceRef                    m_xParent;                  // ParentComponent
+    css::uno::Reference<css::uno::XInterface>                    m_xParent;                  // ParentComponent
     PropertyBagHelper               m_aPropertyBagHelper;
 
     const css::uno::Reference<css::uno::XComponentContext>&
@@ -407,11 +407,11 @@ public:
 
 // XServiceInfo
     virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
 // XSericeInfo - static version(s)
-    static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+    static  css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XPersistObject
     virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
@@ -421,8 +421,8 @@ public:
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XChild (base of XFormComponent)
-    virtual InterfaceRef SAL_CALL   getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL           setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL   getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL           setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -985,10 +985,10 @@ public:
     virtual void SAL_CALL removeResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static version
-    static  StringSequence SAL_CALL getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+    static  css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
     // XChild
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

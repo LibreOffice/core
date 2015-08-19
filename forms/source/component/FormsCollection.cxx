@@ -93,9 +93,9 @@ sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceNa
     return cppu::supportsService(this, _rServiceName);
 }
 
-StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aReturn(2);
+    css::uno::Sequence<OUString> aReturn(2);
 
     aReturn[0] = "com.sun.star.form.Forms";
     aReturn[1] = "com.sun.star.form.FormComponents";
@@ -127,13 +127,13 @@ void OFormsCollection::disposing()
 
 //XChild
 
-void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException, std::exception )
+void OFormsCollection::setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw( NoSupportException, RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
-InterfaceRef  OFormsCollection::getParent() throw( RuntimeException, std::exception )
+css::uno::Reference<css::uno::XInterface>  OFormsCollection::getParent() throw( RuntimeException, std::exception )
 {
     return m_xParent;
 }

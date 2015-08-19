@@ -107,7 +107,7 @@ extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
     static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
 }
 
-::comphelper::StringSequence SAL_CALL SbaXGridControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames() throw(std::exception)
 {
     return getSupportedServiceNames_Static();
 }

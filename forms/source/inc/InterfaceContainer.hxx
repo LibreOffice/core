@@ -76,8 +76,8 @@ namespace frm
         ElementDescription& operator=( const ElementDescription& ) SAL_DELETED_FUNCTION;
     };
 
-typedef std::vector<InterfaceRef> OInterfaceArray;
-typedef std::unordered_multimap< OUString, InterfaceRef, OUStringHash > OInterfaceMap;
+typedef std::vector<css::uno::Reference<css::uno::XInterface>> OInterfaceArray;
+typedef std::unordered_multimap< OUString, css::uno::Reference<css::uno::XInterface>, OUStringHash > OInterfaceMap;
 
 
 // OInterfaceContainer
@@ -145,7 +145,7 @@ public:
 
 // ::com::sun::star::container::XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual StringSequence SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::container::XNameReplace
@@ -223,7 +223,7 @@ protected:
     // called after the object is inserted, but before the "real listeners" are notified
     virtual void implInserted( const ElementDescription* _pElement );
     // called after the object is removed, but before the "real listeners" are notified
-    virtual void implRemoved(const InterfaceRef& _rxObject);
+    virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject);
 
     /** called after an object was replaced. The default implementation notifies our listeners, after releasing
         the instance lock.
@@ -289,7 +289,7 @@ class OFormComponents   :public FormComponentsBase
 {
 protected:
     ::osl::Mutex                m_aMutex;
-    ::comphelper::InterfaceRef  m_xParent;
+    css::uno::Reference<css::uno::XInterface>  m_xParent;
 
 public:
     OFormComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
@@ -305,8 +305,8 @@ public:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 // ::com::sun::star::form::XFormComponent
-    virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     using OInterfaceContainer::disposing;

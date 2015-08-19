@@ -62,9 +62,9 @@ OFixedTextModel::~OFixedTextModel( )
 IMPLEMENT_DEFAULT_CLONING( OFixedTextModel )
 
 
-StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();

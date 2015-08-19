@@ -82,9 +82,9 @@ Sequence<Type> OComboBoxModel::_getTypes()
 
 // XServiceInfo
 
-StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -336,7 +336,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream
         nAnyMask |= BOUNDCOLUMN;
     _rxOutStream << nAnyMask;
 
-    StringSequence aListSourceSeq(&m_aListSource, 1);
+    css::uno::Sequence<OUString> aListSourceSeq(&m_aListSource, 1);
     _rxOutStream << aListSourceSeq;
     _rxOutStream << (sal_Int16)m_eListSourceType;
 
@@ -402,7 +402,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
     else // nVersion == 4
     {
         m_aListSource.clear();
-        StringSequence aListSource;
+        css::uno::Sequence<OUString> aListSource;
         _rxInStream >> aListSource;
         const OUString* pToken = aListSource.getConstArray();
         sal_Int32 nLen = aListSource.getLength();
@@ -437,7 +437,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         &&  !hasExternalListSource()
         )
     {
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
     }
 
     if (nVersion > 0x0004)
@@ -634,7 +634,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 Reference<XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
                 if (xFieldNames.is())
                 {
-                    StringSequence seqNames = xFieldNames->getElementNames();
+                    css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
                     sal_Int32 nFieldsCount = seqNames.getLength();
                     const OUString* pustrNames = seqNames.getConstArray();
 
@@ -659,8 +659,8 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-    // Create StringSequence for ListBox
-    StringSequence aStringSeq(aStringList.size());
+    // Create css::uno::Sequence<OUString> for ListBox
+    css::uno::Sequence<OUString> aStringSeq(aStringList.size());
     OUString* pStringAry = aStringSeq.getArray();
     for (sal_Int32 i = 0; i<aStringSeq.getLength(); ++i)
         pStringAry[i] = aStringList[i];
@@ -758,7 +758,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 
     if ( bAddToList )
     {
-        StringSequence aStringItemList;
+        css::uno::Sequence<OUString> aStringItemList;
         if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
         {
             const OUString* pStringItems = aStringItemList.getConstArray();
@@ -867,9 +867,9 @@ OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContex
 }
 
 
-StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();

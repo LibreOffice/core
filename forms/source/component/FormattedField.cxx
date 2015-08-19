@@ -201,7 +201,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
     if( !xSet.is() )
         return;
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
-    InterfaceRef  xParent = xFComp->getParent();
+    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
     Reference<com::sun::star::beans::XPropertySet>  xFormSet(xParent, UNO_QUERY);
@@ -244,16 +244,16 @@ IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed)
 {
     m_nKeyEvent = 0;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
-    InterfaceRef  xParent = xFComp->getParent();
+    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl> (), ::com::sun::star::awt::MouseEvent() );
     return 0L;
 }
 
-StringSequence  OFormattedControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
     OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_FORMATTEDFIELD;
@@ -312,9 +312,9 @@ void SAL_CALL OFormattedModel::disposing()
 }
 
 // XServiceInfo
-StringSequence OFormattedModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OEditBaseModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OEditBaseModel::getSupportedServiceNames();
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;

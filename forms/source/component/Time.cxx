@@ -56,9 +56,9 @@ Sequence<Type> OTimeControl::_getTypes()
 }
 
 
-StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -72,9 +72,9 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exce
 
 // XServiceInfo
 
-StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OTimeModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );

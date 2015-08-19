@@ -61,9 +61,9 @@ OImageButtonModel::~OImageButtonModel()
 }
 
 // XServiceInfo
-StringSequence  OImageButtonModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OImageButtonModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -150,9 +150,9 @@ Sequence<Type> OImageButtonControl::_getTypes()
     return aTypes;
 }
 
-StringSequence  OImageButtonControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OImageButtonControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();

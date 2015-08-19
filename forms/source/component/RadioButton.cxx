@@ -43,9 +43,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
 
-StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -111,9 +111,9 @@ IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 
 // XServiceInfo
 
-StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -155,7 +155,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
         sal_Int32 nNumSiblings = xIndexAccess->getCount();
         for (sal_Int32 i=0; i<nNumSiblings; ++i)
         {
-            Reference<XPropertySet> xSiblingProperties(*static_cast<InterfaceRef const *>(xIndexAccess->getByIndex(i).getValue()), UNO_QUERY);
+            Reference<XPropertySet> xSiblingProperties(*static_cast<css::uno::Reference<css::uno::XInterface> const *>(xIndexAccess->getByIndex(i).getValue()), UNO_QUERY);
             if (!xSiblingProperties.is())
                 continue;
             if (xMyProps == xSiblingProperties)
@@ -230,7 +230,7 @@ void ORadioButtonModel::setControlSource()
             static_cast<XWeak*>(this), css::uno::UNO_QUERY);
         for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
         {
-            Reference<XPropertySet> xSiblingProperties(*static_cast<InterfaceRef const *>(xIndexAccess->getByIndex(i).getValue()), UNO_QUERY);
+            Reference<XPropertySet> xSiblingProperties(*static_cast<css::uno::Reference<css::uno::XInterface> const *>(xIndexAccess->getByIndex(i).getValue()), UNO_QUERY);
             if (!xSiblingProperties.is())
                 continue;
 

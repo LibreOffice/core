@@ -56,9 +56,9 @@ Sequence<Type> ODateControl::_getTypes()
 }
 
 
-StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -120,9 +120,9 @@ IMPLEMENT_DEFAULT_CLONING( ODateModel )
 
 // XServiceInfo
 
-StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );

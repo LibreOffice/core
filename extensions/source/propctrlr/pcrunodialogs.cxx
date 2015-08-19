@@ -94,15 +94,15 @@ namespace pcr
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OTabOrderDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
 
 
-    ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
+    css::uno::Sequence<OUString> OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        ::comphelper::StringSequence aSupported(2);
+        css::uno::Sequence<OUString> aSupported(2);
         aSupported.getArray()[0] = "com.sun.star.form.ui.TabOrderDialog";
         aSupported.getArray()[1] = "com.sun.star.form.TabOrderDialog";
         return aSupported;

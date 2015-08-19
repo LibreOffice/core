@@ -738,7 +738,7 @@ namespace frm
             // changed in a document that is already loaded. There's no way
             // we can get to the Model during loading.
             Reference< XModel >  xModel;
-            InterfaceRef  xIfc( *this );
+            css::uno::Reference<css::uno::XInterface>  xIfc( *this );
             while( !xModel.is() && xIfc.is() )
             {
                 Reference<XChild>  xChild( xIfc, UNO_QUERY );

@@ -107,7 +107,7 @@ namespace svt
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
         // OPropertySetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue ) throw(com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;

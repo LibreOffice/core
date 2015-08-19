@@ -73,14 +73,14 @@ OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeExceptio
     return OUString("org.openoffice.comp.dbu.OSQLMessageDialog");
 }
 
-::comphelper::StringSequence SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence OSQLMessageDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> OSQLMessageDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported.getArray()[0] = "com.sun.star.sdb.ErrorMessageDialog";
     return aSupported;
 }

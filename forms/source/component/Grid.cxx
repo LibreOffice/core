@@ -166,9 +166,9 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
 }
 
 // XServiceInfo
-StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> OGridControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 4);
     aSupported[aSupported.getLength()-4] = "com.sun.star.awt.UnoControlModel";
     aSupported[aSupported.getLength()-3] = FRM_SUN_COMPONENT_GRIDCONTROL;
@@ -225,7 +225,7 @@ void SAL_CALL OGridControlModel::removeRowSetChangeListener( const Reference< XR
 }
 
 // XChild
-void SAL_CALL OGridControlModel::setParent( const InterfaceRef& i_Parent ) throw(NoSupportException, RuntimeException, std::exception)
+void SAL_CALL OGridControlModel::setParent( const css::uno::Reference<css::uno::XInterface>& i_Parent ) throw(NoSupportException, RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( i_Parent == getParent() )
@@ -280,7 +280,7 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalAr
             throw IllegalArgumentException();
         }
     }
-    InterfaceRef xMe = static_cast<XWeak*>(this);
+    css::uno::Reference<css::uno::XInterface> xMe = static_cast<XWeak*>(this);
     if (xSel.is())
     {
         Reference<XChild> xAsChild(xSel, UNO_QUERY);
@@ -341,7 +341,7 @@ Reference<XPropertySet>  OGridControlModel::createColumnById(sal_Int32 nTypeId) 
     }
     return xReturn;
 }
-StringSequence SAL_CALL OGridControlModel::getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return frm::getColumnTypes();
 }
@@ -692,7 +692,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     return aReturn;
 }
 
-OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxIFace)
+OGridColumn* OGridControlModel::getColumnImplementation(const css::uno::Reference<css::uno::XInterface>& _rxIFace)
 {
     OGridColumn* pImplementation = NULL;
     Reference< XUnoTunnel > xUnoTunnel( _rxIFace, UNO_QUERY );
@@ -721,7 +721,7 @@ void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
         xBroadcaster->removeSQLErrorListener( this );
 }
 
-void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
+void OGridControlModel::implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject)
 {
     OInterfaceContainer::implRemoved(_rxObject);
     lostColumn(_rxObject);
@@ -916,7 +916,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
     // reading the attachment
     for (sal_Int32 i = 0; i < nLen; i++)
     {
-        InterfaceRef  xIfc(m_aItems[i], UNO_QUERY);
+        css::uno::Reference<css::uno::XInterface>  xIfc(m_aItems[i], UNO_QUERY);
         Reference<XPropertySet>  xSet(xIfc, UNO_QUERY);
         Any aHelper;
         aHelper <<= xSet;

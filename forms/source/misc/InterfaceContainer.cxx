@@ -39,7 +39,6 @@
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
@@ -683,9 +682,9 @@ throw (::com::sun::star::uno::RuntimeException, std::exception) {
         OInterfaceMap::iterator i = m_aMap.find(::comphelper::getString(evt.OldValue));
         if (i != m_aMap.end() && (*i).second != evt.Source)
         {
-            InterfaceRef  xCorrectType((*i).second);
+            css::uno::Reference<css::uno::XInterface>  xCorrectType((*i).second);
             m_aMap.erase(i);
-            m_aMap.insert(::std::pair<const OUString, InterfaceRef >(::comphelper::getString(evt.NewValue),xCorrectType));
+            m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
         }
     }
 }
@@ -725,9 +724,9 @@ Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName ) throw(NoSu
 }
 
 
-StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aNameList(m_aItems.size());
+    css::uno::Sequence<OUString> aNameList(m_aItems.size());
     OUString* pStringArray = aNameList.getArray();
 
     for (OInterfaceMap::const_iterator i = m_aMap.begin(); i != m_aMap.end(); ++i, ++pStringArray)
@@ -836,7 +835,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     else
         m_aItems.insert( m_aItems.begin() + _nIndex, pElementMetaData->xInterface );
 
-    m_aMap.insert( ::std::pair< const OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
+    m_aMap.insert( ::std::pair< const OUString, css::uno::Reference<css::uno::XInterface> >( sName, pElementMetaData->xInterface ) );
 
     // announce ourself as parent to the new element
     pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
@@ -901,7 +900,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
 void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
 {
     OInterfaceArray::iterator i = m_aItems.begin() + nIndex;
-    InterfaceRef  xElement(*i);
+    css::uno::Reference<css::uno::XInterface>  xElement(*i);
 
     OInterfaceMap::iterator j = m_aMap.begin();
     while (j != m_aMap.end() && (*j).second != xElement) ++j;
@@ -915,7 +914,7 @@ void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
 
     Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(InterfaceRef ());
+        xChild->setParent(css::uno::Reference<css::uno::XInterface> ());
 }
 
 
@@ -925,7 +924,7 @@ void OInterfaceContainer::implInserted( const ElementDescription* /*_pElement*/ 
 }
 
 
-void OInterfaceContainer::implRemoved( const InterfaceRef& /*_rxObject*/ )
+void OInterfaceContainer::implRemoved( const css::uno::Reference<css::uno::XInterface>& /*_rxObject*/ )
 {
     // not inrerested in
 }
@@ -961,7 +960,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     }
 
     // get the old element
-    InterfaceRef  xOldElement( m_aItems[ _nIndex ] );
+    css::uno::Reference<css::uno::XInterface>  xOldElement( m_aItems[ _nIndex ] );
     DBG_ASSERT( xOldElement.get() == Reference< XInterface >( xOldElement, UNO_QUERY ).get(),
         "OInterfaceContainer::implReplaceByIndex: elements should be held normalized!" );
 
@@ -973,7 +972,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     // remove event knittings
     if ( m_xEventAttacher.is() )
     {
-        InterfaceRef xNormalized( xOldElement, UNO_QUERY );
+        css::uno::Reference<css::uno::XInterface> xNormalized( xOldElement, UNO_QUERY );
         m_xEventAttacher->detach( _nIndex, xNormalized );
         m_xEventAttacher->removeEntry( _nIndex );
     }
@@ -986,7 +985,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     // give the old element a new (void) parent
     Reference<XChild>  xChild(xOldElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(InterfaceRef ());
+        xChild->setParent(css::uno::Reference<css::uno::XInterface> ());
 
     // remove the old one
     m_aMap.erase(j);
@@ -999,7 +998,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     aElementMetaData.get()->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // insert the new one
-    m_aMap.insert( ::std::pair<const OUString, InterfaceRef  >( sName, aElementMetaData.get()->xInterface ) );
+    m_aMap.insert( ::std::pair<const OUString, css::uno::Reference<css::uno::XInterface>  >( sName, aElementMetaData.get()->xInterface ) );
     m_aItems[ _nIndex ] = aElementMetaData.get()->xInterface;
 
     aElementMetaData.get()->xChild->setParent(static_cast<XContainer*>(this));
@@ -1042,7 +1041,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
     OSL_PRECOND( ( _nIndex >= 0 ) && ( _nIndex < (sal_Int32)m_aItems.size() ), "OInterfaceContainer::implRemoveByIndex: precondition not met (index)!" );
 
     OInterfaceArray::iterator i = m_aItems.begin() + _nIndex;
-    InterfaceRef  xElement(*i);
+    css::uno::Reference<css::uno::XInterface>  xElement(*i);
 
     OInterfaceMap::iterator j = m_aMap.begin();
     while (j != m_aMap.end() && (*j).second != xElement) ++j;
@@ -1053,7 +1052,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
     // remove event knittings
     if ( m_xEventAttacher.is() )
     {
-        InterfaceRef xNormalized( xElement, UNO_QUERY );
+        css::uno::Reference<css::uno::XInterface> xNormalized( xElement, UNO_QUERY );
         m_xEventAttacher->detach( _nIndex, xNormalized );
         m_xEventAttacher->removeEntry( _nIndex );
     }
@@ -1064,7 +1063,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
 
     Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(InterfaceRef ());
+        xChild->setParent(css::uno::Reference<css::uno::XInterface> ());
 
     // notify derived classes
     implRemoved(xElement);
@@ -1325,14 +1324,14 @@ void OFormComponents::disposing()
 
 //XChild
 
-void OFormComponents::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException, std::exception )
+void OFormComponents::setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw( NoSupportException, RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
 
-InterfaceRef OFormComponents::getParent() throw( RuntimeException, std::exception )
+css::uno::Reference<css::uno::XInterface> OFormComponents::getParent() throw( RuntimeException, std::exception )
 {
     return m_xParent;
 }

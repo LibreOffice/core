@@ -1525,7 +1525,7 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
 }
 
 // XServiceInfo
-StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return ::comphelper::combineSequences(
         getAggregateServiceNames(),

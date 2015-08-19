@@ -284,7 +284,7 @@ bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
             }
             case TypeClass_INTERFACE:
             {
-                InterfaceRef aDummy;
+                css::uno::Reference<css::uno::XInterface> aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }

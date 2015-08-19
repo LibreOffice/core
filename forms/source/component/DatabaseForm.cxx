@@ -2346,7 +2346,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
 
 // smartXChild
 
-void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw ( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // SYNCHRONIZED ----->
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
@@ -3090,7 +3090,7 @@ bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, con
 sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) throw( RuntimeException, std::exception )
 {
     // is our aggregate calling?
-    if (event.Source == InterfaceRef(static_cast<XWeak*>(this)))
+    if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
     {
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
@@ -3139,7 +3139,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) thr
 sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) throw( RuntimeException, std::exception )
 {
     // is our aggregate calling?
-    if (event.Source == InterfaceRef(static_cast<XWeak*>(this)))
+    if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
     {
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
@@ -3178,7 +3178,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
 
 sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) throw( RuntimeException, std::exception )
 {
-    if (event.Source == InterfaceRef(static_cast<XWeak*>(this))) // ignore our aggregate as we handle this approve ourself
+    if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this))) // ignore our aggregate as we handle this approve ourself
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         bool bWasLoaded = isLoaded();
@@ -3433,7 +3433,7 @@ sal_Bool SAL_CALL ODatabaseForm::rowDeleted() throw( SQLException, RuntimeExcept
 }
 
 
-InterfaceRef SAL_CALL ODatabaseForm::getStatement() throw( SQLException, RuntimeException, std::exception )
+css::uno::Reference<css::uno::XInterface> SAL_CALL ODatabaseForm::getStatement() throw( SQLException, RuntimeException, std::exception )
 {
     return m_xAggregateAsRowSet->getStatement();
 }
@@ -4019,7 +4019,7 @@ void ODatabaseForm::implInserted( const ElementDescription* _pElement )
 }
 
 
-void ODatabaseForm::implRemoved(const InterfaceRef& _rxObject)
+void ODatabaseForm::implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject)
 {
     OFormComponents::implRemoved( _rxObject );
 

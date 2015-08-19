@@ -42,9 +42,9 @@ ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-StringSequence ONumericControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> ONumericControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -95,9 +95,9 @@ IMPLEMENT_DEFAULT_CLONING( ONumericModel )
 
 // XServiceInfo
 
-StringSequence ONumericModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> ONumericModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );

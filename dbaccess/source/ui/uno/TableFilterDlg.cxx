@@ -62,14 +62,14 @@ OUString OTableFilterDialog::getImplementationName_Static() throw(RuntimeExcepti
     return OUString("org.openoffice.comp.dbu.OTableFilterDialog");
 }
 
-::comphelper::StringSequence SAL_CALL OTableFilterDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OTableFilterDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence OTableFilterDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> OTableFilterDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.TableFilterDialog";
     return aSupported;
 }

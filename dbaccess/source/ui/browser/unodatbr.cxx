@@ -185,7 +185,7 @@ OUString SAL_CALL SbaTableQueryBrowser::getImplementationName() throw(RuntimeExc
     return getImplementationName_Static();
 }
 
-::comphelper::StringSequence SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -195,9 +195,9 @@ OUString SbaTableQueryBrowser::getImplementationName_Static() throw(RuntimeExcep
     return OUString("org.openoffice.comp.dbu.ODatasourceBrowser");
 }
 
-::comphelper::StringSequence SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.DataSourceBrowser";
     return aSupported;
 }

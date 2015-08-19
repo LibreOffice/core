@@ -139,9 +139,9 @@ void OEditControl::disposing()
 
 // XServiceInfo
 
-StringSequence  OEditControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OEditControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 3);
 
     OUString*pArray = aSupported.getArray();
@@ -201,7 +201,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
         return;
 
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
-    InterfaceRef  xParent = xFComp->getParent();
+    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
 
@@ -252,7 +252,7 @@ IMPL_LINK_NOARG(OEditControl, OnKeyPressed)
     m_nKeyEvent = 0;
 
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
-    InterfaceRef  xParent = xFComp->getParent();
+    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl>(), ::com::sun::star::awt::MouseEvent() );
@@ -327,9 +327,9 @@ OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::Ru
 
 // XServiceInfo
 
-StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );

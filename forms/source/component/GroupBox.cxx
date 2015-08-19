@@ -57,9 +57,9 @@ OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Referenc
 
 // XServiceInfo
 
-StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -128,9 +128,9 @@ OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();

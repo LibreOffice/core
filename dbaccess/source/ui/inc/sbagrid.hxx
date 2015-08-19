@@ -70,7 +70,7 @@ namespace dbaui
 
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
         // need by registration
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );

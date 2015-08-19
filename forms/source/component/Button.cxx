@@ -113,9 +113,9 @@ IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 
 // XServiceInfo
 
-StringSequence  OButtonModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OButtonModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc( aSupported.getLength() + 2 );
 
     OUString* pArray = aSupported.getArray();
@@ -338,9 +338,9 @@ Sequence<Type> OButtonControl::_getTypes()
 }
 
 
-StringSequence  OButtonControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OButtonControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();

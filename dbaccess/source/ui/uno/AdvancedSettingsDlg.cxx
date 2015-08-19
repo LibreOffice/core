@@ -47,7 +47,7 @@ namespace dbaui
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
@@ -90,14 +90,14 @@ namespace dbaui
         return OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
     }
 
-    ::comphelper::StringSequence SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_Static();
     }
 
-    ::comphelper::StringSequence OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+    css::uno::Sequence<OUString> OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
     {
-        ::comphelper::StringSequence aSupported(1);
+        css::uno::Sequence<OUString> aSupported(1);
         aSupported[0] = "com.sun.star.sdb.AdvancedDatabaseSettingsDialog";
         return aSupported;
     }

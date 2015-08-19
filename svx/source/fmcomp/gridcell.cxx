@@ -2432,7 +2432,7 @@ void DbComboBox::SetList(const Any& rItems)
     ComboBoxControl* pField = static_cast<ComboBoxControl*>(m_pWindow.get());
     pField->Clear();
 
-    ::comphelper::StringSequence aTest;
+    css::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
         const OUString* pStrings = aTest.getConstArray();
@@ -2553,7 +2553,7 @@ void DbListBox::SetList(const Any& rItems)
     pField->Clear();
     m_bBound = false;
 
-    ::comphelper::StringSequence aTest;
+    css::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
         const OUString* pStrings = aTest.getConstArray();
@@ -2716,7 +2716,7 @@ void DbFilterField::PaintCell(OutputDevice& rDev, const Rectangle& rRect)
 
 void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 {
-    ::comphelper::StringSequence aTest;
+    css::uno::Sequence<OUString> aTest;
     rItems >>= aTest;
     const OUString* pStrings = aTest.getConstArray();
     sal_Int32 nItems = aTest.getLength();
@@ -4095,7 +4095,7 @@ void SAL_CALL FmXListBoxCell::addItem(const OUString& aItem, sal_Int16 nPos) thr
 }
 
 
-void SAL_CALL FmXListBoxCell::addItems(const ::comphelper::StringSequence& aItems, sal_Int16 nPos) throw( RuntimeException, std::exception )
+void SAL_CALL FmXListBoxCell::addItems(const css::uno::Sequence<OUString>& aItems, sal_Int16 nPos) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (m_pBox)
@@ -4135,15 +4135,15 @@ OUString SAL_CALL FmXListBoxCell::getItem(sal_Int16 nPos) throw( RuntimeExceptio
     return m_pBox ? OUString(m_pBox->GetEntry(nPos)) : OUString();
 }
 
-::comphelper::StringSequence SAL_CALL FmXListBoxCell::getItems() throw( RuntimeException, std::exception )
+css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::comphelper::StringSequence aSeq;
+    css::uno::Sequence<OUString> aSeq;
     if (m_pBox)
     {
         sal_uInt16 nEntries = m_pBox ->GetEntryCount();
-        aSeq = ::comphelper::StringSequence( nEntries );
+        aSeq = css::uno::Sequence<OUString>( nEntries );
         for ( sal_uInt16 n = nEntries; n; )
         {
             --n;
@@ -4201,17 +4201,17 @@ OUString SAL_CALL FmXListBoxCell::getSelectedItem() throw( RuntimeException, std
 }
 
 
-::comphelper::StringSequence SAL_CALL FmXListBoxCell::getSelectedItems() throw( RuntimeException, std::exception )
+css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::comphelper::StringSequence aSeq;
+    css::uno::Sequence<OUString> aSeq;
 
     if (m_pBox)
     {
         UpdateFromColumn();
         sal_uInt16 nSelEntries = m_pBox->GetSelectEntryCount();
-        aSeq = ::comphelper::StringSequence( nSelEntries );
+        aSeq = css::uno::Sequence<OUString>( nSelEntries );
         for ( sal_uInt16 n = 0; n < nSelEntries; n++ )
             aSeq.getArray()[n] = m_pBox->GetSelectEntry( n );
     }

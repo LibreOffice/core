@@ -25,9 +25,9 @@
 using namespace ::com::sun::star::uno;
 
 
-const ::comphelper::StringSequence& getColumnTypes()
+const css::uno::Sequence<OUString>& getColumnTypes()
 {
-    static ::comphelper::StringSequence aColumnTypes(10);
+    static css::uno::Sequence<OUString> aColumnTypes(10);
     if (aColumnTypes.getConstArray()[0].isEmpty())
     {
         OUString* pNames = aColumnTypes.getArray();
@@ -89,7 +89,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
-        const ::comphelper::StringSequence& rColumnTypes = getColumnTypes();
+        const css::uno::Sequence<OUString>& rColumnTypes = getColumnTypes();
         nTypeId = lcl_findPos(aColumnType, rColumnTypes);
     }
     return nTypeId;

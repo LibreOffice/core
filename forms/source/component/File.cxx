@@ -67,9 +67,9 @@ Sequence<Type> OFileControlModel::_getTypes()
 
 // XServiceInfo
 
-StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString>  OFileControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();

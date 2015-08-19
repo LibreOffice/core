@@ -46,7 +46,7 @@ class OFormsCollection
         ,public OFormsCollection_BASE
 {
     ::osl::Mutex                m_aMutex;
-    ::comphelper::InterfaceRef  m_xParent; // Parent
+    css::uno::Reference<css::uno::XInterface>  m_xParent; // Parent
 
 public:
     OFormsCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
@@ -68,7 +68,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -77,8 +77,8 @@ public:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // ::com::sun::star::container::XChild
-    virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // prevent method hiding
     using OInterfaceContainer::disposing;

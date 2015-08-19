@@ -77,14 +77,14 @@ OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeExce
     return OUString("org.openoffice.comp.dbu.ODBTypeWizDialogSetup");
 }
 
-::comphelper::StringSequence SAL_CALL ODBTypeWizDialogSetup::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialogSetup::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.DatabaseWizardDialog";
     return aSupported;
 }

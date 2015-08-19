@@ -45,9 +45,9 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -84,9 +84,9 @@ IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
 // XServiceInfo
 
-StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );

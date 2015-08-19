@@ -73,7 +73,7 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 
 }
 
-::comphelper::StringSequence SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -83,9 +83,9 @@ OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeE
     return OUString("org.openoffice.comp.dbu.OFormGridView");
 }
 
-::comphelper::StringSequence SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.FormGridView";
     return aSupported;
 }

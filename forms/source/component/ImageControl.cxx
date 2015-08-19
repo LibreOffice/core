@@ -188,9 +188,9 @@ IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 
 // XServiceInfo
 
-StringSequence  OImageControlModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OImageControlModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -723,9 +723,9 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (R
 }
 
 
-StringSequence  OImageControlControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OImageControlControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();

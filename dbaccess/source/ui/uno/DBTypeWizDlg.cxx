@@ -62,14 +62,14 @@ OUString ODBTypeWizDialog::getImplementationName_Static() throw(RuntimeException
     return OUString("org.openoffice.comp.dbu.ODBTypeWizDialog");
 }
 
-::comphelper::StringSequence SAL_CALL ODBTypeWizDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence ODBTypeWizDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> ODBTypeWizDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.DataSourceTypeChangeDialog";
     return aSupported;
 }

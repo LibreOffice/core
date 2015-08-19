@@ -58,7 +58,7 @@ namespace pcr
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static() throw( ::com::sun::star::uno::RuntimeException );

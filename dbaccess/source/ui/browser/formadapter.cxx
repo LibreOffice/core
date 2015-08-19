@@ -144,7 +144,7 @@ void SbaXFormAdapter::StartListening()
         Reference< css::beans::XMultiPropertySet >  xBroadcaster(m_xMainForm, UNO_QUERY);
         OUString sEmpty;
         if (xBroadcaster.is())
-            xBroadcaster->addPropertiesChangeListener(::comphelper::StringSequence(&sEmpty, 1), &m_aPropertiesChangeListeners);
+            xBroadcaster->addPropertiesChangeListener(css::uno::Sequence<OUString>(&sEmpty, 1), &m_aPropertiesChangeListeners);
     }
 
     // log off ourself

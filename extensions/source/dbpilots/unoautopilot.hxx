@@ -61,7 +61,7 @@ namespace dbp
             return getImplementationName_Static();
         }
 
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return getSupportedServiceNames_Static();
         }

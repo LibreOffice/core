@@ -48,7 +48,7 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext
 {
 }
 
-InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
+css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
 {
     OFormattedFieldWrapper *pRef = new OFormattedFieldWrapper(_rxFactory);
 
@@ -58,7 +58,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
         // (instantiate it directly ..., as the OFormattedModel isn't
         // registered for any service names anymore)
         OFormattedModel* pModel = new OFormattedModel(pRef->m_xContext);
-        InterfaceRef xFormattedModel(
+        css::uno::Reference<css::uno::XInterface> xFormattedModel(
             static_cast<XWeak*>(pModel), css::uno::UNO_QUERY);
 
         pRef->m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
@@ -76,7 +76,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
         pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef));
     }
 
-    InterfaceRef xRef(*pRef);
+    css::uno::Reference<css::uno::XInterface> xRef(*pRef);
     osl_atomic_decrement(&pRef->m_refCount);
 
     return xRef;
@@ -122,7 +122,7 @@ OFormattedFieldWrapper::~OFormattedFieldWrapper()
 {
     // release the aggregated object (if any)
     if (m_xAggregate.is())
-        m_xAggregate->setDelegator(InterfaceRef ());
+        m_xAggregate->setDelegator(css::uno::Reference<css::uno::XInterface> ());
 
 }
 
@@ -313,7 +313,7 @@ void OFormattedFieldWrapper::ensureAggregate()
     {
         // instantiate an EditModel (the only place where we are allowed to decide that we're an FormattedModel
         // is in ::read)
-        InterfaceRef  xEditModel = m_xContext->getServiceManager()->createInstanceWithContext(FRM_SUN_COMPONENT_TEXTFIELD, m_xContext);
+        css::uno::Reference<css::uno::XInterface>  xEditModel = m_xContext->getServiceManager()->createInstanceWithContext(FRM_SUN_COMPONENT_TEXTFIELD, m_xContext);
         if (!xEditModel.is())
         {
             // arghhh ... instantiate it directly ... it's dirty, but we really need this aggregate

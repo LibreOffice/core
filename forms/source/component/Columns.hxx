@@ -182,7 +182,7 @@ OGridColumn* ClassName::createCloneColumn() const \
 #define TYPE_TIMEFIELD      9
 
 // List of all known columns
-const StringSequence& getColumnTypes();
+const css::uno::Sequence<OUString>& getColumnTypes();
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 // Columns

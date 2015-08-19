@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -37,11 +36,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 namespace comphelper
 {
-
-    typedef css::uno::Reference< css::uno::XInterface >           InterfaceRef;
-    typedef css::uno::Sequence< OUString >                StringSequence;
-
-
     /** compare the two given Anys
         The comparison is deep, means if one of the Any's contains an Any which contains an Any ..., this is resolved <br/>
         Other types recognized currently : FontDescriptor, ::com::sun::star::util::Date/Tim/DateTime, css::uno::Sequence<sal_Int8>

@@ -151,7 +151,7 @@ namespace dbaui
     public:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
         static Sequence< OUString >  getSupportedServiceNames_Static() throw( RuntimeException );
@@ -423,14 +423,14 @@ OUString CopyTableWizard::getImplementationName_Static() throw(RuntimeException)
     return OUString( "org.openoffice.comp.dbu.CopyTableWizard" );
 }
 
-::comphelper::StringSequence SAL_CALL CopyTableWizard::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence CopyTableWizard::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> CopyTableWizard::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported.getArray()[0] = "com.sun.star.sdb.application.CopyTableWizard";
     return aSupported;
 }

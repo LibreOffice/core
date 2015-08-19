@@ -52,7 +52,7 @@ class OComboBoxModel
     OUString                                m_aDefaultText;         // DefaultText
     ::com::sun::star::uno::Any              m_aLastKnownValue;
 
-    StringSequence                          m_aDesignModeStringItems;
+    css::uno::Sequence<OUString>                          m_aDesignModeStringItems;
     // upon loading, in some cases we reset fill our string item list ourself. We don't want
     // to lose the user's items then, so we remember them here.
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
@@ -88,7 +88,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OComboBoxModel"); }
 
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel)
@@ -151,7 +151,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.form.OComboBoxControl"); }
 
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

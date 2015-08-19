@@ -386,7 +386,7 @@ OUString SAL_CALL FmXGridControl::getImplementationName() throw(std::exception)
     return OUString("com.sun.star.form.FmXGridControl");
 }
 
-::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedServiceNames() throw(std::exception)
 {
     Sequence< OUString > aServiceNames(2);
     aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
@@ -961,10 +961,10 @@ OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException, std::except
 }
 
 
-::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedModes() throw( RuntimeException, std::exception )
+css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedModes() throw( RuntimeException, std::exception )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
-    return xPeer.is() ? xPeer->getSupportedModes() : ::comphelper::StringSequence();
+    return xPeer.is() ? xPeer->getSupportedModes() : css::uno::Sequence<OUString>();
 }
 
 
@@ -1386,7 +1386,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
     else if (pGrid && m_xColumns.is() && m_xColumns->hasElements())
     {
         // next find which column has changed
-        ::comphelper::InterfaceRef xCurrent;
+        css::uno::Reference<css::uno::XInterface> xCurrent;
         sal_Int32 i;
 
         for ( i = 0; i < m_xColumns->getCount(); i++)
@@ -2377,9 +2377,9 @@ OUString FmXGridPeer::getMode() throw( RuntimeException, std::exception )
 }
 
 
-::comphelper::StringSequence FmXGridPeer::getSupportedModes() throw( RuntimeException, std::exception )
+css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes() throw( RuntimeException, std::exception )
 {
-    static ::comphelper::StringSequence aModes;
+    static css::uno::Sequence<OUString> aModes;
     if (!aModes.getLength())
     {
         aModes.realloc(2);
@@ -2393,7 +2393,7 @@ OUString FmXGridPeer::getMode() throw( RuntimeException, std::exception )
 
 sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException, std::exception )
 {
-    ::comphelper::StringSequence aModes(getSupportedModes());
+    css::uno::Sequence<OUString> aModes(getSupportedModes());
     const OUString* pModes = aModes.getConstArray();
     for (sal_Int32 i = aModes.getLength(); i > 0; )
     {

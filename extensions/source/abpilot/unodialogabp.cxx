@@ -101,15 +101,15 @@ namespace abp
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OABSPilotUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_Static();
     }
 
 
-    ::comphelper::StringSequence OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
+    css::uno::Sequence<OUString> OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
-        ::comphelper::StringSequence aSupported(1);
+        css::uno::Sequence<OUString> aSupported(1);
         aSupported[0] = "com.sun.star.ui.dialogs.AddressBookSourcePilot";
         return aSupported;
     }

@@ -62,14 +62,14 @@ OUString ODataSourcePropertyDialog::getImplementationName_Static() throw(Runtime
     return OUString("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
 }
 
-::comphelper::StringSequence SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
 
-::comphelper::StringSequence ODataSourcePropertyDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> ODataSourcePropertyDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    ::comphelper::StringSequence aSupported(1);
+    css::uno::Sequence<OUString> aSupported(1);
     aSupported[0] = "com.sun.star.sdb.DatasourceAdministrationDialog";
     return aSupported;
 }

@@ -276,8 +276,8 @@ public:
     virtual void SAL_CALL removeSubmitListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XSubmitListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // com::sun::star::container::XChild
-    virtual InterfaceRef SAL_CALL getParent() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OFormComponents::getParent(); }
-    virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw ( :: com::sun::star::lang::NoSupportException , ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getParent() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OFormComponents::getParent(); }
+    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw ( :: com::sun::star::lang::NoSupportException , ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // com::sun::star::container::XNamed
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -362,7 +362,7 @@ public:
     virtual sal_Bool SAL_CALL rowUpdated() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL rowInserted() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL rowDeleted() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual InterfaceRef SAL_CALL getStatement() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getStatement() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // com::sun::star::sdbc::XResultSetUpdate
     virtual void SAL_CALL insertRow() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -443,7 +443,7 @@ protected:
 
     // OInterfaceContainer overridables
     virtual void implInserted( const ElementDescription* _pElement ) SAL_OVERRIDE;
-    virtual void implRemoved(const InterfaceRef& _rxObject) SAL_OVERRIDE;
+    virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) SAL_OVERRIDE;
 
     // OPropertyChangeListener
     virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

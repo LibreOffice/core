@@ -36,7 +36,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "services.hxx"
 #include "frm_resource.hrc"
@@ -63,9 +62,9 @@ const sal_uInt16 OLD_HIDDEN         = 0x0004;
 const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
 
-const StringSequence& getColumnTypes()
+const css::uno::Sequence<OUString>& getColumnTypes()
 {
-    static StringSequence aColumnTypes(10);
+    static css::uno::Sequence<OUString> aColumnTypes(10);
     if (aColumnTypes.getConstArray()[0].isEmpty())
     {
         OUString* pNames = aColumnTypes.getArray();
@@ -105,7 +104,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
-        const StringSequence& rColumnTypes = getColumnTypes();
+        const css::uno::Sequence<OUString>& rColumnTypes = getColumnTypes();
         nTypeId = ::detail::findPos(aColumnType, rColumnTypes);
     }
     return nTypeId;
@@ -262,7 +261,7 @@ OGridColumn::~OGridColumn()
     // Free the aggregate
     if (m_xAggregate.is())
     {
-        InterfaceRef  xIface;
+        css::uno::Reference<css::uno::XInterface>  xIface;
         m_xAggregate->setDelegator(xIface);
     }
 

@@ -50,9 +50,9 @@ Sequence<Type> OPatternControl::_getTypes()
 }
 
 
-StringSequence OPatternControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> OPatternControl::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -98,9 +98,9 @@ IMPLEMENT_DEFAULT_CLONING( OPatternModel )
 
 // XServiceInfo
 
-StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames() throw(std::exception)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 3);
 
     OUString*pArray = aSupported.getArray();

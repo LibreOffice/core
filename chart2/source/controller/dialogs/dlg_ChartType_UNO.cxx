@@ -51,7 +51,7 @@ OUString ChartTypeUnoDlg::getImplementationName_Static() throw(uno::RuntimeExcep
     return OUString(CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME);
 }
 
-::comphelper::StringSequence SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }

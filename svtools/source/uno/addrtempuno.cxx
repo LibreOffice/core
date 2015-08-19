@@ -58,7 +58,7 @@ namespace {
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
         virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -99,9 +99,9 @@ namespace {
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        ::comphelper::StringSequence aSupported(1);
+        css::uno::Sequence<OUString> aSupported(1);
         aSupported.getArray()[0] = "com.sun.star.ui.AddressBookSourceDialog";
         return aSupported;
     }

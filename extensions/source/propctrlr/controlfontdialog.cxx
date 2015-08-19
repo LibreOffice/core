@@ -86,15 +86,15 @@ namespace pcr
     }
 
 
-    ::comphelper::StringSequence SAL_CALL OControlFontDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OControlFontDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
         return getSupportedServiceNames_static();
     }
 
 
-    ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
+    css::uno::Sequence<OUString> OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        ::comphelper::StringSequence aSupported(1);
+        css::uno::Sequence<OUString> aSupported(1);
         aSupported[0] = "com.sun.star.form.ControlFontDialog";
         return aSupported;
     }

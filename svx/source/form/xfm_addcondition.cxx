@@ -53,7 +53,7 @@ namespace svxform
 
     Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames()
     {
-        ::comphelper::StringSequence aSupported( 1 );
+        css::uno::Sequence<OUString> aSupported( 1 );
         aSupported.getArray()[0] = "com.sun.star.xforms.ui.dialogs.AddCondition";
         return aSupported;
     }

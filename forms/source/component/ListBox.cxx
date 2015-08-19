@@ -203,9 +203,9 @@ namespace frm
 
     // XServiceInfo
 
-    StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+        css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
         sal_Int32 nOldLen = aSupported.getLength();
         aSupported.realloc( nOldLen + 9 );
@@ -474,8 +474,8 @@ namespace frm
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
-            DECL_PROP1(LISTSOURCE,          StringSequence,                 BOUND);
-            DECL_PROP3(VALUE_SEQ,           StringSequence,                 BOUND, READONLY, TRANSIENT);
+            DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,                 BOUND);
+            DECL_PROP3(VALUE_SEQ,           css::uno::Sequence<OUString>,                 BOUND, READONLY, TRANSIENT);
             DECL_PROP2(SELECT_VALUE_SEQ,    Sequence< Any >,                BOUND, TRANSIENT);
             DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
@@ -594,7 +594,7 @@ namespace frm
         _rxInStream >> nAnyMask;
 
         // ListSourceSeq
-        StringSequence aListSourceSeq;
+        css::uno::Sequence<OUString> aListSourceSeq;
         if (nVersion == 0x0001)
         {
             // Create ListSourceSeq from String
@@ -660,7 +660,7 @@ namespace frm
             &&  !hasExternalListSource()
             )
         {
-            setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
+            setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
         }
 
         if (nVersion > 3)
@@ -932,7 +932,7 @@ namespace frm
                     Reference<XNameAccess> xFieldNames = getTableFields(xConnection, sListSource);
                     if (xFieldNames.is())
                     {
-                        StringSequence seqNames = xFieldNames->getElementNames();
+                        css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
                         ::std::copy(
                             seqNames.getConstArray(),
                             seqNames.getConstArray() + seqNames.getLength(),
@@ -1009,7 +1009,7 @@ namespace frm
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
             if ( !hasExternalListSource() )
-                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
+                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
 
             m_aListRowSet.dispose();
         }
@@ -1805,9 +1805,9 @@ namespace frm
     }
 
 
-    StringSequence SAL_CALL OListBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OListBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        StringSequence aSupported = OBoundControl::getSupportedServiceNames();
+        css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
         aSupported.realloc(aSupported.getLength() + 2);
 
         OUString* pArray = aSupported.getArray();
