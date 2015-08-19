@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <svtools/miscopt.hxx>
+#include <rtl/character.hxx>
 
 struct SbiParseStack {              // "Stack" for statement-blocks
     SbiParseStack* pNext;           // Chain
@@ -677,7 +678,7 @@ void SbiParser::DefXXX()
     while( !bAbort )
     {
         if( Next() != SYMBOL ) break;
-        ch1 = aSym.toAsciiUpperCase()[0];
+        ch1 = rtl::toAsciiUpperCase(aSym[0]);
         ch2 = 0;
         if( Peek() == MINUS )
         {
@@ -685,7 +686,7 @@ void SbiParser::DefXXX()
             if( Next() != SYMBOL ) Error( ERRCODE_BASIC_SYMBOL_EXPECTED );
             else
             {
-                ch2 = aSym.toAsciiUpperCase()[0];
+                ch2 = rtl::toAsciiUpperCase(aSym[0]);
                 if( ch2 < ch1 ) Error( ERRCODE_BASIC_SYNTAX ), ch2 = 0;
             }
         }
