@@ -34,8 +34,7 @@
 
 
 OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
-        com::sun::star::uno::Reference<
-            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+        TranferableText xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
@@ -60,8 +59,7 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
 }
 
 OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
-        com::sun::star::uno::Reference<
-            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+        TranferableText xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
@@ -82,6 +80,12 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
                                                   true);
 
     return pOutl->CreateParaObject();
+}
+
+TranferableText TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
+{
+    ESelection aWholeTextSel(0,0, 1000000, 1000000);
+    return pOutl->pEditEngine->CreateTransferable(aWholeTextSel);
 }
 
 
@@ -174,8 +178,7 @@ OutlinerParaObject *impGetDeeplyMergedParaObject(Outliner *pOutl,
 
 // class OverflowingText
 
-OverflowingText::OverflowingText(com::sun::star::uno::Reference<
-        com::sun::star::datatransfer::XTransferable> xOverflowingContent) :
+OverflowingText::OverflowingText(TranferableText xOverflowingContent) :
         mxOverflowingContent(xOverflowingContent)
 {
 

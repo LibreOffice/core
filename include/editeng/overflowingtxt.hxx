@@ -31,6 +31,9 @@ namespace com { namespace sun { namespace star {
     class XTransferable;
 } } } }
 
+typedef com::sun::star::uno::Reference<
+            com::sun::star::datatransfer::XTransferable> TranferableText;
+
 class OUString;
 
 
@@ -41,19 +44,20 @@ class Outliner;
 
 /*
  * A collection of static methods for attaching text.
- * Strongly coupled with some of the classes in this files
+ * Strongly coupled with some of the classes in this file.
  */
 class TextChainingUtils
 {
     public:
+
+    static TranferableText CreateTransferableFromText(Outliner *);
+
     static OutlinerParaObject *JuxtaposeParaObject(
-            com::sun::star::uno::Reference<
-            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+            TranferableText xOverflowingContent,
             Outliner *,
             OutlinerParaObject *);
     static OutlinerParaObject *DeeplyMergeParaObject(
-            com::sun::star::uno::Reference<
-            com::sun::star::datatransfer::XTransferable> xOverflowingContent,
+            TranferableText xOverflowingContent,
             Outliner *,
             OutlinerParaObject *);
 };
@@ -74,12 +78,10 @@ public:
 
 private:
     friend class Outliner;
-    OverflowingText(com::sun::star::uno::Reference<
-        com::sun::star::datatransfer::XTransferable> xOverflowingContent);
+    OverflowingText(TranferableText xOverflowingContent);
 
 
-    com::sun::star::uno::Reference<
-        com::sun::star::datatransfer::XTransferable> mxOverflowingContent;
+    TranferableText mxOverflowingContent;
 };
 
 class NonOverflowingText {
