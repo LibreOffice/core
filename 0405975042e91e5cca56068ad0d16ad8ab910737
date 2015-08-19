@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aed3d3a_34c1c681",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2015-08-19T09:16:13Z",
+      "side": 1,
+      "message": "If nested types are not supported it probably would be a good idea to let the user know (if nested types are detected on store)",
+      "revId": "0405975042e91e5cca56068ad0d16ad8ab910737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_74bb4e0f",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2015-08-19T09:16:13Z",
+      "side": 1,
+      "message": "I think maybe a new record type like B_USERTYPE or something might be better, e.g. if enums were saved to binary[*] they look like they should be saved also as B_SBXOBJECTS, how could you distinguish them (if both were persisted) if that was the case\n\n[*] ok I think enums are just available in vbasupport mode but... I dunno perhaps there are other things stored as SbxObjects that we don\u0027t currently persist, maybe support for enums could in the future be supported in \u0027normal\u0027 basic. Anyway better to make this as unambiguous as possible to save trouble if this stuff is enhanced in the future",
+      "revId": "0405975042e91e5cca56068ad0d16ad8ab910737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
