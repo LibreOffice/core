@@ -25,11 +25,11 @@
 #include "address.hxx"
 #include "global.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <memory>
 #include <set>
+#include <vector>
 
 class ScDocument;
 struct ScSortParam;
@@ -219,9 +219,15 @@ public:
      */
     class AnonDBs
     {
-        typedef ::boost::ptr_vector<ScDBData> DBsType;
-        DBsType maDBs;
+        typedef ::std::vector<std::unique_ptr<ScDBData>> DBsType;
+        DBsType m_DBs;
+
+        AnonDBs& operator=(AnonDBs const&) = delete;
+
     public:
+        AnonDBs();
+        AnonDBs(AnonDBs const&);
+
         typedef DBsType::iterator iterator;
         typedef DBsType::const_iterator const_iterator;
 
