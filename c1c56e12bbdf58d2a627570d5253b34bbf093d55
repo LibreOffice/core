@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aed3d3a_b49f96b3",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-19T05:14:55Z",
+      "side": 1,
+      "message": "This is redundant. \"A function defined within a class definition is an inline function.\"",
+      "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_14a5a203",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-19T05:14:55Z",
+      "side": 1,
+      "message": "same here, and one more time below",
+      "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aed3d3a_346546e1",
         "filename": "include/o3tl/cow_wrapper.hxx",
         "patchSetId": 1
@@ -13,6 +47,24 @@
       "writtenOn": "2015-08-19T02:25:24Z",
       "side": 1,
       "message": "Not really much different from the copy constructor. I think having a move constructor defined is nice, but I won\u0027t be heartbroken if this doesn\u0027t get pushed. If someone can think of a better move constructor that would be great. This is the best I could come up with.",
+      "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aed3d3a_f4a91ee1",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-19T05:14:55Z",
+      "side": 1,
+      "message": "Heh - a heap alloc is really worse than just using the copy ctor as-is. ;)\n\nJust gutting the rSrc object, and checking for nullptr in the dtor could be better.",
+      "parentUuid": "9aed3d3a_346546e1",
       "revId": "c1c56e12bbdf58d2a627570d5253b34bbf093d55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
