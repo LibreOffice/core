@@ -2776,14 +2776,14 @@ Content::ResourceType Content::resourceTypeForLocks(
             xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
             uno::Sequence< ucb::LockEntry > aSupportedLocks;
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
-                >>= aSupportedLocks )            //get the cached value for supportedlock
+                 >>= aSupportedLocks )            //get the cached value for supportedlock
             {
                 for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                 {
                     if ( aSupportedLocks[ n ].Scope
-                            == ucb::LockScope_EXCLUSIVE &&
+                         == ucb::LockScope_EXCLUSIVE &&
                          aSupportedLocks[ n ].Type
-                            == ucb::LockType_WRITE )
+                         == ucb::LockType_WRITE )
                         eResourceTypeForLocks = DAV;
                 }
             }
@@ -2862,36 +2862,39 @@ Content::ResourceType Content::resourceTypeForLocks(
                 //grab the error code
                 switch( e.getStatus() )
                 {
-                case SC_NOT_FOUND:
-                    SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks - URL: "<<m_xIdentifier->getContentIdentifier()<<" not found. ");
-                    eResourceTypeForLocks = NOT_FOUND;
-                    break;
-                    // some servers returns this, instead
-                    // TODO: probably remove it, when OPTIONS implemented
-                    // the meaning of SC_FORBIDDEN is, according to http://tools.ietf.org/html/rfc7231#section-6.5.3
-                    // The 403 (Forbidden) status code indicates that the server understood
-                    // the request but refuses to authorize it
-                case SC_FORBIDDEN:
-                    // this returned errors are part of base http 1.1 RFCs
-                                            // see:
-                case SC_NOT_IMPLEMENTED:    // http://tools.ietf.org/html/rfc7231#section-6.6.2
-                case SC_METHOD_NOT_ALLOWED: // http://tools.ietf.org/html/rfc7231#section-6.5.5
-                    // they all mean the resource is NON_DAV
-                    SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException (SC_FORBIDDEN, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
-                    eResourceTypeForLocks = NON_DAV;
-                    break;
-                default:
-                    //fallthrough
-                    SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
-                    eResourceTypeForLocks = UNKNOWN;
+                    case SC_NOT_FOUND:
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks - URL: "<<m_xIdentifier->getContentIdentifier()<<" not found. ");
+                        eResourceTypeForLocks = NOT_FOUND;
+                        break;
+                        // some servers returns this, instead
+                        // TODO: probably remove it, when OPTIONS implemented
+                        // the meaning of SC_FORBIDDEN is, according to http://tools.ietf.org/html/rfc7231#section-6.5.3
+                        // The 403 (Forbidden) status code indicates that the server understood
+                        // the request but refuses to authorize it
+                    case SC_FORBIDDEN:
+                        // this returned errors are part of base http 1.1 RFCs
+                        // see:
+                    case SC_NOT_IMPLEMENTED:    // http://tools.ietf.org/html/rfc7231#section-6.6.2
+                    case SC_METHOD_NOT_ALLOWED: // http://tools.ietf.org/html/rfc7231#section-6.5.5
+                        // they all mean the resource is NON_DAV
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException (SC_FORBIDDEN, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
+                        eResourceTypeForLocks = NON_DAV;
+                        break;
+                    default:
+                        //fallthrough
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
+                        eResourceTypeForLocks = UNKNOWN;
                 }
             }
         }
     }
     osl::MutexGuard g(m_aMutex);
-    if (m_eResourceTypeForLocks == UNKNOWN) {
+    if (m_eResourceTypeForLocks == UNKNOWN)
+    {
         m_eResourceTypeForLocks = eResourceTypeForLocks;
-    } else {
+    }
+    else
+    {
         SAL_WARN_IF(
             eResourceTypeForLocks != m_eResourceTypeForLocks, "ucb.ucp.webdav",
             "different resource types for <" << rURL << ">: "
@@ -2957,44 +2960,64 @@ void Content::lock(
         // this exception should be managed by the issuer of 'lock' command
         switch(e.getError())
         {
-        case DAVException::DAV_LOCKED:
-        {
-            SAL_WARN( "ucb.ucp.webdav", "lock: resource already locked - URL: "<<m_xIdentifier->getContentIdentifier() );
-            throw(ucb::InteractiveLockingLockedException(
-                      OUString( "Locked!" ),
-                      static_cast< cppu::OWeakObject * >( this ),
-                      task::InteractionClassification_ERROR,
-                      aURL,
-                      false ));
-        }
-        break;
-        case DAVException::DAV_HTTP_ERROR:
-            //grab the error code
-            switch( e.getStatus() )
+            case DAVException::DAV_LOCKED:
             {
-                // this returned error is part of base http 1.1 RFCs
-            case SC_NOT_IMPLEMENTED:
-            case SC_METHOD_NOT_ALLOWED:
-                SAL_WARN( "ucb.ucp.webdav", "lock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
-                // act as nothing happened
-                // that's because when a resource is first created
-                // the lock is sent before the put, so the resource
-                // is actually created by LOCK, locking it before
-                // doing the first PUT, but if LOCK is not supported
-                // (simple web or DAV with lock disabled) we end with one of these two http
-                // errors
-                // details to LOCK on an unmapped (i.e. non existent) resource are in:
-                // http://tools.ietf.org/html/rfc4918#section-7.3
-                return;
+                SAL_WARN( "ucb.ucp.webdav", "lock: resource already locked - URL: "<<m_xIdentifier->getContentIdentifier() );
+                throw(ucb::InteractiveLockingLockedException(
+                          OUString( "Locked!" ),
+                          static_cast< cppu::OWeakObject * >( this ),
+                          task::InteractionClassification_ERROR,
+                          aURL,
+                          false ));
+            }
+            break;
+            case DAVException::DAV_HTTP_AUTH:
+            {
+                SAL_WARN( "ucb.ucp.webdav", "lock: DAVException Authentication error - URL: "<<m_xIdentifier->getContentIdentifier() );
+                // this could mean:
+                // - interaction handler for credential management not present (happens, depending
+                //   on the LO framework processing)
+                // - the remote site is a WebDAV with special configuration: read/only for read operations
+                //   and read/write for write operations, the user is not allowed to lock/write and
+                //   she cancelled the credentials request.
+                //   this is not actually an error, but the exception is sent directly from here, avoiding the automatic
+                //   management that takes part in cancelCommandExecution() below
+                // Unfortunately there is no InteractiveNetwork*Exception available to signal this
+                // since it mostly happens on read/only part of webdav, this appears to be the most correct exception available
+                throw( ucb::InteractiveNetworkWriteException(
+                           OUString( "Authentication error while tring to lock! Write only WebDAV perhaps?" ),
+                           static_cast< cppu::OWeakObject * >( this ),
+                           task::InteractionClassification_ERROR,
+                           e.getData() ) );
+            }
+            break;
+            case DAVException::DAV_HTTP_ERROR:
+                //grab the error code
+                switch( e.getStatus() )
+                {
+                    // this returned error is part of base http 1.1 RFCs
+                    case SC_NOT_IMPLEMENTED:
+                    case SC_METHOD_NOT_ALLOWED:
+                        SAL_WARN( "ucb.ucp.webdav", "lock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
+                        // act as nothing happened
+                        // that's because when a resource is first created
+                        // the lock is sent before the put, so the resource
+                        // is actually created by LOCK, locking it before
+                        // doing the first PUT, but if LOCK is not supported
+                        // (simple web or DAV with lock disabled) we end with one of these two http
+                        // errors
+                        // details to LOCK on an unmapped (i.e. non existent) resource are in:
+                        // http://tools.ietf.org/html/rfc4918#section-7.3
+                        return;
+                        break;
+                    default:
+                        //fallthrough
+                        ;
+                }
                 break;
             default:
                 //fallthrough
                 ;
-            }
-            break;
-        default:
-            //fallthrough
-            ;
         }
 
         SAL_WARN( "ucb.ucp.webdav","lock: DAVException - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
@@ -3027,33 +3050,33 @@ void Content::unlock(
     {
         switch(e.getError())
         {
-        case DAVException::DAV_NOT_LOCKED:
-            SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException::DAV_NOT_LOCKED - URL: "<<m_xIdentifier->getContentIdentifier() );
-            // means that we don't own any lock on this resource
-            // intercepted here to remove a confusing indication to the user
-            // unfortunately this happens in some WebDAV server configuration
-            // acting as WebDAV and having lock/unlock enabled only
-            // for authorized user.
-            return;
-            break;
-        case DAVException::DAV_HTTP_ERROR:
-            //grab the error code
-            switch( e.getStatus() )
-            {
-                // this returned error is part of base http 1.1 RFCs
-            case SC_NOT_IMPLEMENTED:
-            case SC_METHOD_NOT_ALLOWED:
-                SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
+            case DAVException::DAV_NOT_LOCKED:
+                SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException::DAV_NOT_LOCKED - URL: "<<m_xIdentifier->getContentIdentifier() );
+                // means that we don't own any lock on this resource
+                // intercepted here to remove a confusing indication to the user
+                // unfortunately this happens in some WebDAV server configuration
+                // acting as WebDAV and having lock/unlock enabled only
+                // for authorized user.
                 return;
+                break;
+            case DAVException::DAV_HTTP_ERROR:
+                //grab the error code
+                switch( e.getStatus() )
+                {
+                    // this returned error is part of base http 1.1 RFCs
+                    case SC_NOT_IMPLEMENTED:
+                    case SC_METHOD_NOT_ALLOWED:
+                        SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
+                        return;
+                        break;
+                    default:
+                        //fallthrough
+                        ;
+                }
                 break;
             default:
                 //fallthrough
                 ;
-            }
-            break;
-        default:
-            //fallthrough
-            ;
         }
         SAL_WARN( "ucb.ucp.webdav","unlock: DAVException - URL: "<<m_xIdentifier->getContentIdentifier()<<", DAV error: "<< e.getError() <<", HTTP error: "<<e.getStatus() );
         cancelCommandExecution( e, Environment );
