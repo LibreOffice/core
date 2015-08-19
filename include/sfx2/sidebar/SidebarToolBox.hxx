@@ -61,6 +61,8 @@ public:
                        const css::uno::Reference<css::frame::XToolbarController>& rxController,
                        const OUString& rsCommandName);
 
+    css::uno::Reference<css::frame::XToolbarController> GetFirstController();
+
 private:
     Image maItemSeparator;
 

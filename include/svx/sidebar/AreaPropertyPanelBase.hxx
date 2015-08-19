@@ -23,6 +23,7 @@
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -124,7 +125,7 @@ protected:
     VclPtr<FixedText>                                          mpColorTextFT;
     VclPtr<SvxFillTypeBox>                                     mpLbFillType;
     VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
-    VclPtr<ToolBox>                                            mpToolBoxColor; // for new color picker
+    VclPtr<sfx2::sidebar::SidebarToolBox>                                            mpToolBoxColor; // for new color picker
     VclPtr<FixedText>                                          mpTrspTextFT;
     VclPtr<ListBox>                                            mpLBTransType;
     VclPtr<MetricField>                                        mpMTRTransparent;

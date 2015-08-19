@@ -29,6 +29,8 @@
 #include <svx/PaletteManager.hxx>
 #include <vcl/lstbox.hxx>
 
+#include <functional>
+
 class BorderColorStatus;
 
 class SvxColorWindow_Impl : public SfxPopupWindow
@@ -50,6 +52,8 @@ private:
     PaletteManager&     mrPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
 
+    std::function<void(const OUString&, const Color&)> maColorSelectFunction;
+
     DECL_LINK( SelectHdl, SvxColorValueSet* );
     DECL_LINK( SelectPaletteHdl, void *);
     DECL_LINK( AutoColorClickHdl, void * );
@@ -66,7 +70,8 @@ public:
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
-                         vcl::Window* pParentWindow);
+                         vcl::Window* pParentWindow,
+                         std::function<void(const OUString&, const Color&)> maColorSelectFunction);
     virtual ~SvxColorWindow_Impl();
     virtual void        dispose() SAL_OVERRIDE;
     void                StartSelection();

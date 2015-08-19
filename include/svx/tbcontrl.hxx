@@ -225,6 +225,7 @@ public:
     Color GetColor();
 };
 
+typedef std::function<void(const OUString&, const Color&)> ColorSelectFunction;
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     using SfxToolBoxControl::StateChanged;
@@ -233,6 +234,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     PaletteManager mPaletteManager;
     BorderColorStatus maBorderColorStatus;
     bool bSidebarType;
+    ColorSelectFunction maColorSelectFunction;
     DECL_LINK(SelectedHdl, Color*);
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -247,6 +249,8 @@ public:
     // XSubToolbarController
     virtual sal_Bool SAL_CALL opensSubToolbar() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL updateImage() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    void setColorSelectFunction(ColorSelectFunction aColorSelectFunction);
 };
 
 class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl

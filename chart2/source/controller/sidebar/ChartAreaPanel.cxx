@@ -19,6 +19,8 @@
 #include <svx/xflftrit.hxx>
 #include <svx/unomid.hxx>
 
+#include <svx/tbcontrl.hxx>
+
 namespace chart { namespace sidebar {
 
 namespace {
@@ -237,7 +239,8 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
-    mbModelValid(true)
+    mbModelValid(true),
+    maFillColorWrapper(mxModel)
 {
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
     mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
@@ -269,6 +272,10 @@ void ChartAreaPanel::Initialize()
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
+
+    css::uno::Reference<css::frame::XToolbarController> xController = mpToolBoxColor->GetFirstController();
+    SvxColorToolBoxControl* pToolBoxColor = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
+    pToolBoxColor->setColorSelectFunction(maFillColorWrapper);
 
     updateData();
 }

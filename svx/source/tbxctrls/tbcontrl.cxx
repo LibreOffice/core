@@ -1215,7 +1215,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
-                                          vcl::Window*                    pParentWindow ):
+                                          vcl::Window*                    pParentWindow,
+                                          std::function<void(const OUString&, const Color&)> aFunction):
 
     SfxPopupWindow( nSlotId, pParentWindow,
                     "palette_popup_window", "svx/ui/colorwindow.ui",
@@ -1223,7 +1224,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     theSlotId( nSlotId ),
     maCommand( rCommand ),
     mrPaletteManager( rPaletteManager ),
-    mrBorderColorStatus( rBorderColorStatus )
+    mrBorderColorStatus( rBorderColorStatus ),
+    maColorSelectFunction(aFunction)
 {
     get(mpPaletteListBox,     "palette_listbox");
     get(mpButtonAutoColor,    "auto_color_button");
@@ -1365,7 +1367,7 @@ IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
     if ( maSelectedLink.IsSet() )
         maSelectedLink.Call(&aColor);
 
-    PaletteManager::DispatchColorCommand(maCommand, aColor);
+    maColorSelectFunction(maCommand, aColor);
     return 0;
 }
 
@@ -1407,7 +1409,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl)
     if ( maSelectedLink.IsSet() )
         maSelectedLink.Call(&aColor);
 
-    PaletteManager::DispatchColorCommand(maCommand, aColor);
+    maColorSelectFunction(maCommand, aColor);
     return 0;
 }
 
@@ -2537,8 +2539,9 @@ VclPtr<vcl::Window> SvxFontNameToolBoxControl::CreateItemWindow( vcl::Window *pP
 SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
-    ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
+    ToolBox& rTbx ):
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
+    maColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
     if ( dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) )
         bSidebarType = true;
@@ -2611,6 +2614,12 @@ SvxColorToolBoxControl::~SvxColorToolBoxControl()
 {
 }
 
+void SvxColorToolBoxControl::setColorSelectFunction(ColorSelectFunction aColorSelectFunction)
+{
+    maColorSelectFunction = aColorSelectFunction;
+    mPaletteManager.SetColorSelectFunction(aColorSelectFunction);
+}
+
 VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin =
@@ -2622,7 +2631,8 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
-                            &GetToolBox() );
+                            &GetToolBox(),
+                            maColorSelectFunction);
 
     switch( GetSlotId() )
     {

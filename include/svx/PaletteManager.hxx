@@ -50,6 +50,8 @@ class PaletteManager
     std::deque<Color>       maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
+    std::function<void(const OUString&, const Color&)> maColorSelectFunction;
+
 public:
     PaletteManager();
     ~PaletteManager();
@@ -69,6 +71,9 @@ public:
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
     void        PopupColorPicker(const OUString& aCommand);
+
+    void        SetColorSelectFunction(std::function<void(const OUString&, const Color&)> aColorSelectFunction);
+
     static void DispatchColorCommand(const OUString& aCommand, const Color& rColor);
 };
 

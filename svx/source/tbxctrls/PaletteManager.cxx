@@ -36,7 +36,8 @@ PaletteManager::PaletteManager() :
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(NULL),
-    mLastColor(COL_AUTO)
+    mLastColor(COL_AUTO),
+    maColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
     LoadPalettes();
     mnNumOfPalettes += m_Palettes.size();
@@ -217,6 +218,11 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
     mpBtnUpdater = pBtnUpdater;
 }
 
+void PaletteManager::SetColorSelectFunction(std::function<void(const OUString&, const Color&)> aColorSelectFunction)
+{
+    maColorSelectFunction = aColorSelectFunction;
+}
+
 void PaletteManager::PopupColorPicker(const OUString& aCommand)
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
@@ -230,7 +236,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
         AddRecentColor( mLastColor );
-        DispatchColorCommand(aCommandCopy, mLastColor);
+        maColorSelectFunction(aCommandCopy, mLastColor);
     }
 }
 

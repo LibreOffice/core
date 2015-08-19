@@ -205,6 +205,14 @@ sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubTool
     return 0;
 }
 
+css::uno::Reference<css::frame::XToolbarController> SidebarToolBox::GetFirstController()
+{
+    if (maControllers.empty())
+        return css::uno::Reference<css::frame::XToolbarController>();
+
+    return maControllers.begin()->second.mxController;
+}
+
 void SidebarToolBox::RegisterHandlers()
 {
     if ( ! mbAreHandlersRegistered)

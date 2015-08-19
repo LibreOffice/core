@@ -30,6 +30,7 @@
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
+#include "ChartColorWrapper.hxx"
 
 class XFillFloatTransparenceItem;
 class XFillTransparenceItem;
@@ -92,6 +93,8 @@ private:
 
     bool mbUpdate;
     bool mbModelValid;
+
+    ChartColorWrapper maFillColorWrapper;
 };
 
 } } // end of namespace svx::sidebar

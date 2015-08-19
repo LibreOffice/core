@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTCOLORWRAPPER_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTCOLORWRAPPER_HXX
+
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <tools/color.hxx>
+
+namespace chart { namespace sidebar {
+
+class ChartColorWrapper
+{
+private:
+
+public:
+    ChartColorWrapper(css::uno::Reference<css::frame::XModel> xModel);
+
+    void operator()(const OUString& rCommand, const Color& rColor);
+
+    void updateModel(css::uno::Reference<css::frame::XModel> xModel);
+private:
+
+    // not the chart frame
+    // you need to get the chart frame through getActiveFrame
+    css::uno::Reference<css::frame::XModel> mxModel;
+
+    OUString maPropertyName;
+};
+
+} }
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
