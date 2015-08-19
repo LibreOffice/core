@@ -2991,6 +2991,28 @@ void Content::lock(
                         false );
             }
             break;
+            case DAVException::DAV_HTTP_AUTH:
+            {
+                SAL_WARN( "ucb.ucp.webdav", "lock: DAVException Authentication error - URL: <"
+                          << m_xIdentifier->getContentIdentifier() << ">" );
+                // this could mean:
+                // - interaction handler for credential management not present (happens, depending
+                //   on the LO framework processing)
+                // - the remote site is a WebDAV with special configuration: read/only for read operations
+                //   and read/write for write operations, the user is not allowed to lock/write and
+                //   she cancelled the credentials request.
+                //   this is not actually an error, but the exception is sent directly from here, avoiding the automatic
+                //   management that takes part in cancelCommandExecution() below
+                // Unfortunately there is no InteractiveNetwork*Exception available to signal this
+                // since it mostly happens on read/only part of webdav, this appears to be the most correct exception available
+                throw
+                    ucb::InteractiveNetworkWriteException(
+                        OUString( "Authentication error while tring to lock! Write only WebDAV perhaps?" ),
+                        static_cast< cppu::OWeakObject * >( this ),
+                        task::InteractionClassification_ERROR,
+                        e.getData() );
+            }
+            break;
             case DAVException::DAV_HTTP_ERROR:
                 //grab the error code
                 switch( e.getStatus() )
