@@ -536,7 +536,8 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
                 }
             }
 
-            AddUndo(pTxtUndo);
+            if (pTxtUndo)
+                AddUndo(pTxtUndo);
 
             //maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
             //SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
