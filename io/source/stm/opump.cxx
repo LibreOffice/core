@@ -33,7 +33,7 @@
 
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -53,7 +53,7 @@ using namespace com::sun::star::io;
 
 namespace io_stm {
 
-    class Pump : public WeakImplHelper5<
+    class Pump : public WeakImplHelper<
           XActiveDataSource, XActiveDataSink, XActiveDataControl, XConnectable, XServiceInfo >
     {
         Mutex                                   m_aMutex;

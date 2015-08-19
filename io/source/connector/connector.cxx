@@ -22,7 +22,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/unourl.hxx"
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector
 {
-    class OConnector : public WeakImplHelper2< XConnector, XServiceInfo >
+    class OConnector : public WeakImplHelper< XConnector, XServiceInfo >
     {
         Reference< XMultiComponentFactory > _xSMgr;
         Reference< XComponentContext > _xCtx;

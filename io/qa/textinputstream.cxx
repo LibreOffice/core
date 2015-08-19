@@ -23,7 +23,7 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include "com/sun/star/uno/RuntimeException.hdl"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -34,7 +34,7 @@
 
 namespace {
 
-class Input: public cppu::WeakImplHelper1<css::io::XInputStream> {
+class Input: public cppu::WeakImplHelper<css::io::XInputStream> {
 public:
     Input(): open_(true), index_(0) {}
 

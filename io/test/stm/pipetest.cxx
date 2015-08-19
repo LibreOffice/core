@@ -28,7 +28,7 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -91,7 +91,7 @@ private:
 
 
 
-class OPipeTest : public WeakImplHelper1 < XSimpleTest >
+class OPipeTest : public WeakImplHelper < XSimpleTest >
 {
 public:
     OPipeTest( const Reference< XMultiServiceFactory >  & rFactory );

@@ -34,7 +34,7 @@
 
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -60,7 +60,7 @@ static void mywait()
     osl_yieldThread();
 }
 
-class OPumpTest : public WeakImplHelper1 < XSimpleTest >
+class OPumpTest : public WeakImplHelper < XSimpleTest >
 {
 public:
     OPumpTest( const Reference< XMultiServiceFactory >  & rFactory );
@@ -226,7 +226,7 @@ void OPumpTest::testSimple( const Reference < XInterface > &r )
 
 }
 
-class TestListener: public WeakImplHelper1< XStreamListener >
+class TestListener: public WeakImplHelper< XStreamListener >
 {
 public:
     sal_Bool m_bStarted;

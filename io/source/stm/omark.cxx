@@ -31,7 +31,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>
@@ -66,7 +66,7 @@ namespace io_stm {
 *
 **********************/
 class OMarkableOutputStream :
-    public WeakImplHelper5< XOutputStream ,
+    public WeakImplHelper< XOutputStream ,
                             XActiveDataSource ,
                             XMarkableStream ,
                             XConnectable,
@@ -479,7 +479,7 @@ Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames()
 
 
 class OMarkableInputStream :
-    public WeakImplHelper5
+    public WeakImplHelper
     <
              XInputStream,
              XActiveDataSink,
