@@ -708,13 +708,18 @@ void OutlinerView::PasteSpecial()
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
         }
 
-        // XXX: Chaining call
-        if (aEndCutPasteLink.IsSet())
-            aEndCutPasteLink.Call(NULL);
-
         pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
         pEditView->ShowCursor( true, true );
+
+        // Chaining call
+        // NOTE: We need to do this last because it pEditView may be deleted if a switch of box occurs
+        // (If you you have it here you don't need to set updateMode=true everywhere in TextChainFlow)
+        // XXX: I wonder if it has to be within the Undo action for some reason though
+
+        if (aEndCutPasteLink.IsSet())
+            aEndCutPasteLink.Call(NULL);
+
     }
 
 }
