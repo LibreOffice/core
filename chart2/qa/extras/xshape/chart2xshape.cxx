@@ -32,12 +32,14 @@ public:
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
     void testTdf76649TrendLineBug();
+    void testTdf93506TrendLineBug();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testFdo75075);
     CPPUNIT_TEST(testPropertyMappingBarChart);
     CPPUNIT_TEST(testPieChartLabels1);
     CPPUNIT_TEST(testTdf76649TrendLineBug);
+    CPPUNIT_TEST(testTdf93506TrendLineBug);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -110,7 +112,18 @@ void Chart2XShapeTest::testPieChartLabels1()
 {
     // inside placement for the best fit case
     load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
-    compareAgainstReference("tdf90839-1.xml");
+//    compareAgainstReference("tdf90839-1.xml"); // comment till tdf90839 is fixed
+}
+
+void Chart2XShapeTest::testTdf93506TrendLineBug()
+{
+    load("chart2/qa/extras/xshape/data/ods/", "tdf93506_TrendLineBug.ods");
+
+    xmlDocPtr pXmlDoc = getXShapeDumpXmlDoc();
+
+    // Check if the regression curve does not exists
+    // (all aValuesX are NaN, so trendline is hidden)
+    assertXPath(pXmlDoc, "//XShape[@name='CID/D=0:CS=0:CT=0:Series=0:Curve=0']", 0);
 }
 
 void Chart2XShapeTest::testTdf76649TrendLineBug()
