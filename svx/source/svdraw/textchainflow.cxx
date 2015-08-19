@@ -310,7 +310,8 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 
 void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
+    //OutlinerParaObject *pNewText =
+    mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
     //impSetTextForEditingOutliner(pNewText); //XXX: Don't call it since we do everything with NonOverflowingText::ToParaObject // XXX: You may need this for Underflow
 
     // XXX: I'm not sure whether we need this (after all operations such as Paste don't change this - as far as I understand)

@@ -1421,6 +1421,17 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
     TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
     bool bIsOverflow;
 
+    // Some debug output
+    size_t nObjCount = pPage->GetObjCount();
+    for (unsigned i = 0; i < nObjCount; i++) {
+        SdrTextObj *pCurObj = (SdrTextObj *) pPage->GetObj(i);
+
+        if (pCurObj == this) {
+            fprintf(stderr, "Working on TextBox %d\n", i);
+            break;
+        }
+    }
+
     aTxtChainFlow.CheckForFlowEvents(&rOutliner);
 
     if (aTxtChainFlow.IsUnderflow() && !IsInEditMode())
