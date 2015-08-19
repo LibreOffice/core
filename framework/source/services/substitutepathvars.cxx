@@ -260,7 +260,6 @@ public:
 
 protected:
     void            SetPredefinedPathVariables();
-    OUString   ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const;
 
     // Special case (transient) values can change during runtime!
     // Don't store them in the pre defined struct
@@ -787,21 +786,6 @@ throw ( NoSuchElementException, RuntimeException, std::exception )
     return impl_getSubstituteVariableValue( aVariable );
 }
 
-OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const
-{
-    OUString aResult;
-    OUString   aTemp;
-
-    osl::FileBase::getSystemPathFromFileURL( aOSLCompliantURL, aTemp );
-    osl::FileBase::getFileURLFromSystemPath( aTemp, aResult );
-
-    // Not all OSL URL's can be mapped to UCB URL's!
-    if ( aResult.isEmpty() )
-        return aOSLCompliantURL;
-    else
-        return aResult;
-}
-
 OUString SubstitutePathVariables::GetWorkPath() const
 {
     OUString aWorkPath;
@@ -826,7 +810,7 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     }
     else
         aWorkPath = x.get();
-    return ConvertOSLtoUCBURL( aWorkPath );
+    return aWorkPath;
 }
 
 OUString SubstitutePathVariables::GetHomeVariableValue() const
@@ -835,7 +819,7 @@ OUString SubstitutePathVariables::GetHomeVariableValue() const
     OUString   aHomePath;
 
     aSecurity.getHomeDir( aHomePath );
-    return ConvertOSLtoUCBURL( aHomePath );
+    return aHomePath;
 }
 
 OUString SubstitutePathVariables::GetPathVariableValue() const
@@ -1086,7 +1070,6 @@ throw ( RuntimeException )
         OUString aTemp;
         if ( osl::FileBase::getFileURLFromSystemPath( rURL, aTemp ) == osl::FileBase::E_None )
         {
-            aTemp = ConvertOSLtoUCBURL( aTemp );
             if ( !aTemp.isEmpty() )
             {
                 aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::NO_DECODE );
@@ -1238,7 +1221,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     // It's not possible to detect when an empty value would actually be used.
     // (note: getenv is a hack to detect if we're running in a unit test)
     if (aState == ::utl::Bootstrap::PATH_EXISTS || getenv("SRC_ROOT")) {
-        m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
+        m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ] = sVal;
     }
 
     // Set $(inst), $(instpath), $(insturl)
@@ -1297,7 +1280,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     // Set $(temp)
     OUString aTmp;
     osl::FileBase::getTempDirURL( aTmp );
-    m_aPreDefVars.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_TEMP ] = aTmp;
 }
 
 struct Instance {
