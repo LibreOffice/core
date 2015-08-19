@@ -1226,19 +1226,22 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
 
     // read sections
     sal_Size nSectPosPos = rStrm.Tell();
-    for( sal_Int32 nSectIdx = 0; (nSectIdx < nSectCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nSectIdx )
+    for (sal_Int32 nSectIdx = 0; nSectIdx < nSectCount; ++nSectIdx)
     {
         // read section guid/position pair
-        rStrm.Seek( nSectPosPos );
+        rStrm.Seek(nSectPosPos);
         SvGlobalName aSectGuid;
-        sal_uInt32 nSectPos;
         rStrm >> aSectGuid;
-        rStrm.ReadUInt32( nSectPos );
+        sal_uInt32 nSectPos(0);
+        rStrm.ReadUInt32(nSectPos);
+        if (!rStrm.good())
+            break;
         nSectPosPos = rStrm.Tell();
         // read section
-        rStrm.Seek( static_cast< sal_Size >( nSectPos ) );
-        if( rStrm.GetErrorCode() == SVSTREAM_OK )
-            LoadObject( rStrm, AddSection( aSectGuid ) );
+        rStrm.Seek(nSectPos);
+        LoadObject(rStrm, AddSection(aSectGuid));
+        if (!rStrm.good())
+            break;
     }
 }
 
