@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/BitmapMode.idl>
 #include <com/sun/star/awt/XBitmap.idl>
 #include <com/sun/star/drawing/RectanglePoint.idl>
-
+#include <com/sun/star/text/GraphicCrop.idl>
 
 
 module com { module sun { module star { module drawing {
