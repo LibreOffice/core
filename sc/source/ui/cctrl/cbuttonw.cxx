@@ -54,7 +54,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
                                bool         bBtnIn  /* = false */ )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
-        return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
+        return;
 
     // save old state
     bool        bHadFill   = pOut->IsFillColor();
