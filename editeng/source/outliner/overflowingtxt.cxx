@@ -89,7 +89,7 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
 TranferableText TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
 {
     const EditEngine &rEditEngine = pOutl->GetEditEngine();
-    sal_Int32 nLastPara = rEditEngine.GetParagraphCount()-1;
+    sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
     ESelection aWholeTextSel(0, 0, nLastPara, rEditEngine.GetTextLen(nLastPara));
 
     return rEditEngine.CreateTransferable(aWholeTextSel);

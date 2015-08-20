@@ -2159,8 +2159,8 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         //sal_Int32 nStartPos = 0;
         ESelection aOverflowingTextSelection;
 
-        const sal_Int32 nEndPara = 1000000;
-        const sal_Int32 nEndPos = 1000000;
+        const sal_Int32 nEndPara = GetParagraphCount()-1;
+        const sal_Int32 nEndPos = pEditEngine->GetTextLen(nEndPara);
 
         if (nLen == 0) {
             // XXX: What happens inside this case might be dependent on the joining paragraps or not-thingy
