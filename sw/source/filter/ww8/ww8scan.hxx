@@ -1265,7 +1265,7 @@ public:
     sal_Int32 lcbPlcfbkl;   // 0x114 sal_Int32
 
     WW8_FC fcCmds;      // 0x118 FC
-    sal_Int32 lcbCmds;      // 0x11c
+    sal_uInt32 lcbCmds;      // 0x11c
 
     WW8_FC fcPlcfmcr;       // 0x120 FC
     sal_Int32 lcbPlcfmcr;       // 0x124

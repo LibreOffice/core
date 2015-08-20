@@ -5172,14 +5172,14 @@ namespace
     {
         if (eVer <= ww::eWW2)
         {
-            sal_uInt16 nShort;
-            rSt.ReadUInt16( nShort );
+            sal_uInt16 nShort(0);
+            rSt.ReadUInt16(nShort);
             return nShort;
         }
         else
         {
-            sal_uInt32 nLong;
-            rSt.ReadUInt32( nLong );
+            sal_uInt32 nLong(0);
+            rSt.ReadUInt32(nLong);
             return nLong;
         }
     }

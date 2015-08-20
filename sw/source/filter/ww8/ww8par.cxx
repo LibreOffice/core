@@ -4651,15 +4651,14 @@ void SwWW8ImplReader::StoreMacroCmds()
         {
             uno::Reference < io::XStream > xStream =
                     xRoot->openStreamElement( OUString(SL::aMSMacroCmds), embed::ElementModes::READWRITE );
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
+            std::unique_ptr<SvStream> xOutStream(::utl::UcbStreamHelper::CreateStream(xStream));
 
-            sal_uInt8 *pBuffer = new sal_uInt8[m_pWwFib->lcbCmds];
-            m_pWwFib->lcbCmds = m_pTableStream->Read(pBuffer, m_pWwFib->lcbCmds);
-            pStream->Write(pBuffer, m_pWwFib->lcbCmds);
-            delete[] pBuffer;
-            delete pStream;
+            sal_uInt32 lcbCmds = std::min<sal_uInt32>(m_pWwFib->lcbCmds, m_pTableStream->remainingSize());
+            std::unique_ptr<sal_uInt8[]> xBuffer(new sal_uInt8[lcbCmds]);
+            m_pWwFib->lcbCmds = m_pTableStream->Read(xBuffer.get(), lcbCmds);
+            xOutStream->Write(xBuffer.get(), m_pWwFib->lcbCmds);
         }
-        catch ( const uno::Exception& )
+        catch (...)
         {
         }
     }
