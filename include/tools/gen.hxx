@@ -426,10 +426,6 @@ public:
      * Expands the rectangle in all directions by the input value.
      */
     inline void expand(long nExpandBy);
-    /**
-     * Contracts the rectangle in all directions by the input value.
-     */
-    ;
 
 private:
     long                nLeft;
