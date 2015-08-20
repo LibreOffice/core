@@ -97,7 +97,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bool bMustMergeParaOF = bMustMergeParaAmongLinks || mbOFisUFinduced;
 
     // XXX
-    bMustMergeParaOF = false; // XXX: Experiment: no deep merging.
+    bMustMergeParaOF = true; // XXX: Experiment: no deep merging.
 
     mpOverflChText = bOverflow ?
                      new OFlowChainedText(pFlowOutl, bMustMergeParaOF) :
