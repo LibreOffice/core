@@ -2239,7 +2239,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
             const SwFormatURL& rURLItem = pFormat->GetURL();
             if( rURLItem.GetMap() || !rURLItem.GetURL().isEmpty() )
             {
-                SwFlyFrm* pFly = pFormat->GetFrm( &aPt, false );
+                SwFlyFrm* pFly = pFormat->GetFrm( &aPt );
                 SwPosition aTmpPos( *pBodySttNd );
                 if( pFly &&
                     GetBodyTextNode( *GetDoc(), aTmpPos, *pFly->GetLower() ) )
@@ -2294,7 +2294,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         }
         else // then is it a fly
         {
-            SwFlyFrm* pFly = pFndFormat->GetFrm(&aPt, false );
+            SwFlyFrm* pFly = pFndFormat->GetFrm(&aPt);
             if( pFly )
             {
                 static_cast<SwFEShell*>(this)->SelectFlyFrm( *pFly, true );

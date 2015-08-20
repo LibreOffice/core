@@ -1995,7 +1995,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                     0 );
-        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, true, true);
+        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, true);
         aSet.Put( aCharAttrsAtPaM );
     }
 
@@ -2115,7 +2115,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 
     if ( pTextNode->HasBullet() || pTextNode->HasNumber() )
     {
-        pSet->Put( pTextNode->GetAttr(RES_PARATR_LIST_LEVEL, true) );
+        pSet->Put( pTextNode->GetAttr(RES_PARATR_LIST_LEVEL) );
     }
     pSet->Put( pTextNode->SwContentNode::GetAttr(RES_UL_SPACE) );
     pSet->Put( pTextNode->SwContentNode::GetAttr(RES_LR_SPACE) );
@@ -3856,7 +3856,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
             if (headStr == "Heading")
             {
                 OUString intStr = sValue.copy(8);
-                sal_Int32 headingLevel = intStr.toInt32(10);
+                sal_Int32 headingLevel = intStr.toInt32();
                 return headingLevel;
             }
         }
@@ -3872,7 +3872,7 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
     uno::Any Ret;
     OUString strHeading("heading-level:");
     if( nHeadingLevel >= 0 )
-        strHeading += OUString::number(nHeadingLevel, 10);
+        strHeading += OUString::number(nHeadingLevel);
     strHeading += ";";
 
     strHeading += strHeading.copy(8); // tdf#84102: expose the same attribute with the name "level"

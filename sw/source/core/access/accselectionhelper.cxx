@@ -350,8 +350,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( aChild.GetSwFrm() )
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
-                m_rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
-                true ) );
+                m_rContext.GetMap()->GetContextImpl( aChild.GetSwFrm() ) );
         if( xChildImpl.is() )
         {
             xChildImpl->SetParent( &m_rContext );
@@ -362,7 +361,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     {
         ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
                 m_rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
-                                          &m_rContext, true )  );
+                                          &m_rContext )  );
         if( xChildImpl.is() )
             xChild = xChildImpl.get();
     }

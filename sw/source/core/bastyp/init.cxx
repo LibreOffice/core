@@ -776,7 +776,7 @@ void _FinitCore()
 #if OSL_DEBUG_LEVEL > 0
     // free defaults to prevent assertions
     if ( aAttrTab[0]->GetRefCount() )
-        SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, false);
+        SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN);
 #endif
     delete SwDoc::mpACmpltWords;
 

@@ -1701,7 +1701,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
 
                 // Move cursor to non-covered cell:
                 const SwTableNode* pTableNd = pTableBoxStartNode->FindTableNode();
-                pTableBox = & pTableBox->FindStartOfRowSpan( pTableNd->GetTable(), USHRT_MAX );
+                pTableBox = & pTableBox->FindStartOfRowSpan( pTableNd->GetTable() );
                  SwNodeIndex& rPtIdx = GetPoint()->nNode;
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtIdx = aNewIdx;
@@ -1781,7 +1781,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
 
     // If the point/mark of the table cursor in the same box then set cursor to
     // beginning of the box
-    if( pTableCrsr && GetNode( true ).StartOfSectionNode() ==
+    if( pTableCrsr && GetNode().StartOfSectionNode() ==
                     GetNode( false ).StartOfSectionNode() )
     {
         if ( End() != GetPoint() )
@@ -1821,7 +1821,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             // than one paragraph. If we want to go down, we have to set the
             // point to the last frame in the table box. This is only necessary
             // if we do not already have a table selection
-            const SwStartNode* pTableNd = GetNode( true ).FindTableBoxStartNode();
+            const SwStartNode* pTableNd = GetNode().FindTableBoxStartNode();
             OSL_ENSURE( pTableNd, "pTableCrsr without SwTableNode?" );
 
             if ( pTableNd ) // safety first
@@ -1973,7 +1973,7 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
         {
             m_nRowSpanOffset = pTableBox->getRowSpan();
             // move cursor to non-covered cell:
-            pTableBox = & pTableBox->FindStartOfRowSpan( pTableNd->GetTable(), USHRT_MAX );
+            pTableBox = & pTableBox->FindStartOfRowSpan( pTableNd->GetTable() );
             SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
             rPtIdx = aNewIdx;
         }

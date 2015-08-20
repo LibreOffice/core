@@ -181,7 +181,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
 
     Any aRet;
     //SwFrm* pAnchor = static_cast<SwFlyFrm*>(mpFrm)->GetAnchor();
-    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrm, true);
+    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrm);
     //SwAccessibleNoTextFrame* pFrame = xFrame.get();
     //Reference< XAccessible > xAnchor = (XAccessible*)pFrame;
     aRet <<= xAnchor;

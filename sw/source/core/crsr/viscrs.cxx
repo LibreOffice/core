@@ -122,7 +122,7 @@ void SwVisCrsr::_SetPosAndShow()
     }
     else
     {
-        m_aTextCrsr.SetOrientation( 0 );
+        m_aTextCrsr.SetOrientation();
         aRect = SwRect( m_pCrsrShell->m_aCharRect.Pos(),
            Size( m_pCrsrShell->m_aCharRect.Width(), nTmpY ) );
         aRect.Pos().setY(aRect.Pos().getY() + m_pCrsrShell->m_aCrsrHeight.getX());

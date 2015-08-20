@@ -861,7 +861,7 @@ inline void
 SwTextNode::CutText(SwTextNode * const pDest, const SwIndex & rDestStart,
                     const SwIndex & rStart, const sal_Int32 nLen)
 {
-    CutImpl( pDest, rDestStart, rStart, nLen, true );
+    CutImpl( pDest, rDestStart, rStart, nLen );
 }
 
 inline sal_Int32 SwTextNode::GetSpaceLeft() const

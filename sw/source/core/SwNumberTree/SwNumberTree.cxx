@@ -72,7 +72,7 @@ SwNumberTreeNode * SwNumberTreeNode::CreatePhantom()
     else
     {
         pNew = Create();
-        pNew->SetPhantom(true);
+        pNew->SetPhantom();
         pNew->mpParent = this;
 
         std::pair<tSwNumberTreeChildren::iterator, bool> aInsert =

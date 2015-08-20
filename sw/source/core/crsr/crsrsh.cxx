@@ -854,7 +854,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
             m_bAllProtect = true;
             if( GetDoc()->GetDocShell() )
             {
-                GetDoc()->GetDocShell()->SetReadOnlyUI( true );
+                GetDoc()->GetDocShell()->SetReadOnlyUI();
                 CallChgLnk(); // notify UI
             }
         }
@@ -1416,7 +1416,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
     if( pTstCrsr->HasMark() && !m_pBlockCrsr &&
         mpDoc->IsIdxInTable( pTstCrsr->GetPoint()->nNode ) &&
           ( m_pTableCrsr ||
-            pTstCrsr->GetNode( true ).StartOfSectionNode() !=
+            pTstCrsr->GetNode().StartOfSectionNode() !=
             pTstCrsr->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)
     {
         SwShellCrsr* pITmpCrsr = getShellCrsr( true );
@@ -1603,7 +1603,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
                     m_bAllProtect = true;
                     if( GetDoc()->GetDocShell() )
                     {
-                        GetDoc()->GetDocShell()->SetReadOnlyUI( true );
+                        GetDoc()->GetDocShell()->SetReadOnlyUI();
                         CallChgLnk();       // notify UI!
                     }
                     return;
@@ -1701,7 +1701,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
                         m_bAllProtect = true;
                         if( GetDoc()->GetDocShell() )
                         {
-                            GetDoc()->GetDocShell()->SetReadOnlyUI( true );
+                            GetDoc()->GetDocShell()->SetReadOnlyUI();
                             CallChgLnk();       // notify UI!
                         }
                         return;
@@ -2377,7 +2377,7 @@ bool SwCrsrShell::SetVisCrsr( const Point &rPt )
             m_aCrsrHeight.setY(m_aCharRect.Height());
         }
 
-        m_pVisCrsr->SetDragCrsr( true );
+        m_pVisCrsr->SetDragCrsr();
         m_pVisCrsr->Show(); // show again
     }
     return bRet;
@@ -2814,10 +2814,10 @@ bool SwCrsrShell::FindValidContentNode( bool bOnlyText )
         aPam.GetPoint()->nNode = *pCNd->EndOfSectionNode();
 
         bool bFirst = false;
-        if( 0 == (pCNd = ::GetNode( aPam, bFirst, fnMoveForward, false )))
+        if( 0 == (pCNd = ::GetNode( aPam, bFirst, fnMoveForward )))
         {
             aPam.GetMark()->nNode = *rNds.GetEndOfPostIts().StartOfSectionNode();
-            pCNd = ::GetNode( aPam, bFirst, fnMoveBackward, false );
+            pCNd = ::GetNode( aPam, bFirst, fnMoveBackward );
         }
 
         if( !pCNd ) // should *never* happen
@@ -2898,7 +2898,7 @@ bool SwCrsrShell::FindValidContentNode( bool bOnlyText )
                         SwCallLink aTmp( *this );
                         SwCrsrSaveState aSaveState( *m_pCurCrsr );
                         aTmp.nNdTyp = 0; // don't do anything in DTOR
-                        if( !m_pCurCrsr->IsInProtectTable( true, true ) )
+                        if( !m_pCurCrsr->IsInProtectTable( true ) )
                         {
                             const SwSectionNode* pSNd = pCNd->FindSectionNode();
                             if( !pSNd || !pSNd->GetSection().IsHiddenFlag()

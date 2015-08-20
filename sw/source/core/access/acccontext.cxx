@@ -188,7 +188,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                             "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
                     const SwFrm* pLower( rLower.GetSwFrm() );
                     ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                        GetMap()->GetContextImpl( pLower, true );
+                        GetMap()->GetContextImpl( pLower );
                     if( xAccImpl.is() )
                     {
                         switch( eAction )
@@ -220,8 +220,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                             "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
                     ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rLower.GetDrawObject(),
-                                                  this,
-                                                  true );
+                                                  this );
                     if( xAccImpl.is() )
                     {
                         switch( eAction )
@@ -983,7 +982,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 {
     ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl( pAccImpl );
     if( !xAccImpl.is() )
-        xAccImpl = GetMap()->GetContextImpl( pObj, this, true );
+        xAccImpl = GetMap()->GetContextImpl( pObj, this );
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
@@ -1088,15 +1087,14 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
         if( rChildFrmOrObj.GetSwFrm() )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm(),
-                                              true );
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm() );
             xAccImpl->Dispose( bRecursive );
         }
         else if ( rChildFrmOrObj.GetDrawObject() )
         {
             ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
                     GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
-                                              this, true );
+                                              this );
             DisposeShape( rChildFrmOrObj.GetDrawObject(),
                           xAccImpl.get() );
         }
@@ -1175,15 +1173,14 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             {
                 // The frame becomes visible. A child event must be send.
                 ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm(),
-                                              true );
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm() );
                 xAccImpl->ScrolledIn();
             }
             else if ( rChildFrmOrObj.GetDrawObject() )
             {
                 ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
-                                                  this, true );
+                                                  this );
                 // #i37790#
                 if ( xAccImpl.is() )
                 {
@@ -1216,8 +1213,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             if( rChildFrmOrObj.GetSwFrm() )
             {
                 ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm(),
-                                              true );
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm() );
                 xAccImpl->SetParent( this );
                 xAccImpl->Dispose( true );
             }
@@ -1225,7 +1221,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             {
                 ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
-                                                  this, true );
+                                                  this );
                 DisposeShape( rChildFrmOrObj.GetDrawObject(),
                           xAccImpl.get() );
             }

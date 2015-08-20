@@ -741,7 +741,7 @@ OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
     {
-        const SwContentNode* pTextNode = pPam->GetContentNode( true );
+        const SwContentNode* pTextNode = pPam->GetContentNode();
         if( pTextNode && pTextNode->IsTextNode() && pTextNode == pPam->GetContentNode( false ) )
         {
             utl::TextSearch aSText( rSearchOpt );

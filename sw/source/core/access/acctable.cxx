@@ -1212,7 +1212,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
     const SwFrm *pCellFrm =
                     GetTableData().GetCell( nRow, nColumn, false, this );
     if( pCellFrm )
-        xRet = GetMap()->GetContext( pCellFrm, true );
+        xRet = GetMap()->GetContext( pCellFrm );
 
     return xRet;
 }

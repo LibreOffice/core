@@ -715,7 +715,7 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
-        return m_aSet.ClearItem( 0 );
+        return m_aSet.ClearItem();
 
     SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
               aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );

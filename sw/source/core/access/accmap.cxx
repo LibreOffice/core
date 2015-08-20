@@ -2678,7 +2678,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                         xAcc = xOldAcc; // make sure ate least one
                 }
                 if( !xAcc.is() )
-                    xAcc = GetContext( aFrmOrObj.GetSwFrm(), true );
+                    xAcc = GetContext( aFrmOrObj.GetSwFrm() );
             }
         }
         else if (bShapeSelected)
@@ -2707,7 +2707,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                                 if (pTabFrm)
                                 {
                                     //The Table should not add in acc.because the "pParent" is not add to acc .
-                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,true);//Should Create.
+                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm);//Should Create.
 
                                     const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pTabFrm), GetShell()->IsPreview() );
                                     if (pParentRoot)
@@ -2728,7 +2728,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                                 else
                                 {
                                     //directly create this acc para .
-                                    xParentAccImpl = GetContextImpl(pParent,true);//Should Create.
+                                    xParentAccImpl = GetContextImpl(pParent);//Should Create.
 
                                     const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pParent), GetShell()->IsPreview() );
 
@@ -2745,7 +2745,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                             if (xParentAccImpl.is())
                             {
                                 uno::Reference< XAccessible>  xAccShape =
-                                    GetContext(pObj,xParentAccImpl.get(),true);
+                                    GetContext(pObj,xParentAccImpl.get());
 
                                 AccessibleEventObject aEvent;
                                 aEvent.EventId = AccessibleEventId::CHILD;
@@ -2849,7 +2849,7 @@ void SwAccessibleMap::InvalidateStates( AccessibleStates _nStates,
     if( !aFrmOrObj.GetSwFrm() )
         aFrmOrObj = GetShell()->GetLayout();
 
-    uno::Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), true ) );
+    uno::Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm() ) );
     SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
     if( GetShell()->ActionPend() )
     {
