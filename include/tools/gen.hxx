@@ -371,7 +371,8 @@ public:
     inline Point        RightCenter() const;
     inline Point        Center() const;
 
-    inline void         Move( long nHorzMove, long nVertMove );
+    /// Move the top and left edges by a delta, preserving width and height
+    inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
     inline void         Transpose();
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
@@ -415,8 +416,10 @@ public:
     long                getWidth() const { return nRight - nLeft; }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     long                getHeight() const { return nBottom - nTop; }
-    void                setX( long n ) { nRight += n-nLeft; nLeft = n; }
-    void                setY( long n ) { nBottom += n-nTop; nTop = n; }
+    /// Set the left edge of the rectangle to x, preserving the width
+    void                setX( long x ) { nLeft = x; nRight += x - nLeft; }
+    /// Set the top edge of the rectangle to y, preserving the height
+    void                setY( long y ) { nTop = y; nBottom += y - nTop; }
     void                setWidth( long n ) { nRight = nLeft + n; }
     void                setHeight( long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
