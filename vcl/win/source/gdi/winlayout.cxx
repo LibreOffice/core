@@ -64,6 +64,7 @@ struct OpenGLGlyphCacheChunk
     int mnGlyphCount;
     std::vector<Rectangle> maLocation;
     std::shared_ptr<OpenGLTexture> mpTexture;
+    int mnAscentPlusIntLeading;
 };
 
 // win32 specific physical font instance
@@ -354,6 +355,10 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     }
 
     aChunk.mpTexture = std::unique_ptr<OpenGLTexture>(aDC.getTexture());
+
+    TEXTMETRICW aTextMetric;
+    GetTextMetricsW(aDC.getCompatibleHDC(), &aTextMetric);
+    aChunk.mnAscentPlusIntLeading = aTextMetric.tmAscent + aTextMetric.tmInternalLeading;
 
     maOpenGLGlyphCache.insert(n, aChunk);
 
@@ -1667,7 +1672,7 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
 
             SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
                                rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
-                               nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.maLocation[n].getHeight(),
+                               nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscentPlusIntLeading,
                                rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
             pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
             nAdvance += mpGlyphAdvances[i];
