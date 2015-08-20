@@ -33,6 +33,7 @@
 #include <opengl/framebuffer.hxx>
 #include <opengl/program.hxx>
 #include <opengl/texture.hxx>
+#include <opengl/zone.hxx>
 
 using namespace com::sun::star;
 
@@ -70,6 +71,7 @@ OpenGLContext::OpenGLContext():
     mpNextContext(NULL)
 {
     SAL_INFO("vcl.opengl", "new context: " << this);
+
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     mbPixmap = false;
 #endif
@@ -185,6 +187,8 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWindow& glWin)
 {
+    OpenGLZone aZone;
+
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
     int  pfmt;
     int ret;
@@ -228,6 +232,8 @@ int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTO
 
 bool WGLisExtensionSupported(const char *extension)
 {
+    OpenGLZone aZone;
+
     const size_t extlen = strlen(extension);
     const char *supported = NULL;
 
@@ -266,6 +272,8 @@ bool WGLisExtensionSupported(const char *extension)
 bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         bool bUseDoubleBufferedRendering, bool bRequestVirtualDevice)
 {
+    OpenGLZone aZone;
+
     HWND hWnd = NULL;
     GLWindow glWin;
     //create a temp windwo to check whether support multi-sample, if support, get the format
@@ -558,6 +566,8 @@ GLXFBConfig* getFBConfigForPixmap(Display* dpy, int& nBestFBC, bool bUseDoubleBu
 
 GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering, bool bWithSameVisualID)
 {
+    OpenGLZone aZone;
+
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
 
@@ -638,6 +648,8 @@ void initOpenGLFunctionPointers()
 
 Visual* getVisual(Display* dpy, Window win)
 {
+    OpenGLZone aZone;
+
     initOpenGLFunctionPointers();
 
     XWindowAttributes xattr;
@@ -659,6 +671,8 @@ bool OpenGLContext::init( vcl::Window* pParent )
     if(mbInitialized)
         return true;
 
+    OpenGLZone aZone;
+
     m_xWindow.reset(pParent ? nullptr : VclPtr<vcl::Window>::Create(nullptr, WB_NOBORDER|WB_NODIALOGCONTROL));
     mpWindow = pParent ? pParent : m_xWindow.get();
     if(m_xWindow)
@@ -676,6 +690,8 @@ bool OpenGLContext::init(SystemChildWindow* pChildWindow)
     if( !pChildWindow )
         return false;
 
+    OpenGLZone aZone;
+
     mpWindow = pChildWindow->GetParent();
     m_pChildWindow = pChildWindow;
     initWindow();
@@ -690,6 +706,8 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
 
     if (!dpy)
         return false;
+
+    OpenGLZone aZone;
 
     m_aGLWin.dpy = dpy;
     m_aGLWin.win = win;
@@ -739,6 +757,8 @@ bool OpenGLContext::ImplInit()
     {
         return false;
     }
+
+    OpenGLZone aZone;
 
     GLXContext pSharedCtx( NULL );
 #ifdef DBG_UTIL
@@ -866,6 +886,8 @@ bool OpenGLContext::init(HDC hDC, HWND hWnd)
 
 bool OpenGLContext::ImplInit()
 {
+    OpenGLZone aZone;
+
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
     // PixelFormat tells Windows how we want things to be
     PIXELFORMATDESCRIPTOR PixelFormatFront =
@@ -988,6 +1010,8 @@ bool OpenGLContext::ImplInit()
 
 bool OpenGLContext::ImplInit()
 {
+    OpenGLZone aZone;
+
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::makeCurrent(pView);
@@ -1010,6 +1034,8 @@ bool OpenGLContext::InitGLEW()
     static bool bGlewInit = false;
     if(!bGlewInit)
     {
+        OpenGLZone aZone;
+
         glewExperimental = GL_TRUE;
         GLenum err = glewInit();
         if (err != GLEW_OK)
@@ -1025,6 +1051,8 @@ bool OpenGLContext::InitGLEW()
     // only enable debug output in dbgutil build
     if( GLEW_ARB_debug_output)
     {
+        OpenGLZone aZone;
+
         if (glDebugMessageCallbackARB)
         {
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
@@ -1169,6 +1197,8 @@ bool OpenGLContext::initWindow()
 
 void OpenGLContext::initGLWindow(Visual* pVisual)
 {
+    OpenGLZone aZone;
+
     // Get visual info
     {
         XVisualInfo aTemplate;
@@ -1198,6 +1228,8 @@ void OpenGLContext::reset()
 {
     if( !mbInitialized )
         return;
+
+    OpenGLZone aZone;
 
     // reset the clip region
     maClipRegion.SetEmpty();
@@ -1285,6 +1317,8 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool b
 
 SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 {
+    OpenGLZone aZone;
+
     SystemWindowData aWinData;
     aWinData.nSize = sizeof(aWinData);
     aWinData.pVisual = NULL;
@@ -1326,6 +1360,8 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 
 bool OpenGLContext::isCurrent()
 {
+    OpenGLZone aZone;
+
 #if defined( WNT )
     return (wglGetCurrentContext() == m_aGLWin.hRC &&
             wglGetCurrentDC() == m_aGLWin.hDC);
@@ -1358,6 +1394,8 @@ void OpenGLContext::makeCurrent()
 
     if (isCurrent())
         return;
+
+    OpenGLZone aZone;
 
     clearCurrent();
 
@@ -1407,6 +1445,8 @@ void OpenGLContext::resetCurrent()
 {
     clearCurrent();
 
+    OpenGLZone aZone;
+
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
@@ -1421,6 +1461,8 @@ void OpenGLContext::resetCurrent()
 
 void OpenGLContext::swapBuffers()
 {
+    OpenGLZone aZone;
+
 #if defined( WNT )
     SwapBuffers(m_aGLWin.hDC);
 #elif defined( MACOSX )
@@ -1435,6 +1477,8 @@ void OpenGLContext::swapBuffers()
 
 void OpenGLContext::sync()
 {
+    OpenGLZone aZone;
+
 #if defined( WNT )
     // nothing
 #elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
@@ -1478,6 +1522,8 @@ NSOpenGLView* OpenGLContext::getOpenGLView()
 
 bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
 {
+    OpenGLZone aZone;
+
     if( pFramebuffer != mpCurrentFramebuffer )
     {
         if( pFramebuffer )
@@ -1497,6 +1543,8 @@ bool OpenGLContext::AcquireDefaultFramebuffer()
 
 OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rTexture )
 {
+    OpenGLZone aZone;
+
     OpenGLFramebuffer* pFramebuffer = NULL;
     OpenGLFramebuffer* pFreeFbo = NULL;
     OpenGLFramebuffer* pSameSizeFbo = NULL;
@@ -1563,6 +1611,7 @@ void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
 
 void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
 {
+    OpenGLZone aZone;
     OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
 
     while( pFramebuffer )
@@ -1578,6 +1627,7 @@ void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
 
 void OpenGLContext::ReleaseFramebuffers()
 {
+    OpenGLZone aZone;
     OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
     while( pFramebuffer )
     {
@@ -1589,6 +1639,8 @@ void OpenGLContext::ReleaseFramebuffers()
 
 OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
+    OpenGLZone aZone;
+
     ProgramKey aKey( rVertexShader, rFragmentShader, preamble );
 
     std::map< ProgramKey, boost::shared_ptr<OpenGLProgram> >::iterator
@@ -1606,6 +1658,8 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
 
 OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
+    OpenGLZone aZone;
+
     OpenGLProgram* pProgram = GetProgram( rVertexShader, rFragmentShader, preamble );
 
     if( pProgram == mpCurrentProgram )
