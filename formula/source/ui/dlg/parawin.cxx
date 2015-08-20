@@ -215,8 +215,8 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         else
             SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
     }
-    if(nArg<nArgs) SetArgVal(i,aParaArray[nArg]);
-
+    if (nArg<nArgs)
+        SetArgVal(i,aParaArray[nArg]);
 }
 
 ParaWin::~ParaWin()
