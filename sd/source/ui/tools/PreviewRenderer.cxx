@@ -190,7 +190,7 @@ Image PreviewRenderer::RenderSubstitution (
         svtools::ColorConfig aColorConfig;
         mpPreviewDevice->SetFillColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
         mpPreviewDevice->DrawRect (aPaintRectangle);
-        mpPreviewDevice->EnableMapMode(true);
+        mpPreviewDevice->EnableMapMode();
 
         // Paint substitution text and a frame around it.
         PaintSubstitutionText (rSubstitutionText);
@@ -366,7 +366,7 @@ void PreviewRenderer::PaintFrame()
         mpPreviewDevice->SetLineColor(maFrameColor);
         mpPreviewDevice->SetFillColor();
         mpPreviewDevice->DrawRect(aPaintRectangle);
-        mpPreviewDevice->EnableMapMode(true);
+        mpPreviewDevice->EnableMapMode();
      }
 }
 
@@ -423,7 +423,7 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     mpView->SetPreviewRenderer(true);
 #if 1
     mpView->SetPageVisible(false);
-    mpView->SetPageBorderVisible(true);
+    mpView->SetPageBorderVisible();
     mpView->SetBordVisible(false);
     mpView->SetGridVisible(false);
     mpView->SetHlplVisible(false);

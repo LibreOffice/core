@@ -406,7 +406,7 @@ void ShowWindow::TerminateShow()
         // show navigator?
         if( mbShowNavigatorAfterSpecialMode )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, true );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR );
             mbShowNavigatorAfterSpecialMode = false;
         }
     }
@@ -460,7 +460,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     if( mbShowNavigatorAfterSpecialMode )
     {
         if (mpViewShell)
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, true );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR );
         mbShowNavigatorAfterSpecialMode = false;
     }
 }

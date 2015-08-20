@@ -91,7 +91,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
         const OUString aFileName( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() ) );
         GraphicDescriptor aDesc( *pInStrm, &aFileName );
-        if( !aDesc.Detect( false ) )
+        if( !aDesc.Detect() )
         {
             INetURLObject aCheckURL( aFileName );
             if( aCheckURL.getExtension().equalsIgnoreAsciiCase("cgm") )

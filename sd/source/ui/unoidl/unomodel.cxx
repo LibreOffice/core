@@ -1679,14 +1679,14 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                     {
                         sal_Int32 nCount = rDoc.GetSdPageCount( PK_STANDARD );
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::PDFWriter::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
                     case presentation::ClickAction_FIRSTPAGE :
                     {
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::PDFWriter::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -1696,7 +1696,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                         if ( nDestPage )
                             nDestPage--;
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -1707,7 +1707,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                         if ( nDestPage > nLastPage )
                             nDestPage = nLastPage;
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -1725,7 +1725,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                                 case presentation::ClickAction_DOCUMENT :
                                 case presentation::ClickAction_PROGRAM :
                                 {
-                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                                     rPDFExtOutDevData.SetLinkURL( nLinkId, aBookmark );
                                 }
                                 break;
@@ -1735,7 +1735,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                                     if ( nPage != -1 )
                                     {
                                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::PDFWriter::FitRectangle );
-                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                                     }
                                 }
@@ -2128,7 +2128,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                             if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) ||
                                                 xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
                                             {
-                                                pPDFExtOutDevData->SetPageTransition( eType, nTime, -1 );
+                                                pPDFExtOutDevData->SetPageTransition( eType, nTime );
                                             }
                                         }
                                     }

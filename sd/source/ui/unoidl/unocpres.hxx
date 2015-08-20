@@ -146,7 +146,7 @@ public:
 inline SdCustomShowList* SdXCustomPresentationAccess::GetCustomShowList() const throw()
 {
     if(mrModel.GetDoc())
-        return mrModel.GetDoc()->GetCustomShowList(false);
+        return mrModel.GetDoc()->GetCustomShowList();
     else
         return NULL;
 };

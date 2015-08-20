@@ -440,7 +440,7 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
     {
         const sal_Int32 nLines (rsDistance.copy(0,rsDistance.getLength()-1).toInt32());
         // Take the height of the first line as the height of every line.
-        const sal_uInt32 nFirstLineHeight (mpEditEngine->GetLineHeight(0,0));
+        const sal_uInt32 nFirstLineHeight (mpEditEngine->GetLineHeight(0));
         nDistance = nFirstLineHeight * nLines;
     }
 
@@ -456,7 +456,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap()
         mpOutputDevice.disposeAndClear();
         mpOutputDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
-        mpOutputDevice->SetOutputSizePixel(maSize, true);
+        mpOutputDevice->SetOutputSizePixel(maSize);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();
         mpOutputDevice->SetBackground(Wallpaper());
@@ -503,7 +503,7 @@ void PresenterTextView::Implementation::CheckTop()
     if (mpEditEngine!=NULL && mnTotalHeight < 0)
         mnTotalHeight = mpEditEngine->GetTextHeight();
     if (mpEditEngine!=NULL && mnTop >= mnTotalHeight)
-        mnTop = mnTotalHeight - mpEditEngine->GetLineHeight(0,0);
+        mnTop = mnTotalHeight - mpEditEngine->GetLineHeight(0);
 
     if (mnTotalHeight < maSize.Height())
         mnTop = 0;

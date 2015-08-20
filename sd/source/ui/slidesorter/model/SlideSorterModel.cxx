@@ -209,7 +209,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
         if (pDescriptor.get() == NULL)
         {
             // Call GetPageDescriptor() to create the missing descriptor.
-            pDescriptor = GetPageDescriptor(nIndex,true);
+            pDescriptor = GetPageDescriptor(nIndex);
         }
 
         if (pDescriptor->GetXDrawPage() == rxSlide)
@@ -247,7 +247,7 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
         if (pDescriptor.get() == NULL)
         {
             // Call GetPageDescriptor() to create the missing descriptor.
-            pDescriptor = GetPageDescriptor(nIndex, true);
+            pDescriptor = GetPageDescriptor(nIndex);
         }
 
         if (pDescriptor->GetPage() == pPage)

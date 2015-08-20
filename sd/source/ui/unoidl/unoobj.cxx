@@ -712,7 +712,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
 
     if( pEntry && mpShape->GetSdrObject() )
     {
-        SdAnimationInfo* pInfo = GetAnimationInfo(false);
+        SdAnimationInfo* pInfo = GetAnimationInfo();
 
         switch(pEntry->nWID)
         {
@@ -1320,7 +1320,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             if( ( nFound & FOUND_CLICKACTION ) == 0 )
                 break;
 
-            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( false );
+            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo();
             if( presentation::ClickAction_NONE == eClickAction && NULL == pInfo )
             {
                 bOk = true;
@@ -1476,7 +1476,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     if( mpShape == NULL || aName != maStrOnClick )
         throw container::NoSuchElementException();
 
-    SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( false );
+    SdAnimationInfo* pInfo = mpShape->GetAnimationInfo();
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
     if( pInfo )

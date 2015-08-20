@@ -276,7 +276,7 @@ void SlideSorterView::HandleDrawModeChange()
     // PreviewRenderer that is used by the cache is replaced by this as
     // well.
     mpPreviewCache.reset();
-    GetPreviewCache()->InvalidateCache(true);
+    GetPreviewCache()->InvalidateCache();
 
     RequestRepaint();
 }

@@ -961,7 +961,7 @@ throw (UnknownPropertyException, PropertyVetoException,
     }
 
     if( bChanged || bOptionsChanged )
-        mxModel->SetModified( true );
+        mxModel->SetModified();
 }
 
 void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )

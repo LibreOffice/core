@@ -92,7 +92,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         // Make the frame window transparent and make the parent able to
         // draw behind it.
         if (pParentWindow.get() != NULL)
-            pParentWindow->EnableChildTransparentMode(true);
+            pParentWindow->EnableChildTransparentMode();
     }
 
     pWindow->Show(bInitiallyVisible);

@@ -65,7 +65,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
 
 DragAndDropContext::~DragAndDropContext()
 {
-    SetTargetSlideSorter (NULL, Point(0,0), InsertionIndicatorHandler::UnknownMode, false);
+    SetTargetSlideSorter (NULL, Point(0,0), InsertionIndicatorHandler::UnknownMode);
 }
 
 void DragAndDropContext::Dispose()

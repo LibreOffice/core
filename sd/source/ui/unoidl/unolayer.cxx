@@ -709,7 +709,7 @@ void SdLayerManager::UpdateLayerView( bool modify ) const throw()
         }
 
         if(modify)
-            mpModel->mpDoc->SetChanged(true);
+            mpModel->mpDoc->SetChanged();
     }
 }
 

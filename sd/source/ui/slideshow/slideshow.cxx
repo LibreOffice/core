@@ -332,7 +332,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
             const OUString aShowName( aShow );
 
-            SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(false);
+            SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList();
             if(pCustomShowList)
             {
                 SdCustomShow* pCustomShow;
@@ -528,7 +528,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         throw IllegalArgumentException();
 
     if( bValuesChanged )
-        mpDoc->SetChanged( true );
+        mpDoc->SetChanged();
 }
 
 Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -550,7 +550,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
         return Any( rPresSettings.mbAnimationAllowed );
     case ATTR_PRESENT_CUSTOMSHOW:
         {
-            SdCustomShowList* pList = mpDoc->GetCustomShowList(false);
+            SdCustomShowList* pList = mpDoc->GetCustomShowList();
             SdCustomShow* pShow = (pList && rPresSettings.mbCustomShow) ? pList->GetCurObject() : NULL;
             OUString aShowName;
 

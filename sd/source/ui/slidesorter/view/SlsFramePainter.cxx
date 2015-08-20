@@ -90,15 +90,15 @@ void FramePainter::AdaptColor (
         maCenter.maBitmap.SetEmpty();
 
     // Replace the color in all bitmaps.
-    maTopLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maTop.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maTopRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maCenter.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maBottomLeft.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maBottom.maBitmap.Replace(aSourceColor, aNewColor, 0);
-    maBottomRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
+    maTopLeft.maBitmap.Replace(aSourceColor, aNewColor);
+    maTop.maBitmap.Replace(aSourceColor, aNewColor);
+    maTopRight.maBitmap.Replace(aSourceColor, aNewColor);
+    maLeft.maBitmap.Replace(aSourceColor, aNewColor);
+    maCenter.maBitmap.Replace(aSourceColor, aNewColor);
+    maRight.maBitmap.Replace(aSourceColor, aNewColor);
+    maBottomLeft.maBitmap.Replace(aSourceColor, aNewColor);
+    maBottom.maBitmap.Replace(aSourceColor, aNewColor);
+    maBottomRight.maBitmap.Replace(aSourceColor, aNewColor);
 }
 
 //===== FramePainter::OffsetBitmap ============================================

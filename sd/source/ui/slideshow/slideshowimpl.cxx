@@ -700,7 +700,7 @@ void SAL_CALL SlideshowImpl::disposing()
         }
         else if( meAnimationMode == ANIMATIONMODE_PREVIEW )
         {
-            mpViewShell->ShowUIControls (true);
+            mpViewShell->ShowUIControls();
         }
     }
 
@@ -2208,7 +2208,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
                     break;
             }
 
-            pWidthMenu->EnableItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator), true);
+            pWidthMenu->EnableItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator));
             if( nWidth ==  mdUserPaintStrokeWidth)
                 pWidthMenu->CheckItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator) );
         }
@@ -3145,7 +3145,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
                 // Note that in this special case we do NOT pass
                 // bSkipAllMainSequenceEffects because we display the same
                 // slide as before and do not want to show all its effects.
-                displayCurrentSlide(false);
+                displayCurrentSlide();
             }
         }
     }

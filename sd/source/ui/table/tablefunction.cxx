@@ -186,7 +186,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         GetParentWindow()->GrabFocus();
         if( pPickObj )
-            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, true );
+            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj );
         else
             mpView->InsertObjectAtView(pObj, *pPV, SdrInsertFlags::SETDEFLAYER);
 
@@ -194,7 +194,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_INSERT_TABLE, true, false );
+        rBindings.Invalidate( SID_INSERT_TABLE, true );
         break;
     }
     case SID_TABLEDESIGN:

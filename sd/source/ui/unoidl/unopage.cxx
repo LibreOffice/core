@@ -1619,7 +1619,7 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
     _SelectObjectInView( xGroup, pPageView );
-    mpView->DismantleMarkedObjects( false );
+    mpView->DismantleMarkedObjects();
     mpView->HideSdrPage();
 
     GetModel()->SetModified();
@@ -1640,7 +1640,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
 
     _SelectObjectsInView( xShapes, pPageView );
 
-    mpView->CombineMarkedObjects( true );
+    mpView->CombineMarkedObjects();
 
     mpView->AdjustMarkHdl();
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();

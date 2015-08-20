@@ -624,7 +624,7 @@ IMPL_LINK(MasterPageContainer::Implementation,AsynchronousNotifyCallback, EventD
 
     if (pData != NULL)
     {
-        FireContainerChange(pData->first, pData->second, false);
+        FireContainerChange(pData->first, pData->second);
         delete pData;
     }
 
@@ -697,10 +697,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             std::vector<MasterPageContainerChangeEvent::EventType>::const_iterator iEventType;
             for (iEventType=pEventTypes->begin(); iEventType!=pEventTypes->end(); ++iEventType)
             {
-                FireContainerChange(
-                    *iEventType,
-                    (*aEntry)->maToken,
-                    false);
+                FireContainerChange( *iEventType,(*aEntry)->maToken);
             }
         }
     }
