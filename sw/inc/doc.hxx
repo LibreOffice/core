@@ -55,8 +55,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 namespace editeng { class SvxBorderLine; }
 
 class SvxForbiddenCharactersTable;
@@ -235,7 +233,7 @@ namespace sfx2 {
     class LinkManager;
 }
 
-typedef boost::ptr_vector<SwPageDesc> SwPageDescs;
+typedef std::vector<std::unique_ptr<SwPageDesc>> SwPageDescs;
 
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
@@ -254,7 +252,7 @@ class SW_DLLPUBLIC SwDoc :
     // private Member
     std::unique_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
     SwAttrPool* mpAttrPool;             //< the attribute pool
-    SwPageDescs maPageDescs;             //< PageDescriptors
+    SwPageDescs m_PageDescs;             //< PageDescriptors
     Link<>      maOle2Link;              //< OLE 2.0-notification
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
@@ -916,12 +914,12 @@ public:
             sal_Int32 nDocPageCount );
 
     // PageDescriptor interface.
-    size_t GetPageDescCnt() const { return maPageDescs.size(); }
-    const SwPageDesc& GetPageDesc( const size_t i ) const { return maPageDescs[i]; }
-    SwPageDesc& GetPageDesc( size_t i ) { return maPageDescs[i]; }
+    size_t GetPageDescCnt() const { return m_PageDescs.size(); }
+    const SwPageDesc& GetPageDesc(const size_t i) const { return *m_PageDescs[i]; }
+    SwPageDesc& GetPageDesc(size_t const i) { return *m_PageDescs[i]; }
     SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = NULL);
     SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = NULL) const;
-    // Just searches the pointer in the maPageDescs vector!
+    // Just searches the pointer in the m_PageDescs vector!
     bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = NULL);
 
     /** Copy the complete PageDesc - beyond document and "deep"!

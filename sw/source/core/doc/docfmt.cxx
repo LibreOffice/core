@@ -1538,7 +1538,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     if (bIncludePageStyles)
     {
         // and now the page templates
-        SwPageDescs::size_type nCnt = rSource.maPageDescs.size();
+        SwPageDescs::size_type nCnt = rSource.m_PageDescs.size();
         if( nCnt )
         {
             // a different Doc -> Number formatter needs to be merged
@@ -1547,15 +1547,15 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             // 1st step: Create all formats (skip the 0th - it's the default!)
             while( nCnt )
             {
-                const SwPageDesc &rSrc = rSource.maPageDescs[ --nCnt ];
+                const SwPageDesc &rSrc = *rSource.m_PageDescs[ --nCnt ];
                 if( 0 == FindPageDesc( rSrc.GetName() ) )
                     MakePageDesc( rSrc.GetName() );
             }
 
             // 2nd step: Copy all attributes, set the right parents
-            for( nCnt = rSource.maPageDescs.size(); nCnt; )
+            for (SwPageDescs::size_type i = rSource.m_PageDescs.size(); i; )
             {
-                const SwPageDesc &rSrc = rSource.maPageDescs[ --nCnt ];
+                const SwPageDesc &rSrc = *rSource.m_PageDescs[ --i ];
                 SwPageDesc* pDesc = FindPageDesc( rSrc.GetName() );
                 CopyPageDesc( rSrc, *pDesc);
             }
