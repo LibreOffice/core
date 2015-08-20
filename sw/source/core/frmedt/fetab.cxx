@@ -390,7 +390,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 pDelBox = pLn->GetTabBoxes().back();
             }
             SwTableBox* pNextBox = pDelLine->FindNextBox( pTableNd->GetTable(),
-                                                            pDelBox, true );
+                                                            pDelBox );
             while( pNextBox &&
                     pNextBox->GetFrameFormat()->GetProtect().IsContentProtected() )
                 pNextBox = pNextBox->FindNextBox( pTableNd->GetTable(), pNextBox );
@@ -402,7 +402,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 while( !pDelBox->GetSttNd() )
                     pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
                 pNextBox = pDelLine->FindPreviousBox( pTableNd->GetTable(),
-                                                            pDelBox, true );
+                                                            pDelBox );
                 while( pNextBox &&
                         pNextBox->GetFrameFormat()->GetProtect().IsContentProtected() )
                     pNextBox = pNextBox->FindPreviousBox( pTableNd->GetTable(), pNextBox );
@@ -1802,7 +1802,7 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
         *pCrsr->GetPoint() = *ppPos[0];
         pCrsr->GetPtPos() = paPt[0];
 
-        if ( !pCrsr->IsInProtectTable( false, true ) )
+        if ( !pCrsr->IsInProtectTable( false ) )
         {
             bool bNewSelection = true;
 

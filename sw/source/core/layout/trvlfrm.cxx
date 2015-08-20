@@ -694,7 +694,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrm *pStart,
     //going down.
     bool bTableSel = false;
     if ( pStart->IsInTab() &&
-        pPam->GetNode( true ).StartOfSectionNode() !=
+        pPam->GetNode().StartOfSectionNode() !=
         pPam->GetNode( false ).StartOfSectionNode() )
     {
         bTableSel = true;

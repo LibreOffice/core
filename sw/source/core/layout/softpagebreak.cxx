@@ -65,7 +65,7 @@ void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 // If there's no follow flow line, the soft page break will be
                 // exported at the row, not at the content.
                 if( pRow == pFirstRow &&
-                    pTab->FindMaster( false )->HasFollowFlowLine() )
+                    pTab->FindMaster()->HasFollowFlowLine() )
                 {
                     // Now we have the row which causes a new page,
                     // this row is a follow flow line and therefore cannot get
@@ -131,7 +131,7 @@ bool SwTableLine::hasSoftPageBreak() const
             if( pRow == pLast )
             {
                 // The last check: no soft page break for "follow" table lines
-                if( pTab->IsFollow() && pTab->FindMaster( false )->HasFollowFlowLine() )
+                if( pTab->IsFollow() && pTab->FindMaster()->HasFollowFlowLine() )
                     return false;
                 return true;
             }

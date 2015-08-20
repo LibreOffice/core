@@ -273,7 +273,7 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
 
     const SwVirtFlyDrawObj *pObj = GetVirtDrawObj();
     SwRect aClip, aTmpStretch;
-    ::CalcClipRect( pObj, aClip, true );
+    ::CalcClipRect( pObj, aClip );
     ::CalcClipRect( pObj, aTmpStretch, false );
     aClip._Intersection( aTmpStretch );
 

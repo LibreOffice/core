@@ -333,7 +333,7 @@ void SwEditShell::ClearAutomaticContour()
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();
-        pNd->SetContour( NULL, false );
+        pNd->SetContour( NULL );
         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pNd->getLayoutFrm(GetLayout())->GetUpper());
         const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
         pFly->GetFormat()->NotifyClients( &rSur, &rSur );
@@ -787,7 +787,7 @@ void SwEditShell::SetNumberingRestart()
                             {
                                 // now set a the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
-                                GetDoc()->SetNumRuleStart( aCurrentNode, true );
+                                GetDoc()->SetNumRuleStart( aCurrentNode );
                             }
                         }
                     }

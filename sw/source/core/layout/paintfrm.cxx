@@ -5147,7 +5147,7 @@ void PaintCharacterBorder(
     if( aBottomBorder )
     {
         if( aBottomBorder->isDouble() )
-            aBottomBorder->SetMirrorWidths(true);
+            aBottomBorder->SetMirrorWidths();
 
         Point aLeftTop(
             aAlignedRect.Left(),
@@ -5188,7 +5188,7 @@ void PaintCharacterBorder(
     if( aRightBorder )
     {
         if( aRightBorder->isDouble() )
-            aRightBorder->SetMirrorWidths(true);
+            aRightBorder->SetMirrorWidths();
 
         Point aLeftTop(
             aAlignedRect.Right() - aRightBorder.get().GetScaledWidth(),

@@ -58,7 +58,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
     , m_pDoc( pDoc )
 {
     SetScaleUnit( MAP_TWIP );
-    SetSwapGraphics( true );
+    SetSwapGraphics();
 
     // use common InitDrawModelAndDocShell which will set the associations as needed,
     // including SvxColorTableItem  with WhichID SID_COLOR_TABLE

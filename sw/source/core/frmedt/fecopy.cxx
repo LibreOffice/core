@@ -192,7 +192,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
                 aSet.Put( aAnchor );
 
                 SdrObject *const pNew =
-                    pClpDoc->CloneSdrObj( *pObj, false, true );
+                    pClpDoc->CloneSdrObj( *pObj, false );
 
                 SwPaM aTemp(aPos);
                 pClpDoc->getIDocumentContentOperations().InsertDrawObj(aTemp, *pNew, aSet );
@@ -378,7 +378,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     SfxItemSet aSet( pDestDoc->GetAttrPool(),aFrameFormatSetRange);
                     aSet.Put( aAnchor );
                     SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
-                                                GetDoc() == pDestDoc, true );
+                                                GetDoc() == pDestDoc );
                     pFormat = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *pDestShell->GetCrsr(), *pNew, aSet );
                 }
                 else
@@ -549,7 +549,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             // only select if it can be shifted/copied in the same shell
             if( bSelectInsert )
             {
-                SwFlyFrm* pFlyFrm = static_cast<SwFlyFrameFormat*>(pFlyFormat)->GetFrm( &aPt, false );
+                SwFlyFrm* pFlyFrm = static_cast<SwFlyFrameFormat*>(pFlyFormat)->GetFrm( &aPt );
                 if( pFlyFrm )
                 {
                     //JP 12.05.98: should this be in SelectFlyFrm???
@@ -868,7 +868,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                 }
 
                 bRet = GetDoc()->InsCopyOfTable( aDestPos, aBoxes, &pSrcNd->GetTable(),
-                                            false, false );
+                                            false );
 
                 if( bParkTableCrsr )
                     GetCrsr();
@@ -989,7 +989,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                             {
                                 const Point aPt( GetCrsrDocPos() );
                                 SwFlyFrm* pFlyFrm = static_cast<SwFlyFrameFormat*>(pNew)->
-                                                        GetFrm( &aPt, false );
+                                                        GetFrm( &aPt );
                                 if( pFlyFrm )
                                     SelectFlyFrm( *pFlyFrm, true );
                                 // always pick the first FlyFrame only; the others
@@ -1496,7 +1496,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                     aSet.Put(pClpObj->GetMergedItemSet());
                 }
 
-                pView->SetAttributes( aSet, false );
+                pView->SetAttributes( aSet );
             }
             break;
 
@@ -1514,7 +1514,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 
         bool bDesignMode = pView->IsDesignMode();
         if( !bDesignMode )
-            pView->SetDesignMode( true );
+            pView->SetDesignMode();
 
         // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
@@ -1531,7 +1531,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 pObj->ImpSetAnchorPos( aNull );
             }
 
-            pView->SetCurrentObj( OBJ_GRUP, SdrInventor );
+            pView->SetCurrentObj( OBJ_GRUP );
             if ( nCnt > 1 )
                 pView->GroupMarked();
             SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();

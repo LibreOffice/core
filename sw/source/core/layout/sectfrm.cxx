@@ -2457,7 +2457,7 @@ SwFootnoteContFrm* SwSectionFrm::ContainsFootnoteCont( const SwFootnoteContFrm* 
     const SwLayoutFrm* pLay;
     if( pCont )
     {
-        pLay = pCont->FindFootnoteBossFrm( false );
+        pLay = pCont->FindFootnoteBossFrm();
         OSL_ENSURE( IsAnLower( pLay ), "ConatainsFootnoteCont: Wrong FootnoteContainer" );
         pLay = static_cast<const SwLayoutFrm*>(pLay->GetNext());
     }

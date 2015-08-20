@@ -641,7 +641,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pListener( 0 ),
     xOLERef( xObj )
 {
-    xOLERef.Lock( true );
+    xOLERef.Lock();
     if ( xObj.is() )
     {
         pListener = new SwOLEListener_Impl( this );
@@ -655,7 +655,7 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pListener( 0 ),
     aName( rString )
 {
-    xOLERef.Lock( true );
+    xOLERef.Lock();
     xOLERef.SetViewAspect( nAspect );
 }
 

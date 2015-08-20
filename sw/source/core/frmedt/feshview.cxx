@@ -642,7 +642,7 @@ void SwFEShell::StartCropImage()
             if( bForget )
             {
                 pView->UnmarkAll();
-                pView->MarkObj( pTmpObj, Imp()->GetPageView(), false, false );
+                pView->MarkObj( pTmpObj, Imp()->GetPageView(), false );
                 break;
             }
         }
@@ -1866,12 +1866,12 @@ bool SwFEShell::ImpEndCreate()
             if ( pMarkObj )
             {
                 Imp()->GetDrawView()->MarkObj( pMarkObj, Imp()->GetPageView(),
-                                                false, false );
+                                                false );
             }
             else
             {
                 Imp()->GetDrawView()->MarkObj( &rSdrObj, Imp()->GetPageView(),
-                                                false, false );
+                                                false );
             }
         }
     }

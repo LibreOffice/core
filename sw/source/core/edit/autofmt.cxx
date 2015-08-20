@@ -1267,7 +1267,7 @@ void SwAutoFormat::BuildIndent()
                     !CalcLevel( *pNxtNd ) );
         }
     }
-    DeleteCurrentParagraph( true, true );
+    DeleteCurrentParagraph( true );
     AutoCorrect();
 }
 
@@ -1305,7 +1305,7 @@ void SwAutoFormat::BuildTextIndent()
             pNxtNd = GetNextNode();
         }
     }
-    DeleteCurrentParagraph( true, true );
+    DeleteCurrentParagraph( true );
     AutoCorrect();
 }
 
@@ -1342,7 +1342,7 @@ void SwAutoFormat::BuildText()
                 break;
         }
     }
-    DeleteCurrentParagraph( true, true );
+    DeleteCurrentParagraph( true );
     AutoCorrect();
 }
 
@@ -1375,7 +1375,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     IsBlanksInString( *m_pCurTextNd ) ||
                     IsSentenceAtEnd( *m_pCurTextNd );
     bool bRTL = m_pEditShell->IsInRightToLeftText();
-    DeleteCurrentParagraph( true, true );
+    DeleteCurrentParagraph( true );
 
     bool bChgBullet = false, bChgEnum = false;
     sal_Int32 nAutoCorrPos = 0;
@@ -1655,7 +1655,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         if(!pNxtNd || pCurrNode == pNxtNd)
             break;
     }
-    DeleteCurrentParagraph( false, true );
+    DeleteCurrentParagraph( false );
     AutoCorrect( nAutoCorrPos );
 }
 
@@ -1740,7 +1740,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             pNxtNd = GetNextNode();
         }
     }
-    DeleteCurrentParagraph( true, true );
+    DeleteCurrentParagraph( true );
     AutoCorrect();
 }
 
@@ -1771,7 +1771,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
     }
     else
     {
-        DeleteCurrentParagraph( true, true );
+        DeleteCurrentParagraph( true );
         AutoCorrect();
     }
 }
@@ -2213,7 +2213,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
                     m_eStat = READ_NEXT_PARA;
                     // delete all blanks at beginning/end and in between
                     //JP 29.04.98: first only "all in between"
-                    DelMoreLinesBlanks( false );
+                    DelMoreLinesBlanks();
                     break;
                 }
 
@@ -2465,7 +2465,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
                 m_eStat = READ_NEXT_PARA;
                 // delete all blanks at beginning/end and in between
                 //JP 29.04.98: first only "all in between"
-                DelMoreLinesBlanks( false );
+                DelMoreLinesBlanks();
 
                 // handle hard attributes
                 if( m_pCurTextNd->HasSwAttrSet() )

@@ -971,7 +971,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             {
                 const bool bIsModifyLocked = IsModifyLocked();
                 LockModify();
-                SwapIn( false );
+                SwapIn();
                 if( !bIsModifyLocked )
                     UnlockModify();
             }

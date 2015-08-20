@@ -167,7 +167,7 @@ OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, sal_uI
 {
     if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
-        EnableFormat(true);
+        EnableFormat();
         return ExpandValue(nValue, nFormat, nLng);
     }
 

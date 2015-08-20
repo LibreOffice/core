@@ -198,7 +198,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                         break;
                     }
             }
-            bRet = pInsDoc->InsCopyOfTable( aPos, aBoxes, 0, bCpyTableNm, false );
+            bRet = pInsDoc->InsCopyOfTable( aPos, aBoxes, 0, bCpyTableNm );
         }
         else
             bRet = false;
@@ -295,7 +295,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         {
             // write selected areas into a ASCII document
             SwWriter aWriter( aStream, *this);
-            xWrt->SetShowProgress( false );
+            xWrt->SetShowProgress();
 
             switch( nHndlParaBrk )
             {

@@ -69,7 +69,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
         {
             Point aPt;
             SwFlyFrm *const pFly =
-                static_cast<SwFlyFrameFormat*>(pSelFormat)->GetFrm(& aPt, false);
+                static_cast<SwFlyFrameFormat*>(pSelFormat)->GetFrm(& aPt);
             if (pFly)
             {
                 // fdo#36681: Invalidate the content and layout to refresh

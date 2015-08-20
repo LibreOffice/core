@@ -190,7 +190,7 @@ void GetTableSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         const SwTableLine* pLine = pMarkBox ? pMarkBox->GetUpper() : 0;
         sal_uInt16 nSttPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nSttPos, "Where is my row in the table?" );
-        pLine = rTable.GetTableBox( rCrsr.GetNode( true ).StartOfSectionIndex() )->GetUpper();
+        pLine = rTable.GetTableBox( rCrsr.GetNode().StartOfSectionIndex() )->GetUpper();
         sal_uInt16 nEndPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nEndPos, "Where is my row in the table?" );
         // pb: #i20193# if tableintable then nSttPos == nEndPos == USHRT_MAX
@@ -1067,7 +1067,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             // then we should insert a new box and adjust the widths
                             sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().GetPos(
                                             pBox )+1;
-                            lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos, 1 );
+                            lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos );
 
                             SwFormatFrmSize aNew(pBox->GetFrameFormat()->GetFrmSize() );
                             long nLeft = rUnion.Left() - pCell->Frm().Left(),
@@ -1378,7 +1378,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 (*ppMergeBox)->GetSttNd()->EndOfSectionIndex(),
                     "empty box" );
         SwNodeIndex aIdx( *(*ppMergeBox)->GetSttNd()->EndOfSectionNode(), -1 );
-        pDoc->GetNodes().Delete( aIdx, 1 );
+        pDoc->GetNodes().Delete( aIdx );
     }
 
     // set width of the box

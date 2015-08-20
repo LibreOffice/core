@@ -217,7 +217,7 @@ void SwLayoutFrm::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
         // SaveContent would also suck up the content of the footnote container
         // and store it within the normal text flow.
         if( IsPageBodyFrm() )
-            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFootnotes( static_cast<SwPageFrm*>(GetUpper()), true, false );
+            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFootnotes( static_cast<SwPageFrm*>(GetUpper()) );
         pSave = ::SaveContent( this );
 
         //If columns exist, they get deleted if a column count of 0 or 1 is requested.

@@ -899,7 +899,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             // If Seconds > 0 then bSec should be TRUE otherwise Seconds
             // information will be lost if file has EditTime in Seconds format.
             aStr = pLocalData->getTime( tools::Time(dur/3600, (dur%3600)/60, dur%60),
-                                        dur%60 > 0, false);
+                                        dur%60 > 0);
         }
         else
         {
@@ -964,7 +964,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                         lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
                                                         &pLocalData );
                         aStr = pLocalData->getTime( aDate,
-                                                    false, false);
+                                                    false);
                     }
                     else
                     {

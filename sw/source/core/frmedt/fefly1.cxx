@@ -247,7 +247,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
             pImpl->GetDrawView()->UnmarkAll();
 
         pImpl->GetDrawView()->MarkObj( rFrm.GetVirtDrawObj(),
-                                      pImpl->GetPageView(), false, false );
+                                      pImpl->GetPageView(), false );
         KillPams();
         ClearMark();
         SelFlyGrabCrsr();
@@ -682,7 +682,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchVal
                 //              chaos::anchor should not lie in the shifted area
                 pRet->DelFrms();
 
-                const SwFrm* pAnch = ::FindAnchor( GetLayout(), aPt, false );
+                const SwFrm* pAnch = ::FindAnchor( GetLayout(), aPt );
                 SwPosition aPos( *static_cast<const SwContentFrm*>(pAnch)->GetNode() );
                 if ( FLY_AS_CHAR == eRndId )
                 {
@@ -893,7 +893,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     {
         // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView(),
-                                       false, false );
+                                       false );
     }
     else
     {
@@ -987,7 +987,7 @@ bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 
     SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
 
-    if( !rSet.Set( pFly->GetFormat()->GetAttrSet(), true ) )
+    if( !rSet.Set( pFly->GetFormat()->GetAttrSet() ) )
         return false;
 
     // now examine all attributes. Remove forbidden attributes, then
