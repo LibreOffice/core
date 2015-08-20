@@ -435,6 +435,11 @@ void ChartAreaPanel::updateData()
     updateFillFloatTransparence(false, true, &aFillFloatTransparenceItem);
 
     maFillColorWrapper.updateData();
+
+    sal_uInt32 nFillColor;
+    xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+    XFillColorItem aFillColorItem("", Color(nFillColor));
+    updateFillColor(true, &aFillColorItem);
 }
 
 void ChartAreaPanel::modelInvalid()
