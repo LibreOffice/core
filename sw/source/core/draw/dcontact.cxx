@@ -2165,7 +2165,7 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
     // #i26791#
     maAnchoredDrawObj.SetDrawObj( *this );
     // #i35635# - set initial position out of sight
-    NbcMove( Size( -RECT_EMPTY, -RECT_EMPTY ) );
+    NbcMove( Size( -16000, -16000 ) );
 }
 
 SwDrawVirtObj::~SwDrawVirtObj()
