@@ -1294,24 +1294,18 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                 LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1));
                                 LanguageTag aLanguageTag( eLang);
 
-                                if (!pImpEditEngine->pLocaleDataWrapper)
-                                    pImpEditEngine->pLocaleDataWrapper = new OnDemandLocaleDataWrapper;
-
-                                if (!pImpEditEngine->pLocaleDataWrapper->isInitialized())
-                                    pImpEditEngine->pLocaleDataWrapper->init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
+                                if (!pImpEditEngine->xLocaleDataWrapper.isInitialized())
+                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
                                 else
-                                    pImpEditEngine->pLocaleDataWrapper->changeLocale( aLanguageTag);
+                                    pImpEditEngine->xLocaleDataWrapper.changeLocale( aLanguageTag);
 
-                                if (!pImpEditEngine->pTransliterationWrapper)
-                                    pImpEditEngine->pTransliterationWrapper = new OnDemandTransliterationWrapper;
-
-                                if (!pImpEditEngine->pTransliterationWrapper->isInitialized())
-                                    pImpEditEngine->pTransliterationWrapper->init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang, i18n::TransliterationModules_IGNORE_CASE);
+                                if (!pImpEditEngine->xTransliterationWrapper.isInitialized())
+                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang, i18n::TransliterationModules_IGNORE_CASE);
                                 else
-                                    pImpEditEngine->pTransliterationWrapper->changeLocale( eLang);
+                                    pImpEditEngine->xTransliterationWrapper.changeLocale( eLang);
 
-                                const ::utl::TransliterationWrapper* pTransliteration = pImpEditEngine->pTransliterationWrapper->get();
-                                Sequence< i18n::CalendarItem2 > xItem = pImpEditEngine->pLocaleDataWrapper->get()->getDefaultCalendarDays();
+                                const ::utl::TransliterationWrapper* pTransliteration = pImpEditEngine->xTransliterationWrapper.get();
+                                Sequence< i18n::CalendarItem2 > xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarDays();
                                 sal_Int32 nCount = xItem.getLength();
                                 const i18n::CalendarItem2* pArr = xItem.getArray();
                                 for( sal_Int32 n = 0; n <= nCount; ++n )
@@ -1326,7 +1320,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
                                 if ( aComplete.isEmpty() )
                                 {
-                                    xItem = pImpEditEngine->pLocaleDataWrapper->get()->getDefaultCalendarMonths();
+                                    xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarMonths();
                                     sal_Int32 nMonthCount = xItem.getLength();
                                     const i18n::CalendarItem2* pMonthArr = xItem.getArray();
                                     for( sal_Int32 n = 0; n <= nMonthCount; ++n )

@@ -129,8 +129,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     nStretchY           = 100;
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
-    pLocaleDataWrapper  = 0;
-    pTransliterationWrapper = 0;
     maBackgroundColor   = COL_AUTO;
 
     nAsianCompressionMode = text::CharacterCompressionType::NONE;
@@ -184,8 +182,6 @@ ImpEditEngine::~ImpEditEngine()
     delete pCTLOptions;
     if ( bOwnerOfRefDev )
         pRefDev.disposeAndClear();
-    delete pLocaleDataWrapper;
-    delete pTransliterationWrapper;
     delete pSpellInfo;
 }
 

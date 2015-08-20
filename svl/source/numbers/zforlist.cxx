@@ -26,6 +26,7 @@
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
@@ -3125,7 +3126,9 @@ sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear ) const
 // static
 sal_uInt16 SvNumberFormatter::GetYear2000Default()
 {
-    return (sal_uInt16) ::utl::MiscCfg().GetYear2000();
+    if (!utl::ConfigManager::IsAvoidConfig())
+        return (sal_uInt16) ::utl::MiscCfg().GetYear2000();
+    return 1930;
 }
 
 

@@ -31,6 +31,7 @@
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/misccfg.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <fmtpdsc.hxx>
@@ -1714,7 +1715,8 @@ void SwDoc::_CreateNumberFormatter()
 
     mpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
     mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
+    if (!utl::ConfigManager::IsAvoidConfig())
+        mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
 }
 
 SwTableNumFormatMerge::SwTableNumFormatMerge( const SwDoc& rSrc, SwDoc& rDest )

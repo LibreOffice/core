@@ -516,8 +516,8 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
     if ( !pOptions )
     {
         pOptions = new SvtSysLocaleOptions_Impl;
-
-        ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);
+        if (!utl::ConfigManager::IsAvoidConfig())
+            ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);
     }
     ++nRefCount;
     pOptions->AddListener(this);
