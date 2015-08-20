@@ -507,7 +507,10 @@ void RefEdit::dispose()
 
 void RefEdit::SetRefString( const OUString& rStr )
 {
-    Edit::SetText( rStr );
+    // Prevent unwanted side effects by setting only a differing string.
+    // See commit message for reasons.
+    if (Edit::GetText() != rStr)
+        Edit::SetText( rStr );
 }
 
 void RefEdit::SetRefValid(bool bValid)
