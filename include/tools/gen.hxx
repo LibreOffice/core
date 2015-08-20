@@ -39,8 +39,8 @@ enum TriState { TRISTATE_FALSE, TRISTATE_TRUE, TRISTATE_INDET };
 class SAL_WARN_UNUSED Pair
 {
 public:
-                        Pair();
-                        Pair( long nA, long nB );
+                        Pair() : nA(0), nB(0) {}
+                        Pair( long _nA, long _nB ) : nA(_nA), nB(_nB) {}
 
     long                A() const { return nA; }
     long                B() const { return nB; }
@@ -59,17 +59,6 @@ protected:
     long                nB;
 };
 
-inline Pair::Pair()
-{
-    nA = nB = 0;
-}
-
-inline Pair::Pair( long _nA, long _nB )
-{
-    Pair::nA = _nA;
-    Pair::nB = _nB;
-}
-
 inline bool Pair::operator == ( const Pair& rPair ) const
 {
     return ((nA == rPair.nA) && (nB == rPair.nB));
@@ -85,8 +74,8 @@ inline bool Pair::operator != ( const Pair& rPair ) const
 class SAL_DLLPUBLIC_EXPORT SAL_WARN_UNUSED Point : public Pair
 {
 public:
-                        Point();
-                        Point( long nX, long nY );
+                        Point() {}
+                        Point( long nX, long nY ) : Pair( nX, nY ) {}
 
     long                X() const { return nA; }
     long                Y() const { return nB; }
@@ -114,14 +103,6 @@ public:
     void                setX(long nX)  { X() = nX; }
     void                setY(long nY)  { Y() = nY; }
 };
-
-inline Point::Point()
-{
-}
-
-inline Point::Point( long nX, long nY ) : Pair( nX, nY )
-{
-}
 
 inline void Point::Move( long nHorzMove, long nVertMove )
 {
@@ -189,8 +170,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
 class SAL_WARN_UNUSED Size : public Pair
 {
 public:
-                    Size();
-                    Size( long nWidth, long nHeight );
+                    Size() {}
+                    Size( long nWidth, long nHeight ) : Pair( nWidth, nHeight ) {}
 
     long            Width() const  { return nA; }
     long            Height() const { return nB; }
@@ -203,15 +184,6 @@ public:
     void            setWidth(long nWidth)  { Width() = nWidth; }
     void            setHeight(long nHeight)  { Height() = nHeight; }
 };
-
-inline Size::Size()
-{
-}
-
-inline Size::Size( long nWidth, long nHeight ) :
-                Pair( nWidth, nHeight )
-{
-}
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -227,8 +199,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
 class SAL_WARN_UNUSED Range : public Pair
 {
 public:
-                    Range();
-                    Range( long nMin, long nMax );
+                    Range() {}
+                    Range( long nMin, long nMax ) : Pair( nMin, nMax ) {}
 
     long            Min() const { return nA; }
     long            Max() const { return nB; }
@@ -241,14 +213,6 @@ public:
 
     void            Justify();
 };
-
-inline Range::Range()
-{
-}
-
-inline Range::Range( long nMin, long nMax ) : Pair( nMin, nMax )
-{
-}
 
 inline bool Range::IsInside( long nIs ) const
 {
@@ -280,9 +244,9 @@ inline std::basic_ostream<charT, traits> & operator <<(
 class SAL_WARN_UNUSED Selection : public Pair
 {
 public:
-                    Selection();
-                    Selection( long nPos );
-                    Selection( long nMin, long nMax );
+                    Selection() {}
+                    Selection( long nPos ) : Pair( nPos, nPos ) {}
+                    Selection( long nMin, long nMax ) : Pair( nMin, nMax ) {}
 
     long            Min() const { return nA; }
     long            Max() const { return nB; }
@@ -301,19 +265,6 @@ public:
     void            setMin(long nMin)  { Min() = nMin; }
     void            setMax(long nMax)  { Max() = nMax; }
 };
-
-inline Selection::Selection()
-{
-}
-
-inline Selection::Selection( long nPos ) : Pair( nPos, nPos )
-{
-}
-
-inline Selection::Selection( long nMin, long nMax ) :
-           Pair( nMin, nMax )
-{
-}
 
 inline bool Selection::IsInside( long nIs ) const
 {
@@ -470,7 +421,7 @@ inline Rectangle::Rectangle( const Point& rLT, const Size& rSize )
 
 inline bool Rectangle::IsEmpty() const
 {
-    return ((nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY));
+    return (nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY);
 }
 
 inline Point Rectangle::TopLeft() const
@@ -623,18 +574,18 @@ inline Rectangle Rectangle::GetIntersection( const Rectangle& rRect ) const
 
 inline bool Rectangle::operator == ( const Rectangle& rRect ) const
 {
-    return ((nLeft   == rRect.nLeft   ) &&
-            (nTop    == rRect.nTop    ) &&
-            (nRight  == rRect.nRight  ) &&
-            (nBottom == rRect.nBottom ));
+    return (nLeft   == rRect.nLeft   ) &&
+           (nTop    == rRect.nTop    ) &&
+           (nRight  == rRect.nRight  ) &&
+           (nBottom == rRect.nBottom );
 }
 
 inline bool Rectangle::operator != ( const Rectangle& rRect ) const
 {
-    return ((nLeft   != rRect.nLeft   ) ||
-            (nTop    != rRect.nTop    ) ||
-            (nRight  != rRect.nRight  ) ||
-            (nBottom != rRect.nBottom ));
+    return (nLeft   != rRect.nLeft   ) ||
+           (nTop    != rRect.nTop    ) ||
+           (nRight  != rRect.nRight  ) ||
+           (nBottom != rRect.nBottom );
 }
 
 inline Rectangle& Rectangle::operator +=( const Point& rPt )
