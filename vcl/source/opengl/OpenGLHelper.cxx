@@ -20,8 +20,12 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 #include <vector>
+
+#include "opengl/zone.hxx"
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #include "opengl/x11/X11DeviceInfo.hxx"
@@ -68,6 +72,8 @@ namespace {
     int LogCompilerError(GLuint nId, const rtl::OUString &rDetail,
                          const rtl::OUString &rName, bool bShaderNotProgram)
     {
+        OpenGLZone aZone;
+
         int InfoLogLength = 0;
 
         CHECK_GL_ERROR();
@@ -127,6 +133,8 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName, const OString& preamble)
 {
+    OpenGLZone aZone;
+
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -205,6 +213,8 @@ void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx,
 
 void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)
 {
+    OpenGLZone aZone;
+
     boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nWidth*nHeight*4]);
     glReadPixels(0, 0, nWidth, nHeight, GL_BGRA, GL_UNSIGNED_BYTE, pBuffer.get());
     BitmapEx aBitmap = ConvertBGRABufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
@@ -312,6 +322,8 @@ std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
 void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
         GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId, bool bRenderbuffer)
 {
+    OpenGLZone aZone;
+
     // create a renderbuffer for depth attachment
     glGenRenderbuffers(1, &nRenderbufferDepthId);
     glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferDepthId);
@@ -383,6 +395,8 @@ float OpenGLHelper::getGLVersion()
 
 void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
 {
+    OpenGLZone aZone;
+
     GLenum glErr = glGetError();
     if (glErr != GL_NO_ERROR)
     {
@@ -403,6 +417,8 @@ bool OpenGLHelper::isDeviceBlacklisted()
     static bool bBlacklisted = true; // assume the worst
     if (!bSet)
     {
+        OpenGLZone aZone;
+
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
         X11OpenGLDeviceInfo aInfo;
         bBlacklisted = aInfo.isDeviceBlocked();
@@ -428,6 +444,34 @@ bool OpenGLHelper::supportsVCLOpenGL()
         return false;
     else
         return true;
+}
+
+/// How many nested OpenGL code-paths are we inside ?
+int OpenGLZone::gnInOpenGLZone = 0;
+
+/**
+ * Called from a signal handler if we get a crash in some GL code
+ */
+void OpenGLZone::hardDisable()
+{
+    // protect ourselves from double calling etc.
+    static bool bDisabled = false;
+    if (!bDisabled)
+    {
+        bDisabled = true;
+
+        // Disable the OpenGL support
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::VCL::UseOpenGL::set(false,  xChanges);
+        xChanges->commit();
+
+        // Force synchronous config write
+        css::uno::Reference< css::util::XFlushable >(
+            css::configuration::theDefaultProvider::get(
+                comphelper::getProcessComponentContext()),
+            css::uno::UNO_QUERY_THROW)->flush();
+    }
 }
 
 bool OpenGLHelper::isVCLOpenGLEnabled()
@@ -483,6 +527,8 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 
 bool OpenGLHelper::GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI)
 {
+    OpenGLZone aZone;
+
     XVisualInfo* pVI;
     int aAttrib[] = { GLX_RGBA,
                       GLX_RED_SIZE, 8,
@@ -505,6 +551,8 @@ bool OpenGLHelper::GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rV
 
 GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted )
 {
+    OpenGLZone aZone;
+
     int nScreen = DefaultScreen( pDisplay );
     GLXFBConfig *aFbConfigs;
     int i, nFbConfigs, nValue;

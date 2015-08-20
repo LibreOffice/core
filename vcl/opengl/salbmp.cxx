@@ -27,6 +27,7 @@
 #include "svdata.hxx"
 #include "salgdi.hxx"
 
+#include "opengl/zone.hxx"
 #include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"
 
@@ -56,6 +57,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
 bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
 {
     static const BitmapPalette aEmptyPalette;
+    OpenGLZone aZone;
 
     Destroy();
     SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: [" << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
@@ -81,6 +83,8 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
 
 bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
+    OpenGLZone aZone;
+
     Destroy();
     SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create with size: " << rSize );
 
@@ -105,6 +109,8 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 
 bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
+    OpenGLZone aZone;
+
     // check that carefully only in the debug mode
     assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBmp));
 
@@ -152,6 +158,8 @@ OpenGLTexture& OpenGLSalBitmap::GetTexture() const
 
 void OpenGLSalBitmap::Destroy()
 {
+    OpenGLZone aZone;
+
     SAL_INFO( "vcl.opengl", "Destroy OpenGLSalBitmap" );
     maPendingOps.clear();
     maTexture = OpenGLTexture();
@@ -310,6 +318,8 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
 
 Size OpenGLSalBitmap::GetSize() const
 {
+    OpenGLZone aZone;
+
     std::deque< OpenGLSalBitmapOp* >::const_iterator it = maPendingOps.begin();
     Size aSize( mnWidth, mnHeight );
 
@@ -484,6 +494,7 @@ void OpenGLSalBitmap::makeCurrent()
 
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 {
+    OpenGLZone aZone;
 
     if( nMode != BITMAP_INFO_ACCESS )
     {
@@ -529,6 +540,8 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
 void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
+    OpenGLZone aZone;
+
     if( nMode == BITMAP_WRITE_ACCESS )
     {
         maTexture = OpenGLTexture();
@@ -591,6 +604,8 @@ bool OpenGLSalBitmap::Erase( const ::Color& /*rFillColor*/ )
 
 bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
+    OpenGLZone aZone;
+
     OpenGLFramebuffer* pFramebuffer;
     OpenGLProgram* pProgram;
 
