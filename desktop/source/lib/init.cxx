@@ -57,6 +57,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 #include <app.hxx>
 
@@ -966,31 +967,125 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
-/// pre-load all C++ component factories and leak references to them.
-static void forceLoadAllNativeComponents()
+static void loadSharedLibrary(const OUString & aUriRdb)
 {
-    // FIXME: we need to inject RTLD_NOW into here, either by a
-    // putenv("LD_BIND_NOW=1") in parent process or ... (?).
+    int nsId;
+    int nUcNsId;
 
-    try {
-        uno::Reference<container::XContentEnumerationAccess> xEnumAcc(
-            xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-        uno::Reference<container::XHierarchicalNameAccess> xTypeMgr(
-            xContext->getValueByName(
-                "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
-            css::uno::UNO_QUERY_THROW);
-        uno::Sequence<OUString> aServiceNames(
-            xContext->getServiceManager()->getAvailableServiceNames());
+    OUString sAttrUri;
+    OUString sAttrLoader;
 
-        for (sal_Int32 i = 0; i != aServiceNames.getLength(); ++i)
+    xmlreader::Span aName;
+    xmlreader::XmlReader::Result aItem = xmlreader::XmlReader::RESULT_BEGIN;
+
+    xmlreader::XmlReader aRdbReader(aUriRdb);
+    nUcNsId = aRdbReader.registerNamespaceIri(xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("http://openoffice.org/2010/uno-components")));
+
+    while( aItem != xmlreader::XmlReader::RESULT_DONE )
+    {
+        aItem = aRdbReader.nextItem(xmlreader::XmlReader::TEXT_NONE, &aName, &nsId );
+        if (nsId == nUcNsId &&
+            aName.equals(RTL_CONSTASCII_STRINGPARAM("component")))
         {
-            css::uno::Reference<css::container::XEnumeration> xServiceImpls(
-                xEnumAcc->createContentEnumeration(aServiceNames[i]),
-                css::uno::UNO_SET_THROW);
-            SAL_INFO("lok", "service " << aServiceNames[i]);
-            // FIXME: need to actually load and link each native DSO.
+            sAttrLoader = OUString();
+            sAttrUri = OUString();
+
+            while (aRdbReader.nextAttribute(&nsId, &aName))
+            {
+                if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
+                    aName.equals(RTL_CONSTASCII_STRINGPARAM("loader")))
+                    sAttrLoader = aRdbReader.getAttributeValue(false).convertFromUtf8();
+                else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
+                    aName.equals(RTL_CONSTASCII_STRINGPARAM("uri")))
+                    sAttrUri = aRdbReader.getAttributeValue(false).convertFromUtf8();
+            }
+
+            try
+            {
+                sAttrUri = cppu::bootstrap_expandUri(sAttrUri);
+            }
+            catch(css::lang::IllegalArgumentException)
+            {
+                fprintf(stderr, "Cannot expand URI '%s'\n",
+                    OUStringToOString(sAttrUri, RTL_TEXTENCODING_UTF8).getStr());
+            }
+
+            if (sAttrLoader == "com.sun.star.loader.SharedLibrary")
+            {
+                oslModule aModule = osl_loadModule( sAttrUri.pData, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL );
+                SAL_INFO("lok", "loaded component library " << sAttrUri << ( aModule ? " ok" : " no"));
+
+                // leak aModule
+                // osl_unloadModule(aModule);
+                aModule = 0;
+            }
         }
-    } catch (const uno::Exception &) {
+    }
+}
+
+/// pre-load all C++ component factories and leak references to them.
+static void forceLoadAllNativeComponents(const OUString & aAppURL)
+{
+    sal_Int32 nIndex = 0;
+
+    rtl::Bootstrap bs(aAppURL + "/" + SAL_CONFIGFILE("uno"));
+    if (bs.getHandle() == 0)
+    {
+        fprintf(stderr, "Cannot open uno ini '%s'\n",
+                 OUStringToOString(aAppURL + "/" + SAL_CONFIGFILE("uno"), RTL_TEXTENCODING_UTF8).getStr());
+        return;
+    }
+
+    OUString aRdbFiles;
+    if (!bs.getFrom("UNO_SERVICES", aRdbFiles))
+    {
+        fprintf(stderr, "Cannot obtain UNO_SERVICES from uno ini\n");
+        return;
+    }
+
+    while (nIndex != -1)
+    {
+        OUString aUriRdb(aRdbFiles.getToken(0, ' ', nIndex));
+
+        if (aUriRdb.isEmpty())
+            continue;
+
+        if (aUriRdb[0] == '?')
+            aUriRdb = aUriRdb.copy(1);
+
+        if (aUriRdb.startsWith("<") && aUriRdb.endsWith(">*"))
+        {
+            aUriRdb = aUriRdb.copy(1, aUriRdb.getLength() - 3);
+            osl::Directory aDir(aUriRdb);
+
+            if ( aDir.open() == osl::FileBase::E_None )
+            {
+                while(true)
+                {
+                    osl::DirectoryItem aDirItem;
+
+                    if ( aDir.getNextItem(aDirItem, SAL_MAX_UINT32) != osl::FileBase::E_None)
+                        break;
+
+                    osl::FileStatus stat(osl_FileStatus_Mask_Type |
+                                         osl_FileStatus_Mask_FileName |
+                                         osl_FileStatus_Mask_FileURL);
+
+                    if (aDirItem.getFileStatus(stat) == osl::FileBase::E_None)
+                        loadSharedLibrary(stat.getFileURL());
+                }
+            }
+            else
+            {
+                fprintf(stderr, "Cannot open directory '%s'\n",
+                    OUStringToOString(aUriRdb, RTL_TEXTENCODING_UTF8).getStr());
+            }
+
+        }
+        else
+        {
+            loadSharedLibrary(aUriRdb);
+        }
     }
 }
 
@@ -1072,7 +1167,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
         if (eStage == PRE_INIT)
         {
-            forceLoadAllNativeComponents();
+            forceLoadAllNativeComponents(aAppURL);
             forceLoadFilterXML();
         }
 
