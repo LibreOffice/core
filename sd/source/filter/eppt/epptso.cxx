@@ -382,7 +382,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
                .WriteUInt32( 4 )
                .WriteUInt32( nHyperId );
 
-    PPTWriter::WriteCString( *mpExEmbed, rStringVer0, 0 );
+    PPTWriter::WriteCString( *mpExEmbed, rStringVer0 );
     PPTWriter::WriteCString( *mpExEmbed, rStringVer1, 1 );
     PPTWriter::WriteCString( *mpExEmbed, rStringVer2, 2 );
     PPTWriter::WriteCString( *mpExEmbed, rStringVer3, 3 );
@@ -2110,7 +2110,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const
         SvMemoryStream  aClientTextBox( 0x200, 0x200 );
         ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, NULL, aExtBu, &aPropOpt );
 
-        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
         aPropOpt.CreateShapeProperties( mXShape );
         aPropOpt.Commit( *mpStrm );
         mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
@@ -2152,7 +2152,7 @@ void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSo
     if ( bFill )
         rPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
     if ( ImplGetText() )
-        rPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+        rPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
 }
 
 void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& aSolverContainer, PageType ePageType, bool bMasterPage, int nPageNumber )
@@ -2314,7 +2314,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( ImplGetText() )
                     {
                         if ( !aPropOpt.IsFontWork() )
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, true, true );
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, true );
                     }
                 }
             }
@@ -2809,7 +2809,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 if ( aPropertyOptions.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
                                     nLineFlags |= 0x10001;  // draw dashed line if no line
                                 aPropertyOptions.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
-                                aPropertyOptions.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+                                aPropertyOptions.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                                 aPropertyOptions.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
@@ -2850,7 +2850,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );          // Flags: HaveAnchor | HaveMaster
                             aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
                             aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
                             ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                             if ( mbEmptyPresObj )
                             {
@@ -2901,7 +2901,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 if ( aPropOpt2.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
                                     nLineFlags |= 0x10001;  // draw dashed line if no line
                                 aPropOpt2.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
-                                aPropOpt2.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+                                aPropOpt2.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt2 );
                                 aPropOpt2.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
@@ -2951,7 +2951,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );          // Flags: HaveAnchor | HaveMaster
                             aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
                             aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
                             ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                             if ( mbEmptyPresObj )
                             {
@@ -3696,7 +3696,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
                         aPropOptSp.CreateFillProperties( mXPropSet, true );
                         aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                        aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
+                        aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, false );
                         aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
 
                         SvMemoryStream aClientTextBox( 0x200, 0x200 );

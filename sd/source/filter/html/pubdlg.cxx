@@ -465,7 +465,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
     pPage3_Quality->InsertEntry( OUString( "75%" ) );
     pPage3_Quality->InsertEntry( OUString( "100%" ) );
 
-    pPage5_Buttons->SetColCount( 1 );
+    pPage5_Buttons->SetColCount();
     pPage5_Buttons->SetLineCount( 4 );
     pPage5_Buttons->SetExtraSpacing( 1 );
 
@@ -753,7 +753,7 @@ void SdPublishingDlg::SetDefaults()
     SdPublishingDesign aDefault;
     SetDesign(&aDefault);
 
-    pPage1_NewDesign->Check(true);
+    pPage1_NewDesign->Check();
     pPage1_OldDesign->Check(false);
     UpdatePage();
 }
@@ -943,7 +943,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 {
     if(pButton == pPage1_NewDesign)
     {
-        pPage1_NewDesign->Check(true); // because of DesignDeleteHdl
+        pPage1_NewDesign->Check(); // because of DesignDeleteHdl
         pPage1_OldDesign->Check(false);
         pPage1_Designs->Disable();
         pPage1_DelDesign->Disable();
@@ -1116,7 +1116,7 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
             m_aALinkColor = aDlg.GetColor();
     }
 
-    pPage6_User->Check(true);
+    pPage6_User->Check();
     pPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
                                m_aVLinkColor, m_aALinkColor );
     pPage6_Preview->Invalidate();

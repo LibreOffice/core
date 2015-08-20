@@ -382,7 +382,7 @@ struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
     void operator() ( const OUString & rString ) const
     {
         INetURLObject aURL( rString );
-        mrListBox->InsertEntry( aURL.GetBase(), LISTBOX_APPEND );
+        mrListBox->InsertEntry( aURL.GetBase() );
     }
 
 private:

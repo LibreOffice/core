@@ -2090,7 +2090,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
         if(pOutlParaObj)
         {
             // assign text
-            ::sd::Outliner* pOutl = pModel->GetInternalOutliner( true );
+            ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
             pOutlParaObj = pOutl->CreateParaObject();

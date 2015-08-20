@@ -914,7 +914,7 @@ SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject) const
 {
     DBG_ASSERT(pObject, "sd::SdDrawDocument::GetAnimationInfo(), invalid argument!");
     if( pObject )
-        return GetShapeUserData( *pObject, false );
+        return GetShapeUserData( *pObject );
     else
         return 0;
 }
@@ -1090,7 +1090,7 @@ void SdDrawDocument::CheckMasterPages()
                     if( PK_STANDARD == pPage->GetPageKind() )
                     {
                         MoveMasterPage( nFound, nPage );
-                        pPage->SetInserted(true);
+                        pPage->SetInserted();
                         break;
 
                     }
@@ -1121,7 +1121,7 @@ void SdDrawDocument::CheckMasterPages()
                     if( (PK_NOTES == pNotesPage->GetPageKind()) && ( pPage->GetLayoutName() == pNotesPage->GetLayoutName() ) )
                     {
                         MoveMasterPage( nFound, nPage );
-                        pNotesPage->SetInserted(true);
+                        pNotesPage->SetInserted();
                         break;
                     }
 

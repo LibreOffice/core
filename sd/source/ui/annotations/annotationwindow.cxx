@@ -639,7 +639,7 @@ void AnnotationWindow::Deactivate()
                 if( mpDoc->IsUndoEnabled() )
                     mpDoc->EndUndo();
 
-                DocView()->GetDocSh()->SetModified(true);
+                DocView()->GetDocSh()->SetModified();
             }
 
         }

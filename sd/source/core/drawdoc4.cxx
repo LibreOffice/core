@@ -745,7 +745,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
     {
         StopOnlineSpelling();
 
-        ::sd::Outliner* pOutl = GetInternalOutliner(true);
+        ::sd::Outliner* pOutl = GetInternalOutliner();
 
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -880,7 +880,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
         mbHasOnlineSpellErrors = false;
-        ::sd::Outliner* pOutl = GetInternalOutliner(true);
+        ::sd::Outliner* pOutl = GetInternalOutliner();
         pOutl->SetUpdateMode(true);
         Link<> aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
@@ -1351,7 +1351,7 @@ void ModifyGuard::init()
 ModifyGuard::~ModifyGuard()
 {
     if( mbIsEnableSetModified )
-        mpDocShell->EnableSetModified( true );
+        mpDocShell->EnableSetModified();
 
     if( mpDoc && (mpDoc->IsChanged() != mbIsDocumentChanged) )
         mpDoc->SetChanged(mbIsDocumentChanged);

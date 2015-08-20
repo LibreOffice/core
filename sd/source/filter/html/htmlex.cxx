@@ -939,7 +939,7 @@ bool HtmlExport::SavePresentation()
 
     OUString aURL(maExportPath + maDocFileName);
 
-    mpDocSh->EnableSetModified( true );
+    mpDocSh->EnableSetModified();
 
     try
     {

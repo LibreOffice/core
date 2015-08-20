@@ -508,7 +508,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
             {
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
-                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimEvent( rStrm, xNode );
                 exportAnimValue( rStrm, xNode, false );
             }
             break;
@@ -572,7 +572,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 }
                 exportIterate( rStrm, xNode );
                 exportAnimPropertySet( rStrm, xNode );
-                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimEvent( rStrm, xNode );
                 exportAnimValue( rStrm, xNode, false );
             }
             break;
@@ -581,7 +581,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
             {
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
-                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimEvent( rStrm, xNode );
                 exportAnimValue( rStrm, xNode, false );
                 exportAnimate( rStrm, xNode );
             }
@@ -595,7 +595,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                     exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                     exportAnimPropertySet( rStrm, xNode );
                     exportAnimateSet( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_SET : AFTEREFFECT_NONE );
-                    exportAnimEvent( rStrm, xNode, 0 );
+                    exportAnimEvent( rStrm, xNode );
                     exportAnimValue( rStrm, xNode, false );
                 }
                 else
@@ -610,7 +610,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimateMotion( rStrm, xNode );
-                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimEvent( rStrm, xNode );
                 exportAnimValue( rStrm, xNode, false );
             }
             break;
@@ -626,7 +626,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                     exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                     exportAnimPropertySet( rStrm, xNode );
                     exportAnimateColor( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_COLOR : AFTEREFFECT_NONE );
-                    exportAnimEvent( rStrm, xNode, 0 );
+                    exportAnimEvent( rStrm, xNode );
                     exportAnimValue( rStrm, xNode, false );
                 }
                 else
@@ -641,7 +641,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
                 exportAnimateTransform( rStrm, xNode );
-                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimEvent( rStrm, xNode );
                 exportAnimValue( rStrm, xNode, false );
             }
             break;
@@ -650,7 +650,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
             {
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
-                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimEvent( rStrm, xNode );
                 exportAnimValue( rStrm, xNode, false );
                 exportTransitionFilter( rStrm, xNode );
             }

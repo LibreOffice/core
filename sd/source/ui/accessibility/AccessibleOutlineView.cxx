@@ -205,7 +205,7 @@ void AccessibleOutlineView::Activated()
     SolarMutexGuard aGuard;
 
     // delegate listener handling to children manager.
-    maTextHelper.SetFocus(true);
+    maTextHelper.SetFocus();
 }
 
 void AccessibleOutlineView::Deactivated()

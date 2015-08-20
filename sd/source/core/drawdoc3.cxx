@@ -918,7 +918,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     }
 
     // Make absolutely sure no double masterpages are there
-    RemoveUnnecessaryMasterPages(NULL, true, true);
+    RemoveUnnecessaryMasterPages(NULL, true);
 
     // Rename object styles if necessary
     if(!aRenameStr.isEmpty())
@@ -1567,7 +1567,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         // A stylesheet of the same name already exists -> overwrite contents
                         bool bTest = pMySheet->SetName(pHisSheet->GetName());
                         DBG_ASSERT(bTest, "Renaming StyleSheet failed.");
-                        pMySheet->GetItemSet().ClearItem(0);  // Delete all
+                        pMySheet->GetItemSet().ClearItem();  // Delete all
 
                         if (bUndo)
                         {
@@ -1584,7 +1584,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         OUString aHelpFile;
                         pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SD_STYLE_FAMILY_MASTERPAGE, pHisSheet->GetMask()) );
                         pMySheet->SetHelpId( aHelpFile, pHisSheet->GetHelpId(aHelpFile) );
-                        pMySheet->GetItemSet().ClearItem(0);  // Delete all
+                        pMySheet->GetItemSet().ClearItem();  // Delete all
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
 
                         aCreatedStyles.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pMySheet ) ) );

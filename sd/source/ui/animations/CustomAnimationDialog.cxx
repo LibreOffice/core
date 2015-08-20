@@ -1767,7 +1767,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
                     continue;
             }
 
-            OUString aDescription( getShapeDescription( xShape, true ) );
+            OUString aDescription( getShapeDescription( xShape ) );
             sal_Int32 nPos = mpLBTrigger->InsertEntry( aDescription );
 
             mpLBTrigger->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nShape) );
@@ -1804,7 +1804,7 @@ IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
     if( pControl == mpLBTrigger )
     {
         mpRBClickSequence->Check( false );
-        mpRBInteractive->Check( true );
+        mpRBInteractive->Check();
     }
 
     return 0;

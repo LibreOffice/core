@@ -515,7 +515,7 @@ bool ImplSdPPTImport::Import()
                 DffRecordHeader aHyperE;
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlink, nExObjHyperListLen, &aHyperE ) )
                     break;
-                if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen, NULL, 0 ) )
+                if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen, NULL ) )
                     break;
                 rStCtrl.SeekRel( 8 );
                 rStCtrl.ReadUInt32( pPtr->nIndex );
@@ -716,7 +716,7 @@ bool ImplSdPPTImport::Import()
                 if ( pNotesClone )
                 {
                     OUString aLayoutName( static_cast<SdPage*>(pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
-                    static_cast<SdPage*>(pNotesClone)->SetPresentationLayout( aLayoutName, false, false, false );
+                    static_cast<SdPage*>(pNotesClone)->SetPresentationLayout( aLayoutName, false, false );
                     static_cast<SdPage*>(pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
@@ -1170,7 +1170,7 @@ bool ImplSdPPTImport::Import()
     }
     if ( mbDocumentFound )
     {
-        mpDoc->SetSummationOfParagraphs( true );
+        mpDoc->SetSummationOfParagraphs();
         if ( pDocShell )
         {
             ::sd::FrameView* pFrameView = mpDoc->GetFrameView( 0 );
@@ -1316,7 +1316,7 @@ bool ImplSdPPTImport::Import()
         // set the current custom show
         if ( !aCustomShow.isEmpty() )
         {
-            SdCustomShowList* pList = mpDoc->GetCustomShowList( false );
+            SdCustomShowList* pList = mpDoc->GetCustomShowList();
             if ( pList )
             {
                 SdCustomShow* pPtr = NULL;
@@ -1855,7 +1855,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     if ( OUString::number(nSoundRef) == aRefStr )
                     {
                         rStCtrl.Seek( nPosMerk2 );
-                        if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 0 ) )
+                        if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL ) )
                         {
                             ReadString( aRetval );
                             bDone = true;
@@ -1889,7 +1889,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     {
                         rStCtrl.Seek( nPosMerk2 );
                         DffRecordHeader aSoundDataRecHd;
-                        if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd, 0 ) )
+                        if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd ) )
                         {
                             OUString aGalleryDir( SvtPathOptions().GetGalleryPath() );
                             sal_Int32 nTokenCount = comphelper::string::getTokenCount(aGalleryDir, ';');
@@ -2594,7 +2594,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             sal_uInt32 nFilePosMerk2 = rSt.Tell();
                             OUString aMacroName;
 
-                            if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd, NULL, 0 ) )
+                            if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd, NULL ) )
                                 ReadString(aMacroName);
 
                             rSt.Seek( nFilePosMerk2 );

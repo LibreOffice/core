@@ -737,7 +737,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
                 // switch snapping off
                 if(!bWasNoSnap)
-                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(true);
+                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap();
                 if(bWasSnapEnabled)
                     mrView.SetSnapEnabled(false);
 

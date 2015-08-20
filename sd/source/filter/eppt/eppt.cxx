@@ -578,7 +578,7 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "DateTimeText" ), true ) )
         {
             if ( aAny >>= aString )
-                PPTWriter::WriteCString( rStrm, aString, 0 );
+                PPTWriter::WriteCString( rStrm, aString );
         }
     }
 }
@@ -657,7 +657,7 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
             nVal |= nFormat;
         }
 
-        mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 0 );
+        mpPptEscherEx->OpenContainer( EPP_HeadersFooters );
         mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
         mpStrm->WriteUInt32( nVal );
         ImplCreateHeaderFooterStrings( *mpStrm, rXPagePropSet );
@@ -1108,7 +1108,7 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
                 OUString sInitials( getInitials( sAuthor ) );
                 util::DateTime aDateTime( xAnnotation->getDateTime() );
                 if ( !sAuthor.isEmpty() )
-                    PPTWriter::WriteCString( rBinaryTagData10Atom, sAuthor, 0 );
+                    PPTWriter::WriteCString( rBinaryTagData10Atom, sAuthor );
                 if ( !sText.isEmpty() )
                     PPTWriter::WriteCString( rBinaryTagData10Atom, sText, 1 );
                 if ( !sInitials.isEmpty() )

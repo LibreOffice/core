@@ -184,7 +184,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
-        SetSwapGraphics(true);
+        SetSwapGraphics();
     }
 
     // Set measuring unit (of the application) and scale (of SdMod)
@@ -765,7 +765,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                     if (!aString.isEmpty())
                     {
-                        sd::Outliner* pInternalOutl = GetInternalOutliner(true);
+                        sd::Outliner* pInternalOutl = GetInternalOutliner();
                         pPage->SetObjText( static_cast<SdrTextObj*>(pObj), pInternalOutl, ePresObjKind, aString );
                         pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
                         pInternalOutl->Clear();

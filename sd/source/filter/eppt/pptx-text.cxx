@@ -65,7 +65,7 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
 {
     mXPropSet = rXPropSet;
 
-    ImplGetPortionValues( rFontCollection, false );
+    ImplGetPortionValues( rFontCollection );
 }
 
 PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
@@ -328,7 +328,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     }
 
     mnCharHeight = 24;
-    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, false ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName ) )
     {
         float fVal(0.0);
         if ( mAny >>= fVal )
@@ -337,7 +337,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
             meCharHeight = GetPropertyState( mXPropSet, aCharHeightName );
         }
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, false ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName ) )
     {
         float fFloat(0.0);
         if ( mAny >>= fFloat )
@@ -348,13 +348,13 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
                 mnCharAttrHard |= 1;
         }
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, false ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName ) )
     {
         com::sun::star::lang::Locale eLocale;
         if ( mAny >>= eLocale )
             meCharLocale = eLocale;
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, false ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName ) )
     {
         ::com::sun::star::awt::FontSlant aFS;
         if ( mAny >>= aFS )
@@ -673,7 +673,7 @@ ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::s
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( pProv, false );
+    ImplGetParagraphValues( pProv );
 }
 
 ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
