@@ -204,6 +204,15 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     // Line Properties
+
+    rOutProperties.push_back(
+        Property( "LineColor",
+                  PROP_DATAPOINT_BORDER_COLOR,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     rOutProperties.push_back(
         Property( "LineStyle",
                   LinePropertiesHelper::PROP_LINE_STYLE,
