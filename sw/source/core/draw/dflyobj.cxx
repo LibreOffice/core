@@ -332,9 +332,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
         {
             const Rectangle aOuterRectangle(pFlyFrame->Frm().Pos(), pFlyFrame->Frm().SSize());
 
-            if(!aOuterRectangle.IsEmpty()
-                && RECT_EMPTY != aOuterRectangle.Right()
-                && RECT_EMPTY != aOuterRectangle.Bottom())
+            if(!aOuterRectangle.IsEmpty())
             {
                 aOuterRange.expand(basegfx::B2DTuple(aOuterRectangle.Left(), aOuterRectangle.Top()));
                 aOuterRange.expand(basegfx::B2DTuple(aOuterRectangle.Right(), aOuterRectangle.Bottom()));
@@ -358,9 +356,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
         {
             const Rectangle aInnerRectangle(pFlyFrame->Frm().Pos() + pFlyFrame->Prt().Pos(), pFlyFrame->Prt().SSize());
 
-            if(!aInnerRectangle.IsEmpty()
-                && RECT_EMPTY != aInnerRectangle.Right()
-                && RECT_EMPTY != aInnerRectangle.Bottom())
+            if(!aInnerRectangle.IsEmpty())
             {
                 aInnerRange.expand(basegfx::B2DTuple(aInnerRectangle.Left(), aInnerRectangle.Top()));
                 aInnerRange.expand(basegfx::B2DTuple(aInnerRectangle.Right(), aInnerRectangle.Bottom()));

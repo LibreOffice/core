@@ -148,9 +148,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
             // will access aOutRect directly
             const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
 
-            if(!aOuterRectangle.IsEmpty()
-                && RECT_EMPTY != aOuterRectangle.Right()
-                && RECT_EMPTY != aOuterRectangle.Bottom())
+            if(!aOuterRectangle.IsEmpty())
             {
                 basegfx::B2DRange aOuterRange(
                     aOuterRectangle.Left(), aOuterRectangle.Top(),
