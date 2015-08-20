@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <unx/saldisp.hxx>
 
 #include <fixx11h.h>
@@ -36,7 +38,7 @@ class KDEXLib : public QObject, public SalXLib
     Q_OBJECT
     private:
         bool m_bStartupDone;
-        VCLKDEApplication* m_pApplication;
+        std::unique_ptr<VCLKDEApplication> m_pApplication;
         char** m_pFreeCmdLineArgs;
         char** m_pAppCmdLineArgs;
         int m_nFakeCmdLineArgs;

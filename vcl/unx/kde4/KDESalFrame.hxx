@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>
 
@@ -32,7 +34,7 @@ class KDESalFrame : public X11SalFrame
             X11SalGraphics* pGraphics;
             bool bInUse;
 
-            GraphicsHolder() : pGraphics(0),bInUse( false ) {}
+            GraphicsHolder() : pGraphics(nullptr),bInUse( false ) {}
             ~GraphicsHolder();
         };
 
