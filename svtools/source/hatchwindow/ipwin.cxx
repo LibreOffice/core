@@ -347,73 +347,51 @@ void SvResizeHelper::ValidateRect( Rectangle & rValidate ) const
     {
         case 0:
             if( rValidate.Top() > rValidate.Bottom() )
-            {
                 rValidate.Top() = rValidate.Bottom();
-                rValidate.Bottom() = RECT_EMPTY;
-            }
             if( rValidate.Left() > rValidate.Right() )
-            {
                 rValidate.Left() = rValidate.Right();
-                rValidate.Right() = RECT_EMPTY;
-            }
             break;
         case 1:
             if( rValidate.Top() > rValidate.Bottom() )
-            {
                 rValidate.Top() = rValidate.Bottom();
-                rValidate.Bottom() = RECT_EMPTY;
-            }
             break;
         case 2:
             if( rValidate.Top() > rValidate.Bottom() )
-            {
                 rValidate.Top() = rValidate.Bottom();
-                rValidate.Bottom() = RECT_EMPTY;
-            }
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Right() = RECT_EMPTY;
+                rValidate.Right() = rValidate.Left();
             break;
         case 3:
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Right() = RECT_EMPTY;
+                rValidate.Right() = rValidate.Left();
             break;
         case 4:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Bottom() = RECT_EMPTY;
+                rValidate.Bottom() = rValidate.Top();
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Right() = RECT_EMPTY;
+                rValidate.Right() = rValidate.Left();
             break;
         case 5:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Bottom() = RECT_EMPTY;
+                rValidate.Bottom() = rValidate.Top();
             break;
         case 6:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Bottom() = RECT_EMPTY;
+                rValidate.Bottom() = rValidate.Top();
             if( rValidate.Left() > rValidate.Right() )
-            {
                 rValidate.Left() = rValidate.Right();
-                rValidate.Right() = RECT_EMPTY;
-            }
             break;
         case 7:
             if( rValidate.Left() > rValidate.Right() )
-            {
                 rValidate.Left() = rValidate.Right();
-                rValidate.Right() = RECT_EMPTY;
-            }
             break;
     }
-    if( rValidate.Right() == RECT_EMPTY )
-        rValidate.Right() = rValidate.Left();
-    if( rValidate.Bottom() == RECT_EMPTY )
-        rValidate.Bottom() = rValidate.Top();
 
     // Mindestgr"osse 5 x 5
     if( rValidate.Left() + 5 > rValidate.Right() )
-        rValidate.Right() = rValidate.Left() +5;
+        rValidate.Right() = rValidate.Left() + 5;
     if( rValidate.Top() + 5 > rValidate.Bottom() )
-        rValidate.Bottom() = rValidate.Top() +5;
+        rValidate.Bottom() = rValidate.Top() + 5;
 }
 
 /*************************************************************************
