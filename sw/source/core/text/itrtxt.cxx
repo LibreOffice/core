@@ -354,7 +354,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
                         const sal_uInt16 nTmpPos = pHt->GetStart();
                         if ( nEnd <= nTmpPos && nTmpPos < nRangeEnd )
                             pFollow->_InvalidateRange(
-                                SwCharRange( nTmpPos, nTmpPos ), 0 );
+                                SwCharRange( nTmpPos, nTmpPos ) );
                     }
                 }
             }

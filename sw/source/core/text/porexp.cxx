@@ -88,7 +88,7 @@ void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawMarkedText( *this, rInf.GetLen(), false, false,
             0 != rInf.GetSmartTags(), 0 != rInf.GetGrammarCheckList() );
     else
-        rInf.DrawText( *this, rInf.GetLen(), false );
+        rInf.DrawText( *this, rInf.GetLen() );
 
     if( GetJoinBorderWithPrev() || GetJoinBorderWithNext() )
         *const_cast<SwTextPaintInfo&>(rInf).GetFont() = aOldFont;

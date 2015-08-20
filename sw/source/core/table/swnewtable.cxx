@@ -500,7 +500,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                             if( nOutSpan < 0 )
                             {
                                 const SwTableBox& rBox =
-                                    pOuterBox->FindStartOfRowSpan( *this, USHRT_MAX );
+                                    pOuterBox->FindStartOfRowSpan( *this );
                                 nOutSpan = rBox.getRowSpan();
                                 const SwTableLine* pTmpL = rBox.GetUpper();
                                 nCheck = GetTabLines().GetPos( pTmpL );
@@ -1067,7 +1067,7 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, sal_uInt16 nMax
 static void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBox& rBox )
 {
     SwTableBox* pBox = &rBox;
-    OSL_ENSURE( pBox == &rBox.FindStartOfRowSpan( rTable, USHRT_MAX ), "Not a master box" );
+    OSL_ENSURE( pBox == &rBox.FindStartOfRowSpan( rTable ), "Not a master box" );
     rBoxes.insert( pBox );
     if( pBox->getRowSpan() == 1 )
         return;
@@ -1634,7 +1634,7 @@ static void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nM
                 if( bColumn && nRowSpan != 1 && nOldCnt < rBoxes.size() )
                 {
                     SwTableBox *pMasterBox = pBox->getRowSpan() > 0 ? pBox
-                        : &pBox->FindStartOfRowSpan( rTable, USHRT_MAX );
+                        : &pBox->FindStartOfRowSpan( rTable );
                     lcl_getAllMergedBoxes( rTable, rBoxes, *pMasterBox );
                 }
             }
@@ -1901,7 +1901,7 @@ void SwTable::ExpandSelection( SwSelBoxes& rBoxes ) const
         if( nRowSpan != 1 )
         {
             SwTableBox *pMasterBox = nRowSpan > 0 ? pBox
-                    : &pBox->FindStartOfRowSpan( *this, USHRT_MAX );
+                    : &pBox->FindStartOfRowSpan( *this );
             lcl_getAllMergedBoxes( *this, rBoxes, *pMasterBox );
         }
     }

@@ -1603,9 +1603,9 @@ bool SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 sal_Int32 nPos;
                 if( lcl_ErgoVadis( this, nPos, PREP_QUOVADIS ) )
-                    InvalidateRange( SwCharRange( nPos, 1 ), 0 );
+                    InvalidateRange( SwCharRange( nPos, 1 ) );
                 if( lcl_ErgoVadis( this, nPos, PREP_ERGOSUM ) )
-                    InvalidateRange( SwCharRange( nPos, 1 ), 0 );
+                    InvalidateRange( SwCharRange( nPos, 1 ) );
             }
             // If we have a page number field, we must invalidate those spots
             SwpHints *pHints = GetTextNode()->GetpSwpHints();
@@ -1763,7 +1763,7 @@ bool SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     FindMaster()->Prepare( PREP_FTN_GONE ); // Master's Prepare
                 if( nPos )
                     --nPos; // The char preceding our Follow
-                InvalidateRange( SwCharRange( nPos, 1 ), 0 );
+                InvalidateRange( SwCharRange( nPos, 1 ) );
                 return bParaPossiblyInvalid;
             }
         case PREP_ERGOSUM:
@@ -1771,7 +1771,7 @@ bool SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 sal_Int32 nPos;
                 if( lcl_ErgoVadis( this, nPos, ePrep ) )
-                    InvalidateRange( SwCharRange( nPos, 1 ), 0 );
+                    InvalidateRange( SwCharRange( nPos, 1 ) );
             }
             break;
         case PREP_FLY_ATTR_CHG:
@@ -1794,7 +1794,7 @@ bool SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 {
                     sal_Int32 nLen = ( GetFollow() ? GetFollow()->GetOfst() :
                                       COMPLETE_STRING ) - GetOfst();
-                    InvalidateRange( SwCharRange( GetOfst(), nLen ), 0 );
+                    InvalidateRange( SwCharRange( GetOfst(), nLen ) );
                 }
             }
             else

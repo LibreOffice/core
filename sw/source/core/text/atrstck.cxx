@@ -364,7 +364,7 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
     mpShell = pSh;
 
     for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
-        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, true );
+        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );
 }
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,

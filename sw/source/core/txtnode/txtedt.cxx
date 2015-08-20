@@ -780,7 +780,7 @@ namespace
             sal_uInt16 nCurrScript = rxBreak->getScriptType( rText, nBegin );
 
             sal_Int32 indexUtf16 = nBegin;
-            rText.iterateCodePoints(&indexUtf16, 1);
+            rText.iterateCodePoints(&indexUtf16);
 
             //First character is Asian, consider it a word :-(
             if (nCurrScript == i18n::ScriptType::ASIAN)
@@ -799,7 +799,7 @@ namespace
                     nLen = indexUtf16 - nBegin;
                     return nLen;
                 }
-                rText.iterateCodePoints(&indexUtf16, 1);
+                rText.iterateCodePoints(&indexUtf16);
             }
         }
         return nLen;

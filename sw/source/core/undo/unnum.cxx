@@ -256,7 +256,7 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else
     {
-        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, false);
+        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset);
     }
 }
 
@@ -323,7 +323,7 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if (mbOldNum && ! mbNewNum)
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, false);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode);
     }
     else if ( ! mbOldNum && mbNewNum )
     {

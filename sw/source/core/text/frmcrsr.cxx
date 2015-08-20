@@ -756,7 +756,7 @@ bool SwTextFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     SwSetToRightMargin aSet;
 
     if( IsInTab() &&
-        pPam->GetNode( true ).StartOfSectionNode() !=
+        pPam->GetNode().StartOfSectionNode() !=
         pPam->GetNode( false ).StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
@@ -1143,7 +1143,7 @@ bool SwTextFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 {
 
     if ( IsInTab() &&
-        pPam->GetNode( true ).StartOfSectionNode() !=
+        pPam->GetNode().StartOfSectionNode() !=
         pPam->GetNode( false ).StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,

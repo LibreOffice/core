@@ -48,7 +48,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 
     // check whether a tab adjustment has been specified.
     if (SVX_TAB_ADJUST_END > aToken.eTabAlign) {
-        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwContentNode::GetAttr(RES_LR_SPACE, true) );
+        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwContentNode::GetAttr(RES_LR_SPACE) );
 
         long nTabPosition = aToken.nTabStopPosition;
         if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTextLeft()) {
@@ -106,7 +106,7 @@ DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNod
     if (!pageDescription) {
         return false;
     }
-    const SwFrm* pFrm = targetNode.getLayoutFrm(currentLayout, 0, 0, true);
+    const SwFrm* pFrm = targetNode.getLayoutFrm(currentLayout, 0, 0);
     if (!pFrm) {
         return false;
     }

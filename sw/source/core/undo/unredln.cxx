@@ -378,7 +378,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
-    if( !FillSaveData( rRedl, *pRedlSaveData, false, true ))
+    if( !FillSaveData( rRedl, *pRedlSaveData, false ))
         delete pRedlSaveData, pRedlSaveData = 0;
 }
 
@@ -407,7 +407,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 
         // per definition Point is end (in SwUndRng!)
         SwContentNode* pCSttNd = rPam.GetContentNode(false);
-        SwContentNode* pCEndNd = rPam.GetContentNode(true);
+        SwContentNode* pCEndNd = rPam.GetContentNode();
 
         // if start- and end-content is zero, then the doc-compare moves
         // complete nodes into the current doc. And then the selection
@@ -427,14 +427,14 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pCSttNd && !pCEndNd)
         {
             // #112139# Do not step behind the end of content.
-            SwNode & rTmp = rPam.GetNode(true);
+            SwNode & rTmp = rPam.GetNode();
             SwNode * pEnd = rDoc.GetNodes().DocumentSectionEndNode(&rTmp);
 
             if (&rTmp != pEnd)
             {
                 rPam.SetMark();
                 ++rPam.GetPoint()->nNode;
-                rPam.GetBound( true ).nContent.Assign( 0, 0 );
+                rPam.GetBound().nContent.Assign( 0, 0 );
                 rPam.GetBound( false ).nContent.Assign( 0, 0 );
                 pUnDel2 = new SwUndoDelete(rPam, true);
             }

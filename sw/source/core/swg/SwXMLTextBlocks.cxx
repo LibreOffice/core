@@ -243,7 +243,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
                                                     const OUString& rLong)
 {
     sal_uLong nError = 0;
-    OpenFile(true);
+    OpenFile();
     rDestImp.OpenFile(false);
     const OUString aGroup( rShort );
     bool bTextOnly = IsOnlyTextBlock ( rShort ) ;//pImp->pBlkRoot->IsStream( aGroup );

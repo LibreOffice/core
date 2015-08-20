@@ -171,7 +171,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     if( !bFileAlreadyOpen )
     {
         CloseFile();
-        nRet = OpenFile ( true );
+        nRet = OpenFile();
     }
     if ( 0 == nRet )
     {

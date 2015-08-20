@@ -2375,7 +2375,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         SwFlyPortion *pFly = new SwFlyPortion( aInter );
         if( bForced )
         {
-            pCurr->SetForcedLeftMargin( true );
+            pCurr->SetForcedLeftMargin();
             rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
         }
 

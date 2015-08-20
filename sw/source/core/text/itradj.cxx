@@ -121,7 +121,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
     // total number of kashida positions, or the number of kashida positions after some positions
     // have been dropped.
     // Here we want the clean total, which is OK: We have called ClearKashidaInvalid() before.
-    rKashidas = rSI.KashidaJustify ( 0, 0, rItr.GetStart(), rItr.GetLength(), 0 );
+    rKashidas = rSI.KashidaJustify ( 0, 0, rItr.GetStart(), rItr.GetLength() );
 
     if (rKashidas <= 0) // nothing to do
         return true;
@@ -410,7 +410,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     bool bNoCompression = false;
 
     // Do not forget: CalcRightMargin() sets pCurrent->Width() to the line width!
-    CalcRightMargin( pCurrent, 0 );
+    CalcRightMargin( pCurrent );
 
     SwLinePortion* pPos = pCurrent->GetPortion();
 
@@ -718,7 +718,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
         const long nLocalWidth = aLocal.Left() + aLocal.Width();
         if( nRealWidth < nLocalWidth )
             aLocal.Width( nRealWidth - aLocal.Left() );
-        GetInfo().GetParaPortion()->SetFly( true );
+        GetInfo().GetParaPortion()->SetFly();
         pFlyPortion = new SwFlyPortion( aLocal );
         pFlyPortion->Height( sal_uInt16( rCurrRect.Height() ) );
         // The Width could be smaller than the FixWidth, thus:

@@ -212,7 +212,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
             RemoveIdxRel(aDelIdx.GetIndex(), *rPam.GetPoint());
 
-            rDoc.GetNodes().Delete( aDelIdx, 1 );
+            rDoc.GetNodes().Delete( aDelIdx );
         }
         else
         {

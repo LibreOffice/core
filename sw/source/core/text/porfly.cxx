@@ -69,7 +69,7 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
     // resetting
     rInf.SetFly( 0 );
     rInf.Width( rInf.RealWidth() );
-    rInf.GetParaPortion()->SetFly( true );
+    rInf.GetParaPortion()->SetFly();
 
     // trailing blank:
     if( rInf.GetIdx() < rInf.GetText().getLength() &&  1 < rInf.GetIdx()
@@ -134,7 +134,7 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
         }
     }
 
-    rInf.GetParaPortion()->SetFly( true );
+    rInf.GetParaPortion()->SetFly();
     return bFull;
 }
 

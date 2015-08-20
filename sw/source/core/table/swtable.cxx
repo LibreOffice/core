@@ -637,7 +637,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                 ::lcl_ProcessLineGet( aLines[i], rToFill, pTabFormat );
         }
 
-        rToFill.Remove( 0, 1 );
+        rToFill.Remove( 0 );
     }
 
     // Now the coordinates are relative to the left table border - i.e.
@@ -1990,7 +1990,7 @@ void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
 void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign )
 {
-    sal_uLong nNdPos = rBox.IsValidNumTextNd( true );
+    sal_uLong nNdPos = rBox.IsValidNumTextNd();
     ChgTextToNum( rBox,rText,pCol,bChgAlign,nNdPos);
 }
 void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
@@ -2295,7 +2295,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                             RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewVal) ))
                         {
                             // so far, no value has been set, so try to evaluate the content
-                            sal_uLong nNdPos = pBox->IsValidNumTextNd( true );
+                            sal_uLong nNdPos = pBox->IsValidNumTextNd();
                             if( ULONG_MAX != nNdPos )
                             {
                                 sal_uInt32 nTmpFormatIdx = nNewFormat;
@@ -2398,7 +2398,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
                             bool& rIsEmptyTextNd ) const
 {
     bool bRet = false;
-    sal_uLong nNdPos = IsValidNumTextNd( true );
+    sal_uLong nNdPos = IsValidNumTextNd();
     if( ULONG_MAX != nNdPos )
     {
         OUString aText( pSttNd->GetNodes()[ nNdPos ]->GetTextNode()->GetRedlineText() );
@@ -2447,7 +2447,7 @@ bool SwTableBox::IsNumberChanged() const
             pNumFormat = 0;
 
         sal_uLong nNdPos;
-        if( pNumFormat && pValue && ULONG_MAX != ( nNdPos = IsValidNumTextNd( true ) ) )
+        if( pNumFormat && pValue && ULONG_MAX != ( nNdPos = IsValidNumTextNd() ) )
         {
             OUString sNewText, sOldText( pSttNd->GetNodes()[ nNdPos ]->
                                     GetTextNode()->GetRedlineText() );
@@ -2575,7 +2575,7 @@ void SwTableBox::ActualiseValueBox()
         SvNumberFormatter* pNumFormatr = pFormat->GetDoc()->GetNumberFormatter();
 
         if( !pNumFormatr->IsTextFormat( nFormatId ) &&
-            ULONG_MAX != (nNdPos = IsValidNumTextNd( true )) )
+            ULONG_MAX != (nNdPos = IsValidNumTextNd()) )
         {
             double fVal = static_cast<const SwTableBoxValue*>(pValItem)->GetValue();
             Color* pCol = 0;

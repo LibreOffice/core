@@ -257,7 +257,7 @@ SwUndoDelete::SwUndoDelete(
                     SwPosition aSplitPos( *pEndTextNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, true );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd );
                     --aRg.aEnd;
                 }
                 else
@@ -281,7 +281,7 @@ SwUndoDelete::SwUndoDelete(
                     SwPosition aSplitPos( *pSttTextNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, true );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart );
                     --aRg.aStart;
                 }
             }
@@ -319,12 +319,12 @@ SwUndoDelete::SwUndoDelete(
                 if( bJoinNext )
                 {
                     SwNodeRange aMvRg( *pEndTextNd, 0, *pEndTextNd, 1 );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, true );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart );
                 }
                 else
                 {
                     SwNodeRange aMvRg( *pSttTextNd, 0, *pSttTextNd, 1 );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, true );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd );
                 }
             }
         }
@@ -849,7 +849,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             --aPos.nNode;
             if( !bJoinNext )
                 pMovedNode = &aPos.nNode.GetNode();
-            rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, true);
+            rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
             ++aPos.nNode;
         }
 
@@ -875,8 +875,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
                 SwNodeRange aRg( aPos.nNode, 0, aPos.nNode, 1 );
                 pMovedNode = &aPos.nNode.GetNode();
-                rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, true);
-                rDoc.GetNodes().Delete( aMvIdx, 1 );
+                rDoc.GetNodes()._MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
+                rDoc.GetNodes().Delete( aMvIdx);
             }
         }
 
@@ -945,7 +945,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     // delete the temporarily added Node
     if( pInsNd )
-        rDoc.GetNodes().Delete( aIdx, 1 );
+        rDoc.GetNodes().Delete( aIdx );
     if( pRedlSaveData )
         SetSaveData(rDoc, *pRedlSaveData);
 

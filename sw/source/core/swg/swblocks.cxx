@@ -397,7 +397,7 @@ bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
     {
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == ( nErr = pImp->OpenFile( true )))
+        else if( 0 == ( nErr = pImp->OpenFile()))
         {
             pImp->ClearDoc();
             nErr = pImp->GetDoc( n );
@@ -546,7 +546,7 @@ bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
     {
         SwBlockName* pBlkNm = pImp->aNames[ nIdx ];
         if( !pBlkNm->bIsOnlyTextFlagInit &&
-            !pImp->IsFileChanged() && !pImp->OpenFile( true ) )
+            !pImp->IsFileChanged() && !pImp->OpenFile() )
         {
             pBlkNm->bIsOnlyText = pImp->IsOnlyTextBlock( pBlkNm->aShort );
             pBlkNm->bIsOnlyTextFlagInit = true;

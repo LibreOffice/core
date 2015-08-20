@@ -966,7 +966,7 @@ SwHistory::SwHistory( sal_uInt16 nInitSz )
 
 SwHistory::~SwHistory()
 {
-    Delete( 0 );
+    Delete();
     std::vector<SwHistoryHint*>::const_iterator it;
     for(it = m_SwpHstry.begin(); it != m_SwpHstry.end(); ++it)
         delete *it;

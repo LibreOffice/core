@@ -159,11 +159,11 @@ void UndoManager::UnLockUndoNoModifiedPosition()
 
 SwUndo* UndoManager::GetLastUndo()
 {
-    if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetUndoActionCount())
     {
         return 0;
     }
-    SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction(0) );
+    SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction() );
     return dynamic_cast<SwUndo*>(pAction);
 }
 
@@ -226,8 +226,8 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
                 "EndUndo(): no Undo ID, but rewriter given?");
 
     SfxUndoAction *const pLastUndo(
-        (0 == SdrUndoManager::GetUndoActionCount(CurrentLevel))
-            ? 0 : SdrUndoManager::GetUndoAction(0) );
+        (0 == SdrUndoManager::GetUndoActionCount())
+            ? 0 : SdrUndoManager::GetUndoAction() );
 
     int const nCount = LeaveListAction();
 
@@ -235,7 +235,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
     {
         OSL_ASSERT(pLastUndo);
         OSL_ASSERT(UNDO_START != eUndoId);
-        SfxUndoAction *const pUndoAction(SdrUndoManager::GetUndoAction(0));
+        SfxUndoAction *const pUndoAction(SdrUndoManager::GetUndoAction());
         SfxListUndoAction *const pListAction(
             dynamic_cast<SfxListUndoAction*>(pUndoAction));
         OSL_ASSERT(pListAction);
@@ -282,12 +282,12 @@ UndoManager::GetLastUndoInfo(
 {
     // this is actually expected to work on the current level,
     // but that was really not obvious from the previous implementation...
-    if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetUndoActionCount())
     {
         return false;
     }
 
-    SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction(0) );
+    SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction() );
 
     if (o_pStr)
     {
@@ -322,12 +322,12 @@ SwUndoComments_t UndoManager::GetUndoComments() const
 bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
                                    SwUndoId *const o_pId) const
 {
-    if (!SdrUndoManager::GetRedoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetRedoActionCount())
     {
         return false;
     }
 
-    SfxUndoAction *const pAction( SdrUndoManager::GetRedoAction(0, CurrentLevel) );
+    SfxUndoAction *const pAction( SdrUndoManager::GetRedoAction(0) );
     if ( pAction == NULL )
     {
         return false;
@@ -380,18 +380,18 @@ SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
 
 SwUndo * UndoManager::RemoveLastUndo()
 {
-    if (SdrUndoManager::GetRedoActionCount(CurrentLevel) ||
+    if (SdrUndoManager::GetRedoActionCount() ||
         SdrUndoManager::GetRedoActionCount(TopLevel))
     {
         OSL_ENSURE(false, "RemoveLastUndoAction(): there are Redo actions?");
         return 0;
     }
-    if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetUndoActionCount())
     {
         OSL_ENSURE(false, "RemoveLastUndoAction(): no Undo actions");
         return 0;
     }
-    SfxUndoAction *const pLastUndo(GetUndoAction(0));
+    SfxUndoAction *const pLastUndo(GetUndoAction());
     SdrUndoManager::RemoveLastUndoAction();
     return dynamic_cast<SwUndo *>(pLastUndo);
 }
@@ -546,7 +546,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     {
         return false;
     }
-    SfxUndoAction *const pRepeatAction(GetUndoAction(0));
+    SfxUndoAction *const pRepeatAction(GetUndoAction());
     OSL_ASSERT(pRepeatAction);
     if (!pRepeatAction || !pRepeatAction->CanRepeat(rContext))
     {

@@ -823,7 +823,7 @@ void SwUndoSaveSection::SaveSection(
     }
 
     pRedlSaveData = new SwRedlineSaveDatas;
-    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, true, true ))
+    if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, true ))
         delete pRedlSaveData, pRedlSaveData = 0;
 
     nStartPos = rRange.aStart.GetIndex();
@@ -834,7 +834,7 @@ void SwUndoSaveSection::SaveSection(
     SwContentNode* pCNd = aPam.GetContentNode( false );
     if( pCNd )
         aPam.GetMark()->nContent.Assign( pCNd, 0 );
-    if( 0 != ( pCNd = aPam.GetContentNode( true )) )
+    if( 0 != ( pCNd = aPam.GetContentNode()) )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     // Keep positions as SwIndex so that this section can be deleted in DTOR

@@ -173,7 +173,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        rDoc.InsertSwSection(rPam, *m_pSectionData, 0, m_pAttrSet.get(), true);
+        rDoc.InsertSwSection(rPam, *m_pSectionData, 0, m_pAttrSet.get());
     }
 
     if (m_pHistory.get())

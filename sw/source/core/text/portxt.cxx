@@ -521,14 +521,14 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDEND);
-        rInf.DrawText( aText, *this, 0, aText.getLength(), false );
+        rInf.DrawText( aText, *this, 0, aText.getLength() );
     }
     else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText()[rInf.GetIdx()])
     {
         assert(false); // this is some debugging only code
         rInf.DrawBackBrush( *this );
         const OUString aText(CH_TXT_ATR_SUBST_FIELDSTART);
-        rInf.DrawText( aText, *this, 0, aText.getLength(), false );
+        rInf.DrawText( aText, *this, 0, aText.getLength() );
     }
     else if( GetLen() )
     {
@@ -550,7 +550,7 @@ void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
         if ( bWrong || bSmartTags || bGrammarCheck )
             rInf.DrawMarkedText( *this, rInf.GetLen(), false, bWrong, bSmartTags, bGrammarCheck );
         else
-            rInf.DrawText( *this, rInf.GetLen(), false );
+            rInf.DrawText( *this, rInf.GetLen() );
     }
 }
 
@@ -806,7 +806,7 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 
     const OUString aText( ' ' );
-    rInf.DrawText( aText, *this, 0, 1, false );
+    rInf.DrawText( aText, *this, 0, 1 );
 
     delete pFontSave;
     delete pHoleFont;

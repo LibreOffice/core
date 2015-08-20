@@ -2023,7 +2023,7 @@ CHECKTABLE(pTableNd->GetTable())
                         if( pMove )
                             pCNd->MoveTo( *pMove );
                     }
-                    rDoc.GetNodes().Delete( aIdx, 1 );
+                    rDoc.GetNodes().Delete( aIdx );
                 }
                 else if( pTextNd )
                 {
@@ -2534,7 +2534,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         pEntry->pUndo = pUndo;
 
         aInsIdx = rBox.GetSttIdx() + 1;
-        rDoc.GetNodes().Delete( aInsIdx, 1 );
+        rDoc.GetNodes().Delete( aInsIdx );
 
         SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
                                                 RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
@@ -2626,7 +2626,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         // b62341295: Redline for copying tables - End.
 
         aInsIdx = rBox.GetSttIdx() + 1;
-        rDoc.GetNodes().Delete( aInsIdx, 1 );
+        rDoc.GetNodes().Delete( aInsIdx );
 
         SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
                                                 RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
@@ -2701,7 +2701,7 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
             pEntry->pUndo = PrepareRedline( pDoc, rBox, aTmpPos, pEntry->bJoin, false );
         }
         SwNodeIndex aDelIdx( *rBox.GetSttNd(), 1 );
-        rBox.GetFrameFormat()->GetDoc()->GetNodes().Delete( aDelIdx, 1 );
+        rBox.GetFrameFormat()->GetDoc()->GetNodes().Delete( aDelIdx );
         _DEBUG_REDLINE( pDoc )
     }
 
@@ -2796,7 +2796,7 @@ bool SwUndoTableCpyTable::InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes,
                                        0, 0, nCnt, true, false );
     SwTableSortBoxes aTmpLst( rTable.GetTabSortBoxes() );
 
-    bool bRet = rTable.InsertRow( rTable.GetFrameFormat()->GetDoc(), rBoxes, nCnt, true );
+    bool bRet = rTable.InsertRow( rTable.GetFrameFormat()->GetDoc(), rBoxes, nCnt );
     if( bRet )
         pInsRowUndo->SaveNewBoxes( *pTableNd, aTmpLst );
     else
@@ -2895,7 +2895,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // remove implicitly created paragraph again
-        pDoc->GetNodes().Delete( idx, 1 );
+        pDoc->GetNodes().Delete( idx );
     }
 
     rIdx = nTableNode + nOffset;
@@ -2925,7 +2925,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwSelBoxes aSelBoxes;
             SwTableBox* pBox = rTable.GetTableBox( nTableNode + nOffset + 1 );
-            SwTable::SelLineFromBox( pBox, aSelBoxes, true );
+            SwTable::SelLineFromBox( pBox, aSelBoxes );
             _FndBox aTmpBox( 0, 0 );
             aTmpBox.SetTableLines( aSelBoxes, rTable );
             aTmpBox.DelFrms( rTable );
@@ -3027,7 +3027,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     aFndBox.DelFrms( *pTable );
     // ? TL_CHART2: notification or locking of controller required ?
 
-    SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx, true, false );
+    SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx, true );
 
     // update layout
     aFndBox.MakeFrms( *pTable );

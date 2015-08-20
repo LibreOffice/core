@@ -1647,8 +1647,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // than one link to this destination:
                     OUString aURL( INetURLObject::decode(
                         p->rINetAttr.GetINetFormat().GetValue(),
-                        INetURLObject::DECODE_UNAMBIGUOUS,
-                        RTL_TEXTENCODING_UTF8 ) );
+                        INetURLObject::DECODE_UNAMBIGUOUS ) );
 
                     // We have to distinguish between intern and real URLs
                     const bool bIntern = '#' == aURL[0];
