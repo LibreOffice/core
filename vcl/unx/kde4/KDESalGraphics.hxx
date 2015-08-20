@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <rtl/string.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
@@ -28,13 +30,10 @@
 /** handles graphics drawings requests and performs the needed drawing operations */
 class KDESalGraphics : public X11SalGraphics
 {
-    QImage* m_image;
+    std::unique_ptr<QImage> m_image;
     QRect lastPopupRect;
 
     public:
-        KDESalGraphics();
-        virtual ~KDESalGraphics();
-
         /**
             What widgets can be drawn the native way.
             @param type Type of the widget.
