@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aef4532_1d3e73b8",
+        "filename": "vcl/unx/kde4/KDEXLib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-20T06:42:55Z",
+      "side": 0,
+      "message": "why did you remove this?",
+      "revId": "5120b3f30614f6e4988c512577da1d70be8d25b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

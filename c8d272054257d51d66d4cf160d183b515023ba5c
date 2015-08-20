@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aef4532_9d51e311",
+        "filename": "vcl/unx/kde4/KDE4FilePicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-20T06:42:55Z",
+      "side": 1,
+      "message": "???",
+      "revId": "c8d272054257d51d66d4cf160d183b515023ba5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aef4532_fd562705",
+        "filename": "vcl/unx/kde4/KDESalFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-20T06:42:55Z",
+      "side": 1,
+      "message": "not your fault, but please remove the \"if pMenuBar\", makes no sense",
+      "revId": "c8d272054257d51d66d4cf160d183b515023ba5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aef4532_dd5b6b2d",
+        "filename": "vcl/unx/kde4/KDESalFrame.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-20T06:42:55Z",
+      "side": 1,
+      "message": "???",
+      "revId": "c8d272054257d51d66d4cf160d183b515023ba5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aef4532_3d41af3a",
+        "filename": "vcl/unx/kde4/KDESalGraphics.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-20T06:42:55Z",
+      "side": 1,
+      "message": "you can just go \n   m_image \u003d new QImage\nno need to explictly call the unique_ptr constructor",
+      "revId": "c8d272054257d51d66d4cf160d183b515023ba5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
