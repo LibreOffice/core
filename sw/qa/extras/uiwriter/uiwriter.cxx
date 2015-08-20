@@ -51,7 +51,9 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
-
+#include <reffld.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <unofldmid.h>
 #include "UndoManager.hxx"
 #include <textsh.hxx>
 #include <frmmgr.hxx>
@@ -134,6 +136,7 @@ public:
     void testUnoParagraph();
     void testTdf60967();
     void testSearchWithTransliterate();
+    void testTdf77342();
     void testTdf74230();
     void testTdf74363();
     void testTdf80663();
@@ -206,6 +209,7 @@ public:
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf77342);
     CPPUNIT_TEST(testTdf74230);
     CPPUNIT_TEST(testTdf74363);
     CPPUNIT_TEST(testTdf80663);
@@ -1632,6 +1636,182 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf77342()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    //inserting first footnote
+    pWrtShell->InsertFootnote(OUString("This is first footnote"));
+    SwFieldType* pField = pWrtShell->GetFieldType(0, RES_GETREFFLD);
+    SwGetRefFieldType* pRefType = dynamic_cast<SwGetRefFieldType*>(pField);
+    pWrtShell->SttDoc();
+    //inserting refernce field 1
+    SwGetRefField xField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
+    pWrtShell->Insert(xField1);
+    //inserting second footnote
+    pWrtShell->InsertFootnote(OUString("This is second footnote"));
+    pWrtShell->SttDoc();
+    pCrsr->Move(fnMoveForward);
+    //inserting refernce field 2
+    SwGetRefField xField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
+    pWrtShell->Insert(xField2);
+    //inserting third footnote
+    pWrtShell->InsertFootnote(OUString("This is third footnote"));
+    pWrtShell->SttDoc();
+    pCrsr->Move(fnMoveForward);
+    pCrsr->Move(fnMoveForward);
+    //inserting refernce field 3
+    SwGetRefField xField3(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
+    pWrtShell->Insert(xField3);
+    //updating the fields
+    IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
+    rField.UpdateExpFields(nullptr, true);
+    //creating new clipboard doc
+    SwDoc* pClpDoc = new SwDoc();
+    pClpDoc->acquire();
+    pClpDoc->SetClipBoard(true);
+    //selecting reference field 2 and reference field 3 and footnote 1 and footnote 2, this selection is such that more than one footnote and one ref fields are selected but not all footnotes/reference fields, also there is atleast 1 ref field whose corresponding footnote is not selected
+    pCrsr->Move(fnMoveBackward);
+    pCrsr->Move(fnMoveBackward);
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward);
+    pCrsr->Move(fnMoveForward);
+    pCrsr->Move(fnMoveForward);
+    //copying the selection to clipboard
+    pWrtShell->Copy(pClpDoc);
+    pCrsr->DeleteMark();
+    //checking that the footnotes reference fields have same values after copy operation
+    uno::Any aAny;
+    //reference field 1
+    xField1.QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    xField1.QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //reference field 2
+    xField2.QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    xField2.QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //reference field 3
+    xField3.QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    xField3.QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //moving cursor to the end of the document
+    pWrtShell->EndDoc();
+    //pasting the copied selection at current cursor position
+    pWrtShell->Paste(pClpDoc);
+    //checking the fields, both new and old, for proper values
+    pWrtShell->SttDoc();
+    //old Ref field 1
+    SwField* pOldRef11 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pOldRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pOldRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //old Ref field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef12 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pOldRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pOldRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old Ref field 3
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef13 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pOldRef13->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pOldRef13->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old footnote 1
+    pCrsr->Move(fnMoveForward);
+    //old footnote 2
+    pCrsr->Move(fnMoveForward);
+    //old footnote 3
+    pCrsr->Move(fnMoveForward);
+    //new Ref field 1
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef11 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(1)), aAny);
+    //new Ref field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef12 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pNewRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pNewRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(3)), aAny);
+    //new footnote 1
+    pCrsr->Move(fnMoveForward);
+    //moving the cursor to the starting of document
+    pWrtShell->SttDoc();
+    //pasting the selection again at current cursor position
+    pWrtShell->Paste(pClpDoc);
+    //checking the fields, both new and old, for proper values
+    pWrtShell->SttDoc();
+    //new Ref field 1
+    SwField* pNewRef21 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(1)), aAny);
+    //new Ref field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef22 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pNewRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pNewRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(4)), aAny);
+    //new footnote 1
+    pCrsr->Move(fnMoveForward);
+    //old Ref field 1
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef21 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pOldRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pOldRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(0)), aAny);
+    //old Ref field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef22 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pOldRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pOldRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(1)), aAny);
+    //old Ref field 3
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef23 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pOldRef23->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pOldRef23->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(2)), aAny);
+    //old footnote 1
+    pCrsr->Move(fnMoveForward);
+    //old footnote 2
+    pCrsr->Move(fnMoveForward);
+    //old footnote 3
+    pCrsr->Move(fnMoveForward);
+    //old Ref field 4
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef24 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pNewRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pNewRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(1)), aAny);
+    //old Ref field 5
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef25 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    pNewRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_USHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(REF_CONTENT)), aAny);
+    pNewRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(3)), aAny);
+    //old footnote 4
+    pCrsr->Move(fnMoveForward);
 }
 
 void SwUiWriterTest::testTdf74230()
