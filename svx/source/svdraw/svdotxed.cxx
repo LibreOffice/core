@@ -293,7 +293,8 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // We don't want broadcasting if we are merely trying to move to next box (this prevents infinite loops)
         if (IsChainable() && GetTextChain()->GetSwitchingToNextBox(this)) {
             GetTextChain()->SetSwitchingToNextBox(this, false);
-            NbcSetOutlinerParaObject(pNewText);
+            if( getActiveText() )
+                getActiveText()->SetOutlinerParaObject( pNewText);
         } else {
             SetOutlinerParaObject(pNewText);
         }
