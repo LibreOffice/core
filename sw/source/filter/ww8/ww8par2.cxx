@@ -2358,7 +2358,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     // rows of a band can be duplicated easy.
     pTable = pIo->m_rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, false, true );
+            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, false );
 
     OSL_ENSURE(pTable && pTable->GetFrameFormat(), "insert table failed");
     if (!pTable || !pTable->GetFrameFormat())
@@ -3763,7 +3763,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
         {
             pColl->ResetAllFormatAttr(); // #i73790# - method renamed
         }
-        pColl->SetAuto(false);          // suggested by JP
+        pColl->SetAuto();          // suggested by JP
     }                                   // but changes the UI
     pIo->m_pAktColl = pColl;
     rSI.pFormat = pColl;                  // remember translation WW->SW

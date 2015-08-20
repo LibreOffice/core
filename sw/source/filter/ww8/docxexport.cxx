@@ -382,7 +382,7 @@ OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaTyp
     if( lcl_CopyStream( xInStream, xOutStream ) )
 
         sId = m_pFilter->addRelation( GetFS()->getOutputStream(),
-                sRelationType, sFileName, false );
+                sRelationType, sFileName );
 
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }

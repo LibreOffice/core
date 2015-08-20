@@ -179,7 +179,7 @@ void SwWW8AttrIter::IterToCurrent()
 SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     MSWordAttrIter(rWr),
     rNd(rTextNd),
-    maCharRuns(GetPseudoCharRuns(rTextNd, 0)),
+    maCharRuns(GetPseudoCharRuns(rTextNd)),
     pCurRedline(0),
     nAktSwPos(0),
     nCurRedlinePos(USHRT_MAX),
@@ -2179,7 +2179,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
-                    AppendBookmark( pFieldmark->GetName(), false );
+                    AppendBookmark( pFieldmark->GetName() );
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                 OUString sCode = lcl_getFieldCode( pFieldmark );
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
@@ -2243,7 +2243,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                 OutputField( NULL, eFieldId, OUString(), WRITEFIELD_CLOSE );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
-                    AppendBookmark( pFieldmark->GetName(), false );
+                    AppendBookmark( pFieldmark->GetName() );
             }
             else if ( ch == CH_TXT_ATR_FORMELEMENT )
             {
@@ -2255,7 +2255,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
 
                 if ( isDropdownOrCheckbox )
-                    AppendBookmark( pFieldmark->GetName(), false );
+                    AppendBookmark( pFieldmark->GetName() );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ),
                         lcl_getFieldCode( pFieldmark ),
                         WRITEFIELD_START | WRITEFIELD_CMD_START );
@@ -2263,7 +2263,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     WriteFormData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CLOSE );
                 if ( isDropdownOrCheckbox )
-                    AppendBookmark( pFieldmark->GetName(), false );
+                    AppendBookmark( pFieldmark->GetName() );
             }
             nLen -= ofs;
 
@@ -2951,7 +2951,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Po
             {
                 /* Munge flys in fly into absolutely positioned elements for word 6 */
                 const SwTextNode* pParTextNode = rAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
-                const SwRect aPageRect = pParTextNode->FindPageFrmRect( false, 0, false );
+                const SwRect aPageRect = pParTextNode->FindPageFrmRect( false, 0 );
 
                 aOffset = rFrameFormat.FindLayoutRect().Pos();
                 aOffset -= aPageRect.Pos();

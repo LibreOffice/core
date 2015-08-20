@@ -755,18 +755,18 @@ void SwXMLImport::endDocument()
 #if OSL_DEBUG_LEVEL > 0
                 // !!! This should be impossible !!!!
                 OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound( true ).nNode.GetIndex(),
+                                        pPaM->GetBound().nNode.GetIndex(),
                         "PaM.Bound1 point to new node " );
                 OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( false ).nNode.GetIndex(),
                         "PaM.Bound2 points to new node" );
 
                 if( pSttNdIdx->GetIndex()+1 ==
-                                        pPaM->GetBound( true ).nNode.GetIndex() )
+                                        pPaM->GetBound().nNode.GetIndex() )
                 {
                     const sal_Int32 nCntPos =
-                            pPaM->GetBound( true ).nContent.GetIndex();
-                    pPaM->GetBound( true ).nContent.Assign( pTextNode,
+                            pPaM->GetBound().nContent.GetIndex();
+                    pPaM->GetBound().nContent.Assign( pTextNode,
                             pTextNode->GetText().getLength() + nCntPos );
                 }
                 if( pSttNdIdx->GetIndex()+1 ==
@@ -812,7 +812,7 @@ void SwXMLImport::endDocument()
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() )
                     {
-                        pPaM->GetBound(true).nContent.Assign( 0, 0 );
+                        pPaM->GetBound().nContent.Assign( 0, 0 );
                         pPaM->GetBound(false).nContent.Assign( 0, 0 );
                         pDoc->GetNodes().Delete( pPaM->GetPoint()->nNode );
                     }
@@ -841,7 +841,7 @@ void SwXMLImport::endDocument()
                 {
                     pPos->nContent.Assign( 0, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
-                    pDoc->GetNodes().Delete( pPos->nNode, 1 );
+                    pDoc->GetNodes().Delete( pPos->nNode );
                     pPaM->Move( fnMoveBackward );
                 }
             }

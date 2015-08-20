@@ -3092,7 +3092,7 @@ static bool lcl_IsAtTextEnd(const SwFormatFootnote& rFootnote)
                                                         FindSectionNode();
         while( pSectNd && FTNEND_ATPGORDOCEND ==
                 static_cast<const SwFormatFootnoteEndAtTextEnd&>(pSectNd->GetSection().GetFormat()->
-                GetFormatAttr( nWh, true)).GetValue() )
+                GetFormatAttr( nWh)).GetValue() )
             pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
 
         if (!pSectNd)

@@ -473,7 +473,7 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
             if ( bPap || m_rExport.CollapseScriptsforWordOk(
                 i18n::ScriptType::LATIN, n) )
             {
-                m_rExport.AttrOutput().OutputItem( rFormat.GetFormatAttr( n, true ) );
+                m_rExport.AttrOutput().OutputItem( rFormat.GetFormatAttr( n ) );
             }
         }
     }

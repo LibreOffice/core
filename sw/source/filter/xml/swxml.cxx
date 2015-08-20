@@ -727,7 +727,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     }
     else
     {
-        rPaM.GetBound(true).nContent.Assign(0, 0);
+        rPaM.GetBound().nContent.Assign(0, 0);
         rPaM.GetBound(false).nContent.Assign(0, 0);
     }
 

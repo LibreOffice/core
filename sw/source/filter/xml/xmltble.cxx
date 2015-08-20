@@ -809,8 +809,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                         // (export values only if cell contains text;)
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
-                                *this, nNumberFormat, xCell->getValue(),
-                                 true );
+                                *this, nNumberFormat, xCell->getValue() );
                     }
                     // else: invalid key; ignore
 

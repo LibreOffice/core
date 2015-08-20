@@ -174,8 +174,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                         while( USHRT_MAX != nIdx )
                         {
                             _GetNamespaceMap().Add( pUnknown->GetPrefix( nIdx ),
-                                                pUnknown->GetNamespace( nIdx ),
-                                                XML_NAMESPACE_UNKNOWN );
+                                                pUnknown->GetNamespace( nIdx ) );
                             nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
                         }
                         bExtended = true;

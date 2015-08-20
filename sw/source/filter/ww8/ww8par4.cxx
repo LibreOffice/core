@@ -395,7 +395,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         //Can't put them in headers/footers :-(
         uno::Reference< drawing::XShape > xRef;
         OSL_ENSURE(m_pFormImpl, "Impossible");
-        if (m_pFormImpl && m_pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
+        if (m_pFormImpl && m_pFormImpl->ReadOCXStream(xSrc1, &xRef))
         {
             pRet = GetSdrObjectFromXShape(xRef);
             OSL_ENSURE(pRet, "Impossible");
