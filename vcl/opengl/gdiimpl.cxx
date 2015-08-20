@@ -32,6 +32,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include "salgdi.hxx"
 #include "svdata.hxx"
+#include "opengl/zone.hxx"
 #include "opengl/salbmp.hxx"
 
 #include <vector>
@@ -150,6 +151,8 @@ void OpenGLSalGraphicsImpl::Init()
 
 void OpenGLSalGraphicsImpl::PreDraw()
 {
+    OpenGLZone::enter();
+
     if( !AcquireContext() )
     {
         SAL_WARN( "vcl.opengl", "Couldn't acquire context" );
@@ -189,6 +192,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
     }
 
     CHECK_GL_ERROR();
+    OpenGLZone::leave();
 }
 
 void OpenGLSalGraphicsImpl::ApplyProgramMatrices(float fPixelOffset)
@@ -445,6 +449,8 @@ bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor )
 
 bool OpenGLSalGraphicsImpl::UseInvert()
 {
+    OpenGLZone aZone;
+
     if( !UseSolid( MAKE_SALCOLOR( 255, 255, 255 ) ) )
         return false;
     mpProgram->SetBlendMode( GL_ONE_MINUS_DST_COLOR, GL_ZERO );
@@ -453,6 +459,8 @@ bool OpenGLSalGraphicsImpl::UseInvert()
 
 void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 {
+    OpenGLZone aZone;
+
     GLfloat pPoint[2];
 
     pPoint[0] = GLfloat(nX);
@@ -467,6 +475,8 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 
 void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double nY2 )
 {
+    OpenGLZone aZone;
+
     GLfloat pPoints[4];
 
     pPoints[0] = GLfloat(nX1);
@@ -483,6 +493,8 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
 
 void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, double nY2 )
 {
+    OpenGLZone aZone;
+
     if( !mrParent.getAntiAliasB2DDraw())
         return DrawLine( nX1, nY1, nX2, nY2 );
 
@@ -658,6 +670,8 @@ void OpenGLSalGraphicsImpl::DrawEdgeAA( double nX1, double nY1, double nX2, doub
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA )
 {
+    OpenGLZone aZone;
+
     std::vector<GLfloat> aVertices(nPoints * 2);
     sal_uInt32 i, j;
 
@@ -699,6 +713,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA )
 {
+    OpenGLZone aZone;
+
     sal_uInt16 nPoints = rPolygon.GetSize() - 1;
     std::vector<GLfloat> aVertices(nPoints * 2);
     sal_uInt32 i, j;
@@ -742,6 +758,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
 
 void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA )
 {
+    OpenGLZone aZone;
+
     const basegfx::B2DPolygon& rPolygon = trapezoid.getB2DPolygon();
     sal_uInt16 nPoints = rPolygon.count();
     std::vector<GLfloat> aVertices(nPoints * 2);
@@ -843,6 +861,8 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
 
 void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
 {
+    OpenGLZone aZone;
+
     RectangleVector aRects;
     std::vector<GLfloat> aVertices;
     rRegion.GetRegionRectangles( aRects );
@@ -876,6 +896,8 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
 
 void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted )
 {
+    OpenGLZone aZone;
+
     GLfloat aTexCoord[8];
     rTexture.GetCoord( aTexCoord, rPosAry, bInverted );
     mpProgram->SetTextureCoord( aTexCoord );
@@ -884,6 +906,8 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& rTexture, const SalT
 
 void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& pPosAry, bool bInverted )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "textureFragmentShader" ) )
         return;
     mpProgram->SetTexture( "sampler", rTexture );
@@ -898,6 +922,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY )
 {
+    OpenGLZone aZone;
+
     GLfloat aVertices[8] = {
         0, (float) rTexture.GetHeight(), 0, 0,
         (float) rTexture.GetWidth(), 0, (float) rTexture.GetWidth(), (float) rTexture.GetHeight() };
@@ -986,6 +1012,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
 
 void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool bPremultiplied )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "textureFragmentShader" ) )
         return;
     mpProgram->SetTexture( "sampler", rTexture );
@@ -997,6 +1025,8 @@ void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const Sal
 
 void OpenGLSalGraphicsImpl::DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "diffTextureFragmentShader" ) )
         return;
     mpProgram->SetTexture( "texture", rTexture );
@@ -1008,6 +1038,8 @@ void OpenGLSalGraphicsImpl::DrawTextureDiff( OpenGLTexture& rTexture, OpenGLText
 
 void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& pPosAry )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "maskedTextureFragmentShader" ) )
         return;
     mpProgram->SetTexture( "sampler", rTexture );
@@ -1019,6 +1051,8 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGL
 
 void OpenGLSalGraphicsImpl::DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry )
 {
+    OpenGLZone aZone;
+
     GLfloat aTexCoord[8];
     if( !UseProgram( "blendedTextureVertexShader", "blendedTextureFragmentShader" ) )
         return;
@@ -1034,6 +1068,8 @@ void OpenGLSalGraphicsImpl::DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLT
 
 void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor, const SalTwoRect& pPosAry )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "maskFragmentShader" ) )
         return;
     mpProgram->SetColor( "color", nMaskColor, 0 );
@@ -1045,6 +1081,8 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
 
 void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
         return;
     Color aStartCol = rGradient.GetStartColor();
@@ -1069,6 +1107,8 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
 
 void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
         return;
     Color aStartCol = rGradient.GetStartColor();
@@ -1119,6 +1159,8 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
 
 void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
+    OpenGLZone aZone;
+
     if( !UseProgram( "textureVertexShader", "radialGradientFragmentShader" ) )
         return;
     Color aStartCol = rGradient.GetStartColor();

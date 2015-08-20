@@ -23,6 +23,7 @@
 
 #include "vcl/bitmap.hxx"
 
+#include "opengl/zone.hxx"
 #include "opengl/bmpop.hxx"
 #include "opengl/salbmp.hxx"
 #include "opengl/program.hxx"
@@ -373,6 +374,8 @@ void ScaleOp::GetSize( Size& rSize ) const
 
 bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
+    OpenGLZone aZone;
+
     SAL_INFO("vcl.opengl", "::Scale " << int(nScaleFlag)
              << " from " << mnWidth << "x" << mnHeight
              << " to " << (mnWidth * rScaleX) << "x" << (mnHeight * rScaleY) );
