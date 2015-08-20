@@ -116,7 +116,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         if(pRule)
         {
             SvxNumRule aNewRule( *pRule );
-            aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, true );
+            aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
             SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
             aInputSet.Put(aNewItem);

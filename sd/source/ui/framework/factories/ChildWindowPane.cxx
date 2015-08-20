@@ -156,7 +156,7 @@ vcl::Window* ChildWindowPane::GetWindow()
                 // The child window is not yet visible.  Ask the view frame
                 // to show it and try again to get access to the child
                 // window.
-                pViewFrame->ShowChildWindow(mnChildWindowId, true);
+                pViewFrame->ShowChildWindow(mnChildWindowId);
                 pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
             }
 

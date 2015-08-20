@@ -136,11 +136,11 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     aCbxAutoLogo->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_SHOW_PAUSELOGO ) ).GetValue() );
 
     if( bWindow )
-        aRbtWindow->Check( true );
+        aRbtWindow->Check();
     else if( bEndless )
-        aRbtAuto->Check( true );
+        aRbtAuto->Check();
     else
-        aRbtStandard->Check( true );
+        aRbtStandard->Check();
 
     InitMonitorSettings();
 

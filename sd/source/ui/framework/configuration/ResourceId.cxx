@@ -187,7 +187,7 @@ OUString SAL_CALL
 
         // Get the prefix that ends with the second "/".
         const OUString& rsResourceURL (maResourceURLs[0]);
-        sal_Int32 nPrefixEnd (rsResourceURL.indexOf('/', 0));
+        sal_Int32 nPrefixEnd (rsResourceURL.indexOf('/'));
         if (nPrefixEnd >= 0)
             nPrefixEnd = rsResourceURL.indexOf('/', nPrefixEnd+1) + 1;
         else

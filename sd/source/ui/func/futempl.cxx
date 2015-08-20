@@ -163,7 +163,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     {
         case SID_STYLE_NEW:
         {
-            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
+            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily );
             if(p)
             {
                 pSSPool->Remove(p);
@@ -186,7 +186,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
             // at the moment, the dialog to enter the name of the template is still opened
-            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
+            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily );
             if(p)
             {
                 pSSPool->Remove(p);
@@ -207,7 +207,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             {
                 pSSPool->Remove( pStyleSheet );
                 nRetMask = sal_uInt16(true);
-                mpDoc->SetChanged(true);
+                mpDoc->SetChanged();
             }
             else
             {
@@ -245,7 +245,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     (pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
                 {
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
-                    mpDoc->SetChanged(true);
+                    mpDoc->SetChanged();
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
@@ -552,7 +552,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             }
                         }
 
-                        mpDoc->SetChanged(true);
+                        mpDoc->SetChanged();
                     }
                     break;
 
@@ -598,7 +598,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     }
 
                     static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-                    mpDoc->SetChanged(true);
+                    mpDoc->SetChanged();
 
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
@@ -625,7 +625,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     mpView->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet));
 
                     static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-                    mpDoc->SetChanged(true);
+                    mpDoc->SetChanged();
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }

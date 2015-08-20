@@ -715,7 +715,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
                 // is shown in url notation!
                 aStr = pDocShell->GetName();
 
-                maLbDocs->InsertEntry( aStr, LISTBOX_APPEND );
+                maLbDocs->InsertEntry( aStr );
 
                 if( pDocShell == pCurrentDocShell )
                     aInfo.SetActive();

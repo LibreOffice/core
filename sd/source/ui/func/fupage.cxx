@@ -457,7 +457,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                 mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
             }
 
-            mpDoc->SetChanged(true);
+            mpDoc->SetChanged();
 
             // BackgroundFill of Masterpage: no hard attributes allowed
             SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();

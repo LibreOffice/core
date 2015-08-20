@@ -390,7 +390,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         nControlWord &=~ EEControlBits::ULSPACEFIRSTPARA;
         ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
-        mpDoc->SetSummationOfParagraphs( true );
+        mpDoc->SetSummationOfParagraphs();
     }
 
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
@@ -657,7 +657,7 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
                                SfxViewFrame::Current();
 
         if( pFrame )
-            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, true, false );
+            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, true );
     }
     return bRet;
 }
@@ -825,7 +825,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             ? pDrawViewShell->GetViewFrame()
             : SfxViewFrame::Current() )->GetBindings();
 
-        rBindings.Invalidate(SID_NAVIGATOR_STATE, true, false);
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 
@@ -1010,7 +1010,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
         SfxBindings& rBindings = ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                                  mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
 
-        rBindings.Invalidate(SID_NAVIGATOR_STATE, true, false);
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 

@@ -1146,9 +1146,9 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 
         // Select all entries and disable them as drop targets.
         SetSelectionMode(MULTIPLE_SELECTION);
-        SetCursor(NULL, false);
+        SetCursor(static_cast<SvTreeListEntry*>(NULL));
         SelectAll(true, false);
-        EnableSelectionAsDropTarget(false, true);
+        EnableSelectionAsDropTarget(false);
 
         // Enable only the entries as drop targets that are children of the
         // page under the mouse.
@@ -1156,16 +1156,16 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
         if (pParent != NULL)
         {
             SelectAll(false, false);
-            Select(pParent, true);
+            Select(pParent);
             //            for (SvTreeListEntry*pChild=FirstChild(pParent); pChild!=NULL; pChild=NextSibling(pChild))
             //                Select(pChild, sal_True);
-            EnableSelectionAsDropTarget(true, true);//sal_False);
+            EnableSelectionAsDropTarget(true);//sal_False);
         }
 
         // Set selection back to the entry under the mouse.
         SelectAll(false, false);
         SetSelectionMode(SINGLE_SELECTION);
-        Select(pEntry, true);
+        Select(pEntry);
 
         // We can delete the Navigator from ExecuteDrag (when switching to
         // another document type), but that would kill the StarView MouseMove

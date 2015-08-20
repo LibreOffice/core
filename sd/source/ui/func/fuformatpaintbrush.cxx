@@ -140,7 +140,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         {
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             bool bToggle = false;
-            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, false);
+            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle);
             return true;
         }
     }

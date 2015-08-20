@@ -754,7 +754,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                                 // switch snapping off
                                 if(!bWasNoSnap)
-                                    ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                                    ((SdrDragStat&)rDragStat).SetNoSnap();
                                 if(bWasSnapEnabled)
                                     mpView->SetSnapEnabled(false);
 

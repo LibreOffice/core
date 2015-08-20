@@ -63,7 +63,7 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
         sal_uInt16 nRet = pDlg->Execute();
         if( pDlg->IsModified() )
         {
-            mpDoc->SetChanged( true );
+            mpDoc->SetChanged();
             sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }

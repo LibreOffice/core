@@ -495,7 +495,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     while ( pOutliner->GetParagraphCount() > 1 )
                     {
                         Paragraph* pPara = pOutliner->GetParagraph( 0 );
-                        sal_uLong nLen = pOutliner->GetText( pPara, 1 ).getLength();
+                        sal_uLong nLen = pOutliner->GetText( pPara ).getLength();
                         pOutliner->QuickDelete( ESelection( 0, nLen, 1, 0 ) );
                         pOutliner->QuickInsertLineBreak( ESelection( 0, nLen, 0, nLen ) );
                     }

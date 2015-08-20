@@ -429,7 +429,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // mark last object
                 mpView->UnmarkAllObj();
-                mpView->MarkNextObj(false);
+                mpView->MarkNextObj();
 
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);

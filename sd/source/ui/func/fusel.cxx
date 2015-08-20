@@ -391,7 +391,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 bToggle = true;
                             }
 
-                            bMarked = mpView->MarkObj(aMDPos, nHitLog, bToggle, false);
+                            bMarked = mpView->MarkObj(aMDPos, nHitLog, bToggle);
                         }
                     }
 
@@ -537,7 +537,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    bMarked = mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), false);
+                    bMarked = mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift());
                 }
             }
 
@@ -687,7 +687,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     if (pPV->IsObjSelectable(pObj))
                     {
                         mpView->UnmarkAllObj();
-                        mpView->MarkObj(pObj,pPV,false,false);
+                        mpView->MarkObj(pObj,pPV,false);
                         return true;
                     }
                 }
@@ -1362,7 +1362,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Assign verb
                     mpView->UnmarkAll();
-                    mpView->MarkObj(pObj, mpView->GetSdrPageView(), false, false);
+                    mpView->MarkObj(pObj, mpView->GetSdrPageView(), false);
                     pDrViewSh->DoVerb((sal_Int16)pInfo->mnVerb);
                     bAnimated = true;
                 }

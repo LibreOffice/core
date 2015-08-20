@@ -25,7 +25,7 @@ SdInsertPasteDlg::SdInsertPasteDlg(vcl::Window* pWindow)
 {
     get(m_pRbBefore, "before");
     get(m_pRbAfter, "after");
-    m_pRbAfter->Check( true );
+    m_pRbAfter->Check();
 }
 
 SdInsertPasteDlg::~SdInsertPasteDlg()

@@ -297,7 +297,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         const OUString aStrNone("LANGUAGE_NONE");
                         const OUString aStrResetLangs("RESET_LANGUAGES");
                         sal_Int32 nPos = -1;
-                        if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix , 0 )))
+                        if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix )))
                         {
                             aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), "" );
                         }

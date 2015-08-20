@@ -156,7 +156,7 @@ void FuText::disposing()
 {
     if(mpView)
     {
-        if(mpView->SdrEndTextEdit(false) == SDRENDTEXTEDIT_DELETED)
+        if(mpView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
             mxTextObj.reset( 0 );
 
         // reset the RequestHandler of the used Outliner to the handler of the document
@@ -660,7 +660,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 if (pPV->IsObjSelectable(pObj))
                 {
                     mpView->UnmarkAllObj();
-                    mpView->MarkObj(pObj,pPV,false,false);
+                    mpView->MarkObj(pObj,pPV,false);
                     return bReturn;
                 }
             }

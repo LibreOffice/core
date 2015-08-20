@@ -272,7 +272,7 @@ void LayerTabBar::EndRenaming()
             // the View then already has to know the Layer
             pView->SetActiveLayer(aNewName);
             pLayer->SetName(aNewName);
-            rDoc.SetChanged(true);
+            rDoc.SetChanged();
         }
     }
 }
