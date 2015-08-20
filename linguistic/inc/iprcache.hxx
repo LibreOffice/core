@@ -20,7 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_INC_IPRCACHE_HXX
 #define INCLUDED_LINGUISTIC_INC_IPRCACHE_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -51,7 +51,7 @@ protected:
 
 
 class FlushListener :
-    public cppu::WeakImplHelper2
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XDictionaryListEventListener,
         ::com::sun::star::beans::XPropertyChangeListener

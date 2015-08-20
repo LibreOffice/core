@@ -60,7 +60,7 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic );
 
 
 class DicEvtListenerHelper :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         XDictionaryEventListener
     >

@@ -24,9 +24,7 @@
 #include "linguistic/misc.hxx"
 #include "iprcache.hxx"
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
@@ -46,7 +44,7 @@ class LngSvcMgr;
 
 
 class SpellCheckerDispatcher :
-    public cppu::WeakImplHelper2
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XSpellChecker1,
         ::com::sun::star::linguistic2::XSpellChecker

@@ -26,8 +26,6 @@
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

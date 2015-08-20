@@ -23,7 +23,7 @@
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include "linguistic/misc.hxx"
@@ -34,7 +34,7 @@ class ConvDicNameContainer;
 
 
 class ConvDicList :
-    public cppu::WeakImplHelper3
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XConversionDictionaryList,
         ::com::sun::star::lang::XComponent,

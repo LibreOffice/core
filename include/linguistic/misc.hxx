@@ -31,7 +31,7 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unotools/pathoptions.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
@@ -178,7 +178,7 @@ LNG_DLLPUBLIC bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::c
 // (ie the Desktop) is about to terminate
 
 class AppExitListener :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::frame::XTerminateListener
     >

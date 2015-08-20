@@ -48,7 +48,6 @@
 #include <sal/config.h>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>

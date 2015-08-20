@@ -20,7 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 
@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 
 class LngSvcMgr :
-    public cppu::WeakImplHelper3
+    public cppu::WeakImplHelper
     <
         com::sun::star::linguistic2::XLinguServiceManager2,
         com::sun::star::lang::XServiceInfo,

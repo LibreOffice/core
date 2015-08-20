@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -73,7 +73,7 @@ struct FPEntry
 
 
 class GrammarCheckingIterator:
-    public cppu::WeakImplHelper5
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XProofreadingIterator,
         ::com::sun::star::linguistic2::XLinguServiceEventListener,

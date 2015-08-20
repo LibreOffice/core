@@ -24,7 +24,7 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSetSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
 #include <boost/noncopyable.hpp>
 
@@ -61,7 +61,7 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
 
 
 class SpellAlternatives
-    : public cppu::WeakImplHelper2
+    : public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XSpellAlternatives,
         ::com::sun::star::linguistic2::XSetSpellAlternatives

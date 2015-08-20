@@ -20,7 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_WORKBEN_SPROPHELP_HXX
 #define INCLUDED_LINGUISTIC_WORKBEN_SPROPHELP_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::linguistic2;
 // Only propertyChange needs to be implemented.
 
 class PropertyChgHelper :
-    public cppu::WeakImplHelper2
+    public cppu::WeakImplHelper
     <
         XPropertyChangeListener,
         XLinguServiceEventBroadcaster

@@ -30,7 +30,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -43,7 +43,7 @@ class LngSvcMgr;
 
 
 class HyphenatorDispatcher :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XHyphenator
     >,

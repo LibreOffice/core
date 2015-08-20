@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <rtl/ustring.hxx>
 #include "linguistic/misc.hxx"
