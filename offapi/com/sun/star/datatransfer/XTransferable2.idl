@@ -8,7 +8,7 @@
 #ifndef __com_sun_star_datatransfer_XTransferable2_idl__
 #define __com_sun_star_datatransfer_XTransferable2_idl__
 
-#include <com/sun/star/datatransfer/XTransferable2.idl>
+#include <com/sun/star/datatransfer/XTransferable.idl>
 
 module com { module sun { module star { module datatransfer {
 
