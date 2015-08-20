@@ -290,7 +290,13 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // uses GetCurrentBoundRect() which needs to take the text into account
         // to work correct
         mbInEditMode = false;
-        SetOutlinerParaObject(pNewText);
+        // We don't want broadcasting if we are merely trying to move to next box (this prevents infinite loops)
+        if (IsChainable() && GetTextChain()->GetSwitchingToNextBox(this)) {
+            GetTextChain()->SetSwitchingToNextBox(this, false);
+            NbcSetOutlinerParaObject(pNewText);
+        } else {
+            SetOutlinerParaObject(pNewText);
+        }
     }
 
     /* Beginning Chaining-related code */

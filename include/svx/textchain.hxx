@@ -120,6 +120,7 @@ class ImpChainLinkProperties
         INIT_CHAIN_PROP(PostChainingSel, ESelection(0,0,0,0));
         INIT_CHAIN_PROP(IsPartOfLastParaInNextLink, false) // XXX: Should come from file
         INIT_CHAIN_PROP(PendingOverflowCheck, false)
+        INIT_CHAIN_PROP(SwitchingToNextBox, false)
     }
 
     private:
@@ -130,6 +131,7 @@ class ImpChainLinkProperties
     DECL_CHAIN_PROP(PostChainingSel, ESelection)
     DECL_CHAIN_PROP(IsPartOfLastParaInNextLink, bool)
     DECL_CHAIN_PROP(PendingOverflowCheck, bool)
+    DECL_CHAIN_PROP(SwitchingToNextBox, bool)
 
 };
 
@@ -158,6 +160,8 @@ class TextChain {
     DECL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
     // return whether there is a pending overflow check (usually when we move cursor after an overflow in the prev link)
     DECL_CHAIN_PROP_INTERFACE(PendingOverflowCheck, bool)
+    // return whether we are currently moving the cursor to the next box (useful to know whether we should prevent SetOutlinerParaObject invocations in SdrTextObj::EndTextEdit)
+    DECL_CHAIN_PROP_INTERFACE(SwitchingToNextBox, bool)
 
 
 

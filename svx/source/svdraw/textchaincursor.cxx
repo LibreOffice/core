@@ -173,6 +173,7 @@ void TextChainCursorManager::HandleCursorEvent(
                 pOLV->SetSelection(aNewSel);
                 break;
             case CursorChainingEvent::TO_NEXT_LINK:
+                mpTextObj->GetTextChain()->SetSwitchingToNextBox(mpTextObj, true);
                 impChangeEditingTextObj(pNextLink, aNewSel);
                 break;
             case CursorChainingEvent::TO_PREV_LINK:
