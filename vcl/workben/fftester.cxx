@@ -103,31 +103,31 @@ try_again:
         {
             GDIMetaFile aGDIMetaFile;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = ReadWindowMetafile(aFileStream, aGDIMetaFile);
+            ret = (int) ReadWindowMetafile(aFileStream, aGDIMetaFile);
         }
         else if (strcmp(argv[2], "jpg") == 0)
         {
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = ImportJPEG(aFileStream, aGraphic, NULL, GraphicFilterImportFlags::NONE);
+            ret = (int) ImportJPEG(aFileStream, aGraphic, NULL, GraphicFilterImportFlags::NONE);
         }
         else if (strcmp(argv[2], "gif") == 0)
         {
             SvFileStream aFileStream(out, StreamMode::READ);
             Graphic aGraphic;
-            ret = ImportGIF(aFileStream, aGraphic);
+            ret = (int) ImportGIF(aFileStream, aGraphic);
         }
         else if (strcmp(argv[2], "xbm") == 0)
         {
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = ImportXBM(aFileStream, aGraphic);
+            ret = (int) ImportXBM(aFileStream, aGraphic);
         }
         else if (strcmp(argv[2], "xpm") == 0)
         {
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = ImportXPM(aFileStream, aGraphic);
+            ret = (int) ImportXPM(aFileStream, aGraphic);
         }
         else if (strcmp(argv[2], "png") == 0)
         {
@@ -139,7 +139,7 @@ try_again:
         {
             Bitmap aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = ReadDIB(aTarget, aFileStream, true);
+            ret = (int) ReadDIB(aTarget, aFileStream, true);
         }
         else if (strcmp(argv[2], "svm") == 0)
         {
@@ -160,7 +160,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "dxf") == 0)
         {
@@ -175,7 +175,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "met") == 0)
         {
@@ -190,7 +190,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if ((strcmp(argv[2], "pbm") == 0) || strcmp(argv[2], "ppm") == 0)
         {
@@ -205,7 +205,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "psd") == 0)
         {
@@ -220,7 +220,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "eps") == 0)
         {
@@ -235,7 +235,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "pct") == 0)
         {
@@ -250,7 +250,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "pcx") == 0)
         {
@@ -265,7 +265,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "ras") == 0)
         {
@@ -280,7 +280,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "tga") == 0)
         {
@@ -295,7 +295,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "tif") == 0)
         {
@@ -310,7 +310,7 @@ try_again:
             }
             Graphic aTarget;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = (*pfnImport)(aFileStream, aTarget, NULL);
+            ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
         else if (strcmp(argv[2], "doc") == 0)
         {
@@ -323,7 +323,7 @@ try_again:
                     aLibrary.getFunctionSymbol("TestImportDOC"));
                 aLibrary.release();
             }
-            ret = (*pfnImport)(out);
+            ret = (int) (*pfnImport)(out);
         }
     }
 
