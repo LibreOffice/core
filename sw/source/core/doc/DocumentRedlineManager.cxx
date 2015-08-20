@@ -257,7 +257,7 @@ namespace
 
                         if( pCSttNd && !pCEndNd )
                         {
-                            aPam.GetBound( true ).nContent.Assign( 0, 0 );
+                            aPam.GetBound().nContent.Assign( 0, 0 );
                             aPam.GetBound( false ).nContent.Assign( 0, 0 );
                             aPam.DeleteMark();
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
@@ -367,7 +367,7 @@ namespace
 
                         if( pCSttNd && !pCEndNd )
                         {
-                            aPam.GetBound( true ).nContent.Assign( 0, 0 );
+                            aPam.GetBound().nContent.Assign( 0, 0 );
                             aPam.GetBound( false ).nContent.Assign( 0, 0 );
                             aPam.DeleteMark();
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
@@ -500,7 +500,7 @@ namespace
         const SwPosition* pStt = rPam.Start(),
                         * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
                                                          : rPam.GetPoint();
-        const SwRangeRedline* pFnd = rArr.FindAtPosition( *pStt, n, true );
+        const SwRangeRedline* pFnd = rArr.FindAtPosition( *pStt, n );
         if( pFnd &&     // Is new a part of it?
             ( *pFnd->Start() != *pStt || *pFnd->End() > *pEnd ))
         {
@@ -2333,7 +2333,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
     // If the starting position points to the last valid ContentNode,
     // we take the next Redline in any case.
     sal_uInt16 n = 0;
-    const SwRangeRedline* pFnd = GetRedlineTable().FindAtPosition( rSttPos, n, true );
+    const SwRangeRedline* pFnd = GetRedlineTable().FindAtPosition( rSttPos, n );
     if( pFnd )
     {
         const SwPosition* pEnd = pFnd->End();
@@ -2569,7 +2569,7 @@ bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUStrin
                     * pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
                                                      : rPaM.GetPoint();
     sal_uInt16 n = 0;
-    if( GetRedlineTable().FindAtPosition( *pStt, n, true ) )
+    if( GetRedlineTable().FindAtPosition( *pStt, n ) )
     {
         for( ; n < mpRedlineTable->size(); ++n )
         {

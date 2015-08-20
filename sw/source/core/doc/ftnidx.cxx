@@ -288,7 +288,7 @@ const SwSectionNode* SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr(
     const SwSectionNode* pNd = rTextFootnote.GetTextNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
             static_cast<const SwFormatFootnoteEndAtTextEnd&>(pNd->GetSection().GetFormat()->
-            GetFormatAttr( nWh, true )).GetValue() ) &&
+            GetFormatAttr( nWh )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
         pNd = pNd->StartOfSectionNode()->FindSectionNode();
 

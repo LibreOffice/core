@@ -852,7 +852,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
     mpCharFormatTable->push_back( pFormat );
-    pFormat->SetAuto( false );
+    pFormat->SetAuto();
     getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -889,7 +889,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     SwTextFormatColl *pFormatColl = new SwTextFormatColl( GetAttrPool(), rFormatName,
                                                 pDerivedFrom );
     mpTextFormatCollTable->push_back(pFormatColl);
-    pFormatColl->SetAuto( false );
+    pFormatColl->SetAuto();
     getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -923,7 +923,7 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
     SwConditionTextFormatColl*pFormatColl = new SwConditionTextFormatColl( GetAttrPool(),
                                                     rFormatName, pDerivedFrom );
     mpTextFormatCollTable->push_back(pFormatColl);
-    pFormatColl->SetAuto( false );
+    pFormatColl->SetAuto();
     getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -948,7 +948,7 @@ SwGrfFormatColl* SwDoc::MakeGrfFormatColl( const OUString &rFormatName,
     SwGrfFormatColl *pFormatColl = new SwGrfFormatColl( GetAttrPool(), rFormatName,
                                                 pDerivedFrom );
     mpGrfFormatCollTable->push_back( pFormatColl );
-    pFormatColl->SetAuto( false );
+    pFormatColl->SetAuto();
     getIDocumentState().SetModified();
     return pFormatColl;
 }
@@ -1129,7 +1129,7 @@ SwFormat* SwDoc::CopyFormat( const SwFormat& rFormat,
     // #i40550#
     SwFormat* pNewFormat = (this->*fnCopyFormat)( rFormat.GetName(), pParent, false, true );
     pNewFormat->SetAuto( rFormat.IsAuto() );
-    pNewFormat->CopyAttrs( rFormat, true );           // copy the attributes
+    pNewFormat->CopyAttrs( rFormat );           // copy the attributes
 
     pNewFormat->SetPoolFormatId( rFormat.GetPoolFormatId() );
     pNewFormat->SetPoolHelpId( rFormat.GetPoolHelpId() );
@@ -1173,7 +1173,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         pNewColl = new SwConditionTextFormatColl( GetAttrPool(), rColl.GetName(),
                                                 pParent);
         mpTextFormatCollTable->push_back( pNewColl );
-        pNewColl->SetAuto( false );
+        pNewColl->SetAuto();
         getIDocumentState().SetModified();
 
         // copy the conditions
@@ -1185,7 +1185,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         pNewColl = MakeTextFormatColl( rColl.GetName(), pParent );
 
     // copy the auto formats or the attributes
-    pNewColl->CopyAttrs( rColl, true );
+    pNewColl->CopyAttrs( rColl );
 
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
         pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());
@@ -1281,7 +1281,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
             continue;
 
         pDest = FindFormatByName( rDestArr, pSrc->GetName() );
-        pDest->SetAuto( false );
+        pDest->SetAuto();
         pDest->DelDiffs( *pSrc );
 
         // #i94285#: existing <SwFormatPageDesc> instance, before copying attributes
@@ -1362,7 +1362,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     {
         SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), "CpyDesc",
                                             GetDfltFrameFormat() );
-        pNewFormat->CopyAttrs( *pOldFormat, true );
+        pNewFormat->CopyAttrs( *pOldFormat );
 
         if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(
             RES_CNTNT, false, &pItem ))
@@ -1723,7 +1723,7 @@ SwTableNumFormatMerge::SwTableNumFormatMerge( const SwDoc& rSrc, SwDoc& rDest )
     // a different Doc -> Number formatter needs to be merged
     SvNumberFormatter* pN;
     if( &rSrc != &rDest && 0 != ( pN = const_cast<SwDoc&>(rSrc).GetNumberFormatter( false ) ))
-        ( pNFormat = rDest.GetNumberFormatter( true ))->MergeFormatter( *pN );
+        ( pNFormat = rDest.GetNumberFormatter())->MergeFormatter( *pN );
 
     if( &rSrc != &rDest )
         static_cast<SwGetRefFieldType*>(rSrc.getIDocumentFieldsAccess().GetSysFieldType( RES_GETREFFLD ))->
@@ -1818,10 +1818,10 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     }
     whichIds.push_back(0);
     SfxItemSet currentSet(GetAttrPool(), &whichIds[0]);
-    pTNd->GetAttr(currentSet, nEnd, nEnd, false, true, false);
+    pTNd->GetAttr(currentSet, nEnd, nEnd, false, true);
     for (size_t i = 0; whichIds[i]; i += 2)
     {   // yuk - want to explicitly set the pool defaults too :-/
-        currentSet.Put(currentSet.Get(whichIds[i], true));
+        currentSet.Put(currentSet.Get(whichIds[i]));
     }
 
     getIDocumentContentOperations().InsertItemSet( rPam, rSet, SetAttrMode::DONTEXPAND );

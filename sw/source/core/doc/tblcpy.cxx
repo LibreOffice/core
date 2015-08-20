@@ -553,7 +553,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             SwPosition aMvPos( aInsIdx );
             SwContentNode* pCNd = SwNodes::GoPrevious( &aMvPos.nNode );
             aMvPos.nContent.Assign( pCNd, pCNd->Len() );
-            SwDoc::CorrAbs( aInsIdx, aEndNdIdx, aMvPos, false );
+            SwDoc::CorrAbs( aInsIdx, aEndNdIdx, aMvPos );
         }
 
         // If we still have FlyFrames hanging around, delete them too
@@ -681,7 +681,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
-            InsertRow( pDoc, aBoxes, aTarget.mnAddLine, true );
+            InsertRow( pDoc, aBoxes, aTarget.mnAddLine );
 
         aTarget.moreLines( *this );
         bClear = true;
@@ -884,9 +884,9 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
 
                 if( pUndo
                     ? !pUndo->InsertRow( *this, SelLineFromBox( pInsBox,
-                                aBoxes, true ), nNewLns )
+                                aBoxes ), nNewLns )
                     : !InsertRow( pDoc, SelLineFromBox( pInsBox,
-                                aBoxes, true ), nNewLns, true ) )
+                                aBoxes ), nNewLns ) )
                     return false;
             }
 
@@ -990,7 +990,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
     // Delete the Frames
     aFndBox.SetTableLines( *this );
     //Not dispose accessible table
-    aFndBox.DelFrms( *this,false );
+    aFndBox.DelFrms( *this );
 
     if( 1 == rCpyTable.GetTabSortBoxes().size() )
     {

@@ -181,7 +181,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
         case FLY_AS_CHAR:
             if( pFlyFormat && rAnch.GetContentAnchor() )
             {
-                const SwFrm* pOld = static_cast<const SwFlyFrameFormat*>(pFlyFormat)->GetFrm( &aRet, false );
+                const SwFrm* pOld = static_cast<const SwFlyFrameFormat*>(pFlyFormat)->GetFrm( &aRet );
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -204,7 +204,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             {
                 const SwFlyFrameFormat* pFormat = static_cast<SwFlyFrameFormat*>(rAnch.GetContentAnchor()->
                                                 nNode.GetNode().GetFlyFormat());
-                const SwFrm* pOld = pFormat ? pFormat->GetFrm( &aRet, false ) : 0;
+                const SwFrm* pOld = pFormat ? pFormat->GetFrm( &aRet ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -752,7 +752,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                                             : aPt;
 
                     // allow drawing objects in header/footer
-                    pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aNewPoint, false );
+                    pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aNewPoint );
                     if ( pNewAnchorFrm->IsTextFrm() && static_cast<const SwTextFrm*>(pNewAnchorFrm)->IsFollow() )
                     {
                         pNewAnchorFrm = static_cast<const SwTextFrm*>(pNewAnchorFrm)->FindMaster();
@@ -823,7 +823,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 else            // Change of anchors
                 {
                     // allow drawing objects in header/footer
-                    pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aPt, false );
+                    pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aPt );
                     if( pNewAnchorFrm->IsProtected() )
                     {
                         pNewAnchorFrm = 0;

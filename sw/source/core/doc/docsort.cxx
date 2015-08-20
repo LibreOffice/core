@@ -353,7 +353,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             pRedlPam->GetMark()->nContent.Assign( pCNd, 0 );
 
             pRedlPam->GetPoint()->nNode.Assign( aEndIdx.GetNode() );
-            pCNd = pRedlPam->GetContentNode( true );
+            pCNd = pRedlPam->GetContentNode();
             sal_Int32 nCLen = 0;
             if( !pCNd &&
                 0 != (pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetContentNode()))
@@ -735,7 +735,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
     // If first Node is empty -> delete it
     if(bDelFirst)
-        pDoc->GetNodes().Delete( aTar, 1 );
+        pDoc->GetNodes().Delete( aTar );
 }
 
 /// Generate two-dimensional array of FndBoxes

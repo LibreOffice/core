@@ -63,7 +63,7 @@ enum SwSplitDocType
 bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
                                    const SwTextFormatColl* pSplitColl )
 {
-    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, false, pSplitColl, 0 );
+    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, false, pSplitColl );
 }
 
 bool SwDoc::GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel )
@@ -79,7 +79,7 @@ bool SwDoc::GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel )
 bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
                                  const SwTextFormatColl* pSplitColl )
 {
-    return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl, 0 );
+    return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl );
 }
 
 // two helpers for outline mode
@@ -308,7 +308,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
                     if( aIdx.GetIndex() + 1 !=
                         pDoc->GetNodes().GetEndOfContent().GetIndex() )
-                        pDoc->GetNodes().Delete( aIdx, 1 );
+                        pDoc->GetNodes().Delete( aIdx );
 
                     // All Flys in the section
                     GetDocumentContentOperationsManager().CopyFlyInFlyImpl( aRg, 0, aIdx );

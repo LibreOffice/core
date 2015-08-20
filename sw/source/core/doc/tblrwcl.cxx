@@ -1162,7 +1162,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                         pLastBox = pNewLine->GetTabBoxes()[0];  // reset
                         SwNodeIndex aInsPos( *pLastBox->GetSttNd(), 1 );
                         pDoc->GetNodes()._MoveNodes(aRg, pDoc->GetNodes(), aInsPos, false);
-                        pDoc->GetNodes().Delete( aInsPos, 1 ); // delete the empty one
+                        pDoc->GetNodes().Delete( aInsPos ); // delete the empty one
                     }
                 }
             }
@@ -1915,7 +1915,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
 
                 pFromDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aCpyRg, 0, aInsIdx, NULL, false );
                 // Delete the initial TextNode
-                pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
+                pCpyPara->pDoc->GetNodes().Delete( aInsIdx );
             }
             ++pCpyPara->nInsPos;
         }
@@ -2003,7 +2003,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
     SwSelBoxes aSelBoxes;
     SwTableBox* pBox = GetTabSortBoxes()[ 0 ];
     pBox = GetTableBox( pBox->GetSttNd()->StartOfSectionNode()->GetIndex() + 1 );
-    SelLineFromBox( pBox, aSelBoxes, true );
+    SelLineFromBox( pBox, aSelBoxes );
 
     _FndBox aFndBox( 0, 0 );
     {

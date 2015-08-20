@@ -207,7 +207,7 @@ SwSection::SwSection(
     {
         if( pParentSect->IsHiddenFlag() )
         {
-            SetHidden( true );
+            SetHidden();
         }
 
         m_Data.SetProtectFlag( pParentSect->IsProtectFlag() );
@@ -524,7 +524,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( bUpdateFootnote )
     {
-        SwSectionNode* pSectNd = GetFormat()->GetSectionNode( false );
+        SwSectionNode* pSectNd = GetFormat()->GetSectionNode();
         if( pSectNd )
             pSectNd->GetDoc()->GetFootnoteIdxs().UpdateFootnote(SwNodeIndex( *pSectNd ));
     }
@@ -1185,7 +1185,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
 {
-    SwSectionNode* pSectNd = rSectFormat.GetSectionNode( false );
+    SwSectionNode* pSectNd = rSectFormat.GetSectionNode();
     SwDoc* pDoc = rSectFormat.GetDoc();
 
     SotClipboardFormatId nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
@@ -1290,7 +1290,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
             if( nRet )
             {
-                rSection.SetConnectFlag(true);
+                rSection.SetConnectFlag();
 
                 SwNodeIndex aSave( pPam->GetPoint()->nNode, -1 );
                 SwNodeRange* pCpyRg = 0;
@@ -1378,7 +1378,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                         pPam->SetMark(); // Rewire both SwPositions
 
                         pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, true );
-                        pDoc->GetNodes().Delete( aSave, 1 );
+                        pDoc->GetNodes().Delete( aSave );
                     }
                     delete pCpyRg;
                 }
@@ -1423,7 +1423,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
         if( !IsError( aTmpReader.Read( *pRead ) ))
         {
-            rSection.SetConnectFlag(true);
+            rSection.SetConnectFlag();
         }
 
         if( pESh )
@@ -1483,7 +1483,7 @@ void SwIntrnlSectRefLink::Closed()
                 pDoc->UpdateSection( n, aSectionData );
 
                 // Make all Links within the Section visible again
-                SwSectionNode* pSectNd = rSectFormat.GetSectionNode( false );
+                SwSectionNode* pSectNd = rSectFormat.GetSectionNode();
                 if( pSectNd )
                     SwSection::MakeChildLinksVisible( *pSectNd );
 
@@ -1591,13 +1591,13 @@ void SwSection::BreakLink()
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const
 {
-    return rSectFormat.GetSectionNode( false );
+    return rSectFormat.GetSectionNode();
 }
 
 bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                      sal_Int32 , sal_Int32 ) const
 {
-    SwStartNode* pSttNd = rSectFormat.GetSectionNode( false );
+    SwStartNode* pSttNd = rSectFormat.GetSectionNode();
     return pSttNd &&
             nSttNd < pSttNd->GetIndex() &&
             pSttNd->EndOfSectionIndex() < nEndNd;

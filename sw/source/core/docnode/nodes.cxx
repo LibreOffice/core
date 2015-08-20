@@ -915,7 +915,7 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
     SwNodeIndex aTmpIdx( *pAktNode->StartOfSectionNode() );
 
     if( pAktNode->GetEndNode() )
-        DelNodes( pRange->aStart, 1 ); // prevent empty section
+        DelNodes( pRange->aStart ); // prevent empty section
     else
     {
         // insert a new StartNode
@@ -929,7 +929,7 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
     // For other nodes, insert a new end node.
     --pRange->aEnd;
     if( pRange->aEnd.GetNode().GetStartNode() )
-        DelNodes( pRange->aEnd, 1 );
+        DelNodes( pRange->aEnd );
     else
     {
         ++pRange->aEnd;
@@ -988,10 +988,10 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
             }
             return ;
         }
-        DelNodes( pRange->aStart, 1 );
+        DelNodes( pRange->aStart );
     }
     else if( aIdx == pRange->aStart.GetIndex()-1 ) // before StartNode
-        DelNodes( aIdx, 1 );
+        DelNodes( aIdx );
     else
         new SwEndNode( pRange->aStart, *aIdx.GetNode().GetStartNode() );
 
@@ -1000,7 +1000,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     // For other nodes, insert a new end node.
     SwNodeIndex aTmpIdx( pRange->aEnd );
     if( pRange->aEnd.GetNode().IsEndNode() )
-        DelNodes( pRange->aEnd, 1 );
+        DelNodes( pRange->aEnd );
     else
     {
         new SwStartNode( pRange->aEnd );
@@ -1767,7 +1767,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                     SwStartNode* pSttNd = aRg.aStart.GetNode().GetStartNode();
                     _CopyNodes( SwNodeRange( *pSttNd, + 1,
                                             *pSttNd->EndOfSectionNode() ),
-                                aInsPos, bNewFrms, false );
+                                aInsPos, bNewFrms );
 
                     // insert a DummyNode for the box-EndNode?
                     if( bTableInsDummyNode )

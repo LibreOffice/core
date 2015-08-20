@@ -1668,7 +1668,7 @@ bool SwContentNode::GetAttr( SfxItemSet& rSet, bool bInParent ) const
 
     const SwAttrSet& rAttrSet = GetSwAttrSet();
     if( bInParent )
-        return rSet.Set( rAttrSet, true );
+        return rSet.Set( rAttrSet );
 
     rSet.Put( rAttrSet );
     return rSet.Count() != 0;

@@ -406,13 +406,13 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
                 // If the passed PaM is not in the Crsr ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)
-                if( pOldTextNd == rPam.GetBound( true ).nContent.GetIdxReg() )
-                    rPam.GetBound( true ) = aAlphaPos;
+                if( pOldTextNd == rPam.GetBound().nContent.GetIdxReg() )
+                    rPam.GetBound() = aAlphaPos;
                 if( pOldTextNd == rPam.GetBound( false ).nContent.GetIdxReg() )
                     rPam.GetBound( false ) = aAlphaPos;
             }
             // delete the Node, at last!
-            pDoc->GetNodes().Delete( aOldIdx, 1 );
+            pDoc->GetNodes().Delete( aOldIdx );
         }
         else
         {
@@ -448,9 +448,9 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, true );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
-            if ( pDelNd == rPam.GetBound( true ).nContent.GetIdxReg() )
+            if ( pDelNd == rPam.GetBound().nContent.GetIdxReg() )
             {
-                rPam.GetBound( true ) = SwPosition( SwNodeIndex( *pTextNd ), SwIndex( pTextNd ) );
+                rPam.GetBound() = SwPosition( SwNodeIndex( *pTextNd ), SwIndex( pTextNd ) );
             }
             if( pDelNd == rPam.GetBound( false ).nContent.GetIdxReg() )
             {

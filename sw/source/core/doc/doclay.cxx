@@ -416,7 +416,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                 OSL_ENSURE( aIndex.GetNode().GetTextNode(),
                         "a TextNode should be here" );
                 aPos.nContent.Assign( 0, 0 );       // Deregister index!
-                GetNodes().Delete( aIndex, 1 );
+                GetNodes().Delete( aIndex );
 
                 // This is a hack: whilst FlyFrames/Headers/Footers are not undoable we delete all Undo objects
                 if( GetIDocumentUndoRedo().DoesUndo() )

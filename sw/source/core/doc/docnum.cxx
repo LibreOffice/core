@@ -1934,7 +1934,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                     SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ n ];
 
                     SwPosition* pPos;
-                    if( ( pPos = &pTmp->GetBound(true))->nNode == aIdx )
+                    if( ( pPos = &pTmp->GetBound())->nNode == aIdx )
                     {
                         ++pPos->nNode;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetContentNode(),0);
@@ -1945,7 +1945,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetContentNode(),0);
                     }
                 }
-                CorrRel( aIdx, aInsPos, 0, false );
+                CorrRel( aIdx, aInsPos, 0 );
 
                 if (pCNd)
                     pCNd->JoinNext();
@@ -1970,7 +1970,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
             // that requires touching a lot of code.)
-            aPam.GetBound(true).nContent.Assign( NULL, 0 );
+            aPam.GetBound().nContent.Assign( NULL, 0 );
             aPam.GetBound(false).nContent.Assign( NULL, 0 );
 
             getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );

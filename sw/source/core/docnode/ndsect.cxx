@@ -1264,12 +1264,12 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     pNewSect->SetCondition( GetSection().GetCondition() );
     pNewSect->SetLinkFileName( GetSection().GetLinkFileName() );
     if( !pNewSect->IsHiddenFlag() && GetSection().IsHidden() )
-        pNewSect->SetHidden( true );
+        pNewSect->SetHidden();
     if( !pNewSect->IsProtectFlag() && GetSection().IsProtect() )
-        pNewSect->SetProtect( true );
+        pNewSect->SetProtect();
     // edit in readonly sections
     if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
-        pNewSect->SetEditInReadonly( true );
+        pNewSect->SetEditInReadonly();
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() ); // Where am I?
     rNds._Copy( aRg, aInsPos, false );
@@ -1400,7 +1400,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
 
     for( auto pFormat : *mpSectionFormatTable )
     {
-        const SwSectionNode *const pSectNd = pFormat->GetSectionNode( false );
+        const SwSectionNode *const pSectNd = pFormat->GetSectionNode();
         if( pSectNd != nullptr )
         {
             const OUString rNm = pSectNd->GetSection().GetSectionName();

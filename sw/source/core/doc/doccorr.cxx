@@ -67,7 +67,7 @@ namespace
         const SwPosition& rNewPos)
     {
         bool bRet = false;
-        bRet |= lcl_PosCorrAbs(rPam.GetBound(true ), rStart, rEnd, rNewPos);
+        bRet |= lcl_PosCorrAbs(rPam.GetBound(), rStart, rEnd, rNewPos);
         bRet |= lcl_PosCorrAbs(rPam.GetBound(false), rStart, rEnd, rNewPos);
         return bRet;
     };

@@ -439,8 +439,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
     rpRange = 0;
 
     OUString sItem( INetURLObject::decode( rStr,
-                                         INetURLObject::DECODE_WITH_CHARSET,
-                                        RTL_TEXTENCODING_UTF8 ));
+                                         INetURLObject::DECODE_WITH_CHARSET ));
 
     sal_Int32 nPos = sItem.indexOf( cMarkSeparator );
 

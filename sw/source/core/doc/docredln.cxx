@@ -1135,8 +1135,8 @@ void SwRangeRedline::MoveToSection()
             for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
             {
                 SwRangeRedline* pRedl = rTable[ n ];
-                if( pRedl->GetBound(true) == *pStt )
-                    pRedl->GetBound(true) = *pEnd;
+                if( pRedl->GetBound() == *pStt )
+                    pRedl->GetBound() = *pEnd;
                 if( pRedl->GetBound(false) == *pStt )
                     pRedl->GetBound(false) = *pEnd;
             }
@@ -1285,8 +1285,8 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
             for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
             {
                 SwRangeRedline* pRedl = rTable[ n ];
-                if( pRedl->GetBound(true) == *pStt )
-                    pRedl->GetBound(true) = *pEnd;
+                if( pRedl->GetBound() == *pStt )
+                    pRedl->GetBound() = *pEnd;
                 if( pRedl->GetBound(false) == *pStt )
                     pRedl->GetBound(false) = *pEnd;
             }
@@ -1318,9 +1318,9 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                 {
                     --n;
                     bBreak = true;
-                    if( rTable[ n ]->GetBound(true) == *aPam.GetPoint() )
+                    if( rTable[ n ]->GetBound() == *aPam.GetPoint() )
                     {
-                        rTable[ n ]->GetBound(true) = *pEnd;
+                        rTable[ n ]->GetBound() = *pEnd;
                         bBreak = false;
                     }
                     if( rTable[ n ]->GetBound(false) == *aPam.GetPoint() )
@@ -1335,7 +1335,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                 *GetMark() = *pEnd;
                 DeleteMark();
 
-                aPam.GetBound( true ).nContent.Assign( 0, 0 );
+                aPam.GetBound().nContent.Assign( 0, 0 );
                 aPam.GetBound( false ).nContent.Assign( 0, 0 );
                 aPam.DeleteMark();
                 pDoc->getIDocumentContentOperations().DelFullPara( aPam );
@@ -1367,10 +1367,10 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         for( n = nMyPos+1; !bBreak && n < rTable.size(); ++n )
         {
             bBreak = true;
-            if( rTable[ n ]->GetBound(true) == *GetPoint() )
+            if( rTable[ n ]->GetBound() == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTable[n];
-                aBehindArr.push_back(&pRedl->GetBound(true));
+                aBehindArr.push_back(&pRedl->GetBound());
                 bBreak = false;
             }
             if( rTable[ n ]->GetBound(false) == *GetPoint() )
@@ -1384,10 +1384,10 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         {
             --n;
             bBreak = true;
-            if( rTable[ n ]->GetBound(true) == *GetPoint() )
+            if( rTable[ n ]->GetBound() == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTable[n];
-                aBeforeArr.push_back(&pRedl->GetBound(true));
+                aBeforeArr.push_back(&pRedl->GetBound());
                 bBreak = false;
             }
             if( rTable[ n ]->GetBound(false) == *GetPoint() )

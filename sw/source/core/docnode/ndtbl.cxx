@@ -168,7 +168,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
         if( pAutoFormat )
             pAutoFormat->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFormat->GetAttrSet(),
                                     SwTableAutoFormat::UPDATE_BOX,
-                                    pDoc->GetNumberFormatter( true ) );
+                                    pDoc->GetNumberFormatter() );
         else
             ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
 
@@ -201,7 +201,7 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
         rAutoFormat.UpdateToSet( nId, (SfxItemSet&)pBoxFormat->GetAttrSet(),
                                 SwTableAutoFormat::UPDATE_BOX,
-                                rDoc.GetNumberFormatter( true ) );
+                                rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
@@ -1875,7 +1875,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
             pDelBox = pLn->GetTabBoxes().back();
         }
         SwTableBox* pNextBox = pDelLine->FindNextBox( pTableNd->GetTable(),
-                                                        pDelBox, true );
+                                                        pDelBox );
         while( pNextBox &&
                 pNextBox->GetFrameFormat()->GetProtect().IsContentProtected() )
             pNextBox = pNextBox->FindNextBox( pTableNd->GetTable(), pNextBox );
@@ -1887,7 +1887,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
             while( !pDelBox->GetSttNd() )
                 pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
             pNextBox = pDelLine->FindPreviousBox( pTableNd->GetTable(),
-                                                        pDelBox, true );
+                                                        pDelBox );
             while( pNextBox &&
                     pNextBox->GetFrameFormat()->GetProtect().IsContentProtected() )
                 pNextBox = pNextBox->FindPreviousBox( pTableNd->GetTable(), pNextBox );
@@ -2693,8 +2693,8 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     OSL_ENSURE( rFill.Count(), "Deleting from empty vector. Fasten your seatbelts!" );
     // #i60818# There may be only one entry in rFill. Make
     // code robust by checking count of rFill.
-    if ( rFill.Count() ) rFill.Remove( 0, 1 );
-    if ( rFill.Count() ) rFill.Remove( rFill.Count() - 1 , 1 );
+    if ( rFill.Count() ) rFill.Remove( 0 );
+    if ( rFill.Count() ) rFill.Remove( rFill.Count() - 1 );
     rFill.SetLastRowAllowedToChange( !pTab->HasFollowFlowLine() );
 }
 
@@ -3688,7 +3688,7 @@ static bool lcl_SetAFormatBox( _FndBox & rBox, _SetAFormatTabPara *pSetPara )
                                         SwTableAutoFormat::UPDATE_CHAR, 0 );
         pSetPara->rTableFormat.UpdateToSet( nPos, aBoxSet,
                                         SwTableAutoFormat::UPDATE_BOX,
-                                        pDoc->GetNumberFormatter( true ) );
+                                        pDoc->GetNumberFormatter() );
         if( aCharSet.Count() )
         {
             sal_uLong nSttNd = pSetBox->GetSttIdx()+1;
@@ -3876,7 +3876,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
                                     SwTableAutoFormat::UPDATE_CHAR, 0 );
             rGet.UpdateFromSet( nPos, pFBox->GetFrameFormat()->GetAttrSet(),
                                 SwTableAutoFormat::UPDATE_BOX,
-                                GetNumberFormatter( true ) );
+                                GetNumberFormatter() );
         }
     }
 

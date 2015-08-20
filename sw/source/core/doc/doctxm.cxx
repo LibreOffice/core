@@ -623,7 +623,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
     for( auto pSectionFormat : *mpSectionFormatTable )
     {
-        const SwSectionNode *pSectNd = pSectionFormat->GetSectionNode( false );
+        const SwSectionNode *pSectNd = pSectionFormat->GetSectionNode();
         if ( !pSectNd )
             continue;
 
@@ -839,7 +839,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // find the first layout node for this TOX, if it only find the content
     // in his own chapter
     const SwTextNode* pOwnChapterNode = IsFromChapter()
-            ? ::lcl_FindChapterNode( *pSectNd, 0 )
+            ? ::lcl_FindChapterNode( *pSectNd )
             : 0;
 
     SwNode2Layout aN2L( *pSectNd );
@@ -1020,7 +1020,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     sal_uLong nIdx = pSectNd->GetIndex();
     // don't delete if index is empty
     if(nIdx + 2 < pSectNd->EndOfSectionIndex())
-        pDoc->GetNodes().Delete( aInsPos, 1 );
+        pDoc->GetNodes().Delete( aInsPos );
 
     aN2L.RestoreUpperFrms( pDoc->GetNodes(), nIdx, nIdx + 1 );
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
@@ -1151,7 +1151,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetText().getLength() && pTOXSrc->HasWriterListeners() &&
                 pTOXSrc->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-               (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
+               (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
                !SwScriptInfo::IsInHiddenRange( *pTOXSrc, pTextMark->GetStart() ) )
             {
@@ -1212,7 +1212,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode )
            !pTextNd->HasHiddenParaField() &&
            !pTextNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
-               ::lcl_FindChapterNode( *pTextNd, 0 ) == pOwnChapterNode ))
+               ::lcl_FindChapterNode( *pTextNd ) == pOwnChapterNode ))
         {
             SwTOXPara * pNew = new SwTOXPara( *pTextNd, nsSwTOXElement::TOX_OUTLINELEVEL );
             InsertSorted( pNew );
@@ -1251,7 +1251,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTextNode* pOwnChapterNode )
                     pTextNd->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
                     pTextNd->GetNodes().IsDocNodes() &&
                     ( !IsFromChapter() || pOwnChapterNode ==
-                        ::lcl_FindChapterNode( *pTextNd, 0 ) ) )
+                        ::lcl_FindChapterNode( *pTextNd ) ) )
                 {
                     SwTOXPara * pNew = new SwTOXPara( *pTextNd, nsSwTOXElement::TOX_TEMPLATE, i + 1 );
                     InsertSorted(pNew);
@@ -1282,7 +1282,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTextNode* pOwnChapterNode )
             rTextNode.getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
             rTextNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
-                ::lcl_FindChapterNode( rTextNode, 0 ) == pOwnChapterNode ) )
+                ::lcl_FindChapterNode( rTextNode ) == pOwnChapterNode ) )
         {
             const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFormatField->GetField()));
             const OUString sName = GetSequenceName()
@@ -1475,7 +1475,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
             }
 
             if( pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && ( !IsFromChapter() ||
-                    ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
+                    ::lcl_FindChapterNode( *pCNd ) == pOwnChapterNode ))
             {
                 SwTOXPara * pNew = new SwTOXPara( *pCNd, eMyType,
                             ( USHRT_MAX != nSetLevel )
@@ -1513,7 +1513,7 @@ void SwTOXBaseSection::UpdateTable( const SwTextNode* pOwnChapterNode )
                 aContentIdx.GetIndex() < pTableNd->EndOfSectionIndex() )
             {
                 if( pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && (!IsFromChapter() ||
-                    ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
+                    ::lcl_FindChapterNode( *pCNd ) == pOwnChapterNode ))
                 {
                     SwTOXTable * pNew = new SwTOXTable( *pCNd );
                     if( IsLevelFromChapter() && TOX_TABLES != SwTOXBase::GetType())

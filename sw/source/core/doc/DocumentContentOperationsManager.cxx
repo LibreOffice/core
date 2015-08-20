@@ -1862,8 +1862,8 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             }
         }
 
-        SwContentNode *pTmpNode = rPam.GetBound( true ).nNode.GetNode().GetContentNode();
-        rPam.GetBound( true ).nContent.Assign( pTmpNode, 0 );
+        SwContentNode *pTmpNode = rPam.GetBound().nNode.GetNode().GetContentNode();
+        rPam.GetBound().nContent.Assign( pTmpNode, 0 );
         pTmpNode = rPam.GetBound( false ).nNode.GetNode().GetContentNode();
         rPam.GetBound( false ).nContent.Assign( pTmpNode, 0 );
         m_rDoc.GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
@@ -2680,7 +2680,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, true );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj );
         m_rDoc.getIDocumentState().SetModified();
     }
 }
