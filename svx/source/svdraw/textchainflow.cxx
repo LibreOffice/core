@@ -71,12 +71,12 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 {
     bool bOldUpdateMode = pFlowOutl->GetUpdateMode();
 
-    // We need this since it's required to check overflow
-    pFlowOutl->SetUpdateMode(true);
-
     // XXX: This could be reorganized moving most of this stuff inside EditingTextChainFlow
     if (pParamOutl != NULL)
     {
+        // We need this since it's required to check overflow
+        pFlowOutl->SetUpdateMode(true);
+
         // XXX: does this work if you do it before setting the text? Seems so.
         impSetFlowOutlinerParams(pFlowOutl, pParamOutl);
     }
@@ -105,7 +105,8 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
                       NULL;
 
     // Reset update mode // Reset it here because we use WriteRTF (needing updatemode = true) in the two constructors above
-    pFlowOutl->SetUpdateMode(bOldUpdateMode);
+    if (!bOldUpdateMode) // Reset only if the old value was false
+        pFlowOutl->SetUpdateMode(bOldUpdateMode);
 
     // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
     impUpdateCursorInfo();
@@ -155,11 +156,6 @@ bool TextChainFlow::IsUnderflow() const
 // XXX:Would it be possible to unify undeflow and its possibly following overrflow?
 void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
-    bool bOldUpdateMode = pOutl->GetUpdateMode();
-
-    // We need this since it's required by WriteRTF
-    pOutl->SetUpdateMode(true);
-
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
@@ -180,9 +176,6 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     pOutl->SetMaxAutoPaperSize(aOldSize);
     pOutl->SetText(*pNewText);
 
-    // Reset update mode
-    pOutl->SetUpdateMode(bOldUpdateMode);
-
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 
     // Check for new overflow
@@ -191,11 +184,6 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 
 void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pOverflOutl)
 {
-    bool bOldUpdateMode = pNonOverflOutl->GetUpdateMode();
-
-    // We need this since it's required by WriteRTF
-    pNonOverflOutl->SetUpdateMode(true);
-
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // Leave only non overflowing text
     impLeaveOnlyNonOverflowingText(pNonOverflOutl);
@@ -205,9 +193,6 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
     {
         impMoveChainedTextToNextLink(pOverflOutl);
     }
-
-    // Reset update mode
-    pNonOverflOutl->SetUpdateMode(bOldUpdateMode);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 }
