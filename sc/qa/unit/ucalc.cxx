@@ -1469,9 +1469,10 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
     pDoc->CalcAll();
     {
-        // Default is to use the current formula syntax, which is Calc A1.
+        // Default is to use compatibility mode, accept both Calc A1 and
+        // Excel A1 syntax
         const OUString* aChecks[] = {
-            &aTest, &aRefErr, &aRefErr, &aTest
+            &aTest, &aTest, &aRefErr, &aTest
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -1482,8 +1483,8 @@ void testFuncINDIRECT(ScDocument* pDoc)
     }
 
     ScCalcConfig aConfig;
-    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_OOO;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_OOO );
+    pDoc->SetCalcConfig(aConfig);
     pDoc->CalcAll();
     {
         // Explicit Calc A1 syntax
@@ -1498,8 +1499,8 @@ void testFuncINDIRECT(ScDocument* pDoc)
         }
     }
 
-    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_A1;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_A1 );
+    pDoc->SetCalcConfig(aConfig);
     pDoc->CalcAll();
     {
         // Excel A1 syntax
@@ -1514,8 +1515,8 @@ void testFuncINDIRECT(ScDocument* pDoc)
         }
     }
 
-    aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_R1C1 );
+    pDoc->SetCalcConfig(aConfig);
     pDoc->CalcAll();
     {
         // Excel R1C1 syntax
@@ -2176,7 +2177,7 @@ void Test::testFuncParam()
 
     // With "Empty string as zero" option.
     aConfig.mbEmptyStringAsZero = true;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
@@ -2189,7 +2190,7 @@ void Test::testFuncParam()
 
     // Without "Empty string as zero" option.
     aConfig.mbEmptyStringAsZero = false;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     aVal = m_pDoc->GetString( 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");

@@ -57,6 +57,7 @@ private:
     OUString maCalcA1;
     OUString maExcelA1;
     OUString maExcelR1C1;
+    OUString maCalcA1ExcelR1C1;
 
     OUString maCaptionStringRefSyntax;
     OUString maDescStringRefSyntax;
