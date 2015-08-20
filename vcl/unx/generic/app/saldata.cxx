@@ -59,18 +59,6 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef UNX
-#ifndef SIGBUS
-#define SIGBUS 10
-#endif
-#ifndef SIGSEGV
-#define SIGSEGV 11
-#endif
-#ifndef SIGIOT
-#define SIGIOT SIGABRT
-#endif
-#endif
-
 X11SalData* GetX11SalData()
 {
     SalData * p1 = ImplGetSVData()->mpSalData;
