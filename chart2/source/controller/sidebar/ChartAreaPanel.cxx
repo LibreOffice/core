@@ -436,7 +436,7 @@ void ChartAreaPanel::updateData()
 
     maFillColorWrapper.updateData();
 
-    sal_uInt32 nFillColor;
+    sal_uInt32 nFillColor = 0;
     xPropSet->getPropertyValue("FillColor") >>= nFillColor;
     XFillColorItem aFillColorItem("", Color(nFillColor));
     updateFillColor(true, &aFillColorItem);
