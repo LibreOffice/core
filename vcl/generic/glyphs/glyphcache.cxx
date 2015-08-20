@@ -60,6 +60,8 @@ void GlyphCache::InvalidateAllGlyphs()
     for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
     {
         ServerFont* pServerFont = it->second;
+        // free all pServerFont related data
+        pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
         mrPeer.RemovingFont(*pServerFont);
         delete pServerFont;
     }
