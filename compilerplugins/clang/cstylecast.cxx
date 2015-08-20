@@ -198,7 +198,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     report(
         DiagnosticsEngine::Warning, "%0 C-style cast from %1%2 to %3%4%5",
         expr->getSourceRange().getBegin())
-      << expr->getCastKindName() << incompFrom
+      << incompFrom
       << expr->getSubExprAsWritten()->getType() << incompTo << expr->getType()
       << performs << expr->getSourceRange();
     return true;

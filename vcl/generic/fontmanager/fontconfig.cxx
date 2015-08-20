@@ -497,7 +497,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             FcResult eFileRes         = FcPatternGetString(pFSet->fonts[i], FC_FILE, 0, &file);
             FcResult eFamilyRes       = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &family, FC_FAMILY, FC_FAMILYLANG );
-            if (bMinimalFontset && strncmp((char*)family, "Liberation", strlen("Liberation")))
+            if (bMinimalFontset && strncmp(reinterpret_cast<char*>(family), "Liberation", strlen("Liberation")))
                 continue;
             FcResult eStyleRes        = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &style, FC_STYLE, FC_STYLELANG );
             FcResult eSlantRes        = FcPatternGetInteger(pFSet->fonts[i], FC_SLANT, 0, &slant);
