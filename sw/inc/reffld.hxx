@@ -60,7 +60,7 @@ enum REFERENCEMARK
 
 /// Get reference.
 
-class SwGetRefFieldType : public SwFieldType
+class SW_DLLPUBLIC SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
 protected:
