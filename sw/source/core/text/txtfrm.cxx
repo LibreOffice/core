@@ -28,6 +28,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <unotools/configmgr.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
@@ -314,14 +315,17 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
         rOut( rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
 {
     LanguageType eLang = eCurLang;
-    const SvtCTLOptions::TextNumerals nTextNumerals = SW_MOD()->GetCTLOptions().GetCTLTextNumerals();
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        const SvtCTLOptions::TextNumerals nTextNumerals = SW_MOD()->GetCTLOptions().GetCTLTextNumerals();
 
-    if ( SvtCTLOptions::NUMERALS_HINDI == nTextNumerals )
-        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-    else if ( SvtCTLOptions::NUMERALS_ARABIC == nTextNumerals )
-        eLang = LANGUAGE_ENGLISH;
-    else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
-        eLang = ::GetAppLanguage();
+        if ( SvtCTLOptions::NUMERALS_HINDI == nTextNumerals )
+            eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
+        else if ( SvtCTLOptions::NUMERALS_ARABIC == nTextNumerals )
+            eLang = LANGUAGE_ENGLISH;
+        else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
+            eLang = ::GetAppLanguage();
+    }
 
     const_cast<OutputDevice&>(rOut).SetDigitLanguage( eLang );
 }
