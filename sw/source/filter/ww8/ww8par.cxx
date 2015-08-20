@@ -6048,7 +6048,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
     return new WW8Reader();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL, const OUString &rFltName)
 {
     Reader *pReader = ImportDOC();
 
@@ -6057,6 +6057,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL
 
     pReader->pStrm = &aFileStream;
     pReader->pStg = xStorage.get();
+    pReader->SetFltName(rFltName);
 
     SwGlobals::ensure();
 

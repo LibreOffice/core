@@ -63,7 +63,7 @@ using namespace cppu;
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-typedef bool (*WFilterCall)(const OUString &rUrl);
+typedef bool (*WFilterCall)(const OUString &rUrl, const OUString &rFlt);
 
 /* This constant specifies the number of inputs to process before restarting.
  * This is optional, but helps limit the impact of memory leaks and similar
@@ -312,7 +312,10 @@ try_again:
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = (int) (*pfnImport)(aFileStream, aTarget, NULL);
         }
-        else if (strcmp(argv[2], "doc") == 0)
+        else if ( (strcmp(argv[2], "doc") == 0) ||
+                  (strcmp(argv[2], "ww8") == 0) ||
+                  (strcmp(argv[2], "ww6") == 0) ||
+                  (strcmp(argv[2], "ww2") == 0) )
         {
             static WFilterCall pfnImport(0);
             if (!pfnImport)
@@ -323,7 +326,12 @@ try_again:
                     aLibrary.getFunctionSymbol("TestImportDOC"));
                 aLibrary.release();
             }
-            ret = (int) (*pfnImport)(out);
+            if (strcmp(argv[2], "ww6") == 0)
+                ret = (int) (*pfnImport)(out, OUString("CWW6"));
+            else if (strcmp(argv[2], "ww2") == 0)
+                ret = (int) (*pfnImport)(out, OUString("WW6"));
+            else
+                ret = (int) (*pfnImport)(out, OUString("CWW8"));
         }
     }
 
