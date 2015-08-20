@@ -3783,8 +3783,9 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, long nTextEnd, bool& rbStart
                     (aRes.nSprmId == eFLD) || (aRes.nSprmId == eAND)
                    )
                 {
-                    // Skip Field/Ftn-/End-Note here
-                    rTxtPos += nSkipChars;
+                    WW8_CP nMaxLegalSkip = nTextEnd - rTxtPos;
+                    // Skip Field/Footnote-/End-Note here
+                    rTxtPos += std::min<WW8_CP>(nSkipChars, nMaxLegalSkip);
                     nSkipPos = rTxtPos-1;
                 }
             }
