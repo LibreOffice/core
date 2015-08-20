@@ -31,6 +31,7 @@ IMPL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
 IMPL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
 IMPL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
 IMPL_CHAIN_PROP_INTERFACE(PendingOverflowCheck, bool)
+IMPL_CHAIN_PROP_INTERFACE(SwitchingToNextBox, bool)
 
 
 /* End Definition of Properties Interface */
