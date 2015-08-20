@@ -1138,7 +1138,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 for (size_t nRed = 0; nRed < rRedTable.size(); ++nRed)
                 {
                     const SwRangeRedline* pRedline = rRedTable[nRed];
-                    const SwNode& rRedPointNode = pRedline->GetNode(true);
+                    const SwNode& rRedPointNode = pRedline->GetNode();
                     const SwNode& rRedMarkNode = pRedline->GetNode(false);
                     if ((&rRedPointNode == pSectNode) ||
                         (&rRedMarkNode == pSectNode))

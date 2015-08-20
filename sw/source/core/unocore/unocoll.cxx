@@ -554,7 +554,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         break;
         case  SW_SERVICE_TYPE_FIELDMARK :
         {
-            xRet = SwXFieldmark::CreateXFieldmark(rDoc, 0, false);
+            xRet = SwXFieldmark::CreateXFieldmark(rDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_FORMFIELDMARK :
@@ -614,7 +614,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         break;
 
         case  SW_SERVICE_TYPE_FOOTNOTE :
-            xRet = SwXFootnote::CreateXFootnote(rDoc, 0, false);
+            xRet = SwXFootnote::CreateXFootnote(rDoc, 0);
         break;
         case  SW_SERVICE_TYPE_ENDNOTE  :
             xRet = SwXFootnote::CreateXFootnote(rDoc, 0, true);

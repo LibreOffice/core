@@ -670,7 +670,7 @@ public:
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
-        , m_pUnoCursor(rDoc.CreateUnoCrsr(rPoint, false), true)
+        , m_pUnoCursor(rDoc.CreateUnoCrsr(rPoint), true)
     {
         if (pMark)
         {
@@ -2002,7 +2002,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     // if we are reseting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
-    auto pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
+    auto pTemp ( rDoc.CreateUnoCrsr(aStart) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
         pTemp->MovePara(fnParaCurr, fnParaStart);
@@ -2515,17 +2515,17 @@ throw (uno::RuntimeException, std::exception)
     if ( text::TextMarkupType::SPELLCHECK == nType )
     {
         txtNode->SetWrongDirty(true);
-        txtNode->SetWrong(0, true);
+        txtNode->SetWrong(0);
     }
     else if( text::TextMarkupType::PROOFREADING == nType )
     {
         txtNode->SetGrammarCheckDirty(true);
-        txtNode->SetGrammarCheck(0,true);
+        txtNode->SetGrammarCheck(0);
     }
     else if ( text::TextMarkupType::SMARTTAG == nType )
     {
         txtNode->SetSmartTagDirty(true);
-        txtNode->SetSmartTags (0, true);
+        txtNode->SetSmartTags(0);
     }
     else return;
 

@@ -324,7 +324,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
                 pTableNode = pTableNode->EndOfSectionNode();
             for(const SwRangeRedline* pRedline : pFormat->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable())
             {
-                const SwNode& rRedPointNode = pRedline->GetNode(true);
+                const SwNode& rRedPointNode = pRedline->GetNode();
                 const SwNode& rRedMarkNode = pRedline->GetNode(false);
                 if(&rRedPointNode == pTableNode || &rRedMarkNode == pTableNode)
                 {
@@ -691,7 +691,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
     if(!rCell.IsValid())
         return;
     // first this text (maybe) needs to be deleted
-    sal_uLong nNdPos = rCell.pBox->IsValidNumTextNd( true );
+    sal_uLong nNdPos = rCell.pBox->IsValidNumTextNd();
     if(ULONG_MAX != nNdPos)
         sw_setString( rCell, OUString(), true );   // true == keep number format
     SwDoc* pDoc = rCell.GetDoc();
@@ -862,7 +862,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException,
     if(!IsValid())
         return;
     // first this text (maybe) needs to be deleted
-    sal_uInt32 nNdPos = pBox->IsValidNumTextNd( true );
+    sal_uInt32 nNdPos = pBox->IsValidNumTextNd();
     if(USHRT_MAX == nNdPos)
         sw_setString( *this, OUString(), true );
     OUString sFormula(comphelper::string::stripStart(rFormula, ' '));
@@ -1088,7 +1088,7 @@ uno::Reference<container::XEnumeration> SwXCell::createEnumeration() throw( uno:
         return uno::Reference<container::XEnumeration>();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     // remember table and start node for later travelling
     // (used in export of tables in tables)
@@ -3316,7 +3316,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                             nValid = SvxBoxInfoItemValidFlags::DISTANCE;
                         break;
                     }
-                    aBoxInfo.SetValid(nValid, true);
+                    aBoxInfo.SetValid(nValid);
 
                     aSet.Put(aBoxInfo);
                     SwDoc::GetTabBorders(rCrsr, aSet);

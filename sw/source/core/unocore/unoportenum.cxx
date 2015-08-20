@@ -363,7 +363,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         const sal_Int32 nEnd )
     : m_Portions()
 {
-    m_pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
+    m_pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint());
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
         nEnd <= m_pUnoCrsr->Start()->nNode.GetNode().GetTextNode()->GetText().getLength()),
@@ -380,7 +380,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         TextRangeList_t const & rPortions )
     : m_Portions( rPortions )
 {
-    m_pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
+    m_pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint());
 }
 
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()

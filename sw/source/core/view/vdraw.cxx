@@ -170,7 +170,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
     if( pO && ::CalcClipRect( pO, aRect, false ) )
     {
         SwRect aTmp;
-        ::CalcClipRect( pO, aTmp, true );
+        ::CalcClipRect( pO, aTmp );
         aRect.Union( aTmp );
     }
     else

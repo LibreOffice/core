@@ -300,7 +300,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
             MINFLY > static_cast<const SwFormatFrmSize*>(pItem)->GetWidth() )
     {
-        SwFormatFrmSize aSz(static_cast<const SwFormatFrmSize&>(rFlySet.Get(RES_FRM_SIZE, true)));
+        SwFormatFrmSize aSz(static_cast<const SwFormatFrmSize&>(rFlySet.Get(RES_FRM_SIZE)));
         if (pItem)
             aSz = static_cast<const SwFormatFrmSize&>(*pItem);
 

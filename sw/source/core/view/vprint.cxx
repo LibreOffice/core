@@ -549,7 +549,7 @@ bool SwViewShell::PrintOrPDFExport(
             pMetaFile->Stop();
             pMetaFile->WindStart();
             //Enable output to the device again
-            pOutDev->EnableOutput(true);
+            pOutDev->EnableOutput();
             //Restore the original recorder
             pOutDev->SetConnectMetaFile(pOrigRecorder);
 

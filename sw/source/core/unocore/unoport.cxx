@@ -129,7 +129,7 @@ SwXTextPortion::SwXTextPortion(
     if (!bIsEnd)
     {
         const SfxPoolItem& rItem = rAttr.GetAttr();
-        rItem.QueryValue(*m_pRubyText, MID_RUBY_TEXT);
+        rItem.QueryValue(*m_pRubyText);
         rItem.QueryValue(*m_pRubyStyle, MID_RUBY_CHARSTYLE);
         rItem.QueryValue(*m_pRubyAdjust, MID_RUBY_ADJUST);
         rItem.QueryValue(*m_pRubyIsAbove, MID_RUBY_ABOVE);

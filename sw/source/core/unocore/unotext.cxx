@@ -2493,7 +2493,7 @@ SwXBodyText::createTextCursor() throw (uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
 
     const uno::Reference< text::XTextCursor > xRef(
-            static_cast<text::XWordCursor*>(CreateTextCursor(false)) );
+            static_cast<text::XWordCursor*>(CreateTextCursor()) );
     if (!xRef.is())
     {
         uno::RuntimeException aRuntime;
@@ -2564,7 +2564,7 @@ throw (uno::RuntimeException, std::exception)
 
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
     SwPosition aPos(rNode);
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos));
     pUnoCursor->Move(fnMoveBackward, fnGoDoc);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_BODY);
 }
@@ -2826,7 +2826,7 @@ throw (uno::RuntimeException, std::exception)
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
 }

@@ -3871,7 +3871,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TBODY_ON:
         case HTML_TBODY_OFF:
         case HTML_TABLE_OFF:
-            SkipToken(-1);
+            SkipToken();
             //fall-through
         case HTML_TABLEHEADER_OFF:
         case HTML_TABLEDATA_OFF:
@@ -4261,7 +4261,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TABLE_ON:
             if( !pCurTable->GetContext()  )
             {
-                SkipToken( -1 );
+                SkipToken();
                 bDone = true;
             }
 
@@ -4274,7 +4274,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TFOOT_ON:
         case HTML_TFOOT_OFF:
         case HTML_TABLE_OFF:
-            SkipToken( -1 );
+            SkipToken();
             //fall-through
         case HTML_TABLEROW_OFF:
             bDone = true;
@@ -4438,7 +4438,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         case HTML_TABLE_ON:
             if( !pCurTable->GetContext()  )
             {
-                SkipToken( -1 );
+                SkipToken();
                 bDone = true;
             }
 
@@ -4447,7 +4447,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         case HTML_TFOOT_ON:
         case HTML_TBODY_ON:
         case HTML_TABLE_OFF:
-            SkipToken( -1 );
+            SkipToken();
             //fall-through
         case HTML_THEAD_OFF:
         case HTML_TBODY_OFF:
@@ -4462,7 +4462,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             break;
         case HTML_TABLEHEADER_ON:
         case HTML_TABLEDATA_ON:
-            SkipToken( -1 );
+            SkipToken();
             BuildTableRow( pCurTable, false, pSaveStruct->eAdjust,
                            pSaveStruct->eVertOri );
             bDone = pTable->IsOverflowing();
@@ -4632,7 +4632,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         case HTML_TABLE_ON:
             if( !pCurTable->GetContext()  )
             {
-                SkipToken( -1 );
+                SkipToken();
                 bDone = true;
             }
 
@@ -4643,7 +4643,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         case HTML_TBODY_ON:
         case HTML_TABLEROW_ON:
         case HTML_TABLE_OFF:
-            SkipToken( -1 );
+            SkipToken();
             //fall-through
         case HTML_COLGROUP_OFF:
             bDone = true;
@@ -4880,7 +4880,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         case HTML_TFOOT_ON:
         case HTML_TBODY_ON:
         case HTML_TABLEROW_ON:
-            SkipToken( -1 );
+            SkipToken();
             bDone = true;
             break;
 
@@ -5229,7 +5229,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             {
                 // Wenn noch keine Tabelle eingefuegt wurde,
                 // die naechste Tabelle lesen
-                SkipToken( -1 );
+                SkipToken();
                 bDone = true;
             }
 
@@ -5242,7 +5242,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             bDone = pTable->IsOverflowing();
             break;
         case HTML_COL_ON:
-            SkipToken( -1 );
+            SkipToken();
             BuildTableColGroup( pCurTable, false );
             break;
         case HTML_COLGROUP_ON:
@@ -5251,7 +5251,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         case HTML_TABLEROW_ON:
         case HTML_TABLEHEADER_ON:
         case HTML_TABLEDATA_ON:
-            SkipToken( -1 );
+            SkipToken();
             BuildTableSection( pCurTable, false, false );
             bDone = pTable->IsOverflowing();
             break;

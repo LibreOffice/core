@@ -343,7 +343,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->UpdateNumRule();
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
-    pDoc->getIDocumentState().SetLoaded( true );
+    pDoc->getIDocumentState().SetLoaded();
 
     pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
     if (!bReadPageDescs)

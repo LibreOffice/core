@@ -664,7 +664,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
 
             SwTextNode *const pTextNode = rPam.GetNode().GetTextNode();
-            if (&rPam.GetNode(true) == &rPam.GetNode(false)
+            if (&rPam.GetNode() == &rPam.GetNode(false)
                 && pTextNode && pTextNode->GetpSwpHints())
             {
                 sal_Int32 nPaMStart = rPam.GetPoint()->nContent.GetIndex();

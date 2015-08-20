@@ -576,7 +576,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = rUnoCrsr.Start();
-        auto aNewCrsr(rUnoCrsr.GetDoc()->CreateUnoCrsr(*pStart, false));
+        auto aNewCrsr(rUnoCrsr.GetDoc()->CreateUnoCrsr(*pStart));
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1118,7 +1118,7 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
-    const auto pNewCrsr(rDoc.CreateUnoCrsr(rPos, false));
+    const auto pNewCrsr(rDoc.CreateUnoCrsr(rPos));
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1252,7 +1252,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
-    const auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    const auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1271,7 +1271,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
-    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr(aPos));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1649,7 +1649,7 @@ SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, cons
 SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode,
         SwFrameFormat* const pFormat)
-    : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
+    : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint()))
 {
     if (rPaM.HasMark())
     {

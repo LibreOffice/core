@@ -703,15 +703,15 @@ void SwHTMLParser::Continue( int nToken )
 
 #if OSL_DEBUG_LEVEL > 0
 // !!! sollte nicht moeglich sein, oder ??
-OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( true ).nNode.GetIndex(),
+OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound().nNode.GetIndex(),
             "Pam.Bound1 steht noch im Node" );
 OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( false ).nNode.GetIndex(),
             "Pam.Bound2 steht noch im Node" );
 
-if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( true ).nNode.GetIndex() )
+if( pSttNdIdx->GetIndex()+1 == pPam->GetBound().nNode.GetIndex() )
 {
-    const sal_Int32 nCntPos = pPam->GetBound( true ).nContent.GetIndex();
-    pPam->GetBound( true ).nContent.Assign( pTextNode,
+    const sal_Int32 nCntPos = pPam->GetBound().nContent.GetIndex();
+    pPam->GetBound().nContent.Assign( pTextNode,
                     pTextNode->GetText().getLength() + nCntPos );
 }
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
@@ -775,7 +775,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
                             pCrsrSh->SetMark();
                             pCrsrSh->ClearMark();
                         }
-                        pPam->GetBound(true).nContent.Assign( 0, 0 );
+                        pPam->GetBound().nContent.Assign( 0, 0 );
                         pPam->GetBound(false).nContent.Assign( 0, 0 );
                         pDoc->GetNodes().Delete( pPam->GetPoint()->nNode );
                     }
@@ -794,7 +794,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
                 {
                     pPos->nContent.Assign( 0, 0 );
                     pPam->SetMark(); pPam->DeleteMark();
-                    pDoc->GetNodes().Delete( pPos->nNode, 1 );
+                    pDoc->GetNodes().Delete( pPos->nNode );
                     pPam->Move( fnMoveBackward );
                 }
             }
@@ -824,8 +824,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
                 if( pPrev->HasSwAttrSet() )
                     pTextNode->SetAttr( *pPrev->GetpSwAttrSet() );
 
-                if( &pPam->GetBound(true).nNode.GetNode() == pPrev )
-                    pPam->GetBound(true).nContent.Assign( pTextNode, 0 );
+                if( &pPam->GetBound().nNode.GetNode() == pPrev )
+                    pPam->GetBound().nContent.Assign( pTextNode, 0 );
                 if( &pPam->GetBound(false).nNode.GetNode() == pPrev )
                     pPam->GetBound(false).nContent.Assign( pTextNode, 0 );
 
@@ -888,7 +888,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
             pDoc->getIDocumentState().ResetModified();
         if( bSetModEnabled && pDoc->GetDocShell() )
         {
-            pDoc->GetDocShell()->EnableSetModified( true );
+            pDoc->GetDocShell()->EnableSetModified();
             bSetModEnabled = false; // this is unnecessary here
         }
     }
@@ -928,7 +928,7 @@ void SwHTMLParser::DocumentDetected()
         if( IsInHeader() )
             FinishHeader( true );
 
-        CallEndAction( true, true );
+        CallEndAction( true );
 
         pDoc->GetIDocumentUndoRedo().DoUndo(false);
         // Durch das DocumentDetected wurde im allgemeinen eine

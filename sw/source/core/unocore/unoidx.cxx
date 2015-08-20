@@ -1376,7 +1376,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     //TODO: apply Section attributes (columns and background)
     SwTOXBaseSection *const pTOX =
-        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0, false );
+        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0 );
 
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
 
@@ -1969,7 +1969,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // n.b.: toxmarks must have either alternative text or an extent
     if (bMark && !rMark.GetAlternativeText().isEmpty())
     {
-        rPam.Normalize(true);
+        rPam.Normalize();
         rPam.DeleteMark();
         bMark = false;
     }
