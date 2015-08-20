@@ -24,8 +24,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/stream.hxx>
 
@@ -37,7 +36,7 @@
 sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg );
 
 class DictionaryNeo :
-    public ::cppu::WeakImplHelper2
+    public ::cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XDictionary,
         ::com::sun::star::frame::XStorable
@@ -179,7 +178,7 @@ public:
 
 
 class DicEntry :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XDictionaryEntry
     >

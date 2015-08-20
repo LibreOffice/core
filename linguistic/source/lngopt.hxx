@@ -20,7 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -67,7 +67,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
     OPropertyListenerContainerHelper;
 
 class LinguProps :
-    public cppu::WeakImplHelper5
+    public cppu::WeakImplHelper
     <
         com::sun::star::linguistic2::XLinguProperties,
         com::sun::star::beans::XFastPropertySet,

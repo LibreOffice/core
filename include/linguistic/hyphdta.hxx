@@ -22,14 +22,14 @@
 
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
 
 namespace linguistic
 {
 
 class HyphenatedWord :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XHyphenatedWord
     >
@@ -76,7 +76,7 @@ public:
 
 
 class PossibleHyphens :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XPossibleHyphens
     >

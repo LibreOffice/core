@@ -20,7 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_LNGPROPHELP_HXX
 #define INCLUDED_LINGUISTIC_LNGPROPHELP_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -49,7 +49,7 @@ namespace linguistic
 #define AE_SPELLCHECKER 1
 #define AE_HYPHENATOR   2
 
-typedef cppu::WeakImplHelper2
+typedef cppu::WeakImplHelper
 <
     ::com::sun::star::beans::XPropertyChangeListener,
     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster

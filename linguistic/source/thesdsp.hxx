@@ -32,8 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <osl/mutex.hxx>
@@ -46,7 +45,7 @@
 
 
 class ThesaurusDispatcher :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XThesaurus
     >,

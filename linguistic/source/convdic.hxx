@@ -23,7 +23,7 @@
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <memory>
@@ -67,7 +67,7 @@ typedef std::unordered_multimap< OUString, sal_Int16,
 
 
 class ConvDic :
-    public ::cppu::WeakImplHelper4
+    public ::cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XConversionDictionary,
         ::com::sun::star::linguistic2::XConversionPropertyType,

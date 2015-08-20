@@ -23,7 +23,6 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include "linguistic/misc.hxx"

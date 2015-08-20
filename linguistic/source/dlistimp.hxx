@@ -24,8 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <vector>
@@ -37,7 +36,7 @@ class DicEvtListenerHelper;
 
 
 class DicList :
-    public cppu::WeakImplHelper3
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::linguistic2::XSearchableDictionaryList,
         ::com::sun::star::lang::XComponent,

@@ -33,6 +33,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/checked_delete.hpp>
 #include <boost/noncopyable.hpp>
@@ -173,7 +174,7 @@ bool SvcInfo::HasLanguage( sal_Int16 nLanguage ) const
 }
 
 class LngSvcMgrListenerHelper :
-    public cppu::WeakImplHelper2
+    public cppu::WeakImplHelper
     <
         linguistic2::XLinguServiceEventListener,
         linguistic2::XDictionaryListEventListener

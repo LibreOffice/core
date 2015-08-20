@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
@@ -82,7 +83,7 @@ OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectory
 }
 
 class ConvDicNameContainer :
-    public cppu::WeakImplHelper1
+    public cppu::WeakImplHelper
     <
         ::com::sun::star::container::XNameContainer
     >,
