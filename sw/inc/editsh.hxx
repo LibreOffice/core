@@ -394,6 +394,7 @@ public:
     void UpdateExpFlds(sal_Bool bCloseDB = sal_False);///< only every expression fields update
     void LockExpFlds();
     void UnlockExpFlds();
+    bool IsExpFldsLocked() const;
 
     SwFldUpdateFlags GetFldUpdateFlags(sal_Bool bDocSettings = sal_False) const;
     void SetFldUpdateFlags( SwFldUpdateFlags eFlags );
