@@ -173,7 +173,7 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
         mpTargetLink->NbcSetOutlinerParaObject(pNewText);
 
     // Restore size and set new text
-    pOutl->SetMaxAutoPaperSize(aOldSize);
+    //pOutl->SetMaxAutoPaperSize(aOldSize); // XXX
     pOutl->SetText(*pNewText);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
