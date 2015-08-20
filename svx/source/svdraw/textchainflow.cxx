@@ -95,6 +95,10 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     // If we had an underflow before we have to deep merge paras anyway
     bool bMustMergeParaOF = bMustMergeParaAmongLinks || mbOFisUFinduced;
+
+    // XXX
+    bMustMergeParaOF = true; // XXX: Experiment: no deep merging.
+
     mpOverflChText = bOverflow ?
                      new OFlowChainedText(pFlowOutl, bMustMergeParaOF) :
                      NULL;
