@@ -307,9 +307,9 @@ void ViewShell::Activate(bool bIsMDIActivate)
        gets the focus. */
 
     if (mpHorizontalRuler.get() != NULL)
-        mpHorizontalRuler->SetActive(true);
+        mpHorizontalRuler->SetActive();
     if (mpVerticalRuler.get() != NULL)
-        mpVerticalRuler->SetActive(true);
+        mpVerticalRuler->SetActive();
 
     if (bIsMDIActivate)
     {
@@ -325,7 +325,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_3D_STATE, true, false );
+        rBindings.Invalidate( SID_3D_STATE, true );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if(xSlideShow.is() && xSlideShow->isRunning() )
@@ -843,7 +843,7 @@ void ViewShell::SetupRulers()
             if ( mpVerticalRuler.get() != NULL )
             {
                 nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
-                mpVerticalRuler->SetActive(true);
+                mpVerticalRuler->SetActive();
                 mpVerticalRuler->Show();
             }
         }
@@ -853,7 +853,7 @@ void ViewShell::SetupRulers()
             if ( mpHorizontalRuler.get() != NULL )
             {
                 mpHorizontalRuler->SetWinPos(nHRulerOfs);
-                mpHorizontalRuler->SetActive(true);
+                mpHorizontalRuler->SetActive();
                 mpHorizontalRuler->Show();
             }
         }
@@ -924,7 +924,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                 if(pRule)
                 {
                     SvxNumRule aNewRule( *pRule );
-                    aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, true );
+                    aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
                     SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
                     aNewAttr.Put(aNewItem);

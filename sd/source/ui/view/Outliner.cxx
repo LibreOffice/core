@@ -334,7 +334,7 @@ void Outliner::EndSpelling()
         if(mpView && mpView->ISA(OutlineView))
             static_cast<OutlineView*>(mpView)->PrepareClose(false);
         if(mpDrawDocument && !mpDrawDocument->IsChanged())
-            mpDrawDocument->SetChanged(true);
+            mpDrawDocument->SetChanged();
     }
 
     // Now clear the modify flag to have a specified state of
@@ -1574,13 +1574,13 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     if (pChildWindow != NULL)
         pSearchDialog = pChildWindow->GetWindow();
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(false,true);
+        pSearchDialog->EnableInput(false);
 
     sal_uInt16 nResult = rMessageBox.Execute();
 
     // Unlock the search dialog.
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(true,true);
+        pSearchDialog->EnableInput();
 
     return nResult;
 }

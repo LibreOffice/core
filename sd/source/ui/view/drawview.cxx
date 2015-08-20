@@ -86,7 +86,7 @@ DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* 
 , mpVDev(NULL)
 , mnPOCHSmph(0)
 {
-    SetCurrentObj(OBJ_RECT, SdrInventor);
+    SetCurrentObj(OBJ_RECT);
 }
 
 DrawView::~DrawView()

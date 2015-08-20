@@ -248,7 +248,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         if( SfxItemState::DEFAULT == rSet.GetItemState( SID_DISMANTLE ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_BREAK ) )
         {
-            if ( !mpDrawView->IsDismantlePossible(false) )
+            if ( !mpDrawView->IsDismantlePossible() )
             {
                 rSet.DisableItem( SID_DISMANTLE );
             }
@@ -434,7 +434,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
         }
 
-        if ( !mpDrawView->IsDismantlePossible(false) )
+        if ( !mpDrawView->IsDismantlePossible() )
         {
             rSet.DisableItem( SID_DISMANTLE );
         }
@@ -444,7 +444,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         {
             rSet.DisableItem( SID_BREAK );
         }
-        if ( !mpDrawView->IsCombinePossible(false) )
+        if ( !mpDrawView->IsCombinePossible() )
         {
             rSet.DisableItem(SID_COMBINE);
             rSet.DisableItem(SID_POLY_MERGE);

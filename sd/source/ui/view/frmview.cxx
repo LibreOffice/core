@@ -66,7 +66,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     SetGridFront( false );
     SetHlplFront( false );
     SetOConSnap( false );
-    SetFrameDragSingles( true );
+    SetFrameDragSingles();
     SetSlidesPerRow(4);
 
     if( NULL == pFrameView )

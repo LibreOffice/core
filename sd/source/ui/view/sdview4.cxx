@@ -126,7 +126,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if ( pNewGrafObj->IsEmptyPresObj() )
         {
             Rectangle aRect( pNewGrafObj->GetLogicRect() );
-            pNewGrafObj->AdjustToMaxRect( aRect, false );
+            pNewGrafObj->AdjustToMaxRect( aRect );
             pNewGrafObj->SetOutlinerParaObject(NULL);
             pNewGrafObj->SetEmptyPresObj(false);
         }

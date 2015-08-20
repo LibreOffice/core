@@ -90,7 +90,7 @@ TYPEINIT1( OutlineView, ::sd::View );
 OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)
 , mrOutlineViewShell(rOutlineViewShell)
-, mrOutliner(*mrDoc.GetOutliner(true))
+, mrOutliner(*mrDoc.GetOutliner())
 , mnPagesToProcess(0)
 , mnPagesProcessed(0)
 , mbFirstPaint(true)
@@ -1542,7 +1542,7 @@ void OutlineView::TryToMergeUndoActions()
     ::svl::IUndoManager& rOutlineUndo = mrOutliner.GetUndoManager();
     if( rOutlineUndo.GetUndoActionCount() > 1 )
     {
-        SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction(0) );
+        SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction() );
         SfxListUndoAction* pPrevListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction(1) );
         if( pListAction && pPrevListAction )
         {
@@ -1599,7 +1599,7 @@ void OutlineView::TryToMergeUndoActions()
                         }
 
                         if( pLinkAction && pPrevLinkAction &&
-                            ( pLinkAction->GetAction() == pDocUndoManager->GetUndoAction(0) ) &&
+                            ( pLinkAction->GetAction() == pDocUndoManager->GetUndoAction() ) &&
                             ( pPrevLinkAction->GetAction() == pDocUndoManager->GetUndoAction(1) ) )
                         {
                             SfxListUndoAction* pSourceList = dynamic_cast< SfxListUndoAction* >(pLinkAction->GetAction());

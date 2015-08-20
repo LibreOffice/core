@@ -861,7 +861,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
-            SID_NAVIGATOR_STATE, true, false);
+            SID_NAVIGATOR_STATE, true);
     }
 
     GetDocSh()->SetWaitCursor( false );

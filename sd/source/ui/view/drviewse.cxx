@@ -638,7 +638,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
     bool bConsumed = false;
 
     //if any placeholders are selected
-    if (mpDrawView->IsPresObjSelected(false, true, false, false))
+    if (mpDrawView->IsPresObjSelected(false, true, false))
     {
         //If there are placeholders in the list which can be toggled
         //off in edit->master->master elements then do that here,

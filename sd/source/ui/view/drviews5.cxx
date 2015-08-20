@@ -70,7 +70,7 @@ void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
     // that the navigator also gets an up to date state
-    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, true, false );
+    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, true );
 
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->Execute(

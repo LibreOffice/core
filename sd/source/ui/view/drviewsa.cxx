@@ -219,7 +219,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
     mpView = mpDrawView;             // Pointer of base class ViewShell
-    mpDrawView->SetSwapAsynchron(true); // Asynchronous load of graphics
+    mpDrawView->SetSwapAsynchron(); // Asynchronous load of graphics
 
     // We do not read the page kind from the frame view anymore so we have
     // to set it in order to resync frame view and this view.
@@ -313,7 +313,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     // start selection function
     SfxRequest aReq(SID_OBJECT_SELECT, SfxCallMode::SLOT, GetDoc()->GetItemPool());
     FuPermanent(aReq);
-    mpDrawView->SetFrameDragSingles(true);
+    mpDrawView->SetFrameDragSingles();
 
     if (pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
     {

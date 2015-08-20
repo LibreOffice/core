@@ -320,7 +320,7 @@ void View::DoPaste (vcl::Window* pWindow)
             if( !mrDoc.IsChanged() )
             {
                 if( pOutliner && pOutliner->IsModified() )
-                    mrDoc.SetChanged( true );
+                    mrDoc.SetChanged();
             }
         }
     }

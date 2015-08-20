@@ -1494,7 +1494,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             ResetActualLayer();
 
-            GetDoc()->SetChanged(true);
+            GetDoc()->SetChanged();
 
             GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
@@ -2098,7 +2098,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, true, false );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, true );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -2131,7 +2131,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, true, false );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, true );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -2278,10 +2278,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_DISMANTLE:  // BASIC
         {
-            if ( mpDrawView->IsDismantlePossible(false) )
+            if ( mpDrawView->IsDismantlePossible() )
             {
                 WaitObject aWait( GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(false);
+                mpDrawView->DismantleMarkedObjects();
             }
             Cancel();
             rReq.Done ();
@@ -2298,7 +2298,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( GetActiveWindow() );
-                mpDrawView->CombineMarkedObjects(true);
+                mpDrawView->CombineMarkedObjects();
             }
             Cancel();
             rReq.Done ();

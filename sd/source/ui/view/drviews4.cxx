@@ -224,7 +224,7 @@ void DrawViewShell::StartRulerDrag (
     {
         // #i34536# if no guide-lines are visible yet, that show them
         if( ! mpDrawView->IsHlplVisible())
-            mpDrawView->SetHlplVisible( true );
+            mpDrawView->SetHlplVisible();
 
         SdrHelpLineKind eKind;
 
@@ -919,7 +919,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
             SD_RESSTR(STR_POPUP_DELETE_SNAPLINE));
     }
 
-    pMenu->RemoveDisabledEntries(false, false);
+    pMenu->RemoveDisabledEntries(false);
 
     const sal_uInt16 nResult = pMenu->Execute(
         GetActiveWindow(),
