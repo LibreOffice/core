@@ -288,7 +288,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Menu
     style.SetSkipDisabledInMenus( TRUE );
-    KMenuBar* pMenuBar = new KMenuBar();
+    std::unique_ptr<KMenuBar> pMenuBar = std::unique_ptr<KMenuBar>( new KMenuBar() );
     if ( pMenuBar )
     {
         // Color
@@ -329,8 +329,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetMenuFont( aFont );
     }
 
-    delete pMenuBar;
-
     // Scroll bar size
     style.SetScrollBarSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
     style.SetMinThumbSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
@@ -366,7 +364,6 @@ KDESalFrame::~KDESalFrame()
 
 KDESalFrame::GraphicsHolder::~GraphicsHolder()
 {
-    delete pGraphics;
 }
 
 SalGraphics* KDESalFrame::AcquireGraphics()

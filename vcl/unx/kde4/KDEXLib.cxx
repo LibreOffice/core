@@ -49,7 +49,7 @@
 #endif
 
 KDEXLib::KDEXLib() :
-    SalXLib(),  m_bStartupDone(false), m_pApplication(0),
+    SalXLib(),  m_bStartupDone(false),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
     m_frameWidth( -1 ), m_isGlibEventLoopType(false),
     m_allowKdeDialogs(false), blockIdleTimeout(false)
@@ -86,7 +86,6 @@ KDEXLib::KDEXLib() :
 
 KDEXLib::~KDEXLib()
 {
-    delete m_pApplication;
 
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
@@ -175,7 +174,7 @@ void KDEXLib::Init()
         session_manager = strdup( getenv( "SESSION_MANAGER" ));
         unsetenv( "SESSION_MANAGER" );
     }
-    m_pApplication = new VCLKDEApplication();
+    m_pApplication = std::unique_ptr<VCLKDEApplication>( new VCLKDEApplication() );
     if( session_manager != NULL )
     {
         // coverity[tainted_string] - trusted source for setenv
@@ -270,7 +269,6 @@ void KDEXLib::Remove( int fd )
     if( !m_isGlibEventLoopType )
         return SalXLib::Remove( fd );
     SocketData sdata = socketData.take( fd );// according to SalXLib::Remove() this should be safe
-    delete sdata.notifier;
 }
 
 void KDEXLib::socketNotifierActivated( int fd )
