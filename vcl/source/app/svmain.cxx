@@ -81,6 +81,8 @@
 #include "cppuhelper/implbase1.hxx"
 #include "uno/current_context.hxx"
 
+#include "opengl/zone.hxx"
+
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
 #include "rtl/strbuf.hxx"
@@ -102,7 +104,11 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
              (pInfo->Signal == osl_Signal_IntegerDivideByZero) ||
              (pInfo->Signal == osl_Signal_FloatDivideByZero)   ||
              (pInfo->Signal == osl_Signal_DebugBreak) )
+        {
             nVCLException = EXC_SYSTEM;
+            if (OpenGLZone::isInZone())
+                OpenGLZone::hardDisable();
+        }
 
         // RC
         if ((pInfo->Signal == osl_Signal_User) &&
