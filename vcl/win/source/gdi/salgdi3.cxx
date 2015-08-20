@@ -1559,17 +1559,6 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
     if( mpWinFontData[ nFallbackLevel ] )
         mpWinFontData[ nFallbackLevel ]->UpdateFromHDC( getHDC() );
 
-    if( !nFallbackLevel )
-    {
-        mbFontKernInit = TRUE;
-        if ( mpFontKernPairs )
-        {
-            delete[] mpFontKernPairs;
-            mpFontKernPairs = NULL;
-        }
-        mnFontKernPairCount = 0;
-    }
-
     // some printers have higher internal resolution, so their
     // text output would be different from what we calculated
     // => suggest DrawTextArray to workaround this problem
@@ -1653,35 +1642,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     }
 
     pMetric->mnMinKashida = GetMinKashidaWidth();
-}
-
-sal_uLong WinSalGraphics::GetKernPairs()
-{
-    if ( mbFontKernInit )
-    {
-        if( mpFontKernPairs )
-        {
-            delete[] mpFontKernPairs;
-            mpFontKernPairs = NULL;
-        }
-        mnFontKernPairCount = 0;
-
-        KERNINGPAIR* pPairs = NULL;
-        int nCount = ::GetKerningPairsW( getHDC(), 0, NULL );
-        if( nCount )
-        {
-            pPairs = new KERNINGPAIR[ nCount+1 ];
-            mpFontKernPairs = pPairs;
-            mnFontKernPairCount = nCount;
-            ::GetKerningPairsW( getHDC(), nCount, pPairs );
-        }
-
-        mbFontKernInit = FALSE;
-
-        std::sort( mpFontKernPairs, mpFontKernPairs + mnFontKernPairCount, ImplCmpKernData );
-    }
-
-    return mnFontKernPairCount;
 }
 
 const FontCharMapPtr WinSalGraphics::GetFontCharMap() const
