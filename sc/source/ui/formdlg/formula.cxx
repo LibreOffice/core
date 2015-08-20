@@ -255,7 +255,6 @@ void ScFormulaDlg::dispose()
         pScMod->SetRefInputHdl(NULL);
         StoreFormEditData(pData);
     }
-    ScFormulaReferenceHelper::enableInput( true );
     formula::FormulaDlg::dispose();
 }
 
