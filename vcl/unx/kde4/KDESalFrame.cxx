@@ -288,48 +288,44 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Menu
     style.SetSkipDisabledInMenus( TRUE );
-    KMenuBar* pMenuBar = new KMenuBar();
-    if ( pMenuBar )
+    std::unique_ptr<KMenuBar> pMenuBar = std::unique_ptr<KMenuBar>( new KMenuBar() );
+
+    // Color
+    QPalette qMenuCG = pMenuBar->palette();
+
+    // Menu text and background color, theme specific
+    Color aMenuFore = toColor( qMenuCG.color( QPalette::WindowText ) );
+    Color aMenuBack = toColor( qMenuCG.color( QPalette::Window ) );
+
+    style.SetMenuTextColor( aMenuFore );
+    style.SetMenuBarTextColor( style.GetPersonaMenuBarTextColor().get_value_or( aMenuFore ) );
+    style.SetMenuColor( aMenuBack );
+    style.SetMenuBarColor( aMenuBack );
+    style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
+    style.SetMenuHighlightTextColor( aMenuFore );
+
+    // set special menubar higlight text color
+    if ( QApplication::style()->inherits( "HighContrastStyle" ) )
+        ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
+    else
+        ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
+
+    // set menubar rollover color
+    if ( pMenuBar->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
     {
-        // Color
-        QPalette qMenuCG = pMenuBar->palette();
-
-        // Menu text and background color, theme specific
-        Color aMenuFore = toColor( qMenuCG.color( QPalette::WindowText ) );
-        Color aMenuBack = toColor( qMenuCG.color( QPalette::Window ) );
-
-        style.SetMenuTextColor( aMenuFore );
-        style.SetMenuBarTextColor( style.GetPersonaMenuBarTextColor().get_value_or( aMenuFore ) );
-        style.SetMenuColor( aMenuBack );
-        style.SetMenuBarColor( aMenuBack );
-        style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
-        style.SetMenuHighlightTextColor( aMenuFore );
-
-        // set special menubar higlight text color
-        if ( QApplication::style()->inherits( "HighContrastStyle" ) )
-            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
-        else
-            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
-
-        // set menubar rollover color
-        if ( pMenuBar->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
-        {
-            style.SetMenuBarRolloverColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
-            style.SetMenuBarRolloverTextColor( ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor );
-        }
-        else
-        {
-            style.SetMenuBarRolloverColor( aMenuBack );
-            style.SetMenuBarRolloverTextColor( aMenuFore );
-        }
-        style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
-
-        // Font
-        aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
-        style.SetMenuFont( aFont );
+        style.SetMenuBarRolloverColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
+        style.SetMenuBarRolloverTextColor( ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor );
     }
+    else
+    {
+        style.SetMenuBarRolloverColor( aMenuBack );
+        style.SetMenuBarRolloverTextColor( aMenuFore );
+    }
+    style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
 
-    delete pMenuBar;
+    // Font
+    aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
+    style.SetMenuFont( aFont );
 
     // Scroll bar size
     style.SetScrollBarSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
@@ -366,7 +362,6 @@ KDESalFrame::~KDESalFrame()
 
 KDESalFrame::GraphicsHolder::~GraphicsHolder()
 {
-    delete pGraphics;
 }
 
 SalGraphics* KDESalFrame::AcquireGraphics()
