@@ -54,6 +54,12 @@ namespace
 
 } //end of anonymous namespace
 
+namespace sfx2 { namespace sidebar {
+
+class SidebarToolBox;
+
+} }
+
 namespace svx
 {
 namespace sidebar
@@ -111,6 +117,10 @@ protected:
     void ActivateControls();
 
     void setMapUnit(SfxMapUnit eMapUnit);
+
+protected:
+
+    VclPtr<sfx2::sidebar::SidebarToolBox> mpTBColor;
 
 private:
     //ui controls

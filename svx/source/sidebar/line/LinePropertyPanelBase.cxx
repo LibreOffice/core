@@ -165,6 +165,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
 {
     get(mpFTWidth, "widthlabel");
     get(mpTBWidth, "width");
+    get(mpTBColor, "color");
     get(mpFTStyle, "stylelabel");
     get(mpLBStyle, "linestyle");
     get(mpFTTransparency, "translabel");
@@ -191,6 +192,7 @@ void LinePropertyPanelBase::dispose()
 {
     mpFTWidth.clear();
     mpTBWidth.clear();
+    mpTBColor.clear();
     mpFTStyle.clear();
     mpLBStyle.clear();
     mpFTTransparency.clear();

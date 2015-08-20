@@ -18,11 +18,21 @@
 #include <svx/xlntrit.hxx>
 #include <svx/unomid.hxx>
 
+#include <svx/tbcontrl.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
+
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 namespace chart { namespace sidebar {
 
 namespace {
+
+SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pToolBoxColor)
+{
+    css::uno::Reference<css::frame::XToolbarController> xController = pToolBoxColor->GetFirstController();
+    SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
+    return pToolBoxColorControl;
+}
 
 OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
 {
@@ -122,7 +132,8 @@ ChartLinePanel::ChartLinePanel(vcl::Window* pParent,
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
-    mbModelValid(true)
+    mbModelValid(true),
+    maLineColorWrapper(mxModel, getColorToolBoxControl(mpTBColor.get()), "LineColor")
 {
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM, OBJECTTYPE_DATA_SERIES, OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
     mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
@@ -155,6 +166,9 @@ void ChartLinePanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
+    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mpTBColor.get());
+    pToolBoxColor->setColorSelectFunction(maLineColorWrapper);
+
     setMapUnit(SFX_MAPUNIT_100TH_MM);
     updateData();
 }
@@ -185,6 +199,8 @@ void ChartLinePanel::updateData()
     XLineDashItem aDashItem;
     aDashItem.PutValue(aLineDash, MID_LINEDASH);
     updateLineDash(false, true, &aDashItem);
+
+    maLineColorWrapper.updateData();
 }
 
 void ChartLinePanel::modelInvalid()
@@ -213,6 +229,8 @@ void ChartLinePanel::updateModel(
 
     mxModel = xModel;
     mbModelValid = true;
+
+    maLineColorWrapper.updateModel(mxModel);
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcasterNew->addModifyListener(mxListener);
