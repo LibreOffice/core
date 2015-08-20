@@ -302,7 +302,7 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
 }
 XMLFile::~XMLFile()
 {
-    if( m_pXMLStrings != NULL )
+    if( m_pXMLStrings )
     {
         XMLHashMap::iterator pos = m_pXMLStrings->begin();
         for( ; pos != m_pXMLStrings->end() ; ++pos )
