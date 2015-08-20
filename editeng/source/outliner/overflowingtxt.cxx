@@ -44,6 +44,11 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
         pOutl->SetText(*pNextPObj);
     }
 
+    // Special case: if only empty text remove it at the end
+    bool bOnlyOneEmptyPara = !pNextPObj ||
+                             (pOutl->GetParagraphCount() == 1 &&
+                              pNextPObj->GetTextObject().GetText(0) == "");
+
     EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
 
     // XXX: this code should be moved in Outliner directly
@@ -54,8 +59,12 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
                                                     aStartSel.Min(),
                                                     true);
 
-    // Separate Paragraphs
-    rEditEngine.InsertParaBreak(aNewSel);
+    if (!bOnlyOneEmptyPara) {
+        // Separate Paragraphs
+        rEditEngine.InsertParaBreak(aNewSel);
+    }
+
+
 
     return pOutl->CreateParaObject();
 }
@@ -65,7 +74,7 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
-     if (!pNextPObj) {
+    if (!pNextPObj) {
         pOutl->SetToEmptyText();
     } else {
         pOutl->SetText(*pNextPObj);
