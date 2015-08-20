@@ -77,14 +77,6 @@ private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
 
 public:
-    bool                    HasKernData() const;
-    void                    SetKernData( int, const KERNINGPAIR* );
-    int                     GetKerning( sal_Unicode, sal_Unicode ) const;
-private:
-    KERNINGPAIR*            mpKerningPairs;
-    int                     mnKerningPairs;
-
-public:
     SCRIPT_CACHE&           GetScriptCache() const
                             { return maScriptCache; }
 private:
@@ -2426,8 +2418,6 @@ int    WinSalGraphics::GetMinKashidaWidth()
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
-,   mpKerningPairs( NULL )
-,   mnKerningPairs( -1 )
 ,   maWidthMap( 512 )
 ,    mnMinKashidaWidth( -1 )
 ,    mnMinKashidaGlyph( -1 )
@@ -2439,38 +2429,6 @@ ImplWinFontEntry::~ImplWinFontEntry()
 {
     if( maScriptCache != NULL )
         ScriptFreeCache( &maScriptCache );
-    delete[] mpKerningPairs;
-}
-
-bool ImplWinFontEntry::HasKernData() const
-{
-    return (mnKerningPairs >= 0);
-}
-
-void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData )
-{
-    mnKerningPairs = nPairCount;
-    mpKerningPairs = new KERNINGPAIR[ mnKerningPairs ];
-    memcpy( mpKerningPairs, (const void*)pPairData, nPairCount*sizeof(KERNINGPAIR) );
-}
-
-int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
-{
-    int nKernAmount = 0;
-    if( mpKerningPairs )
-    {
-        const KERNINGPAIR aRefPair = { cLeft, cRight, 0 };
-        const KERNINGPAIR* pFirstPair = mpKerningPairs;
-        const KERNINGPAIR* pEndPair = mpKerningPairs + mnKerningPairs;
-        const KERNINGPAIR* pPair = std::lower_bound( pFirstPair,
-            pEndPair, aRefPair, ImplCmpKernData );
-        if( (pPair != pEndPair)
-        &&  (pPair->wFirst == aRefPair.wFirst)
-        &&  (pPair->wSecond == aRefPair.wSecond) )
-            nKernAmount = pPair->iKernAmount;
-    }
-
-    return nKernAmount;
 }
 
 bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
