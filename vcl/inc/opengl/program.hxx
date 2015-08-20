@@ -39,6 +39,11 @@ private:
     TextureList     maTextures;
     bool            mbBlending;
 
+    float mfLastWidth;
+    float mfLastHeight;
+    float mfLastPixelOffset;
+
+
     OpenGLProgram(const OpenGLProgram &) SAL_DELETED_FUNCTION;
 public:
     OpenGLProgram();
