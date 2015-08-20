@@ -51,7 +51,12 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
-
+#include <reffld.hxx>
+#include <txatbase.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <unofldmid.h>
 #include "UndoManager.hxx"
 #include <textsh.hxx>
 #include <frmmgr.hxx>
@@ -134,6 +139,7 @@ public:
     void testUnoParagraph();
     void testTdf60967();
     void testSearchWithTransliterate();
+    void testTdf77342();
     void testTdf74230();
     void testTdf74363();
     void testTdf80663();
@@ -206,6 +212,7 @@ public:
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf77342);
     CPPUNIT_TEST(testTdf74230);
     CPPUNIT_TEST(testTdf74363);
     CPPUNIT_TEST(testTdf80663);
@@ -1632,6 +1639,248 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf77342()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    //inserting first footnote
+    pWrtShell->InsertFootnote(OUString(""));
+    SwFieldType* pField = pWrtShell->GetFieldType(0, RES_GETREFFLD);
+    SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pField);
+    //moving cursor to the starting of document
+    pWrtShell->SttDoc();
+    //inserting refernce field 1
+    SwGetRefField xField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
+    pWrtShell->Insert(xField1);
+    //inserting second footnote
+    pWrtShell->InsertFootnote(OUString(""));
+    pWrtShell->SttDoc();
+    pCrsr->Move(fnMoveForward);
+    //inserting refernce field 2
+    SwGetRefField xField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
+    pWrtShell->Insert(xField2);
+    //inserting third footnote
+    pWrtShell->InsertFootnote(OUString(""));
+    pWrtShell->SttDoc();
+    pCrsr->Move(fnMoveForward);
+    pCrsr->Move(fnMoveForward);
+    //inserting refernce field 3
+    SwGetRefField xField3(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
+    pWrtShell->Insert(xField3);
+    //updating the fields
+    IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
+    rField.UpdateExpFields(nullptr, true);
+    //creating new clipboard doc
+    SwDoc* pClpDoc = new SwDoc();
+    pClpDoc->acquire();
+    pClpDoc->SetClipBoard(true);
+    pClpDoc->getIDocumentFieldsAccess().LockExpFields();
+    //selecting reference field 2 and reference field 3 and footnote 1 and footnote 2
+    //selection is such that more than one and not all footnotes and ref fields are selected
+    pCrsr->Move(fnMoveBackward);
+    pCrsr->Move(fnMoveBackward);
+    //start marking
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward);
+    pCrsr->Move(fnMoveForward);
+    pCrsr->Move(fnMoveForward);
+    //copying the selection to clipboard
+    pWrtShell->Copy(pClpDoc);
+    //deleting selection mark after copy
+    pCrsr->DeleteMark();
+    //checking that the footnotes reference fields have same values after copy operation
+    uno::Any aAny;
+    sal_uInt16 aFormat;
+    //reference field 1
+    pWrtShell->SttDoc();
+    SwField* pRef1 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pRef1->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pRef1->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //reference field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pRef2 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pRef2->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pRef2->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //reference field 3
+    pCrsr->Move(fnMoveForward);
+    SwField* pRef3 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pRef3->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pRef3->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //moving cursor to the end of the document
+    pWrtShell->EndDoc();
+    //pasting the copied selection at current cursor position
+    pWrtShell->Paste(pClpDoc);
+    //checking the fields, both new and old, for proper values
+    pWrtShell->SttDoc();
+    //old reference field 1
+    SwField* pOldRef11 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef11->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //old reference field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef12 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef12->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old reference field 3
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef13 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef13->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef13->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old footnote 1
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd1 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote1 = pTextNd1->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote1(pFootnote1->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnote1.GetNumber());
+    SwTextFootnote* pTFNote1 = static_cast<SwTextFootnote*> (pFootnote1);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pTFNote1->GetSeqRefNo());
+    //old footnote 2
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd2 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote2 = pTextNd2->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote2(pFootnote2->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnote2.GetNumber());
+    SwTextFootnote* pTFNote2 = static_cast<SwTextFootnote*> (pFootnote2);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pTFNote2->GetSeqRefNo());
+    //old footnote 3
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd3 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote3 = pTextNd3->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote3(pFootnote3->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rFootnote3.GetNumber());
+    SwTextFootnote* pTFNote3 = static_cast<SwTextFootnote*> (pFootnote3);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pTFNote3->GetSeqRefNo());
+    //new reference field 1
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef11 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pNewRef11->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //new reference field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef12 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pNewRef12->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef12->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(3)), aAny);
+    //new footnote 1
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd4 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote4 = pTextNd4->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote4(pFootnote4->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), rFootnote4.GetNumber());
+    SwTextFootnote* pTFNote4 = static_cast<SwTextFootnote*> (pFootnote4);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pTFNote4->GetSeqRefNo());
+    //moving the cursor to the starting of document
+    pWrtShell->SttDoc();
+    //pasting the selection again at current cursor position
+    pWrtShell->Paste(pClpDoc);
+    //checking the fields, both new and old, for proper values
+    pWrtShell->SttDoc();
+    //new reference field 1
+    SwField* pNewRef21 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pNewRef21->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //new reference field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pNewRef22 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pNewRef22->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pNewRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(4)), aAny);
+    //new footnote 1
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd11 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote11 = pTextNd11->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote11(pFootnote11->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnote11.GetNumber());
+    SwTextFootnote* pTFNote11 = static_cast<SwTextFootnote*> (pFootnote11);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pTFNote11->GetSeqRefNo());
+    //old reference field 1
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef21 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef21->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(0)), aAny);
+    //old reference field 2
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef22 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef22->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef22->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old reference field 3
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef23 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef23->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef23->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
+    //old footnote 1
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd12 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote12 = pTextNd12->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote12(pFootnote12->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnote12.GetNumber());
+    SwTextFootnote* pTFNote12 = static_cast<SwTextFootnote*> (pFootnote12);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pTFNote12->GetSeqRefNo());
+    //old footnote 2
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd13 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote13 = pTextNd13->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote13(pFootnote13->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rFootnote13.GetNumber());
+    SwTextFootnote* pTFNote13 = static_cast<SwTextFootnote*> (pFootnote13);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pTFNote13->GetSeqRefNo());
+    //old footnote 3
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd14 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote14 = pTextNd14->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote14(pFootnote14->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), rFootnote14.GetNumber());
+    SwTextFootnote* pTFNote14 = static_cast<SwTextFootnote*> (pFootnote14);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pTFNote14->GetSeqRefNo());
+    //old reference field 4
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef24 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef24->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
+    //old reference field 5
+    pCrsr->Move(fnMoveForward);
+    SwField* pOldRef25 = pDoc->GetEditShell()->GetFieldAtCrsr(pCrsr, true);
+    aFormat = pOldRef25->GetFormat();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
+    pOldRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(3)), aAny);
+    //old footnote 4
+    pCrsr->Move(fnMoveForward);
+    SwTextNode* pTextNd15 = pCrsr->GetNode().GetTextNode();
+    SwTextAttr* const pFootnote15 = pTextNd15->GetTextAttrForCharAt(pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+    const SwFormatFootnote& rFootnote15(pFootnote15->GetFootnote());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), rFootnote15.GetNumber());
+    SwTextFootnote* pTFNote15 = static_cast<SwTextFootnote*> (pFootnote15);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pTFNote15->GetSeqRefNo());
 }
 
 void SwUiWriterTest::testTdf74230()
