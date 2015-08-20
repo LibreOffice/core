@@ -4658,6 +4658,12 @@ void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
         EditLine &aLine = pPara->GetLines()[nLine];
         nLH = aLine.GetHeight();
         nY += nLH;
+
+        // Debugging output
+        if (nLine == 0) {
+            fprintf(stderr, "[CHAINING] First line has height %d\n", nLH);
+        }
+
         if ( nY > nPaperHeight ) // found first line overflowing
         {
             mnOverflowingLine = nLine;
