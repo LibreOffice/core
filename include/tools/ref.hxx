@@ -153,7 +153,11 @@ public:
 class TOOLS_DLLPUBLIC SvRefBase
 {
     // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
+#if defined(__AFL_HAVE_MANUAL_INIT)
+    bool bNoDelete;
+#else
     unsigned int bNoDelete : 1;
+#endif
     unsigned int nRefCount : 31;
 
 protected:
