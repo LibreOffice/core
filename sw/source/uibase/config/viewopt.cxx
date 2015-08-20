@@ -200,7 +200,7 @@ SwViewOption::SwViewOption() :
         aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
     nDivisionX = nDivisionY = 1;
 
-    bSelectionInReadonly = !utl::ConfigManager::IsAvoidConfig() ? SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly() : false;
+    bSelectionInReadonly = !utl::ConfigManager::IsAvoidConfig() && SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
 
     bIdle = true;
 
