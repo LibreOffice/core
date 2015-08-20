@@ -147,7 +147,7 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
     aClip = basegfx::tools::correctOrientations(aClip);
     aClip = basegfx::tools::solveCrossovers(aClip);
     aClip = basegfx::tools::stripNeutralPolygons(aClip);
-    aClip = basegfx::tools::stripDispensablePolygons(aClip, false);
+    aClip = basegfx::tools::stripDispensablePolygons(aClip);
 
     return aClip;
 }
@@ -1136,7 +1136,7 @@ void SlideView::updateClip()
                            mpCanvas,
                            maUserSize ));
 
-    pruneLayers( false );
+    pruneLayers();
 }
 
 void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const

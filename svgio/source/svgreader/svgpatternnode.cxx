@@ -146,11 +146,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
+                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
                             setPatternUnits(userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox, 0))
+                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
                             setPatternUnits(objectBoundingBox);
                         }
@@ -161,11 +161,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
+                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
                             setPatternContentUnits(userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox, 0))
+                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
                             setPatternContentUnits(objectBoundingBox);
                         }

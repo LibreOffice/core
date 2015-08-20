@@ -574,7 +574,7 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
             //If we started a selection in this line and it haven't ended, we do that now!
             if(IsSelecting) {
                 IsSelecting = false;
-                SetSelectedOnAll(it.Current(), true);
+                SetSelectedOnAll(it.Current());
                 //Set StartPos and EndPos to invalid positions, this ensures that an unused
                 //start or end (because we forced end above), doesn't start a new selection.
                 StartPos = EndPos = SmCaretPos();
@@ -629,9 +629,9 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
         if( pNode->GetType() != NBRACEBODY ||
             !pNode->GetParent() ||
             pNode->GetParent()->GetType() != NBRACE )
-            SetSelectedOnAll( pNode, true );
+            SetSelectedOnAll( pNode );
         else
-            SetSelectedOnAll( pNode->GetParent(), true );
+            SetSelectedOnAll( pNode->GetParent() );
         /* If the equation is:      sqrt{2 + 4} + 5
          * And the selection is:    sqrt{2 + [4} +] 5
          *      Where [ denotes StartPos and ] denotes EndPos
@@ -689,7 +689,7 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
         i2 = EndPos.Index;
 
     long start, end;
-    pNode->SetSelected( true );
+    pNode->SetSelected();
     if( i1 != -1 && i2 != -1 ) {
         start = i1 < i2 ? i1 : i2; //MIN
         end   = i1 > i2 ? i1 : i2; //MAX

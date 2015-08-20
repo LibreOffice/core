@@ -299,7 +299,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     const SmCaretPos pos = position->CaretPos;
 
     //Find top most of line that holds position
-    SmNode* pLine = FindTopMostNodeInLine(pos.pSelectedNode, false);
+    SmNode* pLine = FindTopMostNodeInLine(pos.pSelectedNode);
 
     //Find line parent and line index in parent
     SmStructureNode* pLineParent = pLine->GetParent();
@@ -501,7 +501,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode);
 
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -602,7 +602,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
         pSubject = static_cast<SmOperNode*>(position->CaretPos.pSelectedNode);
     else {
         //If not, check if parent of the current line is a SmOperNode
-        SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
+        SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode);
         if(pLineNode->GetParent() && pLineNode->GetParent()->GetType() == NOPER)
             pSubject = static_cast<SmOperNode*>(pLineNode->GetParent());
     }
@@ -672,7 +672,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
         OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode);
 
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -809,7 +809,7 @@ bool SmCursor::InsertRow() {
         OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode);
 
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -933,7 +933,7 @@ void SmCursor::InsertFraction() {
         OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode);
 
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -1144,14 +1144,14 @@ void SmCursor::InsertCommand(sal_uInt16 nCommand) {
             InsertRow();
             break;
         case RID_FROMX:
-            InsertLimit(CSUB, true);
+            InsertLimit(CSUB);
             break;
         case RID_TOX:
-            InsertLimit(CSUP, true);
+            InsertLimit(CSUP);
             break;
         case RID_FROMXTOY:
-            if(InsertLimit(CSUB, true))
-                InsertLimit(CSUP, true);
+            if(InsertLimit(CSUB))
+                InsertLimit(CSUP);
             break;
         default:
             InsertCommandText(SM_RESSTR(nCommand));

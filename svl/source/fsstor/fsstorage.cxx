@@ -136,7 +136,7 @@ bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
                                  uno::Reference< ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext(),
                                  aParent ) )
-        return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent, false );
+        return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent );
 
     return false;
 }

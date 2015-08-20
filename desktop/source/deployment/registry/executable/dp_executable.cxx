@@ -284,7 +284,7 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
         if (osl::File::E_None == osl::File::getAbsoluteFileURL(
             OUString(), dp_misc::expandUnoRcUrl(m_url), sFile))
         {
-            if (sFile.match(sExtensionDir, 0))
+            if (sFile.match(sExtensionDir))
                 bSuccess = true;
         }
     }

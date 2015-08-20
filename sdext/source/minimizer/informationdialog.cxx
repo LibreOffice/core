@@ -202,7 +202,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal )
     fVal /= ( 1 << 20 );
     fVal += 0.05;
     OUStringBuffer aVal( OUString::number( fVal ) );
-    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
+    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.' ) );
     if ( nX > 0 )
         aVal.setLength( nX + 2 );
     return aVal.makeStringAndClear();
@@ -274,7 +274,7 @@ void InformationDialog::InitDialog()
         aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
         aTitle = xURLTransformer->getPresentation( aPresentationURL, sal_False );
 
-        if ( aTitle.match( sFileProtocol, 0 ) )
+        if ( aTitle.match( sFileProtocol ) )
             aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), OUString() );
     }
 
@@ -284,15 +284,15 @@ void InformationDialog::InitDialog()
     const OUString aTitlePlaceholder( !aTitle.isEmpty() ? OUString("%TITLE"  )
                                                          : OUString("'%TITLE'") );
 
-    sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder, 0 );
+    sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder );
     if ( i >= 0 )
         aInfoString = aInfoString.replaceAt( i, aOldSizePlaceholder.getLength(), ImpValueOfInMB( nSource ) );
 
-    sal_Int32 j = aInfoString.indexOf( aNewSizePlaceholder, 0 );
+    sal_Int32 j = aInfoString.indexOf( aNewSizePlaceholder );
     if ( j >= 0 )
         aInfoString = aInfoString.replaceAt( j, aNewSizePlaceholder.getLength(), ImpValueOfInMB( nDest ) );
 
-    sal_Int32 k = aInfoString.indexOf( aTitlePlaceholder, 0 );
+    sal_Int32 k = aInfoString.indexOf( aTitlePlaceholder );
     if ( k >= 0 )
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 

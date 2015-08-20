@@ -249,7 +249,7 @@ IMPL_LINK_NOARG(LicenseDialogImpl, AcceptHdl)
 
 IMPL_LINK_NOARG(LicenseDialogImpl, CancelHdl)
 {
-    EndDialog(RET_CANCEL);
+    EndDialog();
     return 0;
 }
 

@@ -110,7 +110,7 @@ namespace svgio
                         {
                             setMarkerUnits(strokeWidth);
                         }
-                        else if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
+                        else if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
                             setMarkerUnits(userSpaceOnUse);
                         }
@@ -151,7 +151,7 @@ namespace svgio
                     {
                         if(aContent.startsWith("auto"))
                         {
-                            setOrientAuto(true);
+                            setOrientAuto();
                         }
                         else
                         {

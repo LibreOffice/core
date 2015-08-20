@@ -801,7 +801,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= toHyper( rVal, SAL_INT64_MIN, SAL_INT64_MAX );
         break;
     case TypeClass_UNSIGNED_HYPER:
-        aRet <<= (sal_uInt64)( toHyper( rVal, 0, SAL_UINT64_MAX ) );
+        aRet <<= (sal_uInt64)( toHyper( rVal, 0 ) );
         break;
 
     // --- to FLOAT, DOUBLE ---------------------------------------------------------------------

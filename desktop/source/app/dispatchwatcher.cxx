@@ -241,7 +241,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         {
             bSetInputFilter = true;
             aForcedInputFilter = aDispatchRequest.aURL;
-            OfficeIPCThread::RequestsCompleted( 1 );
+            OfficeIPCThread::RequestsCompleted();
             continue;
         }
 
@@ -478,7 +478,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                  aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
                 // request is completed
-                OfficeIPCThread::RequestsCompleted( 1 );
+                OfficeIPCThread::RequestsCompleted();
             }
             else if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
                       aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
@@ -695,7 +695,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 }
 
                 // request is completed
-                OfficeIPCThread::RequestsCompleted( 1 );
+                OfficeIPCThread::RequestsCompleted();
             }
         }
     }
@@ -760,7 +760,7 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     osl::ClearableMutexGuard aGuard( GetMutex() );
     sal_Int16 nCount = --m_nRequestCount;
     aGuard.clear();
-    OfficeIPCThread::RequestsCompleted( 1 );
+    OfficeIPCThread::RequestsCompleted();
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.

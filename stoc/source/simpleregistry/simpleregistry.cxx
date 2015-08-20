@@ -1080,7 +1080,7 @@ void SimpleRegistry::mergeKey(
     RegistryKey root;
     RegError err = registry_.openRootKey(root);
     if (err == RegError::NO_ERROR) {
-        err = registry_.mergeKey(root, aKeyName, aUrl, false, false);
+        err = registry_.mergeKey(root, aKeyName, aUrl, false);
     }
     switch (err) {
     case RegError::NO_ERROR:

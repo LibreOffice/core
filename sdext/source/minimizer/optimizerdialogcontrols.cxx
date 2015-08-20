@@ -590,7 +590,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
     fVal /= ( 1 << 20 );
     fVal += 0.05;
     OUStringBuffer aVal( OUString::number( fVal ) );
-    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
+    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.' ) );
     if ( nX >= 0 )
     {
         aVal.setLength( nX + 2 );
@@ -734,7 +734,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     {
         OUString aStr( getString( STR_DELETE_SLIDES ) );
         OUString aPlaceholder( "%SLIDES"  );
-        sal_Int32 i = aStr.indexOf( aPlaceholder, 0 );
+        sal_Int32 i = aStr.indexOf( aPlaceholder );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::number( nDeletedSlides ) );
         aSummaryStrings.push_back( aStr );
@@ -754,15 +754,15 @@ void OptimizerDialog::UpdateControlStatesPage4()
         OUString aImagePlaceholder( "%IMAGES"  );
         OUString aQualityPlaceholder( "%QUALITY"  );
         OUString aResolutionPlaceholder( "%RESOLUTION"  );
-        sal_Int32 i = aStr.indexOf( aImagePlaceholder, 0 );
+        sal_Int32 i = aStr.indexOf( aImagePlaceholder );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::number( nGraphics ) );
 
-        sal_Int32 j = aStr.indexOf( aQualityPlaceholder, 0 );
+        sal_Int32 j = aStr.indexOf( aQualityPlaceholder );
         if ( j >= 0 )
             aStr = aStr.replaceAt( j, aQualityPlaceholder.getLength(), OUString::number( nJPEGQuality ) );
 
-        sal_Int32 k = aStr.indexOf( aResolutionPlaceholder, 0 );
+        sal_Int32 k = aStr.indexOf( aResolutionPlaceholder );
         if ( k >= 0 )
             aStr = aStr.replaceAt( k, aResolutionPlaceholder.getLength(), OUString::number( nImageResolution ) );
 
@@ -789,7 +789,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         {
             OUString aStr( getString( STR_CREATE_REPLACEMENT ) );
             OUString aPlaceholder( "%OLE"  );
-            sal_Int32 i = aStr.indexOf( aPlaceholder, 0 );
+            sal_Int32 i = aStr.indexOf( aPlaceholder );
             if ( i >= 0 )
                 aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::number( nOLEReplacements ) );
             aSummaryStrings.push_back( aStr );

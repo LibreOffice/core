@@ -80,11 +80,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
+                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
                         {
                             setClipPathUnits(userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox, 0))
+                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
                         {
                             setClipPathUnits(objectBoundingBox);
                         }

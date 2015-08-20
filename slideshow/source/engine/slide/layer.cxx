@@ -242,7 +242,7 @@ namespace slideshow
                 // the calculated update area
                 ::basegfx::B2DPolyPolygon aClip( maUpdateAreas.solveCrossovers() );
                 aClip = ::basegfx::tools::stripNeutralPolygons(aClip);
-                aClip = ::basegfx::tools::stripDispensablePolygons(aClip, false);
+                aClip = ::basegfx::tools::stripDispensablePolygons(aClip);
 
                 // actually, if there happen to be shapes with zero
                 // update area in the maUpdateAreas vector, the

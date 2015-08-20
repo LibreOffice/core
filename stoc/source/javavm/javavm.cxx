@@ -728,7 +728,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             OString sOption = OUStringToOString(
                 *i, osl_getThreadTextEncoding());
 
-            if (!sOption.matchIgnoreAsciiCase(sJavaOption, 0))
+            if (!sOption.matchIgnoreAsciiCase(sJavaOption))
                 arPropStrings[index]= OString("-D") + sOption;
             else
                 arPropStrings[index] = sOption;

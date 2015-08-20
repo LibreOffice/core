@@ -74,7 +74,7 @@ namespace slideshow
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
                         // skip comment if not a special XTEXT... comment
-                        if( pAct->GetComment().matchIgnoreAsciiCase( OString("XTEXT"), 0 ) )
+                        if( pAct->GetComment().matchIgnoreAsciiCase( OString("XTEXT") ) )
                         {
                             // fill classification vector with NOOPs,
                             // then insert corresponding classes at

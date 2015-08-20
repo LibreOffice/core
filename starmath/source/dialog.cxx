@@ -608,13 +608,13 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
     pp->GetConfig()->GetFontPickList(FNT_SANS)     = *m_pSansFont;
     pp->GetConfig()->GetFontPickList(FNT_FIXED)    = *m_pFixedFont;
 
-    rFormat.SetFont( FNT_VARIABLE, m_pVariableFont->Get(0) );
-    rFormat.SetFont( FNT_FUNCTION, m_pFunctionFont->Get(0) );
-    rFormat.SetFont( FNT_NUMBER,   m_pNumberFont->Get(0) );
-    rFormat.SetFont( FNT_TEXT,     m_pTextFont->Get(0) );
-    rFormat.SetFont( FNT_SERIF,    m_pSerifFont->Get(0) );
-    rFormat.SetFont( FNT_SANS,     m_pSansFont->Get(0) );
-    rFormat.SetFont( FNT_FIXED,    m_pFixedFont->Get(0) );
+    rFormat.SetFont( FNT_VARIABLE, m_pVariableFont->Get() );
+    rFormat.SetFont( FNT_FUNCTION, m_pFunctionFont->Get() );
+    rFormat.SetFont( FNT_NUMBER,   m_pNumberFont->Get() );
+    rFormat.SetFont( FNT_TEXT,     m_pTextFont->Get() );
+    rFormat.SetFont( FNT_SERIF,    m_pSerifFont->Get() );
+    rFormat.SetFont( FNT_SANS,     m_pSansFont->Get() );
+    rFormat.SetFont( FNT_FIXED,    m_pFixedFont->Get() );
 
     rFormat.RequestApplyChanges();
 }
@@ -876,7 +876,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         m_pMetricField4->Enable( bChecked );
     }
 
-    m_pMenuButton->GetPopupMenu()->CheckItem(nCategory + 1, true);
+    m_pMenuButton->GetPopupMenu()->CheckItem(nCategory + 1);
     m_pFrame->set_label(Categories[nCategory]->GetName());
 
     nActiveCategory = nCategory;
@@ -1069,21 +1069,21 @@ void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
     switch (rFormat.GetHorAlign())
     {
         case AlignLeft:
-            m_pLeft->Check(true);
+            m_pLeft->Check();
             m_pCenter->Check(false);
             m_pRight->Check(false);
             break;
 
         case AlignCenter:
             m_pLeft->Check(false);
-            m_pCenter->Check(true);
+            m_pCenter->Check();
             m_pRight->Check(false);
             break;
 
         case AlignRight:
             m_pLeft->Check(false);
             m_pCenter->Check(false);
-            m_pRight->Check(true);
+            m_pRight->Check();
             break;
     }
 }

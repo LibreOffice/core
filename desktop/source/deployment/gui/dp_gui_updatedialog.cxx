@@ -1319,7 +1319,7 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler)
 
 IMPL_LINK_NOARG(UpdateDialog, closeHandler) {
     m_thread->stop();
-    EndDialog(RET_CANCEL);
+    EndDialog();
     return 0;
 }
 

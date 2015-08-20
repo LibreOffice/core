@@ -160,7 +160,7 @@ void PackageManagerImpl::initActivationLayer(
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         m_registrationData_expanded = expandUnoRcUrl(m_registrationData);
         if (!m_readOnly)
-            create_folder( 0, m_activePackages_expanded, xCmdEnv, true);
+            create_folder( 0, m_activePackages_expanded, xCmdEnv);
 
         OUString dbName;
         if (m_context == "user")
@@ -168,7 +168,7 @@ void PackageManagerImpl::initActivationLayer(
         else
         {
             // Create the extension data base in the user installation
-            create_folder( 0, m_registrationData_expanded, xCmdEnv, true);
+            create_folder( 0, m_registrationData_expanded, xCmdEnv);
             dbName = m_registrationData_expanded + "/extensions.pmap";
         }
         // The data base can always be written because it is always in the user installation
@@ -953,7 +953,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
     ActivePackages::Data val;
     if (m_activePackagesDB->get( &val, id, fileName ))
     {
-        return getDeployedPackage_( id, val, xCmdEnv, false );
+        return getDeployedPackage_( id, val, xCmdEnv );
     }
     throw lang::IllegalArgumentException(
         getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,

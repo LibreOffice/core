@@ -211,7 +211,7 @@ void ActivePackages::erase(
     OUString const & id, OUString const & fileName)
 {
 #if HAVE_FEATURE_EXTENSIONS
-    m_map.erase(newKey(id), true) || m_map.erase(oldKey(fileName), true);
+    m_map.erase(newKey(id)) || m_map.erase(oldKey(fileName));
 #else
     (void) id;
     (void) fileName;

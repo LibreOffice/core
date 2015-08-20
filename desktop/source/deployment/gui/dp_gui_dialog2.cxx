@@ -709,9 +709,9 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     m_pSharedCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
     m_pUserCbx->SetClickHdl( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
 
-    m_pBundledCbx->Check( true );
-    m_pSharedCbx->Check( true );
-    m_pUserCbx->Check( true );
+    m_pBundledCbx->Check();
+    m_pSharedCbx->Check();
+    m_pUserCbx->Check();
 
     m_pProgressBar->Hide();
 
@@ -1420,7 +1420,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn)
         else if ( hasActiveEntries() )
             disableAllEntries();
         else
-            EndDialog( 0 );
+            EndDialog();
     }
 
     return 1;
@@ -1505,7 +1505,7 @@ bool UpdateRequiredDialog::Close()
         else if ( hasActiveEntries() )
             disableAllEntries();
         else
-            EndDialog( 0 );
+            EndDialog();
     }
 
     return false;

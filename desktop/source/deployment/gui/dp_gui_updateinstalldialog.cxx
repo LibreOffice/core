@@ -326,7 +326,7 @@ void UpdateInstallDialog::setError(OUString const & exceptionMessage)
 IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
 {
     m_thread->stop();
-    EndDialog(RET_CANCEL);
+    EndDialog();
     return 0;
 }
 
@@ -352,7 +352,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         m_sDownloadFolder = destFolder;
         try
         {
-            dp_misc::create_folder(0, destFolder, m_updateCmdEnv.get(), true );
+            dp_misc::create_folder(0, destFolder, m_updateCmdEnv.get() );
         } catch (const cssu::Exception & e)
         {
             throw cssu::Exception(e.Message + " No extensions will be installed.", 0);

@@ -551,8 +551,8 @@ void SmEditWindow::CreateEditView()
             pScrollBox  = VclPtr<ScrollBarBox>::Create(this);
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
-        pVScrollBar->EnableDrag( true );
-        pHScrollBar->EnableDrag( true );
+        pVScrollBar->EnableDrag();
+        pHScrollBar->EnableDrag();
 
         pEditView->SetOutputArea(AdjustScrollBars());
 
@@ -560,7 +560,7 @@ void SmEditWindow::CreateEditView()
 
         pEditView->SetSelection(eSelection);
         Update();
-        pEditView->ShowCursor(true, true);
+        pEditView->ShowCursor(true);
 
         pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
         SetPointer(pEditView->GetPointer());
@@ -700,7 +700,7 @@ void SmEditWindow::GetFocus()
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
         ::accessibility::AccessibleTextHelper *pHelper = mxAccessible->GetTextHelper();
         if (pHelper)
-            pHelper->SetFocus(true);
+            pHelper->SetFocus();
     }
 
     if (!pEditView)
@@ -711,7 +711,7 @@ void SmEditWindow::GetFocus()
 
     //Let SmViewShell know we got focus
     if(GetView() && IsInlineEditEnabled())
-        GetView()->SetInsertIntoEditWindow(true);
+        GetView()->SetInsertIntoEditWindow();
 }
 
 
