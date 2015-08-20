@@ -256,6 +256,7 @@ void ScFormulaDlg::dispose()
         StoreFormEditData(pData);
     }
     formula::FormulaDlg::dispose();
+    ScFormulaReferenceHelper::enableInput( true );
 }
 
 bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
