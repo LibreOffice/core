@@ -271,6 +271,8 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     if (!GetCharABCWidthsI(hDC, 0, nCount, aGlyphIndices.data(), aABC.data()))
     {
         SAL_WARN("vcl.gdi", "GetCharABCWidthsI failed: " << WindowsErrorString(GetLastError()));
+        SelectObject(hDC, hOrigFont);
+        DeleteDC(hDC);
         return false;
     }
 
@@ -296,14 +298,34 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     }
 
     TEXTMETRICW aTextMetric;
-    GetTextMetricsW(hDC, &aTextMetric);
+    if (!GetTextMetricsW(hDC, &aTextMetric))
+    {
+        SAL_WARN("vcl.gdi", "GetTextMetrics failed: " << WindowsErrorString(GetLastError()));
+        SelectObject(hDC, hOrigFont);
+        DeleteDC(hDC);
+        return false;
+    }
     aChunk.mnAscentPlusIntLeading = aTextMetric.tmAscent + aTextMetric.tmInternalLeading;
 
     LOGFONTW aLogfont;
-    GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont);
+    if (!GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont))
+    {
+        SAL_WARN("vcl.gdi", "GetObject failed: " << WindowsErrorString(GetLastError()));
+        SelectObject(hDC, hOrigFont);
+        DeleteDC(hDC);
+        return false;
+    }
 
     wchar_t sFaceName[200];
     int nFaceNameLen = GetTextFaceW(hDC, SAL_N_ELEMENTS(sFaceName), sFaceName);
+    if (!nFaceNameLen)
+    {
+        SAL_WARN("vcl.gdi", "GetTextFace failed: " << WindowsErrorString(GetLastError()));
+        SelectObject(hDC, hOrigFont);
+        DeleteDC(hDC);
+        return false;
+    }
+
     SAL_INFO("vcl.gdi.opengl", OUString(sFaceName, nFaceNameLen) <<
              ": Escapement=" << aLogfont.lfEscapement <<
              " Orientation=" << aLogfont.lfOrientation <<
