@@ -555,7 +555,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ENGLISH_MALAWI,         "en", "MW", 0     },   /* en default for MW */
     { LANGUAGE_USER_NYANJA,                 "ny", "MW", 0     },
     { LANGUAGE_USER_KASHUBIAN,             "csb", "PL", 0     },
-    { LANGUAGE_USER_SPANISH_CUBA,           "es", "CU", 0     },
+    { LANGUAGE_SPANISH_CUBA,                "es", "CU", 0     },
+    { LANGUAGE_OBSOLETE_USER_SPANISH_CUBA,  "es", "CU", 0     },
     { LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA, "qul", "BO", 0     },
     { LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA, "quh", "BO", 0     },
     { LANGUAGE_USER_BODO_INDIA,            "brx", "IN", 0     },

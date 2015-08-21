@@ -552,6 +552,9 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
         case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
             nLang = LANGUAGE_KURDISH_ARABIC_IRAQ;
             break;
+        case LANGUAGE_OBSOLETE_USER_SPANISH_CUBA:
+            nLang = LANGUAGE_SPANISH_CUBA;
+            break;
 
         // The following are not strictly obsolete but should be mapped to a
         // replacement locale when encountered.

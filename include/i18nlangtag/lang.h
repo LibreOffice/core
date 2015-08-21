@@ -364,6 +364,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SPANISH_CHILE              0x340A
 #define LANGUAGE_SPANISH_COLOMBIA           0x240A
 #define LANGUAGE_SPANISH_COSTARICA          0x140A
+#define LANGUAGE_SPANISH_CUBA               0x5C0A
 #define LANGUAGE_SPANISH_DOMINICAN_REPUBLIC 0x1C0A
 #define LANGUAGE_SPANISH_ECUADOR            0x300A
 #define LANGUAGE_SPANISH_EL_SALVADOR        0x440A
@@ -564,7 +565,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_HILIGAYNON            0x063D
 #define LANGUAGE_USER_NYANJA                0x063E
 #define LANGUAGE_USER_KASHUBIAN             0x063F
-#define LANGUAGE_USER_SPANISH_CUBA          0x800A  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SPANISH)) */
+#define LANGUAGE_OBSOLETE_USER_SPANISH_CUBA 0x800A  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SPANISH)) */
+#define LANGUAGE_USER_SPANISH_CUBA          LANGUAGE_SPANISH_CUBA
 #define LANGUAGE_USER_TETUN                 0x0640
 #define LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA 0x0641
 #define LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA 0x0642
