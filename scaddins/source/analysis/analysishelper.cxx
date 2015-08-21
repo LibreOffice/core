@@ -2080,8 +2080,7 @@ void Complex::Csch() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 
 ComplexList::~ComplexList()
 {
-    for( size_t i = 0; i < maVector.size(); ++i )
-        delete maVector[i];
+    maVector.clear();
 }
 
 
@@ -2103,9 +2102,9 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, C
             const OUString&   rStr = rList[ n2 ];
 
             if( !rStr.isEmpty() )
-                Append( new Complex( rStr ) );
+                Append( Complex( rStr ) );
             else if( bEmpty0 )
-                Append( new Complex( 0.0 ) );
+                Append( Complex( 0.0 ) );
             else if( bErrOnEmpty )
                 throw lang::IllegalArgumentException();
         }
@@ -2130,15 +2129,15 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
                 const OUString*       pStr = static_cast<const OUString*>(r.getValue());
 
                 if( !pStr->isEmpty() )
-                    Append( new Complex( *static_cast<OUString const *>(r.getValue()) ) );
+                    Append( Complex( *static_cast<OUString const *>(r.getValue()) ) );
                 else if( bEmpty0 )
-                    Append( new Complex( 0.0 ) );
+                    Append( Complex( 0.0 ) );
                 else if( bErrOnEmpty )
                     throw lang::IllegalArgumentException();
                 }
                 break;
             case uno::TypeClass_DOUBLE:
-                Append( new Complex( *static_cast<double const *>(r.getValue()), 0.0 ) );
+                Append( Complex( *static_cast<double const *>(r.getValue()), 0.0 ) );
                 break;
             case uno::TypeClass_SEQUENCE:
                 {

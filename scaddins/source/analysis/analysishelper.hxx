@@ -417,18 +417,18 @@ enum ComplListAppendHandl
 class ComplexList
 {
 private:
-    std::vector<Complex*>  maVector;
+    std::vector<Complex>  maVector;
 public:
     virtual                 ~ComplexList();
 
-    inline const Complex*   Get( sal_uInt32 nIndex ) const;
+    inline const Complex&   Get( sal_uInt32 nIndex ) const;
 
     inline bool             empty() const
                                 { return maVector.empty(); }
     inline sal_uInt32       Count() const
                                 { return maVector.size(); }
 
-    inline void             Append( Complex* pNew );
+    inline void             Append( const Complex& rNew );
     void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
@@ -647,15 +647,15 @@ inline void Complex::Add( const Complex& rAdd )
 }
 
 
-inline const Complex* ComplexList::Get( sal_uInt32 n ) const
+inline const Complex& ComplexList::Get( sal_uInt32 n ) const
 {
     return maVector[n];
 }
 
 
-inline void ComplexList::Append( Complex* p )
+inline void ComplexList::Append( const Complex& rNew )
 {
-    maVector.push_back(p);
+    maVector.push_back(rNew);
 }
 
 
