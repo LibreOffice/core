@@ -797,6 +797,9 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                 m_pAddService_btn->SetPopupMenu( NULL );
 
                 m_bIsUpdated = true;
+
+                m_bIsConnected = false;
+                EnableControls();
             }
         }
     }
