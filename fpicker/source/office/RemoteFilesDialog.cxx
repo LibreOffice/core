@@ -541,6 +541,9 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
             // -1 timeout - sync
             m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetBlackList() );
+
+            if( m_eMode != REMOTEDLG_MODE_SAVE )
+                m_pName_ed->SetText( "" );
         }
         else
         {
