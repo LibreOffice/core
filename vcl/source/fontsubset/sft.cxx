@@ -35,15 +35,9 @@
 #endif
 #include "sft.hxx"
 #include "gsub.h"
-#if ! (defined(NO_TTCR) && defined(NO_TYPE42))
 #include "ttcr.hxx"
-#endif
-#ifndef NO_MAPPERS            /* include MapChar() and MapString() */
 #include "xlat.hxx"
-#endif
-#ifndef NO_TYPE3              /* include CreateT3FromTTGlyphs() */
 #include <rtl/crc.h>
-#endif
 #include <rtl/ustring.hxx>
 
 #include <osl/endian.h>
@@ -308,7 +302,6 @@ _inline sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 ord)
     return ttf->tlens[ord];
 }
 
-#ifndef NO_TYPE42
 /* Hex Formatter functions */
 static const char HexChars[] = "0123456789ABCDEF";
 
@@ -371,7 +364,6 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
     }
     _this->total += size;
 }
-#endif
 
 /* Outline Extraction functions */
 
@@ -724,8 +716,6 @@ static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint
     return res;
 }
 
-#ifndef NO_TYPE3
-
 /*- returns the number of items in the path -*/
 
 static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **path)
@@ -853,8 +843,6 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
     return nPathCount;
 }
-
-#endif
 
 /*- Extracts a string from the name table and allocates memory for it -*/
 
@@ -1814,7 +1802,6 @@ int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal
     return n;
 }
 
-#ifndef NO_TYPE3
 int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
                           sal_uInt16 *glyphArray, sal_uInt8 *encoding, int nGlyphs,
                           int wmode)
@@ -1966,9 +1953,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 
     return SF_OK;
 }
-#endif
 
-#ifndef NO_TTCR
 int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           const char    *fname,
                           sal_uInt16        *glyphArray,
@@ -2112,9 +2097,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 
     return res;
 }
-#endif
 
-#ifndef NO_TYPE42
 static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
     GlyphOffsets* res = static_cast<GlyphOffsets*>(smalloc(sizeof(GlyphOffsets)));
@@ -2372,9 +2355,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     free(sfntP);
     return SF_OK;
 }
-#endif
 
-#ifndef NO_MAPPERS
 int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical)
 {
     int i;
@@ -2460,8 +2441,6 @@ int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
     return nRet;
 }
 
-#endif
-
 int GetTTGlyphCount( TrueTypeFont* ttf )
 {
     return ttf->nglyphs;
@@ -2532,7 +2511,6 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
     return res;
 }
 
-#ifndef NO_MAPPERS
 TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firstChar, int nChars, bool vertical)
 {
     TTSimpleGlyphMetrics *res = 0;
@@ -2550,7 +2528,6 @@ TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firs
 
     return res;
 }
-#endif
 
 void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
 {

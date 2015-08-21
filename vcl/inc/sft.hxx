@@ -24,16 +24,6 @@
  */
 
 /*
- *        If NO_MAPPERS is defined, MapChar() and MapString() and consequently GetTTSimpleCharMetrics()
- *        don't get compiled in. This is done to avoid including a large chunk of code (TranslateXY() from
- *        xlat.c in the projects that don't require it.
- *
- *        If NO_TYPE3 is defined CreateT3FromTTGlyphs() does not get compiled in.
- *        If NO_TYPE42 is defined Type42-related code is excluded
- *        If NO_TTCR is defined TrueType creation related code is excluded\
- */
-
-/*
  *        Generated fonts contain an XUID entry in the form of:
  *
  *                  103 0 T C1 N C2 C3
@@ -140,7 +130,6 @@ namespace vcl
         OVERLAP_COMPOUND          = 1<<10
     };
 
-#ifndef NO_TTCR
 /** Flags for TrueType generation */
     enum TTCreationFlags {
         TTCF_AutoName = 1,                  /**< Automatically generate a compact 'name' table.
@@ -156,7 +145,6 @@ namespace vcl
         TTCF_IncludeOS2 = 2                 /** If this flag is set OS/2 table from the original font will be
                                                 copied to the subset */
     };
-#endif
 
 /** Structure used by GetTTSimpleGlyphMetrics() and GetTTSimpleCharMetrics() functions */
     typedef struct {
@@ -364,7 +352,6 @@ namespace vcl
  */
     void DisposeNameRecords(NameRecord* nr, int n);
 
-#ifndef NO_TYPE3
 /**
  * Generates a new PostScript Type 3 font and dumps it to <b>outf</b> file.
  * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
@@ -383,9 +370,7 @@ namespace vcl
  *
  */
     int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
-#endif
 
-#ifndef NO_TTCR
 /**
  * Generates a new TrueType font and dumps it to <b>outf</b> file.
  * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
@@ -414,9 +399,7 @@ namespace vcl
                               int            nNameRecs,
                               NameRecord    *nr,
                               sal_uInt32        flags);
-#endif
 
-#ifndef NO_TYPE42
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
  * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
@@ -443,7 +426,6 @@ namespace vcl
                                sal_uInt16        *glyphArray,
                                sal_uInt8          *encoding,
                                int            nGlyphs);
-#endif
 
 /**
  * Queries glyph metrics. Allocates an array of TTSimpleGlyphMetrics structs and returns it.
@@ -457,7 +439,6 @@ namespace vcl
  */
     TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
-#ifndef NO_MAPPERS
 /**
  * Queries glyph metrics. Allocates an array of TTSimpleGlyphMetrics structs and returns it.
  * This function behaves just like GetTTSimpleGlyphMetrics() but it takes a range of Unicode
@@ -511,8 +492,6 @@ namespace vcl
  * @param ttf         pointer to the TrueTypeFont structure
  */
     int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical);
-
-#endif
 
 /**
  * Returns global font information about the TrueType font.
