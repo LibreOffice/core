@@ -42,7 +42,7 @@ class SW_DLLPUBLIC SwFormatFootnote
     friend class SwTextFootnote;
     SwTextFootnote* m_pTextAttr;   ///< My TextAttribute.
     OUString m_aNumber;     ///< User-defined 'Number'.
-    sal_uInt16 m_nNumber;   ///< Automatische Nummerierung
+    sal_uInt16 m_nNumber;   ///< automatic sequence number
     bool    m_bEndNote;     ///< Is it an End note?
 
     css::uno::WeakReference<css::text::XFootnote> m_wXFootnote;
