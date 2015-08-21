@@ -22,6 +22,8 @@
 #include "salinst.hxx"
 
 // #define TEST_WATCHDOG
+// Comment if UT fails randomly.
+#define TEST_TIMERPRECISION
 
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread
@@ -44,7 +46,7 @@ public:
     }
 };
 
-static WatchDog aWatchDog( 10 /* 10 secs should be enough */);
+static WatchDog aWatchDog( 12 /* 12 secs should be enough */);
 
 class TimerTest : public test::BootstrapFixture
 {
@@ -58,6 +60,7 @@ public:
 #endif
     void testDurations();
     void testAutoTimer();
+    void testMultiAutoTimers();
     void testRecursiveTimer();
     void testSlowTimerCallback();
 
@@ -69,6 +72,7 @@ public:
 #endif
     CPPUNIT_TEST(testDurations);
     CPPUNIT_TEST(testAutoTimer);
+    CPPUNIT_TEST(testMultiAutoTimers);
     CPPUNIT_TEST(testRecursiveTimer);
     CPPUNIT_TEST(testSlowTimerCallback);
 
@@ -117,6 +121,7 @@ void TimerTest::testIdle()
 // tdf#91727
 void TimerTest::testIdleMainloop()
 {
+#ifndef WNT
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
     // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone
@@ -131,6 +136,7 @@ void TimerTest::testIdleMainloop()
         pSVData->maAppData.mnDispatchLevel--;
     }
     CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);
+#endif
 }
 
 // --------------------------------------------------------------------
@@ -189,11 +195,106 @@ public:
 
 void TimerTest::testAutoTimer()
 {
+    const sal_Int32 nDurationMs = 30;
+    const sal_Int32 nEventsCount = 5;
+    const double exp = (nDurationMs * nEventsCount);
+
     sal_Int32 nCount = 0;
-    AutoTimerCount aCount(1, nCount);
-    while (nCount < 100) {
-        Application::Yield();
+    double dur = 0;
+    std::ostringstream msg;
+
+    // Repeat when we have random latencies.
+    // This is expected on non-realtime OSes.
+    for (int i = 0; i < 10; ++i)
+    {
+        const auto start = std::chrono::high_resolution_clock::now();
+        nCount = 0;
+        AutoTimerCount aCount(nDurationMs, nCount);
+        while (nCount < nEventsCount) {
+            Application::Yield();
+        }
+
+        const auto end = std::chrono::high_resolution_clock::now();
+        dur = std::chrono::duration<double, std::milli>(end - start).count();
+
+        msg << std::setprecision(2) << std::fixed
+            << "periodic multi-timer - dur: "
+            << dur << " (" << exp << ") ms." << std::endl;
+
+        // +/- 20% should be reasonable enough a margin.
+        if (dur >= (exp * 0.8) && dur <= (exp * 1.2))
+        {
+            // Success.
+            return;
+        }
     }
+
+#ifdef TEST_TIMERPRECISION
+    CPPUNIT_FAIL(msg.str().c_str());
+#endif
+}
+
+void TimerTest::testMultiAutoTimers()
+{
+    // The behavior of the timers change drastically
+    // when multiple timers are present.
+    // The worst, in my tests, is when two
+    // timers with 1ms period exist with a
+    // third of much longer period.
+
+    const sal_Int32 nDurationMsX = 5;
+    const sal_Int32 nDurationMsY = 10;
+    const sal_Int32 nDurationMs = 40;
+    const sal_Int32 nEventsCount = 5;
+    const double exp = (nDurationMs * nEventsCount);
+    const double expX = (exp / nDurationMsX);
+    const double expY = (exp / nDurationMsY);
+
+    double dur = 0;
+    sal_Int32 nCountX = 0;
+    sal_Int32 nCountY = 0;
+    sal_Int32 nCount = 0;
+    std::ostringstream msg;
+
+    // Repeat when we have random latencies.
+    // This is expected on non-realtime OSes.
+    for (int i = 0; i < 10; ++i)
+    {
+        nCountX = 0;
+        nCountY = 0;
+        nCount = 0;
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        AutoTimerCount aCountX(nDurationMsX, nCountX);
+        AutoTimerCount aCountY(nDurationMsY, nCountY);
+
+        AutoTimerCount aCount(nDurationMs, nCount);
+        while (nCount < nEventsCount) {
+            Application::Yield();
+        }
+
+        const auto end = std::chrono::high_resolution_clock::now();
+        dur = std::chrono::duration<double, std::milli>(end - start).count();
+
+        msg << std::setprecision(2) << std::fixed << "periodic multi-timer - dur: "
+            << dur << " (" << exp << ") ms, nCount: " << nCount
+            << " (" << nEventsCount << "), nCountX: " << nCountX
+            << " (" << expX << "), nCountY: " << nCountY
+            << " (" << expY << ")." << std::endl;
+
+        // +/- 20% should be reasonable enough a margin.
+        if (dur >= (exp * 0.8) && dur <= (exp * 1.2) &&
+            nCountX >= (expX * 0.8) && nCountX <= (expX * 1.2) &&
+            nCountY >= (expY * 0.8) && nCountY <= (expY * 1.2))
+        {
+            // Success.
+            return;
+        }
+    }
+
+#ifdef TEST_TIMERPRECISION
+    CPPUNIT_FAIL(msg.str().c_str());
+#endif
 }
 
 // --------------------------------------------------------------------
