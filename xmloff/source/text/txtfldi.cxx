@@ -977,6 +977,22 @@ XMLPageNumberImportContext::XMLPageNumberImportContext(
     bValid = true;
 }
 
+XMLPageNumberImportContext::XMLPageNumberImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_page_number, Element ),
+    sPropertySubType(sAPI_sub_type),
+    sPropertyNumberingType(sAPI_numbering_type),
+    sPropertyOffset(sAPI_offset),
+    sNumberSync(GetXMLToken(XML_FALSE)),
+    nPageAdjust(0),
+    eSelectPage(PageNumberType_CURRENT),
+    sNumberFormatOK(false)
+{
+    bValid = true;
+}
+
 void XMLPageNumberImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
