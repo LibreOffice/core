@@ -902,28 +902,32 @@ PhysicalFontFamily* PhysicalFontCollection::FindDefaultFont() const
 {
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
-    const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-    LanguageTag aLanguageTag( OUString( "en"));
-    OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS_UNICODE );
-    PhysicalFontFamily* pFoundData = ImplFindByTokenNames( aFontname );
+    PhysicalFontFamily* pFoundData = nullptr;
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
+        LanguageTag aLanguageTag( OUString( "en"));
+        OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS_UNICODE );
+        pFoundData = ImplFindByTokenNames( aFontname );
 
-    if( pFoundData )
-        return pFoundData;
+        if( pFoundData )
+            return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS );
-    pFoundData = ImplFindByTokenNames( aFontname );
-    if( pFoundData )
-        return pFoundData;
+        aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS );
+        pFoundData = ImplFindByTokenNames( aFontname );
+        if( pFoundData )
+            return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SERIF );
-    pFoundData = ImplFindByTokenNames( aFontname );
-    if( pFoundData )
-        return pFoundData;
+        aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SERIF );
+        pFoundData = ImplFindByTokenNames( aFontname );
+        if( pFoundData )
+            return pFoundData;
 
-    aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::FIXED );
-    pFoundData = ImplFindByTokenNames( aFontname );
-    if( pFoundData )
-        return pFoundData;
+        aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::FIXED );
+        pFoundData = ImplFindByTokenNames( aFontname );
+        if( pFoundData )
+            return pFoundData;
+    }
 
     // now try to find a reasonable non-symbol font
 
