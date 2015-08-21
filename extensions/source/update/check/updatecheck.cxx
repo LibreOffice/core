@@ -1254,7 +1254,7 @@ UpdateCheck::showDialog(bool forceCheck)
         aGuard.reset();
     }
 
-    getUpdateHandler()->setVisible(true);
+    getUpdateHandler()->setVisible();
 
     // Run check in separate thread ..
     if( UPDATESTATE_CHECKING == eDialogState )
