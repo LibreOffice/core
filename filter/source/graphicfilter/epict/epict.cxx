@@ -1393,7 +1393,6 @@ void PictWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx
 void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 {
     size_t nA, nACount;
-    const MetaAction* pMA;
 
     if( !bStatus)
         return;
@@ -1402,7 +1401,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
     for (nA=0; nA < nACount; nA++)
     {
-        pMA = rMTF.GetAction(nA);
+        const MetaAction* pMA = rMTF.GetAction(nA);
 
         switch (pMA->GetType())
         {

@@ -770,10 +770,9 @@ void SvxRTFParser::ClearStyleTbl()
 
 void SvxRTFParser::ClearAttrStack()
 {
-    SvxRTFItemStackType* pTmp;
     for( size_t nCnt = aAttrStack.size(); nCnt; --nCnt )
     {
-        pTmp = aAttrStack.back();
+        SvxRTFItemStackType* pTmp = aAttrStack.back();
         aAttrStack.pop_back();
         delete pTmp;
     }
