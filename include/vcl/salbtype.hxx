@@ -419,7 +419,7 @@ inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
 {
     if( mnCount )
     {
-        const sal_uLong nSize = mnCount * sizeof( BitmapColor );
+        const size_t nSize = mnCount * sizeof( BitmapColor );
         mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
         memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
     }
@@ -432,7 +432,7 @@ inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
 {
     if( mnCount )
     {
-        const sal_uLong nSize = mnCount * sizeof( BitmapColor );
+        const size_t nSize = mnCount * sizeof( BitmapColor );
         mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
         memset( mpBitmapColor, 0, nSize );
     }
@@ -452,7 +452,7 @@ inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPale
 
     if( mnCount )
     {
-        const sal_uLong nSize = mnCount * sizeof( BitmapColor );
+        const size_t nSize = mnCount * sizeof( BitmapColor );
         mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
         memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
     }
@@ -508,8 +508,8 @@ inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
     }
     else if( nCount != mnCount )
     {
-        const sal_uLong nNewSize = nCount * sizeof( BitmapColor );
-        const sal_uLong nMinSize = std::min( mnCount, nCount ) * sizeof( BitmapColor );
+        const size_t nNewSize = nCount * sizeof( BitmapColor );
+        const size_t nMinSize = std::min( mnCount, nCount ) * sizeof( BitmapColor );
         sal_uInt8*      pNewColor = new sal_uInt8[ nNewSize ];
 
         if ( nMinSize && mpBitmapColor )
