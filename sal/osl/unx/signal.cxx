@@ -65,7 +65,7 @@
 #define ACT_EXIT    2
 #define ACT_SYSTEM  3
 #define ACT_HIDE    4
-#define ACT_ABORT   ACT_SYSTEM
+#define ACT_ABORT   5
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
