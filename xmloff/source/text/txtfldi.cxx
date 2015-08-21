@@ -3020,6 +3020,23 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 {
 }
 
+XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nToken,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_get_reference, Element ),
+    sPropertyReferenceFieldPart(sAPI_reference_field_part),
+    sPropertyReferenceFieldSource(sAPI_reference_field_source),
+    sPropertySourceName(sAPI_source_name),
+    sPropertyCurrentPresentation(sAPI_current_presentation),
+    nElementToken(nToken),
+    nSource(0),
+    bNameOK(false),
+    bTypeOK(false)
+{
+}
+
 static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
 {
     { XML_PAGE,         ReferenceFieldPart::PAGE},
@@ -3063,6 +3080,33 @@ void XMLReferenceFieldImportContext::StartElement(
     XMLTextFieldImportContext::StartElement(xAttrList);
 }
 
+void XMLReferenceFieldImportContext::startFastElement( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( RuntimeException, SAXException, std::exception )
+{
+    bTypeOK = true;
+    switch( nElementToken )
+    {
+        case XML_TOK_TEXT_REFERENCE_REF:
+            nSource = ReferenceFieldSource::REFERENCE_MARK;
+            break;
+        case XML_TOK_TEXT_BOOKMARK_REF:
+            nSource = ReferenceFieldSource::BOOKMARK;
+            break;
+        case XML_TOK_TEXT_NOTE_REF:
+            nSource = ReferenceFieldSource::FOOTNOTE;
+            break;
+        case XML_TOK_TEXT_SEQUENCE_REF:
+            nSource = ReferenceFieldSource::SEQUENCE_FIELD;
+            break;
+        default:
+            bTypeOK = false;
+            OSL_FAIL("unknown reference field");
+            break;
+    }
+
+    XMLTextFieldImportContext::startFastElement( Element, xAttrList );
+}
 
 void XMLReferenceFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,

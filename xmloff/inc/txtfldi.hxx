@@ -1063,12 +1063,19 @@ public:
                                    sal_uInt16 nToken,
                                    sal_uInt16 nPrfx,
                                    const OUString& sLocalName);
+    XMLReferenceFieldImportContext( SvXMLImport& rImport,
+                                    XMLTextImportHelper& rHlp,
+                                    sal_uInt16 nToken,
+                                    sal_Int32 Element );
 
 protected:
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
