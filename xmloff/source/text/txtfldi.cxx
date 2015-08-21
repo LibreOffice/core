@@ -3575,6 +3575,16 @@ XMLDdeFieldImportContext::XMLDdeFieldImportContext(
 {
 }
 
+XMLDdeFieldImportContext::XMLDdeFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_dde, Element ),
+    sName(),
+    sPropertyContent(sAPI_content)
+{
+}
+
 void XMLDdeFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
@@ -3587,6 +3597,57 @@ void XMLDdeFieldImportContext::ProcessAttribute(
 }
 
 void XMLDdeFieldImportContext::EndElement()
+{
+    if (bValid)
+    {
+        // find master
+        OUStringBuffer sBuf;
+        sBuf.appendAscii(sAPI_fieldmaster_prefix);
+        sBuf.appendAscii(sAPI_dde);
+        sBuf.append('.');
+        sBuf.append(sName);
+        OUString sMasterName = sBuf.makeStringAndClear();
+
+        Reference<XTextFieldsSupplier> xTextFieldsSupp(GetImport().GetModel(),
+                                                       UNO_QUERY);
+        Reference<container::XNameAccess> xFieldMasterNameAccess(
+            xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
+
+        if (xFieldMasterNameAccess->hasByName(sMasterName))
+        {
+            Reference<XPropertySet> xMaster;
+            Any aAny = xFieldMasterNameAccess->getByName(sMasterName);
+            aAny >>= xMaster;
+            //apply the content to the master
+            xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
+            // master exists: create text field and attach
+            Reference<XPropertySet> xField;
+            sBuf.appendAscii(sAPI_textfield_prefix);
+            sBuf.appendAscii(sAPI_dde);
+            if (CreateField(xField, sBuf.makeStringAndClear()))
+            {
+                Reference<XDependentTextField> xDepTextField(xField,UNO_QUERY);
+                xDepTextField->attachTextFieldMaster(xMaster);
+
+                // attach field to document
+                Reference<XTextContent> xTextContent(xField, UNO_QUERY);
+                if (xTextContent.is())
+                {
+                    GetImportHelper().InsertTextContent(xTextContent);
+
+                    // we're lucky. nothing else to prepare.
+                }
+                // else: fail, because text content could not be created
+            }
+            // else: fail, because field could not be created
+        }
+        // else: fail, because no master was found (faulty document?!)
+    }
+    // not valid: ignore
+}
+
+void XMLDdeFieldImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw( RuntimeException, SAXException, std::exception )
 {
     if (bValid)
     {

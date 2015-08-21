@@ -1161,6 +1161,9 @@ public:
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
                              const OUString& sLocalName);
+    XMLDdeFieldImportContext( SvXMLImport& rImport,
+                              XMLTextImportHelper& rHlp,
+                              sal_Int32 Element );
 
 protected:
     /// process attribute values
@@ -1169,6 +1172,8 @@ protected:
 
     /// create textfield, attach master, and insert into document
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /// empty method
     virtual void PrepareField(
