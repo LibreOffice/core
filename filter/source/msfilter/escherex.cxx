@@ -436,14 +436,14 @@ void EscherPropertyContainer::CreateGradientProperties(
 
     // Transparency gradient: Means the third setting in transparency page is set
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, OUString( "FillTransparenceGradient" ), false ) )
+        aAny, rXPropSet, OUString( "FillTransparenceGradient" ) ) )
     {
         pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
 
         ::com::sun::star::uno::Any          aAnyTemp;
         const rtl::OUString aPropName( "FillStyle" );
         if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAnyTemp, rXPropSet, aPropName, false ) )
+            aAnyTemp, rXPropSet, aPropName ) )
         {
             ::com::sun::star::drawing::FillStyle eFS;
             if ( ! ( aAnyTemp >>= eFS ) )
@@ -452,7 +452,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             if ( eFS == ::com::sun::star::drawing::FillStyle_SOLID)
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
-                    aAnyTemp, rXPropSet, OUString( "FillColor" ), false ) )
+                    aAnyTemp, rXPropSet, OUString( "FillColor" ) ) )
                 {
                     const_cast<css::awt::Gradient *>(pGradient)->StartColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
                     const_cast<css::awt::Gradient *>(pGradient)->EndColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
@@ -462,7 +462,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             else if( eFS == ::com::sun::star::drawing::FillStyle_GRADIENT )
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
-                    aAny, rXPropSet, OUString( "FillGradient" ), false ) )
+                    aAny, rXPropSet, OUString( "FillGradient" ) ) )
                     pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
             }
         }
@@ -470,7 +470,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     }
     // Not transparency gradient
     else if ( EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, OUString( "FillGradient" ), false ) )
+        aAny, rXPropSet, OUString( "FillGradient" ) ) )
     {
         pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
     }
@@ -539,7 +539,7 @@ void EscherPropertyContainer::CreateGradientProperties(
 
     // Transparency gradient
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, OUString( "FillTransparenceGradient" ), false ) )
+        aAny, rXPropSet, OUString( "FillTransparenceGradient" ) ) )
     {
         pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
         if ( pGradient )
@@ -581,7 +581,7 @@ void EscherPropertyContainer::CreateFillProperties(
     const OUString aPropName( "FillStyle" );
 
     if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, aPropName, false ) )
+            aAny, rXPropSet, aPropName ) )
     {
         ::com::sun::star::drawing::FillStyle eFS;
         if ( ! ( aAny >>= eFS ) )
@@ -621,7 +621,7 @@ void EscherPropertyContainer::CreateFillProperties(
                         AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
 
                     if ( EscherPropertyValueHelper::GetPropertyValue(
-                            aAny, rXPropSet, OUString( "FillColor" ), false ) )
+                            aAny, rXPropSet, OUString( "FillColor" ) ) )
                     {
                         sal_uInt32 nFillColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
                         nFillBackColor = nFillColor ^ 0xffffff;
@@ -677,7 +677,7 @@ void EscherPropertyContainer::CreateTextProperties(
         aAny >>= eHA;
     if ( bIsCustomShape )
     {
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextWordWrap" ), false ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextWordWrap" ) ) )
             aAny >>= bWordWrap;
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextAutoGrowHeight" ), true ) )
             aAny >>= bAutoGrowSize;
@@ -853,8 +853,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
     bool bIsArrow = false;
 
     ::com::sun::star::uno::Any aAny;
-    if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, sLine, false ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sLine ) )
     {
         tools::PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aAny ) );
         if ( aPolyPoly.Count() && aPolyPoly[ 0 ].GetSize() )
@@ -865,8 +864,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
             rnArrowLength = 1;
             rnArrowWidth  = 1;
 
-            if ( EscherPropertyValueHelper::GetPropertyValue(
-                aAny, rXPropSet, sLineName, false ) )
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sLineName ) )
             {
                 OUString        aArrowStartName = *static_cast<OUString const *>(aAny.getValue());
                 sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
@@ -978,7 +976,7 @@ void EscherPropertyContainer::CreateLineProperties(
     }
 
     // support LineCaps
-    if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, OUString( "LineCap" ), false))
+    if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, OUString( "LineCap" )))
     {
         ::com::sun::star::drawing::LineCap aLineCap(com::sun::star::drawing::LineCap_BUTT);
 
@@ -1005,7 +1003,7 @@ void EscherPropertyContainer::CreateLineProperties(
         }
     }
 
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineStyle" ), false ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineStyle" ) ) )
     {
         ::com::sun::star::drawing::LineStyle eLS;
         if ( aAny >>= eLS )
@@ -1018,7 +1016,7 @@ void EscherPropertyContainer::CreateLineProperties(
 
                 case ::com::sun::star::drawing::LineStyle_DASH :
                 {
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineDash" ), false ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineDash" ) ) )
                     {
                         ESCHER_LineDashing eDash = ESCHER_LineSolid;
                         ::com::sun::star::drawing::LineDash const * pLineDash = static_cast<css::drawing::LineDash const *>(aAny.getValue());
@@ -1073,7 +1071,7 @@ void EscherPropertyContainer::CreateLineProperties(
                 break;
             }
         }
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineColor" ), false ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineColor" ) ) )
         {
             sal_uInt32 nLineColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
             AddOpt( ESCHER_Prop_lineColor, nLineColor );
@@ -1081,7 +1079,7 @@ void EscherPropertyContainer::CreateLineProperties(
         }
     }
 
-    sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineWidth" ), false ) )
+    sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineWidth" ) ) )
         ? *static_cast<sal_uInt32 const *>(aAny.getValue()) : 0;
     if ( nLineSize > 1 )
         AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
@@ -1354,7 +1352,7 @@ bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     bool bRetValue = false;
     OUString aVndUrl( "vnd.sun.star.GraphicObject:" );
     OUString aBmpUrl( rBitmapUrl );
-    sal_Int32 nIndex = aBmpUrl.indexOf( aVndUrl, 0 );
+    sal_Int32 nIndex = aBmpUrl.indexOf( aVndUrl );
     if( nIndex != -1 )
     {
         nIndex += aVndUrl.getLength();
@@ -1499,7 +1497,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             if ( aAny >>= aHatch )
             {
                 Color aBackColor;
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillColor" ), false ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillColor" ) ) )
                 {
                     aBackColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()), false );
                 }
@@ -1562,7 +1560,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         if ( aGraphicUrl.getLength() )
         {
             OUString aVndUrl( "vnd.sun.star.GraphicObject:" );
-            sal_Int32 nIndex = aGraphicUrl.indexOf( aVndUrl, 0 );
+            sal_Int32 nIndex = aGraphicUrl.indexOf( aVndUrl );
             if ( nIndex != -1 )
             {
                 nIndex = nIndex + aVndUrl.getLength();
@@ -1840,7 +1838,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                             if ( ePolyFlags == css::drawing::PolygonFlags_CONTROL )
                                 continue;
                         }
-                        aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                        aPolyPolygon.Insert( aPolygon );
                     }
                 }
             }
@@ -1878,7 +1876,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                             aPolygon[ b ] = Point( pArray->X, pArray->Y );
                             pArray++;
                         }
-                        aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                        aPolyPolygon.Insert( aPolygon );
                     }
                 }
             }
@@ -1905,7 +1903,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                     aPolygon[ a ] = Point( pArray->X, pArray->Y );
                     pArray++;
                 }
-                aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
+                aPolyPolygon.Insert( aPolygon );
             }
         }
     }
@@ -1928,7 +1926,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     tools::PolyPolygon aPolyPolygon;
 
     if ( pPolygon )
-        aPolyPolygon.Insert( *pPolygon, POLYPOLY_APPEND );
+        aPolyPolygon.Insert( *pPolygon );
     else
     {
         ::com::sun::star::uno::Any aAny;
@@ -2356,13 +2354,13 @@ bool EscherPropertyContainer::CreateShadowProperties(
                 if ( bHasShadow )
                 {
                     nShadowFlags |= 2;
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowColor" ), false ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowColor" ) ) )
                         AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) ) );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowXDistance" ), false ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowXDistance" ) ) )
                         AddOpt( ESCHER_Prop_shadowOffsetX, *static_cast<sal_Int32 const *>(aAny.getValue()) * 360 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowYDistance" ), false ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowYDistance" ) ) )
                         AddOpt( ESCHER_Prop_shadowOffsetY, *static_cast<sal_Int32 const *>(aAny.getValue()) * 360 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowTransparence" ), false ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowTransparence" ) ) )
                         AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (((sal_uInt32)*static_cast<sal_uInt16 const *>(aAny.getValue())) * 655 ) );
                 }
             }
@@ -5416,7 +5414,7 @@ sal_uInt32 EscherEx::GetColor( const Color& rSOColor, bool bSwap )
     nColor |= rSOColor.GetBlue();
 
     if ( !bSwap )
-        nColor = GetColor( nColor, true );
+        nColor = GetColor( nColor );
 
     return nColor;
 }

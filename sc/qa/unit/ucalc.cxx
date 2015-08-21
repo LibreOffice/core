@@ -4101,7 +4101,7 @@ void Test::testCopyPasteRepeatOneFormula()
     ScRange aRowOne(0,0,0,MAXCOL,0,0);
     aMark.SetMarkArea(aRowOne);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS_BEFORE, true, true, false);
+    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS_BEFORE, true, true);
 
     CPPUNIT_ASSERT_MESSAGE("C1 should be empty.", m_pDoc->GetCellType(ScAddress(2,0,0)) == CELLTYPE_NONE);
 
@@ -4192,13 +4192,13 @@ void Test::testMergedCells()
     m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
-    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
+    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0);
     CPPUNIT_ASSERT_MESSAGE("did not merge cells", nEndCol == 3 && nEndRow == 3);
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS_BEFORE, true, true);
-    m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0, false);
+    m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0);
     CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
@@ -5130,7 +5130,7 @@ void Test::testNoteLifeCycle()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScMarkData aMarkData;
     aMarkData.SelectOneTable(0);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, false, true, true, false);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, false, true, true);
 
     ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
@@ -5168,7 +5168,7 @@ void Test::testNoteCopyPaste()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
     ScClipParam aClipParam(aCopyRange, false);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false, false, true, false);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false, false, true);
 
     // Make sure the notes are in the clipboard.
     pNote = aClipDoc.GetNote(ScAddress(1,1,0));
@@ -6636,7 +6636,7 @@ void Test::testUndoDataAnchor()
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
 
     // Get anchor data
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     ScAddress aOldStart = pData->maStart;
@@ -6656,9 +6656,9 @@ void Test::testUndoDataAnchor()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true, false);
+    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true);
 
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     ScAddress aNewStart = pData->maStart;
@@ -6684,7 +6684,7 @@ void Test::testUndoDataAnchor()
     CPPUNIT_ASSERT_MESSAGE( "Failed to check state SCA_CELL.", oldType == SCA_CELL );
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     // Get non rotated anchor data
@@ -6701,7 +6701,7 @@ void Test::testUndoDataAnchor()
     pUndoMgr->Redo();
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
 
     // Get non rotated anchor data

@@ -534,7 +534,7 @@ void XclImpChEscherFormat::ReadHeaderRecord( XclImpStream& rStrm )
     // get the data
     aPropSet.FillToItemSet( *maData.mxItemSet );
     // get fill type from DFF property set
-    mnDffFillType = aPropSet.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+    mnDffFillType = aPropSet.GetPropertyValue( DFF_Prop_fillType );
 }
 
 void XclImpChEscherFormat::ReadSubRecord( XclImpStream& rStrm )

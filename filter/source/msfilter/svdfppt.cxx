@@ -1820,7 +1820,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
             rStCtrl.SeekRel( 4 );
 
             ::utl::TempFile aTmpFile;
-            aTmpFile.EnableKillingFile( true );
+            aTmpFile.EnableKillingFile();
 
             if ( aTmpFile.IsValid() )
             {
@@ -1876,7 +1876,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     uno::Reference< frame::XModel > xModel( pOe->pShell->GetModel() );
                                     PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, xModel, eAktPageKind );
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
-                                    if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, false ) )
+                                    if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
                                         pRet = GetSdrObjectFromXShape( xShape );
 
                                 }

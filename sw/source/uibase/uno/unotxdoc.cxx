@@ -450,7 +450,7 @@ void SwXTextDocument::GetNumberFormatter()
             if ( pDocShell->GetDoc() )
             {
                 SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
-                                    pDocShell->GetDoc()->GetNumberFormatter( true ));
+                                    pDocShell->GetDoc()->GetNumberFormatter());
                 Reference< util::XNumberFormatsSupplier >  xTmp = pNumFormat;
                 xNumFormatAgg = Reference< XAggregation >(xTmp, UNO_QUERY);
             }
@@ -471,7 +471,7 @@ void SwXTextDocument::GetNumberFormatter()
             }
             OSL_ENSURE(pNumFormat, "No number formatter available");
             if (pNumFormat && !pNumFormat->GetNumberFormatter())
-                pNumFormat->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter( true ));
+                pNumFormat->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter());
         }
     }
 }
@@ -922,8 +922,7 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
             bool bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
                     eStart, eEnd, bCancel,
-                    (FindRanges)eRanges,
-                    /*bool bReplace =*/false );
+                    (FindRanges)eRanges );
         }
         if(nResult || (eRanges&(FND_IN_SELALL|FND_IN_OTHER)))
             break;
@@ -2094,7 +2093,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
         {
-            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ( true )->GetYear2000());
+            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ()->GetYear2000());
         }
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
@@ -2608,7 +2607,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // #122919# Force field update before PDF export
             pViewShell->SwViewShell::UpdateFields(true);
             if( bStateChanged )
-                pRenderDocShell->EnableSetModified( true );
+                pRenderDocShell->EnableSetModified();
 
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.
@@ -2626,7 +2625,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
         // get number of pages to be rendered
 
-        const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
+        const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect" );
         if (bPrintProspect)
         {
             SwDoc::CalculatePagePairsForProspectPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, nPageCount );
@@ -2687,9 +2686,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     m_pPrintUIOptions->processProperties( rxOptions );
-    const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
+    const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect" );
     const bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
-    const bool bPrintPaperFromSetup = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup", false );
+    const bool bPrintPaperFromSetup = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup" );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
@@ -2957,8 +2956,8 @@ void SAL_CALL SwXTextDocument::render(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     m_pPrintUIOptions->processProperties( rxOptions );
-    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
-    const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", false );
+    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect" );
+    const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage" );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
@@ -3006,7 +3005,7 @@ void SAL_CALL SwXTextDocument::render(
                 if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
                 {
                     const OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
-                    const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", false );
+                    const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage" );
                     bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
                     OSL_ENSURE(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())

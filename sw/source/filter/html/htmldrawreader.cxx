@@ -352,8 +352,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                     rOption.GetEnum( aHTMLImgVAlignTable,
                                                     text::VertOrientation::TOP );
                 eHoriOri =
-                    rOption.GetEnum( aHTMLImgHAlignTable,
-                                                    text::HoriOrientation::NONE );
+                    rOption.GetEnum( aHTMLImgHAlignTable );
                 break;
         }
     }

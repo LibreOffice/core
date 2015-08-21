@@ -1289,7 +1289,7 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
                 RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
                 0 );
-            aTstItemSet.Set( pDCCharFormat->GetAttrSet(), true );
+            aTstItemSet.Set( pDCCharFormat->GetAttrSet() );
             return HasScriptDependentItems( aTstItemSet, false );
         }
     }
@@ -1441,7 +1441,7 @@ static void OutCSS1DropCapRule(
                                        RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
                                        0 );
             if( pDCCharFormat )
-                aScriptItemSet.Set( pDCCharFormat->GetAttrSet(), true );
+                aScriptItemSet.Set( pDCCharFormat->GetAttrSet() );
 
             OUString aNewSelector( aSelector );
             aNewSelector += ".western" + aPseudo;
@@ -1553,9 +1553,9 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     // (all but for nDeep==1)
     const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
     SfxItemSet aItemSet( *rFormatItemSet.GetPool(), rFormatItemSet.GetRanges() );
-    aItemSet.Set( rFormatItemSet, true ); // Was nDeep!=1 that is not working
-                                       // for script dependent items buts should
-                                       // not make a difference for any other
+    aItemSet.Set( rFormatItemSet ); // Was nDeep!=1 that is not working
+                                    // for script dependent items buts should
+                                    // not make a difference for any other
 
     bool bSetDefaults = true, bClearSame = true;
     const SwFormat *pRefFormat = 0;
@@ -1755,7 +1755,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     const SwFrameFormat &rMaster = rPageDesc.GetMaster();
     SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
                          RES_LR_SPACE, RES_UL_SPACE );
-    aItemSet.Set( rMaster.GetAttrSet(), true );
+    aItemSet.Set( rMaster.GetAttrSet() );
 
     if( pRefPageDesc )
     {
@@ -1807,7 +1807,7 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
     {
         const SfxItemSet& rFormatItemSet = pSymCharFormat->GetAttrSet();
         SfxItemSet aItemSet( *rFormatItemSet.GetPool(), rFormatItemSet.GetRanges() );
-        aItemSet.Set( rFormatItemSet, true );
+        aItemSet.Set( rFormatItemSet );
 
         // If there are footnotes or endnotes, then all Attributes have to be
         // exported, so that Netscape displays the document correctly.

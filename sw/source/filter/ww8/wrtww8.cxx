@@ -672,7 +672,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
         OSL_ENSURE(nWhich != 0, "All broken, Impossible");
-        pItem = &m_pISet->Get(nWhich, true);
+        pItem = &m_pISet->Get(nWhich);
     }
     else if( m_pChpIter )
         pItem = &m_pChpIter->GetItem( nWhich );
@@ -1521,7 +1521,7 @@ void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
     WW8Export & rWW8Wrt = *(static_cast<SwWW8Writer&>(rWrt).m_pExport);
     rWW8Wrt.WriteAsStringTable(maAuthors, rWW8Wrt.pFib->fcSttbfRMark,
-        rWW8Wrt.pFib->lcbSttbfRMark, 0);
+        rWW8Wrt.pFib->lcbSttbfRMark);
 }
 
 sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
@@ -3283,7 +3283,7 @@ void WW8Export::PrepareStorage()
             if ( SvtFilterOptions::Get().IsEnableWordPreview() )
             {
                 std::shared_ptr<GDIMetaFile> xMetaFile =
-                    pDocShell->GetPreviewMetaFile(false);
+                    pDocShell->GetPreviewMetaFile();
                 uno::Sequence<sal_uInt8> metaFile(
                     sfx2::convertMetaFile(xMetaFile.get()));
                 sfx2::SaveOlePropertySet(xDocProps, &GetWriter().GetStorage(), &metaFile);

@@ -1638,9 +1638,9 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
 OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
 {
-    if (&rPam.GetNode(true) == &rPam.GetNode(false))
+    if (&rPam.GetNode() == &rPam.GetNode(false))
     {
-        SwTextNode * pTextNode = rPam.GetNode(true).GetTextNode();
+        SwTextNode * pTextNode = rPam.GetNode().GetTextNode();
 
         if (0 != pTextNode)
         {

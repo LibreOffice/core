@@ -995,7 +995,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             rSet.Put( XLineDashItem( OUString(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
             rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
         }
-        rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor, 0 ), DFF_Prop_lineColor ) ) );
+        rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor, 0 ) ) ) );
         if ( IsProperty( DFF_Prop_lineOpacity ) )
         {
             double nTrans = GetPropertyValue(DFF_Prop_lineOpacity, 0x10000);
@@ -3643,7 +3643,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
             OUString aParagraph( pCurrent, nParaSize );
             if ( !nParaIndex && aParagraph.isEmpty() )              // SJ: we are crashing if the first paragraph is empty ?
                 aParagraph += " ";                   // otherwise these two lines can be removed.
-            rOutliner.Insert( aParagraph, nParaIndex, 0 );
+            rOutliner.Insert( aParagraph, nParaIndex );
             rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
 
             SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );

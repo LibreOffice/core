@@ -162,7 +162,7 @@ void ScConditionalFormatTest::testUndoAnchor()
     CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawView != NULL );
 
     // Select graphic object
-    pDrawView->MarkNextObj(false);
+    pDrawView->MarkNextObj();
     CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawView->AreObjectsMarked() );
 
     // Set Cell Anchor

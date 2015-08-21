@@ -349,8 +349,7 @@ void SwHTMLParser::InsertImage()
                     rOption.GetEnum( aHTMLImgVAlignTable,
                                                     text::VertOrientation::TOP );
                 eHoriOri =
-                    rOption.GetEnum( aHTMLImgHAlignTable,
-                                                    text::HoriOrientation::NONE );
+                    rOption.GetEnum( aHTMLImgHAlignTable );
                 break;
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
@@ -1160,8 +1159,7 @@ ANCHOR_SETEVENT:
     if( !aName.isEmpty() )
     {
         OUString sDecoded( INetURLObject::decode( aName,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ));
+                                           INetURLObject::DECODE_UNAMBIGUOUS ));
         sal_Int32 nPos = sDecoded.lastIndexOf( cMarkSeparator );
         if( nPos != -1 )
         {

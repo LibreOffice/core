@@ -354,7 +354,7 @@ void Chart2ImportTest::testDOCXChartSeries()
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
     std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
@@ -382,7 +382,7 @@ void Chart2ImportTest::testPPTXChartSeries()
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
     std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
@@ -405,7 +405,7 @@ void Chart2ImportTest::testPPTXHiddenDataSeries()
     CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in pptx should be loaded as no fill (transparent).",
         eStyle == drawing::FillStyle_NONE);
 
-    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
     // There should be only one data series present.
@@ -621,7 +621,7 @@ void Chart2ImportTest::testFlatODSStackedColumnChart()
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xChartType.is());
 
     Reference<chart2::XDataSeriesContainer> xDSCont(xChartType, UNO_QUERY);

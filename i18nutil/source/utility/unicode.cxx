@@ -1194,7 +1194,7 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
 
     nUnicode = sIn.toString().toUInt32(16);
     if( !nUnicode || nUnicode > 0x10ffff )
-       maInput.truncate(0).append( sIn[sIn.getLength()-1] );
+       maInput.truncate().append( sIn[sIn.getLength()-1] );
     return maInput.toString();
 }
 
@@ -1205,7 +1205,7 @@ sal_uInt32 ToggleUnicodeCodepoint::CharsToDelete()
     sal_uInt32 counter = 0;
     while( nPos < sIn.getLength() )
     {
-        sIn.iterateCodePoints(&nPos,1);
+        sIn.iterateCodePoints(&nPos);
         ++counter;
     }
     return counter;
@@ -1243,7 +1243,7 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
         while( nPos < sIn.getLength() )
         {
             maOutput.append( "U+" );
-            maOutput.append( OUString::number(sIn.iterateCodePoints(&nPos,1),16) );
+            maOutput.append( OUString::number(sIn.iterateCodePoints(&nPos),16) );
         }
     }
     return maOutput.toString();

@@ -1490,7 +1490,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             if(pOrient)
             {
                 uno::Any any;
-                pOrient->QueryValue(any, MID_VERTORIENT_ORIENT);
+                pOrient->QueryValue(any);
                 aPropertyValues.push_back(PropertyValue(
                     UNO_NAME_VERT_ORIENT, -1, any, PropertyState_DIRECT_VALUE));
             }

@@ -1567,7 +1567,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     }
                 }
 
-                pFormat->GetDoc()->SetFrameFormatToFly( *pFormat, *pFrameFormat, pSet, false );
+                pFormat->GetDoc()->SetFrameFormatToFly( *pFormat, *pFrameFormat, pSet );
                 delete pSet;
             }
             else
@@ -3285,7 +3285,7 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration() thr
     if(!pFormat)
         return nullptr;
     SwPosition aPos(pFormat->GetContent().GetContentIdx()->GetNode());
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_FRAME);
 }

@@ -503,11 +503,11 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
     if( (mpItems == NULL) || ( SfxItemState::SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, false, &pItem ) ) )
     {
         SvXMLAttrContainerItem aAlienAttributes;
-        aAlienAttributes.QueryValue( rAttributes, 0 );
+        aAlienAttributes.QueryValue( rAttributes );
     }
     else
     {
-        static_cast<const SvXMLAttrContainerItem*>(pItem)->QueryValue( rAttributes, 0 );
+        static_cast<const SvXMLAttrContainerItem*>(pItem)->QueryValue( rAttributes );
     }
 }
 

@@ -81,22 +81,22 @@ namespace {
 
         bool IsPrintPageName() const
         {
-            return GetBoolValue("IsPrintName");
+            return GetBoolValue("IsPrintName", false);
         }
 
         bool IsDate() const
         {
-            return GetBoolValue("IsPrintDateTime");
+            return GetBoolValue("IsPrintDateTime", false);
         }
 
         bool IsTime() const
         {
-            return GetBoolValue("IsPrintDateTime");
+            return GetBoolValue("IsPrintDateTime", false);
         }
 
         bool IsHiddenPages() const
         {
-            return GetBoolValue("IsPrintHidden");
+            return GetBoolValue("IsPrintHidden", false);
         }
 
         bool IsHandoutHorizontal() const
@@ -229,7 +229,7 @@ namespace {
         */
         bool GetBoolValue (
             const sal_Char* pName,
-            const bool bDefaultValue = false) const
+            const bool bDefaultValue) const
         {
             bool bValue = mrProperties.getBoolValue( pName, bDefaultValue );
             return bValue;
@@ -1432,7 +1432,7 @@ private:
             }
 
             if (mpOptions->IsTime())
-                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false, false );
+                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false );
 
             // Draw and Notes should usually use specified paper size when printing
             if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))

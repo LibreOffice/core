@@ -1084,7 +1084,7 @@ void checkMergedCells( ScDocument& rDoc, const ScAddress& rStartAddress,
     SCCOL nActualEndCol = rStartAddress.Col();
     SCROW nActualEndRow = rStartAddress.Row();
     rDoc.ExtendMerge( rStartAddress.Col(), rStartAddress.Row(),
-                       nActualEndCol, nActualEndRow, rStartAddress.Tab(), false );
+                       nActualEndCol, nActualEndRow, rStartAddress.Tab() );
     OString sTab = OString::number( rStartAddress.Tab() + 1 );
     OString msg = "Merged cells are not correctly imported on sheet" + sTab;
     OString msgCol = msg + "; end col";
@@ -1703,7 +1703,7 @@ void ScFiltersTest::testCellAnchoredShapesODS()
     {
         SdrObject* pObj = pPage->GetObj(i);
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
-        ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+        ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
         CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
         CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
     }

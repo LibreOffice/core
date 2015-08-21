@@ -1679,7 +1679,7 @@ void Test::testFormulaRefUpdateInsertRows()
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.InsertCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, INS_INSROWS_BEFORE, false, true);
 
     // The raw data should have shifted to B4:B6.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,3,0)));
@@ -1703,7 +1703,7 @@ void Test::testFormulaRefUpdateInsertRows()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
     // Insert 3 rows over 2:4.  This should push A3:A6 to A6:A9.
-    rFunc.InsertCells(ScRange(0,1,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,1,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,5,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_MESSAGE("This formula cell should not be an error.", pFC->GetErrCode() == 0);
@@ -1848,7 +1848,7 @@ void Test::testFormulaRefUpdateInsertColumns()
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.InsertCells(ScRange(0,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, false, true);
 
     // Now, the original column B has moved to column D.
     if (!checkFormula(*m_pDoc, ScAddress(3,3,0), "SUM(D1:D3)"))
@@ -2680,7 +2680,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
     OUString aSymbol;
@@ -2709,7 +2709,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,0,0));
 
     // Insert rows over 3:5 which should expand the range by 3 rows.
-    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,4,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,4,0), &aMark, INS_INSROWS_BEFORE, false, true);
 
     pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
@@ -2752,7 +2752,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(4,0,0)));
 
     // Insert a new row at row 3.  This should expand MyData to A1:A4.
-    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, false, true);
 
     // Set new value to A3.
     m_pDoc->SetValue(ScAddress(0,2,0), 4.0);
@@ -2980,7 +2980,7 @@ void Test::testFormulaRefUpdateValidity()
     aMark.SelectOneTable(0);
 
     // Insert a new column at Column B, to move the list from C2:C4 to D2:D4.
-    bool bInserted = rFunc.InsertCells(ScRange(1,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, true, true, false);
+    bool bInserted = rFunc.InsertCells(ScRange(1,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, true, true);
     CPPUNIT_ASSERT_MESSAGE("Column insertion failed.", bInserted);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3,1,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,2,0)));
@@ -3234,7 +3234,7 @@ void Test::testFuncROW()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
+    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "ROW(A6)"))
         CPPUNIT_FAIL("Wrong formula!");
     if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "ROW(B6)"))

@@ -514,7 +514,7 @@ void Chart2ExportTest::testScatterChartTextXValues()
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
     // Make sure we have exactly 3 data series.
@@ -1031,7 +1031,7 @@ void Chart2ExportTest::testScatterPlotLabels()
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
     // Make sure the original chart has 'a', 'b', 'c' as its data labels.
@@ -1047,7 +1047,7 @@ void Chart2ExportTest::testScatterPlotLabels()
     xChartDoc.set(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
     aLabels = getDataSeriesLabelsFromChartType(xCT);
@@ -1167,7 +1167,7 @@ void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > xC
 {
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0, 0 );
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
     CPPUNIT_ASSERT(xChartType.is());
 
     Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );

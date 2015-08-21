@@ -1385,7 +1385,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if ( rSh.IsTableMode() )
                 {
                     SwFrameFormat *pFormat = rSh.GetTableFormat();
-                    aSet.Put(pFormat->GetFormatAttr( nWhich, true ));
+                    aSet.Put(pFormat->GetFormatAttr( nWhich ));
                 }
                 else if( rSh.IsFrmSelected() )
                 {

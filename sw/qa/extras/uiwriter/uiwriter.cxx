@@ -1232,7 +1232,7 @@ void SwUiWriterTest::testTdf79236()
     const SwAttrSet& attrSet = pTextFormat->GetAttrSet();
     SfxItemSet* itemSet = attrSet.Clone();
     sal_uInt16 initialCount = itemSet->Count();
-    SvxAdjustItem AdjustItem = attrSet.GetAdjust(true);
+    SvxAdjustItem AdjustItem = attrSet.GetAdjust();
     SvxAdjust initialAdjust = AdjustItem.GetAdjust();
     //By default the adjust is LEFT
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, initialAdjust);
@@ -1251,7 +1251,7 @@ void SwUiWriterTest::testTdf79236()
     //Checking the Changes
     SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
     const SwAttrSet& attrSet2 = pTextFormat2->GetAttrSet();
-    const SvxAdjustItem& AdjustItem2 = attrSet2.GetAdjust(true);
+    const SvxAdjustItem& AdjustItem2 = attrSet2.GetAdjust();
     SvxAdjust Adjust2 = AdjustItem2.GetAdjust();
     //The adjust should be RIGHT as per the modifications made
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust2);
@@ -1259,7 +1259,7 @@ void SwUiWriterTest::testTdf79236()
     rUndoManager.Undo();
     SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
     const SwAttrSet& attrSet3 = pTextFormat3->GetAttrSet();
-    const SvxAdjustItem& AdjustItem3 = attrSet3.GetAdjust(true);
+    const SvxAdjustItem& AdjustItem3 = attrSet3.GetAdjust();
     SvxAdjust Adjust3 = AdjustItem3.GetAdjust();
     //The adjust should be back to default, LEFT
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust3);
@@ -1267,7 +1267,7 @@ void SwUiWriterTest::testTdf79236()
     rUndoManager.Redo();
     SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
     const SwAttrSet& attrSet4 = pTextFormat4->GetAttrSet();
-    const SvxAdjustItem& AdjustItem4 = attrSet4.GetAdjust(true);
+    const SvxAdjustItem& AdjustItem4 = attrSet4.GetAdjust();
     SvxAdjust Adjust4 = AdjustItem4.GetAdjust();
     //The adjust should be RIGHT as per the modifications made
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust4);
@@ -1275,7 +1275,7 @@ void SwUiWriterTest::testTdf79236()
     rUndoManager.Undo();
     SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
     const SwAttrSet& attrSet5 = pTextFormat5->GetAttrSet();
-    const SvxAdjustItem& AdjustItem5 = attrSet5.GetAdjust(true);
+    const SvxAdjustItem& AdjustItem5 = attrSet5.GetAdjust();
     SvxAdjust Adjust5 = AdjustItem5.GetAdjust();
     //The adjust should be back to default, LEFT
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust5);
@@ -1621,14 +1621,14 @@ void SwUiWriterTest::testSearchWithTransliterate()
     SearchOpt.insertedChars = 0;
     SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
     //transliteration option set so that at least one of the search strings is not found
-    sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY,false);
+    sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY);
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(0,(int)case1);
     SearchOpt.searchString = "paragraph";
     SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
-    sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY,false);
+    sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY);
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
@@ -1892,9 +1892,9 @@ void SwUiWriterTest::testTdf75137()
     sal_uLong firstIndex = pShellCrsr->GetNode().GetIndex();
     pShellCrsr->GotoFootnoteAnchor();
     pWrtShell->InsertFootnote(OUString("This is second footnote"));
-    pWrtShell->Up(false, 1, false);
+    pWrtShell->Up(false, 1);
     sal_uLong secondIndex = pShellCrsr->GetNode().GetIndex();
-    pWrtShell->Down(false, 1, false);
+    pWrtShell->Down(false, 1);
     sal_uLong thirdIndex = pShellCrsr->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(firstIndex, thirdIndex);
     CPPUNIT_ASSERT(firstIndex != secondIndex);
@@ -2221,8 +2221,8 @@ void SwUiWriterTest::testShapeAnchorUndo()
 
     pWrtShell->SelectObj(Point(), 0, pObject);
 
-    pWrtShell->GetDrawView()->MoveMarkedObj(Size(100, 100), false);
-    pWrtShell->ChgAnchor(0, true, true);
+    pWrtShell->GetDrawView()->MoveMarkedObj(Size(100, 100));
+    pWrtShell->ChgAnchor(0, true);
 
     rUndoManager.EndUndo(UNDO_END, NULL);
 

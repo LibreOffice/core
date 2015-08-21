@@ -228,7 +228,7 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
     {
         SCCOL nCol = 4;
         SCROW nRow = 1;
-        rDoc.ExtendMerge(4, 1, nCol, nRow, 0, false);
+        rDoc.ExtendMerge(4, 1, nCol, nRow, 0);
         CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
 
         //check notes import

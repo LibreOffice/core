@@ -1241,7 +1241,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
     MapMode    OutputMapMode;
     // PDF export should always use PRINT_SIZE_NORMAL ...
-    if (!rPrintUIOptions.getBoolValue( "IsPrinter", false ) )
+    if (!rPrintUIOptions.getBoolValue( "IsPrinter" ) )
         ePrintSize = PRINT_SIZE_NORMAL;
     switch (ePrintSize)
     {
@@ -1287,7 +1287,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
     rOutDev.SetMapMode(OutputMapMode);
     rOutDev.SetClipRegion(vcl::Region(aOutRect));
-    GetDoc()->DrawFormula(rOutDev, aPos, false);
+    GetDoc()->DrawFormula(rOutDev, aPos);
     rOutDev.SetClipRegion();
 
     rOutDev.Pop();

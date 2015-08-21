@@ -2738,7 +2738,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
 
     // Get anchor data
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
 
@@ -2759,7 +2759,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
     rDoc.InsertRow(ScRange( 0, aDataStart.Row() - 1, 0, MAXCOL, aDataStart.Row(), 0));
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
 
@@ -2800,7 +2800,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
 
@@ -2820,7 +2820,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
     rDoc1.InsertCol(ScRange( aDataStart.Col(), 0 , 0 , aDataStart.Col(), MAXROW, 0 ));
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
 
@@ -2861,7 +2861,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
 
     // Get anchor data
-    pData = ScDrawLayer::GetObjData(pObj, false);
+    pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
 

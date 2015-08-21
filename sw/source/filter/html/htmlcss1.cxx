@@ -684,8 +684,8 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
             if( aClearItems[j] ||
                 (pParentItemSet &&
                  SfxItemState::SET == rItemSet.GetItemState( nWhich, false, &pItem ) &&
-                 (0==i ? swhtml_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, true ) )
-                        : *pItem == pParentItemSet->Get(nWhich, true ) ) ) )
+                 (0==i ? swhtml_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich ) )
+                        : *pItem == pParentItemSet->Get(nWhich ) ) ) )
             {
                 rItemSet.ClearItem( nWhich );
             }
@@ -1099,7 +1099,7 @@ bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             if( !pCFormat )
             {
                 pCFormat = pDoc->MakeCharFormat( aName, pParentCFormat );
-                pCFormat->SetAuto( false );
+                pCFormat->SetAuto();
             }
         }
 
@@ -1184,7 +1184,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( sal_uInt16 nToken2, const OUString& rC
         if( !pCFormat )
         {
             pCFormat = pDoc->MakeCharFormat( sCName, pDoc->GetDfltCharFormat() );
-            pCFormat->SetAuto( false );
+            pCFormat->SetAuto();
         }
     }
 
@@ -1209,7 +1209,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( sal_uInt16 nToken2, const OUString& rC
             if( pClass )
             {
                 pCFormat = pDoc->MakeCharFormat( aTmp, pCFormat );
-                pCFormat->SetAuto( false );
+                pCFormat->SetAuto();
                 SfxItemSet aItemSet( pClass->GetItemSet() );
                 SetCharFormatAttrs( pCFormat, aItemSet );
             }
@@ -1533,7 +1533,7 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
         if( !pCFormat )
         {
             pCFormat = pDoc->MakeCharFormat( aName, pDoc->GetDfltCharFormat() );
-            pCFormat->SetAuto( false );
+            pCFormat->SetAuto();
         }
         SetCharFormatAttrs( pCFormat, rItemSet );
 

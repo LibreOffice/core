@@ -1775,7 +1775,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     {
         sal_uInt16 nPos = aAttr.GetPos(SVBT16ToShort(pDel + i*2));
         if( nPos != SVX_TAB_NOTFOUND )
-            aAttr.Remove( nPos, 1 );
+            aAttr.Remove( nPos );
     }
 
     for (short i=0; i < nIns; ++i)
@@ -1819,7 +1819,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
         sal_uInt16 nPos2 = aAttr.GetPos( nPos );
         if (nPos2 != SVX_TAB_NOTFOUND)
-            aAttr.Remove(nPos2, 1); // Or else Insert() refuses
+            aAttr.Remove(nPos2); // Or else Insert() refuses
         aAttr.Insert(aTabStop);
     }
 
@@ -4913,7 +4913,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     {
         SwDocShell * pDocShell = m_rDoc.GetDocShell();
         if (pDocShell)
-            pDocShell->SetReadOnlyUI(true);
+            pDocShell->SetReadOnlyUI();
     }
 
     mpCrsr = m_rDoc.CreateUnoCrsr(rPos);

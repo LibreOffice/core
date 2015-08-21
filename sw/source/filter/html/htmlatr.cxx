@@ -305,7 +305,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         // sollen ist harte Attributierung noetig. Fuer Vorlagen, die
         // nicht von HTML-Tag-Vorlagen abgeleitet sind, gilt das immer
 
-        pItemSet->Set( pFormat->GetAttrSet(), true );
+        pItemSet->Set( pFormat->GetAttrSet() );
 
         if( pReferenceFormat )
             SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFormat->GetAttrSet(),
@@ -1893,7 +1893,7 @@ void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
         SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj, true );
         bool bOutStylesOld = bOutStyles;
         bOutStyles = false;
-        Insert( aItemSet, nPos, nPos+1, rFormatInfos, false, false );
+        Insert( aItemSet, nPos, nPos+1, rFormatInfos, false );
         bOutStyles = bOutStylesOld;
     }
 }
