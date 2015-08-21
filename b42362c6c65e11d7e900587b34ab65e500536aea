@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_9ba56bb7",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "i think you need to disable field updates for the clipboard document, because that\u0027s what happens for a real clipboard document so the test should do the same\n\nIDocumentFieldsAccess::LockExpFields()",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_fbaaaf84",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "this line is unreadably long",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_dbaff392",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1689,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "this isn\u0027t going to work - the SwField is owned by a SfxPoolItem that is cloned multiple times during insertion, so the actual SwField instance in the document is not the one you\u0027re testing.",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_5b9c8369",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "you could do it that way, but perhaps it would be clearer to use the GetFormat() function to retrieve the format...",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_bb878711",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "actually QueryValue maps REF_CONTENT to ReferenceFieldPart::TEXT so you need to compare against that",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_7b9fbf5f",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "just wondering, does this actually work? the implementation uses a signed sal_Int16 and you compare it to unsigned sal_uInt16?",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_9b8c4b37",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T12:32:53Z",
+      "side": 1,
+      "message": "something\u0027s missing here?",
+      "revId": "b42362c6c65e11d7e900587b34ab65e500536aea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
