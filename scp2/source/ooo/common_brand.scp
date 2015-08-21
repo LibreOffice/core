@@ -1139,6 +1139,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers
 End
 #undef CONFIGURATION_LAYERS_DCONF
 #undef CONFIGURATION_LAYERS_WINREG
+#undef CONFIGURATION_LAYERS_WINUSERREG
 
 #if !defined MACOSX
 ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap
