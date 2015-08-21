@@ -532,18 +532,19 @@ Components::Components(
             modificationFileUrl_ = url;
             parseModificationLayer(url);
         }
-#ifdef WNT
-        else if (type == "winreg" || type == "winuserreg")
-        {
-            if (!url.isEmpty()) {
-                SAL_WARN(
-                    "configmgr",
-                    "winreg URL is not empty, URL handling is not implemented for winreg");
+#if defined WNT
+        else if (type == "winreg") {
+            WinRegType eType;
+            if (url == "LOCAL_MACHINE" || url.isEmpty()/*backwards comp.*/) {
+                eType = WinRegType::LOCAL_MACHINE;
+            } else if (url == "CURRENT_USER") {
+                eType = WinRegType::CURRENT_USER;
+            } else {
+                throw css::uno::RuntimeException(
+                    "CONFIGURATION_LAYERS: unknown \"winreg\" kind \"" + url
+                    + "\"");
             }
             OUString aTempFileURL;
-            WinRegType eType = WinRegType::LOCAL_MACHINE;
-            if (type == "winuserreg")
-                eType = WinRegType::CURRENT_USER;
             if (dumpWindowsRegistry(&aTempFileURL, eType)) {
                 parseFileLeniently(&parseXcuFile, aTempFileURL, layer, data_, 0, 0, 0);
                 layer++;
