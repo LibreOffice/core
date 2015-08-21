@@ -41,6 +41,28 @@
         </prop>
       </node>
 
+      <node oor:name="WriterPageDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Properties</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>WriterPageDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-template-large.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            any, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
       <node oor:name="GalleryDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Gallery</value>
@@ -354,6 +376,146 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+      </node>
+
+      <node oor:name="PageStylesPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Styles</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>PageStylesPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>WriterPageDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:PageDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Writer, Table,    visible ;
+            Writer, Text,     visible ;
+            Writer, default,  visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/PageStylesPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>200</value>
+        </prop>
+      </node>
+
+      <node oor:name="PageMarginPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Margin</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>PageMarginPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>WriterPageDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:PageDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Writer, Table,    visible ;
+            Writer, Text,     visible ;
+            Writer, default,  visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/PageMarginPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>300</value>
+        </prop>
+      </node>
+
+      <node oor:name="PageFormatPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Format</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>PageFormatPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>WriterPageDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:PageDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Writer, Table,    visible ;
+            Writer, Text,     visible ;
+            Writer, default,  visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/PageFormatPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+      </node>
+
+      <node oor:name="PageHeaderPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Header</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>PageHeaderPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>WriterPageDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:PageDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Writer, Table,    hidden ;
+            Writer, Text,     hidden ;
+            Writer, default,  hidden ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/PageHeaderPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>400</value>
+        </prop>
+      </node>
+
+      <node oor:name="PageFooterPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Footer</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>PageFooterPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>WriterPageDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:PageDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Writer, Table,    hidden ;
+            Writer, Text,     hidden ;
+            Writer, default,  hidden ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/PageFooterPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>500</value>
         </prop>
       </node>
 

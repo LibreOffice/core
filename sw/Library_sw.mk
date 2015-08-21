@@ -681,6 +681,11 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/sidebar/PageSizeControl \
     sw/source/uibase/sidebar/PageColumnControl \
     sw/source/uibase/sidebar/PagePropertyPanel \
+    sw/source/uibase/sidebar/PageMarginPanel \
+    sw/source/uibase/sidebar/PageFormatPanel \
+    sw/source/uibase/sidebar/PageHeaderPanel \
+    sw/source/uibase/sidebar/PageFooterPanel \
+    sw/source/uibase/sidebar/PageStylesPanel \
     sw/source/uibase/sidebar/WrapPropertyPanel \
     sw/source/uibase/sidebar/ThemePanel \
     sw/source/uibase/sidebar/SwPanelFactory \
