@@ -52,14 +52,14 @@
 #include <osl/file.hxx>
 #include <signal.h>
 
+#include <../source/filter/igif/gifread.hxx>
+#include <../source/filter/ixbm/xbmread.hxx>
+#include <../source/filter/ixpm/xpmread.hxx>
+#include <../source/filter/jpeg/jpeg.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
-
-extern bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags );
-extern bool ImportGIF( SvStream & rStm, Graphic& rGraphic );
-extern bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
-extern bool ImportXPM( SvStream& rStm, Graphic& rGraphic );
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
