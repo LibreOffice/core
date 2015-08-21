@@ -902,6 +902,20 @@ XMLPageContinuationImportContext::XMLPageContinuationImportContext(
     bValid = true;
 }
 
+XMLPageContinuationImportContext::XMLPageContinuationImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_page_number, Element ),
+    sPropertySubType(sAPI_sub_type),
+    sPropertyUserText(sAPI_user_text),
+    sPropertyNumberingType(sAPI_numbering_type),
+    eSelectPage(PageNumberType_CURRENT),
+    sStringOK(false)
+{
+    bValid = true;
+}
+
 void XMLPageContinuationImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken, const OUString& sAttrValue )
 {
