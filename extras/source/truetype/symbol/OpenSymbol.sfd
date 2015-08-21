@@ -51,7 +51,6 @@ OS2StrikeYSize: 102
 OS2StrikeYPos: 530
 OS2Vendor: 'PfEd'
 OS2UnicodeRanges: 800000af.1001ecea.00000000.00000000
-Lookup: 4 0 1 "'liga' Standard Ligatures lookup 0"  {"'liga' Standard Ligatures lookup 0 subtable"  } ['liga' ('DFLT' <'dflt' > ) ]
 MarkAttachClasses: 1
 DEI: 91125
 TtTable: prep
@@ -8011,7 +8010,6 @@ SplineSet
  1747 139 1747 139 1747 94 c 0,27,28
 EndSplineSet
 Validated: 1
-Ligature2: "'liga' Standard Ligatures lookup 0 subtable" period period period
 EndChar
 
 StartChar: perthousand
@@ -17512,7 +17510,6 @@ SplineSet
  965 -175 965 -175 934 -211 c 1,39,40
 EndSplineSet
 Validated: 1
-Ligature2: "'liga' Standard Ligatures lookup 0 subtable" integral integral
 EndChar
 
 StartChar: uni222D
@@ -17865,7 +17862,6 @@ SplineSet
  1532 -183 1532 -183 1501 -211 c 1,78,79
 EndSplineSet
 Validated: 1
-Ligature2: "'liga' Standard Ligatures lookup 0 subtable" integral integral integral
 EndChar
 
 StartChar: uni222E
@@ -18511,7 +18507,6 @@ SplineSet
  1530 491 1530 491 1530 659 c 0,103,104
 EndSplineSet
 Validated: 33
-Ligature2: "'liga' Standard Ligatures lookup 0 subtable" uni222E uni222E
 EndChar
 
 StartChar: uni2230
@@ -19026,7 +19021,6 @@ SplineSet
  2097 526 2097 526 2097 659 c 0,141,142
 EndSplineSet
 Validated: 5
-Ligature2: "'liga' Standard Ligatures lookup 0 subtable" uni222E uni222E uni222E
 EndChar
 
 StartChar: uni2243
