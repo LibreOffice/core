@@ -35,16 +35,14 @@
 #include <com/sun/star/beans/Property.hpp>
 #include "filrow.hxx"
 #include "filnot.hxx"
-#include <cppuhelper/implbase8.hxx>
-
-
+#include <cppuhelper/implbase.hxx>
 
 namespace fileaccess {
 
-    class Notifier;
+class Notifier;
 
 class XResultSet_impl : public Notifier,
-        public cppu::WeakImplHelper8< css::lang::XEventListener,
+        public cppu::WeakImplHelper<  css::lang::XEventListener,
                                       css::sdbc::XRow,
                                       css::sdbc::XResultSet,
                                       css::ucb::XDynamicResultSet,

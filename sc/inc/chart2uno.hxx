@@ -42,9 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
@@ -59,7 +57,7 @@ class ScDocument;
 
 // DataProvider
 class ScChart2DataProvider : public
-                ::cppu::WeakImplHelper5<
+                ::cppu::WeakImplHelper<
                     ::com::sun::star::chart2::data::XDataProvider,
                     ::com::sun::star::chart2::data::XSheetDataProvider,
                     ::com::sun::star::chart2::data::XRangeXMLConversion,
@@ -193,7 +191,7 @@ private:
 
 // DataSource
 class ScChart2DataSource : public
-                ::cppu::WeakImplHelper2<
+                ::cppu::WeakImplHelper<
                     ::com::sun::star::chart2::data::XDataSource,
                     ::com::sun::star::lang::XServiceInfo>,
                 SfxListener
@@ -234,7 +232,7 @@ private:
 
 // DataSequence
 class ScChart2DataSequence : public
-                ::cppu::WeakImplHelper8<
+                ::cppu::WeakImplHelper<
                     ::com::sun::star::chart2::data::XDataSequence,
                     ::com::sun::star::chart2::data::XTextualDataSequence,
                     ::com::sun::star::chart2::data::XNumericalDataSequence,

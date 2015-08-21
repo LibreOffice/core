@@ -34,7 +34,7 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/ListAction.hpp>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <deque>
 
 namespace cppu {
@@ -113,7 +113,7 @@ public:
 
 
 
-class SortedResultSet: public cppu::WeakImplHelper8 <
+class SortedResultSet: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::lang::XComponent,
     css::ucb::XContentAccess,
