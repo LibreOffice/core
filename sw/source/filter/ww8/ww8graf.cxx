@@ -865,7 +865,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 
 // TxbxText() holt aus WW-File den Text und gibt diesen und den Anfangs- und
 // den um -2 (bzw. -1 bei Ver8) korrigierten End-Cp zurueck
-bool SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
+sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
 {
     WW8_CP nOffset = m_pWwFib->GetBaseCp(eType);
 
@@ -884,23 +884,24 @@ bool SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, 
                 rString = rString.copy(0, nLen-1);
 
             rString = rString.replace( 0xb, 0xa );
-            return true;
+            return nLen;
         }
     }
-    return false;
+    return 0;
 }
 
 OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
 {
     OutlinerParaObject* pRet = 0;
 
-    if (GetRangeAsDrawingString( rString, nStartCp, nEndCp, eType ))
+    sal_Int32 nLen = GetRangeAsDrawingString(rString, nStartCp, nEndCp, eType);
+    if (nLen > 0)
     {
         if (!m_pDrawEditEngine)
             m_pDrawEditEngine = new EditEngine(0);
 
         m_pDrawEditEngine->SetText(rString);
-        InsertAttrsAsDrawingAttrs(nStartCp, nEndCp, eType);
+        InsertAttrsAsDrawingAttrs(nStartCp, nStartCp+nLen, eType);
 
         // Annotations typically begin with a (useless) 0x5
         if ((eType == MAN_AND) && m_pDrawEditEngine->GetTextLen())
@@ -950,8 +951,8 @@ SwFrameFormat* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     OUString aString;
     WW8_CP nStartCp, nEndCp;
     bool bContainsGraphics = false;
-    bool bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
-        nSequence ) && GetRangeAsDrawingString( aString, nStartCp, nEndCp, eType );
+    bool bTextWasRead = GetTxbxTextSttEndCp(nStartCp, nEndCp, nTxBxS, nSequence) &&
+                        GetRangeAsDrawingString(aString, nStartCp, nEndCp, eType) > 0;
 
     if (!m_pDrawEditEngine)
         m_pDrawEditEngine = new EditEngine(0);
