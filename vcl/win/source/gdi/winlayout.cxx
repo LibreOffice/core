@@ -307,53 +307,6 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     }
     aChunk.mnAscentPlusIntLeading = aTextMetric.tmAscent + aTextMetric.tmInternalLeading;
 
-    UINT nAlign = GetTextAlign(hDC);
-    if (nAlign == GDI_ERROR)
-    {
-        SAL_WARN("vcl.gdi", "GetTextAlign failed: " << WindowsErrorString(GetLastError()));
-        SelectObject(hDC, hOrigFont);
-        DeleteDC(hDC);
-        return false;
-    }
-
-    OUString sAlign;
-    switch ((TA_LEFT|TA_CENTER|TA_RIGHT) & nAlign)
-    {
-    case TA_LEFT:
-        sAlign = "LEFT";
-        break;
-    case TA_CENTER:
-        sAlign = "CENTER";
-        break;
-    case TA_RIGHT:
-        sAlign = "RIGHT";
-        break;
-    default:
-        sAlign = "0x" + OUString::number((TA_LEFT|TA_CENTER|TA_RIGHT) & nAlign,16);
-        break;
-    }
-    sAlign += "|";
-    switch ((TA_BOTTOM|TA_BASELINE|TA_TOP) & nAlign)
-    {
-    case TA_BOTTOM:
-        sAlign += "BOTTOM";
-        break;
-    case TA_BASELINE:
-        sAlign += "BASELINE";
-        break;
-    case TA_TOP:
-        sAlign += "TOP";
-        break;
-    default:
-        sAlign += "0x" + OUString::number((TA_BOTTOM|TA_BASELINE|TA_TOP) & nAlign,16);
-        break;
-    }
-    sAlign += "|";
-    if (TA_UPDATECP & nAlign)
-        sAlign += "UPDATECP";
-    else
-        sAlign += "NOUPDATECP";
-
     LOGFONTW aLogfont;
     if (!GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont))
     {
@@ -374,8 +327,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     }
 
     SAL_INFO("vcl.gdi.opengl", OUString(sFaceName, nFaceNameLen) <<
-             ": " << sAlign <<
-             " Escapement=" << aLogfont.lfEscapement <<
+             ": Escapement=" << aLogfont.lfEscapement <<
              " Orientation=" << aLogfont.lfOrientation <<
              " Ascent=" << aTextMetric.tmAscent <<
              " InternalLeading=" << aTextMetric.tmInternalLeading <<
