@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_9bed6b28",
+        "filename": "vcl/unx/kde4/KDE4FilePicker.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-21T06:26:30Z",
+      "side": 1,
+      "message": "unnecessary include",
+      "revId": "a1bb5b0aaa5f43941c8e38bb8e43851f8af8b399",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_fbf2af05",
+        "filename": "vcl/unx/kde4/KDESalGraphics.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-21T06:26:30Z",
+      "side": 1,
+      "message": "this can be written as:\n   m_image \u003d new QImage ........",
+      "revId": "a1bb5b0aaa5f43941c8e38bb8e43851f8af8b399",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_bbe82718",
+        "filename": "vcl/unx/kde4/KDEXLib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-21T06:26:30Z",
+      "side": 1,
+      "message": "this can be written as\n  m_pApplication \u003d new VCLKDEApplication()",
+      "revId": "a1bb5b0aaa5f43941c8e38bb8e43851f8af8b399",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
