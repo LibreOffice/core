@@ -505,7 +505,7 @@ public:
 class ConvertDataList
 {
 private:
-    std::vector<ConvertData*> maVector;
+    std::vector<ConvertData> maVector;
 public:
                             ConvertDataList();
     virtual                 ~ConvertDataList();

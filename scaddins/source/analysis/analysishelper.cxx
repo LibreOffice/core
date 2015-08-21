@@ -2356,10 +2356,10 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 
 ConvertDataList::ConvertDataList()
 {
-#define NEWD(str,unit,cl)   maVector.push_back(new ConvertData(str,unit,cl))
-#define NEWDP(str,unit,cl)  maVector.push_back(new ConvertData(str,unit,cl,true))
-#define NEWL(str,unit,offs,cl)  maVector.push_back(new ConvertDataLinear(str,unit,offs,cl))
-#define NEWLP(str,unit,offs,cl) maVector.push_back(new ConvertDataLinear(str,unit,offs,cl,true))
+#define NEWD(str,unit,cl)   maVector.push_back(ConvertData(str,unit,cl))
+#define NEWDP(str,unit,cl)  maVector.push_back(ConvertData(str,unit,cl,true))
+#define NEWL(str,unit,offs,cl)  maVector.push_back(ConvertDataLinear(str,unit,offs,cl))
+#define NEWLP(str,unit,offs,cl) maVector.push_back(ConvertDataLinear(str,unit,offs,cl,true))
 
     // *** are extra and not standard Excel Analysis Addin!
 
@@ -2533,37 +2533,36 @@ ConvertDataList::ConvertDataList()
 
 ConvertDataList::~ConvertDataList()
 {
-    for( std::vector<ConvertData*>::const_iterator it = maVector.begin(); it != maVector.end(); ++it )
-        delete *it;
+    maVector.clear();
 }
 
 
 double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    ConvertData*    pFrom = NULL;
-    ConvertData*    pTo = NULL;
+    ConvertData*    pFrom = nullptr;
+    ConvertData*    pTo = nullptr;
     bool            bSearchFrom = true;
     bool            bSearchTo = true;
     sal_Int16       nLevelFrom = 0;
     sal_Int16       nLevelTo = 0;
 
-    std::vector<ConvertData*>::iterator it = maVector.begin();
+    auto it = maVector.begin();
     while( it != maVector.end() && ( bSearchFrom || bSearchTo ) )
     {
-        ConvertData*    p = *it;
+        ConvertData    data = *it;
         if( bSearchFrom )
         {
-            sal_Int16   n = p->GetMatchingLevel( rFrom );
+            sal_Int16   n = data.GetMatchingLevel( rFrom );
             if( n != INV_MATCHLEV )
             {
                 if( n )
                 {   // only first match for partial equality rulz a little bit more
-                    pFrom = p;
+                    pFrom = &data;
                     nLevelFrom = n;
                 }
                 else
                 {   // ... but exact match rulz most
-                    pFrom = p;
+                    pFrom = &data;
                     bSearchFrom = false;
                     nLevelFrom = n;
                 }
@@ -2572,17 +2571,17 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 
         if( bSearchTo )
         {
-            sal_Int16   n = p->GetMatchingLevel( rTo );
+            sal_Int16   n = data.GetMatchingLevel( rTo );
             if( n != INV_MATCHLEV )
             {
                 if( n )
                 {   // only first match for partial equality rulz a little bit more
-                    pTo = p;
+                    pTo = &data;
                     nLevelTo = n;
                 }
                 else
                 {   // ... but exact match rulz most
-                    pTo = p;
+                    pTo = &data;
                     bSearchTo = false;
                     nLevelTo = n;
                 }
