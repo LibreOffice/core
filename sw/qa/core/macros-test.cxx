@@ -214,7 +214,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     aPaM.Exchange();
     aPaM.Move(fnMoveBackward, fnGoDoc);
     // delete
-    rIDCO.DeleteAndJoin(aPaM, false);
+    rIDCO.DeleteAndJoin(aPaM);
 
     for (IDocumentMarkAccess::const_iterator_t i = rIDMA.getAllMarksBegin(); i != rIDMA.getAllMarksEnd(); ++i)
     {
@@ -243,7 +243,7 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     CPPUNIT_ASSERT(pMark);
 
     // delete the same selection as the bookmark
-    rIDCO.DeleteAndJoin(aPaM, false);
+    rIDCO.DeleteAndJoin(aPaM);
 
     // bookmark still there?
     auto iter = rIDMA.getAllMarksBegin();
@@ -440,7 +440,7 @@ void SwMacrosTest::testFindReplace()
     SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     // use a UnoCrsr so it will be corrected when deleting nodes
-    auto pPaM(pDoc->CreateUnoCrsr(SwPosition(aIdx), false));
+    auto pPaM(pDoc->CreateUnoCrsr(SwPosition(aIdx)));
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.InsertString(*pPaM, OUString("foo"));
@@ -464,7 +464,7 @@ void SwMacrosTest::testFindReplace()
 
     // find newline on 1st paragraph
     bool bFound = pPaM->Find(
-            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_BODY, false);
+            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_BODY);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetText());
@@ -472,7 +472,7 @@ void SwMacrosTest::testFindReplace()
     // now do another Find, inside the selection from the first Find
 //    opts.searchFlags = 71680;
     bFound = pPaM->Find(
-            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_SEL, false);
+            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_SEL);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetText());
