@@ -4380,6 +4380,9 @@ void WW8RStyle::ImportOldFormatStyles()
         if (eSti == ww::stiNil)
             continue;
 
+        if (stcp >= aPAPXOffsets.size())
+            continue;
+
         rSI.bValid = true;
 
         if (ww::StandardStiIsCharStyle(eSti) && !aPAPXOffsets[stcp].mnSize)
