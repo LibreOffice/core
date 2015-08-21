@@ -1901,11 +1901,11 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
         long nLen = ( (nNextPieceCp < nBehindTextCp) ? nNextPieceCp
             : nBehindTextCp ) - nAktStartCp;
 
-        if( 0 >= nLen )
-            break;
-
         if( nLen > USHRT_MAX - 1 )
             nLen = USHRT_MAX - 1;
+
+        if( 0 >= nLen )
+            break;
 
         rStr += bIsUnicode
              ? read_uInt16s_ToOUString(rStrm, nLen)
