@@ -4154,6 +4154,29 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
     GetImport().GetTextImport()->PushListContext();
 }
 
+XMLAnnotationImportContext::XMLAnnotationImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nToken,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_annotation, Element),
+    sPropertyAuthor(sAPI_author),
+    sPropertyInitials(sAPI_initials),
+    sPropertyContent(sAPI_content),
+    // why is there no UNO_NAME_DATE_TIME, but only UNO_NAME_DATE_TIME_VALUE?
+    sPropertyDate(sAPI_date_time_value),
+    sPropertyTextRange(sAPI_TextRange),
+    sPropertyName(sAPI_name),
+    m_nToken(nToken)
+{
+    bValid = true;
+
+    // remember old list item and block (#91964#) and reset them
+    // for the text frame
+    // do this in the constructor, not in createFastChildContext (#i93392#)
+    GetImport().GetTextImport()->PushListContext();
+}
+
 void XMLAnnotationImportContext::ProcessAttribute(
     sal_uInt16 nToken,
     const OUString& rValue )
@@ -4224,7 +4247,149 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
     return pContext;
 }
 
+Reference< XFastContextHandler > XMLAnnotationImportContext::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( RuntimeException, SAXException, std::exception )
+{
+    Reference< XFastContextHandler > pContext = 0;
+    if( Element == (NAMESPACE | XML_NAMESPACE_DC | XML_creator) )
+        pContext = new XMLStringBufferImportContext( GetImport(), Element, aAuthorBuffer );
+    else if( Element == (NAMESPACE | XML_NAMESPACE_DC | XML_date) )
+        pContext = new XMLStringBufferImportContext( GetImport(), Element, aDateBuffer );
+    else if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_sender_initials) ||
+             Element == (NAMESPACE | XML_NAMESPACE_LO_EXT | XML_sender_initials) )
+        pContext = new XMLStringBufferImportContext( GetImport(), Element, aInitialsBuffer );
+
+    if( !pContext.is() )
+    {
+        try
+        {
+            bool bOK = true;
+            if( !mxField.is() )
+                bOK = CreateField( mxField, sServicePrefix + GetServiceName() );
+            if( bOK )
+            {
+                Any aAny = mxField->getPropertyValue( sPropertyTextRange );
+                Reference< XText > xText;
+                aAny >>= xText;
+                if( xText.is() )
+                {
+                    rtl::Reference< XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
+                    if( !mxCursor.is() )
+                    {
+                        mxOldCursor = xTxtImport->GetCursor();
+                        mxCursor = xText->createTextCursor();
+                    }
+
+                    if( mxCursor.is() )
+                    {
+                        xTxtImport->SetCursor( mxCursor );
+                        pContext = xTxtImport->CreateTextChildContext( GetImport(), Element, xAttrList );
+                    }
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+        }
+
+        if( !pContext.is() )
+            pContext = new XMLStringBufferImportContext( GetImport(), Element, aTextBuffer );
+    }
+
+    return pContext;
+}
+
 void XMLAnnotationImportContext::EndElement()
+{
+    DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
+    if( mxCursor.is() )
+    {
+        // delete addition newline
+        const OUString aEmpty;
+        mxCursor->gotoEnd( sal_False );
+        mxCursor->goLeft( 1, sal_True );
+        mxCursor->setString( aEmpty );
+
+        // reset cursor
+        GetImport().GetTextImport()->ResetCursor();
+    }
+
+    if( mxOldCursor.is() )
+        GetImport().GetTextImport()->SetCursor( mxOldCursor );
+
+    // reinstall old list item #91964#
+    GetImport().GetTextImport()->PopListContext();
+
+    if ( bValid )
+    {
+        if ( m_nToken == XML_TOK_TEXT_ANNOTATION_END )
+        {
+            // Search for a previous annotation with the same name.
+            uno::Reference< text::XTextContent > xPrevField;
+            {
+                Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
+                uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+                uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+                while (xFields->hasMoreElements())
+                {
+                    uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySetInfo> const xInfo(
+                            xCurrField->getPropertySetInfo());
+                    if (xInfo->hasPropertyByName(sPropertyName))
+                    {
+                        OUString aFieldName;
+                        xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
+                        if (aFieldName == aName)
+                        {
+                            xPrevField.set( xCurrField, uno::UNO_QUERY );
+                            break;
+                        }
+                    }
+                }
+            }
+            if ( xPrevField.is() )
+            {
+                // So we are ending a previous annotation,
+                // let's create a text range covering the old and the current position.
+                uno::Reference<text::XText> xText = GetImportHelper().GetText();
+                uno::Reference<text::XTextCursor> xCursor =
+                    xText->createTextCursorByRange(GetImportHelper().GetCursorAsRange());
+                xCursor->gotoRange(xPrevField->getAnchor(), true);
+                uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY);
+
+                xText->insertTextContent(xTextRange, xPrevField, !xCursor->isCollapsed());
+            }
+        }
+        else
+        {
+            if ( mxField.is() || CreateField( mxField, sServicePrefix + GetServiceName() ) )
+            {
+                // set field properties
+                PrepareField( mxField );
+
+                // attach field to document
+                Reference < XTextContent > xTextContent( mxField, UNO_QUERY );
+
+                // workaround for #80606#
+                try
+                {
+                    GetImportHelper().InsertTextContent( xTextContent );
+                }
+                catch (const lang::IllegalArgumentException&)
+                {
+                    // ignore
+                }
+            }
+        }
+    }
+    else
+        GetImportHelper().InsertString(GetContent());
+}
+
+void XMLAnnotationImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw( RuntimeException, SAXException, std::exception )
 {
     DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
     if( mxCursor.is() )
