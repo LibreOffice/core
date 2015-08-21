@@ -65,6 +65,7 @@ struct OpenGLGlyphCacheChunk
     std::vector<Rectangle> maLocation;
     std::shared_ptr<OpenGLTexture> mpTexture;
     int mnAscentPlusIntLeading;
+    bool mbVertical;
 };
 
 // win32 specific physical font instance
@@ -130,13 +131,18 @@ OUString DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
     }
 
     std::cerr << "Bitmap " << hBitmap << ": " << aBitmap.bmWidth << "x" << aBitmap.bmHeight << ":" << std::endl;
+
+    // Print out start pos of each glyph only in the horizontal font case
     int nPos = 0;
-    for (int i = 1; i < rChunk.mnGlyphCount && nPos < 75; i++)
+    if (rChunk.mnGlyphCount > 1 && rChunk.maLocation[1].Left() > rChunk.maLocation[0].Left())
     {
-        for (int j = nPos; j < rChunk.maLocation[i].Left(); j++)
-            std::cerr << " ";
-        std::cerr << "!";
-        nPos = rChunk.maLocation[i].Left() + 1;
+        for (int i = 1; i < rChunk.mnGlyphCount && nPos < 75; i++)
+        {
+            for (int j = nPos; j < rChunk.maLocation[i].Left(); j++)
+                std::cerr << " ";
+            std::cerr << "!";
+            nPos = rChunk.maLocation[i].Left() + 1;
+        }
     }
     std::cerr << std::endl;
 
@@ -289,7 +295,21 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         totWidth += aDX[i];
     }
 
-    SAL_INFO("vcl.gdi.opengl", "aSize=(" << aSize.cx << "," << aSize.cy << ") totWidth=" << totWidth);
+    TEXTMETRICW aTextMetric;
+    GetTextMetricsW(hDC, &aTextMetric);
+    aChunk.mnAscentPlusIntLeading = aTextMetric.tmAscent + aTextMetric.tmInternalLeading;
+
+    LOGFONTW aLogfont;
+    GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont);
+
+    wchar_t sFaceName[200];
+    int nFaceNameLen = GetTextFaceW(hDC, SAL_N_ELEMENTS(sFaceName), sFaceName);
+    SAL_INFO("vcl.gdi.opengl", OUString(sFaceName, nFaceNameLen) <<
+             ": Escapement=" << aLogfont.lfEscapement <<
+             " Orientation=" << aLogfont.lfOrientation <<
+             " Ascent=" << aTextMetric.tmAscent <<
+             " InternalLeading=" << aTextMetric.tmInternalLeading <<
+             " Size=(" << aSize.cx << "," << aSize.cy << ") totWidth=" << totWidth);
 
     if (SelectObject(hDC, hOrigFont) == NULL)
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
@@ -297,7 +317,21 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         SAL_WARN("vcl.gdi", "DeleteDC failed: " << WindowsErrorString(GetLastError()));
 
     // Leave two pixels of extra space also at top and bottom
-    OpenGLCompatibleDC aDC(rGraphics, 0, 0, totWidth, aSize.cy + 4);
+    int nBitmapWidth, nBitmapHeight;
+    if (sFaceName[0] == '@')
+    {
+        nBitmapWidth = aSize.cy + 4;
+        nBitmapHeight = totWidth;
+        aChunk.mbVertical = true;
+    }
+    else
+    {
+        nBitmapWidth = totWidth;
+        nBitmapHeight = aSize.cy + 4;
+        aChunk.mbVertical = false;
+    }
+
+    OpenGLCompatibleDC aDC(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight);
 
     HFONT hNonAntialiasedFont = NULL;
 
@@ -305,12 +339,6 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     static bool bNoAntialias = (std::getenv("VCL_GLYPH_CACHING_HACK_NO_ANTIALIAS") != NULL);
     if (bNoAntialias)
     {
-        LOGFONTW aLogfont;
-        if (!GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont))
-        {
-            SAL_WARN("vcl.gdi", "GetObject failed: " << WindowsErrorString(GetLastError()));
-            return false;
-        }
         aLogfont.lfQuality = NONANTIALIASED_QUALITY;
         hNonAntialiasedFont = CreateFontIndirectW(&aLogfont);
         if (hNonAntialiasedFont == NULL)
@@ -334,7 +362,11 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     aDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
 
     // The 2,2 is for the extra space
-    if (!ExtTextOutW(aDC.getCompatibleHDC(), 2, 2, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
+    int nY = 2;
+    int nX = 2;
+    if (aChunk.mbVertical)
+        nX += aDX[0];
+    if (!ExtTextOutW(aDC.getCompatibleHDC(), nX, nY, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
     {
         SAL_WARN("vcl.gdi", "ExtTextOutW failed: " << WindowsErrorString(GetLastError()));
         SelectFont(aDC.getCompatibleHDC(), hOrigFont);
@@ -347,18 +379,25 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     UINT nPos = 0;
     for (int i = 0; i < nCount; i++)
     {
-        aChunk.maLocation[i].Left() = nPos;
-        aChunk.maLocation[i].Right() = nPos + aDX[i];
-        nPos = aChunk.maLocation[i].Right();
-        aChunk.maLocation[i].Top() = 0;
-        aChunk.maLocation[i].Bottom() = aSize.cy + 4;
+        if (aChunk.mbVertical)
+        {
+            aChunk.maLocation[i].Left() = 0;
+            aChunk.maLocation[i].Right() = nBitmapWidth;
+            aChunk.maLocation[i].Top() = nPos;
+            aChunk.maLocation[i].Bottom() = nPos + aDX[i];
+            nPos = aChunk.maLocation[i].Bottom();
+        }
+        else
+        {
+            aChunk.maLocation[i].Left() = nPos;
+            aChunk.maLocation[i].Right() = nPos + aDX[i];
+            nPos = aChunk.maLocation[i].Right();
+            aChunk.maLocation[i].Top() = 0;
+            aChunk.maLocation[i].Bottom() = aSize.cy + 4;
+        }
     }
 
     aChunk.mpTexture = std::unique_ptr<OpenGLTexture>(aDC.getTexture());
-
-    TEXTMETRICW aTextMetric;
-    GetTextMetricsW(aDC.getCompatibleHDC(), &aTextMetric);
-    aChunk.mnAscentPlusIntLeading = aTextMetric.tmAscent + aTextMetric.tmInternalLeading;
 
     maOpenGLGlyphCache.insert(n, aChunk);
 
@@ -1670,11 +1709,22 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
             const OpenGLGlyphCacheChunk& rChunk = mrWinFontEntry.GetCachedGlyphChunkFor(mpOutGlyphs[i]);
             const int n = mpOutGlyphs[i] - rChunk.mnFirstGlyph;
 
-            SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
-                               rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
-                               nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscentPlusIntLeading,
-                               rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
-            pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
+            if (rChunk.mbVertical)
+            {
+                SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
+                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
+                                   aPos.X(), nAdvance + aPos.Y(),
+                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
+                pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
+            }
+            else
+            {
+                SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
+                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
+                                   nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscentPlusIntLeading,
+                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
+                pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
+            }
             nAdvance += mpGlyphAdvances[i];
         }
     }
