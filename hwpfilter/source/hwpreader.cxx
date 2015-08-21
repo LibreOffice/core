@@ -26,6 +26,7 @@
 #include <math.h>
 
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 #include <comphelper/newarray.hxx>
 
 #include "fontmap.hxx"
@@ -123,6 +124,26 @@ HwpReader::~HwpReader()
     delete d;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(const OUString &rURL)
+{
+    SvFileStream aFileStream(rURL, StreamMode::READ);
+    std::unique_ptr<HStream> stream(new HStream);
+    byte aData[32768];
+    sal_Size nRead, nBlock = 32768;
+
+    while (true)
+    {
+        nRead = aFileStream.Read(aData, nBlock);
+        if (nRead == 0)
+            break;
+        stream->addData(aData, (int)nRead);
+    }
+
+    HWPFile hwpfile;
+    if (hwpfile.ReadHwpFile(stream.release()))
+          return false;
+    return true;
+}
 
 sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(RuntimeException, std::exception)
 {
