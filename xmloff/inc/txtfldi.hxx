@@ -1365,6 +1365,9 @@ public:
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
+    XMLMeasureFieldImportContext(SvXMLImport& rImport,
+                                 XMLTextImportHelper& rHlp,
+                                 sal_Int32 Element );
 
 protected:
     /// process attribute values

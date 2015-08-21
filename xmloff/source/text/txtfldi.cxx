@@ -4268,6 +4268,15 @@ XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
 {
 }
 
+XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_measure, Element ),
+    mnKind( 0 )
+{
+}
+
 void XMLMeasureFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
