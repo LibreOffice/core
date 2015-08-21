@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_fb6c6f0a",
+        "filename": "sw/inc/reffld.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-21T20:38:44Z",
+      "side": 1,
+      "message": "i believe this is not necessary now with the static_cast?",
+      "revId": "5ddbb8d1b8731a7378297de6cf99d2f68d1ab544",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
