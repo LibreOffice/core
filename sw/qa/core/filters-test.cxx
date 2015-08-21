@@ -151,6 +151,10 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/data/ww8/"),
             OUString(FILTER_WW8));
 
+    testDir(OUString("MS WinWord 6.0"),
+            getURLFromSrc("/sw/qa/core/data/ww6/"),
+            OUString(sWW6));
+
     testDir(OUString("MS WinWord 5"),
             getURLFromSrc("/sw/qa/core/data/ww5/"),
             OUString(sWW5));
