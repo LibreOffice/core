@@ -63,7 +63,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SfxItemState::DEFAULT)
     {
-        EnableItem( nMID, true );
+        EnableItem( nMID );
         if (_pItem)
         {
             CheckItem ( nMID, !_pItem->ISA(SfxVoidItem) &&

@@ -389,7 +389,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                 pSh->GotoFly(pFirstFlyFormat->GetName(), FLYCNTTYPE_ALL, false);
 
             pSh->EndAllAction();
-            pSh->DoUndo( true );
+            pSh->DoUndo();
         }
 
         if( rItem.aWriting.indexOf( '<' ) >= 0 )

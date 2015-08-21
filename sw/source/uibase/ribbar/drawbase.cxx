@@ -56,7 +56,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
 SwDrawBase::~SwDrawBase()
 {
     if (m_pView->GetWrtShellPtr()) // In the view-dtor could the wrtsh already been deleted...
-        m_pSh->GetDrawView()->SetEditMode(true);
+        m_pSh->GetDrawView()->SetEditMode();
 }
 
 bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)

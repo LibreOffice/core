@@ -136,8 +136,8 @@ void SwInputWindow::dispose()
     // wake rulers
     if(pView)
     {
-        pView->GetHRuler().SetActive( true );
-        pView->GetVRuler().SetActive( true );
+        pView->GetHRuler().SetActive();
+        pView->GetVRuler().SetActive();
     }
     delete pMgr;
     if(pWrtShell)
@@ -246,7 +246,7 @@ void SwInputWindow::ShowWin()
                 m_bDoesUndo = pWrtShell->DoesUndo();
                 if( !m_bDoesUndo )
                 {
-                    pWrtShell->DoUndo( true );
+                    pWrtShell->DoUndo();
                 }
 
                 if( !pWrtShell->SwCrsrShell::HasSelection() )

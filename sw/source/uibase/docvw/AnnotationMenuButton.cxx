@@ -84,9 +84,9 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         pButtonPopup->EnableItem(FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
-        pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR, true );
-        pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES, true );
-        pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES, true );
+        pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR);
+        pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES);
+        pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES);
     }
 
     if (mrSidebarWin.IsProtected())
@@ -111,7 +111,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            pButtonPopup->EnableItem(FN_REPLY, true);
+            pButtonPopup->EnableItem(FN_REPLY);
         }
     }
 

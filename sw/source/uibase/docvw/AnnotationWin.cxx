@@ -106,7 +106,7 @@ void SwAnnotationWin::SetPostItText()
     {
         Engine()->Clear();
         GetOutlinerView()->SetAttribs(DefaultItem());
-        GetOutlinerView()->InsertText(sNewText,false);
+        GetOutlinerView()->InsertText(sNewText);
     }
 
     Engine()->ClearModifyFlag();
@@ -243,15 +243,15 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
             + " (" + rLocalData.getDate( pWin->GetDate())
             + ", " + rLocalData.getTime( pWin->GetTime(), false)
             + "): \"";
-    GetOutlinerView()->InsertText(aText,false);
+    GetOutlinerView()->InsertText(aText);
 
     // insert old, selected text or "..."
     // TODO: iterate over all paragraphs, not only first one to find out if it is empty
     if (!pText->GetTextObject().GetText(0).isEmpty())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
-        GetOutlinerView()->InsertText(OUString("..."),false);
-    GetOutlinerView()->InsertText(OUString("\"\n"),false);
+        GetOutlinerView()->InsertText(OUString("..."));
+    GetOutlinerView()->InsertText(OUString("\"\n"));
 
     GetOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
     SfxItemSet aAnswerSet( DocView().GetDocShell()->GetPool() );

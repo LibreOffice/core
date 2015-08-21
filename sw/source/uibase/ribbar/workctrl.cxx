@@ -335,7 +335,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
 
     sal_uInt16 nItemId = SwView::GetMoveType();
     m_pInfoField->SetText(m_pToolBox->GetItemText(nItemId));
-    m_pToolBox->CheckItem( nItemId, true );
+    m_pToolBox->CheckItem( nItemId );
 
     m_pToolBox->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
     m_pToolBox->StartSelection();

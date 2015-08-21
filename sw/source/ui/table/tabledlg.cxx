@@ -483,7 +483,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 
         if(pTableData->GetWidthPercent())
         {
-            m_pRelWidthCB->Check(true);
+            m_pRelWidthCB->Check();
             RelWidthClickHdl(m_pRelWidthCB);
             m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FUNIT_CUSTOM);
 
@@ -1564,9 +1564,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                     m_pPageCollCB->Enable();
                     m_pPgBrkCB->Check();
 
-                    m_pPgBrkCB->Check( true );
+                    m_pPgBrkCB->Check();
                     m_pColBrkRB->Check( false );
-                    m_pPgBrkBeforeRB->Check( true );
+                    m_pPgBrkBeforeRB->Check();
                     m_pPgBrkAfterRB->Check( false );
                 }
                 else
@@ -1592,28 +1592,28 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 switch ( eBreak )
                 {
                     case SVX_BREAK_PAGE_BEFORE:
-                        m_pPgBrkRB->Check( true );
+                        m_pPgBrkRB->Check();
                         m_pColBrkRB->Check( false );
-                        m_pPgBrkBeforeRB->Check( true );
+                        m_pPgBrkBeforeRB->Check();
                         m_pPgBrkAfterRB->Check( false );
                         break;
                     case SVX_BREAK_PAGE_AFTER:
-                        m_pPgBrkRB->Check( true );
+                        m_pPgBrkRB->Check();
                         m_pColBrkRB->Check( false );
                         m_pPgBrkBeforeRB->Check( false );
-                        m_pPgBrkAfterRB->Check( true );
+                        m_pPgBrkAfterRB->Check();
                         break;
                     case SVX_BREAK_COLUMN_BEFORE:
                         m_pPgBrkRB->Check( false );
-                        m_pColBrkRB->Check( true );
-                        m_pPgBrkBeforeRB->Check( true );
+                        m_pColBrkRB->Check();
+                        m_pPgBrkBeforeRB->Check();
                         m_pPgBrkAfterRB->Check( false );
                         break;
                     case SVX_BREAK_COLUMN_AFTER:
                         m_pPgBrkRB->Check( false );
-                        m_pColBrkRB->Check( true );
+                        m_pColBrkRB->Check();
                         m_pPgBrkBeforeRB->Check( false );
-                        m_pPgBrkAfterRB->Check( true );
+                        m_pPgBrkAfterRB->Check();
                         break;
                     default:; //prevent warning
                 }

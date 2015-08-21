@@ -121,7 +121,7 @@ CancelableDialog::~CancelableDialog()
 
 void CancelableDialog::dispose()
 {
-    EndDialog( 0 );
+    EndDialog();
     m_pCancelButton.clear();
 
     Dialog::dispose();

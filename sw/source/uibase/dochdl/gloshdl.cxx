@@ -155,7 +155,7 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
     OUString sRet = rStatGlossaries.GetGroupName(nId);
     if(pTitle)
     {
-        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet, false);
+        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet);
         if (pGroup && !pGroup->GetError())
         {
             *pTitle = pGroup->GetName();
@@ -190,7 +190,7 @@ bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
         FindGroupName(sOldGroup);
     if(rOld == rNew)
     {
-        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sOldGroup, false);
+        SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sOldGroup);
         if(pGroup)
         {
             pGroup->SetName(rNewTitle);
@@ -214,8 +214,8 @@ bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
 bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSourceShortName,
                                 const OUString& rDestGroupName, const OUString& rLongName, bool bMove )
 {
-    SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName, false);
-    SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, false);
+    SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName);
+    SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName);
     if (pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
     {
         delete pDestGroup;
@@ -278,7 +278,7 @@ OUString SwGlossaryHdl::GetGlossaryShortName(const OUString &rName)
 {
     OUString sReturn;
     SwTextBlocks *pTmp =
-        pCurGrp ? pCurGrp: rStatGlossaries.GetGroupDoc( aCurGrp, false );
+        pCurGrp ? pCurGrp: rStatGlossaries.GetGroupDoc( aCurGrp );
     if(pTmp)
     {
         sal_uInt16 nIdx = pTmp->GetLongIndex( rName );

@@ -256,7 +256,7 @@ void SidebarTextControlAccessibleContext::ProcessWindowEvent( const VclWindowEve
             case VCLEVENT_WINDOW_GETFOCUS:
             case VCLEVENT_CONTROL_GETFOCUS:
             {
-                mpAccessibleTextHelper->SetFocus( true );
+                mpAccessibleTextHelper->SetFocus();
             }
             break;
             case VCLEVENT_WINDOW_LOSEFOCUS:

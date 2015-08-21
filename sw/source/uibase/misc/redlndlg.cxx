@@ -191,7 +191,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     {
         pActLB->InsertEntry(sFormatCollSet);
         pActLB->InsertEntry(sAutoFormat);
-        pTPView->ShowUndo(true);
+        pTPView->ShowUndo();
         pTPView->DisableUndo();     // no UNDO events yet
     }
 
@@ -1110,7 +1110,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( pParentDlg, aSet, false ));
+                        boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( pParentDlg, aSet ));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         pDlg->HideAuthor();

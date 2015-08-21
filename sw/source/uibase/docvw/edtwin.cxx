@@ -1293,7 +1293,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
                         // switch snapping off
                         if(!bWasNoSnap)
-                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap(true);
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
                         if(bWasSnapEnabled)
                             pSdrView->SetSnapEnabled(false);
 
@@ -1614,7 +1614,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     else
                         rSh.SttSelect();
                     rSh.MoveSection( fnSectionCurr, fnSectionEnd );
-                    rSh.Pop( true );
+                    rSh.Pop();
                     rSh.EndSelect();
                     sFormulaEntry = "=";
                 }
@@ -1984,7 +1984,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                     }
                                 }
                                 if ( bCallNumOrNoNum
-                                     && rSh.NumOrNoNum( !bOnlyBackspaceKey, true ) )
+                                     && rSh.NumOrNoNum( !bOnlyBackspaceKey ) )
                                 {
                                     eKeyState = KS_NumOrNoNum;
                                 }
@@ -2208,10 +2208,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             rSh.GetCurAttr(aSet);
                             if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
                             {
-                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
+                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT);
                                 bNormalChar = false;
                                 eKeyState = KS_End;
-                                rSh.ClickToINetAttr(static_cast<const SwFormatINetFormat&>(rItem), URLLOAD_NOFILTER);
+                                rSh.ClickToINetAttr(static_cast<const SwFormatINetFormat&>(rItem));
                             }
                         }
                     }
@@ -2464,7 +2464,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NumDown:
-                rSh.NumUpDown( true );
+                rSh.NumUpDown();
                 m_nKS_NUMDOWN_Count = 2;
                 break;
             case KS_NumUp:
@@ -2496,7 +2496,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_OutlineDown:
-                rSh.OutlineUpDown( 1 );
+                rSh.OutlineUpDown();
                 break;
             case KS_OutlineUp:
                 rSh.OutlineUpDown( -1 );
@@ -3016,7 +3016,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                               pHdl->GetKind() == HDL_ANCHOR_TR ) )
                     {
                         // #i121463# Set selected during drag
-                        pHdl->SetSelected(true);
+                        pHdl->SetSelected();
                         m_pAnchorMarker = new SwAnchorMarker( pHdl );
                         UpdatePointer( aDocPos, rMEvt.GetModifier() );
                         return;
@@ -4074,7 +4074,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         {
             if ( m_pApplyTempl )
             {
-                UpdatePointer(aDocPt, 0); // maybe a frame has to be marked here
+                UpdatePointer(aDocPt); // maybe a frame has to be marked here
                 break;
             }
             // change ui if mouse is over SwPostItField
@@ -4257,14 +4257,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if (aTextBoxShapes.find(pFormat) == aTextBoxShapes.end())
                 {
                     pSdrView->UnmarkAllObj();
-                    pSdrView->MarkObj(pObj,pPV,false,false);
+                    pSdrView->MarkObj(pObj,pPV,false);
                 }
                 else
                 {
                     // If the fly frame is a textbox of a shape, then select the shape instead.
                     SdrObject* pShape = aTextBoxShapes[pFormat]->FindSdrObject();
                     pSdrView->UnmarkAllObj();
-                    pSdrView->MarkObj(pShape, pPV, false, false);
+                    pSdrView->MarkObj(pShape, pPV, false);
                 }
             }
         }
@@ -5435,7 +5435,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
                 rSh.GetCrsr()->GetMark()->nNode = nPosNodeIdx;
                 rSh.GetCrsr()->GetMark()->nContent =
-                    rSh.GetCrsr()->GetContentNode( true )->Len();
+                    rSh.GetCrsr()->GetContentNode()->Len();
                 }
                 else if( nPosNodeIdx == nMarkNodeIdx )
                 {
@@ -5590,7 +5590,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         rSh.Edit();
     }
 
-    UpdatePointer( aDocPos, 0 );
+    UpdatePointer( aDocPos );
 
     if( !rSh.IsSelFrmMode() &&
         !GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
@@ -5628,7 +5628,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
                     rSh.EnterSelFrmMode( &aDocPos );
                     g_bFrmDrag = true;
-                    UpdatePointer( aDocPos, 0 );
+                    UpdatePointer( aDocPos );
                     return bRet;
                 }
             }
@@ -5683,7 +5683,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 m_rView.LeaveDrawCreate();
                 m_rView.AttrChangedNotify( &rSh );
             }
-            UpdatePointer( aDocPos, 0 );
+            UpdatePointer( aDocPos );
             bRet = true;
         }
     }

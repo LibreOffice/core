@@ -743,7 +743,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         SwDoc* pDoc = static_cast<SwDoc*>(pObject);
         xWrt->bWriteClipboardDoc = true;
         xWrt->bWriteOnlyFirstTable = 0 != (TRNSFR_TABELLE & eBufferType);
-        xWrt->SetShowProgress( false );
+        xWrt->SetShowProgress();
 
 #if defined(DEBUGPASTE)
         SvFileStream aPasteDebug(OUString(
@@ -3199,7 +3199,7 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
             {
                 if ( !(pWrtShell->IsSelFrmMode() || pWrtShell->IsObjSelected()) )
                     //SmartCut, take one of the blanks along
-                    pWrtShell->IntelligentCut( pWrtShell->GetSelectionType(), true );
+                    pWrtShell->IntelligentCut( pWrtShell->GetSelectionType() );
                 pWrtShell->DelRight();
             }
             pWrtShell->EndUndo( UNDO_UI_DRAG_AND_MOVE );

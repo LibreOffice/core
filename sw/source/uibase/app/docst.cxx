@@ -817,7 +817,7 @@ sal_uInt16 SwDocShell::Edit(
         {
             if( bNew )
             {
-                GetWrtShell()->Undo(1);
+                GetWrtShell()->Undo();
                 m_pDoc->GetIDocumentUndoRedo().ClearRedo();
             }
 

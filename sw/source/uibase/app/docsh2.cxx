@@ -304,7 +304,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if ( !bIsDocModified )
                     m_pDoc->getIDocumentState().ResetModified();
                 if ( bResetModified )
-                    EnableSetModified( true );
+                    EnableSetModified();
             }
             break;
         }
@@ -1129,7 +1129,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
                     pCurrView = dynamic_cast<SwView*>( pViewShell );
                 }
-                m_pDoc->GetNumberFormatter(true)->SetYear2000(nYear2K);
+                m_pDoc->GetNumberFormatter()->SetYear2000(nYear2K);
             }
         break;
         case FN_OPEN_FILE:
@@ -1234,7 +1234,7 @@ void SwDocShell::SetModified( bool bSet )
             else
                 m_pDoc->getIDocumentState().ResetModified();
 
-            EnableSetModified( true );
+            EnableSetModified();
          }
 
         UpdateChildWindows();
@@ -1391,12 +1391,12 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, STREAM_STD_READ );
     const SfxFilter* pFlt = 0;
-    aMatcher.DetectFilter( aMed, &pFlt, false, false );
+    aMatcher.DetectFilter( aMed, &pFlt, false );
     if(!pFlt)
     {
         OUString sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
         SfxFilterMatcher aWebMatcher( sWebFactory );
-        aWebMatcher.DetectFilter( aMed, &pFlt, false, false );
+        aWebMatcher.DetectFilter( aMed, &pFlt, false );
     }
     // --> OD #i117339# - trigger import only for own formats
     bool bImport( false );
@@ -1566,7 +1566,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
-            aMatcher.DetectFilter( *pMed, &pSfxFlt, false, false );
+            aMatcher.DetectFilter( *pMed, &pSfxFlt, false );
 
         if( pSfxFlt )
         {

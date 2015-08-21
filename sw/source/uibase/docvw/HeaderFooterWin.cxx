@@ -452,17 +452,17 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 const SfxPoolItem* pItem;
                 if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
                     pHFFormat->SetFormatAttr( *pItem );
-                    rView.GetDocShell()->SetModified(true);
+                    rView.GetDocShell()->SetModified();
                 }
 
                 if ( SfxItemState::SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
                     pHFFormat->SetFormatAttr( *pItem );
-                    rView.GetDocShell()->SetModified(true);
+                    rView.GetDocShell()->SetModified();
                 }
 
                 if ( SfxItemState::SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
                     pHFFormat->SetFormatAttr( *pItem );
-                    rView.GetDocShell()->SetModified(true);
+                    rView.GetDocShell()->SetModified();
                 }
             }
         }

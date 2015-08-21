@@ -207,7 +207,7 @@ void SwSpellPopup::fillLangPopupMenu(
             if (aEntryText == aCurLang)
             {
                 //make a check mark for the current language
-                pPopupMenu->CheckItem( nItemId, true );
+                pPopupMenu->CheckItem( nItemId );
             }
             rLangTable[ nItemId ] = aEntryText;
             ++nItemId;
@@ -216,7 +216,7 @@ void SwSpellPopup::fillLangPopupMenu(
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MenuItemBits::RADIOCHECK );
     if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == aCurLang )
-        pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, true );
+        pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET );
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), MenuItemBits::NONE );
     pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), MenuItemBits::NONE );
@@ -432,11 +432,11 @@ SwSpellPopup::SwSpellPopup(
 
     pMenu = GetPopupMenu(MN_SET_LANGUAGE_SELECTION);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );
-    EnableItem( MN_SET_LANGUAGE_SELECTION, true );
+    EnableItem( MN_SET_LANGUAGE_SELECTION );
 
     pMenu = GetPopupMenu(MN_SET_LANGUAGE_PARAGRAPH);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, m_aLangTable_Paragraph );
-    EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
+    EnableItem( MN_SET_LANGUAGE_PARAGRAPH );
 
     if (bUseImagesInMenus)
     {
@@ -581,11 +581,11 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
 
     PopupMenu *pMenu = GetPopupMenu(MN_SET_LANGUAGE_SELECTION);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );
-    EnableItem( MN_SET_LANGUAGE_SELECTION, true );
+    EnableItem( MN_SET_LANGUAGE_SELECTION );
 
     pMenu = GetPopupMenu(MN_SET_LANGUAGE_PARAGRAPH);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, m_aLangTable_Paragraph );
-    EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
+    EnableItem( MN_SET_LANGUAGE_PARAGRAPH );
 
     if (bUseImagesInMenus)
     {
@@ -653,7 +653,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         if (0 <= nAltIdx && nAltIdx < m_aSuggestions.getLength() && (m_bGrammarResults || m_xSpellAlt.is()))
         {
             bool bOldIns = m_pSh->IsInsMode();
-            m_pSh->SetInsMode( true );
+            m_pSh->SetInsMode();
 
             OUString aTmp( m_aSuggestions[ nAltIdx ] );
             OUString aOrig( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() );

@@ -1182,7 +1182,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 aBoxInfo.SetMinDist( true );// set minimum size in tables and paragraphs
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );// always set Default-Gap
                     // Single lines can only have DontCare-Status in tables
-                aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, true );
+                aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
 
                 if( nFamily == SFX_STYLE_FAMILY_CHAR )
                 {
@@ -1342,7 +1342,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwFormat *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle, 0, true );
+                    SwFormat *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle, 0 );
                     if (pFindFormat)
                     {
                         aCond.RegisterToFormat( *pFindFormat );
@@ -1374,7 +1374,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwTextFormatColl *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle, 0, true );
+                    SwTextFormatColl *const pFindFormat = lcl_FindParaFormat( rDoc, sStyle, 0 );
                     if (pFindFormat)
                     {
                         pCColl->InsertCondition( SwCollCondition( pFindFormat,
@@ -1723,7 +1723,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         {
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
-            pCharFormat = lcl_FindCharFormat(rDoc, aName, this, true );
+            pCharFormat = lcl_FindCharFormat(rDoc, aName, this );
         }
 
         pFormat = pCharFormat;
@@ -1750,7 +1750,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             {
                 bDeleteInfo = true;
                 ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
-                pColl = lcl_FindParaFormat(rDoc, aName, this, true );
+                pColl = lcl_FindParaFormat(rDoc, aName, this );
             }
 
             pFormat = pColl;
@@ -1773,7 +1773,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         {
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
-            pFrameFormat = lcl_FindFrameFormat(rDoc, aName, this, true );
+            pFrameFormat = lcl_FindFrameFormat(rDoc, aName, this );
         }
         pFormat = pFrameFormat;
         if( !bCreate && !pFormat )
@@ -1792,7 +1792,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         {
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
-            pDesc = lcl_FindPageDesc( rDoc, aName, this, true );
+            pDesc = lcl_FindPageDesc( rDoc, aName, this );
         }
 
         if( pDesc )
@@ -1820,7 +1820,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         {
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
-            pNumRule = lcl_FindNumRule( rDoc, aName, this, true );
+            pNumRule = lcl_FindNumRule( rDoc, aName, this );
         }
 
         if( pNumRule )
@@ -1898,7 +1898,7 @@ void SwDocStyleSheet::Create()
             if( !pCharFormat )
                 pCharFormat = rDoc.MakeCharFormat(aName,
                                             rDoc.GetDfltCharFormat());
-            pCharFormat->SetAuto( false );
+            pCharFormat->SetAuto();
             break;
 
         case SFX_STYLE_FAMILY_PARA :
@@ -2833,7 +2833,7 @@ SfxStyleSheetBase* SwStyleSheetIterator::Next()
         mxIterSheet->SetMask( nMask );
         if(mxIterSheet->pSet)
         {
-            mxIterSheet->pSet->ClearItem(0);
+            mxIterSheet->pSet->ClearItem();
             mxIterSheet->pSet= 0;
         }
         return mxIterSheet.get();

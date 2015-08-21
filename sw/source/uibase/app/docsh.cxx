@@ -795,7 +795,7 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
 
         DELETEZ(m_pOLEChildList);
         if( bResetModified )
-            EnableSetModified( true );
+            EnableSetModified();
     }
     return bRet;
 }
@@ -840,7 +840,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
         delete pOrig;
     }
     if ( bResetModified )
-        EnableSetModified( true );
+        EnableSetModified();
 }
 
 void SwDocShell::SetVisArea( const Rectangle &rRect )
@@ -861,7 +861,7 @@ void SwDocShell::SetVisArea( const Rectangle &rRect )
         aRect.Move( nMoveX, nMoveY );
 
         // Calls SfxInPlaceObject::SetVisArea()!
-        m_pView->SetVisArea( aRect, true );
+        m_pView->SetVisArea( aRect );
     }
     else
         SfxObjectShell::SetVisArea( aRect );
@@ -875,7 +875,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwNodeIndex aIdx( m_pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwContentNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
 
-        const SwRect aPageRect = pNd->FindPageFrmRect( false, 0, false );
+        const SwRect aPageRect = pNd->FindPageFrmRect( false, 0 );
         return aPageRect.SVRect();
     }
     return SfxObjectShell::GetVisArea( nAspect );

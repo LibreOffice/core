@@ -1309,7 +1309,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                                 pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                                SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
+                                SfxPrinter* pDocPrt = pWorkView->GetPrinter();
                                 JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
                                 Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
 #if ENABLE_CUPS && !defined(MACOSX)
@@ -2637,8 +2637,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
         uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
 
         OUString sNewName = INetURLObject::decode( aURL.getName(),
-                                                 INetURLObject::DECODE_UNAMBIGUOUS,
-                                                 RTL_TEXTENCODING_UTF8 );
+                                                 INetURLObject::DECODE_UNAMBIGUOUS );
         sal_Int32 nExtLen = aURL.GetExtension().getLength();
         sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
         if (pPrefix)
@@ -2692,7 +2691,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
                 // Cannot embed, as embedded data source would need the URL of the parent document.
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
-                aTempFile.EnableKillingFile(true);
+                aTempFile.EnableKillingFile();
                 OUString sTmpName = aTempFile.GetURL();
                 xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
             }

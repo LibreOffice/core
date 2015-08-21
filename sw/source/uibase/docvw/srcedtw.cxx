@@ -542,7 +542,7 @@ void SwSrcEditWindow::CreateTextEngine()
     pTextEngine->EnableUndo( true );
     pTextEngine->SetUpdateMode( true );
 
-    pTextView->ShowCursor( true, true );
+    pTextView->ShowCursor( true );
     InitScrollBars();
     StartListening( *pTextEngine );
 
@@ -580,14 +580,14 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     {
         long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( false, true );
+        pTextView->ShowCursor( false );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     }
     else
     {
         long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( false, true );
+        pTextView->ShowCursor( false );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
@@ -656,7 +656,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         bool bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara, true );
+        pTextEngine->RemoveAttribs( nPara );
         OUString aSource( pTextEngine->GetText( nPara ) );
         pTextEngine->SetUpdateMode( false );
         ImpDoHighlight( aSource, nPara );
@@ -739,7 +739,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         sal_uInt16 nLine = nLineOff+r.nLine;
-        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, true );
+        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
 }
 

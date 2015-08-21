@@ -147,7 +147,7 @@ OUString SwGlossaries::GetGroupTitle( const OUString& rGroupName )
     OUString sGroup(rGroupName);
     if (sGroup.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroup);
-    SwTextBlocks* pGroup = GetGroupDoc(sGroup, false);
+    SwTextBlocks* pGroup = GetGroupDoc(sGroup);
     if(pGroup)
     {
         sRet = pGroup->GetName();

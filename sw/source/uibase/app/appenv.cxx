@@ -454,7 +454,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         // Move Flys to the "old" pages
         if (!aFlyArr.empty())
-            pSh->SetPageObjsNewPage(aFlyArr, 1);
+            pSh->SetPageObjsNewPage(aFlyArr);
 
         // Finished
         pSh->SttEndDoc(true);
@@ -462,7 +462,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->EndAllAction();
 
         if (nMode == ENV_NEWDOC)
-            pSh->DoUndo(true);
+            pSh->DoUndo();
         else
             pSh->EndUndo(UNDO_UI_INSERT_ENVELOPE);
 

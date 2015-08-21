@@ -133,7 +133,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 {
     OSL_ENSURE(PTR_CAST(SwView, pView),"return no SwView");
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, &aTypeId, true));
+    SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, &aTypeId));
     return pNView;
 }
 

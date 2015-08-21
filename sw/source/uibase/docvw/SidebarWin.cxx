@@ -1185,7 +1185,7 @@ IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll)
 
 IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl)
 {
-    mrView.GetDocShell()->SetModified(true);
+    mrView.GetDocShell()->SetModified();
     return 0;
 }
 
@@ -1349,7 +1349,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)
-        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, false);
+        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0);
     GrabFocusToDocument();
 }
 
