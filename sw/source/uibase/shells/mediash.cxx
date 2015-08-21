@@ -142,7 +142,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
         if( pSdrView->GetModel()->IsChanged() )
             GetShell().SetModified();
         else if( bChanged )
-            pSdrView->GetModel()->SetChanged(true);
+            pSdrView->GetModel()->SetChanged();
     }
 }
 

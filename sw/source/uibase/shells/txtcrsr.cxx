@@ -144,13 +144,13 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
             bRet = rSh.SttDoc( true );
             break;
         case FN_START_OF_DOCUMENT:
-            bRet = rSh.SttDoc( false );
+            bRet = rSh.SttDoc();
             break;
         case FN_END_OF_DOCUMENT_SEL:
             bRet = rSh.EndDoc( true );
             break;
         case FN_END_OF_DOCUMENT:
-            bRet = rSh.EndDoc( false );
+            bRet = rSh.EndDoc();
             break;
         case FN_SELECT_WORD:
             bRet = rSh.SelNearestWrd();
@@ -183,37 +183,37 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
             rSh.SttNxtPg( true );
             break;
         case FN_START_OF_NEXT_PAGE:
-            rSh.SttNxtPg( false );
+            rSh.SttNxtPg();
             break;
         case FN_END_OF_NEXT_PAGE_SEL:
             rSh.EndNxtPg( true );
             break;
         case FN_END_OF_NEXT_PAGE:
-            rSh.EndNxtPg( false );
+            rSh.EndNxtPg();
             break;
         case FN_START_OF_PREV_PAGE_SEL:
             rSh.SttPrvPg( true );
             break;
         case FN_START_OF_PREV_PAGE:
-            rSh.SttPrvPg( false );
+            rSh.SttPrvPg();
             break;
         case FN_END_OF_PREV_PAGE_SEL:
             rSh.EndPrvPg( true );
             break;
         case FN_END_OF_PREV_PAGE:
-            rSh.EndPrvPg( false );
+            rSh.EndPrvPg();
             break;
         case FN_START_OF_PAGE_SEL:
             rSh.SttPg( true );
             break;
         case FN_START_OF_PAGE:
-            rSh.SttPg( false );
+            rSh.SttPg();
             break;
         case FN_END_OF_PAGE_SEL:
             rSh.EndPg( true );
             break;
         case FN_END_OF_PAGE:
-            rSh.EndPg( false );
+            rSh.EndPg();
             break;
         default:
             OSL_FAIL("wrong dispatcher");
@@ -228,22 +228,22 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
     switch ( rReq.GetSlot() )
     {
         case FN_START_OF_COLUMN:
-            rSh.StartOfColumn( false );
+            rSh.StartOfColumn();
             break;
         case FN_END_OF_COLUMN:
-            rSh.EndOfColumn( false );
+            rSh.EndOfColumn();
             break;
         case FN_START_OF_NEXT_COLUMN:
-            rSh.StartOfNextColumn( false ) ;
+            rSh.StartOfNextColumn() ;
             break;
         case FN_END_OF_NEXT_COLUMN:
-            rSh.EndOfNextColumn( false );
+            rSh.EndOfNextColumn();
             break;
         case FN_START_OF_PREV_COLUMN:
-            rSh.StartOfPrevColumn( false );
+            rSh.StartOfPrevColumn();
             break;
         case FN_END_OF_PREV_COLUMN:
-            rSh.EndOfPrevColumn( false );
+            rSh.EndOfPrevColumn();
             break;
         default:
             OSL_FAIL("wrong dispatcher");
@@ -263,43 +263,43 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
             rSh.NxtWrd( true );
             break;
         case FN_NEXT_WORD:
-            rSh.NxtWrd( false );
+            rSh.NxtWrd();
             break;
         case FN_START_OF_PARA_SEL:
             rSh.SttPara( true );
             break;
         case FN_START_OF_PARA:
-            rSh.SttPara( false );
+            rSh.SttPara();
             break;
         case FN_END_OF_PARA_SEL:
             rSh.EndPara( true );
             break;
         case FN_END_OF_PARA:
-            rSh.EndPara( false );
+            rSh.EndPara();
             break;
         case FN_PREV_WORD_SEL:
             rSh.PrvWrd( true );
             break;
         case FN_PREV_WORD:
-            rSh.PrvWrd( false );
+            rSh.PrvWrd();
             break;
         case FN_NEXT_SENT_SEL:
             rSh.FwdSentence( true );
             break;
         case FN_NEXT_SENT:
-            rSh.FwdSentence( false );
+            rSh.FwdSentence();
             break;
         case FN_PREV_SENT_SEL:
             rSh.BwdSentence( true );
             break;
         case FN_PREV_SENT:
-            rSh.BwdSentence( false );
+            rSh.BwdSentence();
             break;
         case FN_NEXT_PARA:
-            rSh.FwdPara( false );
+            rSh.FwdPara();
             break;
         case FN_PREV_PARA:
-            rSh.BwdPara( false );
+            rSh.BwdPara();
             break;
         default:
             OSL_FAIL("wrong dispatcher");
@@ -409,16 +409,16 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             bRet = rSh.MoveRegion(fnRegionPrev, fnRegionStart);
             break;
         case FN_NEXT_TOXMARK:
-            bRet = rSh.GotoNxtPrvTOXMark( true );
+            bRet = rSh.GotoNxtPrvTOXMark();
             break;
         case FN_PREV_TOXMARK:
             bRet = rSh.GotoNxtPrvTOXMark( false );
             break;
         case FN_NEXT_TBLFML:
-            bRet = rSh.GotoNxtPrvTableFormula( true, false );
+            bRet = rSh.GotoNxtPrvTableFormula( true );
             break;
         case FN_PREV_TBLFML:
-            bRet = rSh.GotoNxtPrvTableFormula( false, false );
+            bRet = rSh.GotoNxtPrvTableFormula( false );
             break;
         case FN_NEXT_TBLFML_ERR:
             bRet = rSh.GotoNxtPrvTableFormula( true, true );

@@ -144,20 +144,20 @@ namespace SwLangHelper
                 sal_Int32 nPos = 0;
                 bool bForSelection = true;
                 bool bForParagraph = false;
-                if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix, 0 )))
+                if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix )))
                 {
                     // ... for the current selection
                     aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                     bForSelection = true;
                 }
-                else if (-1 != (nPos = aNewLangText.indexOf( aParagraphLangPrefix , 0 )))
+                else if (-1 != (nPos = aNewLangText.indexOf( aParagraphLangPrefix )))
                 {
                     // ... for the current paragraph language
                     aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                     bForSelection = true;
                     bForParagraph = true;
                 }
-                else if (-1 != (nPos = aNewLangText.indexOf( aDocumentLangPrefix , 0 )))
+                else if (-1 != (nPos = aNewLangText.indexOf( aDocumentLangPrefix )))
                 {
                     // ... as default document language
                     aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");

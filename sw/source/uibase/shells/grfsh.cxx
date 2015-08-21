@@ -305,8 +305,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             if( !sGrfNm.isEmpty() )
             {
                 aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ),
+                                           INetURLObject::DECODE_UNAMBIGUOUS ),
                                         sFilterNm, GPOS_LT,
                                         SID_ATTR_GRAF_GRAPHIC ));
             }

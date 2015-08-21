@@ -69,7 +69,7 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(true);
+        pSdrView->GetModel()->SetChanged();
 }
 
 // determine if the buttons should be enabled/disabled

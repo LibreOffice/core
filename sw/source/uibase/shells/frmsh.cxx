@@ -702,7 +702,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case RES_PRINT:
                 case RES_SURROUND:
                 {
-                    rSet.Put(aSet.Get(GetPool().GetWhich(nWhich), true ));
+                    rSet.Put(aSet.Get(GetPool().GetWhich(nWhich)));
                 }
                 break;
                 case SID_OBJECT_ALIGN_LEFT   :

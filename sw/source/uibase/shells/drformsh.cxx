@@ -249,7 +249,7 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
     SetHelpId(SW_DRAWFORMSHELL);
-    GetShell().NoEdit(true);
+    GetShell().NoEdit();
     SetName(OUString("DrawForm"));
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Form));
 }

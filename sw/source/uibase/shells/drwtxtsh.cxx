@@ -131,7 +131,7 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
 
     Init();
 
-    rSh.NoEdit(true);
+    rSh.NoEdit();
     SetName(OUString("ObjectText"));
     SetHelpId(SW_DRWTXTSHELL);
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawText));

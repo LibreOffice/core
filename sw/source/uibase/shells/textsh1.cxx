@@ -368,20 +368,20 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     sal_Int32 nPos = 0;
                     bool bForSelection = true;
                     bool bForParagraph = false;
-                    if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix, 0 )))
+                    if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix )))
                     {
                         // ... for the current selection
                         aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                         bForSelection = true;
                     }
-                    else if (-1 != (nPos = aNewLangText.indexOf(aParagraphLangPrefix, 0)))
+                    else if (-1 != (nPos = aNewLangText.indexOf(aParagraphLangPrefix)))
                     {
                         // ... for the current paragraph language
                         aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                         bForSelection = true;
                         bForParagraph = true;
                     }
-                    else if (-1 != (nPos = aNewLangText.indexOf(aDocumentLangPrefix, 0)))
+                    else if (-1 != (nPos = aNewLangText.indexOf(aDocumentLangPrefix)))
                     {
                         // ... as default document language
                         aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
@@ -484,7 +484,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
-                GetView().GetWindow(), rWrtSh, false));
+                GetView().GetWindow(), rWrtSh));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
@@ -1130,7 +1130,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SELECT_PARA:
         {
             if ( !rWrtSh.IsSttOfPara() )
-                rWrtSh.SttPara( false );
+                rWrtSh.SttPara();
             else
                 rWrtSh.EnterStdMode();
             rWrtSh.EndPara( true );
@@ -1303,7 +1303,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_BULLET_MOVEDOWN:
             if (!rWrtSh.IsAddMode())
-                rWrtSh.MoveParagraph(1);
+                rWrtSh.MoveParagraph();
             rReq.Done();
             break;
 
@@ -1366,7 +1366,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.GetCurAttr(aSet);
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true ))
         {
-            const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT, true) );
+            const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT) );
             if( nSlot == FN_COPY_HYPERLINK_LOCATION )
             {
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
@@ -1375,7 +1375,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         xClipboard );
             }
             else
-                rWrtSh.ClickToINetAttr(rINetFormat, URLLOAD_NOFILTER);
+                rWrtSh.ClickToINetAttr(rINetFormat);
         }
     }
     break;
@@ -1585,7 +1585,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 sal_uInt16 nHtmlMode = ::GetHtmlMode( GetView().GetDocShell() );
                 nHtmlMode &= HTMLMODE_ON | HTMLMODE_SOME_STYLES;
                 if ( ( nHtmlMode == HTMLMODE_ON )
-                     || !rSh.IsMoveLeftMargin( SID_INC_INDENT == nWhich, true ) )
+                     || !rSh.IsMoveLeftMargin( SID_INC_INDENT == nWhich ) )
                 {
                     rSet.DisableItem( nWhich );
                 }

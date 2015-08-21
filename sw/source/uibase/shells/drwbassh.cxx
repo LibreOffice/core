@@ -77,7 +77,7 @@ TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 SwDrawBaseShell::SwDrawBaseShell(SwView &_rView)
     : SwBaseShell(_rView)
 {
-    GetShell().NoEdit(true);
+    GetShell().NoEdit();
 
     SwEditWin& rWin = GetView().GetEditWin();
 
@@ -582,7 +582,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         if (pSdrView->GetModel()->IsChanged())
             pSh->SetModified();
         else if (bChanged)
-            pSdrView->GetModel()->SetChanged(true);
+            pSdrView->GetModel()->SetChanged();
     }
 }
 

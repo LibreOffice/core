@@ -156,7 +156,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_SOFT_HYPHEN:
-        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true, 0 ) &&
+        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true ) &&
             CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true, -1 ))
             rSh.Insert( OUString( CHAR_SOFTHYPHEN ) );
         break;
@@ -473,7 +473,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             // the suggestion has to be removed before
             GetView().GetEditWin().StopQuickHelp();
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
-            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, true, 0 );
+            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, true );
         }
         break;
 
@@ -1101,17 +1101,17 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
             if( SvtScriptType::LATIN & nScript )
             {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT, true ) );
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_FONT);
             }
             if( SvtScriptType::ASIAN & nScript )
             {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT, true ) );
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CJK_FONT );
             }
             if( SvtScriptType::COMPLEX & nScript )
             {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT, true ) );
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CTL_FONT );
             }
 

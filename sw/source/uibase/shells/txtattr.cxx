@@ -728,7 +728,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), true);
                 rSet.Put(rItem);
 #else
-                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot), true));
+                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot)));
 #endif
                 nSlot = 0;
             }
@@ -749,7 +749,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
-                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
+                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT);
                 rSet.Put(rItem);
                 nSlot = 0;
             }

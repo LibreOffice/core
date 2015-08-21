@@ -406,7 +406,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     aFieldMgr.InsertField( aData );
 
                     rSh.Push();
-                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, false);
+                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS);
                     pPostIt = static_cast<SwPostItField*>(aFieldMgr.GetCurField());
                     rSh.Pop(false); // Restore cursor position
                 }

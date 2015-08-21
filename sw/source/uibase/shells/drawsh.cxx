@@ -391,7 +391,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         rSh.SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(true);
+        pSdrView->GetModel()->SetChanged();
 }
 
 void SwDrawShell::GetState(SfxItemSet& rSet)
@@ -570,7 +570,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
         rSh.SetModified();
     else
         if (bChanged)
-            pDrView->GetModel()->SetChanged(true);
+            pDrView->GetModel()->SetChanged();
 }
 
 //Return status values for FontWork

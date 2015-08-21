@@ -161,7 +161,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         GetShell().SetModified();
     else
         if (bChanged)
-            pDoc->SetChanged(true);
+            pDoc->SetChanged();
 }
 
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
@@ -210,7 +210,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
         GetShell().SetModified();
     else
         if (bChanged)
-            pView->GetModel()->SetChanged(true);
+            pView->GetModel()->SetChanged();
 }
 
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
