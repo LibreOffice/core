@@ -873,13 +873,12 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
     sal_Int32 index = sPathWithProperty.lastIndexOf(static_cast< SvLBoxString& >(pEntry->GetItem(1)).GetText());
     OUString sPath = sPathWithProperty.copy(0, index);
     index = 0;
-    int prevIndex;
     SvTreeListEntry* pParentEntry;
     SvTreeListEntry* pGrandParentEntry = nullptr;
 
     do
     {
-        prevIndex = index;
+        int prevIndex = index;
         index = sPath.indexOf("/", index+1);
         OUString sParentName = sPath.copy(prevIndex+1, index - prevIndex - 1);
 

@@ -217,9 +217,6 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     int         ind;
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
-    char pActiveXPath[1124];
-    char pActiveXPath101[1124];
-
 
     // In case SO7 is installed for this user he can have local registry entries that will prevent him from
     // using SO8 ActiveX control. The fix is just to clean up the local entries related to ActiveX control.
@@ -229,6 +226,9 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
 
     if ( pProgramPath && strlen( pProgramPath ) < 1024 )
     {
+        char pActiveXPath[1124];
+        char pActiveXPath101[1124];
+
         sprintf( pActiveXPath, "%s\\%s", pProgramPath, pLibName );
         sprintf( pActiveXPath101, "%s\\%s, 101", pProgramPath, pLibName );
 
@@ -660,7 +660,6 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 
 STDAPI DllRegisterServer()
 {
-    char pProgramPath[1024];
     HRESULT aResult = E_FAIL;
 
     HMODULE aCurModule = GetModuleHandleA( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
@@ -669,6 +668,7 @@ STDAPI DllRegisterServer()
 
     if( aCurModule )
     {
+        char pProgramPath[1024];
         DWORD nLen = GetModuleFileNameA( aCurModule, pProgramPath, 1024 );
         if ( nLen && nLen > nLibNameLen + 1 )
         {
