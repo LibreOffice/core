@@ -1237,17 +1237,21 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
                 return pFoundData;
         }
 
-        // use a font name from font fallback list to determine font attributes
-        // get fallback info using FontSubstConfiguration and
-        // the target name, it's shortened name and family name in that order
-        const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
-        const utl::FontNameAttr* pTempFontAttr = rFontSubst.getSubstInfo( aSearchName );
+        const utl::FontNameAttr* pTempFontAttr = NULL;
+        if (!utl::ConfigManager::IsAvoidConfig())
+        {
+            // use a font name from font fallback list to determine font attributes
+            // get fallback info using FontSubstConfiguration and
+            // the target name, it's shortened name and family name in that order
+            const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
+            pTempFontAttr = rFontSubst.getSubstInfo( aSearchName );
 
-        if ( !pTempFontAttr && (aTempShortName != aSearchName) )
-            pTempFontAttr = rFontSubst.getSubstInfo( aTempShortName );
+            if ( !pTempFontAttr && (aTempShortName != aSearchName) )
+                pTempFontAttr = rFontSubst.getSubstInfo( aTempShortName );
 
-        if ( !pTempFontAttr && (aTempFamilyName != aTempShortName) )
-            pTempFontAttr = rFontSubst.getSubstInfo( aTempFamilyName );
+            if ( !pTempFontAttr && (aTempFamilyName != aTempShortName) )
+                pTempFontAttr = rFontSubst.getSubstInfo( aTempFamilyName );
+        }
 
         // try the font substitutions suggested by the fallback info
         if( pTempFontAttr )
