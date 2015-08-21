@@ -497,9 +497,9 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {   // it is a form
                     try
                     {
-                        if  (   ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
-                            &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
-                            &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
+                        if  (   xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND) == aSrcCursorSource
+                            &&  xCurrentSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE) == aSrcCursorSourceType
+                            &&  xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE) == aSrcDataSource
                             )
                         {
                             bEqualDSS = true;
@@ -528,9 +528,9 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {   // it is a form
                     try
                     {
-                        if  (   ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
-                            &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
-                            &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
+                        if  (   xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND) == aSrcCursorSource
+                            &&  xCurrentDestForm->getPropertyValue(FM_PROP_COMMANDTYPE) == aSrcCursorSourceType
+                            &&  xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE) == aSrcDataSource
                             )
                         {
                             bEqualDSS = true;

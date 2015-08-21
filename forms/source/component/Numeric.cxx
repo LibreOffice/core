@@ -138,7 +138,7 @@ OUString SAL_CALL ONumericModel::getServiceName() throw ( ::com::sun::star::uno:
 bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( !compare( aControlValue, m_aSaveValue ) )
+    if ( aControlValue != m_aSaveValue )
     {
         if ( !aControlValue.hasValue() )
             m_xColumnUpdate->updateNull();

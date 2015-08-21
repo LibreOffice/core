@@ -187,7 +187,7 @@ OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno
 bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( !compare( aControlValue, m_aSaveValue ) )
+    if ( aControlValue != m_aSaveValue )
     {
         if ( aControlValue.getValueType().getTypeClass() == TypeClass_VOID )
             m_xColumnUpdate->updateNull();

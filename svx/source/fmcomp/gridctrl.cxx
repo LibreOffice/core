@@ -246,7 +246,7 @@ static const sal_uInt16 ControlMap[] =
 
 bool CompareBookmark(const Any& aLeft, const Any& aRight)
 {
-    return ::comphelper::compare(aLeft, aRight);
+    return aLeft == aRight;
 }
 
 class FmXGridSourcePropListener : public ::comphelper::OPropertyChangeListener

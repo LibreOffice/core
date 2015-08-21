@@ -748,7 +748,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         PropertyValueSet::iterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
         if (aRelevantSettings.end() != aOverwrittenSetting)
         {   // the setting was present in the original sequence, and it is to be overwritten -> replace it
-            if ( !::comphelper::compare(pInfo->Value,aOverwrittenSetting->Value) )
+            if ( pInfo->Value != aOverwrittenSetting->Value )
                 *pInfo = *aOverwrittenSetting;
             aRelevantSettings.erase(aOverwrittenSetting);
         }

@@ -45,7 +45,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <comphelper/types.hxx>
 #include <functional>
 #include <algorithm>
 
@@ -390,7 +389,7 @@ bool DoesDependOnOthers( sal_uInt16 nPropertyId )
 
 bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 )
 {
-    return ::comphelper::compare( r1, r2 );
+    return r1 == r2;
 }
 
 

@@ -215,7 +215,7 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
-    if ( !compare( aControlValue, m_aSaveValue ) )
+    if ( aControlValue != m_aSaveValue )
     {
         if ( !aControlValue.hasValue() )
             m_xColumnUpdate->updateNull();

@@ -11,7 +11,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,comphelper_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/string/test_string \
-    comphelper/qa/test_any \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,comphelper_test, \
@@ -26,7 +25,5 @@ $(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
     sal \
 	$(gb_UWINAPI) \
 ))
-
-$(eval $(call gb_CppunitTest_use_ure,comphelper_test))
 
 # vim: set noet sw=4 ts=4:

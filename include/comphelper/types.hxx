@@ -36,13 +36,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 namespace comphelper
 {
-    /** compare the two given Anys
-        The comparison is deep, means if one of the Any's contains an Any which contains an Any ..., this is resolved <br/>
-        Other types recognized currently : FontDescriptor, ::com::sun::star::util::Date/Tim/DateTime, css::uno::Sequence<sal_Int8>
-    */
-    COMPHELPER_DLLPUBLIC bool compare(const css::uno::Any& rLeft, const css::uno::Any& rRight);
-
-
     /** compare two FontDescriptor's
     */
     COMPHELPER_DLLPUBLIC bool   operator ==(const css::awt::FontDescriptor& _rLeft, const css::awt::FontDescriptor& _rRight);

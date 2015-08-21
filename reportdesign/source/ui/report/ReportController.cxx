@@ -35,7 +35,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/types.hxx>
 
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/view/PaperFormat.hpp>
@@ -4137,7 +4136,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
                     {
                         aTemp = aTemp2;
                     }
-                    else if ( !comphelper::compare(aTemp,aTemp2) )
+                    else if ( aTemp != aTemp2 )
                         break;
                 }
                 catch(const beans::UnknownPropertyException&)

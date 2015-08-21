@@ -813,7 +813,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                         bModified = checkValue->Name != pInfoIter->Name;
                         if ( !bModified )
                         {
-                            bModified = !::comphelper::compare(checkValue->Value,pInfoIter->Value);
+                            bModified = checkValue->Value != pInfoIter->Value;
                         }
                     }
                 }
