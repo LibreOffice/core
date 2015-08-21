@@ -2876,6 +2876,18 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
 {
 }
 
+XMLMacroFieldImportContext::XMLMacroFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_macro, Element ),
+    sPropertyHint(sAPI_hint),
+    sPropertyMacroName("MacroName"),
+    sPropertyScriptURL("ScriptURL"),
+    bDescriptionOK(false)
+{
+}
+
 SvXMLImportContext* XMLMacroFieldImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -2899,6 +2911,25 @@ SvXMLImportContext* XMLMacroFieldImportContext::CreateChildContext(
     return pContext;
 }
 
+Reference< XFastContextHandler > XMLMacroFieldImportContext::createFastChildContext(
+    sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( RuntimeException, SAXException, std::exception )
+{
+    Reference< XFastContextHandler > pContext = NULL;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) )
+    {
+        // create events context and remember it!
+        pContext = new XMLEventsImportContext( GetImport(), Element );
+        xEventContext = static_cast< SvXMLImportContext *>( pContext.get() );
+        bValid = true;
+    }
+    else
+        pContext = SvXMLImportContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
+}
 
 void XMLMacroFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
