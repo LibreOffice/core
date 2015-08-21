@@ -64,8 +64,6 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
         pWindow->SetPosPixel( pInfo->aPos );
     }
 
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-
     SetHideNotDelete( true );
 }
 

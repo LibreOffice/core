@@ -84,7 +84,6 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
               :SfxChildWindow(_pParent, _nId)
 {
     pWindow = VclPtr<FmPropBrw>::Create( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo );
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( _pInfo );
 }
 

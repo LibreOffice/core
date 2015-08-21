@@ -2910,8 +2910,6 @@ Svx3DChildWindow::Svx3DChildWindow( vcl::Window* _pParent,
     VclPtr<Svx3DWin> pWin = VclPtr<Svx3DWin>::Create( pBindings, this, _pParent );
     pWindow = pWin;
 
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-
     pWin->Initialize( pInfo );
 }
 

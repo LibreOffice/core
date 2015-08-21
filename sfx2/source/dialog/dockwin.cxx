@@ -132,7 +132,6 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     VclPtr<SfxTitleDockingWindow> pTitleDockWindow = VclPtr<SfxTitleDockingWindow>::Create( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     pWindow = pTitleDockWindow;
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     // Use factory manager to retrieve XWindow factory. That can be used to instantiate
     // the real window factory.

@@ -166,8 +166,6 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
     VclPtrInstance<SvxFontWorkDialog> pDlg(pBindings, this, _pParent);
     pWindow = pDlg.get();
 
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-
     pDlg->Initialize( pInfo );
 }
 

@@ -62,7 +62,7 @@ PaneChildWindow::PaneChildWindow (
         this,
         pParentWindow,
         SD_RESSTR(nTitleBarResId));
-    eChildAlignment = eAlignment;
+    SetAlignment(eAlignment);
     static_cast<SfxDockingWindow*>(pWindow.get())->Initialize(pInfo);
     SetHideNotDelete(true);
 

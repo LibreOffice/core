@@ -42,8 +42,6 @@ AnimationChildWindow::AnimationChildWindow(
     VclPtr<AnimationWindow> pAnimWin = VclPtr<AnimationWindow>::Create(pBindings, this, _pParent);
     pWindow = pAnimWin;
 
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-
     pAnimWin->Initialize( pInfo );
 
     SetHideNotDelete( true );

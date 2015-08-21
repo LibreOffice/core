@@ -39,7 +39,6 @@ SpellDialogChildWindow::SpellDialogChildWindow (
                                             pBindings,
                                             this ));
     pWindow = m_xAbstractSpellDialog->GetWindow();
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     SetHideNotDelete(true);
 }
 

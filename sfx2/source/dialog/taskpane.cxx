@@ -251,7 +251,7 @@ namespace sfx2
     {
         pWindow = VclPtr<TaskPaneDockingWindow>::Create( i_pBindings, *this, i_pParent,
             WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
-        eChildAlignment = SfxChildAlignment::RIGHT;
+        SetAlignment(SfxChildAlignment::RIGHT);
 
         pWindow->SetHelpId( HID_TASKPANE_WINDOW );
         pWindow->SetOutputSizePixel( Size( 300, 450 ) );

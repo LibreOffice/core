@@ -426,7 +426,6 @@ FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
 {
     pWindow = VclPtr<FmFieldWin>::Create(_pBindings, this, _pParent);
     SetHideNotDelete(true);
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( _pInfo );
 }
 

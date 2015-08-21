@@ -1997,7 +1997,6 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uIn
                  :SfxChildWindow( _pParent, _nId )
 {
     pWindow = VclPtr<FmFilterNavigatorWin>::Create( _pBindings, this, _pParent );
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
 }
 

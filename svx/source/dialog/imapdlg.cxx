@@ -102,8 +102,6 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
 
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-
     pDlg->Initialize( pInfo );
 }
 

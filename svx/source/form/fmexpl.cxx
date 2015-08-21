@@ -615,7 +615,6 @@ namespace svxform
                      :SfxChildWindow( _pParent, _nId )
     {
         pWindow = VclPtr<NavigatorFrame>::Create( _pBindings, this, _pParent );
-        eChildAlignment = SfxChildAlignment::NOALIGNMENT;
         static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
     }
 

@@ -2253,7 +2253,7 @@ namespace svxform
 
     {
         pWindow = VclPtr<DataNavigator>::Create( _pBindings, this, _pParent );
-        eChildAlignment = SfxChildAlignment::RIGHT;
+        SetAlignment(SfxChildAlignment::RIGHT);
         pWindow->SetSizePixel( Size( 250, 400 ) );
         static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
     }

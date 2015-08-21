@@ -769,7 +769,7 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
     pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
     pDialog->Show();
 
-    eChildAlignment = SfxChildAlignment::LEFT;
+    SetAlignment(SfxChildAlignment::LEFT);
 
     pDialog->Initialize( pInfo );
 }

@@ -60,7 +60,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 {
     // Create Window
     pWindow = VclPtr<SfxPartDockWnd_Impl>::Create( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
-    eChildAlignment = SfxChildAlignment::TOP;
+    SetAlignment(SfxChildAlignment::TOP);
 
     assert(pInfo);
     pInfo->nFlags |= SfxChildWindowFlags::FORCEDOCK;

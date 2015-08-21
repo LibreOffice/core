@@ -67,7 +67,6 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
     pWindow = pAbstDlg->GetWindow();
     pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
                         // -> Show() will invoke StateChanged() and save pos
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 }
 
 SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
@@ -95,8 +94,6 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   vcl::Window *pParentWindow,
     pAbstDlg = pFact->CreateAuthMarkFloatDlg(pBindings, this, pParentWindow, pInfo);
     OSL_ENSURE(pAbstDlg, "Dialog creation failed!");
     pWindow = pAbstDlg->GetWindow();
-
-    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 }
 
 SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const

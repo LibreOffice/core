@@ -38,7 +38,7 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
                                                        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION |
                                                        WB_CLIPCHILDREN | WB_SIZEABLE |
                                                        WB_3DLOOK | WB_ROLLABLE));
-    eChildAlignment = SfxChildAlignment::RIGHT;
+    SetAlignment(SfxChildAlignment::RIGHT);
 
     pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
     pWindow->SetOutputSizePixel(Size(GetDefaultWidth(pWindow), 450));
