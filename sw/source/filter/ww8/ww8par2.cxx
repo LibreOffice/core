@@ -4325,6 +4325,7 @@ void WW8RStyle::ImportOldFormatStyles()
         {
             rSt.SeekRel(cbPapx-nByteCount);
             nByteCount += cbPapx-nByteCount;
+            break;
         }
 
         sal_uInt8 cb(0);
