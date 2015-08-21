@@ -341,9 +341,9 @@ public:
     void            DeactivateOle();
 
     SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
-    VclPtr<SfxModelessDialog> CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
-                                               SfxChildWinInfo* pInfo,
-                                               vcl::Window* pParent, sal_uInt16 nSlotId );
+    SfxModelessDialog*  CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
+                                        SfxChildWinInfo* pInfo,
+                                        vcl::Window* pParent, sal_uInt16 nSlotId );
 
     void            UpdateOleZoom();
 
