@@ -569,6 +569,16 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
         case LANGUAGE_SPANISH_DATED:
             nLang = LANGUAGE_SPANISH_MODERN;
             break;
+
+        // The erroneous Tibetan vs. Dzongkha case, #i53497#
+        // We (and MS) have stored LANGUAGE_TIBETAN_BHUTAN. This will need
+        // special attention if MS one day decides to actually use
+        // LANGUAGE_TIBETAN_BHUTAN for bo-BT instead of having it reserved;
+        // then remove the mapping and hope every dz-BT user used ODF to store
+        // documents ;-)
+        case LANGUAGE_TIBETAN_BHUTAN:
+            nLang = LANGUAGE_DZONGKHA_BHUTAN;
+            break;
     }
     return nLang;
 }

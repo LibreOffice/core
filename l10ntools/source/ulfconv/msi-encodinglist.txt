@@ -44,7 +44,7 @@ cy       0  1106   # Welsh
 da       0  1030
 de       0  1031
 dgo      0  1604   # Dogri (India)
-dz       0  2129   # Dzongkha (same ID as tibetan bhutan (s. i40713))
+dz       0  3153   # Dzongkha
 el       0  1032
 en-GB    0  2057
 en-US    0  1033

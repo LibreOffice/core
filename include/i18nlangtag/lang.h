@@ -401,8 +401,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TELUGU                     0x044A
 #define LANGUAGE_THAI                       0x041E
 #define LANGUAGE_TIBETAN                    0x0451
-#define LANGUAGE_DZONGKHA                   0x0851
-#define LANGUAGE_TIBETAN_BHUTAN             LANGUAGE_DZONGKHA   /* a MS error, see #i53497# */
+#define LANGUAGE_TIBETAN_BHUTAN             0x0851  /* was used as Dzongkha, a MS error, see #i53497# */
+#define LANGUAGE_DZONGKHA_BHUTAN            0x0C51  /* they finally got it ... ([MS-LCID] rev. 7.0 2015-06-30) */
 #define LANGUAGE_TIGRIGNA_ERITREA           0x0873
 #define LANGUAGE_TIGRIGNA_ETHIOPIA          0x0473
 #define LANGUAGE_TSONGA                     0x0431
@@ -527,7 +527,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ 0x8092  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
 #define LANGUAGE_USER_KURDISH_SOUTHERN_IRAN 0x8492  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
 #define LANGUAGE_USER_SARDINIAN             0x0627
-/* was reserved for Dzongkha but turned down with #i53497#: 0x0628 */  /* obsoleted by LANGUAGE_DZONGKHA */
+/* was reserved for Dzongkha but turned down with #i53497#: 0x0628 */  /* obsoleted by LANGUAGE_DZONGKHA_BHUTAN */
 #define LANGUAGE_USER_DZONGKHA_MAP_LONLY    0xF851  /* to map "dz" only, because of the MS error, and preserve CTL information, sub 0x3e */
 #define LANGUAGE_USER_SWAHILI_TANZANIA      0x8041  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SWAHILI)) */
 #define LANGUAGE_OBSOLETE_USER_BRETON       0x0629

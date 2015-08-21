@@ -394,8 +394,9 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_TAJIK_LSO,                   "tg", ""  , 0     },
     { LANGUAGE_TIBETAN,                     "bo", "CN", 0     },    // CN politically correct?
     { LANGUAGE_USER_TIBETAN_INDIA,          "bo", "IN", 0     },
-    { LANGUAGE_USER_TIBETAN_BHUTAN,         "bo", "BT", 0     },    // MS reserved, but with the ID error instead
-    { LANGUAGE_DZONGKHA,                    "dz", "BT", 0     },
+    { LANGUAGE_USER_TIBETAN_BHUTAN,         "bo", "BT", 0     },
+    { LANGUAGE_DZONGKHA_BHUTAN,             "dz", "BT", 0     },
+    { LANGUAGE_TIBETAN_BHUTAN,              "dz", "BT", 0     },    // MS reserved for bo-BT, but LCID was used as Dzongkha, see #i53497#
     { LANGUAGE_USER_DZONGKHA_MAP_LONLY,     "dz", ""  , 0     },    // because of the MS error, see lang.h
     { LANGUAGE_TURKMEN,                     "tk", "TM", 0     },
     { LANGUAGE_WELSH,                       "cy", "GB", 0     },

@@ -3072,7 +3072,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_UIGHUR_CHINA;
             break;
         case AppleLanguageId::DZONGKHA:
-            nLang = LANGUAGE_DZONGKHA;
+            nLang = LANGUAGE_DZONGKHA_BHUTAN;
             break;
         case AppleLanguageId::JAVANESE_LATIN:
             return LanguageTag("jv-Latn");
