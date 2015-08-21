@@ -196,7 +196,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         performs = std::string(" (performs: ") + perf + ")";
     }
     report(
-        DiagnosticsEngine::Warning, "%0 C-style cast from %1%2 to %3%4%5",
+        DiagnosticsEngine::Warning, "C-style cast from %1%2 to %3%4%5",
         expr->getSourceRange().getBegin())
       << incompFrom
       << expr->getSubExprAsWritten()->getType() << incompTo << expr->getType()
