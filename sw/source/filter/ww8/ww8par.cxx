@@ -3880,7 +3880,7 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, 
         {
             m_aCurrAttrCP = rTextPos;
             rNext = ReadTextAttr(rTextPos, nTextEnd, rbStartLine);
-            if (rTextPos == rNext && rTextPos == WW8_CP_MAX)
+            if (rTextPos == rNext && rTextPos >= nTextEnd)
                 break;
         }
         while( rTextPos >= rNext );
