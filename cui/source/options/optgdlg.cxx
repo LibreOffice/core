@@ -144,8 +144,10 @@ OpenGLCfg::~OpenGLCfg()
     if (mbModified)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
-        officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
+        if (!officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
+            officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
+        if (!officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
+            officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
         batch->commit();
     }
 }
@@ -674,6 +676,12 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     // separate auto and other icon themes
     m_pIconStyleLB->SetSeparatorPos( 0 );
     m_pIconStyleLB->SelectEntryPos(0);
+
+    // FIXME: should really add code to show a 'lock' icon here.
+    if (officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
+        m_pUseOpenGL->Enable(false);
+    if (officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
+        m_pForceOpenGL->Enable(false);
 }
 
 OfaViewTabPage::~OfaViewTabPage()
