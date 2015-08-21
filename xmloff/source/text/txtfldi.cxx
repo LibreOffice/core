@@ -4205,6 +4205,19 @@ XMLScriptImportContext::XMLScriptImportContext(
 {
 }
 
+XMLScriptImportContext::XMLScriptImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_script, Element ),
+    sPropertyScriptType(sAPI_script_type),
+    sPropertyURLContent(sAPI_url_content),
+    sPropertyContent(sAPI_content),
+    bContentOK(false),
+    bScriptTypeOK(false)
+{
+}
+
 void XMLScriptImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
