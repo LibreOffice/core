@@ -9,6 +9,38 @@
 
 #include <svtools/breadcrumb.hxx>
 
+class CustomLink : public FixedHyperlink
+{
+public:
+    CustomLink( vcl::Window* pParent, WinBits nWinStyle )
+    : FixedHyperlink( pParent, nWinStyle )
+    {
+        vcl::Font aFont = GetControlFont( );
+        aFont.SetUnderline( UNDERLINE_NONE );
+        SetControlFont( aFont );
+    }
+
+protected:
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE
+    {
+        // changes the style if the control is enabled
+        if ( !rMEvt.IsLeaveWindow() && IsEnabled() )
+        {
+            vcl::Font aFont = GetControlFont( );
+            aFont.SetUnderline( UNDERLINE_SINGLE );
+            SetControlFont( aFont );
+        }
+        else
+        {
+            vcl::Font aFont = GetControlFont( );
+            aFont.SetUnderline( UNDERLINE_NONE );
+            SetControlFont( aFont );
+        }
+
+        FixedHyperlink::MouseMove( rMEvt );
+    }
+};
+
 Breadcrumb::Breadcrumb( vcl::Window* pParent, WinBits nWinStyle ) : VclHBox( pParent, nWinStyle )
 {
     m_eMode = SvtBreadcrumbMode::ONLY_CURRENT_PATH;
@@ -112,6 +144,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
         m_aLinks[i]->SetURL( sRootPath + OUString( sPath.getStr(), nEnd ) );
         m_aLinks[i]->Hide();
         m_aLinks[i]->Enable( true );
+
         m_aSeparators[i]->Hide();
 
         nPos = nEnd;
@@ -208,7 +241,7 @@ void Breadcrumb::SetMode( SvtBreadcrumbMode eMode )
 
 void Breadcrumb::appendField()
 {
-    m_aLinks.push_back( VclPtr< FixedHyperlink >::Create( this, WB_TABSTOP ) );
+    m_aLinks.push_back( VclPtr< CustomLink >::Create( this, WB_TABSTOP ) );
     m_aLinks[m_aLinks.size() - 1]->Hide();
     m_aLinks[m_aLinks.size() - 1]->SetClickHdl( LINK( this, Breadcrumb, ClickLinkHdl ) );
 

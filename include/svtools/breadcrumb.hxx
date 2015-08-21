@@ -27,10 +27,12 @@ enum SvtBreadcrumbMode
     ALL_VISITED = 1
 };
 
+class CustomLink;
+
 class SVT_DLLPUBLIC Breadcrumb : public VclHBox
 {
     private:
-        std::vector< VclPtr< FixedHyperlink > > m_aLinks;
+        std::vector< VclPtr< CustomLink > > m_aLinks;
         std::vector< VclPtr< FixedText > > m_aSeparators;
 
         OUString m_sRootName;
