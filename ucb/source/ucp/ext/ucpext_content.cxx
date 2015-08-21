@@ -343,7 +343,7 @@ namespace ucb { namespace ucp { namespace ext
             const OUString sURL = m_xIdentifier->getContentIdentifier();
 
             // cut the root URL
-            if ( !sURL.match( sRootURL, 0 ) )
+            if ( !sURL.match( sRootURL ) )
             {
                 SAL_INFO( "ucb.ucp.ext", "illegal URL structure - no root" );
                 break;

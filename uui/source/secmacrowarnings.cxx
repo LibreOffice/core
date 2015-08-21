@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
 
 IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl)
 {
-    EndDialog( RET_CANCEL );
+    EndDialog();
     return 0;
 }
 

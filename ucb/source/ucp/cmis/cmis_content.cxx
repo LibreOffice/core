@@ -235,7 +235,7 @@ namespace
             for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
             {
                 OUStringBuffer aBuffer;
-                ::sax::Converter::convertDateTime( aBuffer, seqValue[i], 0, false );
+                ::sax::Converter::convertDateTime( aBuffer, seqValue[i], 0 );
                 values.push_back( OUSTR_TO_STDSTR( aBuffer.makeStringAndClear( )  ) );
             }
             type = libcmis::PropertyType::DateTime;

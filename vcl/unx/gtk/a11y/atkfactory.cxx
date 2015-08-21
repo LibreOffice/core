@@ -135,7 +135,7 @@ wrapper_factory_create_accessible( GObject *obj )
 
         if( pWindow )
         {
-             uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible(true);
+             uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible();
             if( xAccessible.is() )
             {
                 AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );

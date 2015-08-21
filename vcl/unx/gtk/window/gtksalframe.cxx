@@ -937,7 +937,7 @@ GtkSalFrame::~GtkSalFrame()
 
 void GtkSalFrame::moveWindow( long nX, long nY )
 {
-    if( isChild( false, true ) )
+    if( isChild( false ) )
     {
         if( m_pParent )
             gtk_fixed_move( m_pParent->getFixedContainer(),
@@ -972,7 +972,7 @@ void GtkSalFrame::window_resize(long nWidth, long nHeight)
 
 void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
 {
-    if( isChild( false, true ) )
+    if( isChild( false ) )
     {
         widget_set_size_request(nWidth, nHeight);
     }
@@ -2132,7 +2132,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         maGeometry.nWidth   = nWidth;
         maGeometry.nHeight  = nHeight;
 
-        if( isChild( false, true ) )
+        if( isChild( false ) )
             widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
             window_resize(nWidth, nHeight);
@@ -2737,7 +2737,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
 {
     if( m_pWindow )
     {
-        if( isChild( false, true ) )
+        if( isChild( false ) )
             gtk_widget_grab_focus( m_pWindow );
         else if( IS_WIDGET_MAPPED( m_pWindow ) )
         {
@@ -2789,7 +2789,7 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
         // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
         if( getDisplay()->MouseCaptured( this ) )
-            grabPointer( true, false );
+            grabPointer( true );
         else if( m_nFloats > 0 )
             grabPointer( true, true );
     }
@@ -2904,7 +2904,7 @@ void GtkSalFrame::CaptureMouse( bool bCapture )
 void GtkSalFrame::SetPointerPos( long nX, long nY )
 {
     GtkSalFrame* pFrame = this;
-    while( pFrame && pFrame->isChild( false, true ) )
+    while( pFrame && pFrame->isChild( false ) )
         pFrame = pFrame->m_pParent;
     if( ! pFrame )
         return;
@@ -4676,7 +4676,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     uno::Reference<accessibility::XAccessibleEditableText> xText;
     try
     {
-        uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible( true ) );
+        uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible() );
         if (xAccessible.is())
             xText = FindFocus(xAccessible->getAccessibleContext());
     }

@@ -36,7 +36,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)
         EndDialog( RET_OK );
     } else
     {
-        EndDialog( RET_CANCEL );
+        EndDialog();
     }
 
     return 1;

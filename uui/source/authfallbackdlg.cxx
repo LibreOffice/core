@@ -55,6 +55,6 @@ IMPL_LINK ( AuthFallbackDlg,  OKHdl, Button *, )
 
 IMPL_LINK ( AuthFallbackDlg,  CancelHdl, Button *, )
 {
-    EndDialog( RET_CANCEL );
+    EndDialog();
     return 0;
 }

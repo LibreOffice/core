@@ -4708,7 +4708,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         // It turns out \li should reset the \fi inherited from the stylesheet.
         // So set the direct formatting to zero, if we don't have such direct formatting yet.
         lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, std::make_shared<RTFValue>(0),
-                               RTFOverwrite::NO_IGNORE, /*bAttribute=*/true);
+                               RTFOverwrite::NO_IGNORE);
     }
     break;
     case RTF_RI:

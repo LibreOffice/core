@@ -61,7 +61,7 @@ OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     {
         // The content provider scheme is the part before the first ':'
         // within the content id.
-        sal_Int32 nPos = m_aContentId.indexOf( ':', 0 );
+        sal_Int32 nPos = m_aContentId.indexOf( ':' );
         if ( nPos != -1 )
         {
             OUString aScheme( m_aContentId.copy( 0, nPos ) );

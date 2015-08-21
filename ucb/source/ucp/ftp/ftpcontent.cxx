@@ -694,7 +694,7 @@ FTPContent::getParent(  )
     throw (RuntimeException, std::exception)
 {
     Reference<XContentIdentifier>
-        xIdent(new FTPContentIdentifier(m_aFTPURL.parent(false)));
+        xIdent(new FTPContentIdentifier(m_aFTPURL.parent()));
     return Reference<XInterface>( m_xProvider->queryContent(xIdent), UNO_QUERY );
 }
 
