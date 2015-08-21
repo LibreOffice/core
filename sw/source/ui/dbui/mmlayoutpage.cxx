@@ -461,7 +461,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         else
             while(nMoves)
             {
-                bool bMoved = rShell.MoveParagraph( 1 );
+                bool bMoved = rShell.MoveParagraph();
                 if(!bMoved)
                 {
                     //insert a new paragraph before the greeting line

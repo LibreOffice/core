@@ -430,7 +430,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         }//<-end
         ListBox & rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
+        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO);
         const SfxStyleSheetBase* pBase = pPool->First();
         std::set<OUString> aNames;
         while(pBase)

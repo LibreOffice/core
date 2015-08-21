@@ -413,7 +413,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
             for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i, true);
+                    m_pLevelLB->SelectEntryPos( i );
                 nMask <<= 1 ;
             }
         m_pLevelLB->SetUpdateMode(true);
@@ -466,13 +466,13 @@ void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
     m_pLevelLB->SetNoSelection();
     if(nActNumLvl == USHRT_MAX)
     {
-        m_pLevelLB->SelectEntryPos( MAXLEVEL, true);
+        m_pLevelLB->SelectEntryPos( MAXLEVEL );
     }
     else
         for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i, true);
+                m_pLevelLB->SelectEntryPos( i );
             nMask <<= 1;
         }
     m_pLevelLB->SetUpdateMode(true);

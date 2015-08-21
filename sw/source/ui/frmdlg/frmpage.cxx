@@ -2329,18 +2329,18 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
     RangeModifyHdl(&m_aWidthED);  // set reference values (for 100%)
 
     if (rSize.GetWidthPercent() == 0xff || rSize.GetHeightPercent() == 0xff)
-        m_pFixedRatioCB->Check(true);
+        m_pFixedRatioCB->Check();
     if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff &&
         !m_pRelWidthCB->IsChecked())
     {
-        m_pRelWidthCB->Check(true);
+        m_pRelWidthCB->Check();
         RelSizeClickHdl(m_pRelWidthCB);
         m_aWidthED.SetPrcntValue(rSize.GetWidthPercent(), FUNIT_CUSTOM);
     }
     if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff &&
         !m_pRelHeightCB->IsChecked())
     {
-        m_pRelHeightCB->Check(true);
+        m_pRelHeightCB->Check();
         RelSizeClickHdl(m_pRelHeightCB);
         m_aHeightED.SetPrcntValue(rSize.GetHeightPercent(), FUNIT_CUSTOM);
     }
@@ -2463,10 +2463,10 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         switch( eMirror )
         {
         case RES_MIRROR_GRAPH_DONT: break;
-        case RES_MIRROR_GRAPH_VERT: m_pMirrorHorzBox->Check(true); break;
-        case RES_MIRROR_GRAPH_HOR:  m_pMirrorVertBox->Check(true); break;
-        case RES_MIRROR_GRAPH_BOTH: m_pMirrorHorzBox->Check(true);
-                                    m_pMirrorVertBox->Check(true);
+        case RES_MIRROR_GRAPH_VERT: m_pMirrorHorzBox->Check(); break;
+        case RES_MIRROR_GRAPH_HOR:  m_pMirrorVertBox->Check(); break;
+        case RES_MIRROR_GRAPH_BOTH: m_pMirrorHorzBox->Check();
+                                    m_pMirrorVertBox->Check();
                                     break;
         default:
             ;
@@ -2481,7 +2481,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         {
             case 1: // mirror at left / even pages
                 m_pLeftPagesRB->Check();
-                m_pMirrorHorzBox->Check(true);
+                m_pMirrorHorzBox->Check();
                 break;
             case 2: // mirror on all pages
                 m_pAllPagesRB->Check();
@@ -2594,8 +2594,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
     {   // remember selected filter
         aFilterName = pGrfDlg->GetCurrentFilter();
         aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 );
+                                           INetURLObject::DECODE_UNAMBIGUOUS );
         m_pConnectED->SetModifyFlag();
         m_pConnectED->SetText( aNewGrfName );
         //reset mirrors because maybe a Bitmap was swapped with
@@ -2792,8 +2791,7 @@ void SwFrmURLPage::Reset( const SfxItemSet *rSet )
     {
         const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
         pURLED->SetText( INetURLObject::decode( pFormatURL->GetURL(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ));
+                                           INetURLObject::DECODE_UNAMBIGUOUS ));
         pNameED->SetText( pFormatURL->GetName());
 
         pClientCB->Enable( pFormatURL->GetMap() != 0 );

@@ -211,8 +211,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
     {
         const SwFormatINetFormat* pINetFormat = static_cast<const SwFormatINetFormat*>( pItem);
         m_pURLED->SetText(INetURLObject::decode(pINetFormat->GetValue(),
-            INetURLObject::DECODE_UNAMBIGUOUS,
-            RTL_TEXTENCODING_UTF8));
+            INetURLObject::DECODE_UNAMBIGUOUS));
         m_pURLED->SaveValue();
         m_pURLED->SetText(pINetFormat->GetName());
 

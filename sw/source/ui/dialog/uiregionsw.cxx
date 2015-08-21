@@ -204,8 +204,7 @@ SectRepr::SectRepr( size_t nPos, SwSection& rSect )
 void SectRepr::SetFile( const OUString& rFile )
 {
     OUString sNewFile( INetURLObject::decode( rFile,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ));
+                                           INetURLObject::DECODE_UNAMBIGUOUS ));
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
     const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
@@ -290,8 +289,7 @@ OUString SectRepr::GetFile() const
                         .replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
     }
     return INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
-                                  INetURLObject::DECODE_UNAMBIGUOUS,
-                                  RTL_TEXTENCODING_UTF8 );
+                                  INetURLObject::DECODE_UNAMBIGUOUS );
 }
 
 OUString SectRepr::GetSubRegion() const
@@ -584,12 +582,12 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     ::com::sun::star::uno::Sequence <sal_Int8> aCurPasswd;
     if( 1 < pBox->GetSelectionCount() )
     {
-        m_pHideCB->EnableTriState(true);
-        m_pProtectCB->EnableTriState(true);
+        m_pHideCB->EnableTriState();
+        m_pProtectCB->EnableTriState();
         // edit in readonly sections
-        m_pEditInReadonlyCB->EnableTriState(true);
+        m_pEditInReadonlyCB->EnableTriState();
 
-        m_pFileCB->EnableTriState(true);
+        m_pFileCB->EnableTriState();
 
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
@@ -701,7 +699,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         m_pSubRegionED->Clear();
         if( !aFile.isEmpty() || !sSub.isEmpty() )
         {
-            m_pFileCB->Check(true);
+            m_pFileCB->Check();
             m_pFileNameED->SetText(aFile);
             m_pSubRegionED->SetText(sSub);
             m_pDDECB->Check(rData.GetType() == DDE_LINK_SECTION);
@@ -1763,7 +1761,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     if( bFile )
     {
         m_pFileNameED->GrabFocus();
-        m_pProtectCB->Check( true );
+        m_pProtectCB->Check();
     }
     else
     {
@@ -1823,7 +1821,7 @@ IMPL_LINK_TYPED( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *,
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 m_sFilePasswd = static_cast<const SfxStringItem*>(pItem)->GetValue();
             m_pFileNameED->SetText( INetURLObject::decode(
-                m_sFileName, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
+                m_sFileName, INetURLObject::DECODE_UNAMBIGUOUS ) );
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
         }
     }

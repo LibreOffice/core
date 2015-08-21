@@ -449,7 +449,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     {
         pGlossaryHdl->NewGlossary(m_pNameED->GetText(),
                                   m_pShortNameEdit->GetText(),
-                                  false, false);
+                                  false);
     }
     else if (sItemIdent == "replacetext")
     {

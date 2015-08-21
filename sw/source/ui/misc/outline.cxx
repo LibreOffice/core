@@ -233,7 +233,7 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl)
 {
     if (!bModified)
         rWrtSh.ResetModified();
-    EndDialog(RET_CANCEL);
+    EndDialog();
     return 0;
 }
 

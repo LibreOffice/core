@@ -848,7 +848,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
     m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN,
-                                 false, false, false );
+                                 false, false );
 
     //Default mode is arranged to be the tallest mode
     //of alphabetical index, lock that height in now
@@ -1268,8 +1268,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos(reinterpret_cast<void*>(nData)));
 
     sAutoMarkURL = INetURLObject::decode( rSh.GetTOIAutoMarkURL(),
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 );
+                                           INetURLObject::DECODE_UNAMBIGUOUS );
     m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );
 
     m_pCaptionSequenceLB->Clear();
@@ -1406,7 +1405,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
         if(!m_pAddStylesCB->IsChecked() && !m_pFromHeadingsCB->IsChecked() && !m_pTOXMarksCB->IsChecked())
         {
             //TODO: InfoBox?
-            pBox->Check(true);
+            pBox->Check();
         }
         m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
@@ -3159,7 +3158,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     Size aEditSize(GetOutputSizePixel());
     aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
     pButton->SetSizePixel(aEditSize);
-    pButton->Check(true);
+    pButton->Check();
     pButton->Show();
     SetActiveControl(pButton);
 
@@ -3639,7 +3638,7 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& r
     m_pLevelLB->set_height_request(nHeight);
     m_pParaLayLB->set_height_request(nHeight);
 
-    SetExchangeSupport( true );
+    SetExchangeSupport();
 
     m_pEditStyleBT->SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
     m_pAssignBT->SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
@@ -3906,7 +3905,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     --nWidth;
     for(sal_uInt16 i = 1; i < 8; i++)
         InsertDataColumn( i, *aTitles[i - 1], nWidth,
-                          HeaderBarItemBits::STDSTYLE, HEADERBAR_APPEND );
+                          HeaderBarItemBits::STDSTYLE );
 }
 
 SwEntryBrowseBox::~SwEntryBrowseBox()
@@ -4205,7 +4204,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
     }
 
     if(bError)
-        EndDialog(RET_CANCEL);
+        EndDialog();
 }
 
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()

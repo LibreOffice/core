@@ -178,11 +178,11 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     if(lHeight)
     {
         m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FUNIT_TWIP);
-        m_pMaxHeightBtn->Check(true);
+        m_pMaxHeightBtn->Check();
     }
     else
     {
-        m_pMaxHeightPageBtn->Check(true);
+        m_pMaxHeightPageBtn->Check();
         m_pMaxHeightEdit->Enable(false);
     }
     m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));

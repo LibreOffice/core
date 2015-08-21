@@ -57,7 +57,7 @@ static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bL
     aFormat.SetCountLines(bLineNumber);
     rSet.Put(aFormat);
     xStyleSheet->MergeIndentAttrsOfListStyle( rSet );
-    xStyleSheet->SetItemSet(rSet, false);
+    xStyleSheet->SetItemSet(rSet);
 }
 
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)

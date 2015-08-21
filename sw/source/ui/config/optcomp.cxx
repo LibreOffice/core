@@ -207,7 +207,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     {
         pObjShell = m_pWrtShell->GetView().GetDocShell();
         if ( pObjShell )
-            sDocTitle = pObjShell->GetTitle( SFX_TITLE_TITLE );
+            sDocTitle = pObjShell->GetTitle();
     }
     else
     {

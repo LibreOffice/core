@@ -534,7 +534,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         if(m_pNoWrapRB->IsChecked() && !m_pNoWrapRB->IsEnabled())
         {
             if(m_pWrapThroughRB->IsEnabled())
-                m_pWrapThroughRB->Check(true);
+                m_pWrapThroughRB->Check();
             else if(m_pWrapLeftRB->IsEnabled())
                 m_pWrapLeftRB->Check();
             else if(m_pWrapRightRB->IsEnabled())

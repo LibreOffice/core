@@ -201,7 +201,7 @@ void SwBreakDlg::CheckEnable()
     {
         m_pPageBtn->Enable(false);
         if(m_pPageBtn->IsChecked())
-            m_pLineBtn->Check(true);
+            m_pLineBtn->Check();
         bEnable = false;
     }
     const bool bPage = m_pPageBtn->IsChecked();

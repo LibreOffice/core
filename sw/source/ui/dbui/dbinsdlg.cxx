@@ -337,7 +337,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     // fill paragraph templates-ListBox
     {
         SfxStyleSheetBasePool* pPool = pView->GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+        pPool->SetSearchMask( SFX_STYLE_FAMILY_PARA );
         m_pLbDbParaColl->InsertEntry( sNoTmpl );
 
         const SfxStyleSheetBase* pBase = pPool->First();
@@ -353,13 +353,13 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     if( pView->GetWrtShell().GetTableFormat() )
     {
         m_pRbAsTable->Enable( false );
-        m_pRbAsField->Check( true );
-        m_pRbDbFormatFromDb->Check( true );
+        m_pRbAsField->Check();
+        m_pRbDbFormatFromDb->Check();
     }
     else
     {
-        m_pRbAsTable->Check( true );
-        m_pRbDbFormatFromDb->Check( true );
+        m_pRbAsTable->Check();
+        m_pRbDbFormatFromDb->Check();
         m_pIbDbcolOneFrom->Enable( false );
         m_pIbDbcolAllFrom->Enable( false );
     }
@@ -515,8 +515,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton )
                nCnt = m_pLbTableDbColumn->GetEntryCount();
         if( LISTBOX_APPEND == nInsPos )
             for( n = 0; n < nCnt; ++n )
-                m_pLbTableCol->InsertEntry( m_pLbTableDbColumn->GetEntry( n ),
-                                            LISTBOX_APPEND );
+                m_pLbTableCol->InsertEntry( m_pLbTableDbColumn->GetEntry( n ) );
         else
             for( n = 0; n < nCnt; ++n, ++nInsPos )
                 m_pLbTableCol->InsertEntry( m_pLbTableDbColumn->GetEntry( n ), nInsPos );
@@ -694,7 +693,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, PushButton*, pButton )
             // always set default-gap
         aBoxInfo.SetDefDist( MIN_BORDER_DIST );
             // Single lines can have DontCare-status only in tables
-        aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, true );
+        aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
         pTableSet->Put( aBoxInfo );
 
         SwGetCurColNumPara aPara;
@@ -1426,7 +1425,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
     if( bUndo )
     {
-        rSh.DoUndo( true );
+        rSh.DoUndo();
         rSh.AppendUndoForInsertFromDB( bAsTable );
         rSh.EndUndo( UNDO_EMPTY );
     }
@@ -1823,7 +1822,7 @@ void SwInsertDBColAutoPilot::Load()
 
             // when the cursor is inside of a table, table must NEVER be selectable
             if( !m_pRbAsTable->IsEnabled() && m_pRbAsTable->IsChecked() )
-                m_pRbAsField->Check( true );
+                m_pRbAsField->Check();
             break;
         }
     }

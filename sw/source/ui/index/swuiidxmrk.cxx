@@ -432,7 +432,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
     //todo/mba: assuming that notes should not be searched
     bool bSearchInNotes = false;
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
-                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), false );
+                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY) );
 }
 
 void SwIndexMarkPane::InsertMark()
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl)
     }
     else
     {
-        m_rDialog.EndDialog(RET_CANCEL);
+        m_rDialog.EndDialog();
     }
     return 0;
 }
@@ -1120,7 +1120,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
     }
     else
     {
-        m_rDialog.EndDialog(RET_CANCEL);
+        m_rDialog.EndDialog();
     }
     return 0;
 }
@@ -1264,7 +1264,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
         }
         if(bNewEntry && !m_pFromDocContentRB->IsChecked())
         {
-            m_pFromDocContentRB->Check(true);
+            m_pFromDocContentRB->Check();
             ChangeSourceHdl(m_pFromDocContentRB);
         }
         if(bCreate)

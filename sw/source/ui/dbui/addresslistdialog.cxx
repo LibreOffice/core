@@ -419,7 +419,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             {
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sFind, true, &sExt, &sHomePath);
-                aTempFile.EnableKillingFile(true);
+                aTempFile.EnableKillingFile();
                 sTmpName = aTempFile.GetURL();
             }
             xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());

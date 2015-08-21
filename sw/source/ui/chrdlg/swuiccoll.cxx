@@ -182,7 +182,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
     m_pTbLinks->Clear();
 
     SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
+    pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
     m_pStyleLB->Clear();
     const SfxStyleSheetBase* pBase = pPool->First();
     while( pBase )

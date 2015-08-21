@@ -642,7 +642,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
         if( SfxItemState::SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
             m_pBalanceColsCB->Check(!static_cast<const SwFormatNoBalancedColumns*>(pItem)->GetValue());
         else
-            m_pBalanceColsCB->Check( true );
+            m_pBalanceColsCB->Check();
     }
 
     //text direction

@@ -133,13 +133,13 @@ IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, AlignHdl, ToolBox *, void)
     {
         for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
             m_pAlignBox->CheckItem(m_aIds[i], false);
-        m_pAlignBox->CheckItem(m_pAlignBox->GetCurItemId(), true);
+        m_pAlignBox->CheckItem(m_pAlignBox->GetCurItemId());
     }
     else
     {
         // GetCurItemId() == 0 is possible!
         const SwEnvItem& rItem = static_cast<const SwEnvItem&>( GetItemSet().Get(FN_ENVELOP) );
-        m_pAlignBox->CheckItem(m_aIds[rItem.eAlign], true);
+        m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
     }
 }
 

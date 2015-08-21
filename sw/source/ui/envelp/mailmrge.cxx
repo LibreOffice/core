@@ -249,7 +249,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pFormatHtmlCB->Check(bool(nMailingMode & MailTextFormats::HTML));
     m_pFormatRtfCB->Check(bool(nMailingMode & MailTextFormats::RTF));
 
-    m_pAllRB->Check(true);
+    m_pAllRB->Check();
 
     // Install handlers
     Link<> aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
@@ -274,7 +274,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     FilenameHdl( m_pGenerateFromDataBaseCB );
     aLk = LINK(this, SwMailMergeDlg, SaveTypeHdl);
-    m_pSaveSingleDocRB->Check( true );
+    m_pSaveSingleDocRB->Check();
     m_pSaveSingleDocRB->SetClickHdl( aLk );
     m_pSaveIndividualRB->SetClickHdl( aLk );
     aLk.Call( m_pSaveSingleDocRB );
