@@ -6053,10 +6053,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL
     Reader *pReader = ImportDOC();
 
     SvFileStream aFileStream(rURL, StreamMode::READ);
-    tools::SvRef<SotStorage> xStorage = new SotStorage(aFileStream);
-
+    tools::SvRef<SotStorage> xStorage;
     pReader->pStrm = &aFileStream;
-    pReader->pStg = xStorage.get();
+    if (rFltName != "WW6")
+    {
+        xStorage = tools::SvRef<SotStorage>(new SotStorage(aFileStream));
+        pReader->pStg = xStorage.get();
+    }
     pReader->SetFltName(rFltName);
 
     SwGlobals::ensure();
