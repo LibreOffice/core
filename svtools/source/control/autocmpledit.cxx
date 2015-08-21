@@ -70,7 +70,7 @@ bool AutocompleteEdit::Match( const OUString& rText )
 
     for( std::vector< OUString >::size_type i = 0; i < m_aEntries.size(); ++i )
     {
-        if( m_aEntries[i].startsWith( rText ) )
+        if( m_aEntries[i].startsWithIgnoreAsciiCase( rText ) )
         {
             m_aMatching.push_back( m_aEntries[i] );
             bRet = true;
