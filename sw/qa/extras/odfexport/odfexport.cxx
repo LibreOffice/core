@@ -232,6 +232,19 @@ DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
+{
+    // frame style fo:background-color was not imported
+    uno::Reference<container::XNameAccess> xStyles(getStyles("FrameStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("encarts"),
+            uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffcc99), getProperty<sal_Int32>(xStyle, "BackColorRGB"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, "BackColorTransparency"));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffcc99), getProperty<sal_Int32>(xStyle, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, "FillTransparence"));
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
 {
     // the boolean properties of the index were not exported properly
