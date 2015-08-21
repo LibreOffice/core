@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_9b99eb22",
+        "filename": "scaddins/source/analysis/analysishelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-21T19:22:46Z",
+      "side": 1,
+      "message": "That should be\n\n const Complex\u0026 rNew\n\n(pass by reference) instead. Otherwise a temporary copy (pass by value) may be created by the compiler.\n\nNote also our convention to use the p... prefix for pointer, and r... prefix for reference.",
+      "range": {
+        "startLine": 429,
+        "startChar": 36,
+        "endLine": 429,
+        "endChar": 48
+      },
+      "revId": "84e67e507ac5c72af5b8ba5cc0eb4a615532fd7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_fb9e2f06",
+        "filename": "scaddins/source/analysis/analysishelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-21T19:22:46Z",
+      "side": 1,
+      "message": "const Complex\u0026 r",
+      "range": {
+        "startLine": 657,
+        "startChar": 33,
+        "endLine": 657,
+        "endChar": 42
+      },
+      "revId": "84e67e507ac5c72af5b8ba5cc0eb4a615532fd7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
