@@ -109,11 +109,11 @@ class SfxChildWinContextArr_Impl;
 
 struct SFX2_DLLPUBLIC SfxChildWinFactory
 {
-    SfxChildWinCtor            pCtor;  // Factory method
-    sal_uInt16              nId;            // ChildWindow-Id ( SlotId )
-    SfxChildWinInfo            aInfo;  // Configuration
-    sal_uInt16                  nPos;  // Position in UI
-    SfxChildWinContextArr_Impl *pArr;  // Array for Contexts
+    SfxChildWinCtor             pCtor;  // Factory method
+    sal_uInt16                  nId;    // ChildWindow-Id ( SlotId )
+    SfxChildWinInfo             aInfo;  // Configuration
+    sal_uInt16                  nPos;   // Position in UI
+    SfxChildWinContextArr_Impl *pArr;   // Array for Contexts
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID, sal_uInt16 n );
     ~SfxChildWinFactory();
@@ -135,9 +135,9 @@ public:
 
     void                SetWindow( vcl::Window* pWin )
                         { pWindow=pWin; }
-    vcl::Window*           GetWindow() const
+    vcl::Window*        GetWindow() const
                         { return pWindow; }
-    sal_uInt16              GetContextId() const
+    sal_uInt16          GetContextId() const
                         { return nContextId; }
 
     FloatingWindow*     GetFloatingWindow() const;
@@ -167,9 +167,9 @@ protected:
 public:
     virtual             ~SfxChildWindow();
     void                Destroy();
-    vcl::Window*           GetWindow() const
+    vcl::Window*        GetWindow() const
                         { return pWindow; }
-    vcl::Window*           GetParent() const
+    vcl::Window*        GetParent() const
                         { return pParent; }
     SfxChildAlignment   GetAlignment() const
                         { return eChildAlignment; }
@@ -184,13 +184,13 @@ public:
                         { return nType; }
 
     void                CreateContext( sal_uInt16 nContextId, SfxBindings& );
-    sal_uInt16              GetContextId() const
+    sal_uInt16          GetContextId() const
                         { return pContext ? pContext->GetContextId(): 0; }
 
-    vcl::Window*           GetContextWindow() const
+    vcl::Window*        GetContextWindow() const
                         { return pContext ? pContext->GetWindow(): 0; }
 
-    vcl::Window*           GetContextWindow( SfxModule *pModule ) const;
+    vcl::Window*        GetContextWindow( SfxModule *pModule ) const;
 
     virtual SfxChildWinInfo GetInfo() const;
     void                SaveStatus(const SfxChildWinInfo& rInfo);
@@ -206,11 +206,11 @@ public:
     bool                WantsFocus() const;
 
     virtual bool        QueryClose();
-    com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >           GetFrame();
-    void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
+    css::uno::Reference< css::frame::XFrame >           GetFrame();
+    void                SetFrame( const css::uno::Reference< css::frame::XFrame > & );
 
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
-    void SetVisible_Impl( bool bVis );
+    void                SetVisible_Impl( bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE void Activate_Impl();
     SAL_DLLPRIVATE void Deactivate_Impl();
