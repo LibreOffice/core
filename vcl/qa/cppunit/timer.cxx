@@ -22,6 +22,8 @@
 #include "salinst.hxx"
 
 // #define TEST_WATCHDOG
+// Comment if UT fails randomly.
+#define TEST_TIMERPRECISION
 
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread
@@ -58,6 +60,7 @@ public:
 #endif
     void testDurations();
     void testAutoTimer();
+    void testMultiAutoTimers();
     void testRecursiveTimer();
     void testSlowTimerCallback();
 
@@ -69,6 +72,7 @@ public:
 #endif
     CPPUNIT_TEST(testDurations);
     CPPUNIT_TEST(testAutoTimer);
+    CPPUNIT_TEST(testMultiAutoTimers);
     CPPUNIT_TEST(testRecursiveTimer);
     CPPUNIT_TEST(testSlowTimerCallback);
 
@@ -117,6 +121,10 @@ void TimerTest::testIdle()
 // tdf#91727
 void TimerTest::testIdleMainloop()
 {
+    // For whatever reason, ImplGetSVData()
+    // doesn't link to the test binary on
+    // Windows.
+#ifndef WNT
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
     // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone
@@ -131,6 +139,7 @@ void TimerTest::testIdleMainloop()
         pSVData->maAppData.mnDispatchLevel--;
     }
     CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);
+#endif
 }
 
 // --------------------------------------------------------------------
@@ -189,11 +198,99 @@ public:
 
 void TimerTest::testAutoTimer()
 {
+    const sal_Int32 nDurationMs = 30;
+    const sal_Int32 nEventsCount = 5;
+    const double exp = (nDurationMs * nEventsCount);
+
     sal_Int32 nCount = 0;
-    AutoTimerCount aCount(1, nCount);
-    while (nCount < 100) {
-        Application::Yield();
+    double dur = 0;
+
+    // Repeat when we have random latencies.
+    // This is expected on non-realtime OSes.
+    for (int i = 0; i < 6; ++i)
+    {
+        const auto start = std::chrono::high_resolution_clock::now();
+        nCount = 0;
+        AutoTimerCount aCount(nDurationMs, nCount);
+        while (nCount < nEventsCount) {
+            Application::Yield();
+        }
+
+        const auto end = std::chrono::high_resolution_clock::now();
+        dur = std::chrono::duration<double, std::milli>(end - start).count();
+        if (dur >= (exp * 0.9) && dur <= (exp * 1.1))
+        {
+            break;
+        }
     }
+
+#ifdef TEST_TIMERPRECISION
+    // +/- 10% should be reasonable enough a margin.
+    // Increase if fails randomly under load.
+    CPPUNIT_ASSERT_MESSAGE("periodic timer", dur >= (exp * 0.9) && dur <= (exp * 1.1));
+#endif
+}
+
+void TimerTest::testMultiAutoTimers()
+{
+    // The behavior of the timers change drastically
+    // when multiple timers are present.
+    // The worst, in my tests, is when two
+    // timers with 1ms period exist with a
+    // third of much longer period.
+
+    const sal_Int32 nDurationMsX = 5;
+    const sal_Int32 nDurationMsY = 10;
+    const sal_Int32 nDurationMs = 40;
+    const sal_Int32 nEventsCount = 5;
+    const double exp = (nDurationMs * nEventsCount);
+    const double expX = (exp / nDurationMsX);
+    const double expY = (exp / nDurationMsY);
+
+    double dur = 0;
+    sal_Int32 nCountX = 0;
+    sal_Int32 nCountY = 0;
+    sal_Int32 nCount = 0;
+    char msg[200];
+
+    // Repeat when we have random latencies.
+    // This is expected on non-realtime OSes.
+    for (int i = 0; i < 6; ++i)
+    {
+        nCountX = 0;
+        nCountY = 0;
+        nCount = 0;
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        AutoTimerCount aCountX(nDurationMsX, nCountX);
+        AutoTimerCount aCountY(nDurationMsY, nCountY);
+
+        AutoTimerCount aCount(nDurationMs, nCount);
+        while (nCount < nEventsCount) {
+            Application::Yield();
+        }
+
+        const auto end = std::chrono::high_resolution_clock::now();
+        dur = std::chrono::duration<double, std::milli>(end - start).count();
+
+        sprintf(msg, "periodic multi-timer - dur: %.2f (%.2f) ms, nCount: %d (%d), "
+                     "nCountX: %d (%.2f), nCountY: %d (%.2f)\n",
+                dur, exp, nCount, nEventsCount, nCountX, expX, nCountY, expY);
+
+        // +/- 10% should be reasonable enough a margin.
+        // Increase if fails randomly under load.
+        if (dur >= (exp * 0.9) && dur <= (exp * 1.1) &&
+            nCountX >= (expX * 0.9) && nCountX <= (expX * 1.1) &&
+            nCountY >= (expY * 0.9) && nCountY <= (expY * 1.1))
+        {
+            // Success.
+            return;
+        }
+    }
+
+#ifdef TEST_TIMERPRECISION
+    CPPUNIT_FAIL(msg);
+#endif
 }
 
 // --------------------------------------------------------------------
