@@ -382,7 +382,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                          const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                          const SfxItemSet* pReplaceSet = 0);
 
-    void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar = ' ' );
+    void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar );
 
     // action ahead of cursor movement
     // resets selection if applicable, triggers timer and GCAttr()

@@ -772,8 +772,8 @@ public:
     sal_uInt16 GetRefMarks( std::vector<OUString>* = 0 ) const;
 
     /// Call AutoCorrect
-    void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode = true,
-                        sal_Unicode cChar = ' ' );
+    void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode,
+                        sal_Unicode cChar );
     bool GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord );
 
     /// Set our styles according to the respective rules.
