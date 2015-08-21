@@ -975,7 +975,10 @@ IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, FolderTree *, pBox )
     OUString* sURL = static_cast< OUString* >( pBox->GetHdlEntry()->GetUserData() );
 
     if( sURL )
+    {
         OpenURL( *sURL );
+        m_pFileView->GrabFocus();
+    }
 
     return 1;
 }
