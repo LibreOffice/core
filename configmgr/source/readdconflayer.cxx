@@ -87,7 +87,13 @@
 //
 // ** Nillable values recursively map to GVariant maybe instances.
 //
-// TODO: support "finalized", "mandatory", and "external"?
+// Finalization:  The component-update.dtd allows for finalization of
+// oor:component-data, node, and prop elements, while dconf allows for locking
+// of individual keys.  That does not match, but just mark the individual Node
+// instances that correspond to individual dconf keys as finalized for
+// non-writable dconf keys.
+//
+// TODO: support "mandatory" and "external"?
 
 namespace configmgr {
 
@@ -682,6 +688,15 @@ ReadValue readValue(
     return ReadValue::Value;
 }
 
+void finalize(
+    GObjectHolder<DConfClient> const & client, OString const & path,
+    rtl::Reference<Node> & node, int layer)
+{
+    if (!dconf_client_is_writable(client.get(), path.getStr())) {
+        node->setFinalized(layer);
+    }
+}
+
 void readDir(
     Data & data, int layer, rtl::Reference<Node> const & node,
     NodeMap & members, GObjectHolder<DConfClient> const & client,
@@ -855,6 +870,7 @@ void readDir(
                     continue;
                 case ReadValue::Value:
                     prop->setValue(layer, value);
+                    finalize(client, path, member, layer);
                     break;
                 case ReadValue::Remove:
                     remove = true;
@@ -885,6 +901,7 @@ void readDir(
                 }
                 static_cast<LocalizedValueNode *>(member.get())->setValue(
                     layer, value);
+                finalize(client, path, member, layer);
                 break;
             }
         case Node::KIND_LOCALIZED_PROPERTY:
