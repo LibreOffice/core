@@ -4813,6 +4813,16 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
     bValid = true;
 }
 
+XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_header, Element )
+{
+    sServicePrefix = sAPI_presentation_prefix;
+    bValid = true;
+}
+
 /// process attribute values
 void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16, const OUString& )
 {
