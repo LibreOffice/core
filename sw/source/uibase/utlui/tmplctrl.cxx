@@ -104,7 +104,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             {
                 SfxStyleSheetBasePool* pPool = pView->GetDocShell()->
                                                             GetStyleSheetPool();
-                pPool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
+                pPool->SetSearchMask(SFX_STYLE_FAMILY_PAGE);
                 if( pPool->Count() > 1 )
                 {
                     sal_uInt16 nCount = 0;

@@ -873,8 +873,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     bool bOld = g_bNoInterrupt;
     g_bNoInterrupt = true;
 
-    m_pHRuler->SetActive( true );
-    m_pVRuler->SetActive( true );
+    m_pHRuler->SetActive();
+    m_pVRuler->SetActive();
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if( pViewFrame->GetFrame().GetParentFrame())
@@ -921,7 +921,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SAL_WARN_IF(
         officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw", "/org.openoffice.Office.Common/Undo/Steps <= 0");
-    m_pWrtShell->DoUndo( true );
+    m_pWrtShell->DoUndo();
 
     const bool bBrowse = m_pWrtShell->GetViewOptions()->getBrowseMode();
     // Disable "multiple window"
@@ -1009,7 +1009,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations = false;
     if(bOldModifyFlag)
-        pDocSh->EnableSetModified( true );
+        pDocSh->EnableSetModified();
     InvalidateBorder();
 
     if( !m_pHScrollbar->IsVisible( true ) )

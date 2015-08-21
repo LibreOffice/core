@@ -690,7 +690,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
                     if ( bResetEnableSetModified )
                     {
-                        GetDoc()->GetDocShell()->EnableSetModified( true );
+                        GetDoc()->GetDocShell()->EnableSetModified();
                     }
                 }
             }

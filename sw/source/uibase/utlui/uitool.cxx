@@ -707,7 +707,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
 {
     const sal_Int32 nOffset = rToFill.GetEntryCount() > 0 ? 1 : 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
+    pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
     OUString sStandard;
@@ -788,7 +788,7 @@ OUString GetAppLangDateTimeString( const DateTime& rDT )
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rAppLclData = aSysLocale.GetLocaleData();
-    OUString sRet = rAppLclData.getDate( rDT ) + " " + rAppLclData.getTime( rDT, false, false );
+    OUString sRet = rAppLclData.getDate( rDT ) + " " + rAppLclData.getTime( rDT, false );
     return sRet;
 }
 

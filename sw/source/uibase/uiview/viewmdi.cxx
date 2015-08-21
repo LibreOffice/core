@@ -152,7 +152,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         {
             pUsrPref->SetZoom(nZoomFac);
             pUsrPref->SetZoomType(eZoomType);
-            SW_MOD()->ApplyUsrPref(*pUsrPref, 0, 0);
+            SW_MOD()->ApplyUsrPref(*pUsrPref, 0);
             pUsrPref->SetModified();
         }
         if ( pOpt->GetZoom() != nZoomFac )
@@ -226,7 +226,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
         {
             pUsrPref->SetViewLayoutColumns(nColumns);
             pUsrPref->SetViewLayoutBookMode(bBookMode);
-            SW_MOD()->ApplyUsrPref(*pUsrPref, 0, 0);
+            SW_MOD()->ApplyUsrPref(*pUsrPref, 0);
             pUsrPref->SetModified();
         }
     }
@@ -302,7 +302,7 @@ int SwView::_CreateScrollbar( bool bHori )
         ppScrollbar->SetScrollHdl( LINK( this, SwView, ScrollHdl ));
     ppScrollbar->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
-    ppScrollbar->EnableDrag( true );
+    ppScrollbar->EnableDrag();
 
     if(GetWindow())
         InvalidateBorder();
@@ -522,7 +522,7 @@ int SwView::CreateVRuler()
 int SwView::KillVRuler()
 {
     m_pVRuler->Hide();
-    m_pHRuler->SetBorderPos( 0 );
+    m_pHRuler->SetBorderPos();
     InvalidateBorder();
     return 1;
 }

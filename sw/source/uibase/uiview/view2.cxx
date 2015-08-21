@@ -800,7 +800,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_SYNC_LABELS:
         case FN_MAILMERGE_CHILDWINDOW:
-            GetViewFrame()->ShowChildWindow(nSlot, true);
+            GetViewFrame()->ShowChildWindow(nSlot);
         break;
         case FN_ESCAPE:
         {
@@ -1080,7 +1080,7 @@ void SwView::Execute(SfxRequest &rReq)
             if(pVFrame->HasChildWindow(SID_BROWSER))
             {
                 const SwDBData& rData = GetWrtShell().GetDBDesc();
-                SwModule::ShowDBObj(*this, rData, false);
+                SwModule::ShowDBObj(*this, rData);
             }
         }
         break;
@@ -1931,8 +1931,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         const SwFormatINetFormat* pINet;
         OUString sCmp;
         OUString  sMark( INetURLObject::decode( rMark,
-                                           INetURLObject::DECODE_WITH_CHARSET,
-                                        RTL_TEXTENCODING_UTF8 ));
+                                           INetURLObject::DECODE_WITH_CHARSET ));
 
         sal_Int32 nLastPos, nPos = sMark.indexOf( cMarkSeparator );
         if( -1 != nPos )

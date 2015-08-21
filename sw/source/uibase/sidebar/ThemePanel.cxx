@@ -430,7 +430,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
     std::vector<ColorSet> aColorSets = initColorSets();
     ColorSet aColorSet = getColorSet(sColorSetName, aColorSets);
 
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
+    pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
     pStyle = static_cast<SwDocStyleSheet*>(pPool->First());
 
     while (pStyle)
@@ -449,7 +449,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
         pStyle = static_cast<SwDocStyleSheet*>(pPool->Next());
     }
 
-    pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
+    pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR);
     pStyle = static_cast<SwDocStyleSheet*>(pPool->First());
 
     while (pStyle)

@@ -325,7 +325,7 @@ long SwWrtShell::DelRight()
                             have moved to a different cell */
                         if (pSNdOld != pSNdNew)
                         {
-                            SwCrsrShell::Pop( true );
+                            SwCrsrShell::Pop();
                             break;
                         }
                     }

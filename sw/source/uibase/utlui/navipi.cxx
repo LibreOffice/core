@@ -548,7 +548,7 @@ void SwNavigationPI::_ZoomOut()
         }
         SvTreeListEntry* pFirst = aContentTree->FirstSelected();
         if(pFirst)
-            aContentTree->Select(pFirst, true); // Enable toolbox
+            aContentTree->Select(pFirst); // Enable toolbox
         pConfig->SetSmall( false );
         aContentToolBox->CheckItem(FN_SHOW_CONTENT_BOX);
     }
@@ -577,7 +577,7 @@ void SwNavigationPI::_ZoomIn()
             pFloat->SetOutputSizePixel(aSz);
             SvTreeListEntry* pFirst = aContentTree->FirstSelected();
             if(pFirst)
-                aContentTree->Select(pFirst, true); // Enable toolbox
+                aContentTree->Select(pFirst); // Enable toolbox
             pConfig->SetSmall( true );
             aContentToolBox->CheckItem(FN_SHOW_CONTENT_BOX, false);
         }
@@ -763,7 +763,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                                   DragDropMode::ENABLE_TOP );
     aContentTree->EnableAsyncDrag(true);
     aContentTree->ShowTree();
-    aContentToolBox->CheckItem(FN_SHOW_CONTENT_BOX, true);
+    aContentToolBox->CheckItem(FN_SHOW_CONTENT_BOX);
 
 //  TreeListBox for global document
     aGlobalTree->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y );
@@ -784,7 +784,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox->SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
     aGlobalToolBox->SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
     aGlobalToolBox->SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
-    aGlobalToolBox->CheckItem(FN_GLOBAL_SWITCH, true);
+    aGlobalToolBox->CheckItem(FN_GLOBAL_SWITCH);
 
     vcl::Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
@@ -1300,7 +1300,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     if( nRootType < CONTENT_TYPE_MAX )
     {
         pNavi->aContentTree->SetRootType(nRootType);
-        pNavi->aContentToolBox->CheckItem(FN_SHOW_ROOT, true);
+        pNavi->aContentToolBox->CheckItem(FN_SHOW_ROOT);
     }
     pNavi->aContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
     pNavi->SetRegionDropMode( static_cast< sal_uInt16 >( pNaviConfig->GetRegionMode() ) );

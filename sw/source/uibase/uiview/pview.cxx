@@ -626,7 +626,7 @@ void SwPagePreview::_ExecPgUpAndPgDown( const bool  _bPgUp,
             const int eMvMode = _bPgUp ?
                                 SwPagePreviewWin::MV_PAGE_UP :
                                 SwPagePreviewWin::MV_PAGE_DOWN;
-            if ( ChgPage( eMvMode, true ) )
+            if ( ChgPage( eMvMode ) )
                 pViewWin->Invalidate();
         }
         else
@@ -856,7 +856,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 {
                     pViewWin->SetSelectedPage( nNewSelectedPage );
                     pViewWin->SetSttPage( nNewStartPage );
-                    bRefresh = ChgPage( SwPagePreviewWin::MV_SELPAGE, true );
+                    bRefresh = ChgPage( SwPagePreviewWin::MV_SELPAGE );
                 }
                 GetViewShell()->ShowPreviewSelection( nNewSelectedPage );
                 // invalidate page status.
@@ -890,7 +890,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             eMvMode = SwPagePreviewWin::MV_DOC_END; bRetVal = true; goto MOVEPAGE;
 MOVEPAGE:
             {
-                bool nRet = ChgPage( eMvMode, true );
+                bool nRet = ChgPage( eMvMode );
                 // return value fuer Basic
                 if(bRetVal)
                     rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !nRet));
@@ -1199,7 +1199,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         {
             pVS = static_cast<SwView*>(pOldSh)->GetWrtShellPtr();
             // save the current ViewData of the previous SwView
-            pOldSh->WriteUserData( sSwViewData, false );
+            pOldSh->WriteUserData( sSwViewData );
         }
         else
             pVS = GetDocShell()->GetWrtShell();
@@ -1263,7 +1263,7 @@ int SwPagePreview::_CreateScrollbar( bool bHori )
     ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
 
     ScrollDocSzChg();
-    ppScrollbar->EnableDrag( true );
+    ppScrollbar->EnableDrag();
     ppScrollbar->SetEndScrollHdl( LINK( this, SwPagePreview, EndScrollHdl ));
 
     ppScrollbar->SetScrollHdl( LINK( this, SwPagePreview, ScrollHdl ));
@@ -1545,7 +1545,7 @@ void SwPagePreview::DocSzChgd( const Size &rSz )
 
     if( aVisArea.GetWidth() )
     {
-        ChgPage( SwPagePreviewWin::MV_CALC, true );
+        ChgPage( SwPagePreviewWin::MV_CALC );
         ScrollDocSzChg();
 
         pViewWin->Invalidate();

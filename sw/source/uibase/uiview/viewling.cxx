@@ -234,14 +234,14 @@ void SwView::StartTextConversion(
         return;
     }
 
-    SpellKontext(true);
+    SpellKontext();
 
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
     const bool bOldIdle = pVOpt->IsIdle();
     pVOpt->SetIdle( false );
 
     bool bOldIns = m_pWrtShell->IsInsMode();
-    m_pWrtShell->SetInsMode( true );
+    m_pWrtShell->SetInsMode();
 
     const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection() ||
         m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
@@ -501,7 +501,7 @@ OUString SwView::GetThesaurusLookUpText( bool bSelection ) const
 void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bSelection )
 {
     bool bOldIns = m_pWrtShell->IsInsMode();
-    m_pWrtShell->SetInsMode( true );
+    m_pWrtShell->SetInsMode();
 
     m_pWrtShell->StartAllAction();
     m_pWrtShell->StartUndo(UNDO_DELETE);
@@ -898,7 +898,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
             SwView& rView = static_cast<SwEditWin*>( GetParent() )->GetView();
-            rView.GetDocShell()->SetModified( true );
+            rView.GetDocShell()->SetModified();
         }
 
         EndPopupMode();

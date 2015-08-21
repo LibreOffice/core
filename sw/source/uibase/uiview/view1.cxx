@@ -66,8 +66,8 @@ void SwView::Activate(bool bMDIActivate)
         m_pWrtShell->MakeSelVisible();
         m_bMakeSelectionVisible = false;
     }
-    m_pHRuler->SetActive( true );
-    m_pVRuler->SetActive( true );
+    m_pHRuler->SetActive();
+    m_pVRuler->SetActive();
 
     if ( bMDIActivate )
     {
@@ -75,7 +75,7 @@ void SwView::Activate(bool bMDIActivate)
 
         if( !m_sSwViewData.isEmpty() )
         {
-            ReadUserData(m_sSwViewData, false);
+            ReadUserData(m_sSwViewData);
             m_sSwViewData.clear();
         }
 

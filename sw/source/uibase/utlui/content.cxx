@@ -164,8 +164,7 @@ namespace
                                 p->sText,
                                 INetURLObject::decode(
                                     p->rINetAttr.GetINetFormat().GetValue(),
-                                    INetURLObject::DECODE_UNAMBIGUOUS,
-                                    RTL_TEXTENCODING_UTF8 ),
+                                    INetURLObject::DECODE_UNAMBIGUOUS ),
                                 &p->rINetAttr,
                                 n );
             pMember->insert( pCnt );
@@ -577,8 +576,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     pWrtShell->GetGrfNms( &sLink, 0, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
                     pCnt = new SwGraphicContent(this, sFrmName,
                                 INetURLObject::decode( sLink,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ),
+                                           INetURLObject::DECODE_UNAMBIGUOUS ),
                                 pFrameFormat->FindLayoutRect(false, &aNullPt).Top());
                 }
                 else
@@ -916,7 +914,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
             {
                 if( pActiveShell && pActiveShell->GetDoc() )
                 {
-                    const SwFlyFrameFormat* pFrameFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                    const SwFlyFrameFormat* pFrameFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName());
                     if( pFrameFormat )
                     {
 //                        SwNodeIndex aIdx( *(pFrameFormat->GetContent().GetContentIdx()), 1 );
@@ -932,7 +930,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
         case CONTENT_TYPE_FRAME     :
             {
                 //Can't find the GetAlternateText function. Need to verify again.
-                const SwFlyFrameFormat* pFlyFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                const SwFlyFrameFormat* pFlyFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName());
                 if( pFlyFormat )
                     return pFlyFormat->/*GetAlternateText*/GetName();
             }
@@ -1009,7 +1007,7 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
         case CONTENT_TYPE_FRAME     :
             {
                 //Can't find the function "GetLongDescription". Need to verify again.
-                const SwFlyFrameFormat* pFlyFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                const SwFlyFrameFormat* pFlyFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName());
                 if( pFlyFormat )
                     return pFlyFormat->GetDescription();
             }

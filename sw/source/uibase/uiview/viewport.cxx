@@ -338,7 +338,7 @@ void SwView::CheckVisArea()
             Rectangle aNewVisArea( m_aVisArea );
             aNewVisArea.Move( DOCUMENTBORDER - m_aVisArea.Left(),
                               DOCUMENTBORDER - m_aVisArea.Top() );
-            SetVisArea( aNewVisArea, true );
+            SetVisArea( aNewVisArea );
         }
     }
 }
@@ -603,7 +603,7 @@ long SwView::PhyPageUp()
 long SwView::PhyPageDown()
 {
     // Check for the currently visible page, do not format
-    sal_uInt16 nActPage = m_pWrtShell->GetNextPrevPageNum( true );
+    sal_uInt16 nActPage = m_pWrtShell->GetNextPrevPageNum();
     // If the last page of the document is visible, do nothing.
     if( USHRT_MAX != nActPage )
     {

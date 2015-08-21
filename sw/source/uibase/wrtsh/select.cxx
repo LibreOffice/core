@@ -221,7 +221,7 @@ sal_uLong SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, bool bSear
     sal_uLong nRet = Find( rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace );
     if(bCancel)
     {
-        Undo(1);
+        Undo();
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -246,7 +246,7 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
                                eStt,eEnd, bCancel, eFlags, pReplaceColl);
     if(bCancel)
     {
-        Undo(1);
+        Undo();
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -269,7 +269,7 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
 
     if(bCancel)
     {
-        Undo(1);
+        Undo();
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -400,11 +400,11 @@ void SwWrtShell::EndSelect()
         m_bInSelect = false;
         if (m_bAddMode)
         {
-            AddLeaveSelect(0, false);
+            AddLeaveSelect(0);
         }
         else
         {
-            SttLeaveSelect(0, false);
+            SttLeaveSelect(0);
             m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
             m_fnKillSel = &SwWrtShell::ResetSelect;
         }
@@ -656,7 +656,7 @@ void SwWrtShell::SetRedlineModeAndCheckInsMode( sal_uInt16 eMode )
 {
    SetRedlineMode( eMode );
    if (IsRedlineOn())
-       SetInsMode( true );
+       SetInsMode();
 }
 
 // Edit frame

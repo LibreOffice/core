@@ -276,7 +276,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
     int nSelectionType = rWrtShell.GetSelectionType();
     SfxItemSet* pItemSet_TextAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, true );
-    SfxItemSet* pItemSet_ParAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, false );
+    SfxItemSet* pItemSet_ParAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool );
 
     rWrtShell.StartAction();
     rWrtShell.Push();
@@ -511,7 +511,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         {
             // temporary SfxItemSet
             boost::scoped_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
-                    nSelectionType, *m_pItemSet_ParAttr->GetPool(), false));
+                    nSelectionType, *m_pItemSet_ParAttr->GetPool()));
             // no need to verify the existence of pTemplateItemSet as we
             // know that here the selection type is SEL_TXT
 

@@ -169,7 +169,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
                 const SwFrameFormat& rMaster = rDesc.GetMaster();
                 const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>(
-                                    rMaster.GetFormatAttr(RES_BACKGROUND, true));
+                                    rMaster.GetFormatAttr(RES_BACKGROUND));
                 rSet.Put(rBrush);
             }
             break;
