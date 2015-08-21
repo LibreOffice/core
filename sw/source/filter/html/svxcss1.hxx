@@ -25,7 +25,9 @@
 #include "parcss1.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
+
+#include <memory>
+#include <map>
 
 class SfxItemPool;
 class SvxBoxItem;
@@ -197,13 +199,13 @@ inline bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& rE2 )
 class SvxCSS1Parser : public CSS1Parser
 {
     typedef ::boost::ptr_vector<CSS1Selector> CSS1Selectors;
-    typedef ::boost::ptr_map<OUString, SvxCSS1MapEntry> CSS1Map;
+    typedef ::std::map<OUString, std::unique_ptr<SvxCSS1MapEntry>> CSS1Map;
     CSS1Selectors aSelectors;   // Liste der "offenen" Selectoren
 
-    CSS1Map aIds;
-    CSS1Map aClasses;
-    CSS1Map aPages;
-    CSS1Map aTags;
+    CSS1Map m_Ids;
+    CSS1Map m_Classes;
+    CSS1Map m_Pages;
+    CSS1Map m_Tags;
 
     OUString sBaseURL;
 

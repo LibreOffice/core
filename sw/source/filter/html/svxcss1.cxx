@@ -19,7 +19,6 @@
 
 #include <stdlib.h>
 
-#include <o3tl/ptr_container.hxx>
 #include <svx/svxids.hrc>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/ctrltool.hxx>
@@ -772,26 +771,26 @@ void SvxCSS1Parser::InsertId( const OUString& rId,
                               const SfxItemSet& rItemSet,
                               const SvxCSS1PropertyInfo& rProp )
 {
-    InsertMapEntry( rId, rItemSet, rProp, aIds );
+    InsertMapEntry( rId, rItemSet, rProp, m_Ids );
 }
 
 const SvxCSS1MapEntry* SvxCSS1Parser::GetId( const OUString& rId ) const
 {
-    CSS1Map::const_iterator itr = aIds.find(rId);
-    return itr == aIds.end() ? NULL : itr->second;
+    CSS1Map::const_iterator itr = m_Ids.find(rId);
+    return itr == m_Ids.end() ? nullptr : itr->second.get();
 }
 
 void SvxCSS1Parser::InsertClass( const OUString& rClass,
                                  const SfxItemSet& rItemSet,
                                  const SvxCSS1PropertyInfo& rProp )
 {
-    InsertMapEntry( rClass, rItemSet, rProp, aClasses );
+    InsertMapEntry( rClass, rItemSet, rProp, m_Classes );
 }
 
 const SvxCSS1MapEntry* SvxCSS1Parser::GetClass( const OUString& rClass ) const
 {
-    CSS1Map::const_iterator itr = aClasses.find(rClass);
-    return itr == aClasses.end() ? NULL : itr->second;
+    CSS1Map::const_iterator itr = m_Classes.find(rClass);
+    return itr == m_Classes.end() ? nullptr : itr->second.get();
 }
 
 void SvxCSS1Parser::InsertPage( const OUString& rPage,
@@ -802,7 +801,7 @@ void SvxCSS1Parser::InsertPage( const OUString& rPage,
     OUString aKey( rPage );
     if( bPseudo )
         aKey = ":" + aKey;
-    InsertMapEntry( aKey, rItemSet, rProp, aPages );
+    InsertMapEntry( aKey, rItemSet, rProp, m_Pages );
 }
 
 SvxCSS1MapEntry* SvxCSS1Parser::GetPage( const OUString& rPage, bool bPseudo )
@@ -811,21 +810,21 @@ SvxCSS1MapEntry* SvxCSS1Parser::GetPage( const OUString& rPage, bool bPseudo )
     if( bPseudo )
         aKey = ":" + aKey;
 
-    CSS1Map::iterator itr = aPages.find(aKey);
-    return itr == aPages.end() ? NULL : itr->second;
+    CSS1Map::iterator itr = m_Pages.find(aKey);
+    return itr == m_Pages.end() ? nullptr : itr->second.get();
 }
 
 void SvxCSS1Parser::InsertTag( const OUString& rTag,
                                const SfxItemSet& rItemSet,
                                const SvxCSS1PropertyInfo& rProp )
 {
-    InsertMapEntry( rTag, rItemSet, rProp, aTags );
+    InsertMapEntry( rTag, rItemSet, rProp, m_Tags );
 }
 
 SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const OUString& rTag )
 {
-    CSS1Map::iterator itr = aTags.find(rTag);
-    return itr == aTags.end() ? NULL : itr->second;
+    CSS1Map::iterator itr = m_Tags.find(rTag);
+    return itr == m_Tags.end() ? nullptr : itr->second.get();
 }
 
 bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
@@ -930,11 +929,11 @@ void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
     if (itr == rMap.end())
     {
         std::unique_ptr<SvxCSS1MapEntry> p(new SvxCSS1MapEntry(rKey, rItemSet, rProp));
-        o3tl::ptr_container::insert(rMap, rKey, std::move(p));
+        rMap.insert(std::make_pair(rKey, std::move(p)));
     }
     else
     {
-        SvxCSS1MapEntry* p = itr->second;
+        SvxCSS1MapEntry *const p = itr->second.get();
         MergeStyles( rItemSet, rProp,
                      p->GetItemSet(), p->GetPropertyInfo(), true );
     }
