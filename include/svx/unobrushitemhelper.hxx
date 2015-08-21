@@ -46,7 +46,8 @@ SVX_DLLPUBLIC void setSvxBrushItemAsFillAttributesToTargetSet(
 SVX_DLLPUBLIC SvxBrushItem getSvxBrushItemFromSourceSet(
     const SfxItemSet& rSourceSet,
     sal_uInt16 nBackgroundID,
-    bool bSearchInParents = true);
+    bool bSearchInParents = true,
+    bool bXMLImportHack = false);
 
 #endif // _UNOBRUSHITEMHELPER_HXX
 
