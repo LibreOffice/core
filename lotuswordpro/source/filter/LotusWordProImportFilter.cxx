@@ -90,6 +90,13 @@ bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::sun::
 
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(const OUString &rURL)
+{
+    SvFileStream aFileStream(rURL, StreamMode::READ);
+    uno::Reference< XDocumentHandler > xHandler;
+    return ( ReadWordproFile(aFileStream, xHandler) == 0 );
+}
+
 sal_Bool SAL_CALL LotusWordProImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException, std::exception)
 {

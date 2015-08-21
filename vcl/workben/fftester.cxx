@@ -347,6 +347,20 @@ try_again:
             }
             ret = (int) (*pfnImport)(out);
         }
+        else if (strcmp(argv[2], "lwp") == 0)
+        {
+            static HFilterCall pfnImport(0);
+            if (!pfnImport)
+            {
+                osl::Module aLibrary;
+                aLibrary.loadRelative(&thisModule, "liblwpftlo.so", SAL_LOADMODULE_LAZY);
+                pfnImport = reinterpret_cast<HFilterCall>(
+                    aLibrary.getFunctionSymbol("TestImportLWP"));
+                aLibrary.release();
+            }
+            ret = (int) (*pfnImport)(out);
+        }
+
     }
 
     /* To signal successful completion of a run, we need to deliver
