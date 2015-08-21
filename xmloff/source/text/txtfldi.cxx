@@ -2613,6 +2613,19 @@ XMLChapterImportContext::XMLChapterImportContext(
     bValid = true;
 }
 
+XMLChapterImportContext::XMLChapterImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_chapter, Element ),
+    sPropertyChapterFormat(sAPI_chapter_format),
+    sPropertyLevel(sAPI_level),
+    nFormat(ChapterFormat::NAME_NUMBER),
+    nLevel(0)
+{
+    bValid = true;
+}
+
 void XMLChapterImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
