@@ -1759,7 +1759,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         {
             //UUUU
             SfxItemSet& rStyleSet = rBase.GetItemSet();
-            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND));
+            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
             SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
             aChangedBrushItem.PutValue(aValue, nMemberId);
@@ -4298,7 +4298,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 case RES_BACKGROUND:
                 {
                     //UUUU
-                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND));
+                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, pDocShell->GetDoc()->IsInXMLImport()));
                     SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
                     aChangedBrushItem.PutValue(aValue, nMemberId);
