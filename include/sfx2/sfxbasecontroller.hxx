@@ -36,7 +36,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
@@ -63,7 +63,7 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
 //  class declarations
 
 
-typedef ::cppu::WeakImplHelper10 <   css::frame::XController2
+typedef ::cppu::WeakImplHelper  <   css::frame::XController2
                                 ,   css::frame::XControllerBorder
                                 ,   css::frame::XDispatchProvider
                                 ,   css::task::XStatusIndicatorSupplier
