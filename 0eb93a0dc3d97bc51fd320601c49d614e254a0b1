@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_5b9003ed",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2543,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-21T19:34:20Z",
+      "side": 1,
+      "message": "(nitpick) probably that should had been const ConvertData* anyway.. as we don\u0027t want to modify the original data.",
+      "revId": "0eb93a0dc3d97bc51fd320601c49d614e254a0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_7b933ffb",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2552,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-21T19:34:20Z",
+      "side": 1,
+      "message": "You don\u0027t want to create a temporary object here, but refer to the original instead. So\n\n const ConvertData\u0026 rData \u003d *it;\n\nOtherwise, see below...",
+      "revId": "0eb93a0dc3d97bc51fd320601c49d614e254a0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_3b89b7cb",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-21T19:34:20Z",
+      "side": 1,
+      "message": "This wouldn\u0027t work then, you\u0027d be holding a pointer to a temporary variable on the stack that gets invalidated when going out of scope.",
+      "revId": "0eb93a0dc3d97bc51fd320601c49d614e254a0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_1b867bb9",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2579,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-21T19:34:20Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "0eb93a0dc3d97bc51fd320601c49d614e254a0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
