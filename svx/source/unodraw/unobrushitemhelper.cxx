@@ -192,7 +192,7 @@ SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchI
 }
 
 //UUUU
-SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents)
+SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
 {
     const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSourceSet.GetItem(XATTR_FILLSTYLE, bSearchInParents)));
 
@@ -201,8 +201,8 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
         // no fill, still need to rescue the evtl. set RGB color, but use as transparent color (we have drawing::FillStyle_NONE)
         Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
 
-        // when fill style is none, then don't allow anything other than 0 or auto.
-        if (aFillColor.GetColor() != 0)
+        // for writerfilter: when fill style is none, then don't allow anything other than 0 or auto.
+        if (!bXMLImportHack && aFillColor.GetColor() != 0)
             aFillColor.SetColor(COL_AUTO);
 
         aFillColor.SetTransparency(0xff);
