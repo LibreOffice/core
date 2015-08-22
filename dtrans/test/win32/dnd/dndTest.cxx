@@ -122,8 +122,7 @@ HRESULT doTest()
 extern Reference<XMultiServiceFactory> MultiServiceFactory;
 DWORD WINAPI MTAFunc( void* threadData)
 {
-    HRESULT hr= S_OK;
-    hr= CoInitializeEx( NULL, COINIT_MULTITHREADED);
+    HRESULT hr= CoInitializeEx( NULL, COINIT_MULTITHREADED);
     ATLASSERT( FAILED(hr) );
     MSG msg;
     // force the creation of a message queue

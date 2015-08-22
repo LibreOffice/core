@@ -284,8 +284,7 @@ ShowProgressUI(bool indeterminate, bool initUIStrings)
   actx.lpSource = appPath;
   actx.lpResourceName = MAKEINTRESOURCE(IDR_COMCTL32_MANIFEST);
 
-  HANDLE hactx = INVALID_HANDLE_VALUE;
-  hactx = CreateActCtxW(&actx);
+  HANDLE hactx = CreateActCtxW(&actx);
   ULONG_PTR actxCookie = NULL;
   if (hactx != INVALID_HANDLE_VALUE) {
     // Push the specified activation context to the top of the activation stack.
