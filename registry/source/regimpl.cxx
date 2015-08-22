@@ -904,11 +904,10 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
                             bool bWarnings, bool bReport)
 {
-    RegError _ret = RegError::NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     std::unique_ptr< ORegistry > pReg (new ORegistry());
-    _ret = pReg->initRegistry(regFileName, RegAccessMode::READONLY);
+    RegError _ret = pReg->initRegistry(regFileName, RegAccessMode::READONLY);
     if (_ret != RegError::NO_ERROR)
         return _ret;
     ORegKey* pRootKey = pReg->getRootKey();
@@ -952,11 +951,10 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
                             bool bWarnings, bool bReport)
 {
-    RegError _ret = RegError::NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
     std::unique_ptr< ORegistry > pReg (new ORegistry());
-    _ret = pReg->initRegistry(regFileName, RegAccessMode::READWRITE, true/*bCreate*/);
+    RegError _ret = pReg->initRegistry(regFileName, RegAccessMode::READWRITE, true/*bCreate*/);
     if (_ret != RegError::NO_ERROR)
         return _ret;
     ORegKey* pRootKey = pReg->getRootKey();

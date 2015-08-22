@@ -125,12 +125,11 @@ namespace /* private */
             return false;
 
         oslProcess proc;
-        oslProcessError err = osl_Process_E_Unknown;
 
         /* for efficiency reasons we are using a 'bad' cast here
         as a vector or OUStrings is nothing else than
         an array of pointers to rtl_uString's */
-        err = osl_executeProcess(
+        oslProcessError err = osl_executeProcess(
             senddocUrl.pData,
             (rtl_uString**)&rCommandArgs[0],
             rCommandArgs.size(),
