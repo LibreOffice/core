@@ -2035,10 +2035,11 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
     double fRetval(1.0);
     rUnit.setLength(0L);
 
-    const sal_Char* psUnit = 0;
 
     if(nSourceUnit != nTargetUnit)
     {
+        const sal_Char* psUnit = 0;
+
         switch(nSourceUnit)
         {
             case MeasureUnit::TWIP:

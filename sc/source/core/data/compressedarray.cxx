@@ -89,7 +89,6 @@ size_t ScCompressedArray<A,D>::Search( A nAccess ) const
     long nLo    = 0;
     long nHi    = static_cast<long>(nCount) - 1;
     long nStart = 0;
-    long nEnd   = 0;
     long i      = 0;
     bool bFound = (nCount == 1);
     while (!bFound && nLo <= nHi)
@@ -99,7 +98,7 @@ size_t ScCompressedArray<A,D>::Search( A nAccess ) const
             nStart = static_cast<long>(pData[i - 1].nEnd);
         else
             nStart = -1;
-        nEnd = static_cast<long>(pData[i].nEnd);
+        long nEnd = static_cast<long>(pData[i].nEnd);
         if (nEnd < static_cast<long>(nAccess))
             nLo = ++i;
         else

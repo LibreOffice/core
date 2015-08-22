@@ -2756,10 +2756,9 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 
     unsigned int i;
     unsigned int nCount = maMemberArray.size();
-    ScDPResultMember* pResultMember;
     for( i = 0; i < nCount ; i++ )
     {
-        pResultMember = maMemberArray[i];
+        ScDPResultMember* pResultMember = maMemberArray[i];
         if ( pResultMember->IsNamedItem( iData ) )
             return pResultMember;
     }
@@ -4077,10 +4076,9 @@ void ScDPResultDimension::CheckShowEmpty( bool bShow )
 {
     long nCount = maMemberArray.size();
 
-    ScDPResultMember* pMember = NULL;
     for (long i=0; i<nCount; i++)
     {
-        pMember = maMemberArray.at(i);
+        ScDPResultMember* pMember = maMemberArray.at(i);
         pMember->CheckShowEmpty(bShow);
     }
 

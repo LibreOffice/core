@@ -40,7 +40,6 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
 {
-    unsigned char                   cLead;
     unsigned char                   cTrail;
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
@@ -54,7 +53,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
     while ( pSrcBuf < pEndSrcBuf )
     {
-        cLead = (unsigned char)*pSrcBuf;
+        unsigned char cLead = (unsigned char)*pSrcBuf;
 
         /* get entry for the lead byte */
         pLeadEntry = pLeadTab+cLead;

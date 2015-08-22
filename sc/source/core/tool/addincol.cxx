@@ -1568,8 +1568,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     long nRowCount = pRowSeq->getLength();
                     const uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
                     long nMaxColCount = 0;
-                    long nCol, nRow;
-                    for (nRow=0; nRow<nRowCount; nRow++)
+                    for (long nRow=0; nRow<nRowCount; nRow++)
                     {
                         long nTmp = pRowArr[nRow].getLength();
                         if ( nTmp > nMaxColCount )
@@ -1580,15 +1579,15 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (nRow=0; nRow<nRowCount; nRow++)
+                        for (long nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const sal_Int32* pColArr = pRowArr[nRow].getConstArray();
-                            for (nCol=0; nCol<nColCount; nCol++)
+                            for (long nCol=0; nCol<nColCount; nCol++)
                                 xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
-                            for (nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (long nCol=nColCount; nCol<nMaxColCount; nCol++)
                                 xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
@@ -1610,8 +1609,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     long nRowCount = pRowSeq->getLength();
                     const uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
                     long nMaxColCount = 0;
-                    long nCol, nRow;
-                    for (nRow=0; nRow<nRowCount; nRow++)
+                    for (long nRow=0; nRow<nRowCount; nRow++)
                     {
                         long nTmp = pRowArr[nRow].getLength();
                         if ( nTmp > nMaxColCount )
@@ -1622,15 +1620,15 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (nRow=0; nRow<nRowCount; nRow++)
+                        for (long nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
-                            for (nCol=0; nCol<nColCount; nCol++)
+                            for (long nCol=0; nCol<nColCount; nCol++)
                                 xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
-                            for (nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (long nCol=nColCount; nCol<nMaxColCount; nCol++)
                                 xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
@@ -1652,8 +1650,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     long nRowCount = pRowSeq->getLength();
                     const uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
                     long nMaxColCount = 0;
-                    long nCol, nRow;
-                    for (nRow=0; nRow<nRowCount; nRow++)
+                    for (long nRow=0; nRow<nRowCount; nRow++)
                     {
                         long nTmp = pRowArr[nRow].getLength();
                         if ( nTmp > nMaxColCount )
@@ -1664,17 +1661,17 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (nRow=0; nRow<nRowCount; nRow++)
+                        for (long nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const OUString* pColArr = pRowArr[nRow].getConstArray();
-                            for (nCol=0; nCol<nColCount; nCol++)
+                            for (long nCol=0; nCol<nColCount; nCol++)
                             {
                                 xMatrix->PutString(
                                     svl::SharedString(pColArr[nCol]),
                                     static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
                             }
-                            for (nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (long nCol=nColCount; nCol<nMaxColCount; nCol++)
                             {
                                 xMatrix->PutString(
                                     svl::SharedString(EMPTY_OUSTRING),
