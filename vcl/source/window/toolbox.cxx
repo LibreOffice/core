@@ -2908,30 +2908,29 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bo
 
 void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect)
 {
-    bool bNativeOk = false;
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
+    ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
 
-    ControlPart nPart = IsHorizontal() ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ;
-    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, nPart))
+    // no separator before or after windows or at breaks
+    if (pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size() - 1)
     {
-        ImplControlValue aControlValue;
-        ControlState     nState = ControlState::NONE;
-        bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, nPart, rRect, nState, aControlValue, OUString());
-    }
-
-    /* Draw the widget only if it can't be drawn natively. */
-    if(!bNativeOk)
-    {
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
-
-        // no separator before or after windows or at breaks
-        if (pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size() - 1)
+        pTempItem = &mpData->m_aItems[nPos+1];
+        if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
         {
-            pTempItem = &mpData->m_aItems[nPos+1];
-            if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
+            bool bNativeOk = false;
+            ControlPart nPart = IsHorizontal() ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ;
+            if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, nPart))
+            {
+                ImplControlValue aControlValue;
+                ControlState     nState = ControlState::NONE;
+                bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, nPart, rRect, nState, aControlValue, OUString());
+            }
+
+            /* Draw the widget only if it can't be drawn natively. */
+            if (!bNativeOk)
             {
                 long nCenterPos, nSlim;
+                const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
                 rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
                 if (IsHorizontal())
                 {
