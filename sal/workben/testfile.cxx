@@ -2455,10 +2455,8 @@ void print_error( const ::rtl::OString& str, FileBase::RC rc )
 
 int MAIN( int argc, char* argv[] )
 {
-    sal_Bool fSuccess=sal_False;
-
     //Initialization
-    fSuccess=Initialize();
+    sal_Bool fSuccess=Initialize();
     if ( !fSuccess )
     {
         printf("Error during Initialization");

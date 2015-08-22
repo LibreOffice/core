@@ -74,14 +74,13 @@ namespace abp
         bool bHaveEvolution = false;
         bool bHaveKab = false;
         bool bHaveMacab = false;
-        bool bWithMork = false;
 
 #if defined WNT
 #if defined WITH_MOZILLA
         bWithMozilla = true;
 #endif
 #else
-        bWithMork = true;
+        bool bWithMork = true;
 
         Reference< XDriverManager2 > xManager = DriverManager::create( _pParent->getORB() );
 
