@@ -154,7 +154,6 @@ void ScContentTree::dispose()
 // helper function for  GetEntryAltText and GetEntryLongDescription
 OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltText) const
 {
-    SdrObject* pFound = NULL;
 
     sal_uInt16 nType;
     sal_uLong nChild;
@@ -165,6 +164,7 @@ OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltT
     case SC_CONTENT_GRAPHIC:
     case SC_CONTENT_DRAWING:
         {
+            SdrObject* pFound = NULL;
             ScDocument* pDoc = ( const_cast< ScContentTree* >(this) )->GetSourceDocument();
             SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
@@ -192,13 +192,13 @@ OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltT
                     }
                 }
             }
-             if( pFound )
-             {
+            if( pFound )
+            {
                 if( isAltText )
                     return pFound->GetTitle();
                 else
                     return pFound->GetDescription();
-             }
+            }
         }
         break;
     }
