@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/string.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -51,7 +51,7 @@ namespace vml {
     3)  Line breaks represented by a single <br> element (without matching
         </br> element) are replaced by a literal LF character.
  */
-class InputStream : public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream >
+class InputStream : public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream >
 {
 public:
     explicit            InputStream(

@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_CORE_FRAGMENTHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/dllapi.h>
@@ -74,7 +74,7 @@ struct RecordInfo
 
 
 
-typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
+typedef ::cppu::ImplInheritanceHelper< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
 
 class OOX_DLLPUBLIC FragmentHandler : public FragmentHandler_BASE
 {

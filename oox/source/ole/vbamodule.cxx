@@ -25,7 +25,6 @@
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/storagebase.hxx"

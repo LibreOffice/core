@@ -23,7 +23,7 @@
 #include <oox/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sax/fastattribs.hxx>
 
 namespace oox { class TokenMap; }
@@ -37,7 +37,7 @@ namespace core {
     that provides access to the tokens generated from the internal token name list.
  */
 class OOX_DLLPUBLIC FastTokenHandler :
-    public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo,
+    public ::cppu::WeakImplHelper< ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::xml::sax::XFastTokenHandler >,
     public sax_fastparser::FastTokenHandlerBase
 {

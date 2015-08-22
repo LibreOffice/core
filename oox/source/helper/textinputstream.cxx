@@ -21,7 +21,7 @@
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include "oox/helper/binaryinputstream.hxx"
@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-typedef ::cppu::WeakImplHelper1< XInputStream > UnoBinaryInputStream_BASE;
+typedef ::cppu::WeakImplHelper< XInputStream > UnoBinaryInputStream_BASE;
 
 /** Implementation of a UNO input stream wrapping a binary input stream.
  */

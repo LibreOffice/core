@@ -21,7 +21,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shape.hxx"
@@ -47,7 +47,7 @@ public:
 };
 
 class ShapeContextHandler:
-    public ::cppu::WeakImplHelper2< css::xml::sax::XFastShapeContextHandler,
+    public ::cppu::WeakImplHelper< css::xml::sax::XFastShapeContextHandler,
                                     css::lang::XServiceInfo >
 {
 public:

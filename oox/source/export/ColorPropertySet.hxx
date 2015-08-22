@@ -22,7 +22,7 @@
 
 // FIXME? this file is identical to xmloff/source/chart/ColorPropertySet.hxx
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -32,7 +32,7 @@ namespace oox
 namespace drawingml
 {
 
-class ColorPropertySet : public ::cppu::WeakImplHelper2<
+class ColorPropertySet : public ::cppu::WeakImplHelper<
         ::com::sun::star::beans::XPropertySet,
         ::com::sun::star::beans::XPropertyState >
 {

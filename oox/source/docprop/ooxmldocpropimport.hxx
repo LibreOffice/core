@@ -24,13 +24,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace oox {
 namespace docprop {
 
 class DocumentPropertiesImport :
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::document::XOOXMLDocumentPropertiesImporter >
 {
