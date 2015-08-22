@@ -63,11 +63,12 @@ PyObject* PyUNO_iterator_next( PyObject *self )
     PyUNO_iterator* me = reinterpret_cast<PyUNO_iterator*>(self);
 
     Runtime runtime;
-    bool hasMoreElements = false;
     Any aRet;
 
     try
     {
+        bool hasMoreElements = false;
+
         {
             PyThreadDetach antiguard;
 

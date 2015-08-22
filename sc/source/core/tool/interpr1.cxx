@@ -6826,7 +6826,6 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
     double nErg = 0.0;
     double fMem = 0.0;
-    bool bNull = true;
     sal_uLong nCount = 0;
     bool bMissingField = false;
     unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
@@ -6848,6 +6847,8 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
                 case ifMIN:     nErg = MAXDOUBLE; break;
                 default: ; // nothing
             }
+
+            bool bNull = true;
             do
             {
                 nCount++;

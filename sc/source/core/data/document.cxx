@@ -425,7 +425,6 @@ void ScDocument::CreateValidTabNames(std::vector<OUString>& aNames, SCTAB nCount
     OUString aStrTable = rOpt.GetInitTabPrefix();
 
     OUStringBuffer rName;
-    bool         bOk   = false;
 
     // First test if the prefix is valid, if so only avoid doubles
     bool bPrefix = ValidTabName( aStrTable );
@@ -435,7 +434,7 @@ void ScDocument::CreateValidTabNames(std::vector<OUString>& aNames, SCTAB nCount
 
     for (SCTAB j = 0; j < nCount; ++j)
     {
-        bOk = false;
+        bool bOk = false;
         while(!bOk)
         {
             rName = aStrTable;
