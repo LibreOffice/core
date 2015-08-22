@@ -1956,16 +1956,11 @@ double lcl_GetSign(double fValue)
 bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
                                   ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
-    double fScale ;
-    double fEuclid ;
-    double fFactor ;
-    double fSignum ;
-    double fSum ;
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE col = 0; col <nK; col++)
     {
         // calculate vector u of the householder transformation
-        fScale = lcl_GetColumnMaximumNorm(pMatA, col, col, nN);
+        const double fScale = lcl_GetColumnMaximumNorm(pMatA, col, col, nN);
         if (fScale == 0.0)
         {
             // A is singular
@@ -1974,16 +1969,16 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
         for (SCSIZE row = col; row <nN; row++)
             pMatA->PutDouble( pMatA->GetDouble(col,row)/fScale, col, row);
 
-        fEuclid = lcl_GetColumnEuclideanNorm(pMatA, col, col, nN);
-        fFactor = 1.0/fEuclid/(fEuclid + fabs(pMatA->GetDouble(col,col)));
-        fSignum = lcl_GetSign(pMatA->GetDouble(col,col));
+        const double fEuclid = lcl_GetColumnEuclideanNorm(pMatA, col, col, nN);
+        const double fFactor = 1.0/fEuclid/(fEuclid + fabs(pMatA->GetDouble(col,col)));
+        const double fSignum = lcl_GetSign(pMatA->GetDouble(col,col));
         pMatA->PutDouble( pMatA->GetDouble(col,col) + fSignum*fEuclid, col,col);
         pVecR[col] = -fSignum * fScale * fEuclid;
 
         // apply Householder transformation to A
         for (SCSIZE c=col+1; c<nK; c++)
         {
-            fSum =lcl_GetColumnSumProduct(pMatA, col, pMatA, c, col, nN);
+            const double fSum =lcl_GetColumnSumProduct(pMatA, col, pMatA, c, col, nN);
             for (SCSIZE row = col; row <nN; row++)
                 pMatA->PutDouble( pMatA->GetDouble(c,row) - fSum * fFactor * pMatA->GetDouble(col,row), c, row);
         }

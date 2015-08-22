@@ -1194,7 +1194,6 @@ void ScInterpreter::ScIRR()
     while (fEps > SCdEpsilon && nItCount < nIterationsMax)
     {                                       // Newtons method:
         sp = sPos;                          // reset stack
-        double nCount = 0.0;
         double fNom = 0.0;
         double fDenom = 0.0;
         sal_uInt16 nErr = 0;
@@ -1202,6 +1201,7 @@ void ScInterpreter::ScIRR()
         ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
         if (aValIter.GetFirst(fValue, nErr))
         {
+            double nCount = 0.0;
             fNom +=           fValue / pow(1.0+x,(double)nCount);
             fDenom  += -nCount * fValue / pow(1.0+x,nCount+1.0);
             nCount++;
