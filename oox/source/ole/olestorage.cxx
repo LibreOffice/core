@@ -29,7 +29,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
@@ -51,7 +51,7 @@ namespace {
 /** Implementation of an OLE storage output stream that inserts itself into the
     storage when it is closed.
  */
-class OleOutputStream : public ::cppu::WeakImplHelper2< XSeekable, XOutputStream >
+class OleOutputStream : public ::cppu::WeakImplHelper< XSeekable, XOutputStream >
 {
 public:
     explicit            OleOutputStream(

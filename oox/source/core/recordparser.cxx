@@ -22,7 +22,7 @@
 #include <vector>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include "oox/core/fragmenthandler.hxx"
 
@@ -36,7 +36,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace prv {
 
-class Locator : public ::cppu::WeakImplHelper1< XLocator >
+class Locator : public ::cppu::WeakImplHelper< XLocator >
 {
 public:
     inline explicit         Locator( RecordParser* pParser ) : mpParser( pParser ) {}

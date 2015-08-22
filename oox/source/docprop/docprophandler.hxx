@@ -24,7 +24,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "oox/token/namespaces.hxx"
 #include "oox/token/tokens.hxx"
@@ -39,7 +39,7 @@ namespace docprop {
 #define DC_TOKEN( token )       (::oox::NMSP_dc | XML_##token)
 #define DCT_TOKEN( token )      (::oox::NMSP_dcTerms | XML_##token)
 
-class OOXMLDocPropHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastDocumentHandler >
+class OOXMLDocPropHandler : public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XFastDocumentHandler >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocProp;

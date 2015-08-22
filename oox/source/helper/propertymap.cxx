@@ -45,7 +45,7 @@ using ::com::sun::star::text::WritingMode;
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include "oox/token/propertynames.hxx"
@@ -97,7 +97,7 @@ namespace {
     Properties of all names and types can be set and later retrieved.
     TODO: move this to comphelper or better find an existing implementation
  */
-class GenericPropertySet : public ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo >
+class GenericPropertySet : public ::cppu::WeakImplHelper< XPropertySet, XPropertySetInfo >
 {
 public:
     explicit            GenericPropertySet( const PropertyMap& rPropMap );

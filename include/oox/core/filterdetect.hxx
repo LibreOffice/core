@@ -24,8 +24,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
@@ -47,7 +46,7 @@ namespace core {
     It takes a reference to the filter string object via its constructor, and
     puts the name of the detected filter to it, if it successfully finds one.
  */
-class FilterDetectDocHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastDocumentHandler >
+class FilterDetectDocHandler : public ::cppu::WeakImplHelper< ::com::sun::star::xml::sax::XFastDocumentHandler >
 {
 public:
     explicit            FilterDetectDocHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, OUString& rFilter );
@@ -85,7 +84,7 @@ private:
 
 
 
-class OOX_DLLPUBLIC FilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
+class OOX_DLLPUBLIC FilterDetect : public ::cppu::WeakImplHelper< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
 public:
     explicit            FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )

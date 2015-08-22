@@ -12,7 +12,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <sax/tools/converter.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -44,7 +44,7 @@ vector<sal_uInt8> convertToVector(Sequence<sal_Int8>& input)
     return vector<sal_uInt8>(inputArray, inputArray + input.getLength());
 }
 
-class AgileTokenHandler : public cppu::WeakImplHelper1< XFastTokenHandler >
+class AgileTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >
 {
 public:
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence< sal_Int8 >& /*nIdentifier*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
@@ -58,7 +58,7 @@ public:
     }
 };
 
-class AgileDocumentHandler : public ::cppu::WeakImplHelper1< XFastDocumentHandler >
+class AgileDocumentHandler : public ::cppu::WeakImplHelper< XFastDocumentHandler >
 {
     AgileEncryptionInfo& mInfo;
 

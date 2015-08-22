@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
@@ -82,7 +82,7 @@ enum OoxmlVersion
 
 struct FilterBaseImpl;
 
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::document::XImporter,
