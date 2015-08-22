@@ -2539,8 +2539,8 @@ ConvertDataList::~ConvertDataList()
 
 double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    ConvertData*    pFrom = nullptr;
-    ConvertData*    pTo = nullptr;
+    const ConvertData*    pFrom = nullptr;
+    const ConvertData*    pTo = nullptr;
     bool            bSearchFrom = true;
     bool            bSearchTo = true;
     sal_Int16       nLevelFrom = 0;
@@ -2549,20 +2549,20 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
     auto it = maVector.begin();
     while( it != maVector.end() && ( bSearchFrom || bSearchTo ) )
     {
-        ConvertData    data = *it;
+        const ConvertData&    rData = *it;
         if( bSearchFrom )
         {
-            sal_Int16   n = data.GetMatchingLevel( rFrom );
+            sal_Int16   n = rData.GetMatchingLevel( rFrom );
             if( n != INV_MATCHLEV )
             {
                 if( n )
                 {   // only first match for partial equality rulz a little bit more
-                    pFrom = &data;
+                    pFrom = &rData;
                     nLevelFrom = n;
                 }
                 else
                 {   // ... but exact match rulz most
-                    pFrom = &data;
+                    pFrom = &rData;
                     bSearchFrom = false;
                     nLevelFrom = n;
                 }
@@ -2571,17 +2571,17 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 
         if( bSearchTo )
         {
-            sal_Int16   n = data.GetMatchingLevel( rTo );
+            sal_Int16   n = rData.GetMatchingLevel( rTo );
             if( n != INV_MATCHLEV )
             {
                 if( n )
                 {   // only first match for partial equality rulz a little bit more
-                    pTo = &data;
+                    pTo = &rData;
                     nLevelTo = n;
                 }
                 else
                 {   // ... but exact match rulz most
-                    pTo = &data;
+                    pTo = &rData;
                     bSearchTo = false;
                     nLevelTo = n;
                 }
