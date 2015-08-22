@@ -101,11 +101,15 @@ void MediaFloater::ToggleFloatingMode()
 {
     ::avmedia::MediaItem aRestoreItem;
 
-    mpMediaWindow->updateMediaItem( aRestoreItem );
+    if (mpMediaWindow)
+        mpMediaWindow->updateMediaItem( aRestoreItem );
     delete mpMediaWindow;
     mpMediaWindow = NULL;
 
     SfxDockingWindow::ToggleFloatingMode();
+
+    if (isDisposed())
+        return;
 
     mpMediaWindow = new MediaWindow( this, true );
 
