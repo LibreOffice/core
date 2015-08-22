@@ -120,8 +120,11 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
 
     // The only position of 0x0D will not be able to make region in the old logic
     // because it is beyond the length of para...need special consideration here.
-    SwContentNode *const pContentNode(
-        SwNodeIndex(rMkPos.m_nNode, +1).GetNode().GetContentNode());
+    sal_uLong nMk = rMkPos.m_nNode.GetIndex() + 1;
+    const SwNodes& rMkNodes = rMkPos.m_nNode.GetNodes();
+    if (nMk >= rMkNodes.Count())
+        return false;
+    SwContentNode *const pContentNode(rMkNodes[nMk]->GetContentNode());
     if (rMkPos == rPtPos &&
         ((0 != rPtPos.m_nContent) || (pContentNode && (0 != pContentNode->Len())))
         && ( RES_TXTATR_FIELD != nWhich
