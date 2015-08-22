@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_7ee7ad40",
+        "filename": "vcl/unx/gtk3/gdi/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-08-22T17:47:05Z",
+      "side": 1,
+      "message": "If I revert those two lines, the plus and minus icons become black again in LTR but continue to be grey in RTL, should I just do this so it can land without regressing LTR until a fix for RTL is found? Having the icons visible in RTL is a big improvement even if they look greyed out.",
+      "revId": "4aab8dae49c5a85f9ad48fcefc7820d565fd6fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
