@@ -87,12 +87,11 @@ sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
 {
     DeclList::const_iterator iter = getIteratorBegin();
     DeclList::const_iterator end = getIteratorEnd();
-    AstDeclaration* pDecl = NULL;
     sal_uInt16 count = 0;
 
     while ( iter != end )
     {
-        pDecl = *iter;
+        AstDeclaration* pDecl = *iter;
         if ( pDecl->getNodeType() == nodeType )
             count++;
         ++iter;
@@ -199,11 +198,10 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
 {
     DeclList::const_iterator iter(m_declarations.begin());
     DeclList::const_iterator end(m_declarations.end());
-    AstDeclaration* pDecl = NULL;
 
     while ( iter != end )
     {
-        pDecl = *iter;
+        AstDeclaration* pDecl = *iter;
         if ( pDecl->getLocalName() == name )
             return pDecl;
         ++iter;

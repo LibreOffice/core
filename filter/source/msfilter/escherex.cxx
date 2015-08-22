@@ -1423,25 +1423,26 @@ bool EscherPropertyContainer::CreateGraphicProperties(
     bool        bRetValue = false;
     bool        bCreateFillStyles = false;
 
-    bool        bMirrored = false;
-    bool        bRotate   = true;
     boost::scoped_ptr<GraphicAttr> pGraphicAttr;
     GraphicObject   aGraphicObject;
     OUString        aGraphicUrl;
     OString         aUniqueId;
-    bool            bIsGraphicMtf(false);
-    // #121074#
-    sal_Int16 nTransparency(0);
-    sal_Int16 nRed(0);
-    sal_Int16 nGreen(0);
-    sal_Int16 nBlue(0);
-    double fGamma(1.0);
 
     ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
     ::com::sun::star::uno::Any aAny;
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
     {
+        bool bMirrored = false;
+        bool bRotate = true;
+        bool bIsGraphicMtf = false;
+        // #121074#
+        sal_Int16 nTransparency(0);
+        sal_Int16 nRed(0);
+        sal_Int16 nGreen(0);
+        sal_Int16 nBlue(0);
+        double fGamma(1.0);
+
         sal_uInt16 nAngle = 0;
         if ( rSource == "MetaFile" )
         {

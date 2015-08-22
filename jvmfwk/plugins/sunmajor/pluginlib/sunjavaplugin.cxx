@@ -117,7 +117,6 @@ OString getPluginJarPath(
     }
     else
     {
-        char sep[] =  {SAL_PATHSEPARATOR, 0};
         OUString sName(sLocation + "/lib/" + sName1);
         OUString sPath1;
         OUString sPath2;
@@ -128,6 +127,7 @@ OString getPluginJarPath(
             if (osl_getSystemPathFromFileURL(sName.pData, & sPath2.pData)
                 == osl_File_E_None)
             {
+                char sep[] = {SAL_PATHSEPARATOR, 0};
                 sPath = sPath1 + OUString::createFromAscii(sep) + sPath2;
             }
         }

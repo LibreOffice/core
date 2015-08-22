@@ -647,11 +647,11 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                         OUString usHome((sal_Unicode*) szTmpPath);
                         // check if there is already an entry with the same JavaHomeruntime lib
                         // if so, we use the one with the more accurate version
-                        bool bAppend= true;
                         OUString usHomeUrl;
                         if (osl_getFileURLFromSystemPath(usHome.pData, & usHomeUrl.pData) ==
                             osl_File_E_None)
                         {
+                            bool bAppend= true;
                             //iterate over the vector with java home strings
                             typedef vector<OUString>::iterator ItHome;
                             for(ItHome itHome= vecJavaHome.begin();
