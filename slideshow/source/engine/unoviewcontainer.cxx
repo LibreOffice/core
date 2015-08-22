@@ -22,8 +22,6 @@
 
 #include <osl/diagnose.h>
 
-#include <boost/bind.hpp>
-
 #include <algorithm>
 
 
@@ -45,14 +43,11 @@ namespace slideshow
             // check whether same view is already added
 
             // already added?
+            const uno::Reference< presentation::XSlideShowView > rShowView = rView->getUnoView();
             if( ::std::any_of( maViews.begin(),
                                maViews.end(),
-                               ::boost::bind(
-                                    ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                                    rView->getUnoView(),
-                                    ::boost::bind(
-                                        &UnoView::getUnoView,
-                                        _1 ) ) ) )
+                               [&rShowView]( const UnoViewSharedPtr& pUnoView )
+                               { return rShowView == pUnoView->getUnoView(); } ) )
             {
                 // yes, nothing to do
                 return false;
@@ -73,12 +68,8 @@ namespace slideshow
             // added in the first place?
             if( (aIter=::std::find_if( maViews.begin(),
                                        aEnd,
-                                       ::boost::bind(
-                                           ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                                           ::boost::cref( xView ),
-                                           ::boost::bind(
-                                               &UnoView::getUnoView,
-                                               _1 ) ) ) ) == aEnd )
+                                       [&xView]( const UnoViewSharedPtr& pUnoView )
+                                       { return xView == pUnoView->getUnoView(); } ) ) == aEnd )
             {
                 // nope, nothing to do
                 return UnoViewSharedPtr();
@@ -88,12 +79,8 @@ namespace slideshow
                 ::std::count_if(
                     maViews.begin(),
                     aEnd,
-                    ::boost::bind(
-                        ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                        ::boost::cref( xView ),
-                        ::boost::bind(
-                            &UnoView::getUnoView,
-                            _1 ))) == 1,
+                    [&xView]( const UnoViewSharedPtr& pUnoView )
+                    { return xView == pUnoView->getUnoView(); } ) == 1,
                 "UnoViewContainer::removeView(): View was added multiple times" );
 
             UnoViewSharedPtr pView( *aIter );
@@ -106,9 +93,8 @@ namespace slideshow
 
         void UnoViewContainer::dispose()
         {
-            ::std::for_each( maViews.begin(),
-                             maViews.end(),
-                             ::boost::mem_fn(&UnoView::_dispose) );
+            for( const auto& rView : maViews )
+                rView->_dispose();
             maViews.clear();
         }
     }

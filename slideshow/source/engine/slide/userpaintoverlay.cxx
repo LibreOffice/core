@@ -36,7 +36,6 @@
 #include "screenupdater.hxx"
 #include "vieweventhandler.hxx"
 
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include "slide.hxx"
 #include "cursormanager.hxx"
@@ -76,11 +75,9 @@ namespace slideshow
                 mnSize(100),
                 mbActive( bActive )
             {
-                std::for_each( rViews.begin(),
-                               rViews.end(),
-                               boost::bind( &PaintOverlayHandler::viewAdded,
-                                            this,
-                                            _1 ));
+                for( const auto& rView : rViews )
+                    this->viewAdded( rView );
+
                 drawPolygons();
             }
 
