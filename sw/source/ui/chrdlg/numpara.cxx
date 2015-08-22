@@ -335,7 +335,7 @@ IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl )
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl)
 {
     OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
-    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PARA, 0 );
+    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PSEUDO, 0 );
     return 0;
 }
 
