@@ -20,6 +20,7 @@
 #include "AreaTransparencyGradientControl.hxx"
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <AreaPropertyPanel.hrc>
@@ -84,7 +85,8 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maTrGrPopup(this, ::boost::bind(&AreaPropertyPanelBase::CreateTransparencyGradientControl, this, _1)),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
-      mxFrame(rxFrame)
+      mxFrame(rxFrame),
+      mpSidebarController()
 {
     get(mpColorTextFT,    "filllabel");
     get(mpLbFillType,     "fillstyle");
@@ -93,7 +95,12 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
     get(mpToolBoxColor,   "selectcolor");
     get(mpLBTransType,    "transtype");
     get(mpMTRTransparent, "settransparency");
+    get(mpSldTransparent, "transparencyslider");
     get(mpBTNGradient,    "selectgradient");
+    get(mpMTRAngle, "gradangle");
+    get(mpLbFillGradFrom, "fillgrad1");
+    get(mpLbFillGradTo, "fillgrad2");
+    get(mpGradientStyle, "gradientstyle");
 
     Initialize();
 }
@@ -112,7 +119,12 @@ void AreaPropertyPanelBase::dispose()
     mpTrspTextFT.clear();
     mpLBTransType.clear();
     mpMTRTransparent.clear();
+    mpSldTransparent.clear();
     mpBTNGradient.clear();
+    mpMTRAngle.clear();
+    mpLbFillGradFrom.clear();
+    mpLbFillGradTo.clear();
+    mpGradientStyle.clear();
 
     PanelLayout::dispose();
 }
@@ -150,12 +162,17 @@ void AreaPropertyPanelBase::Initialize()
 
     aLink = LINK( this, AreaPropertyPanelBase, SelectFillAttrHdl );
     mpLbFillAttr->SetSelectHdl( aLink );
+    mpGradientStyle->SetSelectHdl( aLink );
+    mpMTRAngle->SetModifyHdl( aLink );
+    mpLbFillGradFrom->SetSelectHdl( aLink );
+    mpLbFillGradTo->SetSelectHdl( aLink );
 
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl));
     mpLBTransType->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
-    mpMTRTransparent->SetValue( 50 );
+    SetTransparency( 50 );
     mpMTRTransparent->SetModifyHdl(LINK(this, AreaPropertyPanelBase, ModifyTransparentHdl_Impl));
+    mpSldTransparent->SetSlideHdl(LINK(this, AreaPropertyPanelBase, ModifyTransSliderHdl));
     mpMTRTransparent->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
     const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
@@ -172,6 +189,14 @@ void AreaPropertyPanelBase::Initialize()
     mpLBTransType->SetAccessibleRelationLabeledBy(mpTrspTextFT);
     mpMTRTransparent->SetAccessibleRelationLabeledBy(mpMTRTransparent);
     mpBTNGradient->SetAccessibleRelationLabeledBy(mpBTNGradient);
+
+    mpSidebarController = sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(mxFrame);
+}
+
+void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
+{
+    mpSldTransparent->SetThumbPos(nVal);
+    mpMTRTransparent->SetValue(nVal);
 }
 
 IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
@@ -194,6 +219,10 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
             case drawing::FillStyle_NONE:
             {
                 mpLbFillAttr->Show();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpGradientStyle->Hide();
+                mpMTRAngle->Hide();
                 mpToolBoxColor->Hide();
                 mpLbFillType->Selected();
                 mpLbFillAttr->Disable();
@@ -205,6 +234,10 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
             case drawing::FillStyle_SOLID:
             {
                 mpLbFillAttr->Hide();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpGradientStyle->Hide();
+                mpMTRAngle->Hide();
                 mpToolBoxColor->Show();
                 const OUString aTmpStr;
                 const Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
@@ -216,20 +249,29 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
             }
             case drawing::FillStyle_GRADIENT:
             {
-                mpLbFillAttr->Show();
+                mpLbFillAttr->Hide();
+                mpLbFillGradFrom->Show();
+                mpLbFillGradTo->Show();
+                mpGradientStyle->Show();
+                mpMTRAngle->Show();
                 mpToolBoxColor->Hide();
 
-                if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
+                if(pSh && pSh->GetItem(SID_COLOR_TABLE))
                 {
-                    if(!mpLbFillAttr->GetEntryCount())
-                    {
-                        const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
-                        mpLbFillAttr->Enable();
-                        mpLbFillAttr->Clear();
-                        mpLbFillAttr->Fill(aItem.GetGradientList());
-                    }
+                    const SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
+                    mpLbFillAttr->Enable();
+                    mpLbFillGradTo->Enable();
+                    mpLbFillGradFrom->Enable();
+                    mpGradientStyle->Enable();
+                    mpMTRAngle->Enable();
+                    mpLbFillAttr->Clear();
+                    mpLbFillGradTo->Clear();
+                    mpLbFillGradFrom->Clear();
+                    mpLbFillGradTo->Fill(aColorListItem.GetColorList());
+                    mpLbFillGradFrom->Fill(aColorListItem.GetColorList());
 
-                    mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+                    mpLbFillGradFrom->AdaptDropDownLineCountToMaximum();
+                    mpLbFillGradTo->AdaptDropDownLineCountToMaximum();
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
                     {
@@ -238,23 +280,46 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
                         if(mnLastPosGradient < aItem.GetGradientList()->Count())
                         {
                             const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
-                            const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetEntry(mnLastPosGradient), aGradient);
+                            const XFillGradientItem aXFillGradientItem(aGradient);
 
                             // #i122676# change FillStyle and Gradient in one call
                             setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
-                            mpLbFillAttr->SelectEntryPos(mnLastPosGradient);
+                            mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                            if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
+                            {
+                                mpLbFillGradFrom->InsertEntry(aGradient.GetStartColor(), OUString());
+                                mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                            }
+                            mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                            if(mpLbFillGradTo->GetSelectEntryCount() == 0)
+                            {
+                                mpLbFillGradTo->InsertEntry(aGradient.GetEndColor(), OUString());
+                                mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                            }
+
+                            mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
+                            css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
+                            mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
+
                         }
                     }
                 }
                 else
                 {
-                    mpLbFillAttr->Disable();
+                    mpLbFillGradFrom->Disable();
+                    mpLbFillGradTo->Disable();
+                    mpMTRAngle->Disable();
+                    mpGradientStyle->Disable();
                 }
                 break;
             }
             case drawing::FillStyle_HATCH:
             {
                 mpLbFillAttr->Show();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpMTRAngle->Hide();
+                mpGradientStyle->Hide();
                 mpToolBoxColor->Hide();
 
                 if(pSh && pSh->GetItem(SID_HATCH_LIST))
@@ -293,6 +358,10 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
             case drawing::FillStyle_BITMAP:
             {
                 mpLbFillAttr->Show();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpMTRAngle->Hide();
+                mpGradientStyle->Hide();
                 mpToolBoxColor->Hide();
 
                 if(pSh && pSh->GetItem(SID_BITMAP_LIST))
@@ -341,6 +410,8 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox *, pToolBox)
         }
     }
 
+    mpSidebarController->NotifyResize();
+
     return 0;
 }
 
@@ -369,31 +440,21 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox*, pToolBox)
             }
             case drawing::FillStyle_GRADIENT:
             {
-                sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
-                if(LISTBOX_ENTRY_NOTFOUND == nPos)
+                if(pSh && pSh->GetItem(SID_COLOR_TABLE))
                 {
-                    nPos = mnLastPosGradient;
-                }
+                    XGradient aGradient;
+                    aGradient.SetAngle(mpMTRAngle->GetValue() * 10);
+                    aGradient.SetGradientStyle((css::awt::GradientStyle)mpGradientStyle->GetSelectEntryPos());
+                    aGradient.SetStartColor(mpLbFillGradFrom->GetSelectEntryColor());
+                    aGradient.SetEndColor(mpLbFillGradTo->GetSelectEntryColor());
 
-                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_GRADIENT_LIST))
-                {
-                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
-
-                    if(nPos < aItem.GetGradientList()->Count())
-                    {
-                        const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
-                        const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
+                    const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
 
                         // #i122676# Change FillStyle and Gradinet in one call
-                        setFillStyleAndGradient(bFillStyleChange ? &aXFillStyleItem : NULL, aXFillGradientItem);
-                    }
+                    setFillStyleAndGradient(bFillStyleChange ? &aXFillStyleItem : NULL, aXFillGradientItem);
                 }
 
-                if(LISTBOX_ENTRY_NOTFOUND != nPos)
-                {
-                    mnLastPosGradient = nPos;
-                }
                 break;
             }
             case drawing::FillStyle_HATCH:
@@ -456,6 +517,7 @@ IMPL_LINK(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox*, pToolBox)
             }
             default: break;
         }
+        mpSidebarController->NotifyResize();
     }
 
     return 0;
@@ -492,8 +554,10 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
                 mpLBTransType->SelectEntryPos(1);
                 mpBTNGradient->Hide();
                 mpMTRTransparent->Show();
+                mpSldTransparent->Show();
                 mpMTRTransparent->Enable();
-                mpMTRTransparent->SetValue(nValue);
+                mpSldTransparent->Enable();
+                SetTransparency(nValue);
             }
 
             if(!bZeroValue)
@@ -513,6 +577,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
                 mpLBTransType->Enable();
                 mpTrspTextFT->Enable();
                 mpMTRTransparent->Hide();
+                mpSldTransparent->Hide();
                 mpBTNGradient->Enable();
                 mpBTNGradient->Show();
 
@@ -575,8 +640,10 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
             mpLBTransType->SelectEntryPos(0);
             mpBTNGradient->Hide();
             mpMTRTransparent->Enable();
+            mpSldTransparent->Enable();
             mpMTRTransparent->Show();
-            mpMTRTransparent->SetValue(0);
+            mpSldTransparent->Show();
+            SetTransparency(0);
         }
     }
     else
@@ -586,7 +653,9 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
         mpLBTransType->Disable();
         mpTrspTextFT->Disable();
         mpMTRTransparent->Disable();
+        mpSldTransparent->Disable();
         mpMTRTransparent->Show();
+        mpSldTransparent->Show();
         mpBTNGradient->Disable();
         mpBTNGradient->Hide();
     }
@@ -698,22 +767,30 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
 
     if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
     {
-        mpLbFillAttr->Show();
+        mpLbFillAttr->Hide();
+        mpLbFillGradFrom->Show();
+        mpLbFillGradTo->Show();
+        mpMTRAngle->Show();
+        mpGradientStyle->Show();
         mpToolBoxColor->Hide();
 
         if(bDefault)
         {
-            mpLbFillAttr->Enable();
             Update();
         }
         else if(bDisabled)
         {
-            mpLbFillAttr->Disable();
-            mpLbFillAttr->SetNoSelection();
+            mpLbFillGradFrom->SetNoSelection();
+            mpLbFillGradTo->SetNoSelection();
+            mpLbFillGradFrom->Disable();
+            mpLbFillGradTo->Disable();
+            mpMTRAngle->Disable();
+            mpGradientStyle->Disable();
         }
         else
         {
-            mpLbFillAttr->SetNoSelection();
+            mpLbFillGradFrom->SetNoSelection();
+            mpLbFillGradTo->SetNoSelection();
         }
     }
 }
@@ -908,6 +985,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
             break;
         }
     }
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::Update()
@@ -922,6 +1000,10 @@ void AreaPropertyPanelBase::Update()
             case drawing::FillStyle_NONE:
             {
                 mpLbFillAttr->Show();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpMTRAngle->Hide();
+                mpGradientStyle->Hide();
                 mpToolBoxColor->Hide();
                 break;
             }
@@ -930,13 +1012,22 @@ void AreaPropertyPanelBase::Update()
                 if(mpColorItem)
                 {
                     mpLbFillAttr->Hide();
+                    mpLbFillGradFrom->Hide();
+                    mpLbFillGradTo->Hide();
+                    mpMTRAngle->Hide();
+                    mpGradientStyle->Hide();
                     mpToolBoxColor->Show();
                 }
                 break;
             }
             case drawing::FillStyle_GRADIENT:
             {
-                mpLbFillAttr->Show();
+                mpLbFillAttr->Hide();
+                mpLbFillGradFrom->Show();
+                mpLbFillGradTo->Show();
+                mpMTRAngle->Enable();
+                mpMTRAngle->Show();
+                mpGradientStyle->Show();
                 mpToolBoxColor->Hide();
 
                 if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
@@ -945,12 +1036,33 @@ void AreaPropertyPanelBase::Update()
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
                     mpLbFillAttr->Fill(aItem.GetGradientList());
-
+                    const SvxColorListItem aColorItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
+                    mpLbFillGradFrom->Fill(aColorItem.GetColorList());
+                    mpLbFillGradTo->Fill(aColorItem.GetColorList());
+                    mpLbFillGradTo->SetNoSelection();
+                    mpLbFillGradFrom->SetNoSelection();
                     if(mpFillGradientItem)
                     {
                         const OUString aString(mpFillGradientItem->GetName());
-
                         mpLbFillAttr->SelectEntry(aString);
+                        const XGradient pGradient = mpFillGradientItem->GetGradientValue();
+                        mpLbFillGradFrom->SelectEntry(pGradient.GetStartColor());
+                        if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradFrom->InsertEntry(pGradient.GetStartColor(), OUString());
+                            mpLbFillGradFrom->SelectEntry(pGradient.GetStartColor());
+                        }
+                        mpLbFillGradTo->SelectEntry(pGradient.GetEndColor());
+                        if(mpLbFillGradTo->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradTo->InsertEntry(pGradient.GetEndColor(), OUString());
+                            mpLbFillGradTo->SelectEntry(pGradient.GetEndColor());
+                        }
+                        mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( pGradient.GetGradientStyle() ));
+                        if(mpGradientStyle->GetSelectEntryPos() == GradientStyle_RADIAL)
+                            mpMTRAngle->Disable();
+                        else
+                            mpMTRAngle->SetValue( pGradient.GetAngle() /10 );
                     }
                     else
                     {
@@ -966,6 +1078,10 @@ void AreaPropertyPanelBase::Update()
             case drawing::FillStyle_HATCH:
             {
                 mpLbFillAttr->Show();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpMTRAngle->Hide();
+                mpGradientStyle->Hide();
                 mpToolBoxColor->Hide();
 
                 if(pSh && pSh->GetItem(SID_HATCH_LIST))
@@ -996,6 +1112,10 @@ void AreaPropertyPanelBase::Update()
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
+                mpLbFillGradFrom->Hide();
+                mpLbFillGradTo->Hide();
+                mpMTRAngle->Hide();
+                mpGradientStyle->Hide();
 
                 if(pSh && pSh->GetItem(SID_BITMAP_LIST))
                 {
@@ -1028,6 +1148,16 @@ void AreaPropertyPanelBase::Update()
     }
 }
 
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl)
+{
+    const sal_uInt16 nVal = mpSldTransparent->GetThumbPos();
+    SetTransparency(nVal);
+    const XFillTransparenceItem aLinearItem(nVal);
+    setFillTransparence(aLinearItem);
+
+    return 0L;
+}
+
 IMPL_LINK_TYPED( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
     maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());
@@ -1045,17 +1175,21 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl)
     {
         mpBTNGradient->Hide();
         mpMTRTransparent->Show();
+        mpSldTransparent->Show();
         mpMTRTransparent->Enable();
-        mpMTRTransparent->SetValue(0);
+        mpSldTransparent->Enable();
+        SetTransparency(0);
     }
     else if(1 == nSelectType)
     {
         mpBTNGradient->Hide();
         mpMTRTransparent->Show();
+        mpSldTransparent->Show();
         nTrans = mnLastTransSolid;
         mpMTRTransparent->SetValue(nTrans);
         mpLBTransType->SelectEntryPos(1);
         mpMTRTransparent->Enable();
+        mpSldTransparent->Enable();
     }
     else
     {
@@ -1085,6 +1219,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl)
         }
 
         mpMTRTransparent->Hide();
+        mpSldTransparent->Hide();
         mpBTNGradient->Enable();
         bGradient = true;
     }
