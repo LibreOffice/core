@@ -10,10 +10,21 @@
 # http://download.microsoft.com/download/9/5/E/95EF66AF-9026-4BB0-A41D-A4F81802D92C/%5BMS-LCID%5D.pdf
 # downloaded from http://msdn.microsoft.com/library/cc233965.aspx
 # At least this worked for Release: Monday, July 22, 2013; 08/08/2013 Revision 6.0
-# downloaded on 2013-10-17
+# Also worked for 6/30/2015 revision 7.0
 #
 # Uses pdftotext (from poppler-utils), grep and gawk.
-# Files created/overwritten: MS-LCID.txt, MS-LCID.lst, MS-LCID.lst.h
+#
+# The script expects the downloaded [MS-LCID].pdf as MS-LCID.pdf
+#
+# Files created/OVERWRITTEN: MS-LCID.txt, MS-LCID.lst, MS-LCID.lst.h
+#
+# Best invoked in a temporary directory ...
+# Layout may change, diff MS-LCID.lst with ignore spaces against the previous
+# version for changes and additions, e.g.
+# gvimdiff -c 'set diffopt+=iwhite' ../MS-LCID.lst MS-LCID.lst
+# The generated MS-LCID.lst.h file is only a copy&paste help to add entries in
+# isolang.cxx and not to be committed, the #define names have to be adapted for
+# lang.h and isolang.cxx
 
 pdftotext -layout MS-LCID.pdf
 grep '^ *0x[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F] ' MS-LCID.txt > MS-LCID.lst
@@ -39,18 +50,18 @@ gawk -e '
     {
         case 1:
             # lll
-            mapping = sprintf( "    { %-36s %5s, \"\"  , false },", usedef, "\"" arr[1] "\"");
+            mapping = sprintf( "    { %-36s %5s, \"\"  , 0     },", usedef, "\"" arr[1] "\"");
             break;
         case 2:
             if (length(arr[2]) == 2)
             {
                 # lll-CC
-                mapping = sprintf( "    { %-36s %5s, \"%s\", false },", usedef, "\"" arr[1] "\"", arr[2]);
+                mapping = sprintf( "    { %-36s %5s, \"%s\", 0     },", usedef, "\"" arr[1] "\"", arr[2]);
             }
             else if (length(arr[2]) == 4)
             {
                 # lll-Ssss
-                mapping = sprintf( "    { %-44s %10s, \"\"   },", usedef, "\"" tag "\"");
+                mapping = sprintf( "    { %-44s %10s, \"\"  , 0     },", usedef, "\"" tag "\"");
             }
             else
             {
@@ -67,7 +78,7 @@ gawk -e '
             else if (length(arr[2]) == 4)
             {
                 # lll-Ssss-CC
-                mapping = sprintf( "    { %-44s %10s, \"%s\" },", usedef, "\"" arr[1] "-" arr[2] "\"", arr[3]);
+                mapping = sprintf( "    { %-44s %10s, \"%s\", 0     },", usedef, "\"" arr[1] "-" arr[2] "\"", arr[3]);
             }
             else
             {
