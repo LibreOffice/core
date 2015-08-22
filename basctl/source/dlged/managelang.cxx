@@ -149,12 +149,19 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
     ScopedVclPtrInstance< SetDefaultLanguageDialog > aDlg( this, m_xLocalizationMgr );
     if ( RET_OK == aDlg->Execute() )
     {
-        // add new locales
-        Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
-        m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
-        // update listbox
-        ClearLanguageBox();
-        FillLanguageBox();
+        if (!m_xLocalizationMgr->isLibraryLocalized())
+        {
+            SAL_WARN("basctl.basicide", "Adding langs to non-localized library tdf#93077");
+        }
+        else
+        {
+            // add new locales
+            Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
+            m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
+            // update listbox
+            ClearLanguageBox();
+            FillLanguageBox();
+        }
 
         if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
@@ -277,16 +284,17 @@ void SetDefaultLanguageDialog::FillLanguageBox()
 {
     // fill list with all languages
     m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::ALL, false );
-    // remove the already localized languages
-    Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
-    const Locale* pLocale = aLocaleSeq.getConstArray();
-    sal_Int32 i, nCount = aLocaleSeq.getLength();
-    for ( i = 0;  i < nCount;  ++i )
-        m_pLanguageLB->RemoveLanguage( LanguageTag::convertToLanguageType( pLocale[i] ) );
 
-    // fill checklistbox if not in default mode
     if ( m_xLocalizationMgr->isLibraryLocalized() )
     {
+        // remove the already localized languages
+        Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
+        const Locale* pLocale = aLocaleSeq.getConstArray();
+        sal_Int32 i, nCount = aLocaleSeq.getLength();
+        for ( i = 0;  i < nCount;  ++i )
+            m_pLanguageLB->RemoveLanguage( LanguageTag::convertToLanguageType( pLocale[i] ) );
+
+        // fill checklistbox if not in default mode
         sal_uInt16 j, nCount_ = m_pLanguageLB->GetEntryCount();
         for ( j = 0;  j < nCount_;  ++j )
         {
