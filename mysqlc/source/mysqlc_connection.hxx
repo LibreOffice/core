@@ -38,7 +38,7 @@
 
 #include <cppconn/driver.h>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>
 
@@ -65,7 +65,7 @@ namespace connectivity
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > my_XNameAccessRef;
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > my_XDatabaseMetaDataRef;
 
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XConnection,
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XConnection,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::lang::XServiceInfo
                                                 > OMetaConnection_BASE;
