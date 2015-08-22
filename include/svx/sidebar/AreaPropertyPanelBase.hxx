@@ -35,6 +35,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/slider.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/vclptr.hxx>
 #include <svl/intitem.hxx>
@@ -125,11 +126,16 @@ protected:
     VclPtr<FixedText>                                          mpColorTextFT;
     VclPtr<SvxFillTypeBox>                                     mpLbFillType;
     VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
-    VclPtr<sfx2::sidebar::SidebarToolBox>                                            mpToolBoxColor; // for new color picker
+    VclPtr<ColorLB>                                            mpLbFillGradFrom;
+    VclPtr<ColorLB>                                            mpLbFillGradTo;
+    VclPtr<sfx2::sidebar::SidebarToolBox>                      mpToolBoxColor; // for new color picker
     VclPtr<FixedText>                                          mpTrspTextFT;
     VclPtr<ListBox>                                            mpLBTransType;
     VclPtr<MetricField>                                        mpMTRTransparent;
+    VclPtr<Slider>                                             mpSldTransparent;
     VclPtr<ToolBox>                                            mpBTNGradient;
+    VclPtr<MetricField>                                        mpMTRAngle;
+    VclPtr<ListBox>                                            mpGradientStyle;
 
     ::boost::scoped_ptr< XFillStyleItem >               mpStyleItem;
     ::boost::scoped_ptr< XFillColorItem >               mpColorItem;
@@ -155,6 +161,7 @@ protected:
     DECL_LINK(SelectFillAttrHdl, ListBox* );
     DECL_LINK(ChangeTrgrTypeHdl_Impl, void*);
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
+    DECL_LINK(ModifyTransSliderHdl, void*);
 
     // for transparency gradient
     VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
@@ -163,6 +170,7 @@ protected:
     void Initialize();
     void Update();
     void ImpUpdateTransparencies();
+    void SetTransparency(sal_uInt16 nVal);
 };
 
 
