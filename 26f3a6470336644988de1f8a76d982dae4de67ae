@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_9eed5928",
+        "filename": "slideshow/source/engine/slide/layer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-22T17:57:12Z",
+      "side": 0,
+      "message": "maViewEntries is looped over twice. The first time the to set clip and the second time to clear the update areas. After looking at the code, I think it can be condensed into one loop, but I could be wrong.",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_def7e1f3",
+        "filename": "slideshow/source/engine/slide/layermanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-22T17:57:12Z",
+      "side": 0,
+      "message": "I thought this made more sense as a range-based for-loop",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_5ee4713a",
+        "filename": "slideshow/source/engine/slide/slideimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-22T17:57:12Z",
+      "side": 0,
+      "message": "The view container is looped over twice. Once calling clearAll for each view. However, if you look at SlideRenderer clearAll is also called there, so I\u0027m not sure why the first loop is there. Is there a reason why it is called twice? I removed SlideRenderer and moved the contents of the () operator to the body of the for loop.",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_fec9fdad",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-22T17:57:12Z",
+      "side": 0,
+      "message": "I thought this made more sense as a range-based for-loop. In addition, as opposed to using a bool flag value, I thought it might make more sense to return the value immediately if the element is found. Then if no element is found explicitly return the end of the map.",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_fef29d05",
+        "filename": "slideshow/source/engine/slide/layer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-22T17:57:12Z",
+      "side": 1,
+      "message": "I\u0027ll change the above comment to \"clear update area of view layer\" if you agree with this change",
+      "revId": "4fa0f6d3fed545738d847154a82cad486651b421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
