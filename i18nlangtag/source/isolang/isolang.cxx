@@ -387,7 +387,9 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_MALTESE,                     "mt", "MT", 0     },
     { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA, "mn", "MN", 0     },    // macrolanguage code; should be khk-MN; Cyrillic script
     { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,      "mn", ""  , 0     },    // macrolanguage code; should be khk; Cyrillic script
-    { LANGUAGE_RUSSIAN_MOLDOVA,             "mo", "MD", 0     },
+    { LANGUAGE_ROMANIAN_MOLDOVA,            "ro", "MD", 0     },
+    { LANGUAGE_ROMANIAN_MOLDOVA,            "mo", "MD", 0     },    // mo-MD was associated with Russian Moldova LCID, apparently an error; 'mo' is retired, merged with 'ro', see http://www-01.sil.org/iso639-3/documentation.asp?id=mol
+    { LANGUAGE_RUSSIAN_MOLDOVA,             "ru", "MD", 0     },    // as per [MS-LCID] rev. 7.0 2015-06-30
     { LANGUAGE_SWAHILI,                     "sw", "KE", 0     },
     { LANGUAGE_USER_SWAHILI_TANZANIA,       "sw", "TZ", 0     },
     { LANGUAGE_TAJIK,                       "tg", "TJ", 0     },
