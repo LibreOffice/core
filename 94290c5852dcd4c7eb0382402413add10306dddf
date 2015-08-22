@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_3b0c1742",
+        "filename": "vcl/qa/cppunit/timer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-08-22T02:33:07Z",
+      "side": 1,
+      "message": "Thanks. I can remove the comment then, since it\u0027s by design.",
+      "parentUuid": "1af94dfe_fb3aafe6",
+      "revId": "94290c5852dcd4c7eb0382402413add10306dddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_db3ff3d4",
         "filename": "vcl/qa/cppunit/timer.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-21T22:22:40Z",
       "side": 1,
       "message": "ugh, static buffer etc - this is rather unidiomatic...\n\nsc/qa/unit/ucalc_formula.cxx has a nicer example",
+      "revId": "94290c5852dcd4c7eb0382402413add10306dddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_1b095b32",
+        "filename": "vcl/qa/cppunit/timer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-08-22T02:33:07Z",
+      "side": 1,
+      "message": "I didn\u0027t find a good reason to complicate things. Not that I\u0027m a fan of static buffers, but here there is no dynamic data anyway.\n\nIs ucalc_formula an indirect way of suggesting I use ostringstream?",
+      "parentUuid": "1af94dfe_db3ff3d4",
       "revId": "94290c5852dcd4c7eb0382402413add10306dddf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
