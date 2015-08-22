@@ -143,9 +143,8 @@ public:
             bRet = !rVec.empty();
 
             // registered node found -> fire all events in the vector
-            std::for_each( rVec.begin(), rVec.end(),
-                           boost::bind( &EventQueue::addEvent,
-                                        boost::ref( mrEventQueue ), _1 ) );
+            for( const auto& pEvent : rVec )
+                mrEventQueue.addEvent( pEvent );
 
             rVec.clear();
         }

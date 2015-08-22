@@ -64,16 +64,12 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
 
         // clone listener map
         uno::Reference<presentation::XShapeEventListener> xDummyListener;
-        std::for_each( mrGlobalListenersMap.begin(),
-                       mrGlobalListenersMap.end(),
-                       [&xDummyListener, this]( const ShapeEventListenerMap::value_type& cp )
-                       { this->listenerAdded(xDummyListener, cp.first); } );
+        for( const auto& rListener : mrGlobalListenersMap )
+            this->listenerAdded( xDummyListener, rListener.first );
 
         // clone cursor map
-        std::for_each( mrGlobalCursorMap.begin(),
-                       mrGlobalCursorMap.end(),
-                       [this]( const ShapeCursorMap::value_type& cp )
-                       { this->cursorChanged(cp.first, cp.second); } );
+        for( const auto& rListener : mrGlobalCursorMap )
+            this->cursorChanged( rListener.first, rListener.second );
 
         if( mpLayerManager )
             mpLayerManager->activate( bSlideBackgoundPainted );
