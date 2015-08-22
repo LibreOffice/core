@@ -152,7 +152,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     SCROW nRow = rParam.nRow1;
     SCCOL nEndCol = nCol;                   // end of resulting database area
     SCROW nEndRow = nRow;
-    long i;
 
     bool bDoSelection = false;
     bool bRealSelection = false;            // sal_True if not everything is selected
@@ -281,7 +280,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 uno::Sequence<sal_Bool> aColCurr( nColCount );      // currency flag is not in types
                 sal_Int32* pTypeArr = aColTypes.getArray();
                 sal_Bool* pCurrArr = aColCurr.getArray();
-                for (i=0; i<nColCount; i++)
+                for (long i=0; i<nColCount; i++)
                 {
                     pTypeArr[i] = xMeta->getColumnType( i+1 );
                     pCurrArr[i] = xMeta->isCurrency( i+1 );
@@ -290,7 +289,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 if ( !bAddrInsert )                 // read column names
                 {
                     nCol = rParam.nCol1;
-                    for (i=0; i<nColCount; i++)
+                    for (long i=0; i<nColCount; i++)
                     {
                         pImportDoc->SetString( nCol, nRow, nTab,
                                                 xMeta->getColumnLabel( i+1 ) );
@@ -342,7 +341,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                         if ( ValidRow(nRow) )
                         {
                             nCol = rParam.nCol1;
-                            for (i=0; i<nColCount; i++)
+                            for (long i=0; i<nColCount; i++)
                             {
                                 ScDatabaseDocUtil::PutData( pImportDoc, nCol, nRow, nTab,
                                                 xRow, i+1, pTypeArr[i], pCurrArr[i] );

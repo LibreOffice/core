@@ -189,7 +189,6 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
     FUNC_TYPE eType;
     DefTokenId eOc;
     double nFloatArray[ nBufSize ] = {0};
-    double nFloat;
     const sal_Char* pExtString = 0;
 
     aCRD.InitFlags();
@@ -212,6 +211,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
 
             if( nFmla[ i ] == 0x00 )
             {
+                double nFloat;
                 maIn.ReadDouble( nFloat );
                 nFloatArray[ nFloatCount ] = nFloat;
                 SAFEDEC_OR_RET(nRef, 8, ConvErrCount);

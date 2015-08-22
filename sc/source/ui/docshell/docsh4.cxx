@@ -1366,7 +1366,6 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
 void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages )
 {
-    bool bUndo(aDocument.IsUndoEnabled());
     OUString aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
@@ -1376,6 +1375,7 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
         ScDocShellModificator aModificator( *this );
 
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
+        const bool bUndo(aDocument.IsUndoEnabled());
         if (bUndo)
         {
             sal_uInt16 nOldScale = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
@@ -1532,7 +1532,6 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                 }
                 else if ( pReqArgs == NULL )
                 {
-                    bool bUndo(aDocument.IsUndoEnabled());
                     OUString aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet
@@ -1543,6 +1542,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                     if ( pStyleSheet )
                     {
                         ScStyleSaveData aOldData;
+                        const bool bUndo(aDocument.IsUndoEnabled());
                         if (bUndo)
                             aOldData.InitFromStyle( pStyleSheet );
 

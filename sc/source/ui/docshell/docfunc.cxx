@@ -451,12 +451,12 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
     bool bDone = false;
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    bool bUndo (rDoc.IsUndoEnabled());
     ScDetOpList* pList = rDoc.GetDetOpList();
     if ( pList && pList->Count() )
     {
         rDocShell.MakeDrawLayer();
         ScDrawLayer* pModel = rDoc.GetDrawLayer();
+        const bool bUndo (rDoc.IsUndoEnabled());
         if (bUndo)
             pModel->BeginCalcUndo(false);
 
@@ -4052,8 +4052,6 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
 
-    bool bUndo(rDoc.IsUndoEnabled());
-
     ScMarkData aMark;
     if (pTabMark)
         aMark = *pTabMark;
@@ -4070,6 +4068,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
 
         ScDocument* pUndoDoc = NULL;
 
+        const bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
         {
             //! auch bei Undo selektierte Tabellen beruecksichtigen
@@ -5167,8 +5166,6 @@ bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     SCROW nStartRow = rOldRange.aStart.Row();
     SCTAB nTab = rOldRange.aStart.Tab();
 
-    bool bUndo(rDoc.IsUndoEnabled());
-
     bool bRet = false;
 
     OUString aFormula;
@@ -5176,6 +5173,7 @@ bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     if ( aFormula.startsWith("{") && aFormula.endsWith("}") )
     {
         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
+        bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
             rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 
