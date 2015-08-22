@@ -539,8 +539,6 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
             const sal_uInt32 nCount = aNewPickVector.size();
             for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
-                char menuShortCut[5] = "~n: ";
-
                 OUString aMenuShortCut;
                 if ( i <= 9 )
                 {
@@ -548,6 +546,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                         aMenuShortCut = "1~0: ";
                     else
                     {
+                        char menuShortCut[5] = "~n: ";
                         menuShortCut[1] = (char)( '1' + i );
                         aMenuShortCut = OUString::createFromAscii( menuShortCut );
                     }

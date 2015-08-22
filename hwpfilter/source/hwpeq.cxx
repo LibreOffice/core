@@ -674,12 +674,12 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
   MzString  white, token;
   char      key[256];
   int       ch, result;
-  const hwpeq *eq = 0;
 
   while( 0 != (result = next_token(white, token, strm)) ) {
     if( sentinel && (result == 1) && strchr(sentinel, token[0]) )
       break;
     make_keyword(key, token);
+    const hwpeq *eq = 0;
     if( (eq = lookup_eqn(key)) != 0 ) {
       if( eq->latex )
         strcpy(key, eq->latex);

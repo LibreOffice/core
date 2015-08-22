@@ -1005,10 +1005,6 @@ bool SVGFilter::implGenerateMetaData()
                     {
                         bool bBackgroundVisibility                = true;     // default: visible
                         bool bBackgroundObjectsVisibility         = true;     // default: visible
-                        bool bPageNumberVisibility                = false;    // default: hidden
-                        bool bDateTimeVisibility                  = true;     // default: visible
-                        bool bFooterVisibility                    = true;     // default: visible
-                        bool bDateTimeFixed                       = true;     // default: fixed
 
                         FixedDateTimeField            aFixedDateTimeField;
                         VariableDateTimeField         aVariableDateTimeField;
@@ -1024,6 +1020,11 @@ bool SVGFilter::implGenerateMetaData()
                         xPropSet->getPropertyValue( "IsBackgroundObjectsVisible" )  >>= bBackgroundObjectsVisibility;
                         if( bBackgroundObjectsVisibility ) // visibility default value: 'visible'
                         {
+                            bool bPageNumberVisibility    = false;    // default: hidden
+                            bool bDateTimeVisibility      = true;     // default: visible
+                            bool bFooterVisibility        = true;     // default: visible
+                            bool bDateTimeFixed           = true;     // default: fixed
+
                             /*
                              *  Page Number Field
                              */

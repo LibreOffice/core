@@ -1238,11 +1238,10 @@ void yyerror(const char * /*err*/)
 {
 //  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
-    Node *pNode = 0L;
     int ncount = nodelist.size();
     for( int i = 0 ; i < ncount ; i++){
-	pNode = nodelist.front();
-	nodelist.pop_front();
+        Node *pNode = nodelist.front();
+        nodelist.pop_front();
         delete pNode;
     }
     top = 0L;

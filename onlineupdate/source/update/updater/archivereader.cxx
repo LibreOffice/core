@@ -273,7 +273,7 @@ ArchiveReader::ExtractItemToStream(const MarItem *item, FILE *fp)
   /* decompress the data chunk by chunk */
 
   bz_stream strm;
-  int offset, inlen, outlen, ret = OK;
+  int offset, inlen, ret = OK;
 
   memset(&strm, 0, sizeof(strm));
   if (BZ2_bzDecompressInit(&strm, 0, 0) != BZ_OK)
@@ -304,7 +304,7 @@ ArchiveReader::ExtractItemToStream(const MarItem *item, FILE *fp)
       break;
     }
 
-    outlen = outbuf_size - strm.avail_out;
+    int outlen = outbuf_size - strm.avail_out;
     if (outlen) {
       if (fwrite(outbuf, outlen, 1, fp) != 1) {
         ret = WRITE_ERROR_EXTRACT;
