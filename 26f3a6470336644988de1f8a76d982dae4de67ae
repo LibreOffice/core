@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_fe829dc7",
+        "filename": "slideshow/source/engine/slide/layer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-23T21:33:28Z",
+      "side": 0,
+      "message": "Nope, that\u0027s correct.",
+      "parentUuid": "1af94dfe_9eed5928",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_def7e1f3",
         "filename": "slideshow/source/engine/slide/layermanager.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-22T17:57:12Z",
       "side": 0,
       "message": "I thought this made more sense as a range-based for-loop",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_de87e1d5",
+        "filename": "slideshow/source/engine/slide/layermanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-23T21:33:28Z",
+      "side": 0,
+      "message": "quite apparently - since it saves lines ;)",
+      "parentUuid": "1af94dfe_def7e1f3",
       "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_3e6d2533",
+        "filename": "slideshow/source/engine/slide/slideimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-23T21:33:28Z",
+      "side": 0,
+      "message": "Yep, seems correct to me as well.",
+      "parentUuid": "1af94dfe_5ee4713a",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_fec9fdad",
         "filename": "slideshow/source/engine/slideshowimpl.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-08-22T17:57:12Z",
       "side": 0,
       "message": "I thought this made more sense as a range-based for-loop. In addition, as opposed to using a bool flag value, I thought it might make more sense to return the value immediately if the element is found. Then if no element is found explicitly return the end of the map.",
+      "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_1e6ae91a",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-23T21:33:28Z",
+      "side": 0,
+      "message": "Yep, much less contorted logic.\n\nBut since you\u0027re not using range-based for (for obvious reasons) - perhaps at least aIter could be auto?",
+      "parentUuid": "1af94dfe_fec9fdad",
       "revId": "26f3a6470336644988de1f8a76d982dae4de67ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
