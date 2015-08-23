@@ -40,7 +40,7 @@ public interface MergeAlgorithm {
      *  This method is to merge the difference to an <code>Iterator</code>.
      *  The original <code>Iterator</code> will be modified after the call.
      *
-     *  @param  objSeq       The original sequence which the difference
+     *  @param  orgSeq       The original sequence which the difference
      *                       will be applied.  It will be modified.
      *  @param  modSeq       The modified sequence where the difference
      *                       content will be extracted.

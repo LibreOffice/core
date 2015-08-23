@@ -352,7 +352,7 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     }
 
     /**
-      * Writes the ExtendedFormat to the <code>Outputstream<code>
+      * Writes the ExtendedFormat to the <code>Outputstream</code>
       *
       * @param  output the <code>Outputstream</code>to write to
       */

@@ -33,7 +33,7 @@ import java.util.HashMap;
  * SHORT</code>) do not have a matching Java class.  For another, it can be
  * necessary to describe a type which is unknown to the Java runtime system
  * (for example, for delaying the need of a class, so that it is possible to
- * generate it on the fly.)</p>
+ * generate it on the fly.)
  *
  * <p>A <code>Type</code> is uniquely determined by its type class (a
  * <code>TypeClass</code>) and its type name (a <code>String</code>); these two
@@ -204,7 +204,7 @@ public class Type {
      *
      * <p>In certain cases, one Java class corresponds to two UNO types (e.g.,
      * the Java class <code>short[].class</code> corresponds to both a sequence
-     * of <codde>SHORT</code> and a sequence of <code>UNSIGNED SHORT</code> in
+     * of <code>SHORT</code> and a sequence of <code>UNSIGNED SHORT</code> in
      * UNO).  In such ambiguous cases, the parameter <code>alternative</code>
      * controls which UNO type is chosen:</p>
      * <ul>

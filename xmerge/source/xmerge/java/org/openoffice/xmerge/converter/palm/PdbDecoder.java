@@ -31,16 +31,16 @@ import java.io.DataInputStream;
 /**
  *  <p>Provides functionality to decode a PDB formatted file into
  *  a <code>PalmDB</code> object given an <code>InputStream</code>.
- *  This class is only used by the <code>PalmDB</code> object.</p>
+ *  This class is only used by the <code>PalmDB</code> object.
  *
- *  <p>Sample usage:</p>
+ *  <p>Sample usage:
  *
  *  <blockquote><pre><code>
  *     PdbDecoder decoder = new PdbDecoder("sample.pdb");
  *     PalmDB palmDB = decoder.parse();
  *  </code></pre></blockquote>
  *
- *  <p>This decoder has the following assumptions on the PDB file:</p>
+ *  <p>This decoder has the following assumptions on the PDB file:
  *
  *  <p><ol>
  *  <li>There is only one RecordList section in the PDB.</li>
@@ -50,9 +50,9 @@ import java.io.DataInputStream;
  *  <li>The raw <code>Record</code> in the <code>Record</code> section
  *      are sorted as well in order, i.e. first <code>Record</code>
  *      comes ahead of second <code>Record</code>, etc.</li>
- *  </ol></p>
+ *  </ol>
  *
- *  <p>Other decoders assume these as well.</p>
+ *  <p>Other decoders assume these as well.
  *
  *  @author  Herbie Ong
  *  @see     PalmDB

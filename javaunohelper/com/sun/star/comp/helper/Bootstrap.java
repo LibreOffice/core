@@ -97,6 +97,7 @@ public class Bootstrap {
         @param context_entries the hash table contains mappings of entry names (type string) to
         context entries (type class ComponentContextEntry).
         @return a new context.
+        @throws java.lang.Exception
     */
     static public XComponentContext createInitialComponentContext( Hashtable context_entries )
         throws Exception
@@ -149,6 +150,7 @@ public class Bootstrap {
      * <p>
      * @return     a freshly boostrapped service manager
      * @see        com.sun.star.lang.ServiceManager
+     * @throws      java.lang.Exception
      */
     static public XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
@@ -157,10 +159,12 @@ public class Bootstrap {
     }
 
 
-    /** Bootstraps the initial component context from a native UNO installation.
-
-        @see cppuhelper/defaultBootstrap_InitialComponentContext()
-    */
+    /**
+     * Bootstraps the initial component context from a native UNO installation.
+     * <p>
+     * @return
+     * @see cppuhelper/defaultBootstrap_InitialComponentContext()
+     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext()
         throws Exception
     {

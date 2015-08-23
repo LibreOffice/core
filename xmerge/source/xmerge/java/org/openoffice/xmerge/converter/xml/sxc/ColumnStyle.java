@@ -44,7 +44,7 @@ public class ColumnStyle extends Style implements Cloneable {
     /**
      *  Constructor for use when going from DOM to client device format.
      *
-     *  @param  Node  The <i>style:style</i> <code>Node</code> containing
+     *  @param  node  The <i>style:style</i> <code>Node</code> containing
      *                the <code>Style</code>.  (This <code>Node</code> is
      *                assumed have a <i>family</i> attribute of <i>text</i>).
      *  @param  sc    The <code>StyleCatalog</code>, which is used for
@@ -97,7 +97,7 @@ public class ColumnStyle extends Style implements Cloneable {
      *                   <i>text</i>).  Can be null.
      *  @param  parent   Name of parent text <code>Style</code>, or null
      *                   for none.
-     *  @param  mask     the width of this column
+     *  @param  colWidth the width of this column
      *  @param sc        The <code>StyleCatalog</code>, which is used for
      *                   looking up ancestor <code>Style</code> objects.
      */

@@ -28,13 +28,13 @@ import java.io.IOException;
 /**
  *  <p>A <code>DocumentDeserializer</code> represents a converter that
  *  converts &quot;Device&quot; <code>Document</code> objects into the
- *  &quot;Office&quot; <code>Document</code> format.</p>
+ *  &quot;Office&quot; <code>Document</code> format.
  *
  *  <p>The <code>DocumentDeserializer</code> object is created by
- *  the </code>PluginFactory</code> {@link
+ *  the <code>PluginFactory</code> {@link
  *  org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
  *  createDocumentDeserializer} method.  When it is constructed, a
- *  <code>ConvertData</code> object is passed in to be used as input.</p>
+ *  <code>ConvertData</code> object is passed in to be used as input.
  *
  *  @author  Herbie Ong
  *  @see     org.openoffice.xmerge.PluginFactory
