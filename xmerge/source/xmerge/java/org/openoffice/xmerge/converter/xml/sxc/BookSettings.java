@@ -52,8 +52,7 @@ public class BookSettings implements OfficeConstants {
     /**
      * Default Constructor for a <code>BookSettings</code>
      *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param root
      */
     public BookSettings(Node root) {
         readNode(root);

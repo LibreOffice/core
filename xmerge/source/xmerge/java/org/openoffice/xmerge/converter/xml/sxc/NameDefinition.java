@@ -135,7 +135,7 @@ public class NameDefinition implements OfficeConstants {
     /**
      * Writes out a content.xml entry for this NameDefinition object
      *
-     * @param settings a <code>Document</code> object representing the settings.xml
+     * @param doc  a <code>Document</code> object representing the settings.xml
      * @param root the root xml node to add to
      */
     public void writeNode(org.w3c.dom.Document doc, Node root) {

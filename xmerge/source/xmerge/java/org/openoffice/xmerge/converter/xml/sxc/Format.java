@@ -295,7 +295,7 @@ public class Format implements Cloneable {
      /**
       *  Set the font used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      *  @param  fontSize
       */
      public void setFontSize(int fontSize) {
          sizeInPoints = fontSize;
@@ -312,9 +312,9 @@ public class Format implements Cloneable {
      }
 
       /**
-      *  Set the alignmen used for this cell.
+      *  Set the alignment used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      *  @param  vertAlign
       */
      public void setVertAlign(int vertAlign) {
          this.vertAlign = vertAlign;
@@ -331,9 +331,9 @@ public class Format implements Cloneable {
      }
 
       /**
-      *  Set the alignmen used for this cell.
+      *  Set the alignment used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      *  @param  align
       */
      public void setAlign(int align) {
          this.align = align;
@@ -351,7 +351,7 @@ public class Format implements Cloneable {
      /**
       *  Set the Foreground <code>Color</code> for this cell.
       *
-      *  @param  color  A <code>Color</code> object representing the
+      *  @param  c      A <code>Color</code> object representing the
       *                 foreground color.
       */
      public void setForeground(Color c) {
@@ -373,7 +373,7 @@ public class Format implements Cloneable {
      /**
       *  Set the Background <code>Color</code> for this cell
       *
-      *  @param  color  A <code>Color</code> object representing
+      *  @param  c      A <code>Color</code> object representing
       *                 the background color.
       */
      public void setBackground(Color c) {
@@ -433,7 +433,7 @@ public class Format implements Cloneable {
      *  than this <code>Style</code>, and nothing it specifies
      *  contradicts this <code>Style</code>.
      *
-     *  @param  style  The <code>Style</code> to check.
+     *  @param  rhs  The <code>Style</code> to check.
      *
      *  @return  true if <code>style</code> is a subset, false
      *           otherwise.

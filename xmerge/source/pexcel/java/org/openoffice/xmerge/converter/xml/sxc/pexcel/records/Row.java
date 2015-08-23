@@ -101,7 +101,7 @@ public class Row implements BIFFRecord {
     /**
      * Reads a Row from an <code>InputStream</code>
      *
-     * @param   is InputStream containing a Pane Record
+     * @param   input InputStream containing a Pane Record
      */
     public int read(InputStream input) throws IOException {
 

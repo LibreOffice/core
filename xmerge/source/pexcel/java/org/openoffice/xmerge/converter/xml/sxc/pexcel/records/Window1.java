@@ -87,7 +87,7 @@ public class Window1 implements BIFFRecord {
        /**
       * Reads a Window1 Record from an <code>InputStream</code>
       *
-      * @param  is InputStream containing a Window1 Record
+      * @param  input InputStream containing a Window1 Record
       */
     public int read(InputStream input) throws IOException {
 

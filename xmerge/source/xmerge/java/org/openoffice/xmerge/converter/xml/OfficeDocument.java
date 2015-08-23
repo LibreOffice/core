@@ -1119,7 +1119,7 @@ public abstract class OfficeDocument
 
 
     /**
-     *  <p>Hacked code to filter <!DOCTYPE> tag before
+     *  <p>Hacked code to filter &lt;!DOCTYPE&gt; tag before
      *  sending stream to parser.</p>
      *
      *  <p>This hacked code needs to be changed later on.</p>
@@ -1128,7 +1128,7 @@ public abstract class OfficeDocument
      *  to turn off processing of dtds.  Current set of dtds
      *  have bugs, processing them will throw exceptions.</p>
      *
-     *  <p>This is a simple hack that assumes the whole <!DOCTYPE>
+     *  <p>This is a simple hack that assumes the whole &lt;!DOCTYPE&gt;
      *  tag are all in the same line.  This is sufficient for
      *  current StarOffice 6.0 generated XML files.  Since this
      *  hack really needs to go away, I don't want to spend
@@ -1138,7 +1138,7 @@ public abstract class OfficeDocument
      *
      *  @param  is  <code>InputStream</code> to be filtered.
      *
-     *  @return  Reader value without the <!DOCTYPE> tag.
+     *  @return  Reader value without the &lt;!DOCTYPE&gt; tag.
      *
      *  @throws  IOException  If any I/O error occurs.
      */

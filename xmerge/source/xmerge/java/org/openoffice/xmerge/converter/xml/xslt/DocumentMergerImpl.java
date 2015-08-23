@@ -44,7 +44,7 @@ import org.openoffice.xmerge.util.Debug;
  *  Xslt implementation of <code>DocumentMerger</code>
  *  for the {@link
  *  org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
- *  PluginFactoryImpl}.</p>
+ *  PluginFactoryImpl}.
  */
 public class DocumentMergerImpl implements DocumentMerger {
 

@@ -52,7 +52,7 @@ public class FloatNumber extends CellValue {
       * Constructs a <code>FloatNumber</code> using specified attributes
      *
      * @param row row number
-     * @param col column number
+     * @param column column number
      * @param cellContents contents of the cell
      * @param ixfe font index
       */

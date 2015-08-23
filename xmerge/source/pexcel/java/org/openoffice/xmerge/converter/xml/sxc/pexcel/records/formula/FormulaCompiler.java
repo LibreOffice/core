@@ -45,7 +45,7 @@ import org.openoffice.xmerge.util.Debug;
  *          else if token is close bracket
  *              pop from stack into result until close bracket or function
  *          else
- *              while stack.top.priority >= token.priority
+ *              while stack.top.priority &gt;= token.priority
  *                  add stack.pop to result
  *              push token onto stack
  * </pre>

@@ -44,9 +44,6 @@ public class BeginningOfFile implements BIFFRecord {
 
    /**
     *  Constructor that initializes the member values.
-    *
-    *  @param  ver  Version Number
-    *               Substream type (workbook = 0x05, worksheet = 0x10)
     */
     public BeginningOfFile(boolean global) {
         setVersion((short) 271);
@@ -61,6 +58,10 @@ public class BeginningOfFile implements BIFFRecord {
         read(is);
     }
 
+    /**
+     *
+     *  @param  version  Version Number
+     */
     private void setVersion(short version) {
         this.version = EndianConverter.writeShort(version);
     }
@@ -79,6 +80,10 @@ public class BeginningOfFile implements BIFFRecord {
         subStream = EndianConverter.writeShort((short) 0x10);
     }
 
+    /**
+     *
+     * @return Substream type (workbook = 0x05, worksheet = 0x10)
+     */
     int getSubStreamType() {
         return EndianConverter.readShort(subStream);
     }

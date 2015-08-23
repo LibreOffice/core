@@ -109,7 +109,7 @@ public final class PdbEncoder {
      *      top of the PDB.</li>
      *  <li>1 byte of <code>Record</code> attribute.</li>
      *  <li>3 bytes unique <code>Record</code> ID.</li>
-     *  </ul></p>
+     *  </ul>
      *
      *  <p>There should be a total of <code>header.numRecords</code>
      *  of <code>Record</code> index info</p>.

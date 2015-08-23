@@ -142,7 +142,7 @@ class alignment extends conversionAlgorithm {
  *                   in bits indicated by LH_VALUEMASK.
  *  </td></tr><tr><td>
  *  TEXT_ALIGN       </td><td>ALIGN_RIGHT, ALIGN_CENTER, ALIGN_JUST, ALIGN_LEFT
- *  </td></tr></table></p>
+ *  </td></tr></table>
  *
  *   @author   David Proulx
  */
@@ -266,9 +266,9 @@ public class ParaStyle extends Style implements Cloneable {
      *  Constructor for use when going from client device format to DOM.
      *
      *  @param  name     Name of the <code>Style</code>.  Can be null.
-     *  @param  family   Family of the <code>Style</code> - usually
+     *  @param  familyName   Family of the <code>Style</code> - usually
      *                   <i>paragraph</i>, <i>text</i>, etc.  Can be null.
-     *  @param  parent   Name of the parent <code>Style</code>, or null
+     *  @param  parentName   Name of the parent <code>Style</code>, or null
      *                   if none.
      *  @param  attribs  Array of attributes to set.
      *  @param  values   Array of values to set.
@@ -289,13 +289,13 @@ public class ParaStyle extends Style implements Cloneable {
      *  format to DOM.
      *
      *  @param  name     Name of the <code>Style</code>.  Can be null.
-     *  @param  family   Family of the <code>Style</code> - usually
+     *  @param  familyName   Family of the <code>Style</code> - usually
      *                   <i>paragraph</i>, <i>text</i>, etc.  Can be null.
-     *  @param  parent   Name of the parent <code>Style</code>, or
+     *  @param  parentName   Name of the parent <code>Style</code>, or
      *                   null if none.
      *  @param  attribs  Array of attributes indices to set.
      *  @param  values   Array of values to set.
-     *  @param  sc       The <code>StyleCatalog</code>, which is used for
+     *  @param  lookup   The <code>StyleCatalog</code>, which is used for
      *                   looking up ancestor <code>Style</code> objects.
      */
     public ParaStyle(String name, String familyName, String parentName,
@@ -373,7 +373,7 @@ public class ParaStyle extends Style implements Cloneable {
      *  Set an attribute for this paragraph <code>Style</code>.
      *
      *  @param  attr   The attribute index to set.
-     *  @apram  value  The attribute value to set.
+     *  @param  value  The attribute value to set.
      */
     public void setAttribute(int attr, String value) {
         isSet[attr] = true;
@@ -496,7 +496,7 @@ public class ParaStyle extends Style implements Cloneable {
     /**
      *  Create the <code>Node</code> with the specified elements.
      *
-     *  @parentDoc  Parent  <code>Document</code> of the
+     *  @param  parentDoc  <code>Document</code> of the
      *                      <code>Node</code> to create.
      *  @param      name    Name of the <code>Node</code>.
      *

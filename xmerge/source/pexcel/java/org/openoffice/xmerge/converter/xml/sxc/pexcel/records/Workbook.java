@@ -236,7 +236,7 @@ OfficeConstants {
     /**
       * Adds a ExtendedFormat record to the workbook
      *
-      * @param  f the font record to add
+      * @param  fmt the font record to add
       */
     public int addExtendedFormat(Format fmt) throws IOException {
 
@@ -466,12 +466,6 @@ OfficeConstants {
         }
     }
 
-    /**
-      * Will create a number of ColInfo recrods based on the column widths
-     * based in.
-     *
-      * @param  an integer list representing the column widths
-      */
     public void addNameDefinition(NameDefinition nameDefinition) throws IOException {
 
         DefinedName dn = new DefinedName(nameDefinition, this);

@@ -32,7 +32,7 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
- * Represents a BIFF record defiuning the defualt column width
+ * Represents a BIFF record defining the default column width
  */
 public class DefColWidth implements BIFFRecord {
 
@@ -40,18 +40,18 @@ public class DefColWidth implements BIFFRecord {
     private byte[] coldx = new byte[2];
     private byte[] ixfe  = new byte[2];
 
-/**
- * Constructs a pocket Excel Document from the
- * <code>InputStream</code> and assigns it the document name passed in
- *
- * @param   is InputStream containing a Pocket Excel Data file.
- */
     public DefColWidth() {
         grbit   = new byte[] {0x00, 0x00};
         coldx   = new byte[] {0x00, 0x09};
         ixfe    = new byte[] {0x00, 0x00};
     }
 
+    /**
+     * Constructs a pocket Excel Document from the
+     * <code>InputStream</code> and assigns it the document name passed in
+     *
+     * @param   is InputStream containing a Pocket Excel Data file.
+     */
     public DefColWidth(InputStream is) throws IOException {
         read(is);
     }

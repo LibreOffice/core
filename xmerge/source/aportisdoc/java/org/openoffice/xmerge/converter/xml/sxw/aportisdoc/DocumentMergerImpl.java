@@ -44,7 +44,7 @@ import org.openoffice.xmerge.util.Debug;
  *  AportisDoc implementation of <code>DocumentMerger</code>
  *  for the {@link
  *  org.openoffice.xmerge.converter.xml.sxw.aportisdoc.PluginFactoryImpl
- *  PluginFactoryImpl}.</p>
+ *  PluginFactoryImpl}.
  */
 public class DocumentMergerImpl implements DocumentMerger {
 

@@ -43,7 +43,7 @@ public class BoolErrCell extends CellValue {
      * Constructs a BoolErrCell from arguments
       *
      * @param row row number
-     * @param col column number
+     * @param column column number
      * @param ixfe font index
      * @param bBoolErr Boolean value or error value
      * @param fError Boolean error flag
@@ -78,7 +78,7 @@ public class BoolErrCell extends CellValue {
     /**
      * Writes a <code>BoolErrCell</code> to the specified <code>Outputstream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param output the <code>OutputStream</code> to write to
      */
     public void write(OutputStream output) throws IOException {
 
@@ -95,7 +95,7 @@ public class BoolErrCell extends CellValue {
     /**
      * Reads a BoolErrCell from the <code>InputStream</code>
       *
-      * @param  is InputStream containing a BoolErrCell
+      * @param  input InputStream containing a BoolErrCell
       */
     public int read(InputStream input) throws IOException {
 

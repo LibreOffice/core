@@ -92,7 +92,7 @@ public abstract class CellValue implements BIFFRecord {
     /**
      * Writes basic cell value attributes to the specified <code>Outputstream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param output the <code>OutputStream</code> to write to
      */
     public void write(OutputStream output) throws IOException {
 
@@ -102,9 +102,9 @@ public abstract class CellValue implements BIFFRecord {
     }
 
     /**
-     * Writes a<code>LabelCell</code> to the specified <code>Outputstream</code>
+     * Read a <code>LabelCell</code> from the specified <code>InputStream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param input the <code>InputStream</code> to read from
      */
     public int read(InputStream input) throws IOException {
 

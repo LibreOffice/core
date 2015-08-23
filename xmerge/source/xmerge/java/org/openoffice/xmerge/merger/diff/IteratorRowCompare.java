@@ -54,7 +54,7 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  *    If there are more objects in the original sequence than the modified
  *    sequence, then all the extra one in the modified sequence are marked
  *    as delete.
- *  </li></ol></p>
+ *  </li></ol>
  *
  *  <p>NOTE: The algorithm will have potential side effect to split rows.</p>
  *

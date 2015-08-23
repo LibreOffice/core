@@ -104,21 +104,13 @@ public abstract class SpreadsheetEncoder {
      *  @param  columnWidths  An <code>IntArrayList</code> of column
      *                        widths.
      */
-    public abstract void setColumnRows(Vector columnRows) throws IOException;
+    public abstract void setColumnRows(Vector columnWidths) throws IOException;
 
     /**
-     *  Set the width of the columns in the WorkBook.
-     *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
      */
     public abstract void setNameDefinition(NameDefinition nd) throws IOException;
 
     /**
-     *  Set the width of the columns in the WorkBook.
-     *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
      */
     public abstract void addSettings(BookSettings s) throws IOException;
 }

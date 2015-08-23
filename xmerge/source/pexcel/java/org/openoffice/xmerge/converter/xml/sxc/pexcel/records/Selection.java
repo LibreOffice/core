@@ -100,7 +100,7 @@ public class Selection implements BIFFRecord {
     /**
      * Reads a Selection Record from the <code>InputStream</code>
      *
-     * @param   is InputStream containing a Pocket Excel Data file.
+     * @param   input InputStream containing a Pocket Excel Data file.
      */
     public int read(InputStream input) throws IOException {
 

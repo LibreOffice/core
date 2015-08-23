@@ -56,13 +56,6 @@ public class FontDescription implements BIFFRecord {
     public static final int UNDERLINE   = 0x01;
     public static final int ITALIC      = 0x02;
 
-    /**
-      * Constructs a FontDescription from the bold italic and undelrine attributes
-      *
-      * @param  italic      Italic attribute
-      * @param  bold        Bold attribute
-      * @param  underline   Underline attribute
-      */
     public FontDescription(Format fmt) throws IOException {
 
         Debug.log(Debug.TRACE,"Building FontDescriptor based on Format : " + fmt);
@@ -230,7 +223,7 @@ public class FontDescription implements BIFFRecord {
     /**
       * Constructs a Font Description from the <code>InputStream</code>
       *
-      * @param  is InputStream containing a <code>FontDescription</code>
+      * @param  input InputStream containing a <code>FontDescription</code>
       */
     public int read(InputStream input) throws IOException {
 

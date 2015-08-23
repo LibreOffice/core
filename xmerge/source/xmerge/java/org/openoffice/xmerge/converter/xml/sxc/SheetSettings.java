@@ -79,8 +79,7 @@ public class SheetSettings implements OfficeConstants {
     /**
      * Constructor for a <code>ColumnRowInfo</code>
      *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param name
      */
     public SheetSettings(String name) {
         sheetName = name;
@@ -175,12 +174,10 @@ public class SheetSettings implements OfficeConstants {
 
         return posLeft;
     }
+
     /**
-     * Sets the top row visible in the lower pane and the leftmost column
-     * visibile in the right pane.
+     * Gets the top row visible in the lower pane.
      *
-     * @param top The top row visible in the lower pane
-     * @param left The leftmost column visibile in the right pane
      */
     public int getTop() {
 

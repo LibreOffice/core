@@ -69,7 +69,7 @@ public final class DocumentDeserializerImpl
 
 
     /**
-     * Initialises a new <code>DocumentDeserializerImpl</code> using the
+     * <p>Initialises a new <code>DocumentDeserializerImpl</code> using the
      * supplied <code>ConvertData</code>.</p>
      *
      * <p>The <code>Document</code> objects in the <code>ConvertData</code>

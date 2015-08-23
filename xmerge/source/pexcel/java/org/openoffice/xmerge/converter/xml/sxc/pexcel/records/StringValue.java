@@ -43,9 +43,9 @@ public class StringValue implements BIFFRecord {
     private byte[]  rgch;
 
     /**
-      * Constructs a StringValue Record from an <code>InputStream</code>
+      * Constructs a StringValue Record from a <code>String</code>
       *
-      * @param  is InputStream containing a StringValue Record
+      * @param str
       */
     public StringValue(String str) throws IOException {
         cch = EndianConverter.writeShort((short) str.length());
@@ -74,7 +74,7 @@ public class StringValue implements BIFFRecord {
        /**
       * Reads a StringVlaue Record from an <code>InputStream</code>
       *
-      * @param  is InputStream containing a StringValue Record
+      * @param  input InputStream containing a StringValue Record
       */
     public int read(InputStream input) throws IOException {
 

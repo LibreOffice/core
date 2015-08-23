@@ -64,7 +64,7 @@ public class BoundSheet implements BIFFRecord {
       * Sets the worksheet name. The sheetname length must be doubled as the
      * String is stored in unicode format.
       *
-      * @param  sheetname   worksheet name
+      * @param  sheetName   worksheet name
       */
     void setSheetName(String sheetName) throws IOException {
         this.cch        = (byte) sheetName.length();
@@ -95,7 +95,7 @@ public class BoundSheet implements BIFFRecord {
      /**
      * Write this particular <code>BIFFRecord</code> to the <code>OutputStream</code>
      *
-     * @param ouput the <code>OutputStream</code>
+     * @param output the <code>OutputStream</code>
      */
     public void write(OutputStream output) throws IOException {
 
@@ -111,7 +111,7 @@ public class BoundSheet implements BIFFRecord {
       * Reads a BoundSheet from the <code>InputStream</code> The byte array
      * must be twice the size of the String as it uses unicode.
       *
-      * @param  is InputStream containing the record data
+      * @param  input InputStream containing the record data
       */
     public int read(InputStream input) throws IOException {
 

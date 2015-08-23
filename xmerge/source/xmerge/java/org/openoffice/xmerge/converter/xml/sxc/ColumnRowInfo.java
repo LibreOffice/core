@@ -46,8 +46,7 @@ public class ColumnRowInfo {
     /**
      * Constructor for a <code>ColumnRowInfo</code>
      *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param type whether Row or column record
      */
     public ColumnRowInfo(int type) {
 
@@ -82,7 +81,7 @@ public class ColumnRowInfo {
     /**
      * sets the definition
      *
-     * @param newDefinition sets the definition
+     * @param fmt sets the definition
      */
     public void setFormat(Format fmt) {
 
@@ -110,9 +109,9 @@ public class ColumnRowInfo {
     }
 
     /**
-     * sets the definition
+     * Sets the definition
      *
-     * @param newDefinition sets the definition
+     * @param dimension
      */
     public void setSize(int dimension) {
 

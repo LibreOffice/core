@@ -467,6 +467,8 @@ public class InterfaceContainer implements Cloneable
     /** The iterator keeps a copy of the list. Changes to InterfaceContainer do not
      *  affect the data of the iterator. Conversly, changes to the iterator are effect
      *  InterfaceContainer.
+     *
+     * @param index
      */
     synchronized public ListIterator listIterator(int index)
     {

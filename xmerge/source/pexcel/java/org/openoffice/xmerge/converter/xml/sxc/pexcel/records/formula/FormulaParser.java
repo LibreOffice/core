@@ -32,7 +32,7 @@ import org.openoffice.xmerge.util.Debug;
 /**
  * This is the Formula Parser based on an article written by Jack Crenshaw. It is a
  * top down parser with some basic error handling. It handles
- * +,-,*,/,>,<,>=,<=,=,<>, unary + and - as well as functions.
+ * +,-,*,/,&gt;,&lt;,&gt;=,&lt;=,=,&lt;&gt;, unary + and - as well as functions.
  * The BNF notation for this parser is
  * <pre>
  *  &lt;expression&gt; ::= &lt;unary op&gt; &lt;term&gt; [&lt;addop&gt;|&lt;logop&gt; &lt;term&gt;]
@@ -110,7 +110,7 @@ public class FormulaParser {
     }
 
     /**
-     * Identify <, >, <=, >=, =, <> using the index to find the current character(s)
+     * Identify &lt;, &gt;, &lt;=, &gt;=, =, &lt;&gt; using the index to find the current character(s)
      *
      * @return A boolean returning the result of the comparison
      */
@@ -131,9 +131,9 @@ public class FormulaParser {
      }
 
     /**
-     * Identify <, >, <=, >=, =, <>
+     * Identify &lt;, &gt;, &lt;=, &gt;=, =, &lt;&gt;
      *
-     * @param  The <code>String</code> which is to be identified
+     * @param op The <code>String</code> which is to be identified
      * @return A boolean returning the result of the comparison
      */
     private boolean isLogicalOp(String op) {
@@ -397,7 +397,7 @@ public class FormulaParser {
      * Will keep pulling valid logical operators from the formula and return
      * the resultant <code>String</code>.
      *
-     * @return a <code>String<code> representing a logical operator
+     * @return a <code>String</code> representing a logical operator
      */
     private String getLogicalOperator() throws FormulaParsingException {
         String op = new String();
@@ -535,7 +535,7 @@ public class FormulaParser {
 
     /**
      * Pull a logical operator starting at the current index, add a token for
-     * that operator to the tokenVector and call <code>term<code> to parse the
+     * that operator to the tokenVector and call <code>term</code> to parse the
      * right hand side of the operator
      */
     private void logicalOp()  throws FormulaParsingException {

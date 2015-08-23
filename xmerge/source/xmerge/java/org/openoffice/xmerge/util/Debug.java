@@ -39,7 +39,7 @@ import java.util.Properties;
 /**
  *  This class is used for logging debug messages.
  *  Currently, there are three types of logging:  {@link #INFO},
- *  {@link #TRACE} & {@link #ERROR}.  Use the Debug.properties
+ *  {@link #TRACE} &amp; {@link #ERROR}.  Use the Debug.properties
  *  file to set or unset each type.  Also use Debug.properties
  *  to set the writer to either <code>System.out</code>,
  *  <code>System.err</code>, or to a file.
@@ -265,7 +265,7 @@ public final class Debug {
      *  <p>This logs the message during runtime if debug.info or debug.trace
      *  in the properties file is set to true.</p>
      *
-     *  @param   int   Log type, one of the Debug constants
+     *  @param   flag  Log type, one of the Debug constants
      *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
      *                 or a combination of which or'ed together.
      *  @param   msg   The message.
@@ -287,7 +287,7 @@ public final class Debug {
      *  of the exception passed in.  Refer to the other log method
      *  for description.
      *
-     *  @param   int   Log type, one of the Debug constants
+     *  @param   flag  Log type, one of the Debug constants
      *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
      *                 or a combination of which or'ed together.
      *  @param   msg   The message.

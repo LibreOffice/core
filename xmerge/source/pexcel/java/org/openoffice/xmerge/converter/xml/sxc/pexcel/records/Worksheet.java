@@ -56,25 +56,18 @@ public class Worksheet {
     private BeginningOfFile bof;
     private Eof eof;
 
-    /**
-      * Writes the current workbook to the <code>Outputstream</code>
-      *
-      * @param  os The destination outputstream
-      */
     public Worksheet(Workbook wb) {
         this.wb = wb;
     }
 
     /**
       * Default Contructor
-      *
-      * @param  os The destination outputstream
       */
     public Worksheet() {
     }
 
     /**
-      * Writes the current workbook to the <code>Outputstream</code>
+      * Writes the current workbook to the <code>OutputStream</code>
       *
       * @param  os The destination outputstream
       */
@@ -229,7 +222,7 @@ public class Worksheet {
       * Adds a cell to this worksheet. Current valdid celltypes are
      * <code>FloatNumber</code>, <code>LabelCell</code> or <code>Formula</code>
      *
-      * @param  f the font record to add
+      * @param  br
       */
     public void addCell(BIFFRecord br) {
         cells.add(br);
@@ -239,7 +232,7 @@ public class Worksheet {
       * Adds a number of ColInfo Records to the worksheet base on a list of
      * clumnwidths passed in
      *
-      * @param  list of column widths
+      * @param r    list of column widths
       */
     public void addRow(Row r) {
         rows.add(r);
@@ -249,7 +242,7 @@ public class Worksheet {
       * Adds a number of ColInfo Records to the worksheet base on a list of
      * clumnwidths passed in
      *
-      * @param  list of column widths
+      * @param c    list of column widths
       */
     public void addCol(ColInfo c) {
         colInfo.add(c);

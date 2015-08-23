@@ -123,7 +123,7 @@ public class Window2 implements BIFFRecord {
        /**
       * Reads a Window2 Record from an <code>InputStream</code>
       *
-      * @param  is InputStream containing a Window2 Record
+      * @param  input InputStream containing a Window2 Record
       */
     public int read(InputStream input) throws IOException {
 

@@ -53,7 +53,7 @@ public final class ConverterInfoMgr {
     *  and must have non-null values for DisplayName, ClassImpl,
     *  OfficeMime, and DeviceMime.
     *
-    *  @param  ConverterInfo  A <code>ConverterInfo</code> object
+    *  @param   ci  A <code>ConverterInfo</code> object
     *                         describing a plug-in.
     *
     *  @throws  RegistryException  If the <code>ConverterInfo</code>
@@ -109,16 +109,16 @@ public final class ConverterInfoMgr {
 
 
    /**
-    *  Adds a <code>Vector</code> of converter plug-ins to the registry.
-    *  Each <code>ConverterInfo</code> in the <code>Vector</code> must have
+    *  Adds an <code>Enumeration</code> of converter plug-ins to the registry.
+    *  Each <code>ConverterInfo</code> in the <code>Enumeration</code> must have
     *  a unique DisplayName and must have non-null values for DisplayName,
     *  ClassImpl, OfficeMime, and DeviceMime.
     *
-    *  @param  ciVectory  A <code>Vector</code> of <code>ConverterInfo</code>
+    *  @param  jarEnum  An <code>Enumeration</code> of <code>ConverterInfo</code>
     *                     objects describing one or more plug-in(s).
     *
     *  @throws  RegistryException  If a <code>ConverterInfo</code> in the
-    *                              <code>Vector</code> is not valid.
+    *                              <code>Enumeration</code> is not valid.
     */
     public static void addPlugIn(Enumeration jarEnum) throws RegistryException {
 
@@ -257,8 +257,8 @@ public final class ConverterInfoMgr {
     *  If there are multiple <code>ConverterInfo</code> objects that
     *  support this conversion, only the first is returned.
     *
-    *  @param  deviceMimeFrom  The device from mime.
-    *  @param  deviceMimeTo    The device to mime.
+    *  @param  deviceFromMime  The device from mime.
+    *  @param  deviceToMime    The device to mime.
     *
     *  @return  An array of two <code>ConverterInfo</code> objects
     *           that can be chained to perform the specified

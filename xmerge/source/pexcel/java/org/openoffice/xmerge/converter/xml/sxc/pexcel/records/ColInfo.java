@@ -50,8 +50,8 @@ public class ColInfo implements BIFFRecord {
       *
       * @param  colFirst    the first column this formatting applies to
       * @param  colLast     last column this formatting applies to
-      * @param  coldx       column width
-      * @param  grbit       options flags
+      * @param  colDX       column width
+      * @param  ixfe        options flags
       */
     public ColInfo(int colFirst, int colLast, int colDX, int ixfe) {
         this.colFirst   = EndianConverter.writeShort((short)colFirst);
@@ -135,7 +135,7 @@ public class ColInfo implements BIFFRecord {
     /**
      * Writes a ColInfo to the specified <code>Outputstream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param output the <code>OutputStream</code> to write to
      */
     public void write(OutputStream output) throws IOException {
 
