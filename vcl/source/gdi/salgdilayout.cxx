@@ -98,7 +98,11 @@ bool SalGraphics::drawTransformedBitmap(
 
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
 
     if( w )
     {
@@ -130,7 +134,11 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
 
 void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bool bBack ) const
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
 
     if( w )
     {
@@ -163,7 +171,11 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
 
 bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack ) const
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
 
     if( w )
     {
@@ -285,7 +297,11 @@ void SalGraphics::mirror( Rectangle& rRect, const OutputDevice *pOutDev, bool bB
 
 basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *i_pOutDev, bool i_bBack ) const
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = i_pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
 
     DBG_ASSERT( w, "missing graphics width" );
 
@@ -310,7 +326,11 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
 
 basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *i_pOutDev, bool i_bBack ) const
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = i_pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
 
     DBG_ASSERT( w, "missing graphics width" );
 
@@ -336,7 +356,11 @@ basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, con
 
 basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *i_pOutDev, bool i_bBack ) const
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( i_pOutDev && i_pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
+        w = i_pOutDev->GetOutputWidthPixel();
+    else
+        w = GetGraphicsWidth();
 
     DBG_ASSERT( w, "missing graphics width" );
 
