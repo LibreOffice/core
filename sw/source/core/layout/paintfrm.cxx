@@ -476,13 +476,13 @@ static sal_uInt8 lcl_TryMergeLines(
 {
     double const fMergeGap(gProp.nSPixelSzW + gProp.nSHalfPixelSzW); // NOT static!
     // A is above/before B
-    if( mergeA.second <= mergeB.second &&
+    if( mergeA.second <= mergeB.first &&
         mergeA.second + fMergeGap >= mergeB.first )
     {
         return 1;
     }
     // B is above/before A
-    else if( mergeB.second <= mergeA.second &&
+    else if( mergeB.second <= mergeA.first &&
              mergeB.second + fMergeGap >= mergeA.first )
     {
         return 2;
