@@ -377,13 +377,9 @@ try_again:
 
         /* If AFL_PERSISTENT not set or PERSIST_MAX exceeded, exit normally. */
     }
-    catch (const Exception& e)
+    catch (...)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
-    }
-    catch (const std::exception &e)
-    {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        abort();
     }
 
     _exit(ret);
