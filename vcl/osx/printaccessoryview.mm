@@ -298,14 +298,14 @@ class ControllerProperties
         if( i_nPage >= 0 && nPages > i_nPage )
         {
             GDIMetaFile aMtf;
-            PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
+            PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf ) );
             auto aDev(VclPtr<VirtualDevice>::Create());
             if( mpController->getPrinter()->GetPrinterOptions().IsConvertToGreyscales() )
                 aDev->SetDrawMode( aDev->GetDrawMode() | ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText | 
                                                          DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
             // see salprn.cxx, currently we pretend to be a 720dpi device on printers
             aDev->SetReferenceDevice( 720, 720 );
-            aDev->EnableOutput( TRUE );
+            aDev->EnableOutput();
             Size aLogicSize( aDev->PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
             double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());
