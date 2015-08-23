@@ -43,14 +43,14 @@ namespace cssxs = com::sun::star::xml::sax;
 /* protected: for signature generation */
 OUString XSecController::createId()
 {
-    cssu::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aSeq.getArray()), 0, sal_True);
+    sal_uInt8 aSeq[16];
+    rtl_createUuid( aSeq, 0, true );
 
     char str[68]="ID_";
     int length = 3;
     for (int i=0; i<16; ++i)
     {
-        length += sprintf(str+length, "%04x", (unsigned char)aSeq[i]);
+        length += sprintf(str+length, "%04x", aSeq[i]);
     }
 
     return OUString::createFromAscii(str);
