@@ -289,7 +289,7 @@ public:
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
 
-    sal_uLong               GetChecksum() const;
+    sal_uInt32              GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
 

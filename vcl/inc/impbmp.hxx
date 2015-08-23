@@ -40,7 +40,7 @@ class ImpBitmap
 {
 private:
     sal_uLong           mnRefCount;
-    sal_uLong           mnChecksum;
+    sal_uInt32          mnChecksum;
     SalBitmap*          mpSalBitmap;
 
 public:
@@ -68,8 +68,8 @@ public:
     void                ImplIncRefCount() { mnRefCount++; }
     void                ImplDecRefCount() { mnRefCount--; }
 
-    inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
-    inline sal_uLong    ImplGetChecksum() const { return mnChecksum; }
+    inline void         ImplSetChecksum( sal_uInt32 nChecksum ) { mnChecksum = nChecksum; }
+    inline sal_uInt32   ImplGetChecksum() const { return mnChecksum; }
 
     bool                ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
     bool                ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol );

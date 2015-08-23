@@ -286,9 +286,9 @@ bool Bitmap::HasGreyPalette() const
     return bRet;
 }
 
-sal_uLong Bitmap::GetChecksum() const
+sal_uInt32 Bitmap::GetChecksum() const
 {
-    sal_uLong nRet = 0UL;
+    sal_uInt32 nRet = 0;
 
     if( mpImpBmp )
     {
@@ -329,9 +329,9 @@ sal_uLong Bitmap::GetChecksum() const
                                       pRAcc->GetPaletteEntryCount() * sizeof( BitmapColor ) );
                 }
 
-                nCrc = rtl_crc32( nCrc, pRAcc->GetBuffer(), pRAcc->GetScanlineSize() * pRAcc->Height() );
+                nRet = rtl_crc32( nCrc, pRAcc->GetBuffer(), pRAcc->GetScanlineSize() * pRAcc->Height() );
 
-                mpImpBmp->ImplSetChecksum( nRet = nCrc );
+                mpImpBmp->ImplSetChecksum( nRet );
             }
 
             if (pRAcc) ReleaseAccess( pRAcc );

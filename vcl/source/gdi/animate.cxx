@@ -31,7 +31,7 @@
 
 sal_uLong Animation::mnAnimCount = 0UL;
 
-sal_uLong AnimationBitmap::GetChecksum() const
+sal_uInt32 AnimationBitmap::GetChecksum() const
 {
     sal_uInt32  nCrc = aBmpEx.GetChecksum();
     SVBT32      aBT32;
@@ -206,7 +206,7 @@ sal_uLong Animation::GetSizeBytes() const
     return nSizeBytes;
 }
 
-sal_uLong Animation::GetChecksum() const
+sal_uInt32 Animation::GetChecksum() const
 {
     SVBT32      aBT32;
     sal_uInt32  nCrc = GetBitmapEx().GetChecksum();

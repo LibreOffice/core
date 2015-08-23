@@ -160,7 +160,7 @@ public:
 
     sal_uLong               GetAnimationLoopCount() const;
 
-    sal_uLong               GetChecksum() const;
+    sal_uInt32          GetChecksum() const;
 
 public:
 
