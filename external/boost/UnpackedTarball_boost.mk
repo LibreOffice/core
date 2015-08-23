@@ -25,8 +25,6 @@ boost_patches += boost.date_time.Wshadow.warnings.patch
 boost_patches += boost.multi_array.C4510.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9888
 boost_patches += boost.multi_array.Wunused-local-typedefs.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9891
-boost_patches += boost.preprocessor.Wundef.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9892
 boost_patches += boost.property_tree.Wshadow.warnings.patch.1
 # https://svn.boost.org/trac/boost/ticket/9894
@@ -41,8 +39,6 @@ boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
 boost_patches += boost.random.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9900
 boost_patches += boost.spirit.Wshadow.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9901
-boost_patches += boost.spirit.Wunused-local-typedefs.warnings.patch
 # to-do: submit upstream
 boost_patches += boost.spirit.Wunused-parameter.warnings.patch
 boost_patches += boost.date_time.Wshadow.warnings.patch.1
@@ -51,7 +47,6 @@ boost_patches += boost.utility.Wundef.warnings.patch
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 ifeq (GCC,$(COM))
-boost_patches += boost_1_44_0-unused-parameters.patch
 boost_patches += boost.signals2.unused.parameters.patch
 endif
 
@@ -70,8 +65,6 @@ boost_patches += rtti.patch.0
 
 # https://svn.boost.org/trac/boost/ticket/11505
 boost_patches += boost_1_59_0.mpl.config.wundef.patch
-# https://svn.boost.org/trac/boost/ticket/11503
-boost_patches += boost_1_59_0.type_index.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11502
 boost_patches += boost_1_59_0.property_tree.wtype-limits.patch
 # https://svn.boost.org/trac/boost/ticket/11507
@@ -82,19 +75,11 @@ boost_patches += boost_1_59_0.iostreams.wshadow.patch
 boost_patches += boost_1_59_0.iostreams.wunused.patch
 # https://svn.boost.org/trac/boost/ticket/11506
 boost_patches += boost_1_59_0.rational.wshadow.patch
-# https://svn.boost.org/trac/boost/ticket/11510
-boost_patches += boost_1_59_0.unique_ptr.wshadow.patch
 # fixed upstream
-# https://svn.boost.org/trac/boost/ticket/11500
-boost_patches += boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch
 # https://svn.boost.org/trac/boost/ticket/11511
 boost_patches += boost_1_59_0.multi_array.wshadow.patch
-# https://svn.boost.org/trac/boost/ticket/11512
-boost_patches += boost_1_59_0.signal2.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11501
 boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
-# fixed upstream by bdcd06c4cc1971d763e528b8cb1d0f16fcc5ecf4
-boost_patches += boost.concept_check.Wunused-local-typedefs.warnings.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
