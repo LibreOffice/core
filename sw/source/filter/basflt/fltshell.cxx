@@ -419,25 +419,33 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
     return pRet;
 }
 
-static void MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
+static bool MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
     SwPaM& rRegion)
 {
     // the anchor is the Pam's Point. It's modified when inserting
     // text, etc.; therefore it is kept on the stack. Only the
     // attribute's format needs to be set.
     rRegion.DeleteMark();
-    rRegion.GetPoint()->nNode = rEntry.m_aMkPos.m_nNode.GetIndex() + 1;
+
+    sal_uLong nMk = rEntry.m_aMkPos.m_nNode.GetIndex() + 1;
+    const SwNodes& rMkNodes = rEntry.m_aMkPos.m_nNode.GetNodes();
+    if (nMk >= rMkNodes.Count())
+        return false;
+
+    rRegion.GetPoint()->nNode = nMk;
     SwContentNode* pCNd = GetContentNode(pDoc, rRegion.GetPoint()->nNode, true);
     rRegion.GetPoint()->nContent.Assign(pCNd, rEntry.m_aMkPos.m_nContent);
+    return true;
 }
 
 // MakeBookRegionOrPoint() behaves like MakeRegionOrPoint, except that
 // it adheres to certain restrictions on bookmarks in tables (cannot
 // span more than one cell)
-static void MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
+static bool MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
                     SwPaM& rRegion, bool bCheck )
 {
-    if (rEntry.MakeRegion(pDoc, rRegion, bCheck )){
+    if (rEntry.MakeRegion(pDoc, rRegion, bCheck ))
+    {
         // sal_Bool b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
         if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()
               != rRegion.GetMark()->nNode.GetNode().FindTableBoxStartNode())
@@ -445,9 +453,9 @@ static void MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
             rRegion.Exchange();         // invalid range
             rRegion.DeleteMark();       // -> both to mark
         }
-    }else{
-        MakePoint(rEntry, pDoc, rRegion);
+        return true;
     }
+    return MakePoint(rEntry, pDoc, rRegion);
 }
 
 // IterateNumrulePiece() looks for the first range valid for Numrules
@@ -596,8 +604,10 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_ANNOTATIONMARK:
         {
-            MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true);
-            pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
+            if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
+                pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
+            else
+                SAL_WARN("sw", "failed to make book region or point");
         }
         break;
     case RES_FLTR_TOX:
