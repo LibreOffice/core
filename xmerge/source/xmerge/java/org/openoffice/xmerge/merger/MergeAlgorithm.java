@@ -46,9 +46,6 @@ public interface MergeAlgorithm {
      *                       content will be extracted.
      *  @param  differences  The <code>Difference</code> array.
      *
-     *  @return  An <code>Iterator</code> which is the modified original
-     *           <code>Iterator</code> Sequence.  Same as the first parameter.
-     *
      *  @throws  MergeException  If an error occurs during the merge.
      */
     public void applyDifference(Iterator orgSeq, Iterator modSeq,

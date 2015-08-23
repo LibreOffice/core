@@ -358,7 +358,7 @@ OfficeConstants {
     /**
      * Adds a <code>Worksheet</code> to the workbook.
      *
-     * @return name the name of the <code>Worksheet</code> to be added
+     * @param name the name of the <code>Worksheet</code> to be added
      */
     public void addWorksheet(String name) throws IOException {
 
@@ -372,7 +372,6 @@ OfficeConstants {
     /**
      * Adds a cell to the current worksheet.
      *
-     * @return the name of the <code>Worksheet</code> to be added
      */
     public void addCell(int row,int col, Format fmt, String cellContents)
     throws IOException {

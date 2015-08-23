@@ -247,11 +247,7 @@ public class Worksheet {
     public void addCol(ColInfo c) {
         colInfo.add(c);
     }
-    /**
-     * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
-     *
-     * @return an <code>Enumeration</code> to the ColInfo's
-     */
+
     public void addSettings(SheetSettings s) {
 
         sel.setActiveCell(s.getCursor());

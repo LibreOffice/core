@@ -127,11 +127,6 @@ public class ColumnRowInfo {
         return repeated;
     }
 
-    /**
-     * Returns the base Cell address
-     *
-     * @return the base cell address
-     */
     public void setRepeated(int repeated) {
 
         this.repeated = repeated;

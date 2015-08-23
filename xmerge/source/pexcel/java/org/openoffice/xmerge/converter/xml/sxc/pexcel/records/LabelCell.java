@@ -126,7 +126,7 @@ public class LabelCell extends CellValue {
     /**
      * Sets the <code>String</code> representing the cells contents
      *
-     * @return the <code>String</code> representing the cells contents
+     * @param cellContents the <code>String</code> representing the cells contents
      */
     private void setLabel(String cellContents) throws IOException {
         rgch = cellContents.getBytes("UTF-16LE");

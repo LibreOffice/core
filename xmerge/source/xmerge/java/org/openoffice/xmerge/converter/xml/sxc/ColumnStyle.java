@@ -118,7 +118,7 @@ public class ColumnStyle extends Style implements Cloneable {
     /**
      * Sets the width of this column
      *
-     * @return the <code>Format</code> object
+     * @param colWidth the column width
      */
     public void setColWidth(int colWidth) {
 
