@@ -30,6 +30,8 @@
 #define CODEPAGE RTL_TEXTENCODING_MS_1252
 #endif
 
+#define VBA_EXPORT_DEBUG 1
+
 namespace {
 
 void exportString(SvStream& rStrm, const OUString& rString)
@@ -582,11 +584,30 @@ void writePROJECTMODULES(SvStream& rStrm)
 // section 2.3.4.2
 void exportDirStream(SvStream& rStrm)
 {
-    writePROJECTINFORMATION(rStrm);
-    writePROJECTREFERENCES(rStrm);
-    writePROJECTMODULES(rStrm);
-    rStrm.WriteUInt16(0x0010); // terminator
-    rStrm.WriteUInt32(0x00000000); // reserved
+    SvMemoryStream aDirStream(4096, 4096);
+
+    writePROJECTINFORMATION(aDirStream);
+    writePROJECTREFERENCES(aDirStream);
+    writePROJECTMODULES(aDirStream);
+    aDirStream.WriteUInt16(0x0010); // terminator
+    aDirStream.WriteUInt32(0x00000000); // reserved
+
+    aDirStream.Seek(0);
+
+#if VBA_EXPORT_DEBUG
+    const OUString aDirFileName("/tmp/vba_dir_out.bin");
+    SvFileStream aDirStreamDebug(aDirFileName, STREAM_READWRITE);
+
+    aDirStreamDebug.WriteStream(aDirStream);
+    aDirStream.Seek(0);
+#endif
+
+    // the stream for the compression
+    SvMemoryStream aMemoryStream(4096, 4096);
+    aMemoryStream.WriteStream(aDirStream);
+
+    VBACompression aCompression(rStrm, aDirStream);
+    aCompression.write();
 }
 
 }
@@ -602,19 +623,8 @@ void VbaExport::exportVBA()
     SotStorage* pVBAStream = aStorage->OpenSotStorage("VBA", STREAM_READWRITE);
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
 
-    const OUString aDirFileName("/tmp/vba_dir_out.bin");
-    SvFileStream aDirStream(aDirFileName, STREAM_READWRITE);
-
     // export
-    exportDirStream(aDirStream);
-
-    aDirStream.Seek(0);
-
-    SvMemoryStream aMemoryStream(4096, 4096);
-    aMemoryStream.WriteStream(aDirStream);
-
-    VBACompression aCompression(*pDirStream, aMemoryStream);
-    aCompression.write();
+    exportDirStream(*pDirStream);
 
     css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
