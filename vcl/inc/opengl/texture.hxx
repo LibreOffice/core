@@ -23,18 +23,19 @@
 #include <GL/glew.h>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 #include <tools/gen.hxx>
 
-class ImplOpenGLTexture
+struct ImplOpenGLTexture
 {
-public:
-    int    mnRefCount;
     GLuint mnTexture;
     int    mnWidth;
     int    mnHeight;
     GLenum mnFilter;
 
+    ImplOpenGLTexture();
+    ImplOpenGLTexture( const ImplOpenGLTexture& rSrc );
     ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate );
     ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
     ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight );
@@ -47,8 +48,7 @@ private:
     // if the rect size doesn't match the mpImpl one, this instance
     // is a sub-area from the real OpenGL texture
     Rectangle          maRect;
-
-    ImplOpenGLTexture* mpImpl;
+    ::o3tl::cow_wrapper< ImplOpenGLTexture > maImpl;
 
 public:
                     OpenGLTexture();

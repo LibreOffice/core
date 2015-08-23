@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <algorithm>
 
 #include "svdata.hxx"
 
@@ -28,9 +29,17 @@
 #include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
 
+// default texture
+ImplOpenGLTexture::ImplOpenGLTexture() :
+    mnTexture( 0 ),
+    mnWidth( 0 ),
+    mnHeight( 0 ),
+    mnFilter( GL_NEAREST )
+{
+}
+
 // texture with allocated size
 ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
-    mnRefCount( 1 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST )
@@ -52,7 +61,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
 
 // texture with content retrieved from FBO
 ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) :
-    mnRefCount( 1 ),
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
@@ -78,7 +86,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
 
 // texture from buffer data
 ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData ) :
-    mnRefCount( 1 ),
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
@@ -100,6 +107,15 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     CHECK_GL_ERROR();
 }
 
+// copy texture impl
+ImplOpenGLTexture::ImplOpenGLTexture( const ImplOpenGLTexture& rSrc ) :
+    mnTexture( rSrc.mnTexture ),
+    mnWidth( rSrc.mnWidth ),
+    mnHeight( rSrc.mnHeight ),
+    mnFilter( rSrc.mnFilter )
+{
+}
+
 ImplOpenGLTexture::~ImplOpenGLTexture()
 {
     SAL_INFO( "vcl.opengl", "~OpenGLTexture " << mnTexture );
@@ -109,34 +125,32 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
 
 OpenGLTexture::OpenGLTexture() :
     maRect( 0, 0, 0, 0 ),
-    mpImpl( NULL )
+    maImpl()
 {
 }
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
-    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) ),
+    maImpl( ImplOpenGLTexture( nWidth, nHeight, bAllocate ) )
 {
-    mpImpl = new ImplOpenGLTexture( nWidth, nHeight, bAllocate );
 }
 
 OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight ) :
-    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) ),
+    maImpl( ImplOpenGLTexture( nX, nY, nWidth, nHeight ) )
 {
-    mpImpl = new ImplOpenGLTexture( nX, nY, nWidth, nHeight );
 }
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData ) :
-    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) ),
+    maImpl( ImplOpenGLTexture( nWidth, nHeight, nFormat, nType, pData ) )
 {
-    mpImpl = new ImplOpenGLTexture( nWidth, nHeight, nFormat, nType, pData );
 }
 
-OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture )
+OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture ) :
+    maRect( rTexture.maRect ),
+    maImpl( rTexture.maImpl )
 {
-    maRect = rTexture.maRect;
-    mpImpl = rTexture.mpImpl;
-    if( mpImpl )
-        mpImpl->mnRefCount++;
 }
 
 OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
@@ -144,33 +158,23 @@ OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
 {
     maRect = Rectangle( Point( rTexture.maRect.Left() + nX, rTexture.maRect.Top() + nY ),
                         Size( nWidth, nHeight ) );
-    mpImpl = rTexture.mpImpl;
-    if( mpImpl )
-        mpImpl->mnRefCount++;
+    maImpl = rTexture.maImpl;
     SAL_INFO( "vcl.opengl", "Copying texture " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 }
 
 OpenGLTexture::~OpenGLTexture()
 {
-    if( mpImpl )
-    {
-        if( mpImpl->mnRefCount == 1 )
-            delete mpImpl;
-        else
-            mpImpl->mnRefCount--;
-    }
 }
 
 bool OpenGLTexture::IsUnique() const
 {
-    return ( mpImpl == NULL || mpImpl->mnRefCount == 1 );
+    return ( maImpl.is_unique() );
 }
 
 GLuint OpenGLTexture::Id() const
 {
-    if( mpImpl )
-        return mpImpl->mnTexture;
-    return 0;
+    // default is 0
+    return maImpl->mnTexture;
 }
 
 int OpenGLTexture::GetWidth() const
@@ -187,36 +191,35 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
 {
     SAL_INFO( "vcl.opengl", "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 
-    if( mpImpl == NULL )
+    if( maImpl->mnWidth < 1 )
     {
         pCoord[0] = pCoord[1] = pCoord[2] = pCoord[3] = 0.0f;
         pCoord[4] = pCoord[5] = pCoord[6] = pCoord[7] = 0.0f;
         return;
     }
-
-    pCoord[0] = pCoord[2] = (maRect.Left() + rPosAry.mnSrcX) / (double) mpImpl->mnWidth;
-    pCoord[4] = pCoord[6] = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) mpImpl->mnWidth;
+    pCoord[0] = pCoord[2] = (maRect.Left() + rPosAry.mnSrcX) / (double) maImpl->mnWidth;
+    pCoord[4] = pCoord[6] = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) maImpl->mnWidth;
 
     if( !bInverted )
     {
-        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
-        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) maImpl->mnHeight;
+        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) maImpl->mnHeight;
     }
     else
     {
-        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) mpImpl->mnHeight;
-        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) mpImpl->mnHeight;
+        pCoord[1] = pCoord[7] = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / (double) maImpl->mnHeight;
+        pCoord[3] = pCoord[5] = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) maImpl->mnHeight;
     }
 }
 
 void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 {
-    if( GetWidth() != mpImpl->mnWidth || GetHeight() != mpImpl->mnHeight )
+    if( GetWidth() != maImpl->mnWidth || GetHeight() != maImpl->mnHeight )
     {
-        pCoord[0] = pCoord[2] = maRect.Left() / (double) mpImpl->mnWidth;
-        pCoord[4] = pCoord[6] = maRect.Right() / (double) mpImpl->mnWidth;
-        pCoord[3] = pCoord[5] = 1.0f - maRect.Top() / (double) mpImpl->mnHeight;
-        pCoord[1] = pCoord[7] = 1.0f - maRect.Bottom() / (double) mpImpl->mnHeight;
+        pCoord[0] = pCoord[2] = maRect.Left() / (double) maImpl->mnWidth;
+        pCoord[4] = pCoord[6] = maRect.Right() / (double) maImpl->mnWidth;
+        pCoord[3] = pCoord[5] = 1.0f - maRect.Top() / (double) maImpl->mnHeight;
+        pCoord[1] = pCoord[7] = 1.0f - maRect.Bottom() / (double) maImpl->mnHeight;
     }
     else
     {
@@ -229,42 +232,36 @@ void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 
 GLenum OpenGLTexture::GetFilter() const
 {
-    if( mpImpl )
-        return mpImpl->mnFilter;
-    return GL_NEAREST;
+    // default is GL_NEAREST
+    return maImpl->mnFilter;
 }
 
 void OpenGLTexture::SetFilter( GLenum nFilter )
 {
-    if( mpImpl )
-    {
-        mpImpl->mnFilter = nFilter;
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, nFilter );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, nFilter );
-    }
+    maImpl->mnFilter = nFilter;
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, nFilter );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, nFilter );
 
     CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Bind()
 {
-    if( mpImpl )
-        glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
+    glBindTexture( GL_TEXTURE_2D, maImpl->mnTexture );
 
     CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Unbind()
 {
-    if( mpImpl )
-        glBindTexture( GL_TEXTURE_2D, 0 );
+    glBindTexture( GL_TEXTURE_2D, 0 );
 
     CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 {
-    if( mpImpl == NULL )
+    if( maImpl->mnWidth < 1 && maImpl->mnHeight < 1 )
     {
         SAL_WARN( "vcl.opengl", "Can't read invalid texture" );
         return;
@@ -275,7 +272,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 
     SAL_INFO( "vcl.opengl", "Reading texture " << Id() << " " << GetWidth() << "x" << GetHeight() );
 
-    if( GetWidth() == mpImpl->mnWidth && GetHeight() == mpImpl->mnHeight )
+    if( GetWidth() == maImpl->mnWidth && GetHeight() == maImpl->mnHeight )
     {
         // XXX: Call not available with GLES 2.0
         glGetTexImage( GL_TEXTURE_2D, 0, nFormat, nType, pData );
@@ -288,7 +285,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
         OpenGLFramebuffer* pFramebuffer;
 
         pFramebuffer = pContext->AcquireFramebuffer( *this );
-        glReadPixels( maRect.Left(), mpImpl->mnHeight - maRect.Top(), GetWidth(), GetHeight(), nFormat, nType, pData );
+        glReadPixels( maRect.Left(), maImpl->mnHeight - maRect.Top(), GetWidth(), GetHeight(), nFormat, nType, pData );
         OpenGLContext::ReleaseFramebuffer( pFramebuffer );
         CHECK_GL_ERROR();
     }
@@ -299,30 +296,20 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 
 OpenGLTexture::operator bool() const
 {
-    return ( mpImpl != NULL );
+    return ( maImpl->mnWidth != 0 && maImpl->mnHeight != 0 );
 }
 
 OpenGLTexture&  OpenGLTexture::operator=( const OpenGLTexture& rTexture )
 {
-    if( rTexture.mpImpl )
-        rTexture.mpImpl->mnRefCount++;
-    if( mpImpl )
-    {
-        if( mpImpl->mnRefCount == 1 )
-            delete mpImpl;
-        else
-            mpImpl->mnRefCount--;
-    }
-
     maRect = rTexture.maRect;
-    mpImpl = rTexture.mpImpl;
+    maImpl = rTexture.maImpl;
 
     return *this;
 }
 
 bool OpenGLTexture::operator==( const OpenGLTexture& rTexture ) const
 {
-    return (mpImpl == rTexture.mpImpl && maRect == rTexture.maRect );
+    return ( maImpl.same_object( rTexture.maImpl ) && maRect == rTexture.maRect );
 }
 
 bool OpenGLTexture::operator!=( const OpenGLTexture& rTexture ) const
