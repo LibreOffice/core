@@ -241,6 +241,17 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 break;
             }
             case B_SBXOBJECTS:
+            {
+                //assuming an empty string with just the lead 32bit/16bit len indicator
+                const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
+                const size_t nMinRecordSize = nMinStringSize + sizeof(sal_Int16);
+                const size_t nMaxRecords = r.remainingSize() / nMinRecordSize;
+                if (nCount > nMinRecordSize)
+                {
+                    SAL_WARN("basic", "Parsing error: " << nMaxRecords <<
+                             " max possible entries, but " << nCount << " claimed, truncating");
+                    nCount = nMaxRecords;
+                }
 
                 // User defined types
                 for (sal_uInt16 i = 0; i < nCount; i++)
@@ -319,9 +330,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
                     AddType(pType);
                 }
-
                 break;
-
+            }
             case B_MODEND:
                 goto done;
             default:
