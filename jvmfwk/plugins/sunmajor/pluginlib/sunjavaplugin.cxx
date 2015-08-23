@@ -669,7 +669,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #if defined(WNT)
     do_msvcr_magic(sRuntimeLib.pData);
 #endif
-    if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_DEFAULT))
+    if (!moduleRt.load(sRuntimeLib))
 #endif
     {
         JFW_ENSURE(false,
