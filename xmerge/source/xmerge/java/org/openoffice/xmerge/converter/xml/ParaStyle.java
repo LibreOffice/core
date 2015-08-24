@@ -123,26 +123,21 @@ class alignment extends conversionAlgorithm {
 /**
  *  <p>This class represents a paragraph <code>Style</code>.</p>
  *
- *  <p><table border="1" cellpadding="1"><tr><td>
- *  Attribute        </td><td>Value
- *  </td></tr><tr><td>
- *  MARGIN_LEFT      </td><td>mm * 100
- *  </td></tr><tr><td>
- *  MARGIN_RIGHT     </td><td>mm * 100
- *  </td></tr><tr><td>
- *  MARGIN_TOP       </td><td>mm * 100 (space on top of paragraph)
- *  </td></tr><tr><td>
- *  MARGIN_BOTTOM    </td><td>mm * 100
- *  </td></tr><tr><td>
- *  TEXT_INDENT      </td><td>mm * 100 (first line indent)
- *  </td></tr><tr><td>
- *  LINE_HEIGHT      </td><td>mm * 100, unless or'ed with LH_PCT, in which
+ *  <p><table border="1" cellpadding="1">
+ *  <caption>Properties</caption>
+ *  <tr><th>Attribute</th><th>Value</th></tr>
+ *  <tr><td>MARGIN_LEFT      </td><td>mm * 100</td></tr>
+ *  <tr><td>MARGIN_RIGHT     </td><td>mm * 100</td></tr>
+ *  <tr><td>MARGIN_TOP       </td><td>mm * 100 (space on top of paragraph)</td></tr>
+ *  <tr><td>MARGIN_BOTTOM    </td><td>mm * 100</td></tr>
+ *  <tr><td>TEXT_INDENT      </td><td>mm * 100 (first line indent)</td></tr>
+ *  <tr><td>LINE_HEIGHT      </td><td>mm * 100, unless or'ed with LH_PCT, in which
  *                   case it is a percentage (e.g. 200% for double spacing)
  *                   Can also be or'ed with LH_ATLEAST.  Value is stored
  *                   in bits indicated by LH_VALUEMASK.
- *  </td></tr><tr><td>
- *  TEXT_ALIGN       </td><td>ALIGN_RIGHT, ALIGN_CENTER, ALIGN_JUST, ALIGN_LEFT
- *  </td></tr></table>
+ *  </td></tr>
+ *  <tr><td>TEXT_ALIGN       </td><td>ALIGN_RIGHT, ALIGN_CENTER, ALIGN_JUST, ALIGN_LEFT</td></tr>
+ *  </table>
  *
  *   @author   David Proulx
  */
