@@ -248,6 +248,7 @@ void ScFormulaDlg::dispose()
 {
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
+    m_aHelper.dispose();
 
     if (pData) // close dosen't destroy;
     {
