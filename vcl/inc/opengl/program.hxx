@@ -36,6 +36,7 @@ private:
     GLuint          mnPositionAttrib;
     GLuint          mnTexCoordAttrib;
     GLuint          mnAlphaCoordAttrib;
+    GLuint          mnMaskCoordAttrib;
     TextureList     maTextures;
     bool            mbBlending;
 
@@ -56,6 +57,7 @@ public:
     void SetVertices( const GLvoid* pData );
     void SetTextureCoord( const GLvoid* pData );
     void SetAlphaCoord( const GLvoid* pData );
+    void SetMaskCoord(const GLvoid* pData);
 
     void SetUniform1f( const OString& rName, GLfloat v1 );
     void SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 );
