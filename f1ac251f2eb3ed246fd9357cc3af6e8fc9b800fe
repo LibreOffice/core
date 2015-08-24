@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_be62d514",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2536,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-24T10:26:20Z",
+      "side": 1,
+      "message": "The dtor is not needed at all now.",
+      "revId": "f1ac251f2eb3ed246fd9357cc3af6e8fc9b800fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
