@@ -91,7 +91,7 @@ namespace
             pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() ); \
         OSL_ENSURE( pViewShell, "missing view shell :-(" );         \
         pWindow = pViewShell ?                                      \
-            pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : NULL;    \
+            pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : nullptr;    \
         if (pViewShell && !pWindow)                                             \
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
     }
