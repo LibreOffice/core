@@ -395,7 +395,7 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
         MakeRealLocale();
         LanguageTag::setConfiguredSystemLanguage( m_aRealLocale.getLanguageType() );
         SetModified();
-        sal_uLong nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
+        sal_uInt32 nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
         if ( m_aCurrencyString.isEmpty() )
             nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
         NotifyListeners( nHint );
@@ -457,7 +457,7 @@ void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( bool bSet)
 
 void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    sal_uLong nHint = 0;
+    sal_uInt32 nHint = 0;
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
     Sequence< sal_Bool > seqROStates = GetReadOnlyStates( seqPropertyNames );
     sal_Int32 nCount = seqPropertyNames.getLength();
