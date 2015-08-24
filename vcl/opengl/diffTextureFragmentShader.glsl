@@ -9,14 +9,16 @@
 
 /*precision mediump float;*/
 varying vec2 tex_coord;
+varying vec2 mask_coord;
 uniform sampler2D texture; /* white background */
 uniform sampler2D mask;    /* black background */
 
-void main() {
+void main()
+{
     float alpha;
     vec4 texel0, texel1;
     texel0 = texture2D(texture, tex_coord);
-    texel1 = texture2D(mask, tex_coord);
+    texel1 = texture2D(mask, mask_coord);
     alpha = 1.0 - abs(texel0.r - texel1.r);
     if(alpha > 0.0)
         gl_FragColor = texel1 / alpha;

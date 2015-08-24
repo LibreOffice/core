@@ -9,14 +9,18 @@
 
 varying vec2 tex_coord;
 varying vec2 alpha_coord;
+varying vec2 mask_coord;
+
 uniform sampler2D sampler;
 uniform sampler2D mask;
 uniform sampler2D alpha;
 
-void main() {
+void main()
+{
     vec4 texel0, texel1, texel2;
+
     texel0 = texture2D(sampler, tex_coord);
-    texel1 = texture2D(mask, tex_coord);
+    texel1 = texture2D(mask, mask_coord);
     texel2 = texture2D(alpha, alpha_coord);
     gl_FragColor = texel0;
 

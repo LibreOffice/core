@@ -30,6 +30,7 @@ varying vec2 tex_coord;
 // This mode makes the scaling work like maskedTextureFragmentShader.glsl
 // (instead of like plain textureVertexShader.glsl).
 #ifdef MASKED
+varying vec2 mask_coord;
 uniform sampler2D mask;
 #endif
 
