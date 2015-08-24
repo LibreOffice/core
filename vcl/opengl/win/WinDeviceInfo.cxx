@@ -555,6 +555,30 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
     return match;
 }
 
+namespace {
+
+OString getCacheFolder()
+{
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+    rtl::Bootstrap::expandMacros(url);
+
+    osl::Directory::create(url);
+
+    return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+}
+
+OString aCacheFolder = getCacheFolder();
+
+void writeToLog(SvStream& rStrm, const char* pKey, const OUString rVal)
+{
+    rStrm.WriteCharPtr(pKey);
+    rStrm.WriteCharPtr(": ");
+    rStrm.WriteOString(OUStringToOString(rVal, RTL_TEXTENCODING_UTF8));
+    rStrm.WriteChar('\n');
+}
+
+}
+
 bool WinOpenGLDeviceInfo::isDeviceBlocked()
 {
     SAL_INFO("vcl.opengl", maDriverVersion);
@@ -565,6 +589,18 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
     SAL_INFO("vcl.opengl", maAdapterSubsysID);
     SAL_INFO("vcl.opengl", maDeviceKey);
     SAL_INFO("vcl.opengl", maDeviceString);
+
+    OString aCacheFile( aCacheFolder + "/opengl_device.log" );
+    SvFileStream aOpenGLLogFile(aCacheFile, StreamMode::WRITE);
+
+    writeToLog(aOpenGLLogFile, "DriverVersion", maDriverVersion);
+    writeToLog(aOpenGLLogFile, "DriverDate", maDriverDate);
+    writeToLog(aOpenGLLogFile, "DeviceID", maDeviceID);
+    writeToLog(aOpenGLLogFile, "AdapterVendorID", maAdapterVendorID);
+    writeToLog(aOpenGLLogFile, "AdapterDeviceID", maAdapterDeviceID);
+    writeToLog(aOpenGLLogFile, "AdapterSubsysID", maAdapterSubsysID);
+    writeToLog(aOpenGLLogFile, "DeviceKey", maDeviceKey);
+    writeToLog(aOpenGLLogFile, "DeviceString", maDeviceString);
 
     // Check if the device is blocked from the downloaded blocklist. If not, check
     // the static list after that. This order is used so that we can later escape
