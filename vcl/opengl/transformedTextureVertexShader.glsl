@@ -9,15 +9,18 @@
 
 attribute vec4 position;
 attribute vec2 tex_coord_in;
+attribute vec2 mask_coord_in;
 uniform vec2 viewport;
 uniform mat4 transform;
 uniform mat4 mvp;
 varying vec2 tex_coord;
+varying vec2 mask_coord;
 
 void main() {
     vec4 pos = mvp * transform * position;
     gl_Position = pos;
     tex_coord = tex_coord_in;
+    mask_coord = mask_coord_in;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,17 +9,15 @@
 
 attribute vec4 position;
 attribute vec2 tex_coord_in;
-attribute vec2 alpha_coord_in;
 attribute vec2 mask_coord_in;
 varying vec2 tex_coord;
-varying vec2 alpha_coord;
 varying vec2 mask_coord;
 uniform mat4 mvp;
 
-void main() {
+void main()
+{
    gl_Position = mvp * position;
    tex_coord = tex_coord_in;
-   alpha_coord = alpha_coord_in;
    mask_coord = mask_coord_in;
 }
 
