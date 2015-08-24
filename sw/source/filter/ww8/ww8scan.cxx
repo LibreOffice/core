@@ -4595,7 +4595,9 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
             break;
     }
 
-    nCpO = pWwFib->GetBaseCp(nType);
+    WW8_CP cp = 0;
+    pWwFib->GetBaseCp(nType, &cp); //TODO: check return value
+    nCpO = cp;
 
     if( nStartCp || nCpO )
         SeekPos( nStartCp );    // PLCFe auf Text-StartPos einstellen
@@ -5235,46 +5237,65 @@ namespace
     }
 }
 
-WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
+bool WW8Fib::GetBaseCp(ManTypes nType, WW8_CP * cp) const
 {
+    assert(cp != nullptr);
     WW8_CP nOffset = 0;
 
     switch( nType )
     {
         default:
-        case MAN_MAINTEXT:
-            break;
-        case MAN_FTN:
-            nOffset = ccpText;
-            break;
-        case MAN_HDFT:
-            nOffset = ccpText + ccpFootnote;
-            break;
+        case MAN_TXBX_HDFT:
+            nOffset = ccpTxbx;
+            // fall through
+        case MAN_TXBX:
+            if (ccpEdn > std::numeric_limits<WW8_CP>::max() - nOffset) {
+                return false;
+            }
+            nOffset += ccpEdn;
+            // fall through
+        case MAN_EDN:
+            if (ccpAtn > std::numeric_limits<WW8_CP>::max() - nOffset) {
+                return false;
+            }
+            nOffset += ccpAtn;
+            // fall through
+        case MAN_AND:
+            if (ccpMcr > std::numeric_limits<WW8_CP>::max() - nOffset) {
+                return false;
+            }
+            nOffset += ccpMcr;
         /*
+            // fall through
+
          A subdocument of this kind (MAN_MACRO) probably exists in some defunct
          version of MSWord, but now ccpMcr is always 0. If some example that
          uses this comes to light, this is the likely calculation required
 
         case MAN_MACRO:
-            nOffset = ccpText + ccpFootnote + ccpHdr;
-            break;
-
         */
-        case MAN_AND:
-            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr;
-            break;
-        case MAN_EDN:
-            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr + ccpAtn;
-            break;
-        case MAN_TXBX:
-            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr + ccpAtn + ccpEdn;
-            break;
-        case MAN_TXBX_HDFT:
-            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr + ccpAtn + ccpEdn +
-                ccpTxbx;
+            if (ccpHdr > std::numeric_limits<WW8_CP>::max() - nOffset) {
+                return false;
+            }
+            nOffset += ccpHdr;
+            // fall through
+        case MAN_HDFT:
+            if (ccpFootnote > std::numeric_limits<WW8_CP>::max() - nOffset) {
+                return false;
+            }
+            nOffset += ccpFootnote;
+            // fall through
+        case MAN_FTN:
+            if (ccpText > std::numeric_limits<WW8_CP>::max() - nOffset) {
+                return false;
+            }
+            nOffset += ccpText;
+            // fall through
+        case MAN_MAINTEXT:
             break;
     }
-    return nOffset;
+    *cp = nOffset;
+    return true;
 }
 
 ww::WordVersion WW8Fib::GetFIBVersion() const
