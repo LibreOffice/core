@@ -20,10 +20,12 @@
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
 
+#include <cassert>
+#include <cstddef>
+#include <cstring>
 #include <functional>
 #include <algorithm>
 
-#include <string.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <sprmids.hxx>
 #include <rtl/tencinfo.h>
@@ -6357,10 +6359,15 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
     return pStd;
 }
 
-struct WW8_FFN_Ver6 : public WW8_FFN_BASE
+namespace {
+const sal_uInt16 maxStrSize = 65;
+}
+
+struct WW8_FFN_Ver6
 {
-    // ab Ver6
-    sal_Char szFfn[65]; // 0x6 bzw. 0x40 ab Ver8 zero terminated string that
+    WW8_FFN_BASE base;
+    // from Ver6
+    sal_Char szFfn[maxStrSize]; // 0x6 bzw. 0x40 ab Ver8 zero terminated string that
                         // records name of font.
                         // Maximal size of szFfn is 65 characters.
                         // Vorsicht: Dieses Array kann auch kleiner sein!!!
@@ -6439,6 +6446,50 @@ namespace
         }
         return nMax;
     }
+
+    template<typename T> bool readU8(
+        sal_uInt8 const * p, std::size_t offset, sal_uInt8 const * pEnd,
+        T * value)
+    {
+        assert(p <= pEnd);
+        assert(value != nullptr);
+        if (offset >= static_cast<std::size_t>(pEnd - p)) {
+            return false;
+        }
+        *value = p[offset];
+        return true;
+    }
+
+    bool readS16(
+        sal_uInt8 const * p, std::size_t offset, sal_uInt8 const * pEnd,
+        short * value)
+    {
+        assert(p <= pEnd);
+        assert(value != nullptr);
+        if (offset > static_cast<std::size_t>(pEnd - p)
+            || static_cast<std::size_t>(pEnd - p) - offset < 2)
+        {
+            return false;
+        }
+        *value = unsigned(p[offset]) + (unsigned(p[offset + 1]) << 8);
+        return true;
+    }
+
+    sal_Int32 getStringLength(
+        sal_uInt8 const * p, std::size_t offset, sal_uInt8 const * pEnd)
+    {
+        assert(p <= pEnd);
+        assert(pEnd - p <= SAL_MAX_INT32);
+        if (offset >= static_cast<std::size_t>(pEnd - p)) {
+            return -1;
+        }
+        void const * p2 = std::memchr(
+            p + offset, 0, static_cast<std::size_t>(pEnd - p) - offset);
+        if (p2 == nullptr) {
+            return -1;
+        }
+        return static_cast<sal_uInt8 const *>(p2) - (p + offset);
+    }
 }
 
 WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
@@ -6476,6 +6527,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
     // read all font information
     nFFn = rSt.Read(pA, nFFn);
+    sal_uInt8 * const pEnd = pA + nFFn;
     const sal_uInt16 nCalcMax = calcMaxFonts(pA, nFFn);
 
     if (eVersion < ww::eWW8)
@@ -6495,17 +6547,26 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
         if( eVersion <= ww::eWW2 )
         {
-            WW8_FFN_BASE* pVer2 = reinterpret_cast<WW8_FFN_BASE*>(pA);
-            for(sal_uInt16 i=0; i<nMax; ++i, ++p)
+            sal_uInt8 const * pVer2 = pA;
+            sal_uInt16 i = 0;
+            for(; i<nMax; ++i, ++p)
             {
-                p->cbFfnM1   = pVer2->cbFfnM1;
+                if (!readU8(
+                        pVer2, offsetof(WW8_FFN_BASE, cbFfnM1), pEnd,
+                        &p->cbFfnM1))
+                {
+                    break;
+                }
 
                 p->prg       =  0;
                 p->fTrueType = 0;
                 p->ff        = 0;
 
-                p->wWeight   = ( *(reinterpret_cast<sal_uInt8*>(pVer2) + 1) );
-                p->chs   = ( *(reinterpret_cast<sal_uInt8*>(pVer2) + 2) );
+                if (!(readU8(pVer2, 1, pEnd, &p->wWeight)
+                      && readU8(pVer2, 2, pEnd, &p->chs)))
+                {
+                    break;
+                }
                 /*
                  #i8726# 7- seems to encode the name in the same encoding as
                  the font, e.g load the doc in 97 and save to see the unicode
@@ -6515,27 +6576,49 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
-                p->sFontname = OUString ( (reinterpret_cast<char*>(pVer2) + 1 + 2), strlen((reinterpret_cast<char*>(pVer2) + 1 + 2)), eEnc);
-                pVer2 = reinterpret_cast<WW8_FFN_BASE*>( reinterpret_cast<sal_uInt8*>(pVer2) + pVer2->cbFfnM1 + 1 );
+                sal_Int32 n = getStringLength(pVer2, 1 + 2, pEnd);
+                if (n == -1) {
+                    break;
+                }
+                p->sFontname = OUString(
+                    reinterpret_cast<char const *>(pVer2 + 1 + 2), n, eEnc);
+                pVer2 = pVer2 + p->cbFfnM1 + 1;
             }
+            nMax = i;
         }
         else if( eVersion < ww::eWW8 )
         {
-            WW8_FFN_Ver6* pVer6 = reinterpret_cast<WW8_FFN_Ver6*>(pA);
-            sal_uInt8 c2;
-            for(sal_uInt16 i=0; i<nMax; ++i, ++p)
+            sal_uInt8 const * pVer6 = pA;
+            sal_uInt16 i = 0;
+            for(; i<nMax; ++i, ++p)
             {
-                p->cbFfnM1   = pVer6->cbFfnM1;
-                c2           = *(reinterpret_cast<sal_uInt8*>(pVer6) + 1);
+                if (!readU8(
+                        pVer6, offsetof(WW8_FFN_BASE, cbFfnM1), pEnd,
+                        &p->cbFfnM1))
+                {
+                    break;
+                }
+                sal_uInt8 c2;
+                if (!readU8(pVer6, 1, pEnd, &c2)) {
+                    break;
+                }
 
                 p->prg       =  c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
                 // ein Reserve-Bit ueberspringen
                 p->ff        = (c2 & 0x70) >> 4;
 
-                p->wWeight   = SVBT16ToShort( *reinterpret_cast<SVBT16*>(&pVer6->wWeight) );
-                p->chs       = pVer6->chs;
-                p->ibszAlt   = pVer6->ibszAlt;
+                if (!(readS16(
+                          pVer6, offsetof(WW8_FFN_BASE, wWeight), pEnd,
+                          &p->wWeight)
+                      && readU8(
+                          pVer6, offsetof(WW8_FFN_BASE, chs), pEnd, &p->chs)
+                      && readU8(
+                          pVer6, offsetof(WW8_FFN_BASE, ibszAlt), pEnd,
+                          &p->ibszAlt)))
+                {
+                    break;
+                }
                 /*
                  #i8726# 7- seems to encode the name in the same encoding as
                  the font, e.g load the doc in 97 and save to see the unicode
@@ -6544,12 +6627,27 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs, rFib.lid);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
-                p->sFontname = OUString(pVer6->szFfn, rtl_str_getLength(pVer6->szFfn), eEnc);
-                const sal_uInt16 maxStrSize = sizeof (pVer6->szFfn) / sizeof (pVer6->szFfn[0]);
+                sal_Int32 n = getStringLength(
+                    pVer6, offsetof(WW8_FFN_Ver6, szFfn), pEnd);
+                if (n == -1) {
+                    break;
+                }
+                p->sFontname = OUString(
+                    reinterpret_cast<char const *>(
+                        pVer6 + offsetof(WW8_FFN_Ver6, szFfn)),
+                    n, eEnc);
                 if (p->ibszAlt && p->ibszAlt < maxStrSize) //don't start after end of string
                 {
-                    const sal_Char *pAlt = pVer6->szFfn+p->ibszAlt;
-                    p->sFontname += ";" + OUString(pAlt, rtl_str_getLength(pAlt), eEnc);
+                    n = getStringLength(
+                        pVer6, offsetof(WW8_FFN_Ver6, szFfn) + p->ibszAlt,
+                        pEnd);
+                    if (n == -1) {
+                        break;
+                    }
+                    p->sFontname += ";" + OUString(
+                        reinterpret_cast<char const *>(
+                            pVer6 + offsetof(WW8_FFN_Ver6, szFfn) + p->ibszAlt),
+                        n, eEnc);
                 }
                 else
                 {
@@ -6562,8 +6660,9 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                         p->sFontname += ";Symbol";
                     }
                 }
-                pVer6 = reinterpret_cast<WW8_FFN_Ver6*>( reinterpret_cast<sal_uInt8*>(pVer6) + pVer6->cbFfnM1 + 1 );
+                pVer6 = pVer6 + p->cbFfnM1 + 1;
             }
+            nMax = i;
         }
         else
         {
