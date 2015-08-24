@@ -40,8 +40,8 @@ namespace avmedia
 MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
-    pWindow.reset( VclPtr<MediaFloater>::Create( _pBindings, this, _pParent ) );
-    static_cast< MediaFloater* >( pWindow.get() )->Initialize( pInfo );
+    SetWindow( VclPtr<MediaFloater>::Create( _pBindings, this, _pParent ) );
+    static_cast< MediaFloater* >( GetWindow() )->Initialize( pInfo );
 };
 
 

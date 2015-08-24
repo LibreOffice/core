@@ -124,7 +124,7 @@ SearchResultsDlgWrapper::SearchResultsDlgWrapper(
     vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/ ) :
     SfxChildWindow(_pParent, nId)
 {
-    pWindow = VclPtr<SearchResultsDlg>::Create(pBindings, _pParent, nId);
+    SetWindow( VclPtr<SearchResultsDlg>::Create(pBindings, _pParent, nId) );
 }
 
 SearchResultsDlgWrapper::~SearchResultsDlgWrapper() {}

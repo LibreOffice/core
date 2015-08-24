@@ -44,7 +44,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     DBG_ASSERT(pFact, "Dialog creation failed!");
     mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
     DBG_ASSERT(mpDlg, "Dialog creation failed!");
-    pWindow = mpDlg->GetWindow();
+    SetWindow( mpDlg->GetWindow() );
     SetVisible_Impl(false);
 
     vcl::Window* pTopWindow = 0;
@@ -61,7 +61,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
             pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < long(0.1*aParentSize.Height()) ?
                               long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
 
-        pWindow->SetPosPixel( pInfo->aPos );
+        GetWindow()->SetPosPixel( pInfo->aPos );
     }
 
     SetHideNotDelete( true );

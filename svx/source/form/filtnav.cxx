@@ -1996,8 +1996,8 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uIn
                                     SfxBindings *_pBindings, SfxChildWinInfo* _pInfo )
                  :SfxChildWindow( _pParent, _nId )
 {
-    pWindow = VclPtr<FmFilterNavigatorWin>::Create( _pBindings, this, _pParent );
-    static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
+    SetWindow( VclPtr<FmFilterNavigatorWin>::Create( _pBindings, this, _pParent ) );
+    static_cast<SfxDockingWindow*>(GetWindow())->Initialize( _pInfo );
 }
 
 

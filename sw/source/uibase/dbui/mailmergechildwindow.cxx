@@ -43,7 +43,7 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( vcl::Window* _pParent,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
 {
-    pWindow = VclPtr<SwMailMergeChildWin>::Create( pBindings, this, _pParent);
+    SetWindow( VclPtr<SwMailMergeChildWin>::Create( pBindings, this, _pParent) );
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
@@ -51,16 +51,16 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( vcl::Window* _pParent,
         if(pActiveView)
         {
             const SwEditWin &rEditWin = pActiveView->GetEditWin();
-            pWindow->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
+            GetWindow()->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
         }
         else
-            pWindow->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
-        pInfo->aPos = pWindow->GetPosPixel();
-        pInfo->aSize = pWindow->GetSizePixel();
+            GetWindow()->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
+        pInfo->aPos = GetWindow()->GetPosPixel();
+        pInfo->aSize = GetWindow()->GetSizePixel();
     }
 
-    static_cast<SwMailMergeChildWin *>(pWindow.get())->Initialize(pInfo);
-    pWindow->Show();
+    static_cast<SwMailMergeChildWin *>(GetWindow())->Initialize(pInfo);
+    GetWindow()->Show();
 }
 
 SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,

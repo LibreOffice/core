@@ -65,7 +65,7 @@ ScFunctionChildWindow::ScFunctionChildWindow( vcl::Window* pParentP,
 {
     VclPtr<ScFunctionDockWin> pWin = VclPtr<ScFunctionDockWin>::Create( pBindings, this,
                                         pParentP, ScResId( FID_FUNCTION_BOX ) );
-    pWindow = pWin;
+    SetWindow(pWin);
 
     SetAlignment(SfxChildAlignment::RIGHT);
 

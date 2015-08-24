@@ -249,17 +249,17 @@ namespace sfx2
     TaskPaneWrapper::TaskPaneWrapper( vcl::Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
-        pWindow = VclPtr<TaskPaneDockingWindow>::Create( i_pBindings, *this, i_pParent,
-            WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
+        SetWindow(VclPtr<TaskPaneDockingWindow>::Create( i_pBindings, *this, i_pParent,
+            WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE));
         SetAlignment(SfxChildAlignment::RIGHT);
 
-        pWindow->SetHelpId( HID_TASKPANE_WINDOW );
-        pWindow->SetOutputSizePixel( Size( 300, 450 ) );
+        GetWindow()->SetHelpId( HID_TASKPANE_WINDOW );
+        GetWindow()->SetOutputSizePixel( Size( 300, 450 ) );
 
-        dynamic_cast<SfxDockingWindow&>(*pWindow).Initialize(i_pInfo);
+        dynamic_cast<SfxDockingWindow*>(GetWindow())->Initialize(i_pInfo);
         SetHideNotDelete( true );
 
-        pWindow->Show();
+        GetWindow()->Show();
     }
 
 

@@ -164,7 +164,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
     SfxChildWindow( _pParent, nId )
 {
     VclPtrInstance<SvxFontWorkDialog> pDlg(pBindings, this, _pParent);
-    pWindow = pDlg.get();
+    SetWindow(pDlg);
 
     pDlg->Initialize( pInfo );
 }

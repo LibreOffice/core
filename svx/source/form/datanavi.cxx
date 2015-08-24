@@ -2252,10 +2252,10 @@ namespace svxform
         SfxChildWindow( _pParent, _nId )
 
     {
-        pWindow = VclPtr<DataNavigator>::Create( _pBindings, this, _pParent );
+        SetWindow( VclPtr<DataNavigator>::Create( _pBindings, this, _pParent ) );
         SetAlignment(SfxChildAlignment::RIGHT);
-        pWindow->SetSizePixel( Size( 250, 400 ) );
-        static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
+        GetWindow()->SetSizePixel( Size( 250, 400 ) );
+        static_cast<SfxDockingWindow*>(GetWindow())->Initialize( _pInfo );
     }
 
     AddDataItemDialog::AddDataItemDialog(vcl::Window* pParent, ItemNode* _pNode,

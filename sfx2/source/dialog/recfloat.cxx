@@ -131,9 +131,9 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( vcl::Window* pPare
                     : SfxChildWindow( pParentWnd, nId )
                     , pBindings( pBind )
 {
-    pWindow = VclPtr<SfxRecordingFloat_Impl>::Create( pBindings, this, pParentWnd );
+    SetWindow( VclPtr<SfxRecordingFloat_Impl>::Create( pBindings, this, pParentWnd ) );
     SetWantsFocus( false );
-    static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( pInfo );
+    static_cast<SfxFloatingWindow*>(GetWindow())->Initialize( pInfo );
 }
 
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()

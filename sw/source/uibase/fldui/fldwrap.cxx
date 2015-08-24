@@ -84,7 +84,7 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     AbstractSwFieldDlg* pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
     assert(pDlg && "Dialog creation failed!");
     pDlgInterface = pDlg;
-    pWindow = pDlg->GetWindow();
+    SetWindow( pDlg->GetWindow() );
     pDlg->Start();
 }
 
@@ -129,7 +129,7 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlgInterface = pDlg;
 
-    pWindow = pDlg->GetWindow();
+    SetWindow( pDlg->GetWindow() );
     pDlg->ActivateDatabasePage();
     pDlg->Start();
     pDlg->Initialize( pInfo );

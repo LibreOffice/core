@@ -32,11 +32,11 @@ public:
         OSL_ENSURE(pViewShell, "Missing view shell!");
 
         if (pViewShell)
-            pWindow = pViewShell->CreateRefDialog( pBindings, this, pInfo, pParentP, WindowID );
+            SetWindow( pViewShell->CreateRefDialog( pBindings, this, pInfo, pParentP, WindowID ) );
         else
-            pWindow = NULL;
+            SetWindow( NULL );
 
-        if (pViewShell && !pWindow)
+        if (pViewShell && !GetWindow())
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );
     }
 

@@ -34,13 +34,13 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
                                                 SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParentWnd , nId )
 {
-    pWindow = VclPtr<SfxNavigator>::Create( pBindings, this, pParentWnd,
-        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
+    SetWindow( VclPtr<SfxNavigator>::Create( pBindings, this, pParentWnd,
+        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE) );
 
-    pWindow->SetHelpId ( HID_NAVIGATOR_WINDOW );
-    pWindow->SetOutputSizePixel( Size( 270, 240 ) );
+    GetWindow()->SetHelpId ( HID_NAVIGATOR_WINDOW );
+    GetWindow()->SetOutputSizePixel( Size( 270, 240 ) );
 
-    static_cast<SfxDockingWindow*>( pWindow.get() )->Initialize( pInfo );
+    static_cast<SfxDockingWindow*>( GetWindow() )->Initialize( pInfo );
     SetHideNotDelete( true );
 }
 

@@ -37,7 +37,7 @@ SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
 {
-    pWindow = VclPtr<SwSyncBtnDlg>::Create( pBindings, this, _pParent);
+    SetWindow(VclPtr<SwSyncBtnDlg>::Create( pBindings, this, _pParent));
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
@@ -45,17 +45,17 @@ SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
         if(pActiveView)
         {
             const SwEditWin &rEditWin = pActiveView->GetEditWin();
-            pWindow->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
+            GetWindow()->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
         }
         else
-            pWindow->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
-        pInfo->aPos = pWindow->GetPosPixel();
-        pInfo->aSize = pWindow->GetSizePixel();
+            GetWindow()->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
+        pInfo->aPos = GetWindow()->GetPosPixel();
+        pInfo->aSize = GetWindow()->GetSizePixel();
     }
 
-    static_cast<SwSyncBtnDlg *>(pWindow.get())->Initialize(pInfo);
+    static_cast<SwSyncBtnDlg *>(GetWindow())->Initialize(pInfo);
 
-    pWindow->Show();
+    GetWindow()->Show();
 }
 
 SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,

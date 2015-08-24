@@ -764,7 +764,7 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
     SfxChildWindow(pParentWindow, nId)
 {
     VclPtrInstance<SmElementsDockingWindow> pDialog(pBindings, this, pParentWindow);
-    pWindow.reset(pDialog);
+    SetWindow(pDialog);
     pDialog->setDeferredProperties();
     pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
     pDialog->Show();

@@ -889,11 +889,11 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
                                  SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {
-    pWindow.reset(VclPtr<SmCmdBoxWindow>::Create(pBindings, this, pParentWindow));
+    SetWindow(VclPtr<SmCmdBoxWindow>::Create(pBindings, this, pParentWindow));
 
     // make window docked to the bottom initially (after first start)
     SetAlignment(SfxChildAlignment::BOTTOM);
-    static_cast<SfxDockingWindow *>(pWindow.get())->Initialize(pInfo);
+    static_cast<SfxDockingWindow *>(GetWindow())->Initialize(pInfo);
 }
 
 #if OSL_DEBUG_LEVEL > 1

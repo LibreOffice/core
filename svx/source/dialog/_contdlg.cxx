@@ -68,7 +68,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_u
             SfxChildWindow( _pParent, nId )
 {
     VclPtr<SvxSuperContourDlg> pDlg = VclPtr<SvxSuperContourDlg>::Create(pBindings, this, _pParent);
-    pWindow = pDlg;
+    SetWindow(pDlg);
 
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();

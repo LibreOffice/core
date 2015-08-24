@@ -34,16 +34,16 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
                                         SfxBindings* pBindings, SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
 {
-    pWindow.reset(VclPtr<SidebarDockingWindow>::Create(pBindings, *this, pParentWindow,
+    SetWindow(VclPtr<SidebarDockingWindow>::Create(pBindings, *this, pParentWindow,
                                                        WB_STDDOCKWIN | WB_OWNERDRAWDECORATION |
                                                        WB_CLIPCHILDREN | WB_SIZEABLE |
                                                        WB_3DLOOK | WB_ROLLABLE));
     SetAlignment(SfxChildAlignment::RIGHT);
 
-    pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
-    pWindow->SetOutputSizePixel(Size(GetDefaultWidth(pWindow), 450));
+    GetWindow()->SetHelpId(HID_SIDEBAR_WINDOW);
+    GetWindow()->SetOutputSizePixel(Size(GetDefaultWidth(GetWindow()), 450));
 
-    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow.get());
+    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(GetWindow());
     if (pDockingParent != NULL)
     {
         if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "sdraw" && pInfo->aModule != "simpress")
@@ -54,14 +54,14 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
             // HACK: unfortunately I haven't found a clean solution to do
             // this, so do it this way:
             //
-            pDockingParent->SetSizePixel(Size(TabBar::GetDefaultWidth() * pWindow->GetDPIScaleFactor(),
+            pDockingParent->SetSizePixel(Size(TabBar::GetDefaultWidth() * GetWindow()->GetDPIScaleFactor(),
                         pDockingParent->GetSizePixel().Height()));
         }
         pDockingParent->Initialize(pInfo);
     }
     SetHideNotDelete(true);
 
-    pWindow->Show();
+    GetWindow()->Show();
 }
 
 sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)

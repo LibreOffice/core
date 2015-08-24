@@ -123,8 +123,8 @@ ScInputWindowWrapper::ScInputWindowWrapper( vcl::Window*          pParentP,
                                             SfxChildWinInfo* /* pInfo */ )
     :   SfxChildWindow( pParentP, nId )
 {
-    VclPtr<ScInputWindow> pWin=VclPtr<ScInputWindow>::Create( pParentP, pBindings );
-    pWindow = pWin;
+    VclPtr<ScInputWindow> pWin = VclPtr<ScInputWindow>::Create( pParentP, pBindings );
+    SetWindow( pWin );
 
     pWin->Show();
 

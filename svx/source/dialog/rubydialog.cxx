@@ -70,7 +70,7 @@ SvxRubyChildWindow::SvxRubyChildWindow(vcl::Window* _pParent, sal_uInt16 nId,Sfx
     : SfxChildWindow(_pParent, nId)
 {
     VclPtr<SvxRubyDialog> pDlg = VclPtr<SvxRubyDialog>::Create(pBindings, this, _pParent);
-    pWindow = pDlg;
+    SetWindow(pDlg);
 
     if (pInfo->nFlags & SfxChildWindowFlags::ZOOMIN)
         pDlg->RollUp();

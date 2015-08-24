@@ -131,7 +131,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
 
     VclPtr<SfxTitleDockingWindow> pTitleDockWindow = VclPtr<SfxTitleDockingWindow>::Create( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
-    pWindow = pTitleDockWindow;
+    SetWindow( pTitleDockWindow );
 
     // Use factory manager to retrieve XWindow factory. That can be used to instantiate
     // the real window factory.
@@ -204,9 +204,9 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
         pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
     pTitleDockWindow->SetWrappedWindow(pContentWindow);
 
-    pWindow->SetOutputSizePixel( Size( 270, 240 ) );
+    GetWindow()->SetOutputSizePixel( Size( 270, 240 ) );
 
-    static_cast<SfxDockingWindow*>( pWindow.get() )->Initialize( pInfo );
+    static_cast<SfxDockingWindow*>( GetWindow() )->Initialize( pInfo );
     SetHideNotDelete( true );
 }
 

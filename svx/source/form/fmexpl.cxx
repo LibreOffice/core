@@ -614,8 +614,8 @@ namespace svxform
                                         SfxBindings* _pBindings, SfxChildWinInfo* _pInfo )
                      :SfxChildWindow( _pParent, _nId )
     {
-        pWindow = VclPtr<NavigatorFrame>::Create( _pBindings, this, _pParent );
-        static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
+        SetWindow( VclPtr<NavigatorFrame>::Create( _pBindings, this, _pParent ) );
+        static_cast<SfxDockingWindow*>(GetWindow())->Initialize( _pInfo );
     }
 
 

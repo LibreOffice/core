@@ -2908,7 +2908,7 @@ Svx3DChildWindow::Svx3DChildWindow( vcl::Window* _pParent,
     SfxChildWindow( _pParent, nId )
 {
     VclPtr<Svx3DWin> pWin = VclPtr<Svx3DWin>::Create( pBindings, this, _pParent );
-    pWindow = pWin;
+    SetWindow(pWin);
 
     pWin->Initialize( pInfo );
 }

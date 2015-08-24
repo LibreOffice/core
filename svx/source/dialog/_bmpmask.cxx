@@ -354,7 +354,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 n
 {
     VclPtr<SvxBmpMask> pDlg = VclPtr<SvxBmpMask>::Create(pBindings, this, pParent_);
 
-    pWindow = pDlg;
+    SetWindow( pDlg );
 
     pDlg->Initialize( pInfo );
 }

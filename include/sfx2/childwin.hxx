@@ -150,18 +150,16 @@ class SFX2_DLLPUBLIC SfxChildWindow
 {
     VclPtr<vcl::Window>        pParent;        // parent window ( Topwindow )
     sal_uInt16                 nType;          // ChildWindow-Id
-
-protected:
-    VclPtr<vcl::Window>         pWindow;         // actual contents
-
-private:
-    SfxChildAlignment           eChildAlignment; // Current ::com::sun::star::drawing::Alignment
-    SfxChildWindow_Impl*        pImp;            // Implementation data
-    SfxChildWindowContext*      pContext;        // With context-sensitive ChildWindows:
+    VclPtr<vcl::Window>        pWindow;         // actual contents
+    SfxChildAlignment          eChildAlignment; // Current ::com::sun::star::drawing::Alignment
+    SfxChildWindow_Impl*       pImp;            // Implementation data
+    SfxChildWindowContext*     pContext;        // With context-sensitive ChildWindows:
                                                  // Annother window in pWindow
     SAL_DLLPRIVATE void ClearWorkwin();
 
 protected:
+    void                SetWindow(const VclPtr<vcl::Window>& p) { pWindow = p; }
+
                         SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId);
 
 public:

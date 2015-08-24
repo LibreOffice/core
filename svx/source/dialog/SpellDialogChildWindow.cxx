@@ -38,7 +38,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     m_xAbstractSpellDialog.reset(pFact->CreateSvxSpellDialog(_pParent,
                                             pBindings,
                                             this ));
-    pWindow = m_xAbstractSpellDialog->GetWindow();
+    SetWindow( m_xAbstractSpellDialog->GetWindow() );
     SetHideNotDelete(true);
 }
 

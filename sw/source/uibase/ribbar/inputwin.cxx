@@ -622,8 +622,8 @@ SwInputChild::SwInputChild(vcl::Window* _pParent,
                                 SfxChildWindow( _pParent, nId )
 {
     pDispatch = pBindings->GetDispatcher();
-    pWindow = VclPtr<SwInputWindow>::Create( _pParent );
-    static_cast<SwInputWindow*>(pWindow.get())->ShowWin();
+    SetWindow( VclPtr<SwInputWindow>::Create( _pParent ) );
+    static_cast<SwInputWindow*>(GetWindow())->ShowWin();
     SetAlignment(SfxChildAlignment::LOWESTTOP);
 }
 

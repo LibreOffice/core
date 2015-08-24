@@ -83,8 +83,8 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    pWindow = VclPtr<FmPropBrw>::Create( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo );
-    static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( _pInfo );
+    SetWindow( VclPtr<FmPropBrw>::Create( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo ) );
+    static_cast<SfxFloatingWindow*>(GetWindow())->Initialize( _pInfo );
 }
 
 

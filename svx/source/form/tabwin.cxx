@@ -424,9 +424,9 @@ FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
                SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    pWindow = VclPtr<FmFieldWin>::Create(_pBindings, this, _pParent);
+    SetWindow( VclPtr<FmFieldWin>::Create(_pBindings, this, _pParent) );
     SetHideNotDelete(true);
-    static_cast<SfxFloatingWindow*>(pWindow.get())->Initialize( _pInfo );
+    static_cast<SfxFloatingWindow*>(GetWindow())->Initialize( _pInfo );
 }
 
 

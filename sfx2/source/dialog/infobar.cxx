@@ -332,9 +332,9 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_u
     SfxChildWindow(_pParent, nId),
     m_pBindings(pBindings)
 {
-    pWindow = VclPtr<SfxInfoBarContainerWindow>::Create(this);
-    pWindow->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
-    pWindow->Show();
+    SetWindow( VclPtr<SfxInfoBarContainerWindow>::Create(this) );
+    GetWindow()->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
+    GetWindow()->Show();
 
     SetAlignment(SfxChildAlignment::LOWESTTOP);
 }
