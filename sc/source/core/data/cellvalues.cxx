@@ -284,9 +284,9 @@ struct TableValues::Impl
         {
             m_Tables.push_back(std::unique_ptr<TableType_new>(new TableType_new));
             std::unique_ptr<TableType_new>& rTab2 = m_Tables.back();
-        for (size_t nCol = 0; nCol < nCols; ++nCol)
-            rTab2.get()->push_back(std::unique_ptr<CellValues>(new CellValues));
-        }
+            for (size_t nCol = 0; nCol < nCols; ++nCol)
+                rTab2.get()->push_back(std::unique_ptr<CellValues>(new CellValues));
+            }
     }
 
     CellValues* getCellValues( SCTAB nTab, SCCOL nCol )
