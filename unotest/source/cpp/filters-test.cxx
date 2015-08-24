@@ -122,7 +122,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
 
         //output name early, so in the case of a hang, the name of
         //the hanging input file is visible
-        fprintf(stderr, "%s,", aRes.getStr());
+        fprintf(stderr, "Testing %s:\n", aRes.getStr());
         sal_uInt32 nStartTime = osl_getGlobalTimer();
         bool bRes;
         if (!bExport)
@@ -136,8 +136,8 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
         if (bEncrypted)
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::remove(sTmpFile));
 
-        fprintf(stderr, "%s,%" SAL_PRIuUINT32"\n",
-            bRes?"Pass":"Fail",nEndTime-nStartTime);
+        fprintf(stderr, "Tested %s: %s (%" SAL_PRIuUINT32 "ms)\n",
+            aRes.getStr(), bRes?"Pass":"Fail", nEndTime-nStartTime);
         if (nExpected == test::indeterminate)
             continue;
         filterStatus nResult = bRes ? test::pass : test::fail;
@@ -151,7 +151,6 @@ void FiltersTest::testDir(const OUString &rFilter,
     SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
     unsigned int nFilterVersion, bool bExport)
 {
-    fprintf(stderr, "File tested,Test Result,Execution tools::Time (ms)\n");
     recursiveScan(test::pass, rFilter,
         rURL + "pass",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
