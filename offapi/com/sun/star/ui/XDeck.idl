@@ -15,7 +15,9 @@
 
  module com {  module sun {  module star {  module ui {
 
-/** provides access to Desk */
+/** provides access to Deck
+    @since LibreOffice 5.1
+*/
 
 interface XDeck
 
@@ -39,7 +41,7 @@ interface XDeck
     */
     boolean isActive();
 
-    /** Activate the deck and isplays its content
+    /** Activate the deck and displays its content
 
         @param bActivate
             The requested state for the deck

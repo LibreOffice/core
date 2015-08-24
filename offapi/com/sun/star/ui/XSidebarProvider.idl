@@ -21,6 +21,7 @@
 module com { module sun { module star { module ui {
 
 /** Interface of the sidebar
+    @since LibreOffice 5.1
 */
 interface XSidebarProvider: com::sun::star::uno::XInterface
 {

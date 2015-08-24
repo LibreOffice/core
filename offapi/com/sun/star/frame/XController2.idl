@@ -63,6 +63,7 @@ interface XController2 : XController
                                                             CreationArguments;
 
     /** get the sidebar if exists
+        @since LibreOffice 5.1
     */
     ::com::sun::star::ui::XSidebarProvider getSidebar();
 };

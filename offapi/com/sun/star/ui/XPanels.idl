@@ -15,14 +15,21 @@
 
  module com {  module sun {  module star {  module ui {
 
-/** provides access to Panels of a Deck.*/
+/** provides access to Panels of a Deck.
+    @since LibreOffice 5.1
+*/
 
 interface XPanels
 
 {
+    /**
+        returned ANYs are actually of type com::sun::star::ui::XPanel
+    */
     interface com::sun::star::container::XIndexAccess;
     interface com::sun::star::container::XNameAccess;
 
+    /** The deck Id that contains the Panels
+    */
     string getDeckId();
 };
 

@@ -4013,17 +4013,17 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui,\
 	XContextChangeEventMultiplexer \
 	XContextMenuInterception \
 	XContextMenuInterceptor \
+	XDeck \
+	XDecks \
 	XDockingAreaAcceptor \
 	XImageManager \
 	XModuleUIConfigurationManager \
 	XModuleUIConfigurationManager2 \
 	XModuleUIConfigurationManagerSupplier \
-	XSidebar \
-	XSidebarPanel \
 	XPanel \
 	XPanels \
-	XDeck \
-	XDecks \
+	XSidebar \
+	XSidebarPanel \
 	XSidebarProvider \
 	XStatusbarItem \
 	XToolPanel \
@@ -4036,7 +4036,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui,\
 	XUIConfigurationStorage \
 	XUIElement \
 	XUIElementFactory \
-    XUIElementFactoryManager \
+	XUIElementFactoryManager \
 	XUIElementFactoryRegistration \
 	XUIElementSettings \
 	XUpdateModel \
