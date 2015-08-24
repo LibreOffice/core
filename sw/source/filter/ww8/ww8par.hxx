@@ -1264,6 +1264,7 @@ private:
     sal_uInt32 m_nFieldTagBad[3];      // dito for tagging of fields that can't be imported
     bool m_bRegardHindiDigits;  // import digits in CTL scripts as Hindi numbers
 
+    bool m_bDrawCpOValid;
     WW8_CP m_nDrawCpO;            // start of Txbx-SubDocs
 
     sal_uLong m_nPicLocFc;            // Picture Location in File (FC)
