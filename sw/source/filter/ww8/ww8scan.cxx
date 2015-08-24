@@ -7558,7 +7558,8 @@ SEPr::SEPr() :
 
 bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
 {
-    return (rSt.Seek(nOffset) == static_cast<sal_Size>(nOffset));
+    return (nOffset != SAL_MAX_UINT32 &&
+            rSt.Seek(nOffset) == static_cast<sal_Size>(nOffset));
 }
 
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
