@@ -16,7 +16,9 @@
 
  module com {  module sun {  module star {  module ui {
 
-/** provides access to Desk */
+/** provides access to Panel
+    @since LibreOffice 5.1
+*/
 
 interface XPanel
 
