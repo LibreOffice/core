@@ -37,7 +37,7 @@ private:
     sal_uLong           mnMode;             // 0->PBM, 1->PGM, 2->PPM
     Bitmap              maBmp;
     BitmapWriteAccess*  mpAcc;
-    sal_uLong           mnWidth, mnHeight;  // dimensions in pixel
+    sal_Int32       mnWidth, mnHeight;  // dimensions in pixel
     sal_uLong           mnCol;
     sal_uLong           mnMaxVal;           // max value in the <missing comment>
     bool            ImplReadBody();
@@ -83,7 +83,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     if ( !( mbStatus = ImplReadHeader() ) )
         return false;
 
-    if ( ( mnMaxVal == 0 ) || ( mnWidth == 0 ) || ( mnHeight == 0 ) )
+    if ( ( mnMaxVal == 0 ) || ( mnWidth <= 0 ) || ( mnHeight <= 0 ) )
         return false;
 
     // 0->PBM, 1->PGM, 2->PPM
@@ -91,7 +91,8 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     {
         case 0 :
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
+            mpAcc = maBmp.AcquireWriteAccess();
+            if (!mpAcc || mpAcc->Width() != mnWidth || mpAcc->Height() != mnHeight)
                 return false;
             mpAcc->SetPaletteEntryCount( 2 );
             mpAcc->SetPaletteColor( 0, BitmapColor( 0xff, 0xff, 0xff ) );
@@ -242,8 +243,8 @@ bool PBMReader::ImplReadBody()
     bool    bPara, bFinished = false;
     sal_uInt8   nDat = 0, nCount;
     sal_uLong   nGrey, nRGB[3];
-    sal_uLong   nWidth = 0;
-    sal_uLong   nHeight = 0;
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
 
     if ( mbRaw )
     {
