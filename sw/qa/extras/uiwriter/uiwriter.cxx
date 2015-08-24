@@ -126,7 +126,7 @@ public:
     void testTdf90003();
     void testTdf51741();
     void testDefaultsOfOutlineNumbering();
-    void testdelofTableRedlines();
+    void testDeleteTableRedlines();
     void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
@@ -199,7 +199,7 @@ public:
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testTdf51741);
     CPPUNIT_TEST(testDefaultsOfOutlineNumbering);
-    CPPUNIT_TEST(testdelofTableRedlines);
+    CPPUNIT_TEST(testDeleteTableRedlines);
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
@@ -357,11 +357,11 @@ void SwUiWriterTest::testFdo70807()
 {
     load(DATA_DIRECTORY, "fdo70807.odt");
 
-    uno::Reference<container::XIndexAccess> stylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xStylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
 
-    for (sal_Int32 i = 0; i < stylesIter->getCount(); ++i)
+    for (sal_Int32 i = 0; i < xStylesIter->getCount(); ++i)
     {
-        uno::Reference<style::XStyle> xStyle(stylesIter->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStylesIter->getByIndex(i), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xName(xStyle, uno::UNO_QUERY);
 
         bool expectedUsedStyle = false;
@@ -636,7 +636,6 @@ void SwUiWriterTest::testChineseConversionBlank()
                         true, false, false );
     aWrap.Convert();
 
-
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString(), pTextNode->GetText());
@@ -655,13 +654,11 @@ void SwUiWriterTest::testChineseConversionNonChineseText()
     SwPaM aPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, NON_CHINESE_CONTENT);
 
-
     // When
     SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
-
 
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
@@ -681,13 +678,11 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
     SwPaM aPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_TRADITIONAL_CONTENT);
 
-
     // When
     SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
-
 
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
@@ -707,13 +702,11 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
     SwPaM aPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_SIMPLIFIED_CONTENT);
 
-
     // When
     SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, NULL,
                         i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
                         true, false, false );
     aWrap.Convert();
-
 
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
@@ -1083,23 +1076,23 @@ void SwUiWriterTest::testDefaultsOfOutlineNumbering()
     }
 }
 
-void SwUiWriterTest::testdelofTableRedlines()
+void SwUiWriterTest::testDeleteTableRedlines()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
-    const SwTable& tbl = pWrtShell->InsertTable(TableOpt, 1, 3);
+    const SwTable& rTbl = pWrtShell->InsertTable(TableOpt, 1, 3);
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
     uno::Sequence<beans::PropertyValue> aDescriptor;
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(tbl.GetTableBox(OUString("A1")))), OUString("TableCellInsert"), aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(tbl.GetTableBox(OUString("B1")))), OUString("TableCellInsert"), aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(tbl.GetTableBox(OUString("C1")))), OUString("TableCellInsert"), aDescriptor);
-    IDocumentRedlineAccess& pDocRed = pDoc->getIDocumentRedlineAccess();
-    SwExtraRedlineTable& redtbl = pDocRed.GetExtraRedlineTable();
-    redtbl.DeleteAllTableRedlines(pDoc, tbl, false, sal_uInt16(USHRT_MAX));
-    CPPUNIT_ASSERT(redtbl.IsEmpty());
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("A1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("B1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("C1")))), OUString("TableCellInsert"), aDescriptor);
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
+    rExtras.DeleteAllTableRedlines(pDoc, rTbl, false, sal_uInt16(USHRT_MAX));
+    CPPUNIT_ASSERT(rExtras.IsEmpty());
 }
 
 void SwUiWriterTest::testXFlatParagraph()
@@ -1236,10 +1229,10 @@ void SwUiWriterTest::testTdf79236()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //Getting some paragraph style
     SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(OUString("Text Body"));
-    const SwAttrSet& attrSet = pTextFormat->GetAttrSet();
-    SfxItemSet* itemSet = attrSet.Clone();
-    sal_uInt16 initialCount = itemSet->Count();
-    SvxAdjustItem AdjustItem = attrSet.GetAdjust();
+    const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
+    SfxItemSet* pNewSet = rAttrSet.Clone();
+    sal_uInt16 initialCount = pNewSet->Count();
+    SvxAdjustItem AdjustItem = rAttrSet.GetAdjust();
     SvxAdjust initialAdjust = AdjustItem.GetAdjust();
     //By default the adjust is LEFT
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, initialAdjust);
@@ -1249,41 +1242,41 @@ void SwUiWriterTest::testTdf79236()
     SvxAdjust modifiedAdjust = AdjustItem.GetAdjust();
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, modifiedAdjust);
     //Modifying the itemset, putting *one* item
-    itemSet->Put(AdjustItem);
+    pNewSet->Put(AdjustItem);
     //The count should increment by 1
-    sal_uInt16 modifiedCount = itemSet->Count();
+    sal_uInt16 modifiedCount = pNewSet->Count();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(initialCount + 1), modifiedCount);
     //Setting the updated item set on the style
-    pDoc->ChgFormat(*pTextFormat, *itemSet);
+    pDoc->ChgFormat(*pTextFormat, *pNewSet);
     //Checking the Changes
     SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
-    const SwAttrSet& attrSet2 = pTextFormat2->GetAttrSet();
-    const SvxAdjustItem& AdjustItem2 = attrSet2.GetAdjust();
-    SvxAdjust Adjust2 = AdjustItem2.GetAdjust();
+    const SwAttrSet& rAttrSet2 = pTextFormat2->GetAttrSet();
+    const SvxAdjustItem& rAdjustItem2 = rAttrSet2.GetAdjust();
+    SvxAdjust Adjust2 = rAdjustItem2.GetAdjust();
     //The adjust should be RIGHT as per the modifications made
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust2);
     //Undo the changes
     rUndoManager.Undo();
     SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
-    const SwAttrSet& attrSet3 = pTextFormat3->GetAttrSet();
-    const SvxAdjustItem& AdjustItem3 = attrSet3.GetAdjust();
-    SvxAdjust Adjust3 = AdjustItem3.GetAdjust();
+    const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
+    const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
+    SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
     //The adjust should be back to default, LEFT
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
     SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
-    const SwAttrSet& attrSet4 = pTextFormat4->GetAttrSet();
-    const SvxAdjustItem& AdjustItem4 = attrSet4.GetAdjust();
-    SvxAdjust Adjust4 = AdjustItem4.GetAdjust();
+    const SwAttrSet& rAttrSet4 = pTextFormat4->GetAttrSet();
+    const SvxAdjustItem& rAdjustItem4 = rAttrSet4.GetAdjust();
+    SvxAdjust Adjust4 = rAdjustItem4.GetAdjust();
     //The adjust should be RIGHT as per the modifications made
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust4);
     //Undo the changes
     rUndoManager.Undo();
     SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
-    const SwAttrSet& attrSet5 = pTextFormat5->GetAttrSet();
-    const SvxAdjustItem& AdjustItem5 = attrSet5.GetAdjust();
-    SvxAdjust Adjust5 = AdjustItem5.GetAdjust();
+    const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
+    const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
+    SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
     //The adjust should be back to default, LEFT
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust5);
 }
@@ -1380,51 +1373,51 @@ void SwUiWriterTest::testTdf69282()
     SwPageDesc* tPageDesc = target->MakePageDesc(OUString("TargetStyle"));
     sPageDesc->ChgFirstShare(false);
     CPPUNIT_ASSERT(!sPageDesc->IsFirstShared());
-    SwFrameFormat& sMasterFormat = sPageDesc->GetMaster();
+    SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
     //Setting horizontal spaces on master
     SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
     horizontalSpace.SetLeft(11);
     horizontalSpace.SetRight(12);
-    sMasterFormat.SetFormatAttr(horizontalSpace);
+    rSourceMasterFormat.SetFormatAttr(horizontalSpace);
     //Setting vertical spaces on master
     SvxULSpaceItem verticalSpace(RES_UL_SPACE);
     verticalSpace.SetUpper(13);
     verticalSpace.SetLower(14);
-    sMasterFormat.SetFormatAttr(verticalSpace);
+    rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
     source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
     target->CopyPageDesc(*sPageDesc, *tPageDesc);
     //Checking the set values on all Formats in target
-    SwFrameFormat& tMasterFormat = tPageDesc->GetMaster();
-    SwFrameFormat& tLeftFormat = tPageDesc->GetLeft();
-    SwFrameFormat& tFirstMasterFormat = tPageDesc->GetFirstMaster();
-    SwFrameFormat& tFirstLeftFormat = tPageDesc->GetFirstLeft();
+    SwFrameFormat& rTargetMasterFormat = tPageDesc->GetMaster();
+    SwFrameFormat& rTargetLeftFormat = tPageDesc->GetLeft();
+    SwFrameFormat& rTargetFirstMasterFormat = tPageDesc->GetFirstMaster();
+    SwFrameFormat& rTargetFirstLeftFormat = tPageDesc->GetFirstLeft();
     //Checking horizontal spaces
-    const SvxLRSpaceItem hMasterFormatSpace = tMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hMasterFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hMasterFormatSpace.GetRight());
-    const SvxLRSpaceItem hLeftFormatSpace = tLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hLeftFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hLeftFormatSpace.GetRight());
-    const SvxLRSpaceItem hFirstMasterFormatSpace = tFirstMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstMasterFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstMasterFormatSpace.GetRight());
-    const SvxLRSpaceItem hFirstLeftFormatSpace = tFirstLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstLeftFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstLeftFormatSpace.GetRight());
+    const SvxLRSpaceItem MasterLRSpace = rTargetMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), MasterLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), MasterLRSpace.GetRight());
+    const SvxLRSpaceItem LeftLRSpace = rTargetLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), LeftLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), LeftLRSpace.GetRight());
+    const SvxLRSpaceItem FirstMasterLRSpace = rTargetFirstMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstMasterLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstMasterLRSpace.GetRight());
+    const SvxLRSpaceItem FirstLeftLRSpace = rTargetFirstLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstLeftLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstLeftLRSpace.GetRight());
     //Checking vertical spaces
-    const SvxULSpaceItem vMasterFormatSpace = tMasterFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vMasterFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vMasterFormatSpace.GetLower());
-    const SvxULSpaceItem vLeftFormatSpace = tLeftFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vLeftFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vLeftFormatSpace.GetLower());
-    const SvxULSpaceItem vFirstMasterFormatSpace = tFirstMasterFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstMasterFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstMasterFormatSpace.GetLower());
-    const SvxULSpaceItem vFirstLeftFormatSpace = tFirstLeftFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
+    const SvxULSpaceItem MasterULSpace = rTargetMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), MasterULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), MasterULSpace.GetLower());
+    const SvxULSpaceItem LeftULSpace = rTargetLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), LeftULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), LeftULSpace.GetLower());
+    const SvxULSpaceItem FirstMasterULSpace = rTargetFirstMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), FirstMasterULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), FirstMasterULSpace.GetLower());
+    const SvxULSpaceItem FirstLeftULSpace = rTargetFirstLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), FirstLeftULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), FirstLeftULSpace.GetLower());
     xSourceDoc->dispose();
 }
 
@@ -1441,53 +1434,53 @@ void SwUiWriterTest::testTdf69282WithMirror()
     SwPageDesc* tPageDesc = target->MakePageDesc(OUString("TargetStyle"));
     //Enabling Mirror
     sPageDesc->SetUseOn(nsUseOnPage::PD_MIRROR);
-    SwFrameFormat& sMasterFormat = sPageDesc->GetMaster();
+    SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
     //Setting horizontal spaces on master
     SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
     horizontalSpace.SetLeft(11);
     horizontalSpace.SetRight(12);
-    sMasterFormat.SetFormatAttr(horizontalSpace);
+    rSourceMasterFormat.SetFormatAttr(horizontalSpace);
     //Setting vertical spaces on master
     SvxULSpaceItem verticalSpace(RES_UL_SPACE);
     verticalSpace.SetUpper(13);
     verticalSpace.SetLower(14);
-    sMasterFormat.SetFormatAttr(verticalSpace);
+    rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
     source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
     target->CopyPageDesc(*sPageDesc, *tPageDesc);
     //Checking the set values on all Formats in target
-    SwFrameFormat& tMasterFormat = tPageDesc->GetMaster();
-    SwFrameFormat& tLeftFormat = tPageDesc->GetLeft();
-    SwFrameFormat& tFirstMasterFormat = tPageDesc->GetFirstMaster();
-    SwFrameFormat& tFirstLeftFormat = tPageDesc->GetFirstLeft();
+    SwFrameFormat& rTargetMasterFormat = tPageDesc->GetMaster();
+    SwFrameFormat& rTargetLeftFormat = tPageDesc->GetLeft();
+    SwFrameFormat& rTargetFirstMasterFormat = tPageDesc->GetFirstMaster();
+    SwFrameFormat& rTargetFirstLeftFormat = tPageDesc->GetFirstLeft();
     //Checking horizontal spaces
-    const SvxLRSpaceItem hMasterFormatSpace = tMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hMasterFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hMasterFormatSpace.GetRight());
+    const SvxLRSpaceItem MasterLRSpace = rTargetMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), MasterLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), MasterLRSpace.GetRight());
     //mirror effect should be present
-    const SvxLRSpaceItem hLeftFormatSpace = tLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hLeftFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hLeftFormatSpace.GetRight());
-    const SvxLRSpaceItem hFirstMasterFormatSpace = tFirstMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstMasterFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstMasterFormatSpace.GetRight());
+    const SvxLRSpaceItem LeftLRSpace = rTargetLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), LeftLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), LeftLRSpace.GetRight());
+    const SvxLRSpaceItem FirstMasterLRSpace = rTargetFirstMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstMasterLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstMasterLRSpace.GetRight());
     //mirror effect should be present
-    const SvxLRSpaceItem hFirstLeftFormatSpace = tFirstLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstLeftFormatSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstLeftFormatSpace.GetRight());
+    const SvxLRSpaceItem FirstLeftLRSpace = rTargetFirstLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstLeftLRSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstLeftLRSpace.GetRight());
     //Checking vertical spaces
-    const SvxULSpaceItem vMasterFormatSpace = tMasterFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vMasterFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vMasterFormatSpace.GetLower());
-    const SvxULSpaceItem vLeftFormatSpace = tLeftFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vLeftFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vLeftFormatSpace.GetLower());
-    const SvxULSpaceItem vFirstMasterFormatSpace = tFirstMasterFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstMasterFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstMasterFormatSpace.GetLower());
-    const SvxULSpaceItem vFirstLeftFormatSpace = tFirstLeftFormat.GetULSpace();
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
-    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
+    const SvxULSpaceItem MasterULSpace = rTargetMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), MasterULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), MasterULSpace.GetLower());
+    const SvxULSpaceItem LeftULSpace = rTargetLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), LeftULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), LeftULSpace.GetLower());
+    const SvxULSpaceItem FirstMasterULSpace = rTargetFirstMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), FirstMasterULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), FirstMasterULSpace.GetLower());
+    const SvxULSpaceItem FirstLeftULSpace = rTargetFirstLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), FirstLeftULSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), FirstLeftULSpace.GetLower());
     xSourceDoc->dispose();
 }
 
@@ -1566,45 +1559,45 @@ void SwUiWriterTest::testTdf60967()
     SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
     //getting the cursor's position just after the table insert
-    SwPosition xPosAfterTable(*(pCrsr->GetPoint()));
+    SwPosition aPosAfterTable(*(pCrsr->GetPoint()));
     //moving cursor to B2 (bottom right cell)
     pCrsr->Move(fnMoveBackward);
-    SwPosition xPosInTable(*(pCrsr->GetPoint()));
+    SwPosition aPosInTable(*(pCrsr->GetPoint()));
     //deleting paragraph following table with Ctrl+Shift+Del
     sal_Int32 val = pWrtShell->DelToEndOfSentence();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), val);
     //getting the cursor's position just after the paragraph deletion
-    SwPosition xPosAfterDel(*(pCrsr->GetPoint()));
+    SwPosition aPosAfterDel(*(pCrsr->GetPoint()));
     //moving cursor forward to check whether there is any node following the table, BTW there should not be any such node
     pCrsr->Move(fnMoveForward);
-    SwPosition xPosMoveAfterDel(*(pCrsr->GetPoint()));
+    SwPosition aPosMoveAfterDel(*(pCrsr->GetPoint()));
     //checking the positons to verify that the paragraph is actually deleted
-    CPPUNIT_ASSERT(xPosInTable==xPosAfterDel);
-    CPPUNIT_ASSERT(xPosInTable==xPosMoveAfterDel);
+    CPPUNIT_ASSERT(aPosInTable == aPosAfterDel);
+    CPPUNIT_ASSERT(aPosInTable == aPosMoveAfterDel);
     //Undo the changes
     rUndoManager.Undo();
     {
         //paragraph *text node* should be back
-        SwPosition xPosAfterUndo(*(pCrsr->GetPoint()));
-        //after undo xPosAfterTable increases the node position by one, since this contains the position *text node* so xPosAfterUndo should be less than xPosAfterTable
-        CPPUNIT_ASSERT(xPosAfterTable>xPosAfterUndo);
+        SwPosition aPosAfterUndo(*(pCrsr->GetPoint()));
+        //after undo aPosAfterTable increases the node position by one, since this contains the position *text node* so aPosAfterUndo should be less than aPosAfterTable
+        CPPUNIT_ASSERT(aPosAfterTable > aPosAfterUndo);
         //moving cursor forward to check whether there is any node following the paragraph, BTW there should not be any such node as paragraph node is the last one in header
         pCrsr->Move(fnMoveForward);
-        SwPosition xPosMoveAfterUndo(*(pCrsr->GetPoint()));
+        SwPosition aPosMoveAfterUndo(*(pCrsr->GetPoint()));
         //checking positions to verify that paragraph node is the last one and we are paragraph node only
-        CPPUNIT_ASSERT(xPosAfterTable>xPosMoveAfterUndo);
-        CPPUNIT_ASSERT(xPosMoveAfterUndo==xPosAfterUndo);
+        CPPUNIT_ASSERT(aPosAfterTable > aPosMoveAfterUndo);
+        CPPUNIT_ASSERT(aPosMoveAfterUndo == aPosAfterUndo);
     }
     //Redo the changes
     rUndoManager.Redo();
     //paragraph *text node* should not be there
-    SwPosition xPosAfterRedo(*(pCrsr->GetPoint()));
+    SwPosition aPosAfterRedo(*(pCrsr->GetPoint()));
     //position should be exactly same as it was after deletion of *text node*
-    CPPUNIT_ASSERT(xPosMoveAfterDel==xPosAfterRedo);
+    CPPUNIT_ASSERT(aPosMoveAfterDel == aPosAfterRedo);
     //moving the cursor forward, but it should not actually move as there is no *text node* after the table due to this same postion is expected after move as it was before move
     pCrsr->Move(fnMoveForward);
-    SwPosition xPosAfterUndoMove(*(pCrsr->GetPoint()));
-    CPPUNIT_ASSERT(xPosAfterUndoMove==xPosAfterRedo);
+    SwPosition aPosAfterUndoMove(*(pCrsr->GetPoint()));
+    CPPUNIT_ASSERT(aPosAfterUndoMove == aPosAfterRedo);
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
@@ -1653,23 +1646,23 @@ void SwUiWriterTest::testTdf77342()
     //moving cursor to the starting of document
     pWrtShell->SttDoc();
     //inserting refernce field 1
-    SwGetRefField xField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
-    pWrtShell->Insert(xField1);
+    SwGetRefField aField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
+    pWrtShell->Insert(aField1);
     //inserting second footnote
     pWrtShell->InsertFootnote(OUString(""));
     pWrtShell->SttDoc();
     pCrsr->Move(fnMoveForward);
     //inserting refernce field 2
-    SwGetRefField xField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
-    pWrtShell->Insert(xField2);
+    SwGetRefField aField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
+    pWrtShell->Insert(aField2);
     //inserting third footnote
     pWrtShell->InsertFootnote(OUString(""));
     pWrtShell->SttDoc();
     pCrsr->Move(fnMoveForward);
     pCrsr->Move(fnMoveForward);
     //inserting refernce field 3
-    SwGetRefField xField3(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
-    pWrtShell->Insert(xField3);
+    SwGetRefField aField3(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
+    pWrtShell->Insert(aField3);
     //updating the fields
     IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
     rField.UpdateExpFields(nullptr, true);
@@ -2098,38 +2091,38 @@ void SwUiWriterTest::testTdf90808()
     xText->setString(OUString("Hello World!"));
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
     //creating bookmark 1
-    uno::Reference<text::XTextContent> type1bookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xName1(type1bookmark1, uno::UNO_QUERY);
-    xName1->setName("__RefHeading__1");
+    uno::Reference<text::XTextContent> xHeadingBookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xHeadingName1(xHeadingBookmark1, uno::UNO_QUERY);
+    xHeadingName1->setName("__RefHeading__1");
     //moving cursor to the starting of paragraph
     xCrsr->gotoStartOfParagraph(false);
     //inserting the bookmark in paragraph
-    xText->insertTextContent(xCrsr, type1bookmark1, true);
+    xText->insertTextContent(xCrsr, xHeadingBookmark1, true);
     //creating bookmark 2
-    uno::Reference<text::XTextContent> type1bookmark2(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xName2(type1bookmark2, uno::UNO_QUERY);
-    xName2->setName("__RefHeading__2");
+    uno::Reference<text::XTextContent> xHeadingBookmark2(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xHeadingName2(xHeadingBookmark2, uno::UNO_QUERY);
+    xHeadingName2->setName("__RefHeading__2");
     //inserting the bookmark in same paragraph, at the end
     //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
     xCrsr->gotoEndOfParagraph(true);
-    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, type1bookmark2, true), com::sun::star::lang::IllegalArgumentException);
+    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, xHeadingBookmark2, true), com::sun::star::lang::IllegalArgumentException);
     //now testing for __RefNumPara__
     //creating bookmark 1
-    uno::Reference<text::XTextContent> type2bookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xName3(type2bookmark1, uno::UNO_QUERY);
-    xName3->setName("__RefNumPara__1");
+    uno::Reference<text::XTextContent> xNumBookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNumName1(xNumBookmark1, uno::UNO_QUERY);
+    xNumName1->setName("__RefNumPara__1");
     //moving cursor to the starting of paragraph
     xCrsr->gotoStartOfParagraph(false);
     //inserting the bookmark in paragraph
-    xText->insertTextContent(xCrsr, type2bookmark1, true);
+    xText->insertTextContent(xCrsr, xNumBookmark1, true);
     //creating bookmark 2
-    uno::Reference<text::XTextContent> type2bookmark2(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
-    uno::Reference<container::XNamed> xName4(type2bookmark2, uno::UNO_QUERY);
-    xName4->setName("__RefNumPara__2");
+    uno::Reference<text::XTextContent> xNumBookmark2(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNumName2(xNumBookmark2, uno::UNO_QUERY);
+    xNumName2->setName("__RefNumPara__2");
     //inserting the bookmark in same paragraph, at the end
     //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
     xCrsr->gotoEndOfParagraph(true);
-    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, type2bookmark2, true), com::sun::star::lang::IllegalArgumentException);
+    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, xNumBookmark2, true), com::sun::star::lang::IllegalArgumentException);
 }
 
 void SwUiWriterTest::testTdf75137()
@@ -2251,7 +2244,7 @@ void SwUiWriterTest::testTableBackgroundColor()
     pWrtShell->SetBoxBackground(SvxBrushItem(colour, sal_Int16(RES_BACKGROUND)));
     //Checking cells for background color only A1 should be modified
     uno::Reference<table::XCell> xCell;
-   xCell = xTable->getCellByName("A1");
+    xCell = xTable->getCellByName("A1");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell = xTable->getCellByName("A2");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
@@ -2342,17 +2335,16 @@ void SwUiWriterTest::testUndoCharAttribute()
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT);
     // Adds selected text's attributes to aSet
     pCrsr->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
-    SfxPoolItem const * aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
-    SfxPoolItem& ampPoolItem = aWeightItem;
+    SfxPoolItem const * pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     // Check that bold is active on the selection; checks if it's in aSet
-    CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), true);
+    CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), true);
     // Invoke Undo
     rUndoManager.Undo();
     // Check that bold is no longer active
     aSet.ClearItem(RES_CHRATR_WEIGHT);
     pCrsr->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
-    aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
-    CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), false);
+    pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), false);
 }
 
 void SwUiWriterTest::testTdf86639()
@@ -2434,12 +2426,12 @@ void SwUiWriterTest::testUnoCursorPointer()
             dynamic_cast<SwXTextDocument *>(xDocComponent.get()));
     CPPUNIT_ASSERT(pxDocDocument);
     SwDoc* const pDoc(pxDocDocument->GetDocShell()->GetDoc());
-    std::unique_ptr<SwNodeIndex> xIdx(new SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1));
-    std::unique_ptr<SwPosition> xPos(new SwPosition(*xIdx));
-    sw::UnoCursorPointer pCursor(pDoc->CreateUnoCrsr(*xPos));
+    std::unique_ptr<SwNodeIndex> pIdx(new SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1));
+    std::unique_ptr<SwPosition> pPos(new SwPosition(*pIdx));
+    sw::UnoCursorPointer pCursor(pDoc->CreateUnoCrsr(*pPos));
     CPPUNIT_ASSERT(static_cast<bool>(pCursor));
-    xPos.reset(); // we need to kill the SwPosition before disposing
-    xIdx.reset(); // we need to kill the SwNodeIndex before disposing
+    pPos.reset(); // we need to kill the SwPosition before disposing
+    pIdx.reset(); // we need to kill the SwNodeIndex before disposing
     xDocComponent->dispose();
     CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
 }
