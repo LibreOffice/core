@@ -292,6 +292,7 @@ private:
 
     void MakeFailedPLCF();
 
+    void TruncToSortedRange();
 public:
     WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         WW8_CP nStartPos = -1);
