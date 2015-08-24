@@ -655,12 +655,6 @@ css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
     try
     {
         css::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
-        css::uno::Sequence<OUString> aElementNames = xLibContainer->getElementNames();
-        sal_Int32 n = aElementNames.getLength();
-        for (sal_Int32 i = 0; i < n; ++i)
-        {
-            SAL_DEBUG(aElementNames[i]);
-        }
         OUString aProjectName = getProjectName();
         xLibrary.set( xLibContainer->getByName(aProjectName), css::uno::UNO_QUERY_THROW );
     }
