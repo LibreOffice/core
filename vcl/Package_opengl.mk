@@ -19,6 +19,7 @@ $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 	convolutionFragmentShader.glsl \
 	linearGradientFragmentShader.glsl \
 	maskFragmentShader.glsl \
+	maskedTextureVertexShader.glsl \
 	maskedTextureFragmentShader.glsl \
 	radialGradientFragmentShader.glsl \
 	replaceColorFragmentShader.glsl \
