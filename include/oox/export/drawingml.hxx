@@ -190,7 +190,7 @@ public:
 
     static void ResetCounters();
 
-    static void GetUUID( OStringBuffer& rBuffer );
+    static OString GetUUID();
 
     static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc );
 

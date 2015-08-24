@@ -1475,44 +1475,20 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
     return sType;
 }
 
-void DrawingML::GetUUID( OStringBuffer& rBuffer )
+OString DrawingML::GetUUID()
 {
     sal_uInt8 aSeq[16];
-    static const char cDigits[17] = "0123456789ABCDEF";
-    rtl_createUuid( aSeq, 0, true );
-    int i;
+    rtl_createUuid(aSeq, 0, true);
 
-    rBuffer.append( '{' );
-    for( i = 0; i < 4; i++ )
-    {
-        rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
-    }
-    rBuffer.append( '-' );
-    for( ; i < 6; i++ )
-    {
-        rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
-    }
-    rBuffer.append( '-' );
-    for( ; i < 8; i++ )
-    {
-        rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
-    }
-    rBuffer.append( '-' );
-    for( ; i < 10; i++ )
-    {
-        rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
-    }
-    rBuffer.append( '-' );
-    for( ; i < 16; i++ )
-    {
-        rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
-    }
-    rBuffer.append( '}' );
+    char str[39];
+    sprintf(str, "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+        aSeq[0], aSeq[1], aSeq[2], aSeq[3],
+        aSeq[4], aSeq[5],
+        aSeq[6], aSeq[7],
+        aSeq[8], aSeq[9],
+        aSeq[10], aSeq[11], aSeq[12], aSeq[13], aSeq[14], aSeq[15]);
+
+    return OString(str, SAL_N_ELEMENTS(str));
 }
 
 void DrawingML::WriteRun( Reference< XTextRange > rRun )
@@ -1549,9 +1525,7 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     sFieldType = GetFieldType( rRun, bIsField );
     if( ( sFieldType != NULL ) )
     {
-        OStringBuffer sUUID(39);
-
-        GetUUID( sUUID );
+        OString sUUID(GetUUID());
         mpFS->startElementNS( XML_a, XML_fld,
                               XML_id, sUUID.getStr(),
                               XML_type, sFieldType,
