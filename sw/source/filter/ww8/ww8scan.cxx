@@ -4202,17 +4202,18 @@ bool WW8PLCFx_Book::MapName(OUString& rName)
         return false;
 
     bool bFound = false;
-    sal_uInt16 i = 0;
-    do
+
+    size_t i = 0;
+    while (i < aBookNames.size())
     {
         if (rName.equalsIgnoreAsciiCase(aBookNames[i]))
         {
             rName = aBookNames[i];
             bFound = true;
+            break;
         }
         ++i;
     }
-    while (!bFound && i < pBook[0]->GetIMax());
     return bFound;
 }
 
