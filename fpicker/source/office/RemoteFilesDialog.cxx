@@ -6,7 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 #include "RemoteFilesDialog.hxx"
 
 class FileViewContainer : public vcl::Window
@@ -172,6 +171,8 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "fps/ui/remotefilesdialog.ui" )
     , m_xContext( comphelper::getProcessComponentContext() )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
+    , m_nWidth( 0 )
+    , m_nHeight( 0 )
     , m_pCurrentAsyncAction( NULL )
     , m_pFileNotifier( NULL )
     , m_pSplitter( NULL )
@@ -297,9 +298,15 @@ void RemoteFilesDialog::dispose()
     {
         SvtViewOptions aDlgOpt( E_DIALOG, m_sIniKey );
         aDlgOpt.SetWindowState( OStringToOUString( GetWindowState(), osl_getThreadTextEncoding() ) );
+
+        Size aSize( GetSizePixel() );
+
+        OUString sSize = OUString::number( aSize.Width() ) + "|";
+        sSize = sSize + OUString::number( aSize.Height() ) + "|";
+
         OUString sUserData = m_pFileView->GetConfigString();
         aDlgOpt.SetUserItem( OUString( "UserData" ),
-                             makeAny( sUserData ) );
+                             makeAny( sSize + sUserData ) );
     }
 
     // save services
@@ -373,6 +380,17 @@ short RemoteFilesDialog::Execute()
     return nRet;
 }
 
+void RemoteFilesDialog::Show()
+{
+    SvtFileDialog_Base::Show();
+
+    if( m_nWidth > 0 && m_nHeight > 0 )
+    {
+        Size aSize( m_nWidth, m_nHeight );
+        SetSizePixel( aSize );
+    }
+}
+
 OUString lcl_GetServiceType( ServicePtr pService )
 {
     INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
@@ -423,7 +441,21 @@ void RemoteFilesDialog::InitSize()
         Any aUserData = aDlgOpt.GetUserItem( OUString( "UserData" ) );
         OUString sCfgStr;
         if( aUserData >>= sCfgStr )
-            m_pFileView->SetConfigString( sCfgStr );
+        {
+            int nPos = sCfgStr.indexOf( "|" );
+            if( nPos != -1 )
+            {
+                nPos = sCfgStr.indexOf( "|", nPos + 1 );
+                if( nPos != -1 )
+                {
+                    sal_Int32 nIdx = 0;
+                    m_nWidth = sCfgStr.getToken( 0, '|', nIdx ).toInt32();
+                    m_nHeight = sCfgStr.getToken( 0, '|', nIdx ).toInt32();
+
+                    m_pFileView->SetConfigString( sCfgStr.copy( nPos + 1) );
+                }
+            }
+        }
     }
 }
 

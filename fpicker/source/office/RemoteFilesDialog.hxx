@@ -77,6 +77,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
+    virtual void Show();
 
     // SvtFileDialog_Base
 
@@ -134,6 +135,8 @@ private:
     bool m_bServiceChanged;
 
     OUString m_sIniKey;
+    int m_nWidth;
+    int m_nHeight;
 
     OUString m_sPath;
     OUString m_sStdDir;
