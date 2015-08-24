@@ -611,15 +611,10 @@ void exportDirStream(SvStream& rStrm)
 
 }
 
-void VbaExport::exportVBA()
+void VbaExport::exportVBA(SotStorage* pRootStorage)
 {
     // start here with the VBA export
-
-    const OUString aVbaStreamLocation("/tmp/vba_out.bin");
-    SvFileStream aVbaStream(aVbaStreamLocation, STREAM_READWRITE);
-
-    tools::SvRef<SotStorage> aStorage(new SotStorage(aVbaStream));
-    SotStorage* pVBAStream = aStorage->OpenSotStorage("VBA", STREAM_READWRITE);
+    SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
 
     // export
@@ -638,7 +633,7 @@ void VbaExport::exportVBA()
     }
     pDirStream->Commit();
     pVBAStream->Commit();
-    aStorage->Commit();
+    pRootStorage->Commit();
 }
 
 css::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContainer()
