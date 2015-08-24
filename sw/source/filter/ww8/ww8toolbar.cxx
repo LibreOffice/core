@@ -21,6 +21,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <fstream>
 #include <comphelper/processfactory.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
 #include <map>
 #include <sal/log.hxx>
@@ -227,15 +228,20 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     {
         try
         {
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
-            CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( "com.sun.star.text.TextDocument" ) );
+            css::uno::Reference<css::ui::XUIConfigurationManager> xCfgMgr;
+            if (!utl::ConfigManager::IsAvoidConfig())
+            {
+                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
+                xCfgMgr = xAppCfgSupp->getUIConfigurationManager("com.sun.star.text.TextDocument");
+            }
+            CustomToolBarImportHelper helper(rDocSh, xCfgMgr);
             helper.setMSOCommandMap( new MSOWordCommandConvertor() );
 
             if ( !(*it).ImportCustomToolBar( *this, helper ) )
                 return false;
         }
-        catch(...)
+        catch (...)
         {
             continue;
         }
