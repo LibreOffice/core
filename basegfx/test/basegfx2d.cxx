@@ -193,7 +193,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D", tools::importFromSvgD( aReImport, aExport, false, 0));
         CPPUNIT_ASSERT_MESSAGE("re-imported polygon needs to be identical", aReImport == aPoly);
 
-        CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", tools::importFromSvgD( aPoly, aPath2, , false, 0));
+        CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", tools::importFromSvgD( aPoly, aPath2, false, 0));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
