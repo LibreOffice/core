@@ -23,6 +23,8 @@
 #include <sfx2/docinf.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 
+#include <oox/ole/vbaexport.hxx>
+
 #include "scerrors.hxx"
 #include "scextopt.hxx"
 
@@ -38,8 +40,21 @@
 #include "xltools.hxx"
 #include "xelink.hxx"
 
+#include <officecfg/Office/Calc.hxx>
+
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+namespace {
+
+enum class VBAExportMode
+{
+    NONE,
+    REEXPORT_STREAM,
+    FULL_EXPORT
+};
+
+}
 
 ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
@@ -65,14 +80,26 @@ FltError ExportBiff5::Write()
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     OSL_ENSURE( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
 
-    bool bWriteBasicStrg = false;
+    VBAExportMode eVbaExportMode = VBAExportMode::NONE;
     if( GetBiff() == EXC_BIFF8 )
     {
-        const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
-        bWriteBasicStrg = rFilterOpt.IsLoadExcelBasicStorage();
+        if (officecfg::Office::Calc::Filter::Import::VBA::UseExport::get())
+            eVbaExportMode = VBAExportMode::FULL_EXPORT;
+        else
+        {
+            const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
+            if (rFilterOpt.IsLoadExcelBasicStorage())
+                eVbaExportMode = VBAExportMode::REEXPORT_STREAM;
+        }
     }
 
-    if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
+    if ( pDocShell && xRootStrg.Is() && eVbaExportMode == VBAExportMode::FULL_EXPORT)
+    {
+        VbaExport aExport(pDocShell->GetModel());
+        if (aExport.containsVBAProject())
+            aExport.exportVBA();
+    }
+    else if( pDocShell && xRootStrg.Is() && eVbaExportMode == VBAExportMode::REEXPORT_STREAM )
     {
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg );
         sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT );
