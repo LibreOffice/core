@@ -353,6 +353,9 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         aChunk.mbVertical = false;
     }
 
+    if (aChunk.mbVertical && aLogfont.lfEscapement != 2700)
+        return false;
+
     OpenGLCompatibleDC aDC(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight);
 
     HFONT hNonAntialiasedFont = NULL;
