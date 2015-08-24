@@ -19,6 +19,8 @@
 
 
 #include "lzwdecom.hxx"
+#include <algorithm>
+#include <vector>
 
 #define MAX_TABLE_SIZE 4096
 
@@ -161,8 +163,18 @@ void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData
         return;
     }
 
+    std::vector<sal_uInt16> aSeenIndexes;
     while (pTable[nCodeFirstData].nDataCount>1)
+    {
+        if (std::find(aSeenIndexes.begin(), aSeenIndexes.end(), nCodeFirstData) != aSeenIndexes.end())
+        {
+            SAL_WARN("filter.tiff", "Loop in chain");
+            bEOIFound = true;
+            return;
+        }
+        aSeenIndexes.push_back(nCodeFirstData);
         nCodeFirstData=pTable[nCodeFirstData].nPrevCode;
+    }
 
     pTable[nTableSize].nPrevCode=nPrevCode;
     pTable[nTableSize].nDataCount=pTable[nPrevCode].nDataCount+1;
