@@ -211,10 +211,6 @@ String RID_STR_CANNOTCLOSE
 {
     Text [ en-US ] = "The window cannot be closed while BASIC is running." ;
 };
-String RID_STR_CANNOTSAVEVBA
-{
-    Text [ en-US ] = "You are editing a VBA macro. Changes can be saved only in OpenDocument Format." ;
-};
 String RID_STR_REPLACESTDLIB
 {
     Text [ en-US ] = "The default library cannot be replaced." ;
