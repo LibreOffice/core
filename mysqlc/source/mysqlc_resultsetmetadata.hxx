@@ -24,7 +24,7 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppconn/resultset_metadata.h>
 
 namespace connectivity
@@ -36,7 +36,7 @@ namespace connectivity
 
         //************ Class: ResultSetMetaData
 
-        typedef ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
 
         class OResultSetMetaData : public OResultSetMetaData_BASE
         {

@@ -23,7 +23,7 @@
 #include "mysqlc_connection.hxx"
 
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <cppconn/metadata.h>
 
@@ -40,7 +40,7 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
 
 
-        typedef ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
+        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
