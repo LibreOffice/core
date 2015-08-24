@@ -2125,6 +2125,8 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 #endif // OSL_BIGENDIAN
         // Pointer to content array
         pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+
+        TruncToSortedRange();
     }
 
     OSL_ENSURE(bValid, "Document has corrupt PLCF, ignoring it");
@@ -2142,6 +2144,21 @@ void WW8PLCF::MakeFailedPLCF()
     pPLCF_PosArray = new sal_Int32[2];
     pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
     pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+}
+
+void WW8PLCF::TruncToSortedRange()
+{
+    //Docs state that: ... all Plcs ... are sorted in ascending order.
+    //So ensure that here for broken documents.
+    for (auto nI = 0; nI < nIMax; ++nI)
+    {
+        if (pPLCF_PosArray[nI] > pPLCF_PosArray[nI+1])
+        {
+            SAL_WARN("sw.ww8", "Document has unsorted PLCF, truncated to sorted portion");
+            nIMax = nI;
+            break;
+        }
+    }
 }
 
 void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
