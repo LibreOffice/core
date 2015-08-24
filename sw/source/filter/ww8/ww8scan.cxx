@@ -6726,9 +6726,8 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
     sal_uInt8* pData = pDataPtr;
 
     sal_uInt32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
-    rSt.Seek( nPos );
-    if (2 > nSize || nRead != rSt.Read(pData, nRead))
-        nDopError = ERR_SWG_READ_ERROR;     // Error melden
+    if (nSize < 2 || !checkSeek(rSt, nPos) || nRead != rSt.Read(pData, nRead))
+        nDopError = ERR_SWG_READ_ERROR;     // report error
     else
     {
         if (nMaxDopSize > nRead)
@@ -7575,8 +7574,8 @@ SEPr::SEPr() :
 
 bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
 {
-    return (nOffset != SAL_MAX_UINT32 &&
-            rSt.Seek(nOffset) == static_cast<sal_Size>(nOffset));
+    const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+    return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
 }
 
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
