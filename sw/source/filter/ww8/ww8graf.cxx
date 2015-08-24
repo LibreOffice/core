@@ -867,7 +867,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 // den um -2 (bzw. -1 bei Ver8) korrigierten End-Cp zurueck
 sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
 {
-    WW8_CP nOffset = m_pWwFib->GetBaseCp(eType);
+    WW8_CP nOffset = 0;
+    m_pWwFib->GetBaseCp(eType, &nOffset); //TODO: check return value
 
     OSL_ENSURE(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
     if (nStartCp == nEndCp)
@@ -2390,7 +2391,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     ::SetProgressState(m_nProgress, m_pDocShell);     // Update
 
-    m_nDrawCpO = m_pWwFib->GetBaseCp(m_pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX);
+    m_nDrawCpO = 0;
+    m_pWwFib->GetBaseCp(m_pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX, &m_nDrawCpO); //TODO: check return value
 
     GrafikCtor();
 
