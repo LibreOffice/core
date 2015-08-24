@@ -1629,6 +1629,14 @@
           <info>
             <desc>Specifies how VBA macros are treated in Excel files.</desc>
           </info>
+          <prop oor:name="UseExport" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
+            <info>
+              <desc>Indicates whether VBA macros are exported through the vba export code.</desc>
+              <label>Export VBA</label>
+            </info>
+            <value>true</value>
+          </prop>
           <prop oor:name="Load" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Filter/MS_Office/Basic/Excel -->
             <!-- OldLocation: soffice.cfg -->
