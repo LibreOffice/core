@@ -16,6 +16,8 @@
 
 #include <oox/dllapi.h>
 
+class SotStorage;
+
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
@@ -27,7 +29,7 @@ class OOX_DLLPUBLIC VbaExport
 public:
     VbaExport(css::uno::Reference<css::frame::XModel> xModel);
 
-    void exportVBA();
+    void exportVBA(SotStorage* pRootStorage);
 
     bool containsVBAProject();
 
