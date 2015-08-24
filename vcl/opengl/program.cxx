@@ -21,6 +21,7 @@ OpenGLProgram::OpenGLProgram() :
     mnPositionAttrib( SAL_MAX_UINT32 ),
     mnTexCoordAttrib( SAL_MAX_UINT32 ),
     mnAlphaCoordAttrib( SAL_MAX_UINT32 ),
+    mnMaskCoordAttrib( SAL_MAX_UINT32 ),
     mbBlending( false ),
     mfLastWidth(0.0),
     mfLastHeight(0.0),
@@ -113,6 +114,11 @@ void OpenGLProgram::SetTextureCoord( const GLvoid* pData )
 void OpenGLProgram::SetAlphaCoord( const GLvoid* pData )
 {
     SetVertexAttrib( mnAlphaCoordAttrib, "alpha_coord_in", pData );
+}
+
+void OpenGLProgram::SetMaskCoord(const GLvoid* pData)
+{
+    SetVertexAttrib(mnMaskCoordAttrib, "mask_coord_in", pData);
 }
 
 GLuint OpenGLProgram::GetUniformLocation( const OString& rName )
