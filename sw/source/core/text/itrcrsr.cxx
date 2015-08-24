@@ -56,6 +56,7 @@
 // --> OD 2010-05-05 #i111284#
 #include <numrule.hxx>
 // <--
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
@@ -267,6 +268,9 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
             rSpace.IsAutoFirst() )
         {
             nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
+                        LanguageType aLang = pNode->GetLang( 0, 1, i18n::ScriptType::ASIAN);
+                        if (aLang != LANGUAGE_KOREAN && aLang != LANGUAGE_JAPANESE)
+                            nFirstLineOfs<<=1;
             const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
             if( pSpace )
             {
