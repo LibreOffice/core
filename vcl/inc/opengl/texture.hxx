@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 
 #include <memory>
+#include <vector>
 
 class ImplOpenGLTexture
 {
