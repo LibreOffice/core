@@ -651,6 +651,13 @@ void SwXMLImport::startDocument()
     if( !pDoc )
         return;
 
+    if (IMPORT_ALL == getImportFlags())
+    {
+        // for flat ODF - this is done in SwReader::Read() for package ODF
+        pDoc->SetInReading(true);
+        pDoc->SetInXMLImport(true);
+    }
+
     if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
     {
         pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
@@ -875,6 +882,11 @@ void SwXMLImport::endDocument( void )
                 pDoc->PrtOLENotify( false );
             else if ( pDoc->IsOLEPrtNotifyPending() )
                 pDoc->PrtOLENotify( true );
+
+            assert(pDoc->IsInReading());
+            assert(pDoc->IsInXMLImport());
+            pDoc->SetInReading(false);
+            pDoc->SetInXMLImport(false);
         }
 
         SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
