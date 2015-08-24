@@ -25,14 +25,14 @@
 #include <osl/diagnose.h>
 
 
-SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :
+SvxEditSourceHint::SvxEditSourceHint( sal_uInt32 _nId ) :
     TextHint( _nId ),
     mnStart( 0 ),
     mnEnd( 0 )
 {
 }
 
-SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd ) :
+SvxEditSourceHint::SvxEditSourceHint( sal_uInt32 _nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd ) :
     TextHint( _nId, nValue ),
     mnStart( nStart),
     mnEnd( nEnd )

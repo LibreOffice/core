@@ -45,8 +45,8 @@ private:
     sal_Int32   mnEnd;
 
 public:
-            SvxEditSourceHint( sal_uLong nId );
-            SvxEditSourceHint( sal_uLong nId, sal_uLong nValue, sal_Int32 nStart=0, sal_Int32 nEnd=0 );
+            SvxEditSourceHint( sal_uInt32 nId );
+            SvxEditSourceHint( sal_uInt32 nId, sal_uLong nValue, sal_Int32 nStart=0, sal_Int32 nEnd=0 );
 
     sal_uLong   GetValue() const;
     sal_Int32   GetStartValue() const { return mnStart;}
