@@ -2107,7 +2107,8 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 {
     sal_Size nOldPos = rSt.Tell();
-    bool bValid = checkSeek(rSt, nFilePos) && (rSt.remainingSize() >= nPLCF);
+    bool bValid = nPLCF != 0 && checkSeek(rSt, nFilePos)
+        && (rSt.remainingSize() >= nPLCF);
 
     if (bValid)
     {
