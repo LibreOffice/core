@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_7eaa0d1b",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-24T10:25:42Z",
+      "side": 1,
+      "message": "The destructor is not needed at all now.",
+      "revId": "9ac418187f2f22c8d9b0d5181374be03062c31de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
