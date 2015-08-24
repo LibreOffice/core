@@ -255,13 +255,7 @@ Shell::~Shell()
 void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 {
     if (pCurWin)
-    {
         pCurWin->OnNewDocument();
-
-        // for VBA documents, show a warning that we can save them only in ODF
-        if (pCurWin->GetDocument().isInVBAMode())
-            GetViewFrame()->AppendInfoBar("vba_save", IDE_RESSTR(RID_STR_CANNOTSAVEVBA));
-    }
 
     UpdateWindows();
 }
