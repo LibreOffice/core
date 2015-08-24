@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_5e03d10f",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-24T12:53:48Z",
+      "side": 1,
+      "message": "In the new code, rather set those accessible names in .ui file or not set them at all\n\nThere\u0027s the following easy hack: tdf#87026 to clean those things up in legacy code",
+      "revId": "abd96698be2cae42db81c4db9f20a346d2b80907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_c1fee604",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-24T12:53:48Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this also disable transparency spinbox? Now it stays enabled when transparency\u0027s none, so user can click it freely and as soon as the value changes to \u003e0, it switches transparency mode to \u0027linear\u0027 ... is this expected? (\u0027yes\u0027 is also a valid answer)",
+      "revId": "abd96698be2cae42db81c4db9f20a346d2b80907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_5ee2b1a0",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-24T12:53:48Z",
+      "side": 1,
+      "message": "Please add some tooltip here, so it\u0027s clear this is a start/end colour of the gradient",
+      "revId": "abd96698be2cae42db81c4db9f20a346d2b80907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_be177553",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-24T12:53:48Z",
+      "side": 1,
+      "message": "Tooltip here too",
+      "revId": "abd96698be2cae42db81c4db9f20a346d2b80907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_3e0c0542",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-24T12:53:48Z",
+      "side": 1,
+      "message": "... and here",
+      "revId": "abd96698be2cae42db81c4db9f20a346d2b80907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_1e094932",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-24T12:53:48Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is really what you meant ... did you want to make this spin button increment/decrement its value by 5 when clicked on arrows? If yes, you have to do that in GtkAdjustment associated w/ this spin button",
+      "revId": "abd96698be2cae42db81c4db9f20a346d2b80907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
