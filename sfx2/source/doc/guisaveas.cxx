@@ -803,41 +803,6 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
         if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
-            // is it possible to get these names from somewhere and not just
-            // hardcode them?
-            OUString sXLSXFilter("Calc MS Excel 2007 XML");
-            OUString sOtherXLSXFilter("Calc Office Open XML");
-            bool bHasMacros = hasMacros( GetModel() );
-            if ( bHasMacros && (  aFilterName == sXLSXFilter  ||  aFilterName == sOtherXLSXFilter ) )
-            {
-                uno::Reference< task::XInteractionHandler > xHandler;
-                GetMediaDescr()[ OUString( "InteractionHandler" ) ] >>= xHandler;
-                if ( xHandler.is() )
-                {
-                    bool bResult = false;
-                    try
-                    {
-                        task::ErrorCodeRequest aErrorCode;
-                        aErrorCode.ErrCode = ERRCODE_SFX_VBASIC_CANTSAVE_STORAGE;
-
-                        uno::Any aRequest = uno::makeAny( aErrorCode );
-                        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
-
-                        ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
-                        aContinuations[ 0 ] = pApprove.get();
-
-                        ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort( new ::comphelper::OInteractionAbort );
-                        aContinuations[ 1 ] = pAbort.get();
-                        xHandler->handle(::framework::InteractionRequest::CreateRequest (aRequest,aContinuations));
-                        bResult = pApprove->wasSelected();
-                    }
-                    catch( const uno::Exception& )
-                    {
-                    }
-                    if ( !bResult )
-                        return STATUS_SAVEAS;
-                }
-            }
             if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, aDefExtension,
                                                             true, (bool)( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
                 return STATUS_SAVEAS_STANDARDNAME;
