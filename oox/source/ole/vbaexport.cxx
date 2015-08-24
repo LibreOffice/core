@@ -13,6 +13,7 @@
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/helper/binaryoutputstream.hxx>
@@ -313,8 +314,6 @@ void VBACompression::write()
 VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
     mxModel(xModel)
 {
-    // TODO: how do we get the correct project name
-    maProjectName = "VBAProject";
 }
 
 namespace {
@@ -642,26 +641,58 @@ void VbaExport::exportVBA()
     aStorage->Commit();
 }
 
+css::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContainer()
+{
+    oox::PropertySet aDocProp(mxModel);
+    css::uno::Reference<css::script::XLibraryContainer> xLibContainer(aDocProp.getAnyProperty(oox::PROP_BasicLibraries), css::uno::UNO_QUERY);
+
+    return xLibContainer;
+}
+
 css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
 {
     css::uno::Reference<css::container::XNameContainer> xLibrary;
     try
     {
-        oox::PropertySet aDocProp(mxModel);
-        css::uno::Reference<css::script::XLibraryContainer> xLibContainer(aDocProp.getAnyProperty(oox::PROP_BasicLibraries), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
         css::uno::Sequence<OUString> aElementNames = xLibContainer->getElementNames();
         sal_Int32 n = aElementNames.getLength();
         for (sal_Int32 i = 0; i < n; ++i)
         {
             SAL_DEBUG(aElementNames[i]);
         }
-        xLibrary.set( xLibContainer->getByName(maProjectName), css::uno::UNO_QUERY_THROW );
+        OUString aProjectName = getProjectName();
+        xLibrary.set( xLibContainer->getByName(aProjectName), css::uno::UNO_QUERY_THROW );
     }
     catch(...)
     {
     }
 
     return xLibrary;
+}
+
+bool VbaExport::containsVBAProject()
+{
+    css::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
+    if (!xLibContainer.is())
+        return false;
+
+    css::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility (xLibContainer, css::uno::UNO_QUERY);
+    if (!xVbaCompatibility.is())
+        return false;
+
+    bool bVBACompatibilty = xVbaCompatibility->getVBACompatibilityMode();
+
+    return bVBACompatibilty;
+}
+
+OUString VbaExport::getProjectName()
+{
+    css::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility(getLibraryContainer(), css::uno::UNO_QUERY);
+    if (xVbaCompatibility.is())
+        return xVbaCompatibility->getProjectName();
+
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,7 @@
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
+    namespace script { class XLibraryContainer; }
 } } }
 
 class OOX_DLLPUBLIC VbaExport
@@ -28,14 +29,19 @@ public:
 
     void exportVBA();
 
+    bool containsVBAProject();
+
 private:
 
     css::uno::Reference<css::container::XNameContainer>
         getBasicLibrary();
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    css::uno::Reference<css::script::XLibraryContainer>
+        getLibraryContainer();
 
-    OUString maProjectName;
+    OUString getProjectName();
+
+    css::uno::Reference<css::frame::XModel> mxModel;
 };
 
 class VBACompressionChunk
