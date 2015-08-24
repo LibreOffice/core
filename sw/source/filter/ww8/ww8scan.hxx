@@ -1456,7 +1456,7 @@ public:
     bool Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale);
     ww::WordVersion GetFIBVersion() const;
-    WW8_CP GetBaseCp(ManTypes nType) const;
+    bool GetBaseCp(ManTypes nType, WW8_CP * cp) const;
     sal_Unicode getNumDecimalSep() const { return nNumDecimalSep;}
 };
 
