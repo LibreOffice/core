@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <unotest/filters-test.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -60,71 +64,84 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    std::set<OUString> dirs;
+    std::set<OUString> files;
     while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
     {
         aItem.getFileStatus(aFileStatus);
         OUString sURL = aFileStatus.getFileURL();
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
         {
-            recursiveScan(nExpected, rFilter, sURL, rUserData,
-                nFilterFlags, nClipboardID, nFilterVersion, bExport);
+            dirs.insert(sURL);
         }
         else
         {
-            OUString sTmpFile;
-            bool bEncrypted = false;
-
-            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
-
-            if ((nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()))
-            {
-                //ignore .files
-                if (sURL[nLastSlash+1] == '.')
-                    continue;
-
-                if (
-                    (sURL.match("BID", nLastSlash+1)) ||
-                    (sURL.match("CVE", nLastSlash+1)) ||
-                    (sURL.match("EDB", nLastSlash+1))
-                   )
-                {
-                    bEncrypted = true;
-                }
-            }
-
-            OString aRes(OUStringToOString(sURL,
-                osl_getThreadTextEncoding()));
-
-            if (bEncrypted)
-            {
-                CPPUNIT_ASSERT(osl::FileBase::E_None == osl::FileBase::createTempFile(NULL, NULL, &sTmpFile));
-                decode(sURL, sTmpFile);
-                sURL = sTmpFile;
-            }
-
-            //output name early, so in the case of a hang, the name of
-            //the hanging input file is visible
-            fprintf(stderr, "%s,", aRes.getStr());
-            sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes;
-            if (!bExport)
-                bRes = load(rFilter, sURL, rUserData, nFilterFlags,
-                            nClipboardID, nFilterVersion);
-            else
-                bRes = save(rFilter, sURL, rUserData, nFilterFlags,
-                            nClipboardID, nFilterVersion);
-            sal_uInt32 nEndTime = osl_getGlobalTimer();
-
-            if (bEncrypted)
-                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::remove(sTmpFile));
-
-            fprintf(stderr, "%s,%" SAL_PRIuUINT32"\n",
-                bRes?"Pass":"Fail",nEndTime-nStartTime);
-            if (nExpected == test::indeterminate)
-                continue;
-            filterStatus nResult = bRes ? test::pass : test::fail;
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), nResult == nExpected);
+            files.insert(sURL);
         }
+    }
+    for (auto const & sURL: dirs) {
+        recursiveScan(nExpected, rFilter, sURL, rUserData,
+            nFilterFlags, nClipboardID, nFilterVersion, bExport);
+    }
+    for (auto const & sURL: files) {
+        OUString sTmpFile;
+        bool bEncrypted = false;
+
+        sal_Int32 nLastSlash = sURL.lastIndexOf('/');
+
+        if ((nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()))
+        {
+            //ignore .files
+            if (sURL[nLastSlash+1] == '.')
+                continue;
+
+            if (
+                (sURL.match("BID", nLastSlash+1)) ||
+                (sURL.match("CVE", nLastSlash+1)) ||
+                (sURL.match("EDB", nLastSlash+1))
+               )
+            {
+                bEncrypted = true;
+            }
+        }
+
+        OString aRes(OUStringToOString(sURL,
+            osl_getThreadTextEncoding()));
+
+        OUString realUrl;
+        if (bEncrypted)
+        {
+            CPPUNIT_ASSERT(osl::FileBase::E_None == osl::FileBase::createTempFile(NULL, NULL, &sTmpFile));
+            decode(sURL, sTmpFile);
+            realUrl = sTmpFile;
+        }
+        else
+        {
+            realUrl = sURL;
+        }
+
+        //output name early, so in the case of a hang, the name of
+        //the hanging input file is visible
+        fprintf(stderr, "%s,", aRes.getStr());
+        sal_uInt32 nStartTime = osl_getGlobalTimer();
+        bool bRes;
+        if (!bExport)
+            bRes = load(rFilter, realUrl, rUserData, nFilterFlags,
+                        nClipboardID, nFilterVersion);
+        else
+            bRes = save(rFilter, realUrl, rUserData, nFilterFlags,
+                        nClipboardID, nFilterVersion);
+        sal_uInt32 nEndTime = osl_getGlobalTimer();
+
+        if (bEncrypted)
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::remove(sTmpFile));
+
+        fprintf(stderr, "%s,%" SAL_PRIuUINT32"\n",
+            bRes?"Pass":"Fail",nEndTime-nStartTime);
+        if (nExpected == test::indeterminate)
+            continue;
+        filterStatus nResult = bRes ? test::pass : test::fail;
+        CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), nResult == nExpected);
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
 }
