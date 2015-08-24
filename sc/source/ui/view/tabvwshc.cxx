@@ -113,9 +113,10 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
    }
 }
 
-SfxModelessDialog* ScTabViewShell::CreateRefDialog(
-                        SfxBindings* pB, SfxChildWindow* pCW, SfxChildWinInfo* pInfo,
-                        vcl::Window* pParent, sal_uInt16 nSlotId )
+VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
+                                SfxBindings* pB, SfxChildWindow* pCW,
+                                SfxChildWinInfo* pInfo,
+                                vcl::Window* pParent, sal_uInt16 nSlotId )
 {
     //  Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
     //  z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).
@@ -132,7 +133,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         return NULL;
     }
 
-    SfxModelessDialog* pResult = 0;
+    VclPtr<SfxModelessDialog> pResult;
 
     if(pCW)
         pCW->SetHideNotDelete(true);
@@ -156,7 +157,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
                                                 GetViewData().GetTabNo() ), &maRangeMap);
-                static_cast<ScNameDlg*>(pResult)->SetEntry( maName, maScope);
+                static_cast<ScNameDlg*>(pResult.get())->SetEntry( maName, maScope);
                 mbInSwitch = false;
             }
         }
