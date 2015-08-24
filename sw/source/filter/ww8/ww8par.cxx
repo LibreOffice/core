@@ -4183,6 +4183,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_nIniFlags1(0)
     , m_nFieldFlags(0)
     , m_bRegardHindiDigits( false )
+    , m_bDrawCpOValid( false )
     , m_nDrawCpO(0)
     , m_nPicLocFc(0)
     , m_nObjLocFc(0)
@@ -6182,7 +6183,7 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
             // Note: Ask MM for initialization of <nStartCp> and <nEndCp>.
             // Note: Ask MM about assertions in method <rReader.GetTxbxTextSttEndCp(..)>.
             WW8_CP nStartCp, nEndCp;
-            if ( rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
+            if ( rReader.m_bDrawCpOValid && rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
                             static_cast<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
                             static_cast<sal_uInt16>(nOLEId & 0xFFFF)) )
             {
