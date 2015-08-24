@@ -28,7 +28,7 @@ void FixedTextureAtlasManager::CreateNewTexture()
 {
     int nTextureWidth = mWidthFactor  * mSubTextureSize;
     int nTextureHeight = mHeightFactor * mSubTextureSize;
-    mpTextures.push_back(std::move(std::unique_ptr<ImplOpenGLTexture>(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true))));
+    mpTextures.push_back(std::unique_ptr<ImplOpenGLTexture>(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true)));
     mpTextures.back()->InitializeSlots(mWidthFactor * mHeightFactor);
 }
 
