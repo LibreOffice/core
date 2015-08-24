@@ -1093,7 +1093,8 @@ bool XclExpXmlStream::exportDocument()
                                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
 
     VbaExport aExport(getModel());
-    aExport.exportVBA();
+    if (aExport.containsVBAProject())
+        aExport.exportVBA();
 
     // destruct at the end of the block
     {
