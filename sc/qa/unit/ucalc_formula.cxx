@@ -5877,4 +5877,87 @@ void Test::testFuncGCD()
 
     m_pDoc->DeleteTab(0);
 }
+
+void Test::testFuncLCM()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "LCMTest");
+
+    OUString aVal;
+    ScAddress aPos(4,0,0);
+
+    m_pDoc->SetString(aPos, "=LCM(A1)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 10.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 10.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, -2.0); // A1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for values less then 0",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetString(0, 0, 0, "a"); // A1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return #VALUE! for a single string",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->SetString(aPos, "=LCM(A1:B2)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, -12.0); // B1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a matrix with values less then 0",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetValue(0, 0, 0, 15.0); // A1
+    m_pDoc->SetValue(0, 1, 0, 0.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 5.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 15.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 10.0); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 30.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 20.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 60.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, 125.0); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 1500.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 99.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 49500.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 37.0); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 1831500.0, m_pDoc->GetValue(aPos));
+
+    // with floor
+    m_pDoc->SetValue(1, 0, 0, 99.89); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 1831500.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, 11.32); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 73260.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 22.58); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 7326.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 3.99); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 198.0, m_pDoc->GetValue(aPos));
+
+    // inline array
+    m_pDoc->SetString(aPos, "=LCM({3;6;9})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 18.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=LCM({150;0})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=LCM({-3;6;9})");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a array with values less then 0",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetString(aPos, "=LCM({\"a\";6;9})");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return #VALUE! for a array with strings",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->SetString(aPos, "=LCM(12;24;36;48;60)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 720.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=LCM(0;12;24;36;48;60)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=LCM(\"a\";1)");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return #VALUE! for a array with strings",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
