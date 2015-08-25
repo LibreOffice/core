@@ -1198,8 +1198,9 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
             }
         }
     }
-    else
+    else if (!sURL.isEmpty() && sURL[0] != '#')
     {
+        // Link is not started from "#", so looks like external link. Encode this URL.
         INetURLObject aURL(sURL);
         sURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
     }
