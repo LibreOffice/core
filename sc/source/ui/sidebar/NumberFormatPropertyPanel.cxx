@@ -38,7 +38,7 @@ using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
-const char UNO_NUMERICFIELD[]         = ".uno:NumericField";
+const char UNO_NUMERICFIELD[]         = ".uno:NumberFormatDecimal";
 const char UNO_NUMBERFORMATPERCENT[]  = ".uno:NumberFormatPercent";
 const char UNO_NUMBERFORMATCURRENCY[] = ".uno:NumberFormatCurrency";
 
