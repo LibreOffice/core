@@ -44,7 +44,7 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
     lSrcIndex = lIndexSrc;
     fInputFile = fFile;
 
-    //Status: Zeiger am Ende des Lesepuffers
+    // state: pointer at the end of the input buffer
     nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
     pInput    = static_cast<char *>(rtl_allocateMemory( nInputBufLen ));
 }
@@ -63,7 +63,7 @@ int RscFileInst::GetChar()
         return pLine[ nScanPos++ ];
     else if( nInputPos >= nInputEndPos && nInputEndPos != nInputBufLen )
     {
-        // Dateiende
+        // end of file
         bEof = true;
         return 0;
     }
@@ -79,7 +79,7 @@ void RscFileInst::GetNewLine()
     nLineNo++;
     nScanPos = 0;
 
-    //laeuft bis Dateiende
+    // run until end of file
     sal_uInt32 nLen = 0;
     while( (nInputPos < nInputEndPos) || (nInputEndPos == nInputBufLen) )
     {
@@ -91,15 +91,15 @@ void RscFileInst::GetNewLine()
 
         while( nInputPos < nInputEndPos )
         {
-            //immer eine Zeile lesen
+            // always read one line
             if( nLen >= nLineBufLen )
             {
                 nLineBufLen += 256;
-                // einen dazu fuer '\0'
+                // one more for '\0'
                 pLine = static_cast<char*>(rtl_reallocateMemory( pLine, nLineBufLen +1 ));
             }
 
-            // cr lf, lf cr, lf oder cr wird '\0'
+            // cr lf, lf cr, lf or cr become '\0'
             if( pInput[ nInputPos ] == '\n' )
             {
                 nInputPos++;
@@ -136,7 +136,7 @@ void RscFileInst::GetNewLine()
         }
     }
 
-    // Abbruch ueber EOF
+    // stop on reaching EOF
     pLine[ nLen ] = '\0';
 
 END:

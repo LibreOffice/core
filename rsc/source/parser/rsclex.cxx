@@ -50,7 +50,7 @@ const char* StringContainer::putString( const char* pString )
 }
 
 int             c;
-bool            bLastInclude;// War letztes Symbol INCLUDE
+bool            bLastInclude;//  true, if last symbol was INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
 RscExpression * pExp;
@@ -100,10 +100,10 @@ sal_uInt32 GetNumber()
         }
     }
 
-    while( c=='U' || c=='u' || c=='l' || c=='L' ) //Wg. Unsigned Longs
+    while( c=='U' || c=='u' || c=='l' || c=='L' ) // because of unsigned longs
         c = pFI->GetFastChar();
 
-    if( l > 0x7fffffff ) //Oberstes bit gegebenenfalls abschneiden;
+    if( l > 0x7fffffff ) // drop the most significant bit if needed;
         l &= 0x7fffffff;
 
     return l;
@@ -113,7 +113,7 @@ int MakeToken( YYSTYPE * pTokenVal )
 {
     int             c1;
 
-    while( true ) // Kommentare und Leerzeichen ueberlesen
+    while( true ) // ignore comments and space characters
     {
         while( isspace( c ) )
             c = pFI->GetFastChar();
@@ -157,7 +157,7 @@ int MakeToken( YYSTYPE * pTokenVal )
 
     if( bLastInclude )
     {
-        bLastInclude = false; //Zuruecksetzten
+        bLastInclude = false; // reset
         if( '<' == c )
         {
             OStringBuffer aBuf( 256 );
@@ -232,11 +232,11 @@ int MakeToken( YYSTYPE * pTokenVal )
         {
             KEY_STRUCT  aKey;
 
-            // Suche nach dem Schluesselwort
+            // search for keyword
             if( pTC->aNmTb.Get( nHashId, &aKey ) )
             {
 
-                // Schluesselwort gefunden
+                // keyword found
                 switch( aKey.nTyp )
                 {
                 case CLASSNAME:
@@ -336,20 +336,20 @@ void yyerror( char* pMessage )
 
 void InitParser( RscFileInst * pFileInst )
 {
-    pTC = pFileInst->pTypCont;          // Datenkontainer setzten
+    pTC = pFileInst->pTypCont;          // set file container
     pFI = pFileInst;
     pStringContainer = new StringContainer();
-    pExp = NULL;                //fuer MacroParser
+    pExp = NULL;                // for macro parser
     bTargetDefined = false;
 
-    // Anfangszeichen initialisieren
+    // initialize first character
     bLastInclude = false;
     c = pFI->GetFastChar();
 }
 
 void EndParser()
 {
-    // Stack abraeumen
+    // empty stack
     while( ! S.IsEmpty() )
         S.Pop();
 
@@ -366,10 +366,10 @@ void EndParser()
 
 void IncludeParser( RscFileInst * pFileInst )
 {
-    int           nToken;   // Wert des Tokens
-    YYSTYPE       aYYSType; // Daten des Tokens
-    RscFile     * pFName;   // Filestruktur
-    sal_uLong         lKey;     // Fileschluessel
+    int           nToken;   // token value
+    YYSTYPE       aYYSType; // token data
+    RscFile     * pFName;   // file structure
+    sal_uLong         lKey;     // file key
     RscTypCont  * pTypCon  = pFileInst->pTypCont;
 
     pFName = pTypCon->aFileTab.Get( pFileInst->GetFileIndex() );
@@ -412,7 +412,7 @@ ERRTYPE parser( RscFileInst * pFileInst )
 
     EndParser();
 
-    // yyparser gibt 0 zurueck, wenn erfolgreich
+    // yyparser returns 0 on success
     if( 0 == aError )
         aError.Clear();
     if( pFileInst->pTypCont->pEH->nErrors )

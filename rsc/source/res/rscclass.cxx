@@ -213,11 +213,11 @@ void RscClass::Destroy( const RSCINST & rInst )
             aTmpI = GetInstData( rInst.pData, i, true );
             if( aTmpI.IsInst() )
             {
-                // Objekt loeschen
+                // destroy object
                 aTmpI.pClass->Destroy( aTmpI );
                 if( pVarTypeList[ i ].nVarType & VAR_POINTER )
                 {
-                    // Speicher freigeben
+                    // free memory
                     rtl_freeMemory( aTmpI.pData );
                 }
             }
@@ -272,7 +272,7 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
     nEntries++;
     if( nEntries > (sizeof( sal_uLong ) * 8) )
     {
-        // Bereich fuer Default zu klein
+        // range for default is too small
         RscExit( 16 );
     }
     return ERR_OK;
@@ -313,11 +313,11 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
         }
         else
         {
-            // Default Instanz generieren
+            // generate default instance
             RSCINST aDefInst = rInitInst;
             if( !aDefInst.IsInst() && bInitDflt )
             {
-                // mit dem Variablen-Default besetzen
+                // set to default variables
                 aDefInst.pData  = pVarTypeList[ i ].pDefault;
                 aDefInst.pClass = pVarTypeList[ i ].pClass;
             }
@@ -332,7 +332,7 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
                 }
             }
             else
-            { // Wird ueber Zeiger angegeben
+            { // is provided via pointer
                 if( VAR_EXTENDABLE & pVarTypeList[ i ].nVarType )
                 {
                     RSCINST * pInst = reinterpret_cast<RSCINST *>
@@ -352,7 +352,7 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
                 }
             }
         }
-        // auf nicht Default setzen
+        // set as non default
         SetVarDflt( rInst.pData, i, false );
         return aTmpI;
     }
@@ -380,7 +380,7 @@ RSCINST RscClass::GetCopyVar( const RSCINST & rInst, Atom nVarName)
         {
             if( IsDflt( rInst.pData, i ) )
             {
-                // mit Variablen Default initialiaieren
+                // initialize with default variables
                 aVarI = GetVariable( rInst, nVarName, RSCINST(), true );
                 SetVarDflt( rInst.pData, i, true );
             }
@@ -427,8 +427,7 @@ void RscClass::SetToDefault( const RSCINST & rInst )
 
     for( i = 0; i < nEntries; i++ )
     {
-        // Variablen ohne eigenen Speicher werden vom "Datenserver"
-        // auf Default gesetzt
+        // variables without own memory are set from "data server" to default
         if( !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
         {
             aTmpI = GetInstData( rInst.pData, i, true );
@@ -436,7 +435,7 @@ void RscClass::SetToDefault( const RSCINST & rInst )
                 aTmpI.pClass->SetToDefault( aTmpI );
         }
     }
-    pClass->nVarDflt = ~((sal_uLong)0); // alles auf Default
+    pClass->nVarDflt = ~((sal_uLong)0); // set everything to default
 
     RscTop::SetToDefault( rInst );
 }
@@ -448,8 +447,7 @@ bool RscClass::IsDefault( const RSCINST & rInst )
 
     for( i = 0; i < nEntries; i++ )
     {
-        // Variablen ohne eigenen Speicher werden vom "Datenserver"
-        // auf Default untersucht
+        // variables without own memory are looked for default in "data server"
         if( !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
             if( !IsDflt( rInst.pData, i ) )
                 return false;
@@ -490,7 +488,7 @@ bool RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
             return false;
 
         if( aTmpI.pClass == pVarTypeList[ nEle ].pClass )
-            //sie haben auch die gleiche Klasse
+            // they also have the same class
             return aTmpI.pClass->IsValueDefault( aTmpI, GetDfltData( nEle ) );
         else
             return false;
@@ -514,7 +512,7 @@ bool RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
             if( aTmpI.IsInst() )
             {
                 if( aTmpI.pClass != pVarTypeList[ i ].pClass )
-                    //sie haben nicht die gleiche Klasse
+                    // they don't have the same class
                     return false;
 
                 aDfltI = GetInstData( pDef, i, true );
@@ -550,7 +548,7 @@ void RscClass::SetDefault( const RSCINST & rInst, Atom nVarName )
             SetVarDflt( rInst.pData, i, true );
         }
     }
-    else //In Superklasse nach Variable suchen
+    else // look for variable in super class
         RscTop::SetDefault( rInst, nVarName );
 
 }
@@ -571,7 +569,7 @@ void RscClass::WriteSrc( const RSCINST & rInst,
     {
         if( !(VAR_HIDDEN & pVarTypeList[ i ].nVarType) )
         {
-            // Hack wegen Position und Dimensiuon
+            // hack for position and dimension
             if( nRsc_XYMAPMODEId == pVarTypeList[ i ].nVarName ||
                 nRsc_WHMAPMODEId == pVarTypeList[ i ].nVarName )
             {
@@ -579,7 +577,7 @@ void RscClass::WriteSrc( const RSCINST & rInst,
                     !IsDflt( rInst.pData, i+1 ) || //X, Width
                     !IsDflt( rInst.pData, i+2 ) )  //Y, Height
                 {
-                    // ein Wert ist nicht Default
+                    // one value is no default
                     for( n = 0; n < nTab; n++ )
                         fputc( '\t', fOutput );
 
@@ -612,7 +610,7 @@ void RscClass::WriteSrc( const RSCINST & rInst,
                               aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
                     fprintf( fOutput, " );\n" );
                 }
-                i += 2; //_X, _Y oder _Width, Height ueberlesen
+                i += 2; // ignore _X, _Y or _Width, Height
             }
             else if( !IsDflt( rInst.pData, i )
                      && !IsValueDflt( rInst.pData, i ) )
@@ -647,11 +645,11 @@ sal_Int32 RscClass::GetCorrectValues( const RSCINST & rInst,
     sal_Int32 nLang = 0;
     sal_Int32 nBaseValue;
 
-    // Basiswert holen
+    // retrieve base value
     RSCINST aTmpI = GetInstData( rInst.pData, nVarPos, true );
     aTmpI.pClass->GetNumber( aTmpI, &nBaseValue );
 
-    // Sprach Delta holen
+    // retrieve language delta
     aTmpI = rInst.pClass->GetVariable( rInst, nRsc_DELTALANG, RSCINST() );
     if( aTmpI.IsInst() )
     {
@@ -672,9 +670,9 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
     sal_uInt32 i = 0;
     ERRTYPE aError;
     RSCINST aTmpI;
-    sal_uInt32  nMaskOff = 0;// Offset um Maskenfeld zu addressieren
+    sal_uInt32  nMaskOff = 0;// offset to address mask field
 
-    // Wenn eine Variable Maskierung hat, dann Maskenfeld
+    // when a variable is masked, then mask field
     for( i = 0; i < nEntries; i++ )
     {
         if( pVarTypeList[ i ].nMask )
@@ -716,8 +714,7 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                     else
                     {
                         aTmpI = GetInstData( rInst.pData, i, true );
-                        // Nur an Variable Extradata bExtra nicht auf false
-                        // setzen
+                        // set only for variable extradata with bExtra not false
                         aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
                                            RscId(), nDeep,
@@ -738,8 +735,7 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                 else
                     aTmpI = GetInstData( rInst.pData, i, true );
 
-                // Nur an Variable Extradata bExtra nicht auf false
-                // setzen
+                // set only for variable extradata with bExtra not false
                 aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
                                         RscId(), nDeep,
@@ -777,7 +773,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
     ERRTYPE     aError;
     RSCINST     aFileName;
 
-    //Instanz mit dem Dateinamen "FILENAME" holen
+    // retriebe instance with file name "FILENAME"
     aFileName = RscClass::GetCopyVar( rInst, pHS->getID( "FILE", true ) );
     if( aFileName.IsInst() )
     {
@@ -787,7 +783,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
         // Obsolete - need changes in VCL
         rMem.Put( sal_uInt32(0) );
 
-        // Identifier schreiben
+        // write identifier
         sal_uInt32  nId = 0xFFFFFFFF;
         if( aTmpMem.Size() && pTC && (*aTmpMem.GetUTF8( 0 ) != '\0') )
         {
@@ -812,7 +808,7 @@ ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( this == rInst.pClass )
     {
-        // nur wenn es eigen Klasse ist
+        // only when it is own class
         aError = WriteSysDependRc( rInst, rMem, pTC, nDeep, bExtra );
     }
     return aError;

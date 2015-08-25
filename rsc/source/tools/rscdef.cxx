@@ -18,7 +18,7 @@
  */
 
 
-// Programmuebergreifende Includes.
+// overall program includes
 #include <rscdef.hxx>
 
 bool RscId::bNames = true;
@@ -250,7 +250,7 @@ bool RscExpType::Evaluate( sal_Int32 * plValue ) const
     if( IsDefinition() )
     {
         aExp.pDef->Evaluate();
-        // Eventuellen Fehler ignorieren
+        // ignore potential errors
         *plValue = aExp.pDef->GetNumber();
     }
     else if( IsExpression() )
@@ -303,7 +303,7 @@ bool RscExpression::Evaluate( sal_Int32 * plValue )
     sal_Int32 lLeft;
     sal_Int32 lRight;
 
-    // linken und rechten Zweig auswerten
+    // interpret left and right branches
     if( aLeftExp.Evaluate( &lLeft ) && aRightExp.Evaluate( &lRight ) )
     {
         if( cOperation == '&' )
@@ -335,7 +335,7 @@ OString RscExpression::GetMacro()
 {
     OStringBuffer aLeft;
 
-    // Ausgabeoptimierung
+    // output optimization
     if( aLeftExp.IsNothing() )
     {
         if ( '-' == cOperation )
@@ -354,13 +354,13 @@ OString RscExpression::GetMacro()
     else
     {
         aLeft.append('(');
-        // linken Zweig auswerten
+        // interpret left branch
         aLeftExp.AppendMacro(aLeft);
 
         aLeft.append(cOperation);
 
         aLeft.append('(');
-        // rechten Zweig auswerten
+        // interpret right branch
         aRightExp.AppendMacro(aLeft);
         aLeft.append(')');
 
@@ -384,8 +384,8 @@ RscFile :: ~RscFile()
         delete aDepLst[ i ];
     aDepLst.clear();
 
-    //von hinten nach vorne ist besser wegen der Abhaengigkeiten
-    //Objekte zerstoeren sich, wenn Referenzzaehler NULL
+    // from back to front is better because of dependencies
+    // objects are destroyed when reference counter is NULL
     while( aDefLst.Remove() ) ;
 }
 
@@ -417,10 +417,10 @@ bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
             return true;
     }
 
-    // Current-Zeiger steht auf letztem Element
+    // current pointer points to last element
     if( lPos >= aDepLst.size() )
-    { //letztes Element muss immer letztes bleiben
-        // Abhaengigkeit vor der letzten Position eintragen
+    { // the last element must always stay the last one
+        // put dependency before the last position
         aDepLst.push_back( new RscDepend( lIncFile ) );
     }
     else
@@ -467,7 +467,7 @@ void RscDefTree::Remove( RscDefine * pDef )
 {
     if( pDefRoot )
     {
-        //falls pDef == pDefRoot
+        // in case pDef == pDefRoot
         pDefRoot = static_cast<RscDefine *>(pDefRoot->Remove( pDef ));
     }
     pDef->DecRef();
@@ -612,7 +612,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
 
     if( !pDef )
     {
-        //Macros in den Expressions sind definiert ?
+        // are macros in expressions defined?
         if( TestDef( lFileKey, lPos, pExp ) )
         {
             RscFile * pFile = GetFile( lFileKey );
@@ -629,8 +629,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
 
     if( !pDef )
     {
-        // pExp wird immer Eigentum und muss, wenn es nicht benoetigt wird
-        // geloescht werden
+        // pExp is always always owned and must be deleted after used
         delete pExp;
     }
     return pDef;
