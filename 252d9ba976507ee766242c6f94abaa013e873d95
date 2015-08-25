@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_01abae8a",
+        "filename": "sc/source/core/data/cellvalues.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-25T06:46:55Z",
+      "side": 1,
+      "message": "change names back",
+      "revId": "252d9ba976507ee766242c6f94abaa013e873d95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_e1afa292",
+        "filename": "sc/source/core/data/cellvalues.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-25T06:46:55Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "252d9ba976507ee766242c6f94abaa013e873d95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
