@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_ZIPPACKAGE_HXX
 #define INCLUDED_PACKAGE_INC_ZIPPACKAGE_HXX
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -63,7 +63,7 @@ enum InitialisationMode
     e_IMode_XStream
 };
 
-class ZipPackage : public cppu::WeakImplHelper7
+class ZipPackage : public cppu::WeakImplHelper
                     <
                        com::sun::star::lang::XInitialization,
                        com::sun::star::lang::XSingleServiceFactory,

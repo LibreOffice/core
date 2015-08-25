@@ -21,10 +21,10 @@
 
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
-class BlowfishCFB8CipherContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XCipherContext >
+class BlowfishCFB8CipherContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XCipherContext >
 {
     ::osl::Mutex m_aMutex;
     void* m_pCipher;

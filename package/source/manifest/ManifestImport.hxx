@@ -20,7 +20,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTIMPORT_HXX
 #define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTIMPORT_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <vector>
 
@@ -51,7 +51,7 @@ struct ManifestScopeEntry
 
 typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 
-class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
+class ManifestImport : public cppu::WeakImplHelper < com::sun::star::xml::sax::XDocumentHandler >
 {
 protected:
     std::vector< com::sun::star::beans::PropertyValue > aSequence;

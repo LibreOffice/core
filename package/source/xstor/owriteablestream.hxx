@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
 

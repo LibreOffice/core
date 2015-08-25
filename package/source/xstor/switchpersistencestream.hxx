@@ -32,7 +32,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 // SwitchablePersistenceStream
 
@@ -42,7 +42,7 @@
 
 struct SPStreamData_Impl;
 class SwitchablePersistenceStream
-        : public ::cppu::WeakImplHelper6 <
+        : public ::cppu::WeakImplHelper <
                                         ::com::sun::star::io::XStream,
                                         ::com::sun::star::io::XInputStream,
                                         ::com::sun::star::io::XOutputStream,

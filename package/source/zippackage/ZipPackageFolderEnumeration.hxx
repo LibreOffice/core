@@ -19,12 +19,12 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGEFOLDERENUMERATION_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGEFOLDERENUMERATION_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <HashMaps.hxx>
 
-class ZipPackageFolderEnumeration : public cppu::WeakImplHelper2
+class ZipPackageFolderEnumeration : public cppu::WeakImplHelper
 <
     com::sun::star::container::XEnumeration,
     com::sun::star::lang::XServiceInfo
