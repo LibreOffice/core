@@ -286,7 +286,18 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
     switch (eFill)
     {
         case drawing::FillStyle_NONE:
-            return false; // ignoring some extremely limited XFillColorItem eval
+            // claim that BackColor and BackTransparent are available so that
+            // fo:background="transparent" attribute is exported to override
+            // the parent style in case it is != NONE
+            switch (nMID)
+            {
+                case MID_BACK_COLOR:
+                case MID_BACK_COLOR_R_G_B:
+                case MID_GRAPHIC_TRANSPARENT: // this is *BackTransparent
+                    return true;
+                default:
+                    return false;
+            }
             break;
         case drawing::FillStyle_SOLID:
         case drawing::FillStyle_GRADIENT: // gradient and hatch don't exist in
@@ -294,6 +305,7 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
             switch (nMID)
             {
                 case MID_BACK_COLOR:
+                case MID_GRAPHIC_TRANSPARENT: // this is *BackTransparent
                     // Gradient/Hatch always have emulated color
                     return (drawing::FillStyle_SOLID != eFill)
                         || SfxItemState::SET == rSet.GetItemState(XATTR_FILLCOLOR)
