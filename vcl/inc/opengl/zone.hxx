@@ -7,28 +7,37 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_GUARD_H
-#define INCLUDED_VCL_INC_OPENGL_GUARD_H
+#ifndef INCLUDED_VCL_INC_OPENGL_ZONE_H
+#define INCLUDED_VCL_INC_OPENGL_ZONE_H
 
 #include <sal/config.h>
+#include <sal/types.h>
+
+class OpenGLWatchdogThread;
 
 /**
  * We want to be able to detect if a given crash came
  * from the OpenGL code, so use this helper to track that.
  */
-class OpenGLSalGraphicsImpl;
 class OpenGLZone {
-    static int gnInOpenGLZone;
+    friend class OpenGLWatchdogThread;
     friend class OpenGLSalGraphicsImpl;
-    static void enter() { gnInOpenGLZone++; }
-    static void leave() { gnInOpenGLZone--; }
+    friend void opengl_zone_enter_leave(bool); // testing.
+
+    /// how many times have we entered a GL zone
+    static volatile sal_uInt64 gnEnterCount;
+    /// how many times have we left a new GL zone
+    static volatile sal_uInt64 gnLeaveCount;
+
+    static void enter() { gnEnterCount++; }
+    static void leave() { gnLeaveCount++; }
 public:
      OpenGLZone() { enter(); }
     ~OpenGLZone() { leave(); }
-    static bool isInZone() { return gnInOpenGLZone > 0; }
+    static bool isInZone() { return gnEnterCount != gnLeaveCount; }
     static void hardDisable();
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_PROGRAM_H
+#endif // INCLUDED_VCL_INC_OPENGL_ZONE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
