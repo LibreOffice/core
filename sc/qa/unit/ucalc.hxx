@@ -188,6 +188,7 @@ public:
     void testFuncFTESTBug();
     void testFuncCHITEST();
     void testFuncSUMX2PY2();
+    void testFuncGCD();
 
     void testExternalRef();
     void testExternalRefFunctions();
