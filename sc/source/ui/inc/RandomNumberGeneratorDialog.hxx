@@ -76,6 +76,7 @@ private:
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
 
+    DECL_LINK( InputRangeModified, void* );
     DECL_LINK( Parameter1ValueModified, void* );
     DECL_LINK( Parameter2ValueModified, void* );
     DECL_LINK( DistributionChanged, void* );

@@ -59,7 +59,9 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent, rID, rUIXMLDescription ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
+    mInputRange     ( ScAddress::INITIALIZE_INVALID ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
+    mOutputAddress  ( ScAddress::INITIALIZE_INVALID ),
     mGroupedBy      ( BY_COLUMN ),
     mpActiveEdit    ( NULL ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
@@ -123,6 +125,10 @@ void ScStatisticsInputOutputDialog::Init()
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
+    aLink = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
+    mpInputRangeEdit->SetModifyHdl( aLink);
+    mpOutputRangeEdit->SetModifyHdl( aLink);
+
     mpOutputRangeEdit->GrabFocus();
 
     mpGroupByColumnsRadio->SetToggleHdl( LINK( this, ScStatisticsInputOutputDialog, GroupByChanged ) );
@@ -176,11 +182,14 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
             sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
             aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
             mpOutputRangeEdit->SetRefString( aReferenceString );
-
-            // Enable OK, Cancel if output range is set
-            mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
     }
+
+    // Enable OK if both, input range and output address are set.
+    if (mInputRange.IsValid() && mOutputAddress.IsValid())
+        mpButtonOk->Enable();
+    else
+        mpButtonOk->Disable();
 }
 
 IMPL_LINK( ScStatisticsInputOutputDialog, OkClicked, PushButton*, /*pButton*/ )
@@ -217,6 +226,62 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged )
         mGroupedBy = BY_COLUMN;
     else if (mpGroupByRowsRadio->IsChecked())
         mGroupedBy = BY_ROW;
+
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler )
+{
+    if ( mpActiveEdit )
+    {
+        if ( mpActiveEdit == mpInputRangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpInputRangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mInputRange = *pRange;
+                // Highlight the resulting range.
+                mpInputRangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mInputRange = ScRange( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+        else if ( mpActiveEdit == mpOutputRangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpOutputRangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mOutputAddress = pRange->aStart;
+
+                // Crop output range to top left address for Edit field.
+                if (pRange->aStart != pRange->aEnd)
+                {
+                    sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+                    OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
+                    mpOutputRangeEdit->SetRefString( aReferenceString );
+                }
+
+                // Highlight the resulting range.
+                mpOutputRangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mOutputAddress = ScAddress( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+    }
+
+    // Enable OK if both, input range and output address are set.
+    if (mInputRange.IsValid() && mOutputAddress.IsValid())
+        mpButtonOk->Enable();
+    else
+        mpButtonOk->Disable();
 
     return 0;
 }
