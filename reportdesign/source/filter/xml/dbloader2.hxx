@@ -45,7 +45,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <vcl/svapp.hxx>
 #include <ucbhelper/content.hxx>
@@ -64,7 +64,7 @@
 namespace rptxml
 {
 
-    class ORptTypeDetection : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo>
+    class ORptTypeDetection : public ::cppu::WeakImplHelper< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo>
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 public:

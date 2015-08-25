@@ -38,7 +38,7 @@
 #include "ReportController.hxx"
 #include "ColumnInfo.hxx"
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/property.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
@@ -81,7 +81,7 @@ using namespace ::comphelper;
   * Separated out from OFieldExpressionControl to prevent collision of ref-counted base classes
   */
 class OFieldExpressionControl;
-class OFieldExpressionControlContainerListener : public ::cppu::WeakImplHelper1< container::XContainerListener >
+class OFieldExpressionControlContainerListener : public ::cppu::WeakImplHelper< container::XContainerListener >
 {
     VclPtr<OFieldExpressionControl> mpParent;
 public:

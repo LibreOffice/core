@@ -20,7 +20,7 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_GROUP_HXX
 
 #include <com/sun/star/report/XGroup.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
@@ -31,7 +31,7 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::WeakComponentImplHelper2< com::sun::star::report::XGroup
+    typedef ::cppu::WeakComponentImplHelper< com::sun::star::report::XGroup
                                          ,   ::com::sun::star::lang::XServiceInfo> GroupBase;
     typedef ::cppu::PropertySetMixin< com::sun::star::report::XGroup> GroupPropertySet;
 

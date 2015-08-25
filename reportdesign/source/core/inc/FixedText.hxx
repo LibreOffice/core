@@ -23,7 +23,7 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFixedText.hpp>
 #include "ReportControlModel.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ReportHelperDefines.hxx"
@@ -32,7 +32,7 @@
 namespace reportdesign
 {
     typedef ::cppu::PropertySetMixin<        com::sun::star::report::XFixedText > FixedTextPropertySet;
-    typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XFixedText
+    typedef ::cppu::WeakComponentImplHelper<    com::sun::star::report::XFixedText
                                                 ,com::sun::star::lang::XServiceInfo > FixedTextBase;
 
     /** \class OFixedText Defines the implementation of a \interface com:::sun::star::report::XFixedText

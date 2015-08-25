@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 #include <dllapi.h>
@@ -41,7 +41,7 @@ namespace rptui
 
 
     class OXReportControllerObserver
-        : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+        : public ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
                                         ,   ::com::sun::star::util::XModifyListener
                                         >

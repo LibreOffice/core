@@ -24,7 +24,7 @@
 #include <map>
 
 #include <com/sun/star/report/XReportEngine.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
@@ -37,7 +37,7 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::WeakComponentImplHelper2< com::sun::star::report::XReportEngine
+    typedef ::cppu::WeakComponentImplHelper< com::sun::star::report::XReportEngine
                                              ,com::sun::star::lang::XServiceInfo> ReportEngineBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XReportEngine> ReportEnginePropertySet;
 

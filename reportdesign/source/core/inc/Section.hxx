@@ -20,7 +20,7 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_SECTION_HXX
 
 #include <com/sun/star/report/XSection.hpp>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
@@ -36,7 +36,7 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::WeakComponentImplHelper6
+    typedef ::cppu::WeakComponentImplHelper
         <   ::com::sun::star::report::XSection
         ,   ::com::sun::star::lang::XServiceInfo
         ,   ::com::sun::star::lang::XUnoTunnel

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/report/XFunctions.hpp>
 #include <com/sun/star/report/XFunctionsSupplier.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <list>
@@ -29,7 +29,7 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::WeakComponentImplHelper1< com::sun::star::report::XFunctions> FunctionsBase;
+    typedef ::cppu::WeakComponentImplHelper< com::sun::star::report::XFunctions> FunctionsBase;
     /** \class OFunctions Defines the implementation of a \interface com:::sun::star::report::XFunctions
      * \ingroup reportdesign_api
      *

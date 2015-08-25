@@ -23,13 +23,13 @@
 #include <com/sun/star/report/XFunction.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include "ReportControlModel.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace reportdesign
 {
     typedef ::cppu::PropertySetMixin<        com::sun::star::report::XFunction  > FunctionPropertySet;
-    typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XFunction
+    typedef ::cppu::WeakComponentImplHelper<    com::sun::star::report::XFunction
                                                 ,com::sun::star::lang::XServiceInfo > FunctionBase;
 
     /** \class OFunction Defines the implementation of a \interface com:::sun::star::report::XFunction

@@ -23,14 +23,14 @@
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/Function.hpp>
 #include "ReportControlModel.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ReportHelperDefines.hxx"
 namespace reportdesign
 {
     typedef ::cppu::PropertySetMixin<        com::sun::star::report::XFormattedField    > FormattedFieldPropertySet;
-    typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XFormattedField
+    typedef ::cppu::WeakComponentImplHelper<    com::sun::star::report::XFormattedField
                                                 ,com::sun::star::lang::XServiceInfo > FormattedFieldBase;
 
     /** \class OFormattedField Defines the implementation of a \interface com:::sun::star::report::XFormattedField

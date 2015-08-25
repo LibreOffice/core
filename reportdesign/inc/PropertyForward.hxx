@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include "RptDef.hxx"
 
@@ -32,7 +32,7 @@
 namespace rptui
 {
 
-    typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
                                     >   OPropertyForward_Base;
 
     /** \class OPropertyMediator
