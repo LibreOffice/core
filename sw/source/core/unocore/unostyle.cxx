@@ -1766,7 +1766,11 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
             aChangedBrushItem.PutValue(aValue, nMemberId);
 
-            if(!(aChangedBrushItem == aOriginalBrushItem))
+            if (!(aChangedBrushItem == aOriginalBrushItem) ||
+                // 0xff is already the default - but if BackTransparent is set
+                // to true, it must be applied in the item set on ODF import
+                // to potentially override parent style, which is unknown yet
+                (MID_GRAPHIC_TRANSPARENT == nMemberId && aValue.has<bool>() && aValue.get<bool>()))
             {
                 setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
             }
