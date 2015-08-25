@@ -104,6 +104,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <dbaccess/dbaundomanager.hxx>
@@ -237,7 +238,7 @@ typedef ::comphelper::OPropertyStateContainer       OStyle_PBASE;
 class OStyle;
 typedef ::comphelper::OPropertyArrayUsageHelper <   OStyle
                                                 >   OStyle_PABASE;
-typedef ::cppu::WeakImplHelper2< style::XStyle, beans::XMultiPropertyStates> TStyleBASE;
+typedef ::cppu::WeakImplHelper< style::XStyle, beans::XMultiPropertyStates> TStyleBASE;
 
 class OStyle :   public ::comphelper::OMutexAndBroadcastHelper
                 ,public TStyleBASE
@@ -2276,7 +2277,7 @@ OUString SAL_CALL OReportDefinition::getShapeType(  ) throw (uno::RuntimeExcepti
    return OUString("com.sun.star.drawing.OLE2Shape");
 }
 
-typedef ::cppu::WeakImplHelper2< container::XNameContainer,
+typedef ::cppu::WeakImplHelper< container::XNameContainer,
                              container::XIndexAccess
                             > TStylesBASE;
 class OStylesHelper:

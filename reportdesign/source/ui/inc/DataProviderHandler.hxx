@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -42,7 +42,7 @@ namespace rptui
 
     class OPropertyInfoService;
 
-    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::inspection::XPropertyHandler
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::inspection::XPropertyHandler
                                             ,   ::com::sun::star::lang::XServiceInfo> DataProviderHandler_Base;
 
     class DataProviderHandler:

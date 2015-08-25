@@ -22,7 +22,6 @@
 #include <RptResId.hrc>
 #include "ModuleHelper.hxx"
 #include "helpids.hrc"
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

@@ -22,7 +22,7 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XImageControl.hpp>
 #include "ReportControlModel.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ReportHelperDefines.hxx"
@@ -30,7 +30,7 @@
 namespace reportdesign
 {
     typedef ::cppu::PropertySetMixin<        com::sun::star::report::XImageControl  > ImageControlPropertySet;
-    typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XImageControl
+    typedef ::cppu::WeakComponentImplHelper<    com::sun::star::report::XImageControl
                                                 ,com::sun::star::lang::XServiceInfo     > ImageControlBase;
 
     /** \class OImageControl Defines the implementation of a \interface com:::sun::star::report::XImageControl

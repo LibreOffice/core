@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <memory>
 #include <svl/lstner.hxx>
 
@@ -34,7 +34,7 @@ namespace rptui
 
 
     class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment
-        : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+        : public ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
                                         ,   ::com::sun::star::util::XModifyListener
                                         >

@@ -36,7 +36,6 @@
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
 
-#include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/lstner.hxx>

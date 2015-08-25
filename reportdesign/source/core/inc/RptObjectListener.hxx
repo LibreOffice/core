@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 
@@ -32,7 +32,7 @@ class OObjectBase;
 // OObjectListener
 
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > TPropertyChangeListenerHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener > TPropertyChangeListenerHelper;
 
 class OObjectListener: public TPropertyChangeListenerHelper
 {

@@ -20,7 +20,6 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_GROUPEXCHANGE_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase2.hxx>
 #include <svtools/transfer.hxx>
 #include "GroupsSorting.hxx"
 
