@@ -6115,6 +6115,10 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
         {
             // Remove Frame and offsets from Frame Template
             Reader::ResetFrameFormats( rDoc );
+
+            rPaM.GetBound().nContent.Assign(0, 0);
+            rPaM.GetBound(false).nContent.Assign(0, 0);
+
         }
         try
         {
