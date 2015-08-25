@@ -5795,4 +5795,86 @@ void Test::testFuncSUMX2PY2()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncGCD()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "GCDTest");
+
+    OUString aVal;
+    ScAddress aPos(4,0,0);
+
+    m_pDoc->SetString(aPos, "=GCD(A1)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 10.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 10.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, -2.0); // A1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for values less then 0",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetString(0, 0, 0, "a"); // A1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return #VALUE! for a single string",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->SetString(aPos, "=GCD(A1:B2)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, -12.0); // B1
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a matrix with values less then 0",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetValue(0, 0, 0, 15.0); // A1
+    m_pDoc->SetValue(0, 1, 0, 0.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 15.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 5.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 10.0); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 30.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 20.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 10.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, 120.0); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 10.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 40.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 20.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 45.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+
+    // with floor
+    m_pDoc->SetValue(1, 0, 0, 45.381); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, 120.895); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 20.97); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 10.15); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 5.0, m_pDoc->GetValue(aPos));
+
+    // inline array
+    m_pDoc->SetString(aPos, "=GCD({3;6;9})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 3.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=GCD({150;0})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 150.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=GCD({-3;6;9})");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a array with values less then 0",
+            OUString("Err:502"), aVal);
+    m_pDoc->SetString(aPos, "=GCD({\"a\";6;9})");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return #VALUE! for a array with strings",
+            OUString("#VALUE!"), aVal);
+
+    // inline list of values
+    m_pDoc->SetString(aPos, "=GCD(12;24;36;48;60)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 12.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=GCD(0;12;24;36;48;60)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 12.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=GCD(\"a\";1)");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return #VALUE! for a array with strings",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->DeleteTab(0);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
