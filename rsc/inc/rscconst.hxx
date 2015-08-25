@@ -29,16 +29,16 @@ class RscConst : public RscTop
 protected:
     struct VarEle
     {
-        Atom    nId;    // Name der Konstante
-        sal_Int32   lValue; // Wert der Konstante
+        Atom    nId;    // constant name
+        sal_Int32   lValue; // constant value
     };
-    VarEle *        pVarArray;  // Zeiger auf das Feld mit Konstanten
-    sal_uInt32      nEntries;   // Anzahle der Eintraege im Feld
+    VarEle *        pVarArray;  // pointer to the field with constant
+    sal_uInt32      nEntries;   // number of entries in field
 public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
                     virtual ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
-                    // Die erlaubten Werte werden gesetzt
+                    // sets the allowed values
     ERRTYPE         SetConstant( Atom nVarName, sal_Int32 lValue );
     bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
     bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
@@ -49,8 +49,8 @@ class RscEnum : public RscConst
 {
     struct RscEnumInst
     {
-        sal_uInt32  nValue; // Position der Konstanten im Array
-        bool        bDflt;  // Ist Default
+        sal_uInt32  nValue; // constant position in the array
+        bool        bDflt;  // is default
     };
     sal_uInt32      nSize;
 public:
@@ -66,7 +66,7 @@ public:
                     {
                         return reinterpret_cast<RscEnumInst*>(rInst.pData)->bDflt;
                     };
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,

@@ -29,9 +29,9 @@ class RscString : public RscTop
     RscTop * pRefClass;
     struct RscStringInst
     {
-        char *  pStr;   // Zeiger auf String
-        bool    bDflt;  // Ist Default
-        RscId   aRefId; // ReferenzName
+        char *  pStr;   // pointer to string
+        bool    bDflt;  // is default
+        RscId   aRefId; // reference name
     };
     sal_uInt32  nSize;
 public:
@@ -40,7 +40,7 @@ public:
 
     void            SetRefClass( RscTop * pClass ) { pRefClass = pClass; }
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
-                    // Der zulaessige Bereich wird gesetzt
+                    // sets the allowed range
     void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
     void            SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
@@ -51,7 +51,7 @@ public:
                         {
                             return reinterpret_cast<RscStringInst*>(rInst.pData)->bDflt;
                         }
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
     ERRTYPE         SetString( const RSCINST &, const char * pStr ) SAL_OVERRIDE;
     ERRTYPE         GetString( const RSCINST &, char ** ppStr ) SAL_OVERRIDE;

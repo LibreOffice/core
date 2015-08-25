@@ -33,19 +33,19 @@ protected:
     };
     struct VARTYPE_STRUCT
     {
-        Atom            nVarName;   // Variablenname
-        RSCVAR          nVarType;   // Variablentyp
-        sal_uInt32      nMask;      // Maskierungsbit
-        sal_uInt32      nOffset;    // Beginn der Instanzdaten
-        RscTop *        pClass;     // Klasse
-        CLASS_DATA      pDefault;   // Zeiger auf DefaultDaten
-        Atom            nDataBaseName;//Name fuer Fremddatenbereich
+        Atom            nVarName;   // variable name
+        RSCVAR          nVarType;   // variable type
+        sal_uInt32      nMask;      // bit mask
+        sal_uInt32      nOffset;    // start of instance data
+        RscTop *        pClass;     // class
+        CLASS_DATA      pDefault;   // pointer to default data
+        Atom            nDataBaseName;//name of foreign data area
     };
-    sal_uInt32          nSuperSize; // Groesse der Instanzdaten der SuperKl.
-    sal_uInt32          nSize;      // Groesse der Instanzdaten dieser Klasse
-                                    // mit Superklassen
-    sal_uInt32          nEntries;   // Eintraege in pVarTypeList
-    VARTYPE_STRUCT *    pVarTypeList;   // Variablenliste
+    sal_uInt32          nSuperSize; // size of super class instance data
+    sal_uInt32          nSize;      // size of this class instance data
+                                    // with super class
+    sal_uInt32          nEntries;   // entries in pVarTypeList
+    VARTYPE_STRUCT *    pVarTypeList;   // variable list
     RSCINST             GetInstData( CLASS_DATA pData, sal_uInt32 nEle,
                                      bool bGetCopy = false );
     CLASS_DATA          GetDfltData( sal_uInt32 nEle );
@@ -73,7 +73,7 @@ public:
                                  RscTop * pCreateClass = NULL ) SAL_OVERRIDE;
     RSCINST         GetCopyVar( const RSCINST & rInst, Atom nVarName ) SAL_OVERRIDE;
 
-                    // Gibt die Groesse der Klasse in Bytes
+                    // gives the class size in bytes
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
 
     bool            IsConsistent( const RSCINST & rInst ) SAL_OVERRIDE;

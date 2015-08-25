@@ -29,21 +29,21 @@ class RscRange : public RscTop
 protected:
     struct RscRangeInst
     {
-        sal_uInt16  nValue; // nValue = Ausgangswert - nMin
-        bool        bDflt;  // Ist Default
+        sal_uInt16  nValue; // nValue = output value - nMin
+        bool        bDflt;  // is default
     };
-    sal_Int32       nMin;   // Minimum des Bereiches
-    sal_Int32       nMax;   // Maximum des Bereiches
+    sal_Int32       nMin;   // range minimum value
+    sal_Int32       nMax;   // range maximum value
     sal_uInt32      nSize;
 public:
                     RscRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
-                    // Der zulaessige Bereich wird gesetzt
+                    // sets the allowed range
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
-                    // Gibt die Groesse der Klasse in Bytes
+                    // returns the class size in bytes
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
                             reinterpret_cast<RscRangeInst*>(rInst.pData)->bDflt = true;
@@ -52,7 +52,7 @@ public:
                         {
                             return reinterpret_cast<RscRangeInst*>(rInst.pData)->bDflt;
                         };
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
     ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
     ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * ) SAL_OVERRIDE;
@@ -67,21 +67,21 @@ class RscLongRange : public RscTop
 protected:
     struct RscLongRangeInst
     {
-        sal_Int32    nValue; // nValue = Ausgangswert - nMin
-        bool    bDflt;  // Ist Default
+        sal_Int32    nValue; // nValue = output value - nMin
+        bool    bDflt;  // is default
     };
-    sal_Int32    nMin;   // Minimum des Bereiches
-    sal_Int32    nMax;   // Maximum des Bereiches
+    sal_Int32    nMin;   // range minimum value
+    sal_Int32    nMax;   // range maximum value
     sal_uInt32  nSize;
 public:
                     RscLongRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
-                    // Der zulaessige Bereich wird gesetzt
+                    // sets the alloed range
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
-                    // Gibt die Groesse der Klasse in Bytes
+                    // returns the class size in bytes
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
                             reinterpret_cast<RscLongRangeInst*>(rInst.pData)->bDflt = true;
@@ -90,7 +90,7 @@ public:
                         {
                             return reinterpret_cast<RscLongRangeInst*>(rInst.pData)->bDflt;
                         };
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
     ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
     ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * ) SAL_OVERRIDE;
@@ -114,12 +114,12 @@ class RscIdRange : public RscTop
 {
     sal_uInt32  nSize;
 protected:
-    sal_Int32    nMin;   // Minimum des Bereiches
-    sal_Int32    nMax;   // Maximum des Bereiches
+    sal_Int32    nMin;   // range minimum value
+    sal_Int32    nMax;   // range maximum value
 public:
                     RscIdRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
-                    // Der zulaessige Bereich wird gesetzt
+                    // sets the allowed range
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
                         {
                             nMin = nMinimum;
@@ -135,10 +135,10 @@ public:
                         }
     bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
-                            //cUnused wird fuer Defaultkennung verwendet
+                            //cUnused is used as default identifier
                             return reinterpret_cast<RscId*>(rInst.pData)->aExp.cUnused;
                         }
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
     ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
     ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * ) SAL_OVERRIDE;

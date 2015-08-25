@@ -49,16 +49,13 @@ struct RscArrayInst
     RscInstNode *   pNode;
 };
 
-/* Der Baum wird ueber die Werte des Enums sortiert, nicht ueber
-    seine HashId.
-*/
+/* The tree is sorted against its enum value, not gainst its HashId */
 class RscArray : public RscTop
 {
 protected:
-    RscEnum *       pTypeClass; // Typ der Eintraege
-    sal_uInt32      nSize;      // Groesse der Instanzdaten dieser Klasse
-                                // mit Superklassen
-    sal_uInt32      nOffInstData;// Offset auf eigen Instanzdaten
+    RscEnum *       pTypeClass; // type of entries
+    sal_uInt32      nSize;      // size of this class instance data with super class
+    sal_uInt32      nOffInstData;// Offset of self instance data
     void            WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
                                    RscTypCont * pTC, sal_uInt32 nTab, const char * );
 public:
@@ -77,7 +74,7 @@ public:
                                  RscTop * pCreateClass,
                                  RSCINST * pGetInst ) SAL_OVERRIDE;
 
-                    // Gibt die Groesse der Klasse in Bytes
+                    // gives the size of the class in bytes
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
 
     bool            IsConsistent( const RSCINST & rInst ) SAL_OVERRIDE;
