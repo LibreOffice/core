@@ -284,6 +284,15 @@ DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
 //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle32, "FillColor"));
 //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle32, "FillTransparence"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x461900), getProperty<sal_Int32>(xStyle32, "CharColor"));
+
+    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    {
+        // check that fo:background-color attribute is exported properly
+        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Titre Avis expert']/style:paragraph-properties[@fo:background-color='#661900']", 1);
+        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Avis expert questions']/style:paragraph-properties[@fo:background-color='transparent']", 1);
+        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='avis expert questions non cadres']/style:paragraph-properties[@fo:background-color='#801900']", 1);
+        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Avis expert rXponses']/style:paragraph-properties[@fo:background-color='transparent']", 1);
+    }
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
