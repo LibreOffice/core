@@ -75,9 +75,9 @@ public:
 /*********** R s c I d ***************************************************/
 class RscId
 {
-    static      bool bNames;// false, bei den Namenoperation nur Zahlen
+    static      bool bNames;// if false, only count name operation
 public:
-    RscExpType  aExp;       // Zahl, Define oder Ausdruck
+    RscExpType  aExp;       // number, define or expression
     sal_Int32   GetNumber() const;
     void    Create( const RscExpType & rExpType );
     void    Create(){ aExp.cType = RSCEXP_NOTHING; }
@@ -103,8 +103,8 @@ public:
             RscId& operator = ( const RscId& rRscId );
 
     static void SetNames( bool bSet = true );
-    operator sal_Int32() const;   // Gibt Nummer zurueck
-    OString GetName()  const;   // Gibt den Namen des Defines zurueck
+    operator sal_Int32() const;   // returns the number
+    OString GetName()  const;   // returns the define
     bool    operator <  ( const RscId& rRscId ) const;
     bool    operator >  ( const RscId& rRscId ) const;
     bool    operator == ( const RscId& rRscId ) const;
@@ -123,10 +123,10 @@ friend class RscDefineList;
 friend class RscDefTree;
 friend class RscExpression;
 friend class RscId;
-    sal_uLong   lFileKey;   // zu welcher Datei gehoert das Define
-    sal_uInt32  nRefCount;  // Wieviele Referenzen auf dieses Objekt
-    sal_Int32   lId;        // Identifier
-    RscExpression * pExp;       // Ausdruck
+    sal_uLong   lFileKey;   // file the define belongs to
+    sal_uInt32  nRefCount;  // reference count to this object
+    sal_Int32   lId;        // identifier
+    RscExpression * pExp;       // expression
 protected:
 
                 RscDefine( sal_uLong lFileKey, const OString& rDefName,
@@ -156,7 +156,7 @@ friend class RscFile;
 friend class RscFileTab;
 private:
     RscSubDefList   maList;
-                // pExpression wird auf jedenfall Eigentum der Liste
+                // pExpression always belongs to the list
     RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
                      sal_Int32 lDefId, size_t lPos );
     RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
@@ -199,19 +199,19 @@ public:
 
 typedef ::std::vector< RscDepend* > RscDependList;
 
-// Tabelle die alle Dateinamen enthaelt
+// table containing al file names
 class RscFile
 {
 friend class RscFileTab;
-    bool            bIncFile;   // Ist es eine Include-Datei
+    bool            bIncFile;   // whether it is an include file
 public:
-    bool            bLoaded;    // Ist die Datei geladen
-    bool            bScanned;   // Wurde Datei nach Inclide abgesucht
-    bool            bDirty;     // Dirty-Flag
-    OString         aFileName;  // Name der Datei
-    OString         aPathName;  // Pfad und Name der Datei
-    RscDefineList   aDefLst;    // Liste der Defines
-    RscDependList   aDepLst;    // List of Depend
+    bool            bLoaded;    // whether the file is loaded
+    bool            bScanned;   // whether the file searches for include
+    bool            bDirty;     // dirty-flag
+    OString         aFileName;  // file name
+    OString         aPathName;  // file path and name
+    RscDefineList   aDefLst;    // list of defines
+    RscDependList   aDepLst;    // list of depend
 
                     RscFile();
                     ~RscFile();
@@ -261,7 +261,7 @@ public:
     RscDefine * NewDef( sal_uLong lKey, const OString& rDefName,
                         RscExpression *, sal_uLong lPos );
 
-           // Alle Defines die in dieser Datei Definiert sind loeschen
+           // deletes all defines defined in this file
     void        DeleteFileContext( sal_uLong lKey );
     sal_uLong   NewCodeFile(const OString& rName);
     sal_uLong   NewIncFile(const OString& rName, const OString& rPath);
