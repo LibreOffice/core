@@ -337,8 +337,11 @@ bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &r
 SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     const Graphic* pGrf, const SfxItemSet* pFlySet, const Rectangle& aVisArea )
 {
-    SdrObject* pRet = 0;
-    OSL_ENSURE( m_pStg, "ohne storage geht hier fast gar nichts!" );
+    if (!m_pStg)
+    {
+        SAL_WARN("sw.ww8", "no storage for ole objects");
+        return nullptr;
+    }
 
     ::SetProgressState( m_nProgress, m_rDoc.GetDocShell() );     // Update
 
@@ -389,6 +392,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             aRect.SetSize(pSize->GetSize());
         }
     }
+
+    SdrObject* pRet = 0;
 
     if (!(m_bIsHeader || m_bIsFooter))
     {
