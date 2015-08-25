@@ -33,7 +33,7 @@ class SwFieldEditDlg : public SfxSingleTabDialog
     VclPtr<PushButton> m_pAddressBT;
 
     DECL_LINK(AddressHdl, void *);
-    DECL_LINK(NextPrevHdl, Button *pBt = 0);
+    DECL_LINK(NextPrevHdl, Button *);
 
     void            Init();
     VclPtr<SfxTabPage> CreatePage(sal_uInt16 nGroup);

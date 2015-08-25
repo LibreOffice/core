@@ -121,8 +121,8 @@ private:
     static void Execute( const CommandInfo &rCmdInfo,
                   const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
-    DECL_LINK( MenuSelectHdl, Menu* pMenu );
-    DECL_LINK( BackgroundMenuSelectHdl, Menu* pMenu );
+    DECL_LINK( MenuSelectHdl, Menu* );
+    DECL_LINK( BackgroundMenuSelectHdl, Menu* );
 public:
     GalleryThemePopup( const GalleryTheme* pTheme,
                        sal_uIntPtr nObjectPos,

@@ -104,12 +104,12 @@ class SwMailMergeDlg : public SvxStandardDialog
     Size            m_aDialogSize;
     OUString m_sSaveFilter;
 
-    DECL_LINK( ButtonHdl, Button* pBtn );
+    DECL_LINK( ButtonHdl, Button* );
     DECL_LINK(InsertPathHdl, void *);
-    DECL_LINK( OutputTypeHdl, RadioButton* pBtn );
-    DECL_LINK( FilenameHdl, CheckBox* pBtn );
+    DECL_LINK( OutputTypeHdl, RadioButton* );
+    DECL_LINK( FilenameHdl, CheckBox* );
     DECL_LINK(ModifyHdl, void *);
-    DECL_LINK( SaveTypeHdl, RadioButton* pBtn );
+    DECL_LINK( SaveTypeHdl, RadioButton* );
 
     virtual void    Apply() SAL_OVERRIDE;
     bool            ExecQryShell();

@@ -241,7 +241,7 @@ private:
     sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = NULL );
     sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
-                    DECL_LINK( FilterCallback, ConvertData* pData );
+                    DECL_LINK( FilterCallback, ConvertData* );
 
 protected:
 

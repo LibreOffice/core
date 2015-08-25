@@ -230,9 +230,9 @@ private:
 
     mutable sal_Int32           nTransliterationFlags;
 
-    DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
-    DECL_LINK( FlagHdl_Impl, Control* pCtrl );
-    DECL_LINK( CommandHdl_Impl, Button* pBtn );
+    DECL_LINK( ModifyHdl_Impl, ComboBox* );
+    DECL_LINK( FlagHdl_Impl, Control* );
+    DECL_LINK( CommandHdl_Impl, Button* );
     DECL_LINK(TemplateHdl_Impl, void *);
     DECL_LINK( FocusHdl_Impl, Control* );
     DECL_LINK(LoseFocusHdl_Impl, void *);

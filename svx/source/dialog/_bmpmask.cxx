@@ -173,9 +173,9 @@ public:
     bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK_TYPED( PipetteHdl, ToolBox*, void );
-                DECL_LINK( CbxHdl, CheckBox* pCbx );
-                DECL_LINK( CbxTransHdl, CheckBox* pCbx );
-                DECL_LINK( FocusLbHdl, ColorLB* pLb );
+                DECL_LINK( CbxHdl, CheckBox* );
+                DECL_LINK( CbxTransHdl, CheckBox* );
+                DECL_LINK( FocusLbHdl, ColorLB* );
                 DECL_LINK(ExecHdl, void *);
 };
 

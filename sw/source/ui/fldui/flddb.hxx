@@ -55,8 +55,8 @@ class SwFieldDBPage : public SwFieldPage
     Link<>              m_aOldNumSelectHdl;
 
     DECL_LINK( TypeHdl, ListBox* );
-    DECL_LINK( NumSelectHdl, NumFormatListBox* pLB = 0);
-    DECL_LINK( TreeSelectHdl, SvTreeListBox* pBox );
+    DECL_LINK( NumSelectHdl, NumFormatListBox* );
+    DECL_LINK( TreeSelectHdl, SvTreeListBox* );
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK(AddDBHdl, void *);
 

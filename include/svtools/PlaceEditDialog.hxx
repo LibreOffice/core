@@ -88,7 +88,7 @@ private:
     DECL_LINK ( SelectTypeHdl, void * );
     DECL_LINK ( EditLabelHdl, void * );
     DECL_LINK ( EditUsernameHdl, void * );
-    DECL_LINK ( ToggledPassHdl, CheckBox * pCheckBox );
+    DECL_LINK ( ToggledPassHdl, CheckBox * );
 
 };
 

@@ -51,7 +51,7 @@ private:
     GraphicCacheEntry*      ImplGetCacheEntry( const GraphicObject& rObj );
 
 
-                            DECL_LINK_TYPED( ReleaseTimeoutHdl, Timer* pTimer, void );
+                            DECL_LINK_TYPED( ReleaseTimeoutHdl, Timer*, void );
 
 public:
 

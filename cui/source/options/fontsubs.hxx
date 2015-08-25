@@ -81,8 +81,8 @@ class SvxFontSubstTabPage : public SfxTabPage
 
     SvLBoxButtonData*   pCheckButtonData;
 
-    DECL_LINK(SelectHdl, vcl::Window *pWin = 0);
-    DECL_LINK(NonPropFontsHdl, CheckBox* pBox);
+    DECL_LINK(SelectHdl, vcl::Window *);
+    DECL_LINK(NonPropFontsHdl, CheckBox* );
 
     SvTreeListEntry*    CreateEntry(OUString& rFont1, OUString& rFont2);
     void            CheckEnable();

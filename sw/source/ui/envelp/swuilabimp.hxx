@@ -48,7 +48,7 @@ class SwLabPage : public SfxTabPage
     bool        m_bLabel;
 
     DECL_LINK(AddrHdl, void *);
-    DECL_LINK( DatabaseHdl, ListBox *pListBox );
+    DECL_LINK( DatabaseHdl, ListBox * );
     DECL_LINK(FieldHdl, void *);
     DECL_LINK(PageHdl, void *);
     DECL_LINK(MakeHdl, void *);

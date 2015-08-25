@@ -340,9 +340,9 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     OUString             sAuthor;
     OUString             sNone;
 
-    DECL_LINK(AttribHdl, ListBox* pLB);
+    DECL_LINK(AttribHdl, ListBox*);
     DECL_LINK(ChangedMaskPrevHdl, void* = 0);
-    DECL_LINK(ColorHdl, ColorListBox* pColorLB);
+    DECL_LINK(ColorHdl, ColorListBox*);
 
     static void InitFontStyle(SvxFontPrevWindow& rExampleWin);
 

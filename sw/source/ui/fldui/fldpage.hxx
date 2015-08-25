@@ -53,7 +53,7 @@ protected:
     SwField*            GetCurField()               { return m_pCurField;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
-    DECL_LINK( InsertHdl, Button *pBtn = 0 );
+    DECL_LINK( InsertHdl, Button * = 0);
     DECL_LINK(NumFormatHdl, void *);
 
     void                Init();

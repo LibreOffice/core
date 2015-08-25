@@ -109,7 +109,7 @@ private:
 
                     DECL_LINK_TYPED( PauseTimeoutHdl, Timer*, void );
                     DECL_LINK_TYPED(MouseTimeoutHdl, Timer *, void);
-                    DECL_LINK( EventHdl, VclWindowEvent* pEvent );
+                    DECL_LINK( EventHdl, VclWindowEvent* );
 
     ::rtl::Reference< SlideshowImpl > mxController;
 };

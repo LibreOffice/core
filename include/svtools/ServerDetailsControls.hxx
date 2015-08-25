@@ -102,7 +102,7 @@ class DavDetailsContainer : public HostDetailsContainer
         virtual bool verifyScheme( const OUString& rScheme ) SAL_OVERRIDE;
 
     private:
-        DECL_LINK ( ToggledDavsHdl, CheckBox * pCheckBox );
+        DECL_LINK ( ToggledDavsHdl, CheckBox * );
 };
 
 class SmbDetailsContainer : public DetailsContainer

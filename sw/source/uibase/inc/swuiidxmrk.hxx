@@ -114,7 +114,7 @@ class SwIndexMarkPane
     DECL_LINK(NextSameHdl, void *);
     DECL_LINK(PrevHdl, void *);
     DECL_LINK(PrevSameHdl, void *);
-    DECL_LINK( ModifyHdl, ListBox* pBox = 0 );
+    DECL_LINK( ModifyHdl, ListBox* );
     DECL_LINK( KeyDCBModifyHdl, ComboBox * );
     DECL_LINK(NewUserIdxHdl, void *);
     DECL_LINK( SearchTypeHdl, CheckBox*);

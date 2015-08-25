@@ -74,7 +74,7 @@ private:
     bool            bIsBitmap;
 
     DECL_LINK_TYPED(ImplPreviewTimeoutHdl, Timer *, void);
-    DECL_LINK( ImplModifyHdl, void* p );
+    DECL_LINK( ImplModifyHdl, void* );
 
 protected:
     VclPtr<GraphicPreviewWindow>  mpPreview;

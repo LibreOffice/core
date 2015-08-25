@@ -1001,7 +1001,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 
     DECL_LINK(IdentifierHdl, ComboBox*);
     DECL_LINK(ShortNameHdl, Edit*);
-    DECL_LINK(EnableHdl, ListBox* pBox);
+    DECL_LINK(EnableHdl, ListBox*);
 
 public:
     SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,

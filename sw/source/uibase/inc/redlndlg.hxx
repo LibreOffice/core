@@ -114,7 +114,7 @@ public:
     SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFormat = false);
     virtual ~SwRedlineAcceptDlg();
 
-    DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
+    DECL_LINK( FilterChangedHdl, void * = 0 );
 
     inline SvxAcceptChgCtr& GetChgCtrl()        { return *aTabPagesCTRL.get(); }
     inline bool     HasRedlineAutoFormat() const   { return bRedlnAutoFormat; }
