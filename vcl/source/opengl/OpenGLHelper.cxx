@@ -26,6 +26,8 @@
 #include <vector>
 
 #include "opengl/zone.hxx"
+#include "opengl/watchdog.hxx"
+#include <osl/conditn.h>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #include "opengl/x11/X11DeviceInfo.hxx"
@@ -446,11 +448,101 @@ bool OpenGLHelper::supportsVCLOpenGL()
         return true;
 }
 
-/// How many nested OpenGL code-paths are we inside ?
-int OpenGLZone::gnInOpenGLZone = 0;
+sal_uInt64 volatile OpenGLZone::gnEnterCount = 0;
+sal_uInt64 volatile OpenGLZone::gnLeaveCount = 0;
+
+void OpenGLZone::enter() { gnEnterCount++; }
+void OpenGLZone::leave() { gnLeaveCount++; }
+
+namespace {
+    static volatile bool gbWatchdogFiring = false;
+    static oslCondition gpWatchdogExit = NULL;
+    static rtl::Reference<OpenGLWatchdogThread> gxWatchdog;
+}
+
+OpenGLWatchdogThread::OpenGLWatchdogThread()
+    : salhelper::Thread("OpenGL Watchdog")
+{
+}
+
+void OpenGLWatchdogThread::execute()
+{
+    static const int nDisableEntries = 4; // 2 seconds - disable GL
+    static const int nAbortAfter = 10;   // 5 seconds - not coming back; abort
+    int nUnchanged = 0; // how many unchanged nEnters
+
+    TimeValue aHalfSecond;
+    aHalfSecond.Seconds = 0;
+    aHalfSecond.Nanosec = 1000*1000*1000/2;
+
+    do {
+        sal_uInt64 nLastEnters = OpenGLZone::gnEnterCount;
+
+        osl_waitCondition(gpWatchdogExit, &aHalfSecond);
+
+        if (OpenGLZone::isInZone())
+        {
+            if (nLastEnters == OpenGLZone::gnEnterCount)
+                nUnchanged++;
+            else
+                nUnchanged = 0;
+            SAL_INFO("vcl.opengl", "GL watchdog - unchanged " <<
+                     nUnchanged << " enter count " <<
+                     OpenGLZone::gnEnterCount);
+
+            // Not making progress
+            if (nUnchanged == nDisableEntries)
+            {
+                gbWatchdogFiring = true;
+                SAL_WARN("vcl.opengl", "Watchdog triggered: hard disable GL");
+                OpenGLZone::hardDisable();
+                gbWatchdogFiring = false;
+            }
+
+            if (nUnchanged == nAbortAfter)
+            {
+                SAL_WARN("vcl.opengl", "Watchdog gave up: aborting");
+                gbWatchdogFiring = true;
+                std::abort();
+            }
+        }
+        else
+        {
+            nUnchanged = 0;
+        }
+    } while (!osl_checkCondition(gpWatchdogExit));
+}
+
+void OpenGLWatchdogThread::start()
+{
+    assert (gxWatchdog == NULL);
+    gpWatchdogExit = osl_createCondition();
+    gxWatchdog = rtl::Reference<OpenGLWatchdogThread>(new OpenGLWatchdogThread());
+    gxWatchdog->launch();
+}
+
+void OpenGLWatchdogThread::stop()
+{
+    if (gbWatchdogFiring)
+        return; // in watchdog thread
+
+    if (gpWatchdogExit)
+        osl_setCondition(gpWatchdogExit);
+
+    if (gxWatchdog.is())
+    {
+        gxWatchdog->join();
+        gxWatchdog.clear();
+    }
+
+    if (gpWatchdogExit)
+        osl_destroyCondition(gpWatchdogExit);
+    gpWatchdogExit = NULL;
+}
 
 /**
- * Called from a signal handler if we get a crash in some GL code
+ * Called from a signal handler or watchdog thread if we get
+ * a crash or hang in some GL code.
  */
 void OpenGLZone::hardDisable()
 {
@@ -471,6 +563,8 @@ void OpenGLZone::hardDisable()
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()),
             css::uno::UNO_QUERY_THROW)->flush();
+
+        OpenGLWatchdogThread::stop();
     }
 }
 
@@ -502,25 +596,31 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 
     bSet = true;
     bForceOpenGL = !!getenv("SAL_FORCEGL") || officecfg::Office::Common::VCL::ForceOpenGL::get();
+
+    bool bRet = false;
     if (bForceOpenGL)
-        return true;
+        bRet = true;
 
-    if (!supportsVCLOpenGL())
+    else if (!supportsVCLOpenGL())
+        bRet = false;
+    else
     {
-        return false;
+        static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
+
+        bEnable = bEnableGLEnv;
+
+        static bool bDuringBuild = getenv("VCL_HIDE_WINDOWS");
+        if (bDuringBuild && !bEnable /* env. enable overrides */)
+            bEnable = false;
+        else if (officecfg::Office::Common::VCL::UseOpenGL::get())
+            bEnable = true;
+
+        bRet = bEnable;
     }
+    if (bRet)
+        OpenGLWatchdogThread::start();
 
-    static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
-
-    bEnable = bEnableGLEnv;
-
-    static bool bDuringBuild = getenv("VCL_HIDE_WINDOWS");
-    if (bDuringBuild && !bEnable /* env. enable overrides */)
-        bEnable = false;
-    else if (officecfg::Office::Common::VCL::UseOpenGL::get())
-        bEnable = true;
-
-    return bEnable;
+    return bRet;
 }
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
