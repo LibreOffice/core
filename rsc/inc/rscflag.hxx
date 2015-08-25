@@ -44,10 +44,10 @@ public:
     bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE;
     bool            IsDefault( const RSCINST & rInst, Atom nConstId );
 
-                    // Ist das Flag gesetzt
+                    // whether the flag is set
     bool            IsSet( const RSCINST & rInst, Atom nConstId );
 
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
                                     Atom nConstId );
@@ -64,8 +64,8 @@ public:
 /******************* R s c C l i e n t ***********************************/
 class RscClient : public RscTop
 {
-    RscFlag *       pRefClass;  //Klasse die als Server benutzt wird
-    Atom            nConstId;   //Id des zu setzenden Wertes
+    RscFlag *       pRefClass;  // class which is used as server
+    Atom            nConstId;   // id of the value to set
 public:
                     RscClient( Atom nId, sal_uInt32 nTypId, RscFlag * pClass,
                                Atom nConstantId );
@@ -73,11 +73,11 @@ public:
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
     sal_uInt32      Size() SAL_OVERRIDE { return pRefClass->Size(); }
 
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE {
                         return pRefClass->IsDefault( rInst, nConstId );
                     };
-                    // Als Default setzen
+                    // sets as default
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE
                         {
                             return pRefClass->IsValueDefault( rInst,

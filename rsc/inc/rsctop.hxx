@@ -31,7 +31,7 @@ typedef sal_uInt32 RSCVAR;
 #define VAR_NORC        0x0008
 #define VAR_SVDYNAMIC   0x0010
 #define VAR_NOENUM      0x0020
-#define VAR_EXTENDABLE  0x0040  /* Auch die Ableitung einer Klasse kann angegeben werden */
+#define VAR_EXTENDABLE  0x0040  /* class derivation can all be given */
 
 class RscTop : public RefNode
 {
@@ -45,16 +45,16 @@ protected:
                             RscTop * pSuperCl = NULL );
 
 public:
-         OString    aCallPar1;      // Klassenaufruf ohne Typen bis ResId
-         OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
-         OString    aCallParType;   // Klassenaufruf mit Typen
+         OString    aCallPar1;      // class call without types until ResId
+         OString    aCallPar2;      // class call without types staring at ResId
+         OString    aCallParType;   // class call with types
 
             RscTop* GetSuperClass() const
                     { return pSuperClass; }
-                    // Gibt den Typidentifier zurueck
+                    // returns the type identifier
             sal_uInt32  GetTypId() const
                     { return nTypId; };
-                    // Gibt die Oberklasse zurueck
+                    // returns the super class
             bool    InHierarchy( RscTop * pClass );
             void    SetCallPar( const OString& rPar1, const OString& rPar2,
                                 const OString& rParType );
@@ -62,34 +62,34 @@ public:
     virtual RSCCLASS_TYPE GetClassType() const = 0;
             RSCINST GetDefault();
 
-                    // Vorbereitung auf den dtor aufruf
-                    // Da die Klassen gegenseitige Abhaengigkeiten
-                    // aufweisen koennen, kann man im dtor nicht davon
-                    // ausgehen, dass alle Klassenzeiger noch gueltig sind
+                    // preparation fro the destructor call
+                    // given that classes can have mutual dependencies,
+                    // we cannot assume in destructor that all class pointer
+                    // are still valid
     virtual void    Pre_dtor();
 
     virtual RscTop* GetTypeClass() const;
 
-                    // Gibt die Groesse der Klasse in Bytes
+                    // returns the class size in bytes
     virtual sal_uInt32  Size();
 
-                    // Gibt die Referenz zurueck
+                    // returns the reference
     virtual ERRTYPE GetRef( const RSCINST & rInst, RscId * );
 
-                    // Gibt die Referenz zurueck
+                    // sets the reference
     virtual ERRTYPE SetRef( const RSCINST & rInst, const RscId & rRefId );
 
-                    // Variable anlegen
+                    // sets the variable
     virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = NULL,
                                  RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom );
 
-                    // Zaehlt alle Variablen auf
+                    // enumerate all variables
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc );
 
-                    // Liefert Instanz der Variablen zurueck
-                    // pData, pClass im return koennen NULL sein
+                    // returns variable instance
+                    // returned pData, pClass may be NULL
     virtual RSCINST GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
                                  bool nInitDflt = false,
@@ -99,20 +99,20 @@ public:
     virtual RSCINST GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RSCINST & rInitInst );
 
-                    // Liefert Instanz aus einem Feld zurueck
-                    // pGetInst im return kann NULL sein
+                    // returns instance from a field
+                    // returned pGetInst may be NULL
     virtual ERRTYPE GetElement( const RSCINST & rInst, const RscId & rEleName,
                                 RscTop *pCreateClass, const RSCINST & rCreateInst,
                                 RSCINST * pGetInst );
 
-                    // Liefert Instanz aus einem Feld zurueck
-                    // pGetInst im return kann NULL sein
+                    // returns instance from a value
+                    // returnd pGetInst may be NULL
     virtual ERRTYPE GetValueEle( const RSCINST & rInst, sal_Int32 lValue,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
 
-                    // Liefert Instanz aus einem Feld zurueck
-                    // pGetInst im return kann NULL sein
+                    // returns instance from an array
+                    // returnd pGetInst may be NULL
     virtual ERRTYPE GetArrayEle( const RSCINST & rInst, Atom nId,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
@@ -120,35 +120,34 @@ public:
     virtual RSCINST SearchEle( const RSCINST & rInst, const RscId & rEleName,
                                RscTop * pClass );
 
-                    // Liefert Instanz an der Position zurueck
+                    // returns instance at the position
     virtual RSCINST GetPosEle( const RSCINST & rInst, sal_uInt32 nPos );
 
-                    // verschiebt eine Instanz
+                    // smove an instance
     virtual ERRTYPE MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
                                 sal_uInt32 nSourcePos );
 
-                    // aendert RscId an Position
+                    // changes RscId at position
     virtual ERRTYPE SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RscId & rRscId);
 
-                    // Liefert Information ueber Instanz
-                    // an der Position zurueck
+                    // returns instance information at position
     virtual SUBINFO_STRUCT GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos );
 
-                    // Anzahl der Eintraege
+                    // number of entries
     virtual sal_uInt32 GetCount( const RSCINST & rInst );
 
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     virtual ERRTYPE SetNumber( const RSCINST & rInst, sal_Int32 lValue );
 
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     virtual ERRTYPE SetBool( const RSCINST & rInst, bool bValue );
 
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     virtual ERRTYPE SetConst( const RSCINST & rInst, Atom nValueId,
                               sal_Int32 nValue );
 
-                    // Eine Zuweisung an eine Variable
+                    // an assignment to a variable
     virtual ERRTYPE SetNotConst( const RSCINST & rInst, Atom nId );
 
     virtual ERRTYPE SetString( const RSCINST & rInst, const char * pStr );
@@ -164,25 +163,25 @@ public:
     virtual RSCINST Create( RSCINST * pInst,
                             const RSCINST & rDefInst, bool bOwnClass = false );
 
-                    // Instanz zerstoeren
+                    // detroys instance
     virtual void    Destroy( const RSCINST & rInst );
 
-                    // prueft auf konsistenz
+                    // checks consistency
     virtual bool    IsConsistent( const RSCINST & rInst );
 
-                    // Alles auf Default setzen
+                    // sets all default values
     virtual void    SetToDefault( const RSCINST & rInst );
 
-                    // Ist Eingabe = Default
+                    // wether input is equal to default
     virtual bool    IsDefault( const RSCINST & rInst );
 
-                    // Gleiche Werte auf Default setzen
+                    // sets value to default
     virtual bool    IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
-                    // Instanz auf Default setzen
+                    // sets intance to default
     virtual void    SetDefault( const RSCINST & rInst, Atom nVarId );
 
-                    // Default zu einer Variablen holen
+                    // returns a variable default
     virtual RSCINST GetDefault( Atom nVarId );
 
     virtual void    Delete( const RSCINST & rInst, RscTop * pClass,
@@ -190,8 +189,7 @@ public:
 
     virtual void    DeletePos( const RSCINST & rInst, sal_uInt32 nPos );
 
-                    // Schreibt den Kopf und das Ende einer Resource
-                    // Script Datei
+                    // writes header and footer of a resource script file
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
                                     const RscId & aId, const char * );
