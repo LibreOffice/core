@@ -1094,6 +1094,7 @@ private:
 
 // allgemeines
     SwDoc& m_rDoc;
+    std::shared_ptr<SwUnoCrsr> mpCrsr;
     SwPaM* m_pPaM;
 
     SwWW8FltControlStack* m_pCtrlStck;    // Stack fuer die Attribute
@@ -1536,9 +1537,9 @@ private:
     //This converts MS Asian Typography information into OOo's
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
-    sal_uLong LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss);
+    sal_uLong LoadThroughDecryption(WW8Glossary *pGloss);
     sal_uLong SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream, tools::SvRef<SotStorageStream> &rDataStream);
-    sal_uLong CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos);
+    sal_uLong CoreLoad(WW8Glossary *pGloss);
 
     void ReadDocVars();
 
@@ -1884,11 +1885,11 @@ public:     // eigentlich private, geht aber leider nur public
     static ColorData GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages );
+        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition &rPos );
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }
-    // Laden eines kompletten DocFiles
-    sal_uLong LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
+    // load a complete doc file
+    sal_uLong LoadDoc(WW8Glossary *pGloss=0);
     rtl_TextEncoding GetCurrentCharSet();
     rtl_TextEncoding GetCurrentCJKCharSet();
     rtl_TextEncoding GetCharSetFromLanguage();
