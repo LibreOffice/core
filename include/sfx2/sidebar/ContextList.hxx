@@ -55,6 +55,8 @@ public:
         const bool bIsInitiallyVisible,
         const ::rtl::OUString& rsMenuCommand);
 
+    const ::std::vector<Entry>& GetEntries() const {return maEntries;};
+
 private:
     ::std::vector<Entry> maEntries;
 

@@ -44,30 +44,17 @@ public:
      ResourceManager();
     ~ResourceManager();
 
-    static ResourceManager& Instance();
-
     const DeckDescriptor* GetDeckDescriptor(const OUString& rsDeckId) const;
+    DeckDescriptor* GetDeckDescriptor(const OUString& rsDeckId);
+
     const PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId) const;
-
-    /** Excluded or include a deck from being displayed in the tab
-        bar.
-        Note that this value is not persistent.
-        The flag can not be set directly at a DeckDescriptor object
-        because the ResourceManager gives access to them only
-        read-only.
-    */
-    void SetIsDeckEnabled(const OUString& rsDeckId, const bool bIsEnabled);
-
-    void SetDeckTitle(const OUString& rsDeckId, const OUString& sTitle);
-
-    void SetDeckToDescriptor(const OUString& rsDeckId, VclPtr<Deck> aDeck);
-
-    void SetDeckOrderIndex(const OUString& rsDeckId, const sal_Int32 orderIndex);
-
-    void SetPanelOrderIndex(const OUString& rsPanelId, const sal_Int32 orderIndex);
+    PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId);
 
     void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
+    void InitDeckContext(const Context& rContex);
+    void SaveDecksSettings(const Context& rContext);
+    void SaveDeckSettings(const DeckDescriptor* pDeckDesc);
 
     class DeckContextDescriptor
     {
@@ -100,7 +87,6 @@ public:
                                             const css::uno::Reference<css::frame::XController>& rxController);
 
     /** Remember the expansions state per panel and context.
-        This is not persistent past application end.
     */
     void StorePanelExpansionState(const OUString& rsPanelId,
                                   const bool bExpansionState,
@@ -123,13 +109,19 @@ private:
     static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
+
+    css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool isDeckEnabled);
+
     void ReadLegacyAddons(const css::uno::Reference<css::frame::XController>& rxController);
     static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
     static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
                                const utl::OConfigurationTreeRoot& aRoot);
-    static bool IsDeckEnabled(const OUString& rsDeckId,
+    bool IsDeckEnabled(const OUString& rsDeckId,
                        const Context& rContext,
                        const css::uno::Reference<css::frame::XController>& rxController);
+
+    const DeckDescriptor* ImplGetDeckDescriptor(const OUString& rsDeckId) const;
+    const PanelDescriptor* ImplGetPanelDescriptor(const OUString& rsPanelId) const;
 };
 
 } } // end of namespace sfx2::sidebar
