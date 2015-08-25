@@ -90,14 +90,19 @@ GraphCtrl::~GraphCtrl()
 
 void GraphCtrl::dispose()
 {
+    aUpdateIdle.Stop();
+
     if( mpAccContext )
     {
         mpAccContext->disposing();
         mpAccContext->release();
     }
     delete pView;
+    pView = NULL;
     delete pModel;
+    pModel = NULL;
     delete pUserCall;
+    pUserCall = NULL;
     Control::dispose();
 }
 
