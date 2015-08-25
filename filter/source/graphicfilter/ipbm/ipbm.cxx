@@ -218,17 +218,41 @@ bool PBMReader::ImplReadHeader()
             nDat -= '0';
             if ( nCount == 0 )
             {
+                if (mnWidth > SAL_MAX_INT32 / 10)
+                {
+                    return false;
+                }
                 mnWidth *= 10;
+                if (nDat > SAL_MAX_INT32 - mnWidth)
+                {
+                    return false;
+                }
                 mnWidth += nDat;
             }
             else if ( nCount == 1 )
             {
+                if (mnHeight > SAL_MAX_INT32 / 10)
+                {
+                    return false;
+                }
                 mnHeight *= 10;
+                if (nDat > SAL_MAX_INT32 - mnHeight)
+                {
+                    return false;
+                }
                 mnHeight += nDat;
             }
             else if ( nCount == 2 )
             {
+                if (mnMaxVal > std::numeric_limits<sal_uLong>::max() / 10)
+                {
+                    return false;
+                }
                 mnMaxVal *= 10;
+                if (nDat > std::numeric_limits<sal_uLong>::max() - mnMaxVal)
+                {
+                    return false;
+                }
                 mnMaxVal += nDat;
             }
         }
