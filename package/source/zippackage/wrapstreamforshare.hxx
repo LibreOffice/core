@@ -22,11 +22,11 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <mutexholder.hxx>
 
-class WrapStreamForShare : public cppu::WeakImplHelper2 < ::com::sun::star::io::XInputStream
+class WrapStreamForShare : public cppu::WeakImplHelper < ::com::sun::star::io::XInputStream
                                                         , ::com::sun::star::io::XSeekable >
 {
 protected:

@@ -58,7 +58,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ContentInfo.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
@@ -104,7 +104,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 #define THROW_WHERE ""
 #endif
 
-class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
+class ActiveDataStreamer : public ::cppu::WeakImplHelper< XActiveDataStreamer >
 {
     uno::Reference< XStream > mStream;
 public:
@@ -118,7 +118,7 @@ public:
             { mStream = stream; }
 };
 
-class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
+class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
     virtual sal_Int32 SAL_CALL readBytes( uno::Sequence< sal_Int8 >&, sal_Int32 )
             throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE

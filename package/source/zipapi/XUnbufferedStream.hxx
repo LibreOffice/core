@@ -25,7 +25,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <package/Inflater.hxx>
 #include <ZipEntry.hxx>
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 #define UNBUFF_STREAM_WRAPPEDRAW    2
 
 class EncryptionData;
-class XUnbufferedStream : public cppu::WeakImplHelper1
+class XUnbufferedStream : public cppu::WeakImplHelper
 <
     com::sun::star::io::XInputStream
 >

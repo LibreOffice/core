@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ZipPackageEntry.hxx>
 #include <rtl/ref.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <EncryptionData.hxx>
 #include <mutexholder.hxx>
@@ -39,7 +39,7 @@
 
 class ZipPackage;
 struct ZipEntry;
-class ZipPackageStream : public cppu::ImplInheritanceHelper2
+class ZipPackageStream : public cppu::ImplInheritanceHelper
 <
     ZipPackageEntry,
     ::com::sun::star::io::XActiveDataSink,
