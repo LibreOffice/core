@@ -35,7 +35,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << ")\n    {\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    double tmp = NAN;\n";
+    ss << "    double tmp = CreateDoubleError(NOTAVAILABLE);\n";
     ss << "    double intermediate = DBL_MAX;\n";
     ss << "    int singleIndex = gid0;\n";
     ss << "    int rowNum = -1;\n";

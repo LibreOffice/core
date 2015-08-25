@@ -40,6 +40,7 @@ static const char* publicFunc =
  "#define errIllegalFPOperation 503 // #NUM!\n"
  "#define errNoValue 519 // #VALUE!\n"
  "#define errDivisionByZero 532 // #DIV/0!\n"
+ "#define NOTAVAILABLE 0x7fff // #N/A\n"
  "\n"
  "double CreateDoubleError(ulong nErr)\n"
  "{\n"
