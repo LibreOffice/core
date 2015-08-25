@@ -31,7 +31,17 @@ mpPanel()
 {
     SidebarController* pSidebarController = getSidebarController();
 
+    pSidebarController->CreateDeck(mDeckId); // creates deck object is not already
     mpDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
+/*
+    mpPanel = mpDeck->GetPanel(mPanelId);
+    if (!mpPanel)
+    {
+        // creates panel objects if not already
+        pSidebarController->CreatePanel(mPanelId);
+        mpPanel = mpDeck->GetPanel(mPanelId);
+    }
+*/
     mpPanel = mpDeck->GetPanel(mPanelId);
 }
 SidebarController* SfxUnoPanel::getSidebarController()
@@ -61,8 +71,16 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
 {
     SolarMutexGuard aGuard;
 
-    PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
-    pTitleBar->SetTitle(newTitle);
+    SidebarController* pSidebarController = getSidebarController();
+    PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+
+    if (pPanelDescriptor)
+    {
+        pPanelDescriptor->msTitle = newTitle;
+        PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
+        if (pTitleBar)
+            pTitleBar->SetTitle(newTitle);
+    }
 }
 
 sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
@@ -97,6 +115,9 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
         }
     }
 
+    SidebarController* pSidebarController = getSidebarController();
+    pSidebarController->NotifyResize();
+
 }
 
 void SAL_CALL SfxUnoPanel::collapse()
@@ -105,6 +126,8 @@ void SAL_CALL SfxUnoPanel::collapse()
     SolarMutexGuard aGuard;
 
     mpPanel->SetExpanded(false);
+    SidebarController* pSidebarController = getSidebarController();
+    pSidebarController->NotifyResize();
 }
 
 uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
@@ -132,9 +155,14 @@ void SAL_CALL SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
 
-    pSidebarController->GetResourceManager()->SetPanelOrderIndex(mPanelId, newOrderIndex);
+    PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
 
-    pSidebarController->NotifyResize();
+    if (pPanelDescriptor)
+    {
+        pPanelDescriptor->mnOrderIndex = newOrderIndex;
+        // update the sidebar
+        pSidebarController->NotifyResize();
+    }
 }
 
 void SAL_CALL SfxUnoPanel::moveFirst()
@@ -151,8 +179,13 @@ void SAL_CALL SfxUnoPanel::moveFirst()
     if (curOrderIndex != minIndex) // is current panel already in place ?
     {
         minIndex -= 1;
-        pSidebarController->GetResourceManager()->SetPanelOrderIndex(mPanelId, minIndex);
-        pSidebarController->NotifyResize();
+        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (pPanelDescriptor)
+        {
+            pPanelDescriptor->mnOrderIndex = minIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
@@ -170,8 +203,13 @@ void SAL_CALL SfxUnoPanel::moveLast()
     if (curOrderIndex != maxIndex) // is current panel already in place ?
     {
         maxIndex += 1;
-        pSidebarController->GetResourceManager()->SetPanelOrderIndex(mPanelId, maxIndex);
-        pSidebarController->NotifyResize();
+        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (pPanelDescriptor)
+        {
+            pPanelDescriptor->mnOrderIndex = maxIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
@@ -198,8 +236,13 @@ void SAL_CALL SfxUnoPanel::moveUp()
     if (curOrderIndex != previousIndex) // is current panel already in place ?
     {
         previousIndex -= 1;
-        pSidebarController->GetResourceManager()->SetPanelOrderIndex(mPanelId, previousIndex);
-        pSidebarController->NotifyResize();
+        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (pPanelDescriptor)
+        {
+            pPanelDescriptor->mnOrderIndex = previousIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
@@ -226,8 +269,13 @@ void SAL_CALL SfxUnoPanel::moveDown()
     if (curOrderIndex != nextIndex) // is current panel already in place ?
     {
         nextIndex += 1;
-        pSidebarController->GetResourceManager()->SetPanelOrderIndex(mPanelId, nextIndex);
-        pSidebarController->NotifyResize();
+        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (pPanelDescriptor)
+        {
+            pPanelDescriptor->mnOrderIndex = nextIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 

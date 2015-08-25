@@ -43,6 +43,8 @@ public:
     sal_Int32 mnOrderIndex;
     bool mbExperimental;
 
+    OUString msNodeName; // some impress deck nodes names are different from their Id
+
     VclPtr<Deck> mpDeck;
 
     DeckDescriptor();

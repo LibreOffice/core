@@ -67,15 +67,19 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
     SidebarController* pSidebarController = getSidebarController();
     pSidebarController->CreateDeck(mDeckId);
 
-    Deck* pDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
+    DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
 
-    DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
-    pTitleBar->SetTitle(newTitle);
+    if (pDeckDescriptor)
+    {
+        Deck* pDeck = pDeckDescriptor->mpDeck;
+        DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
+        pTitleBar->SetTitle(newTitle);
 
-    // update the ResourceManager
-    pSidebarController->GetResourceManager()->SetDeckTitle(mDeckId, newTitle);
-    pSidebarController->notifyDeckTitle(mDeckId);
+        pDeckDescriptor->msTitle = newTitle;
+        pDeckDescriptor->msHelpText = newTitle;
 
+        pSidebarController->notifyDeckTitle(mDeckId);
+    }
 }
 
 sal_Bool SAL_CALL SfxUnoDeck::isActive()
@@ -129,10 +133,14 @@ void SAL_CALL SfxUnoDeck::setOrderIndex( const sal_Int32 newOrderIndex )
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
 
-    pSidebarController->GetResourceManager()->SetDeckOrderIndex(mDeckId, newOrderIndex);
+    DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
 
-    // update the sidebar
-    pSidebarController->NotifyResize();
+    if (pDeckDescriptor)
+    {
+        pDeckDescriptor->mnOrderIndex = newOrderIndex;
+        // update the sidebar
+        pSidebarController->NotifyResize();
+    }
 }
 
 void SAL_CALL SfxUnoDeck::moveFirst()
@@ -149,8 +157,13 @@ void SAL_CALL SfxUnoDeck::moveFirst()
     if (curOrderIndex != minIndex) // is deck already in place ?
     {
         minIndex -= 1;
-        pSidebarController->GetResourceManager()->SetDeckOrderIndex(mDeckId, minIndex);
-        pSidebarController->NotifyResize();
+        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (pDeckDescriptor)
+        {
+            pDeckDescriptor->mnOrderIndex = minIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
@@ -168,8 +181,13 @@ void SAL_CALL SfxUnoDeck::moveLast()
     if (curOrderIndex != maxIndex) // is deck already in place ?
     {
         maxIndex += 1;
-        pSidebarController->GetResourceManager()->SetDeckOrderIndex(mDeckId, maxIndex);
-        pSidebarController->NotifyResize();
+        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (pDeckDescriptor)
+        {
+            pDeckDescriptor->mnOrderIndex = maxIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
@@ -196,8 +214,13 @@ void SAL_CALL SfxUnoDeck::moveUp()
     if (curOrderIndex != previousIndex) // is deck already in place ?
     {
         previousIndex -= 1;
-        pSidebarController->GetResourceManager()->SetDeckOrderIndex(mDeckId, previousIndex);
-        pSidebarController->NotifyResize();
+        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (pDeckDescriptor)
+        {
+            pDeckDescriptor->mnOrderIndex = previousIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
@@ -225,8 +248,13 @@ void SAL_CALL SfxUnoDeck::moveDown()
     if (curOrderIndex != nextIndex) // is deck already in place ?
     {
         nextIndex += 1;
-        pSidebarController->GetResourceManager()->SetDeckOrderIndex(mDeckId, nextIndex);
-        pSidebarController->NotifyResize();
+        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (pDeckDescriptor)
+        {
+            pDeckDescriptor->mnOrderIndex = nextIndex;
+            // update the sidebar
+            pSidebarController->NotifyResize();
+        }
     }
 }
 
