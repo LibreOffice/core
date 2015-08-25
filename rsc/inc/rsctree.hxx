@@ -30,16 +30,14 @@ protected:
 
 public:
 
-                         // Wandelt eine doppelt verkettete Liste in
-                         // einen binaeren Baum um
+                         // convert a double linked list into a binary tree
             BiNode *    ChangeDLListBTree( BiNode * pList );
 
                         BiNode();
     virtual             ~BiNode();
 
 
-                        // Wandelt einen binaeren Baum in eine doppelt
-                        // verkettete Liste um
+                        // convert a binary tree in a double linked list
                         BiNode* ChangeBTreeDLList();
 
             BiNode *    Left() const { return pLeft  ; }
@@ -52,7 +50,7 @@ class NameNode : public BiNode
     void                SubOrderTree( NameNode * pOrderNode );
 
 protected:
-                        // pCmp ist Zeiger auf Namen
+                        // pCmp is a pointer to name
             NameNode*   Search( const void * pCmp ) const;
 
 public:
@@ -65,7 +63,7 @@ public:
     virtual COMPARE     Compare( const NameNode * ) const;
     virtual COMPARE     Compare( const void * ) const;
             NameNode*   SearchParent( const NameNode * ) const;
-                        // return ist neue Root
+                        // returns the new root
             NameNode*   Remove( NameNode * );
             void        OrderTree();
 };
