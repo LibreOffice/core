@@ -82,6 +82,7 @@ private:
     DECL_LINK( OkClicked,        PushButton* );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
+    DECL_LINK( RefInputModifyHandler, void* );
 };
 
 #endif
