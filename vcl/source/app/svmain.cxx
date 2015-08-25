@@ -82,6 +82,7 @@
 #include "uno/current_context.hxx"
 
 #include "opengl/zone.hxx"
+#include "opengl/watchdog.hxx"
 
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
@@ -189,7 +190,10 @@ int ImplSVMain()
       pSVData->mxAccessBridge.clear();
     }
 
+    OpenGLWatchdogThread::stop();
+
     DeInitVCL();
+
     return nReturn;
 }
 
