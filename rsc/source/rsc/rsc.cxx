@@ -128,12 +128,12 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 nCommands |= NOLINK_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "l" ) )
-            { // Linken, keine Syntax und kein Prepro
+            { // links, no syntax and no preprocessing
                 nCommands |= NOPREPRO_FLAG;
                 nCommands |= NOSYNTAX_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "r" ) )
-            { // erzeugt kein .res-file
+            { // generate no .res file
                 nCommands |= NORESFILE_FLAG;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "sub", 3 ) )
@@ -148,19 +148,19 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
-            { // Alle Resourcen mit Preload
+            { // all resources with Preload
                 nCommands |= PRELOAD_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "LITTLEENDIAN" ) )
-            { // Byte Ordnung beim Schreiben
+            { // endianness when writing
                 nByteOrder = RSC_LITTLEENDIAN;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "BIGENDIAN" ) )
-            { // Byte Ordnung beim Schreiben
+            { // endianness when writing
                 nByteOrder = RSC_BIGENDIAN;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "d", 1 ) )
-            { // Symbole definieren
+            { // define symbols
                 nCommands |= DEFINE_FLAG;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
@@ -206,7 +206,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 aILDir = (*ppStr) + 5;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "NoSysResTest" ) )
-            { // Bitmap, Pointers, Icons nicht ueberpruefen
+            { // don't check Bitmap, Pointers, Icons
                 nCommands |= NOSYSRESTEST_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "SrsDefault" ) )
@@ -228,7 +228,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         }
         else
         {
-            // Eingabedatei
+            // input file
             aInputList.push_back( new OString(*ppStr) );
         }
         ppStr++;
@@ -340,7 +340,7 @@ ERRTYPE RscCompiler::Start()
                 if( !pFName->bScanned && !pFName->IsIncFile() )
                 {
                     aError = IncludeParser( aIndex );
-                    // Currentzeiger richtig setzen
+                    // set current pointer correctly
                     aIndex = pTC->aFileTab.GetIndexOf( pFName );
                 }
                 aIndex = pTC->aFileTab.NextIndex( aIndex );
@@ -384,8 +384,8 @@ void RscCompiler::EndCompile()
         pTC->pEH->StdOut( pCL->aOutputSrs.getStr(), RscVerbosityVerbose );
         pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputSrs.getStr() );   // Zieldatei loeschen
+        // copy from TMP to real names
+        unlink( pCL->aOutputSrs.getStr() );   // delete target file
         if( !(pCL->nCommands & NOSYNTAX_FLAG) )
         {
             FILE        * foutput;
@@ -394,7 +394,7 @@ void RscCompiler::EndCompile()
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputSrs.getStr() );
             else
             {
-                // Schreibe Datei
+                // write file
                 sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
                 while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
                 {
@@ -402,7 +402,7 @@ void RscCompiler::EndCompile()
                     if( !pFN->IsIncFile() )
                     {
                         pTC->WriteSrc( foutput, NOFILE_INDEX, false );
-                        break; // ?T 281091MM nur eine Src-Datei
+                        break; // ?T 281091MM only one source file
                     }
                 }
 
@@ -438,12 +438,12 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
             ::IncludeParser( &aFileInst );
             fclose( finput );
 
-            // Include-Pfad durchsuchen
+            // look into include path
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
                 RscDepend       * pDep = pFName->aDepLst[ i ];
                 RscFile         * pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
-                // Kein Pfad und Include Datei
+                // no path and include file
                 if( pFNTmp && !pFNTmp->bLoaded )
                 {
                    pFNTmp->aPathName = pFNTmp->aFileName;
@@ -469,8 +469,8 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
     else if( !pFName->bLoaded )
     {
 
-        //Include-Dateien vorher lesen
-        pFName->bLoaded = true; //Endlos Rekursion vermeiden
+        // first read include file
+        pFName->bLoaded = true; // avoid endless recursion
 
         for ( size_t i = 0; i < pFName->aDepLst.size() && aError.IsOk(); ++i )
         {
@@ -479,7 +479,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
         }
 
         if( aError.IsError() )
-            pFName->bLoaded = false; //bei Fehler nicht geladenen
+            pFName->bLoaded = false; // not loaded upon error
         else
         {
             OUString aTmpPath;
@@ -512,7 +512,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
 
                 aError = ::parser( &aFileInst );
                 if( aError.IsError() )
-                    pTC->Delete( lFileKey );//Resourceobjekte loeschen
+                    pTC->Delete( lFileKey );// delete resource objects
                 pTC->pEH->StdOut( "\n", RscVerbosityVerbose );
                 fclose( finput );
             };
@@ -630,7 +630,7 @@ ERRTYPE RscCompiler::Link()
             if ( NULL == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
-            // Schreibe Datei
+            // write file
             sal_Char cSearchDelim = SAL_PATHSEPARATOR;
             sal_Char cAccessDelim = SAL_PATHDELIMITER;
             pTC->ChangeLanguage( it->aLangName );
