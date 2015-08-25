@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_c49a74c5",
+        "filename": "vcl/inc/opengl/texture.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-25T19:25:09Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure with c++11, requirement for default ctor could be waived. then again, the implementation relies on \u0027this is sorta empty\u0027 anyway. so perhaps an explicit flag inside ImplOpenGLTexture to signal that?",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_a49f68b3",
+        "filename": "vcl/inc/opengl/texture.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-25T19:25:09Z",
+      "side": 1,
+      "message": "yep, mpImpl would be more idiomatic",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_04a57c03",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-25T19:25:09Z",
+      "side": 1,
+      "message": "little pet peeve of mine - those parenthesis are redundant ;)",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_e4a970e1",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-25T19:25:09Z",
+      "side": 1,
+      "message": "I agree, here semantics change (subtly). mnWidth might be zero even in a regular case.",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_44af84e3",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-25T19:25:09Z",
+      "side": 1,
+      "message": "here semantics change considerably. with cow_wrapper, the operator-\u003e above un-shares the object, getting you a new copy.\n\nSo the original class has *no* copy-on-write semantics. Question is, is it assumed to have from client code?",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_24acf8ec",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-25T19:25:09Z",
+      "side": 1,
+      "message": "same here, shared copy gets clobbered",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
