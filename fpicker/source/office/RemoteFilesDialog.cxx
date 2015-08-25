@@ -822,6 +822,30 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
             if( aBox->Execute() == RET_YES )
             {
+                // remove password
+                try
+                {
+                    if( m_xMasterPasswd->isPersistentStoringAllowed() )
+                    {
+                        OUString sUrl( m_aServices[nPos]->GetUrl() );
+
+                        Reference< XInteractionHandler > xInteractionHandler(
+                            InteractionHandler::createWithParent( m_xContext, 0 ),
+                            UNO_QUERY );
+
+                        UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
+
+                        if( aURLEntries.Url == sUrl && aURLEntries.UserList.getLength() )
+                        {
+                            OUString sUserName = aURLEntries.UserList[0].UserName;
+
+                            m_xMasterPasswd->removePersistent( sUrl, sUserName );
+                        }
+                    }
+                }
+                catch( const Exception& )
+                {}
+
                 m_aServices.erase( m_aServices.begin() + nPos );
                 m_pServices_lb->RemoveEntry( nSelected );
 
