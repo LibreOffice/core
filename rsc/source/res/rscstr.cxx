@@ -146,7 +146,7 @@ bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
             if( pData->aRefId.aExp.IsNumber() &&
                 pDefData->aRefId.aExp.IsNumber() )
             {
-                // Sind die Referenzidentifier gleich
+                // check whether reference identifiers are equal
                 if( pData->aRefId.GetNumber() == pDefData->aRefId.GetNumber() )
                 {
                     return true;
@@ -205,7 +205,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                 nSlashPos = nPos = 0;
 
                 while( pStrI->pStr[ n ] && (nPos < 72 || nPos - nSlashPos <= 3) )
-                { // nach \ mindesten 3 Zeichen wegeb \xa7
+                { // after \ drop at least 3 characters \xa7
                     fputc( pStrI->pStr[ n ], fOutput );
                     if( pStrI->pStr[ n ] == '\\' )
                         nSlashPos = nPos;
@@ -214,7 +214,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                 }
 
                 fputc( '\"', fOutput );
-                if( pStrI->pStr[ n ] ) //nocht nicht zu ende
+                if( pStrI->pStr[ n ] ) // end not reached yet
                 {
                     fputc( '\n', fOutput );
                 }
@@ -242,7 +242,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
         while( aError.IsOk() && aId.IsId() )
         {
-            //Erhoehen und abfragen um Endlosrekusion zu vermeiden
+            // increment and test to avoid endless recursion
             nDeep++;
             if( nDeep > nRefDeep )
                 aError = ERR_REFTODEEP;

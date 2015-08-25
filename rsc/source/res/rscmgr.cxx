@@ -168,7 +168,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( pClassData->aRefId.IsId() )
     {
-        //Erhoehen und abfragen um Endlosrekusion zu vermeiden
+        // increment and test to avoid endless recursion
         nDeep++;
         if( nDeep > nRefDeep )
             aError = ERR_REFTODEEP;
@@ -220,17 +220,17 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
             if( aError.IsOk() )
             {
-                // RscClass wird uebersprungen
+                // RscClass is skipped
                 aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
             }
 
             /*
-            // Definition der Struktur, aus denen die Resource aufgebaut ist
+            // structure definitoin from which the resource is built
             struct RSHEADER_TYPE{
-                RESOURCE_TYPE   nRT;        // Resource Typ
-                sal_uInt32          nRT;        // Resource Typ
-                sal_uInt32          nGlobOff;   // Globaler Offset
-                sal_uInt32          nLocalOff;  // Lokaler Offset
+                RESOURCE_TYPE   nRT;        // resource type
+                sal_uInt32          nRT;        // resource type
+                sal_uInt32          nGlobOff;   // global offset
+                sal_uInt32          nLocalOff;  // local offset
             };
             */
             sal_uInt32 nID = rId;
@@ -291,17 +291,17 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
 
     while( aTmpI.IsInst() && (nDeep < nRefDeep) && aError.IsOk() )
     {
-        // Referenz holen
+        // retrieve reference
         aTmpI.pClass->GetRef( aTmpI, &aId );
-        // Referenziertes Objekt holen
+        // retrieve referenced object
         pObjNode = aTmpI.pClass->GetObjNode( aId );
-        // Referenzierte Objekt gefunden ?
+        // was the referenced object found?
         if( pObjNode )
         {
             aTmpI.pData = pObjNode->GetRscObj();
             nDeep++;
         }
-        else //aTmpI.IsInst() wird false, Schleife beenden
+        else //aTmpI.IsInst() becomes false, end loop
             aTmpI.pData = NULL;
     }
 
@@ -329,9 +329,8 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
     else
     {
         pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
-        aOldId = pClassData->aRefId;// Alten Wert merken
-        pClassData->aRefId = rRefId;// vorher eintragen,
-                                    // sonst Fehler bei rekursion
+        aOldId = pClassData->aRefId;// mark old value
+        pClassData->aRefId = rRefId;// previous entry to avoid failure when recursing
 
 
         aError = IsToDeep( rInst );
