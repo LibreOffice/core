@@ -151,7 +151,8 @@ public:
     void SwitchToDeck ( const ::rtl::OUString& rsDeckId);
     void SwitchToDefaultDeck();
 
-    void CreateDeck(const ::rtl::OUString& rDeckId);
+    void CreateDeck(const ::rtl::OUString& rDeckId, bool bForceCreate = false);
+    void CreatePanels(const ::rtl::OUString& rDeckId);
 
     ResourceManager::DeckContextDescriptorContainer GetMatchingDecks();
     ResourceManager::PanelContextDescriptorContainer GetMatchingPanels( const ::rtl::OUString& rDeckId);
@@ -223,7 +224,8 @@ private:
         const ::rtl::OUString& rsPanelId,
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
-        const Context& rContext);
+        const Context& rContext,
+        VclPtr<Deck> pDeck);
 
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,

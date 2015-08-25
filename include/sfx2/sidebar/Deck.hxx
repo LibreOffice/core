@@ -94,6 +94,7 @@ private:
 
     DECL_LINK_TYPED(HandleVerticalScrollBarChange, ScrollBar*, void);
     bool ProcessWheelEvent(CommandEvent* pCommandEvent);
+
 };
 
 } } // end of namespace sfx2::sidebar

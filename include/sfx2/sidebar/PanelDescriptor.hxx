@@ -41,6 +41,8 @@ public:
     bool mbWantsCanvas;
     bool mbExperimental;
 
+    OUString msNodeName; // some impress panel nodes names are different from their Id
+
     PanelDescriptor();
     PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
     ~PanelDescriptor();
