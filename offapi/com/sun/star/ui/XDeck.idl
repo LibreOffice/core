@@ -41,7 +41,7 @@ interface XDeck
     */
     boolean isActive();
 
-    /** Activate the deck and displays its content
+    /** Activate the deck and display its content
 
         @param bActivate
             The requested state for the deck
