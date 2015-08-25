@@ -236,7 +236,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
         return fValue;
     }
 
-    if (GetGlobalConfig().mbEmptyStringAsZero)
+    if (maCalcConfig.mbEmptyStringAsZero)
     {
         // The number scanner does not accept empty strings or strings
         // containing only spaces, be on par in these cases with what was
@@ -3737,6 +3737,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
+    MergeCalcConfig();
 
     if(pMyFormulaCell)
     {
@@ -3780,6 +3781,13 @@ void ScInterpreter::SetGlobalConfig(const ScCalcConfig& rConfig)
 const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 {
     return maGlobalConfig;
+}
+
+void ScInterpreter::MergeCalcConfig()
+{
+    maCalcConfig = maGlobalConfig;
+    if (pDok)
+        maCalcConfig.MergeDocumentSpecific( pDok->GetCalcConfig());
 }
 
 void ScInterpreter::GlobalExit()

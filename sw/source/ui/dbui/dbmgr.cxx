@@ -1155,14 +1155,21 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             pWorkDoc->EmbedAllLinks();
 
                             // #i69458# lock fields to prevent access to the result set while calculating layout
+                            // tdf#92324: and do not unlock: keep document locked during printing to avoid
+                            // ExpFields update during printing, generation of preview, etc.
                             rWorkShell.LockExpFlds();
                             rWorkShell.CalcLayout();
-                            rWorkShell.UnlockExpFlds();
                         }
 
                             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
+                            // tdf#92324: Allow ExpFields update only by explicit instruction to avoid
+                            // database cursor movement on any other fields update, for example during
+                            // print preview and other operations
+                            if ( rWorkShell.IsExpFldsLocked() )
+                                rWorkShell.UnlockExpFlds();
                             rWorkShell.ViewShell::UpdateFlds();
+                            rWorkShell.LockExpFlds();
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
                             // launch MailMergeEvent if required
@@ -1231,45 +1238,45 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     rMergeDescriptor.pMailMergeConfigItem->AddMergedDocument( aMergeInfo );
                                 }
                             }
-                        else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
-                        {
-                            assert(!bCreateSingleFile);
-                            if( 1 == nDocNo ) // set up printing only once at the beginning
+                            else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
                             {
-                                // printing should be done synchronously otherwise the document
-                                // might already become invalid during the process
-                                uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
-
-                                aOptions.realloc( 2 );
-                                aOptions[ 0 ].Name = "Wait";
-                                aOptions[ 0 ].Value <<= sal_True;
-                                aOptions[ 1 ].Name = "MonitorVisible";
-                                aOptions[ 1 ].Value <<= sal_False;
-                                // move print options
-                                const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
-                                for( sal_Int32 nOption = 0, nIndex = 1 ; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
+                                assert(!bCreateSingleFile);
+                                if( 1 == nDocNo ) // set up printing only once at the beginning
                                 {
-                                    if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
-                                        || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
-                                        || pPrintOptions[nOption].Name == "Wait" || pPrintOptions[nOption].Name == "PrinterName" )
+                                    // printing should be done synchronously otherwise the document
+                                    // might already become invalid during the process
+                                    uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
+
+                                    aOptions.realloc( 2 );
+                                    aOptions[ 0 ].Name = "Wait";
+                                    aOptions[ 0 ].Value <<= sal_True;
+                                    aOptions[ 1 ].Name = "MonitorVisible";
+                                    aOptions[ 1 ].Value <<= sal_False;
+                                    // move print options
+                                    const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
+                                    for( sal_Int32 nOption = 0, nIndex = 1 ; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
                                     {
-                                        // add an option
-                                        aOptions.realloc( nIndex + 1 );
-                                        aOptions[ nIndex ].Name = pPrintOptions[nOption].Name;
-                                        aOptions[ nIndex++ ].Value = pPrintOptions[nOption].Value ;
+                                        if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
+                                            || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
+                                            || pPrintOptions[nOption].Name == "Wait" || pPrintOptions[nOption].Name == "PrinterName" )
+                                        {
+                                            // add an option
+                                            aOptions.realloc( nIndex + 1 );
+                                            aOptions[ nIndex ].Name = pPrintOptions[nOption].Name;
+                                            aOptions[ nIndex++ ].Value = pPrintOptions[nOption].Value ;
+                                        }
                                     }
-                                }
-                                pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                                SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
-                                JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
-                                Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
+                                    pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+                                    SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
+                                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
+                                    Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
 #if ENABLE_CUPS
-                                psp::PrinterInfoManager::get().startBatchPrint();
+                                    psp::PrinterInfoManager::get().startBatchPrint();
 #endif
+                                }
+                                if( !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
+                                    bCancel = true;
                             }
-                            if( !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
-                                bCancel = true;
-                        }
                             else
                             {
                                 assert( createTempFile );
@@ -1399,6 +1406,12 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+            if ( xWorkDocSh.Is() && pWorkView->GetWrtShell().IsExpFldsLocked() )
+            {
+                // Unlock ducment fields after merge complete
+                pWorkView->GetWrtShell().UnlockExpFlds();
+            }
 
             if( !bCreateSingleFile )
             {

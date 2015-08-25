@@ -469,6 +469,11 @@ void SwEditShell::UnlockExpFlds()
 }
 
 
+bool SwEditShell::IsExpFldsLocked() const
+{
+    return GetDoc()->IsExpFldsLocked();
+}
+
 void SwEditShell::SetFldUpdateFlags( SwFldUpdateFlags eFlags )
 {
     getIDocumentSettingAccess()->setFieldUpdateFlags( eFlags );

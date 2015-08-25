@@ -87,6 +87,7 @@
 #include "cell.hxx"
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
+#include "interpre.hxx"
 
 using namespace com::sun::star;
 
@@ -115,10 +116,10 @@ private:
 };
 
 // STATIC DATA -----------------------------------------------------------
-
 ScDocument::ScDocument( ScDocumentMode  eMode,
                         SfxObjectShell* pDocShell ) :
         xServiceManager( ::comphelper::getProcessServiceFactory() ),
+        maCalcConfig( ScInterpreter::GetGlobalConfig()),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),

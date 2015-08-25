@@ -10608,14 +10608,14 @@ void PDFWriterImpl::updateGraphicsState()
         if( m_aCurrentPDFState.m_bClipRegion != rNewState.m_bClipRegion ||
             ( rNewState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion != rNewState.m_aClipRegion ) )
         {
-            if( m_aCurrentPDFState.m_bClipRegion && m_aCurrentPDFState.m_aClipRegion.count() )
+            if( m_aCurrentPDFState.m_bClipRegion )
             {
                 aLine.append( "Q " );
                 // invalidate everything but the clip region
                 m_aCurrentPDFState = GraphicsState();
                 rNewState.m_nUpdateFlags = sal::static_int_cast<sal_uInt16>(~GraphicsState::updateClipRegion);
             }
-            if( rNewState.m_bClipRegion && rNewState.m_aClipRegion.count() )
+            if( rNewState.m_bClipRegion )
             {
                 // clip region is always stored in private PDF mapmode
                 MapMode aNewMapMode = rNewState.m_aMapMode;
@@ -10624,7 +10624,10 @@ void PDFWriterImpl::updateGraphicsState()
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
                 aLine.append( "q " );
-                m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
+                if( rNewState.m_aClipRegion.count() )
+                    m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
+                else
+                    aLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
                 aLine.append( "W* n\n" );
                 rNewState.m_aMapMode = aNewMapMode;
                 getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );

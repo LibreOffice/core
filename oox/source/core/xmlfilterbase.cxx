@@ -138,7 +138,8 @@ namespace
                 "http://schemas.openxmlformats.org/markup-compatibility/2006",
                 "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
                 "http://schemas.microsoft.com/office/drawing/2008/diagram",
-                "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
+                "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
+                "http://schemas.libreoffice.org/"
             };
 
             static const sal_Int32 namespaceIds[] = {
@@ -162,7 +163,8 @@ namespace
                 NMSP_mce,
                 NMSP_mceTest,
                 NMSP_dsp,
-                NMSP_xlsExtLst
+                NMSP_xlsExtLst,
+                NMSP_loext
             };
 
             Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));

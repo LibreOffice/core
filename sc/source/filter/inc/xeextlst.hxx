@@ -14,12 +14,14 @@
 #include "xeroot.hxx"
 
 #include "colorscale.hxx"
+#include "formulaopt.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
 enum XclExpExtType
 {
-    XclExpExtDataBarType
+    XclExpExtDataBarType,
+    XclExpExtDataFooType
 };
 
 /**
@@ -126,6 +128,19 @@ public:
 
 private:
     XclExpRecordList< XclExpExtConditionalFormatting > maCF;
+};
+
+class XclExpExtCalcPr : public XclExpExt
+{
+public:
+    XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGrammar::AddressConvention eConv );
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+
+    virtual XclExpExtType GetType() SAL_OVERRIDE { return XclExpExtDataFooType; }
+
+private:
+    formula::FormulaGrammar::AddressConvention meConv;
+    OString maSyntax;
 };
 
 class XclExtLst : public XclExpRecordBase, public XclExpRoot
