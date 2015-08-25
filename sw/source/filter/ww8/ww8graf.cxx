@@ -758,7 +758,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
         }
         for (myIter aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
             aIter2->Adjust(nChanged);
-        }
+    }
 
     /*
      Don't worry about the new pPlcxMan, the restorer removes it when
