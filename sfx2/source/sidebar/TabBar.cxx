@@ -132,8 +132,8 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
         rItem.mpButton = CreateTabItem(*pDescriptor);
         rItem.mpButton->SetClickHdl(LINK(&rItem, TabBar::Item, HandleClick));
         rItem.maDeckActivationFunctor = maDeckActivationFunctor;
-        rItem.mbIsHiddenByDefault = false;
         rItem.mbIsHidden = ! pDescriptor->mbIsEnabled;
+        rItem.mbIsHiddenByDefault = rItem.mbIsHidden; // the default is the state while creating
 
         rItem.mpButton->Enable(iDeck->mbIsEnabled);
     }
@@ -302,10 +302,13 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
     {
         maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
 
-    pParentSidebarController->GetResourceManager()->SetIsDeckEnabled(
-            maItems[nIndex].msDeckId,
-            maItems[nIndex].mbIsHidden);
-        Layout();
+        DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
+
+        if (pDeckDescriptor)
+        {
+            pDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
+            Layout();
+        }
     }
 }
 

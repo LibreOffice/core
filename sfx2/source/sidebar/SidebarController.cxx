@@ -192,8 +192,11 @@ void SAL_CALL SidebarController::disposing()
     maFocusManager.Clear();
     mpTabBar.disposeAndClear();
 
+    // save decks settings
+    if (GetCurrentContext().msApplication != "") // case of Impress shutdown
+        mpResourceManager->SaveDecksSettings(GetCurrentContext());
 
-        // clear decks
+    // clear decks
     ResourceManager::DeckContextDescriptorContainer aDecks;
 
     mpResourceManager->GetMatchingDecks (
@@ -207,6 +210,7 @@ void SAL_CALL SidebarController::disposing()
             iDeck!=iEnd; ++iDeck)
     {
         const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+
         VclPtr<Deck> aDeck = deckDesc->mpDeck;
         if (aDeck)
             aDeck.disposeAndClear();
@@ -247,9 +251,11 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     // Update to the requested new context asynchronously to avoid
     // subtle errors caused by SFX2 which in rare cases can not
     // properly handle a synchronous update.
+
     maRequestedContext = Context(
         rEvent.ApplicationName,
         rEvent.ContextName);
+
     if (maRequestedContext != maCurrentContext)
     {
         mxCurrentController = css::uno::Reference<css::frame::XController>(rEvent.Source, css::uno::UNO_QUERY);
@@ -286,6 +292,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         // Force the current deck to update its panel list.
         if ( ! mbIsDocumentReadOnly)
             msCurrentDeckId = gsDefaultDeckId;
+
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
         maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
@@ -415,10 +422,17 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
 
 void SidebarController::UpdateConfigurations()
 {
+
     if (maCurrentContext != maRequestedContext
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
+
+        if (maCurrentContext.msApplication != "")
+            mpResourceManager->SaveDecksSettings(maCurrentContext);
+
         maCurrentContext = maRequestedContext;
+
+        mpResourceManager->InitDeckContext(GetCurrentContext());
 
         // Find the set of decks that could be displayed for the new context.
         ResourceManager::DeckContextDescriptorContainer aDecks;
@@ -523,20 +537,21 @@ void SidebarController::SwitchToDeck (
 
 void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId)
 {
-    const DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+    DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
-    if (pDeckDescriptor->mpDeck.get()==nullptr)
+    if (pDeckDescriptor)
     {
-        VclPtr<Deck> aDeck = VclPtr<Deck>::Create(
-                *pDeckDescriptor,
-                mpParentWindow,
-                ::boost::bind(&SidebarController::RequestCloseDeck, this));
+        if (pDeckDescriptor->mpDeck.get()==nullptr)
+        {
+            VclPtr<Deck> aDeck = VclPtr<Deck>::Create(
+                    *pDeckDescriptor,
+                    mpParentWindow,
+                    ::boost::bind(&SidebarController::RequestCloseDeck, this));
 
-        mpResourceManager->SetDeckToDescriptor(rDeckId, aDeck);
+            pDeckDescriptor->mpDeck = aDeck;
+        }
     }
-
 }
-
 
 void SidebarController::SwitchToDeck (
     const DeckDescriptor& rDeckDescriptor,
@@ -934,7 +949,7 @@ void SidebarController::ShowPopupMenu (
         else
         {
             pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::CHECKABLE);
-            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsActive);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsEnabled && iItem->mbIsActive);
         }
     }
 
@@ -1001,7 +1016,19 @@ IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
                 }
                 else if (nIndex >=MID_FIRST_HIDE)
                     if (pMenu->GetItemBits(nIndex) == MenuItemBits::CHECKABLE)
+                    {
                         mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
+
+                        // Find the set of decks that could be displayed for the new context.
+                        ResourceManager::DeckContextDescriptorContainer aDecks;
+                        mpResourceManager->GetMatchingDecks (
+                                                    aDecks,
+                                                    GetCurrentContext(),
+                                                    IsDocumentReadOnly(),
+                                                    mxFrame->getController());
+                        // Notify the tab bar about the updated set of decks.
+                        mpTabBar->SetDecks(aDecks);
+                    }
             }
             catch (RuntimeException&)
             {
