@@ -395,6 +395,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Aranese" ; LANGUAGE_USER_OCCITAN_ARANESE ; > ;
         < "Arpitan (France)" ; LANGUAGE_USER_ARPITAN_FRANCE ; > ;
         < "Arpitan (Italy)" ; LANGUAGE_USER_ARPITAN_ITALY ; > ;
+        < "Arpitan (Switzerland)" ; LANGUAGE_USER_ARPITAN_SWITZERLAND ; > ;
     };
 };
 
