@@ -125,42 +125,22 @@ namespace
 
 const int GraphiteLayout::EXTRA_CONTEXT_LENGTH = 10;
 
-// find first slot of cluster and first slot of subsequent cluster
-static void findFirstClusterSlot(const gr_slot* base, gr_slot const** first, gr_slot const** after, int * firstChar, int * lastChar, bool bRtl)
+// recurse to find left most X position of this cluster. Or do we just take left of the base glyph?
+float getLeftBoundary(const gr_slot *slot)
 {
-    if (gr_slot_attached_to(base) == NULL || gr_slot_can_insert_before(base))
+    return gr_slot_origin_X(slot);
+#if 0
+    float res = gr_slot_origin_X(slot);
+    for (const gr_slot *s = gr_slot_first_attachment(slot); s; s = gr_slot_next_sibling_attachment(s))
     {
-        *first = base;
-        *after = (bRtl)? gr_slot_prev_in_segment(base) :
-            gr_slot_next_in_segment(base);
-        *firstChar = gr_slot_before(base);
-        *lastChar = gr_slot_after(base);
-    }
-    for (const gr_slot * attachment = gr_slot_first_attachment(base); attachment; attachment = gr_slot_next_sibling_attachment(attachment))
-    {
-        if (gr_slot_can_insert_before(attachment))
+        if (gr_slot_can_insert_before(s))
             break;
-        if (gr_slot_origin_X(*first) > gr_slot_origin_X(attachment))
-            *first = attachment;
-        const gr_slot* attachmentNext = (bRtl)?
-            gr_slot_prev_in_segment(attachment) : gr_slot_next_in_segment(attachment);
-        if (attachmentNext)
-        {
-            if (*after && (gr_slot_origin_X(*after) < gr_slot_origin_X(attachmentNext)))
-//            if (!*after || gr_slot_index(*after) > gr_slot_index(attachmentNext))
-                *after = attachmentNext;
-        }
-        else
-        {
-            *after = NULL;
-        }
-        if (gr_slot_before(attachment) < *firstChar)
-            *firstChar = gr_slot_before(attachment);
-        if (gr_slot_after(attachment) > *lastChar)
-            *lastChar = gr_slot_after(attachment);
-        if (gr_slot_first_attachment(attachment))
-            findFirstClusterSlot(attachment, first, after, firstChar, lastChar, bRtl);
+        float temp = getLeftBoundary(s);
+        if (temp < res)
+            res = temp;
     }
+    return res;
+#endif
 }
 
 // The Graphite glyph stream is really a sequence of glyph attachment trees
@@ -172,179 +152,46 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
 {
     bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
     int nCharRequested = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    int nChar = gr_seg_n_cinfo(pSegment);
     float fMinX = gr_seg_advance_X(pSegment);
     float fMaxX = 0.0f;
     long nDxOffset = 0; // from dropped glyphs
-    int nFirstCharInCluster = 0;
-    int nLastCharInCluster = 0;
     unsigned int nGlyphs = gr_seg_n_slots(pSegment);
     mvGlyph2Char.assign(nGlyphs, -1);
     mvGlyphs.reserve(nGlyphs);
 
-    if (bRtl)
+    if (!nGlyphs || !nCharRequested) return;
+    const gr_slot* baseSlot = bRtl ? gr_seg_last_slot(pSegment) : gr_seg_first_slot(pSegment);
+    // find first base
+    while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
+        baseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
+    assert(baseSlot);
+    float rightBoundary = getLeftBoundary(baseSlot);
+    // now loop over bases
+    while (baseSlot)
     {
-        const gr_slot* baseSlot = gr_seg_last_slot(pSegment);
-        // find first base
-        while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
-            baseSlot = gr_slot_prev_in_segment(baseSlot);
-        int iChar = nChar - 1;
-        int iNextChar = nChar - 1;
-        bool reordered = false;
-        int nBaseGlyphIndex = 0;
-        // now loop over bases
-        while (baseSlot)
-        {
-            bool bCluster = !reordered;
-            const gr_slot * clusterFirst = NULL;
-            const gr_slot * clusterAfter = NULL;
-            int firstChar = -1;
-            int lastChar = -1;
-            findFirstClusterSlot(baseSlot, &clusterFirst, &clusterAfter, &firstChar, &lastChar, bRtl);
-//            if (!clusterFirst)
-//                break;
-            iNextChar = minimum<int>(firstChar, iNextChar);
-            if (bCluster)
-            {
-                nBaseGlyphIndex = mvGlyphs.size();
-                mvGlyph2Char[nBaseGlyphIndex] = iChar + mnSegCharOffset;
-                nFirstCharInCluster = firstChar;
-                nLastCharInCluster = lastChar;
-            }
-            else
-            {
-                mvGlyph2Char[mvGlyphs.size()] = firstChar + mnSegCharOffset;
-                nFirstCharInCluster = minimum<int>(firstChar, nFirstCharInCluster);
-                nLastCharInCluster = maximum<int>(lastChar, nLastCharInCluster);
-            }
-            float leftBoundary = gr_slot_origin_X(clusterFirst);
-            float rightBoundary = (clusterAfter)?
-                gr_slot_origin_X(clusterAfter) : gr_seg_advance_X(pSegment);
-            if (
-                lastChar < iChar && clusterAfter &&
-                 (gr_cinfo_after(gr_seg_cinfo(pSegment, iChar)) >
-                 static_cast<int>(gr_slot_index(clusterAfter)))
-               )
-            {
-                reordered = true;
-            }
-            else
-            {
-                reordered = false;
-                iChar = iNextChar - 1;
-            }
-            if (mnSegCharOffset + nFirstCharInCluster >= mnMinCharPos &&
-                mnSegCharOffset + nFirstCharInCluster < mnEndCharPos)
-            {
-                fMinX = minimum<float>(fMinX, leftBoundary);
-                fMaxX = maximum<float>(fMaxX, rightBoundary);
-                if (!reordered)
-                {
-                    for (int i = nFirstCharInCluster; i <= nLastCharInCluster; i++)
-                    {
-                        if (mnSegCharOffset + i >= mnEndCharPos)
-                            break;
-                        // from the point of view of the dx array, the xpos is
-                        // the origin of the first glyph of the cluster rtl
-                        mvCharDxs[mnSegCharOffset + i - mnMinCharPos] =
-                            static_cast<int>(leftBoundary * fScaling) + nDxOffset;
-                        mvCharBreaks[mnSegCharOffset + i - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, i));
-                    }
-                    mvChar2BaseGlyph[mnSegCharOffset + nFirstCharInCluster - mnMinCharPos] = nBaseGlyphIndex;
-                }
-                append(pSegment, rArgs, baseSlot, gr_slot_origin_X(baseSlot), rightBoundary, fScaling,
-                       nDxOffset, bCluster, mnSegCharOffset + firstChar);
-            }
-            if (mnSegCharOffset + nLastCharInCluster < mnMinCharPos)
+        float leftBoundary = rightBoundary;
+        const gr_slot *nextBaseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
+        for ( ; nextBaseSlot; nextBaseSlot = bRtl ? gr_slot_prev_in_segment(nextBaseSlot) : gr_slot_next_in_segment(nextBaseSlot))
+            if (!gr_slot_attached_to(nextBaseSlot) || gr_slot_can_insert_before(nextBaseSlot))
                 break;
-//            baseSlot = gr_slot_next_sibling_attachment(baseSlot);
-            baseSlot = clusterAfter;
-            while (baseSlot && !gr_slot_can_insert_before(baseSlot) && gr_slot_attached_to(baseSlot))
-                baseSlot = gr_slot_attached_to(baseSlot);
-        }
-    }
-    else
-    {
-        const gr_slot* baseSlot = gr_seg_first_slot(pSegment);
-        // find first base
-        while (baseSlot && (gr_slot_attached_to(baseSlot) != NULL))
-            baseSlot = gr_slot_next_in_segment(baseSlot);
-        int iChar = 0; // relative to segment
-        int iNextChar = 0;
-        bool reordered = false;
-        int nBaseGlyphIndex = 0;
-        // now loop over bases
-        while (baseSlot)
+        if (nextBaseSlot)
+            rightBoundary = getLeftBoundary(nextBaseSlot);
+        else
+            rightBoundary = gr_seg_advance_X(pSegment);
+        int firstChar = gr_slot_before(baseSlot) + mnSegCharOffset;
+        if (firstChar >= mnMinCharPos && firstChar < mnEndCharPos)
         {
-            bool bCluster = !reordered;
-            const gr_slot * clusterFirst = NULL;
-            const gr_slot * clusterAfter = NULL;
-            int firstChar = -1;
-            int lastChar = -1;
-            findFirstClusterSlot(baseSlot, &clusterFirst, &clusterAfter, &firstChar, &lastChar, bRtl);
-            iNextChar = maximum<int>(lastChar, iNextChar);
-            if (bCluster)
-            {
-                nBaseGlyphIndex = mvGlyphs.size();
-                mvGlyph2Char[nBaseGlyphIndex] = iChar + mnSegCharOffset;
-                nFirstCharInCluster = firstChar;
-                nLastCharInCluster = lastChar;
-            }
-            else
-            {
-                mvGlyph2Char[mvGlyphs.size()] = firstChar + mnSegCharOffset;
-                nFirstCharInCluster = minimum<int>(firstChar, nFirstCharInCluster);
-                nLastCharInCluster = maximum<int>(lastChar, nLastCharInCluster);
-            }
-            if (
-                firstChar > iChar &&
-                 (gr_cinfo_before(gr_seg_cinfo(pSegment, iChar)) >
-                 static_cast<int>(gr_slot_index(clusterFirst)))
-               )
-            {
-                reordered = true;
-            }
-            else
-            {
-                reordered = false;
-                iChar = iNextChar + 1;
-            }
-            float leftBoundary = gr_slot_origin_X(clusterFirst);
-            float rightBoundary = (clusterAfter)?
-                gr_slot_origin_X(clusterAfter) : gr_seg_advance_X(pSegment);
-            int bFirstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, nFirstCharInCluster));
-            if (mnSegCharOffset + bFirstChar >= mnMinCharPos &&
-                mnSegCharOffset + bFirstChar < mnEndCharPos)
-            {
-                fMinX = minimum<float>(fMinX, leftBoundary);
-                fMaxX = maximum<float>(fMaxX, rightBoundary);
-                if (!reordered)
-                {
-                    for (int i = nFirstCharInCluster; i <= nLastCharInCluster; i++)
-                    {
-                        int ibase = gr_cinfo_base(gr_seg_cinfo(pSegment, i));
-                        if (mnSegCharOffset + ibase >= mnEndCharPos)
-                            break;
-                        // from the point of view of the dx array, the xpos is
-                        // the origin of the first glyph of the next cluster ltr
-                        mvCharDxs[mnSegCharOffset + ibase - mnMinCharPos] =
-                            static_cast<int>(rightBoundary * fScaling) + nDxOffset;
-                        mvCharBreaks[mnSegCharOffset + ibase - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, i));
-                    }
-                    // only set mvChar2BaseGlyph for first character of cluster
-                    mvChar2BaseGlyph[mnSegCharOffset + bFirstChar - mnMinCharPos] = nBaseGlyphIndex;
-                }
-                append(pSegment, rArgs, baseSlot, gr_slot_origin_X(baseSlot), rightBoundary, fScaling,
-                       nDxOffset, true, mnSegCharOffset + firstChar);
-            }
-            if (mnSegCharOffset + bFirstChar >= mnEndCharPos)
-                break;
-            baseSlot = gr_slot_next_sibling_attachment(baseSlot);
-//            baseSlot = clusterAfter;
-//            while (baseSlot && !gr_slot_can_insert_before(baseSlot) && gr_slot_attached_to(baseSlot))
-//                baseSlot = gr_slot_attached_to(baseSlot);
+            int baseGlyph = mvGlyphs.size();
+            mvCharDxs[firstChar - mnMinCharPos] = static_cast<int>(leftBoundary * fScaling) + nDxOffset;
+            mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, firstChar - mnSegCharOffset));
+            mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
+            append(pSegment, rArgs, baseSlot, gr_slot_origin_X(baseSlot), rightBoundary, fScaling, nDxOffset, true, firstChar, baseGlyph);
+            if (leftBoundary < fMinX) fMinX = leftBoundary;
+            if (rightBoundary > fMaxX) fMaxX = rightBoundary;
         }
+        baseSlot = nextBaseSlot;
     }
+
     long nXOffset = round_to_long(fMinX * fScaling);
     mnWidth = round_to_long(fMaxX * fScaling) - nXOffset + nDxOffset;
     if (mnWidth < 0)
@@ -396,7 +243,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
 float
 GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     const gr_slot * gi, float gOrigin, float nextGlyphOrigin, float scaling, long & rDXOffset,
-    bool bIsBase, int baseChar)
+    bool bIsBase, int baseChar, int baseGlyph)
 {
     bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
     float nextOrigin;
@@ -404,17 +251,26 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     assert(gr_slot_before(gi) <= gr_slot_after(gi));
     int firstChar = gr_slot_before(gi) + mnSegCharOffset;
     assert(mvGlyphs.size() < mvGlyph2Char.size());
-    if (!bIsBase) mvGlyph2Char[mvGlyphs.size()] = baseChar;//firstChar;
+    if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
+        return nextGlyphOrigin;
+    if (!bIsBase)
+    {
+        mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
+        mvCharDxs[firstChar - mnMinCharPos] = mvCharDxs[baseChar - mnMinCharPos];
+        mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSeg, firstChar - mnSegCharOffset));
+    }
+    else
+        mvGlyph2Char[mvGlyphs.size()] = baseChar; //firstChar;
     // is the next glyph attached or in the next cluster?
     //glyph_set_range_t iAttached = gi.attachedClusterGlyphs();
     const gr_slot * pFirstAttached = gr_slot_first_attachment(gi);
     const gr_slot * pNextSibling = gr_slot_next_sibling_attachment(gi);
-    if (pFirstAttached)
-        nextOrigin = gr_slot_origin_X(pFirstAttached);
-    else if (!bIsBase && pNextSibling)
-        nextOrigin = gr_slot_origin_X(pNextSibling);
-    else
-        nextOrigin = nextGlyphOrigin;
+//    if (pFirstAttached)
+//        nextOrigin = gr_slot_origin_X(pFirstAttached);
+//    else if (!bIsBase && pNextSibling)
+//        nextOrigin = gr_slot_origin_X(pNextSibling);
+//    else
+    nextOrigin = nextGlyphOrigin;
     long glyphId = gr_slot_gid(gi);
     long deltaOffset = 0;
     int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling);
@@ -476,7 +332,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     float cOrigin = nextOrigin;
     for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL; agi = gr_slot_next_sibling_attachment(agi))
         if (!gr_slot_can_insert_before(agi))
-            cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar);
+            cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar, baseGlyph);
 
     return cOrigin;
 }

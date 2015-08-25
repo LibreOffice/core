@@ -151,7 +151,7 @@ private:
                 ImplLayoutArgs & rArgs,
                 const gr_slot * pSlot, float gOrigin,
                 float nextGlyphOrigin, float fScaling,
-                long & rDXOffset, bool bIsBase, int baseChar);
+                long & rDXOffset, bool bIsBase, int baseChar, int baseGlyph);
 };
 
 #endif // INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX
