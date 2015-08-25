@@ -174,7 +174,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 else
                 {
                     ss << "        {\n";
-                    ss << "            tmp = isNan(";
+                    ss << "            tmp = !isNan(";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
                     ss << "[rowNum])?";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
@@ -259,7 +259,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 }
                 else
                 {
-                    ss << "            tmp = isNan(";
+                    ss << "            tmp = !isNan(";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
                     ss << "[rowNum])?";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
