@@ -32,7 +32,9 @@ ScSamplingDialog::ScSamplingDialog(
     mpActiveEdit    ( NULL  ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
+    mInputRange     ( ScAddress::INITIALIZE_INVALID ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
+    mOutputAddress  ( ScAddress::INITIALIZE_INVALID ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
@@ -98,6 +100,10 @@ void ScSamplingDialog::Init()
     mpInputRangeButton->SetLoseFocusHdl( aLink );
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
+
+    aLink = LINK( this, ScSamplingDialog, RefInputModifyHandler);
+    mpInputRangeEdit->SetModifyHdl( aLink);
+    mpOutputRangeEdit->SetModifyHdl( aLink);
 
     mpSampleSize->SetModifyHdl( LINK( this, ScSamplingDialog, SamplingSizeValueModified ));
 
@@ -168,11 +174,12 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
             if (aSelectedSampleSize > 1)
                 mpSampleSize->SetValue(aSelectedSampleSize);
             SamplingSizeValueModified(NULL);
-
-            // Enable OK, Cancel if output range is set
-            mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
     }
+
+    // Enable OK if both, input range and output address are set.
+    if (mInputRange.IsValid() && mOutputAddress.IsValid())
+        mpButtonOk->Enable();
 }
 
 ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
@@ -329,6 +336,68 @@ IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod)
         mpPeriod->Enable(true);
         mpSampleSize->Enable(false);
     }
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler)
+{
+    if ( mpActiveEdit )
+    {
+        if ( mpActiveEdit == mpInputRangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpInputRangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mInputRange = *pRange;
+                // Highlight the resulting range.
+                mpInputRangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mInputRange = ScRange( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+        else if ( mpActiveEdit == mpOutputRangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpOutputRangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mOutputAddress = pRange->aStart;
+
+                // Crop output range to top left address for Edit field.
+                if (pRange->aStart != pRange->aEnd)
+                {
+                    sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+                    OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
+                    mpOutputRangeEdit->SetRefString( aReferenceString );
+                }
+
+                // Change sampling size according to output range selection
+                sal_Int64 aSelectedSampleSize = pRange->aEnd.Row() - pRange->aStart.Row() + 1;
+                if (aSelectedSampleSize > 1)
+                    mpSampleSize->SetValue(aSelectedSampleSize);
+                SamplingSizeValueModified(NULL);
+
+                // Highlight the resulting range.
+                mpOutputRangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mOutputAddress = ScAddress( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+    }
+
+    // Enable OK if both, input range and output address are set.
+    if (mInputRange.IsValid() && mOutputAddress.IsValid())
+        mpButtonOk->Enable();
+    else
+        mpButtonOk->Disable();
+
     return 0;
 }
 

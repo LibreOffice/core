@@ -31,7 +31,10 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent, rID, rUIXMLDescription ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
+    mVariable1Range ( ScAddress::INITIALIZE_INVALID ),
+    mVariable2Range ( ScAddress::INITIALIZE_INVALID ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
+    mOutputAddress  ( ScAddress::INITIALIZE_INVALID ),
     mGroupedBy      ( BY_COLUMN ),
     mpActiveEdit    ( NULL ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
@@ -107,6 +110,11 @@ void ScStatisticsTwoVariableDialog::Init()
     mpVariable2RangeButton->SetLoseFocusHdl( aLink );
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
+
+    aLink = LINK( this, ScStatisticsTwoVariableDialog, RefInputModifyHandler);
+    mpVariable1RangeEdit->SetModifyHdl( aLink);
+    mpVariable2RangeEdit->SetModifyHdl( aLink);
+    mpOutputRangeEdit->SetModifyHdl( aLink);
 
     mpOutputRangeEdit->GrabFocus();
 
@@ -187,11 +195,14 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
             sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
             aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
             mpOutputRangeEdit->SetRefString( aReferenceString );
-
-            // Enable OK, Cancel if output range is set
-            mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
     }
+
+    // Enable OK if all ranges are set.
+    if (mVariable1Range.IsValid() && mVariable2Range.IsValid() && mOutputAddress.IsValid())
+        mpButtonOk->Enable();
+    else
+        mpButtonOk->Disable();
 }
 
 IMPL_LINK( ScStatisticsTwoVariableDialog, OkClicked, PushButton*, /*pButton*/ )
@@ -238,6 +249,78 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, GroupByChanged )
         mGroupedBy = BY_COLUMN;
     else if (mpGroupByRowsRadio->IsChecked())
         mGroupedBy = BY_ROW;
+
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler )
+{
+    if ( mpActiveEdit )
+    {
+        if ( mpActiveEdit == mpVariable1RangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpVariable1RangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mVariable1Range = *pRange;
+                // Highlight the resulting range.
+                mpVariable1RangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mVariable1Range = ScRange( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+        else if ( mpActiveEdit == mpVariable2RangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpVariable2RangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mVariable2Range = *pRange;
+                // Highlight the resulting range.
+                mpVariable2RangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mVariable2Range = ScRange( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+        else if ( mpActiveEdit == mpOutputRangeEdit )
+        {
+            ScRangeList aRangeList;
+            bool bValid = ParseWithNames( aRangeList, mpOutputRangeEdit->GetText(), mDocument);
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            if (pRange)
+            {
+                mOutputAddress = pRange->aStart;
+
+                // Crop output range to top left address for Edit field.
+                if (pRange->aStart != pRange->aEnd)
+                {
+                    sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
+                    OUString aReferenceString = mOutputAddress.Format(nFormat, mDocument, mDocument->GetAddressConvention());
+                    mpOutputRangeEdit->SetRefString( aReferenceString );
+                }
+
+                // Highlight the resulting range.
+                mpOutputRangeEdit->StartUpdateData();
+            }
+            else
+            {
+                mOutputAddress = ScAddress( ScAddress::INITIALIZE_INVALID);
+            }
+        }
+    }
+
+    // Enable OK if all ranges are set.
+    if (mVariable1Range.IsValid() && mVariable2Range.IsValid() && mOutputAddress.IsValid())
+        mpButtonOk->Enable();
+    else
+        mpButtonOk->Disable();
 
     return 0;
 }

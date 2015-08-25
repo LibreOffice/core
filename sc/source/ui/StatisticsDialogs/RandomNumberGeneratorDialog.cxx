@@ -120,6 +120,7 @@ void ScRandomNumberGeneratorDialog::Init()
     mpInputRangeEdit->SetLoseFocusHdl ( aLink );
     mpInputRangeButton->SetLoseFocusHdl ( aLink );
 
+    mpInputRangeEdit->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, InputRangeModified ));
     mpParameter1Value->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, Parameter1ValueModified ));
     mpParameter2Value->SetModifyHdl( LINK( this, ScRandomNumberGeneratorDialog, Parameter2ValueModified ));
 
@@ -170,11 +171,17 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
 
         OUString aReferenceString(maInputRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         mpInputRangeEdit->SetRefString( aReferenceString );
+
+        mpButtonApply->Enable();
+        mpButtonOk->Enable();
     }
 }
 
 void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 {
+    if (!maInputRange.IsValid())
+        return;
+
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>(mpDistributionCombo->GetEntryData(aSelectedIndex));
 
@@ -354,6 +361,28 @@ IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control*, pCtrl )
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseFocusHandler)
 {
     mbDialogLostFocus = !IsActive();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified)
+{
+    ScRangeList aRangeList;
+    bool bValid = ParseWithNames( aRangeList, mpInputRangeEdit->GetText(), mpDoc);
+    const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+    if (pRange)
+    {
+        maInputRange = *pRange;
+        mpButtonApply->Enable();
+        mpButtonOk->Enable();
+        // Highlight the resulting range.
+        mpInputRangeEdit->StartUpdateData();
+    }
+    else
+    {
+        maInputRange = ScRange( ScAddress::INITIALIZE_INVALID);
+        mpButtonApply->Disable();
+        mpButtonOk->Disable();
+    }
     return 0;
 }
 

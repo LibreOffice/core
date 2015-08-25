@@ -77,6 +77,7 @@ private:
     DECL_LINK( LoseFocusHandler, void* );
     DECL_LINK( SamplingSizeValueModified, void* );
     DECL_LINK( ToggleSamplingMethod, void* );
+    DECL_LINK( RefInputModifyHandler, void* );
 };
 
 #endif
