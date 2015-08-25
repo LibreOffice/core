@@ -1602,7 +1602,6 @@ private:
         SfxAllItemSet &rSet);
     SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, const WW8_DO* pDo,
         SfxAllItemSet &rSet);
-    ESelection GetESelection( long nCpStart, long nCpEnd );
     void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
     void InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
