@@ -189,7 +189,10 @@ int ImplSVMain()
       pSVData->mxAccessBridge.clear();
     }
 
+    OpenGLWatchdogThread::stop();
+
     DeInitVCL();
+
     return nReturn;
 }
 

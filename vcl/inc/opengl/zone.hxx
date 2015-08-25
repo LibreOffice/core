@@ -11,21 +11,42 @@
 #define INCLUDED_VCL_INC_OPENGL_GUARD_H
 
 #include <sal/config.h>
+#include <sal/types.h>
+#include <rtl/ref.hxx>
+#include <osl/conditn.hxx>
+#include <salhelper/thread.hxx>
+
+class OpenGLWatchdogThread : private salhelper::Thread
+{
+    OpenGLWatchdogThread();
+    virtual void execute() SAL_OVERRIDE;
+public:
+    static void start();
+    static void stop();
+    using salhelper::Thread::acquire;
+    using salhelper::Thread::release;
+};
 
 /**
  * We want to be able to detect if a given crash came
  * from the OpenGL code, so use this helper to track that.
  */
-class OpenGLSalGraphicsImpl;
 class OpenGLZone {
-    static int gnInOpenGLZone;
+    friend class OpenGLWatchdogThread;
     friend class OpenGLSalGraphicsImpl;
-    static void enter() { gnInOpenGLZone++; }
-    static void leave() { gnInOpenGLZone--; }
+    friend void opengl_zone_enter_leave(bool); // testing.
+
+    /// how many times have we entered a GL zone
+    static volatile sal_uInt64 gnEnterCount;
+    /// how many times have we left a new GL zone
+    static volatile sal_uInt64 gnLeaveCount;
+
+    static void enter() { gnEnterCount++; }
+    static void leave() { gnLeaveCount++; }
 public:
      OpenGLZone() { enter(); }
     ~OpenGLZone() { leave(); }
-    static bool isInZone() { return gnInOpenGLZone > 0; }
+    static bool isInZone() { return gnEnterCount != gnLeaveCount; }
     static void hardDisable();
 };
 

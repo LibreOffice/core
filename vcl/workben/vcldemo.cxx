@@ -41,6 +41,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcldemo-debug.hxx>
+#include <opengl/zone.hxx>
 
 #include <rtl/math.hxx>
 
@@ -1457,13 +1458,23 @@ class DemoWidgets : public WorkWindow
     VclPtr<VclBox> mpBox;
     VclPtr<ToolBox> mpToolbox;
     VclPtr<PushButton> mpButton;
+    VclPtr<VclHBox> mpHBox;
+    VclPtr<CheckBox> mpGLCheck;
+    VclPtr<ComboBox> mpGLCombo;
+    VclPtr<PushButton> mpGLButton;
+
+    DECL_LINK(GLTestClick, void *);
 
 public:
     DemoWidgets() :
         WorkWindow(NULL, WB_APP | WB_STDWORK),
         mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
-        mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
-        mpButton(VclPtrInstance<PushButton>(mpBox.get()))
+        mpToolbox(VclPtrInstance<ToolBox>(mpBox)),
+        mpButton(VclPtrInstance<PushButton>(mpBox)),
+        mpHBox(VclPtrInstance<VclHBox>(mpBox, true, 3)),
+        mpGLCheck(VclPtrInstance<CheckBox>(mpHBox)),
+        mpGLCombo(VclPtrInstance<ComboBox>(mpHBox)),
+        mpGLButton(VclPtrInstance<PushButton>(mpHBox))
     {
         SetText("VCL widget demo");
 
@@ -1484,11 +1495,27 @@ public:
         mpButton->SetText("Click me; go on");
         mpButton->Show();
 
+        mpGLCheck->SetText("Test in OGL zone");
+        mpGLCheck->Show();
+        mpGLCombo->InsertEntry("sleep 1 second");
+        mpGLCombo->InsertEntry("sleep 3 seconds");
+        mpGLCombo->InsertEntry("sleep 7 seconds");
+        mpGLCombo->SelectEntryPos(2);
+        mpGLCombo->Show();
+        mpGLButton->SetText("Execute test");
+        mpGLButton->SetClickHdl(LINK(this,DemoWidgets,GLTestClick));
+        mpGLButton->Show();
+        mpHBox->Show();
+
         Show();
     }
     virtual ~DemoWidgets() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
+        mpGLButton.disposeAndClear();
+        mpGLCombo.disposeAndClear();
+        mpGLCheck.disposeAndClear();
+        mpHBox.disposeAndClear();
         mpToolbox.disposeAndClear();
         mpButton.disposeAndClear();
         mpBox.disposeAndClear();
@@ -1520,6 +1547,42 @@ public:
                    Point( 0, 0 ), aExclude.GetSize(), *pDev.get() );
     }
 };
+
+extern void opengl_zone_enter_leave(bool bEnter);
+
+IMPL_LINK_NOARG(DemoWidgets,GLTestClick)
+{
+    sal_Int32 nSelected = mpGLCombo->GetSelectEntryPos();
+
+    TimeValue aDelay;
+    aDelay.Seconds = 0;
+    aDelay.Nanosec = 0;
+    switch (nSelected)
+    {
+    case 0:
+        aDelay.Seconds = 1;
+        break;
+    case 1:
+        aDelay.Seconds = 3;
+        break;
+    case 2:
+        aDelay.Seconds = 7;
+        break;
+    default:
+        break;
+    }
+
+    bool bEnterLeave = mpGLCheck->IsChecked();
+    if (bEnterLeave)
+        opengl_zone_enter_leave(true);
+
+    osl_waitThread(&aDelay);
+
+    if (bEnterLeave)
+        opengl_zone_enter_leave(false);
+
+    return 0;
+}
 
 class DemoPopup : public FloatingWindow
 {
