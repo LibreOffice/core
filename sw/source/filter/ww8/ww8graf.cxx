@@ -460,23 +460,23 @@ SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
+ESelection GetESelection(EditEngine &rDrawEditEngine, long nCpStart, long nCpEnd)
 {
-    sal_Int32 nPCnt = mpDrawEditEngine->GetParagraphCount();
+    sal_Int32 nPCnt = rDrawEditEngine.GetParagraphCount();
     sal_Int32 nSP = 0;
     sal_Int32 nEP = 0;
     while(      (nSP < nPCnt)
-            &&  (nCpStart >= mpDrawEditEngine->GetTextLen( nSP ) + 1) )
+            &&  (nCpStart >= rDrawEditEngine.GetTextLen( nSP ) + 1) )
     {
-        nCpStart -= mpDrawEditEngine->GetTextLen( nSP ) + 1;
+        nCpStart -= rDrawEditEngine.GetTextLen( nSP ) + 1;
         nSP++;
     }
         // Beim Ende erst 1 Zeichen spaeter auf naechste Zeile umschalten,
         // da sonst Zeilenattribute immer eine Zeile zu weit reichen.
     while(      (nEP < nPCnt)
-            &&  (nCpEnd > mpDrawEditEngine->GetTextLen( nEP ) + 1) )
+            &&  (nCpEnd > rDrawEditEngine.GetTextLen( nEP ) + 1) )
     {
-        nCpEnd -= mpDrawEditEngine->GetTextLen( nEP ) + 1;
+        nCpEnd -= rDrawEditEngine.GetTextLen( nEP ) + 1;
         nEP++;
     }
     return ESelection( nSP, nCpStart, nEP, nCpEnd );
@@ -657,7 +657,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                         comphelper::string::padToLength(sTemp,
                             nTxtStart - nStartReplace, cReplaceSymbol);
                         mpDrawEditEngine->QuickInsertText(sTemp.makeStringAndClear(),
-                            GetESelection(nStartReplace - nStartCp,
+                            GetESelection(*mpDrawEditEngine, nStartReplace - nStartCp,
                             nTxtStart - nStartCp ) );
                     }
                 }
@@ -734,7 +734,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             if( pS->Count() )
             {
                 mpDrawEditEngine->QuickSetAttribs( *pS,
-                    GetESelection( nTxtStart - nStartCp, nEnd - nStartCp ) );
+                    GetESelection(*mpDrawEditEngine, nTxtStart - nStartCp, nEnd - nStartCp) );
                 delete pS;
                 pS = new SfxItemSet(mpDrawEditEngine->GetEmptyItemSet());
             }
@@ -752,7 +752,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
     myIter aEnd = aChunks.end();
     for (myIter aIter = aChunks.begin(); aIter != aEnd; ++aIter)
     {
-        ESelection aSel(GetESelection(aIter->GetStartPos()-nStartCp,
+        ESelection aSel(GetESelection(*mpDrawEditEngine, aIter->GetStartPos()-nStartCp,
             aIter->GetEndPos()-nStartCp));
         OUString aString(mpDrawEditEngine->GetText(aSel));
         const sal_Int32 nOrigLen = aString.getLength();
@@ -907,6 +907,47 @@ sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStar
     return 0;
 }
 
+//EditEngine::InsertText will replace dos lines resulting in a shorter
+//string than is passed in, so inserting attributes based on the original
+//string len can fail. So here replace the dos line ends similar to
+//how EditEngine does it, but preserve the length and replace the extra
+//chars with placeholders, record the position of the placeholders and
+//remove those extra chars after attributes have been inserted
+std::vector<sal_Int32> replaceDosLineEndsButPreserveLength(OUString &rIn)
+{
+    OUStringBuffer aNewData(rIn);
+    std::vector<sal_Int32> aDosLineEndDummies;
+    sal_Int32 i = 0;
+    sal_Int32 nStrLen = rIn.getLength();
+    while (i < nStrLen)
+    {
+        // \r or \n causes linebreak
+        if (rIn[i] == '\r' || rIn[i] == '\n')
+        {
+            // skip char if \r\n or \n\r
+            if ( (i+1) < nStrLen && ((rIn[i+1] == '\r') || (rIn[i+1] == '\n')) &&
+                 (rIn[i] != rIn[i+1]) )
+            {
+                ++i;
+                aDosLineEndDummies.push_back(i);
+                aNewData[i] = 0;
+            }
+        }
+        ++i;
+    }
+    rIn = aNewData.makeStringAndClear();
+    return aDosLineEndDummies;
+}
+
+void removePositions(EditEngine &rDrawEditEngine, const std::vector<sal_Int32>& rDosLineEndDummies)
+{
+    for (auto aIter = rDosLineEndDummies.rbegin(); aIter != rDosLineEndDummies.rend(); ++aIter)
+    {
+        sal_Int32 nCharPos(*aIter);
+        rDrawEditEngine.QuickDelete(GetESelection(rDrawEditEngine, nCharPos, nCharPos+1));
+    }
+}
+
 OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
 {
     OutlinerParaObject* pRet = 0;
@@ -917,8 +958,16 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
         if (!mpDrawEditEngine)
             mpDrawEditEngine = new EditEngine(0);
 
-        mpDrawEditEngine->SetText(rString);
+        //replace dos line endings with editeng ones, replace any extra chars with
+        //placeholders to keep the inserted string len in sync with the attribute cps
+        //and record in aDosLineEnds the superfluous positions
+        OUString sEEString(rString);
+        std::vector<sal_Int32> aDosLineEnds(replaceDosLineEndsButPreserveLength(sEEString));
+        mpDrawEditEngine->SetText(sEEString);
         InsertAttrsAsDrawingAttrs(nStartCp, nStartCp+nLen, eType);
+        //remove any superfluous placeholders of replaceDosLineEndsButPreserveLength
+        //after attributes have been inserted
+        removePositions(*mpDrawEditEngine, aDosLineEnds);
 
         // Annotations typically begin with a (useless) 0x5
         if ((eType == MAN_AND) && mpDrawEditEngine->GetTextLen())
