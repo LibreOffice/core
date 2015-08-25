@@ -30,7 +30,8 @@ namespace writerperfect
 namespace
 {
 
-std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[] = {
+std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[] =
+{
     {OUStringLiteral("MacArabic"), OUStringLiteral("Arabic (Apple Macintosh)")},
     {OUStringLiteral("CP864"), OUStringLiteral("Arabic (DOS/OS2-864)")},
     {OUStringLiteral("CP1006"), OUStringLiteral("Arabic (IBM-1006)")},
@@ -38,21 +39,33 @@ std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[] = {
     {OUStringLiteral("CP775"), OUStringLiteral("Baltic (DOS/OS2-775)")},
     {OUStringLiteral("CP1257"), OUStringLiteral("Baltic (Windows-1257)")},
     {OUStringLiteral("MacCeltic"), OUStringLiteral("Celtic (Apple Macintosh)")},
-    {OUStringLiteral("MacCyrillic"),
-     OUStringLiteral("Cyrillic (Apple Macintosh)")},
+    {
+        OUStringLiteral("MacCyrillic"),
+        OUStringLiteral("Cyrillic (Apple Macintosh)")
+    },
     {OUStringLiteral("CP855"), OUStringLiteral("Cyrillic (DOS/OS2-855)")},
-    {OUStringLiteral("CP866"),
-     OUStringLiteral("Cyrillic (DOS/OS2-866/Russian)")},
+    {
+        OUStringLiteral("CP866"),
+        OUStringLiteral("Cyrillic (DOS/OS2-866/Russian)")
+    },
     {OUStringLiteral("CP1251"), OUStringLiteral("Cyrillic (Windows-1251)")},
-    {OUStringLiteral("MacCEurope"),
-     OUStringLiteral("Eastern Europe (Apple Macintosh)")},
-    {OUStringLiteral("MacCroatian"),
-     OUStringLiteral("Eastern Europe (Apple Macintosh/Croatian)")},
-    {OUStringLiteral("MacRomanian"),
-     OUStringLiteral("Eastern Europe (Apple Macintosh/Romanian)")},
+    {
+        OUStringLiteral("MacCEurope"),
+        OUStringLiteral("Eastern Europe (Apple Macintosh)")
+    },
+    {
+        OUStringLiteral("MacCroatian"),
+        OUStringLiteral("Eastern Europe (Apple Macintosh/Croatian)")
+    },
+    {
+        OUStringLiteral("MacRomanian"),
+        OUStringLiteral("Eastern Europe (Apple Macintosh/Romanian)")
+    },
     {OUStringLiteral("CP852"), OUStringLiteral("Eastern Europe (DOS/OS2-852)")},
-    {OUStringLiteral("CP1250"),
-     OUStringLiteral("Eastern Europe (Windows-1250/WinLatin 2)")},
+    {
+        OUStringLiteral("CP1250"),
+        OUStringLiteral("Eastern Europe (Windows-1250/WinLatin 2)")
+    },
     {OUStringLiteral("MacGreek"), OUStringLiteral("Greek (Apple Macintosh)")},
     {OUStringLiteral("CP737"), OUStringLiteral("Greek (DOS/OS2-737)")},
     {OUStringLiteral("CP869"), OUStringLiteral("Greek (DOS/OS2-869/Greek-2)")},
@@ -66,31 +79,51 @@ std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[] = {
     {OUStringLiteral("CP500"), OUStringLiteral("International (DOS/OS2-500)")},
     {OUStringLiteral("MacThai"), OUStringLiteral("Thai (Apple Macintosh)")},
     {OUStringLiteral("CP874"), OUStringLiteral("Thai (DOS/OS2-874)")},
-    {OUStringLiteral("MacTurkish"),
-     OUStringLiteral("Turkish (Apple Macintosh)")},
+    {
+        OUStringLiteral("MacTurkish"),
+        OUStringLiteral("Turkish (Apple Macintosh)")
+    },
     {OUStringLiteral("CP857"), OUStringLiteral("Turkish (DOS/OS2-857)")},
     {OUStringLiteral("CP1026"), OUStringLiteral("Turkish (DOS/OS2-1026)")},
     {OUStringLiteral("CP1254"), OUStringLiteral("Turkish (Windows-1254)")},
     {OUStringLiteral("CP1258"), OUStringLiteral("Vietnamese (Windows-1258)")},
-    {OUStringLiteral("MacRoman"),
-     OUStringLiteral("Western Europe (Apple Macintosh)")},
-    {OUStringLiteral("MacIceland"),
-     OUStringLiteral("Western Europe (Apple Macintosh/Icelandic)")},
-    {OUStringLiteral("CP037"),
-     OUStringLiteral("Western Europe (DOS/OS2-037/US-Canada)")},
-    {OUStringLiteral("CP437"),
-     OUStringLiteral("Western Europe (DOS/OS2-437/US)")},
+    {
+        OUStringLiteral("MacRoman"),
+        OUStringLiteral("Western Europe (Apple Macintosh)")
+    },
+    {
+        OUStringLiteral("MacIceland"),
+        OUStringLiteral("Western Europe (Apple Macintosh/Icelandic)")
+    },
+    {
+        OUStringLiteral("CP037"),
+        OUStringLiteral("Western Europe (DOS/OS2-037/US-Canada)")
+    },
+    {
+        OUStringLiteral("CP437"),
+        OUStringLiteral("Western Europe (DOS/OS2-437/US)")
+    },
     {OUStringLiteral("CP850"), OUStringLiteral("Western Europe (DOS/OS2-850)")},
-    {OUStringLiteral("CP860"),
-     OUStringLiteral("Western Europe (DOS/OS2-860/Portuguese)")},
-    {OUStringLiteral("CP861"),
-     OUStringLiteral("Western Europe (DOS/OS2-861/Icelandic)")},
-    {OUStringLiteral("CP863"),
-     OUStringLiteral("Western Europe (DOS/OS2-863/French)")},
-    {OUStringLiteral("CP865"),
-     OUStringLiteral("Western Europe (DOS/OS2-865/Nordic)")},
-    {OUStringLiteral("CP1252"),
-     OUStringLiteral("Western Europe (Windows-1252/WinLatin 1)")}
+    {
+        OUStringLiteral("CP860"),
+        OUStringLiteral("Western Europe (DOS/OS2-860/Portuguese)")
+    },
+    {
+        OUStringLiteral("CP861"),
+        OUStringLiteral("Western Europe (DOS/OS2-861/Icelandic)")
+    },
+    {
+        OUStringLiteral("CP863"),
+        OUStringLiteral("Western Europe (DOS/OS2-863/French)")
+    },
+    {
+        OUStringLiteral("CP865"),
+        OUStringLiteral("Western Europe (DOS/OS2-865/Nordic)")
+    },
+    {
+        OUStringLiteral("CP1252"),
+        OUStringLiteral("Western Europe (Windows-1252/WinLatin 1)")
+    }
 };
 
 std::size_t const numEncodings = SAL_N_ELEMENTS(s_encodings);

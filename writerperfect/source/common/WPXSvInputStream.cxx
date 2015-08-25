@@ -401,7 +401,7 @@ class WPXSvInputStreamImpl
 {
 public:
     explicit WPXSvInputStreamImpl(::com::sun::star::uno::Reference<
-                         ::com::sun::star::io::XInputStream > xStream);
+                                  ::com::sun::star::io::XInputStream > xStream);
     ~WPXSvInputStreamImpl();
 
     bool isStructured();
