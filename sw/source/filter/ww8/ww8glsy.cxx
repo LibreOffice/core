@@ -209,9 +209,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
             SfxObjectShellLock xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
             if (xDocSh->DoInitNew(0))
             {
-                SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
-                SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
-                    xStg, &rStrm, *pD, rBlocks.GetBaseURL(), true);
+                SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
                 SwNodeIndex aIdx(
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
@@ -223,11 +221,11 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 SwPaM aPamo( aIdx );
                 aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetCntntNode(),
                     0);
-                pRdr->LoadDoc(aPamo,this);
-
+                std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
+                    pGlossary->nVersion, xStg, &rStrm, *pD, rBlocks.GetBaseURL(),
+                    true, *aPamo.GetPoint()));
+                xRdr->LoadDoc(this);
                 bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);
-
-                delete pRdr;
             }
             xDocSh->DoClose();
             rBlocks.EndPutMuchBlockEntries();
