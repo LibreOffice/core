@@ -84,7 +84,6 @@ private:
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK_TYPED(NumFormatHdl, ToolBox*, void);
     DECL_LINK(NumFormatSelectHdl, ListBox*);
     DECL_LINK(NumFormatValueHdl, void*);
 

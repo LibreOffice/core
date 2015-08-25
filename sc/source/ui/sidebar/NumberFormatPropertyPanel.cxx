@@ -38,10 +38,6 @@ using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
-const char UNO_NUMERICFIELD[]         = ".uno:NumberFormatDecimal";
-const char UNO_NUMBERFORMATPERCENT[]  = ".uno:NumberFormatPercent";
-const char UNO_NUMBERFORMATCURRENCY[] = ".uno:NumberFormatCurrency";
-
 namespace sc { namespace sidebar {
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
@@ -97,8 +93,6 @@ void NumberFormatPropertyPanel::Initialize()
     mpLbCategory->SetAccessibleName(OUString( "Category"));
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
-    mpTBCategory->SetSelectHdl ( LINK(this, NumberFormatPropertyPanel, NumFormatHdl) );
-
     aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
     mpEdDecimals->SetModifyHdl( aLink );
@@ -110,25 +104,6 @@ void NumberFormatPropertyPanel::Initialize()
     mpBtnThousand->SetClickHdl( aLink );
 
     mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
-}
-
-IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox, void )
-{
-    const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
-    sal_uInt16 nId = 0;
-
-    if(aCommand == UNO_NUMERICFIELD)
-        nId = 1;
-    else if(aCommand == UNO_NUMBERFORMATPERCENT)
-        nId = 2;
-    else if(aCommand == UNO_NUMBERFORMATCURRENCY)
-        nId = 3;
-
-    if( nId != mnCategorySelected )
-    {
-        SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nId );
-        GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
-    }
 }
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )

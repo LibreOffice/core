@@ -56,7 +56,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatCurrency</property>
-                    <property name="label">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -70,7 +69,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatPercent</property>
-                    <property name="label">toolbutton2</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -84,7 +82,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatDecimal</property>
-                    <property name="label">toolbutton3</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
