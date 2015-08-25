@@ -37,6 +37,32 @@
       </style:graphic-properties>
     </style:style>
 
+    <!-- "Titre Avis expert" and derived styles from bugdoc -->
+    <style:style style:name="Titre_20_Avis_20_expert" style:display-name="Titre Avis expert" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="">
+      <style:paragraph-properties fo:text-align="start" style:justify-single-word="false" style:page-number="auto" fo:background-color="#661900">
+        <style:background-image/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#ffffff" />
+    </style:style>
+    <style:style style:name="Avis_20_expert_20_questions" style:display-name="Avis expert questions" style:family="paragraph" style:parent-style-name="Titre_20_Avis_20_expert" style:master-page-name="">
+      <style:paragraph-properties fo:line-height="100%" fo:text-align="start" style:justify-single-word="false" style:page-number="auto" fo:background-color="transparent">
+        <style:background-image/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#661900" />
+    </style:style>
+    <style:style style:name="avis_20_expert_20_questions_20_non_20_cadres" style:display-name="avis expert questions non cadres" style:family="paragraph" style:parent-style-name="Avis_20_expert_20_questions" style:master-page-name="">
+      <style:paragraph-properties style:page-number="auto" fo:background-color="#801900" style:shadow="none">
+        <style:tab-stops/>
+        <style:background-image/>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="Avis_20_expert_20_rXponses" style:display-name="Avis expert rXponses" style:family="paragraph" style:parent-style-name="Avis_20_expert_20_questions" style:master-page-name="">
+      <style:paragraph-properties fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:orphans="0" fo:widows="0" fo:hyphenation-ladder-count="1" style:page-number="auto" fo:background-color="transparent">
+        <style:background-image/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#461900" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+    </style:style>
+
  </office:styles>
  <office:automatic-styles>
   <style:page-layout style:name="pm1">
