@@ -1198,6 +1198,10 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
             }
         }
     }
+    else if (!sURL.isEmpty() && sURL[0] == '#')
+    {
+        // Internal link to bookmark. Do nothing.
+    }
     else
     {
         INetURLObject aURL(sURL);
