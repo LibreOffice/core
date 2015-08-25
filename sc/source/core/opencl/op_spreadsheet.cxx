@@ -162,28 +162,9 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << " == ";
                 ss << j+1;
                 ss << ")\n";
-                if (!(vSubArguments[1+j]->IsMixedArgument()))
-                {
-                    ss << "        {\n";
-                    ss << "            tmp = ";
-                    vSubArguments[1+j]->GenDeclRef(ss);
-                    ss << "[rowNum];\n";
-                    ss << "        }\n";
-
-                }
-                else
-                {
-                    ss << "        {\n";
-                    ss << "            tmp = !isNan(";
-                    vSubArguments[1+j]->GenNumDeclRef(ss);
-                    ss << "[rowNum])?";
-                    vSubArguments[1+j]->GenNumDeclRef(ss);
-                    ss << "[rowNum]:";
-                    vSubArguments[1+j]->GenStringDeclRef(ss);
-                    ss << "[rowNum];\n";
-                    ss << "        }\n";
-
-                }
+                ss << "            tmp = ";
+                vSubArguments[1+j]->GenDeclRef(ss);
+                ss << "[rowNum];\n";
             }
             ss << "        return tmp;\n";
             ss << "    }\n";
@@ -250,23 +231,9 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << " == ";
                 ss << j+1;
                 ss << ")\n";
-                ///Add MixedArguments for string support in Vlookup.
-                if (!(vSubArguments[1+j]->IsMixedArgument()))
-                {
-                    ss << "            tmp = ";
-                    vSubArguments[1+j]->GenDeclRef(ss);
-                    ss << "[rowNum];\n";
-                }
-                else
-                {
-                    ss << "            tmp = !isNan(";
-                    vSubArguments[1+j]->GenNumDeclRef(ss);
-                    ss << "[rowNum])?";
-                    vSubArguments[1+j]->GenNumDeclRef(ss);
-                    ss << "[rowNum]:";
-                    vSubArguments[1+j]->GenStringDeclRef(ss);
-                    ss << "[rowNum];\n";
-                }
+                ss << "            tmp = ";
+                vSubArguments[1+j]->GenDeclRef(ss);
+                ss << "[rowNum];\n";
             }
             ss << "        return tmp;\n";
             ss << "    }\n";
