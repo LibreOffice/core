@@ -61,8 +61,10 @@ enum class XMLShapeExportFlags {
 // When setting the flag below a callout shape is exported as office:annotation
      ANNOTATION = 0x0040,
 };
-DECLARE_TYPED_FLAGS(XMLShapeExportFlags, 0x007f)
-
+namespace o3tl
+{
+    template<> struct typed_flags<XMLShapeExportFlags> : is_typed_flags<XMLShapeExportFlags, 0x7f> {};
+}
 
 #define SEF_DEFAULT         XMLShapeExportFlags::POSITION|XMLShapeExportFlags::SIZE
 

@@ -102,7 +102,10 @@ enum class SvXMLExportFlags {
     OASIS                    = 0x8000,
     ALL                      = 0x0fff
 };
-DECLARE_TYPED_FLAGS(SvXMLExportFlags, 0x8fff)
+namespace o3tl
+{
+    template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x8fff> {};
+}
 
 class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
              ::com::sun::star::document::XFilter,

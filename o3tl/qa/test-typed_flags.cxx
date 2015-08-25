@@ -18,7 +18,10 @@ using namespace ::o3tl;
 
 enum class ConfigurationChangedHint { NONE, ONE, TWO };
 
-DECLARE_TYPED_FLAGS(ConfigurationChangedHint, 0xff)
+namespace o3tl
+{
+    template<> struct typed_flags< ConfigurationChangedHint> : is_typed_flags< ConfigurationChangedHint, 0xFF> {};
+}
 
 class typed_flags_test : public CppUnit::TestFixture
 {
