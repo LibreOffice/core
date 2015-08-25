@@ -22,6 +22,30 @@
       "revId": "c936d690a69d4d0332caade1a481ae1c3a6e06e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_e1ecc291",
+        "filename": "sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-08-25T11:37:46Z",
+      "side": 1,
+      "message": "Right, but I removed this variable completely in a follow-up commit.",
+      "parentUuid": "1af94dfe_a1f2ba6d",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 27
+      },
+      "revId": "c936d690a69d4d0332caade1a481ae1c3a6e06e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
