@@ -61,7 +61,7 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
     , nFlags( nFlagsP )
 {
     nUniqueId = 256;
-    nPMId = RSC_VERSIONCONTROL +1; //mindestens einen groesser
+    nPMId = RSC_VERSIONCONTROL +1; // at least one more
     pEH = pErrHdl;
     Init();
 }
@@ -168,13 +168,13 @@ void Pre_dtorTree( RscTop * pRscTop )
 
 RscTypCont :: ~RscTypCont()
 {
-    // Alle Unterbaeume loeschen
+    // delete all subtrees
     aVersion.pClass->Destroy( aVersion );
     rtl_freeMemory( aVersion.pData );
     DestroySubTrees( pRoot );
 
-    // Alle Klassen noch gueltig, jeweilige Instanzen freigeben
-    // BasisTypen
+    // all classes are still valid, destroy each instance
+    // of base types
     for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
         aBaseLst[ i ]->Pre_dtor();
 
@@ -188,10 +188,10 @@ RscTypCont :: ~RscTypCont()
     aString.Pre_dtor();
     aWinBits.Pre_dtor();
     aVersion.pClass->Pre_dtor();
-    // Zusammengesetzte Typen
+    // sub-types
     Pre_dtorTree( pRoot );
 
-    // Klassen zerstoeren
+    // destroy classes
     delete aVersion.pClass;
     DestroyTree( pRoot );
 
@@ -216,9 +216,9 @@ void RscTypCont::ClearSysNames()
 
 RscTop * RscTypCont::SearchType( Atom nId )
 {
-    /*  [Beschreibung]
+    /*  [Description]
 
-        Sucht eine Basistyp nId;
+        Search for base type nId;
     */
     if( nId == InvalidAtom )
         return NULL;
@@ -343,10 +343,10 @@ class RscEnumerateObj
 {
 friend class RscEnumerateRef;
 private:
-    ERRTYPE     aError;     // Enthaelt den ersten Fehler
+    ERRTYPE     aError;     // contains the first field
     RscTypCont* pTypCont;
-    FILE *      fOutput;    // AusgabeDatei
-    sal_uLong   lFileKey;   // Welche src-Datei
+    FILE *      fOutput;    // output file
+    sal_uLong   lFileKey;   // what source file
     RscTop *    pClass;
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
@@ -397,45 +397,45 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
 {
-    // Definition der Struktur, aus denen die Resource aufgebaut ist
+    // structure definition from which the resource is built
     /*
     struct RSHEADER_TYPE{
-        sal_uInt32          nId;        // Identifier der Resource
-        sal_uInt32          nRT;        // Resource Typ
-        sal_uInt32          nGlobOff;   // Globaler Offset
-        sal_uInt32          nLocalOff;  // Lokaler Offset
+        sal_uInt32          nId;        // resource identifier
+        sal_uInt32          nRT;        // resource type
+        sal_uInt32          nGlobOff;   // global offset
+        sal_uInt32          nLocalOff;  // local offset
     } aHeader;
     */
 
     sal_uInt32 nId = rMem.GetLong( 0 );
     sal_uInt32 nRT = rMem.GetLong( 4 );
 
-    // Tabelle wird entsprechend gefuellt
+    // table is filled with with nId and nRT
     pTypCont->PutTranslatorKey( (sal_uInt64(nRT) << 32) + sal_uInt64(nId) );
 
     if( nRT == RSC_VERSIONCONTROL )
-    { // kommt immmer als letztes
+    { // always comes last
         sal_Int32 nCount = pTypCont->aIdTranslator.size();
-        // groesse der Tabelle
+        // table size
         sal_uInt32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(sal_Int32))) + sizeof(sal_Int32);
 
-        rMem.Put( nCount ); //Anzahl speichern
+        rMem.Put( nCount ); // save the count
         for( std::map< sal_uInt64, sal_uLong >::const_iterator it =
              pTypCont->aIdTranslator.begin(); it != pTypCont->aIdTranslator.end(); ++it )
         {
-            // Schluessel schreiben
+            // save the key
             rMem.Put( it->first );
-            // Objekt Id oder Position schreiben
+            // save the object id or position
             rMem.Put( (sal_Int32)it->second );
         }
-        rMem.Put( nSize ); // Groesse hinten Speichern
+        rMem.Put( nSize ); // save the size next
     }
 
-    //Dateioffset neu setzen
+    // reset the file offset
     pTypCont->IncFilePos( rMem.Size() );
 
 
-    //Position wurde vorher in Tabelle geschrieben
+    // position was written previously in the table
     bool bSuccess = (1 == fwrite( rMem.GetBuffer(), rMem.Size(), 1, fOut ));
     SAL_WARN_IF(!bSuccess, "rsc", "short write");
 };
@@ -492,7 +492,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 
     aIdTranslator.clear();
     nFilePos = 0;
-    nPMId = RSCVERSION_ID +1; //mindestens einen groesser
+    nPMId = RSCVERSION_ID +1; // at least one more
 
     aError = aEnumRef.WriteRc();
 
@@ -582,9 +582,9 @@ IMPL_LINK( RscDel, Delete, RscTop *, pNode )
 
 void RscTypCont :: Delete( sal_uLong lFileKey )
 {
-    // Resourceinstanzen loeschen
+    // delete resource instance
     RscDel aDel( pRoot, lFileKey );
-    // Defines loeschen
+    // delete defines
     aFileTab.DeleteFileContext( lFileKey );
 }
 

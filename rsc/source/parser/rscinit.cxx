@@ -111,7 +111,7 @@ void RscTypCont::Init()
     aNmTb.Put( "extendable",         EXTENDABLE,     (sal_IntPtr)0  );
     aNmTb.Put( "writeifset",         WRITEIFSET,     (sal_IntPtr)0  );
 
-/* Werte fuer Aufzaehlungstypen */
+/* values for integer types */
     aNmTb.Put( "TRUE",               BOOLEAN,        (sal_IntPtr)sal_True  );
     aNmTb.Put( "FALSE",              BOOLEAN,        (sal_IntPtr)sal_False );
 
@@ -142,7 +142,7 @@ void RscTypCont::Init()
     aIdLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 {
-    // Variablenname fuer WinBits
+    // variable name for WinBits
     nWinBitVarId = aNmTb.Put( "_WinBits", VARNAME );
 
     // Windows
@@ -288,17 +288,17 @@ void RscTypCont::Init()
     pClassString = InitClassString( pClassMgr );
     pRoot->Insert( pClassString );
 
-    // String als Referenzklasse des Basisstrings einsetzen
+    // set String as reference class of the base strings
     aString.SetRefClass( pClassString );
 
-    // Klasse anlegen
+    // initialize class
     nId = pHS->getID( "StringArray" );
     pClassStringArray = new RscClass( nId, RSC_STRINGARRAY, pClassMgr );
     pClassStringArray->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
     aNmTb.Put( nId, CLASSNAME, pClassStringArray );
     pRoot->Insert( pClassStringArray );
 
-    // Variablen anlegen
+    // initialize variables
     nId = aNmTb.Put( "ItemList", VARNAME );
     pClassStringArray->SetVariable( nId, pLangStringLongTupelList );
 
@@ -334,7 +334,7 @@ void RscTypCont::Init()
     pClassControl = InitClassControl( pClassWindow );
     pRoot->Insert( pClassControl );
 
-    // Klasse anlegen
+    // initialize class
     nId = pHS->getID( "Button" );
     pClassButton = new RscClass( nId, RSC_BUTTON, pClassControl );
     pClassButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -344,7 +344,7 @@ void RscTypCont::Init()
     pClassCheckBox = InitClassCheckBox( pClassButton );
     pRoot->Insert( pClassCheckBox );
 
-    // Klasse anlegen
+    // initialize class
     pClassPushButton = InitClassPushButton( pClassButton );
     pRoot->Insert( pClassPushButton );
 }
@@ -388,7 +388,7 @@ void RscTypCont::Init()
     pRoot->Insert( pClassAccel );
     nAcceleratorType = pClassAccel->GetId();
 
-    // pClassAccel ist erst hier definiert
+    // pClassAccel is only completely defined here
     nId = aNmTb.Put( "SubAccelerator", VARNAME );
     pClassAccelItem->SetVariable( nId, pClassAccel, NULL, VAR_SVDYNAMIC,
                                ACCELITEM_ACCEL );
@@ -400,7 +400,7 @@ void RscTypCont::Init()
     pClassMenu = InitClassMenu( pClassMgr, pClassMenuItem );
     pRoot->Insert( pClassMenu );
 
-    // pClassMenu ist erst hier definiert
+    // pClassMenu is only completely defined here
     nId = aNmTb.Put( "SubMenu", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassMenu, NULL, VAR_SVDYNAMIC,
                                  RSC_MENUITEM_MENU );
@@ -409,7 +409,7 @@ void RscTypCont::Init()
     pClassSplitWindow = InitClassSplitWindow( pClassWindow );
     pRoot->Insert( pClassSplitWindow );
 
-    // Klasse anlegen
+    // initialize class
     nId = pHS->getID( "SpinButton" );
     pClassSpinButton = new RscClass( nId, RSC_SPINBUTTON, pClassControl );
     pClassSpinButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -417,7 +417,7 @@ void RscTypCont::Init()
     {
         RscClient * pClient;
 
-        // Clientvariablen einfuegen
+        // add client variables
         // Sysmodal
         aBaseLst.push_back(
             pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nRepeatId )
@@ -433,14 +433,14 @@ void RscTypCont::Init()
     pRoot->Insert( pClassSpinField );
 }
 {
-    { // Mehrfachvererbung von Hand
+    { // hand-made multiple inheritance
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
 
     pClassNumericField = InitClassNumericField( pClassTmp );
     pRoot->Insert( pClassNumericField );
     }
-    { // Mehrfachvererbung von Hand
+    { // hand-made multiple inheritance
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
@@ -462,7 +462,7 @@ void RscTypCont::Init()
                                       pClassImageList );
     pRoot->Insert( pClassToolBox );
 
-    // Klasse anlegen
+    // initialize class
     nId = pHS->getID( "FixedLine" );
     pClassFixedLine =
           new RscClass( nId, RSC_FIXEDLINE, pClassControl );
