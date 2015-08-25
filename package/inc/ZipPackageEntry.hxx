@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ZipEntry.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
@@ -36,7 +36,7 @@ typedef void* rtlRandomPool;
 class ZipOutputStream;
 class ZipPackageFolder;
 
-class ZipPackageEntry : public cppu::WeakImplHelper5
+class ZipPackageEntry : public cppu::WeakImplHelper
 <
     com::sun::star::container::XNamed,
     com::sun::star::container::XChild,

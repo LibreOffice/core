@@ -29,14 +29,14 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <mutexholder.hxx>
 
 #include <ZipFile.hxx>
 #include <HashMaps.hxx>
 
-class OZipFileAccess : public ::cppu::WeakImplHelper4<
+class OZipFileAccess : public ::cppu::WeakImplHelper<
                         ::com::sun::star::packages::zip::XZipFileAccess2,
                         ::com::sun::star::lang::XInitialization,
                         ::com::sun::star::lang::XComponent,

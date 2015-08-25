@@ -22,9 +22,9 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class ZipPackageBuffer : public ::cppu::WeakImplHelper3
+class ZipPackageBuffer : public ::cppu::WeakImplHelper
 <
     com::sun::star::io::XInputStream,
     com::sun::star::io::XOutputStream,

@@ -27,14 +27,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include "mutexholder.hxx"
 
 struct OWriteStream_Impl;
 
-class OInputCompStream : public cppu::WeakImplHelper4 < ::com::sun::star::io::XInputStream
+class OInputCompStream : public cppu::WeakImplHelper < ::com::sun::star::io::XInputStream
                                                         ,::com::sun::star::embed::XExtendedStorageStream
                                                         ,::com::sun::star::embed::XRelationshipAccess
                                                         ,::com::sun::star::beans::XPropertySet >

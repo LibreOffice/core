@@ -23,7 +23,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -52,7 +52,7 @@ typedef ::std::vector< OUString > OStringList_Impl;
 typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XExtendedStorageStream > >
                         OWeakStorRefList_Impl;
 
-struct OHierarchyElement_Impl : public cppu::WeakImplHelper1< ::com::sun::star::embed::XTransactionListener >
+struct OHierarchyElement_Impl : public cppu::WeakImplHelper< ::com::sun::star::embed::XTransactionListener >
 {
     ::osl::Mutex m_aMutex;
 

@@ -20,9 +20,9 @@
 #define INCLUDED_PACKAGE_SOURCE_ZIPPACKAGE_ZIPPACKAGESINK_HXX
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class ZipPackageSink : public ::cppu::WeakImplHelper1
+class ZipPackageSink : public ::cppu::WeakImplHelper
 <
     com::sun::star::io::XActiveDataSink
 >

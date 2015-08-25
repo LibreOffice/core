@@ -23,11 +23,11 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 struct OWriteStream_Impl;
 
-class OSelfTerminateFileStream : public cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream,
+class OSelfTerminateFileStream : public cppu::WeakImplHelper< ::com::sun::star::io::XInputStream,
                                                                ::com::sun::star::io::XSeekable >
 {
 protected:

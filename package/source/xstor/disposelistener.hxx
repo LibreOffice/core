@@ -21,11 +21,11 @@
 #define INCLUDED_PACKAGE_SOURCE_XSTOR_DISPOSELISTENER_HXX
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 class OStorage;
-class OChildDispListener_Impl : public ::cppu::WeakImplHelper1 < ::com::sun::star::lang::XEventListener >
+class OChildDispListener_Impl : public ::cppu::WeakImplHelper < ::com::sun::star::lang::XEventListener >
 {
     ::osl::Mutex m_aMutex;
     OStorage* m_pStorage;

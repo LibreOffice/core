@@ -20,7 +20,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTREADER_HXX
 #define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTREADER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-class ManifestReader: public ::cppu::WeakImplHelper2
+class ManifestReader: public ::cppu::WeakImplHelper
 <
     ::com::sun::star::packages::manifest::XManifestReader,
     ::com::sun::star::lang::XServiceInfo
