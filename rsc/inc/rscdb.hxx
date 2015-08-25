@@ -53,7 +53,7 @@ struct WriteRcContext
     RscCmdLine*         pCmdLine;
 };
 
-// Tabelle fuer Systemabhaengige Resourcen
+// table for system dependent resources
 struct RscSysEntry
 {
     sal_uInt32      nKey;
@@ -66,25 +66,25 @@ struct RscSysEntry
 class RscTypCont
 {
     rtl_TextEncoding    nSourceCharSet;
-    sal_uInt32          nMachineId;         // Globaler Maschinentyp
+    sal_uInt32          nMachineId;         // global machine type
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
     OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
-    OString             aSearchPath;        // Suchen der Bitmap, Icon, Pointer
+    OString             aSearchPath;        // search path for bitmap, icon and pointer
     OString             aSysSearchPath;     // aSearchPath plus language specific paths
-    sal_uInt32          nUniqueId;          // eindeutiger Id fuer Systemresourcen
-    sal_uLong           nFilePos;           // Position in der Datei ( MTF )
-    sal_uInt32          nPMId;              // eindeutiger Id fuer PM-Rseourcefile
-                                            // muss groesser als RSC_VERSIONCONTROL_ID sein
-    RscTop  *           pRoot;              // Zeiger auf die Wurzel vom Typenbaum
-    RSCINST             aVersion;           // Versionskontrollinstanz
+    sal_uInt32          nUniqueId;          // unique id for system resources
+    sal_uLong           nFilePos;           // position in file (MTF)
+    sal_uInt32          nPMId;              // unique id for PR-resource file
+                                            // must be greater that RSC_VERSIONCONTROL_ID
+    RscTop  *           pRoot;              // pointer to the root of type tree
+    RSCINST             aVersion;           // version control instance
 
     ::std::vector< RscTop* >
-                        aBaseLst;           // Liste der einfachen Resourceklasse
+                        aBaseLst;           // list of simple resource class
     ::std::vector< RscSysEntry* >
-                        aSysLst;            // Liste der Systemresourcen
+                        aSysLst;            // list of system resources
 
-    Atom                nWinBitVarId;       // Name der Winbitvariablen
+    Atom                nWinBitVarId;       // name of the winbit variable
     Atom                nBorderId;
     Atom                nHideId;
     Atom                nClipChildrenId;
@@ -141,7 +141,7 @@ class RscTypCont
     Atom                nVertId;
     Atom                nSysWinId;
 
-    void        Init();         // Initialisiert Klassen und Tabelle
+    void        Init();         // initializes classes and tables
     void        SETCONST( RscConst *, const char *, sal_uInt32 );
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
     inline void SETCONST( RscConst *p1, const char * p2, SymbolType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
@@ -246,12 +246,11 @@ public:
 
     Atom                nAcceleratorType;
 
-    RscError*           pEH;        // Fehlerhandler
-    RscNameTable        aNmTb;      // Tabelle fuer Namen
-    RscFileTab          aFileTab;   // Tabelle der Dateinamen
+    RscError*           pEH;        // error handler
+    RscNameTable        aNmTb;      // name table
+    RscFileTab          aFileTab;   // fila name table
     sal_uInt32          nFlags;
-    std::map<sal_uInt64, sal_uLong> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
-                                       //(unter PM), oder eine Dateiposition (MTF)
+    std::map<sal_uInt64, sal_uLong> aIdTranslator; // map resources types and ids to an id (under PM9 or to a file position (MTF)
 
     RscTypCont( RscError *, RSCBYTEORDER_TYPE, const OString& rSearchPath, sal_uInt32 nFlags );
     ~RscTypCont();
@@ -278,7 +277,7 @@ public:
                               aBaseLst.push_back( pType );
                           }
     RscTop  *         SearchType( Atom nTypId );
-                      // loescht alle Resourceobjekte diese Datei
+                      // deletes all resource objects of this file
     void              Delete( sal_uLong lFileKey );
     RscTop  *         GetRoot()         { return pRoot; }
     sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
