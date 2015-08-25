@@ -210,8 +210,6 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
             if (xDocSh->DoInitNew(0))
             {
                 SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
-                SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
-                    xStg, &rStrm, *pD, rBlocks.GetBaseURL(), true, false);
 
                 SwNodeIndex aIdx(
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
@@ -223,11 +221,11 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 SwPaM aPamo( aIdx );
                 aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
                     0);
-                pRdr->LoadDoc(aPamo,this);
-
+                std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
+                    pGlossary->nVersion, xStg, &rStrm, *pD, rBlocks.GetBaseURL(),
+                    true, false, *aPamo.GetPoint()));
+                xRdr->LoadDoc(this);
                 bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);
-
-                delete pRdr;
             }
             xDocSh->DoClose();
             rBlocks.EndPutMuchBlockEntries();

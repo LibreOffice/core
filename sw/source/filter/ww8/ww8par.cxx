@@ -4124,7 +4124,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 }
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages)
+    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition &rPos)
     : m_pDocShell(rD.GetDocShell())
     , m_pStg(pStorage)
     , m_pStrm(pSt)
@@ -4260,6 +4260,8 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
 {
     m_pStrm->SetEndian( SvStreamEndian::LITTLE );
     m_aApos.push_back(false);
+
+    mpCrsr = m_rDoc.CreateUnoCrsr(rPos);
 }
 
 void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
@@ -4881,7 +4883,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     return bRes;
 }
 
-sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
+sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
 
@@ -4917,7 +4919,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             pDocShell->SetReadOnlyUI();
     }
 
-    mpCrsr = m_rDoc.CreateUnoCrsr(rPos);
     m_pPaM = mpCrsr.get();
 
     m_pCtrlStck = new SwWW8FltControlStack( &m_rDoc, m_nFieldFlags, *this );
@@ -5595,7 +5596,7 @@ namespace
     }
 }
 
-sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
+sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
     if (pGloss)
@@ -5765,7 +5766,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
     }
 
     if (!nErrRet)
-        nErrRet = CoreLoad(pGloss, *rPaM.GetPoint());
+        nErrRet = CoreLoad(pGloss);
 
     delete pTempMain;
     delete pTempTable;
@@ -5962,7 +5963,7 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     return pRet;
 }
 
-sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
+sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
 
@@ -6037,7 +6038,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     }
 
     if (!nErrRet)
-        nErrRet = LoadThroughDecryption(rPaM ,pGloss);
+        nErrRet = LoadThroughDecryption(pGloss);
 
     m_rDoc.PropagateOutlineRule();
 
@@ -6103,7 +6104,7 @@ sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_u
     return nRet;
 }
 
-sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & /* FileName */)
+sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
@@ -6146,16 +6147,16 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
 
     if( !nRet )
     {
+        SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
+            rBaseURL, bNew, bSkipImages, *rPaM.GetPoint());
         if (bNew)
         {
             // Remove Frame and offsets from Frame Template
             Reader::ResetFrameFormats( rDoc );
         }
-        SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
-            rBaseURL, bNew, bSkipImages);
         try
         {
-            nRet = pRdr->LoadDoc( rPam );
+            nRet = pRdr->LoadDoc();
         }
         catch( const std::exception& )
         {
