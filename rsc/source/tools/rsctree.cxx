@@ -71,10 +71,10 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
         {
             pList = nullptr;
         }
-        if( NULL != (pTmp = pMiddle->Left()) )  // rechten Zeiger auf Null
+        if( NULL != (pTmp = pMiddle->Left()) )  // set right pointer to NULL
             pTmp->pRight = nullptr;
 
-        // linken Zeiger auf Null
+        // set left pointer to NULL
         BiNode * pRightNode = pMiddle->Right();
         if (pRightNode)
             pRightNode->pLeft = nullptr;
@@ -90,7 +90,7 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
 BiNode * BiNode::ChangeBTreeDLList()
 {
     BiNode * pList;
-    BiNode * pLL_RN;    // linke Liste rechter Knoten
+    BiNode * pLL_RN;    // right node of left list
 
     if( Right() )
     {
@@ -247,10 +247,9 @@ NameNode* NameNode::Search( const void * pSearch ) const
     return NULL;
 }
 
-// Ein Knoten wird in den Baum eingefuegt
-// Gibt es einen Knoten mit dem gleichen Namen, dann return false
-// sonst return true. Der Knoten wird auf jeden Fall eingefuegt.
-
+// A node is inserted into the tree
+// If a node with the same name already exists, then returns false
+// otherwise, returns true, In any case, the node will be inserted
 bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth )
 {
     bool bRet = true;
@@ -340,7 +339,7 @@ COMPARE IdNode::Compare( const NameNode * pSearch ) const
         return EQUAL;
 }
 
-// pSearch ist ein Zeiger auf sal_uInt32
+// pSearch is a pointer to sal_uInt32
 COMPARE IdNode::Compare( const void * pSearch ) const
 {
     if( GetId() < *static_cast<const sal_uInt32 *>(pSearch) )
@@ -373,7 +372,7 @@ COMPARE StringNode::Compare( const NameNode * pSearch ) const
         return EQUAL;
 }
 
-// pSearch ist ein Zeiger auf const char *
+// pSearch is a pointer to const char *
 COMPARE StringNode::Compare( const void * pSearch ) const
 {
     int nCmp = strcmp( m_aName.getStr(), static_cast<const char *>(pSearch) );

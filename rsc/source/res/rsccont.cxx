@@ -198,7 +198,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
 
     if( !bNoId )
         aTmpI = SearchEle( rInst, rEleName, pCreateClass );
-    // Eintrag gefunden
+    // entry found
     if( aTmpI.IsInst() )
     {
         aError = WRN_CONT_DOUBLEID;
@@ -228,7 +228,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
 
         if( rCreateInst.IsInst() )
         {
-            // Instanz mit CreateInst-Daten initialisieren
+            // initialize instance with CreateInst data
             pClassData->pEntries[ pClassData->nEntries ].aInst =
                 pCreateClass->Create( NULL, rCreateInst );
         }
@@ -279,16 +279,16 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
         int nInc = 1;
         sal_uInt32 i = 0;
 
-        // Quelle Merken
+        // mark source
         aEntry = pClassData->pEntries[ nSourcePos ];
-        // Richtung der for-Schleife bestimmen
+        // guess direction of the for-loop
         if( nDestPos < nSourcePos )
             nInc = -1;
 
         for( i = nSourcePos; i != nDestPos; i += nInc )
             pClassData->pEntries[ i ] = pClassData->pEntries[ i + nInc ];
 
-        // Zuweisung Quelle auf Ziel
+        // assign source to target
         pClassData->pEntries[ nDestPos ] = aEntry;
     }
     else
@@ -530,8 +530,8 @@ bool RscBaseCont::IsConsistent( const RSCINST & rInst )
 
     pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
-    // auf doppelten Id Testen und Reihenfolge beibehalten
-    // Komplexitaet = n^2 / 2
+    // check for duplicate Id and keep order
+    // complexity = n^2 / 2
     for( i = 0; i < pClassData->nEntries; i++ )
     {
         if( !bNoId )
@@ -685,7 +685,7 @@ ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     ERRTYPE       aError;
 
     if( bExtra || bNoId )
-    { // Nur Subresourcen schreiben, wenn bExtra == true
+    { // only write sub resources when bExtra == true
         pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
         for (sal_uInt32 i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )

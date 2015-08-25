@@ -301,7 +301,7 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnCla
         else
             *pClassData = RscId( nMin );
 
-        //cUnused wird fuer Defaultkennung verwendet
+        //cUnusedi is used as default identifier
         reinterpret_cast<RscId *>(aInst.pData)->aExp.cUnused = true;
     }
 
