@@ -37,12 +37,9 @@ namespace oglcanvas
         glBindTexture(GL_TEXTURE_2D, 0);
 
         // delete all cached textures
-        TextureCacheMapT::const_iterator aCurr=maCache.begin();
-        const TextureCacheMapT::const_iterator aEnd=maCache.end();
-        while( aCurr != aEnd )
+        for( const auto& rCache : maCache )
         {
-            glDeleteTextures(1, &aCurr->second.nTexture);
-            ++aCurr;
+            glDeleteTextures( 1, &rCache.second.nTexture );
         }
 
         maCache.clear();
@@ -56,22 +53,20 @@ namespace oglcanvas
         glBindTexture(GL_TEXTURE_2D, 0);
 
         // delete already "old" textures, mark "new" entries "old"
-        TextureCacheMapT::iterator aNext;
-        TextureCacheMapT::iterator aCurr=maCache.begin();
         const TextureCacheMapT::iterator aEnd=maCache.end();
-        while( aCurr != aEnd )
+        for( auto aCurr = maCache.begin();
+                aCurr != aEnd;
+                ++aCurr )
         {
-            aNext=aCurr; ++aNext;
             if( aCurr->second.bOld )
             {
-                glDeleteTextures(1, &aCurr->second.nTexture);
-                maCache.erase(aCurr);
+                glDeleteTextures( 1, &aCurr->second.nTexture );
+                maCache.erase( aCurr );
             }
             else
             {
                 aCurr->second.bOld = true;
             }
-            aCurr=aNext;
         }
 
         mnMissCount = 0;

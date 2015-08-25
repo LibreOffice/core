@@ -102,11 +102,9 @@ namespace dxcanvas
             uno::Sequence< sal_Int32 > aValues( sizeof(DeviceInfo)/sizeof(sal_Int32)*maValues.size() );
 
             sal_Int32* pValues = aValues.getArray();
-            ValueSet::const_iterator aIter( maValues.begin() );
-            const ValueSet::const_iterator aEnd( maValues.end() );
-            while( aIter != aEnd )
+            for( const auto& rValueSet : maValues )
             {
-                const DeviceInfo& rInfo( *aIter );
+                const DeviceInfo& rInfo( rValueSet );
                 *pValues++ = rInfo.nVendorId;
                 *pValues++ = rInfo.nDeviceId;
                 *pValues++ = rInfo.nDeviceSubSysId;
@@ -115,7 +113,6 @@ namespace dxcanvas
                 *pValues++ = rInfo.nDriverVersion;
                 *pValues++ = rInfo.nDriverSubVersion;
                 *pValues++ = rInfo.nDriverBuildId;
-                ++aIter;
             }
 
             uno::Sequence< uno::Any > aValue(1);

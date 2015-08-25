@@ -28,11 +28,9 @@ namespace canvas
         // we are asked to find a location for the requested size.
         // first we try to satisfy the request from the
         // remaining space in the existing pages.
-        const PageContainer_t::iterator aEnd(maPages.end());
-        PageContainer_t::iterator       it(maPages.begin());
-        while(it != aEnd)
+        for( const auto& pPage : maPages )
         {
-            FragmentSharedPtr pFragment((*it)->allocateSpace(rSize));
+            FragmentSharedPtr pFragment( pPage->allocateSpace(rSize) );
             if(pFragment)
             {
                 // the page created a new fragment, since we maybe want
@@ -41,8 +39,6 @@ namespace canvas
                 maFragments.push_back(pFragment);
                 return pFragment;
             }
-
-            ++it;
         }
 
         // otherwise try to create a new page and allocate space there...
@@ -94,43 +90,34 @@ namespace canvas
             // no way, we need to free up some space...
             // TODO(F1): this is a heuristic, could
             // be designed as a policy.
-            const FragmentContainer_t::const_iterator aEnd(maFragments.end());
-            FragmentContainer_t::const_iterator       candidate(maFragments.begin());
-            while(candidate != aEnd)
+            const FragmentContainer_t::const_iterator aEnd(maFragments.cend());
+            for( auto candidate = maFragments.cend(); candidate != aEnd; ++candidate )
             {
-                if(*candidate && !((*candidate)->isNaked()))
-                    break;
-                ++candidate;
-            }
-
-            if (candidate != aEnd)
-            {
-                const ::basegfx::B2ISize& rSize((*candidate)->getSize());
-                sal_uInt32                nMaxArea(rSize.getX()*rSize.getY());
-
-                FragmentContainer_t::const_iterator it(candidate);
-                while(it != aEnd)
+                if( *candidate && !( ( *candidate )->isNaked() ) )
                 {
-                    if (*it && !((*it)->isNaked()))
+                    const ::basegfx::B2ISize& rSize( ( *candidate )->getSize() );
+                    sal_uInt32                nMaxArea( rSize.getX() * rSize.getY() );
+
+                    for( auto it = candidate; it != aEnd; ++it )
                     {
-                        const ::basegfx::B2ISize& rCandidateSize((*it)->getSize());
-                        const sal_uInt32 nArea(rCandidateSize.getX()*rCandidateSize.getY());
-                        if(nArea > nMaxArea)
+                        if( *it && !( ( *it )->isNaked() ) )
                         {
-                            candidate=it;
-                            nMaxArea=nArea;
+                            const ::basegfx::B2ISize& rCandidateSize( ( *it )->getSize() );
+                            const sal_uInt32 nArea( rCandidateSize.getX() * rCandidateSize.getY() );
+                            if(nArea > nMaxArea)
+                            {
+                                candidate = it;
+                                nMaxArea=nArea;
+                            }
                         }
                     }
 
-                    ++it;
+                    // this does not erase the candidate,
+                    // but makes it 'naked'...
+                    ( *candidate )->free( *candidate );
+                    break;
                 }
-
-                // this does not erase the candidate,
-                // but makes it 'naked'...
-                (*candidate)->free(*candidate);
             }
-            else
-                break;
         }
     }
 
@@ -140,23 +127,18 @@ namespace canvas
         // be naked, that is it is not located on any page.
         // we try all available pages again, maybe some
         // other fragment was deleted and we can exploit the space.
-        const PageContainer_t::iterator aEnd(maPages.end());
-        PageContainer_t::iterator       it(maPages.begin());
-        while(it != aEnd)
+        for( const auto& pPage : maPages )
         {
             // if the page at hand takes the fragment, we immediately
             // call select() to pull the information from the associated
             // image to the hardware surface.
-            if((*it)->nakedFragment(pFragment))
+            if( pPage->nakedFragment( pFragment ) )
             {
                 // dirty, since newly allocated.
                 pFragment->select(true);
                 return true;
             }
-
-            ++it;
         }
-
         return false;
     }
 

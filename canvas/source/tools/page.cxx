@@ -84,11 +84,9 @@ namespace canvas
 
     bool Page::insert( SurfaceRect& r )
     {
-        const FragmentContainer_t::const_iterator aEnd(mpFragments.end());
-        FragmentContainer_t::const_iterator       it(mpFragments.begin());
-        while(it != aEnd)
+        for( const auto& pFragment : mpFragments )
         {
-            const SurfaceRect &rect = (*it)->getRect();
+            const SurfaceRect &rect = pFragment->getRect();
             const sal_Int32 x = rect.maPos.getX();
             const sal_Int32 y = rect.maPos.getY();
             // to avoid interpolation artifacts from other textures,
@@ -107,8 +105,6 @@ namespace canvas
             r.maPos.setY(y+h);
             if(isValidLocation(r))
                 return true;
-
-            ++it;
         }
 
         r.maPos.setX(0);
@@ -126,14 +122,10 @@ namespace canvas
         if( !r.inside(aBoundary) )
             return false;
 
-        const FragmentContainer_t::const_iterator aEnd(mpFragments.end());
-        FragmentContainer_t::const_iterator       it(mpFragments.begin());
-        while(it != aEnd)
+        for( const auto& pFragment : mpFragments )
         {
-            if(r.intersection((*it)->getRect()))
+            if( r.intersection( pFragment->getRect() ) )
                 return false;
-
-            ++it;
         }
 
         return true;
