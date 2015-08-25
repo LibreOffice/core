@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_e148428a",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-25T14:08:50Z",
+      "side": 1,
+      "message": "Please don\u0027t do this -- you\u0027re introducing an untranslatable string. \n\nWhat people usually do in cases like this (if there ain\u0027t no legacy .src file to sneak the string into) is that they add an invisible GtkLabel with the given string to .ui file",
+      "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_415e5646",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-25T14:08:50Z",
+      "side": 1,
+      "message": "Uhm, I\u0027m not convinced this is the best way to do things, I\u0027d maybe prefer not to use ComboBoxText but some other widget whose items can store some data (think liststore) and those data would contain the value needed for spacing ... \n\nLet me check how other sidebar code does things and update this commend then accordingly",
+      "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_01444e72",
+        "filename": "sw/uiconfig/swriter/ui/sidebarwrap.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-25T14:08:50Z",
+      "side": 1,
+      "message": "Maybe some ellipsis here would be appropriate (Edit Contour ...) as it opens a new dialog",
+      "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
