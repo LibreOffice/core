@@ -63,6 +63,10 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
 
     PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
     pTitleBar->SetTitle(newTitle);
+
+    // update the ResourceManager
+    SidebarController* pSidebarController = getSidebarController();
+    pSidebarController->GetResourceManager()->SetPanelTitle(mPanelId, newTitle);
 }
 
 sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
