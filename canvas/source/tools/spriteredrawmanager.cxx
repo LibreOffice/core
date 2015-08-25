@@ -225,15 +225,12 @@ namespace canvas
         SpriteWeakOrder aSpriteComparator;
 
         // put all sprites that have changed content into update areas
-        ListOfSprites::const_iterator       aCurrSprite( maSprites.begin() );
-        const ListOfSprites::const_iterator aEndSprite ( maSprites.end() );
-        while( aCurrSprite != aEndSprite )
+        for( const auto& pSprite : maSprites )
         {
-            if( (*aCurrSprite)->isContentChanged() )
-                const_cast<SpriteRedrawManager*>(this)->updateSprite( *aCurrSprite,
-                                                                      (*aCurrSprite)->getPosPixel(),
-                                                                      (*aCurrSprite)->getUpdateArea() );
-            ++aCurrSprite;
+            if( pSprite->isContentChanged() )
+                const_cast< SpriteRedrawManager* >( this )->updateSprite( pSprite,
+                                                                          pSprite->getPosPixel(),
+                                                                          pSprite->getUpdateArea() );
         }
 
         // sort sprites after prio
@@ -250,14 +247,11 @@ namespace canvas
         // sprite pointer). This assumes that, until this scope
         // ends, nobody changes the maChangeRecords vector!
         VectorOfSprites aUpdatableSprites;
-        VectorOfChangeRecords::const_iterator       aCurrRecord( maChangeRecords.begin() );
-        const VectorOfChangeRecords::const_iterator aEndRecords( maChangeRecords.end() );
-        while( aCurrRecord != aEndRecords )
+        for( const auto& rChangeRecord : maChangeRecords )
         {
-            const Sprite::Reference& rSprite( aCurrRecord->getSprite() );
+            const Sprite::Reference& rSprite( rChangeRecord.getSprite() );
             if( rSprite.is() )
                 aUpdatableSprites.push_back( rSprite );
-            ++aCurrRecord;
         }
 
         ::std::sort( aUpdatableSprites.begin(),
@@ -294,17 +288,14 @@ namespace canvas
 
         // add each remaining unchanged sprite to connected ranges,
         // marked as "don't need update"
-        VectorOfSprites::const_iterator         aCurr( aUnchangedSprites.begin() );
-        const VectorOfSprites::const_iterator   aEnd2( aUnchangedSprites.end() );
-        while( aCurr != aEnd2 )
+        for( const auto& pUnchangedSprite : aUnchangedSprites )
         {
-            const ::basegfx::B2DRange& rUpdateArea( (*aCurr)->getUpdateArea() );
+            const ::basegfx::B2DRange& rUpdateArea( pUnchangedSprite->getUpdateArea() );
             rUpdateAreas.addRange(
                 ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( rUpdateArea ),
-                SpriteInfo(*aCurr,
-                           rUpdateArea,
-                           false) );
-            ++aCurr;
+                SpriteInfo( pUnchangedSprite,
+                            rUpdateArea,
+                            false ) );
         }
     }
 
