@@ -51,7 +51,6 @@ public:
 
     /** Excluded or include a deck from being displayed in the tab
         bar.
-        Note that this value is not persistent.
         The flag can not be set directly at a DeckDescriptor object
         because the ResourceManager gives access to them only
         read-only.
@@ -64,10 +63,12 @@ public:
 
     void SetDeckOrderIndex(const OUString& rsDeckId, const sal_Int32 orderIndex);
 
+    void SetPanelTitle(const OUString& rsPanelId, const OUString& sTitle);
     void SetPanelOrderIndex(const OUString& rsPanelId, const sal_Int32 orderIndex);
 
     void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
+    void SaveDeckSettings(const DeckDescriptor* pDeckDesc);
 
     class DeckContextDescriptor
     {
@@ -123,6 +124,9 @@ private:
     static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
+
+    css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool isDeckEnabled);
+
     void ReadLegacyAddons(const css::uno::Reference<css::frame::XController>& rxController);
     static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
     static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
