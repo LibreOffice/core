@@ -207,6 +207,10 @@ void SAL_CALL SidebarController::disposing()
             iDeck!=iEnd; ++iDeck)
     {
         const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+
+        // save Deck settings
+        mpResourceManager->SaveDeckSettings(deckDesc);
+
         VclPtr<Deck> aDeck = deckDesc->mpDeck;
         if (aDeck)
             aDeck.disposeAndClear();

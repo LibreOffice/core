@@ -68,6 +68,7 @@ public:
 
     void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
+    void SaveDeckSettings(const DeckDescriptor* pDeckDesc);
 
     class DeckContextDescriptor
     {
@@ -123,6 +124,9 @@ private:
     static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
+
+    css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool isDeckEnabled);
+
     void ReadLegacyAddons(const css::uno::Reference<css::frame::XController>& rxController);
     static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
     static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,

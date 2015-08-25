@@ -298,6 +298,41 @@ void ResourceManager::ReadDeckList()
         maDecks.resize(nWriteIndex);
 }
 
+
+void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
+{
+    const utl::OConfigurationTreeRoot aDeckRootNode(
+                                    comphelper::getProcessComponentContext(),
+                                    OUString("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
+                                    true);
+    if (!aDeckRootNode.isValid())
+        return;
+
+    const utl::OConfigurationTreeRoot aPanelRootNode(
+                                    comphelper::getProcessComponentContext(),
+                                    OUString("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
+                                    true);
+
+    if (!aPanelRootNode.isValid())
+        return;
+
+    // save deck settings
+    OUString deckId = pDeckDesc->msId;
+
+    ::uno::Sequence< OUString > sContextList = BuildContextList(pDeckDesc->maContextList, pDeckDesc->mbIsEnabled);
+
+    utl::OConfigurationNode aNode (aDeckRootNode.openNode(deckId));
+
+    aNode.setNodeValue("Title", makeAny(pDeckDesc->msTitle));
+    aNode.setNodeValue("OrderIndex", makeAny(pDeckDesc->mnOrderIndex));
+    aNode.setNodeValue("ContextList", makeAny( sContextList )); // TODO
+
+    aDeckRootNode.commit();
+
+    // TODO save panel settings
+
+}
+
 void ResourceManager::ReadPanelList()
 {
     const utl::OConfigurationTreeRoot aPanelRootNode(
@@ -340,6 +375,40 @@ void ResourceManager::ReadPanelList()
     // of the deck vector.
     if (nWriteIndex<nCount)
         maPanels.resize(nWriteIndex);
+}
+
+css::uno::Sequence<OUString> ResourceManager::BuildContextList (ContextList rContextList, bool isDeckEnabled)
+{
+    ::std::vector<ContextList::Entry> entries = rContextList.GetEntries();
+
+     css::uno::Sequence<OUString> result(entries.size());
+     long i = 0;
+
+    for (::std::vector<ContextList::Entry>::const_iterator iEntry(entries.begin()), iEnd(entries.end());
+                                                            iEntry!=iEnd; ++iEntry)
+          {
+                OUString appName = iEntry->maContext.msApplication;
+                OUString contextName = iEntry->maContext.msContext;
+                bool isVisible = iEntry->mbIsInitiallyVisible ;
+                OUString menuCommand = iEntry->msMenuCommand;
+
+                OUString element = appName + ", " + contextName +", ";
+
+                if (isDeckEnabled)
+                    element += "visible";
+                else
+                    element += "hidden";
+
+                if (menuCommand != "")
+                  element += ", "+menuCommand;
+
+                result[i] = element;
+                i++;
+
+          }
+
+    return result;
+
 }
 
 void ResourceManager::ReadContextList (
