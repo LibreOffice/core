@@ -1658,7 +1658,7 @@ void UniscribeLayout::DrawTextImpl(HDC hDC) const
 
 bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
 {
-    static bool bDoGlyphCaching = (std::getenv("SAL_ENABLE_GLYPH_CACHING") != NULL);
+    static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == NULL);
 
     if (!bDoGlyphCaching)
         return false;
