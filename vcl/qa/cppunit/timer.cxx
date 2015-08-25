@@ -23,7 +23,7 @@
 
 // #define TEST_WATCHDOG
 // Comment if UT fails randomly.
-#define TEST_TIMERPRECISION
+//#define TEST_TIMERPRECISION
 
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread
