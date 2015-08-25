@@ -1373,7 +1373,7 @@
             true, and a formula contains only these operators and
             functions, it might be calculated using OpenCL.</desc>
           </info>
-          <value>+;-;*;/;RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSDIST;NORMSINV;ROUND;POWER;SUMPRODUCT;MIN;MAX;SUM;PRODUCT;AVERAGE;COUNT;VAR;NORMDIST;CORREL;COVAR;PEARSON;SLOPE;SUMIFS</value>
+          <value>+;-;*;/;RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSDIST;NORMSINV;ROUND;POWER;SUMPRODUCT;MIN;MAX;SUM;PRODUCT;AVERAGE;COUNT;VAR;NORMDIST;VLOOKUP;CORREL;COVAR;PEARSON;SLOPE;SUMIFS</value>
         </prop>
         <prop oor:name="OpenCLAutoSelect" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
