@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_a1f2ba6d",
+        "filename": "sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-25T11:34:14Z",
+      "side": 1,
+      "message": "The variable name should had been changed too, otherwise it is rather confusing when reading the code where it is used..",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 27
+      },
+      "revId": "c936d690a69d4d0332caade1a481ae1c3a6e06e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
