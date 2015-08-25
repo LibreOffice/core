@@ -4124,7 +4124,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 }
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc)
+    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, SwPosition &rPos)
     : mpDocShell(rD.GetDocShell())
     , pStg(pStorage)
     , pStrm(pSt)
@@ -4260,6 +4260,8 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     maApos.push_back(false);
+
+    mpCrsr.reset(rDoc.CreateUnoCrsr(rPos));
 }
 
 void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
@@ -4876,7 +4878,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     return bRes;
 }
 
-sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
+sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
 
@@ -4912,7 +4914,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             pDocShell->SetReadOnlyUI(true);
     }
 
-    pPaM = rDoc.CreateUnoCrsr(rPos);
+    pPaM = mpCrsr.get();
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
@@ -5349,7 +5351,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     SAL_WARN_IF(mpTableEndPaM, "sw.ww8", "document ended without table ending");
     mpTableEndPaM.reset();  //ensure this is deleted before pPaM
-    delete pPaM, pPaM = 0;
+    mpCrsr.reset();
+    pPaM = nullptr;
     mpLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
 
     UpdatePageDescs(rDoc, nPageDescOffset);
@@ -5578,7 +5581,7 @@ namespace
     }
 }
 
-sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
+sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
     if (pGloss)
@@ -5748,7 +5751,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
     }
 
     if (!nErrRet)
-        nErrRet = CoreLoad(pGloss, *rPaM.GetPoint());
+        nErrRet = CoreLoad(pGloss);
 
     delete pTempMain;
     delete pTempTable;
@@ -5945,7 +5948,7 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     return pRet;
 }
 
-sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
+sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
 {
     sal_uLong nErrRet = 0;
 
@@ -6020,7 +6023,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     }
 
     if (!nErrRet)
-        nErrRet = LoadThroughDecryption(rPaM ,pGloss);
+        nErrRet = LoadThroughDecryption(pGloss);
 
     rDoc.PropagateOutlineRule();
 
@@ -6053,7 +6056,7 @@ sal_uLong WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuff
     return nRet;
 }
 
-sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & /* FileName */)
+sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
@@ -6096,16 +6099,16 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
 
     if( !nRet )
     {
+        SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
+            rBaseURL, bNew, *rPaM.GetPoint());
         if (bNew)
         {
             // Remove Frame and offsets from Frame Template
             Reader::ResetFrmFmts( rDoc );
         }
-        SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
-            rBaseURL, bNew);
         try
         {
-            nRet = pRdr->LoadDoc( rPam );
+            nRet = pRdr->LoadDoc();
         }
         catch( const std::exception& )
         {
