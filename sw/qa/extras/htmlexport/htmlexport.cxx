@@ -249,7 +249,8 @@ DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
     CPPUNIT_ASSERT(pDoc);
 
     // Internal url should be valid
-    assertXPath(pDoc, "/html/body/p/a", "href", "#0.0.1.Text|outline");
+    assertXPath(pDoc, "/html/body/p[1]/a", "href", "#0.0.1.Text|outline");
+    assertXPath(pDoc, "/html/body/p[2]/a", "href", "#bookmark");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
