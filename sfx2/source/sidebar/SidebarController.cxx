@@ -198,6 +198,34 @@ void SAL_CALL SidebarController::disposing()
     maFocusManager.Clear();
     mpTabBar.disposeAndClear();
 
+    // save decks settings
+    // Impress shutdown : context (frame) is disposed before sidebar disposing
+    // calc writer : context (frame) is disposed after sidebar disposing
+    // so need to test if GetCurrentContext is still valid regarding msApplication
+
+    if (GetCurrentContext().msApplication != "none")
+        mpResourceManager->SaveDecksSettings(GetCurrentContext());
+
+    // clear decks
+    ResourceManager::DeckContextDescriptorContainer aDecks;
+
+    mpResourceManager->GetMatchingDecks (
+            aDecks,
+            GetCurrentContext(),
+            IsDocumentReadOnly(),
+            mxFrame->getController());
+
+    for (ResourceManager::DeckContextDescriptorContainer::const_iterator
+            iDeck(aDecks.begin()), iEnd(aDecks.end());
+            iDeck!=iEnd; ++iDeck)
+    {
+        const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+
+        VclPtr<Deck> aDeck = deckDesc->mpDeck;
+        if (aDeck)
+            aDeck.disposeAndClear();
+    }
+
     uno::Reference<css::frame::XController> xController = mxFrame->getController();
     if (!xController.is())
         xController = mxCurrentController;
@@ -233,9 +261,11 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     // Update to the requested new context asynchronously to avoid
     // subtle errors caused by SFX2 which in rare cases can not
     // properly handle a synchronous update.
+
     maRequestedContext = Context(
         rEvent.ApplicationName,
         rEvent.ContextName);
+
     if (maRequestedContext != maCurrentContext)
     {
         mxCurrentController.set(rEvent.Source, css::uno::UNO_QUERY);
@@ -272,6 +302,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         // Force the current deck to update its panel list.
         if ( ! mbIsDocumentReadOnly)
             msCurrentDeckId = gsDefaultDeckId;
+
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
         maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
@@ -401,10 +432,17 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
 
 void SidebarController::UpdateConfigurations()
 {
+
     if (maCurrentContext != maRequestedContext
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
+
+        if (maCurrentContext.msApplication != "none")
+            mpResourceManager->SaveDecksSettings(maCurrentContext);
+
         maCurrentContext = maRequestedContext;
+
+        mpResourceManager->InitDeckContext(GetCurrentContext());
 
         // Find the set of decks that could be displayed for the new context.
         ResourceManager::DeckContextDescriptorContainer aDecks;
@@ -507,22 +545,93 @@ void SidebarController::SwitchToDeck (
 }
 
 
-void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId)
+void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, bool bForceCreate)
 {
-    const DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+    DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
-    if (pDeckDescriptor->mpDeck.get()==nullptr)
+    if (pDeckDescriptor)
     {
-        VclPtr<Deck> aDeck = VclPtr<Deck>::Create(
-                *pDeckDescriptor,
-                mpParentWindow,
-                [this]() { return this->RequestCloseDeck(); });
+        VclPtr<Deck> aDeck = pDeckDescriptor->mpDeck;
+        if (aDeck.get()==nullptr || bForceCreate)
+        {
+            if (aDeck.get()!=nullptr)
+                aDeck.disposeAndClear();
 
-        mpResourceManager->SetDeckToDescriptor(rDeckId, aDeck);
+            aDeck = VclPtr<Deck>::Create(
+                            *pDeckDescriptor,
+                            mpParentWindow,
+                            [this]() { return this->RequestCloseDeck(); });
+        }
+        pDeckDescriptor->mpDeck = aDeck;
+        CreatePanels(rDeckId);
     }
-
 }
 
+void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
+{
+     DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+
+    // init panels bounded to that deck, do not wait them being displayed as may be accessed through API
+
+            VclPtr<Deck> pDeck = pDeckDescriptor->mpDeck;
+
+            ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
+
+            css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+
+            mpResourceManager->GetMatchingPanels(
+                                                aPanelContextDescriptors,
+                                                maCurrentContext,
+                                                rDeckId,
+                                                xController);
+
+            // Update the panel list.
+            const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
+            SharedPanelContainer aNewPanels;
+
+            aNewPanels.resize(nNewPanelCount);
+            sal_Int32 nWriteIndex (0);
+
+            for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
+            {
+                const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
+                    aPanelContextDescriptors[nReadIndex]);
+
+                // Determine if the panel can be displayed.
+                const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
+                if ( ! bIsPanelVisible)
+                    continue;
+
+                VclPtr<Panel>  aPanel = CreatePanel(
+                                            rPanelContexDescriptor.msId,
+                                            pDeck->GetPanelParentWindow(),
+                                            rPanelContexDescriptor.mbIsInitiallyVisible,
+                                            maCurrentContext,
+                                            pDeck);
+                if (aPanel.get()!=nullptr )
+                {
+                    aNewPanels[nWriteIndex] = aPanel;
+
+                    // Depending on the context we have to change the command
+                    // for the "more options" dialog.
+                    PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
+                    if (pTitleBar != NULL)
+                    {
+                        pTitleBar->SetMoreOptionsCommand(
+                            rPanelContexDescriptor.msMenuCommand,
+                            mxFrame, xController);
+                    }
+                    ++nWriteIndex;
+                 }
+
+            }
+
+            // mpCurrentPanels - may miss stuff (?)
+            aNewPanels.resize(nWriteIndex);
+            pDeck->ResetPanels(aNewPanels);
+
+            pDeckDescriptor->mpDeck = pDeck;
+}
 
 void SidebarController::SwitchToDeck (
     const DeckDescriptor& rDeckDescriptor,
@@ -578,7 +687,11 @@ void SidebarController::SwitchToDeck (
 
     // Provide a configuration and Deck object.
 
-    CreateDeck(rDeckDescriptor.msId);
+    CreateDeck(rDeckDescriptor.msId, bForceNewDeck);
+
+    if (bForceNewPanels && !bForceNewDeck) // already forced if bForceNewDeck
+        CreatePanels(rDeckDescriptor.msId);
+
     mpCurrentDeck.reset(rDeckDescriptor.mpDeck);
 
     if ( ! mpCurrentDeck)
@@ -590,79 +703,6 @@ void SidebarController::SwitchToDeck (
     if (pDebugTitleBar != NULL)
         pDebugTitleBar->SetTitle(rDeckDescriptor.msTitle + " (" + maCurrentContext.msContext + ")");
 #endif
-
-
-    // Update the panel list.
-    const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
-    SharedPanelContainer aNewPanels;
-    const SharedPanelContainer& rCurrentPanels (mpCurrentDeck->GetPanels());
-
-    aNewPanels.resize(nNewPanelCount);
-    sal_Int32 nWriteIndex (0);
-    bool bHasPanelSetChanged (false);
-    for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
-    {
-        const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
-            aPanelContextDescriptors[nReadIndex]);
-
-        // Determine if the panel can be displayed.
-        const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
-        if ( ! bIsPanelVisible)
-            continue;
-
-        // Find the corresponding panel among the currently active
-        // panels.
-        SharedPanelContainer::const_iterator iPanel = rCurrentPanels.end();
-
-        if (!bForceNewPanels)
-        {
-            iPanel = rCurrentPanels.end();
-            for (auto a = rCurrentPanels.begin(); a != rCurrentPanels.end(); ++a)
-            {
-                if ((*a)->HasIdPredicate(rPanelContexDescriptor.msId))
-                {
-                    iPanel = a;
-                    break;
-                }
-            }
-        }
-        if (iPanel != rCurrentPanels.end())
-        {
-            // Panel already exists in current deck.  Reuse it.
-            aNewPanels[nWriteIndex] = *iPanel;
-            aNewPanels[nWriteIndex]->SetExpanded(rPanelContexDescriptor.mbIsInitiallyVisible);
-        }
-        else
-        {
-            // Panel does not yet exist or creation of new panels is forced.
-            // Create it.
-            aNewPanels[nWriteIndex] = CreatePanel(
-                rPanelContexDescriptor.msId,
-                mpCurrentDeck->GetPanelParentWindow(),
-                rPanelContexDescriptor.mbIsInitiallyVisible,
-                rContext);
-            bHasPanelSetChanged = true;
-        }
-
-        if (aNewPanels[nWriteIndex] != nullptr)
-        {
-            // Depending on the context we have to change the command
-            // for the "more options" dialog.
-            PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
-            if (pTitleBar != nullptr)
-            {
-                pTitleBar->SetMoreOptionsCommand(
-                    rPanelContexDescriptor.msMenuCommand,
-                    mxFrame, xController);
-            }
-
-            ++nWriteIndex;
-        }
-
-    }
-    // mpCurrentPanels - may miss stuff (?)
-    aNewPanels.resize(nWriteIndex);
-
 
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
@@ -685,13 +725,11 @@ void SidebarController::SwitchToDeck (
         mpParentWindow->GetSizePixel().Width() - nTabBarDefaultWidth,
         mpParentWindow->GetSizePixel().Height());
 
-    mpCurrentDeck->ResetPanels(aNewPanels);
     mpCurrentDeck->Show();
 
     mpParentWindow->SetText(rDeckDescriptor.msTitle);
 
-    if (bHasPanelSetChanged)
-        NotifyResize();
+    NotifyResize();
 
     // Tell the focus manager about the new panels and tab bar
     // buttons.
@@ -716,7 +754,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
     const OUString& rsPanelId,
     vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
-    const Context& rContext)
+    const Context& rContext,
+    VclPtr<Deck> pDeck)
 {
     const PanelDescriptor* pPanelDescriptor = mpResourceManager->GetPanelDescriptor(rsPanelId);
 
@@ -728,7 +767,7 @@ VclPtr<Panel> SidebarController::CreatePanel (
         *pPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
-        [this]() { return mpCurrentDeck.get()->RequestLayout(); },
+        [pDeck]() { return pDeck.get()->RequestLayout(); },
         [this]() { return this->GetCurrentContext(); },
         mxFrame);
 
@@ -915,7 +954,7 @@ std::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
         else
         {
             pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::CHECKABLE);
-            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsActive);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsEnabled && iItem->mbIsActive);
         }
     }
 
@@ -982,7 +1021,19 @@ IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
                 }
                 else if (nIndex >=MID_FIRST_HIDE)
                     if (pMenu->GetItemBits(nIndex) == MenuItemBits::CHECKABLE)
+                    {
                         mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
+
+                        // Find the set of decks that could be displayed for the new context.
+                        ResourceManager::DeckContextDescriptorContainer aDecks;
+                        mpResourceManager->GetMatchingDecks (
+                                                    aDecks,
+                                                    GetCurrentContext(),
+                                                    IsDocumentReadOnly(),
+                                                    mxFrame->getController());
+                        // Notify the tab bar about the updated set of decks.
+                        mpTabBar->SetDecks(aDecks);
+                    }
             }
             catch (RuntimeException&)
             {
