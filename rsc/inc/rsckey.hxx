@@ -33,8 +33,8 @@ typedef struct
 
 class RscNameTable
 {
-    bool            bSort;      //soll bei jedem einfuegen sortiert werden?
-    sal_uInt32      nEntries;   //Anzahl der Eintr"age
+    bool            bSort;      // whether it must be sorted for each insertion
+    sal_uInt32      nEntries;   // number of entries
     KEY_STRUCT *    pTable;
 public:
             RscNameTable();
@@ -45,7 +45,7 @@ public:
     Atom    Put( const char * pName, sal_uInt32 nTyp );
     Atom    Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
 
-            // true, wurde gefunden
+            // if true, it was found
     bool    Get( Atom nName, KEY_STRUCT * pEle );
 };
 

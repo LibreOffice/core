@@ -35,11 +35,11 @@ class RscCmdLine
 
 public:
 
-    RscStrList          aInputList;     // Liste der Quelldateien
-    OString        aPath;          // Liste der Pfade
+    RscStrList          aInputList;     // source file list
+    OString        aPath;          // path list
     RSCBYTEORDER_TYPE   nByteOrder;
-    unsigned short      nCommands;      // Steuerbits
-    OString        aOutputSrs;     // Name der Srs-Ausgabedatei
+    unsigned short      nCommands;      // command bits
+    OString        aOutputSrs;     // Srs output file name
     OString        aILDir;
 
     struct OutputFile
@@ -78,17 +78,17 @@ private:
                                        const OUString& rSrsOutPath );
 
 public:
-    RscTypCont*     pTC;        // String und Id-Verwalter
-    RscCmdLine*     pCL;        // Kommandozeile
-    FILE *          fListing;   // Ausgabedatei fuer Listings
-    FILE *          fExitFile;  // bei Abbruch muss diese Datei geschlossen werden
+    RscTypCont*     pTC;        // string and id manager
+    RscCmdLine*     pCL;        // command line
+    FILE *          fListing;   // output file for listings
+    FILE *          fExitFile;  // when deconstructed, this file must be deleted
 
                     RscCompiler( RscCmdLine *, RscTypCont * );
                     ~RscCompiler();
 
     ERRTYPE         Start();
 
-                    // Include Statements lesen
+                    // read include statements
     ERRTYPE         IncludeParser( sal_uLong lFileKey );
     ERRTYPE         ParseOneFile( sal_uLong lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
     ERRTYPE         Link();
