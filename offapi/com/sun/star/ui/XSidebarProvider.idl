@@ -57,8 +57,6 @@ interface XSidebarProvider: com::sun::star::uno::XInterface
 
     /**
      * Returns the sidebar object
-     *
-     * @since LibreOffice 5.1
      */
     com::sun::star::ui::XSidebar getSidebar();
 } ;
